@@ -9,7 +9,7 @@ class App extends Component {
   constructor() {
     super();
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
-      onopen: e => socket.json({ "option": "subscribe", "data": "avoidanceRegions" }),
+      onopen: e => socket.json({ "option": "subscribe", "data": "interestedProposal" }),
       onmessage: this.receiveMsg,
     });
     socket.onmessage = (e => console.log('Receirewrewrweved:', e));
@@ -27,7 +27,7 @@ class App extends Component {
   render() {
 
     const telemetry = this.state;
-    console.log(typeof this.state)
+
     return (
       <div className="App">
         <TelemetryLog telemetry={{...this.state}}></TelemetryLog>
@@ -37,3 +37,5 @@ class App extends Component {
 }
 
 export default App;
+
+
