@@ -18,7 +18,7 @@ export default class TelemetryLog extends Component {
                         </tr>
                         <tr>
                             <td rowSpan={ntelemetry.toString()}> Scheduler</td>
-                            <td rowSpan={ntelemetry.toString()}> interestedProposal</td>
+                            <td rowSpan={ntelemetry.toString()}> {this.props.telemetryName}</td>
                             
                         </tr>   
                         {Object.keys(this.props.telemetry).map(
