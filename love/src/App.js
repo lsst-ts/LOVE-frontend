@@ -8,8 +8,11 @@ class App extends Component {
 
   constructor() {
     super();
+    this.state ={
+      telemetryName: "interestedProposal"
+    }
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
-      onopen: e => socket.json({ "option": "subscribe", "data": "interestedProposal" }),
+      onopen: e => socket.json({ "option": "subscribe", "data": this.state.telemetryName }),
       onmessage: this.receiveMsg,
     });
     socket.onmessage = (e => console.log('Receirewrewrweved:', e));
@@ -30,7 +33,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <TelemetryLog telemetry={{...this.state}}></TelemetryLog>
+        <TelemetryLog telemetry={{...this.state}} telemetryName={this.state.telemetryName}></TelemetryLog>
       </div>
     );
   }
