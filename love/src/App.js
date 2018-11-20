@@ -17,12 +17,17 @@ class App extends Component {
   }
 
   receiveMsg = (msg) => {
-    console.log("msg.data")
-    console.log(msg)
-    this.setState({ ...JSON.parse(msg.data) });
+    let data = JSON.parse(msg.data);
+    if(typeof data.data === 'object'){
+
+      this.setState({ ...data.data});
+    }
   }
 
   render() {
+
+    const telemetry = this.state;
+    console.log(typeof this.state)
     return (
       <div className="App">
         <TelemetryLog telemetry={{...this.state}}></TelemetryLog>
