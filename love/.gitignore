@@ -24,3 +24,6 @@ yarn-error.log*
 
 webpack.config.dev.js
 webpack.config.prod.js
+
+webpack-stats.dev.json
+webpack-stats.prod.json
