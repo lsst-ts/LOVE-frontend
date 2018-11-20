@@ -2,40 +2,30 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import sockette from 'sockette';
+import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 
 class App extends Component {
 
   constructor() {
     super();
-    // this.socket = openSocket('ws://localhost:8000/ws/subscription/');
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
-      onopen: e => socket.json({"option": "subscribe", "data": "avoidanceRegions"}),
-      onmessage: (e => console.log('Received:', e)),
+      onopen: e => socket.json({ "option": "subscribe", "data": "avoidanceRegions" }),
+      onmessage: this.receiveMsg,
     });
-    socket.onmessage = (e => console.log('Received:', e));
+    socket.onmessage = (e => console.log('Receirewrewrweved:', e));
+    window.socket = socket;
   }
 
-  receiveMsg(msg){
-    console.log(msg);
+  receiveMsg = (msg) => {
+    console.log("msg.data")
+    console.log(msg)
+    this.setState({ ...JSON.parse(msg.data) });
   }
 
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <TelemetryLog telemetry={{...this.state}}></TelemetryLog>
       </div>
     );
   }
