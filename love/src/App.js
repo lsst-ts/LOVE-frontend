@@ -1,8 +1,24 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import sockette from 'sockette';
 
 class App extends Component {
+
+  constructor() {
+    super();
+    // this.socket = openSocket('ws://localhost:8000/ws/subscription/');
+    const socket = sockette('ws://localhost:8000/ws/subscription/', {
+      onopen: e => socket.json({"option": "subscribe", "data": "avoidanceRegions"}),
+      onmessage: (e => console.log('Received:', e)),
+    });
+    socket.onmessage = (e => console.log('Received:', e));
+  }
+
+  receiveMsg(msg){
+    console.log(msg);
+  }
+
   render() {
     return (
       <div className="App">
