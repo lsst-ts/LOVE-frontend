@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
@@ -28,9 +27,6 @@ class App extends Component {
   }
 
   render() {
-
-    const telemetry = this.state;
-
     return (
       <div className="App">
         <TelemetryLog telemetry={{...this.state}} telemetryName={this.state.telemetryName}></TelemetryLog>
