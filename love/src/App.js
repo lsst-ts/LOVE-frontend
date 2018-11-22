@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
+import RawTelemetryTable from './components/RawTelemetryTable/RawTelemetryTable';
 
 class App extends Component {
 
@@ -29,7 +30,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <TelemetryLog telemetry={{...this.state}} telemetryName={this.state.telemetryName}></TelemetryLog>
+        <RawTelemetryTable></RawTelemetryTable>
       </div>
     );
   }
