@@ -64,7 +64,13 @@ export default class RawTelemetryTable extends PureComponent {
             'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
             'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
             'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            // 'health_status': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
+        }
+
+        let healthFunctions = {
+            'altitude_maxspeed': 'return 1;',
+            'altitude_decel': 'return 2;',
+            'altitude_accel': 'return 0;',
         }
 
         let parsedData = this.convertData(data);
@@ -72,6 +78,7 @@ export default class RawTelemetryTable extends PureComponent {
         this.state = {
             data: parsedData,
             filters: filters,
+            healthFunctions: healthFunctions,
         };
 
         console.log(parsedData);
@@ -98,6 +105,7 @@ export default class RawTelemetryTable extends PureComponent {
                         'data_type': parameter['data_type'],
                         'value': parameter['value'],
                         'units': parameter['units'],
+                        'health_status': (value) => 'Not defined',
                     })
                 }
             }
@@ -107,25 +115,51 @@ export default class RawTelemetryTable extends PureComponent {
 
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
-            console.log(this.state.filters[rowKey].value);
-            console.log(row[rowKey]);
-            console.log(this.state.filters[rowKey].value.test(row[rowKey]));
-            return this.state.filters[rowKey].value.test(row[rowKey]);
+            if (this.state.filters[rowKey].type === 'regexp')
+                return this.state.filters[rowKey].value.test(row[rowKey]);
+            if (this.state.filters[rowKey].type === 'health'){
+                let healthStatus = this.checkHealth(row.param_name, row.value);
+                return this.state.filters[rowKey].value.test(healthStatus);
+            }
+            return true;
         });
         let value = values.reduce((a, b) => a && b, true);
-        console.log(values)
         return value;
     }
 
     changeFilter = (column) => {
         return (event) => {
             console.log(event.target.value)
-            let filters = {...this.state.filters};
-            filters[column].value = new RegExp(event.target.value);
+            let filters = { ...this.state.filters };
+            filters[column].value = new RegExp(event.target.value, 'i');
             this.setState({
                 filters: filters
             })
         }
+    }
+
+    checkHealth = (param_name, value) => {
+        if (this.state.healthFunctions[param_name]) {
+            let result = -1;
+            // console.log(this.state.healthFunctions[param_name]);
+            try {
+                // eslint-disable-next-line
+                let user_func = new Function("value", this.state.healthFunctions[param_name]);
+                // console.log(user_func);
+                // console.log(user_func(value));
+                result = user_func(value);
+            } catch (err) {
+                console.log('Error parsing custom function');
+            }
+            if (result === 0)
+                return 'OK';
+            if (result === 1)
+                return 'Warning';
+            if (result === 2)
+                return 'Alert';
+            return 'Invalid';
+        }
+        return 'Not defined';
     }
 
     render() {
@@ -154,10 +188,11 @@ export default class RawTelemetryTable extends PureComponent {
                             <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
                             <td><input type="text" onChange={this.changeFilter('value')} /></td>
                             <td><input type="text" onChange={this.changeFilter('units')} /></td>
+                            <td><input type="text" onChange={this.changeFilter('health_status')} /></td>
                         </tr>
                         {
                             data.map((row) => {
-                                if (this.testFilter(row))
+                                if (this.testFilter(row)) {
                                     return (
                                         <tr key={row.param_name}>
                                             <td>{row.component}</td>
@@ -168,56 +203,17 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td>{row.data_type}</td>
                                             <td>{row.value}</td>
                                             <td>{row.units}</td>
-                                            <td>-</td>
+                                            <td>{
+                                                this.checkHealth(row.param_name, row.value)
+                                            }</td>
                                         </tr>
                                     )
+                                }
+                                return null;
                             })
                         }
-                        {/* {
-                        Object.keys(data).map((componentName) => {
-                            let component = data[componentName];
-                            let componentParams = Object.keys(component).map((streamName) => {
-                                return component[streamName].nParams;
-                            }).reduce((a, b) => a + b, 0);
-                            console.log('componentParams', componentParams);
-                            return (
-                                <tr>
-                                <td rowSpan={2}>{componentName}</td>
-                                {
-                                    Object.keys(component).map((streamName) => {
-                                        let stream = component[streamName];
-                                        console.log('stream', stream);
-                                        return (
-                                            <>
-                                            <td rowSpan={2}>{streamName}</td>
-                                            {
-                                                stream.parameters.map((param) => {
-                                                    console.log('param', param)
-                                                    return (
-                                                        <>
-                                                        <td>{stream.timestamp}</td>
-                                                        <td>{param.name}</td>
-                                                        <td>{param.param_name}</td>
-                                                        <td>{param.data_type}</td>
-                                                        <td>{param.value}</td>
-                                                        <td>{param.units}</td>
-                                                        </>
-                                                        )
-                                                    })
-                                                }
-                                                </>
-                                                )
-                                            })
-                                        }
-                                        </tr>
-                                        )
-                                    })
-                                } */}
                     </tbody>
                 </table>
-                <span>
-                    {JSON.stringify(this.state)}
-                </span>
             </>
         );
     }
