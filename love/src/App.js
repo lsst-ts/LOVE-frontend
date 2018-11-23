@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
-import RawTelemetryTable from './components/RawTelemetryTable/RawTelemetryTable';
+import RawTelemetryTable from './components/HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
 
 class App extends Component {
 
