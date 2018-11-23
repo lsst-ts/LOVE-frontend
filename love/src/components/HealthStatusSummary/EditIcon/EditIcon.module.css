@@ -1,0 +1,11 @@
+.editIcon {
+    display: inline-block;
+}
+
+.active {
+    fill: var(--secondary-font-color);
+}
+
+.inactive {
+    fill: var(--secondary-font-dimmed-color);
+}
