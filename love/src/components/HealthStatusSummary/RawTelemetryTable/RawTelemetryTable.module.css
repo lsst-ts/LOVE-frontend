@@ -25,6 +25,10 @@
     padding: 0.4em 1em;
 }
 
+.rawTelemetryTable .healthStatusCell {
+    padding: 0.4em 2em;
+}
+
 .rawTelemetryTable td input {
     /* display: none; */
     min-width: 10px !important;
@@ -38,5 +42,17 @@
 
 .rawTelemetryTable tr:last-of-type td:last-of-type {
     border-bottom-right-radius: 7px;
+}
 
+.rawTelemetryTable .editIconWrapper {
+    width: 12px;
+    padding-left: 1em;
+}
+
+.rawTelemetryTable .healthStatusWrapper {
+    display: flex;
+}
+
+.rawTelemetryTable .statusTextWrapper {
+    flex-grow: 1;
 }
