@@ -110,7 +110,25 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        let data = this.convertData(this.props.data);
+        let data = this.props.data;
+        if(Object.keys(this.props.telemetry.parameters).length>0){
+            data["scheduler"][this.props.telemetry.name] = {
+                'timestamp': this.props.telemetry.receptionTimestamp,
+                'nParams': Object.keys(this.props.telemetry.parameters).length,
+                'parameters': Object.entries(this.props.telemetry.parameters).map( parameter=>{
+                    const [name, value] = parameter;
+                    return {
+                        'name': name +'????',
+                        'param_name': name,
+                        'data_type': 'double?',
+                        'value': value,
+                        'units': 'm/s??'
+                    }
+                })
+            }
+
+        }
+        data = this.convertData(data);
 
         return (
             <table className={styles.rawTelemetryTable}>
