@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react'
+import styles from './RawTelemetryTable.module.css';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -117,7 +118,7 @@ export default class RawTelemetryTable extends PureComponent {
         let values = Object.keys(row).map((rowKey) => {
             if (this.state.filters[rowKey].type === 'regexp')
                 return this.state.filters[rowKey].value.test(row[rowKey]);
-            if (this.state.filters[rowKey].type === 'health'){
+            if (this.state.filters[rowKey].type === 'health') {
                 let healthStatus = this.checkHealth(row.param_name, row.value);
                 return this.state.filters[rowKey].value.test(healthStatus);
             }
@@ -165,56 +166,54 @@ export default class RawTelemetryTable extends PureComponent {
     render() {
         const { data } = this.state;
         return (
-            <>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Component</th>
-                            <th>Stream</th>
-                            <th>Timestamp</th>
-                            <th>Name</th>
-                            <th>Parameter</th>
-                            <th>Data type</th>
-                            <th>Value</th>
-                            <th>Units</th>
-                            <th>Health status</th>
-                        </tr>
-                        <tr>
-                            <td><input type="text" onChange={this.changeFilter('component')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('stream')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('timestamp')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('name')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('param_name')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('value')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('units')} /></td>
-                            <td><input type="text" onChange={this.changeFilter('health_status')} /></td>
-                        </tr>
-                        {
-                            data.map((row) => {
-                                if (this.testFilter(row)) {
-                                    return (
-                                        <tr key={row.param_name}>
-                                            <td>{row.component}</td>
-                                            <td>{row.stream}</td>
-                                            <td>{row.timestamp}</td>
-                                            <td>{row.name}</td>
-                                            <td>{row.param_name}</td>
-                                            <td>{row.data_type}</td>
-                                            <td>{row.value}</td>
-                                            <td>{row.units}</td>
-                                            <td>{
-                                                this.checkHealth(row.param_name, row.value)
-                                            }</td>
-                                        </tr>
-                                    )
-                                }
-                                return null;
-                            })
-                        }
-                    </tbody>
-                </table>
-            </>
+            <table className={styles.rawTelemetryTable}>
+                <tbody>
+                    <tr>
+                        <th>Component</th>
+                        <th>Stream</th>
+                        <th>Timestamp</th>
+                        <th>Name</th>
+                        <th>Parameter</th>
+                        <th>Data type</th>
+                        <th>Value</th>
+                        <th>Units</th>
+                        <th>Health status</th>
+                    </tr>
+                    <tr>
+                        <td><input type="text" onChange={this.changeFilter('component')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('stream')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('timestamp')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('name')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('param_name')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('value')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('units')} /></td>
+                        <td><input type="text" onChange={this.changeFilter('health_status')} /></td>
+                    </tr>
+                    {
+                        data.map((row) => {
+                            if (this.testFilter(row)) {
+                                return (
+                                    <tr key={row.param_name}>
+                                        <td>{row.component}</td>
+                                        <td>{row.stream}</td>
+                                        <td>{row.timestamp}</td>
+                                        <td>{row.name}</td>
+                                        <td>{row.param_name}</td>
+                                        <td>{row.data_type}</td>
+                                        <td>{row.value}</td>
+                                        <td>{row.units}</td>
+                                        <td>{
+                                            this.checkHealth(row.param_name, row.value)
+                                        }</td>
+                                    </tr>
+                                )
+                            }
+                            return null;
+                        })
+                    }
+                </tbody>
+            </table>
         );
     }
 }

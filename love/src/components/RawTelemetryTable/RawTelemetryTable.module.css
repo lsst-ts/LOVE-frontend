@@ -1,0 +1,42 @@
+.rawTelemetryTable {
+    width: 100%;
+}
+
+.rawTelemetryTable tbody {
+    background: var(--secondary-background-color);
+}
+
+.rawTelemetryTable th {
+    background: var(--tertiary-background-color);
+    text-transform: uppercase;
+    padding: 0.5em;
+}
+
+.rawTelemetryTable th:first-of-type {
+    border-top-left-radius: 7px;
+}
+
+.rawTelemetryTable th:last-of-type {
+    border-top-right-radius: 7px;
+}
+
+.rawTelemetryTable td {
+    color: var(--secondary-font-color);
+    padding: 0.4em 1em;
+}
+
+.rawTelemetryTable td input {
+    /* display: none; */
+    min-width: 10px !important;
+    width: 100%;
+}
+
+.rawTelemetryTable tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 7px;
+
+}
+
+.rawTelemetryTable tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 7px;
+
+}
