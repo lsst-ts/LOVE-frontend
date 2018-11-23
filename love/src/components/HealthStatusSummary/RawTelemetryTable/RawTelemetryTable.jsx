@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
+import StatusText from '../StatusText/StatusText';
+import EditIcon from '../EditIcon/EditIcon';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -69,9 +71,10 @@ export default class RawTelemetryTable extends PureComponent {
         }
 
         let healthFunctions = {
-            'altitude_maxspeed': 'return 1;',
-            'altitude_decel': 'return 2;',
-            'altitude_accel': 'return 0;',
+            'timestamp': '//asdasdadsa',
+            'altitude_decel': '//dsasdssa\nreturn 1;',
+            'altitude_accel': 'return 2;',
+            'altitude_maxspeed': 'return 3;',
         }
 
         let parsedData = this.convertData(data);
@@ -97,6 +100,7 @@ export default class RawTelemetryTable extends PureComponent {
                 let parameters = telemetryStream['parameters'];
                 for (let k = 0; k < parameters.length; k++) {
                     let parameter = parameters[k];
+                    for(let n=0;n<10;n++)
                     newData.push({//change to fixed length
                         'component': componentName,
                         'stream': telemetryStreamName,
@@ -119,7 +123,7 @@ export default class RawTelemetryTable extends PureComponent {
             if (this.state.filters[rowKey].type === 'regexp')
                 return this.state.filters[rowKey].value.test(row[rowKey]);
             if (this.state.filters[rowKey].type === 'health') {
-                let healthStatus = this.checkHealth(row.param_name, row.value);
+                let healthStatus = this.getHealthText(this.getHealthStatusCode(row.param_name, row.value));
                 return this.state.filters[rowKey].value.test(healthStatus);
             }
             return true;
@@ -130,7 +134,6 @@ export default class RawTelemetryTable extends PureComponent {
 
     changeFilter = (column) => {
         return (event) => {
-            console.log(event.target.value)
             let filters = { ...this.state.filters };
             filters[column].value = new RegExp(event.target.value, 'i');
             this.setState({
@@ -139,28 +142,31 @@ export default class RawTelemetryTable extends PureComponent {
         }
     }
 
-    checkHealth = (param_name, value) => {
+    getHealthStatusCode = (param_name, value) => {
+        let statusCode = 0;
         if (this.state.healthFunctions[param_name]) {
-            let result = -1;
-            // console.log(this.state.healthFunctions[param_name]);
             try {
                 // eslint-disable-next-line
                 let user_func = new Function("value", this.state.healthFunctions[param_name]);
-                // console.log(user_func);
-                // console.log(user_func(value));
-                result = user_func(value);
+                statusCode = user_func(value);
             } catch (err) {
+                statusCode = -1;
                 console.log('Error parsing custom function');
             }
-            if (result === 0)
-                return 'OK';
-            if (result === 1)
-                return 'Warning';
-            if (result === 2)
-                return 'Alert';
-            return 'Invalid';
         }
-        return 'Not defined';
+        return statusCode;
+    }
+
+    getHealthText = (statusCode) => {
+        if (statusCode === 0)
+            return 'Undefined';
+        if (statusCode === 1)
+            return 'OK';
+        if (statusCode === 2)
+            return 'Warning';
+        if (statusCode === 3)
+            return 'Alert';
+        return 'Invalid';
     }
 
     render() {
@@ -192,9 +198,10 @@ export default class RawTelemetryTable extends PureComponent {
                     </tr>
                     {
                         data.map((row) => {
+                            // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
                             if (this.testFilter(row)) {
                                 return (
-                                    <tr key={row.param_name}>
+                                    <tr key={row.param_name+Math.random()}>
                                         <td>{row.component}</td>
                                         <td>{row.stream}</td>
                                         <td>{row.timestamp}</td>
@@ -203,9 +210,17 @@ export default class RawTelemetryTable extends PureComponent {
                                         <td>{row.data_type}</td>
                                         <td>{row.value}</td>
                                         <td>{row.units}</td>
-                                        <td>{
-                                            this.checkHealth(row.param_name, row.value)
-                                        }</td>
+                                        <td className={styles.healthStatusCell}>
+                                            <div className={styles.healthStatusWrapper}>
+                                                <div className={styles.statusTextWrapper}>
+                                                <StatusText statusCode={this.getHealthStatusCode(row.param_name, row.value)} getHealthText={this.getHealthText}>
+                                                </StatusText>
+                                                </div>
+                                                <div className={styles.editIconWrapper}>
+                                                    <EditIcon active></EditIcon>
+                                                </div>
+                                            </div>
+                                        </td>
                                     </tr>
                                 )
                             }
