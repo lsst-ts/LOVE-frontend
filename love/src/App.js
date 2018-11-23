@@ -31,6 +31,7 @@ class App extends Component {
     return (
       <div className="App">
         <RawTelemetryTable></RawTelemetryTable>
+        <TelemetryLog telemetry={{...this.state}} telemetryName={this.state.telemetryName}></TelemetryLog>
       </div>
     );
   }
