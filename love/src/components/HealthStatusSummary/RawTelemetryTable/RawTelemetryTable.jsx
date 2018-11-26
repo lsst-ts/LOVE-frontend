@@ -6,6 +6,7 @@ import EditIcon from '../EditIcon/EditIcon';
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
         super();
+<<<<<<< HEAD
         let data = {
             'scheduler': {
                 'domeConfig': {
@@ -57,6 +58,8 @@ export default class RawTelemetryTable extends PureComponent {
                 },
             }
         }
+=======
+>>>>>>> 2f9472c7c1e816b9451db74ca05c6a466d6b79af
 
         let filters = {
             'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
@@ -82,24 +85,25 @@ export default class RawTelemetryTable extends PureComponent {
             healthFunctions = JSON.parse(healthFunctions);
         }
 
-        let parsedData = this.convertData(data);
 
         let expandedRows = {
             'altitude_maxspeed0': true,
         };
 
         this.state = {
-            data: parsedData,
             filters: filters,
             healthFunctions: healthFunctions,
             expandedRows: expandedRows,
         };
 
+<<<<<<< HEAD
         window.OK = 1;
         window.WARNING = 2;
         window.ALERT = 3;
 
         console.log(parsedData);
+=======
+>>>>>>> 2f9472c7c1e816b9451db74ca05c6a466d6b79af
     }
 
     toggleRow = (rowId) => {
@@ -219,7 +223,26 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        const { data } = this.state;
+        let data = this.props.data;
+        if(Object.keys(this.props.telemetry.parameters).length>0){
+            data["scheduler"][this.props.telemetry.name] = {
+                'timestamp': this.props.telemetry.receptionTimestamp,
+                'nParams': Object.keys(this.props.telemetry.parameters).length,
+                'parameters': Object.entries(this.props.telemetry.parameters).map( parameter=>{
+                    const [name, value] = parameter;
+                    return {
+                        'name': name +'????',
+                        'param_name': name,
+                        'data_type': 'double?',
+                        'value': value,
+                        'units': 'm/s??'
+                    }
+                })
+            }
+
+        }
+        data = this.convertData(data);
+
         return (
             <table className={styles.rawTelemetryTable}>
                 <tbody>
