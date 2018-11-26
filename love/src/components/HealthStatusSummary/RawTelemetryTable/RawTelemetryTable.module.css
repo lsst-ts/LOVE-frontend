@@ -1,5 +1,6 @@
 .rawTelemetryTable {
     width: 100%;
+    table-layout: fixed;
 }
 
 .rawTelemetryTable tbody {
@@ -10,6 +11,14 @@
     background: var(--tertiary-background-color);
     text-transform: uppercase;
     padding: 0.5em;
+}
+
+.rawTelemetryTable tr:hover.dataRow{
+    background: var(--tertiary-background-color);
+}
+
+.dataRow {
+    cursor: pointer;
 }
 
 .rawTelemetryTable th:first-of-type {
@@ -23,36 +32,62 @@
 .rawTelemetryTable td {
     color: var(--secondary-font-color);
     padding: 0.4em 1em;
+    word-wrap:break-word;
+    max-width: 0;
 }
 
 .rawTelemetryTable .healthStatusCell {
-    padding: 0.4em 2em;
+    padding: 0.4em 0.5em;
+}
+
+.rawTelemetryTable .valueCell {
+    padding: 0.4em 0.5em;
+    word-wrap:break-word;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .rawTelemetryTable td input {
-    /* display: none; */
-    min-width: 10px !important;
+    min-width: 10px;
     width: 100%;
 }
 
 .rawTelemetryTable tr:last-of-type td:first-of-type {
     border-bottom-left-radius: 7px;
-
 }
 
 .rawTelemetryTable tr:last-of-type td:last-of-type {
     border-bottom-right-radius: 7px;
 }
 
-.rawTelemetryTable .editIconWrapper {
-    width: 12px;
-    padding-left: 1em;
-}
-
 .rawTelemetryTable .healthStatusWrapper {
     display: flex;
+    position: relative;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.4em 0em;
+}
+
+.rawTelemetryTable .editIconWrapper {
+    position: absolute;
+    visibility: hidden;
+    right: 0;
+    width: 16px;
+    min-width: 16px;
+}
+
+.rawTelemetryTable tr:hover .editIconWrapper {
+    visibility: visible;
 }
 
 .rawTelemetryTable .statusTextWrapper {
     flex-grow: 1;
+    padding: 0.4em 1.5em;
+}
+
+.rawTelemetryTable .expandedRow {
+    text-align: left;
 }

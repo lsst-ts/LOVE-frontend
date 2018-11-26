@@ -23,7 +23,7 @@ export default class RawTelemetryTable extends PureComponent {
                             'name': 'Altitude acceleration',
                             'param_name': 'altitude_accel',
                             'data_type': 'double',
-                            'value': 2,
+                            'value': [2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6, 2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6, 2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6, 2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6,],
                             'units': 'm/s²'
                         },
                         {
@@ -71,21 +71,41 @@ export default class RawTelemetryTable extends PureComponent {
         }
 
         let healthFunctions = {
-            'timestamp': '//asdasdadsa',
-            'altitude_decel': '//dsasdssa\nreturn 1;',
-            'altitude_accel': 'return 2;',
-            'altitude_maxspeed': 'return 3;',
+            'timestamp0': '//asdasdadsa',
+            'altitude_decel0': '//dsasdssa\nreturn ALERT;',
+            'altitude_accel0': 'return WARNING;',
+            'altitude_maxspeed0': 'return OK;',
         }
 
         let parsedData = this.convertData(data);
+
+        let expandedRows = {
+            'altitude_maxspeed0': true,
+        };
 
         this.state = {
             data: parsedData,
             filters: filters,
             healthFunctions: healthFunctions,
+            expandedRows: expandedRows,
         };
 
+        window.OK = 1;
+        window.WARNING = 2;
+        window.ALERT = 3;
+
         console.log(parsedData);
+    }
+
+    toggleRow = (rowId) => {
+        let expandedRows = this.state.expandedRows;
+        if (expandedRows[rowId])
+            expandedRows[rowId] = false;
+        else
+            expandedRows[rowId] = true;
+        this.setState({
+            expandedRows: { ...expandedRows },
+        })
     }
 
     convertData = (data) => {
@@ -100,18 +120,18 @@ export default class RawTelemetryTable extends PureComponent {
                 let parameters = telemetryStream['parameters'];
                 for (let k = 0; k < parameters.length; k++) {
                     let parameter = parameters[k];
-                    for(let n=0;n<10;n++)
-                    newData.push({//change to fixed length
-                        'component': componentName,
-                        'stream': telemetryStreamName,
-                        'timestamp': streamTimestamp,
-                        'name': parameter['name'],
-                        'param_name': parameter['param_name'],
-                        'data_type': parameter['data_type'],
-                        'value': parameter['value'],
-                        'units': parameter['units'],
-                        'health_status': (value) => 'Not defined',
-                    })
+                    for (let n = 0; n < 10; n++)
+                        newData.push({//change to fixed length
+                            'component': componentName,
+                            'stream': telemetryStreamName,
+                            'timestamp': streamTimestamp,
+                            'name': parameter['name'],
+                            'param_name': parameter['param_name'] + n,
+                            'data_type': parameter['data_type'],
+                            'value': parameter['value'],
+                            'units': parameter['units'],
+                            'health_status': (value) => 'Not defined',
+                        })
                 }
             }
         }
@@ -152,6 +172,7 @@ export default class RawTelemetryTable extends PureComponent {
             } catch (err) {
                 statusCode = -1;
                 console.log('Error parsing custom function');
+                console.log(err);
             }
         }
         return statusCode;
@@ -167,6 +188,26 @@ export default class RawTelemetryTable extends PureComponent {
         if (statusCode === 3)
             return 'Alert';
         return 'Invalid';
+    }
+
+    setHealthFunction = (param_name) => {
+        console.log(param_name + '-healthFuncion')
+        let healthFunctions = this.state.healthFunctions;
+        healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
+        this.setState({
+            healthFunctions: { ...healthFunctions },
+        })
+    }
+
+    displayHealthFunction = (param_name, functionType) => {
+        let textArea = document.getElementById(param_name + '-healthFunction');
+        let text = '';
+        if (functionType === 'text')
+            text = 'if(value === <targetValue>)\n    return ALERT;';
+        if (functionType === 'range')
+            text = 'if(value > <targetValue1>)\n    return WARNING;\nif(value > <targetValue1>)\n    return ALERT;\n return OK\n';
+        textArea.value = text;
+        return 0;
     }
 
     render() {
@@ -201,27 +242,63 @@ export default class RawTelemetryTable extends PureComponent {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
                             if (this.testFilter(row)) {
                                 return (
-                                    <tr key={row.param_name+Math.random()}>
-                                        <td>{row.component}</td>
-                                        <td>{row.stream}</td>
-                                        <td>{row.timestamp}</td>
-                                        <td>{row.name}</td>
-                                        <td>{row.param_name}</td>
-                                        <td>{row.data_type}</td>
-                                        <td>{row.value}</td>
-                                        <td>{row.units}</td>
-                                        <td className={styles.healthStatusCell}>
-                                            <div className={styles.healthStatusWrapper}>
-                                                <div className={styles.statusTextWrapper}>
-                                                <StatusText statusCode={this.getHealthStatusCode(row.param_name, row.value)} getHealthText={this.getHealthText}>
-                                                </StatusText>
+                                    <React.Fragment key={row.param_name}>
+                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(row.param_name)} key={row.param_name + '-row'}>
+                                            <td>{row.component}</td>
+                                            <td>{row.stream}</td>
+                                            <td>{row.timestamp}</td>
+                                            <td>{row.name}</td>
+                                            <td>{row.param_name}</td>
+                                            <td>{row.data_type}</td>
+                                            <td className={styles.valueCell}>{JSON.stringify(row.value)}</td>
+                                            <td>{row.units}</td>
+                                            <td className={styles.healthStatusCell}>
+                                                <div className={styles.healthStatusWrapper}>
+                                                    <div className={styles.statusTextWrapper}>
+                                                        <StatusText statusCode={this.getHealthStatusCode(row.param_name, row.value)} getHealthText={this.getHealthText}>
+                                                        </StatusText>
+                                                    </div>
+                                                    <div className={styles.editIconWrapper}>
+                                                        <EditIcon active></EditIcon>
+                                                    </div>
                                                 </div>
-                                                <div className={styles.editIconWrapper}>
-                                                    <EditIcon active></EditIcon>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                        {
+                                            (this.state.expandedRows[row.param_name]) ?
+                                                <tr key={row.param_name + '-expanded'} className={styles.expandedRow}>
+                                                    <td colSpan={9}>
+                                                        <div>
+                                                            <div>
+                                                                <p>
+                                                                    {'function ( value ) {'}
+                                                                </p>
+                                                                <textarea id={row.param_name + '-healthFunction'} defaultValue={this.state.healthFunctions[row.param_name]}>
+                                                                </textarea>
+                                                                <p>
+                                                                    {'}'}
+                                                                </p>
+                                                                <button onClick={() => this.setHealthFunction(row.param_name)}>Set</button>
+                                                            </div>
+                                                            <div>
+                                                                <ul>
+                                                                    <li>
+                                                                        <span onClick={() => this.displayHealthFunction(row.param_name, 'range')}>Range</span>
+                                                                    </li>
+                                                                    <li>
+                                                                        <span onClick={() => this.displayHealthFunction(row.param_name, 'text')}>Text value</span>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div>
+                                                                <span>{JSON.stringify(row.value)}</span>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr> :
+                                                null
+                                        }
+                                    </React.Fragment>
                                 )
                             }
                             return null;
