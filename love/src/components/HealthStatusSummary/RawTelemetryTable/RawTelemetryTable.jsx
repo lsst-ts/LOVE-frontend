@@ -70,11 +70,16 @@ export default class RawTelemetryTable extends PureComponent {
             'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
         }
 
-        let healthFunctions = {
-            'timestamp0': '//asdasdadsa',
-            'altitude_decel0': '//dsasdssa\nreturn ALERT;',
-            'altitude_accel0': 'return WARNING;',
-            'altitude_maxspeed0': 'return OK;',
+        let healthFunctions = localStorage.getItem('healthFunctions');
+        if (!healthFunctions) {
+            healthFunctions = {
+                'timestamp0': '//asdasdadsa',
+                'altitude_decel0': '//dsasdssa\nreturn ALERT;',
+                'altitude_accel0': 'return WARNING;',
+                'altitude_maxspeed0': 'return OK;',
+            }
+        } else {
+            healthFunctions = JSON.parse(healthFunctions);
         }
 
         let parsedData = this.convertData(data);
@@ -101,8 +106,10 @@ export default class RawTelemetryTable extends PureComponent {
         let expandedRows = this.state.expandedRows;
         if (expandedRows[rowId])
             expandedRows[rowId] = false;
-        else
+        else {
+            expandedRows = {};
             expandedRows[rowId] = true;
+        }
         this.setState({
             expandedRows: { ...expandedRows },
         })
@@ -197,6 +204,7 @@ export default class RawTelemetryTable extends PureComponent {
         this.setState({
             healthFunctions: { ...healthFunctions },
         })
+        localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
     }
 
     displayHealthFunction = (param_name, functionType) => {
