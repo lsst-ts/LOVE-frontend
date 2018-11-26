@@ -6,60 +6,6 @@ import EditIcon from '../EditIcon/EditIcon';
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
         super();
-<<<<<<< HEAD
-        let data = {
-            'scheduler': {
-                'domeConfig': {
-                    'timestamp': '2022/04/25 20:03:10',
-                    'nParams': 3,
-                    'parameters': [
-                        {
-                            'name': 'Altitude max speed',
-                            'param_name': 'altitude_maxspeed',
-                            'data_type': 'double',
-                            'value': 1,
-                            'units': 'm/s'
-                        },
-                        {
-                            'name': 'Altitude acceleration',
-                            'param_name': 'altitude_accel',
-                            'data_type': 'double',
-                            'value': [2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6, 2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6, 2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6, 2, 5, 5, 6, 4, 5, 5, 6, 4, 8, 5, 3, 1, 5, 34, 8, 9, 6, 23, 4, 8, 3, 21, 8, 3, 2, 1, 6,],
-                            'units': 'm/s²'
-                        },
-                        {
-                            'name': 'Altitude deceleration',
-                            'param_name': 'altitude_decel',
-                            'data_type': 'double',
-                            'value': 3,
-                            'units': 'm/s²'
-                        },
-                    ]
-                },
-                'cloud': {
-                    'timestamp': '2022/04/25 20:04:10',
-                    'nParams': 2,
-                    'parameters': [
-                        {
-                            'name': 'timestamp',
-                            'param_name': 'timestamp',
-                            'data_type': 'timestamp',
-                            'value': '2022/04/25 10:04:10',
-                            'units': 'YYYY/MM/DD HH:MM:SS'
-                        },
-                        {
-                            'name': 'cloud',
-                            'param_name': 'cloud',
-                            'data_type': 'double',
-                            'value': 2.0,
-                            'units': '?'
-                        },
-                    ]
-                },
-            }
-        }
-=======
->>>>>>> 2f9472c7c1e816b9451db74ca05c6a466d6b79af
 
         let filters = {
             'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
@@ -96,14 +42,11 @@ export default class RawTelemetryTable extends PureComponent {
             expandedRows: expandedRows,
         };
 
-<<<<<<< HEAD
         window.OK = 1;
         window.WARNING = 2;
         window.ALERT = 3;
 
         console.log(parsedData);
-=======
->>>>>>> 2f9472c7c1e816b9451db74ca05c6a466d6b79af
     }
 
     toggleRow = (rowId) => {
