@@ -46,7 +46,6 @@ export default class RawTelemetryTable extends PureComponent {
         window.WARNING = 2;
         window.ALERT = 3;
 
-        console.log(parsedData);
     }
 
     toggleRow = (rowId) => {
