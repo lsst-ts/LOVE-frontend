@@ -3,16 +3,22 @@ import './App.css';
 import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import RawTelemetryTable from './components/HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-
+import fakeData from './components/HealthStatusSummary/RawTelemetryTable/fakeData';
 class App extends Component {
 
   constructor() {
     super();
     this.state ={
-      telemetryName: "interestedProposal"
-    }
+			telemetry: {
+				name: "interestedProposal",
+				parameters: {},
+				receptionTimeStamp: "2018/11-23 21:12:24."
+			}
+		}
+		
+
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
-      onopen: e => socket.json({ "option": "subscribe", "data": this.state.telemetryName }),
+      onopen: e => socket.json({ "option": "subscribe", "data": this.state.telemetry.name }),
       onmessage: this.receiveMsg,
     });
     socket.onmessage = (e => console.log('Receirewrewrweved:', e));
@@ -20,17 +26,27 @@ class App extends Component {
   }
 
   receiveMsg = (msg) => {
-    let data = JSON.parse(msg.data);
-    if(typeof data.data === 'object'){
+		let data = JSON.parse(msg.data);		
+		if(typeof data.data === 'object'){
+			let timestamp = new Date();
+			timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
 
-      this.setState({ ...data.data});
+			let telemetry = {
+				name: "interestedProposal",
+				parameters: {...data.data},
+				receptionTimestamp: timestamp
+			}
+
+      this.setState({telemetry: telemetry});
     }
   }
 
   render() {
     return (
       <div className="App">
-        <RawTelemetryTable></RawTelemetryTable>
+        <RawTelemetryTable data={fakeData} telemetry={this.state.telemetry}></RawTelemetryTable>
+				<TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
+											telemetryName={this.state.telemetry.name}></TelemetryLog>
       </div>
     );
   }
