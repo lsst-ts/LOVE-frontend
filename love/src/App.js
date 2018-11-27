@@ -4,6 +4,8 @@ import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import RawTelemetryTable from './components/HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
 import fakeData from './components/HealthStatusSummary/RawTelemetryTable/fakeData';
+import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
+
 class App extends Component {
 
   constructor() {
@@ -44,7 +46,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <RawTelemetryTable data={fakeData} telemetry={this.state.telemetry}></RawTelemetryTable>
+        <HealthStatusSummary data={fakeData} telemetry={this.state.telemetry}></HealthStatusSummary>
 				<TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
 											telemetryName={this.state.telemetry.name}></TelemetryLog>
       </div>
