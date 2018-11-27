@@ -1,44 +1,17 @@
 import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
-import EditIcon from '../EditIcon/EditIcon';
+import EditIcon from '../../icons/EditIcon/EditIcon';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
         super();
-
-        let filters = {
-            'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'stream': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'timestamp': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'param_name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
-        }
-
-        let healthFunctions = localStorage.getItem('healthFunctions');
-        if (!healthFunctions) {
-            healthFunctions = {
-                'timestamp0': '//asdasdadsa',
-                'altitude_decel0': '//dsasdssa\nreturn ALERT;',
-                'altitude_accel0': 'return WARNING;',
-                'altitude_maxspeed0': 'return OK;',
-            }
-        } else {
-            healthFunctions = JSON.parse(healthFunctions);
-        }
-
 
         let expandedRows = {
             'altitude_maxspeed0': true,
         };
 
         this.state = {
-            filters: filters,
-            healthFunctions: healthFunctions,
             expandedRows: expandedRows,
         };
 
@@ -93,11 +66,11 @@ export default class RawTelemetryTable extends PureComponent {
 
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
-            if (this.state.filters[rowKey].type === 'regexp')
-                return this.state.filters[rowKey].value.test(row[rowKey]);
-            if (this.state.filters[rowKey].type === 'health') {
+            if (this.props.filters[rowKey].type === 'regexp')
+                return this.props.filters[rowKey].value.test(row[rowKey]);
+            if (this.props.filters[rowKey].type === 'health') {
                 let healthStatus = this.getHealthText(this.getHealthStatusCode(row.param_name, row.value));
-                return this.state.filters[rowKey].value.test(healthStatus);
+                return this.props.filters[rowKey].value.test(healthStatus);
             }
             return true;
         });
@@ -107,20 +80,18 @@ export default class RawTelemetryTable extends PureComponent {
 
     changeFilter = (column) => {
         return (event) => {
-            let filters = { ...this.state.filters };
+            let filters = { ...this.props.filters };
             filters[column].value = new RegExp(event.target.value, 'i');
-            this.setState({
-                filters: filters
-            })
+            this.props.setFilters(filters);
         }
     }
 
     getHealthStatusCode = (param_name, value) => {
         let statusCode = 0;
-        if (this.state.healthFunctions[param_name]) {
+        if (this.props.healthFunctions[param_name]) {
             try {
                 // eslint-disable-next-line
-                let user_func = new Function("value", this.state.healthFunctions[param_name]);
+                let user_func = new Function("value", this.props.healthFunctions[param_name]);
                 statusCode = user_func(value);
             } catch (err) {
                 statusCode = -1;
@@ -145,11 +116,9 @@ export default class RawTelemetryTable extends PureComponent {
 
     setHealthFunction = (param_name) => {
         console.log(param_name + '-healthFuncion')
-        let healthFunctions = this.state.healthFunctions;
+        let healthFunctions = this.props.healthFunctions;
         healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
-        this.setState({
-            healthFunctions: { ...healthFunctions },
-        })
+        this.props.setHealthFunctions(healthFunctions);
         localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
     }
 
@@ -246,7 +215,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                                 <p>
                                                                     {'function ( value ) {'}
                                                                 </p>
-                                                                <textarea id={row.param_name + '-healthFunction'} defaultValue={this.state.healthFunctions[row.param_name]}>
+                                                                <textarea id={row.param_name + '-healthFunction'} defaultValue={this.props.healthFunctions[row.param_name]}>
                                                                 </textarea>
                                                                 <p>
                                                                     {'}'}
