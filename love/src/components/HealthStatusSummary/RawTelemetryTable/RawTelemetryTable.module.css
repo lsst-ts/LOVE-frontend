@@ -1,6 +1,7 @@
 .rawTelemetryTable {
     width: 100%;
     table-layout: fixed;
+    border-collapse: collapse;
 }
 
 .rawTelemetryTable tbody {
@@ -8,6 +9,7 @@
 }
 
 .rawTelemetryTable th {
+    border: 2px solid var(--base-background-color);
     background: var(--tertiary-background-color);
     text-transform: uppercase;
     padding: 0.5em;
@@ -34,10 +36,12 @@
     padding: 0.4em 1em;
     word-wrap:break-word;
     max-width: 0;
+    border: 2px solid var(--base-background-color);
 }
 
 .rawTelemetryTable .healthStatusCell {
     padding: 0.4em 0.5em;
+    border-bottom: none;
 }
 
 .rawTelemetryTable .valueCell {
@@ -68,7 +72,7 @@
     flex-wrap: wrap;
     justify-content: space-around;
     align-items: center;
-    padding: 0.4em 0em;
+    padding: 0;
 }
 
 .rawTelemetryTable .editIconWrapper {
@@ -85,9 +89,28 @@
 
 .rawTelemetryTable .statusTextWrapper {
     flex-grow: 1;
-    padding: 0.4em 1.5em;
+    padding: 0.0em 1.5em;
 }
 
 .rawTelemetryTable .expandedRow {
     text-align: left;
+}
+
+.rawTelemetryTable .expandedRow td {
+    border: none;
+}
+
+.rawTelemetryTable .expandedRow p {
+    line-height: 0;
+}
+
+.rawTelemetryTable .expandedRow textarea {
+    background: var(--tertiary-background-color);
+    color: var(--base-font-color);
+    border: none;
+    width: calc(100% - 3em);
+    margin-left: 2em;
+    height: 12em;
+    font-size: 1em;
+    resize: none;
 }

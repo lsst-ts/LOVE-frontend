@@ -135,14 +135,14 @@ export default class RawTelemetryTable extends PureComponent {
 
     render() {
         let data = this.props.data;
-        if(Object.keys(this.props.telemetry.parameters).length>0){
+        if (Object.keys(this.props.telemetry.parameters).length > 0) {
             data["scheduler"][this.props.telemetry.name] = {
                 'timestamp': this.props.telemetry.receptionTimestamp,
                 'nParams': Object.keys(this.props.telemetry.parameters).length,
-                'parameters': Object.entries(this.props.telemetry.parameters).map( parameter=>{
+                'parameters': Object.entries(this.props.telemetry.parameters).map(parameter => {
                     const [name, value] = parameter;
                     return {
-                        'name': name +'????',
+                        'name': name + '????',
                         'param_name': name,
                         'data_type': 'double?',
                         'value': value,
@@ -209,19 +209,24 @@ export default class RawTelemetryTable extends PureComponent {
                                         {
                                             (this.state.expandedRows[row.param_name]) ?
                                                 <tr key={row.param_name + '-expanded'} className={styles.expandedRow}>
-                                                    <td colSpan={9}>
+                                                    <td colSpan={3}>
+                                                    </td>
+                                                    <td colSpan={2}>
+                                                    </td>
+                                                    <td colSpan={3}>
                                                         <div>
-                                                            <div>
-                                                                <p>
-                                                                    {'function ( value ) {'}
-                                                                </p>
-                                                                <textarea id={row.param_name + '-healthFunction'} defaultValue={this.props.healthFunctions[row.param_name]}>
-                                                                </textarea>
-                                                                <p>
-                                                                    {'}'}
-                                                                </p>
-                                                                <button onClick={() => this.setHealthFunction(row.param_name)}>Set</button>
-                                                            </div>
+                                                            <p>
+                                                                {'function ( value ) {'}
+                                                            </p>
+                                                            <textarea id={row.param_name + '-healthFunction'} defaultValue={this.props.healthFunctions[row.param_name]}>
+                                                            </textarea>
+                                                            <p>
+                                                                {'}'}
+                                                            </p>
+                                                        </div>
+                                                    </td>
+                                                    <td colSpan={1}>
+                                                        <div>
                                                             <div>
                                                                 <ul>
                                                                     <li>
@@ -235,6 +240,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <div>
                                                                 <span>{JSON.stringify(row.value)}</span>
                                                             </div>
+                                                            <button onClick={() => this.setHealthFunction(row.param_name)}>Set</button>
                                                         </div>
                                                     </td>
                                                 </tr> :
