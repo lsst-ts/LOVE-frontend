@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
 import EditIcon from '../../icons/EditIcon/EditIcon';
+import Button from '../Button/Button';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -133,6 +134,19 @@ export default class RawTelemetryTable extends PureComponent {
         return 0;
     }
 
+    renderValueAsList = (values) => {
+        let nElements = values.length;
+        let padding = Math.ceil(Math.log10(nElements));
+        let elements = values.map((elem, index) => {
+            return <div key={index} className={styles.valuesListItem}>
+                <span className={styles.valuesListIndex}>{index.toString().padStart(padding, ' ')}</span>: {JSON.stringify(elem)}
+            </div>
+        });
+        return <div className={styles.valuesList}>
+            {elements}
+        </div>;
+    }
+
     render() {
         let data = this.props.data;
         if (Object.keys(this.props.telemetry.parameters).length > 0) {
@@ -194,7 +208,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td>{row.data_type}</td>
                                             <td className={styles.valueCell}>{JSON.stringify(row.value)}</td>
                                             <td>{row.units}</td>
-                                            <td className={styles.healthStatusCell}>
+                                            <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
                                                         <StatusText statusCode={this.getHealthStatusCode(row.param_name, row.value)} getHealthText={this.getHealthText}>
@@ -209,11 +223,17 @@ export default class RawTelemetryTable extends PureComponent {
                                         {
                                             (this.state.expandedRows[row.param_name]) ?
                                                 <tr key={row.param_name + '-expanded'} className={styles.expandedRow}>
-                                                    <td colSpan={3}>
+                                                    <td colSpan={4}>
+                                                        <div>
+                                                            <p>Value</p>
+                                                            {
+                                                                row.value.length > 1 ?
+                                                                    this.renderValueAsList(row.value) :
+                                                                    <span>{JSON.stringify(row.value)}</span>
+                                                            }
+                                                        </div>
                                                     </td>
-                                                    <td colSpan={2}>
-                                                    </td>
-                                                    <td colSpan={3}>
+                                                    <td colSpan={4}>
                                                         <div>
                                                             <p>
                                                                 {'function ( value ) {'}
@@ -223,24 +243,30 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <p>
                                                                 {'}'}
                                                             </p>
+                                                            <div onClick={() => this.setHealthFunction(row.param_name)}>
+                                                                <Button className={styles.setButton}>
+                                                                    <span>Set</span>
+                                                                </Button>
+                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td colSpan={1}>
                                                         <div>
-                                                            <div>
-                                                                <ul>
-                                                                    <li>
-                                                                        <span onClick={() => this.displayHealthFunction(row.param_name, 'range')}>Range</span>
-                                                                    </li>
-                                                                    <li>
-                                                                        <span onClick={() => this.displayHealthFunction(row.param_name, 'text')}>Text value</span>
-                                                                    </li>
-                                                                </ul>
+                                                            <div className={styles.snippetsContainer}>
+                                                                <p>Snippets</p>
+                                                                <div className={styles.snippetsList}>
+                                                                    <div className={styles.snippetButtonWrapper}>
+                                                                        <Button secondary className={styles.snippetButton}>
+                                                                            <span onClick={() => this.displayHealthFunction(row.param_name, 'range')}>Range</span>
+                                                                        </Button>
+                                                                    </div>
+                                                                    <div className={styles.snippetButtonWrapper}>
+                                                                        <Button secondary className={styles.snippetButton}>
+                                                                            <span onClick={() => this.displayHealthFunction(row.param_name, 'text')}>Text value</span>
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div>
-                                                                <span>{JSON.stringify(row.value)}</span>
-                                                            </div>
-                                                            <button onClick={() => this.setHealthFunction(row.param_name)}>Set</button>
                                                         </div>
                                                     </td>
                                                 </tr> :
