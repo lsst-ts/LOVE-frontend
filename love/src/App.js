@@ -9,16 +9,17 @@ class App extends Component {
   constructor() {
     super();
     this.state ={
-			telemetry: {
-				name: "interestedProposal",
-				parameters: {},
-				receptionTimeStamp: "2018/11-23 21:12:24."
+			telemetries: {
+				'interestedProposal':{
+          parameters: {},
+          receptionTimeStamp: "2018/11-23 21:12:24."
+        }
 			}
 		}
 		
 
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
-      onopen: e => socket.json({ "option": "subscribe", "data": this.state.telemetry.name }),
+      onopen: e => socket.json({ "option": "subscribe", "data": 'interestedProposal' }),
       onmessage: this.receiveMsg,
     });
     socket.onmessage = (e => console.log('Receirewrewrweved:', e));
@@ -37,16 +38,16 @@ class App extends Component {
 				receptionTimestamp: timestamp
 			}
 
-      this.setState({telemetry: telemetry});
+      this.setState({telemetries: Object.assign(this.state.telemetries, telemetry)});
     }
   }
 
   render() {
     return (
       <div className="App">
-        <RawTelemetryTable data={fakeData} telemetries={{'interestedProposal':this.state.telemetry}}web></RawTelemetryTable>
-				<TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
-											telemetryName={this.state.telemetry.name}></TelemetryLog>
+        <RawTelemetryTable data={fakeData} telemetries={this.state.telemetries} web></RawTelemetryTable>
+				{/* <TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
+											telemetryName={this.state.telemetry.name}></TelemetryLog> */}
       </div>
     );
   }
