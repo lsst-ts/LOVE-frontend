@@ -39,8 +39,8 @@
     padding: 0.4em 1em;
     word-wrap:break-word;
     max-width: 0;
-    border-top: 2px solid var(--base-background-color);
-    border-bottom: 2px solid var(--base-background-color);
+    border-top: 0 solid var(--base-background-color);
+    border-bottom: 0 solid var(--base-background-color);
     border-left: 1px solid var(--base-background-color);
     border-right: 1px solid var(--base-background-color);
 }
@@ -129,6 +129,8 @@
     height: 12em;
     font-size: 1em;
     resize: none;
+    border-radius: 5px;
+    padding: 0.6em 0.6em;
 }
 
 .rawTelemetryTable .snippetsContainer {
