@@ -165,24 +165,31 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        let data = this.props.data;
-        if(Object.keys(this.props.telemetry.parameters).length>0){
-            data["scheduler"][this.props.telemetry.name] = {
-                'timestamp': this.props.telemetry.receptionTimestamp,
-                'nParams': Object.keys(this.props.telemetry.parameters).length,
-                'parameters': Object.entries(this.props.telemetry.parameters).map( parameter=>{
-                    const [name, value] = parameter;
-                    return {
-                        'name': name +'????',
-                        'param_name': name,
-                        'data_type': 'double?',
-                        'value': value,
-                        'units': 'm/s??'
-                    }
-                })
-            }
+        let data = this.props.data // load "fake" data as template;
 
-        }
+        let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
+        telemetryNames.forEach((telemetryName, telemetryIndex)=>{
+            let telemetryData = this.props.telemetries[telemetryName];
+            let parameters = Object.keys(telemetryData.parameters);
+
+            parameters.forEach((parameter, parameterIndex)=>{
+                data["scheduler"][telemetryName] = {
+                    'timestamp': telemetryData.receptionTimestamp,
+                    'nParams': Object.keys(parameters).length,
+                    'parameters': Object.entries(parameters).map( parameter=>{
+                        const [name, value] = parameter;
+                        return {
+                            'name': name +'????',
+                            'param_name': name,
+                            'data_type': 'double?',
+                            'value': value,
+                            'units': 'm/s??'
+                        }
+                    })
+                }                
+            });
+        });
+
         data = this.convertData(data);
 
         return (

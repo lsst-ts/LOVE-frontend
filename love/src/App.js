@@ -44,7 +44,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <RawTelemetryTable data={fakeData} telemetry={this.state.telemetry}></RawTelemetryTable>
+        <RawTelemetryTable data={fakeData} telemetries={{'interestedProposal':this.state.telemetry}}web></RawTelemetryTable>
 				<TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
 											telemetryName={this.state.telemetry.name}></TelemetryLog>
       </div>
