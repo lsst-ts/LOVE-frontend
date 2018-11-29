@@ -3,7 +3,6 @@ import './App.css';
 import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import RawTelemetryTable from './components/HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import fakeData from './components/HealthStatusSummary/RawTelemetryTable/fakeData';
 class App extends Component {
 
   constructor() {
@@ -33,7 +32,7 @@ class App extends Component {
   }
 
   receiveMsg = (msg) => {
-		let data = JSON.parse(msg.data);		
+    let data = JSON.parse(msg.data);		
 		if(typeof data.data === 'object'){
 			let timestamp = new Date();
 			timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
@@ -53,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <RawTelemetryTable data={fakeData} telemetries={this.state.telemetries} web></RawTelemetryTable>
+        <RawTelemetryTable telemetries={this.state.telemetries} web></RawTelemetryTable>
 				{/* <TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
 											telemetryName={this.state.telemetry.name}></TelemetryLog> */}
       </div>
