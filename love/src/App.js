@@ -23,12 +23,37 @@ class App extends Component {
 			}
 		}
 		
+    this.subscribeToTelemetry('all', this.receiveAllMsg);
+  }
+
+  subscribeToTelemetry = (name, callback) =>{
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
-      onopen: e => socket.json({ "option": "subscribe", "data": 'interestedProposal' }),
-      onmessage: this.receiveMsg,
+      onopen: e => socket.json({ "option": "subscribe", "data": name }),
+      onmessage: callback,
     });
-    socket.onmessage = (e => console.log('Receirewrewrweved:', e));
-    window.socket = socket;
+  }
+
+  receiveAllMsg = (msg) => {
+    let data = JSON.parse(msg.data);		
+		if(typeof data.data === 'object'){
+      
+      let newTelemetries = Object.assign({}, this.state.telemetries);
+      let timestamp = new Date();
+      timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
+      Object.entries(data.data).forEach((entry)=>{
+        console.log(entry);
+        let [telemetryName, parameters] = entry;
+        let telemetry = {};
+        telemetry[telemetryName] = {
+          parameters:  parameters,
+          receptionTimestamp: timestamp
+        }
+        Object.assign(newTelemetries, telemetry);
+      }, this);
+      
+      newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
+      this.setState({telemetries: newTelemetries});
+    }
   }
 
   receiveMsg = (msg) => {
@@ -36,7 +61,6 @@ class App extends Component {
 		if(typeof data.data === 'object'){
 			let timestamp = new Date();
 			timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
-
 			let telemetry = {
 				"interestedProposal":{
           parameters: {...data.data},
