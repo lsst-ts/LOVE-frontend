@@ -12,12 +12,18 @@ class App extends Component {
 			telemetries: {
 				'interestedProposal':{
           parameters: {},
-          receptionTimeStamp: "2018/11-23 21:12:24."
+          receptionTimeStamp: "2018/11/23 21:12:24."
+        },
+        "bulkCloud": {
+          parameters: {
+            "bulkCloud": 0.6713680575252166,
+          "timestamp": 0.5309269973966433
+          },
+          receptionTimeStamp: "2018/11/25 12:21:12"
         }
 			}
 		}
 		
-
     const socket = sockette('ws://localhost:8000/ws/subscription/', {
       onopen: e => socket.json({ "option": "subscribe", "data": 'interestedProposal' }),
       onmessage: this.receiveMsg,
@@ -33,12 +39,14 @@ class App extends Component {
 			timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
 
 			let telemetry = {
-				name: "interestedProposal",
-				parameters: {...data.data},
-				receptionTimestamp: timestamp
-			}
-
-      this.setState({telemetries: Object.assign(this.state.telemetries, telemetry)});
+				"interestedProposal":{
+          parameters: {...data.data},
+          receptionTimestamp: timestamp
+        }
+      }
+      let newTelemetries = Object.assign({}, this.state.telemetries, telemetry);
+      newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
+      this.setState({telemetries: newTelemetries});
     }
   }
 
