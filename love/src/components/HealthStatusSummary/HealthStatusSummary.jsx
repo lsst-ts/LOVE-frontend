@@ -56,7 +56,7 @@ export default class HealthStatusSummary extends Component {
 
     setHealthFunctions = (healthFunctions) => {
         this.setState({
-            healthFunctions: healthFunctions,
+            healthFunctions: {...healthFunctions},
         });
     }
 
