@@ -25,4 +25,4 @@ RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build
 
 WORKDIR /home/docker/love/build
 # start app
-CMD ["python -m SimpleHTTPServer 3000"]
+CMD python -m SimpleHTTPServer 3000
