@@ -1,7 +1,5 @@
 FROM node:10.13-stretch
 
-ARG WEBSOCKET_HOST=127.0.0.1
-
 # set working directory
 RUN mkdir -p /home/docker/love
 
@@ -20,6 +18,8 @@ COPY ./love/yarn.lock /home/docker/love/yarn.lock
 RUN npm install
 
 COPY ./love /home/docker/love/
+
+ARG WEBSOCKET_HOST=127.0.0.1
 
 RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build
 
