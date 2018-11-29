@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
 import EditIcon from '../EditIcon/EditIcon';
+import fakeData from './fakeData';
+
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -73,18 +75,17 @@ export default class RawTelemetryTable extends PureComponent {
                 let parameters = telemetryStream['parameters'];
                 for (let k = 0; k < parameters.length; k++) {
                     let parameter = parameters[k];
-                    for (let n = 0; n < 10; n++)
-                        newData.push({//change to fixed length
-                            'component': componentName,
-                            'stream': telemetryStreamName,
-                            'timestamp': streamTimestamp,
-                            'name': parameter['name'],
-                            'param_name': parameter['param_name'] + n,
-                            'data_type': parameter['data_type'],
-                            'value': parameter['value'],
-                            'units': parameter['units'],
-                            'health_status': (value) => 'Not defined',
-                        })
+                    newData.push({//change to fixed length
+                        'component': componentName,
+                        'stream': telemetryStreamName,
+                        'timestamp': streamTimestamp,
+                        'name': parameter['name'],
+                        'param_name': parameter['param_name'],
+                        'data_type': parameter['data_type'],
+                        'value': parameter['value'],
+                        'units': parameter['units'],
+                        'health_status': (value) => 'Not defined',
+                    })
                 }
             }
         }
@@ -165,7 +166,7 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        let data = this.props.data // load "fake" data as template;
+        let data = Object.assign({},fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
         telemetryNames.forEach((telemetryName, telemetryIndex)=>{
             // look at one telemetry
@@ -177,14 +178,14 @@ export default class RawTelemetryTable extends PureComponent {
                 'nParams': telemetryData.parameters.length,
                 'parameters': Object.entries(telemetryData.parameters).map( parameter=>{
                     // look at one parameter 
-                    const [name, value ] = parameter;
+                    const [name, value, data_type, units ] = parameter;
 
                     return {
                         'name': name +'????',
                         'param_name': name,
-                        'data_type': 'double?',
+                        'data_type': data_type,
                         'value': value,
-                        'units': 'm/s??'
+                        'units': units
                     }
                 })
             }
@@ -192,7 +193,6 @@ export default class RawTelemetryTable extends PureComponent {
 
 
         data = this.convertData(data);
-
         return (
             <table className={styles.rawTelemetryTable}>
                 <tbody>
