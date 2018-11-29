@@ -21,5 +21,6 @@ COPY ./love /home/docker/love/
 
 RUN npm run build
 
+WORKDIR /home/docker/love/build
 # start app
-CMD ["npm", "start"]
+CMD ["python -m", "SimpleHTTPServer", 3000]

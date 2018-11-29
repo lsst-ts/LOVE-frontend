@@ -19,7 +19,7 @@ class App extends Component {
 		}
 		
 
-    const socket = sockette('ws://localhost:8000/ws/subscription/', {
+    const socket = sockette('ws://'+process.env.REACT_APP_WEBSOCKET_HOST+'/ws/subscription/', {
       onopen: e => socket.json({ "option": "subscribe", "data": this.state.telemetry.name }),
       onmessage: this.receiveMsg,
     });
