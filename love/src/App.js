@@ -3,6 +3,8 @@ import './App.css';
 import sockette from 'sockette';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import RawTelemetryTable from './components/HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
+import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
+
 class App extends Component {
 
   constructor() {
@@ -27,7 +29,7 @@ class App extends Component {
   }
 
   subscribeToTelemetry = (name, callback) =>{
-    const socket = sockette('ws://localhost:8000/ws/subscription/', {
+    const socket = sockette('ws://'+process.env.REACT_APP_WEBSOCKET_HOST+'/ws/subscription/', {
       onopen: e => socket.json({ "option": "subscribe", "data": name }),
       onmessage: callback,
     });
@@ -74,12 +76,11 @@ class App extends Component {
   }
 
   render() {
+    
     return (
       <div className="App">
-        <RawTelemetryTable telemetries={this.state.telemetries} web></RawTelemetryTable>
-				{/* <TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
-											telemetryName={this.state.telemetry.name}></TelemetryLog> */}
-      </div>
+        <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>
+	   </div>
     );
   }
 }
@@ -87,3 +88,6 @@ class App extends Component {
 export default App;
 
 
+			// <TelemetryLog telemetry={{...this.state.telemetry.parameters}} 
+				// 							telemetryName={this.state.telemetry.name}></TelemetryLog>
+   
