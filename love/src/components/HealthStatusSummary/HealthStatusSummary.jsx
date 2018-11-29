@@ -97,9 +97,9 @@ export default class HealthStatusSummary extends Component {
                             <UploadButton onLoadFile={this.onLoadFile}></UploadButton>
                         </div>
                     </div>
-                    <div className={styles.buttonWrapper}>
+                    <div className={styles.buttonWrapper} onClick={() => this.download(this.getOutputConfig(), 'data.json')}>
                         {/* <a href={{data: "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({'adsas': 1}))}} download="data.json"> */}
-                        <Button onClick={() => this.download(this.getOutputConfig(), 'data.json')}><ExportIcon></ExportIcon>Export</Button>
+                        <Button><ExportIcon></ExportIcon>Export</Button>
                         {/* </a> */}
                     </div>
                 </div>
