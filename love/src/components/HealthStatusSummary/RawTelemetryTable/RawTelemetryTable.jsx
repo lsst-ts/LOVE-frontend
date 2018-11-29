@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
-import EditIcon from '../EditIcon/EditIcon';
+import EditIcon from '../../icons/EditIcon/EditIcon';
+import Button from '../Button/Button';
 import fakeData from './fakeData';
 
 
@@ -9,38 +10,11 @@ export default class RawTelemetryTable extends PureComponent {
     constructor() {
         super();
 
-        let filters = {
-            'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'stream': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'timestamp': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'param_name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
-        }
-
-        let healthFunctions = localStorage.getItem('healthFunctions');
-        if (!healthFunctions) {
-            healthFunctions = {
-                'timestamp0': '//asdasdadsa',
-                'altitude_decel0': '//dsasdssa\nreturn ALERT;',
-                'altitude_accel0': 'return WARNING;',
-                'altitude_maxspeed0': 'return OK;',
-            }
-        } else {
-            healthFunctions = JSON.parse(healthFunctions);
-        }
-
-
         let expandedRows = {
             'altitude_maxspeed0': true,
         };
 
         this.state = {
-            filters: filters,
-            healthFunctions: healthFunctions,
             expandedRows: expandedRows,
         };
 
@@ -94,11 +68,11 @@ export default class RawTelemetryTable extends PureComponent {
 
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
-            if (this.state.filters[rowKey].type === 'regexp')
-                return this.state.filters[rowKey].value.test(row[rowKey]);
-            if (this.state.filters[rowKey].type === 'health') {
+            if (this.props.filters[rowKey].type === 'regexp')
+                return this.props.filters[rowKey].value.test(row[rowKey]);
+            if (this.props.filters[rowKey].type === 'health') {
                 let healthStatus = this.getHealthText(this.getHealthStatusCode(row.param_name, row.value));
-                return this.state.filters[rowKey].value.test(healthStatus);
+                return this.props.filters[rowKey].value.test(healthStatus);
             }
             return true;
         });
@@ -108,20 +82,18 @@ export default class RawTelemetryTable extends PureComponent {
 
     changeFilter = (column) => {
         return (event) => {
-            let filters = { ...this.state.filters };
+            let filters = { ...this.props.filters };
             filters[column].value = new RegExp(event.target.value, 'i');
-            this.setState({
-                filters: filters
-            })
+            this.props.setFilters(filters);
         }
     }
 
     getHealthStatusCode = (param_name, value) => {
         let statusCode = 0;
-        if (this.state.healthFunctions[param_name]) {
+        if (this.props.healthFunctions[param_name]) {
             try {
                 // eslint-disable-next-line
-                let user_func = new Function("value", this.state.healthFunctions[param_name]);
+                let user_func = new Function("value", this.props.healthFunctions[param_name]);
                 statusCode = user_func(value);
             } catch (err) {
                 statusCode = -1;
@@ -146,11 +118,9 @@ export default class RawTelemetryTable extends PureComponent {
 
     setHealthFunction = (param_name) => {
         console.log(param_name + '-healthFuncion')
-        let healthFunctions = this.state.healthFunctions;
+        let healthFunctions = this.props.healthFunctions;
         healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
-        this.setState({
-            healthFunctions: { ...healthFunctions },
-        })
+        this.props.setHealthFunctions(healthFunctions);
         localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
     }
 
@@ -163,6 +133,19 @@ export default class RawTelemetryTable extends PureComponent {
             text = 'if(value > <targetValue1>)\n    return WARNING;\nif(value > <targetValue1>)\n    return ALERT;\n return OK\n';
         textArea.value = text;
         return 0;
+    }
+
+    renderValueAsList = (values) => {
+        let nElements = values.length;
+        let padding = Math.ceil(Math.log10(nElements));
+        let elements = values.map((elem, index) => {
+            return <div key={index} className={styles.valuesListItem}>
+                <span className={styles.valuesListIndex}>{index.toString().padStart(padding, ' ')}</span>: {JSON.stringify(elem)}
+            </div>
+        });
+        return <div className={styles.valuesList}>
+            {elements}
+        </div>;
     }
 
     render() {
@@ -181,7 +164,7 @@ export default class RawTelemetryTable extends PureComponent {
                     const [name, value, data_type, units ] = parameter;
 
                     return {
-                        'name': name +'????',
+                        'name': name + '????',
                         'param_name': name,
                         'data_type': data_type,
                         'value': value,
@@ -234,7 +217,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td>{row.data_type}</td>
                                             <td className={styles.valueCell}>{JSON.stringify(row.value)}</td>
                                             <td>{row.units}</td>
-                                            <td className={styles.healthStatusCell}>
+                                            <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
                                                         <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
@@ -249,31 +232,49 @@ export default class RawTelemetryTable extends PureComponent {
                                         {
                                             (this.state.expandedRows[key]) ?
                                                 <tr key={key + '-expanded'} className={styles.expandedRow}>
-                                                    <td colSpan={9}>
+                                                    <td colSpan={4}>
                                                         <div>
-                                                            <div>
-                                                                <p>
-                                                                    {'function ( value ) {'}
-                                                                </p>
-                                                                <textarea id={key + '-healthFunction'} defaultValue={this.state.healthFunctions[key]}>
-                                                                </textarea>
-                                                                <p>
-                                                                    {'}'}
-                                                                </p>
-                                                                <button onClick={() => this.setHealthFunction(key)}>Set</button>
+                                                            <p>Value</p>
+                                                            {
+                                                                row.value.length > 1 ?
+                                                                    this.renderValueAsList(row.value) :
+                                                                    <span>{JSON.stringify(row.value)}</span>
+                                                            }
+                                                        </div>
+                                                    </td>
+                                                    <td colSpan={4}>
+                                                        <div>
+                                                            <p>
+                                                                {'function ( value ) {'}
+                                                            </p>
+                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key]}>
+                                                            </textarea>
+                                                            <p>
+                                                                {'}'}
+                                                            </p>
+                                                            <div onClick={() => this.setHealthFunction(key)}>
+                                                                <Button className={styles.setButton}>
+                                                                    <span>Set</span>
+                                                                </Button>
                                                             </div>
-                                                            <div>
-                                                                <ul>
-                                                                    <li>
-                                                                        <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
-                                                                    </li>
-                                                                    <li>
-                                                                        <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                            <div>
-                                                                <span>{JSON.stringify(row.value)}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td colSpan={1}>
+                                                        <div>
+                                                            <div className={styles.snippetsContainer}>
+                                                                <p>Snippets</p>
+                                                                <div className={styles.snippetsList}>
+                                                                    <div className={styles.snippetButtonWrapper}>
+                                                                        <Button secondary className={styles.snippetButton}>
+                                                                            <span onClick={() => this.displayHealthFunction(row.param_name, 'range')}>Range</span>
+                                                                        </Button>
+                                                                    </div>
+                                                                    <div className={styles.snippetButtonWrapper}>
+                                                                        <Button secondary className={styles.snippetButton}>
+                                                                            <span onClick={() => this.displayHealthFunction(row.param_name, 'text')}>Text value</span>
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </td>
