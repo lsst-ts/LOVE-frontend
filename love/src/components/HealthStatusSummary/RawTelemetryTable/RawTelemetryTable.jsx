@@ -3,6 +3,8 @@ import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import Button from '../Button/Button';
+import fakeData from './fakeData';
+
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -47,18 +49,17 @@ export default class RawTelemetryTable extends PureComponent {
                 let parameters = telemetryStream['parameters'];
                 for (let k = 0; k < parameters.length; k++) {
                     let parameter = parameters[k];
-                    for (let n = 0; n < 10; n++)
-                        newData.push({//change to fixed length
-                            'component': componentName,
-                            'stream': telemetryStreamName,
-                            'timestamp': streamTimestamp,
-                            'name': parameter['name'],
-                            'param_name': parameter['param_name'] + n,
-                            'data_type': parameter['data_type'],
-                            'value': parameter['value'],
-                            'units': parameter['units'],
-                            'health_status': (value) => 'Not defined',
-                        })
+                    newData.push({//change to fixed length
+                        'component': componentName,
+                        'stream': telemetryStreamName,
+                        'timestamp': streamTimestamp,
+                        'name': parameter['name'],
+                        'param_name': parameter['param_name'],
+                        'data_type': parameter['data_type'],
+                        'value': parameter['value'],
+                        'units': parameter['units'],
+                        'health_status': (value) => 'Not defined',
+                    })
                 }
             }
         }
@@ -148,26 +149,33 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        let data = this.props.data;
-        if (Object.keys(this.props.telemetry.parameters).length > 0) {
-            data["scheduler"][this.props.telemetry.name] = {
-                'timestamp': this.props.telemetry.receptionTimestamp,
-                'nParams': Object.keys(this.props.telemetry.parameters).length,
-                'parameters': Object.entries(this.props.telemetry.parameters).map(parameter => {
-                    const [name, value] = parameter;
+        let data = Object.assign({},fakeData); // load "fake" data as template;
+        let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
+        telemetryNames.forEach((telemetryName, telemetryIndex)=>{
+            // look at one telemetry
+            let telemetryData = this.props.telemetries[telemetryName];
+            let parametersNames = Object.keys(telemetryData.parameters);
+
+            data["scheduler"][telemetryName] = {
+                'timestamp': telemetryData.receptionTimestamp,
+                'nParams': telemetryData.parameters.length,
+                'parameters': Object.entries(telemetryData.parameters).map( parameter=>{
+                    // look at one parameter 
+                    const [name, value, data_type, units ] = parameter;
+
                     return {
                         'name': name + '????',
                         'param_name': name,
-                        'data_type': 'double?',
+                        'data_type': data_type,
                         'value': value,
-                        'units': 'm/s??'
+                        'units': units
                     }
                 })
             }
+        }, this);
 
-        }
+
         data = this.convertData(data);
-
         return (
             <table className={styles.rawTelemetryTable}>
                 <tbody>
@@ -197,9 +205,10 @@ export default class RawTelemetryTable extends PureComponent {
                         data.map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
                             if (this.testFilter(row)) {
+                                let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
-                                    <React.Fragment key={row.param_name}>
-                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(row.param_name)} key={row.param_name + '-row'}>
+                                    <React.Fragment key={key}>
+                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(key)} key={key + '-row'}>
                                             <td>{row.component}</td>
                                             <td>{row.stream}</td>
                                             <td>{row.timestamp}</td>
@@ -211,7 +220,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
-                                                        <StatusText statusCode={this.getHealthStatusCode(row.param_name, row.value)} getHealthText={this.getHealthText}>
+                                                        <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
                                                         </StatusText>
                                                     </div>
                                                     <div className={styles.editIconWrapper}>
@@ -221,8 +230,8 @@ export default class RawTelemetryTable extends PureComponent {
                                             </td>
                                         </tr>
                                         {
-                                            (this.state.expandedRows[row.param_name]) ?
-                                                <tr key={row.param_name + '-expanded'} className={styles.expandedRow}>
+                                            (this.state.expandedRows[key]) ?
+                                                <tr key={key + '-expanded'} className={styles.expandedRow}>
                                                     <td colSpan={4}>
                                                         <div>
                                                             <p>Value</p>
@@ -238,12 +247,12 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <p>
                                                                 {'function ( value ) {'}
                                                             </p>
-                                                            <textarea id={row.param_name + '-healthFunction'} defaultValue={this.props.healthFunctions[row.param_name]}>
+                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key]}>
                                                             </textarea>
                                                             <p>
                                                                 {'}'}
                                                             </p>
-                                                            <div onClick={() => this.setHealthFunction(row.param_name)}>
+                                                            <div onClick={() => this.setHealthFunction(key)}>
                                                                 <Button className={styles.setButton}>
                                                                     <span>Set</span>
                                                                 </Button>

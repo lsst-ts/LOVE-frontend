@@ -103,7 +103,7 @@ export default class HealthStatusSummary extends Component {
                         {/* </a> */}
                     </div>
                 </div>
-                <RawTelemetryTable data={this.props.data} telemetry={this.props.telemetry} {...this.state}></RawTelemetryTable>
+                <RawTelemetryTable telemetries={this.props.telemetries} {...this.state}></RawTelemetryTable>
             </div >
         )
     }
