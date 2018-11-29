@@ -222,9 +222,10 @@ export default class RawTelemetryTable extends PureComponent {
                         data.map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
                             if (this.testFilter(row)) {
+                                let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
-                                    <React.Fragment key={row.param_name}>
-                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(row.param_name)} key={row.param_name + '-row'}>
+                                    <React.Fragment key={key}>
+                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(key)} key={key + '-row'}>
                                             <td>{row.component}</td>
                                             <td>{row.stream}</td>
                                             <td>{row.timestamp}</td>
@@ -236,7 +237,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td className={styles.healthStatusCell}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
-                                                        <StatusText statusCode={this.getHealthStatusCode(row.param_name, row.value)} getHealthText={this.getHealthText}>
+                                                        <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
                                                         </StatusText>
                                                     </div>
                                                     <div className={styles.editIconWrapper}>
@@ -246,28 +247,28 @@ export default class RawTelemetryTable extends PureComponent {
                                             </td>
                                         </tr>
                                         {
-                                            (this.state.expandedRows[row.param_name]) ?
-                                                <tr key={row.param_name + '-expanded'} className={styles.expandedRow}>
+                                            (this.state.expandedRows[key]) ?
+                                                <tr key={key + '-expanded'} className={styles.expandedRow}>
                                                     <td colSpan={9}>
                                                         <div>
                                                             <div>
                                                                 <p>
                                                                     {'function ( value ) {'}
                                                                 </p>
-                                                                <textarea id={row.param_name + '-healthFunction'} defaultValue={this.state.healthFunctions[row.param_name]}>
+                                                                <textarea id={key + '-healthFunction'} defaultValue={this.state.healthFunctions[key]}>
                                                                 </textarea>
                                                                 <p>
                                                                     {'}'}
                                                                 </p>
-                                                                <button onClick={() => this.setHealthFunction(row.param_name)}>Set</button>
+                                                                <button onClick={() => this.setHealthFunction(key)}>Set</button>
                                                             </div>
                                                             <div>
                                                                 <ul>
                                                                     <li>
-                                                                        <span onClick={() => this.displayHealthFunction(row.param_name, 'range')}>Range</span>
+                                                                        <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
                                                                     </li>
                                                                     <li>
-                                                                        <span onClick={() => this.displayHealthFunction(row.param_name, 'text')}>Text value</span>
+                                                                        <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
                                                                     </li>
                                                                 </ul>
                                                             </div>
