@@ -1,5 +1,7 @@
 FROM node:10.13-stretch
 
+ARG WEBSOCKET_HOST=127.0.0.1
+
 # set working directory
 RUN mkdir -p /home/docker/love
 
@@ -19,8 +21,8 @@ RUN npm install
 
 COPY ./love /home/docker/love/
 
-RUN npm run build
+RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build
 
 WORKDIR /home/docker/love/build
 # start app
-CMD ["python -m", "SimpleHTTPServer", 3000]
+CMD ["python -m SimpleHTTPServer 3000"]
