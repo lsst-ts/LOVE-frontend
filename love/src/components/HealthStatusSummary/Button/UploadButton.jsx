@@ -17,8 +17,8 @@ export default class UploadButton extends Component {
         return (
             <form action="#">
                 <div className={[styles.button, styles.uploadButton].join(' ')}>
-                    <ImportIcon></ImportIcon>
                     <input onChange={this.onChange} type="file" id="my-file" className={styles.customFileInput} />
+                    <ImportIcon></ImportIcon>
                     <label tabIndex="0" htmlFor="my-file" className={styles.inputFileTrigger}>Import</label>
                 </div>
             </form>
