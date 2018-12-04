@@ -150,6 +150,10 @@ export default class RawTelemetryTable extends PureComponent {
         </div>;
     }
 
+    columnOnClick = (ev, filterName) =>{
+        this.setState({activeFilterDialog: filterName});
+    }
+
     render() {
         let data = Object.assign({},fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
@@ -201,7 +205,7 @@ export default class RawTelemetryTable extends PureComponent {
                                         {header} 
                                         
                                         <div className={styles.filterIconWrapper}>
-                                            <FilterIcon/>
+                                            <FilterIcon filterName={filterName} onClickHandler={this.columnOnClick}/>
                                         </div>
                                     </div> 
                                     <div>
