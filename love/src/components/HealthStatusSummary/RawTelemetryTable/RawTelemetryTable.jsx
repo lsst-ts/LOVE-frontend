@@ -4,8 +4,7 @@ import StatusText from '../StatusText/StatusText';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
-import FilterDialog from './FilterDialog/FilterDialog';
-import FilterIcon from '../../icons/FilterIcon/FilterIcon';
+import ColumnHeader from './ColumnHeader/ColumnHeader';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -200,20 +199,10 @@ export default class RawTelemetryTable extends PureComponent {
                         {
                             Object.entries(headersToFilterName).map((entry)=>{
                                 const [header, filterName] = entry;
-                                return(<th key={header}> 
-                                    <div className={styles.columnHeader}>
-                                        {header} 
-                                        
-                                        <div className={styles.filterIconWrapper}>
-                                            <FilterIcon filterName={filterName} onClickHandler={this.columnOnClick}/>
-                                        </div>
-                                    </div> 
-                                    <div>
-                                        <FilterDialog 
-                                            show={this.state.activeFilterDialog===filterName}
-                                            changeFilter={this.changeFilter(filterName)}/> 
-                                    </div>
-                                    </th>)
+                                return(<ColumnHeader header={header} filterName={filterName}
+                                        changeFilter={this.changeFilter} 
+                                        activeFilterDialog={this.state.activeFilterDialog}
+                                        columnOnClick={this.columnOnClick}/>)
                                     
                             })
                         }
