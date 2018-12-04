@@ -15,9 +15,6 @@
     padding: 0.5em;
 }
 
-.rawTelemetryTable tr:hover.dataRow{
-    background: var(--tertiary-background-color);
-}
 .rawTelemetryTable tr:nth-child(even) {
     background: var(--secondary-background-dimmed-color);
 }
@@ -55,7 +52,15 @@
 .rawTelemetryTable .healthStatusCell {
     padding: 0.4em 0.5em;
     border-bottom: none;
-    cursor: pointer;
+    cursor: pointer;    
+}
+
+.rawTelemetryTable .healthStatusCell:hover {
+    background: var(--tertiary-background-color);
+}
+
+.rawTelemetryTable .healthStatusCell:hover .editIconWrapper {
+    visibility: visible;
 }
 
 .rawTelemetryTable .valueCell {
@@ -103,10 +108,6 @@
     right: 0;
     width: 16px;
     min-width: 16px;
-}
-
-.rawTelemetryTable tr:hover .editIconWrapper {
-    visibility: visible;
 }
 
 .rawTelemetryTable .statusTextWrapper {
