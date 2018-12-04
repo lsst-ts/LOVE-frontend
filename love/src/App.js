@@ -43,7 +43,6 @@ class App extends Component {
       let timestamp = new Date();
       timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
       Object.entries(data.data).forEach((entry)=>{
-        console.log(entry);
         let [telemetryName, parameters] = entry;
         let telemetry = {};
         telemetry[telemetryName] = {
