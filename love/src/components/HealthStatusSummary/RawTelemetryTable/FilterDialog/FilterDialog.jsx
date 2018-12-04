@@ -11,7 +11,9 @@ export default class FilterDialog extends Component {
             
             <div className={styles.superContainer}>
                 <div className={styles.filterContainer}>
-                    <input type="text" onChange={this.props.changeFilter} />
+                    <p>Sort A - Z</p>
+                    <p>Sort Z - A</p>
+                    <input type="text" className={styles.filterInput} onChange={this.props.changeFilter} />
                 </div>
             </div>
         );
