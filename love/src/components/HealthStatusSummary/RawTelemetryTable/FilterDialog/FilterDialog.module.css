@@ -1,0 +1,11 @@
+.superContainer{
+    position:relative;
+    width: 100%;
+}
+
+.filterContainer {
+    position: absolute;
+    background-color:white;
+    width: 100%;
+    display:block;
+}
