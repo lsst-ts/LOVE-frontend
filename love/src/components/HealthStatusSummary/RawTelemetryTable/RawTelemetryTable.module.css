@@ -44,6 +44,14 @@
     border-right: 1px solid var(--base-background-color);
 }
 
+.rawTelemetryTable td.string {
+    text-align: left;
+}
+
+.rawTelemetryTable td.number {
+    text-align: right;
+}
+
 .rawTelemetryTable .healthStatusCell {
     padding: 0.4em 0.5em;
     border-bottom: none;
