@@ -4,6 +4,7 @@ import StatusText from '../StatusText/StatusText';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
+import FilterDialog from './FilterDialog/FilterDialog';
 
 
 export default class RawTelemetryTable extends PureComponent {
@@ -180,7 +181,7 @@ export default class RawTelemetryTable extends PureComponent {
             <table className={styles.rawTelemetryTable}>
                 <tbody>
                     <tr>
-                        <th>Component</th>
+                        <th>Component <FilterDialog/> </th>
                         <th>Stream</th>
                         <th>Timestamp</th>
                         <th>Name</th>
