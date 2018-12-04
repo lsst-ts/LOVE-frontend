@@ -8,9 +8,8 @@ export default class FilterDialog extends Component {
 
     render(){
         return(
-            
             <div className={styles.superContainer}>
-                <div className={styles.filterContainer}>
+                <div className={styles.filterContainer + ' '+ (this.props.show ? styles.show: styles.hide) }>
                     <p>Sort A - Z</p>
                     <p>Sort Z - A</p>
                     <input type="text" className={styles.filterInput} onChange={this.props.changeFilter} />

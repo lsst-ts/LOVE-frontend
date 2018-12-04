@@ -17,6 +17,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
+            activeFilterDialog: 'param_name'
         };
 
         window.OK = 1;
@@ -181,11 +182,13 @@ export default class RawTelemetryTable extends PureComponent {
             <table className={styles.rawTelemetryTable}>
                 <tbody>
                     <tr>
-                        <th>Component <FilterDialog changeFilter={this.changeFilter('component')}/> </th>
+                        <th>Component <FilterDialog show={this.state.activeFilterDialog==='component'}
+                                        changeFilter={this.changeFilter('component')}/> </th>
                         <th>Stream</th>
                         <th>Timestamp</th>
                         <th>Name</th>
-                        <th>Parameter <FilterDialog changeFilter={this.changeFilter('param_name')}/> </th>
+                        <th>Parameter <FilterDialog show={this.state.activeFilterDialog==='param_name'}
+                                        changeFilter={this.changeFilter('param_name')}/> </th>
                         <th>Data type</th>
                         <th>Value</th>
                         <th>Units</th>
