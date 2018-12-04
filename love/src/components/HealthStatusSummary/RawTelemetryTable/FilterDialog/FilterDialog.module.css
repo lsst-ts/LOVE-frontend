@@ -1,11 +1,19 @@
 .superContainer{
     position:relative;
-    width: 100%;
+    width: 120%;
 }
 
 .filterContainer {
     position: absolute;
-    background-color:white;
+    background-color:red;
     width: 100%;
     display:block;
+    padding-bottom: 10%;
+    left:10%;
+}
+
+
+.filterInput{
+    width: 80%;
+    box-sizing: border-box;
 }
