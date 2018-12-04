@@ -122,6 +122,7 @@ export default class RawTelemetryTable extends PureComponent {
         healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
         this.props.setHealthFunctions(healthFunctions);
         localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
+        this.toggleRow(param_name);
     }
 
     displayHealthFunction = (param_name, functionType) => {
