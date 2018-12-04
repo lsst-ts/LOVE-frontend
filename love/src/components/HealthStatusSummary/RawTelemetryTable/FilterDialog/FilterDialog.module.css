@@ -7,9 +7,16 @@
     position: absolute;
     background-color:red;
     width: 100%;
-    display:block;
     padding-bottom: 10%;
     left:10%;
+}
+
+.show {
+    display:block;    
+}
+
+.hide {
+    display: none;
 }
 
 
