@@ -5,7 +5,7 @@ import EditIcon from '../../icons/EditIcon/EditIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
 import FilterDialog from './FilterDialog/FilterDialog';
-
+import FilterIcon from '../../icons/FilterIcon/FilterIcon';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -196,9 +196,21 @@ export default class RawTelemetryTable extends PureComponent {
                         {
                             Object.entries(headersToFilterName).map((entry)=>{
                                 const [header, filterName] = entry;
-                                return(<th key={header}> {header} <FilterDialog 
-                                    show={this.state.activeFilterDialog===filterName}
-                                    changeFilter={this.changeFilter(filterName)}/> </th>)
+                                return(<th key={header}> 
+                                    <div className={styles.columnHeader}>
+                                        {header} 
+                                        
+                                        <div className={styles.filterIconWrapper}>
+                                            <FilterIcon/>
+                                        </div>
+                                    </div> 
+                                    <div>
+                                        <FilterDialog 
+                                            show={this.state.activeFilterDialog===filterName}
+                                            changeFilter={this.changeFilter(filterName)}/> 
+                                    </div>
+                                    </th>)
+                                    
                             })
                         }
                     </tr>
