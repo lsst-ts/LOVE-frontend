@@ -17,7 +17,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
-            activeFilterDialog: 'param_name'
+            activeFilterDialog: 'name'
         };
 
         window.OK = 1;
@@ -178,21 +178,29 @@ export default class RawTelemetryTable extends PureComponent {
 
 
         data = this.convertData(data);
+
+        let headersToFilterName = {
+            'Component': 'component',
+            'Stream': 'stream',
+            'Timestamp':'timestamp',
+            'Name':'name',
+            'Parameter':'param_name',
+            'Data type':'data_type',
+            'Value':'value',
+            'Units':'units', 
+            'Health status':'health_status'};
         return (
             <table className={styles.rawTelemetryTable}>
                 <tbody>
                     <tr>
-                        <th>Component <FilterDialog show={this.state.activeFilterDialog==='component'}
-                                        changeFilter={this.changeFilter('component')}/> </th>
-                        <th>Stream</th>
-                        <th>Timestamp</th>
-                        <th>Name</th>
-                        <th>Parameter <FilterDialog show={this.state.activeFilterDialog==='param_name'}
-                                        changeFilter={this.changeFilter('param_name')}/> </th>
-                        <th>Data type</th>
-                        <th>Value</th>
-                        <th>Units</th>
-                        <th>Health status</th>
+                        {
+                            Object.entries(headersToFilterName).map((entry)=>{
+                                const [header, filterName] = entry;
+                                return(<th key={header}> {header} <FilterDialog 
+                                    show={this.state.activeFilterDialog===filterName}
+                                    changeFilter={this.changeFilter(filterName)}/> </th>)
+                            })
+                        }
                     </tr>
                     <tr>
                         <td> asdasd</td>
