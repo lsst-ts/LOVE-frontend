@@ -167,9 +167,9 @@ export default class RawTelemetryTable extends PureComponent {
                     return {
                         'name': name,
                         'param_name': name,
-                        'data_type': data_type,
+                        'data_type': data_type ? data_type:'?',
                         'value': value,
-                        'units': units
+                        'units': units ? units:'?'
                     }
                 })
             }
