@@ -10,7 +10,9 @@ export default class FilterDialog extends Component {
         return(
             
             <div className={styles.superContainer}>
-                <div className={styles.filterContainer}>asdfadsf</div>
+                <div className={styles.filterContainer}>
+                    <input type="text" onChange={this.props.changeFilter} />
+                </div>
             </div>
         );
 

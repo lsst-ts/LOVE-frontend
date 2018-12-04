@@ -181,22 +181,22 @@ export default class RawTelemetryTable extends PureComponent {
             <table className={styles.rawTelemetryTable}>
                 <tbody>
                     <tr>
-                        <th>Component <FilterDialog/> </th>
+                        <th>Component <FilterDialog changeFilter={this.changeFilter('component')}/> </th>
                         <th>Stream</th>
                         <th>Timestamp</th>
                         <th>Name</th>
-                        <th>Parameter</th>
+                        <th>Parameter <FilterDialog changeFilter={this.changeFilter('param_name')}/> </th>
                         <th>Data type</th>
                         <th>Value</th>
                         <th>Units</th>
                         <th>Health status</th>
                     </tr>
                     <tr>
-                        <td><input type="text" onChange={this.changeFilter('component')} /></td>
+                        <td> asdasd</td>
                         <td><input type="text" onChange={this.changeFilter('stream')} /></td>
                         <td><input type="text" onChange={this.changeFilter('timestamp')} /></td>
                         <td><input type="text" onChange={this.changeFilter('name')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('param_name')} /></td>
+                        <td> asd </td>
                         <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
                         <td><input type="text" onChange={this.changeFilter('value')} /></td>
                         <td><input type="text" onChange={this.changeFilter('units')} /></td>
