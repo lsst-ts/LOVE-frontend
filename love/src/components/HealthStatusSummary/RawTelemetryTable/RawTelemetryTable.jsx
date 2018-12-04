@@ -68,8 +68,9 @@ export default class RawTelemetryTable extends PureComponent {
 
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
-            if (this.props.filters[rowKey].type === 'regexp')
+            if (this.props.filters[rowKey].type === 'regexp') {
                 return this.props.filters[rowKey].value.test(row[rowKey]);
+            }
             if (this.props.filters[rowKey].type === 'health') {
                 let healthStatus = this.getHealthText(this.getHealthStatusCode(row.param_name, row.value));
                 return this.props.filters[rowKey].value.test(healthStatus);
@@ -150,18 +151,18 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        let data = Object.assign({},fakeData); // load "fake" data as template;
+        let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
-        telemetryNames.forEach((telemetryName, telemetryIndex)=>{
+        telemetryNames.forEach((telemetryName, telemetryIndex) => {
             // look at one telemetry
             let telemetryData = this.props.telemetries[telemetryName];
 
             data["scheduler"][telemetryName] = {
                 'timestamp': telemetryData.receptionTimestamp,
                 'nParams': telemetryData.parameters.length,
-                'parameters': Object.entries(telemetryData.parameters).map( parameter=>{
+                'parameters': Object.entries(telemetryData.parameters).map(parameter => {
                     // look at one parameter 
-                    const [name, value, data_type, units ] = parameter;
+                    const [name, value, data_type, units] = parameter;
 
                     return {
                         'name': name,
@@ -209,14 +210,14 @@ export default class RawTelemetryTable extends PureComponent {
                                 return (
                                     <React.Fragment key={key}>
                                         <tr className={styles.dataRow}>
-                                            <td>{row.component}</td>
-                                            <td>{row.stream}</td>
-                                            <td>{row.timestamp}</td>
-                                            <td>{row.name}</td>
-                                            <td>{row.param_name}</td>
-                                            <td>{row.data_type}</td>
-                                            <td className={styles.valueCell}>{JSON.stringify(row.value)}</td>
-                                            <td>{row.units}</td>
+                                            <td className={styles.string}>{row.component}</td>
+                                            <td className={styles.string}>{row.stream}</td>
+                                            <td className={styles.string}>{row.timestamp}</td>
+                                            <td className={styles.string}>{row.name}</td>
+                                            <td className={styles.string}>{row.param_name}</td>
+                                            <td className={styles.string}>{row.data_type}</td>
+                                            <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
+                                            <td className={styles.string}>{row.units}</td>
                                             <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}
                                                 onClick={() => this.toggleRow(key)} key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>
@@ -248,7 +249,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <p>
                                                                 {'function ( value ) {'}
                                                             </p>
-                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? 'dsadsa':this.defaultCodeText}>
+                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? '' : this.defaultCodeText}>
                                                             </textarea>
                                                             <p>
                                                                 {'}'}
