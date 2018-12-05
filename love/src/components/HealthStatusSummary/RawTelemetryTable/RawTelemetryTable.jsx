@@ -4,7 +4,7 @@ import StatusText from '../StatusText/StatusText';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
-
+import ColumnHeader from './ColumnHeader/ColumnHeader';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -16,6 +16,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
+            activeFilterDialog: 'name'
         };
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         window.OK = 1;
@@ -149,6 +150,14 @@ export default class RawTelemetryTable extends PureComponent {
         </ol>;
     }
 
+    columnOnClick = (ev, filterName) =>{
+        this.setState({activeFilterDialog: filterName});
+    }
+
+    closeFilterDialogs = ()=>{
+        this.setState({activeFilterDialog: 'None'});
+    }
+
     render() {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
@@ -176,27 +185,41 @@ export default class RawTelemetryTable extends PureComponent {
 
 
         data = this.convertData(data);
+
+        let headersToFilterName = {
+            'Component': 'component',
+            'Stream': 'stream',
+            'Timestamp':'timestamp',
+            'Name':'name',
+            'Parameter':'param_name',
+            'Data type':'data_type',
+            'Value':'value',
+            'Units':'units', 
+            'Health status':'health_status'};
         return (
             <table className={styles.rawTelemetryTable}>
                 <tbody>
                     <tr>
-                        <th>Component</th>
-                        <th>Stream</th>
-                        <th>Timestamp</th>
-                        <th>Name</th>
-                        <th>Parameter</th>
-                        <th>Data type</th>
-                        <th>Value</th>
-                        <th>Units</th>
-                        <th>Health status</th>
+                        {
+                            Object.entries(headersToFilterName).map((entry)=>{
+                                const [header, filterName] = entry;
+                                return(<ColumnHeader key={header} 
+                                        header={header} filterName={filterName}
+                                        changeFilter={this.changeFilter} 
+                                        activeFilterDialog={this.state.activeFilterDialog}
+                                        closeFilterDialogs={this.closeFilterDialogs}
+                                        columnOnClick={this.columnOnClick}/>)
+                                    
+                            })
+                        }
                         <th className={styles.addedColumn}>Added</th>
                     </tr>
                     <tr>
-                        <td><input type="text" onChange={this.changeFilter('component')} /></td>
+                        <td> asdasd</td>
                         <td><input type="text" onChange={this.changeFilter('stream')} /></td>
                         <td><input type="text" onChange={this.changeFilter('timestamp')} /></td>
                         <td><input type="text" onChange={this.changeFilter('name')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('param_name')} /></td>
+                        <td> asd </td>
                         <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
                         <td><input type="text" onChange={this.changeFilter('value')} /></td>
                         <td><input type="text" onChange={this.changeFilter('units')} /></td>
