@@ -68,11 +68,12 @@ export default class RawTelemetryTable extends PureComponent {
 
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
+            let key = [row.component, row.stream, row.param_name].join('-');
             if (this.props.filters[rowKey].type === 'regexp') {
                 return this.props.filters[rowKey].value.test(row[rowKey]);
             }
             if (this.props.filters[rowKey].type === 'health') {
-                let healthStatus = this.getHealthText(this.getHealthStatusCode(row.param_name, row.value));
+                let healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
                 return this.props.filters[rowKey].value.test(healthStatus);
             }
             return true;
@@ -138,16 +139,14 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     renderValueAsList = (values) => {
-        let nElements = values.length;
-        let padding = Math.ceil(Math.log10(nElements));
         let elements = values.map((elem, index) => {
-            return <div key={index} className={styles.valuesListItem}>
-                <span className={styles.valuesListIndex}>{index.toString().padStart(padding, ' ')}</span>: {JSON.stringify(elem)}
-            </div>
+            return <li key={index} className={styles.valuesListItem}>
+                <span className={styles.valuesListItemValue}>{JSON.stringify(elem)}</span>
+            </li> 
         });
-        return <div className={styles.valuesList}>
+        return <ol className={styles.valuesList}>
             {elements}
-        </div>;
+        </ol>;
     }
 
     render() {
@@ -190,6 +189,7 @@ export default class RawTelemetryTable extends PureComponent {
                         <th>Value</th>
                         <th>Units</th>
                         <th>Health status</th>
+                        <th className={styles.addedColumn}>Added</th>
                     </tr>
                     <tr>
                         <td><input type="text" onChange={this.changeFilter('component')} /></td>
@@ -201,6 +201,7 @@ export default class RawTelemetryTable extends PureComponent {
                         <td><input type="text" onChange={this.changeFilter('value')} /></td>
                         <td><input type="text" onChange={this.changeFilter('units')} /></td>
                         <td><input type="text" onChange={this.changeFilter('health_status')} /></td>
+                        <td><input type="text" /></td>
                     </tr>
                     {
                         data.map((row) => {
@@ -230,6 +231,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td><input type="checkbox"/></td>
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
@@ -240,7 +242,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             {
                                                                 row.value.length > 1 ?
                                                                     this.renderValueAsList(row.value) :
-                                                                    <span>{JSON.stringify(row.value)}</span>
+                                                                    this.renderValueAsList([row.value])
                                                             }
                                                         </div>
                                                     </td>
@@ -280,6 +282,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             </div>
                                                         </div>
                                                     </td>
+                                                    <td></td>
                                                 </tr> :
                                                 null
                                         }

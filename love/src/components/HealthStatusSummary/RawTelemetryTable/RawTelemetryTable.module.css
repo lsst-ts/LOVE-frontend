@@ -174,16 +174,34 @@
 }
 
 .rawTelemetryTable .valuesList {
-    display: flex;
-    flex-wrap: wrap;
+    counter-reset: values-list-counter;
+    list-style: none;
+    -webkit-padding-start: 0;
+    position: relative;
 }
 
-.rawTelemetryTable .valuesListIndex {
+
+.rawTelemetryTable .valuesListItem::before {
+    content: counter(values-list-counter) ". ";
     color: var(--secondary-font-dimmed-color);
     white-space: pre-wrap;
     font-family: monospace;
+    text-align: right;
+    position: absolute;
+    width: 4em;
 }
 
 .rawTelemetryTable .valuesListItem {
+    counter-increment: values-list-counter;
     padding: 0 0.4em;
+}
+
+.rawTelemetryTable .valuesListItemValue {
+    position: relative;
+    padding: 0 0.4em;
+    left: 3em;
+}
+
+.rawTelemetryTable .addedColumn {
+    width: 5%;
 }
