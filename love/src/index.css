@@ -19,6 +19,7 @@ body {
   --secondary-background-dimmed-color: hsl(198, 34%, 13.5%, 1);
   --tertiary-background-color: hsl(201, 15%, 54%, 0.25); /*Transparent*/
   --quaternary-background-color: hsl(202, 32%, 28%);
+  --quinary-background-color: hsl(196, 16%, 28%);
 
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);

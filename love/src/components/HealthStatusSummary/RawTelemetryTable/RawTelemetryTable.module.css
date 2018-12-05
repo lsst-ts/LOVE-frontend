@@ -11,8 +11,7 @@
 .rawTelemetryTable th {
     border: 2px solid var(--base-background-color);
     background: var(--tertiary-background-color);
-    text-transform: uppercase;
-    padding: 0.5em;
+    padding: 0em 0.5em;
 }
 
 .rawTelemetryTable tr:nth-child(even) {

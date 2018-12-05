@@ -1,26 +1,44 @@
-.superContainer{
+.superContainer {
     position:relative;
-    width: 120%;
+    width: 100%;
 }
 
 .filterContainer {
     position: absolute;
-    background-color:red;
+    background-color: var(--quinary-background-color);
     width: 100%;
-    padding-bottom: 10%;
-    left:10%;
+    padding: 0.5em;
+    right: -0.5em;
 }
 
 .show {
     display:block;    
+    text-align: left;
 }
 
 .hide {
     display: none;
 }
 
-
-.filterInput{
-    width: 80%;
+.filterInput {
+    width: 100%;
     box-sizing: border-box;
+    background: var(--base-font-color);
+}
+
+.filterText {
+}
+
+.sortOption {
+    background: var(--secondary-font-dimmed-color);
+    padding: 0.3em 1em;
+}
+
+.dialogRow {
+    padding: 0.5em 0.5em;
+    font-size: 0.8em;
+}
+
+.dialogRowTitle {
+    padding: 0.5em 0em;
 }
