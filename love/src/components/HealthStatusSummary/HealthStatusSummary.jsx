@@ -22,7 +22,7 @@ export default class HealthStatusSummary extends Component {
             'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
             'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
             'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'health_status': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
         }
 
         let healthFunctions = localStorage.getItem('healthFunctions');
