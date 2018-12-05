@@ -7,7 +7,7 @@ export default class ColumnHeader extends Component {
 
     render() {
         return(
-            <th key={this.props.header}> 
+            <th > 
                 <div className={styles.columnHeader}>
                     {this.props.header} 
                     
@@ -15,11 +15,10 @@ export default class ColumnHeader extends Component {
                         <FilterIcon filterName={this.props.filterName} onClickHandler={this.props.columnOnClick}/>
                     </div>
                 </div> 
-                <div>
-                    <FilterDialog 
-                        show={this.props.activeFilterDialog===this.props.filterName}
-                        changeFilter={this.props.changeFilter(this.props.filterName)}/> 
-                </div>
+                <FilterDialog 
+                    show={this.props.activeFilterDialog===this.props.filterName}
+                    changeFilter={this.props.changeFilter(this.props.filterName)}
+                    closeFilterDialogs={this.props.closeFilterDialogs}/> 
             </th>
         );
     }
