@@ -213,17 +213,6 @@ export default class RawTelemetryTable extends PureComponent {
                             })
                         }
                     </tr>
-                    <tr>
-                        <td> asdasd</td>
-                        <td><input type="text" onChange={this.changeFilter('stream')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('timestamp')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('name')} /></td>
-                        <td> asd </td>
-                        <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('value')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('units')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('health_status')} /></td>
-                    </tr>
                     {
                         data.map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
