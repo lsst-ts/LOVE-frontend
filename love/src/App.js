@@ -39,7 +39,7 @@ class App extends Component {
       
       let newTelemetries = Object.assign({}, this.state.telemetries);
       let timestamp = new Date();
-      timestamp = timestamp.toISOString().slice(0,20).replace("-","/").replace("T", " ");
+      timestamp = timestamp.toISOString().slice(0,19).replace(/-/g,"/").replace("T", " ");
       Object.entries(data.data).forEach((entry)=>{
         let [telemetryName, parameters] = entry;
         let telemetry = {};
