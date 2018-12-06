@@ -6,11 +6,11 @@ export default class FilterDialog extends Component {
         this.container = React.createRef();
     }
     componentDidMount() {
-        document.addEventListener("mousedown", this.handleClickOutside);
+        document.addEventListener("mouseup", this.handleClickOutside);
     }
     
     componentWillUnmount() {
-        document.removeEventListener("mousedown", this.handleClickOutside);
+        document.removeEventListener("mouseup", this.handleClickOutside);
     }
     
     handleClickOutside = e => {
