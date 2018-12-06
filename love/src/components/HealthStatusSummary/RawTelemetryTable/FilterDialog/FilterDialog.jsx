@@ -14,6 +14,7 @@ export default class FilterDialog extends Component {
     }
 
     handleClickOutside = e => {
+        console.log('CLKCOAUTEORSIDE')
         if (this.props.show && !this.container.current.contains(e.target)) {
             this.props.closeFilterDialogs();
         }
