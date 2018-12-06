@@ -1,5 +1,14 @@
 FROM node:10.13-stretch
 
+RUN apt-get update \
+    && apt-get install -y nginx \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+    && echo "daemon off;" >> /etc/nginx/nginx.conf
+
+COPY ./default /etc/nginx/sites-available/default
+
+
 # set working directory
 RUN mkdir -p /home/docker/love
 
@@ -24,5 +33,6 @@ ARG WEBSOCKET_HOST=127.0.0.1
 RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build
 
 WORKDIR /home/docker/love/build
-# start app
-CMD python -m SimpleHTTPServer 3000
+
+EXPOSE 80
+CMD ["nginx"]
