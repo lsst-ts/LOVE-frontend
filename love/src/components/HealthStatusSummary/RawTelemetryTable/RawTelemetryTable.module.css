@@ -11,19 +11,14 @@
 .rawTelemetryTable th {
     border: 2px solid var(--base-background-color);
     background: var(--tertiary-background-color);
-    text-transform: uppercase;
-    padding: 0.5em;
+    padding: 0em 0.5em;
 }
 
-.rawTelemetryTable tr:hover.dataRow{
-    background: var(--tertiary-background-color);
-}
 .rawTelemetryTable tr:nth-child(even) {
     background: var(--secondary-background-dimmed-color);
 }
 
 .dataRow {
-    cursor: pointer;
 }
 
 .rawTelemetryTable th:first-of-type {
@@ -45,9 +40,26 @@
     border-right: 1px solid var(--base-background-color);
 }
 
+.rawTelemetryTable td.string {
+    text-align: left;
+}
+
+.rawTelemetryTable td.number {
+    text-align: right;
+}
+
 .rawTelemetryTable .healthStatusCell {
     padding: 0.4em 0.5em;
     border-bottom: none;
+    cursor: pointer;    
+}
+
+.rawTelemetryTable .healthStatusCell:hover {
+    background: var(--tertiary-background-color);
+}
+
+.rawTelemetryTable .healthStatusCell:hover .editIconWrapper {
+    visibility: visible;
 }
 
 .rawTelemetryTable .valueCell {
@@ -95,10 +107,6 @@
     right: 0;
     width: 16px;
     min-width: 16px;
-}
-
-.rawTelemetryTable tr:hover .editIconWrapper {
-    visibility: visible;
 }
 
 .rawTelemetryTable .statusTextWrapper {
@@ -165,17 +173,34 @@
 }
 
 .rawTelemetryTable .valuesList {
-    display: flex;
-    flex-wrap: wrap;
+    counter-reset: values-list-counter;
+    list-style: none;
+    -webkit-padding-start: 0;
+    position: relative;
 }
 
-.rawTelemetryTable .valuesListIndex {
+
+.rawTelemetryTable .valuesListItem::before {
+    content: counter(values-list-counter) ". ";
     color: var(--secondary-font-dimmed-color);
     white-space: pre-wrap;
     font-family: monospace;
+    text-align: right;
+    position: absolute;
+    width: 4em;
 }
 
 .rawTelemetryTable .valuesListItem {
+    counter-increment: values-list-counter;
     padding: 0 0.4em;
 }
 
+.rawTelemetryTable .valuesListItemValue {
+    position: relative;
+    padding: 0 0.4em;
+    left: 3em;
+}
+
+.rawTelemetryTable .addedColumn {
+    width: 5%;
+}
