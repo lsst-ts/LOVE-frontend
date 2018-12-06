@@ -18,7 +18,9 @@ export default class ColumnHeader extends Component {
                 <FilterDialog 
                     show={this.props.activeFilterDialog===this.props.filterName}
                     changeFilter={this.props.changeFilter(this.props.filterName)}
-                    closeFilterDialogs={this.props.closeFilterDialogs}/> 
+                    closeFilterDialogs={this.props.closeFilterDialogs}
+                    changeSortDirection={this.props.changeSortDirection}
+                    columnName={this.props.filterName}/> 
             </th>
         );
     }

@@ -6,11 +6,11 @@ export default class FilterDialog extends Component {
         this.container = React.createRef();
     }
     componentDidMount() {
-        document.addEventListener("mousedown", this.handleClickOutside);
+        document.addEventListener("mouseup", this.handleClickOutside);
     }
 
     componentWillUnmount() {
-        document.removeEventListener("mousedown", this.handleClickOutside);
+        document.removeEventListener("mouseup", this.handleClickOutside);
     }
 
     handleClickOutside = e => {
@@ -18,7 +18,14 @@ export default class FilterDialog extends Component {
             this.props.closeFilterDialogs();
         }
     };
+    sortAscending = ()=>{
+        this.props.changeSortDirection('ascending',this.props.columnName);
+    }
 
+    sortDescending = ()=>{
+        this.props.changeSortDirection('descending',this.props.columnName)
+    }
+    
     render() {
         return (
             <div className={styles.superContainer} >
@@ -26,10 +33,10 @@ export default class FilterDialog extends Component {
                     <div className={styles.dialogRowTitle}>
                         <span className={styles.filterText}>Sort as...</span>
                     </div>
-                    <div className={styles.dialogRow}>
+                    <div onClick={this.sortAscending} className={styles.dialogRow}>
                         <span className={styles.sortOption}>A - Z</span>
                     </div>
-                    <div className={styles.dialogRow}>
+                    <div onClick={this.sortDescending} className={styles.dialogRow}>
                         <span className={styles.sortOption}>Z - A</span>
                     </div>
                     <div className={styles.dialogRowTitle}>
