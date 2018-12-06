@@ -20,7 +20,7 @@ export default class RawTelemetryTable extends PureComponent {
             sortingColumn: 'name',
             sortDirection: 'ascending'
         };
-
+        this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         window.OK = 1;
         window.WARNING = 2;
         window.ALERT = 3;
@@ -71,10 +71,12 @@ export default class RawTelemetryTable extends PureComponent {
 
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
-            if (this.props.filters[rowKey].type === 'regexp')
+            let key = [row.component, row.stream, row.param_name].join('-');
+            if (this.props.filters[rowKey].type === 'regexp') {
                 return this.props.filters[rowKey].value.test(row[rowKey]);
+            }
             if (this.props.filters[rowKey].type === 'health') {
-                let healthStatus = this.getHealthText(this.getHealthStatusCode(row.param_name, row.value));
+                let healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
                 return this.props.filters[rowKey].value.test(healthStatus);
             }
             return true;
@@ -125,6 +127,7 @@ export default class RawTelemetryTable extends PureComponent {
         healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
         this.props.setHealthFunctions(healthFunctions);
         localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
+        this.toggleRow(param_name);
     }
 
     displayHealthFunction = (param_name, functionType) => {
@@ -139,16 +142,14 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     renderValueAsList = (values) => {
-        let nElements = values.length;
-        let padding = Math.ceil(Math.log10(nElements));
         let elements = values.map((elem, index) => {
-            return <div key={index} className={styles.valuesListItem}>
-                <span className={styles.valuesListIndex}>{index.toString().padStart(padding, ' ')}</span>: {JSON.stringify(elem)}
-            </div>
+            return <li key={index} className={styles.valuesListItem}>
+                <span className={styles.valuesListItemValue}>{JSON.stringify(elem)}</span>
+            </li> 
         });
-        return <div className={styles.valuesList}>
+        return <ol className={styles.valuesList}>
             {elements}
-        </div>;
+        </ol>;
     }
 
     columnOnClick = (ev, filterName) =>{
@@ -195,26 +196,25 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     render() {
-        let data = Object.assign({},fakeData); // load "fake" data as template;
+        let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
-        telemetryNames.forEach((telemetryName, telemetryIndex)=>{
+        telemetryNames.forEach((telemetryName, telemetryIndex) => {
             // look at one telemetry
             let telemetryData = this.props.telemetries[telemetryName];
-            let parametersNames = Object.keys(telemetryData.parameters);
 
             data["scheduler"][telemetryName] = {
                 'timestamp': telemetryData.receptionTimestamp,
                 'nParams': telemetryData.parameters.length,
-                'parameters': Object.entries(telemetryData.parameters).map( parameter=>{
+                'parameters': Object.entries(telemetryData.parameters).map(parameter => {
                     // look at one parameter 
-                    const [name, value, data_type, units ] = parameter;
+                    const [name, value, data_type, units] = parameter;
 
                     return {
-                        'name': name + '????',
+                        'name': name,
                         'param_name': name,
-                        'data_type': data_type,
+                        'data_type': data_type ? data_type:'?',
                         'value': value,
-                        'units': units
+                        'units': units ? units:'?'
                     }
                 })
             }
@@ -250,6 +250,7 @@ export default class RawTelemetryTable extends PureComponent {
                                     
                             })
                         }
+                        <th className={styles.addedColumn}>Added</th>
                     </tr>
                     {
                         data.sort(this.sortData).map((row) => {
@@ -258,16 +259,17 @@ export default class RawTelemetryTable extends PureComponent {
                                 let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
                                     <React.Fragment key={key}>
-                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(key)} key={key + '-row'}>
-                                            <td>{row.component}</td>
-                                            <td>{row.stream}</td>
-                                            <td>{row.timestamp}</td>
-                                            <td>{row.name}</td>
-                                            <td>{row.param_name}</td>
-                                            <td>{row.data_type}</td>
-                                            <td className={styles.valueCell}>{JSON.stringify(row.value)}</td>
-                                            <td>{row.units}</td>
-                                            <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}>
+                                        <tr className={styles.dataRow}>
+                                            <td className={styles.string}>{row.component}</td>
+                                            <td className={styles.string}>{row.stream}</td>
+                                            <td className={styles.string}>{row.timestamp}</td>
+                                            <td className={styles.string}>{row.name}</td>
+                                            <td className={styles.string}>{row.param_name}</td>
+                                            <td className={styles.string}>{row.data_type}</td>
+                                            <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
+                                            <td className={styles.string}>{row.units}</td>
+                                            <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}
+                                                onClick={() => this.toggleRow(key)} key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
                                                         <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
@@ -278,6 +280,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
+                                            <td><input type="checkbox"/></td>
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
@@ -288,7 +291,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             {
                                                                 row.value.length > 1 ?
                                                                     this.renderValueAsList(row.value) :
-                                                                    <span>{JSON.stringify(row.value)}</span>
+                                                                    this.renderValueAsList([row.value])
                                                             }
                                                         </div>
                                                     </td>
@@ -297,7 +300,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <p>
                                                                 {'function ( value ) {'}
                                                             </p>
-                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key]}>
+                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? '' : this.defaultCodeText}>
                                                             </textarea>
                                                             <p>
                                                                 {'}'}
@@ -316,18 +319,19 @@ export default class RawTelemetryTable extends PureComponent {
                                                                 <div className={styles.snippetsList}>
                                                                     <div className={styles.snippetButtonWrapper}>
                                                                         <Button secondary className={styles.snippetButton}>
-                                                                            <span onClick={() => this.displayHealthFunction(row.param_name, 'range')}>Range</span>
+                                                                            <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
                                                                         </Button>
                                                                     </div>
                                                                     <div className={styles.snippetButtonWrapper}>
                                                                         <Button secondary className={styles.snippetButton}>
-                                                                            <span onClick={() => this.displayHealthFunction(row.param_name, 'text')}>Text value</span>
+                                                                            <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
                                                                         </Button>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </td>
+                                                    <td></td>
                                                 </tr> :
                                                 null
                                         }

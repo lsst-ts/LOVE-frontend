@@ -10,6 +10,7 @@ export default class HealthStatusSummary extends Component {
 
     constructor() {
         super();
+        // eslint-disable-next-line
         RegExp.prototype.toJSON = RegExp.prototype.toString;
 
         let filters = {
@@ -21,7 +22,7 @@ export default class HealthStatusSummary extends Component {
             'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
             'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
             'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'health_status': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
         }
 
         let healthFunctions = localStorage.getItem('healthFunctions');
@@ -48,6 +49,7 @@ export default class HealthStatusSummary extends Component {
         Object.keys(filters).map((key) => {
             if(filters[key]['type'] === 'regexp' && typeof filters[key]['value'] === 'string')
                 filters[key]['value'] = new RegExp(filters[key]['value'].replace(/^\/|\/$/g, ''));
+            return null;
         })
         this.setState({
             filters: filters,
