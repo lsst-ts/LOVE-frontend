@@ -14,6 +14,10 @@
     padding: 0em 0.5em;
 }
 
+.rawTelemetryTable tr:hover.dataRow{
+    background: var(--tertiary-background-color);
+}
+
 .rawTelemetryTable tr:nth-child(even) {
     background: var(--secondary-background-dimmed-color);
 }
