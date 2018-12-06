@@ -1,13 +1,14 @@
 .filterIconWrapper {
     width: 16px;
     min-width: 16px;
+    position:absolute;
+    top:0;
+    right:0;
 }
 
 .columnHeader{
-    display: flex;
-    flex-direction:row;
-    justify-content: space-between;
     text-transform: uppercase;
     padding: 0.5em 0em;
+    position:relative;
 }
 

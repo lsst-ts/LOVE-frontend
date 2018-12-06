@@ -16,7 +16,9 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
-            activeFilterDialog: 'name'
+            activeFilterDialog: 'name',
+            sortingColumn: 'name',
+            sortDirection: 'ascending'
         };
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         window.OK = 1;
@@ -158,6 +160,41 @@ export default class RawTelemetryTable extends PureComponent {
         this.setState({activeFilterDialog: 'None'});
     }
 
+
+    changeSortDirection= (direction, column)=>{
+        /*
+            direction can be "ascending" or "descending", otherwise no
+            sorting will be applied
+            Sorting is applied before filtering
+        */
+        this.setState({sortDirection : direction, sortingColumn: column});
+    }
+
+    sortData = (a,b) =>{
+
+        const column = this.state.sortingColumn;
+        if(this.state.sortDirection !== 'ascending' && this.state.sortDirection !== 'descending'){
+            return 0;
+        }
+
+
+        let direction = this.state.sortDirection == 'ascending'? 1 : -1;
+        
+        if(a[column]<b[column]){
+            return -direction;
+        }
+
+        if(a[column]===b[column]){
+            return 0;
+        }
+
+        if(a[column]>b[column]){
+            return direction;
+        }
+
+        return 0;
+    }
+
     render() {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
@@ -208,26 +245,15 @@ export default class RawTelemetryTable extends PureComponent {
                                         changeFilter={this.changeFilter} 
                                         activeFilterDialog={this.state.activeFilterDialog}
                                         closeFilterDialogs={this.closeFilterDialogs}
-                                        columnOnClick={this.columnOnClick}/>)
+                                        columnOnClick={this.columnOnClick}
+                                        changeSortDirection={this.changeSortDirection}/>)
                                     
                             })
                         }
                         <th className={styles.addedColumn}>Added</th>
                     </tr>
-                    <tr>
-                        <td> asdasd</td>
-                        <td><input type="text" onChange={this.changeFilter('stream')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('timestamp')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('name')} /></td>
-                        <td> asd </td>
-                        <td><input type="text" onChange={this.changeFilter('data_type')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('value')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('units')} /></td>
-                        <td><input type="text" onChange={this.changeFilter('health_status')} /></td>
-                        <td><input type="text" /></td>
-                    </tr>
                     {
-                        data.map((row) => {
+                        data.sort(this.sortData).map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
                             if (this.testFilter(row)) {
                                 let key = [row.component, row.stream, row.param_name].join('-');
