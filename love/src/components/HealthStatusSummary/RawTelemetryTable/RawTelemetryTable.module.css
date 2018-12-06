@@ -23,6 +23,7 @@
 }
 
 .dataRow {
+    cursor: pointer;
 }
 
 .rawTelemetryTable th:first-of-type {
