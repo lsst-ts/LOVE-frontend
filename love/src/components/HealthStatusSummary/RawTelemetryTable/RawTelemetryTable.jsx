@@ -259,7 +259,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
                                     <React.Fragment key={key}>
-                                        <tr className={styles.dataRow}>
+                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(key)} >
                                             <td className={styles.string}>{row.component}</td>
                                             <td className={styles.string}>{row.stream}</td>
                                             <td className={styles.string}>{row.timestamp}</td>
@@ -269,7 +269,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
                                             <td className={styles.string}>{row.units}</td>
                                             <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}
-                                                onClick={() => this.toggleRow(key)} key={key + '-row'}>
+                                                key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
                                                         <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
