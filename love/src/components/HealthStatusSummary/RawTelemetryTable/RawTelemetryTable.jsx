@@ -178,7 +178,7 @@ export default class RawTelemetryTable extends PureComponent {
         }
 
 
-        let direction = this.state.sortDirection == 'ascending'? 1 : -1;
+        let direction = this.state.sortDirection === 'ascending'? 1 : -1;
         
         if(a[column]<b[column]){
             return -direction;
