@@ -8,6 +8,9 @@
     background: var(--secondary-background-color);
 }
 
+.rawTelemetryTable thead{
+    word-wrap:break-word;
+}
 .rawTelemetryTable th {
     border: 2px solid var(--base-background-color);
     background: var(--tertiary-background-color);
