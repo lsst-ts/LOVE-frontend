@@ -16,7 +16,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
-            activeFilterDialog: 'name',
+            activeFilterDialog: '',
             sortingColumn: 'name',
             sortDirection: 'ascending'
         };
