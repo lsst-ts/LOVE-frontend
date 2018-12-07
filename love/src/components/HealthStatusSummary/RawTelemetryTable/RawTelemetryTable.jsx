@@ -154,6 +154,10 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     columnOnClick = (ev, filterName) =>{
+        if(this.state.activeFilterDialog === filterName){
+            this.closeFilterDialogs();
+            return;
+        }
         this.setState({activeFilterDialog: filterName});
     }
 
@@ -194,6 +198,14 @@ export default class RawTelemetryTable extends PureComponent {
         }
 
         return 0;
+    }
+
+    componentDidMount = () => {
+        // document.addEventListener("mouseup", this.closeFilterDialogs);
+    }
+
+    componentWillUnmount = () => {
+        // document.removeEventListener("mouseup", this.closeFilterDialogs);
     }
 
     render() {
@@ -264,7 +276,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
                                     <React.Fragment key={key}>
-                                        <tr className={styles.dataRow}>
+                                        <tr className={styles.dataRow}  onClick={this.closeFilterDialogs}>
                                             <td className={styles.string}>{row.component}</td>
                                             <td className={styles.string}>{row.stream}</td>
                                             <td className={styles.string}>{row.timestamp}</td>
