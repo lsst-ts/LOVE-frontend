@@ -241,14 +241,18 @@ export default class RawTelemetryTable extends PureComponent {
                         {
                             Object.entries(headersToFilterName).map((entry)=>{
                                 const [header, filterName] = entry;
+                                let secondaryText;
+                                if(filterName === 'timestamp')
+                                    secondaryText = 'YYYY-MM-DD HH:MM:SS'
                                 return(<ColumnHeader key={header} 
                                         header={header} filterName={filterName}
                                         changeFilter={this.changeFilter} 
                                         activeFilterDialog={this.state.activeFilterDialog}
                                         closeFilterDialogs={this.closeFilterDialogs}
                                         columnOnClick={this.columnOnClick}
-                                        changeSortDirection={this.changeSortDirection}/>)
-                                    
+                                        changeSortDirection={this.changeSortDirection}
+                                        secondaryText={secondaryText}
+                                        />)
                             })
                         }
                         {/* <th className={styles.addedColumn}>Added</th> */}
