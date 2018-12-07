@@ -9,8 +9,8 @@ export default class ColumnHeader extends Component {
         return(
             <th > 
                 <div className={styles.columnHeader}>
-                    {this.props.header} 
-                    
+                    <span className={styles.primaryText}>{this.props.header}</span> 
+                    <span className={styles.secondaryText}>{this.props.secondaryText}</span>
                     <div className={styles.filterIconWrapper}>
                         <FilterIcon filterName={this.props.filterName} onClickHandler={this.props.columnOnClick}/>
                     </div>
