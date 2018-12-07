@@ -250,7 +250,7 @@ export default class RawTelemetryTable extends PureComponent {
                                     
                             })
                         }
-                        <th className={styles.addedColumn}>Added</th>
+                        {/* <th className={styles.addedColumn}>Added</th> */}
                     </tr>
                     {
                         data.sort(this.sortData).map((row) => {
@@ -280,12 +280,12 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><input type="checkbox"/></td>
+                                            {/* <td><input type="checkbox"/></td> */}
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
                                                 <tr key={key + '-expanded'} className={styles.expandedRow}>
-                                                    <td colSpan={4}>
+                                                    <td colSpan={3}>
                                                         <div>
                                                             <p>Value</p>
                                                             {
