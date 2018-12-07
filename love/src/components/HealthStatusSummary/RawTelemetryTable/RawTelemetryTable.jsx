@@ -123,6 +123,7 @@ export default class RawTelemetryTable extends PureComponent {
 
     setHealthFunction = (param_name) => {
         console.log(param_name + '-healthFuncion')
+        console.log(this.props.healthFunctions);
         let healthFunctions = this.props.healthFunctions;
         healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
         this.props.setHealthFunctions(healthFunctions);
@@ -285,7 +286,7 @@ export default class RawTelemetryTable extends PureComponent {
                                         {
                                             (this.state.expandedRows[key]) ?
                                                 <tr key={key + '-expanded'} className={styles.expandedRow}>
-                                                    <td colSpan={3}>
+                                                    <td colSpan={4}>
                                                         <div>
                                                             <p>Value</p>
                                                             {
@@ -300,7 +301,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <p>
                                                                 {'function ( value ) {'}
                                                             </p>
-                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? '' : this.defaultCodeText}>
+                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText}>
                                                             </textarea>
                                                             <p>
                                                                 {'}'}
@@ -331,7 +332,6 @@ export default class RawTelemetryTable extends PureComponent {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td></td>
                                                 </tr> :
                                                 null
                                         }
