@@ -3,13 +3,13 @@
     min-width: 16px;
     position:absolute;
     right:0;
-    top: 50%;
+    top: 60%;
     transform: translateY(-50%);
 }
 
 .columnHeader {
     text-transform: uppercase;
-    padding: 0.5em 0em;
+    padding: 0.75em 0em 0.4em;
     position:relative;
 }
 
