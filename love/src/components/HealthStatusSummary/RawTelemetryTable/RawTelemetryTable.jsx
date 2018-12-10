@@ -16,7 +16,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
-            activeFilterDialog: '',
+            activeFilterDialog: 'None',
             sortingColumn: 'name',
             sortDirection: 'ascending'
         };
@@ -27,7 +27,15 @@ export default class RawTelemetryTable extends PureComponent {
 
     }
 
+    clickRow = (rowID) => {
+        if(this.state.activeFilterDialog === 'None')
+            this.toggleRow(rowID);
+        else
+            this.closeFilterDialogs();
+    }
+
     toggleRow = (rowId) => {
+        this.closeFilterDialogs();
         let expandedRows = this.state.expandedRows;
         if (expandedRows[rowId])
             expandedRows[rowId] = false;
@@ -274,7 +282,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
                                     <React.Fragment key={key}>
-                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(key)} >
+                                        <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                             <td className={styles.string}>{row.component}</td>
                                             <td className={styles.string}>{row.stream}</td>
                                             <td className={styles.string}>{row.timestamp}</td>
@@ -283,7 +291,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td className={styles.string}>{row.data_type}</td>
                                             <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
                                             <td className={styles.string}>{row.units}</td>
-                                            <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}
+                                            <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
                                                 key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
@@ -299,7 +307,7 @@ export default class RawTelemetryTable extends PureComponent {
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
-                                                <tr key={key + '-expanded'} className={styles.expandedRow}>
+                                                <tr onClick={this.closeFilterDialogs} key={key + '-expanded'} className={styles.expandedRow}>
                                                     <td colSpan={4}>
                                                         <div>
                                                             <p>Value</p>
