@@ -25,6 +25,8 @@
     width: 100%;
     box-sizing: border-box;
     background: var(--base-font-color);
+    border: none;
+    border-radius: 3px;
 }
 
 .filterText {
