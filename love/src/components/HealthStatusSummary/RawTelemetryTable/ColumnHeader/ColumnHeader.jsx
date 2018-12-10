@@ -12,9 +12,8 @@ export default class ColumnHeader extends Component {
                 <div className={styles.columnHeader}>
                     <span className={styles.primaryText}>{this.props.header}</span> 
                     <span className={styles.secondaryText}>{this.props.secondaryText}</span>
-                    <div className={styles.filterIconWrapper}>
-                        <FilterIcon filterName={this.props.filterName} 
-                                    onClickHandler={this.props.columnOnClick} active={isActive}/>
+                    <div onClick={(e) => this.props.columnOnClick(e, this.props.filterName)} className={styles.filterIconWrapper}>
+                        <FilterIcon filterName={this.props.filterName} active={isActive}/>
                     </div>
                 </div> 
                 <FilterDialog 
