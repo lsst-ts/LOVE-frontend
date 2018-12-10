@@ -126,7 +126,6 @@ tbody tr {
 
 .rawTelemetryTable .editIconWrapper {
     position: absolute;
-    visibility: hidden;
     right: 0;
     width: 16px;
     min-width: 16px;
