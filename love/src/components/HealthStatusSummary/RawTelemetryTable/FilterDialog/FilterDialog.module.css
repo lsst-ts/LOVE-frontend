@@ -30,7 +30,6 @@
 }
 
 .sortOption {
-    background: var(--secondary-font-dimmed-color);
     padding: 0.3em 1em;
 }
 
@@ -41,4 +40,9 @@
 
 .dialogRowTitle {
     padding: 0.5em 0em;
+}
+
+.mouseOver{
+    background-color: var(--secondary-font-dimmed-color);
+    cursor: pointer;
 }
