@@ -15,7 +15,7 @@
     background: var(--secondary-background-color);
     display: block;
     height: 85vh; /* necessary for scroll */
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
 }
 tbody tr {
@@ -36,6 +36,16 @@ tbody tr {
 
 .rawTelemetryTable tr:hover.dataRow{
     background: var(--tertiary-background-color);
+}
+
+.rawTelemetryTable tr:hover td{
+    border-bottom: 1px solid var(--secondary-background-color);
+    border-top: 1px solid var(--secondary-background-color);
+}
+
+.rawTelemetryTable tr:hover.expandedRow td{
+    border-bottom: 1px solid var(--secondary-background-color);
+    border-top: 1px solid transparent;
 }
 
 .rawTelemetryTable tr:nth-child(even) {
@@ -59,8 +69,8 @@ tbody tr {
     padding: 0.4em 1em;
     word-wrap:break-word;
     max-width: 0;
-    border-top: 0 solid var(--base-background-color);
-    border-bottom: 0 solid var(--base-background-color);
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
     border-left: 1px solid var(--base-background-color);
     border-right: 1px solid var(--base-background-color);
 }
@@ -71,20 +81,6 @@ tbody tr {
 
 .rawTelemetryTable td.number {
     text-align: right;
-}
-
-.rawTelemetryTable .healthStatusCell {
-    padding: 0.4em 0.5em;
-    border-bottom: none;
-    cursor: pointer;    
-}
-
-.rawTelemetryTable .healthStatusCell:hover {
-    background: var(--tertiary-background-color);
-}
-
-.rawTelemetryTable .healthStatusCell:hover .editIconWrapper {
-    visibility: visible;
 }
 
 .rawTelemetryTable .valueCell {
@@ -118,13 +114,11 @@ tbody tr {
     padding: 0;
 }
 
-.rawTelemetryTable tr:nth-child(even) .selectedHealthStatus {
-    background: var(--secondary-background-color);
+.rawTelemetryTable .healthStatusCell.selectedHealthStatus {
+    background: var(--tertiary-background-color);
+    border-bottom: 1px solid var(--tertiary-background-color);
 }
 
-.rawTelemetryTable tr:nth-child(odd) .selectedHealthStatus {
-    background: var(--secondary-background-dimmed-color);
-}
 .rawTelemetryTable .editIconWrapper {
     position: absolute;
     visibility: hidden;
@@ -136,33 +130,6 @@ tbody tr {
 .rawTelemetryTable .statusTextWrapper {
     flex-grow: 1;
     padding: 0.0em 1.5em;
-}
-
-.rawTelemetryTable .expandedRow {
-    text-align: left;
-}
-
-.rawTelemetryTable .expandedRow td {
-    vertical-align: top;
-    border: none;
-    padding: 1em;
-}
-
-.rawTelemetryTable .expandedRow p {
-    line-height: 0;
-}
-
-.rawTelemetryTable .expandedRow textarea {
-    background: var(--tertiary-background-color);
-    color: var(--base-font-color);
-    border: none;
-    width: calc(100% - 3em);
-    margin-left: 2em;
-    height: 12em;
-    font-size: 1em;
-    resize: none;
-    border-radius: 5px;
-    padding: 0.6em 0.6em;
 }
 
 .rawTelemetryTable .snippetsContainer {
@@ -229,3 +196,49 @@ tbody tr {
 /* .rawTelemetryTable .addedColumn {
     width: 5%;
 } */
+
+.rawTelemetryTable .expandedRow {
+    text-align: left;
+    background: var(--tertiary-background-color);
+}
+
+.rawTelemetryTable tr:nth-child(even).expandedRow {
+    background: var(--tertiary-background-color);
+}
+
+.rawTelemetryTable .expandedRow td {
+    vertical-align: top;
+    border: 1px solid transparent;
+    padding: 1em;
+}
+
+.rawTelemetryTable .expandedRow p {
+    line-height: 0;
+}
+
+.rawTelemetryTable .expandedRow textarea {
+    background: var(--secondary-background-dimmed-color);
+    color: var(--base-font-color);
+    border: none;
+    width: calc(100% - 3em);
+    margin-left: 2em;
+    height: 12em;
+    font-size: 1em;
+    resize: none;
+    border-radius: 5px;
+    padding: 0.6em 0.6em;
+}
+
+.rawTelemetryTable .healthStatusCell {
+    padding: 0.4em 0.5em;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;    
+}
+
+.rawTelemetryTable .healthStatusCell:hover {
+    background: var(--tertiary-background-color);
+}
+
+.rawTelemetryTable .healthStatusCell:hover .editIconWrapper {
+    visibility: visible;
+}
