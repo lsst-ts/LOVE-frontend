@@ -29,4 +29,7 @@ body {
   --status-warning-dimmed-color: hsl(57, 100%, 47%, 0.2);
   --status-alert-color: hsl(23, 99%, 44%);
   --status-alert-dimmed-color: hsl(23, 99%, 44%, 0.2);
+
+
+  --box-shadow-color: rgba(0,0,0,0.17);
 }
