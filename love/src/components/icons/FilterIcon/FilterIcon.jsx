@@ -3,7 +3,7 @@ import styles from './FilterIcon.module.css'
 
 export default class FilterIcon extends Component {
     render() {
-        let status = this.props.active ? styles.active : styles.inactive;
+        let statusStyle = this.props.active ? styles.active : styles.inactive;
 
         const icons = {
             default: <g>
@@ -18,10 +18,11 @@ export default class FilterIcon extends Component {
         let icon = icons.default;
         if(this.props.isFiltered){
             icon = icons.filtered;;
+            statusStyle = styles.active;
         }
         
         return (
-            <svg className={[styles.filterIcon, status].join(' ')} viewBox='0 0 18 18'>
+            <svg className={[styles.filterIcon, statusStyle].join(' ')} viewBox='0 0 18 18'>
                 {icon}
             </svg>
         )
