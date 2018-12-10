@@ -16,7 +16,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
-            activeFilterDialog: '',
+            activeFilterDialog: 'None',
             sortingColumn: 'name',
             sortDirection: 'ascending'
         };
@@ -291,7 +291,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td className={styles.string}>{row.data_type}</td>
                                             <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
                                             <td className={styles.string}>{row.units}</td>
-                                            <td className={[styles.healthStatusCell, this.state.expandedRows[row.param_name] ? styles.selectedHealthStatus : ''].join(' ')}
+                                            <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
                                                 key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
