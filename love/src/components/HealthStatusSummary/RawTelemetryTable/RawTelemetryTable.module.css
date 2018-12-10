@@ -198,7 +198,7 @@ tbody tr {
 }
 
 .rawTelemetryTable .valuesList {
-    counter-reset: values-list-counter;
+    counter-reset: values-list-counter -1;
     list-style: none;
     -webkit-padding-start: 0;
     position: relative;
