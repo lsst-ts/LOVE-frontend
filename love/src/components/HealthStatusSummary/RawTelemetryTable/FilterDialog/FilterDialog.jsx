@@ -10,10 +10,12 @@ export default class FilterDialog extends Component {
 
     sortAscending = ()=>{
         this.props.changeSortDirection('ascending',this.props.columnName);
+        this.props.closeFilterDialogs();
     }
 
     sortDescending = ()=>{
-        this.props.changeSortDirection('descending',this.props.columnName)
+        this.props.changeSortDirection('descending',this.props.columnName);
+        this.props.closeFilterDialogs();
     }
     
     sortMouseOver = (row)=>{
