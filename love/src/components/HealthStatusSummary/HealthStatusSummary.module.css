@@ -1,8 +1,11 @@
 .topButtons {
     display: flex;
+    justify-content: flex-end;
 }
 
 .buttonWrapper {
-    padding: 0.5em 0.3em;
+    padding: 0em 0em;
     align-self: baseline;
+    padding-bottom: 0.3em;
+    padding-left: 0.5em;
 }
