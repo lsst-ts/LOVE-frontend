@@ -18,7 +18,7 @@ body {
   --base-background-color: hsl(205, 40%, 8%);
   --secondary-background-color: hsl(198, 34%, 12%, 1);
   --secondary-background-dimmed-color: hsl(198, 34%, 13.5%, 1);
-  --tertiary-background-color: hsl(201, 15%, 54%, 0.25); /*Transparent*/
+  --tertiary-background-color: hsl(201, 21%, 23%, 1); /*Transparent*/
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
 
