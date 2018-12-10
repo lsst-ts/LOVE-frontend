@@ -34,6 +34,12 @@ export default class FilterDialog extends Component {
             this.setState({ZAMouseOver: false});
         }
     }
+
+    onInputKeyPress = (ev)=>{
+        if(ev.key === "Enter"){
+            this.props.closeFilterDialogs();
+        }
+    }
     render() {
 
         let AZStyle = styles.dialogRow;
@@ -68,7 +74,7 @@ export default class FilterDialog extends Component {
                     <div className={styles.dialogRowTitle}>
                         <span className={styles.filterText}>Filter...</span>
                     </div>
-                    <input type="text" className={styles.filterInput} onChange={this.props.changeFilter} />
+                    <input type="text" className={styles.filterInput} onChange={this.props.changeFilter} onKeyPress={this.onInputKeyPress} />
                 </div>
             </div>
         );
