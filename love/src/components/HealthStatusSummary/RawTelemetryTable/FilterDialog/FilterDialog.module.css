@@ -49,3 +49,8 @@
     background-color: var(--secondary-font-dimmed-color);
     cursor: pointer;
 }
+
+.line {
+    background-color: var(--secondary-font-dimmed-color);
+    height: 1px;
+}

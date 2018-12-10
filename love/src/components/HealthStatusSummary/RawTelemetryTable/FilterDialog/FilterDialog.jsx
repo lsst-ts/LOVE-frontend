@@ -71,6 +71,8 @@ export default class FilterDialog extends Component {
                         onMouseLeave={()=>{this.sortMouseLeave('ZA')}}>                        
                         <span className={styles.sortOption}>Z - A</span>
                     </div>
+
+                    <div className={styles.line}> </div>
                     <div className={styles.dialogRowTitle}>
                         <span className={styles.filterText}>Filter...</span>
                     </div>
