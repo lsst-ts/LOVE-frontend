@@ -27,7 +27,15 @@ export default class RawTelemetryTable extends PureComponent {
 
     }
 
+    clickRow = (rowID) => {
+        if(this.state.activeFilterDialog === 'None')
+            this.toggleRow(rowID);
+        else
+            this.closeFilterDialogs();
+    }
+
     toggleRow = (rowId) => {
+        this.closeFilterDialogs();
         let expandedRows = this.state.expandedRows;
         if (expandedRows[rowId])
             expandedRows[rowId] = false;
@@ -274,7 +282,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
                                     <React.Fragment key={key}>
-                                        <tr className={styles.dataRow} onClick={() => this.toggleRow(key)} >
+                                        <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                             <td className={styles.string}>{row.component}</td>
                                             <td className={styles.string}>{row.stream}</td>
                                             <td className={styles.string}>{row.timestamp}</td>
