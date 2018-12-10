@@ -1,3 +1,7 @@
+:root{
+    --scrollbar-width: 10px;
+}
+
 .rawTelemetryTable {
     width: 100%;
     table-layout: fixed;
@@ -8,13 +12,14 @@
 .rawTelemetryTable thead {
     display: table;
     table-layout:fixed;
-    width: calc(100% - 1em);
+    width: calc(100% - var(--scrollbar-width));
     word-wrap:break-word;
 }
 .rawTelemetryTable  tbody {
     background: var(--secondary-background-color);
     display: block;
     height: 85vh; /* necessary for scroll */
+    width: calc(100%);
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -151,6 +156,7 @@ tbody tr {
 .rawTelemetryTable .setButton {
     padding: 0em 2em;
     margin: auto;
+    background: var(--quaternary-background-color);
 }
 
 .rawTelemetryTable .snippetButton {
@@ -241,4 +247,24 @@ tbody tr {
 
 .rawTelemetryTable .healthStatusCell:hover .editIconWrapper {
     visibility: visible;
+}
+
+/* width */
+.rawTelemetryTable ::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+}
+
+/* Track */
+.rawTelemetryTable ::-webkit-scrollbar-track {
+    background: var(--tertiary-background-color); 
+}
+ 
+/* Handle */
+.rawTelemetryTable ::-webkit-scrollbar-thumb {
+    background: var(--quinary-background-color);
+}
+
+/* Handle on hover */
+.rawTelemetryTable ::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-font-color);
 }
