@@ -6,17 +6,19 @@ import FilterDialog from '../FilterDialog/FilterDialog';
 export default class ColumnHeader extends Component {
 
     render() {
+        const isActive = this.props.activeFilterDialog===this.props.filterName;
         return(
             <th > 
                 <div className={styles.columnHeader}>
                     <span className={styles.primaryText}>{this.props.header}</span> 
                     <span className={styles.secondaryText}>{this.props.secondaryText}</span>
                     <div className={styles.filterIconWrapper}>
-                        <FilterIcon filterName={this.props.filterName} onClickHandler={this.props.columnOnClick}/>
+                        <FilterIcon filterName={this.props.filterName} 
+                                    onClickHandler={this.props.columnOnClick} active={isActive}/>
                     </div>
                 </div> 
                 <FilterDialog 
-                    show={this.props.activeFilterDialog===this.props.filterName}
+                    show={isActive}
                     changeFilter={this.props.changeFilter(this.props.filterName)}
                     closeFilterDialogs={this.props.closeFilterDialogs}
                     changeSortDirection={this.props.changeSortDirection}
