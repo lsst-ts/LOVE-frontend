@@ -1,23 +1,7 @@
 import React, { Component } from 'react'
 import styles from "./FilterDialog.module.css";
 export default class FilterDialog extends Component {
-    constructor(props) {
-        super(props);
-        this.container = React.createRef();
-    }
-    componentDidMount() {
-        document.addEventListener("mouseup", this.handleClickOutside);
-    }
 
-    componentWillUnmount() {
-        document.removeEventListener("mouseup", this.handleClickOutside);
-    }
-
-    handleClickOutside = e => {
-        if (this.props.show && !this.container.current.contains(e.target)) {
-            this.props.closeFilterDialogs();
-        }
-    };
     sortAscending = ()=>{
         this.props.changeSortDirection('ascending',this.props.columnName);
     }

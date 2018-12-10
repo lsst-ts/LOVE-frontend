@@ -16,7 +16,7 @@ export default class RawTelemetryTable extends PureComponent {
 
         this.state = {
             expandedRows: expandedRows,
-            activeFilterDialog: 'name',
+            activeFilterDialog: '',
             sortingColumn: 'name',
             sortDirection: 'ascending'
         };
@@ -123,6 +123,7 @@ export default class RawTelemetryTable extends PureComponent {
 
     setHealthFunction = (param_name) => {
         console.log(param_name + '-healthFuncion')
+        console.log(this.props.healthFunctions);
         let healthFunctions = this.props.healthFunctions;
         healthFunctions[param_name] = document.getElementById(param_name + '-healthFunction').value;
         this.props.setHealthFunctions(healthFunctions);
@@ -153,6 +154,10 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     columnOnClick = (ev, filterName) =>{
+        if(this.state.activeFilterDialog === filterName){
+            this.closeFilterDialogs();
+            return;
+        }
         this.setState({activeFilterDialog: filterName});
     }
 
@@ -178,7 +183,7 @@ export default class RawTelemetryTable extends PureComponent {
         }
 
 
-        let direction = this.state.sortDirection == 'ascending'? 1 : -1;
+        let direction = this.state.sortDirection === 'ascending'? 1 : -1;
         
         if(a[column]<b[column]){
             return -direction;
@@ -193,6 +198,14 @@ export default class RawTelemetryTable extends PureComponent {
         }
 
         return 0;
+    }
+
+    componentDidMount = () => {
+        // document.addEventListener("mouseup", this.closeFilterDialogs);
+    }
+
+    componentWillUnmount = () => {
+        // document.removeEventListener("mouseup", this.closeFilterDialogs);
     }
 
     render() {
@@ -250,11 +263,10 @@ export default class RawTelemetryTable extends PureComponent {
                                         
                                 })
                             }
-                            <th className={styles.addedColumn}>Added</th>
+                            {/* <th className={styles.addedColumn}>Added</th> */}
                         </tr>
                 </thead>
                 <tbody>
-
                     {
                         data.sort(this.sortData).map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
@@ -283,7 +295,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><input type="checkbox"/></td>
+                                            {/* <td><input type="checkbox"/></td> */}
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
@@ -303,7 +315,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                             <p>
                                                                 {'function ( value ) {'}
                                                             </p>
-                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? '' : this.defaultCodeText}>
+                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText}>
                                                             </textarea>
                                                             <p>
                                                                 {'}'}
@@ -334,7 +346,6 @@ export default class RawTelemetryTable extends PureComponent {
                                                             </div>
                                                         </div>
                                                     </td>
-                                                    <td></td>
                                                 </tr> :
                                                 null
                                         }
