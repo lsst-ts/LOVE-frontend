@@ -307,7 +307,7 @@ export default class RawTelemetryTable extends PureComponent {
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
-                                                <tr key={key + '-expanded'} className={styles.expandedRow}>
+                                                <tr onClick={this.closeFilterDialogs} key={key + '-expanded'} className={styles.expandedRow}>
                                                     <td colSpan={4}>
                                                         <div>
                                                             <p>Value</p>
