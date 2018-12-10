@@ -39,6 +39,7 @@
 .dialogRow {
     padding: 0.5em 0.5em;
     font-size: 0.8em;
+    cursor: pointer;
 }
 
 .dialogRowTitle {
@@ -47,7 +48,6 @@
 
 .mouseOver{
     background-color: var(--secondary-font-dimmed-color);
-    cursor: pointer;
 }
 
 .line {
