@@ -9,8 +9,9 @@
     width: 100%;
     padding: 0.5em;
     right: -0.5em;
+    border-radius: 4px 0 4px 4px;
+    box-shadow: -5px 4px 3px -1px var(--box-shadow-color);
 }
-
 .show {
     display:block;    
     text-align: left;
