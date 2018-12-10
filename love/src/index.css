@@ -14,6 +14,8 @@ body {
   --base-font-color: hsl(194, 16%, 79%);
   --secondary-font-color: hsl(197, 13%, 59%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3);/*Transparent*/
+  --tertiary-font-color: hsl(201, 15%, 54%);
+
   --base-background-color: hsl(205, 40%, 8%);
   --secondary-background-color: hsl(198, 34%, 12%, 1);
   --secondary-background-dimmed-color: hsl(198, 34%, 13.5%, 1);
