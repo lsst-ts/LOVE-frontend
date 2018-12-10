@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
-import EditIcon from '../../icons/EditIcon/EditIcon';
+import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
@@ -301,7 +301,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                         </StatusText>
                                                     </div>
                                                     <div className={styles.editIconWrapper}>
-                                                        <EditIcon active></EditIcon>
+                                                        <GearIcon active={!this.state.expandedRows[key]}></GearIcon>
                                                     </div>
                                                 </div>
                                             </td>

@@ -2,12 +2,8 @@ import React, { Component } from 'react'
 import styles from './FilterIcon.module.css'
 
 export default class FilterIcon extends Component {
-    onClickWrapper = (ev)=>{
-        this.props.onClickHandler(ev, this.props.filterName);
-    }
-
     render() {
-        let status = this.props.active ? styles.inactive : styles.active;
+        let status = this.props.active ? styles.active : styles.inactive;
 
         const icons = {
             default: <g>
@@ -25,7 +21,7 @@ export default class FilterIcon extends Component {
         }
         
         return (
-            <svg className={[styles.filterIcon, status].join(' ')}  onClick={this.onClickWrapper} viewBox='0 0 18 18'>
+            <svg className={[styles.filterIcon, status].join(' ')} viewBox='0 0 18 18'>
                 {icon}
             </svg>
         )

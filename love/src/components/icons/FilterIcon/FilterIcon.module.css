@@ -2,11 +2,14 @@
     display: inline-block;
     max-height:100%;
     stroke-miterlimit:10;stroke-width:2px;
+    vertical-align: middle;
 }
 
 .active {
-    fill: var(--secondary-font-color);
-    stroke:var(--secondary-font-color);
+    /* fill: var(--secondary-font-color);
+    stroke:var(--secondary-font-color); */
+    fill:var(--base-font-color);
+    stroke:var(--base-font-color);
 }
 
 .inactive {
