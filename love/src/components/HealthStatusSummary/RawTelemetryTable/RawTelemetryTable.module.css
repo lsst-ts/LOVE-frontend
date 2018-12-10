@@ -15,7 +15,7 @@
     background: var(--secondary-background-color);
     display: block;
     height: 85vh; /* necessary for scroll */
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 tbody tr {
