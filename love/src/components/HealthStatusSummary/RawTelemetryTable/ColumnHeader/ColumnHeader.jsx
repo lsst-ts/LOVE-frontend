@@ -7,6 +7,8 @@ export default class ColumnHeader extends Component {
 
     render() {
         const isActive = this.props.activeFilterDialog===this.props.filterName;
+        const isFiltered = this.props.filter.value.toString().substring(0,6)!== '/(?:)/';
+
         return(
             <th > 
                 <div className={styles.columnHeader}>
@@ -14,7 +16,9 @@ export default class ColumnHeader extends Component {
                     <span className={styles.secondaryText}>{this.props.secondaryText}</span>
                     <div className={styles.filterIconWrapper}>
                         <FilterIcon filterName={this.props.filterName} 
-                                    onClickHandler={this.props.columnOnClick} active={isActive}/>
+                                    onClickHandler={this.props.columnOnClick} 
+                                    active={isActive}
+                                    isFiltered={isFiltered}/>
                     </div>
                 </div> 
                 <FilterDialog 

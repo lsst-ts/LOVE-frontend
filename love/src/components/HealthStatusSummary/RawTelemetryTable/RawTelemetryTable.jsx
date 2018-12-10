@@ -261,13 +261,15 @@ export default class RawTelemetryTable extends PureComponent {
                             {
                                 Object.entries(headersToFilterName).map((entry)=>{
                                     const [header, filterName] = entry;
+
                                     return(<ColumnHeader key={header} 
                                             header={header} filterName={filterName}
                                             changeFilter={this.changeFilter} 
                                             activeFilterDialog={this.state.activeFilterDialog}
                                             closeFilterDialogs={this.closeFilterDialogs}
                                             columnOnClick={this.columnOnClick}
-                                            changeSortDirection={this.changeSortDirection}/>)
+                                            changeSortDirection={this.changeSortDirection}
+                                            filter={this.props.filters[filterName]}/>)
                                         
                                 })
                             }
