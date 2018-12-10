@@ -235,23 +235,26 @@ export default class RawTelemetryTable extends PureComponent {
             'Health status':'health_status'};
         return (
             <table className={styles.rawTelemetryTable}>
+                <thead>
+                        <tr>
+                            {
+                                Object.entries(headersToFilterName).map((entry)=>{
+                                    const [header, filterName] = entry;
+                                    return(<ColumnHeader key={header} 
+                                            header={header} filterName={filterName}
+                                            changeFilter={this.changeFilter} 
+                                            activeFilterDialog={this.state.activeFilterDialog}
+                                            closeFilterDialogs={this.closeFilterDialogs}
+                                            columnOnClick={this.columnOnClick}
+                                            changeSortDirection={this.changeSortDirection}/>)
+                                        
+                                })
+                            }
+                            <th className={styles.addedColumn}>Added</th>
+                        </tr>
+                </thead>
                 <tbody>
-                    <tr>
-                        {
-                            Object.entries(headersToFilterName).map((entry)=>{
-                                const [header, filterName] = entry;
-                                return(<ColumnHeader key={header} 
-                                        header={header} filterName={filterName}
-                                        changeFilter={this.changeFilter} 
-                                        activeFilterDialog={this.state.activeFilterDialog}
-                                        closeFilterDialogs={this.closeFilterDialogs}
-                                        columnOnClick={this.columnOnClick}
-                                        changeSortDirection={this.changeSortDirection}/>)
-                                    
-                            })
-                        }
-                        <th className={styles.addedColumn}>Added</th>
-                    </tr>
+
                     {
                         data.sort(this.sortData).map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
