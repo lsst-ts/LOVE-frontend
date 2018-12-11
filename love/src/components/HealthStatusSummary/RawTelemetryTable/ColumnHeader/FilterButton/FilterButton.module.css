@@ -18,13 +18,16 @@
 }
 
 .default{
-    stroke: hsl(194, 16%, 79%);
-    fill: hsl(194, 16%, 79%);
+    stroke: var(--base-font-color);
+    fill: var(--base-font-color);
 }
 
 .selected, .filterIconWrapper:hover{
-    stroke: hsl(194, 16%, 79%);
-    fill: hsl(194, 16%, 79%);
+    stroke: var(--base-font-color);
+    fill: var(--base-font-color);
     background-color: #3c4d53;
+    /* stroke: #3c4d53;
+    fill: #3c4d53;
+    background-color: var(--base-font-color);; */
     border-radius: 5px;
 }

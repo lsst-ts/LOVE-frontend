@@ -1,17 +1,21 @@
 import React, { Component } from 'react'
 import styles from './FilterButton.module.css';
 import DefaultFilterIcon from '../../../../icons/FilterIcon/DefaultFilterIcon';
-
+import ActiveFilterIcon from '../../../../icons/FilterIcon/ActiveFilterIcon';
 export default class FilterButton extends Component {
 
     
     render(){
-        let statusStyle = this.props.selected ? styles.selected : styles.default;
-        
-        return (<div className={[styles.filterIconWrapper, statusStyle].join(' ')} 
+        let statusStyle = this.props.selected || this.props.isFiltered? styles.selected : styles.default;
+
+        return (
+            <div className={[styles.filterIconWrapper, statusStyle].join(' ')} 
                     onClick={(e) => this.props.columnOnClick(e, this.props.filterName)}>
-            <DefaultFilterIcon style={styles.filterIcon}/>
-        </div>);
+                {this.props.isFiltered? 
+                    <ActiveFilterIcon style={styles.filterIcon}/>: 
+                    <DefaultFilterIcon style={styles.filterIcon}/> }
+                
+            </div>);
     }
 
 }
