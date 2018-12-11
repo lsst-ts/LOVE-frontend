@@ -45,13 +45,13 @@
     cursor: pointer;
 }
 
+.dialogRow:hover {
+    background-color: var(--secondary-font-dimmed-color);
+}
+
 .dialogRowTitle {
     padding: 0.1em 0.5em;
     padding-top: 0.5em;
-}
-
-.mouseOver{
-    background-color: var(--secondary-font-dimmed-color);
 }
 
 .line {
