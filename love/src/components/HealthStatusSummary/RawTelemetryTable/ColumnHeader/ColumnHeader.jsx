@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styles from './ColumnHeader.module.css'
-import FilterIcon from '../../../icons/FilterIcon/FilterIcon';
+// import FilterIcon from '../../../icons/FilterIcon/FilterIcon';
+import FilterButton from './FilterButton/FilterButton';
 import FilterDialog from '../FilterDialog/FilterDialog';
 
 export default class ColumnHeader extends Component {
@@ -14,11 +15,10 @@ export default class ColumnHeader extends Component {
                 <div className={styles.columnHeader}>
                     <span className={styles.primaryText}>{this.props.header}</span> 
                     <span className={styles.secondaryText}>{this.props.secondaryText}</span>
-                    <div className={styles.filterIconWrapper} onClick={(e) => this.props.columnOnClick(e, this.props.filterName)}>
-                        <FilterIcon filterName={this.props.filterName} 
-                                    active={isActive}
-                                    isFiltered={isFiltered}/>
-                    </div>
+                    <FilterButton filterName={this.props.filterName} 
+                                selected={isActive}
+                                isFiltered={isFiltered}
+                                columnOnClick={this.props.columnOnClick}/>
                 </div> 
                 <FilterDialog 
                     show={isActive}
