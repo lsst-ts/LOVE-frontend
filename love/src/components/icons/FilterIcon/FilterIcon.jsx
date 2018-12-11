@@ -18,7 +18,6 @@ export default class FilterIcon extends Component {
         let icon = icons.default;
         if(this.props.isFiltered){
             icon = icons.filtered;;
-            // statusStyle = styles.active;
         }
         
         return (

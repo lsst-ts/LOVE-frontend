@@ -36,8 +36,21 @@ tbody tr {
     border: 2px solid var(--base-background-color);
     background: var(--tertiary-background-color);
     padding: 0em 0.5em;
+    padding-left: 1em;
+    text-align: left;
 }
 
+.rawTelemetryTable .narrowCol {
+    width: 7%;
+}
+
+.rawTelemetryTable .mediumCol {
+    width: 9%;
+}
+
+.rawTelemetryTable .wideCol {
+    width: 12%;
+}
 
 .rawTelemetryTable tr:hover.dataRow{
     background: var(--tertiary-background-color);
