@@ -28,7 +28,7 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     clickRow = (rowID) => {
-        if(this.state.activeFilterDialog === 'None')
+        if (this.state.activeFilterDialog === 'None')
             this.toggleRow(rowID);
         else
             this.closeFilterDialogs();
@@ -154,54 +154,54 @@ export default class RawTelemetryTable extends PureComponent {
         let elements = values.map((elem, index) => {
             return <li key={index} className={styles.valuesListItem}>
                 <span className={styles.valuesListItemValue}>{JSON.stringify(elem)}</span>
-            </li> 
+            </li>
         });
         return <ol className={styles.valuesList}>
             {elements}
         </ol>;
     }
 
-    columnOnClick = (ev, filterName) =>{
-        if(this.state.activeFilterDialog === filterName){
+    columnOnClick = (ev, filterName) => {
+        if (this.state.activeFilterDialog === filterName) {
             this.closeFilterDialogs();
             return;
         }
-        this.setState({activeFilterDialog: filterName});
+        this.setState({ activeFilterDialog: filterName });
     }
 
-    closeFilterDialogs = ()=>{
-        this.setState({activeFilterDialog: 'None'});
+    closeFilterDialogs = () => {
+        this.setState({ activeFilterDialog: 'None' });
     }
 
 
-    changeSortDirection= (direction, column)=>{
+    changeSortDirection = (direction, column) => {
         /*
             direction can be "ascending" or "descending", otherwise no
             sorting will be applied
             Sorting is applied before filtering
         */
-        this.setState({sortDirection : direction, sortingColumn: column});
+        this.setState({ sortDirection: direction, sortingColumn: column });
     }
 
-    sortData = (a,b) =>{
+    sortData = (a, b) => {
 
         const column = this.state.sortingColumn;
-        if(this.state.sortDirection !== 'ascending' && this.state.sortDirection !== 'descending'){
+        if (this.state.sortDirection !== 'ascending' && this.state.sortDirection !== 'descending') {
             return 0;
         }
 
 
-        let direction = this.state.sortDirection === 'ascending'? 1 : -1;
-        
-        if(a[column]<b[column]){
+        let direction = this.state.sortDirection === 'ascending' ? 1 : -1;
+
+        if (a[column] < b[column]) {
             return -direction;
         }
 
-        if(a[column]===b[column]){
+        if (a[column] === b[column]) {
             return 0;
         }
 
-        if(a[column]>b[column]){
+        if (a[column] > b[column]) {
             return direction;
         }
 
@@ -233,9 +233,9 @@ export default class RawTelemetryTable extends PureComponent {
                     return {
                         'name': name,
                         'param_name': name,
-                        'data_type': data_type ? data_type:'?',
+                        'data_type': data_type ? data_type : '?',
                         'value': value,
-                        'units': units ? units:'?'
+                        'units': units ? units : '?'
                     }
                 })
             }
@@ -243,39 +243,39 @@ export default class RawTelemetryTable extends PureComponent {
 
 
         data = this.convertData(data);
-
-        let headersToFilterName = {
-            'Component': 'component',
-            'Stream': 'stream',
-            'Timestamp':'timestamp',
-            'Name':'name',
-            'Parameter':'param_name',
-            'Data type':'data_type',
-            'Value':'value',
-            'Units':'units', 
-            'Health status':'health_status'};
         return (
             <table className={styles.rawTelemetryTable}>
                 <thead>
-                        <tr>
-                            {
-                                Object.entries(headersToFilterName).map((entry)=>{
-                                    const [header, filterName] = entry;
+                    <tr>
 
-                                    return(<ColumnHeader key={header} 
-                                            header={header} filterName={filterName}
-                                            changeFilter={this.changeFilter} 
-                                            activeFilterDialog={this.state.activeFilterDialog}
-                                            closeFilterDialogs={this.closeFilterDialogs}
-                                            columnOnClick={this.columnOnClick}
-                                            changeSortDirection={this.changeSortDirection}
-                                            sortDirection={this.state.sortDirection}
-                                            filter={this.props.filters[filterName]}/>)
-                                        
-                                })
-                            }
-                            {/* <th className={styles.addedColumn}>Added</th> */}
-                        </tr>
+                        {
+                            (() => {
+                                let defaultColumnProps = {
+                                    changeFilter: this.changeFilter,
+                                    activeFilterDialog: this.state.activeFilterDialog,
+                                    closeFilterDialogs: this.closeFilterDialogs,
+                                    columnOnClick: this.columnOnClick,
+                                    changeSortDirection: this.changeSortDirection,
+                                    sortDirection: this.state.sortDirection,
+                                }
+
+                                return (
+                                    <>
+                                        <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.props.filters['component']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.props.filters['stream']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.props.filters['name']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.props.filters['param_name']} />
+                                        <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.props.filters['data_type']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.props.filters['value']} />
+                                        <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.props.filters['units']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.props.filters['health_status']} />
+                                    </>
+                                )
+                            })()
+                        }
+                        {/* <th className={styles.addedColumn}>Added</th> */}
+                    </tr>
                 </thead>
                 <tbody onClick={this.closeFilterDialogs}>
                     {
@@ -291,9 +291,9 @@ export default class RawTelemetryTable extends PureComponent {
                                             <td className={styles.string}>{row.timestamp}</td>
                                             <td className={styles.string}>{row.name}</td>
                                             <td className={styles.string}>{row.param_name}</td>
-                                            <td className={styles.string}>{row.data_type}</td>
+                                            <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
                                             <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
-                                            <td className={styles.string}>{row.units}</td>
+                                            <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
                                             <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
                                                 key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>

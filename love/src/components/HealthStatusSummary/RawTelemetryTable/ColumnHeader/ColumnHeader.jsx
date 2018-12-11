@@ -11,7 +11,7 @@ export default class ColumnHeader extends Component {
         const isFiltered = this.props.filter.value.toString().substring(0,6)!== '/(?:)/';
 
         return(
-            <th > 
+            <th className={this.props.className}> 
                 <div className={styles.columnHeader}>
                     <span className={styles.primaryText}>{this.props.header}</span> 
                     <span className={styles.secondaryText}>{this.props.secondaryText}</span>
