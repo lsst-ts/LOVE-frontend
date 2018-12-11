@@ -18,7 +18,7 @@ export default class RawTelemetryTable extends PureComponent {
             expandedRows: expandedRows,
             activeFilterDialog: 'None',
             sortingColumn: 'name',
-            sortDirection: 'ascending'
+            sortDirection: 'None'
         };
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         window.OK = 1;
@@ -269,6 +269,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             closeFilterDialogs={this.closeFilterDialogs}
                                             columnOnClick={this.columnOnClick}
                                             changeSortDirection={this.changeSortDirection}
+                                            sortDirection={this.state.sortDirection}
                                             filter={this.props.filters[filterName]}/>)
                                         
                                 })
