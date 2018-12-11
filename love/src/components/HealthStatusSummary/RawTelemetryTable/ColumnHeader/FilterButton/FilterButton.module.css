@@ -1,6 +1,6 @@
 .filterIconWrapper {
-    width: 16px;
-    min-width: 16px;
+    width: 12px;
+    min-width: 12px;
     position:absolute;
     right:0;
     top: 50%;
@@ -14,7 +14,7 @@
     max-height:100%;
     stroke-miterlimit:10;stroke-width:2px;
     vertical-align: middle;
-    
+
 }
 
 .default{
@@ -33,7 +33,7 @@
 }
 
 .wrapperSorted{
-    width: 32px;
+    width: 25px;
 }
 
 .iconSorted {
