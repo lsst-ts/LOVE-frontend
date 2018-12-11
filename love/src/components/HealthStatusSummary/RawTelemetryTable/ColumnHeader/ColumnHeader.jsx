@@ -18,7 +18,8 @@ export default class ColumnHeader extends Component {
                     <FilterButton filterName={this.props.filterName} 
                                 selected={isActive}
                                 isFiltered={isFiltered}
-                                columnOnClick={this.props.columnOnClick}/>
+                                columnOnClick={this.props.columnOnClick}
+                                sortDirection={this.props.sortDirection}/>
                 </div> 
                 <FilterDialog 
                     show={isActive}

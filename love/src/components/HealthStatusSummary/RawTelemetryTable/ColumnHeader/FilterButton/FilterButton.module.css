@@ -14,7 +14,7 @@
     max-height:100%;
     stroke-miterlimit:10;stroke-width:2px;
     vertical-align: middle;
-
+    
 }
 
 .default{
@@ -30,4 +30,12 @@
     fill: #3c4d53;
     background-color: var(--base-font-color);; */
     border-radius: 5px;
+}
+
+.wrapperSorted{
+    width: 32px;
+}
+
+.iconSorted {
+    width: 50%;
 }

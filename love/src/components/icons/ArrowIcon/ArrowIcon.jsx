@@ -6,7 +6,7 @@ export default class ArrowIcon extends Component {
         let status = this.props.active ? styles.active : styles.inactive;
         let up = this.props.up;
         return (
-            <svg className={[styles.arrowIcon, status].join(' ')} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'>
+            <svg className={[styles.arrowIcon, status, this.props.style].join(' ')} xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'>
                 {
                     up ?
                         <path className='cls-1' d='M11.74,5.47,9.2,3A.18.18,0,0,0,9.05,3,.19.19,0,0,0,8.9,3L6.4,5.47a.18.18,0,0,0,0,.22.17.17,0,0,0,.18.13h2v8a.17.17,0,0,0,.05.14.2.2,0,0,0,.15.06h.7a.17.17,0,0,0,.14-.06.18.18,0,0,0,.06-.14v-8h2a.19.19,0,0,0,.19-.13A.22.22,0,0,0,11.74,5.47Z'/>
@@ -17,3 +17,7 @@ export default class ArrowIcon extends Component {
         )
     }
 }
+
+ArrowIcon.defaultProps = {
+    style: ''
+};

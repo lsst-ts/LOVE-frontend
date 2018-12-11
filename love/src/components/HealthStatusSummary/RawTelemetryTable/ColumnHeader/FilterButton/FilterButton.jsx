@@ -2,19 +2,30 @@ import React, { Component } from 'react'
 import styles from './FilterButton.module.css';
 import DefaultFilterIcon from '../../../../icons/FilterIcon/DefaultFilterIcon';
 import ActiveFilterIcon from '../../../../icons/FilterIcon/ActiveFilterIcon';
+import ArrowIcon from '../../../../icons/ArrowIcon/ArrowIcon';
 export default class FilterButton extends Component {
 
     
     render(){
+        const isSorted = this.props.sortDirection ==='ascending' || this.props.sortDirection === 'descending';
+        const wrapperSortedStyle = isSorted? styles.wrapperSorted : '';
+        
         let statusStyle = this.props.selected || this.props.isFiltered? styles.selected : styles.default;
 
+        let sortedIconStyle = isSorted ? styles.iconSorted : '';
+        
         return (
-            <div className={[styles.filterIconWrapper, statusStyle].join(' ')} 
+            <div className={[styles.filterIconWrapper, statusStyle, wrapperSortedStyle].join(' ')} 
                     onClick={(e) => this.props.columnOnClick(e, this.props.filterName)}>
-                {this.props.isFiltered? 
-                    <ActiveFilterIcon style={styles.filterIcon}/>: 
-                    <DefaultFilterIcon style={styles.filterIcon}/> }
                 
+                {this.props.isFiltered? 
+                    <ActiveFilterIcon style={[styles.filterIcon, sortedIconStyle].join(' ')}/>: 
+                    <DefaultFilterIcon style={[styles.filterIcon, sortedIconStyle].join(' ')}/> }
+                
+                {isSorted? <ArrowIcon 
+                                active={true} 
+                                up={this.props.sortDirection==='ascending'?true:false} 
+                                style={[sortedIconStyle, styles.arrowIcon].join(' ')}/> : null}    
             </div>);
     }
 
