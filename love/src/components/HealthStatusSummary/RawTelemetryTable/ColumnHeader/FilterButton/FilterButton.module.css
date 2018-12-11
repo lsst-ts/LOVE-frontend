@@ -1,0 +1,30 @@
+.filterIconWrapper {
+    width: 16px;
+    min-width: 16px;
+    position:absolute;
+    right:0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 0.3em;
+}
+
+.filterIcon {
+    display: inline-block;
+    max-height:100%;
+    stroke-miterlimit:10;stroke-width:2px;
+    vertical-align: middle;
+
+}
+
+.default{
+    stroke: hsl(194, 16%, 79%);
+    fill: hsl(194, 16%, 79%);
+}
+
+.selected, .filterIconWrapper:hover{
+    stroke: hsl(194, 16%, 79%);
+    fill: hsl(194, 16%, 79%);
+    background-color: #3c4d53;
+    border-radius: 5px;
+}
