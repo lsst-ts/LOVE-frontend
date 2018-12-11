@@ -27,9 +27,14 @@ export default class FilterDialog extends Component {
         this.props.closeFilterDialogs();
     }
 
-    onInputKeyPress = (ev) => {
+    onInputKeyUp = (ev) => {
         if (ev.key === "Enter") {
             this.props.closeFilterDialogs();
+        }
+        if( ev.key ==="Escape"){
+            this.props.closeFilterDialogs();
+            ev.target.value = "";
+            this.props.changeFilter({target:''});
         }
     }
 
@@ -53,7 +58,7 @@ export default class FilterDialog extends Component {
                     <div className={styles.dialogRowTitle}>
                         <span className={styles.filterText}>Filter...</span>
                     </div>
-                    <input ref={this.textInput} type="text" className={styles.filterInput} onChange={this.props.changeFilter} onKeyPress={this.onInputKeyPress} />
+                    <input ref={this.textInput} type="text" className={styles.filterInput} onChange={this.props.changeFilter} onKeyUp={this.onInputKeyUp} />
                 </div>
             </div>
         );
