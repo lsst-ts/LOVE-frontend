@@ -9,7 +9,6 @@ export default class FilterDialog extends Component {
     }
 
     componentDidUpdate = (prevProps, prevState, snapshot) => {
-        console.log('this.props', this.props)
         this.textInput.current.focus();
     }
 
