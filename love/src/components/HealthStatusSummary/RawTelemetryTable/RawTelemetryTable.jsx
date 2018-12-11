@@ -270,6 +270,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             columnOnClick={this.columnOnClick}
                                             changeSortDirection={this.changeSortDirection}
                                             sortDirection={this.state.sortDirection}
+                                            sortingColumn={this.state.sortingColumn}
                                             filter={this.props.filters[filterName]}/>)
                                         
                                 })

@@ -9,7 +9,7 @@ export default class ColumnHeader extends Component {
     render() {
         const isActive = this.props.activeFilterDialog===this.props.filterName;
         const isFiltered = this.props.filter.value.toString().substring(0,6)!== '/(?:)/';
-
+        const sortDirection = this.props.sortingColumn == this.props.filterName ? this.props.sortDirection : ''; 
         return(
             <th > 
                 <div className={styles.columnHeader}>
@@ -19,7 +19,7 @@ export default class ColumnHeader extends Component {
                                 selected={isActive}
                                 isFiltered={isFiltered}
                                 columnOnClick={this.props.columnOnClick}
-                                sortDirection={this.props.sortDirection}/>
+                                sortDirection={sortDirection}/>
                 </div> 
                 <FilterDialog 
                     show={isActive}
