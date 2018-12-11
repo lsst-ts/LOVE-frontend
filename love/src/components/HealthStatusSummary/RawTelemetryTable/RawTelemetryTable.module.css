@@ -121,7 +121,7 @@ tbody tr {
 
 .rawTelemetryTable .healthStatusCell.selectedHealthStatus {
     background: var(--tertiary-background-color);
-    border-bottom: 1px solid var(--tertiary-background-color);
+    border-bottom: 2px solid var(--tertiary-background-color);
 }
 
 .rawTelemetryTable .editIconWrapper {
