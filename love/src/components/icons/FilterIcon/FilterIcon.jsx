@@ -11,14 +11,14 @@ export default class FilterIcon extends Component {
                     <line x1="4.53" y1="9.29" x2="13.34" y2="9.29" />
                     <line x1="1" y1="4" x2="16.87" y2="4" />
                 </g>,
-            filtered: <path d="M16.94,1.44A.68.68,0,0,0,16.27,1H1.73a.68.68,0,0,0-.67.44.67.67,0,0,0,.16.8l5.6,5.6V13a.7.7,0,0,0,.22.52l2.9,3.26a.67.67,0,0,0,.51.22.79.79,0,0,0,.29-.06.68.68,0,0,0,.44-.67V7.84l5.6-5.6A.67.67,0,0,0,16.94,1.44Z" />
+            filtered: <path className={styles.funnel} d="M16.94,1.44A.68.68,0,0,0,16.27,1H1.73a.68.68,0,0,0-.67.44.67.67,0,0,0,.16.8l5.6,5.6V13a.7.7,0,0,0,.22.52l2.9,3.26a.67.67,0,0,0,.51.22.79.79,0,0,0,.29-.06.68.68,0,0,0,.44-.67V7.84l5.6-5.6A.67.67,0,0,0,16.94,1.44Z" />
             
         }
         
         let icon = icons.default;
         if(this.props.isFiltered){
             icon = icons.filtered;;
-            statusStyle = styles.active;
+            // statusStyle = styles.active;
         }
         
         return (
