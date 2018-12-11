@@ -32,11 +32,12 @@
 }
 
 .filterText {
+    vertical-align: text-top;
 }
 
 .sortOption {
     color: var(--tertiary-font-color);
-    padding: 0.3em 1em;
+    padding: 0.3em 0em;
 }
 
 .dialogRow {
@@ -50,11 +51,17 @@
 }
 
 .dialogRowTitle {
-    padding: 0.1em 0.5em;
+    padding: 0.2em 0.5em;
     padding-top: 0.5em;
 }
 
 .line {
     background-color: var(--secondary-font-dimmed-color);
     height: 1px;
+}
+
+.filterIconWrapper {
+    display: inline-block;
+    width: 1.2em;
+    padding-right: 0.3em;
 }
