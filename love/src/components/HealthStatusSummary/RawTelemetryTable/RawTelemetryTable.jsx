@@ -276,7 +276,7 @@ export default class RawTelemetryTable extends PureComponent {
                             {/* <th className={styles.addedColumn}>Added</th> */}
                         </tr>
                 </thead>
-                <tbody>
+                <tbody onClick={this.closeFilterDialogs}>
                     {
                         data.sort(this.sortData).map((row) => {
                             // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
