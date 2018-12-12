@@ -42,6 +42,9 @@ export default class FilterDialog extends Component {
     clearAllOnClick = () =>{
         this.textInput.current.value = "";
         this.props.changeFilter({target:''});
+        if(this.props.columnName===this.props.sortingColumn){
+            this.props.changeSortDirection('None', this.props.columnName);
+        }
     }
 
     render() {
