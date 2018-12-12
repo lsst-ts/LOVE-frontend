@@ -66,3 +66,9 @@
     width: 1.2em;
     padding-right: 0.3em;
 }
+
+.clearAll{
+    float: right;
+    color: var(--tertiary-font-color);
+    font-size: small;
+}
