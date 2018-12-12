@@ -29,6 +29,7 @@
     background: var(--base-font-color);
     border: none;
     border-radius: 3px;
+    padding: 0.4em;
 }
 
 .filterText {
