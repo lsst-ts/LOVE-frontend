@@ -265,7 +265,7 @@ export default class RawTelemetryTable extends PureComponent {
                                     <>
                                         <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.props.filters['component']} />
                                         <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.props.filters['stream']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} />
+                                        <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} secondaryText={'YYYY/MM/DD'}/>
                                         <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.props.filters['name']} />
                                         <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.props.filters['param_name']} />
                                         <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.props.filters['data_type']} />
@@ -304,7 +304,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                         </StatusText>
                                                     </div>
                                                     <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                                                        <GearIcon active={!this.state.expandedRows[key]}></GearIcon>
+                                                        <GearIcon active={this.state.expandedRows[key]}></GearIcon>
                                                     </div>
                                                 </div>
                                             </td>
