@@ -26,7 +26,8 @@ export default class ColumnHeader extends Component {
                     changeFilter={this.props.changeFilter(this.props.filterName)}
                     closeFilterDialogs={this.props.closeFilterDialogs}
                     changeSortDirection={this.props.changeSortDirection}
-                    columnName={this.props.filterName}/> 
+                    columnName={this.props.filterName}
+                    sortingColumn={this.props.sortingColumn}/> 
             </th>
         );
     }
