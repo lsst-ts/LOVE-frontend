@@ -302,7 +302,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                         <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
                                                         </StatusText>
                                                     </div>
-                                                    <div className={styles.editIconWrapper}>
+                                                    <div className={styles.gearIconWrapper}>
                                                         <GearIcon active={!this.state.expandedRows[key]}></GearIcon>
                                                     </div>
                                                 </div>
