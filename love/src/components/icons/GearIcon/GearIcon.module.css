@@ -6,9 +6,9 @@
 }
 
 .active {
-    fill: var(--secondary-font-color);
+    fill:var(--base-font-color);
 }
 
 .inactive {
-    fill: var(--secondary-font-dimmed-color);
+    fill: var(--secondary-font-color);
 }
