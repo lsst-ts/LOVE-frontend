@@ -163,6 +163,7 @@ tbody tr {
 
 .rawTelemetryTable .snippetButtonWrapper {
     padding: 0.3em 1em;
+    padding-left:0;
     flex-grow: 1;
 }
 
@@ -241,7 +242,7 @@ tbody tr {
     border: none;
     width: calc(100% - 3em);
     margin-left: 2em;
-    height: 12em;
+    height: 13em;
     font-size: 1em;
     resize: none;
     border-radius: 5px;
@@ -282,4 +283,22 @@ tbody tr {
 /* Handle on hover */
 .rawTelemetryTable ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-font-color);
+}
+
+/* for describing sections in the expandable row */
+.statusConfigTitle, .snippetsTitle{ 
+    color: var(--base-font-color);
+    margin-bottom: 0.2em;
+}
+
+.statusConfigTitle {
+    margin-top:0.8em;
+}
+
+.lineJump{
+    white-space: pre;
+}
+
+.statusList {
+    font-size:small;
 }
