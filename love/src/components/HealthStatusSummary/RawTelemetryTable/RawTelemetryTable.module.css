@@ -1,5 +1,6 @@
 :root{
     --scrollbar-width: 10px;
+
 }
 
 .rawTelemetryTable {
@@ -273,7 +274,9 @@ tbody tr {
  
 /* Handle */
 .rawTelemetryTable ::-webkit-scrollbar-thumb {
-    background: var(--quinary-background-color);
+    /* background: var(--quinary-background-color); */
+    background: var(--tertiary-font-color);
+    border-radius: 1.1em;
 }
 
 /* Handle on hover */
