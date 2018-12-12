@@ -72,7 +72,7 @@ tbody tr {
 }
 
 .dataRow {
-    cursor: pointer;
+    /* cursor: pointer; */
 }
 
 .rawTelemetryTable th:first-of-type {
@@ -138,16 +138,19 @@ tbody tr {
     border-bottom: 2px solid var(--tertiary-background-color);
 }
 
-.rawTelemetryTable .editIconWrapper {
+.rawTelemetryTable .gearIconWrapper {
     position: absolute;
     right: 0;
-    width: 16px;
-    min-width: 16px;
+    width: 1.5em;
+    min-width: 1em;
+    cursor: pointer;
+    padding-right: 0.3em;
 }
 
 .rawTelemetryTable .statusTextWrapper {
     flex-grow: 1;
     padding: 0.0em 1.5em;
+    margin-right: 2em;
 }
 
 .rawTelemetryTable .snippetsContainer {
@@ -252,14 +255,13 @@ tbody tr {
 .rawTelemetryTable .healthStatusCell {
     padding: 0.4em 0.5em;
     border-bottom: 1px solid transparent;
-    cursor: pointer;    
 }
 
 .rawTelemetryTable .healthStatusCell:hover {
     background: var(--tertiary-background-color);
 }
 
-.rawTelemetryTable .healthStatusCell:hover .editIconWrapper {
+.rawTelemetryTable .healthStatusCell:hover .gearIconWrapper {
     visibility: visible;
 }
 
