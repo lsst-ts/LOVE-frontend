@@ -39,6 +39,11 @@ export default class FilterDialog extends Component {
         }
     }
 
+    clearAllOnClick = () =>{
+        this.textInput.current.value = "";
+        this.props.changeFilter({target:''});
+    }
+
     render() {
         return (
             <div className={styles.superContainer} >
@@ -48,7 +53,7 @@ export default class FilterDialog extends Component {
                             <FilterIcon />
                         </div>
                         <span className={styles.filterText}>Sort as...</span>
-                        <a href='#' className={styles.clearAll}> Clear all</a>
+                        <a href='#' className={styles.clearAll} onClick={this.clearAllOnClick}> Clear all</a>
                     </div>
                     <div onClick={this.sortAscending}
                         className={styles.dialogRow}>
