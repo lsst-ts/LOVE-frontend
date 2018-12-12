@@ -48,6 +48,7 @@ export default class FilterDialog extends Component {
                             <FilterIcon />
                         </div>
                         <span className={styles.filterText}>Sort as...</span>
+                        <a href='#' className={styles.clearAll}> Clear all</a>
                     </div>
                     <div onClick={this.sortAscending}
                         className={styles.dialogRow}>
