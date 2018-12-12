@@ -28,10 +28,11 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     clickRow = (rowID) => {
-        if (this.state.activeFilterDialog === 'None')
-            this.toggleRow(rowID);
-        else
-            this.closeFilterDialogs();
+        this.closeFilterDialogs();
+    }
+
+    clickGearIcon = (rowID) => {
+        this.toggleRow(rowID);
     }
 
     toggleRow = (rowId) => {
@@ -302,7 +303,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                         <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
                                                         </StatusText>
                                                     </div>
-                                                    <div className={styles.gearIconWrapper}>
+                                                    <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
                                                         <GearIcon active={!this.state.expandedRows[key]}></GearIcon>
                                                     </div>
                                                 </div>
