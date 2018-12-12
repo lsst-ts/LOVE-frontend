@@ -342,7 +342,10 @@ export default class RawTelemetryTable extends PureComponent {
                                                     <td colSpan={1}>
                                                         <div>
                                                             <div className={styles.snippetsContainer}>
-                                                                <p>Snippets</p>
+                                                                
+                                                                <p className={styles.lineJump}>   </p>
+                                                                
+                                                                <div className={styles.snippetsTitle}>Snippets</div>
                                                                 <div className={styles.snippetsList}>
                                                                     <div className={styles.snippetButtonWrapper}>
                                                                         <Button secondary className={styles.snippetButton}>
@@ -355,6 +358,14 @@ export default class RawTelemetryTable extends PureComponent {
                                                                         </Button>
                                                                     </div>
                                                                 </div>
+                                                                
+                                                                <div className={styles.statusConfigTitle}>  Available Status:</div>
+                                                                <div className={styles.statusList}>
+                                                                    <div> OK</div>
+                                                                    <div> WARNING</div>
+                                                                    <div> ALERT</div>
+                                                                </div>
+                                                                
                                                             </div>
                                                         </div>
                                                     </td>
