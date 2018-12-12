@@ -140,14 +140,16 @@ tbody tr {
 .rawTelemetryTable .gearIconWrapper {
     position: absolute;
     right: 0;
-    width: 16px;
-    min-width: 16px;
+    width: 1.5em;
+    min-width: 1em;
     cursor: pointer;
+    padding-right: 0.3em;
 }
 
 .rawTelemetryTable .statusTextWrapper {
     flex-grow: 1;
     padding: 0.0em 1.5em;
+    margin-right: 2em;
 }
 
 .rawTelemetryTable .snippetsContainer {
