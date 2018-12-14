@@ -124,7 +124,7 @@ export default class RawTelemetryTable extends PureComponent {
                 let user_func = new Function("value", this.props.healthFunctions[param_name]);
                 statusCode = user_func(value);
             } catch (err) {
-                statusCode = -1;
+                statusCode = 4;
                 // console.log('Error parsing custom function');
                 // console.log(err);
             }
@@ -133,15 +133,9 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     getHealthText = (statusCode) => {
-        if (statusCode === 0)
-            return 'Undefined';
-        if (statusCode === 1)
-            return 'OK';
-        if (statusCode === 2)
-            return 'Warning';
-        if (statusCode === 3)
-            return 'Alert';
-        return 'Invalid';
+        if(statusCode === undefined)
+            statusCode = 0;
+        return this.healthStatusCodes[statusCode];
     }
 
     setHealthFunction = (param_name) => {
@@ -209,7 +203,7 @@ export default class RawTelemetryTable extends PureComponent {
         if (column === 'health_status') {
             let aValue = this.healthStatusPriorities[a['healthStatusCode']];
             let bValue = this.healthStatusPriorities[b['healthStatusCode']];
-            return (aValue <= bValue) ? -direction : direction;
+            return (aValue < bValue) ? -direction : direction;
         }
         return (a[column] <= b[column]) ? -direction : direction;
     }
