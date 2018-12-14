@@ -71,4 +71,5 @@
     float: right;
     color: var(--tertiary-font-color);
     font-size: small;
+    cursor: pointer;
 }

@@ -45,6 +45,7 @@ export default class FilterDialog extends Component {
         if(this.props.columnName===this.props.sortingColumn){
             this.props.changeSortDirection('None', this.props.columnName);
         }
+        this.props.closeFilterDialogs();
     }
 
     render() {
@@ -56,7 +57,7 @@ export default class FilterDialog extends Component {
                             <FilterIcon />
                         </div>
                         <span className={styles.filterText}>Sort as...</span>
-                        <a href='#' className={styles.clearAll} onClick={this.clearAllOnClick}> Clear all</a>
+                        <span className={styles.clearAll} onClick={this.clearAllOnClick}> Clear all</span>
                     </div>
                     <div onClick={this.sortAscending}
                         className={styles.dialogRow}>
