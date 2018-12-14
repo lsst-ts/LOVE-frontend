@@ -21,6 +21,20 @@ export default class RawTelemetryTable extends PureComponent {
             sortDirection: 'None'
         };
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
+        this.healthStatusCodes = {
+            0: 'Undefined',
+            1: 'OK',
+            2: 'Warning',
+            3: 'Alert',
+            4: 'Invalid',
+        }
+        this.healthStatusPriorities = {
+            3: 5,
+            2: 4,
+            1: 3,
+            4: 2,
+            0: 1,
+        }
         window.OK = 1;
         window.WARNING = 2;
         window.ALERT = 3;
@@ -81,10 +95,10 @@ export default class RawTelemetryTable extends PureComponent {
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
             let key = [row.component, row.stream, row.param_name].join('-');
-            if (this.props.filters[rowKey].type === 'regexp') {
+            if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'regexp') {
                 return this.props.filters[rowKey].value.test(row[rowKey]);
             }
-            if (this.props.filters[rowKey].type === 'health') {
+            if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'health') {
                 let healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
                 return this.props.filters[rowKey].value.test(healthStatus);
             }
@@ -111,8 +125,8 @@ export default class RawTelemetryTable extends PureComponent {
                 statusCode = user_func(value);
             } catch (err) {
                 statusCode = -1;
-                console.log('Error parsing custom function');
-                console.log(err);
+                // console.log('Error parsing custom function');
+                // console.log(err);
             }
         }
         return statusCode;
@@ -191,30 +205,13 @@ export default class RawTelemetryTable extends PureComponent {
             return 0;
         }
 
-
         let direction = this.state.sortDirection === 'ascending' ? 1 : -1;
-
-        if (a[column] < b[column]) {
-            return -direction;
+        if (column === 'health_status') {
+            let aValue = this.healthStatusPriorities[a['healthStatusCode']];
+            let bValue = this.healthStatusPriorities[b['healthStatusCode']];
+            return (aValue <= bValue) ? -direction : direction;
         }
-
-        if (a[column] === b[column]) {
-            return 0;
-        }
-
-        if (a[column] > b[column]) {
-            return direction;
-        }
-
-        return 0;
-    }
-
-    componentDidMount = () => {
-        // document.addEventListener("mouseup", this.closeFilterDialogs);
-    }
-
-    componentWillUnmount = () => {
-        // document.removeEventListener("mouseup", this.closeFilterDialogs);
+        return (a[column] <= b[column]) ? -direction : direction;
     }
 
     render() {
@@ -244,6 +241,13 @@ export default class RawTelemetryTable extends PureComponent {
 
 
         data = this.convertData(data);
+        data = data.map((row) => {
+            let key = [row.component, row.stream, row.param_name].join('-');
+            return {
+                'healthStatusCode': this.getHealthStatusCode(key, row.value),
+                ...row,
+            };
+        });
         return (
             <table className={styles.rawTelemetryTable}>
                 <thead>
@@ -265,7 +269,7 @@ export default class RawTelemetryTable extends PureComponent {
                                     <>
                                         <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.props.filters['component']} />
                                         <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.props.filters['stream']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} secondaryText={'YYYY/MM/DD'}/>
+                                        <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />
                                         <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.props.filters['name']} />
                                         <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.props.filters['param_name']} />
                                         <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.props.filters['data_type']} />
@@ -282,7 +286,6 @@ export default class RawTelemetryTable extends PureComponent {
                 <tbody onClick={this.closeFilterDialogs}>
                     {
                         data.sort(this.sortData).map((row) => {
-                            // console.log('this.getHealthStatusCode', row.param_name, row.value, this.getHealthStatusCode(row.param_name, row.value))
                             if (this.testFilter(row)) {
                                 let key = [row.component, row.stream, row.param_name].join('-');
                                 return (
@@ -300,7 +303,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                 key={key + '-row'}>
                                                 <div className={styles.healthStatusWrapper}>
                                                     <div className={styles.statusTextWrapper}>
-                                                        <StatusText statusCode={this.getHealthStatusCode(key, row.value)} getHealthText={this.getHealthText}>
+                                                        <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
                                                         </StatusText>
                                                     </div>
                                                     <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
@@ -343,9 +346,9 @@ export default class RawTelemetryTable extends PureComponent {
                                                     <td colSpan={1}>
                                                         <div>
                                                             <div className={styles.snippetsContainer}>
-                                                                
+
                                                                 <p className={styles.lineJump}>   </p>
-                                                                
+
                                                                 <div className={styles.snippetsTitle}>Snippets</div>
                                                                 <div className={styles.snippetsList}>
                                                                     <div className={styles.snippetButtonWrapper}>
@@ -359,14 +362,14 @@ export default class RawTelemetryTable extends PureComponent {
                                                                         </Button>
                                                                     </div>
                                                                 </div>
-                                                                
+
                                                                 <div className={styles.statusConfigTitle}>  Available Status:</div>
                                                                 <div className={styles.statusList}>
                                                                     <div> OK</div>
                                                                     <div> WARNING</div>
                                                                     <div> ALERT</div>
                                                                 </div>
-                                                                
+
                                                             </div>
                                                         </div>
                                                     </td>
