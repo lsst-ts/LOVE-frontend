@@ -1,0 +1,62 @@
+.processName {
+    display: flex;
+	color: var(--secondary-font-color);
+	padding: 0.25em 0.5em;
+	font: inherit;
+    border-radius: 0.2em;
+    justify-content: center;
+}
+
+.processBody {
+    display: flex;
+}
+
+.processBody ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0.5em 0em;
+}
+
+.processBody ul li {
+    text-align: left;
+    padding: 0.2em 1em;
+}
+
+.processBodyElement {
+    background: var(--secondary-background-dimmed-color);
+    width: 50%;
+}
+
+.inQueue {
+    background: var(--secondary-background-color);
+    width: 25%;
+}
+
+.outQueue {
+    background: var(--secondary-background-color);
+    width: 25%;
+}
+
+.processBody ul .extraImagesText {
+    font-size: 1.2em;
+    text-align: center;
+    padding-top: 0.5em;
+}
+
+/* Footer */
+.processBodyFooter {
+    display: flex;
+    color: var(--secondary-font-color)
+}
+
+.processBodyElementFooter {
+    width: 50%;
+}
+
+.inQueueFooter {
+    width: 25%;
+}
+
+.outQueueFooter {
+    width: 25%;
+}
