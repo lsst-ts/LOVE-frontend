@@ -1,0 +1,24 @@
+.container {
+    color: var(--secondary-font-color);
+    text-align: left;
+}
+
+.header {
+}
+
+.linkList {
+    font-size: 1.3em;    
+}
+
+.linkListItem {
+    padding: 0.2em;
+}
+
+a {
+    color: var(--secondary-font-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--secondary-font-dimmed-color);
+}
