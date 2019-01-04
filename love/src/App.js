@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import sockette from 'sockette';
+import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 
 import { BrowserRouter } from 'react-router-dom'
-import { Switch, Route, Redirect } from 'react-router-dom'
+import { Switch, Route } from 'react-router-dom'
 
 class App extends Component {
 
@@ -84,13 +85,12 @@ class App extends Component {
 
         <BrowserRouter>
           <Switch>
-            <Route exact path='/' render={() => (
-              <Redirect from='/' to='/health-status-summary' />
-            )} />
             <Route path='/health-status-summary' 
               render={() => <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>} />
             <Route path='/dm-flow' 
               component={DataManagementFlow} />
+            <Route path='/' 
+              component={ComponentIndex} />
           </Switch>
         </BrowserRouter>
       </div>
