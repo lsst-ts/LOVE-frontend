@@ -28,11 +28,16 @@ RUN npm install
 
 COPY ./love /home/docker/love/
 
+COPY ./entrypoint.sh /home/docker/entrypoint.sh
+
 ARG WEBSOCKET_HOST=127.0.0.1
 
-RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build
+RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build-django
 
 WORKDIR /home/docker/love/build
 
+RUN mkdir -p /home/LOVE/manager && cp /home/docker/webpack-stats.prod.json /home/LOVE/manager/webpack-stats.prod.json
+
 EXPOSE 80
-CMD ["nginx"]
+
+CMD ["/home/docker/entrypoint.sh"]
