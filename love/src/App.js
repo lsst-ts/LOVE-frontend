@@ -86,7 +86,7 @@ class App extends Component {
         <BrowserRouter>
           <Switch>
             <Route path='/health-status-summary' 
-              render={() => <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>} />
+              render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
             <Route path='/dm-flow' 
               component={DataManagementFlow} />
             <Route path='/' 

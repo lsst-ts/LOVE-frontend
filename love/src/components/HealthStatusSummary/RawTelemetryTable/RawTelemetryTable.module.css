@@ -7,8 +7,8 @@
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
+    height:inherit;
 }
-
 
 .rawTelemetryTable thead {
     display: table;
@@ -19,7 +19,7 @@
 .rawTelemetryTable  tbody {
     background: var(--secondary-background-color);
     display: block;
-    height: 85vh; /* necessary for scroll */
+    height: inherit; /* necessary for scroll */
     width: calc(100%);
     overflow-y: scroll;
     overflow-x: hidden;
