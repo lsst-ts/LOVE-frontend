@@ -100,7 +100,7 @@ export default class HealthStatusSummary extends Component {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <div className={styles.topButtons}>
                     <div className={styles.buttonWrapper}>
                         {/* <Button>
@@ -119,7 +119,7 @@ export default class HealthStatusSummary extends Component {
                     </div>
                 </div>
                 <RawTelemetryTable telemetries={this.props.telemetries} {...this.state}></RawTelemetryTable>
-            </div >
+            </React.Fragment >
         )
     }
 }
