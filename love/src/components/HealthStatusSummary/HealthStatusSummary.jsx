@@ -10,7 +10,7 @@ import PropTypes from 'prop-types';
 /**
  * Configurable summary displaying the health status of an arbitrary subset
  * of telemetries provided in the component props. The user first faces the
- * [**RawTelemetryTable**](#HealthStatusSummary) component for filtering, 
+ * [**RawTelemetryTable**](#rawtelemetrytable) component for filtering, 
  * selecting telemetries and configuring the definition of health 
  * status. Then the user launches another YET TO BE IMPLEMENTED "printed" table.  
  * 
