@@ -249,6 +249,7 @@ export default class RawTelemetryTable extends PureComponent {
             };
         });
         return (
+
             <table className={styles.rawTelemetryTable}>
                 <thead>
                     <tr>
@@ -384,6 +385,7 @@ export default class RawTelemetryTable extends PureComponent {
                     }
                 </tbody>
             </table>
+
         );
     }
 }

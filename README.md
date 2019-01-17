@@ -1,2 +1,2 @@
 # LOVE-frontend
-Frontend code for the LOVE project
+Frontend code for the LOVE project.
