@@ -208,6 +208,12 @@ export default class RawTelemetryTable extends PureComponent {
         return (a[column] <= b[column]) ? -direction : direction;
     }
 
+    onRowSelection = (key, row) => {
+        console.log('Onselection', key, row);
+        //this.addToSelectedList(event.row)
+        //this.props.callback(event.row)
+    }
+
     render() {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
@@ -274,7 +280,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 )
                             })()
                         }
-                        {/* <th className={styles.addedColumn}>Added</th> */}
+                        <th className={styles.addedColumn}>Added</th>
                     </tr>
                 </thead>
                 <tbody onClick={this.closeFilterDialogs}>
@@ -305,7 +311,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
-                                            {/* <td><input type="checkbox"/></td> */}
+                                            <td><input onClick={() => (this.onRowSelection(row, key))} type="checkbox"/></td>
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
