@@ -5,9 +5,22 @@ import ExportIcon from '../icons/ExportIcon/ExportIcon';
 import styles from './HealthStatusSummary.module.css'
 import saveAs from 'file-saver';
 import UploadButton from './Button/UploadButton';
+import PropTypes from 'prop-types';
 
+/**
+ * Configurable summary displaying the health status of an arbitrary subset
+ * of telemetries provided in the component props. The user first faces the
+ * [**RawTelemetryTable**](#rawtelemetrytable) component for filtering, 
+ * selecting telemetries and configuring the definition of health 
+ * status. Then the user launches another YET TO BE IMPLEMENTED "printed" table.  
+ * 
+ */
 export default class HealthStatusSummary extends Component {
-
+    static propTypes = {
+        /** Dictionary of telemetries that are displayed. See examples below
+         */
+        telemetries: PropTypes.object
+    }
     constructor() {
         super();
         // eslint-disable-next-line
@@ -87,7 +100,7 @@ export default class HealthStatusSummary extends Component {
 
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <div className={styles.topButtons}>
                     <div className={styles.buttonWrapper}>
                         {/* <Button>
@@ -106,7 +119,7 @@ export default class HealthStatusSummary extends Component {
                     </div>
                 </div>
                 <RawTelemetryTable telemetries={this.props.telemetries} {...this.state}></RawTelemetryTable>
-            </div >
+            </React.Fragment >
         )
     }
 }
