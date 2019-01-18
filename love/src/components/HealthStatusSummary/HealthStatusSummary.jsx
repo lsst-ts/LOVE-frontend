@@ -118,7 +118,7 @@ export default class HealthStatusSummary extends Component {
                         {/* </a> */}
                     </div>
                 </div>
-                <RawTelemetryTable telemetries={this.props.telemetries} {...this.state}></RawTelemetryTable>
+                <RawTelemetryTable telemetries={this.props.telemetries} {...this.state} displaySelectionColumn checkedFilterColumn='units'></RawTelemetryTable>
             </React.Fragment >
         )
     }
