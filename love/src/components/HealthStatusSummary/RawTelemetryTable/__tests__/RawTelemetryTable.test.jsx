@@ -64,7 +64,8 @@ describe('GIVEN a current list of telemetries in the table', () => {
     const table = render(<RawTelemetryTable
         telemetries={telemetries}
         filters={filters}
-        healthFunctions={healthFunctions} />);
+        healthFunctions={healthFunctions}
+        displaySelectionColumn />);
 
     const {getByAltText, getByTestId, getByText} = table;
 
