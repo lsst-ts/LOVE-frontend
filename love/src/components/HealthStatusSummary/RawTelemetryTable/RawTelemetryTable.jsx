@@ -249,7 +249,7 @@ export default class RawTelemetryTable extends PureComponent {
             };
         });
         return (
-
+            <React.Fragment>
             <table className={styles.rawTelemetryTable}>
                 <thead>
                     <tr>
@@ -312,7 +312,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><input onClick={() => (this.onRowSelection(row, key))} type="checkbox"/></td>
+                                            <td><input onClick={() => (this.onRowSelection(row, key))} type="checkbox" alt={`select ${key}`}/></td>
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
@@ -385,6 +385,8 @@ export default class RawTelemetryTable extends PureComponent {
                     }
                 </tbody>
             </table>
+            <div data-testid="selected-telemetries">bulkCloud</div>
+            </React.Fragment>
 
         );
     }
