@@ -10,11 +10,11 @@ import PropTypes from 'prop-types';
 export default class RawTelemetryTable extends PureComponent {
     static propTypes = {
         /** Display the selection column or not */
-        displaySelectionColumn: PropTypes.bool, 
+        displaySelectionColumn: PropTypes.bool,
         /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
         checkedFilterColumn: PropTypes.oneOf(['component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units']),
     }
-    
+
     constructor() {
         super();
 
@@ -106,7 +106,7 @@ export default class RawTelemetryTable extends PureComponent {
             if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'regexp') {
                 let regexpFilterResult = this.props.filters[rowKey].value.test(row[rowKey]);
                 let checkedFilterResult = true;
-                if(this.state.checkedFilter && this.state.checkedFilter[rowKey]){
+                if (this.state.checkedFilter && this.state.checkedFilter[rowKey]) {
                     checkedFilterResult = this.state.checkedFilter[rowKey].test(row[rowKey]);
                 }
                 return regexpFilterResult && checkedFilterResult;
@@ -146,7 +146,7 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     getHealthText = (statusCode) => {
-        if(statusCode === undefined)
+        if (statusCode === undefined)
             statusCode = 0;
         return this.healthStatusCodes[statusCode];
     }
@@ -222,7 +222,7 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     setCheckedFilterColumn = (column, value) => {
-        if(column === undefined || value === undefined){
+        if (column === undefined || value === undefined) {
             this.setState({
                 checkedFilter: undefined
             })
@@ -236,13 +236,13 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     updateSelectedList = (checked, key) => {
-        
+
         let selectedRows = this.state.selectedRows;
-        if(checked)
+        if (checked)
             selectedRows.push(key);
         else
             selectedRows.splice(selectedRows.indexOf(key), 1);
-        if(selectedRows.length === 0)
+        if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
             selectedRows: selectedRows
@@ -252,7 +252,7 @@ export default class RawTelemetryTable extends PureComponent {
 
     onRowSelection = (checked, key, row) => {
         let checkedFilterColumn = this.props.checkedFilterColumn;
-        if(row[checkedFilterColumn] === undefined)
+        if (row[checkedFilterColumn] === undefined)
             return;
         let value = row[checkedFilterColumn].replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
         this.setCheckedFilterColumn(checkedFilterColumn, value);
@@ -263,7 +263,7 @@ export default class RawTelemetryTable extends PureComponent {
     render() {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
-        let fake_units = ['unit1','unit2','unit3','unit4'];
+        let fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
         telemetryNames.forEach((telemetryName, telemetryIndex) => {
             // look at one telemetry
             let telemetryData = this.props.telemetries[telemetryName];
@@ -280,7 +280,7 @@ export default class RawTelemetryTable extends PureComponent {
                         'param_name': name,
                         'data_type': data_type ? data_type : '?',
                         'value': value,
-                        'units': units ? units : fake_units[name.charCodeAt(0)%4]
+                        'units': units ? units : fake_units[name.charCodeAt(0) % 4]
                     }
                 })
             }
@@ -297,150 +297,150 @@ export default class RawTelemetryTable extends PureComponent {
         });
         return (
             <React.Fragment>
-            <table className={styles.rawTelemetryTable}>
-                <thead>
-                    <tr>
+                <table className={styles.rawTelemetryTable}>
+                    <thead>
+                        <tr>
 
-                        {
-                            (() => {
-                                let defaultColumnProps = {
-                                    changeFilter: this.changeFilter,
-                                    activeFilterDialog: this.state.activeFilterDialog,
-                                    closeFilterDialogs: this.closeFilterDialogs,
-                                    columnOnClick: this.columnOnClick,
-                                    changeSortDirection: this.changeSortDirection,
-                                    sortDirection: this.state.sortDirection,
-                                    sortingColumn: this.state.sortingColumn
-                                }
+                            {
+                                (() => {
+                                    let defaultColumnProps = {
+                                        changeFilter: this.changeFilter,
+                                        activeFilterDialog: this.state.activeFilterDialog,
+                                        closeFilterDialogs: this.closeFilterDialogs,
+                                        columnOnClick: this.columnOnClick,
+                                        changeSortDirection: this.changeSortDirection,
+                                        sortDirection: this.state.sortDirection,
+                                        sortingColumn: this.state.sortingColumn
+                                    }
 
-                                return (
-                                    <>
-                                        <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.props.filters['component']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.props.filters['stream']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.props.filters['name']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.props.filters['param_name']} />
-                                        <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.props.filters['data_type']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.props.filters['value']} />
-                                        <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.props.filters['units']} />
-                                        <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.props.filters['health_status']} />
-                                    </>
-                                )
-                            })()
-                        }
-                        {
-                            this.props.displaySelectionColumn ? 
-                            <th className={styles.addedColumn}>Added</th>:
-                            null
-                        }
-                    </tr>
-                </thead>
-                <tbody onClick={this.closeFilterDialogs}>
-                    {
-                        data.sort(this.sortData).map((row) => {
-                            if (this.testFilter(row)) {
-                                let key = [row.component, row.stream, row.param_name].join('-');
-                                return (
-                                    <React.Fragment key={key}>
-                                        <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
-                                            <td className={styles.string}>{row.component}</td>
-                                            <td className={styles.string}>{row.stream}</td>
-                                            <td className={styles.string}>{row.timestamp}</td>
-                                            <td className={styles.string}>{row.name}</td>
-                                            <td className={styles.string}>{row.param_name}</td>
-                                            <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
-                                            <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
-                                            <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
-                                            <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
-                                                key={key + '-row'}>
-                                                <div className={styles.healthStatusWrapper}>
-                                                    <div className={styles.statusTextWrapper}>
-                                                        <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
-                                                        </StatusText>
-                                                    </div>
-                                                    <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                                                        <GearIcon active={this.state.expandedRows[key]}></GearIcon>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            {
-                                                this.props.displaySelectionColumn ? 
-                                                <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} type="checkbox" alt={`select ${key}`}/></td>:
-                                                null
-                                            }
-                                        </tr>
-                                        {
-                                            (this.state.expandedRows[key]) ?
-                                                <tr onClick={this.closeFilterDialogs} key={key + '-expanded'} className={styles.expandedRow}>
-                                                    <td colSpan={4}>
-                                                        <div>
-                                                            <p>Value</p>
-                                                            {
-                                                                row.value.length > 1 ?
-                                                                    this.renderValueAsList(row.value) :
-                                                                    this.renderValueAsList([row.value])
-                                                            }
-                                                        </div>
-                                                    </td>
-                                                    <td colSpan={4}>
-                                                        <div>
-                                                            <p>
-                                                                {'function ( value ) {'}
-                                                            </p>
-                                                            <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText}>
-                                                            </textarea>
-                                                            <p>
-                                                                {'}'}
-                                                            </p>
-                                                            <div onClick={() => this.setHealthFunction(key)}>
-                                                                <Button className={styles.setButton}>
-                                                                    <span>Set</span>
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td colSpan={1}>
-                                                        <div>
-                                                            <div className={styles.snippetsContainer}>
-
-                                                                <p className={styles.lineJump}>   </p>
-
-                                                                <div className={styles.snippetsTitle}>Snippets</div>
-                                                                <div className={styles.snippetsList}>
-                                                                    <div className={styles.snippetButtonWrapper}>
-                                                                        <Button secondary className={styles.snippetButton}>
-                                                                            <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
-                                                                        </Button>
-                                                                    </div>
-                                                                    <div className={styles.snippetButtonWrapper}>
-                                                                        <Button secondary className={styles.snippetButton}>
-                                                                            <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
-                                                                        </Button>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className={styles.statusConfigTitle}>  Available Status:</div>
-                                                                <div className={styles.statusList}>
-                                                                    <div> OK</div>
-                                                                    <div> WARNING</div>
-                                                                    <div> ALERT</div>
-                                                                </div>
-
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr> :
-                                                null
-                                        }
-                                    </React.Fragment>
-                                )
+                                    return (
+                                        <>
+                                            <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.props.filters['component']} />
+                                            <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.props.filters['stream']} />
+                                            <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />
+                                            <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.props.filters['name']} />
+                                            <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.props.filters['param_name']} />
+                                            <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.props.filters['data_type']} />
+                                            <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.props.filters['value']} />
+                                            <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.props.filters['units']} />
+                                            <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.props.filters['health_status']} />
+                                        </>
+                                    )
+                                })()
                             }
-                            return null;
-                        })
-                    }
-                </tbody>
-            </table>
-            <div data-testid="selected-telemetries">bulkCloud</div>
+                            {
+                                this.props.displaySelectionColumn ?
+                                    <th className={styles.addedColumn}>Added</th> :
+                                    null
+                            }
+                        </tr>
+                    </thead>
+                    <tbody onClick={this.closeFilterDialogs}>
+                        {
+                            data.sort(this.sortData).map((row) => {
+                                if (this.testFilter(row)) {
+                                    let key = [row.component, row.stream, row.param_name].join('-');
+                                    return (
+                                        <React.Fragment key={key}>
+                                            <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
+                                                <td className={styles.string}>{row.component}</td>
+                                                <td className={styles.string}>{row.stream}</td>
+                                                <td className={styles.string}>{row.timestamp}</td>
+                                                <td className={styles.string}>{row.name}</td>
+                                                <td className={styles.string}>{row.param_name}</td>
+                                                <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
+                                                <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
+                                                <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
+                                                <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
+                                                    key={key + '-row'}>
+                                                    <div className={styles.healthStatusWrapper}>
+                                                        <div className={styles.statusTextWrapper}>
+                                                            <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
+                                                            </StatusText>
+                                                        </div>
+                                                        <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
+                                                            <GearIcon active={this.state.expandedRows[key]}></GearIcon>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                {
+                                                    this.props.displaySelectionColumn ?
+                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} type="checkbox" alt={`select ${key}`} /></td> :
+                                                        null
+                                                }
+                                            </tr>
+                                            {
+                                                (this.state.expandedRows[key]) ?
+                                                    <tr onClick={this.closeFilterDialogs} key={key + '-expanded'} className={styles.expandedRow}>
+                                                        <td colSpan={4}>
+                                                            <div>
+                                                                <p>Value</p>
+                                                                {
+                                                                    row.value.length > 1 ?
+                                                                        this.renderValueAsList(row.value) :
+                                                                        this.renderValueAsList([row.value])
+                                                                }
+                                                            </div>
+                                                        </td>
+                                                        <td colSpan={4}>
+                                                            <div>
+                                                                <p>
+                                                                    {'function ( value ) {'}
+                                                                </p>
+                                                                <textarea id={key + '-healthFunction'} defaultValue={this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText}>
+                                                                </textarea>
+                                                                <p>
+                                                                    {'}'}
+                                                                </p>
+                                                                <div onClick={() => this.setHealthFunction(key)}>
+                                                                    <Button className={styles.setButton}>
+                                                                        <span>Set</span>
+                                                                    </Button>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td colSpan={1}>
+                                                            <div>
+                                                                <div className={styles.snippetsContainer}>
+
+                                                                    <p className={styles.lineJump}>   </p>
+
+                                                                    <div className={styles.snippetsTitle}>Snippets</div>
+                                                                    <div className={styles.snippetsList}>
+                                                                        <div className={styles.snippetButtonWrapper}>
+                                                                            <Button secondary className={styles.snippetButton}>
+                                                                                <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
+                                                                            </Button>
+                                                                        </div>
+                                                                        <div className={styles.snippetButtonWrapper}>
+                                                                            <Button secondary className={styles.snippetButton}>
+                                                                                <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
+                                                                            </Button>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className={styles.statusConfigTitle}>  Available Status:</div>
+                                                                    <div className={styles.statusList}>
+                                                                        <div> OK</div>
+                                                                        <div> WARNING</div>
+                                                                        <div> ALERT</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr> :
+                                                    null
+                                            }
+                                        </React.Fragment>
+                                    )
+                                }
+                                return null;
+                            })
+                        }
+                    </tbody>
+                </table>
+                <div data-testid="selected-telemetries">bulkCloud</div>
             </React.Fragment>
 
         );
