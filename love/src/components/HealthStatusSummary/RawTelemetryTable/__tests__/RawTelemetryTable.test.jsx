@@ -66,17 +66,19 @@ describe('GIVEN a current list of telemetries in the table', () => {
         filters={filters}
         healthFunctions={healthFunctions} />);
 
-    const {getByAltText, getByTestId} = table;
+    const {getByAltText, getByTestId, getByText} = table;
 
-    describe("WHEN the user clicks a checkbox on a specific row", () => {
+    describe("WHEN the user clicks an unchecked checkbox on a specific row", () => {
         let checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud');
         fireEvent.click(checkBox);
 
 
         it("THEN adds the telemetry to the box", async () => {
-            const selectedTelemetries = await waitForElement(()=>getByTestId("selected-telemetries"));
+            const selectedTelemetries = await waitForElement(()=>getByText("Telemetries:"));
+            console.log(selectedTelemetries.innerHTML);
+            debugger;
 
-            expect(getByTestId('selected-telemetries')).toHaveTextContent('bulkCloud');
+            expect(selectedTelemetries.innerHTML).stringContaining('bulkCloud');
         });
     });
-})
+});

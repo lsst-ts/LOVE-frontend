@@ -5,6 +5,7 @@ import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
+import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
 
 export default class RawTelemetryTable extends PureComponent {
     constructor() {
@@ -18,7 +19,8 @@ export default class RawTelemetryTable extends PureComponent {
             expandedRows: expandedRows,
             activeFilterDialog: 'None',
             sortingColumn: 'name',
-            sortDirection: 'None'
+            sortDirection: 'None',
+            selectedTelemetryNames: []
         };
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         this.healthStatusCodes = {
@@ -207,9 +209,14 @@ export default class RawTelemetryTable extends PureComponent {
         }
         return (a[column] <= b[column]) ? -direction : direction;
     }
-
-    onRowSelection = (key, row) => {
-        console.log('Onselection', key, row);
+    addTelemetryToSelection = (telemetryKey) => {
+        let telemetries = this.state.selectedTelemetryNames;
+        telemetries.push(telemetryKey);
+        telemetries = [... new Set(telemetries)];
+        this.setState({selectedTelemetryNames: telemetries});
+    }
+    onRowSelection = (row,key) => {
+        this.addTelemetryToSelection(key)
         //this.addToSelectedList(event.row)
         //this.props.callback(event.row)
     }
@@ -385,7 +392,14 @@ export default class RawTelemetryTable extends PureComponent {
                     }
                 </tbody>
             </table>
-            <div data-testid="selected-telemetries">bulkCloud</div>
+
+            <div data-testid="selected-telemetries">
+            Telemetries:
+                    {this.state.selectedTelemetryNames.map((telemetryKey)=>{
+                        const telemetryName = telemetryKey.split('-')[2];
+                        return <TelemetrySelectionTag key={telemetryKey} telemetryName={telemetryName}></TelemetrySelectionTag>
+                    })}
+            </div>
             </React.Fragment>
 
         );
