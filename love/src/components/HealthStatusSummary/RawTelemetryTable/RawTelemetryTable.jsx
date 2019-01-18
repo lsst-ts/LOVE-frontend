@@ -5,20 +5,28 @@ import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
+import PropTypes from 'prop-types';
 
 export default class RawTelemetryTable extends PureComponent {
+    static propTypes = {
+        /** Display the selection column or not */
+        displaySelectionColumn: PropTypes.bool, 
+        /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
+        checkedFilterColumn: PropTypes.oneOf(['component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units']),
+    }
+    
     constructor() {
         super();
 
         let expandedRows = {
             'altitude_maxspeed0': true,
         };
-
         this.state = {
             expandedRows: expandedRows,
             activeFilterDialog: 'None',
             sortingColumn: 'name',
-            sortDirection: 'None'
+            sortDirection: 'None',
+            selectedRows: [],
         };
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         this.healthStatusCodes = {
@@ -96,7 +104,12 @@ export default class RawTelemetryTable extends PureComponent {
         let values = Object.keys(row).map((rowKey) => {
             let key = [row.component, row.stream, row.param_name].join('-');
             if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'regexp') {
-                return this.props.filters[rowKey].value.test(row[rowKey]);
+                let regexpFilterResult = this.props.filters[rowKey].value.test(row[rowKey]);
+                let checkedFilterResult = true;
+                if(this.state.checkedFilter && this.state.checkedFilter[rowKey]){
+                    checkedFilterResult = this.state.checkedFilter[rowKey].test(row[rowKey]);
+                }
+                return regexpFilterResult && checkedFilterResult;
             }
             if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'health') {
                 let healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
@@ -208,15 +221,49 @@ export default class RawTelemetryTable extends PureComponent {
         return (a[column] <= b[column]) ? -direction : direction;
     }
 
-    onRowSelection = (key, row) => {
-        console.log('Onselection', key, row);
-        //this.addToSelectedList(event.row)
+    setCheckedFilterColumn = (column, value) => {
+        if(column === undefined || value === undefined){
+            this.setState({
+                checkedFilter: undefined
+            })
+            return;
+        }
+        let checkedFilter = {};
+        checkedFilter[column] = new RegExp(value, 'i');
+        this.setState({
+            checkedFilter: checkedFilter
+        })
+    }
+
+    updateSelectedList = (checked, key) => {
+        
+        let selectedRows = this.state.selectedRows;
+        if(checked)
+            selectedRows.push(key);
+        else
+            selectedRows.splice(selectedRows.indexOf(key), 1);
+        if(selectedRows.length === 0)
+            this.setCheckedFilterColumn();
+        this.setState({
+            selectedRows: selectedRows
+        })
+        console.log('selectedRows', selectedRows)
+    }
+
+    onRowSelection = (checked, key, row) => {
+        let checkedFilterColumn = this.props.checkedFilterColumn;
+        if(row[checkedFilterColumn] === undefined)
+            return;
+        let value = row[checkedFilterColumn].replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
+        this.setCheckedFilterColumn(checkedFilterColumn, value);
+        this.updateSelectedList(checked, key)
         //this.props.callback(event.row)
     }
 
     render() {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
+        let fake_units = ['unit1','unit2','unit3','unit4'];
         telemetryNames.forEach((telemetryName, telemetryIndex) => {
             // look at one telemetry
             let telemetryData = this.props.telemetries[telemetryName];
@@ -233,7 +280,7 @@ export default class RawTelemetryTable extends PureComponent {
                         'param_name': name,
                         'data_type': data_type ? data_type : '?',
                         'value': value,
-                        'units': units ? units : '?'
+                        'units': units ? units : fake_units[name.charCodeAt(0)%4]
                     }
                 })
             }
@@ -280,7 +327,11 @@ export default class RawTelemetryTable extends PureComponent {
                                 )
                             })()
                         }
-                        <th className={styles.addedColumn}>Added</th>
+                        {
+                            this.props.displaySelectionColumn ? 
+                            <th className={styles.addedColumn}>Added</th>:
+                            null
+                        }
                     </tr>
                 </thead>
                 <tbody onClick={this.closeFilterDialogs}>
@@ -311,7 +362,11 @@ export default class RawTelemetryTable extends PureComponent {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td><input onClick={() => (this.onRowSelection(row, key))} type="checkbox"/></td>
+                                            {
+                                                this.props.displaySelectionColumn ? 
+                                                <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} type="checkbox"/></td>:
+                                                null
+                                            }
                                         </tr>
                                         {
                                             (this.state.expandedRows[key]) ?
