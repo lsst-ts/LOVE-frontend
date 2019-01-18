@@ -64,7 +64,6 @@
     "test": "node scripts/test.js",
     "styleguide-dev": "npx styleguidist server",
     "styleguide-build": "npx styleguidist build"
-
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -122,6 +121,7 @@
     ]
   },
   "devDependencies": {
+    "jest-dom": "^3.0.0",
     "react-styleguidist": "^8.0.6",
     "react-testing-library": "^5.4.4",
     "webpack-bundle-tracker": "^0.4.2-beta"

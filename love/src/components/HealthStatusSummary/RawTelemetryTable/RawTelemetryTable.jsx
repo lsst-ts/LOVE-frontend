@@ -296,6 +296,7 @@ export default class RawTelemetryTable extends PureComponent {
             };
         });
         return (
+            <React.Fragment>
             <table className={styles.rawTelemetryTable}>
                 <thead>
                     <tr>
@@ -364,7 +365,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             </td>
                                             {
                                                 this.props.displaySelectionColumn ? 
-                                                <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} type="checkbox"/></td>:
+                                                <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} type="checkbox" alt={`select ${key}`}/></td>:
                                                 null
                                             }
                                         </tr>
@@ -439,6 +440,9 @@ export default class RawTelemetryTable extends PureComponent {
                     }
                 </tbody>
             </table>
+            <div data-testid="selected-telemetries">bulkCloud</div>
+            </React.Fragment>
+
         );
     }
 }
