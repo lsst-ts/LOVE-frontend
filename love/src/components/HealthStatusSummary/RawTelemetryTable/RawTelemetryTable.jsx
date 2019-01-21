@@ -441,12 +441,17 @@ export default class RawTelemetryTable extends PureComponent {
                 </tbody>
             </table>
 
-            <div>
-                    Telemetries:
-                    {this.state.selectedRows.map((telemetryKey)=>{
-                        const telemetryName = telemetryKey.split('-')[2];
-                        return <TelemetrySelectionTag key={telemetryKey} telemetryName={telemetryName}></TelemetrySelectionTag>
-                    })}
+            <div className={styles.selectionContainer}>
+                    TELEMETRIES:
+                    <span className={styles.selectionList}>
+                        {this.state.selectedRows.map((telemetryKey)=>{
+                            const telemetryName = telemetryKey.split('-')[2];
+                            return <TelemetrySelectionTag 
+                                    key={telemetryKey} 
+                                    telemetryKey={telemetryKey}
+                                    telemetryName={telemetryName}></TelemetrySelectionTag>
+                        })}
+                    </span>
             </div>
             </React.Fragment>
 
