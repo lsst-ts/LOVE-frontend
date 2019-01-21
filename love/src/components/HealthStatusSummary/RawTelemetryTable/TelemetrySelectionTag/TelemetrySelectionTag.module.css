@@ -6,8 +6,9 @@
     font-size:14pt;
     border-radius:0.3em;
     cursor:default;
+    user-select:none;
 }
-.close {
+.remove {
     font-size: 1em;
     color: var(--secondary-background-dimmed-colo);
     margin-left: 0.2em;

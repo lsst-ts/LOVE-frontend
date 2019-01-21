@@ -60,16 +60,16 @@ const healthFunctions = {
 };
 
 describe('GIVEN a current list of telemetries in the table', () => {
-    describe("WHEN the user clicks a checkbox of a specific row", () => {
-        const table = render(<RawTelemetryTable
-            telemetries={telemetries}
-            filters={filters}
-            healthFunctions={healthFunctions}
-            displaySelectionColumn />);
+    const table = render(<RawTelemetryTable
+        telemetries={telemetries}
+        filters={filters}
+        healthFunctions={healthFunctions}
+        displaySelectionColumn />);
+    const {getByAltText, getByText, getByTitle} = table;
     
-        const {getByAltText, getByText} = table;
-        const checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud'); 
+    describe("WHEN the user clicks a checkbox of a specific row", () => {
         it("THEN adds/removes the telemetry to the box if it was unchecked/checked before", async () => {
+            const checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud'); 
             fireEvent.click(checkBox);
             const selectedTelemetries = await waitForElement(()=> getByText('TELEMETRIES:'));
             expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(true);
@@ -80,4 +80,22 @@ describe('GIVEN a current list of telemetries in the table', () => {
             
         });
     });    
+
+    describe("WHEN the user clicks the 'remove button' of a displayed telemetry tag", () =>{
+        it("THEN unchecks the corresponding checkbox", async () =>{
+            const checkBoxAltText = 'select scheduler-bulkCloud-bulkCloud';
+            const checkBox = getByAltText(checkBoxAltText); 
+            fireEvent.click(checkBox);
+            
+            const selectedTelemetries = await waitForElement(()=> getByText('TELEMETRIES:'));
+            expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(true);
+            expect(checkBox.checked).toBe(true);
+
+            const removeButtonTitle = 'Remove scheduler-bulkCloud-bulkCloud';
+            const removeButton = getByTitle(removeButtonTitle);
+            fireEvent.click(removeButton);
+            await waitForElement( () => getByAltText(checkBoxAltText));
+            expect(checkBox.checked).toBe(false);
+        });
+    });
 });    
