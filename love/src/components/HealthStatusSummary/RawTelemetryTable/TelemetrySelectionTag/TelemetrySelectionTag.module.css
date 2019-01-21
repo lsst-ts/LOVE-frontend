@@ -5,4 +5,11 @@
     padding-top:0.15em;
     font-size:14pt;
     border-radius:0.3em;
+    cursor:default;
+}
+.close {
+    font-size: 1em;
+    color: var(--secondary-background-dimmed-colo);
+    margin-left: 0.2em;
+    cursor:pointer;
 }
