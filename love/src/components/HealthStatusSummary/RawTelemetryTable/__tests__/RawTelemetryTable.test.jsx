@@ -68,14 +68,14 @@ describe('GIVEN a current list of telemetries in the table', () => {
             displaySelectionColumn />);
     
         const {getByAltText, getByText} = table;
-        const checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud');
+        const checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud'); 
         it("THEN adds/removes the telemetry to the box if it was unchecked/checked before", async () => {
             fireEvent.click(checkBox);
-            const selectedTelemetries = await waitForElement(()=> getByText('Telemetries:'));
+            const selectedTelemetries = await waitForElement(()=> getByText('TELEMETRIES:'));
             expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(true);
             
             fireEvent.click(checkBox);
-            await waitForElement(()=>getByText('Telemetries:'));
+            await waitForElement(()=>getByText('TELEMETRIES:'));
             expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(false);
             
         });
