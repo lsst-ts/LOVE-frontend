@@ -60,19 +60,24 @@ const healthFunctions = {
 };
 
 describe('GIVEN a current list of telemetries in the table', () => {
-    describe("WHEN the user clicks an unchecked checkbox on a specific row", () => {
-        it("THEN adds the telemetry to the box", async () => {
-            const table = render(<RawTelemetryTable
-                telemetries={telemetries}
-                filters={filters}
-                healthFunctions={healthFunctions}
-                displaySelectionColumn />);
-        
-            const {getByAltText, getByText} = table;
-            let checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud');
+    describe("WHEN the user clicks a checkbox of a specific row", () => {
+        const table = render(<RawTelemetryTable
+            telemetries={telemetries}
+            filters={filters}
+            healthFunctions={healthFunctions}
+            displaySelectionColumn />);
+    
+        const {getByAltText, getByText} = table;
+        const checkBox = getByAltText('select scheduler-bulkCloud-bulkCloud');
+        it("THEN adds/removes the telemetry to the box if it was unchecked/checked before", async () => {
             fireEvent.click(checkBox);
             const selectedTelemetries = await waitForElement(()=> getByText('Telemetries:'));
             expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(true);
-        });        
+            
+            fireEvent.click(checkBox);
+            await waitForElement(()=>getByText('Telemetries:'));
+            expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(false);
+            
+        });
     });    
 });    
