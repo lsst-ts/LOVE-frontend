@@ -1,9 +1,11 @@
 import React, { Component } from 'react'
-
+import styles from './TelemetrySelectionTag.module.css';
 
 
 export default class TelemetrySelectionTag extends Component {
     render(){
-        return <span> {this.props.telemetryName}</span>
+        return <span className={styles.tagContainer} title={this.props.telemetryKey}> 
+                {this.props.telemetryName}
+                </span>
     }
 }
