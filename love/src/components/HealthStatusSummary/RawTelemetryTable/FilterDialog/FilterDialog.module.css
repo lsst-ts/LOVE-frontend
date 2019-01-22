@@ -1,6 +1,7 @@
 .superContainer {
     position:relative;
     width: 100%;
+    min-width: 170px;
     z-index: 2;
 }
 
