@@ -7,12 +7,29 @@ import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import PropTypes from 'prop-types';
 
+/**
+ * Configurable table displaying an arbitrary subset
+ * of telemetries provided in the component props. It has an optional selection column
+ * to be used as a telemetry selection feature. along with the filtering and sorting methods
+ * 
+ */
 export default class RawTelemetryTable extends PureComponent {
     static propTypes = {
         /** Display the selection column or not */
         displaySelectionColumn: PropTypes.bool,
         /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
         checkedFilterColumn: PropTypes.oneOf(['component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units']),
+        /** Dictionary specifying filters the default filters per column, in the form: 'column': { 'type': 'regexp', 'value': (new RegExp('(?:)')) }*/
+        filters: PropTypes.object,
+        /** Function called to set filters, as defined in the previous prop */
+        setFilters: PropTypes.function,
+        /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
+        separated by a dash. Values are javascript code as text */
+        healthFunctions: PropTypes.object,
+        /** Function called to set healthStatus functions. It receives a dictionary containing the healthStatus functions to be set */
+        setHealthFunctions: PropTypes.function,
+        /** Dictionary of telemetries that are displayed. See examples below */
+        telemetries: PropTypes.object,
     }
 
     constructor() {
