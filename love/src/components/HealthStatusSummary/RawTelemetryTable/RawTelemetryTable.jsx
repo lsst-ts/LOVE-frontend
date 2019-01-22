@@ -5,6 +5,7 @@ import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../Button/Button';
 import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
+import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
 import PropTypes from 'prop-types';
 
 /**
@@ -262,17 +263,16 @@ export default class RawTelemetryTable extends PureComponent {
         if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
-            selectedRows: selectedRows
+            selectedRows: [... selectedRows]
         })
-        console.log('selectedRows', selectedRows)
     }
 
     onRowSelection = (checked, key, row) => {
         let checkedFilterColumn = this.props.checkedFilterColumn;
-        if (row[checkedFilterColumn] === undefined)
-            return;
-        let value = row[checkedFilterColumn].replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
-        this.setCheckedFilterColumn(checkedFilterColumn, value);
+        if (row[checkedFilterColumn] !== undefined){
+            let value = row[checkedFilterColumn].replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
+            this.setCheckedFilterColumn(checkedFilterColumn, value);
+        }
         this.updateSelectedList(checked, key)
         //this.props.callback(event.row)
     }
@@ -445,19 +445,26 @@ export default class RawTelemetryTable extends PureComponent {
 
                                                                 </div>
                                                             </div>
-                                                        </td>
-                                                    </tr> :
-                                                    null
-                                            }
-                                        </React.Fragment>
-                                    )
-                                }
-                                return null;
-                            })
-                        }
-                    </tbody>
-                </table>
-                <div data-testid="selected-telemetries">bulkCloud</div>
+                                                    </td>
+                                                </tr> :
+                                                null
+                                        }
+                                    </React.Fragment>
+                                )
+                            }
+                            return null;
+                        })
+                    }
+                </tbody>
+            </table>
+
+            <div>
+                    Telemetries:
+                    {this.state.selectedRows.map((telemetryKey)=>{
+                        const telemetryName = telemetryKey.split('-')[2];
+                        return <TelemetrySelectionTag key={telemetryKey} telemetryName={telemetryName}></TelemetrySelectionTag>
+                    })}
+            </div>
             </React.Fragment>
 
         );
