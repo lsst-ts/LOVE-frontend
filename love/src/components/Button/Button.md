@@ -1,3 +1,4 @@
+### Examples 
 Button with default props:
 ```jsx
 <Button>Default</Button>
@@ -5,7 +6,7 @@ Button with default props:
 
 Different combinations of status and size:
 
-
+#### Large size
 ``` jsx
 <div style={{
     display:'flex',
@@ -20,6 +21,8 @@ Different combinations of status and size:
     <Button size='large' status='link'>Link</Button>
 </div>
 ```
+
+#### Default size
 ``` jsx
 <div style={{
     display:'flex',
@@ -35,6 +38,7 @@ Different combinations of status and size:
 </div>
 ```
 
+#### Small size
 ``` jsx
 <div style={{
     display:'flex',
@@ -50,7 +54,7 @@ Different combinations of status and size:
 </div>
 ```
 
-
+#### Extra small size
 ``` jsx
 <div style={{
     display:'flex',
