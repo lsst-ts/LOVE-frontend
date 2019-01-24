@@ -5,6 +5,7 @@
 
 .rawTelemetryTable {
     width: 100%;
+    min-width: 1335px;
     table-layout: fixed;
     border-collapse: collapse;
     height:inherit;
