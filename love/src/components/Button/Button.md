@@ -34,3 +34,34 @@ Different status and size:
 </div>
 ```
 
+``` jsx
+<div style={{
+    display:'flex',
+    flexWrap: 'wrap',
+    justifyContent:'space-around'}}>
+    <Button size='small' status='default'>Default</Button>
+    <Button size='small' status='primary'>Primary</Button>
+    <Button size='small' status='success'>Success</Button>
+    <Button size='small' status='info'>Info</Button>
+    <Button size='small' status='warning'>Warning</Button>
+    <Button size='small' status='danger'>Danger</Button>
+    <Button size='small' status='link'>Link</Button>
+</div>
+```
+
+
+``` jsx
+<div style={{
+    display:'flex',
+    flexWrap: 'wrap',
+    justifyContent:'space-around'}}>
+    <Button size='extra-small' status='default'>Default</Button>
+    <Button size='extra-small' status='primary'>Primary</Button>
+    <Button size='extra-small' status='success'>Success</Button>
+    <Button size='extra-small' status='info'>Info</Button>
+    <Button size='extra-small' status='warning'>Warning</Button>
+    <Button size='extra-small' status='danger'>Danger</Button>
+    <Button size='extra-small' status='link'>Link</Button>
+</div>
+```
+

@@ -24,8 +24,10 @@ export default class Button extends Component {
     }
 
     const sizeStyleDict = {
-      large: styles.btnLg,
-      default: ''
+      large: styles.btnLG,
+      default: '',
+      small: styles.btnSM,
+      'extra-small': styles.btnXS
     }
 
 
