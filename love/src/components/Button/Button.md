@@ -1,9 +1,10 @@
-Default props:
+Button with default props:
 ```jsx
 <Button>Default</Button>
 ```
 
-Different status and size:
+Different combinations of status and size:
+
 
 ``` jsx
 <div style={{
