@@ -14,5 +14,8 @@ let telemetries =  {
           receptionTimeStamp: "2018/11/25 12:21:12"
         }
 };
+
+<div style={{'width': '100%', 'overflowX': 'scroll'}}>
 <HealthStatusSummary telemetries={telemetries}/>
+</div>
 ```
