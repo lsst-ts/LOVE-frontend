@@ -16,14 +16,14 @@ body {
   --secondary-font-color: hsl(197, 13%, 59%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3);/*Transparent*/
   --tertiary-font-color: hsl(201, 15%, 54%);
-
+  
   --base-background-color: hsl(205, 40%, 8%);
   --secondary-background-color: hsl(198, 34%, 12%, 1);
   --secondary-background-dimmed-color: hsl(198, 34%, 13.5%, 1);
   --tertiary-background-color: hsl(201, 21%, 23%, 1); /*Transparent*/
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
-
+  
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
   --status-ok-dimmed-color: hsl(161, 100%, 32%, 0.2);
@@ -31,7 +31,57 @@ body {
   --status-warning-dimmed-color: hsl(57, 100%, 47%, 0.2);
   --status-alert-color: hsl(23, 99%, 44%);
   --status-alert-dimmed-color: hsl(23, 99%, 44%, 0.2);
-
-
+  
+  
   --box-shadow-color: rgba(0,0,0,0.17);
+  
+  --default-background-color: #4c606a;
+  --default-font-color: #aabeca;
+  --default-active-background-color: #384850;
+  --default-active-font-color: #92a2ac;
+  --primary-active-hover-background-color:#92a2ac;
+  
+  --primary-background-color: #4c7487;
+  --primary-font-color: #b2c4ce;
+  --primary-active-background-color: #3b5d6e;
+  --primary-active-font-color: #8d9ea7;
+  --primary-active-hover-background-color:#8d9ea7;
+
+  --success-background-color: #57b18a;
+  --success-font-color: #acffd6;
+  --success-active-background-color: #4c9978;
+  --success-active-font-color: #77d9b9;
+  --success-active-hover-background-color:#428568;
+
+  --info-background-color: #5cbed4;
+  --info-font-color: #c8fbff;
+  --info-hover-background-color: #58b0c4;
+  --info-hover-font-color: #97dde9;
+  --info-active-background-color: #58b0c4;
+  --info-active-font-color: #bbe3e6;
+  --info-active-hover-background-color: #45a1b5;
+  --info-active-hover-border-color: #3e707b;
+
+  --warning-background-color: #cec34b;
+  --warning-font-color: #fffaf6;
+  --warning-hover-background-color: #c0b53f;
+  --warning-hover-font-color: #eee6d0;
+  --warning-active-background-color: #c0b53f;
+  --warning-active-font-color: #eee6d0;
+  --warning-active-hover-background-color: #b1a73d;
+
+  --danger-background-color: #d47230;
+  --danger-font-color: #fcefe8;
+  --danger-hover-background-color: #b86229;
+  --danger-hover-font-color: #e7cdc2;
+  --danger-active-background-color: #b86229;
+  --danger-active-font-color: #e7cdc2;
+  --danger-active-hover-background-color: #ad5d28;
+
+  --link-focus-font-color: red;
+  --link-font-color: #fcefe8;
+  --link-hover-font-color: #667986;
+  --link-active-font-color: #667986;
+
+
 }
