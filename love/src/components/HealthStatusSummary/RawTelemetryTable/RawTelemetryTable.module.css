@@ -3,12 +3,16 @@
 
 }
 
+.rawTelemetryTableWrapper {
+    height: 100%;
+}
+
 .rawTelemetryTable {
     width: 100%;
     min-width: 1335px;
     table-layout: fixed;
     border-collapse: collapse;
-    height:inherit;
+    height: calc(100% - 60px);
 }
 
 .rawTelemetryTable thead {

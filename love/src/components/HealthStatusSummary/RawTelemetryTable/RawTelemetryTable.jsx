@@ -23,12 +23,12 @@ export default class RawTelemetryTable extends PureComponent {
         /** Dictionary specifying filters the default filters per column, in the form: 'column': { 'type': 'regexp', 'value': (new RegExp('(?:)')) }*/
         filters: PropTypes.object,
         /** Function called to set filters, as defined in the previous prop */
-        setFilters: PropTypes.function,
+        setFilters: PropTypes.func,
         /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
         separated by a dash. Values are javascript code as text */
         healthFunctions: PropTypes.object,
         /** Function called to set healthStatus functions. It receives a dictionary containing the healthStatus functions to be set */
-        setHealthFunctions: PropTypes.function,
+        setHealthFunctions: PropTypes.func,
         /** Dictionary of telemetries that are displayed. See examples below */
         telemetries: PropTypes.object,
     }
@@ -263,13 +263,13 @@ export default class RawTelemetryTable extends PureComponent {
         if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
-            selectedRows: [... selectedRows]
+            selectedRows: [...selectedRows]
         })
     }
 
     onRowSelection = (checked, key, row) => {
         let checkedFilterColumn = this.props.checkedFilterColumn;
-        if (row[checkedFilterColumn] !== undefined){
+        if (row[checkedFilterColumn] !== undefined) {
             let value = row[checkedFilterColumn].replace(/[-[\]{}()*+!<=:?./\\^$|#\s,]/g, '\\$&');
             this.setCheckedFilterColumn(checkedFilterColumn, value);
         }
@@ -282,7 +282,7 @@ export default class RawTelemetryTable extends PureComponent {
         if(selectedRows.indexOf(key)>-1){
             selectedRows.splice(selectedRows.indexOf(key),1)
             this.setState({
-                selectedRows:[... selectedRows]
+                selectedRows:[...selectedRows]
             });
         }
     }
@@ -323,11 +323,15 @@ export default class RawTelemetryTable extends PureComponent {
             };
         });
         return (
-            <React.Fragment>
+            <div className={styles.rawTelemetryTableWrapper}>
                 <table className={styles.rawTelemetryTable}>
                     <thead>
                         <tr>
-
+                            {
+                                this.props.displaySelectionColumn ?
+                                    <th className={styles.addedColumn}>Added</th> :
+                                    null
+                            }
                             {
                                 (() => {
                                     let defaultColumnProps = {
@@ -355,11 +359,6 @@ export default class RawTelemetryTable extends PureComponent {
                                     )
                                 })()
                             }
-                            {
-                                this.props.displaySelectionColumn ?
-                                    <th className={styles.addedColumn}>Added</th> :
-                                    null
-                            }
                         </tr>
                     </thead>
                     <tbody onClick={this.closeFilterDialogs}>
@@ -372,6 +371,12 @@ export default class RawTelemetryTable extends PureComponent {
                                     return (
                                         <React.Fragment key={key}>
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
+                                                {
+                                                    this.props.displaySelectionColumn ?
+                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} 
+                                                        type="checkbox" alt={`select ${key}`} checked={isChecked}/></td> :
+                                                        null
+                                                }
                                                 <td className={styles.string}>{row.component}</td>
                                                 <td className={styles.string}>{row.stream}</td>
                                                 <td className={styles.string}>{row.timestamp}</td>
@@ -392,12 +397,6 @@ export default class RawTelemetryTable extends PureComponent {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                {
-                                                    this.props.displaySelectionColumn ?
-                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} 
-                                                        type="checkbox" alt={`select ${key}`} checked={isChecked}/></td> :
-                                                        null
-                                                }
                                             </tr>
                                             {
                                                 (this.state.expandedRows[key]) ?
@@ -484,7 +483,7 @@ export default class RawTelemetryTable extends PureComponent {
                         })}
                     </span>
             </div>
-            </React.Fragment>
+            </div>
 
         );
     }
