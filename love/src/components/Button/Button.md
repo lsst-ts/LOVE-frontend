@@ -10,7 +10,7 @@ Different combinations of status and size:
 <div style={{
     display:'flex',
     flexWrap: 'wrap',
-    justifyContent:'space-around'}}>
+    justifyContent:'flext-start'}}>
     <Button size='large' status='default'>Default</Button>
     <Button size='large' status='primary'>Primary</Button>
     <Button size='large' status='success'>Success</Button>
@@ -24,7 +24,7 @@ Different combinations of status and size:
 <div style={{
     display:'flex',
     flexWrap: 'wrap',
-    justifyContent:'space-around'}}>
+    justifyContent:'flext-start'}}>
     <Button status='default'>Default</Button>
     <Button status='primary'>Primary</Button>
     <Button status='success'>Success</Button>
@@ -39,7 +39,7 @@ Different combinations of status and size:
 <div style={{
     display:'flex',
     flexWrap: 'wrap',
-    justifyContent:'space-around'}}>
+    justifyContent:'flext-start'}}>
     <Button size='small' status='default'>Default</Button>
     <Button size='small' status='primary'>Primary</Button>
     <Button size='small' status='success'>Success</Button>
@@ -55,7 +55,7 @@ Different combinations of status and size:
 <div style={{
     display:'flex',
     flexWrap: 'wrap',
-    justifyContent:'space-around'}}>
+    justifyContent:'flext-start'}}>
     <Button size='extra-small' status='default'>Default</Button>
     <Button size='extra-small' status='primary'>Primary</Button>
     <Button size='extra-small' status='success'>Success</Button>
