@@ -24,7 +24,7 @@ export default class Button extends Component {
     }
 
     const sizeStyleDict = {
-      large: 'btnLg',
+      large: styles.btnLg,
       default: ''
     }
 
@@ -33,8 +33,7 @@ export default class Button extends Component {
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
 
-    const style = [btn, statusStyle, statusStyle].join(' ');
-    console.log(this.props.status);
+    const style = [btn, statusStyle, sizeStyle].join(' ');
     
     return (
       <button className={style} type="button">{this.props.children}</button>
