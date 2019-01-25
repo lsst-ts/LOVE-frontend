@@ -274,6 +274,7 @@ export default class RawTelemetryTable extends PureComponent {
                 let key = [row.component, row.stream, row.param_name].join('-');
                 this.onRowSelection(checked, key, row);
             }
+            return true;
         });
     }
 
