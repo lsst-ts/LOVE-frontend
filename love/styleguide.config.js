@@ -10,5 +10,13 @@ module.exports = {
     '**/*.test.{js,jsx,ts,tsx}', 
     '**/*.spec.{js,jsx,ts,tsx}', 
     '**/*.d.ts', 
-    "**/components/HealthStatusSummary/Button/Button.jsx"]
+    '**/components/HealthStatusSummary/Button/Button.jsx',
+    '**/components/HealthStatusSummary/Button/UploadButton.jsx',
+    '**/components/HealthStatusSummary/RawTelemetryTable/ColumnHeader/ColumnHeader.jsx',
+    '**/components/HealthStatusSummary/RawTelemetryTable/ColumnHeader/FilterButton/FilterButton.jsx',
+    '**/components/HealthStatusSummary/RawTelemetryTable/FilterDialog/FilterDialog.jsx',
+    '**/components/HealthStatusSummary/RawTelemetryTable/TelemetrySelectionTag/TelemetrySelectionTag.jsx',
+    '**/components/HealthStatusSummary/RawTelemetryTable/fakeData.jsx',
+    '**/components/icons/**'
+    ]
 }
