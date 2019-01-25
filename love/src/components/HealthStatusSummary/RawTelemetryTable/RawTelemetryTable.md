@@ -30,7 +30,7 @@ let filters = {
     'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
 };
 
-<div style={{'width': '100%', 'overflowX': 'scroll'}}>
+<div style={{'width': '100%', 'overflowX': 'scroll', 'height':'300px'}}>
 <RawTelemetryTable telemetries={telemetries} healthFunctions={healthFunctions} filters={filters} displaySelectionColumn checkedFilterColumn='units'></RawTelemetryTable>
 </div>
 ```
