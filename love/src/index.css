@@ -8,6 +8,7 @@ body {
   background: var(--base-background-color);
   /* font-family: Avenir; */
   font-family: 'Avenir';
+  margin: 0 10px;
   
 }
 

@@ -1,15 +1,15 @@
 :root{
     --scrollbar-width: 10px;
-
 }
 
 .rawTelemetryTableWrapper {
-    height: 100%;
+    height: calc(100% - 40px);
+    background: var(--base-background-color);
+    min-width: 1350px;
 }
 
 .rawTelemetryTable {
     width: 100%;
-    min-width: 1335px;
     table-layout: fixed;
     border-collapse: collapse;
     height: calc(100% - 60px);
@@ -21,11 +21,11 @@
     width: calc(100% - var(--scrollbar-width));
     word-wrap:break-word;
 }
-.rawTelemetryTable  tbody {
-    background: var(--secondary-background-color);
+.rawTelemetryTable tbody {
+    /* background: var(--secondary-background-color); */
     display: block;
     height: inherit; /* necessary for scroll */
-    width: calc(100%);
+    width: 100%;
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -76,6 +76,10 @@
     background: var(--secondary-background-dimmed-color);
 }
 
+.rawTelemetryTable tr:nth-child(odd) {
+    background: var(--secondary-background-color);
+}
+
 .dataRow {
     /* cursor: pointer; */
 }
@@ -117,7 +121,6 @@
 
 .rawTelemetryTable td input {
     min-width: 10px;
-    width: 100%;
 }
 
 .rawTelemetryTable tr:last-of-type td:first-of-type {
@@ -225,6 +228,18 @@
     width: 5%;
 } */
 
+.rawTelemetryTable .firstColumn {
+    width: 1em;
+    background: var(--base-background-color);
+    padding: 0em 0.5em;
+    text-align: center;
+    border: 2px solid var(--base-background-color)
+}
+
+.rawTelemetryTable .firstColumn input {
+    margin: 0;
+}
+
 .rawTelemetryTable .expandedRow {
     text-align: left;
     background: var(--tertiary-background-color);
@@ -315,7 +330,8 @@
     align-items:center;
     color: var(--base-font-color);
     text-align:left;
-    margin: 1em;
+    padding: 1em;
+    background: var(--base-background-color);
 }
 
 .selectionList{
@@ -326,4 +342,8 @@
     margin-left:0.5em;
     border-radius: 0.3em;
     padding-top:0.3em;
+}
+
+.hidden {
+    visibility: hidden;
 }
