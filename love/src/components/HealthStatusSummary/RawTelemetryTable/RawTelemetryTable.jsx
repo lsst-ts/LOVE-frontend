@@ -335,7 +335,7 @@ export default class RawTelemetryTable extends PureComponent {
                             {
                                 this.props.displaySelectionColumn ?
                                     <th className={[styles.addedColumn, styles.firstColumn, displayHeaderCheckbock ? '':styles.hidden].join(' ')}>
-                                        <input type="checkbox" onChange={(event) => (this.selectAllRows(event.target.checked))} />
+                                        <input type="checkbox" alt={'select all telemetries'} onChange={(event) => (this.selectAllRows(event.target.checked))} />
                                     </th> :
                                     null
                             }
