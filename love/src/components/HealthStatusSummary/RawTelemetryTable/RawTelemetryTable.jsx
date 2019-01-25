@@ -256,15 +256,25 @@ export default class RawTelemetryTable extends PureComponent {
     updateSelectedList = (checked, key) => {
 
         let selectedRows = this.state.selectedRows;
-        if (checked)
+        if (checked && selectedRows.indexOf(key) < 0)
             selectedRows.push(key);
-        else
+        if (!checked)
             selectedRows.splice(selectedRows.indexOf(key), 1);
         if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
             selectedRows: [...selectedRows]
         })
+    }
+
+    selectAllRows = (checked) => {
+        const data = this.getData();
+        data.sort(this.sortData).map((row) => {
+            if (this.testFilter(row)) {
+                let key = [row.component, row.stream, row.param_name].join('-');
+                this.onRowSelection(checked, key, row);
+            }
+        });
     }
 
     onRowSelection = (checked, key, row) => {
@@ -274,20 +284,9 @@ export default class RawTelemetryTable extends PureComponent {
             this.setCheckedFilterColumn(checkedFilterColumn, value);
         }
         this.updateSelectedList(checked, key)
-        //this.props.callback(event.row)
     }
 
-    removeTelemetryFromSelection = (key) => {
-        let {selectedRows} = this.state;
-        if(selectedRows.indexOf(key)>-1){
-            selectedRows.splice(selectedRows.indexOf(key),1)
-            this.setState({
-                selectedRows:[...selectedRows]
-            });
-        }
-    }
-
-    render() {
+    getData = () => {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
         let fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
@@ -313,8 +312,13 @@ export default class RawTelemetryTable extends PureComponent {
             }
         }, this);
 
-
         data = this.convertData(data);
+        return data;
+    }
+    
+    render() {
+        const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
+        let data = this.getData();
         data = data.map((row) => {
             let key = [row.component, row.stream, row.param_name].join('-');
             return {
@@ -329,7 +333,9 @@ export default class RawTelemetryTable extends PureComponent {
                         <tr>
                             {
                                 this.props.displaySelectionColumn ?
-                                    <th className={styles.addedColumn}>Added</th> :
+                                    <th className={[styles.addedColumn, styles.firstColumn, displayHeaderCheckbock ? '':styles.hidden].join(' ')}>
+                                        <input type="checkbox" onChange={(event) => (this.selectAllRows(event.target.checked))} />
+                                    </th> :
                                     null
                             }
                             {
@@ -366,15 +372,15 @@ export default class RawTelemetryTable extends PureComponent {
                             data.sort(this.sortData).map((row) => {
                                 if (this.testFilter(row)) {
                                     let key = [row.component, row.stream, row.param_name].join('-');
-                                    let isChecked = this.state.selectedRows.indexOf(key)>=0;
+                                    let isChecked = this.state.selectedRows.indexOf(key) >= 0;
 
                                     return (
                                         <React.Fragment key={key}>
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                                 {
                                                     this.props.displaySelectionColumn ?
-                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} 
-                                                        type="checkbox" alt={`select ${key}`} checked={isChecked}/></td> :
+                                                        <td className={styles.firstColumn}><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
+                                                            type="checkbox" alt={`select ${key}`} checked={isChecked} /></td> :
                                                         null
                                                 }
                                                 <td className={styles.string}>{row.component}</td>
@@ -457,32 +463,32 @@ export default class RawTelemetryTable extends PureComponent {
 
                                                                 </div>
                                                             </div>
-                                                    </td>
-                                                </tr> :
-                                                null
-                                        }
-                                    </React.Fragment>
-                                )
-                            }
-                            return null;
-                        })
-                    }
-                </tbody>
-            </table>
+                                                        </td>
+                                                    </tr> :
+                                                    null
+                                            }
+                                        </React.Fragment>
+                                    )
+                                }
+                                return null;
+                            })
+                        }
+                    </tbody>
+                </table>
 
-            <div className={styles.selectionContainer}>
+                <div className={styles.selectionContainer}>
                     TELEMETRIES:
                     <span className={styles.selectionList}>
-                        {this.state.selectedRows.map((telemetryKey)=>{
+                        {this.state.selectedRows.map((telemetryKey) => {
                             const telemetryName = telemetryKey.split('-')[2];
-                            return <TelemetrySelectionTag 
-                                    key={telemetryKey} 
-                                    telemetryKey={telemetryKey}
-                                    telemetryName={telemetryName}
-                                    remove={this.removeTelemetryFromSelection}></TelemetrySelectionTag>
+                            return <TelemetrySelectionTag
+                                key={telemetryKey}
+                                telemetryKey={telemetryKey}
+                                telemetryName={telemetryName}
+                                remove={() => this.updateSelectedList(false, telemetryKey)}></TelemetrySelectionTag>
                         })}
                     </span>
-            </div>
+                </div>
             </div>
 
         );
