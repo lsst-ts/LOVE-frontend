@@ -482,6 +482,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 remove={this.removeTelemetryFromSelection}></TelemetrySelectionTag>
                         })}
                     </span>
+                    <Button className={styles.selectionSetButton}> Set </Button>
                 </div>
             </div>
 

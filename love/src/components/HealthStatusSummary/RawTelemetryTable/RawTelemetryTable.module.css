@@ -327,3 +327,10 @@
     border-radius: 0.3em;
     padding-top:0.3em;
 }
+
+button.selectionSetButton {
+    margin-left: 0.5em;
+    padding-left: 1em;
+    padding-right: 1em;
+    font-size: 14pt;
+}
