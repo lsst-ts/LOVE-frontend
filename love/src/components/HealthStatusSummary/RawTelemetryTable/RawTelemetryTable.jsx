@@ -256,15 +256,26 @@ export default class RawTelemetryTable extends PureComponent {
     updateSelectedList = (checked, key) => {
 
         let selectedRows = this.state.selectedRows;
-        if (checked)
+        if (checked && selectedRows.indexOf(key) < 0)
             selectedRows.push(key);
-        else
+        if (!checked)
             selectedRows.splice(selectedRows.indexOf(key), 1);
         if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
             selectedRows: [...selectedRows]
         })
+    }
+
+    selectAllRows = (checked) => {
+        const data = this.getData();
+        data.sort(this.sortData).map((row) => {
+            if (this.testFilter(row)) {
+                let key = [row.component, row.stream, row.param_name].join('-');
+                this.onRowSelection(checked, key, row);
+            }
+            return true;
+        });
     }
 
     onRowSelection = (checked, key, row) => {
@@ -274,20 +285,9 @@ export default class RawTelemetryTable extends PureComponent {
             this.setCheckedFilterColumn(checkedFilterColumn, value);
         }
         this.updateSelectedList(checked, key)
-        //this.props.callback(event.row)
     }
 
-    removeTelemetryFromSelection = (key) => {
-        let { selectedRows } = this.state;
-        if (selectedRows.indexOf(key) > -1) {
-            selectedRows.splice(selectedRows.indexOf(key), 1)
-            this.setState({
-                selectedRows: [...selectedRows]
-            });
-        }
-    }
-
-    render() {
+    getData = () => {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
         let fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
@@ -313,8 +313,13 @@ export default class RawTelemetryTable extends PureComponent {
             }
         }, this);
 
-
         data = this.convertData(data);
+        return data;
+    }
+    
+    render() {
+        const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
+        let data = this.getData();
         data = data.map((row) => {
             let key = [row.component, row.stream, row.param_name].join('-');
             return {
@@ -329,7 +334,9 @@ export default class RawTelemetryTable extends PureComponent {
                         <tr>
                             {
                                 this.props.displaySelectionColumn ?
-                                    <th className={styles.addedColumn}>Added</th> :
+                                    <th className={[styles.addedColumn, styles.firstColumn, displayHeaderCheckbock ? '':styles.hidden].join(' ')}>
+                                        <input type="checkbox" alt={'select all telemetries'} onChange={(event) => (this.selectAllRows(event.target.checked))} />
+                                    </th> :
                                     null
                             }
                             {
@@ -373,7 +380,7 @@ export default class RawTelemetryTable extends PureComponent {
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                                 {
                                                     this.props.displaySelectionColumn ?
-                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
+                                                        <td className={styles.firstColumn}><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
                                                             type="checkbox" alt={`select ${key}`} checked={isChecked} /></td> :
                                                         null
                                                 }
@@ -479,7 +486,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 key={telemetryKey}
                                 telemetryKey={telemetryKey}
                                 telemetryName={telemetryName}
-                                remove={this.removeTelemetryFromSelection}></TelemetrySelectionTag>
+                                remove={() => this.updateSelectedList(false, telemetryKey)}></TelemetrySelectionTag>
                         })}
                     </span>
                     <Button className={styles.selectionSetButton} onClick={this.props.onClick}> Set </Button>
