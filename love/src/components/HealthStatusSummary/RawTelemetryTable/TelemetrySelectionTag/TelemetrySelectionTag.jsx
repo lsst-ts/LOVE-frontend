@@ -13,7 +13,7 @@ export default class TelemetrySelectionTag extends Component {
                     <span 
                         className={styles.remove} 
                         title={'Remove '+this.props.telemetryKey} 
-                        onClick={this.remove}>x</span>
+                        onClick={this.remove}>X</span>
                 </span>
     }
 }
