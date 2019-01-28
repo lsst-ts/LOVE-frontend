@@ -1,7 +1,7 @@
 Example 1:
 
 ``` jsx
-let telemetries =  {
+const telemetries =  {
     interestedProposal: {
         parameters: {},
         receptionTimeStamp: "2018/11/23 21:12:24."
@@ -14,11 +14,11 @@ let telemetries =  {
           receptionTimeStamp: "2018/11/25 12:21:12"
         }
 };
-let healthFunctions = {
+const healthFunctions = {
     'scheduler-bulkCloud-bulkCloud': 'return WARNING;',
 };
 
-let filters = {
+const filters = {
     'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
     'stream': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
     'timestamp': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
@@ -30,7 +30,17 @@ let filters = {
     'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
 };
 
+const onSetSelection = (rows,ev) =>{
+    alert(rows);
+}
+
 <div style={{'width': '100%', 'overflowX': 'scroll', 'height':'400px'}}>
-<RawTelemetryTable telemetries={telemetries} healthFunctions={healthFunctions} filters={filters} displaySelectionColumn checkedFilterColumn='units'></RawTelemetryTable>
+<RawTelemetryTable 
+    telemetries={telemetries} 
+    healthFunctions={healthFunctions} 
+    filters={filters} 
+    displaySelectionColumn 
+    checkedFilterColumn='units'
+    onSetSelection={onSetSelection}></RawTelemetryTable>
 </div>
 ```
