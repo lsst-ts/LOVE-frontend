@@ -527,7 +527,7 @@ export default class RawTelemetryTable extends PureComponent {
                         })}
                     </span>
                     <Button className={styles.selectionSetButton} 
-                            onClick={(ev) => {this.props.onSetSelection(this.state.selectedRows, ev)}}> Set </Button>
+                            onClick={(ev) => {this.setSelection(this.state.selectedRows, ev)}}> Set </Button>
                 </div>
             </div>
 
