@@ -98,4 +98,22 @@ describe('GIVEN a current list of telemetries in the table', () => {
             expect(checkBox.checked).toBe(false);
         });
     });
+
+    describe("WHEN the user clicks the header checkbox", () => {
+        it("THEN adds/removes all telemetries to the box if it was unchecked/checked before", async () => {
+            const checkBox = getByAltText('select all telemetries'); 
+            fireEvent.click(checkBox);
+            const selectedTelemetries = await waitForElement(()=> getByText('TELEMETRIES:'));
+            expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(true);
+            expect(selectedTelemetries.innerHTML.includes('interestedProposal')).toBe(true);
+            expect(selectedTelemetries.innerHTML.includes('avoidanceRegions')).toBe(true);
+            
+            fireEvent.click(checkBox);
+            await waitForElement(()=>getByText('TELEMETRIES:'));
+            expect(selectedTelemetries.innerHTML.includes('bulkCloud')).toBe(false);
+            expect(selectedTelemetries.innerHTML.includes('interestedProposal')).toBe(false);
+            expect(selectedTelemetries.innerHTML.includes('avoidanceRegions')).toBe(false);
+            
+        });
+    });
 });    
