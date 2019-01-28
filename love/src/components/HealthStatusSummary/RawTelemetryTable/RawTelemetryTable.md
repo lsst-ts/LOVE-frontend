@@ -15,30 +15,23 @@ const telemetries =  {
         }
 };
 const healthFunctions = {
-    'scheduler-bulkCloud-bulkCloud': 'return WARNING;',
+    'scheduler-bulkCloud-bulkCloud': 'return WARNING;'
 };
 
-const filters = {
-    'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'stream': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'timestamp': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'param_name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-    'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
-};
 
 const onSetSelection = (rows,ev) =>{
     alert(rows);
+}
+
+const setHealthFunctions = (healthFunctions) => {
+    alert(healthFunctions)
 }
 
 <div style={{'width': '100%', 'overflowX': 'scroll', 'height':'400px'}}>
 <RawTelemetryTable 
     telemetries={telemetries} 
     healthFunctions={healthFunctions} 
-    filters={filters} 
+    setHealthFunctions={setHealthFunctions}
     displaySelectionColumn 
     checkedFilterColumn='units'
     onSetSelection={onSetSelection}></RawTelemetryTable>
