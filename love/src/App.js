@@ -7,6 +7,7 @@ import DataManagementFlow from './components/DataManagementFlow/DataManagementFl
 
 import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
+import TimeSeries from './components/TimeSeries/TimeSeries';
 
 class App extends Component {
 
@@ -89,6 +90,8 @@ class App extends Component {
               render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
             <Route path='/dm-flow' 
               component={DataManagementFlow} />
+            <Route path='/time-series' 
+              render={() => <div className="hs-container"><TimeSeries telemetries={this.state.telemetries}> </TimeSeries></div>} />
             <Route path='/' 
               component={ComponentIndex} />
           </Switch>

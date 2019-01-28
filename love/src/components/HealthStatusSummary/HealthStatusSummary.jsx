@@ -26,18 +26,6 @@ export default class HealthStatusSummary extends Component {
         // eslint-disable-next-line
         RegExp.prototype.toJSON = RegExp.prototype.toString;
 
-        let filters = {
-            'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'stream': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'timestamp': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'param_name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
-            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
-        }
-
         let healthFunctions = localStorage.getItem('healthFunctions');
         if (!healthFunctions) {
             healthFunctions = {
@@ -51,22 +39,9 @@ export default class HealthStatusSummary extends Component {
         }
 
         this.state = {
-            filters: filters,
-            setFilters: this.setFilters,
             healthFunctions: healthFunctions,
             setHealthFunctions: this.setHealthFunctions,
         };
-    }
-
-    setFilters = (filters) => {
-        Object.keys(filters).map((key) => {
-            if(filters[key]['type'] === 'regexp' && typeof filters[key]['value'] === 'string')
-                filters[key]['value'] = new RegExp(filters[key]['value'].replace(/^\/|\/$/g, ''));
-            return null;
-        })
-        this.setState({
-            filters: filters,
-        });
     }
 
     setHealthFunctions = (healthFunctions) => {
