@@ -43,8 +43,23 @@ export default class Vega extends Component {
 
     vegaContainer = React.createRef();
 
+    getCSSColorByVariableName = (varName) => {
+        return getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
+    }
+
     componentDidMount() {
-        vegae(this.vegaContainer.current, this.props.spec);
+
+        // check https://vega.github.io/vega/docs/config/ for more config options
+        const spec = Object.assign({
+         "config":{
+             "axis":{
+                 "labelColor" : this.getCSSColorByVariableName('--base-font-color'),
+                 "titleColor" : this.getCSSColorByVariableName('--base-font-color'),
+             }
+         }   
+        }, this.props.spec);
+        
+        vegae(this.vegaContainer.current, spec);
     }
 
     render() {
