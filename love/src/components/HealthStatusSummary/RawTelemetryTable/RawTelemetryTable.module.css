@@ -178,7 +178,7 @@
 .rawTelemetryTable .setButton {
     padding: 0em 2em;
     margin: auto;
-    background: var(--quaternary-background-color);
+    display:flex;
 }
 
 .rawTelemetryTable .snippetButton {
