@@ -11,7 +11,8 @@ import PropTypes from 'prop-types';
 /**
  * Configurable table displaying an arbitrary subset
  * of telemetries provided in the component props. It has an optional selection column
- * to be used as a telemetry selection feature. along with the filtering and sorting methods
+ * to be used as a telemetry selection feature. along with the filtering and sorting methods.
+ * By pressing the Set button, the list of telemetries is passed to a callback function in the component props.
  * 
  */
 export default class RawTelemetryTable extends PureComponent {
@@ -31,6 +32,12 @@ export default class RawTelemetryTable extends PureComponent {
         setHealthFunctions: PropTypes.func,
         /** Dictionary of telemetries that are displayed. See examples below */
         telemetries: PropTypes.object,
+        /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
+        onSetSelection: PropTypes.button
+    }
+
+    defaultProps = {
+        onSetSelection: () => {}
     }
 
     constructor() {
@@ -316,6 +323,11 @@ export default class RawTelemetryTable extends PureComponent {
         data = this.convertData(data);
         return data;
     }
+
+    setSelection = (event)=>{
+
+        this.props.onSetSelection(this.state.selectedRows, event);
+    }
     
     render() {
         const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
@@ -489,7 +501,8 @@ export default class RawTelemetryTable extends PureComponent {
                                 remove={() => this.updateSelectedList(false, telemetryKey)}></TelemetrySelectionTag>
                         })}
                     </span>
-                    <Button className={styles.selectionSetButton} onClick={this.props.onClick}> Set </Button>
+                    <Button className={styles.selectionSetButton} 
+                            onClick={(ev) => {this.props.onSetSelection(this.state.selectedRows, ev)}}> Set </Button>
                 </div>
             </div>
 
