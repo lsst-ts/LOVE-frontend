@@ -12,6 +12,7 @@ export default class ComponentIndex extends Component {
                 <ol className={styles.linkList}>
                     <li className={styles.linkListItem}><Link to='/health-status-summary'>Health status summary</Link></li>
                     <li className={styles.linkListItem}><Link to='/dm-flow'>Data Management Flow</Link></li>
+                    <li className={styles.linkListItem}><Link to='/time-series'>Time Series</Link></li>
                 </ol>
             </div>
         )
