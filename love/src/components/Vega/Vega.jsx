@@ -2,12 +2,23 @@ import React, { Component } from 'react';
 import * as vegal from 'vega-lite';
 import * as vega from 'vega';
 import vegae from 'vega-embed';
+import PropTypes from 'prop-types';
 
+/**
+ * Simple wrapper around the Vega-lite visualization package.
+ * It receives the plot spec and embeds the plot in the DOM using React refs. 
+ */
 export default class Vega extends Component {
+    static propTypes = {
+        /**
+         * Object that defines the properties to be used by Vega-lite
+         */
+        spec: PropTypes.object
+    }
 
     static defaultProps = {
         spec: {
-            $schema: 'https://vega.github.io/schema/vega-lite/v2.0.json',
+            $schema: 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json',
             description: 'A simple bar chart with embedded data.',
             data: {
                 values: [
