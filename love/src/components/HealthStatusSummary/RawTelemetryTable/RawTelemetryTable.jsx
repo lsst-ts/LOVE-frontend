@@ -278,11 +278,11 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     removeTelemetryFromSelection = (key) => {
-        let {selectedRows} = this.state;
-        if(selectedRows.indexOf(key)>-1){
-            selectedRows.splice(selectedRows.indexOf(key),1)
+        let { selectedRows } = this.state;
+        if (selectedRows.indexOf(key) > -1) {
+            selectedRows.splice(selectedRows.indexOf(key), 1)
             this.setState({
-                selectedRows:[...selectedRows]
+                selectedRows: [...selectedRows]
             });
         }
     }
@@ -366,15 +366,15 @@ export default class RawTelemetryTable extends PureComponent {
                             data.sort(this.sortData).map((row) => {
                                 if (this.testFilter(row)) {
                                     let key = [row.component, row.stream, row.param_name].join('-');
-                                    let isChecked = this.state.selectedRows.indexOf(key)>=0;
+                                    let isChecked = this.state.selectedRows.indexOf(key) >= 0;
 
                                     return (
                                         <React.Fragment key={key}>
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                                 {
                                                     this.props.displaySelectionColumn ?
-                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))} 
-                                                        type="checkbox" alt={`select ${key}`} checked={isChecked}/></td> :
+                                                        <td><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
+                                                            type="checkbox" alt={`select ${key}`} checked={isChecked} /></td> :
                                                         null
                                                 }
                                                 <td className={styles.string}>{row.component}</td>
@@ -457,32 +457,32 @@ export default class RawTelemetryTable extends PureComponent {
 
                                                                 </div>
                                                             </div>
-                                                    </td>
-                                                </tr> :
-                                                null
-                                        }
-                                    </React.Fragment>
-                                )
-                            }
-                            return null;
-                        })
-                    }
-                </tbody>
-            </table>
+                                                        </td>
+                                                    </tr> :
+                                                    null
+                                            }
+                                        </React.Fragment>
+                                    )
+                                }
+                                return null;
+                            })
+                        }
+                    </tbody>
+                </table>
 
-            <div className={styles.selectionContainer}>
+                <div className={styles.selectionContainer}>
                     TELEMETRIES:
                     <span className={styles.selectionList}>
-                        {this.state.selectedRows.map((telemetryKey)=>{
+                        {this.state.selectedRows.map((telemetryKey) => {
                             const telemetryName = telemetryKey.split('-')[2];
-                            return <TelemetrySelectionTag 
-                                    key={telemetryKey} 
-                                    telemetryKey={telemetryKey}
-                                    telemetryName={telemetryName}
-                                    remove={this.removeTelemetryFromSelection}></TelemetrySelectionTag>
+                            return <TelemetrySelectionTag
+                                key={telemetryKey}
+                                telemetryKey={telemetryKey}
+                                telemetryName={telemetryName}
+                                remove={this.removeTelemetryFromSelection}></TelemetrySelectionTag>
                         })}
                     </span>
-            </div>
+                </div>
             </div>
 
         );
