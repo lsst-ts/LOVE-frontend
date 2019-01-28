@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
 import StatusText from '../StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
-import Button from '../Button/Button';
+import Button from '../../Button/Button';
 import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
@@ -423,7 +423,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                                 </p>
                                                                 <div onClick={() => this.setHealthFunction(key)}>
                                                                     <Button className={styles.setButton}>
-                                                                        <span>Set</span>
+                                                                        Set
                                                                     </Button>
                                                                 </div>
                                                             </div>
