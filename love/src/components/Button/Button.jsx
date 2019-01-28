@@ -40,13 +40,18 @@ export default class Button extends Component {
     /**
      * Callback for the onClick event of the `<button>` element.
      */
-    onClick: PropTypes.func
+    onClick: PropTypes.func,
+    /**
+     * Aditional names of css classes to be applied after the presets.
+     */
+    className: PropTypes.string
   }
 
   static defaultProps = {
       status: 'default',
       size: 'default',
-      onClick: ()=>{}
+      onClick: ()=>{},
+      className: ''
   }
 
   render() {
@@ -71,8 +76,7 @@ export default class Button extends Component {
     let {btn} = styles;
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
-
-    const style = [btn, statusStyle, sizeStyle].join(' ');
+    const style = [btn, statusStyle, sizeStyle, this.props.className].join(' ');
     
     return (
       <button className={style} type="button" onClick={this.props.onClick}>{this.props.children} </button>
