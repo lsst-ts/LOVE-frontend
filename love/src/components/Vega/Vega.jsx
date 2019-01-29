@@ -58,21 +58,6 @@ export default class Vega extends Component {
     }
 
 
-    newGenerator = () => {
-        var counter = -1;
-        var previousY = [5, 5, 5, 5];
-        return function () {
-            counter++;
-            const newVal = Math.cos(5*counter*Math.PI/180) + Math.random()*0.5;
-            let date = new Date();;
-            date = new Date(date.valueOf() + 1000000*counter-17.7*60*60*1000)
-            return {
-                date: date,
-                value: newVal
-            };
-        };
-    }
-
     componentDidMount() {
 
         // check https://vega.github.io/vega/docs/config/ for more config options
@@ -87,15 +72,7 @@ export default class Vega extends Component {
         
         vegae(this.vegaContainer.current, spec).then( (vegaEmbedResult) => {
             let minimumX = 0;
-            const valueGenerator =  this.newGenerator();
             this.vegaEmbedResult = vegaEmbedResult;
-            window.setInterval( () => {
-                const newVal = valueGenerator();
-                this.setState({
-                    date: newVal.date,
-                    value: newVal.value
-                });                
-            }, 100);
         });
 
 
@@ -108,8 +85,8 @@ export default class Vega extends Component {
             var changeSet = vega
             .changeset()
             .insert({
-                date: this.state.date,
-                value: this.state.value
+                date: this.props.date,
+                value: this.props.value
             })
             .remove( (t)  => {
                 return t.x < this.minimumX;
