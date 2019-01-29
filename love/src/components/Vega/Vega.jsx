@@ -62,6 +62,7 @@ export default class Vega extends Component {
              "axis":{
                  "labelColor" : this.getCSSColorByVariableName('--base-font-color'),
                  "titleColor" : this.getCSSColorByVariableName('--base-font-color'),
+                 "grid": false,
              },
              "legend": {
                  "labelColor": this.getCSSColorByVariableName('--base-font-color'),
@@ -80,7 +81,6 @@ export default class Vega extends Component {
     }
 
     render() {
-        
         if(this.vegaEmbedResult){
             var changeSet = vega
             .changeset()
