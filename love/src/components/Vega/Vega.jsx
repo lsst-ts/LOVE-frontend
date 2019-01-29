@@ -9,6 +9,13 @@ import PropTypes from 'prop-types';
  * It receives the plot spec and embeds the plot in the DOM using React refs. 
  */
 export default class Vega extends Component {
+
+    constructor(){
+        super();
+        this.vegaContainer = React.createRef();
+        this.vegaEmbedResult = null;
+        this.minimumX = 0;
+    }
     static propTypes = {
         /**
          * Object that defines the properties to be used by Vega-lite
@@ -36,16 +43,16 @@ export default class Vega extends Component {
             mark: 'bar',
             encoding: {
                 x: { field: 'a', type: 'ordinal' },
-                y: { field: 'b', type: 'quantitative' }
+                y: { field: 'b', type: 'quantitative' },
             }
         }
     }
 
-    vegaContainer = React.createRef();
 
     getCSSColorByVariableName = (varName) => {
         return getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
     }
+
 
     componentDidMount() {
 
@@ -55,14 +62,36 @@ export default class Vega extends Component {
              "axis":{
                  "labelColor" : this.getCSSColorByVariableName('--base-font-color'),
                  "titleColor" : this.getCSSColorByVariableName('--base-font-color'),
+             },
+             "legend": {
+                 "labelColor": this.getCSSColorByVariableName('--base-font-color'),
+                 "titleColor": this.getCSSColorByVariableName('--base-font-color')
              }
          }   
         }, this.props.spec);
         
-        vegae(this.vegaContainer.current, spec);
+        vegae(this.vegaContainer.current, spec).then( (vegaEmbedResult) => {
+            let minimumX = 0;
+            this.vegaEmbedResult = vegaEmbedResult;
+        });
+
+
+
     }
 
     render() {
+        
+        if(this.vegaEmbedResult){
+            var changeSet = vega
+            .changeset()
+            .insert(this.props.lastMessageData)
+            .remove( (t)  => {
+                return t.x < this.minimumX;
+            });
+            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
+
+        }
+
         return (
             <div ref={this.vegaContainer}></div>
         );
