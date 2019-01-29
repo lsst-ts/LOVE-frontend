@@ -9,6 +9,17 @@ import PropTypes from 'prop-types';
  * It receives the plot spec and embeds the plot in the DOM using React refs. 
  */
 export default class Vega extends Component {
+
+    constructor(){
+        super();
+        this.vegaContainer = React.createRef();
+        this.vegaEmbedResult = null;
+        this.minimumX = 0;
+        this.state = {
+            date: new Date(),
+            value: 1
+        }
+    }
     static propTypes = {
         /**
          * Object that defines the properties to be used by Vega-lite
@@ -41,7 +52,6 @@ export default class Vega extends Component {
         }
     }
 
-    vegaContainer = React.createRef();
 
     getCSSColorByVariableName = (varName) => {
         return getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
@@ -75,21 +85,16 @@ export default class Vega extends Component {
          }   
         }, this.props.spec);
         
-        vegae(this.vegaContainer.current, spec).then( (res) => {
+        vegae(this.vegaContainer.current, spec).then( (vegaEmbedResult) => {
             let minimumX = 0;
             const valueGenerator =  this.newGenerator();
+            this.vegaEmbedResult = vegaEmbedResult;
             window.setInterval( () => {
-                minimumX++;
-
                 const newVal = valueGenerator();
-    
-                var changeSet = vega
-                .changeset()
-                .insert(newVal)
-                .remove(function (t) {
-                    return t.x < minimumX;
-                });
-                res.view.change(spec.data.name, changeSet).run();
+                this.setState({
+                    date: newVal.date,
+                    value: newVal.value
+                });                
             }, 100);
         });
 
@@ -98,6 +103,21 @@ export default class Vega extends Component {
     }
 
     render() {
+        
+        if(this.vegaEmbedResult){
+            var changeSet = vega
+            .changeset()
+            .insert({
+                date: this.state.date,
+                value: this.state.value
+            })
+            .remove( (t)  => {
+                return t.x < this.minimumX;
+            });
+            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
+
+        }
+
         return (
             <div ref={this.vegaContainer}></div>
         );
