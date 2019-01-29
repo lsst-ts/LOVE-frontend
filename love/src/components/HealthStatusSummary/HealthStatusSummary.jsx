@@ -95,7 +95,6 @@ export default class HealthStatusSummary extends Component {
                 </div>
                 <RawTelemetryTable telemetries={this.props.telemetries} 
                     {...this.state} 
-                    displaySelectionColumn 
                     checkedFilterColumn='units'
                     onClick={()=>console.log('RawTel Click')}>
                 </RawTelemetryTable>
