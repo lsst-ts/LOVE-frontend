@@ -1,4 +1,4 @@
-FROM node:10.13-stretch
+FROM node:10.13-stretch as builder
 
 # set working directory
 RUN mkdir -p /home/docker/love
@@ -27,6 +27,11 @@ RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build-django
 
 WORKDIR /home/docker/love/build
 
-RUN mkdir -p /home/LOVE/manager/manager/assets
+FROM alpine:3.7
+RUN mkdir -p /home/LOVE/manager/manager/assets/bundles
+COPY --from=builder /home/docker /home/docker
+# COPY --from=builder /home/docker/webpack-stats.prod.json /home/LOVE/manager/manager/webpack-stats.prod.json
+# COPY --from=builder /home/docker/love/build /home/LOVE/manager/manager/assets/bundles
+# WORKDIR /home/docker/love/build
 
 CMD ["/home/docker/entrypoint.sh"]

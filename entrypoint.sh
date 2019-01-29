@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "Copying webpack-stats.prod.json"
 mkdir -p /home/LOVE/manager/manager
