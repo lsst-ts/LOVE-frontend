@@ -18,7 +18,7 @@ import PropTypes from 'prop-types';
 export default class RawTelemetryTable extends PureComponent {
     static propTypes = {
         /** Display the selection column or not */
-        displaySelectionColumn: PropTypes.bool,
+        columnsToDisplay: PropTypes.arrayOf(PropTypes.oneOf(['selection_column', 'component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units', 'health_status'])),
         /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
         checkedFilterColumn: PropTypes.oneOf(['component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units']),
         /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
@@ -33,7 +33,8 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     static defaultProps = {
-        onSetSelection: () => { }
+        onSetSelection: () => { },
+        columnsToDisplay: ['selection_column', 'component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units', 'health_status'],
     }
 
     constructor() {
@@ -370,7 +371,7 @@ export default class RawTelemetryTable extends PureComponent {
                     <thead>
                         <tr>
                             {
-                                this.props.displaySelectionColumn ?
+                                this.props.columnsToDisplay.includes('selection_column') ?
                                     <th className={[styles.addedColumn, styles.firstColumn, styles.checkboxCell, displayHeaderCheckbock ? '' : styles.hidden].join(' ')}>
                                         <input type="checkbox" alt={'select all telemetries'} onChange={(event) => (this.selectAllRows(event.target.checked))} />
                                     </th> :
@@ -390,15 +391,15 @@ export default class RawTelemetryTable extends PureComponent {
 
                                     return (
                                         <>
-                                            <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.state.filters['component']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.state.filters['stream']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.state.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.state.filters['name']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.state.filters['param_name']} />
-                                            <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.state.filters['data_type']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.state.filters['value']} />
-                                            <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.state.filters['units']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.state.filters['health_status']} />
+                                            {this.props.columnsToDisplay.includes('component') && <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.state.filters['component']} />}
+                                            {this.props.columnsToDisplay.includes('stream') && <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.state.filters['stream']} />}
+                                            {this.props.columnsToDisplay.includes('timestamp') && <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.state.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />}
+                                            {this.props.columnsToDisplay.includes('name') && <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.state.filters['name']} />}
+                                            {this.props.columnsToDisplay.includes('param_name') && <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.state.filters['param_name']} />}
+                                            {this.props.columnsToDisplay.includes('data_type') && <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.state.filters['data_type']} />}
+                                            {this.props.columnsToDisplay.includes('value') && <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.state.filters['value']} />}
+                                            {this.props.columnsToDisplay.includes('units') && <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.state.filters['units']} />}
+                                            {this.props.columnsToDisplay.includes('health_status') && <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.state.filters['health_status']} />}
                                         </>
                                     )
                                 })()
@@ -416,33 +417,35 @@ export default class RawTelemetryTable extends PureComponent {
                                         <React.Fragment key={key}>
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                                 {
-                                                    this.props.displaySelectionColumn ?
+                                                    this.props.columnsToDisplay.includes('selection_column') ?
                                                         <td className={[styles.firstColumn, styles.checkboxCell].join(' ')}>
                                                             <input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
                                                                 type="checkbox" alt={`select ${key}`} checked={isChecked} />
                                                         </td> :
                                                         null
                                                 }
-                                                <td className={styles.string}>{row.component}</td>
-                                                <td className={styles.string}>{row.stream}</td>
-                                                <td className={styles.string}>{row.timestamp}</td>
-                                                <td className={styles.string}>{row.name}</td>
-                                                <td className={styles.string}>{row.param_name}</td>
-                                                <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
-                                                <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
-                                                <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
-                                                <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
-                                                    key={key + '-row'}>
-                                                    <div className={styles.healthStatusWrapper}>
-                                                        <div className={styles.statusTextWrapper}>
-                                                            <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
-                                                            </StatusText>
+                                                {this.props.columnsToDisplay.includes('component') && <td className={styles.string}>{row.component}</td>}
+                                                {this.props.columnsToDisplay.includes('stream') && <td className={styles.string}>{row.stream}</td>}
+                                                {this.props.columnsToDisplay.includes('timestamp') && <td className={styles.string}>{row.timestamp}</td>}
+                                                {this.props.columnsToDisplay.includes('name') && <td className={styles.string}>{row.name}</td>}
+                                                {this.props.columnsToDisplay.includes('param_name') && <td className={styles.string}>{row.param_name}</td>}
+                                                {this.props.columnsToDisplay.includes('data_type') && <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>}
+                                                {this.props.columnsToDisplay.includes('value') && <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>}
+                                                {this.props.columnsToDisplay.includes('units') && <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>}
+                                                {this.props.columnsToDisplay.includes('health_status') &&
+                                                    <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
+                                                        key={key + '-row'}>
+                                                        <div className={styles.healthStatusWrapper}>
+                                                            <div className={styles.statusTextWrapper}>
+                                                                <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
+                                                                </StatusText>
+                                                            </div>
+                                                            <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
+                                                                <GearIcon active={this.state.expandedRows[key]}></GearIcon>
+                                                            </div>
                                                         </div>
-                                                        <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                                                            <GearIcon active={this.state.expandedRows[key]}></GearIcon>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
+                                                }
                                             </tr>
                                             {
                                                 (this.state.expandedRows[key]) ?
