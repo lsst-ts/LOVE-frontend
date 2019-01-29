@@ -14,7 +14,6 @@ export default class Vega extends Component {
         super();
         this.vegaContainer = React.createRef();
         this.vegaEmbedResult = null;
-        this.minimumX = 0;
     }
     static propTypes = {
         /**
@@ -82,11 +81,15 @@ export default class Vega extends Component {
 
     render() {
         if(this.vegaEmbedResult){
+            const timeWindowStart = (new Date()).getTime() - 30*1000 ;
+            const dateOffset = (new Date()).getTimezoneOffset()*60*1000;
+            
             var changeSet = vega
             .changeset()
             .insert(this.props.lastMessageData)
             .remove( (t)  => {
-                return t.x < this.minimumX;
+                const dataDate = (new Date(t.date)).getTime() - dateOffset;
+                return (dataDate  < timeWindowStart );
             });
             this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
 
