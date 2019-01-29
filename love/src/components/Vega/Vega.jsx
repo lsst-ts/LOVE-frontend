@@ -15,10 +15,6 @@ export default class Vega extends Component {
         this.vegaContainer = React.createRef();
         this.vegaEmbedResult = null;
         this.minimumX = 0;
-        this.state = {
-            date: new Date(),
-            value: 1
-        }
     }
     static propTypes = {
         /**
@@ -47,7 +43,7 @@ export default class Vega extends Component {
             mark: 'bar',
             encoding: {
                 x: { field: 'a', type: 'ordinal' },
-                y: { field: 'b', type: 'quantitative' }
+                y: { field: 'b', type: 'quantitative' },
             }
         }
     }
@@ -66,6 +62,10 @@ export default class Vega extends Component {
              "axis":{
                  "labelColor" : this.getCSSColorByVariableName('--base-font-color'),
                  "titleColor" : this.getCSSColorByVariableName('--base-font-color'),
+             },
+             "legend": {
+                 "labelColor": this.getCSSColorByVariableName('--base-font-color'),
+                 "titleColor": this.getCSSColorByVariableName('--base-font-color')
              }
          }   
         }, this.props.spec);
@@ -86,7 +86,8 @@ export default class Vega extends Component {
             .changeset()
             .insert({
                 date: this.props.date,
-                value: this.props.value
+                value: this.props.value,
+                source: 'asdf'
             })
             .remove( (t)  => {
                 return t.x < this.minimumX;
