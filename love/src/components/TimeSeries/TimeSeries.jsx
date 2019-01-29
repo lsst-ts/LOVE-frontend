@@ -58,16 +58,23 @@ export default class TimeSeries extends Component {
 
     newGenerator = () => {
         var counter = -1;
+        const sources = ['source0', 'source1'];
+
         return function () {
             counter++;
-            const newVal = Math.cos(5*counter*Math.PI/180) + Math.random()*0.5;
-            let date = new Date();;
-            date = new Date(date.valueOf() + 1000000*counter-17.7*60*60*1000)
-            return [{
-                date: date,
-                value: newVal,
-                source: 1
-            }];
+            
+            const newVals = sources.map( (source, index) => {
+                const newVal = Math.cos(5*counter/(index+1)*Math.PI/180) + Math.random()*0.5;
+                let date = new Date();;
+                date = new Date(date.valueOf() + 1000000*counter-17.7*60*60*1000)
+                return {
+                    date: date,
+                    value: newVal,
+                    source: source
+                };
+            });
+
+            return newVals;
         };
     }
 
