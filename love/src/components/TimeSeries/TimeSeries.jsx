@@ -81,7 +81,8 @@ export default class TimeSeries extends Component {
             "$schema": "https://vega.github.io/schema/vega-lite/v3.json",
             "description": "Google's stock price over time.",
             "data": {
-                "values": data
+                "values": data,
+                "name": "telemetries"
             },
             "mark": "line",
             "encoding": {

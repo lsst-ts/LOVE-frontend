@@ -47,6 +47,22 @@ export default class Vega extends Component {
         return getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
     }
 
+
+    newGenerator = () => {
+        var counter = -1;
+        var previousY = [5, 5, 5, 5];
+        return function () {
+            counter++;
+            const newVal = Math.cos(5*counter*Math.PI/180) + Math.random()*0.5;
+            let date = new Date();;
+            date = new Date(date.valueOf() + 1000000*counter-17.7*60*60*1000)
+            return {
+                date: date,
+                value: newVal
+            };
+        };
+    }
+
     componentDidMount() {
 
         // check https://vega.github.io/vega/docs/config/ for more config options
@@ -59,7 +75,26 @@ export default class Vega extends Component {
          }   
         }, this.props.spec);
         
-        vegae(this.vegaContainer.current, spec);
+        vegae(this.vegaContainer.current, spec).then( (res) => {
+            let minimumX = 0;
+            const valueGenerator =  this.newGenerator();
+            window.setInterval( () => {
+                minimumX++;
+
+                const newVal = valueGenerator();
+    
+                var changeSet = vega
+                .changeset()
+                .insert(newVal)
+                .remove(function (t) {
+                    return t.x < minimumX;
+                });
+                res.view.change(spec.data.name, changeSet).run();
+            }, 100);
+        });
+
+
+
     }
 
     render() {
