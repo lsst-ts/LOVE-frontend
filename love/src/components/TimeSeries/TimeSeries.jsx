@@ -99,9 +99,10 @@ export default class TimeSeries extends Component {
         }
     }
     render() {
+        const columnsToDisplay = ['selection_column', 'component', 'stream', 'name', 'param_name', 'data_type', 'value', 'units'];
         return (
             this.state.step === 0 ?
-                <RawTelemetryTable telemetries={this.props.telemetries} {...this.state} displaySelectionColumn checkedFilterColumn='units' onSetSelection={this.onSetSelection}></RawTelemetryTable>
+                <RawTelemetryTable telemetries={this.props.telemetries} {...this.state} columnsToDisplay={columnsToDisplay} checkedFilterColumn='units' onSetSelection={this.onSetSelection}></RawTelemetryTable>
                 :
                 <Vega spec={this.getSpec(this.state.data, this.state.telemetryName.split('-')[2])}
                       lastMessageData={this.state.lastMessageData}></Vega>
