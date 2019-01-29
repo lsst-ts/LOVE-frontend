@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
+import { subscribeToTelemetry } from '../../Utils';
+import { unsubscribeToTelemetry } from '../../Utils';
 import Vega from '../Vega/Vega';
 
 export default class TimeSeries extends Component {
@@ -39,9 +41,9 @@ export default class TimeSeries extends Component {
                     "type": "quantitative",
                     "title": name
                 },
-                "color": { 
-                    "field": 'source', 
-                    "type": 'nominal'
+                "color": {
+                    "field": "source",
+                    "type": "nominal"
                 }
 
             }
@@ -49,45 +51,53 @@ export default class TimeSeries extends Component {
     }
 
     onSetSelection = (selectedRows) => {
-        console.log(selectedRows)
+        const streams = selectedRows.map((rowKey) => {
+            return rowKey.split('-')[1];
+        });
+        const streamsSet = new Set(streams);
+        streamsSet.forEach((stream) => {
+            subscribeToTelemetry(stream, this.onReceiveMsg);
+        });
         this.setState({
             telemetryName: selectedRows[0],
+            subscribedStreams: streamsSet,
+            selectedRows: selectedRows,
             step: 1
-        })
+        });
     }
 
-    newGenerator = () => {
-        var counter = -1;
-        const sources = ['source0', 'source1'];
+    componentWillUnmount = () => {
+        this.state.subscribedStreams.forEach((stream) => {
+            unsubscribeToTelemetry(stream, (msg) => console.log(msg));
+        });
+    }
 
-        return function () {
-            counter++;
-            
-            const newVals = sources.map( (source, index) => {
-                const newVal = Math.cos(5*counter/(index+1)*Math.PI/180) + Math.random()*0.5;
-                let date = new Date();;
-                date = new Date(date.valueOf() + 1000000*counter-17.7*60*60*1000)
-                return {
-                    date: date,
-                    value: newVal,
-                    source: source
-                };
+    onReceiveMsg = (msg) => {
+        let data = JSON.parse(msg.data);
+        let newEntries = [];
+        if (typeof data.data === 'object') {
+            let timestamp = new Date();
+            timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
+            Object.keys(data.data).forEach((stream) => {
+                Object.entries(data.data[stream]).forEach((entry) => {
+                    const key = ['scheduler', stream, entry[0]].join('-');
+                    // console.log(key, this.state.selectedRows);
+                    // console.log(this.state.selectedRows.includes(key));
+                    if (this.state.selectedRows.includes(key)) {
+                        const newEntry = {
+                            "value": entry[1],
+                            "date": timestamp,
+                            "source": key
+                        }
+                        newEntries.push(newEntry);
+                    }
+                });
             });
-
-            return newVals;
-        };
-    }
-
-    componentDidMount = () =>{
-        const valueGenerator =  this.newGenerator();
-        window.setInterval( () => {
-            const newVal = valueGenerator();
             this.setState({
-                lastMessageData: newVal
-            });                
-        }, 100);        
+                lastMessageData: newEntries,
+            })
+        }
     }
-
     render() {
         return (
             this.state.step === 0 ?
@@ -98,3 +108,4 @@ export default class TimeSeries extends Component {
         )
     }
 }
+
