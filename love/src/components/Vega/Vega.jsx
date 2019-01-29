@@ -84,11 +84,7 @@ export default class Vega extends Component {
         if(this.vegaEmbedResult){
             var changeSet = vega
             .changeset()
-            .insert({
-                date: this.props.date,
-                value: this.props.value,
-                source: 'asdf'
-            })
+            .insert(this.props.lastMessageData)
             .remove( (t)  => {
                 return t.x < this.minimumX;
             });
