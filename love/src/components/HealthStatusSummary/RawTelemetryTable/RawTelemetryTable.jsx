@@ -33,7 +33,7 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     static defaultProps = {
-        onSetSelection: () => {}
+        onSetSelection: () => { }
     }
 
     constructor() {
@@ -42,7 +42,7 @@ export default class RawTelemetryTable extends PureComponent {
         let expandedRows = {
             'altitude_maxspeed0': true,
         };
-        
+
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         this.healthStatusCodes = {
             0: 'Undefined',
@@ -160,7 +160,7 @@ export default class RawTelemetryTable extends PureComponent {
             }
             if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'health') {
                 let healthStatus = 0;
-                if(this.props.healthFunctions !== undefined)
+                if (this.props.healthFunctions !== undefined)
                     healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
                 return this.state.filters[rowKey].value.test(healthStatus);
             }
@@ -348,10 +348,10 @@ export default class RawTelemetryTable extends PureComponent {
         return data;
     }
 
-    setSelection = (event)=>{
+    setSelection = (event) => {
         this.props.onSetSelection(this.state.selectedRows, event);
     }
-    
+
     render() {
         const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
         let data = this.getData();
@@ -371,7 +371,7 @@ export default class RawTelemetryTable extends PureComponent {
                         <tr>
                             {
                                 this.props.displaySelectionColumn ?
-                                    <th className={[styles.addedColumn, styles.firstColumn, displayHeaderCheckbock ? '' : styles.hidden].join(' ')}>
+                                    <th className={[styles.addedColumn, styles.firstColumn, styles.checkboxCell, displayHeaderCheckbock ? '' : styles.hidden].join(' ')}>
                                         <input type="checkbox" alt={'select all telemetries'} onChange={(event) => (this.selectAllRows(event.target.checked))} />
                                     </th> :
                                     null
@@ -417,8 +417,10 @@ export default class RawTelemetryTable extends PureComponent {
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                                 {
                                                     this.props.displaySelectionColumn ?
-                                                        <td className={styles.firstColumn}><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
-                                                            type="checkbox" alt={`select ${key}`} checked={isChecked} /></td> :
+                                                        <td className={[styles.firstColumn, styles.checkboxCell].join(' ')}>
+                                                            <input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
+                                                                type="checkbox" alt={`select ${key}`} checked={isChecked} />
+                                                        </td> :
                                                         null
                                                 }
                                                 <td className={styles.string}>{row.component}</td>
@@ -526,8 +528,8 @@ export default class RawTelemetryTable extends PureComponent {
                                 remove={() => this.updateSelectedList(false, telemetryKey)}></TelemetrySelectionTag>
                         })}
                     </span>
-                    <Button className={styles.selectionSetButton} 
-                            onClick={(ev) => {this.setSelection(this.state.selectedRows, ev)}}> Set </Button>
+                    <Button className={styles.selectionSetButton}
+                        onClick={(ev) => { this.setSelection(this.state.selectedRows, ev) }}> Set </Button>
                 </div>
             </div>
 
