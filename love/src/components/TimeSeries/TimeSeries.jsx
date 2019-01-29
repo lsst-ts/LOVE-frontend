@@ -10,8 +10,12 @@ export default class TimeSeries extends Component {
         this.state = {
             telemetryName: "test",
             step: 0,
-            date: new Date(),
-            value: 0
+            lastMessageData : [{
+                date: new Date(),
+                value: 0,
+                source: 1
+            }]
+            
         }
     }
 
@@ -34,7 +38,12 @@ export default class TimeSeries extends Component {
                     "field": "value",
                     "type": "quantitative",
                     "title": name
+                },
+                "color": { 
+                    "field": 'source', 
+                    "type": 'nominal'
                 }
+
             }
         }
     }
@@ -49,16 +58,16 @@ export default class TimeSeries extends Component {
 
     newGenerator = () => {
         var counter = -1;
-        var previousY = [5, 5, 5, 5];
         return function () {
             counter++;
             const newVal = Math.cos(5*counter*Math.PI/180) + Math.random()*0.5;
             let date = new Date();;
             date = new Date(date.valueOf() + 1000000*counter-17.7*60*60*1000)
-            return {
+            return [{
                 date: date,
-                value: newVal
-            };
+                value: newVal,
+                source: 1
+            }];
         };
     }
 
@@ -67,8 +76,7 @@ export default class TimeSeries extends Component {
         window.setInterval( () => {
             const newVal = valueGenerator();
             this.setState({
-                date: newVal.date,
-                value: newVal.value
+                lastMessageData: newVal
             });                
         }, 100);        
     }
@@ -79,7 +87,7 @@ export default class TimeSeries extends Component {
                 <RawTelemetryTable telemetries={this.props.telemetries} {...this.state} displaySelectionColumn checkedFilterColumn='units' onSetSelection={this.onSetSelection}></RawTelemetryTable>
                 :
                 <Vega spec={this.getSpec(this.state.data, this.state.telemetryName.split('-')[2])}
-                      date={this.state.date} value={this.state.value}></Vega>
+                      lastMessageData={this.state.lastMessageData}></Vega>
         )
     }
 }
