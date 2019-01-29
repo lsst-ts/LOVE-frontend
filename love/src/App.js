@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './App.css';
-import sockette from 'sockette';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
@@ -8,6 +7,8 @@ import DataManagementFlow from './components/DataManagementFlow/DataManagementFl
 import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
 import TimeSeries from './components/TimeSeries/TimeSeries';
+
+import { subscribeToTelemetry } from './Utils'
 
 class App extends Component {
 
@@ -28,15 +29,7 @@ class App extends Component {
         }
       }
     }
-
-    this.subscribeToTelemetry('all', this.receiveAllMsg);
-  }
-
-  subscribeToTelemetry = (name, callback) => {
-    const socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/', {
-      onopen: e => socket.json({ "option": "subscribe", "data": name }),
-      onmessage: callback,
-    });
+    subscribeToTelemetry('all', this.receiveAllMsg);
   }
 
   receiveAllMsg = (msg) => {
@@ -86,13 +79,13 @@ class App extends Component {
 
         <BrowserRouter>
           <Switch>
-            <Route path='/health-status-summary' 
+            <Route path='/health-status-summary'
               render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
-            <Route path='/dm-flow' 
+            <Route path='/dm-flow'
               component={DataManagementFlow} />
-            <Route path='/time-series' 
+            <Route path='/time-series'
               render={() => <div className="hs-container"><TimeSeries telemetries={this.state.telemetries}> </TimeSeries></div>} />
-            <Route path='/' 
+            <Route path='/'
               component={ComponentIndex} />
           </Switch>
         </BrowserRouter>
