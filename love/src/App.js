@@ -22,8 +22,14 @@ class App extends Component {
         },
         "bulkCloud": {
           parameters: {
-            "bulkCloud": 0.6713680575252166,
-            "timestamp": 0.5309269973966433
+            "bulkCloud": {
+              "value": 0.6713680575252166,
+              "dataType": "Float"
+            },
+            "timestamp": {
+              "value": 0.5309269973966433,
+              "dataType": "Float"
+            },
           },
           receptionTimeStamp: "2018/11/25 12:21:12"
         }

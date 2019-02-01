@@ -332,13 +332,13 @@ export default class RawTelemetryTable extends PureComponent {
                 'nParams': telemetryData.parameters.length,
                 'parameters': Object.entries(telemetryData.parameters).map(parameter => {
                     // look at one parameter 
-                    const [name, value, data_type, units] = parameter;
+                    const [name, measurement, units] = parameter;
 
                     return {
                         'name': name,
                         'param_name': name,
-                        'data_type': data_type ? data_type : '?',
-                        'value': value,
+                        'data_type': measurement['dataType'] ? measurement['dataType'] : '?',
+                        'value': measurement['value'],
                         'units': units ? units : fake_units[name.charCodeAt(0) % 4]
                     }
                 })
