@@ -85,7 +85,7 @@ export default class TimeSeries extends Component {
                     // console.log(this.state.selectedRows.includes(key));
                     if (this.state.selectedRows.includes(key)) {
                         const newEntry = {
-                            "value": entry[1],
+                            "value": entry[1]['value'],
                             "date": timestamp,
                             "source": key
                         }
