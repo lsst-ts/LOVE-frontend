@@ -35,8 +35,9 @@ class App extends Component {
         }
       }
     }
-    this.managerInterface = new ManagerInterface('all', this.receiveAllMsg);
-
+    this.managerInterface = new ManagerInterface();
+    this.managerInterface.subscribeToTelemetry('all', this.receiveAllMsg )
+    
   }
 
   receiveAllMsg = (msg) => {

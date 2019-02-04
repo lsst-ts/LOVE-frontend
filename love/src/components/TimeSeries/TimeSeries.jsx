@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import { subscribeToTelemetry } from '../../Utils';
-import { unsubscribeToTelemetry } from '../../Utils';
+import ManagerInterface from '../../Utils';
 import Vega from '../Vega/Vega';
 
 export default class TimeSeries extends Component {
@@ -15,6 +14,8 @@ export default class TimeSeries extends Component {
             step: 0,
             lastMessageData: []
         }
+
+        this.managerInterface = new ManagerInterface();
     }
 
     getSpec = (data, name) => {
@@ -59,7 +60,7 @@ export default class TimeSeries extends Component {
         });
         const streamsSet = new Set(streams);
         streamsSet.forEach((stream) => {
-            subscribeToTelemetry(stream, this.onReceiveMsg);
+            this.managerInterface.subscribeToTelemetry(stream, this.onReceiveMsg);
         });
         this.setState({
             telemetryName: selectedRows[0].key,
@@ -72,7 +73,7 @@ export default class TimeSeries extends Component {
 
     componentWillUnmount = () => {
         this.state.subscribedStreams.forEach((stream) => {
-            unsubscribeToTelemetry(stream, (msg) => console.log(msg));
+            this.managerInterface.unsubscribeToTelemetry(stream, (msg) => console.log(msg));
         });
     }
 
@@ -91,7 +92,7 @@ export default class TimeSeries extends Component {
                         const newEntry = {
                             "value": entry[1]['value'],
                             "date": timestamp,
-                            "source": key,
+                            "source": key.split('-')[2],
                             "dataType": entry[1]['dataType'],
                         }
                         newEntries.push(newEntry);
