@@ -35,7 +35,7 @@ class App extends Component {
         }
       }
     }
-    subscribeToTelemetry('interestedProposal', this.receiveAllMsg);
+    subscribeToTelemetry('all', this.receiveAllMsg);
   }
 
   receiveAllMsg = (msg) => {
@@ -46,7 +46,6 @@ class App extends Component {
     }
     
     if (typeof data.data === 'object') {
-      console.log(data.data);
       // debugger;
       let newTelemetries = Object.assign({}, this.state.telemetries);
       let timestamp = new Date();
@@ -63,7 +62,7 @@ class App extends Component {
 
       newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
       this.setState({ telemetries: newTelemetries });
-      unsubscribeToTelemetry('interestedProposal', (a)=>{
+      unsubscribeToTelemetry('all', (a)=>{
         console.log('unsubscribed calback')
       })
     }
