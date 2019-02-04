@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
-import { subscribeToTelemetry, unsubscribeToTelemetry } from './Utils'
+import ManagerInterface from './Utils'
 
 class App extends Component {
 
@@ -35,7 +35,8 @@ class App extends Component {
         }
       }
     }
-    subscribeToTelemetry('all', this.receiveAllMsg);
+    this.managerInterface = new ManagerInterface('all', this.receiveAllMsg);
+
   }
 
   receiveAllMsg = (msg) => {
@@ -62,7 +63,7 @@ class App extends Component {
 
       newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
       this.setState({ telemetries: newTelemetries });
-      unsubscribeToTelemetry('all', (a)=>{
+      this.managerInterface.unsubscribeToTelemetry('all', (a)=>{
         console.log('unsubscribed calback')
       })
     }
