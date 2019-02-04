@@ -8,7 +8,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
-import { subscribeToTelemetry } from './Utils'
+import { subscribeToTelemetry, unsubscribeToTelemetry } from './Utils'
 
 class App extends Component {
 
@@ -35,13 +35,19 @@ class App extends Component {
         }
       }
     }
-    subscribeToTelemetry('all', this.receiveAllMsg);
+    subscribeToTelemetry('interestedProposal', this.receiveAllMsg);
   }
 
   receiveAllMsg = (msg) => {
     let data = JSON.parse(msg.data);
+    if(typeof data.data === "string"){
+      console.log(data.data);
+      return;
+    }
+    
     if (typeof data.data === 'object') {
-
+      console.log(data.data);
+      // debugger;
       let newTelemetries = Object.assign({}, this.state.telemetries);
       let timestamp = new Date();
       timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
@@ -57,6 +63,9 @@ class App extends Component {
 
       newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
       this.setState({ telemetries: newTelemetries });
+      unsubscribeToTelemetry('interestedProposal', (a)=>{
+        console.log('unsubscribed calback')
+      })
     }
   }
 
