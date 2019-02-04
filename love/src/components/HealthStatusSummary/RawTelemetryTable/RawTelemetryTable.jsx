@@ -286,12 +286,18 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     updateSelectedList = (checked, key) => {
-
+        const splitKey = key.split('-');
+        const params = this.props.telemetries[splitKey[1]].parameters;
+        const value = params[splitKey[2]];
         let selectedRows = this.state.selectedRows;
+        let newRow = {
+            key: key,
+            value: value
+        }
         if (checked && selectedRows.indexOf(key) < 0)
-            selectedRows.push(key);
+            selectedRows.push(newRow);
         if (!checked)
-            selectedRows.splice(selectedRows.indexOf(key), 1);
+            selectedRows.splice(selectedRows.map((row) => row.key).indexOf(key), 1);
         if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
@@ -411,7 +417,7 @@ export default class RawTelemetryTable extends PureComponent {
                             data.sort(this.sortData).map((row) => {
                                 if (this.testFilter(row)) {
                                     let key = [row.component, row.stream, row.param_name].join('-');
-                                    let isChecked = this.state.selectedRows.indexOf(key) >= 0;
+                                    let isChecked = this.state.selectedRows.map((r) => r.key).indexOf(key) >= 0;
 
                                     return (
                                         <React.Fragment key={key}>
@@ -522,7 +528,8 @@ export default class RawTelemetryTable extends PureComponent {
                 <div className={styles.selectionContainer}>
                     TELEMETRIES:
                     <span className={styles.selectionList}>
-                        {this.state.selectedRows.map((telemetryKey) => {
+                        {this.state.selectedRows.map((telemetryKeyValue) => {
+                            const telemetryKey = telemetryKeyValue.key;
                             const telemetryName = telemetryKey.split('-')[2];
                             return <TelemetrySelectionTag
                                 key={telemetryKey}
