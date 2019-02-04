@@ -110,8 +110,11 @@ export default class TimeSeries extends Component {
             this.state.step === 0 ?
                 <RawTelemetryTable telemetries={this.props.telemetries} {...this.state} columnsToDisplay={columnsToDisplay} checkedFilterColumn='units' onSetSelection={this.onSetSelection}></RawTelemetryTable>
                 :
-                <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
-                    lastMessageData={this.state.lastMessageData}></Vega>
+                <>
+                    <h1>Plot title</h1>
+                    <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
+                        lastMessageData={this.state.lastMessageData}></Vega>
+                </>
         )
     }
 }
