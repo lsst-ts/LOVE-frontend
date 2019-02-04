@@ -10,14 +10,10 @@ export default class TimeSeries extends Component {
         super();
 
         this.state = {
+            specDataType: "quantitative",
             telemetryName: "test",
             step: 0,
-            lastMessageData : [{
-                date: new Date(),
-                value: 0,
-                source: 1
-            }]
-            
+            lastMessageData: []
         }
     }
 
@@ -29,7 +25,7 @@ export default class TimeSeries extends Component {
                 "values": data,
                 "name": "telemetries"
             },
-            "mark": "line",
+            "mark": this.state.specDataType === "quantitative" ? "line" : "point",
             "encoding": {
                 "x": {
                     "field": "date",
@@ -38,7 +34,7 @@ export default class TimeSeries extends Component {
                 },
                 "y": {
                     "field": "value",
-                    "type": "quantitative",
+                    "type": this.state.specDataType,
                     "title": name
                 },
                 "color": {
@@ -50,16 +46,24 @@ export default class TimeSeries extends Component {
         }
     }
 
+    getSpecDataType = (dataType) => {
+        if (dataType === 'String')
+            return "nominal";
+        else
+            return "quantitative";
+    }
+
     onSetSelection = (selectedRows) => {
-        const streams = selectedRows.map((rowKey) => {
-            return rowKey.split('-')[1];
+        const streams = selectedRows.map((rowKeyValue) => {
+            return rowKeyValue.key.split('-')[1];
         });
         const streamsSet = new Set(streams);
         streamsSet.forEach((stream) => {
             subscribeToTelemetry(stream, this.onReceiveMsg);
         });
         this.setState({
-            telemetryName: selectedRows[0],
+            telemetryName: selectedRows[0].key,
+            specDataType: this.getSpecDataType(selectedRows[0].value.dataType),
             subscribedStreams: streamsSet,
             selectedRows: selectedRows,
             step: 1
@@ -83,11 +87,12 @@ export default class TimeSeries extends Component {
                     const key = ['scheduler', stream, entry[0]].join('-');
                     // console.log(key, this.state.selectedRows);
                     // console.log(this.state.selectedRows.includes(key));
-                    if (this.state.selectedRows.includes(key)) {
+                    if (this.state.selectedRows.map((r) => r.key).includes(key)) {
                         const newEntry = {
-                            "value": entry[1],
+                            "value": entry[1]['value'],
                             "date": timestamp,
-                            "source": key
+                            "source": key,
+                            "dataType": entry[1]['dataType'],
                         }
                         newEntries.push(newEntry);
                     }
@@ -104,8 +109,8 @@ export default class TimeSeries extends Component {
             this.state.step === 0 ?
                 <RawTelemetryTable telemetries={this.props.telemetries} {...this.state} columnsToDisplay={columnsToDisplay} checkedFilterColumn='units' onSetSelection={this.onSetSelection}></RawTelemetryTable>
                 :
-                <Vega spec={this.getSpec(this.state.data, this.state.telemetryName.split('-')[2])}
-                      lastMessageData={this.state.lastMessageData}></Vega>
+                <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
+                    lastMessageData={this.state.lastMessageData}></Vega>
         )
     }
 }
