@@ -477,7 +477,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                                     {'}'}
                                                                 </p>
                                                                 <div onClick={() => this.setHealthFunction(key)}>
-                                                                    <Button className={styles.setButton}>
+                                                                    <Button title="Set health status function" className={styles.setButton}>
                                                                         Set
                                                                     </Button>
                                                                 </div>
@@ -538,7 +538,7 @@ export default class RawTelemetryTable extends PureComponent {
                                 remove={() => this.updateSelectedList(false, telemetryKey)}></TelemetrySelectionTag>
                         })}
                     </span>
-                    <Button className={styles.selectionSetButton}
+                    <Button title="Set selected telemetries" className={styles.selectionSetButton}
                         onClick={(ev) => { this.setSelection(this.state.selectedRows, ev) }}> Set </Button>
                 </div>
             </div>
