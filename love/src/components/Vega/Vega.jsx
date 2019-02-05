@@ -67,13 +67,15 @@ export default class Vega extends Component {
                  "labelColor": this.getCSSColorByVariableName('--base-font-color'),
                  "titleColor": this.getCSSColorByVariableName('--base-font-color')
              },
+             "view": {
+                "width": 600
+             }
              
          }   
         }, this.props.spec);
         
-        vegae(this.vegaContainer.current, spec).then( (vegaEmbedResult) => {
+        vegae(this.vegaContainer.current, spec ,{renderer:'svg'}).then( (vegaEmbedResult) => {
             let minimumX = 0;
-            vegaEmbedResult.view.renderer("svg");
             this.vegaEmbedResult = vegaEmbedResult;
         });
 
