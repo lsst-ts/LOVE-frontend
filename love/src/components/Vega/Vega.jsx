@@ -74,7 +74,8 @@ export default class Vega extends Component {
          }   
         }, this.props.spec);
         
-        vegae(this.vegaContainer.current, spec ,{renderer:'svg'}).then( (vegaEmbedResult) => {
+        vegae(this.vegaContainer.current, spec,{renderer:'svg'} ).then( (vegaEmbedResult) => {
+
             let minimumX = 0;
             this.vegaEmbedResult = vegaEmbedResult;
         });
