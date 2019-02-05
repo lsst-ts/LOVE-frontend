@@ -460,5 +460,8 @@ let telemetries = {
         "receptionTimestamp": "2019/01/15 19:43:40"
     }
 }
+test('dummy test', () =>{
 
+    expect(1).toEqual(1);
+});
 export default telemetries;
