@@ -10,8 +10,12 @@ export default class ManagerInterface {
         this.callback = callback;
         if (this.socket === null){
             this.socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/', {
-                onopen: e => this.socket.json({ "option": "subscribe", "data": name }),
-                onmessage: this.callback,
+                onopen: e => {
+                    this.socket.json({ "option": "subscribe", "data": name })
+                },
+                onmessage: (msg)=>{
+                    this.callback(msg)
+                },
             });
             return;
         }
@@ -24,10 +28,3 @@ export default class ManagerInterface {
     }
 }
 
-export function subscribeToTelemetry() {
-    console.log('adsfafds')
-}
-
-export function unsubscribeToTelemetry() {
-    console.log('adsfafds')
-}
