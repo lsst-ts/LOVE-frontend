@@ -10,7 +10,6 @@ import React from 'react';
 import 'jest-dom/extend-expect'
 import TimeSeries from './TimeSeries';
 import {Server} from 'mock-socket';
-import sockette from 'sockette';
 
 /* jest.mock('../../Utils', () => {
     return jest.fn().mockImplementation(() => {
