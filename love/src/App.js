@@ -32,7 +32,7 @@ class App extends Component {
   }
 
   subscribeToTelemetry = (name, callback) => {
-    const socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/', {
+    const socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/ws/subscription/', {
       onopen: e => socket.json({ "option": "subscribe", "data": name }),
       onmessage: callback,
     });
@@ -85,11 +85,11 @@ class App extends Component {
 
         <BrowserRouter>
           <Switch>
-            <Route path='/health-status-summary' 
+            <Route path='/health-status-summary'
               render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
-            <Route path='/dm-flow' 
+            <Route path='/dm-flow'
               component={DataManagementFlow} />
-            <Route path='/' 
+            <Route path='/'
               component={ComponentIndex} />
           </Switch>
         </BrowserRouter>
@@ -99,4 +99,3 @@ class App extends Component {
 }
 
 export default App;
-
