@@ -77,7 +77,28 @@ const telemetries = {
 "WHEN the user clicks a checkbox of a specific row"
 "AND presses the SET button"
 "THEN shows a plot with some text indicating the name of the telemetry"
-test('plot works', async () => {
+jest.useFakeTimers();
+
+describe('my ws test', () => {
+  it('connects', async () => {
+    process.env.REACT_APP_WEBSOCKET_HOST  = 'mockhost:8000';
+    const url = 'ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/';
+    const mockServer = new Server(url);
+    const messageObject =  {
+            data:{
+                cameraConfig: {
+                    filterChangeTime: {
+                        value: 0.8172357870183607,
+                        dataType: "Float"
+                    }
+                }
+            }    
+    };
+    mockServer.on('connection', socket => {
+        socket.send(JSON.stringify(messageObject));
+        socket.close();
+    });
+      
     const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
     const { getByAltText, getByText, getByTitle, debug, getByTestId } = timeSeries;
     const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
@@ -87,49 +108,15 @@ test('plot works', async () => {
     
     const setButton = getByTitle("Set selected telemetries");
     fireEvent.click(setButton);
-
-    await waitForElement(() => getByText("filterChangeTime"));
-
-    setTimeout(()=>{
-        const vegaElement = getByText("filterChangeTime");
-        expect(vegaElement).toBeTruthy();
-
-    },1000)
-});
-
-
-
-
-
-
-jest.useFakeTimers();
-
-describe('my ws test', () => {
-  it.only('connects', () => {
-    const msgs = [];
-    const url = 'ws://localhost:8080';
-    const mockServer = new Server(url);
-    mockServer.on('connection', server => {
-        server.send('you are connected');
-        debugger;
-    });
-
-    debugger;
-    const socket = sockette(url,{
-        onopen: e => {
-            console.log('open');
-            debugger;
-        },
-        onmessage: msg => {
-            console.log('callback');
-            msgs.push(msg);
-            debugger;
-        }
-    })
-
-
+    
     jest.runOnlyPendingTimers();
 
-    expect(msgs.length).toBe(1);
+    
+    await waitForElement(() => getByText("filterChangeTime"));
+    const vegaElement = getByText("filterChangeTime");
+    expect(vegaElement).toBeTruthy();
+
+
+
   });
 });
