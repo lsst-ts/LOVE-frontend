@@ -10,11 +10,13 @@ import PropTypes from 'prop-types';
  */
 export default class Vega extends Component {
 
-    constructor(){
+    constructor() {
         super();
         this.vegaContainer = React.createRef();
         this.vegaEmbedResult = null;
+        this.data = [];
     }
+
     static propTypes = {
         /**
          * Object that defines the properties to be used by Vega-lite
@@ -47,57 +49,74 @@ export default class Vega extends Component {
         }
     }
 
+    componentDidUpdate = (prevProps, prevState) => {
+        if (prevProps.lastMessageData !== this.props.lastMessageData) {
+            if (this.data.length === 0)
+                this.remountPlot();
+            this.data.push(... this.props.lastMessageData);
+            if (this.vegaEmbedResult) {
+                const timeWindowStart = (new Date()).getTime() - 30 * 1000;
+                const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
+                debugger;
+
+                var changeSet = vega
+                    .changeset()
+                    .insert(this.data)
+                this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
+            }
+        }
+    }
 
     getCSSColorByVariableName = (varName) => {
         return getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
     }
 
-
-    componentDidMount() {
-
-        // check https://vega.github.io/vega/docs/config/ for more config options
+    remountPlot = () => {
+        const labelFontSize = 14;
+        const titleFontSize = 16;
         const spec = Object.assign({
-         "config":{
-             "axis":{
-                 "labelColor" : this.getCSSColorByVariableName('--base-font-color'),
-                 "titleColor" : this.getCSSColorByVariableName('--base-font-color'),
-                 "grid": false,
-             },
-             "legend": {
-                 "labelColor": this.getCSSColorByVariableName('--base-font-color'),
-                 "titleColor": this.getCSSColorByVariableName('--base-font-color')
-             },
-             "view": {
-                "width": 600
-             }
-             
-         }   
+            "config": {
+                "axis": {
+                    "labelColor": this.getCSSColorByVariableName('--base-font-color'),
+                    "titleColor": this.getCSSColorByVariableName('--base-font-color'),
+                    "grid": false,
+                },
+                "legend": {
+                    "labelColor": this.getCSSColorByVariableName('--base-font-color'),
+                    "titleColor": this.getCSSColorByVariableName('--base-font-color'),
+                    "labelFontSize": labelFontSize,
+                    "titleFontSize": titleFontSize,
+                    "titleLimit": 160 * titleFontSize,
+                    "labelLimit": 15 * labelFontSize,
+                },
+                "view": {
+                    "width": 600,
+                },
+
+
+            },
         }, this.props.spec);
-        
-        vegae(this.vegaContainer.current, spec,{renderer:'svg'} ).then( (vegaEmbedResult) => {
+
+        vegae(this.vegaContainer.current, spec, { renderer: 'svg' }).then((vegaEmbedResult) => {
 
             let minimumX = 0;
             this.vegaEmbedResult = vegaEmbedResult;
         });
+    }
 
-
-
+    componentDidMount() {
+        this.remountPlot();
     }
 
     render() {
-        if(this.vegaEmbedResult){
-            const timeWindowStart = (new Date()).getTime() - 30*1000 ;
-            const dateOffset = (new Date()).getTimezoneOffset()*60*1000;
-            
-            var changeSet = vega
-            .changeset()
-            .insert(this.props.lastMessageData)
-            .remove( (t)  => {
-                const dataDate = (new Date(t.date)).getTime() - dateOffset;
-                return (dataDate  < timeWindowStart );
-            });
-            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
+        if (this.vegaEmbedResult) {
+            const timeWindowStart = (new Date()).getTime() - 30 * 1000;
+            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
 
+            var changeSet = vega
+                .changeset()
+                .insert(this.props.lastMessageData)
+            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
 
         return (
