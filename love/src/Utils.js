@@ -35,10 +35,33 @@ export default class ManagerInterface {
     }
 }
 
-export function subscribeToTelemetry() {
-    console.log('adsfafds')
-}
+/**
+ * Creates a list of vega friendly objects with values 
+ * for each parameter in parametersNames extracted from a 
+ * telemetries object received from the LOVE-manager
+ * @param {object} telemetries 
+ * @param {Array} parametersNames 
+ * @param {date} timestamp 
+ */
+export const telemetryObjectToVegaList = (telemetries, parametersNames, timestamp) =>{
 
-export function unsubscribeToTelemetry() {
-    console.log('adsfafds')
+    const newEntries = [];
+
+    Object.keys(telemetries).forEach((stream) => {
+        Object.entries(telemetries[stream]).forEach((entry) => {
+            const key = ['scheduler', stream, entry[0]].join('-');
+            if (parametersNames.map((r) => r.key).includes(key)) {
+                const newEntry = {
+                    "value": Array.isArray(entry[1].value) ? entry[1]['value'][0]: entry[1]['value'],
+                    "date": timestamp,
+                    "source": key.split('-')[2],
+                    "dataType": entry[1]['dataType'],
+                }
+                newEntries.push(newEntry);
+            }
+        });
+    });
+
+    return newEntries;
+
 }
