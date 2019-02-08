@@ -53,14 +53,23 @@ export default class Vega extends Component {
         if (prevProps.lastMessageData !== this.props.lastMessageData) {
             if (this.data.length === 0)
                 this.remountPlot();
-            this.data.push(... this.props.lastMessageData);
-            if (this.vegaEmbedResult) {
-                const timeWindowStart = (new Date()).getTime() - 30 * 1000;
-                const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
-                debugger;
 
+            const dateStart = (new Date()).getTime() - 15 * 1000;
+            const dateEnd = new Date();
+            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
+            
+            this.data.push(...this.props.lastMessageData);
+            
+            this.data = this.data.filter( (data)=>{
+                const date = new Date(data.date) - dateOffset;;
+                return date >= dateStart && date <= dateEnd;
+            });
+
+            if (this.vegaEmbedResult) {
+                
                 var changeSet = vega
                     .changeset()
+                    .remove(t => true)
                     .insert(this.data)
                 this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
             }
