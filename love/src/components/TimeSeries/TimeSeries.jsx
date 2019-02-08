@@ -3,6 +3,7 @@ import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelem
 import ManagerInterface from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
+import moment from 'moment'
 
 export default class TimeSeries extends Component {
 
@@ -108,6 +109,14 @@ export default class TimeSeries extends Component {
             })
         }
     }
+
+    setTimeWindow = (timeWindow) => {
+        let date = new Date();
+        let newDate = moment(date).subtract(timeWindow.value, timeWindow.unit).toDate()
+        console.log(timeWindow);
+        console.log(date, newDate);
+    }
+
     render() {
         const columnsToDisplay = ['selection_column', 'component', 'stream', 'name', 'param_name', 'data_type', 'value', 'units'];
         return (
@@ -116,7 +125,7 @@ export default class TimeSeries extends Component {
                 :
                 <>
                     <h1>Plot title</h1>
-                    <TimeSeriesControls liveMode={true}></TimeSeriesControls>
+                    <TimeSeriesControls liveMode={true} setTimeWindow={this.setTimeWindow}></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}></Vega>
                 </>
