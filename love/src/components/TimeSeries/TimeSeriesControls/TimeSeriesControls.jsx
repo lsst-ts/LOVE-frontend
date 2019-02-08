@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 export default class TimeSeriesControls extends Component {
     static propTypes = {
         /** Display time window in live mode if true, otherwise display date selection*/
-        liveMode: PropTypes.bool
+        liveMode: PropTypes.bool,
+        /** Function to be called when changing the time window*/
+        setTimeWindow: PropTypes.func.isRequired,
     }
     static defaultProps = {
         liveMode: false,
@@ -17,7 +19,7 @@ export default class TimeSeriesControls extends Component {
             <div>
                 {
                     this.props.liveMode ?
-                        <TimeWindow></TimeWindow>
+                        <TimeWindow setTimeWindow={this.props.setTimeWindow}></TimeWindow>
                         :
                         <DateSelection></DateSelection>
                 }
