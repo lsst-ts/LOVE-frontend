@@ -46,7 +46,10 @@ export default class Vega extends Component {
                 x: { field: 'a', type: 'ordinal' },
                 y: { field: 'b', type: 'quantitative' },
             }
-        }
+        },
+
+        dateEnd: Infinity,
+        dateStart: -Infinity
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -59,8 +62,21 @@ export default class Vega extends Component {
                 const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
                 debugger;
 
+            const {dateStart, dateEnd} = this.props;
+            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
+            
+            this.data.push(...this.props.lastMessageData);
+            
+            this.data = this.data.filter( (data)=>{
+                const date = new Date(data.date) - dateOffset;;
+                return date >= dateStart && date <= dateEnd;
+            });
+
+            if (this.vegaEmbedResult) {
+                
                 var changeSet = vega
                     .changeset()
+                    .remove(t => true)
                     .insert(this.data)
                 this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
             }
@@ -99,7 +115,6 @@ export default class Vega extends Component {
 
         vegae(this.vegaContainer.current, spec, { renderer: 'svg' }).then((vegaEmbedResult) => {
 
-            let minimumX = 0;
             this.vegaEmbedResult = vegaEmbedResult;
         });
     }
@@ -110,9 +125,6 @@ export default class Vega extends Component {
 
     render() {
         if (this.vegaEmbedResult) {
-            const timeWindowStart = (new Date()).getTime() - 30 * 1000;
-            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
-
             var changeSet = vega
                 .changeset()
                 .insert(this.props.lastMessageData)
