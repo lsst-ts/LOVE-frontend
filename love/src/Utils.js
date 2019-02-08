@@ -34,11 +34,3 @@ export default class ManagerInterface {
         this.callback = callback;
     }
 }
-
-export function subscribeToTelemetry() {
-    console.log('adsfafds')
-}
-
-export function unsubscribeToTelemetry() {
-    console.log('adsfafds')
-}
