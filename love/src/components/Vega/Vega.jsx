@@ -53,7 +53,7 @@ export default class Vega extends Component {
         if (prevProps.lastMessageData !== this.props.lastMessageData) {
             if (this.data.length === 0)
                 this.remountPlot();
-            this.data.push(... this.props.lastMessageData);
+            this.data.push(...this.props.lastMessageData);
             if (this.vegaEmbedResult) {
                 const timeWindowStart = (new Date()).getTime() - 30 * 1000;
                 const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
