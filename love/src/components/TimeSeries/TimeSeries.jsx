@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import ManagerInterface from '../../Utils';
+import ManagerInterface, {telemetryObjectToVegaList} from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import moment from 'moment'
@@ -84,26 +84,10 @@ export default class TimeSeries extends Component {
 
     onReceiveMsg = (msg) => {
         let data = JSON.parse(msg.data);
-        let newEntries = [];
         if (typeof data.data === 'object') {
             let timestamp = new Date();
             timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
-            Object.keys(data.data).forEach((stream) => {
-                Object.entries(data.data[stream]).forEach((entry) => {
-                    const key = ['scheduler', stream, entry[0]].join('-');
-                    // console.log(key, this.state.selectedRows);
-                    // console.log(this.state.selectedRows.includes(key));
-                    if (this.state.selectedRows.map((r) => r.key).includes(key)) {
-                        const newEntry = {
-                            "value": entry[1]['value'],
-                            "date": timestamp,
-                            "source": key.split('-')[2],
-                            "dataType": entry[1]['dataType'],
-                        }
-                        newEntries.push(newEntry);
-                    }
-                });
-            });
+            const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp)
             this.setState({
                 lastMessageData: newEntries,
             })
@@ -127,7 +111,9 @@ export default class TimeSeries extends Component {
                     <h1>Plot title</h1>
                     <TimeSeriesControls liveMode={true} setTimeWindow={this.setTimeWindow}></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
-                        lastMessageData={this.state.lastMessageData}></Vega>
+                        lastMessageData={this.state.lastMessageData}
+                        dateStart={(new Date()).getTime() - 15 * 1000}
+                        dateEnd={new Date()}></Vega>
                 </>
         )
     }
