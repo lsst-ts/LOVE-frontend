@@ -90,7 +90,7 @@ export default class TimeSeries extends Component {
                     // console.log(this.state.selectedRows.includes(key));
                     if (this.state.selectedRows.map((r) => r.key).includes(key)) {
                         const newEntry = {
-                            "value": entry[1]['value'],
+                            "value": Array.isArray(entry[1].value) ? entry[1]['value'][0]: entry[1]['value'],
                             "date": timestamp,
                             "source": key.split('-')[2],
                             "dataType": entry[1]['dataType'],
