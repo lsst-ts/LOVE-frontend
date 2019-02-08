@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
 import ManagerInterface from '../../Utils';
 import Vega from '../Vega/Vega';
+import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 
 export default class TimeSeries extends Component {
 
@@ -115,6 +116,7 @@ export default class TimeSeries extends Component {
                 :
                 <>
                     <h1>Plot title</h1>
+                    <TimeSeriesControls></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}></Vega>
                 </>
