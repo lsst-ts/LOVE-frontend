@@ -4,6 +4,7 @@ import ManagerInterface, { telemetryObjectToVegaList } from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import moment from 'moment'
+import { getFakeUnits } from '../../Utils'
 
 export default class TimeSeries extends Component {
 
@@ -45,7 +46,7 @@ export default class TimeSeries extends Component {
                 "y": {
                     "field": "value",
                     "type": this.state.specDataType,
-                    "title": name
+                    "title": getFakeUnits(name)
                 },
                 "color": {
                     "field": "source",
