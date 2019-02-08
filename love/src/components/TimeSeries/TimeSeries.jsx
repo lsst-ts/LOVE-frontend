@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import ManagerInterface from '../../Utils';
+import ManagerInterface, {telemetryObjectToVegaList} from '../../Utils';
 import Vega from '../Vega/Vega';
 
 export default class TimeSeries extends Component {
@@ -82,26 +82,10 @@ export default class TimeSeries extends Component {
 
     onReceiveMsg = (msg) => {
         let data = JSON.parse(msg.data);
-        let newEntries = [];
         if (typeof data.data === 'object') {
             let timestamp = new Date();
             timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
-            Object.keys(data.data).forEach((stream) => {
-                Object.entries(data.data[stream]).forEach((entry) => {
-                    const key = ['scheduler', stream, entry[0]].join('-');
-                    // console.log(key, this.state.selectedRows);
-                    // console.log(this.state.selectedRows.includes(key));
-                    if (this.state.selectedRows.map((r) => r.key).includes(key)) {
-                        const newEntry = {
-                            "value": Array.isArray(entry[1].value) ? entry[1]['value'][0]: entry[1]['value'],
-                            "date": timestamp,
-                            "source": key.split('-')[2],
-                            "dataType": entry[1]['dataType'],
-                        }
-                        newEntries.push(newEntry);
-                    }
-                });
-            });
+            const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp)
             this.setState({
                 lastMessageData: newEntries,
             })
