@@ -46,7 +46,10 @@ export default class Vega extends Component {
                 x: { field: 'a', type: 'ordinal' },
                 y: { field: 'b', type: 'quantitative' },
             }
-        }
+        },
+
+        dateEnd: Infinity,
+        dateStart: -Infinity
     }
 
     componentDidUpdate = (prevProps, prevState) => {
@@ -54,8 +57,7 @@ export default class Vega extends Component {
             if (this.data.length === 0)
                 this.remountPlot();
 
-            const dateStart = (new Date()).getTime() - 15 * 1000;
-            const dateEnd = new Date();
+            const {dateStart, dateEnd} = this.props;
             const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
             
             this.data.push(...this.props.lastMessageData);
