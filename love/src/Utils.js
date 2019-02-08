@@ -4,18 +4,29 @@ export default class ManagerInterface {
     constructor(name, callback) {
         this.callback = callback;
         this.socket = null;
+        this.socketPromise = null;
     }
 
     subscribeToTelemetry = (name, callback) => {
         this.callback = callback;
-        if (this.socket === null){
-            this.socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/', {
-                onopen: e => this.socket.json({ "option": "subscribe", "data": name }),
-                onmessage: this.callback,
-            });
-            return;
+        if (this.socketPromise === null && this.socket === null) {
+            this.socketPromise = new Promise((resolve, reject) => {
+                this.socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/', {
+                    onopen: e => this.socket.json({ "option": "subscribe", "data": name }),
+                    onmessage: (msg) => {
+                        this.callback(msg);
+                        resolve();
+                    },
+                });
+                console.log(this.socket)
+            })
         }
-        this.socket.json({ "option": "subscribe", "data": name })
+        else{
+            this.socketPromise.then(() => {
+                this.socket.json({ "option": "subscribe", "data": name });
+            });
+
+        }
     }
 
     unsubscribeToTelemetry = (name, callback) => {

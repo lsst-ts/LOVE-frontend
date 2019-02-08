@@ -40,7 +40,10 @@ export default class TimeSeries extends Component {
                 },
                 "color": {
                     "field": "source",
-                    "type": "nominal"
+                    "type": "nominal",
+                    "legend": {
+                        "title": "Parameter Names" + " ".repeat(32),
+                    },
                 }
 
             }
