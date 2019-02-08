@@ -65,3 +65,12 @@ export const telemetryObjectToVegaList = (telemetries, parametersNames, timestam
     return newEntries;
 
 }
+
+/**
+ * Returns the value for a fake unit name, based on the name of a telemetry
+ * @param {string} name
+ */
+export const getFakeUnits = (name) => {
+    const fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
+    return fake_units[name.charCodeAt(0) % 4];
+}
