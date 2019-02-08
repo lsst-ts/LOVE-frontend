@@ -16,11 +16,11 @@ export default class TimeSeries extends Component {
             telemetryName: "test",
             step: 0,
             lastMessageData: [],
-            dateStart: new Date().getTime() - 15 * 1000,
+            dateStart: new Date().getTime() - 60 * 1000,
             dateEnd: new Date(),
             liveMode: true,
             timeWindow: {
-                value: 5,
+                value: 1,
                 unit: "minutes"
             }
         }
@@ -113,7 +113,6 @@ export default class TimeSeries extends Component {
     }
 
     render() {
-        console.log(this.state.dateStart, this.state.dateEnd)
         const columnsToDisplay = ['selection_column', 'component', 'stream', 'name', 'param_name', 'data_type', 'value', 'units'];
         return (
             this.state.step === 0 ?
