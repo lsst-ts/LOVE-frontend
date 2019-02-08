@@ -1,0 +1,21 @@
+.datesContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.fromDateContainer {
+    display: flex;
+    padding: 0em 1em;
+}
+
+.toDateContainer {
+    display: flex;
+    padding: 0em 1em;
+}
+
+.datetimeContainer {
+}
+
+.datetimeDescription {
+    padding: 0em 0.6em;
+}

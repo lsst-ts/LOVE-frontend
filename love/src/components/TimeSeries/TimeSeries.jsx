@@ -116,7 +116,7 @@ export default class TimeSeries extends Component {
                 :
                 <>
                     <h1>Plot title</h1>
-                    <TimeSeriesControls></TimeSeriesControls>
+                    <TimeSeriesControls liveMode={true}></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}></Vega>
                 </>
