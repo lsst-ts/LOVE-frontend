@@ -34,3 +34,26 @@ export default class ManagerInterface {
         this.callback = callback;
     }
 }
+
+export const telemetryObjectToVegaList = (telemetries, parametersNames, timestamp) =>{
+
+    const newEntries = [];
+
+    Object.keys(telemetries).forEach((stream) => {
+        Object.entries(telemetries[stream]).forEach((entry) => {
+            const key = ['scheduler', stream, entry[0]].join('-');
+            if (parametersNames.map((r) => r.key).includes(key)) {
+                const newEntry = {
+                    "value": Array.isArray(entry[1].value) ? entry[1]['value'][0]: entry[1]['value'],
+                    "date": timestamp,
+                    "source": key.split('-')[2],
+                    "dataType": entry[1]['dataType'],
+                }
+                newEntries.push(newEntry);
+            }
+        });
+    });
+
+    return newEntries;
+
+}
