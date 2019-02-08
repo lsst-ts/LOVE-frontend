@@ -40,17 +40,17 @@ export default class ManagerInterface {
  * for each parameter in parametersNames extracted from a 
  * telemetries object received from the LOVE-manager
  * @param {object} telemetries 
- * @param {Array} parametersNames 
+ * @param {Array} parametersKeys 
  * @param {date} timestamp 
  */
-export const telemetryObjectToVegaList = (telemetries, parametersNames, timestamp) =>{
+export const telemetryObjectToVegaList = (telemetries, selectedRows, timestamp) =>{
 
     const newEntries = [];
 
     Object.keys(telemetries).forEach((stream) => {
         Object.entries(telemetries[stream]).forEach((entry) => {
             const key = ['scheduler', stream, entry[0]].join('-');
-            if (parametersNames.map((r) => r.key).includes(key)) {
+            if (selectedRows.map((r) => r.key).includes(key)) {
                 const newEntry = {
                     "value": Array.isArray(entry[1].value) ? entry[1]['value'][0]: entry[1]['value'],
                     "date": timestamp,
@@ -64,4 +64,42 @@ export const telemetryObjectToVegaList = (telemetries, parametersNames, timestam
 
     return newEntries;
 
+};
+
+export const tableRowListToTimeSeriesObject = (selectedRows) =>{
+    let telemetries = {};
+
+    selectedRows.forEach((row)=>{
+        const [component, stream, parameter] = row.key.split('-');
+
+        if(telemetries[stream] === undefined){
+            telemetries[stream] = {}
+        }
+
+
+        telemetries[stream][parameter] = {
+            value: row.value.value, 
+            datatype: row.value.dataType
+        };
+    });
+
+    return telemetries;
 }
+
+export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>{
+
+    dateStart = new Date(dateStart);
+    dateEnd = new Date(dateEnd);
+
+    const telemetries = tableRowListToTimeSeriesObject(selectedRows);
+
+    const time = [];
+    for(let t = dateStart.getTime(); t<=dateEnd.getTime(); t += 2*1000){
+        time.push(new Date(t));
+    }
+
+    const timestamp = new Date();
+    return time.map( (t) =>{
+        return telemetryObjectToVegaList(telemetries, selectedRows,  timestamp.toString());
+    }).flat();
+};
