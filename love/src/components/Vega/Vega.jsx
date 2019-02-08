@@ -110,7 +110,6 @@ export default class Vega extends Component {
 
         vegae(this.vegaContainer.current, spec, { renderer: 'svg' }).then((vegaEmbedResult) => {
 
-            let minimumX = 0;
             this.vegaEmbedResult = vegaEmbedResult;
         });
     }
@@ -121,9 +120,6 @@ export default class Vega extends Component {
 
     render() {
         if (this.vegaEmbedResult) {
-            const timeWindowStart = (new Date()).getTime() - 30 * 1000;
-            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
-
             var changeSet = vega
                 .changeset()
                 .insert(this.props.lastMessageData)
