@@ -7,6 +7,7 @@ import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
 import PropTypes from 'prop-types';
+import { getFakeUnits } from '../../../Utils'
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -328,7 +329,6 @@ export default class RawTelemetryTable extends PureComponent {
     getData = () => {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
-        let fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
         telemetryNames.forEach((telemetryName, telemetryIndex) => {
             // look at one telemetry
             let telemetryData = this.props.telemetries[telemetryName];
@@ -345,7 +345,7 @@ export default class RawTelemetryTable extends PureComponent {
                         'param_name': name,
                         'data_type': measurement['dataType'] ? measurement['dataType'] : '?',
                         'value': measurement['value'],
-                        'units': units ? units : fake_units[name.charCodeAt(0) % 4]
+                        'units': units ? units : getFakeUnits(name)
                     }
                 })
             }
