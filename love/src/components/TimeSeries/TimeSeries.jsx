@@ -99,7 +99,7 @@ export default class TimeSeries extends Component {
 
             this.historicalData = getFakeHistoricalTimeSeries(
                                 this.state.selectedRows, 
-                                (new Date()).getTime() - 15 * 1000,
+                                (new Date()).getTime() - 360 * 1000,
                                 new Date());
             console.log(this.historicalData);
         }
@@ -114,7 +114,7 @@ export default class TimeSeries extends Component {
                     <h1>Plot title</h1>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}
-                        dateStart={(new Date()).getTime() - 15 * 1000}
+                        dateStart={(new Date()).getTime() - 360 * 1000}
                         dateEnd={new Date()}
                         historicalData={this.historicalData}></Vega>
                 </>

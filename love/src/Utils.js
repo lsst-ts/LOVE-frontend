@@ -110,7 +110,13 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
     console.log(time);
     return time.map( (t) =>{
-        return telemetryObjectToVegaList(telemetries, selectedRows, t);
+        let currentValue = telemetryObjectToVegaList(telemetries, selectedRows, t);
+        const dateValue = (new Date(t)).getTime();
+
+        currentValue.forEach( (value)=>{
+            value.value = (Math.cos(dateValue/45*Math.PI/360)+1)/2-0.3+Math.random()*0.3;
+        });
+        return currentValue;
     }).flat();
 };
 
