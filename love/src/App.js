@@ -4,6 +4,7 @@ import sockette from 'sockette';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
+import Login from './components/Login/Login';
 
 import { BrowserRouter } from 'react-router-dom'
 import { Switch, Route } from 'react-router-dom'
@@ -89,6 +90,9 @@ class App extends Component {
               render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
             <Route path='/dm-flow'
               component={DataManagementFlow} />
+            component={Login} />
+            <Route path='/login'
+              component={Login} />
             <Route path='/'
               component={ComponentIndex} />
           </Switch>
