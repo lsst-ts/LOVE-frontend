@@ -20,6 +20,7 @@ export default class TimeSeries extends Component {
             dateEnd: new Date(),
             liveMode: true,
             timeWindow: {
+                id: "1min",
                 value: 1,
                 unit: "minutes"
             }
@@ -120,7 +121,7 @@ export default class TimeSeries extends Component {
                 :
                 <>
                     <h1>Plot title</h1>
-                    <TimeSeriesControls liveMode={this.state.liveMode} setTimeWindow={this.setTimeWindow}></TimeSeriesControls>
+                    <TimeSeriesControls liveMode={this.state.liveMode} setTimeWindow={this.setTimeWindow} timeWindow={this.state.timeWindow}></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}
                         dateStart={this.state.dateStart}
