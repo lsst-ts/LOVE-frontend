@@ -21,12 +21,12 @@ export default class Login extends Component {
                   </p>
                 </div>
                 {/* {% endif %} */}
-                <p>
-                  <label>Username</label>
+                <p className={styles.formEntry}>
+                  <label htmlFor="id_username" className={styles.label}>Username</label>
                   <input type="text" name="username" autofocus="" required="" id="id_username"></input>
                 </p>
-                <p>
-                  <label>Password</label>
+                <p className={styles.formEntry}>
+                  <label htmlFor="id_password"  className={styles.label}>Password</label>
                   <input type="password" name="password" required="" id="id_password"></input>
                 </p>
                 <button type="submit" className={[styles.btn, styles.btnPrimary].join(" ")}>Login</button>
