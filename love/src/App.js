@@ -90,7 +90,6 @@ class App extends Component {
               render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
             <Route path='/dm-flow'
               component={DataManagementFlow} />
-            component={Login} />
             <Route path='/login'
               component={Login} />
             <Route path='/'
