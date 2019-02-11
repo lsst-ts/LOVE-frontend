@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
 import ManagerInterface, {telemetryObjectToVegaList, getFakeHistoricalTimeSeries} from '../../Utils';
 import Vega from '../Vega/Vega';
@@ -6,7 +6,7 @@ import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import moment from 'moment'
 import { getFakeUnits } from '../../Utils'
 
-export default class TimeSeries extends Component {
+export default class TimeSeries extends PureComponent {
 
     constructor() {
         super();
@@ -113,7 +113,6 @@ export default class TimeSeries extends Component {
 
     componentDidUpdate = (prevProps, prevState) =>{
         if(prevState.step !== this.state.step && this.state.step === 1){
-
             this.historicalData = getFakeHistoricalTimeSeries(
                                 this.state.selectedRows, 
                                 (new Date()).getTime() - 3600 * 1000,
