@@ -9,9 +9,9 @@ import {
 import React from 'react';
 import 'jest-dom/extend-expect'
 import TimeSeries from './TimeSeries';
+import {Server} from 'mock-socket';
 
-
-jest.mock('../../Utils', () => {
+/* jest.mock('../../Utils', () => {
     return jest.fn().mockImplementation(() => {
         return {
             subscribeToTelemetry: (name, callback) => {
@@ -29,17 +29,17 @@ jest.mock('../../Utils', () => {
                     })
                 };
                 setTimeout(()=>{
-                    /*
-                        The callback is called exactly after setState({selectedRows})
-                        so this timeout gives it some time  until the state is updated 
-                    */
+                    
+                    //   The callback is called exactly after setState({selectedRows})
+                    //    so this timeout gives it some time  until the state is updated 
+                    
                     callback(message);
 
                 },1000)
             }
         }
     });
-});
+});*/
 
 
 
@@ -76,7 +76,28 @@ const telemetries = {
 "WHEN the user clicks a checkbox of a specific row"
 "AND presses the SET button"
 "THEN shows a plot with some text indicating the name of the telemetry"
-test('plot works', async () => {
+jest.useFakeTimers();
+
+describe('my ws test', () => {
+  it('connects', async () => {
+    process.env.REACT_APP_WEBSOCKET_HOST  = 'mockhost:8000';
+    const url = 'ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/';
+    const mockServer = new Server(url);
+    const messageObject =  {
+            data:{
+                cameraConfig: {
+                    filterChangeTime: {
+                        value: 0.8172357870183607,
+                        dataType: "Float"
+                    }
+                }
+            }    
+    };
+    mockServer.on('connection', socket => {
+        socket.send(JSON.stringify(messageObject));
+        socket.close();
+    });
+      
     const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
     const { getByAltText, getByText, getByTitle, debug, getByTestId } = timeSeries;
     const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
@@ -86,16 +107,15 @@ test('plot works', async () => {
     
     const setButton = getByTitle("Set selected telemetries");
     fireEvent.click(setButton);
+    
+    jest.runOnlyPendingTimers();
 
+    
     await waitForElement(() => getByText("filterChangeTime"));
+    const vegaElement = getByText("filterChangeTime");
+    expect(vegaElement).toBeTruthy();
 
-    debugger;
-    setTimeout(()=>{
-        const vegaElement = getByText("filterChangeTime");
-        expect(vegaElement).toBeTruthy();
 
-    },1000)
+
+  });
 });
-
-
-
