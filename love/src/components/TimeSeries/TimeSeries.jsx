@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import ManagerInterface, {telemetryObjectToVegaList} from '../../Utils';
+import ManagerInterface, { telemetryObjectToVegaList } from '../../Utils';
 import Vega from '../Vega/Vega';
+import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
+import moment from 'moment'
+import { getFakeUnits } from '../../Utils'
 
 export default class TimeSeries extends Component {
 
@@ -12,7 +15,14 @@ export default class TimeSeries extends Component {
             specDataType: "quantitative",
             telemetryName: "test",
             step: 0,
-            lastMessageData: []
+            lastMessageData: [],
+            dateStart: new Date().getTime() - 60 * 1000,
+            dateEnd: new Date(),
+            liveMode: true,
+            timeWindow: {
+                value: 1,
+                unit: "minutes"
+            }
         }
 
         this.managerInterface = new ManagerInterface();
@@ -36,7 +46,7 @@ export default class TimeSeries extends Component {
                 "y": {
                     "field": "value",
                     "type": this.state.specDataType,
-                    "title": name
+                    "title": getFakeUnits(name)
                 },
                 "color": {
                     "field": "source",
@@ -82,15 +92,26 @@ export default class TimeSeries extends Component {
 
     onReceiveMsg = (msg) => {
         let data = JSON.parse(msg.data);
+        let dateEnd = new Date();
+        let dateStart = moment(dateEnd).subtract(this.state.timeWindow.value, this.state.timeWindow.unit).toDate()
         if (typeof data.data === 'object') {
             let timestamp = new Date();
             timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
-            const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp)
+            const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp);
             this.setState({
                 lastMessageData: newEntries,
-            })
+                dateStart: dateStart,
+                dateEnd: dateEnd,
+            });
         }
     }
+
+    setTimeWindow = (timeWindow) => {
+        this.setState({
+            timeWindow: timeWindow,
+        })
+    }
+
     render() {
         const columnsToDisplay = ['selection_column', 'component', 'stream', 'name', 'param_name', 'data_type', 'value', 'units'];
         return (
@@ -99,10 +120,11 @@ export default class TimeSeries extends Component {
                 :
                 <>
                     <h1>Plot title</h1>
+                    <TimeSeriesControls liveMode={this.state.liveMode} setTimeWindow={this.setTimeWindow}></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}
-                        dateStart={(new Date()).getTime() - 15 * 1000}
-                        dateEnd={new Date()}></Vega>
+                        dateStart={this.state.dateStart}
+                        dateEnd={this.state.dateEnd}></Vega>
                 </>
         )
     }
