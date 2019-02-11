@@ -19,11 +19,7 @@ export default class TimeSeries extends Component {
             dateStart: new Date().getTime() - 60 * 1000,
             dateEnd: new Date(),
             liveMode: true,
-            timeWindow: {
-                id: "1min",
-                value: 1,
-                unit: "minutes"
-            }
+            timeWindow: 60,
         }
 
         this.managerInterface = new ManagerInterface();
@@ -94,7 +90,7 @@ export default class TimeSeries extends Component {
     onReceiveMsg = (msg) => {
         let data = JSON.parse(msg.data);
         let dateEnd = new Date();
-        let dateStart = moment(dateEnd).subtract(this.state.timeWindow.value, this.state.timeWindow.unit).toDate()
+        let dateStart = moment(dateEnd).subtract(this.state.timeWindow, 'minutes').toDate()
         if (typeof data.data === 'object') {
             let timestamp = new Date();
             timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
