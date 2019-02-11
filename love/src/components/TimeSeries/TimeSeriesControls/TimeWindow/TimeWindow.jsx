@@ -15,7 +15,7 @@ export default class TimeWindow extends PureComponent {
         this.state = {
             customValue: 5,
             timeWindow: {
-                id: '1min',
+                id: '1h',
                 value: 1,
                 unit: "hours"
             }

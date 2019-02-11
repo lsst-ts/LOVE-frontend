@@ -16,11 +16,11 @@ export default class TimeSeries extends Component {
             telemetryName: "test",
             step: 0,
             lastMessageData: [],
-            dateStart: new Date().getTime() - 60 * 1000,
+            dateStart: new Date().getTime() - 60*60 * 1000,
             dateEnd: new Date(),
             liveMode: true,
             timeWindow: {
-                value: 1,
+                value: 60,
                 unit: "minutes"
             }
         }
