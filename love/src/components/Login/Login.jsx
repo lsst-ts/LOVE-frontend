@@ -1,7 +1,13 @@
 import React, { Component } from 'react'
+import Button from '../Button/Button';
 import styles from './Login.module.css'
 
 export default class Login extends Component {
+
+  handleSubmit() {
+    console.log('Going to submit');
+  }
+
   render() {
     return (
       <div className={styles.login}>
@@ -10,8 +16,8 @@ export default class Login extends Component {
             <h3 className={styles.panelTitle}>Login</h3>
           </div>
           <div className={styles.panelBody}>
-            <form method="post">
-              <form method="post">
+            {/* <form method="post"> */}
+              <form onSubmit={this.handleSubmit}>
                 {/* {% csrf_token %}
                 {% if form.errors %} */}
                 <div className={styles.incorrectCredentialsDiv}>
@@ -29,9 +35,9 @@ export default class Login extends Component {
                   <label htmlFor="id_password"  className={styles.label}>Password</label>
                   <input type="password" name="password" required="" id="id_password"></input>
                 </p>
-                <button type="submit" className={[styles.btn, styles.btnPrimary].join(" ")}>Login</button>
+                <Button type="submit" status="primary">Login</Button>
               </form>
-            </form>
+            {/* </form> */}
           </div>
         </div>
       </div>
