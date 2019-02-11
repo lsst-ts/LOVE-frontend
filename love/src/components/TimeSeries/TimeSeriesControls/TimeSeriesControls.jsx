@@ -19,7 +19,7 @@ export default class TimeSeriesControls extends Component {
             <div>
                 {
                     this.props.liveMode ?
-                        <TimeWindow setTimeWindow={this.props.setTimeWindow}></TimeWindow>
+                        <TimeWindow setTimeWindow={this.props.setTimeWindow} timeWindow={this.props.timeWindow}></TimeWindow>
                         :
                         <DateSelection></DateSelection>
                 }

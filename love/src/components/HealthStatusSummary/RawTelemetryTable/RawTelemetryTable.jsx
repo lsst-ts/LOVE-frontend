@@ -79,8 +79,8 @@ export default class RawTelemetryTable extends PureComponent {
         this.state = {
             expandedRows: expandedRows,
             activeFilterDialog: 'None',
-            sortingColumn: 'name',
-            sortDirection: 'None',
+            sortingColumn: 'stream',
+            sortDirection: 'ascending',
             selectedRows: [],
             filters: filters,
             setFilters: this.setFilters,
@@ -257,13 +257,17 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     sortData = (a, b) => {
-
+        const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
+        const aKey = [a.component, a.stream, a.param_name].join('-');
+        const bKey = [b.component, b.stream, b.param_name].join('-');
+        const selectedKeys = this.state.selectedRows.map((r) => r.key);
         const column = this.state.sortingColumn;
-        if (this.state.sortDirection !== 'ascending' && this.state.sortDirection !== 'descending') {
-            return 0;
+        if( selectedKeys.indexOf(aKey) > -1 && !(selectedKeys.indexOf(bKey) > -1)){
+            return -1;
         }
+        if( selectedKeys.indexOf(bKey) > -1 && !(selectedKeys.indexOf(aKey) > -1))
+            return 1;
 
-        let direction = this.state.sortDirection === 'ascending' ? 1 : -1;
         if (column === 'health_status') {
             let aValue = this.healthStatusPriorities[a['healthStatusCode']];
             let bValue = this.healthStatusPriorities[b['healthStatusCode']];

@@ -8,7 +8,7 @@ import {
 } from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect'
-import TimeSeries from './TimeSeries';
+import TimeSeries from '../TimeSeries';
 import {Server} from 'mock-socket';
 
 /* jest.mock('../../Utils', () => {

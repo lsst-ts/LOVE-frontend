@@ -19,10 +19,7 @@ export default class TimeSeries extends Component {
             dateStart: new Date().getTime() - 60*60 * 1000,
             dateEnd: new Date(),
             liveMode: true,
-            timeWindow: {
-                value: 60,
-                unit: "minutes"
-            }
+            timeWindow: 60,
         }
 
         this.managerInterface = new ManagerInterface();
@@ -95,7 +92,7 @@ export default class TimeSeries extends Component {
     onReceiveMsg = (msg) => {
         let data = JSON.parse(msg.data);
         let dateEnd = new Date();
-        let dateStart = moment(dateEnd).subtract(this.state.timeWindow.value, this.state.timeWindow.unit).toDate()
+        let dateStart = moment(dateEnd).subtract(this.state.timeWindow, 'minutes').toDate()
         if (typeof data.data === 'object') {
             let timestamp = new Date();
             timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
@@ -119,9 +116,8 @@ export default class TimeSeries extends Component {
 
             this.historicalData = getFakeHistoricalTimeSeries(
                                 this.state.selectedRows, 
-                                (new Date()).getTime() - 360 * 1000,
+                                (new Date()).getTime() - 3600 * 1000,
                                 new Date());
-            console.log(this.historicalData);
         }
     }
     render() {
@@ -132,7 +128,7 @@ export default class TimeSeries extends Component {
                 :
                 <>
                     <h1>Plot title</h1>
-                    <TimeSeriesControls liveMode={this.state.liveMode} setTimeWindow={this.setTimeWindow}></TimeSeriesControls>
+                    <TimeSeriesControls liveMode={this.state.liveMode} setTimeWindow={this.setTimeWindow} timeWindow={this.state.timeWindow}></TimeSeriesControls>
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}
                         dateStart={this.state.dateStart}
