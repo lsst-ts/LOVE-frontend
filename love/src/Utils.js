@@ -1,66 +1,73 @@
 import sockette from 'sockette';
 
 export default class ManagerInterface {
-    constructor(name, callback) {
-        this.callback = callback;
-        this.socket = null;
-        this.socketPromise = null;
-    }
+  constructor(name, callback) {
+    this.callback = callback;
+    this.socket = null;
+    this.socketPromise = null;
+  }
 
-    subscribeToTelemetry = (name, callback) => {
-        this.callback = callback;
-        if (this.socketPromise === null && this.socket === null) {
-            this.socketPromise = new Promise((resolve, reject) => {
-                this.socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/', {
-                    onopen: e => this.socket.json({ "option": "subscribe", "data": name }),
-                    onmessage: (msg) => {
-                        this.callback(msg);
-                        resolve();
-                    },
-                });
-                console.log(this.socket)
-            })
-        }
-        else{
-            this.socketPromise.then(() => {
-                this.socket.json({ "option": "subscribe", "data": name });
-            });
-
-        }
+  subscribeToTelemetry = (name, callback) => {
+    this.callback = callback;
+    if (this.socketPromise === null && this.socket === null) {
+      this.socketPromise = new Promise((resolve) => {
+        this.socket = sockette(
+          `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`,
+          {
+            onopen: () => {
+              this.socket.json({ option: 'subscribe', data: name });
+            },
+            onmessage: (msg) => {
+              this.callback(msg);
+              resolve();
+            },
+          },
+        );
+      });
+    } else {
+      this.socketPromise.then(() => {
+        this.socket.json({ option: 'subscribe', data: name });
+      });
     }
+  };
 
-    unsubscribeToTelemetry = (name, callback) => {
-        this.socket.json({ "option": "unsubscribe", "data": name })
-        this.callback = callback;
-    }
+  unsubscribeToTelemetry = (name, callback) => {
+    this.socket.json({ option: 'unsubscribe', data: name });
+    this.callback = callback;
+  };
 }
 
 /**
- * Creates a list of vega friendly objects with values 
- * for each parameter in parametersNames extracted from a 
+ * Creates a list of vega friendly objects with values
+ * for each parameter in parametersNames extracted from a
  * telemetries object received from the LOVE-manager
- * @param {object} telemetries 
- * @param {Array} parametersKeys 
- * @param {date} timestamp 
+ * @param {object} telemetries
+ * @param {Array} parametersNames
+ * @param {date} timestamp
  */
-export const telemetryObjectToVegaList = (telemetries, selectedRows, timestamp) =>{
+export const telemetryObjectToVegaList = (
+  telemetries,
+  parametersNames,
+  timestamp,
+) => {
+  const newEntries = [];
 
-    const newEntries = [];
-
-    Object.keys(telemetries).forEach((stream) => {
-        Object.entries(telemetries[stream]).forEach((entry) => {
-            const key = ['scheduler', stream, entry[0]].join('-');
-            if (selectedRows.map((r) => r.key).includes(key)) {
-                const newEntry = {
-                    "value": Array.isArray(entry[1].value) ? entry[1]['value'][0]: entry[1]['value'],
-                    "date": timestamp,
-                    "source": key.split('-')[2],
-                    "dataType": entry[1]['dataType'],
-                }
-                newEntries.push(newEntry);
-            }
-        });
+  Object.keys(telemetries).forEach((stream) => {
+    Object.entries(telemetries[stream]).forEach((entry) => {
+      const key = ['scheduler', stream, entry[0]].join('-');
+      if (parametersNames.map((r) => r.key).includes(key)) {
+        const newEntry = {
+          value: Array.isArray(entry[1].value)
+            ? entry[1].value[0]
+            : entry[1].value,
+          date: timestamp,
+          source: key.split('-')[2],
+          dataType: entry[1].dataType,
+        };
+        newEntries.push(newEntry);
+      }
     });
+  });
 
     return newEntries;
 
@@ -91,8 +98,8 @@ export const tableRowListToTimeSeriesObject = (selectedRows) =>{
  * @param {string} name
  */
 export const getFakeUnits = (name) => {
-    const fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
-    return fake_units[name.charCodeAt(0) % 4];
+    const fakeUnits = ['unit1', 'unit2', 'unit3', 'unit4'];
+    return fakeUnits[name.charCodeAt(0) % 4];
 }
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>{
 
@@ -116,7 +123,6 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
         time.push(dateString);
     }
 
-    console.log(time);
     return time.map( (t) =>{
         let currentValue = telemetryObjectToVegaList(telemetries, selectedRows, t);
         const dateValue = (new Date(t)).getTime();
