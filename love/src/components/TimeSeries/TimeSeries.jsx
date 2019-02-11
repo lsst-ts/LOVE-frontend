@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import ManagerInterface, {telemetryObjectToVegaList} from '../../Utils';
+import ManagerInterface, {telemetryObjectToVegaList, getFakeHistoricalTimeSeries} from '../../Utils';
 import Vega from '../Vega/Vega';
 
 export default class TimeSeries extends Component {
@@ -16,6 +16,8 @@ export default class TimeSeries extends Component {
         }
 
         this.managerInterface = new ManagerInterface();
+
+        this.historicalData = [];
     }
 
     getSpec = (data, name) => {
@@ -91,6 +93,17 @@ export default class TimeSeries extends Component {
             })
         }
     }
+
+    componentDidUpdate = (prevProps, prevState) =>{
+        if(prevState.step !== this.state.step && this.state.step === 1){
+
+            this.historicalData = getFakeHistoricalTimeSeries(
+                                this.state.selectedRows, 
+                                (new Date()).getTime() - 15 * 1000,
+                                new Date());
+            console.log(this.historicalData);
+        }
+    }
     render() {
         const columnsToDisplay = ['selection_column', 'component', 'stream', 'name', 'param_name', 'data_type', 'value', 'units'];
         return (
@@ -102,7 +115,8 @@ export default class TimeSeries extends Component {
                     <Vega spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
                         lastMessageData={this.state.lastMessageData}
                         dateStart={(new Date()).getTime() - 15 * 1000}
-                        dateEnd={new Date()}></Vega>
+                        dateEnd={new Date()}
+                        historicalData={this.historicalData}></Vega>
                 </>
         )
     }

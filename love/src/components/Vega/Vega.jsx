@@ -53,28 +53,44 @@ export default class Vega extends Component {
     }
 
     componentDidUpdate = (prevProps, prevState) => {
+        const {dateStart, dateEnd} = this.props;
+        const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
+
+        let shouldUpdatePlot = false;
         if (prevProps.lastMessageData !== this.props.lastMessageData) {
             if (this.data.length === 0)
                 this.remountPlot();
 
-            const {dateStart, dateEnd} = this.props;
-            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
             
             this.data.push(...this.props.lastMessageData);
+
+            shouldUpdatePlot = true;
+
+
+        }
+
+        if(prevProps.historicalData !== this.props.historicalData) {
+            if (this.data.length === 0)
+                this.remountPlot();
+
+            this.data.push(...this.props.historicalData);
+
+            shouldUpdatePlot = true;
+        }
+
+
+        if (this.vegaEmbedResult && shouldUpdatePlot) {
             
             this.data = this.data.filter( (data)=>{
                 const date = new Date(data.date) - dateOffset;;
                 return date >= dateStart && date <= dateEnd;
             });
 
-            if (this.vegaEmbedResult) {
-                
-                var changeSet = vega
-                    .changeset()
-                    .remove(t => true)
-                    .insert(this.data)
-                this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
-            }
+            var changeSet = vega
+                .changeset()
+                .remove(t => true)
+                .insert(this.data)
+            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
     }
 
@@ -122,7 +138,7 @@ export default class Vega extends Component {
         if (this.vegaEmbedResult) {
             var changeSet = vega
                 .changeset()
-                .insert(this.props.lastMessageData)
+                .insert(this.data)
             this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
 
