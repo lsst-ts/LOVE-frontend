@@ -108,22 +108,24 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
     const telemetries = tableRowListToTimeSeriesObject(selectedRows);
 
-    const time = [];
-    for(let t = dateStart.getTime(); t<=dateEnd.getTime(); t += 2*1000){
-        const currentDate = new Date(t);
-        let dateString = [currentDate.toLocaleDateString(undefined, {year:'numeric'}),
-        currentDate.toLocaleDateString(undefined, {month:'numeric'}),
-        currentDate.toLocaleDateString(undefined, {day:'2-digit'}) ].join('/');
+    const arraySize = (dateEnd.getTime()-dateStart.getTime())/2000;
+    const time = new Array(arraySize);
+    const tStart = dateStart.getTime();
+    const dateOffset = (new Date()).getTimezoneOffset()/60;
+    for(let i = 0; i<arraySize; i++){
+        const currentDate = new Date(tStart+i*2000);
+        let dateString = [currentDate.getFullYear(),
+            (currentDate.getMonth()+1),
+        currentDate.getUTCDate() ].join('/');
 
-        const dateOffset = (new Date()).getTimezoneOffset()/60;
-        const hours = `0${currentDate.getHours()+dateOffset}`.slice(-2);
-        const minutes = `0${currentDate.getMinutes()}`.slice(-2);
-        const seconds = `0${currentDate.getSeconds()}`.slice(-2);
+        const hours = currentDate.getHours()+dateOffset;
+        const minutes = currentDate.getMinutes();
+        const seconds = currentDate.getSeconds();
         dateString += ' '+hours+':'+minutes+':'+seconds;
-        time.push(dateString);
+        time[i] = dateString;
     }
 
-    return time.map( (t) =>{
+    return time.map((t) =>{
         let currentValue = telemetryObjectToVegaList(telemetries, selectedRows, t);
         const dateValue = (new Date(t)).getTime();
 
