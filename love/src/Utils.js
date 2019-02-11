@@ -79,7 +79,7 @@ export const tableRowListToTimeSeriesObject = (selectedRows) =>{
 
         telemetries[stream][parameter] = {
             value: row.value.value, 
-            datatype: row.value.dataType
+            dataType: row.value.dataType
         };
     });
 
@@ -95,11 +95,23 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
     const time = [];
     for(let t = dateStart.getTime(); t<=dateEnd.getTime(); t += 2*1000){
-        time.push(new Date(t));
+        const currentDate = new Date(t);
+        let dateString = [currentDate.toLocaleDateString(undefined, {year:'numeric'}),
+        currentDate.toLocaleDateString(undefined, {month:'numeric'}),
+        currentDate.toLocaleDateString(undefined, {day:'2-digit'}) ].join('/');
+
+        const dateOffset = (new Date()).getTimezoneOffset()/60;
+        const hours = `0${currentDate.getHours()+dateOffset}`.slice(-2);
+        const minutes = `0${currentDate.getMinutes()}`.slice(-2);
+        const seconds = `0${currentDate.getSeconds()}`.slice(-2);
+        dateString += ' '+hours+':'+minutes+':'+seconds;
+        time.push(dateString);
     }
 
-    const timestamp = new Date();
+    console.log(time);
     return time.map( (t) =>{
-        return telemetryObjectToVegaList(telemetries, selectedRows,  timestamp.toString());
+        return telemetryObjectToVegaList(telemetries, selectedRows, t);
     }).flat();
 };
+
+
