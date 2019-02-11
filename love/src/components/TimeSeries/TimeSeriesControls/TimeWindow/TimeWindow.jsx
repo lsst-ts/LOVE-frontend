@@ -50,7 +50,7 @@ export default class TimeWindow extends PureComponent {
         }
     }
 
-    handleCutomInput = (e) => {
+    handleCustomInput = (e) => {
         const timeWindow = {
             id: 'custom',
             value: e.target.value,
@@ -59,16 +59,12 @@ export default class TimeWindow extends PureComponent {
         this.props.setTimeWindow(timeWindow);
         this.setState({
             customValue: e.target.value,
-            timeWindow: timeWindow
         });
     }
 
     handleTimeWindowSelection = (e) => {
         const timeWindow = this.timeWindows(e.target.value);
         this.props.setTimeWindow(timeWindow);
-        this.setState({
-            timeWindow: timeWindow,
-        });
     }
 
     render() {
@@ -76,23 +72,23 @@ export default class TimeWindow extends PureComponent {
             <div className={styles.timeWindowOptionsContainer}>
                 <span className={styles.timeWindowTitle}>Time window: </span>
                 <div className={styles.timeWindowOption}>
-                    <input id="first-option" type="radio" name="time-window" value="1h" checked={this.state.timeWindow.id === "1h"} onChange={this.handleTimeWindowSelection} />
+                    <input id="first-option" type="radio" name="time-window" value="1h" checked={this.props.timeWindow.id === "1h"} onChange={this.handleTimeWindowSelection} />
                     <label htmlFor="first-option">1h</label>
                 </div>
                 <div className={styles.timeWindowOption}>
-                    <input id="second-option" type="radio" name="time-window" value="15min" checked={this.state.timeWindow.id === "15min"} onChange={this.handleTimeWindowSelection} />
+                    <input id="second-option" type="radio" name="time-window" value="15min" checked={this.props.timeWindow.id === "15min"} onChange={this.handleTimeWindowSelection} />
                     <label htmlFor="second-option">15min</label>
                 </div>
                 <div className={styles.timeWindowOption}>
-                    <input id="third-option" type="radio" name="time-window" value="1min" checked={this.state.timeWindow.id === "1min"} onChange={this.handleTimeWindowSelection} />
+                    <input id="third-option" type="radio" name="time-window" value="1min" checked={this.props.timeWindow.id === "1min"} onChange={this.handleTimeWindowSelection} />
                     <label htmlFor="third-option">1min</label>
                 </div>
                 <div className={styles.timeWindowOption}>
-                    <input id="fourth-option" type="radio" name="time-window" value="custom" checked={this.state.timeWindow.id === "custom"} onChange={this.handleTimeWindowSelection} />
+                    <input id="fourth-option" type="radio" name="time-window" value="custom" checked={this.props.timeWindow.id === "custom"} onChange={this.handleTimeWindowSelection} />
                     <label htmlFor="fourth-option">Custom</label>
-                    <div className={[styles.customTimeWindowContainer, this.state.timeWindow.id === "custom" ? styles.customVisible : ""].join(' ')}>
+                    <div className={[styles.customTimeWindowContainer, this.props.timeWindow.id === "custom" ? styles.customVisible : ""].join(' ')}>
                         <span>: </span>
-                        <input className={styles.customTimeWindowInput} id="custom-option" type="text" value={this.state.customValue} onChange={this.handleCutomInput} />
+                        <input className={styles.customTimeWindowInput} id="custom-option" type="text" value={this.state.customValue} onChange={this.handleCustomInput} />
                         <span> minutes</span>
                     </div>
                 </div>
