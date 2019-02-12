@@ -73,7 +73,7 @@ export default class Vega extends Component {
             if (this.data.length === 0)
                 this.remountPlot();
 
-            this.data.push(...this.props.historicalData);
+            this.data = [...this.props.historicalData];
 
             shouldUpdatePlot = true;
         }
@@ -136,9 +136,16 @@ export default class Vega extends Component {
 
     render() {
         if (this.vegaEmbedResult) {
+            const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
+            const {dateStart, dateEnd} = this.props;
             var changeSet = vega
                 .changeset()
+                .remove((data) => {
+                    const date = new Date(data.date) - dateOffset;;
+                    return date < dateStart || date > dateEnd;
+                })
                 .insert(this.data)
+            console.log('vega:',(this.props.dateEnd-this.props.dateStart)/1000/60, this.data.length);
             this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
 
