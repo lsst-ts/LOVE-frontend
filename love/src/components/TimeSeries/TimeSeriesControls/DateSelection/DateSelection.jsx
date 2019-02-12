@@ -12,7 +12,13 @@ export default class DateSelection extends PureComponent {
     };
   }
 
+  isDateValid = (date) => {
+    const d = new Date(date);
+    return d instanceof Date && !isNaN(d.getTime());
+  };
+
   onDateSelected = (date, isStartDate) => {
+    if (!this.isDateValid(date)) return;
     if (isStartDate)
       this.setState({
         startDate: date,
