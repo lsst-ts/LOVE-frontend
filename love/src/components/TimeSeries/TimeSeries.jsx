@@ -124,6 +124,13 @@ export default class TimeSeries extends PureComponent {
         new Date(),
       );
     }
+    if (prevState.timeWindow !== this.state.timeWindow) {
+      this.historicalData = getFakeHistoricalTimeSeries(
+        this.state.selectedRows,
+        new Date().getTime() - this.state.timeWindow * 60 * 1000,
+        new Date(),
+      );
+    }
   };
 
   setLiveMode = (isLive) => {
@@ -175,7 +182,11 @@ export default class TimeSeries extends PureComponent {
     ) : (
       <>
         <h1>Plot title</h1>
-        <TimeSeriesControls {...props} />
+        <TimeSeriesControls setTimeWindow={this.setTimeWindow} 
+      timeWindow={this.state.timeWindow}
+      setLiveMode={this.setLiveMode}
+      isLive={this.state.isLive}
+      setHistoricalData={this.setHistoricalData} />
         <Vega
           spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
           lastMessageData={this.state.lastMessageData}
