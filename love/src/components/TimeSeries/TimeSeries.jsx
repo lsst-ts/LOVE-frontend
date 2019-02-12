@@ -21,9 +21,9 @@ export default class TimeSeries extends PureComponent {
             liveMode: true,
             timeWindow: 60,
         }
-
+        
         this.managerInterface = new ManagerInterface();
-
+        
         this.historicalData = [];
     }
 
@@ -118,6 +118,14 @@ export default class TimeSeries extends PureComponent {
                                 (new Date()).getTime() - 3600 * 1000,
                                 new Date());
         }
+
+        if(prevState.timeWindow !== this.state.timeWindow){
+            this.historicalData = getFakeHistoricalTimeSeries(
+                this.state.selectedRows, 
+                (new Date()).getTime() - this.state.timeWindow * 60 * 1000,
+                new Date());
+        }
+
     }
     render() {
         const columnsToDisplay = ['selection_column', 'component', 'stream', 'name', 'param_name', 'data_type', 'value', 'units'];
