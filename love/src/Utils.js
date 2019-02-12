@@ -102,7 +102,7 @@ export const getFakeUnits = (name) => {
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
 
-  const arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / 2000;
+  const arraySize = Math.floor(((new Date(dateEnd)).getTime() - (new Date(dateStart)).getTime()) / 2000);
   const time = new Array(arraySize);
   const tStart = (new Date(dateStart)).getTime();
   const dateOffset = new Date().getTimezoneOffset() / 60;
