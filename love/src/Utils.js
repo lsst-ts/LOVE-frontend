@@ -104,7 +104,7 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
   const arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / 2000;
   const time = new Array(arraySize);
-  const tStart = (new Date(dateStart)).getTime();
+  const tStart = new Date(dateStart).getTime();
   const dateOffset = new Date().getTimezoneOffset() / 60;
   for (let i = 0; i < arraySize; i += 1) {
     const currentDate = new Date(tStart + i * 2000);
