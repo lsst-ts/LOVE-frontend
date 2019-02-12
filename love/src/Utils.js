@@ -101,14 +101,18 @@ export const getFakeUnits = (name) => {
 };
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
-
-  const arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / 2000;
+  let timestep = 2000;
+  let arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / timestep;
+  if (arraySize > 1000) {
+    arraySize = 1000;
+    timestep = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / arraySize;
+  }
   const time = new Array(arraySize);
   const tStart = new Date(dateStart).getTime();
   const dateOffset = new Date().getTimezoneOffset() / 60;
   for (let i = 0; i < arraySize; i += 1) {
-    const currentDate = new Date(tStart + i * 2000);
-    let dateString = [currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getUTCDate()].join('/');
+    const currentDate = new Date(tStart + i * timestep);
+    let dateString = [currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, currentDate.getUTCDate()].join('/');
 
     const hours = currentDate.getHours() + dateOffset;
     const minutes = currentDate.getMinutes();
@@ -124,7 +128,7 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
       currentValue.forEach((value) => {
         // eslint-disable-next-line
-        value.value = (Math.cos(((dateValue / 45) * Math.PI) / 360) + 1) / 2 - 0.3 + Math.random() * 0.3;
+        value.value = ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
       });
       return currentValue;
     })
