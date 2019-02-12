@@ -36,13 +36,19 @@ export default class DateSelection extends PureComponent {
         <div className={styles.fromDateContainer}>
           <span className={styles.datetimeDescription}>From:</span>
           <div className={styles.datetimeContainer}>
-            <Datetime onBlur={(momentDate) => this.onDateSelected(momentDate, true)} />
+            <Datetime
+              inputProps={{ placeholder: 'Click to set initial date' }}
+              onBlur={(momentDate) => this.onDateSelected(momentDate, true)}
+            />
           </div>
         </div>
         <div className={styles.toDateContainer}>
           <span className={styles.datetimeDescription}>To:</span>
           <div className={styles.datetimeContainer}>
-            <Datetime onBlur={(momentDate) => this.onDateSelected(momentDate, false)} />
+            <Datetime
+              inputProps={{ placeholder: 'Click to set final date' }}
+              onBlur={(momentDate) => this.onDateSelected(momentDate, false)}
+            />
           </div>
         </div>
       </div>
