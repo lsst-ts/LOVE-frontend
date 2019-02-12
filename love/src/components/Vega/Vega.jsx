@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as vegal from 'vega-lite';
-import * as vega from 'vega';
+import * as vega from 'vega-lib';
 import vegae from 'vega-embed';
 import PropTypes from 'prop-types';
 
@@ -139,12 +139,12 @@ export default class Vega extends Component {
             const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
             const {dateStart, dateEnd} = this.props;
             var changeSet = vega
-                .changeset()
-                .remove((data) => {
-                    const date = new Date(data.date) - dateOffset;;
-                    return date < dateStart || date > dateEnd;
-                })
-                .insert(this.data)
+            .changeset()
+            .remove((data) => {
+                const date = new Date(data.date) - dateOffset;;
+                return date < dateStart || date > dateEnd;
+            })
+            .insert(this.data)
             console.log('vega:',(this.props.dateEnd-this.props.dateStart)/1000/60, this.data.length);
             this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
