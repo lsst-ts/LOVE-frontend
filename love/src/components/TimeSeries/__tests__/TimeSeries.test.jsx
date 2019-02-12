@@ -116,6 +116,54 @@ describe('my ws test', () => {
     expect(vegaElement).toBeTruthy();
 
 
+  });
+});
+
+'GIVEN a current list of selected telemetries in the table'
+"WHEN the user clicks a checkbox of a specific row"
+"AND presses the SET button"
+"THEN shows a plot with some text indicating the name of the telemetry"
+
+// jest.useFakeTimers();
+describe('date picker test', () => {
+  it('works', async () => {
+    const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
+    const { getByAltText, getByText, getByTitle, debug, getByPlaceholderText } = timeSeries;
+    const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
+    fireEvent.click(checkBox);
+
+    expect(getByText('TELEMETRIES:').innerHTML.includes('filterChangeTime')).toBe(true);
+    
+    const setButton = getByTitle("Set selected telemetries");
+    fireEvent.click(setButton);
+    
+    
+    
+    await waitForElement(() => getByAltText("Live/query mode toggle"));
+    
+    // await waitForElement(() => getByText("filterChangeTime"));
+
+    const toggleButton = getByAltText("Live/query mode toggle");
+    expect(toggleButton).toBeTruthy();
+    fireEvent.click(toggleButton);
+    // jest.runOnlyPendingTimers();
+    // console.log(toggleButton)
+    // console.log(timeSeries)
+    // debug();
+    // done();
+    // await wait(() => {
+    //     console.log('AIUDSHDSIUHS')
+    // })
+    // await waitForElement(() => {
+    //     // getByPlaceholderText("Click to set initial date");
+    //     return getByPlaceholderText("Click to set final date");
+    // });
+    // // const initialDatePicker = getByPlaceholderText("Click to set initial date");
+    // const finalDatePicker = getByPlaceholderText("Click to set final date");
+    // // expect(initialDatePicker).toBeTruthy();
+    // expect(finalDatePicker).toBeTruthy();
+    // console.log(finalDatePicker)
+
 
   });
 });

@@ -32,7 +32,7 @@ export default class TimeSeriesControls extends Component {
                 <div className={'switchContainer'}>
                     <span className={[styles.modeSelection, this.props.isLive ? styles.highlightText : ''].join(' ')} onClick={() => this.props.setLiveMode(true)} >Live</span>
                     <label className={styles.switch}>
-                        <input type="checkbox" checked={!this.props.isLive} onChange={this.handleChangeChk}/>
+                        <input type="checkbox" alt="Live/query mode toggle" checked={!this.props.isLive} onChange={this.handleChangeChk}/>
                         <span className={[styles.slider, styles.round].join(' ')}></span>
                     </label>
                     <span className={[styles.modeSelection, !this.props.isLive ? styles.highlightText : ''].join(' ')} onClick={() => this.props.setLiveMode(false)} >Query</span>
