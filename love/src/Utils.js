@@ -1,5 +1,16 @@
 import sockette from 'sockette';
 
+/* Backwards compatibility of Array.flat */
+if (Array.prototype.flat === undefined) {
+  Object.defineProperty(Array.prototype, 'flat', {
+    value: function(depth = 1) {
+      return this.reduce(function(flat, toFlatten) {
+        return flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten);
+      }, []);
+    },
+  });
+}
+
 export default class ManagerInterface {
   constructor(name, callback) {
     this.callback = callback;
@@ -99,6 +110,7 @@ export const getFakeUnits = (name) => {
   const fakeUnits = ['unit1', 'unit2', 'unit3', 'unit4'];
   return fakeUnits[name.charCodeAt(0) % 4];
 };
+
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
