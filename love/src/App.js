@@ -32,8 +32,21 @@ class App extends Component {
     this.subscribeToTelemetry('all', this.receiveAllMsg);
   }
 
+  getToken() {
+    const token = localStorage.getItem(this.TOKEN_STORAGE_NAME);
+    if (token === null) {
+      return undefined;
+    } else {
+      return JSON.parse(token);
+    }
+  }
+
+
   subscribeToTelemetry = (name, callback) => {
-    const socket = sockette('ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/ws/subscription/', {
+    const token = this.getToken();
+    const connectionPath = 'ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/ws/subscription/?token=' + this.getToken();
+    console.log('connectionPath: ', connectionPath);
+    const socket = sockette(connectionPath, {
       onopen: e => socket.json({ "option": "subscribe", "data": name }),
       onmessage: callback,
     });

@@ -35,7 +35,10 @@ export default class Login extends Component {
       body: JSON.stringify(data)
     }).then(response => response.json())
       .then(response => {
-        console.log('response: ', response);
+        const token = response['token'];
+        if (token !== undefined && token !== null) {
+          localStorage.setItem('love-token', JSON.stringify(token));
+        }
       }
     );
     event.preventDefault();
