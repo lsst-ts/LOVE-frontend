@@ -154,6 +154,12 @@ export default class TimeSeries extends PureComponent {
     });
   };
 
+  goBack = () => {
+    this.setState({
+      step: 0,
+    });
+  }
+
   render() {
     const columnsToDisplay = [
       'selection_column',
@@ -186,7 +192,8 @@ export default class TimeSeries extends PureComponent {
       timeWindow={this.state.timeWindow}
       setLiveMode={this.setLiveMode}
       isLive={this.state.isLive}
-      setHistoricalData={this.setHistoricalData} />
+      setHistoricalData={this.setHistoricalData}
+      goBack={this.goBack} />
         <Vega
           spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
           lastMessageData={this.state.lastMessageData}
