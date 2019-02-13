@@ -112,6 +112,8 @@ export const getFakeUnits = (name) => {
 };
 
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
+  const dataType = selectedRows[0].value.dataType;
+  const stringValues = ['a','b','c'];
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
   let arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / timestep;
@@ -139,8 +141,13 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
       const dateValue = new Date(t).getTime();
 
       currentValue.forEach((value) => {
-        // eslint-disable-next-line
-        value.value = ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
+        if(dataType === 'String'){
+          // eslint-disable-next-line
+          value.value = stringValues[Math.floor(Math.random() * stringValues.length)];
+        } else {
+          // eslint-disable-next-line
+          value.value = ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
+        }
       });
       return currentValue;
     })
