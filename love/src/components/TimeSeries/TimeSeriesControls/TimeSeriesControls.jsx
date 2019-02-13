@@ -3,6 +3,7 @@ import DateSelection from './DateSelection/DateSelection';
 import TimeWindow from './TimeWindow/TimeWindow';
 import PropTypes from 'prop-types';
 import styles from './TimeSeriesControls.module.css'
+import GearIcon from '../../icons/GearIcon/GearIcon'
 
 export default class TimeSeriesControls extends Component {
     static propTypes = {
@@ -28,8 +29,8 @@ export default class TimeSeriesControls extends Component {
 
     render() {
         return (
-            <div>
-                <div className={'switchContainer'}>
+            <div className={styles.timeseriesControlsContainer}>
+                <div className={styles.switchContainer}>
                     <span className={[styles.modeSelection, this.props.isLive ? styles.highlightText : ''].join(' ')} onClick={() => this.props.setLiveMode(true)} >Live</span>
                     <label className={styles.switch}>
                         <input type="checkbox" alt="Live/query mode toggle" checked={!this.props.isLive} onChange={this.handleChangeChk}/>
@@ -44,6 +45,9 @@ export default class TimeSeriesControls extends Component {
                         :
                         <DateSelection setHistoricalData={this.props.setHistoricalData}></DateSelection>
                 }
+                <div onClick={this.props.goBack}  className={styles.gearIconContainer}>
+                    <GearIcon active></GearIcon>
+                </div>
             </div>
         )
     }
