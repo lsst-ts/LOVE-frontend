@@ -14,9 +14,10 @@ RUN npm install
 
 # Define url for the websockets host
 ARG WEBSOCKET_HOST=127.0.0.1
+ENV REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST
 
 # Expose port
 EXPOSE 3000
 
 # Run development server in runtime
-CMD REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm start
+CMD npm start

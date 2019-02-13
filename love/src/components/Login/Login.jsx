@@ -21,7 +21,23 @@ export default class Login extends Component {
   }
 
   handleSubmit(event) {
-    console.log('Handling submit, state: ', this.state);
+    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/get-token/';
+    const data = {
+      username: this.state.username,
+      password: this.state.password
+    }
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then(response => response.json())
+      .then(response => {
+        console.log('response: ', response);
+      }
+    );
     event.preventDefault();
   }
 
