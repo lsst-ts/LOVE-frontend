@@ -5,6 +5,7 @@ import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import moment from 'moment';
 import { getFakeUnits } from '../../Utils';
+import styles from './TimeSeries.module.css'
 
 export default class TimeSeries extends PureComponent {
   constructor() {
@@ -180,8 +181,7 @@ export default class TimeSeries extends PureComponent {
         onSetSelection={this.onSetSelection}
       />
     ) : (
-      <>
-        <h1>Plot title</h1>
+      <div className={styles.timeseriesContainer}>
         <TimeSeriesControls setTimeWindow={this.setTimeWindow} 
       timeWindow={this.state.timeWindow}
       setLiveMode={this.setLiveMode}
@@ -194,7 +194,7 @@ export default class TimeSeries extends PureComponent {
           dateEnd={this.state.dateEnd}
           historicalData={this.historicalData}
         />
-      </>
+      </div>
     );
   }
 }
