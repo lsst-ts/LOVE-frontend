@@ -109,7 +109,7 @@ describe('my ws test', () => {
     fireEvent.click(setButton);
     
     jest.runOnlyPendingTimers();
-
+    
     
     await waitForElement(() => getByText("filterChangeTime"));
     const vegaElement = getByText("filterChangeTime");
@@ -136,33 +136,44 @@ describe('date picker test', () => {
     
     const setButton = getByTitle("Set selected telemetries");
     fireEvent.click(setButton);
-    
-    
-    
+
     await waitForElement(() => getByAltText("Live/query mode toggle"));
-    
-    // await waitForElement(() => getByText("filterChangeTime"));
 
     const toggleButton = getByAltText("Live/query mode toggle");
     expect(toggleButton).toBeTruthy();
     fireEvent.click(toggleButton);
-    // jest.runOnlyPendingTimers();
-    // console.log(toggleButton)
-    // console.log(timeSeries)
-    // debug();
-    // done();
-    // await wait(() => {
-    //     console.log('AIUDSHDSIUHS')
-    // })
-    // await waitForElement(() => {
-    //     // getByPlaceholderText("Click to set initial date");
-    //     return getByPlaceholderText("Click to set final date");
-    // });
-    // // const initialDatePicker = getByPlaceholderText("Click to set initial date");
-    // const finalDatePicker = getByPlaceholderText("Click to set final date");
-    // // expect(initialDatePicker).toBeTruthy();
-    // expect(finalDatePicker).toBeTruthy();
-    // console.log(finalDatePicker)
+
+    await waitForElement(() => {
+        return getByPlaceholderText("Click to set initial date") &&  getByPlaceholderText("Click to set final date")
+    });
+
+    const initialDateInput = getByPlaceholderText("Click to set initial date");
+
+    fireEvent.click(initialDateInput);
+
+    await waitForElement(() => getByText('5'));
+    const dayFive = getByText('5');
+    fireEvent.click(dayFive)
+    
+    
+    
+    const finalDateInput = getByPlaceholderText("Click to set final date");
+    fireEvent.mouseDown(finalDateInput)
+    fireEvent.click(finalDateInput);
+    await waitForElement(() => {
+        return timeSeries.getAllByText('11').length === 2
+    });
+    
+    
+    const dayEleven = timeSeries.queryAllByText('11')[1];
+    fireEvent.click(dayEleven)
+    fireEvent.mouseDown(initialDateInput)
+
+
+    await waitForElement(()=> getByText('12 PM'));
+
+    const axisDateString = getByText('12 PM');
+    expect(axisDateString).toBeTruthy();
 
 
   });
