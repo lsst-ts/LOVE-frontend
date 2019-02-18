@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "rules": {
+    "max-len": [1, 120, 2, { "ignoreComments": true }],
+    "arrow-parens": [1, "always"]
+  },
+  "extends": ["airbnb-base", "plugin:react/recommended"],
+  "plugins": ["only-warn"],
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
+      }
+    }
+  }
+}

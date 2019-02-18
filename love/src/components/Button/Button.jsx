@@ -46,6 +46,10 @@ export default class Button extends Component {
      */
     className: PropTypes.string,
     /**
+    * Title of the button to be displayed as a tooltip.
+    */
+   title: PropTypes.string,
+    /**
      * Type for the button.
      */
     type: PropTypes.string
@@ -56,7 +60,8 @@ export default class Button extends Component {
       size: 'default',
       onClick: ()=>{},
       className: '',
-      type: 'button'
+      title: '',
+      type: 'button',
   }
 
   render() {
@@ -84,7 +89,7 @@ export default class Button extends Component {
     const style = [btn, statusStyle, sizeStyle, this.props.className].join(' ');
 
     return (
-      <button className={style} type={this.props.type} onClick={this.props.onClick}>{this.props.children} </button>
+      <button title={this.props.title} className={style} type={this.props.type} onClick={this.props.onClick}>{this.props.children} </button>
     )
   }
 }

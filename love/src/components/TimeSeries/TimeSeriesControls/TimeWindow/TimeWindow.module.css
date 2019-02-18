@@ -1,0 +1,43 @@
+.timeWindowOptionsContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.timeWindowOption {
+    padding: 0 1em;
+    display: flex;
+    align-items: center;
+}
+
+.timeWindowOption label {
+    height: 1em;
+    line-height: 1.4em;
+}
+
+.timeWindowOption span {
+    height: 1em;
+    line-height: 1.4em;
+}
+
+.timeWindowTitle {
+    font-size: var(--font-size-larger);
+}
+
+.customTimeWindowInput {
+    width: 30px;
+    text-align: right;
+    padding: 0px 3px;
+}
+
+.customTimeWindowContainer {
+    display: none;
+    padding-top: 4px;
+}
+
+.customVisible {
+    display: inline-block;
+}
+
+.timeWindowOption label {
+    /* background: var(--tertiary-background-color); */
+}

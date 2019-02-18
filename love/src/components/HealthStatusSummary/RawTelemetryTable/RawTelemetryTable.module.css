@@ -367,3 +367,8 @@ button.selectionSetButton {
 .hidden {
     visibility: hidden;
 }
+
+.checkboxCell input[type="checkbox"] {
+    cursor: pointer;
+    transform: scale(1.6);
+}
