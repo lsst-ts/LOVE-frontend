@@ -5,6 +5,7 @@ import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import Login from './components/Login/Login';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
@@ -92,7 +93,8 @@ class App extends Component {
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route
+            <Route path='/login' component={Login} />
+            <PrivateRoute
               path="/health-status-summary"
               render={() => (
                 <div className="hs-container">
@@ -102,8 +104,8 @@ class App extends Component {
                 </div>
               )}
             />
-            <Route path="/dm-flow" component={DataManagementFlow} />
-            <Route
+            <PrivateRoute path="/dm-flow" component={DataManagementFlow} />
+            <PrivateRoute
               path="/time-series"
               render={() => (
                 <div className="hs-container">
@@ -113,8 +115,7 @@ class App extends Component {
                 </div>
               )}
             />
-            <Route path='/login' component={Login} />
-            <Route path="/" component={ComponentIndex} />
+            <PrivateRoute path="/" component={ComponentIndex} />
           </Switch>
         </BrowserRouter>
       </div>
