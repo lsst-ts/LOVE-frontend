@@ -20,7 +20,7 @@ export default class ManagerInterface {
     const token = localStorage.getItem('LOVE-TOKEN');
     console.log('Token got: ', token);
     if (token === null) {
-      return undefined;
+      return null;
     }
     return JSON.parse(token);
   }
@@ -36,12 +36,16 @@ export default class ManagerInterface {
 
   subscribeToTelemetry = (name, callback) => {
     this.callback = callback;
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      console.log('Token not available or invalid, skipping connection');
+      return;
+    }
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
-        const token = ManagerInterface.getToken();
         const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
         // const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription/`;
-        console.log('connectionPath: ', connectionPath);
+        console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
             this.socket.json({
