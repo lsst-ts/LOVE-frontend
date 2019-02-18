@@ -1,112 +1,120 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import './App.css';
-import sockette from 'sockette';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import Login from './components/Login/Login';
 
-import { BrowserRouter } from 'react-router-dom'
-import { Switch, Route } from 'react-router-dom'
+import TimeSeries from './components/TimeSeries/TimeSeries';
+
+import ManagerInterface from './Utils';
 
 class App extends Component {
-
   constructor() {
     super();
     this.state = {
       telemetries: {
-        'interestedProposal': {
+        interestedProposal: {
           parameters: {},
-          receptionTimeStamp: "2018/11/23 21:12:24."
+          receptionTimeStamp: '2018/11/23 21:12:24.',
         },
-        "bulkCloud": {
+        bulkCloud: {
           parameters: {
-            "bulkCloud": 0.6713680575252166,
-            "timestamp": 0.5309269973966433
+            bulkCloud: {
+              value: 0.6713680575252166,
+              dataType: 'Float',
+            },
+            timestamp: {
+              value: 0.5309269973966433,
+              dataType: 'Float',
+            },
           },
-          receptionTimeStamp: "2018/11/25 12:21:12"
-        }
-      }
-    }
-
-    this.subscribeToTelemetry('all', this.receiveAllMsg);
-  }
-
-  getToken() {
-    const token = localStorage.getItem(this.TOKEN_STORAGE_NAME);
-    if (token === null) {
-      return undefined;
-    } else {
-      return JSON.parse(token);
-    }
-  }
-
-
-  subscribeToTelemetry = (name, callback) => {
-    const token = this.getToken();
-    const connectionPath = 'ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/ws/subscription/?token=' + this.getToken();
-    console.log('connectionPath: ', connectionPath);
-    const socket = sockette(connectionPath, {
-      onopen: e => socket.json({ "option": "subscribe", "data": name }),
-      onmessage: callback,
-    });
+          receptionTimeStamp: '2018/11/25 12:21:12',
+        },
+      },
+    };
+    this.managerInterface = new ManagerInterface();
+    this.managerInterface.subscribeToTelemetry('all', this.receiveAllMsg);
   }
 
   receiveAllMsg = (msg) => {
-    let data = JSON.parse(msg.data);
-    if (typeof data.data === 'object') {
+    const data = JSON.parse(msg.data);
 
+    if (typeof data.data === 'object') {
+      // debugger;
       let newTelemetries = Object.assign({}, this.state.telemetries);
       let timestamp = new Date();
-      timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, "/").replace("T", " ");
+      timestamp = timestamp
+        .toISOString()
+        .slice(0, 19)
+        .replace(/-/g, '/')
+        .replace('T', ' ');
       Object.entries(data.data).forEach((entry) => {
-        let [telemetryName, parameters] = entry;
-        let telemetry = {};
+        const [telemetryName, parameters] = entry;
+        const telemetry = {};
         telemetry[telemetryName] = {
-          parameters: parameters,
-          receptionTimestamp: timestamp
-        }
+          parameters,
+          receptionTimestamp: timestamp,
+        };
         Object.assign(newTelemetries, telemetry);
       }, this);
 
       newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
       this.setState({ telemetries: newTelemetries });
+      this.managerInterface.unsubscribeToTelemetry('all', () => 0);
     }
-  }
+  };
 
   receiveMsg = (msg) => {
-    let data = JSON.parse(msg.data);
+    const data = JSON.parse(msg.data);
     if (typeof data.data === 'object') {
       let timestamp = new Date();
-      timestamp = timestamp.toISOString().slice(0, 20).replace("-", "/").replace("T", " ");
-      let telemetry = {
-        "interestedProposal": {
+      timestamp = timestamp
+        .toISOString()
+        .slice(0, 20)
+        .replace('-', '/')
+        .replace('T', ' ');
+      const telemetry = {
+        interestedProposal: {
           parameters: { ...data.data },
-          receptionTimestamp: timestamp
-        }
-      }
+          receptionTimestamp: timestamp,
+        },
+      };
       let newTelemetries = Object.assign({}, this.state.telemetries, telemetry);
       newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
       this.setState({ telemetries: newTelemetries });
     }
-  }
+  };
 
   render() {
-
     return (
       <div className="App">
-
-
         <BrowserRouter>
           <Switch>
-            <Route path='/health-status-summary'
-              render={() => <div className="hs-container"><HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary></div>} />
-            <Route path='/dm-flow'
-              component={DataManagementFlow} />
-            <Route path='/login'
-              component={Login} />
-            <Route path='/'
-              component={ComponentIndex} />
+            <Route
+              path="/health-status-summary"
+              render={() => (
+                <div className="hs-container">
+                  <HealthStatusSummary telemetries={this.state.telemetries}>
+                    {' '}
+                  </HealthStatusSummary>
+                </div>
+              )}
+            />
+            <Route path="/dm-flow" component={DataManagementFlow} />
+            <Route
+              path="/time-series"
+              render={() => (
+                <div className="hs-container">
+                  <TimeSeries telemetries={this.state.telemetries}>
+                    {' '}
+                  </TimeSeries>
+                </div>
+              )}
+            />
+            <Route path='/login' component={Login} />
+            <Route path="/" component={ComponentIndex} />
           </Switch>
         </BrowserRouter>
       </div>

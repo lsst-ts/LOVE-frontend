@@ -7,23 +7,21 @@ import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
 import PropTypes from 'prop-types';
+import { getFakeUnits } from '../../../Utils'
 
 /**
  * Configurable table displaying an arbitrary subset
  * of telemetries provided in the component props. It has an optional selection column
- * to be used as a telemetry selection feature. along with the filtering and sorting methods
+ * to be used as a telemetry selection feature. along with the filtering and sorting methods.
+ * By pressing the Set button, the list of telemetries is passed to a callback function in the component props.
  * 
  */
 export default class RawTelemetryTable extends PureComponent {
     static propTypes = {
         /** Display the selection column or not */
-        displaySelectionColumn: PropTypes.bool,
+        columnsToDisplay: PropTypes.arrayOf(PropTypes.oneOf(['selection_column', 'component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units', 'health_status'])),
         /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
         checkedFilterColumn: PropTypes.oneOf(['component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units']),
-        /** Dictionary specifying filters the default filters per column, in the form: 'column': { 'type': 'regexp', 'value': (new RegExp('(?:)')) }*/
-        filters: PropTypes.object,
-        /** Function called to set filters, as defined in the previous prop */
-        setFilters: PropTypes.func,
         /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
         separated by a dash. Values are javascript code as text */
         healthFunctions: PropTypes.object,
@@ -31,6 +29,13 @@ export default class RawTelemetryTable extends PureComponent {
         setHealthFunctions: PropTypes.func,
         /** Dictionary of telemetries that are displayed. See examples below */
         telemetries: PropTypes.object,
+        /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
+        onSetSelection: PropTypes.func
+    }
+
+    static defaultProps = {
+        onSetSelection: () => { },
+        columnsToDisplay: ['selection_column', 'component', 'stream', 'timestamp', 'name', 'param_name', 'data_type', 'value', 'units', 'health_status'],
     }
 
     constructor() {
@@ -39,13 +44,7 @@ export default class RawTelemetryTable extends PureComponent {
         let expandedRows = {
             'altitude_maxspeed0': true,
         };
-        this.state = {
-            expandedRows: expandedRows,
-            activeFilterDialog: 'None',
-            sortingColumn: 'name',
-            sortDirection: 'None',
-            selectedRows: [],
-        };
+
         this.defaultCodeText = '// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. \'return OK\'';
         this.healthStatusCodes = {
             0: 'Undefined',
@@ -65,6 +64,38 @@ export default class RawTelemetryTable extends PureComponent {
         window.WARNING = 2;
         window.ALERT = 3;
 
+        let filters = {
+            'component': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'stream': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'timestamp': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'param_name': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'data_type': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'value': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'units': { 'type': 'regexp', 'value': (new RegExp('(?:)')) },
+            'health_status': { 'type': 'health', 'value': (new RegExp('(?:)')) },
+        }
+
+        this.state = {
+            expandedRows: expandedRows,
+            activeFilterDialog: 'None',
+            sortingColumn: 'stream',
+            sortDirection: 'ascending',
+            selectedRows: [],
+            filters: filters,
+            setFilters: this.setFilters,
+        };
+    }
+
+    setFilters = (filters) => {
+        Object.keys(filters).map((key) => {
+            if (filters[key]['type'] === 'regexp' && typeof filters[key]['value'] === 'string')
+                filters[key]['value'] = new RegExp(filters[key]['value'].replace(/^\/|\/$/g, ''));
+            return null;
+        })
+        this.setState({
+            filters: filters,
+        });
     }
 
     clickRow = (rowID) => {
@@ -121,17 +152,19 @@ export default class RawTelemetryTable extends PureComponent {
     testFilter = (row) => {
         let values = Object.keys(row).map((rowKey) => {
             let key = [row.component, row.stream, row.param_name].join('-');
-            if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'regexp') {
-                let regexpFilterResult = this.props.filters[rowKey].value.test(row[rowKey]);
+            if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'regexp') {
+                let regexpFilterResult = this.state.filters[rowKey].value.test(row[rowKey]);
                 let checkedFilterResult = true;
                 if (this.state.checkedFilter && this.state.checkedFilter[rowKey]) {
                     checkedFilterResult = this.state.checkedFilter[rowKey].test(row[rowKey]);
                 }
                 return regexpFilterResult && checkedFilterResult;
             }
-            if (this.props.filters[rowKey] !== undefined && this.props.filters[rowKey].type === 'health') {
-                let healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
-                return this.props.filters[rowKey].value.test(healthStatus);
+            if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'health') {
+                let healthStatus = 0;
+                if (this.props.healthFunctions !== undefined)
+                    healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
+                return this.state.filters[rowKey].value.test(healthStatus);
             }
             return true;
         });
@@ -141,9 +174,9 @@ export default class RawTelemetryTable extends PureComponent {
 
     changeFilter = (column) => {
         return (event) => {
-            let filters = { ...this.props.filters };
+            let filters = { ...this.state.filters };
             filters[column].value = new RegExp(event.target.value, 'i');
-            this.props.setFilters(filters);
+            this.state.setFilters(filters);
         }
     }
 
@@ -224,13 +257,17 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     sortData = (a, b) => {
-
+        const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
+        const aKey = [a.component, a.stream, a.param_name].join('-');
+        const bKey = [b.component, b.stream, b.param_name].join('-');
+        const selectedKeys = this.state.selectedRows.map((r) => r.key);
         const column = this.state.sortingColumn;
-        if (this.state.sortDirection !== 'ascending' && this.state.sortDirection !== 'descending') {
-            return 0;
+        if( selectedKeys.indexOf(aKey) > -1 && !(selectedKeys.indexOf(bKey) > -1)){
+            return -1;
         }
+        if( selectedKeys.indexOf(bKey) > -1 && !(selectedKeys.indexOf(aKey) > -1))
+            return 1;
 
-        let direction = this.state.sortDirection === 'ascending' ? 1 : -1;
         if (column === 'health_status') {
             let aValue = this.healthStatusPriorities[a['healthStatusCode']];
             let bValue = this.healthStatusPriorities[b['healthStatusCode']];
@@ -254,12 +291,18 @@ export default class RawTelemetryTable extends PureComponent {
     }
 
     updateSelectedList = (checked, key) => {
-
+        const splitKey = key.split('-');
+        const params = this.props.telemetries[splitKey[1]].parameters;
+        const value = params[splitKey[2]];
         let selectedRows = this.state.selectedRows;
+        let newRow = {
+            key: key,
+            value: value
+        }
         if (checked && selectedRows.indexOf(key) < 0)
-            selectedRows.push(key);
+            selectedRows.push(newRow);
         if (!checked)
-            selectedRows.splice(selectedRows.indexOf(key), 1);
+            selectedRows.splice(selectedRows.map((row) => row.key).indexOf(key), 1);
         if (selectedRows.length === 0)
             this.setCheckedFilterColumn();
         this.setState({
@@ -290,7 +333,6 @@ export default class RawTelemetryTable extends PureComponent {
     getData = () => {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
         let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
-        let fake_units = ['unit1', 'unit2', 'unit3', 'unit4'];
         telemetryNames.forEach((telemetryName, telemetryIndex) => {
             // look at one telemetry
             let telemetryData = this.props.telemetries[telemetryName];
@@ -300,14 +342,14 @@ export default class RawTelemetryTable extends PureComponent {
                 'nParams': telemetryData.parameters.length,
                 'parameters': Object.entries(telemetryData.parameters).map(parameter => {
                     // look at one parameter 
-                    const [name, value, data_type, units] = parameter;
+                    const [name, measurement, units] = parameter;
 
                     return {
                         'name': name,
                         'param_name': name,
-                        'data_type': data_type ? data_type : '?',
-                        'value': value,
-                        'units': units ? units : fake_units[name.charCodeAt(0) % 4]
+                        'data_type': measurement['dataType'] ? measurement['dataType'] : '?',
+                        'value': measurement['value'],
+                        'units': units ? units : getFakeUnits(name)
                     }
                 })
             }
@@ -316,25 +358,31 @@ export default class RawTelemetryTable extends PureComponent {
         data = this.convertData(data);
         return data;
     }
-    
+
+    setSelection = (event) => {
+        this.props.onSetSelection(this.state.selectedRows, event);
+    }
+
     render() {
         const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
         let data = this.getData();
-        data = data.map((row) => {
-            let key = [row.component, row.stream, row.param_name].join('-');
-            return {
-                'healthStatusCode': this.getHealthStatusCode(key, row.value),
-                ...row,
-            };
-        });
+        if (this.props.healthFunctions !== undefined) {
+            data = data.map((row) => {
+                let key = [row.component, row.stream, row.param_name].join('-');
+                return {
+                    'healthStatusCode': this.getHealthStatusCode(key, row.value),
+                    ...row,
+                };
+            });
+        }
         return (
             <div className={styles.rawTelemetryTableWrapper}>
                 <table className={styles.rawTelemetryTable}>
                     <thead>
                         <tr>
                             {
-                                this.props.displaySelectionColumn ?
-                                    <th className={[styles.addedColumn, styles.firstColumn, displayHeaderCheckbock ? '':styles.hidden].join(' ')}>
+                                this.props.columnsToDisplay.includes('selection_column') ?
+                                    <th className={[styles.addedColumn, styles.firstColumn, styles.checkboxCell, displayHeaderCheckbock ? '' : styles.hidden].join(' ')}>
                                         <input type="checkbox" alt={'select all telemetries'} onChange={(event) => (this.selectAllRows(event.target.checked))} />
                                     </th> :
                                     null
@@ -353,15 +401,15 @@ export default class RawTelemetryTable extends PureComponent {
 
                                     return (
                                         <>
-                                            <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.props.filters['component']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.props.filters['stream']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.props.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.props.filters['name']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.props.filters['param_name']} />
-                                            <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.props.filters['data_type']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.props.filters['value']} />
-                                            <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.props.filters['units']} />
-                                            <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.props.filters['health_status']} />
+                                            {this.props.columnsToDisplay.includes('component') && <ColumnHeader {...defaultColumnProps} header={'Component'} filterName={'component'} filter={this.state.filters['component']} />}
+                                            {this.props.columnsToDisplay.includes('stream') && <ColumnHeader {...defaultColumnProps} header={'Stream'} filterName={'stream'} filter={this.state.filters['stream']} />}
+                                            {this.props.columnsToDisplay.includes('timestamp') && <ColumnHeader {...defaultColumnProps} header={'Timestamp'} filterName={'timestamp'} filter={this.state.filters['timestamp']} secondaryText={'YYYY/MM/DD'} />}
+                                            {this.props.columnsToDisplay.includes('name') && <ColumnHeader {...defaultColumnProps} header={'Name'} filterName={'name'} filter={this.state.filters['name']} />}
+                                            {this.props.columnsToDisplay.includes('param_name') && <ColumnHeader {...defaultColumnProps} header={'Parameter'} filterName={'param_name'} filter={this.state.filters['param_name']} />}
+                                            {this.props.columnsToDisplay.includes('data_type') && <ColumnHeader className={styles.mediumCol} {...defaultColumnProps} header={'Data type'} filterName={'data_type'} filter={this.state.filters['data_type']} />}
+                                            {this.props.columnsToDisplay.includes('value') && <ColumnHeader {...defaultColumnProps} header={'Value'} filterName={'value'} filter={this.state.filters['value']} />}
+                                            {this.props.columnsToDisplay.includes('units') && <ColumnHeader className={styles.narrowCol} {...defaultColumnProps} header={'Units'} filterName={'units'} filter={this.state.filters['units']} />}
+                                            {this.props.columnsToDisplay.includes('health_status') && <ColumnHeader {...defaultColumnProps} header={'Health status'} filterName={'health_status'} filter={this.state.filters['health_status']} />}
                                         </>
                                     )
                                 })()
@@ -373,37 +421,41 @@ export default class RawTelemetryTable extends PureComponent {
                             data.sort(this.sortData).map((row) => {
                                 if (this.testFilter(row)) {
                                     let key = [row.component, row.stream, row.param_name].join('-');
-                                    let isChecked = this.state.selectedRows.indexOf(key) >= 0;
+                                    let isChecked = this.state.selectedRows.map((r) => r.key).indexOf(key) >= 0;
 
                                     return (
                                         <React.Fragment key={key}>
                                             <tr className={styles.dataRow} onClick={() => this.clickRow(key)} >
                                                 {
-                                                    this.props.displaySelectionColumn ?
-                                                        <td className={styles.firstColumn}><input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
-                                                            type="checkbox" alt={`select ${key}`} checked={isChecked} /></td> :
+                                                    this.props.columnsToDisplay.includes('selection_column') ?
+                                                        <td className={[styles.firstColumn, styles.checkboxCell].join(' ')}>
+                                                            <input onChange={(event) => (this.onRowSelection(event.target.checked, key, row))}
+                                                                type="checkbox" alt={`select ${key}`} checked={isChecked} />
+                                                        </td> :
                                                         null
                                                 }
-                                                <td className={styles.string}>{row.component}</td>
-                                                <td className={styles.string}>{row.stream}</td>
-                                                <td className={styles.string}>{row.timestamp}</td>
-                                                <td className={styles.string}>{row.name}</td>
-                                                <td className={styles.string}>{row.param_name}</td>
-                                                <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
-                                                <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
-                                                <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
-                                                <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
-                                                    key={key + '-row'}>
-                                                    <div className={styles.healthStatusWrapper}>
-                                                        <div className={styles.statusTextWrapper}>
-                                                            <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
-                                                            </StatusText>
+                                                {this.props.columnsToDisplay.includes('component') && <td className={styles.string}>{row.component}</td>}
+                                                {this.props.columnsToDisplay.includes('stream') && <td className={styles.string}>{row.stream}</td>}
+                                                {this.props.columnsToDisplay.includes('timestamp') && <td className={styles.string}>{row.timestamp}</td>}
+                                                {this.props.columnsToDisplay.includes('name') && <td className={styles.string}>{row.name}</td>}
+                                                {this.props.columnsToDisplay.includes('param_name') && <td className={styles.string}>{row.param_name}</td>}
+                                                {this.props.columnsToDisplay.includes('data_type') && <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>}
+                                                {this.props.columnsToDisplay.includes('value') && <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>}
+                                                {this.props.columnsToDisplay.includes('units') && <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>}
+                                                {this.props.columnsToDisplay.includes('health_status') &&
+                                                    <td className={[styles.healthStatusCell, this.state.expandedRows[key] ? styles.selectedHealthStatus : ''].join(' ')}
+                                                        key={key + '-row'}>
+                                                        <div className={styles.healthStatusWrapper}>
+                                                            <div className={styles.statusTextWrapper}>
+                                                                <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
+                                                                </StatusText>
+                                                            </div>
+                                                            <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
+                                                                <GearIcon active={this.state.expandedRows[key]}></GearIcon>
+                                                            </div>
                                                         </div>
-                                                        <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                                                            <GearIcon active={this.state.expandedRows[key]}></GearIcon>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                                    </td>
+                                                }
                                             </tr>
                                             {
                                                 (this.state.expandedRows[key]) ?
@@ -429,7 +481,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                                     {'}'}
                                                                 </p>
                                                                 <div onClick={() => this.setHealthFunction(key)}>
-                                                                    <Button className={styles.setButton}>
+                                                                    <Button title="Set health status function" className={styles.setButton}>
                                                                         Set
                                                                     </Button>
                                                                 </div>
@@ -480,7 +532,8 @@ export default class RawTelemetryTable extends PureComponent {
                 <div className={styles.selectionContainer}>
                     TELEMETRIES:
                     <span className={styles.selectionList}>
-                        {this.state.selectedRows.map((telemetryKey) => {
+                        {this.state.selectedRows.map((telemetryKeyValue) => {
+                            const telemetryKey = telemetryKeyValue.key;
                             const telemetryName = telemetryKey.split('-')[2];
                             return <TelemetrySelectionTag
                                 key={telemetryKey}
@@ -489,7 +542,8 @@ export default class RawTelemetryTable extends PureComponent {
                                 remove={() => this.updateSelectedList(false, telemetryKey)}></TelemetrySelectionTag>
                         })}
                     </span>
-                    <Button className={styles.selectionSetButton} onClick={this.props.onClick}> Set </Button>
+                    <Button title="Set selected telemetries" className={styles.selectionSetButton}
+                        onClick={(ev) => { this.setSelection(this.state.selectedRows, ev) }}> Set </Button>
                 </div>
             </div>
 
