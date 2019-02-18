@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Button from '../Button/Button';
 import styles from './Login.module.css'
+import ManagerInterface from '../../Utils';
 
 export default class Login extends Component {
 
@@ -37,7 +38,8 @@ export default class Login extends Component {
       .then(response => {
         const token = response['token'];
         if (token !== undefined && token !== null) {
-          localStorage.setItem('love-token', JSON.stringify(token));
+          ManagerInterface.saveToken(token);
+          // localStorage.setItem('love-token', JSON.stringify(token));
         }
       }
     );

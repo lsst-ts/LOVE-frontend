@@ -3,21 +3,10 @@ import sockette from 'sockette';
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
   Object.defineProperty(Array.prototype, 'flat', {
-    value: function(depth = 1) {
-      return this.reduce(function(flat, toFlatten) {
-        return flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten);
-      }, []);
+    value(depth = 1) {
+      return this.reduce((flat, toFlatten) => flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten), []);
     },
   });
-}
-
-export const getToken = () => {
-  const token = localStorage.getItem('LOVE-TOKEN');
-  if (token === null) {
-    return undefined;
-  } else {
-    return JSON.parse(token);
-  }
 }
 
 export default class ManagerInterface {
@@ -27,12 +16,32 @@ export default class ManagerInterface {
     this.socketPromise = null;
   }
 
+  static getToken() {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    console.log('Token got: ', token);
+    if (token === null) {
+      return undefined;
+    }
+    return JSON.parse(token);
+  }
+
+  static saveToken(token) {
+    if (token === null) {
+      return false;
+    }
+    localStorage.setItem('LOVE-TOKEN', JSON.stringify(token));
+    console.log('Token saved: ', token);
+    return true;
+  }
+
   subscribeToTelemetry = (name, callback) => {
     this.callback = callback;
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
-        const token = getToken();
-        const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/?token=${token}`
+        const token = ManagerInterface.getToken();
+        const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
+        // const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription/`;
+        console.log('connectionPath: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
             this.socket.json({
@@ -124,7 +133,7 @@ export const getFakeUnits = (name) => {
 
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
   const dataType = selectedRows[0].value.dataType;
-  const stringValues = ['a','b','c'];
+  const stringValues = ['a', 'b', 'c'];
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
   let arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / timestep;
@@ -152,7 +161,7 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
       const dateValue = new Date(t).getTime();
 
       currentValue.forEach((value) => {
-        if(dataType === 'String'){
+        if (dataType === 'String') {
           // eslint-disable-next-line
           value.value = stringValues[Math.floor(Math.random() * stringValues.length)];
         } else {
