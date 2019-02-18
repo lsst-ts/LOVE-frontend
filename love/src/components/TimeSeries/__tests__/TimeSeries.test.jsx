@@ -11,38 +11,6 @@ import 'jest-dom/extend-expect'
 import TimeSeries from '../TimeSeries';
 import {Server} from 'mock-socket';
 
-/* jest.mock('../../Utils', () => {
-    return jest.fn().mockImplementation(() => {
-        return {
-            subscribeToTelemetry: (name, callback) => {
-                const message = {
-                    "data": JSON.stringify({
-                        "data":{
-                            "cameraConfig": {
-                                "filterChangeTime": {
-                                    "value": 0.8172357870183607,
-                                    "dataType": "Float"
-                                }
-                            }
-                        }
-                        
-                    })
-                };
-                setTimeout(()=>{
-                    
-                    //   The callback is called exactly after setState({selectedRows})
-                    //    so this timeout gives it some time  until the state is updated 
-                    
-                    callback(message);
-
-                },1000)
-            }
-        }
-    });
-});*/
-
-
-
 const telemetries = {
     'interestedProposal': {
       parameters: {},
@@ -72,6 +40,8 @@ const telemetries = {
     }
   };
 
+afterEach(cleanup);
+
 'GIVEN a current list of selected telemetries in the table'
 "WHEN the user clicks a checkbox of a specific row"
 "AND presses the SET button"
@@ -95,7 +65,6 @@ describe('my ws test', () => {
     };
     mockServer.on('connection', socket => {
         socket.send(JSON.stringify(messageObject));
-        socket.close();
     });
       
     const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
