@@ -119,14 +119,14 @@ describe('my ws test', () => {
   });
 });
 
-'GIVEN a current list of selected telemetries in the table'
-"WHEN the user clicks a checkbox of a specific row"
-"AND presses the SET button"
-"THEN shows a plot with some text indicating the name of the telemetry"
-
-// jest.useFakeTimers();
-describe('date picker test', () => {
-  it('works', async () => {
+test(`
+GIVEN a current list of telemetries
+WHEN the user selects one telemetry with a checkbox
+AND presses the set button
+AND toggles to query mode
+AND chooses a specific date-range
+THEN it should update the plot accordingly
+`, async () => {
     const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
     const { getByAltText, getByText, getByTitle, debug, getByPlaceholderText } = timeSeries;
     const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
@@ -175,6 +175,4 @@ describe('date picker test', () => {
     const axisDateString = getByText('12 PM');
     expect(axisDateString).toBeTruthy();
 
-
-  });
 });
