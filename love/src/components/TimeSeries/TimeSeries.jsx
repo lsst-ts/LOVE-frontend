@@ -20,11 +20,11 @@ export default class TimeSeries extends PureComponent {
       dateEnd: new Date(),
       isLive: true,
       timeWindow: 60,
+      historicalData : [],
     };
 
     this.managerInterface = new ManagerInterface();
 
-    this.historicalData = [];
   }
 
   getSpec = (data, name) => {
@@ -90,7 +90,7 @@ export default class TimeSeries extends PureComponent {
     if(!this.state.isLive)
       return;
     let data = JSON.parse(msg.data);
-    console.log(data);
+    console.log(data);    
     let dateEnd = new Date();
     let dateStart = moment(dateEnd)
       .subtract(this.state.timeWindow, 'minutes')
@@ -112,25 +112,34 @@ export default class TimeSeries extends PureComponent {
   };
 
   setTimeWindow = (timeWindow) => {
+    const now = new Date();
     this.setState({
       timeWindow: timeWindow,
+      dateEnd: now,
+      dateStart: moment(now)
+      .subtract(timeWindow, 'minutes')
+      .toDate(),
     });
   };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.step !== this.state.step && this.state.step === 1) {
-      this.historicalData = getFakeHistoricalTimeSeries(
+      this.setState({
+        historicalData: getFakeHistoricalTimeSeries(
         this.state.selectedRows,
         new Date().getTime() - 3600 * 1000,
         new Date(),
-      );
+        )
+      });
     }
     if (prevState.timeWindow !== this.state.timeWindow) {
-      this.historicalData = getFakeHistoricalTimeSeries(
-        this.state.selectedRows,
-        new Date().getTime() - this.state.timeWindow * 60 * 1000,
-        new Date(),
-      );
+      this.setState({
+        historicalData: getFakeHistoricalTimeSeries(
+          this.state.selectedRows,
+          this.state.dateStart,
+          this.state.dateEnd,
+        )
+      });
     }
   };
 
@@ -142,15 +151,15 @@ export default class TimeSeries extends PureComponent {
   };
 
   setHistoricalData = (dateStart, dateEnd) => {
-    this.historicalData = getFakeHistoricalTimeSeries(
-      this.state.selectedRows,
-      dateStart,
-      dateEnd,
-    );
     this.setState({
       dateStart,
       dateEnd,
       isLive: false,
+      historicalData : getFakeHistoricalTimeSeries(
+        this.state.selectedRows,
+        dateStart,
+        dateEnd,
+      )
     });
   };
 
@@ -195,11 +204,10 @@ export default class TimeSeries extends PureComponent {
       setHistoricalData={this.setHistoricalData}
       goBack={this.goBack} />
         <Vega
-          spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
+          spec={this.getSpec(this.state.historicalData, this.state.telemetryName.split('-')[2])}
           lastMessageData={this.state.lastMessageData}
           dateStart={this.state.dateStart}
           dateEnd={this.state.dateEnd}
-          historicalData={this.historicalData}
         />
       </div>
     );
