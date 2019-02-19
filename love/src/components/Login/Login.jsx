@@ -30,30 +30,14 @@ export default class Login extends Component {
   }
 
   handleSubmit(event) {
-    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/get-token/';
-    const data = {
-      username: this.state.username,
-      password: this.state.password
-    }
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    }).then(response => response.json())
-      .then(response => {
-        const token = response['token'];
-        if (token !== undefined && token !== null) {
-          ManagerInterface.saveToken(token);
-          this.setState({ loginStatus: 'ok' });
-        } else {
-          this.setState({ loginStatus: 'failed' });
-        }
-      }
-    );
     event.preventDefault();
+    ManagerInterface.requestToken(this.state.username, this.state.password).then(response => {
+      if (response === true) {
+        this.setState({ loginStatus: 'ok'});
+      } else {
+        this.setState({ loginStatus: 'failed'});
+      }
+    });
   }
 
   redirect() {

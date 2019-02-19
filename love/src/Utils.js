@@ -16,9 +16,24 @@ export default class ManagerInterface {
     this.socketPromise = null;
   }
 
+  static getHeaders() {
+    const token = ManagerInterface.getToken();
+    if (token) {
+      return new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + token
+      });
+    } else {
+      return new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      });
+    }
+  }
+
   static getToken() {
     const token = localStorage.getItem('LOVE-TOKEN');
-    console.log('Token got: ', token);
     if (token === null) {
       return null;
     }
@@ -30,8 +45,48 @@ export default class ManagerInterface {
       return false;
     }
     localStorage.setItem('LOVE-TOKEN', JSON.stringify(token));
-    console.log('Token saved: ', token);
     return true;
+  }
+
+  static requestToken(username: string, password: string) {
+    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/get-token/';
+    const data = {
+      username: username,
+      password: password
+    }
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data)
+    }).then(response => response.json())
+      .then(response => {
+        const token = response['token'];
+        if (token !== undefined && token !== null) {
+          ManagerInterface.saveToken(token);
+          return true;
+        } else {
+          return false;
+        }
+      }
+    );
+  }
+
+  static validateToken() {
+    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/validate-token/';
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders()
+    }).then(response => response.json())
+      .then(response => {
+        console.log('response: ', response)
+        const detail = response['detail'];
+        if (detail === 'Token is valid') {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    );
   }
 
   subscribeToTelemetry = (name, callback) => {
