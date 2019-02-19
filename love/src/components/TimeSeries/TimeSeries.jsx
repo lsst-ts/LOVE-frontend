@@ -65,11 +65,12 @@ export default class TimeSeries extends PureComponent {
 
   onSetSelection = (selectedRows) => {
     const streams = selectedRows.map((rowKeyValue) => {
-      return rowKeyValue.key.split('-')[1];
+      let splitKey = rowKeyValue.key.split('-')
+      return [splitKey[0], splitKey[1]];
     });
     const streamsSet = new Set(streams);
     streamsSet.forEach((stream) => {
-      this.managerInterface.subscribeToTelemetry(stream, this.onReceiveMsg);
+      this.managerInterface.subscribeToTelemetry(stream[0], stream[1], this.onReceiveMsg);
     });
     this.setState({
       telemetryName: selectedRows[0].key,
@@ -82,7 +83,7 @@ export default class TimeSeries extends PureComponent {
 
   componentWillUnmount = () => {
     this.state.subscribedStreams.forEach((stream) => {
-      this.managerInterface.unsubscribeToTelemetry(stream, (msg) => console.log(msg));
+      this.managerInterface.unsubscribeToTelemetry(stream[0], stream[1], (msg) => console.log(msg));
     });
   };
 
@@ -90,18 +91,17 @@ export default class TimeSeries extends PureComponent {
     if(!this.state.isLive)
       return;
     let data = JSON.parse(msg.data);
-    console.log(data);
     let dateEnd = new Date();
     let dateStart = moment(dateEnd)
-      .subtract(this.state.timeWindow, 'minutes')
-      .toDate();
+    .subtract(this.state.timeWindow, 'minutes')
+    .toDate();
     if (typeof data.data === 'object') {
       let timestamp = new Date();
       timestamp = timestamp
-        .toISOString()
-        .slice(0, 19)
-        .replace(/-/g, '/')
-        .replace('T', ' ');
+      .toISOString()
+      .slice(0, 19)
+      .replace(/-/g, '/')
+      .replace('T', ' ');
       const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp);
       this.setState({
         lastMessageData: newEntries,
