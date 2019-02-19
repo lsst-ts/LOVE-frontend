@@ -46,11 +46,13 @@ export default class ManagerInterface {
   };
 
   unsubscribeToTelemetry = (name, callback) => {
-    this.socket.json({
-      option: 'unsubscribe',
-      data: name,
-    });
-    this.callback = callback;
+    if(this.socket){
+      this.socket.json({
+        option: 'unsubscribe',
+        data: name,
+      });
+      this.callback = callback;
+    }
   };
 }
 

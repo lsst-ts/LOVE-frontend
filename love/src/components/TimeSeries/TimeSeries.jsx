@@ -4,7 +4,6 @@ import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSerie
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import moment from 'moment';
-import { getFakeUnits } from '../../Utils';
 import styles from './TimeSeries.module.css'
 
 export default class TimeSeries extends PureComponent {
@@ -12,7 +11,6 @@ export default class TimeSeries extends PureComponent {
     super();
 
     this.state = {
-      specDataType: 'quantitative',
       telemetryName: 'test',
       step: 0,
       lastMessageData: [],
@@ -20,48 +18,12 @@ export default class TimeSeries extends PureComponent {
       dateEnd: new Date(),
       isLive: true,
       timeWindow: 60,
+      historicalData : [],
     };
 
     this.managerInterface = new ManagerInterface();
 
-    this.historicalData = [];
   }
-
-  getSpec = (data, name) => {
-    return {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
-      description: "Google's stock price over time.",
-      data: {
-        values: data,
-        name: 'telemetries',
-      },
-      mark: this.state.specDataType === 'quantitative' ? 'line' : 'point',
-      encoding: {
-        x: {
-          field: 'date',
-          type: 'temporal',
-          title: 'date',
-        },
-        y: {
-          field: 'value',
-          type: this.state.specDataType,
-          title: getFakeUnits(name),
-        },
-        color: {
-          field: 'source',
-          type: 'nominal',
-          legend: {
-            title: 'Parameter Names' + ' '.repeat(32),
-          },
-        },
-      },
-    };
-  };
-
-  getSpecDataType = (dataType) => {
-    if (dataType === 'String') return 'nominal';
-    else return 'quantitative';
-  };
 
   onSetSelection = (selectedRows) => {
     const streams = selectedRows.map((rowKeyValue) => {
@@ -73,7 +35,6 @@ export default class TimeSeries extends PureComponent {
     });
     this.setState({
       telemetryName: selectedRows[0].key,
-      specDataType: this.getSpecDataType(selectedRows[0].value.dataType),
       subscribedStreams: streamsSet,
       selectedRows: selectedRows,
       step: 1,
@@ -90,7 +51,6 @@ export default class TimeSeries extends PureComponent {
     if(!this.state.isLive)
       return;
     let data = JSON.parse(msg.data);
-    console.log(data);
     let dateEnd = new Date();
     let dateStart = moment(dateEnd)
       .subtract(this.state.timeWindow, 'minutes')
@@ -112,25 +72,34 @@ export default class TimeSeries extends PureComponent {
   };
 
   setTimeWindow = (timeWindow) => {
+    const now = new Date();
     this.setState({
       timeWindow: timeWindow,
+      dateEnd: now,
+      dateStart: moment(now)
+      .subtract(timeWindow, 'minutes')
+      .toDate(),
     });
   };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.step !== this.state.step && this.state.step === 1) {
-      this.historicalData = getFakeHistoricalTimeSeries(
+      this.setState({
+        historicalData: getFakeHistoricalTimeSeries(
         this.state.selectedRows,
         new Date().getTime() - 3600 * 1000,
         new Date(),
-      );
+        )
+      });
     }
     if (prevState.timeWindow !== this.state.timeWindow) {
-      this.historicalData = getFakeHistoricalTimeSeries(
-        this.state.selectedRows,
-        new Date().getTime() - this.state.timeWindow * 60 * 1000,
-        new Date(),
-      );
+      this.setState({
+        historicalData: getFakeHistoricalTimeSeries(
+          this.state.selectedRows,
+          this.state.dateStart,
+          this.state.dateEnd,
+        )
+      });
     }
   };
 
@@ -142,15 +111,15 @@ export default class TimeSeries extends PureComponent {
   };
 
   setHistoricalData = (dateStart, dateEnd) => {
-    this.historicalData = getFakeHistoricalTimeSeries(
-      this.state.selectedRows,
-      dateStart,
-      dateEnd,
-    );
     this.setState({
       dateStart,
       dateEnd,
       isLive: false,
+      historicalData : getFakeHistoricalTimeSeries(
+        this.state.selectedRows,
+        dateStart,
+        dateEnd,
+      )
     });
   };
 
@@ -171,13 +140,7 @@ export default class TimeSeries extends PureComponent {
       'value',
       'units',
     ];
-    let props = {
-      setTimeWindow: this.setTimeWindow,
-      timeWindow: this.state.timeWindow,
-      setLiveMode: this.setLiveMode,
-      isLive: this.state.isLive,
-      setHistoricalData: this.setHistoricalData,
-    };
+
     return this.state.step === 0 ? (
       <RawTelemetryTable
         telemetries={this.props.telemetries}
@@ -195,11 +158,12 @@ export default class TimeSeries extends PureComponent {
       setHistoricalData={this.setHistoricalData}
       goBack={this.goBack} />
         <Vega
-          spec={this.getSpec(this.state.lastMessageData, this.state.telemetryName.split('-')[2])}
+          telemetryName={this.state.telemetryName.split('-')[2]}
+          historicalData={this.state.historicalData}
           lastMessageData={this.state.lastMessageData}
           dateStart={this.state.dateStart}
           dateEnd={this.state.dateEnd}
-          historicalData={this.historicalData}
+          dataType={this.state.selectedRows[0].value.dataType}
         />
       </div>
     );
