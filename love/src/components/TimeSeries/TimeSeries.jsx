@@ -163,6 +163,7 @@ export default class TimeSeries extends PureComponent {
           lastMessageData={this.state.lastMessageData}
           dateStart={this.state.dateStart}
           dateEnd={this.state.dateEnd}
+          dataType={this.state.selectedRows[0].value.dataType}
         />
       </div>
     );
