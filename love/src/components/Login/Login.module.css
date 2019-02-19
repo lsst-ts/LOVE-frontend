@@ -13,6 +13,7 @@
   border: 2px solid var(--secondary-font-color);
   border-radius: 6px;
   height: fit-content;
+  width: 450px;
 }
 
 .panelHeading {
