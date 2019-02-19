@@ -83,6 +83,7 @@ describe('my ws test', () => {
     await waitForElement(() => getByText("filterChangeTime"));
     const vegaElement = getByText("filterChangeTime");
     expect(vegaElement).toBeTruthy();
+    mockServer.stop();
 
 
   });
@@ -110,7 +111,9 @@ THEN it should update the plot accordingly
 
     const toggleButton = getByAltText("Live/query mode toggle");
     expect(toggleButton).toBeTruthy();
+    const a = fireEvent;
     fireEvent.click(toggleButton);
+    debugger;
 
     await waitForElement(() => {
         return getByPlaceholderText("Click to set initial date") &&  getByPlaceholderText("Click to set final date")
@@ -143,5 +146,51 @@ THEN it should update the plot accordingly
 
     const axisDateString = getByText('12 PM');
     expect(axisDateString).toBeTruthy();
+
+});
+
+
+
+test(`
+GIVEN a current list of telemetries
+WHEN the user selects one telemetry with a checkbox
+AND presses the set button
+AND chooses any timewindow
+IT should update the plot accordingly
+`, async () => {
+    // process.env.REACT_APP_WEBSOCKET_HOST  = 'mockhost:8000';
+    // const url = 'ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/';
+    // const mockServer = new Server(url);
+    // const messageObject =  {
+    //         data:{
+    //             cameraConfig: {
+    //                 filterChangeTime: {
+    //                     value: 0.8172357870183607,
+    //                     dataType: "Float"
+    //                 }
+    //             }
+    //         }    
+    // };
+    // mockServer.on('connection', socket => {
+    //     socket.send(JSON.stringify(messageObject));
+    // });
+
+    // const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
+    // const { getByAltText, getByText, getByTitle, debug, getByPlaceholderText } = timeSeries;
+    // const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
+    // fireEvent.click(checkBox);
+
+    // expect(getByText('TELEMETRIES:').innerHTML.includes('filterChangeTime')).toBe(true);
+    
+    // const setButton = getByTitle("Set selected telemetries");
+    // fireEvent.click(setButton);
+
+    // await waitForElement(() => getByText('1h'));
+
+    // const fireevent = fireEvent;
+
+    // fireEvent.click(timeSeries.getByLabelText('1h'))
+    // debugger;
+    // await waitForElement( () => timeSeries.queryAllByText(':', {exact:false}));
 
 });
