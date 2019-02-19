@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import Button from '../Button/Button';
 import styles from './Login.module.css'
 import ManagerInterface from '../../Utils';
@@ -10,9 +11,16 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
+      loginStatus: 'pending'
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidMount() {
+    if (ManagerInterface.getToken() !== null) {
+      this.setState({ loginStatus: 'ok' });
+    }
   }
 
   handleInputChange(event) {
@@ -39,11 +47,23 @@ export default class Login extends Component {
         const token = response['token'];
         if (token !== undefined && token !== null) {
           ManagerInterface.saveToken(token);
-          // localStorage.setItem('love-token', JSON.stringify(token));
+          this.setState({ loginStatus: 'ok' });
+        } else {
+          this.setState({ loginStatus: 'failed' });
         }
       }
     );
     event.preventDefault();
+  }
+
+  redirect() {
+    return (
+      <Redirect to={{
+        pathname: '/',
+        state: { from: this.props.location }
+        }}
+      />
+    );
   }
 
   render() {
@@ -55,15 +75,14 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              {/* {% csrf_token %}
-              {% if form.errors %} */}
-              <div className={styles.incorrectCredentialsDiv}>
-                <p className={styles.incorrectCredentials}>
-                  Your username and password didn't match.
-                  Please try again.
-                </p>
-              </div>
-              {/* {% endif %} */}
+              { this.state.loginStatus === 'failed' ?
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>
+                    Your username and password didn't match.
+                    Please try again.
+                  </p>
+                </div>
+              : null }
               <p className={styles.formEntry}>
                 <label htmlFor="id_username" className={styles.label}>Username</label>
                 <input
@@ -88,6 +107,7 @@ export default class Login extends Component {
                 />
               </p>
               <Button type="submit" status="primary">Login</Button>
+              { this.state.loginStatus === 'ok' ? this.redirect() : ''}
             </form>
           </div>
         </div>
