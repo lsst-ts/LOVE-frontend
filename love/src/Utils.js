@@ -40,6 +40,10 @@ export default class ManagerInterface {
     return JSON.parse(token);
   }
 
+  static removeToken() {
+    localStorage.removeItem('LOVE-TOKEN');
+  }
+
   static saveToken(token) {
     if (token === null) {
       return false;
@@ -72,21 +76,33 @@ export default class ManagerInterface {
   }
 
   static validateToken() {
+    console.log('------------ Validating token');
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
     const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/validate-token/';
     return fetch(url, {
       method: 'GET',
       headers: this.getHeaders()
-    }).then(response => response.json())
-      .then(response => {
-        console.log('response: ', response)
-        const detail = response['detail'];
-        if (detail === 'Token is valid') {
-          return true;
-        } else {
-          return false;
-        }
+    })
+    .then(response => response.json())
+    .then(response => {
+      const detail = response['detail'];
+      if (detail === 'Token is valid') {
+        console.log('valid token');
+        return true;
+      } else {
+        console.log('invalid token');
+        this.removeToken();
+        return false;
       }
-    );
+    })
+    .catch((error) => {
+      console.log('Got error: ', error);
+      console.error(error);
+    });
   }
 
   subscribeToTelemetry = (name, callback) => {
@@ -99,7 +115,6 @@ export default class ManagerInterface {
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
         const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
-        // const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription/`;
         console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
