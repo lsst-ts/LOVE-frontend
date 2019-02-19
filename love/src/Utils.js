@@ -16,6 +16,7 @@ export default class ManagerInterface {
     this.callback = callback;
     this.socket = null;
     this.socketPromise = null;
+    this.connectionIsOpen = false;
   }
 
   subscribeToTelemetry = (name, callback) => {
@@ -24,6 +25,7 @@ export default class ManagerInterface {
       this.socketPromise = new Promise((resolve) => {
         this.socket = sockette(`ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`, {
           onopen: () => {
+            this.connectionIsOpen = true;
             this.socket.json({
               option: 'subscribe',
               data: name,
@@ -46,7 +48,7 @@ export default class ManagerInterface {
   };
 
   unsubscribeToTelemetry = (name, callback) => {
-    if(this.socket){
+    if(this.connectionIsOpen){
       this.socket.json({
         option: 'unsubscribe',
         data: name,
