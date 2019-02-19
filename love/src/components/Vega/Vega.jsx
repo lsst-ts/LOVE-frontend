@@ -57,24 +57,20 @@ export default class Vega extends Component {
         const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
 
         let shouldUpdatePlot = false;
-        if (prevProps.lastMessageData !== this.props.lastMessageData) {
-            if (this.data.length === 0)
-                this.remountPlot();
+        // if (prevProps.lastMessageData !== this.props.lastMessageData) {
+        //     if (this.data.length === 0)
+        //         this.remountPlot();
 
             
-            this.data.push(...this.props.lastMessageData);
+        //     this.data.push(...this.props.lastMessageData);
 
-            shouldUpdatePlot = true;
+        //     shouldUpdatePlot = true;
 
 
-        }
-
-        if(prevProps.historicalData !== this.props.historicalData) {
-            if (this.data.length === 0)
-                this.remountPlot();
-
-            this.data = [...this.props.historicalData];
-
+        // }
+        
+        if(prevProps.spec !== this.props.spec){
+            this.remountPlot();
             shouldUpdatePlot = true;
         }
 
@@ -89,7 +85,7 @@ export default class Vega extends Component {
             var changeSet = vega
                 .changeset()
                 .remove(t => true)
-                .insert(this.data)
+                // .insert(this.data)
             this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
     }
@@ -144,8 +140,8 @@ export default class Vega extends Component {
                 const date = new Date(data.date) - dateOffset;;
                 return date < dateStart || date > dateEnd;
             })
-            .insert(this.data)
-            console.log('vega:',(this.props.dateEnd-this.props.dateStart)/1000/60, this.data.length);
+            // .insert(this.data)
+            
             this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
         }
 
