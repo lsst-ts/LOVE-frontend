@@ -129,6 +129,7 @@ export default class Vega extends Component {
 
 
     changeSpec = (data, name) => {
+        const dataType = this.getSpecDataType(this.props.dataType);
         return {
           $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
           description: "Google's stock price over time.",
@@ -136,7 +137,7 @@ export default class Vega extends Component {
             values: data,
             name: 'telemetries',
           },
-          mark: this.state.specDataType === 'quantitative' ? 'line' : 'point',
+          mark: dataType === 'quantitative' ? 'line' : 'point',
           encoding: {
             x: {
               field: 'date',
@@ -145,7 +146,7 @@ export default class Vega extends Component {
             },
             y: {
               field: 'value',
-              type: this.state.specDataType,
+              type: dataType,
               title: getFakeUnits(name),
             },
             color: {
