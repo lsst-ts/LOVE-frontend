@@ -44,33 +44,35 @@ import {Server} from 'mock-socket';
 
 
 const telemetries = {
-    'interestedProposal': {
-      parameters: {},
-      receptionTimeStamp: "2018/11/23 21:12:24."
-    },
-    "bulkCloud": {
-      parameters: {
+    'scheduler': {
+        'interestedProposal': {
+        parameters: {},
+        receptionTimeStamp: "2018/11/23 21:12:24."
+        },
         "bulkCloud": {
-          "value": 0.6713680575252166,
-          "dataType": "Float"
-        },
-        "timestamp": {
-          "value": 0.5309269973966433,
-          "dataType": "Float"
-        },
-      },
-      receptionTimeStamp: "2018/11/25 12:21:12"
-    },
-    cameraConfig: {
-        parameters:{
-            "filterChangeTime": {
-            "value": 0.8172357870183607,
+        parameters: {
+            "bulkCloud": {
+            "value": 0.6713680575252166,
             "dataType": "Float"
-            }
+            },
+            "timestamp": {
+            "value": 0.5309269973966433,
+            "dataType": "Float"
+            },
         },
+        receptionTimeStamp: "2018/11/25 12:21:12"
+        },
+        cameraConfig: {
+            parameters:{
+                "filterChangeTime": {
+                "value": 0.8172357870183607,
+                "dataType": "Float"
+                }
+            },
 
+        }
     }
-  };
+};
 
 'GIVEN a current list of selected telemetries in the table'
 "WHEN the user clicks a checkbox of a specific row"
@@ -84,14 +86,16 @@ describe('my ws test', () => {
     const url = 'ws://' + process.env.REACT_APP_WEBSOCKET_HOST + '/ws/subscription/';
     const mockServer = new Server(url);
     const messageObject =  {
-            data:{
+        data:{
+            scheduler: {
                 cameraConfig: {
                     filterChangeTime: {
                         value: 0.8172357870183607,
                         dataType: "Float"
                     }
                 }
-            }    
+            }
+        }    
     };
     mockServer.on('connection', socket => {
         socket.send(JSON.stringify(messageObject));

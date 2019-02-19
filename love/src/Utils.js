@@ -12,13 +12,13 @@ if (Array.prototype.flat === undefined) {
 }
 
 export default class ManagerInterface {
-  constructor(name, callback) {
-    this.callback = callback;
+  constructor() {
+    this.callback = null;
     this.socket = null;
     this.socketPromise = null;
   }
 
-  subscribeToTelemetry = (name, callback) => {
+  subscribeToTelemetry = (csc, stream, callback) => {
     this.callback = callback;
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
@@ -26,11 +26,13 @@ export default class ManagerInterface {
           onopen: () => {
             this.socket.json({
               option: 'subscribe',
-              data: name,
+              csc: csc,
+              stream: stream,
             });
           },
           onmessage: (msg) => {
-            this.callback(msg);
+            if(this.callback)
+              this.callback(msg);
             resolve();
           },
         });
@@ -39,16 +41,18 @@ export default class ManagerInterface {
       this.socketPromise.then(() => {
         this.socket.json({
           option: 'subscribe',
-          data: name,
+          csc: csc,
+          stream: stream,
         });
       });
     }
   };
 
-  unsubscribeToTelemetry = (name, callback) => {
+  unsubscribeToTelemetry = (csc, stream, callback) => {
     this.socket.json({
       option: 'unsubscribe',
-      data: name,
+      csc: csc,
+      stream: stream,
     });
     this.callback = callback;
   };
@@ -64,22 +68,23 @@ export default class ManagerInterface {
  */
 export const telemetryObjectToVegaList = (telemetries, parametersNames, timestamp) => {
   const newEntries = [];
-
-  Object.keys(telemetries).forEach((stream) => {
-    Object.entries(telemetries[stream]).forEach((entry) => {
-      const key = ['scheduler', stream, entry[0]].join('-');
-      if (parametersNames.map((r) => r.key).includes(key)) {
-        const newEntry = {
-          value: Array.isArray(entry[1].value) ? entry[1].value[0] : entry[1].value,
-          date: timestamp,
-          source: key.split('-')[2],
-          dataType: entry[1].dataType,
-        };
-        newEntries.push(newEntry);
-      }
+  Object.keys(telemetries).forEach((csc) => {
+    Object.keys(telemetries[csc]).forEach((stream) => {
+      Object.entries(telemetries[csc][stream]).forEach((entry) => {
+        const key = [csc, stream, entry[0]].join('-');
+        if (parametersNames.map((r) => r.key).includes(key)) {
+          const newEntry = {
+            value: Array.isArray(entry[1].value) ? entry[1].value[0] : entry[1].value,
+            date: timestamp,
+            source: key.split('-')[2],
+            dataType: entry[1].dataType,
+          };
+          newEntries.push(newEntry);
+        }
+      });
     });
   });
-
+    
   return newEntries;
 };
 
@@ -87,13 +92,15 @@ export const tableRowListToTimeSeriesObject = (selectedRows) => {
   const telemetries = {};
 
   selectedRows.forEach((row) => {
-    const [, stream, parameter] = row.key.split('-');
-
-    if (telemetries[stream] === undefined) {
-      telemetries[stream] = {};
+    const [csc, stream, parameter] = row.key.split('-');
+    if (telemetries[csc] === undefined) {
+      telemetries[csc] = {};
+    }
+    if (telemetries[csc][stream] === undefined) {
+      telemetries[csc][stream] = {};
     }
 
-    telemetries[stream][parameter] = {
+    telemetries[csc][stream][parameter] = {
       value: row.value.value,
       dataType: row.value.dataType,
     };
@@ -113,7 +120,7 @@ export const getFakeUnits = (name) => {
 
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
   const dataType = selectedRows[0].value.dataType;
-  const stringValues = ['a','b','c'];
+  const stringValues = ['a', 'b', 'c'];
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
   let arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / timestep;
@@ -141,12 +148,13 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
       const dateValue = new Date(t).getTime();
 
       currentValue.forEach((value) => {
-        if(dataType === 'String'){
+        if (dataType === 'String') {
           // eslint-disable-next-line
           value.value = stringValues[Math.floor(Math.random() * stringValues.length)];
         } else {
           // eslint-disable-next-line
-          value.value = ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
+          value.value =
+            ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
         }
       });
       return currentValue;

@@ -14,34 +14,45 @@ class App extends Component {
     super();
     this.state = {
       telemetries: {
-        interestedProposal: {
-          parameters: {},
-          receptionTimeStamp: '2018/11/23 21:12:24.',
-        },
-        bulkCloud: {
-          parameters: {
-            bulkCloud: {
-              value: 0.6713680575252166,
-              dataType: 'Float',
+        scheduler: {
+          interestedProposal: {
+            parameters: {},
+            receptionTimeStamp: '2018/11/23 21:12:24.',
+          },
+          bulkCloud: {
+            parameters: {
+              bulkCloud: {
+                value: 0.6713680575252166,
+                dataType: 'Float',
+              },
+              timestamp: {
+                value: 0.5309269973966433,
+                dataType: 'Float',
+              },
             },
-            timestamp: {
-              value: 0.5309269973966433,
-              dataType: 'Float',
+            receptionTimeStamp: '2018/11/25 12:21:12',
+          },
+        },
+        ScriptQueue: {
+          stream1: {
+            parameters: {
+              exists: {
+                value: 1,
+                dataType: 'Boolean',
+              },
             },
           },
-          receptionTimeStamp: '2018/11/25 12:21:12',
         },
       },
     };
     this.managerInterface = new ManagerInterface();
-    this.managerInterface.subscribeToTelemetry('all', this.receiveAllMsg);
+    this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
   }
 
   receiveAllMsg = (msg) => {
     const data = JSON.parse(msg.data);
 
     if (typeof data.data === 'object') {
-      // debugger;
       let newTelemetries = Object.assign({}, this.state.telemetries);
       let timestamp = new Date();
       timestamp = timestamp
@@ -50,39 +61,25 @@ class App extends Component {
         .replace(/-/g, '/')
         .replace('T', ' ');
       Object.entries(data.data).forEach((entry) => {
-        const [telemetryName, parameters] = entry;
+        const [csc, cscDataString] = entry;
+        const cscData = JSON.parse(cscDataString);
         const telemetry = {};
-        telemetry[telemetryName] = {
-          parameters,
-          receptionTimestamp: timestamp,
+        const stream = {};
+        Object.entries(cscData).forEach((cscStream) => {
+          const [streamName, parameters] = cscStream;
+          stream[streamName] = {};
+          stream[streamName].parameters = parameters;
+          stream[streamName].receptionTimestamp = timestamp;
+        });
+        telemetry[csc] = {
+          ...stream,
         };
         Object.assign(newTelemetries, telemetry);
       }, this);
 
       newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
       this.setState({ telemetries: newTelemetries });
-      this.managerInterface.unsubscribeToTelemetry('all', () => 0);
-    }
-  };
-
-  receiveMsg = (msg) => {
-    const data = JSON.parse(msg.data);
-    if (typeof data.data === 'object') {
-      let timestamp = new Date();
-      timestamp = timestamp
-        .toISOString()
-        .slice(0, 20)
-        .replace('-', '/')
-        .replace('T', ' ');
-      const telemetry = {
-        interestedProposal: {
-          parameters: { ...data.data },
-          receptionTimestamp: timestamp,
-        },
-      };
-      let newTelemetries = Object.assign({}, this.state.telemetries, telemetry);
-      newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
-      this.setState({ telemetries: newTelemetries });
+      this.managerInterface.unsubscribeToTelemetry('all', 'all', () => 0);
     }
   };
 
@@ -95,9 +92,7 @@ class App extends Component {
               path="/health-status-summary"
               render={() => (
                 <div className="hs-container">
-                  <HealthStatusSummary telemetries={this.state.telemetries}>
-                    {' '}
-                  </HealthStatusSummary>
+                  <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>
                 </div>
               )}
             />
@@ -106,9 +101,7 @@ class App extends Component {
               path="/time-series"
               render={() => (
                 <div className="hs-container">
-                  <TimeSeries telemetries={this.state.telemetries}>
-                    {' '}
-                  </TimeSeries>
+                  <TimeSeries telemetries={this.state.telemetries}> </TimeSeries>
                 </div>
               )}
             />
