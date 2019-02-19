@@ -3,6 +3,7 @@ import * as vegal from 'vega-lite';
 import * as vega from 'vega-lib';
 import vegae from 'vega-embed';
 import PropTypes from 'prop-types';
+import { getFakeUnits } from '../../Utils';
 
 /**
  * Simple wrapper around the Vega-lite visualization package.
@@ -15,6 +16,9 @@ export default class Vega extends Component {
         this.vegaContainer = React.createRef();
         this.vegaEmbedResult = null;
         this.data = [];
+        this.state = {
+          specDataType: 'quantitative'
+        }
     }
 
     static propTypes = {
@@ -57,20 +61,17 @@ export default class Vega extends Component {
         const dateOffset = (new Date()).getTimezoneOffset() * 60 * 1000;
 
         let shouldUpdatePlot = false;
-        // if (prevProps.lastMessageData !== this.props.lastMessageData) {
-        //     if (this.data.length === 0)
-        //         this.remountPlot();
+        if (prevProps.lastMessageData !== this.props.lastMessageData) {
 
-            
-        //     this.data.push(...this.props.lastMessageData);
+            this.data.push(...this.props.lastMessageData);
 
-        //     shouldUpdatePlot = true;
+            shouldUpdatePlot = true;
 
 
-        // }
+        }
         
-        if(prevProps.spec !== this.props.spec){
-            this.remountPlot();
+        if(prevProps.historicalData !== this.props.historicalData){
+            this.remountPlot(this.changeSpec(this.props.historicalData, this.props.telemetryName));
             shouldUpdatePlot = true;
         }
 
@@ -84,9 +85,8 @@ export default class Vega extends Component {
 
             var changeSet = vega
                 .changeset()
-                .remove(t => true)
-                // .insert(this.data)
-            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
+                .insert(this.data)
+            this.vegaEmbedResult.view.change('telemetries', changeSet).run();
         }
     }
 
@@ -94,7 +94,8 @@ export default class Vega extends Component {
         return getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
     }
 
-    remountPlot = () => {
+    remountPlot = (dataSpec) => {
+        this.data = [];
         const labelFontSize = 14;
         const titleFontSize = 16;
         const spec = Object.assign({
@@ -118,13 +119,50 @@ export default class Vega extends Component {
 
 
             },
-        }, this.props.spec);
+        }, dataSpec);
 
         vegae(this.vegaContainer.current, spec, { renderer: 'svg' }).then((vegaEmbedResult) => {
 
             this.vegaEmbedResult = vegaEmbedResult;
         });
     }
+
+
+    changeSpec = (data, name) => {
+        return {
+          $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
+          description: "Google's stock price over time.",
+          data: {
+            values: data,
+            name: 'telemetries',
+          },
+          mark: this.state.specDataType === 'quantitative' ? 'line' : 'point',
+          encoding: {
+            x: {
+              field: 'date',
+              type: 'temporal',
+              title: 'date',
+            },
+            y: {
+              field: 'value',
+              type: this.state.specDataType,
+              title: getFakeUnits(name),
+            },
+            color: {
+              field: 'source',
+              type: 'nominal',
+              legend: {
+                title: 'Parameter Names' + ' '.repeat(32),
+              },
+            },
+          },
+        };
+    };
+    
+    getSpecDataType = (dataType) => {
+    if (dataType === 'String') return 'nominal';
+    else return 'quantitative';
+    };    
 
     componentDidMount() {
         this.remountPlot();
@@ -140,9 +178,9 @@ export default class Vega extends Component {
                 const date = new Date(data.date) - dateOffset;;
                 return date < dateStart || date > dateEnd;
             })
-            // .insert(this.data)
+            .insert(this.data)
             
-            this.vegaEmbedResult.view.change(this.props.spec.data.name, changeSet).run();
+            this.vegaEmbedResult.view.change('telemetries', changeSet).run();
         }
 
         return (
