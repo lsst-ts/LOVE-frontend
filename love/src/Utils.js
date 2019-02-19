@@ -49,12 +49,14 @@ export default class ManagerInterface {
   };
 
   unsubscribeToTelemetry = (csc, stream, callback) => {
-    this.socket.json({
-      option: 'unsubscribe',
-      csc: csc,
-      stream: stream,
-    });
-    this.callback = callback;
+    if(this.socket){
+      this.socket.json({
+        option: 'unsubscribe',
+        csc: csc,
+        stream: stream,
+      });
+      this.callback = callback;
+    }
   };
 }
 
