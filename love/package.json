@@ -131,6 +131,7 @@
     "eslint-plugin-only-warn": "^1.0.1",
     "jest-dom": "^3.0.0",
     "mock-socket": "^8.0.5",
+    "react-json-pretty": "^2.0.0",
     "react-styleguidist": "^8.0.6",
     "react-testing-library": "^5.4.4",
     "webpack-bundle-tracker": "^0.4.2-beta"

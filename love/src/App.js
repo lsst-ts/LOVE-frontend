@@ -8,6 +8,7 @@ import DataManagementFlow from './components/DataManagementFlow/DataManagementFl
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
 import ManagerInterface from './Utils';
+import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 
 class App extends Component {
   constructor() {
@@ -102,6 +103,12 @@ class App extends Component {
               render={() => (
                 <div className="hs-container">
                   <TimeSeries telemetries={this.state.telemetries}> </TimeSeries>
+                </div>
+              )}
+            />
+            <Route path="/test" render={() => (
+                <div className="hs-container">
+                  <TelemetryLog csc="scheduler" stream="bulkCloud"> </TelemetryLog>
                 </div>
               )}
             />
