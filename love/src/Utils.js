@@ -87,21 +87,28 @@ export default class ManagerInterface {
       method: 'GET',
       headers: this.getHeaders()
     })
-    .then(response => response.json())
     .then(response => {
-      const detail = response['detail'];
-      if (detail === 'Token is valid') {
-        console.log('valid token');
-        return true;
-      } else {
-        console.log('invalid token');
-        this.removeToken();
+      if (response.status >= 500) {
+        console.error('Error communicating with the server. Logging out\n', response);
+        ManagerInterface.removeToken();
         return false;
       }
-    })
-    .catch((error) => {
-      console.log('Got error: ', error);
-      console.error(error);
+      if (response.status == 401 || response.status == 403) {
+        console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then(response => {
+        const detail = response['detail'];
+        if (detail === 'Token is valid') {
+          console.log('valid token');
+          return true;
+        } else {
+          console.log('Session expired. Logging out');
+          this.removeToken();
+          return false;
+        }
+      });
     });
   }
 
