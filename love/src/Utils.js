@@ -16,19 +16,23 @@ export default class ManagerInterface {
     this.callback = null;
     this.socket = null;
     this.socketPromise = null;
+    this.subscriptions = [];
   }
 
   subscribeToStream = (category, csc, stream, callback) => {
     this.callback = callback;
+    this.subscriptions.push([category, csc, stream]);
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
         this.socket = sockette(`ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`, {
           onopen: () => {
-            this.socket.json({
-              option: 'subscribe',
-              category: category,
-              csc: csc,
-              stream: stream,
+            this.subscriptions.forEach((sub) => {
+              this.socket.json({
+                option: 'subscribe',
+                category: sub[0],
+                csc: sub[1],
+                stream: sub[2],
+              });
             });
           },
           onmessage: (msg) => {
@@ -39,17 +43,23 @@ export default class ManagerInterface {
       });
     } else {
       this.socketPromise.then(() => {
-        this.socket.json({
-          option: 'subscribe',
-          category: category,
-          csc: csc,
-          stream: stream,
+        this.subscriptions.forEach((sub) => {
+          this.socket.json({
+            option: 'subscribe',
+            category: sub[0],
+            csc: sub[1],
+            stream: sub[2],
+          });
         });
       });
     }
   };
 
   unsubscribeToStream = (category, csc, stream, callback) => {
+    let subscriptionKeys = this.subscriptions.map(JSON.stringify);
+    let index = subscriptionKeys.indexOf(JSON.stringify([category, csc, stream]));
+    if(index > -1)
+      this.subscriptions.splice(index, 1);
     if (this.socket) {
       this.socket.json({
         option: 'unsubscribe',
@@ -63,19 +73,19 @@ export default class ManagerInterface {
 
   subscribeToTelemetry = (csc, stream, callback) => {
     this.subscribeToStream('telemetry', csc, stream, callback);
-  }
+  };
 
   unsubscribeToTelemetry = (csc, stream, callback) => {
     this.unsubscribeToStream('telemetry', csc, stream, callback);
-  }
+  };
 
   subscribeToEvents = (csc, stream, callback) => {
     this.subscribeToStream('events', csc, stream, callback);
-  }
+  };
 
   unsubscribeToEvents = (csc, stream, callback) => {
     this.unsubscribeToStream('events', csc, stream, callback);
-  }
+  };
 }
 
 /**
