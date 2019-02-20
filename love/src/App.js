@@ -108,7 +108,7 @@ class App extends Component {
             />
             <Route path="/test" render={() => (
                 <div className="hs-container">
-                  <TelemetryLog csc="scheduler" stream="bulkCloud"> </TelemetryLog>
+                  <TelemetryLog category="event" csc="ScriptQueue" stream="script"> </TelemetryLog>
                 </div>
               )}
             />

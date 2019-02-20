@@ -15,7 +15,7 @@ export default class TelemetryLog extends Component {
   }
 
   componentDidMount = () => {
-    this.managerInterface.subscribeToTelemetry(this.props.csc, this.props.stream, this.receiveMessage);
+    this.managerInterface.subscribeToStream(this.props.category, this.props.csc, this.props.stream, this.receiveMessage);
   };
 
   receiveMessage = (msg) => {
