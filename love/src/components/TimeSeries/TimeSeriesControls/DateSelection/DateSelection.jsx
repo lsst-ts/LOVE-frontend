@@ -31,7 +31,10 @@ export default class DateSelection extends PureComponent {
   };
 
   componentDidUpdate = () => {
-    if (this.state.startDate !== null && this.state.endDate !== null) {
+    if (this.state.startDate !== null && this.state.endDate !== null){
+      if(this.state.startDate > this.state.endDate) {
+        return this.props.setHistoricalData(this.state.startDate, this.state.startDate);        
+      }
       this.props.setHistoricalData(this.state.startDate, this.state.endDate);
     }
   };
