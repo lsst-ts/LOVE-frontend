@@ -18,7 +18,7 @@ export default class ManagerInterface {
     this.socketPromise = null;
   }
 
-  subscribeToTelemetry = (csc, stream, callback) => {
+  subscribeToStream = (category, csc, stream, callback) => {
     this.callback = callback;
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
@@ -26,13 +26,13 @@ export default class ManagerInterface {
           onopen: () => {
             this.socket.json({
               option: 'subscribe',
+              category: category,
               csc: csc,
               stream: stream,
             });
           },
           onmessage: (msg) => {
-            if(this.callback)
-              this.callback(msg);
+            if (this.callback) this.callback(msg);
             resolve();
           },
         });
@@ -41,6 +41,7 @@ export default class ManagerInterface {
       this.socketPromise.then(() => {
         this.socket.json({
           option: 'subscribe',
+          category: category,
           csc: csc,
           stream: stream,
         });
@@ -48,16 +49,33 @@ export default class ManagerInterface {
     }
   };
 
-  unsubscribeToTelemetry = (csc, stream, callback) => {
-    if(this.socket){
+  unsubscribeToStream = (category, csc, stream, callback) => {
+    if (this.socket) {
       this.socket.json({
         option: 'unsubscribe',
+        category: category,
         csc: csc,
         stream: stream,
       });
       this.callback = callback;
     }
   };
+
+  subscribeToTelemetry = (csc, stream, callback) => {
+    this.subscribeToStream('telemetry', csc, stream, callback);
+  }
+
+  unsubscribeToTelemetry = (csc, stream, callback) => {
+    this.unsubscribeToStream('telemetry', csc, stream, callback);
+  }
+
+  subscribeToEvents = (csc, stream, callback) => {
+    this.subscribeToStream('events', csc, stream, callback);
+  }
+
+  unsubscribeToEvents = (csc, stream, callback) => {
+    this.unsubscribeToStream('events', csc, stream, callback);
+  }
 }
 
 /**
@@ -86,7 +104,7 @@ export const telemetryObjectToVegaList = (telemetries, parametersNames, timestam
       });
     });
   });
-    
+
   return newEntries;
 };
 
