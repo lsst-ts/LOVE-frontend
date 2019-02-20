@@ -9,6 +9,7 @@ export default class PrivateRoute extends Component {
     this.state = {
       routingState: 'loading'
     };
+    this.flag = true;
   }
 
   componentDidMount() {
@@ -20,12 +21,18 @@ export default class PrivateRoute extends Component {
   }
 
   updateState() {
+    if(this.flag){
+      this.setState({ routingState: 'loading' });
+      this.flag = false;
+    }
+
     ManagerInterface.validateToken().then(response => {
       if (response === true && this.state.routingState !== 'render') {
         this.setState({ routingState: 'render' });
       } else if (response === false && this.state.routingState !== 'redirect') {
         this.setState({ routingState: 'redirect' });
       }
+      this.flag = true
     });
   }
 
