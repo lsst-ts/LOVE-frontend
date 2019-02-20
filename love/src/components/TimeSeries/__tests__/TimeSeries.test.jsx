@@ -184,27 +184,59 @@ THEN it should update the plot accordingly
     const setButton = getByTitle("Set selected telemetries");
     fireEvent.click(setButton);
 
+
+    /** 1h */
+
     await waitForElement(() => getByText('1h'));
 
     fireEvent.click(timeSeries.getByLabelText('1h'))
     await waitForElement( () => timeSeries.queryAllByText(':', {exact:false}));
     
-    const timeAxisLabels = timeSeries.queryAllByText(':',{exact:false})
+    let timeAxisLabels = timeSeries.queryAllByText(':',{exact:false})
                         .filter(el=>el.textContent.length ===5)
                         .map(el=>el.textContent);
                         
                         
 
-    const now = new Date();
-    const minAxisDate = timeAxisLabels[0].split(':').map(val=>parseFloat(val));
-    const maxAxisDate = timeAxisLabels[timeAxisLabels.length-1].split(':').map(val=>parseFloat(val))
+    let now = new Date();
+    let minAxisDate = timeAxisLabels[0].split(':').map(val=>parseFloat(val));
+    let maxAxisDate = timeAxisLabels[timeAxisLabels.length-1].split(':').map(val=>parseFloat(val))
                         
                         
                         
-    const T  = (now.getUTCHours() % 12) * 60 + now.getUTCMinutes();
-    const T1 = (Math.ceil((T-60)/5)*5 ) % (12*60);
-    const T2 = (T1 + 55) % (12 * 60);
-    expect(T2).toEqual(maxAxisDate[0]*60+maxAxisDate[1]);
-    expect(T1).toEqual(minAxisDate[0]*60+minAxisDate[1]);
+    let T  = (now.getUTCHours() % 12) * 60 + now.getUTCMinutes();
+    let T1 = (Math.floor((T-60)/5)*5 +5 ) % (12*60);
+    let T2 = (T1 + 55) % (12 * 60);
+    expect(Math.abs(minAxisDate[0]*60+minAxisDate[1]-T1)).toBeLessThanOrEqual(5);
+    expect(Math.abs(maxAxisDate[0]*60+maxAxisDate[1]-T2)).toBeLessThanOrEqual(5);
 
+
+    /** 1min */
+
+    await waitForElement(() => getByText('1min'));
+
+    fireEvent.click(timeSeries.getByLabelText('1min'))
+    await waitForElement( () => timeSeries.queryAllByText(':', {exact:false}));
+    
+    timeAxisLabels = timeSeries.queryAllByText(':',{exact:false})
+                        .filter(el=>el.textContent.length <=5 && el.textContent.length>=3)
+                        .map(el=>el.textContent);
+                        
+    let referenceIndex = timeAxisLabels.findIndex(el=> el.length === 5)
+
+    now = new Date();
+    minAxisDate = timeAxisLabels[0].split(':').map(val=>parseFloat(val));
+    maxAxisDate = timeAxisLabels[timeAxisLabels.length-1].split(':').map(val=>parseFloat(val))
+                       
+    if(!isNaN(minAxisDate[0]) ){
+        minAxisDate = [NaN, 0]
+    }
+
+    if(!isNaN(maxAxisDate[0]) ){
+        maxAxisDate[0] = [NaN, 0]
+    }
+
+    expect(Math.abs(minAxisDate[1]-maxAxisDate[1])).toBeLessThanOrEqual(5);
+    expect(referenceIndex).toBeGreaterThanOrEqual(0)
+    
 });
