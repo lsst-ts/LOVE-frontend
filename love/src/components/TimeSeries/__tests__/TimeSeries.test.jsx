@@ -210,6 +210,21 @@ THEN it should update the plot accordingly
     expect(Math.abs(minAxisDate[0]*60+minAxisDate[1]-T1)).toBeLessThanOrEqual(5);
     expect(Math.abs(maxAxisDate[0]*60+maxAxisDate[1]-T2)).toBeLessThanOrEqual(5);
 
+    /** 15 min */
+
+    await waitForElement(() => getByText('15min'));
+
+    fireEvent.click(timeSeries.getByLabelText('15min'))
+    await waitForElement( () => timeSeries.queryAllByText(':', {exact:false}));
+    
+    timeAxisLabels = timeSeries.queryAllByText(':',{exact:false})
+                        .filter(el=>el.textContent.length <=5 && el.textContent.length>=3)
+                        .map(el=>el.textContent);
+    now = new Date();
+    minAxisDate = timeAxisLabels[0].split(':').map(val=>parseFloat(val));
+    maxAxisDate = timeAxisLabels[timeAxisLabels.length-1].split(':').map(val=>parseFloat(val))
+    expect(maxAxisDate[0]*60+maxAxisDate[1] - (minAxisDate[0]*60+minAxisDate[1])).toBeGreaterThanOrEqual(10);
+    expect(maxAxisDate[0]*60+maxAxisDate[1] - (minAxisDate[0]*60+minAxisDate[1])).toBeLessThanOrEqual(15);
 
     /** 1min */
 
@@ -235,8 +250,8 @@ THEN it should update the plot accordingly
     if(!isNaN(maxAxisDate[0]) ){
         maxAxisDate[0] = [NaN, 0]
     }
-
-    expect(Math.abs(minAxisDate[1]-maxAxisDate[1])).toBeLessThanOrEqual(5);
+    const difference = Math.min(Math.abs(maxAxisDate[1]-minAxisDate[1]-60),Math.abs(maxAxisDate[1]-minAxisDate[1]));
+    expect(difference).toEqual(5);
     expect(referenceIndex).toBeGreaterThanOrEqual(0)
     
 });
