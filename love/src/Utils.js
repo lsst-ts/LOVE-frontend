@@ -76,7 +76,6 @@ export default class ManagerInterface {
   }
 
   static validateToken() {
-    console.log('------------ Validating token');
     const token = ManagerInterface.getToken();
     if (token === null) {
       console.log('Token not found during validation');
@@ -101,7 +100,6 @@ export default class ManagerInterface {
       return response.json().then(response => {
         const detail = response['detail'];
         if (detail === 'Token is valid') {
-          console.log('valid token');
           return true;
         } else {
           console.log('Session expired. Logging out');
