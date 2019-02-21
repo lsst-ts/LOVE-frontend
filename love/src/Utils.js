@@ -120,22 +120,26 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
   const stringValues = ['a','b','c'];
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
-  let arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / timestep;
+  const timeWindow = (new Date(dateEnd).getTime() - new Date(dateStart).getTime())
+  let arraySize =  timeWindow / timestep;
   if (arraySize > 1000) {
     arraySize = 1000;
-    timestep = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / arraySize;
+    timestep = timeWindow / 1000;
   }
+
   const time = new Array(arraySize);
   const tStart = new Date(dateStart).getTime();
   const dateOffset = new Date().getTimezoneOffset() / 60;
   for (let i = 0; i < arraySize; i += 1) {
-    const currentDate = new Date(tStart + i * timestep);
+    let currentDate = new Date(tStart + i * timestep);
     let dateString = [currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, currentDate.getUTCDate()].join('/');
 
-    const hours = currentDate.getHours() + dateOffset;
+    currentDate = new Date(currentDate.getTime() + 3*60*60*1000);
+    const hours = currentDate.getHours();
     const minutes = currentDate.getMinutes();
     const seconds = currentDate.getSeconds();
     dateString += ` ${hours}:${minutes}:${seconds}`;
+
     time[i] = dateString;
   }
 
