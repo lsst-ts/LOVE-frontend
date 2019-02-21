@@ -73,22 +73,28 @@ export default class TimeWindow extends PureComponent {
                   checked={this.state.isCustom}
                   onChange={(e) => this.handleTimeWindowSelection(e.target.value, true)}
                 />
-                <label htmlFor={id} onClick={() => this.handleTimeWindowSelection(this.props.timeWindow, true)}>Custom</label>
               </React.Fragment>
             )}
           </UID>
-          <div
-            className={[styles.customTimeWindowContainer, this.state.isCustom ? styles.customVisible : ''].join(' ')}
-          >
-            <span>: </span>
-            <input
-              className={styles.customTimeWindowInput}
-              type="text"
-              value={this.props.timeWindow}
-              onChange={this.handleCustomInput}
-            />
-            <span> minutes</span>
-          </div>
+          <UID>
+            {id => (
+              <>
+                <label htmlFor={id} onClick={() => this.handleTimeWindowSelection(this.props.timeWindow, true)}>Custom</label>
+                <div className={[styles.customTimeWindowContainer, this.state.isCustom ? styles.customVisible : ''].join(' ')}>
+                  <label htmlFor={id}>: </label>
+                  <input
+                    id={id}
+                    className={styles.customTimeWindowInput}
+                    type="text"
+                    value={this.props.timeWindow}
+                    onChange={this.handleCustomInput}
+                    onFocus={(e)=>{e.target.select()}}
+                  />
+                  <label htmlFor={id}> minutes</label>
+              </div>
+              </>
+            )}
+          </UID>
         </div>
       </div>
     );
