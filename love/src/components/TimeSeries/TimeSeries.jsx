@@ -84,21 +84,23 @@ export default class TimeSeries extends PureComponent {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (prevState.step !== this.state.step && this.state.step === 1) {
-      this.setState({
-        historicalData: getFakeHistoricalTimeSeries(
+      const d = getFakeHistoricalTimeSeries(
         this.state.selectedRows,
         new Date().getTime() - 3600 * 1000,
         new Date(),
-        )
+        );
+      this.setState({
+        historicalData: d
       });
     }
     if (prevState.timeWindow !== this.state.timeWindow) {
+      const d = getFakeHistoricalTimeSeries(
+        this.state.selectedRows,
+        this.state.dateStart,
+        this.state.dateEnd,
+      );
       this.setState({
-        historicalData: getFakeHistoricalTimeSeries(
-          this.state.selectedRows,
-          this.state.dateStart,
-          this.state.dateEnd,
-        )
+        historicalData: d
       });
     }
   };

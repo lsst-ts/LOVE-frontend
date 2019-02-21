@@ -148,9 +148,7 @@ THEN it should update the plot accordingly
 
 });
 
-
-
-test(`
+test.only(`
 GIVEN a current list of telemetries
 WHEN the user selects one telemetry with a checkbox
 AND presses the set button
@@ -174,6 +172,18 @@ THEN it should update the plot accordingly
         socket.send(JSON.stringify(messageObject));
     });
 
+
+    const RealDate = Date;
+    global.Date = jest.fn( function(...args){
+        // this.parse = RealDate.parse;
+        if(args.length){
+            return new RealDate(...args);
+        }
+        return new RealDate(2019,0,1);
+    });
+
+    global.Date.parse = RealDate.parse;
+    
     const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
     const { getByAltText, getByText, getByTitle, debug, getByPlaceholderText } = timeSeries;
     const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
@@ -196,8 +206,6 @@ THEN it should update the plot accordingly
                         .filter(el=>el.textContent.length ===5)
                         .map(el=>el.textContent);
                         
-                        
-
     let now = new Date();
     let minAxisDate = timeAxisLabels[0].split(':').map(val=>parseFloat(val));
     let maxAxisDate = timeAxisLabels[timeAxisLabels.length-1].split(':').map(val=>parseFloat(val))
@@ -250,8 +258,30 @@ THEN it should update the plot accordingly
     if(!isNaN(maxAxisDate[0]) ){
         maxAxisDate[0] = [NaN, 0]
     }
-    const difference = Math.min(Math.abs(maxAxisDate[1]-minAxisDate[1]-60),Math.abs(maxAxisDate[1]-minAxisDate[1]));
+    let difference = Math.min(Math.abs(maxAxisDate[1]-minAxisDate[1]-60),Math.abs(maxAxisDate[1]-minAxisDate[1]));
     expect(difference).toEqual(5);
     expect(referenceIndex).toBeGreaterThanOrEqual(0)
+
+
+    /* Custom */
+    fireEvent.click(timeSeries.getByText('Custom'));
+
+    await waitForElement(()=>timeSeries.getByText('minutes'));
+    const customTimeWindowInput = timeSeries.getByLabelText('Custom');
+    
+    fireEvent.change(customTimeWindowInput,{target:{value:'300'}});
+    
+    await waitForElement( ()=> timeSeries.getByValue('300'));
+    
+    timeAxisLabels = timeSeries.queryAllByText(':',{exact:false})
+    .filter(el=>el.textContent.length <=5 && el.textContent.length>=3)
+    .map(el=>el.textContent);
+
+    minAxisDate = timeAxisLabels[0].split(':').map(val=>parseFloat(val));
+    maxAxisDate = timeAxisLabels[timeAxisLabels.length-1].split(':').map(val=>parseFloat(val))
+
+    difference = Math.min( Math.abs((maxAxisDate[0]+12)*60+maxAxisDate[1] - (minAxisDate[0]*60+minAxisDate[1])));
+    expect(difference).toEqual(270);
+    debugger;
     
 });
