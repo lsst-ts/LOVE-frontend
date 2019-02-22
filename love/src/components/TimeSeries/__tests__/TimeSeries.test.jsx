@@ -187,7 +187,7 @@ GIVEN the user has selected a telemetry from the table and pressed SET
 
 
     test(`WHEN the user selects a time window of 1h 
-        THEN the plot shows las 1h of data`, async ()=>{
+        THEN the plot shows last 1h of data`, async ()=>{
 
 
         await waitForElement(() => timeSeries.getByText('1h'));
@@ -211,7 +211,7 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     });
 
     test(`WHEN the user selects a time window of 15min 
-        THEN the plot shows las 1h of data`, async () =>{
+        THEN the plot shows last 1h of data`, async () =>{
 
         fireEvent.click(timeSeries.getByLabelText('15min'))
         await waitForElement( () => timeSeries.queryAllByText(':', {exact:false}));
@@ -227,7 +227,7 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     });
 
     test(`WHEN the user selects a time window of 15min 
-        THEN the plot shows las 15min of data`, async ()=>{
+        THEN the plot shows last 15min of data`, async ()=>{
         /** 1min */
 
         await waitForElement(() => timeSeries.getByText('1min'));
