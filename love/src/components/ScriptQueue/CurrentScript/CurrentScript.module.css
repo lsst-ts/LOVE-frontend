@@ -1,0 +1,66 @@
+.scriptContainer {
+  position: relative;
+  /* height: 3em; */
+  background: var(--second-tertiary-background-color);
+  padding: 0.5em;
+  border-radius: 5px;
+  margin: 0.5em;
+}
+
+.pathTextContainer {
+  display: block;
+  text-align: left;
+  font-size: var(--font-size-larger);
+}
+
+.pathText {
+  text-align: left;
+}
+
+.loadingBarContainer {
+  padding: 0.5em 0em;
+}
+
+.estimatedTimeContainer {
+  /* position: absolute; */
+  text-align: left;
+  font-size: var(--font-size-medium);
+  bottom: 0.5em;
+}
+
+.indexContainer {
+  font-size: var(--font-size-small);
+}
+
+.timeContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.estimatedTimeContainer {
+  display: inline-block;
+  min-width: 10em;
+}
+
+.estimatedTimeLabel {
+}
+
+.estimatedTimeValue {
+  font-weight: bold;
+}
+
+.elapsedTimeContainer {
+  display: inline-block;
+  min-width: 10em;
+}
+
+.elapsedTimeLabel {
+}
+
+.elapsedTimeValue {
+  font-weight: bold;
+}
+
+.highlighted {
+  color: var(--highlighted-font-color);
+}

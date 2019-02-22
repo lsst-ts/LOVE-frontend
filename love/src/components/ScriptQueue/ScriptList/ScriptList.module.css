@@ -1,0 +1,33 @@
+.scriptListWrapper {
+  padding: 0.5em;
+  background: var(--second-secondary-background-color);
+  height: calc( 100% - 3em);
+  overflow-y: scroll;
+}
+
+.scriptListContainer {
+  background: var(--second-secondary-background-color);
+  padding: 0.0em;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--tertiary-background-color); 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /* background: var(--quinary-background-color); */
+  background: var(--tertiary-font-color);
+  border-radius: 1.1em;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-font-color);
+}

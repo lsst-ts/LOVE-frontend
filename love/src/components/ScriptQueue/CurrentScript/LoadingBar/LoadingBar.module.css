@@ -1,0 +1,9 @@
+.backgroundBar{
+  background: grey;
+  border-radius: 4px;
+}
+
+.loadedBar{
+  background: green;
+  height: 1.3em;
+}

@@ -4,6 +4,7 @@ import './App.css';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
+import ScriptQueue from './components/ScriptQueue/ScriptQueue';
 
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
@@ -112,6 +113,7 @@ class App extends Component {
                 </div>
               )}
             />
+            <Route path="/script-queue" component={ScriptQueue} />
             <Route path="/" component={ComponentIndex} />
           </Switch>
         </BrowserRouter>

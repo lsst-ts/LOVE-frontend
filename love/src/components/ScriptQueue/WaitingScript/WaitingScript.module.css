@@ -1,0 +1,37 @@
+.scriptContainer {
+  position: relative;
+  /* height: 3em; */
+  background: var(--second-tertiary-background-color);
+  padding: 0.5em;
+  border-radius: 5px;
+  margin: 0.5em;
+}
+
+.pathTextContainer {
+  display: block;
+  text-align: left;
+  font-size: var(--font-size-large);
+  padding-bottom: 0.2em;
+}
+
+.pathText {
+  text-align: left;
+}
+
+.estimatedTimeContainer {
+  /* position: absolute; */
+  text-align: left;
+  font-size: var(--font-size-small);
+  bottom: 0.5em;
+}
+
+.estimatedTimeLabel {
+}
+
+.estimatedTimeValue {
+  font-weight: bold;
+}
+
+.bold {
+  font-weight: bold;
+}
