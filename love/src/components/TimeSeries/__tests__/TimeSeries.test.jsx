@@ -148,7 +148,7 @@ THEN it should update the plot accordingly
 
 });
 
-test.only(`
+test(`
 GIVEN a current list of telemetries
 WHEN the user selects one telemetry with a checkbox
 AND presses the set button
@@ -282,6 +282,5 @@ THEN it should update the plot accordingly
 
     difference = Math.min( Math.abs((maxAxisDate[0]+12)*60+maxAxisDate[1] - (minAxisDate[0]*60+minAxisDate[1])));
     expect(difference).toEqual(270);
-    debugger;
     
 });
