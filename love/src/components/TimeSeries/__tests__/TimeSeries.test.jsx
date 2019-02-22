@@ -44,39 +44,6 @@ const telemetries = {
 
 afterEach(cleanup);
 
-// 'GIVEN a current list of selected telemetries in the table'
-// "WHEN the user clicks a checkbox of a specific row"
-// "AND presses the SET button"
-// "THEN shows a plot with some text indicating the name of the telemetry"
-// jest.useFakeTimers();
-
-// test(`
-// GIVEN a current list of telemetries
-// WHEN the user selects one telemetry with a checkbox
-// AND presses the set button
-// AND toggles to query mode
-// AND chooses a specific date-range
-// THEN it should update the plot accordingly
-// `, async () => {
-//     const timeSeries = render(<TimeSeries telemetries={telemetries}> </TimeSeries>);
-//     const { getByAltText, getByText, getByTitle, debug, getByPlaceholderText } = timeSeries;
-//     const checkBox = getByAltText('select scheduler-cameraConfig-filterChangeTime');
-//     fireEvent.click(checkBox);
-
-//     expect(getByText('TELEMETRIES:').innerHTML.includes('filterChangeTime')).toBe(true);
-    
-//     const setButton = getByTitle("Set selected telemetries");
-//     fireEvent.click(setButton);
-
-    
-
-// });
-
-// GIVEN a current list of telemetries
-// WHEN the user selects one telemetry with a checkbox
-// AND presses the set button
-// AND chooses any timewindow
-// THEN it should update the plot accordingly
 describe(`
 GIVEN the user has selected a telemetry from the table and pressed SET
 `, () => {
@@ -278,5 +245,13 @@ GIVEN the user has selected a telemetry from the table and pressed SET
         expect(difference).toEqual(270);
 
     });
+
+    test(`WHEN the user clicks the GEAR icon
+          THEN the selection table shows up and the plot disappears`, async () =>{
+        
+        fireEvent.click(timeSeries.getByTitle('Go back to configuration'));
+        expect(timeSeries.queryByText('Parameter Names')).toBeNull();
+        expect(timeSeries.queryByText('TELEMETRIES:')).toBeTruthy();
+    })
     
 });
