@@ -8804,6 +8804,13 @@ react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
   integrity sha512-D+NxhSR2HUCjYky1q1DwpNUD44cDpUXzSmmFyC3ug1bClcU/iDNy0YNn1iwme28fn+NFhpA13IndOd42CrFb+Q==
 
+react-json-pretty@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-json-pretty/-/react-json-pretty-2.0.0.tgz#703bdf7c680afefe3796f4ec00f6424c7865d985"
+  integrity sha512-AaOGcuoU/pBNKtAc33GgtEX7a0vepAfsw/hxhlwJl4qKf3EaHvFgBKblrkiBBIaO/XIS/8/sSwN4tShXvSTmUA==
+  dependencies:
+    prop-types "^15.6.2"
+
 react-lifecycles-compat@^3.0.4:
   version "3.0.4"
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
