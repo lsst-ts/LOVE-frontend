@@ -1,0 +1,66 @@
+.scriptQueueContainer {
+  width: 50vw;
+  height: 50vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 6fr;
+  grid-template-areas: 
+    "current global"
+    "waiting finished";
+  background: var(--second-primary-background-color);
+}
+
+.currentScriptTitle {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+}
+
+.listTitle {
+  display: block;
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  padding-bottom: 1em;
+}
+
+.currentScriptContainer {
+  grid-area: current;
+  text-align: left;
+  border-right: 1px solid var(--second-tertiary-background-color);
+}
+
+.currentScriptWrapper {
+  grid-area: current;
+  text-align: left;
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+}
+
+.globalStateContainer {
+  grid-area: global;
+}
+
+.globalStateWrapper {
+  grid-area: global;
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+}
+
+.scriptList {
+  padding: 1em;
+  margin: 1em;
+  text-align: left;
+}
+
+.waitingScriptList {
+  overflow-y: hidden;
+  grid-area: waiting;
+}
+
+.finishedScriptList {
+  overflow-y: hidden;
+  grid-area: finished;
+}
+
+.availableScriptList {
+  overflow-y: hidden;
+  grid-area: available;
+  display: none;
+}
