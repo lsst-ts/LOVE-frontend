@@ -17,6 +17,7 @@ class App extends Component {
     super();
     this.state = {
       token: null,
+      showSessionExpired: false,
       telemetries: {
         scheduler: {
           interestedProposal: {
@@ -52,25 +53,32 @@ class App extends Component {
     this.managerInterface = new ManagerInterface();
   }
 
-  setTokenState = (token) => {
-    this.setState({ token: token });
-    if (token) {
-      this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
-    }
-  }
-
   componentDidMount = () => {
     const token = ManagerInterface.getToken();
     this.setTokenState(token);
   }
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = (prevProps, prevState) => {
     if (this.state.token && prevProps.location.pathname !== this.props.location.pathname) {
       ManagerInterface.validateToken().then((response) => {
-        if (response == false) {
+        if (response === false) {
           this.setTokenState(null);
         }
       });
+    }
+    if (!this.state.token && prevState.token) {
+      this.setState({ showSessionExpired: true });
+    }
+  }
+
+  hideSessionExpired = () => {
+    this.setState({ showSessionExpired: false })
+  }
+
+  setTokenState = (token) => {
+    this.setState({ token: token });
+    if (token) {
+      this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
     }
   }
 
@@ -115,7 +123,12 @@ class App extends Component {
           <Route
             path='/login'
             render={() => (
-              <Login token={this.state.token} setTokenState={this.setTokenState}> </Login>
+              <Login
+                token={this.state.token}
+                setTokenState={this.setTokenState}
+                showSessionExpired={this.state.showSessionExpired}
+                hideSessionExpired={this.hideSessionExpired}
+              ></Login>
             )}
           />
           <PrivateRoute
