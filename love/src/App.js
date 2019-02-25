@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
@@ -53,7 +53,6 @@ class App extends Component {
   }
 
   setTokenState = (token) => {
-    console.log('Setting state token: ', token);
     this.setState({ token: token });
     if (token) {
       this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
@@ -63,6 +62,16 @@ class App extends Component {
   componentDidMount = () => {
     const token = ManagerInterface.getToken();
     this.setTokenState(token);
+  }
+
+  componentDidUpdate = (prevProps) => {
+    if (this.state.token && prevProps.location.pathname !== this.props.location.pathname) {
+      ManagerInterface.validateToken().then((response) => {
+        if (response == false) {
+          this.setTokenState(null);
+        }
+      });
+    }
   }
 
   receiveAllMsg = (msg) => {
@@ -102,52 +111,50 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <BrowserRouter>
-          <Switch>
-            <Route
-              path='/login'
-              render={() => (
-                <Login token={this.state.token} setTokenState={this.setTokenState}> </Login>
-              )}
-            />
-            <PrivateRoute
-              token={this.state.token}
-              path="/health-status-summary"
-              render={() => (
-                <div className="hs-container">
-                  <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>
-                </div>
-              )}
-            />
-            <PrivateRoute
-              token={this.state.token}
-              path="/dm-flow"
-              component={DataManagementFlow}
-            />
-            <PrivateRoute
-              token={this.state.token}
-              path="/time-series"
-              render={() => (
-                <div className="hs-container">
-                  <TimeSeries telemetries={this.state.telemetries}> </TimeSeries>
-                </div>
-              )}
-            />
-            <Route path="/test" render={() => (
-                <div className="hs-container">
-                  <TelemetryLog category="event" csc="ScriptQueue" stream="all"> </TelemetryLog>
-                </div>
-              )}
-            />
-            <PrivateRoute
-              token={this.state.token}
-              path="/"
-              component={ComponentIndex} />
-          </Switch>
-        </BrowserRouter>
+        <Switch>
+          <Route
+            path='/login'
+            render={() => (
+              <Login token={this.state.token} setTokenState={this.setTokenState}> </Login>
+            )}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/health-status-summary"
+            render={() => (
+              <div className="hs-container">
+                <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>
+              </div>
+            )}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/dm-flow"
+            component={DataManagementFlow}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/time-series"
+            render={() => (
+              <div className="hs-container">
+                <TimeSeries telemetries={this.state.telemetries}> </TimeSeries>
+              </div>
+            )}
+          />
+          <Route path="/test" render={() => (
+              <div className="hs-container">
+                <TelemetryLog category="event" csc="ScriptQueue" stream="all"> </TelemetryLog>
+              </div>
+            )}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/"
+            component={ComponentIndex} />
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
