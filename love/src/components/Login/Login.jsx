@@ -11,7 +11,7 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      showFailedLogin: false
+      showFailedLogin: false,
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -23,6 +23,10 @@ export default class Login extends Component {
     this.setState({ [name]: value });
     if (this.state.showFailedLogin) {
       this.setState({ showFailedLogin: false});
+    }
+    this.props.hideSessionExpired();
+    if (this.state.showSessionExpired) {
+      this.props.hideSessionExpired();
     }
   }
 
@@ -62,6 +66,13 @@ export default class Login extends Component {
                   <p className={styles.incorrectCredentials}>
                     Your username and password didn't match.
                     Please try again.
+                  </p>
+                </div>
+              : null }
+              { this.props.showSessionExpired ?
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>
+                    Your session has expired, you have been logged out.
                   </p>
                 </div>
               : null }
