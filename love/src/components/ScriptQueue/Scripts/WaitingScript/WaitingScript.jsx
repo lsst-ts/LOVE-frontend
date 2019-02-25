@@ -33,7 +33,7 @@ export default class WaitingScript extends Component {
         </div>
         <div className={styles.estimatedTimeContainer}>
           <span className={styles.estimatedTimeLabel}>Estimated time:</span>
-          <span className={styles.estimatedTimeValue}>{this.props.estimatedTime}</span>
+          <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.estimatedTime}</span>
         </div>
       </div>
     );

@@ -28,7 +28,6 @@
 }
 
 .estimatedTimeValue {
-  font-weight: bold;
 }
 
 .elapsedTimeContainer {
@@ -40,5 +39,4 @@
 }
 
 .elapsedTimeValue {
-  font-weight: bold;
 }
