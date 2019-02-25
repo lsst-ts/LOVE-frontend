@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './WaitingScript.module.css';
+import styles from './AvailableScript.module.css';
+import scriptStyles from '../Scripts.module.css';
 
-export default class WaitingScript extends Component {
+export default class AvailableScript extends Component {
   static propTypes = {
     salIndex: PropTypes.number,
     isStandard: PropTypes.bool,
@@ -24,11 +25,11 @@ export default class WaitingScript extends Component {
     const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
     const fileExtension = path.substring(path.lastIndexOf('.'));
     return (
-      <div className={styles.scriptContainer}>
-        <div className={styles.pathTextContainer}>
-          <span className={styles.pathText}>{fileFolder}</span>
-          <span className={[styles.pathText, styles.bold].join(' ')}>{fileName}</span>
-          <span className={styles.pathText}>{fileExtension}</span>
+      <div className={scriptStyles.scriptContainer}>
+        <div className={scriptStyles.pathTextContainer}>
+          <span className={scriptStyles.pathText}>{fileFolder}</span>
+          <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+          <span className={scriptStyles.pathText}>{fileExtension}</span>
         </div>
         <div className={styles.estimatedTimeContainer}>
           <span className={styles.estimatedTimeLabel}>Estimated time:</span>

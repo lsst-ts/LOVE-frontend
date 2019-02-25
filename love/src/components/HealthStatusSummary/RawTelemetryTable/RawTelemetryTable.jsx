@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import styles from './RawTelemetryTable.module.css';
-import StatusText from '../StatusText/StatusText';
+import StatusText from '../../StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../Button/Button';
 import fakeData from './fakeData';
