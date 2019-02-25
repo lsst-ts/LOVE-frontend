@@ -11,31 +11,29 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      loginStatus: 'pending'
+      showFailedLogin: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  componentDidMount() {
-    if (ManagerInterface.getToken() !== null) {
-      this.setState({ loginStatus: 'ok' });
-    }
   }
 
   handleInputChange(event) {
     const name = event.target.name;
     const value = event.target.value;
     this.setState({ [name]: value });
+    if (this.state.showFailedLogin) {
+      this.setState({ showFailedLogin: false});
+    }
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    ManagerInterface.requestToken(this.state.username, this.state.password).then(response => {
-      if (response === true) {
-        this.setState({ loginStatus: 'ok'});
+    ManagerInterface.requestToken(this.state.username, this.state.password).then(token => {
+      if (token) {
+        this.props.setTokenState(token);
       } else {
-        this.setState({ loginStatus: 'failed'});
+        this.setState({ showFailedLogin: true});
+        this.props.setTokenState(null);
       }
     });
   }
@@ -59,7 +57,7 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              { this.state.loginStatus === 'failed' ?
+              { this.state.showFailedLogin ?
                 <div className={styles.incorrectCredentialsDiv}>
                   <p className={styles.incorrectCredentials}>
                     Your username and password didn't match.
@@ -91,7 +89,7 @@ export default class Login extends Component {
                 />
               </p>
               <Button type="submit" status="primary">Login</Button>
-              { this.state.loginStatus === 'ok' ? this.redirect() : ''}
+              { this.props.token !== null ? this.redirect() : ''}
             </form>
           </div>
         </div>

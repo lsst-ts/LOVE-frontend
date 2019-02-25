@@ -69,10 +69,8 @@ export default class ManagerInterface {
         const token = response['token'];
         if (token !== undefined && token !== null) {
           ManagerInterface.saveToken(token);
-          return true;
-        } else {
-          return false;
         }
+        return token;
       }
     );
   }

@@ -16,6 +16,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      token: null,
       telemetries: {
         scheduler: {
           interestedProposal: {
@@ -50,6 +51,16 @@ class App extends Component {
     };
     this.managerInterface = new ManagerInterface();
     this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
+  }
+
+  setTokenState = (token) => {
+    console.log('Setting state token: ', token);
+    this.setState({ token: token });
+  }
+
+  componentDidMount = () => {
+    const token = ManagerInterface.getToken();
+    this.setTokenState(token);
   }
 
   receiveAllMsg = (msg) => {
@@ -91,8 +102,14 @@ class App extends Component {
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route path='/login' component={Login} />
+            <Route
+              path='/login'
+              render={() => (
+                <Login token={this.state.token} setTokenState={this.setTokenState}> </Login>
+              )}
+            />
             <PrivateRoute
+              token={this.state.token}
               path="/health-status-summary"
               render={() => (
                 <div className="hs-container">
@@ -100,8 +117,13 @@ class App extends Component {
                 </div>
               )}
             />
-            <PrivateRoute path="/dm-flow" component={DataManagementFlow} />
             <PrivateRoute
+              token={this.state.token}
+              path="/dm-flow"
+              component={DataManagementFlow}
+            />
+            <PrivateRoute
+              token={this.state.token}
               path="/time-series"
               render={() => (
                 <div className="hs-container">
@@ -115,7 +137,10 @@ class App extends Component {
                 </div>
               )}
             />
-            <PrivateRoute path="/" component={ComponentIndex} />
+            <PrivateRoute
+              token={this.state.token}
+              path="/"
+              component={ComponentIndex} />
           </Switch>
         </BrowserRouter>
       </div>
