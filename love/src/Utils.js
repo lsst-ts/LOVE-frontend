@@ -124,6 +124,7 @@ export default class ManagerInterface {
         console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
+            this.connectionIsOpen = true;
             this.subscriptions.forEach((sub) => {
               this.socket.json({
                 option: 'subscribe',
