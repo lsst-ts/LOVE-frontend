@@ -1,9 +1,9 @@
 .backgroundBar{
-  background: grey;
-  border-radius: 4px;
+  background: var(--second-primary-background-color);
+  border-radius: 5px;
 }
 
 .loadedBar{
-  background: green;
+  background: hsl(188, 79%, 56%);
   height: 1.3em;
 }
