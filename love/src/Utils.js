@@ -41,6 +41,9 @@ export default class ManagerInterface {
             if (this.callback) this.callback(msg);
             resolve();
           },
+          onclose: (msg) => {
+            this.connectionIsOpen = false;
+          }
         });
       });
     } else {
@@ -78,7 +81,6 @@ export default class ManagerInterface {
   };
 
   unsubscribeToTelemetry = (csc, stream, callback) => {
-    console.log('testsetse', this.subscriptions)
     this.unsubscribeToStream('telemetry', csc, stream, callback);
   };
 
