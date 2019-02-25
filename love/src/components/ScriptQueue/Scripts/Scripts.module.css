@@ -18,20 +18,10 @@
   text-align: left;
 }
 
-.estimatedTimeContainer {
-  /* position: absolute; */
-  text-align: left;
-  font-size: var(--font-size-small);
-  bottom: 0.5em;
-}
-
-.estimatedTimeLabel {
-}
-
-.estimatedTimeValue {
-  font-weight: bold;
-}
-
 .bold {
   font-weight: bold;
+}
+
+.highlighted {
+  color: var(--highlighted-font-color);
 }

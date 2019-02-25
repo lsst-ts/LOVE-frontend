@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import WaitingScript from './WaitingScript/WaitingScript';
-import ScriptList from './ScriptList/ScriptList';
+import WaitingScript from './Scripts/WaitingScript/WaitingScript';
+import ScriptList from './Scripts/ScriptList/ScriptList';
+import CurrentScript from './Scripts/CurrentScript/CurrentScript';
 import styles from './ScriptQueue.module.css';
-import CurrentScript from './CurrentScript/CurrentScript';
 import Panel from './../Panel/Panel';
 
 export default class ScriptQueue extends Component {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './CurrentScript.module.css';
 import LoadingBar from './LoadingBar/LoadingBar';
+import styles from './CurrentScript.module.css';
+import scriptStyles from '../Scripts.module.css';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -27,15 +28,15 @@ export default class CurrentScript extends Component {
     const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
     const fileExtension = path.substring(path.lastIndexOf('.'));
     return (
-      <div className={styles.scriptContainer}>
+      <div className={scriptStyles.scriptContainer}>
         <div className={styles.indexContainer}>
           <span className={styles.indexLabel}>Index: </span>
           <span className={styles.indexValue}>{this.props.salIndex}</span>
         </div>
-        <div className={styles.pathTextContainer}>
-          <span className={styles.pathText}>{fileFolder}</span>
-          <span className={[styles.pathText, styles.highlighted].join(' ')}>{fileName}</span>
-          <span className={styles.pathText}>{fileExtension}</span>
+        <div className={scriptStyles.pathTextContainer}>
+          <span className={scriptStyles.pathText}>{fileFolder}</span>
+          <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+          <span className={scriptStyles.pathText}>{fileExtension}</span>
         </div>
         <div className={styles.loadingBarContainer}>
           <LoadingBar percentage={40} />
