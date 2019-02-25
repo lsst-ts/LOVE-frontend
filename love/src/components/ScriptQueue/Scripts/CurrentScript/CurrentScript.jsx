@@ -31,7 +31,7 @@ export default class CurrentScript extends Component {
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.indexContainer}>
           <span className={styles.indexLabel}>Index: </span>
-          <span className={styles.indexValue}>{this.props.salIndex}</span>
+          <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.salIndex}</span>
         </div>
         <div className={scriptStyles.pathTextContainer}>
           <span className={scriptStyles.pathText}>{fileFolder}</span>
@@ -44,11 +44,11 @@ export default class CurrentScript extends Component {
         <div className={styles.timeContainer}>
           <div className={styles.estimatedTimeContainer}>
             <span className={styles.estimatedTimeLabel}>Estimated time:</span>
-            <span className={styles.estimatedTimeValue}>{this.props.estimatedTime}</span>
+            <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.estimatedTime}</span>
           </div>
           <div className={styles.elapsedTimeContainer}>
             <span className={styles.elapsedTimeLabel}>Elapsed time:</span>
-            <span className={styles.elapsedTimeValue}>{this.props.elapsedTime}</span>
+            <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.elapsedTime}</span>
           </div>
         </div>
       </div>
