@@ -1,0 +1,25 @@
+
+.finishedScriptContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.statusTextContainer {
+  min-width: 5em;
+  text-align: center;
+  padding: 0.5em;
+}
+
+.estimatedTimeContainer {
+  /* position: absolute; */
+  text-align: left;
+  font-size: var(--font-size-small);
+  bottom: 0.5em;
+}
+
+.estimatedTimeLabel {
+}
+
+.estimatedTimeValue {
+}

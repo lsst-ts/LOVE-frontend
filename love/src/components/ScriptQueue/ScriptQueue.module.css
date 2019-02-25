@@ -73,3 +73,14 @@
   grid-area: available;
   display: none;
 }
+
+.addScriptContainer {
+  display: flex;
+  justify-content: center;
+  color: var(--highlighted-font-color);
+}
+
+.addScriptButton {
+  color: var(--highlighted-font-color);
+  background: var(--quaternary-background-color);
+}
