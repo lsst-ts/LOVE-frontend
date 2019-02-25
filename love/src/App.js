@@ -50,12 +50,14 @@ class App extends Component {
       },
     };
     this.managerInterface = new ManagerInterface();
-    this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
   }
 
   setTokenState = (token) => {
     console.log('Setting state token: ', token);
     this.setState({ token: token });
+    if (token) {
+      this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
+    }
   }
 
   componentDidMount = () => {
