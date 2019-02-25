@@ -4,6 +4,7 @@ import ScriptList from './Scripts/ScriptList/ScriptList';
 import CurrentScript from './Scripts/CurrentScript/CurrentScript';
 import styles from './ScriptQueue.module.css';
 import Panel from './../Panel/Panel';
+import StatusText from '../StatusText/StatusText';
 
 export default class ScriptQueue extends Component {
   render() {
@@ -18,8 +19,14 @@ export default class ScriptQueue extends Component {
           </div>
           <div className={styles.globalStateWrapper}>
             <div className={styles.globalStateContainer}>
-              CSC
-              STATE
+              <div className={styles.stateContainer}>
+                CSC STATE
+                <StatusText status="ok">OK</StatusText>
+              </div>
+              <div className={styles.stateContainer}>
+                QUEUE STATE
+                <StatusText status="ok">OK</StatusText>
+              </div>
             </div>
           </div>
           <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>

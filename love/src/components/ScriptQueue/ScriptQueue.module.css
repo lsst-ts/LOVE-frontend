@@ -2,11 +2,11 @@
   width: 50vw;
   height: 50vh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 6fr;
   grid-template-areas: 
-    "current global"
-    "waiting finished";
+    "current current current current global global"
+    "waiting waiting waiting finished finished finished";
   background: var(--second-primary-background-color);
 }
 
@@ -26,21 +26,30 @@
   grid-area: current;
   text-align: left;
   border-right: 1px solid var(--second-tertiary-background-color);
+  padding: 0.5em 0em;
 }
 
 .currentScriptWrapper {
   grid-area: current;
   text-align: left;
   border-bottom: 1px solid var(--second-tertiary-background-color);
+  padding-bottom: 1em;
 }
 
 .globalStateContainer {
-  grid-area: global;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .globalStateWrapper {
   grid-area: global;
   border-bottom: 1px solid var(--second-tertiary-background-color);
+}
+
+.stateContainer {
+  width: 8em;
+  padding: 0.5em;
 }
 
 .scriptList {
