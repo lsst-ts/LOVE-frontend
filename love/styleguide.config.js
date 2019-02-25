@@ -21,23 +21,23 @@ module.exports = {
     ],
     theme: {
       color: {
-        base: '#aabeca', //default font color, color of headers and paragraphs
-        light: 'red', // color of urls, "props&methods" "view code" "add examples to this components" and corner squares
+        base: '#788F9B', //default font color, color of headers and paragraphs
+        light: '788F9B', // color of urls, "props&methods" "view code" "add examples to this components" and corner squares
         lightest: '#yellow',
-        link: '#fcefe8', // --link-font-color
+        link: '#788F9B', // --link-font-color
         linkHover: '#667986', //  --link-hover-font-color
         focus: 'rgba(22, 115, 177, 0.25)',//??
-        border: '#e8e8e8',
-        name: '#690',
-        type: '#905',
+        border: '#788F9B',
+        name: '#788F9B',
+        type: '#788F9B',
         error: '#c00',
-        baseBackground: '#071925', // right panel, color taken from uiguide
+        baseBackground: '#0c161d', // right panel, color taken from uiguide
         codeBackground: '#f5f5f5',
-        sidebarBackground: 'black', // of the list of components 
-        ribbonBackground: '#e90',
-        ribbonText: '#fff',
+        sidebarBackground: '0c161d', // of the list of components 
+        ribbonBackground: '#0c161d',
+        ribbonText: '#788F9B',
         // Based on default Prism theme
-        codeComment: '#6d6d6d',
+        codeComment: '#788F9B',
         codePunctuation: '#999',
         codeProperty: '#905',
         codeDeleted: '#905',
