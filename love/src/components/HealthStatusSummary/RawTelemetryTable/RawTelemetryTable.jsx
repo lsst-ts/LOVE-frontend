@@ -450,7 +450,9 @@ export default class RawTelemetryTable extends PureComponent {
                                                         key={key + '-row'}>
                                                         <div className={styles.healthStatusWrapper}>
                                                             <div className={styles.statusTextWrapper}>
-                                                                <StatusText statusCode={row.healthStatusCode} getHealthText={this.getHealthText}>
+                                                                {console.log(row.healthStatusCode, this.healthStatusCodes[row.healthStatusCode])}
+                                                                <StatusText status={this.healthStatusCodes[row.healthStatusCode].toLowerCase()}>
+                                                                    {this.getHealthText(row.healthStatusCode)}
                                                                 </StatusText>
                                                             </div>
                                                             <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
