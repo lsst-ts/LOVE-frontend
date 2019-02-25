@@ -292,7 +292,7 @@ export default class RawTelemetryTable extends PureComponent {
 
     updateSelectedList = (checked, key) => {
         const splitKey = key.split('-');
-        const params = this.props.telemetries[splitKey[1]].parameters;
+        const params = this.props.telemetries[splitKey[0]][splitKey[1]].parameters;
         const value = params[splitKey[2]];
         let selectedRows = this.state.selectedRows;
         let newRow = {
@@ -332,27 +332,30 @@ export default class RawTelemetryTable extends PureComponent {
 
     getData = () => {
         let data = Object.assign({}, fakeData); // load "fake" data as template;
-        let telemetryNames = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
-        telemetryNames.forEach((telemetryName, telemetryIndex) => {
+        let telemetryCSCs = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
+        telemetryCSCs.forEach((telemetryCSC, telemetryIndex) => {
+            data[telemetryCSC] = {};
             // look at one telemetry
-            let telemetryData = this.props.telemetries[telemetryName];
-
-            data["scheduler"][telemetryName] = {
-                'timestamp': telemetryData.receptionTimestamp,
-                'nParams': telemetryData.parameters.length,
-                'parameters': Object.entries(telemetryData.parameters).map(parameter => {
-                    // look at one parameter 
-                    const [name, measurement, units] = parameter;
-
-                    return {
-                        'name': name,
-                        'param_name': name,
-                        'data_type': measurement['dataType'] ? measurement['dataType'] : '?',
-                        'value': measurement['value'],
-                        'units': units ? units : getFakeUnits(name)
-                    }
-                })
-            }
+            let streamsData = this.props.telemetries[telemetryCSC];
+            let streamKeys = Object.keys(streamsData);
+            streamKeys.forEach((streamKey) => {
+                let streamData = streamsData[streamKey];
+                data[telemetryCSC][streamKey] = {
+                    'timestamp': streamData.receptionTimestamp,
+                    'parameters': Object.entries(streamData.parameters).map(parameter => {
+                        // look at one parameter 
+                        const [name, measurement, units] = parameter;
+    
+                        return {
+                            'name': name,
+                            'param_name': name,
+                            'data_type': measurement['dataType'] ? measurement['dataType'] : '?',
+                            'value': measurement['value'],
+                            'units': units ? units : getFakeUnits(name)
+                        }
+                    })
+                }
+            });
         }, this);
 
         data = this.convertData(data);

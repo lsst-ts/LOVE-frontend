@@ -10,10 +10,12 @@ if (Array.prototype.flat === undefined) {
 }
 
 export default class ManagerInterface {
-  constructor(name, callback) {
-    this.callback = callback;
+  constructor() {
+    this.callback = null;
     this.socket = null;
     this.socketPromise = null;
+    this.subscriptions = [];
+    this.connectionIsOpen = false;
   }
 
   static getHeaders() {
@@ -110,46 +112,79 @@ export default class ManagerInterface {
     });
   }
 
-  subscribeToTelemetry = (name, callback) => {
+  subscribeToStream = (category, csc, stream, callback) => {
     this.callback = callback;
     const token = ManagerInterface.getToken();
     if (token === null) {
       console.log('Token not available or invalid, skipping connection');
       return;
     }
+    this.subscriptions.push([category, csc, stream]);
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
         const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
         console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
-            this.socket.json({
-              option: 'subscribe',
-              data: name,
+            this.subscriptions.forEach((sub) => {
+              this.socket.json({
+                option: 'subscribe',
+                category: sub[0],
+                csc: sub[1],
+                stream: sub[2],
+              });
             });
           },
           onmessage: (msg) => {
-            this.callback(msg);
+            if (this.callback) this.callback(msg);
             resolve();
           },
         });
       });
     } else {
       this.socketPromise.then(() => {
-        this.socket.json({
-          option: 'subscribe',
-          data: name,
+        this.subscriptions.forEach((sub) => {
+          this.socket.json({
+            option: 'subscribe',
+            category: sub[0],
+            csc: sub[1],
+            stream: sub[2],
+          });
         });
       });
     }
   };
 
-  unsubscribeToTelemetry = (name, callback) => {
-    this.socket.json({
-      option: 'unsubscribe',
-      data: name,
-    });
-    this.callback = callback;
+  unsubscribeToStream = (category, csc, stream, callback) => {
+    let subscriptionKeys = this.subscriptions.map(JSON.stringify);
+    let index = subscriptionKeys.indexOf(JSON.stringify([category, csc, stream]));
+    if(index > -1)
+      this.subscriptions.splice(index, 1);
+      if(this.connectionIsOpen){
+      this.socket.json({
+        option: 'unsubscribe',
+        category: category,
+        csc: csc,
+        stream: stream,
+      });
+      this.callback = callback;
+    }
+  };
+
+  subscribeToTelemetry = (csc, stream, callback) => {
+    this.subscribeToStream('telemetry', csc, stream, callback);
+  };
+
+  unsubscribeToTelemetry = (csc, stream, callback) => {
+    this.unsubscribeToStream('telemetry', csc, stream, callback);
+  };
+
+  subscribeToEvents = (csc, stream, callback) => {
+    this.subscribeToStream('events', csc, stream, callback);
+  };
+
+  unsubscribeToEvents = (csc, stream, callback) => {
+    this.unsubscribeToStream('events', csc, stream, callback);
   };
 }
 
@@ -163,19 +198,20 @@ export default class ManagerInterface {
  */
 export const telemetryObjectToVegaList = (telemetries, parametersNames, timestamp) => {
   const newEntries = [];
-
-  Object.keys(telemetries).forEach((stream) => {
-    Object.entries(telemetries[stream]).forEach((entry) => {
-      const key = ['scheduler', stream, entry[0]].join('-');
-      if (parametersNames.map((r) => r.key).includes(key)) {
-        const newEntry = {
-          value: Array.isArray(entry[1].value) ? entry[1].value[0] : entry[1].value,
-          date: timestamp,
-          source: key.split('-')[2],
-          dataType: entry[1].dataType,
-        };
-        newEntries.push(newEntry);
-      }
+  Object.keys(telemetries).forEach((csc) => {
+    Object.keys(telemetries[csc]).forEach((stream) => {
+      Object.entries(telemetries[csc][stream]).forEach((entry) => {
+        const key = [csc, stream, entry[0]].join('-');
+        if (parametersNames.map((r) => r.key).includes(key)) {
+          const newEntry = {
+            value: Array.isArray(entry[1].value) ? entry[1].value[0] : entry[1].value,
+            date: timestamp,
+            source: key.split('-')[2],
+            dataType: entry[1].dataType,
+          };
+          newEntries.push(newEntry);
+        }
+      });
     });
   });
 
@@ -186,13 +222,15 @@ export const tableRowListToTimeSeriesObject = (selectedRows) => {
   const telemetries = {};
 
   selectedRows.forEach((row) => {
-    const [, stream, parameter] = row.key.split('-');
-
-    if (telemetries[stream] === undefined) {
-      telemetries[stream] = {};
+    const [csc, stream, parameter] = row.key.split('-');
+    if (telemetries[csc] === undefined) {
+      telemetries[csc] = {};
+    }
+    if (telemetries[csc][stream] === undefined) {
+      telemetries[csc][stream] = {};
     }
 
-    telemetries[stream][parameter] = {
+    telemetries[csc][stream][parameter] = {
       value: row.value.value,
       dataType: row.value.dataType,
     };
@@ -215,22 +253,26 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
   const stringValues = ['a', 'b', 'c'];
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
-  let arraySize = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / timestep;
+  const timeWindow = (new Date(dateEnd).getTime() - new Date(dateStart).getTime())
+  let arraySize =  timeWindow / timestep;
   if (arraySize > 1000) {
     arraySize = 1000;
-    timestep = (new Date(dateEnd).getTime() - new Date(dateStart).getTime()) / arraySize;
+    timestep = timeWindow / 1000;
   }
+
   const time = new Array(arraySize);
   const tStart = new Date(dateStart).getTime();
   const dateOffset = new Date().getTimezoneOffset() / 60;
   for (let i = 0; i < arraySize; i += 1) {
-    const currentDate = new Date(tStart + i * timestep);
+    let currentDate = new Date(tStart + i * timestep);
     let dateString = [currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, currentDate.getUTCDate()].join('/');
 
-    const hours = currentDate.getHours() + dateOffset;
+    currentDate = new Date(currentDate.getTime() + 3*60*60*1000);
+    const hours = currentDate.getHours();
     const minutes = currentDate.getMinutes();
     const seconds = currentDate.getSeconds();
     dateString += ` ${hours}:${minutes}:${seconds}`;
+
     time[i] = dateString;
   }
 
@@ -245,7 +287,8 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
           value.value = stringValues[Math.floor(Math.random() * stringValues.length)];
         } else {
           // eslint-disable-next-line
-          value.value = ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
+          value.value =
+            ((Math.cos((dateValue / 24 / 60 / 60 / 1000) * 2 * Math.PI) + 1) / 2) * 0.7 + Math.random() * 0.3;
         }
       });
       return currentValue;
