@@ -4,6 +4,7 @@ import styles from './LoadingBar.module.css'
 
 export default class LoadingBar extends Component {
   static propTypes = {
+    /** Percentage of Loading bar to display as progress */
     percentage: PropTypes.number,
   };
   static defaultProps = {
