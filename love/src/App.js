@@ -75,6 +75,12 @@ class App extends Component {
     this.setState({ showSessionExpired: false })
   }
 
+  logout = () => {
+    console.log('App logging out');
+    this.setTokenState(null);
+    ManagerInterface.removeToken();
+  }
+
   setTokenState = (token) => {
     this.setState({ token: token });
     if (token) {
@@ -163,7 +169,11 @@ class App extends Component {
           <PrivateRoute
             token={this.state.token}
             path="/"
-            component={ComponentIndex} />
+            render={() => (
+              <ComponentIndex logout={this.logout}> </ComponentIndex>
+            )}
+            // component={ComponentIndex}
+          />
         </Switch>
       </div>
     );
