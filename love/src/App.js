@@ -178,7 +178,6 @@ class App extends Component {
             render={() => (
               <ComponentIndex logout={this.logout}> </ComponentIndex>
             )}
-            // component={ComponentIndex}
           />
         </Switch>
       </div>
