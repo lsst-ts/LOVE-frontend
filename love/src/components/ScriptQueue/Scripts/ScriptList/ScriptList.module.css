@@ -3,6 +3,8 @@
   background: var(--second-secondary-background-color);
   height: calc( 100% - 3em);
   overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 5px;
 }
 
 .scriptListContainer {

@@ -4,10 +4,16 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 6fr;
-  grid-template-areas: 
-    "current current current current global global"
-    "waiting waiting waiting finished finished finished";
-  background: var(--second-primary-background-color);
+  grid-template-areas:
+    'current current current current global global'
+    'body body body body body body';
+  color: var(--second-base-font-color);
+}
+
+.listsBody {
+  grid-area: body;
+  display: flex;
+  overflow: hidden;
 }
 
 .currentScriptTitle {
@@ -20,13 +26,15 @@
   font-size: var(--font-size-large);
   font-weight: bold;
   padding-bottom: 1em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .currentScriptContainer {
   grid-area: current;
   text-align: left;
   border-right: 1px solid var(--second-tertiary-background-color);
-  padding: 0.5em 0em;
+  padding: 0.5em 0.5em;
 }
 
 .currentScriptWrapper {
@@ -40,11 +48,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 1.5em;
 }
 
 .globalStateWrapper {
   grid-area: global;
   border-bottom: 1px solid var(--second-tertiary-background-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .stateContainer {
@@ -53,25 +65,29 @@
 }
 
 .scriptList {
-  padding: 1em;
-  margin: 1em;
+  padding: 0.5em;
+  margin: 0.5em;
   text-align: left;
+  flex-grow: 1;
+  flex-basis: 50%;
+  transition: all 500ms ease-in-out;
 }
 
 .waitingScriptList {
   overflow-y: hidden;
-  grid-area: waiting;
 }
 
 .finishedScriptList {
   overflow-y: hidden;
-  grid-area: finished;
 }
 
 .availableScriptList {
-  overflow-y: hidden;
-  grid-area: available;
-  display: none;
+  flex-basis: 0px;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  overflow: hidden;
 }
 
 .addScriptContainer {
@@ -83,4 +99,10 @@
 .addScriptButton {
   color: var(--highlighted-font-color);
   background: var(--quaternary-background-color);
+}
+
+.threeColumns .availableScriptList {
+  flex-basis: 50%;
+  padding: 0.5em;
+  margin: 0.5em;
 }

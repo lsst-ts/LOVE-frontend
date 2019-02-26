@@ -10,6 +10,7 @@ export default class WaitingScript extends Component {
     path: PropTypes.string,
     estimatedTime: PropTypes.number,
     state: PropTypes.string,
+    isCompact: PropTypes.bool,
   };
   static defaultProps = {
     salIndex: 0,
@@ -17,6 +18,7 @@ export default class WaitingScript extends Component {
     path: 'auxtel/at_calsys_takedata.py',
     estimatedTime: 0,
     state: 'Unknown',
+    isCompact: false,
   };
 
   render() {
@@ -27,12 +29,12 @@ export default class WaitingScript extends Component {
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={scriptStyles.pathTextContainer}>
-          <span className={scriptStyles.pathText}>{fileFolder}</span>
+          {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
           <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-          <span className={scriptStyles.pathText}>{fileExtension}</span>
+          {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
         </div>
         <div className={styles.estimatedTimeContainer}>
-          <span className={styles.estimatedTimeLabel}>Estimated time:</span>
+          <span className={styles.estimatedTimeLabel}>Estimated time: </span>
           <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.estimatedTime}</span>
         </div>
       </div>
