@@ -451,7 +451,7 @@ export default class RawTelemetryTable extends PureComponent {
                                                         <div className={styles.healthStatusWrapper}>
                                                             <div className={styles.statusTextWrapper}>
                                                                 {console.log(row.healthStatusCode, this.healthStatusCodes[row.healthStatusCode])}
-                                                                <StatusText status={this.healthStatusCodes[row.healthStatusCode].toLowerCase()}>
+                                                                <StatusText status={this.healthStatusCodes[row.healthStatusCode] ? this.healthStatusCodes[row.healthStatusCode].toLowerCase() : ''}>
                                                                     {this.getHealthText(row.healthStatusCode)}
                                                                 </StatusText>
                                                             </div>
