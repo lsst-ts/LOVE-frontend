@@ -3,10 +3,8 @@ import sockette from 'sockette';
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
   Object.defineProperty(Array.prototype, 'flat', {
-    value: function(depth = 1) {
-      return this.reduce(function(flat, toFlatten) {
-        return flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten);
-      }, []);
+    value(depth = 1) {
+      return this.reduce((flat, toFlatten) => flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten), []);
     },
   });
 }
@@ -20,12 +18,111 @@ export default class ManagerInterface {
     this.connectionIsOpen = false;
   }
 
+  static getHeaders() {
+    const token = ManagerInterface.getToken();
+    if (token) {
+      return new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + token
+      });
+    } else {
+      return new Headers({
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      });
+    }
+  }
+
+  static getToken() {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    if (token === null) {
+      return null;
+    }
+    return JSON.parse(token);
+  }
+
+  static removeToken() {
+    localStorage.removeItem('LOVE-TOKEN');
+  }
+
+  static saveToken(token) {
+    if (token === null) {
+      return false;
+    }
+    localStorage.setItem('LOVE-TOKEN', JSON.stringify(token));
+    return true;
+  }
+
+  static requestToken(username: string, password: string) {
+    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/get-token/';
+    const data = {
+      username: username,
+      password: password
+    }
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify(data)
+    }).then(response => response.json())
+      .then(response => {
+        const token = response['token'];
+        if (token !== undefined && token !== null) {
+          ManagerInterface.saveToken(token);
+        }
+        return token;
+      }
+    );
+  }
+
+  static validateToken() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/validate-token/';
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders()
+    })
+    .then(response => {
+      if (response.status >= 500) {
+        console.error('Error communicating with the server. Logging out\n', response);
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status == 401 || response.status == 403) {
+        console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then(response => {
+        const detail = response['detail'];
+        if (detail === 'Token is valid') {
+          return true;
+        } else {
+          console.log('Session expired. Logging out');
+          this.removeToken();
+          return false;
+        }
+      });
+    });
+  }
+
   subscribeToStream = (category, csc, stream, callback) => {
     this.callback = callback;
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      console.log('Token not available or invalid, skipping connection');
+      return;
+    }
     this.subscriptions.push([category, csc, stream]);
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
-        this.socket = sockette(`ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`, {
+        const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
+        console.log('Openning websocket connection to: ', connectionPath);
+        this.socket = sockette(connectionPath, {
           onopen: () => {
             this.connectionIsOpen = true;
             this.subscriptions.forEach((sub) => {

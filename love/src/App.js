@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
+import Login from './components/Login/Login';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import ScriptQueue from './components/ScriptQueue/ScriptQueue';
-
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
 import ManagerInterface from './Utils';
@@ -15,6 +16,8 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      token: null,
+      showSessionExpired: false,
       telemetries: {
         scheduler: {
           interestedProposal: {
@@ -48,7 +51,46 @@ class App extends Component {
       },
     };
     this.managerInterface = new ManagerInterface();
-    this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
+    this.justLoggedOut = false;
+  }
+
+  componentDidMount = () => {
+    const token = ManagerInterface.getToken();
+    this.setTokenState(token);
+  }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.token && prevProps.location.pathname !== this.props.location.pathname) {
+      ManagerInterface.validateToken().then((response) => {
+        if (response === false) {
+          this.setTokenState(null);
+        }
+      });
+    }
+    if (!this.state.token && prevState.token) {
+      if(this.justLoggedOut) {
+        this.justLoggedOut = false;
+      } else {
+        this.setState({ showSessionExpired: true });
+      }
+    }
+  }
+
+  hideSessionExpired = () => {
+    this.setState({ showSessionExpired: false })
+  }
+
+  logout = () => {
+    this.setTokenState(null);
+    ManagerInterface.removeToken();
+    this.justLoggedOut = true;
+  }
+
+  setTokenState = (token) => {
+    this.setState({ token: token });
+    if (token) {
+      this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
+    }
   }
 
   receiveAllMsg = (msg) => {
@@ -88,38 +130,59 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <BrowserRouter>
-          <Switch>
-            <Route
-              path="/health-status-summary"
-              render={() => (
-                <div className="hs-container">
-                  <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>
-                </div>
-              )}
-            />
-            <Route path="/dm-flow" component={DataManagementFlow} />
-            <Route
-              path="/time-series"
-              render={() => (
-                <div className="hs-container">
-                  <TimeSeries telemetries={this.state.telemetries}> </TimeSeries>
-                </div>
-              )}
-            />
-            <Route path="/test" render={() => (
-                <div className="hs-container">
-                  <TelemetryLog category="event" csc="ScriptQueue" stream="all"> </TelemetryLog>
-                </div>
-              )}
-            />
-            <Route path="/script-queue" component={ScriptQueue} />
-            <Route path="/" component={ComponentIndex} />
-          </Switch>
-        </BrowserRouter>
+        <Switch>
+          <Route
+            path='/login'
+            render={() => (
+              <Login
+                token={this.state.token}
+                setTokenState={this.setTokenState}
+                showSessionExpired={this.state.showSessionExpired}
+                hideSessionExpired={this.hideSessionExpired}
+              ></Login>
+            )}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/health-status-summary"
+            render={() => (
+              <div className="hs-container">
+                <HealthStatusSummary telemetries={this.state.telemetries}> </HealthStatusSummary>
+              </div>
+            )}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/dm-flow"
+            component={DataManagementFlow}
+          />
+          <PrivateRoute
+            token={this.state.token}
+            path="/time-series"
+            render={() => (
+              <div className="hs-container">
+                <TimeSeries telemetries={this.state.telemetries}> </TimeSeries>
+              </div>
+            )}
+          />
+          <Route path="/test" render={() => (
+              <div className="hs-container">
+                <TelemetryLog category="event" csc="ScriptQueue" stream="all"> </TelemetryLog>
+              </div>
+            )}
+          />
+          <Route path="/script-queue" component={ScriptQueue} />
+          <PrivateRoute
+            token={this.state.token}
+            path="/"
+            render={() => (
+              <ComponentIndex logout={this.logout}> </ComponentIndex>
+            )}
+          />
+        </Switch>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
