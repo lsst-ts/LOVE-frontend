@@ -51,6 +51,7 @@ class App extends Component {
       },
     };
     this.managerInterface = new ManagerInterface();
+    this.justLoggedOut = false;
   }
 
   componentDidMount = () => {
@@ -67,7 +68,11 @@ class App extends Component {
       });
     }
     if (!this.state.token && prevState.token) {
-      this.setState({ showSessionExpired: true });
+      if(this.justLoggedOut) {
+        this.justLoggedOut = false;
+      } else {
+        this.setState({ showSessionExpired: true });
+      }
     }
   }
 
@@ -76,9 +81,9 @@ class App extends Component {
   }
 
   logout = () => {
-    console.log('App logging out');
     this.setTokenState(null);
     ManagerInterface.removeToken();
+    this.justLoggedOut = true;
   }
 
   setTokenState = (token) => {
