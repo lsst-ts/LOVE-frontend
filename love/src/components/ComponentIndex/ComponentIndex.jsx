@@ -14,6 +14,7 @@ export default class ComponentIndex extends Component {
                     <li className={styles.linkListItem}><Link to='/health-status-summary'>Health status summary</Link></li>
                     <li className={styles.linkListItem}><Link to='/dm-flow'>Data Management Flow</Link></li>
                     <li className={styles.linkListItem}><Link to='/time-series'>Time Series</Link></li>
+                    <li className={styles.linkListItem}><Link to='/script-queue'>Script Queue</Link></li>
                     <li className={styles.linkListItem}><Link to='/login'>Login</Link></li>
                     <li className={styles.linkListItem}><Button onClick={this.props.logout}>Logout</Button></li>
                 </ol>
