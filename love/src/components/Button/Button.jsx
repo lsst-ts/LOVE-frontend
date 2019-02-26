@@ -81,7 +81,7 @@ export default class Button extends Component {
       small: styles.btnSM,
       'extra-small': styles.btnXS
     }
-
+    console.log('dsadsa', this.props.size, sizeStyleDict[this.props.size])
 
     let {btn} = styles;
     const statusStyle = statusStyleDict[this.props.status];

@@ -138,6 +138,9 @@ export default class ManagerInterface {
             if (this.callback) this.callback(msg);
             resolve();
           },
+          onclose: (msg) => {
+            this.connectionIsOpen = false;
+          }
         });
       });
     } else {

@@ -6,7 +6,7 @@ import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSu
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import Login from './components/Login/Login';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-
+import ScriptQueue from './components/ScriptQueue/ScriptQueue';
 import TimeSeries from './components/TimeSeries/TimeSeries';
 
 import ManagerInterface from './Utils';
@@ -171,6 +171,7 @@ class App extends Component {
               </div>
             )}
           />
+          <Route path="/script-queue" component={ScriptQueue} />
           <PrivateRoute
             token={this.state.token}
             path="/"
