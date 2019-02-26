@@ -29,6 +29,7 @@ body {
   --second-primary-background-color: hsl(202, 38%, 11%);
   --second-secondary-background-color: hsl(202, 44%, 13%);
   --second-tertiary-background-color: hsl(201, 26%, 23%);
+  --second-base-font-color: hsl(240, 4%, 90%, 0.6);
   
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);

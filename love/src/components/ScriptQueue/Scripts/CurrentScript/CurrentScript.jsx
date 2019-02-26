@@ -43,11 +43,11 @@ export default class CurrentScript extends Component {
         </div>
         <div className={styles.timeContainer}>
           <div className={styles.estimatedTimeContainer}>
-            <span className={styles.estimatedTimeLabel}>Estimated time:</span>
+            <span className={styles.estimatedTimeLabel}>Estimated time: </span>
             <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.estimatedTime}</span>
           </div>
           <div className={styles.elapsedTimeContainer}>
-            <span className={styles.elapsedTimeLabel}>Elapsed time:</span>
+            <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
             <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.elapsedTime}</span>
           </div>
         </div>

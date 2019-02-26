@@ -17,13 +17,20 @@ export default class ScriptQueue extends Component {
       waitingScriptList: [1, 2],
       availableScriptList: [1, 2, 3, 4],
       finishedScriptList: [1, 2],
+      isAvailableScriptListVisible: false,
     };
+  }
+
+  toggleAvailableScript = () => {
+    this.setState({
+      isAvailableScriptListVisible: !this.state.isAvailableScriptListVisible,
+    })
   }
 
   render() {
     return (
       <Panel title="Script Queue">
-        <div className={styles.scriptQueueContainer}>
+        <div className={[styles.scriptQueueContainer, this.state.isAvailableScriptListVisible ? styles.threeColumns: ''].join(' ')}>
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainer}>
               <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
@@ -42,31 +49,36 @@ export default class ScriptQueue extends Component {
               </div>
             </div>
           </div>
-          <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
-            <ScriptList>
-              {this.state.availableScriptList.map((script) => {
-                return <AvailableScript key={script}/>;
-              })}
-            </ScriptList>
-          </div>
-          <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
-            <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
-            <ScriptList>
-              {this.state.waitingScriptList.map((script) => {
-                return <WaitingScript key={script}/>;
-              })}
-              <div className={styles.addScriptContainer}>
-                <Button className={styles.addScriptButton} size={'large'}>+ Add script</Button>
-              </div>
-            </ScriptList>
-          </div>
-          <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
-            <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
-            <ScriptList>
-            {this.state.finishedScriptList.map((script) => {
-                return <FinishedScript key={script}/>;
-              })}
-            </ScriptList>
+          <div className={styles.listsBody}>
+            <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
+              <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
+              <ScriptList>
+                {this.state.availableScriptList.map((script) => {
+                  return <AvailableScript key={script} />;
+                })}
+              </ScriptList>
+            </div>
+            <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
+              <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
+              <ScriptList>
+                {this.state.waitingScriptList.map((script) => {
+                  return <WaitingScript key={script} isCompact={this.state.isAvailableScriptListVisible}/>;
+                })}
+                <div className={styles.addScriptContainer}>
+                  <Button className={styles.addScriptButton} size={'large'} onClick={this.toggleAvailableScript}>
+                    + Add script
+                  </Button>
+                </div>
+              </ScriptList>
+            </div>
+            <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
+              <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
+              <ScriptList>
+                {this.state.finishedScriptList.map((script) => {
+                  return <FinishedScript key={script} isCompact={this.state.isAvailableScriptListVisible}/>;
+                })}
+              </ScriptList>
+            </div>
           </div>
         </div>
       </Panel>
