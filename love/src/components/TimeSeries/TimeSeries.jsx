@@ -19,6 +19,8 @@ export default class TimeSeries extends PureComponent {
       isLive: true,
       timeWindow: 60,
       historicalData : [],
+      subscribedStreams: [],
+      selectedRows: [],
     };
 
     this.managerInterface = new ManagerInterface();
@@ -154,7 +156,7 @@ export default class TimeSeries extends PureComponent {
       />
     ) : (
       <div className={styles.timeseriesContainer}>
-        <TimeSeriesControls setTimeWindow={this.setTimeWindow} 
+        <TimeSeriesControls setTimeWindow={this.setTimeWindow}
       timeWindow={this.state.timeWindow}
       setLiveMode={this.setLiveMode}
       isLive={this.state.isLive}
