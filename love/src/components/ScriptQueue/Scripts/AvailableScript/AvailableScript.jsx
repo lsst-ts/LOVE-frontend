@@ -5,10 +5,15 @@ import scriptStyles from '../Scripts.module.css';
 
 export default class AvailableScript extends Component {
   static propTypes = {
+    /** SAL property: Index of Script SAL component */
     salIndex: PropTypes.number,
+    /** SAL property: True if this is a standard script, False if an external script */
     isStandard: PropTypes.bool,
+    /** SAL property: Path of script, relative to standard or external root directory */
     path: PropTypes.string,
+    /** SAL property: Estimated duration of the script, excluding slewing to the initial position required by the script */
     estimatedTime: PropTypes.number,
+    /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
     state: PropTypes.string,
   };
   static defaultProps = {

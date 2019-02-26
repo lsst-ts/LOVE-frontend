@@ -9,11 +9,14 @@ import Panel from './../Panel/Panel';
 import StatusText from '../StatusText/StatusText';
 import Button from '../Button/Button';
 
+/**
+ * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
+ *
+ */
 export default class ScriptQueue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // waitingScriptList: [1, 2, 3, 4, 5, 6],
       waitingScriptList: [1, 2],
       availableScriptList: [1, 2, 3, 4],
       finishedScriptList: [1, 2],
@@ -24,13 +27,18 @@ export default class ScriptQueue extends Component {
   toggleAvailableScript = () => {
     this.setState({
       isAvailableScriptListVisible: !this.state.isAvailableScriptListVisible,
-    })
-  }
+    });
+  };
 
   render() {
     return (
       <Panel title="Script Queue">
-        <div className={[styles.scriptQueueContainer, this.state.isAvailableScriptListVisible ? styles.threeColumns: ''].join(' ')}>
+        <div
+          className={[
+            styles.scriptQueueContainer,
+            this.state.isAvailableScriptListVisible ? styles.threeColumns : '',
+          ].join(' ')}
+        >
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainer}>
               <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
@@ -62,7 +70,7 @@ export default class ScriptQueue extends Component {
               <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
               <ScriptList>
                 {this.state.waitingScriptList.map((script) => {
-                  return <WaitingScript key={script} isCompact={this.state.isAvailableScriptListVisible}/>;
+                  return <WaitingScript key={script} isCompact={this.state.isAvailableScriptListVisible} />;
                 })}
                 <div className={styles.addScriptContainer}>
                   <Button className={styles.addScriptButton} size={'large'} onClick={this.toggleAvailableScript}>
@@ -75,7 +83,7 @@ export default class ScriptQueue extends Component {
               <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
               <ScriptList>
                 {this.state.finishedScriptList.map((script) => {
-                  return <FinishedScript key={script} isCompact={this.state.isAvailableScriptListVisible}/>;
+                  return <FinishedScript key={script} isCompact={this.state.isAvailableScriptListVisible} />;
                 })}
               </ScriptList>
             </div>
