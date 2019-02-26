@@ -24,8 +24,7 @@ export default class Login extends Component {
     if (this.state.showFailedLogin) {
       this.setState({ showFailedLogin: false});
     }
-    this.props.hideSessionExpired();
-    if (this.state.showSessionExpired) {
+    if (this.props.showSessionExpired) {
       this.props.hideSessionExpired();
     }
   }
