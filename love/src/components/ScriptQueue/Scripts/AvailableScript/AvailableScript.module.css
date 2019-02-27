@@ -1,0 +1,17 @@
+
+.estimatedTimeContainer {
+  /* position: absolute; */
+  text-align: left;
+  font-size: var(--font-size-small);
+  bottom: 0.5em;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.estimatedTimeLabel {
+}
+
+.estimatedTimeValue {
+  font-weight: bold;
+}

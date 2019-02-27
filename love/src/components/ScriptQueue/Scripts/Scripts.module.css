@@ -1,0 +1,31 @@
+.scriptContainer {
+  position: relative;
+  /* height: 3em; */
+  background: var(--second-tertiary-background-color);
+  padding: 0.5em;
+  border-radius: 5px;
+  margin: 0.5em;
+  overflow: hidden;
+}
+
+.pathTextContainer {
+  display: block;
+  text-align: left;
+  font-size: var(--font-size-large);
+  padding-bottom: 0.2em;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.pathText {
+  text-align: left;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.highlighted {
+  color: var(--highlighted-font-color);
+}
