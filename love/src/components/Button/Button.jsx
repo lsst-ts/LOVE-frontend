@@ -9,31 +9,31 @@ import styles from './Button.module.css';
  */
 export default class Button extends Component {
   static propTypes = {
-    /** Changes the color combination according to its value. 
-     * Possible values are: 
-     * 
+    /** Changes the color combination according to its value.
+     * Possible values are:
+     *
       * *default*: Indicates a default/standard button
-      * 
+      *
       * *primary*: Provides extra visual weight and identifies the primary action in a set of buttons
-      * 
+      *
       * *success*: Indicates a successful or positive action
-      * 
+      *
       * *info*: Contextual button for informational alert messages
-      * 
+      *
       * *warning*: Indicates caution should be taken with this action
-      * 
+      *
       * *danger*: Indicates a dangerous or potentially negative action
-      * 
+      *
       * *link*: Makes a button look like a link (will still have button behavior)
-      * 
+      *
     */
     status: PropTypes.string,
     /** Changes the geometry of the button to make it look bigger/smaller according to these values:
-     * 
+     *
       * *large*: Makes a large button
-      * 
+      *
       * *small*:	Makes a small button
-      * 
+      *
       * *extra-small*:	Makes an extra small button
      */
     size: PropTypes.string,
@@ -46,17 +46,22 @@ export default class Button extends Component {
      */
     className: PropTypes.string,
     /**
-     * Title of the button to be displayed as a tooltip.
+    * Title of the button to be displayed as a tooltip.
+    */
+   title: PropTypes.string,
+    /**
+     * Type for the button.
      */
-    title: PropTypes.string
+    type: PropTypes.string
   }
 
   static defaultProps = {
-    status: 'default',
-    size: 'default',
-    onClick: ()=>{},
-    className: '',
-    title: '',
+      status: 'default',
+      size: 'default',
+      onClick: ()=>{},
+      className: '',
+      title: '',
+      type: 'button',
   }
 
   render() {
@@ -82,9 +87,9 @@ export default class Button extends Component {
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
     const style = [btn, statusStyle, sizeStyle, this.props.className].join(' ');
-    
+
     return (
-      <button title={this.props.title} className={style} type="button" onClick={this.props.onClick}>{this.props.children} </button>
+      <button title={this.props.title} className={style} type={this.props.type} onClick={this.props.onClick}>{this.props.children} </button>
     )
   }
 }
