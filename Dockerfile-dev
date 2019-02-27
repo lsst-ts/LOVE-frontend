@@ -14,12 +14,10 @@ RUN npm install
 
 # Define url for the websockets host
 ARG WEBSOCKET_HOST=127.0.0.1
+ENV REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST
 
-# Copy source code and build static files
-COPY love .
-RUN REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST npm run build
+# Expose port
+EXPOSE 3000
 
-# copy compiled files to smaller image
-FROM alpine:3.8
-COPY --from=builder /usr/src/love/build /usr/src/love
-VOLUME /usr/src/love
+# Run development server in runtime
+CMD npm start

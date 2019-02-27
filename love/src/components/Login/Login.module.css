@@ -1,0 +1,81 @@
+.login {
+  display: flex;
+  background-color: #071925;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/*--------- PANEL ---------*/
+/*DEFAULT*/
+.panel {
+  background-color: var(--secondary-background-color);
+  border: 2px solid var(--secondary-font-color);
+  border-radius: 6px;
+  height: fit-content;
+  width: 450px;
+}
+
+.panelHeading {
+  color: var(--secondary-font-color);
+  font-weight: 300;
+  border-bottom: none;
+  border-radius: 6px;
+  padding: 10px 15px;
+}
+
+.panelTitle {
+  text-transform: uppercase;
+  text-align: left;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.panelBody {
+  border-top-left-radius: 8px;
+  border-top: 2px solid var(--secondary-font-color);
+  padding: 10px 15px 20px 15px;
+  margin: 0px 8px;
+  color: var(--secondary-font-color);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.formEntry {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.label{
+  text-align: left;
+  width: 63px;
+  margin: 0;
+}
+
+.panelBody label{
+  text-align: left;
+  width: 63px;
+  margin: 0;
+}
+
+.incorrectCredentials {
+  text-transform: uppercase;
+  color: var(--danger-font-color);
+  background: var(--danger-background-color);
+  border-left: 3px solid #53392c;
+  border-right: 3px solid #53392c;
+  margin: 5px;
+  padding: 2px;
+  font-size: 75%;
+  font-weight: 600;
+}
+
+.panelBody input {
+  border: none;
+  border-radius: 4px;
+  color: black;
+  margin-left: 10px;
+  width: 80%;
+}
