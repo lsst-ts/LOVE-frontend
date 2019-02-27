@@ -27,6 +27,7 @@ export default class ManagerInterface {
       this.socketPromise = new Promise((resolve) => {
         this.socket = sockette(`ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`, {
           onopen: () => {
+            this.connectionIsOpen = true;
             this.subscriptions.forEach((sub) => {
               this.socket.json({
                 option: 'subscribe',
