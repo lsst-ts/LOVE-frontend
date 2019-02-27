@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import LoadingBar from './LoadingBar/LoadingBar';
 import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
+import StatusText from '../../../StatusText/StatusText';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -37,14 +38,24 @@ export default class CurrentScript extends Component {
     const fileExtension = path.substring(path.lastIndexOf('.'));
     return (
       <div className={scriptStyles.scriptContainer}>
-        <div className={styles.indexContainer}>
-          <span className={styles.indexLabel}>Index: </span>
-          <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.salIndex}</span>
-        </div>
-        <div className={scriptStyles.pathTextContainer}>
-          <span className={scriptStyles.pathText}>{fileFolder}</span>
-          <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-          <span className={scriptStyles.pathText}>{fileExtension}</span>
+        <div className={styles.topContainer}>
+          <div>
+            <div className={scriptStyles.externalContainer}>
+              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
+            </div>
+            <div className={styles.indexContainer}>
+              <span className={styles.indexLabel}>Index: </span>
+              <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.salIndex}</span>
+            </div>
+            <div className={scriptStyles.pathTextContainer}>
+              <span className={scriptStyles.pathText}>{fileFolder}</span>
+              <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+              <span className={scriptStyles.pathText}>{fileExtension}</span>
+            </div>
+          </div>
+          <div className={scriptStyles.statusTextContainer}>
+            <StatusText status={'ok'}>{this.props.state}</StatusText>
+          </div>
         </div>
         <div className={styles.loadingBarContainer}>
           <LoadingBar percentage={40} />
@@ -52,11 +63,15 @@ export default class CurrentScript extends Component {
         <div className={styles.timeContainer}>
           <div className={styles.estimatedTimeContainer}>
             <span className={styles.estimatedTimeLabel}>Estimated time: </span>
-            <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.estimatedTime}</span>
+            <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+              {this.props.estimatedTime}
+            </span>
           </div>
           <div className={styles.elapsedTimeContainer}>
             <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
-            <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>{this.props.elapsedTime}</span>
+            <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+              {this.props.elapsedTime}
+            </span>
           </div>
         </div>
       </div>

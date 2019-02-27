@@ -29,3 +29,15 @@
 .highlighted {
   color: var(--highlighted-font-color);
 }
+
+.externalText {
+  font-size: var(--font-size-small);
+  color: var(--highlighted-font-color);
+}
+
+.statusTextContainer {
+  min-width: 5em;
+  text-align: center;
+  padding: 0.5em;
+  text-transform: uppercase;
+}
