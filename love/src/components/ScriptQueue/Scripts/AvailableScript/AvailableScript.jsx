@@ -31,6 +31,11 @@ export default class AvailableScript extends Component {
     const fileExtension = path.substring(path.lastIndexOf('.'));
     return (
       <div className={scriptStyles.scriptContainer}>
+        <div className={scriptStyles.externalContainer}>
+          <span className={scriptStyles.externalText}>
+            {this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}
+          </span>
+        </div>
         <div className={scriptStyles.pathTextContainer}>
           <span className={scriptStyles.pathText}>{fileFolder}</span>
           <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
