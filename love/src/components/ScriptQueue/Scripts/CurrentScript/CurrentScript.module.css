@@ -40,3 +40,8 @@
 
 .elapsedTimeValue {
 }
+
+.topContainer {
+  display: flex;
+  justify-content: space-between;
+}
