@@ -2,9 +2,13 @@ import sockette from 'sockette';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
+  // eslint-disable-next-line
   Object.defineProperty(Array.prototype, 'flat', {
     value(depth = 1) {
-      return this.reduce((flat, toFlatten) => flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten), []);
+      return this.reduce(
+        (flat, toFlatten) => flat.concat(Array.isArray(toFlatten) && depth - 1 ? toFlatten.flat(depth - 1) : toFlatten),
+        [],
+      );
     },
   });
 }
@@ -22,16 +26,15 @@ export default class ManagerInterface {
     const token = ManagerInterface.getToken();
     if (token) {
       return new Headers({
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': 'Token ' + token
-      });
-    } else {
-      return new Headers({
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
       });
     }
+    return new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    });
   }
 
   static getToken() {
@@ -55,57 +58,55 @@ export default class ManagerInterface {
   }
 
   static requestToken(username: string, password: string) {
-    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/get-token/';
+    const url = `http://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/api/get-token/`;
     const data = {
-      username: username,
-      password: password
-    }
+      username,
+      password,
+    };
     return fetch(url, {
       method: 'POST',
       headers: this.getHeaders(),
-      body: JSON.stringify(data)
-    }).then(response => response.json())
-      .then(response => {
-        const token = response['token'];
+      body: JSON.stringify(data),
+    })
+      .then((response) => response.json())
+      .then((response) => {
+        const { token } = response;
         if (token !== undefined && token !== null) {
           ManagerInterface.saveToken(token);
         }
         return token;
-      }
-    );
+      });
   }
 
   static validateToken() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      console.log('Token not found during validation');
+      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    const url = 'http://' + process.env.REACT_APP_WEBSOCKET_HOST + '/manager/api/validate-token/';
+    const url = `http://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/api/validate-token/`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders()
-    })
-    .then(response => {
+      headers: this.getHeaders(),
+    }).then((response) => {
       if (response.status >= 500) {
-        console.error('Error communicating with the server. Logging out\n', response);
+        // console.error('Error communicating with the server. Logging out\n', response);
         ManagerInterface.removeToken();
         return false;
       }
-      if (response.status == 401 || response.status == 403) {
-        console.log('Session expired. Logging out');
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
-      return response.json().then(response => {
-        const detail = response['detail'];
+      return response.json().then((resp) => {
+        const { detail } = resp;
         if (detail === 'Token is valid') {
           return true;
-        } else {
-          console.log('Session expired. Logging out');
-          this.removeToken();
-          return false;
         }
+        // console.log('Session expired. Logging out');
+        this.removeToken();
+        return false;
       });
     });
   }
@@ -114,14 +115,14 @@ export default class ManagerInterface {
     this.callback = callback;
     const token = ManagerInterface.getToken();
     if (token === null) {
-      console.log('Token not available or invalid, skipping connection');
+      // console.log('Token not available or invalid, skipping connection');
       return;
     }
     this.subscriptions.push([category, csc, stream]);
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
         const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
-        console.log('Openning websocket connection to: ', connectionPath);
+        // console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
             this.connectionIsOpen = true;
@@ -138,9 +139,9 @@ export default class ManagerInterface {
             if (this.callback) this.callback(msg);
             resolve();
           },
-          onclose: (msg) => {
+          onclose: () => {
             this.connectionIsOpen = false;
-          }
+          },
         });
       });
     } else {
@@ -158,16 +159,15 @@ export default class ManagerInterface {
   };
 
   unsubscribeToStream = (category, csc, stream, callback) => {
-    let subscriptionKeys = this.subscriptions.map(JSON.stringify);
-    let index = subscriptionKeys.indexOf(JSON.stringify([category, csc, stream]));
-    if(index > -1)
-      this.subscriptions.splice(index, 1);
-      if(this.connectionIsOpen){
+    const subscriptionKeys = this.subscriptions.map(JSON.stringify);
+    const index = subscriptionKeys.indexOf(JSON.stringify([category, csc, stream]));
+    if (index > -1) this.subscriptions.splice(index, 1);
+    if (this.connectionIsOpen) {
       this.socket.json({
         option: 'unsubscribe',
-        category: category,
-        csc: csc,
-        stream: stream,
+        category,
+        csc,
+        stream,
       });
       this.callback = callback;
     }
@@ -251,12 +251,12 @@ export const getFakeUnits = (name) => {
 };
 
 export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) => {
-  const dataType = selectedRows[0].value.dataType;
+  const { dataType } = selectedRows[0].value;
   const stringValues = ['a', 'b', 'c'];
   const telemetries = tableRowListToTimeSeriesObject(selectedRows);
   let timestep = 2000;
-  const timeWindow = (new Date(dateEnd).getTime() - new Date(dateStart).getTime())
-  let arraySize =  timeWindow / timestep;
+  const timeWindow = new Date(dateEnd).getTime() - new Date(dateStart).getTime();
+  let arraySize = timeWindow / timestep;
   if (arraySize > 1000) {
     arraySize = 1000;
     timestep = timeWindow / 1000;
@@ -264,12 +264,11 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
   const time = new Array(arraySize);
   const tStart = new Date(dateStart).getTime();
-  const dateOffset = new Date().getTimezoneOffset() / 60;
   for (let i = 0; i < arraySize; i += 1) {
     let currentDate = new Date(tStart + i * timestep);
     let dateString = [currentDate.getUTCFullYear(), currentDate.getUTCMonth() + 1, currentDate.getUTCDate()].join('/');
 
-    currentDate = new Date(currentDate.getTime() + 3*60*60*1000);
+    currentDate = new Date(currentDate.getTime() + 3 * 60 * 60 * 1000);
     const hours = currentDate.getHours();
     const minutes = currentDate.getMinutes();
     const seconds = currentDate.getSeconds();

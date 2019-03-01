@@ -1,7 +1,7 @@
-let fakeData = {
-    'scheduler': {
-    }
-}
+const fakeData = {
+  scheduler: {
+  },
+};
 
 // let fakeData = {
 //     'scheduler': {

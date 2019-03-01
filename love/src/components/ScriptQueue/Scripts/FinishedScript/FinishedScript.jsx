@@ -20,6 +20,7 @@ export default class FinishedScript extends Component {
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
   };
+
   static defaultProps = {
     salIndex: 0,
     isStandard: true,
@@ -30,7 +31,7 @@ export default class FinishedScript extends Component {
   };
 
   render() {
-    const path = this.props.path;
+    const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
     const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
     const fileExtension = path.substring(path.lastIndexOf('.'));

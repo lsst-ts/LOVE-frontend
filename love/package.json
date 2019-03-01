@@ -48,6 +48,7 @@
     "react-datetime": "^2.16.3",
     "react-dev-utils": "^6.1.1",
     "react-dom": "^16.6.3",
+    "react-json-pretty": "^2.0.0",
     "react-router-dom": "^4.3.1",
     "react-uid": "^2.2.0",
     "resolve": "1.8.1",
@@ -58,6 +59,7 @@
     "url-loader": "1.1.1",
     "vega": "^4.4.0",
     "vega-embed": "^3.29.0",
+    "vega-lib": "^4.4.0",
     "vega-lite": "^3.0.0-rc12",
     "webpack": "4.19.1",
     "webpack-dev-server": "3.1.11",
@@ -132,7 +134,6 @@
     "eslint-plugin-only-warn": "^1.0.1",
     "jest-dom": "^3.0.0",
     "mock-socket": "^8.0.5",
-    "react-json-pretty": "^2.0.0",
     "react-styleguidist": "^8.0.6",
     "react-testing-library": "^5.4.4",
     "webpack-bundle-tracker": "^0.4.2-beta"

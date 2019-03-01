@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './ScriptList.module.css';
 
 export default class ScriptList extends Component {
+  static propTypes = {
+    children: PropTypes.object,
+  };
+
   render() {
     return (
       <div className={styles.scriptListWrapper}>
