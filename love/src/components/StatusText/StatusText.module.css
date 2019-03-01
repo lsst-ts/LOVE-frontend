@@ -2,6 +2,9 @@
     padding: 0.2em 0.3em;
     text-transform: uppercase;
     display: block;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .ok {

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import StatusText from '../../../StatusText/StatusText';
+import { getStatusStyle } from '../Scripts';
 
 export default class FinishedScript extends Component {
   static propTypes = {
@@ -37,6 +38,9 @@ export default class FinishedScript extends Component {
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.finishedScriptContainer}>
           <div>
+            <div className={scriptStyles.externalContainer}>
+              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
+            </div>
             <div className={scriptStyles.pathTextContainer}>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
               <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
@@ -49,8 +53,8 @@ export default class FinishedScript extends Component {
               </span>
             </div>
           </div>
-          <div className={styles.statusTextContainer}>
-            <StatusText status={'ok'}>DONE</StatusText>
+          <div className={scriptStyles.statusTextContainer}>
+            <StatusText status={getStatusStyle(this.props.state)}>{this.props.state}</StatusText>
           </div>
         </div>
       </div>
