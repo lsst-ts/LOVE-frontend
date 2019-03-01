@@ -1,10 +1,12 @@
 {
   "parser": "babel-eslint",
+  "extends": ["airbnb-base", "plugin:react/recommended"],
   "rules": {
     "max-len": [1, 120, 2, { "ignoreComments": true }],
-    "arrow-parens": [1, "always"]
+    "arrow-parens": [1, "always"],
+    "arrow-body-style": "off",
+    "operator-linebreak": [1, "after", { "overrides": { "?": "before", ":": "before" } }]
   },
-  "extends": ["airbnb-base", "plugin:react/recommended"],
   "plugins": ["only-warn"],
   "settings": {
     "import/resolver": {

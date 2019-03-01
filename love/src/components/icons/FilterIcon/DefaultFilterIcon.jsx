@@ -1,8 +1,13 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class DefaultFilterIcon extends Component {
-    render() {       
-        return (
+  static propTypes = {
+    style: PropTypes.string,
+  };
+
+  render() {
+    return (
             <svg className={this.props.style} viewBox='0 0 18 18'>
                 <g>
                     <line x1="6.29" y1="13.7" x2="11.58" y2="13.7" />
@@ -10,6 +15,6 @@ export default class DefaultFilterIcon extends Component {
                     <line x1="1" y1="4" x2="16.87" y2="4" />
                 </g>
             </svg>
-        )
-    }
+    );
+  }
 }
