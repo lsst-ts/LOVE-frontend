@@ -17,9 +17,21 @@ export default class ScriptQueue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      waitingScriptList: [1, 2],
+      waitingScriptList: [{
+        state: 'unconfigured'
+      },{
+        state: 'configured'
+      }],
       availableScriptList: [1, 2, 3, 4],
-      finishedScriptList: [1, 2],
+      finishedScriptList: [{
+        state: 'done'
+      },{
+        state: 'terminated'
+      },{
+        state: 'failed'
+      },{
+        state: 'stopped'
+      }],
       isAvailableScriptListVisible: false,
     };
   }
@@ -42,7 +54,7 @@ export default class ScriptQueue extends Component {
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainer}>
               <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
-              <CurrentScript />
+              <CurrentScript state={'running'}/>
             </div>
           </div>
           <div className={styles.globalStateWrapper}>
@@ -60,6 +72,7 @@ export default class ScriptQueue extends Component {
           <div className={styles.listsBody}>
             <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
               <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
+              <span className={styles.listSubtitle}>&#8203;</span>
               <ScriptList>
                 {this.state.availableScriptList.map((script) => {
                   return <AvailableScript key={script} />;
@@ -68,9 +81,10 @@ export default class ScriptQueue extends Component {
             </div>
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
               <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
+              <span className={styles.listSubtitle}>Total time: 0</span>
               <ScriptList>
                 {this.state.waitingScriptList.map((script) => {
-                  return <WaitingScript key={script} isCompact={this.state.isAvailableScriptListVisible} />;
+                  return <WaitingScript key={script} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />;
                 })}
                 <div className={styles.addScriptContainer}>
                   <Button className={styles.addScriptButton} size={'large'} onClick={this.toggleAvailableScript}>
@@ -81,9 +95,10 @@ export default class ScriptQueue extends Component {
             </div>
             <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
               <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
+              <span className={styles.listSubtitle}>Total time: 0</span>
               <ScriptList>
                 {this.state.finishedScriptList.map((script) => {
-                  return <FinishedScript key={script} isCompact={this.state.isAvailableScriptListVisible} />;
+                  return <FinishedScript key={script} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />;
                 })}
               </ScriptList>
             </div>
