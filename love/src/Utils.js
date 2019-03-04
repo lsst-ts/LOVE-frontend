@@ -22,6 +22,14 @@ export default class ManagerInterface {
     this.connectionIsOpen = false;
   }
 
+  static getApiBaseUrl() {
+    return `http://${window.location.hostname}/manager/api/`;
+  }
+
+  static getWebsocketsUrl() {
+    return `ws://${window.location.hostname}/manager/ws/subscription?token=`;
+  }
+
   static getHeaders() {
     const token = ManagerInterface.getToken();
     if (token) {
@@ -58,7 +66,7 @@ export default class ManagerInterface {
   }
 
   static requestToken(username: string, password: string) {
-    const url = `http://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/api/get-token/`;
+    const url = this.getApiBaseUrl() + 'get-token/';
     const data = {
       username,
       password,
@@ -84,7 +92,7 @@ export default class ManagerInterface {
       // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    const url = `http://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/api/validate-token/`;
+    const url = this.getApiBaseUrl() + 'validate-token/';
     return fetch(url, {
       method: 'GET',
       headers: this.getHeaders(),
@@ -121,8 +129,8 @@ export default class ManagerInterface {
     this.subscriptions.push([category, csc, stream]);
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
-        const connectionPath = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/manager/ws/subscription?token=${token}`;
-        // console.log('Openning websocket connection to: ', connectionPath);
+        const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
+        console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
             this.connectionIsOpen = true;
