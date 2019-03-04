@@ -7,10 +7,20 @@ import ManagerInterface from '../../Utils';
 
 export default class Login extends Component {
   static propTypes = {
+
+    /** Defines wether or not the message of "Session Expired" should be displayed */
     showSessionExpired: PropTypes.bool,
+
+    /** Function to call in order to hide the "Session Expired" message */
     hideSessionExpired: PropTypes.func,
+
+    /** Function to call in order to set the token state of the App component */
     setTokenState: PropTypes.func,
+
+    /** Current router location */
     location: PropTypes.string,
+
+    /** Token state of the App component */
     token: PropTypes.string,
   };
 
