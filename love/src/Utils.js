@@ -65,8 +65,8 @@ export default class ManagerInterface {
     return true;
   }
 
-  static requestToken(username: string, password: string) {
-    const url = this.getApiBaseUrl() + 'get-token/';
+  static requestToken(username, password) {
+    const url = `${this.getApiBaseUrl()}get-token/`;
     const data = {
       username,
       password,
@@ -92,7 +92,7 @@ export default class ManagerInterface {
       // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    const url = this.getApiBaseUrl() + 'validate-token/';
+    const url = `${this.getApiBaseUrl()}validate-token/`;
     return fetch(url, {
       method: 'GET',
       headers: this.getHeaders(),
@@ -130,6 +130,7 @@ export default class ManagerInterface {
     if (this.socketPromise === null && this.socket === null) {
       this.socketPromise = new Promise((resolve) => {
         const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
+        // eslint-disable-next-line
         console.log('Openning websocket connection to: ', connectionPath);
         this.socket = sockette(connectionPath, {
           onopen: () => {
