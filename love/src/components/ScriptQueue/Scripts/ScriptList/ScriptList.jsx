@@ -4,7 +4,7 @@ import styles from './ScriptList.module.css';
 
 export default class ScriptList extends Component {
   static propTypes = {
-    children: PropTypes.object,
+    children: PropTypes.array,
   };
 
   render() {
