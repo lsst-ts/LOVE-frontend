@@ -1,0 +1,43 @@
+.draggableContainer.dragging {
+  /* position: absolute; */
+  /* border: solid red 1px; */
+  /* border: solid blueviolet 5px; */
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.draggableContainer > div {
+  /* border: solid red 1px; */
+  /* border: solid blueviolet 5px; */
+  box-sizing: border-box;  
+}
+
+.draggableContainer > div::after {
+  /* height: 100%;
+  width: 100%;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0; */
+}
+
+.dragOver > div::after {
+  /* background: red; */
+}
+
+.dragging > div {
+  border: dashed blueviolet 5px;
+}
+
+.dragging::after {
+  background: rgba(255,0,0,1);
+  
+  z-index: 10;
+}
+
+.dragOver {
+  /* background: green; */
+  /* border: solid green 1px; */
+}
