@@ -76,6 +76,7 @@ export default class ScriptQueue extends Component {
     if (targetScriptIndex === sourceScriptIndex) return;
 
     const waitingList = [...this.state.waitingScriptList];
+    const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
     let sourceListIndex = -1;
     let targetListIndex = -1;
@@ -85,27 +86,11 @@ export default class ScriptQueue extends Component {
       if (waitingList[i].index === targetScriptIndex) targetListIndex = i;
     }
 
-    if (sourceListIndex !== -1 && targetListIndex !== -1) {
-      [waitingList[sourceListIndex], waitingList[targetListIndex]] = [
-        waitingList[targetListIndex],
-        waitingList[sourceListIndex],
-      ];
-    }
+    newWaitingList.splice(sourceListIndex, 1);
+    newWaitingList.splice(targetListIndex, 0, waitingList[sourceListIndex]);
 
-    // for (let i = 0; i < waitingListLength; i += 1) {
-    //   if (waitingList[i].index === targetScriptIndex) {
-    //     waitingList.splice(targetScriptIndex);
-    //     i -= 1;
-    //   }
-    //   if (waitingList[i].index === sourceScriptIndex) {
-    //     waitingList.splice(targetScriptIndex, 0);
-    //   }
-    // }
-    // waitingList = waitingList.sort(function() {
-    //   return 0.5 - Math.random();
-    // });
     this.setState({
-      waitingScriptList: waitingList,
+      waitingScriptList: newWaitingList,
     });
   };
 
