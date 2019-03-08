@@ -82,7 +82,10 @@
 
 .waitingScriptList {
   overflow-y: hidden;
+  position:relative;
 }
+
+.waitingScriptListDragging * {pointer-events: none;}
 
 .finishedScriptList {
   overflow-y: hidden;

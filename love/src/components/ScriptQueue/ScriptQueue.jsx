@@ -20,43 +20,53 @@ export default class ScriptQueue extends Component {
       waitingScriptList: [
         {
           state: 'unconfigured',
-          index: 0,
+          id: 0,
         },
         {
           state: 'configured',
-          index: 1,
+          id: 1,
         },
         {
-          state: 'failed',
-          index: 2,
+          state: 'done',
+          id: 2,
         },
         {
           state: 'stopped',
-          index: 3,
+          id: 3,
         },
       ],
-      availableScriptList: [],
+      availableScriptList: [
+        {
+          state: 'failed',
+          id: 8,
+        },
+        {
+          state: 'failed',
+          id: 9,
+        },
+      ],
       finishedScriptList: [
         {
           state: 'done',
-          index: 4,
+          id: 4,
         },
         {
           state: 'terminated',
-          index: 5,
+          id: 5,
         },
         {
           state: 'failed',
-          index: 6,
+          id: 6,
         },
         {
           state: 'stopped',
-          index: 7,
+          id: 7,
         },
       ],
       isAvailableScriptListVisible: false,
-      draggingIndex: -1,
+      draggingSource: '',
     };
+    this.lastId = 19;
   }
 
   toggleAvailableScript = () => {
@@ -65,29 +75,98 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  onDragStart = (e, index) => {
+  getScriptFromId = (id, listName) => {
+    let list = this.state.waitingScriptList;
+    if (listName === 'available') list = this.state.availableScriptList;
+    for (let i = 0; i < list.length; i += 1) if (list[i].id === id) return list[i];
+    return null;
+  };
+
+  onDragStart = (e, draggingId, draggingSource) => {
+    // console.log('onDragStart', this.state);
+    const draggingScriptInstance = this.getScriptFromId(draggingId, draggingSource);
+
     this.setState({
-      draggingIndex: index,
+      draggingScriptInstance,
+      draggingSource,
     });
   };
 
-  onDragOver = (e, targetScriptIndex) => {
-    const sourceScriptIndex = this.state.draggingIndex;
-    if (targetScriptIndex === sourceScriptIndex) return;
+  // eslint-disable-next-line
+  onDragEnd = (e, draggingId, draggingSource) => {
+    // console.log('END', e, draggingId, draggingSource, this.state.draggingScriptInstance);
+    const list = [...this.state.waitingScriptList];
+    for (let i = 0; i < list.length; i += 1) {
+      // update id of newly inserted script
+      if (list[i].id === draggingId) {
+        const newItem = { ...list[i] };
+        newItem.id = this.lastId + 1;
+        newItem.pendingConfirmation = true;
+        list[i] = newItem;
+        this.lastId += 1;
+        break;
+      }
+    }
+    this.setState({
+      waitingScriptList: [...list],
+      draggingScriptInstance: null,
+    });
+    return null;
+  };
+
+  removeFromWaitingList = (sourceScriptId) => {
+    const waitingList = [...this.state.waitingScriptList];
+    const newWaitingList = [...waitingList];
+    const waitingListLength = waitingList.length;
+    let waitingListSourceId = -1;
+
+    for (let i = 0; i < waitingListLength; i += 1) {
+      if (waitingList[i].id === sourceScriptId) waitingListSourceId = i;
+    }
+    if (waitingListSourceId !== -1) newWaitingList.splice(waitingListSourceId, 1);
+    this.setState({
+      waitingScriptList: newWaitingList,
+    });
+  };
+
+  onDragLeave = () => {
+    const sourceScriptId = this.state.draggingScriptInstance.id;
+    if (this.state.draggingSource === 'available' || this.state.draggingSource === '') {
+      this.removeFromWaitingList(sourceScriptId);
+    }
+  };
+
+  // eslint-disable-next-line
+  onDragOver = (e, targetScriptId, source) => {
+    const sourceScriptId = this.state.draggingScriptInstance.id;
+    if (targetScriptId === sourceScriptId) return;
 
     const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
-    let sourceListIndex = -1;
-    let targetListIndex = -1;
+    let waitingListSourceId = -1;
+    let waitingListTargetId = -1;
 
     for (let i = 0; i < waitingListLength; i += 1) {
-      if (waitingList[i].index === sourceScriptIndex) sourceListIndex = i;
-      if (waitingList[i].index === targetScriptIndex) targetListIndex = i;
+      if (waitingList[i].id === sourceScriptId) waitingListSourceId = i;
+      if (waitingList[i].id === targetScriptId) waitingListTargetId = i;
     }
 
-    newWaitingList.splice(sourceListIndex, 1);
-    newWaitingList.splice(targetListIndex, 0, waitingList[sourceListIndex]);
+    if (this.state.draggingSource === 'available' || this.state.draggingSource === '') {
+      // get available list id
+      // remove script from waiting list
+      if (waitingListSourceId !== -1) newWaitingList.splice(waitingListSourceId, 1);
+      // reinsert it
+      newWaitingList.splice(waitingListTargetId, 0, this.state.draggingScriptInstance);
+      this.setState({
+        waitingScriptList: newWaitingList,
+        dragOverId: targetScriptId,
+      });
+      return;
+    }
+
+    newWaitingList.splice(waitingListSourceId, 1);
+    newWaitingList.splice(waitingListTargetId, 0, waitingList[waitingListSourceId]);
 
     this.setState({
       waitingScriptList: newWaitingList,
@@ -121,7 +200,14 @@ export default class ScriptQueue extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.listsBody}>
+          <div
+            className={styles.listsBody}
+            onDragEnter={(e) => {
+              this.onDragLeave(e);
+              e.stopPropagation();
+              e.preventDefault();
+            }}
+          >
             <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
               <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
               <span className={styles.listSubtitle}>&#8203;</span>
@@ -129,8 +215,14 @@ export default class ScriptQueue extends Component {
                 {this.state.availableScriptList.map((script) => {
                   if (!script) return null;
                   return (
-                    <DraggableScript key={`${'dragging-'}script.index`}>
-                      <AvailableScript key={script.index} />
+                    <DraggableScript
+                      key={`dragging-${script.id}`}
+                      id={script.id}
+                      onDragOver={(e, id) => this.onDragOver(e, id, 'available')}
+                      onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
+                      onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
+                    >
+                      <AvailableScript key={script.id} />
                     </DraggableScript>
                   );
                 })}
@@ -139,18 +231,18 @@ export default class ScriptQueue extends Component {
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
               <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
               <span className={styles.listSubtitle}>Total time: 0</span>
-              <ScriptList>
+              <ScriptList onDragLeave={this.onDragLeave}>
                 {this.state.waitingScriptList.map((script) => {
                   if (!script) return null;
                   return (
                     <DraggableScript
-                      key={`${'dragging-'}script.index`}
-                      index={script.index}
-                      onDragOver={this.onDragOver}
-                      onDragStart={this.onDragStart}
+                      key={`dragging-${script.id}`}
+                      {...script}
+                      onDragOver={(e, id) => this.onDragOver(e, id, 'waiting')}
+                      onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
                     >
                       <WaitingScript
-                        key={script.index}
+                        key={script.id}
                         state={script.state}
                         isCompact={this.state.isAvailableScriptListVisible}
                       />
@@ -168,12 +260,8 @@ export default class ScriptQueue extends Component {
               <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
               <span className={styles.listSubtitle}>Total time: 0</span>
               <ScriptList>
-                {this.state.finishedScriptList.map((script, index) => (
-                  <FinishedScript
-                    key={index}
-                    state={script.state}
-                    isCompact={this.state.isAvailableScriptListVisible}
-                  />
+                {this.state.finishedScriptList.map((script, id) => (
+                  <FinishedScript key={id} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />
                 ))}
               </ScriptList>
             </div>
