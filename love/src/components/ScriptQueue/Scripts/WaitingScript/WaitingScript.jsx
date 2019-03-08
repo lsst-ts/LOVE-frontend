@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import JSONPretty from 'react-json-pretty';
 import styles from './WaitingScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import StatusText from '../../../StatusText/StatusText';
@@ -30,6 +31,19 @@ export default class WaitingScript extends Component {
     isCompact: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: true,
+    };
+  }
+
+  onClick = () => {
+    this.setState({
+      expanded: !this.state.expanded,
+    });
+  };
+
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
@@ -37,7 +51,7 @@ export default class WaitingScript extends Component {
     const fileExtension = path.substring(path.lastIndexOf('.'));
     return (
       <div className={scriptStyles.scriptContainer}>
-        <div className={styles.waitingScriptContainer}>
+        <div className={styles.waitingScriptContainer} onClick={this.onClick}>
           <div>
             <div className={scriptStyles.externalContainer}>
               <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
@@ -56,6 +70,22 @@ export default class WaitingScript extends Component {
           </div>
           <div className={scriptStyles.statusTextContainer}>
             <StatusText status={getStatusStyle(this.props.state)}>{this.props.state}</StatusText>
+          </div>
+        </div>
+        <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
+          <div className={[styles.expandedSection].join(' ')}>
+            <p>Script config</p>
+            <JSONPretty
+              data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
+              theme={{
+                main:
+                  'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
+                key: 'color:#f92672;',
+                string: 'color:#fd971f;',
+                value: 'color:#a6e22e;',
+                boolean: 'color:#ac81fe;',
+              }}
+            />
           </div>
         </div>
       </div>

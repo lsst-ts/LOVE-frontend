@@ -8,6 +8,11 @@
   visibility: hidden;
 }
 
+.draggableContainer {
+  padding-bottom: 0.5em;
+  /* padding-bottom: 0.5em; */
+}
+
 .draggableContainer > div {
   /* border: solid red 1px; */
   /* border: solid blueviolet 5px; */

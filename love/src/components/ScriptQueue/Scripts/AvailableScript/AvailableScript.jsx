@@ -32,17 +32,19 @@ export default class AvailableScript extends Component {
     const fileExtension = path.substring(path.lastIndexOf('.'));
     return (
       <div className={scriptStyles.scriptContainer}>
-        <div className={scriptStyles.externalContainer}>
-          <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
-        </div>
-        <div className={scriptStyles.pathTextContainer}>
-          <span className={scriptStyles.pathText}>{fileFolder}</span>
-          <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-          <span className={scriptStyles.pathText}>{fileExtension}</span>
-        </div>
-        <div className={styles.estimatedTimeContainer}>
-          <span className={styles.estimatedTimeLabel}>Estimated time:</span>
-          <span className={styles.estimatedTimeValue}>{this.props.estimatedTime}</span>
+        <div className={styles.availableScriptContainer}>
+          <div className={scriptStyles.externalContainer}>
+            <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
+          </div>
+          <div className={scriptStyles.pathTextContainer}>
+            <span className={scriptStyles.pathText}>{fileFolder}</span>
+            <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+            <span className={scriptStyles.pathText}>{fileExtension}</span>
+          </div>
+          <div className={styles.estimatedTimeContainer}>
+            <span className={styles.estimatedTimeLabel}>Estimated time:</span>
+            <span className={styles.estimatedTimeValue}>{this.props.estimatedTime}</span>
+          </div>
         </div>
       </div>
     );

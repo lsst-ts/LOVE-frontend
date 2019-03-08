@@ -261,7 +261,9 @@ export default class ScriptQueue extends Component {
               <span className={styles.listSubtitle}>Total time: 0</span>
               <ScriptList>
                 {this.state.finishedScriptList.map((script, id) => (
-                  <FinishedScript key={id} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />
+                  <DraggableScript key={`dragging-${script.id}`}>
+                    <FinishedScript key={id} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />
+                  </DraggableScript>
                 ))}
               </ScriptList>
             </div>
