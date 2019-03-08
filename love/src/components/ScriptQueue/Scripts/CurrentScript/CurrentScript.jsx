@@ -43,7 +43,7 @@ export default class CurrentScript extends Component {
           <div className={styles.topContainer}>
             <div>
               <div className={scriptStyles.externalContainer}>
-                <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
+                <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
               </div>
               <div className={styles.indexContainer}>
                 <span className={styles.indexLabel}>Index: </span>

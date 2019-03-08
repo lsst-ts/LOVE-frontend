@@ -220,7 +220,6 @@ export default class ScriptQueue extends Component {
                     <DraggableScript
                       key={`dragging-${script.id}`}
                       id={script.id}
-                      onDragOver={(e, id) => this.onDragOver(e, id, 'available')}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
                     >
