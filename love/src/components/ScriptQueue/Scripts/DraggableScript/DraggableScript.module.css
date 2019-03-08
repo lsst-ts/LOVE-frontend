@@ -11,7 +11,7 @@
 .draggableContainer > div {
   /* border: solid red 1px; */
   /* border: solid blueviolet 5px; */
-  box-sizing: border-box;  
+  box-sizing: border-box;
 }
 
 .draggableContainer > div::after {
@@ -28,12 +28,41 @@
 }
 
 .dragging > div {
-  border: dashed blueviolet 5px;
+  border: dashed var(--secondary-font-color) 5px;
+}
+
+.pending {
+  position: relative;
+}
+
+.pending > div::before {
+  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+  background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
+  animation: border-dance 12s infinite linear;
+  content: '';
+  width: 100%;
+  height: 100%;
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+@keyframes border-dance {
+  0% {
+    background-position: 0px 0px, 100% 100%, 0px 200%, 100% 0px;
+  }
+  100% {
+    background-position: 100% 0px, 0px 100%, 0px 0px, 100% 200%;
+  }
 }
 
 .dragging::after {
-  background: rgba(255,0,0,1);
-  
+  background: rgba(255, 0, 0, 1);
+
   z-index: 10;
 }
 

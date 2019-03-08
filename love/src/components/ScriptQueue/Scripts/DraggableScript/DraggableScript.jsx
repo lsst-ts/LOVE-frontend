@@ -7,11 +7,14 @@ export default class AvailableScript extends Component {
     children: PropTypes.object,
     onDragStart: PropTypes.func,
     onDragOver: PropTypes.func,
-    index: PropTypes.number,
+    onDragEnd: PropTypes.func,
+    id: PropTypes.number,
+    pendingConfirmation: PropTypes.number,
   };
 
   static defaultProps = {
     children: [],
+    onDragEnd: () => 0,
   };
 
   constructor(props) {
@@ -29,7 +32,7 @@ export default class AvailableScript extends Component {
     this.setState({
       dragging: true,
     });
-    this.props.onDragStart(e, this.props.index);
+    this.props.onDragStart(e, this.props.id);
   };
 
   onDrop = () => {
@@ -41,7 +44,7 @@ export default class AvailableScript extends Component {
     this.setState({
       dragOver: true,
     });
-    this.props.onDragOver(e, this.props.index);
+    this.props.onDragOver(e, this.props.id);
   };
 
   onDragLeave = () => {
@@ -50,19 +53,21 @@ export default class AvailableScript extends Component {
     });
   };
 
-  onDragEnd = () => {
+  onDragEnd = (e) => {
     // console.log(e);
     this.setState({
       dragging: false,
     });
+    this.props.onDragEnd(e, this.props.id);
   };
 
   render() {
     const draggingClass = this.state.dragging ? styles.dragging : '';
     const dragOverClass = this.state.dragOver ? styles.dragOver : '';
+    const pendingClass = this.props.pendingConfirmation ? styles.pending : '';
     return (
       <div
-        className={[styles.draggableContainer, draggingClass, dragOverClass].join(' ')}
+        className={[styles.draggableContainer, draggingClass, dragOverClass, pendingClass].join(' ')}
         draggable="true"
         onDragStart={this.onDragStart}
         onDrop={this.onDrop}
