@@ -6,6 +6,9 @@ import ImportIcon from '../../icons/ImportIcon/ImportIcon';
 export default class UploadButton extends Component {
   static propTypes = {
     onLoadFile: PropTypes.func,
+    className: PropTypes.string,
+    labelClassName: PropTypes.string,
+    iconClassName: PropTypes.string,
   };
 
   onChange = (event) => {
@@ -16,12 +19,14 @@ export default class UploadButton extends Component {
   };
 
   render() {
+    const classNames = [styles.button, styles.uploadButton, this.props.className].join(' ');
+    const labelClassNames = [styles.inputFileTrigger, this.props.labelClassName].join(' ');
     return (
       <form action="#">
-        <div className={[styles.button, styles.uploadButton].join(' ')}>
+        <div className={classNames}>
           <input onChange={this.onChange} type="file" id="my-file" className={styles.customFileInput} />
-          <ImportIcon />
-          <label tabIndex="0" htmlFor="my-file" className={styles.inputFileTrigger}>
+          <ImportIcon className={this.props.iconClassName} />
+          <label tabIndex="0" htmlFor="my-file" className={labelClassNames}>
             Import
           </label>
         </div>

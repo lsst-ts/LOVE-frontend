@@ -13,7 +13,7 @@
   text-align: left;
   font-size: var(--font-size-large);
   padding-bottom: 0.2em;
-  white-space: nowrap; 
+  white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -40,4 +40,36 @@
   text-align: center;
   padding: 0.5em;
   text-transform: uppercase;
+}
+
+.expandedTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  padding-top: 1em;
+}
+
+.expandedTopRow p {
+  margin: 0;
+}
+
+.uploadButtonWrapper {
+  width: 6em;
+  padding: 0em 0em;
+  /* padding-bottom: 0.3em; */
+  /* padding-left: 0.5em; */
+}
+
+.uploadConfigButton {
+  background: var(--quaternary-background-color);
+  border: solid var(--primary-background-color) 1px;
+}
+
+.uploadButtonLabel {
+  color: var(--base-font-color);
+}
+
+.uploadIcon {
+  fill: var(--base-font-color);
 }
