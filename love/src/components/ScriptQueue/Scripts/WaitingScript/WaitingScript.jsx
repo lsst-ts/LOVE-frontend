@@ -34,7 +34,7 @@ export default class WaitingScript extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: true,
+      expanded: false,
     };
   }
 
@@ -54,7 +54,7 @@ export default class WaitingScript extends Component {
         <div className={styles.waitingScriptContainer} onClick={this.onClick}>
           <div>
             <div className={scriptStyles.externalContainer}>
-              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
+              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
             </div>
             <div className={scriptStyles.pathTextContainer}>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}

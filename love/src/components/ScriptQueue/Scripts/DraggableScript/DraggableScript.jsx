@@ -9,12 +9,13 @@ export default class AvailableScript extends Component {
     onDragOver: PropTypes.func,
     onDragEnd: PropTypes.func,
     id: PropTypes.number,
-    pendingConfirmation: PropTypes.number,
+    pendingConfirmation: PropTypes.bool,
   };
 
   static defaultProps = {
     children: [],
     onDragEnd: () => 0,
+    onDragOver: () => 0,
   };
 
   constructor(props) {

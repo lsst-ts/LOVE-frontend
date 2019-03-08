@@ -34,7 +34,7 @@ export default class AvailableScript extends Component {
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.availableScriptContainer}>
           <div className={scriptStyles.externalContainer}>
-            <span className={scriptStyles.externalText}>{this.props.isStandard ? '[INTERNAL]' : '[EXTERNAL]'}</span>
+            <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
           </div>
           <div className={scriptStyles.pathTextContainer}>
             <span className={scriptStyles.pathText}>{fileFolder}</span>
