@@ -209,8 +209,10 @@ export default class ScriptQueue extends Component {
             }}
           >
             <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
-              <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
-              <span className={styles.listSubtitle}>&#8203;</span>
+              <div className={styles.listTitleWrapper}>
+                <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
+                <span className={styles.listSubtitle}>&#8203;</span>
+              </div>
               <ScriptList>
                 {this.state.availableScriptList.map((script) => {
                   if (!script) return null;
@@ -229,8 +231,10 @@ export default class ScriptQueue extends Component {
               </ScriptList>
             </div>
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
-              <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
-              <span className={styles.listSubtitle}>Total time: 0</span>
+              <div className={styles.listTitleWrapper}>
+                <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
+                <span className={styles.listSubtitle}>Total time: 0</span>
+              </div>
               <ScriptList onDragLeave={this.onDragLeave}>
                 {this.state.waitingScriptList.map((script) => {
                   if (!script) return null;
@@ -257,8 +261,10 @@ export default class ScriptQueue extends Component {
               </ScriptList>
             </div>
             <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
-              <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
-              <span className={styles.listSubtitle}>Total time: 0</span>
+              <div className={styles.listTitleWrapper}>
+                <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
+                <span className={styles.listSubtitle}>Total time: 0</span>
+              </div>
               <ScriptList>
                 {this.state.finishedScriptList.map((script, id) => (
                   <DraggableScript key={`dragging-${script.id}`}>
