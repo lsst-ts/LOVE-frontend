@@ -10,12 +10,17 @@ export default class AvailableScript extends Component {
     onDragEnd: PropTypes.func,
     id: PropTypes.number,
     pendingConfirmation: PropTypes.bool,
+    draggingScriptInstance: PropTypes.object,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
     children: [],
     onDragEnd: () => 0,
     onDragOver: () => 0,
+    onDragLeave: () => 0,
+    onDragStart: () => 0,
+    disabled: false,
   };
 
   constructor(props) {
@@ -23,39 +28,40 @@ export default class AvailableScript extends Component {
     this.state = {
       dragging: false,
       dragOver: false,
+      dragBottom: null,
     };
     this.ref = React.createRef();
   }
 
   onDragStart = (e) => {
+    if (this.props.disabled) return;
     // console.log(e);
     // e.dataTransfer.setDragImage(null,50,50);
     this.setState({
       dragging: true,
+      dragBottom: null,
     });
     this.props.onDragStart(e, this.props.id);
   };
 
-  onDrop = () => {
-    // console.log(e);
-  };
-
   onDragOver = (e) => {
-    // console.log(e);
+    const rect = e.target.getBoundingClientRect();
+    const dragBottom = e.clientY > rect.top + rect.height / 2;
     this.setState({
       dragOver: true,
+      dragBottom,
     });
-    this.props.onDragOver(e, this.props.id);
+    if (this.state.dragBottom !== null && this.state.dragBottom !== dragBottom) this.props.onDragOver(e, this.props.id);
   };
 
   onDragLeave = () => {
     this.setState({
       dragOver: false,
+      dragBottom: null,
     });
   };
 
   onDragEnd = (e) => {
-    // console.log(e);
     this.setState({
       dragging: false,
     });
@@ -66,12 +72,14 @@ export default class AvailableScript extends Component {
     const draggingClass = this.state.dragging ? styles.dragging : '';
     const dragOverClass = this.state.dragOver ? styles.dragOver : '';
     const pendingClass = this.props.pendingConfirmation ? styles.pending : '';
+    const globalDraggingClass = this.props.draggingScriptInstance !== undefined ? styles.globalDragging : '';
     return (
       <div
-        className={[styles.draggableContainer, draggingClass, dragOverClass, pendingClass].join(' ')}
-        draggable="true"
+        className={[styles.draggableContainer, draggingClass, dragOverClass, pendingClass, globalDraggingClass].join(
+          ' ',
+        )}
+        draggable={!this.props.disabled}
         onDragStart={this.onDragStart}
-        onDrop={this.onDrop}
         onDragOver={this.onDragOver}
         onDragLeave={this.onDragLeave}
         onDragEnd={this.onDragEnd}

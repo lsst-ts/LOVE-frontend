@@ -95,22 +95,28 @@ export default class ScriptQueue extends Component {
   // eslint-disable-next-line
   onDragEnd = (e, draggingId, draggingSource) => {
     // console.log('END', e, draggingId, draggingSource, this.state.draggingScriptInstance);
-    const list = [...this.state.waitingScriptList];
-    for (let i = 0; i < list.length; i += 1) {
-      // update id of newly inserted script
-      if (list[i].id === draggingId) {
-        const newItem = { ...list[i] };
-        newItem.id = this.lastId + 1;
-        newItem.pendingConfirmation = true;
-        list[i] = newItem;
-        this.lastId += 1;
-        break;
+    if (draggingSource === 'available') {
+      const list = [...this.state.waitingScriptList];
+      for (let i = 0; i < list.length; i += 1) {
+        // update id of newly inserted script
+        if (list[i].id === draggingId) {
+          const newItem = { ...list[i] };
+          newItem.id = this.lastId + 1;
+          newItem.pendingConfirmation = true;
+          list[i] = newItem;
+          this.lastId += 1;
+          break;
+        }
       }
+      this.setState({
+        waitingScriptList: [...list],
+        draggingScriptInstance: undefined,
+      });
+    } else {
+      this.setState({
+        draggingScriptInstance: undefined,
+      });
     }
-    this.setState({
-      waitingScriptList: [...list],
-      draggingScriptInstance: null,
-    });
     return null;
   };
 
@@ -222,6 +228,7 @@ export default class ScriptQueue extends Component {
                       id={script.id}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
+                      draggingScriptInstance={this.state.draggingScriptInstance}
                     >
                       <AvailableScript key={script.id} />
                     </DraggableScript>
@@ -243,6 +250,8 @@ export default class ScriptQueue extends Component {
                       {...script}
                       onDragOver={(e, id) => this.onDragOver(e, id, 'waiting')}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
+                      onDragEnd={(e, id) => this.onDragEnd(e, id, 'waiting')}
+                      draggingScriptInstance={this.state.draggingScriptInstance}
                     >
                       <WaitingScript
                         key={script.id}
@@ -266,7 +275,7 @@ export default class ScriptQueue extends Component {
               </div>
               <ScriptList>
                 {this.state.finishedScriptList.map((script, id) => (
-                  <DraggableScript key={`dragging-${script.id}`}>
+                  <DraggableScript key={`dragging-${script.id}`} disabled>
                     <FinishedScript key={id} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />
                   </DraggableScript>
                 ))}
