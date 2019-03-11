@@ -17,10 +17,12 @@ export default class WaitingScript extends Component {
     path: PropTypes.string,
     /** SAL property: Estimated duration of the script, excluding slewing to the initial position required by the script */
     estimatedTime: PropTypes.number,
-    /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
-    state: PropTypes.string,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
+    /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
+    script_state: PropTypes.string,
+    /** Timestamp of script creation */
+    timestamp: PropTypes.number,
   };
 
   static defaultProps = {
@@ -28,7 +30,7 @@ export default class WaitingScript extends Component {
     isStandard: true,
     path: 'auxtel/at_calsys_takedata.py',
     estimatedTime: 0,
-    state: 'Unknown',
+    script_state: 'Unknown',
     isCompact: false,
   };
 
@@ -48,8 +50,11 @@ export default class WaitingScript extends Component {
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
-    const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
-    const fileExtension = path.substring(path.lastIndexOf('.'));
+    const fileName =
+      path.lastIndexOf('.') > -1
+        ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
+        : path.substring(path.lastIndexOf('/'));
+    const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.waitingScriptContainer} onClick={this.onClick}>
@@ -70,7 +75,7 @@ export default class WaitingScript extends Component {
             </div>
           </div>
           <div className={scriptStyles.statusTextContainer}>
-            <StatusText status={getStatusStyle(this.props.state)}>{this.props.state}</StatusText>
+            <StatusText status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</StatusText>
           </div>
         </div>
         <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>

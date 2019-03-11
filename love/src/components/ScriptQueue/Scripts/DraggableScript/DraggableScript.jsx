@@ -8,7 +8,7 @@ export default class AvailableScript extends Component {
     onDragStart: PropTypes.func,
     onDragOver: PropTypes.func,
     onDragEnd: PropTypes.func,
-    id: PropTypes.number,
+    index: PropTypes.number,
     pendingConfirmation: PropTypes.bool,
     draggingScriptInstance: PropTypes.object,
     disabled: PropTypes.bool,
@@ -41,7 +41,7 @@ export default class AvailableScript extends Component {
       dragging: true,
       dragBottom: null,
     });
-    this.props.onDragStart(e, this.props.id);
+    this.props.onDragStart(e, this.props.index);
   };
 
   onDragOver = (e) => {
@@ -51,7 +51,9 @@ export default class AvailableScript extends Component {
       dragOver: true,
       dragBottom,
     });
-    if (this.state.dragBottom !== null && this.state.dragBottom !== dragBottom) this.props.onDragOver(e, this.props.id);
+    if (this.state.dragBottom !== null && this.state.dragBottom !== dragBottom) {
+      this.props.onDragOver(e, this.props.index);
+    }
   };
 
   onDragLeave = () => {
@@ -65,7 +67,7 @@ export default class AvailableScript extends Component {
     this.setState({
       dragging: false,
     });
-    this.props.onDragEnd(e, this.props.id);
+    this.props.onDragEnd(e, this.props.index);
   };
 
   render() {
