@@ -120,14 +120,14 @@ export default class ScriptQueue extends Component {
           type: 'Standard',
         },
         {
-          'elapsed_time': 44.16771697998047,
-          'index': 100003,
-          'path': 'script1',
-          'process_state': 'DONE',
-          'script_state': 'DONE',
-          'timestamp': 1552071365.203854,
-          'type': 'Standard'
-        }
+          elapsed_time: 44.16771697998047,
+          index: 100003,
+          path: 'script1',
+          process_state: 'DONE',
+          script_state: 'DONE',
+          timestamp: 1552071365.203854,
+          type: 'Standard',
+        },
       ],
       available_scripts: [
         {
@@ -350,7 +350,7 @@ export default class ScriptQueue extends Component {
               <ScriptList>
                 {this.state.finishedScriptList.map((script, id) => (
                   <DraggableScript key={`dragging-${script.index}`} disabled>
-                    <FinishedScript key={id} state={script.state} isCompact={this.state.isAvailableScriptListVisible} />
+                    <FinishedScript key={id} {...script} isCompact={this.state.isAvailableScriptListVisible} />
                   </DraggableScript>
                 ))}
               </ScriptList>
