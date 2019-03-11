@@ -176,7 +176,7 @@ class App extends Component {
               </div>
             )}
           />
-          <Route path="/script-queue" component={ScriptQueue} />
+          <PrivateRoute token={this.state.token} path="/script-queue" component={ScriptQueue} />
           <PrivateRoute
             token={this.state.token}
             path="/"
