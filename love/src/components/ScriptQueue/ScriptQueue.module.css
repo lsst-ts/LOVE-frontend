@@ -22,6 +22,8 @@
 }
 
 .listTitleWrapper {
+  display: flex;
+  justify-content: space-between;
   padding-left: 0.5em;
 }
 
@@ -107,14 +109,13 @@
 }
 
 .addScriptContainer {
-  display: flex;
-  justify-content: center;
-  color: var(--highlighted-font-color);
+  align-self: center;
+  padding: 0 0.5em;
 }
 
 .addScriptButton {
-  color: var(--highlighted-font-color);
   background: var(--quaternary-background-color);
+  font-size: var(--font-size-large);
 }
 
 .threeColumns .availableScriptList {

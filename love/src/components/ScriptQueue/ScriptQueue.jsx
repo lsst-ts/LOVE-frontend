@@ -109,35 +109,7 @@ export default class ScriptQueue extends Component {
         },
       ],
       state: 'Running',
-      waiting_scripts: [
-        {
-          elapsed_time: 0.0,
-          index: 100001,
-          path: 'script1',
-          process_state: 'FAILED',
-          script_state: 'FAILED',
-          timestamp: 1552071362.581268,
-          type: 'Standard',
-        },
-        {
-          elapsed_time: 44.16771697998047,
-          index: 100003,
-          path: 'script1',
-          process_state: 'DONE',
-          script_state: 'DONE',
-          timestamp: 1552071365.203854,
-          type: 'Standard',
-        },
-        {
-          elapsed_time: 44.16771697998047,
-          index: 100004,
-          path: 'script1',
-          process_state: 'UNCONFIGURED',
-          script_state: 'UNCONFIGURED',
-          timestamp: 1552071365.203854,
-          type: 'Standard',
-        },
-      ],
+      waiting_scripts: [],
       available_scripts: [
         {
           elapsed_time: 0.0,
@@ -153,9 +125,15 @@ export default class ScriptQueue extends Component {
     this.onReceiveMsg(data);
   };
 
-  toggleAvailableScript = () => {
+  displayAvailableScripts = () => {
     this.setState({
-      isAvailableScriptListVisible: !this.state.isAvailableScriptListVisible,
+      isAvailableScriptListVisible: true,
+    });
+  };
+
+  hideAvailableScripts = () => {
+    this.setState({
+      isAvailableScriptListVisible: false,
     });
   };
 
@@ -218,6 +196,25 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  onDragEnter = () => {
+    const sourceScriptId = this.state.draggingScriptInstance.index;
+
+    const waitingList = [...this.state.waitingScriptList];
+    const waitingListLength = waitingList.length;
+    let waitingListSourceId = -1;
+
+    for (let i = 0; i < waitingListLength; i += 1) {
+      if (waitingList[i].index === sourceScriptId) waitingListSourceId = i;
+    }
+
+    if (waitingListSourceId === -1) {
+      waitingList.splice(0, 0, this.state.draggingScriptInstance);
+      this.setState({
+        waitingScriptList: [...waitingList],
+      });
+    }
+  };
+
   onDragLeave = () => {
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (this.state.draggingSource === 'available' || this.state.draggingSource === '') {
@@ -271,13 +268,23 @@ export default class ScriptQueue extends Component {
             this.state.isAvailableScriptListVisible ? styles.threeColumns : '',
           ].join(' ')}
         >
-          <div className={styles.currentScriptWrapper}>
+          <div
+            onDragEnter={(e) => {
+              this.onDragLeave(e);
+            }}
+            className={styles.currentScriptWrapper}
+          >
             <div className={styles.currentScriptContainer}>
               <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
               <CurrentScript {...this.state.current} />
             </div>
           </div>
-          <div className={styles.globalStateWrapper}>
+          <div
+            onDragEnter={(e) => {
+              this.onDragLeave(e);
+            }}
+            className={styles.globalStateWrapper}
+          >
             <div className={styles.globalStateContainer}>
               <div className={styles.stateContainer}>
                 CSC STATE
@@ -289,18 +296,23 @@ export default class ScriptQueue extends Component {
               </div>
             </div>
           </div>
-          <div
-            className={styles.listsBody}
-            onDragEnter={(e) => {
-              this.onDragLeave(e);
-              // e.stopPropagation();
-              // e.preventDefault();
-            }}
-          >
-            <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
+          <div className={styles.listsBody}>
+            <div
+              onDragEnter={(e) => {
+                this.onDragLeave(e);
+              }}
+              className={[styles.availableScriptList, styles.scriptList].join(' ')}
+            >
               <div className={styles.listTitleWrapper}>
-                <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
-                <span className={styles.listSubtitle}>&#8203;</span>
+                <div className={styles.listTitleLeft}>
+                  <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
+                  <span className={styles.listSubtitle}>&#8203;</span>
+                </div>
+                <div className={styles.addScriptContainer}>
+                  <Button className={styles.addScriptButton} size={'large'} onClick={this.hideAvailableScripts}>
+                    Hide column
+                  </Button>
+                </div>
               </div>
               <ScriptList>
                 {this.state.availableScriptList.map((script) => {
@@ -323,10 +335,17 @@ export default class ScriptQueue extends Component {
             </div>
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
               <div className={styles.listTitleWrapper}>
-                <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
-                <span className={styles.listSubtitle}>Total time: 0</span>
+                <div className={styles.listTitleLeft}>
+                  <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
+                  <span className={styles.listSubtitle}>Total time: 0</span>
+                </div>
+                <div className={styles.addScriptContainer}>
+                  <Button className={styles.addScriptButton} size={'large'} onClick={this.displayAvailableScripts}>
+                    + Add script
+                  </Button>
+                </div>
               </div>
-              <ScriptList onDragLeave={this.onDragLeave}>
+              <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
                 {this.state.waitingScriptList.map((script) => {
                   if (!script) return null;
                   return (
@@ -346,17 +365,19 @@ export default class ScriptQueue extends Component {
                     </DraggableScript>
                   );
                 })}
-                <div className={styles.addScriptContainer}>
-                  <Button className={styles.addScriptButton} size={'large'} onClick={this.toggleAvailableScript}>
-                    + Add script
-                  </Button>
-                </div>
               </ScriptList>
             </div>
-            <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
+            <div
+              onDragEnter={(e) => {
+                this.onDragLeave(e);
+              }}
+              className={[styles.finishedScriptList, styles.scriptList].join(' ')}
+            >
               <div className={styles.listTitleWrapper}>
-                <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
-                <span className={styles.listSubtitle}>Total time: 0</span>
+                <div className={styles.listTitleLeft}>
+                  <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
+                  <span className={styles.listSubtitle}>Total time: 0</span>
+                </div>
               </div>
               <ScriptList>
                 {this.state.finishedScriptList.map((script, id) => (
