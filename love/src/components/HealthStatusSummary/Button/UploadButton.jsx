@@ -12,7 +12,6 @@ export default class UploadButton extends Component {
   };
 
   onChange = (event) => {
-    // console.log(event);
     const reader = new FileReader();
     reader.onload = (e) => this.props.onLoadFile(e.target.result);
     reader.readAsText(event.target.files[0]);
@@ -25,8 +24,8 @@ export default class UploadButton extends Component {
       <form action="#">
         <div className={classNames}>
           <input onChange={this.onChange} type="file" id="my-file" className={styles.customFileInput} />
-          <ImportIcon className={this.props.iconClassName} />
           <label tabIndex="0" htmlFor="my-file" className={labelClassNames}>
+          <ImportIcon className={this.props.iconClassName} />
             Import
           </label>
         </div>
