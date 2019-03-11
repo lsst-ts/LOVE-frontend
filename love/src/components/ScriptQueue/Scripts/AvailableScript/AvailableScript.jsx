@@ -42,8 +42,11 @@ export default class AvailableScript extends Component {
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
-    const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
-    const fileExtension = path.substring(path.lastIndexOf('.'));
+    const fileName =
+      path.lastIndexOf('.') > -1
+        ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
+        : path.substring(path.lastIndexOf('/'));
+    const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.availableScriptContainer} onClick={this.onClick}>

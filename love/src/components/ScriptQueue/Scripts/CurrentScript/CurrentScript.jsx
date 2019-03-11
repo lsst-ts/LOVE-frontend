@@ -17,26 +17,32 @@ export default class CurrentScript extends Component {
     estimatedTime: PropTypes.number,
     /** Estimated execution time */
     elapsedTime: PropTypes.number,
-    /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
-    state: PropTypes.string,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
+    /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
+    script_state: PropTypes.string,
+    /** Timestamp of script creation */
+    timestamp: PropTypes.number,
   };
 
   static defaultProps = {
     salIndex: 0,
     isStandard: true,
-    path: 'auxtel/at_calsys_takedata.py',
+    path: 'unknown',
+    timestamp: 0,
+    script_state: 'Unknown',
     estimatedTime: 0,
     elapsedTime: 0,
-    state: 'Unknown',
   };
 
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
-    const fileName = path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'));
-    const fileExtension = path.substring(path.lastIndexOf('.'));
+    const fileName =
+      path.lastIndexOf('.') > -1
+        ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
+        : path.substring(path.lastIndexOf('/'));
+    const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.currentScriptContainer}>
@@ -56,7 +62,7 @@ export default class CurrentScript extends Component {
               </div>
             </div>
             <div className={scriptStyles.statusTextContainer}>
-              <StatusText status={'ok'}>{this.props.state}</StatusText>
+              <StatusText status={'ok'}>{this.props.script_state}</StatusText>
             </div>
           </div>
           <div className={styles.loadingBarContainer}>
