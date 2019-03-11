@@ -6,6 +6,7 @@ WORKDIR /usr/src/love
 ENV PATH /usr/src/love/node_modules/.bin:$PATH
 
 # Install and cache app dependencies
+RUN npm config set unsafe-perm true
 RUN npm install react-scripts@1.1.1 -g --silent
 COPY love/package.json .
 COPY love/package-lock.json .
