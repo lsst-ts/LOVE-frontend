@@ -6,6 +6,7 @@ import scriptStyles from '../Scripts.module.css';
 import StatusText from '../../../StatusText/StatusText';
 import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
+import Button from '../../../Button/Button';
 
 export default class WaitingScript extends Component {
   static propTypes = {
@@ -101,6 +102,14 @@ export default class WaitingScript extends Component {
                 boolean: 'color:#ac81fe;',
               }}
             />
+          </div>
+          <div className={[styles.expandedSection].join(' ')}>
+            <div className={scriptStyles.expandedTopRow}>
+              <p>Remove script</p>
+              <div className={scriptStyles.uploadButtonWrapper}>
+                <Button className={scriptStyles.uploadConfigButton}>Remove</Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
