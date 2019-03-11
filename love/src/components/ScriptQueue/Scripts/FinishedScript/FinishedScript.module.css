@@ -1,20 +1,32 @@
 
 .finishedScriptContainer {
   padding: 0.5em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.estimatedTimeContainer {
-  /* position: absolute; */
-  text-align: left;
-  font-size: var(--font-size-small);
-  bottom: 0.5em;
 }
 
 .estimatedTimeLabel {
 }
 
 .estimatedTimeValue {
+}
+
+.timeContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.estimatedTimeContainer {
+  display: inline-block;
+  min-width: 10em;
+  font-size: var(--font-size-small);
+}
+
+.elapsedTimeContainer {
+  display: inline-block;
+  min-width: 10em;
+  font-size: var(--font-size-small);
+}
+
+.topContainer {
+  display: flex;
+  justify-content: space-between;
 }

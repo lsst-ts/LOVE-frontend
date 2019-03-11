@@ -15,8 +15,10 @@ export default class FinishedScript extends Component {
     path: PropTypes.string,
     /** SAL property: Estimated duration of the script, excluding slewing to the initial position required by the script */
     estimatedTime: PropTypes.number,
+    /** Estimated execution time */
+    elapsedTime: PropTypes.number,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
-    state: PropTypes.string,
+    script_state: PropTypes.string,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
   };
@@ -26,7 +28,8 @@ export default class FinishedScript extends Component {
     isStandard: true,
     path: 'auxtel/at_calsys_takedata.py',
     estimatedTime: 0,
-    state: 'Unknown',
+    elapsedTime: 0,
+    script_state: 'Unknown',
     isCompact: false,
   };
 
@@ -41,24 +44,34 @@ export default class FinishedScript extends Component {
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.finishedScriptContainer}>
-          <div>
-            <div className={scriptStyles.externalContainer}>
-              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
+          <div className={styles.topContainer}>
+            <div>
+              <div className={scriptStyles.externalContainer}>
+                <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
+              </div>
+              <div className={scriptStyles.pathTextContainer}>
+                {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
+                <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+                {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
+              </div>
             </div>
-            <div className={scriptStyles.pathTextContainer}>
-              {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
-              <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-              {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
+            <div className={scriptStyles.statusTextContainer}>
+              <StatusText status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</StatusText>
             </div>
+          </div>
+          <div className={styles.timeContainer}>
             <div className={styles.estimatedTimeContainer}>
-              <span className={styles.estimatedTimeLabel}>Total time: </span>
+              <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
                 {this.props.estimatedTime}
               </span>
             </div>
-          </div>
-          <div className={scriptStyles.statusTextContainer}>
-            <StatusText status={getStatusStyle(this.props.state)}>{this.props.state}</StatusText>
+            <div className={styles.elapsedTimeContainer}>
+              <span className={styles.elapsedTimeLabel}>Total time: </span>
+              <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+                {this.props.elapsedTime}
+              </span>
+            </div>
           </div>
         </div>
       </div>
