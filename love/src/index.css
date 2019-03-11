@@ -32,6 +32,7 @@ body {
   --second-quaternary-background-color: hsl(201, 24%, 30%);
   --second-base-font-color: hsl(240, 4%, 90%, 0.6);
   
+  --script-ok-color: hsl(188, 79%, 56%);
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
   --status-ok-dimmed-color: hsl(161, 100%, 32%, 0.2);

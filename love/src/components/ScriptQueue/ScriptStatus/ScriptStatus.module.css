@@ -1,0 +1,20 @@
+.status {
+  padding: 0.2em 0.3em;
+  text-transform: uppercase;
+  display: block;
+  white-space: nowrap; 
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.ok {
+  color: var(--script-ok-color);
+}
+
+.warning {
+  color: var(--status-warning-color);
+}
+
+.alert {
+  color: var(--status-alert-color);
+}

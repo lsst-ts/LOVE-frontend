@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import styles from './WaitingScript.module.css';
 import scriptStyles from '../Scripts.module.css';
-import StatusText from '../../../StatusText/StatusText';
+import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import Button from '../../../Button/Button';
@@ -75,8 +75,8 @@ export default class WaitingScript extends Component {
               </span>
             </div>
           </div>
-          <div className={scriptStyles.statusTextContainer}>
-            <StatusText status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</StatusText>
+          <div className={scriptStyles.scriptStatusContainer}>
+            <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
           </div>
         </div>
         <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
