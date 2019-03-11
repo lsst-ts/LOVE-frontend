@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     registryCredential = "dockerhub-inriachile"
-    dockerImageName = "inriachile/love-frontend:${GIT_BRANCH}"
+    dockerImageName = "inriachile/love-frontend:ci-pipeline"
     dockerImage = ""
   }
   triggers {
