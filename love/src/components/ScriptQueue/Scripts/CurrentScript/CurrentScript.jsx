@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import JSONPretty from 'react-json-pretty';
 import LoadingBar from './LoadingBar/LoadingBar';
 import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
@@ -35,6 +36,19 @@ export default class CurrentScript extends Component {
     elapsedTime: 0,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      expanded: false,
+    };
+  }
+
+  onClick = () => {
+    this.setState({
+      expanded: !this.state.expanded,
+    });
+  };
+
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
@@ -45,7 +59,7 @@ export default class CurrentScript extends Component {
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
-        <div className={styles.currentScriptContainer}>
+        <div className={styles.currentScriptContainer} onClick={this.onClick}>
           <div className={styles.topContainer}>
             <div>
               <div className={scriptStyles.externalContainer}>
@@ -81,6 +95,26 @@ export default class CurrentScript extends Component {
                 {this.props.elapsedTime}
               </span>
             </div>
+          </div>
+        </div>
+        <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
+          <div className={[styles.expandedSection].join(' ')}>
+            <div className={scriptStyles.expandedTopRow}>
+              <p>Script config</p>
+              <div className={scriptStyles.uploadButtonWrapper}>
+              </div>
+            </div>
+            <JSONPretty
+              data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
+              theme={{
+                main:
+                  'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
+                key: 'color:#f92672;',
+                string: 'color:#fd971f;',
+                value: 'color:#a6e22e;',
+                boolean: 'color:#ac81fe;',
+              }}
+            />
           </div>
         </div>
       </div>

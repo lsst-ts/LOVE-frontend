@@ -34,11 +34,11 @@ export default class FinishedScript extends Component {
     isCompact: false,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       expanded: false,
-    }
+    };
   }
 
   onClick = () => {
@@ -92,9 +92,7 @@ export default class FinishedScript extends Component {
           <div className={[styles.expandedSection].join(' ')}>
             <div className={scriptStyles.expandedTopRow}>
               <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper}>
-                
-              </div>
+              <div className={scriptStyles.uploadButtonWrapper} />
             </div>
             <JSONPretty
               data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
