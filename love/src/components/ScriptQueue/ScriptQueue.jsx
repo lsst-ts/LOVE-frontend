@@ -284,8 +284,8 @@ export default class ScriptQueue extends Component {
             className={styles.listsBody}
             onDragEnter={(e) => {
               this.onDragLeave(e);
-              e.stopPropagation();
-              e.preventDefault();
+              // e.stopPropagation();
+              // e.preventDefault();
             }}
           >
             <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
@@ -300,6 +300,8 @@ export default class ScriptQueue extends Component {
                     <DraggableScript
                       key={`dragging-${script.index}`}
                       {...script}
+                      dragSourceList="available"
+                      onDragOver={(e) => this.onDragLeave(e)}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
                       draggingScriptInstance={this.state.draggingScriptInstance}
@@ -349,7 +351,12 @@ export default class ScriptQueue extends Component {
               </div>
               <ScriptList>
                 {this.state.finishedScriptList.map((script, id) => (
-                  <DraggableScript key={`dragging-${script.index}`} disabled>
+                  <DraggableScript
+                    key={`dragging-${script.index}`}
+                    dragSourceList="available"
+                    onDragOver={(e) => this.onDragLeave(e)}
+                    disabled
+                  >
                     <FinishedScript key={id} {...script} isCompact={this.state.isAvailableScriptListVisible} />
                   </DraggableScript>
                 ))}
