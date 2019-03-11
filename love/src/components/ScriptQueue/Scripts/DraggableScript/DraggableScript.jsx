@@ -12,6 +12,7 @@ export default class AvailableScript extends Component {
     pendingConfirmation: PropTypes.bool,
     draggingScriptInstance: PropTypes.object,
     disabled: PropTypes.bool,
+    dragSourceList: PropTypes.string,
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ export default class AvailableScript extends Component {
     onDragOver: () => 0,
     onDragLeave: () => 0,
     onDragStart: () => 0,
+    dragSourceList: 'waiting',
     disabled: false,
   };
 
@@ -51,7 +53,10 @@ export default class AvailableScript extends Component {
       dragOver: true,
       dragBottom,
     });
-    if (this.state.dragBottom !== null && this.state.dragBottom !== dragBottom) {
+    if (
+      this.props.dragSourceList !== 'waiting' ||
+      (this.state.dragBottom !== null && this.state.dragBottom !== dragBottom)
+    ) {
       this.props.onDragOver(e, this.props.index);
     }
   };
