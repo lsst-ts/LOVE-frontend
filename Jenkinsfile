@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     registryCredential = "dockerhub-inriachile"
-    dockerImageName = "inriachile/love-frontend:ci-pipeline"
+    dockerImageName = "inriachile/love-frontend:${GIT_BRANCH}"
     dockerImage = ""
   }
   triggers {
@@ -15,7 +15,6 @@ pipeline {
         anyOf {
           branch "master"
           branch "develop"
-          branch "feature/ci-pipeline"
         }
       }
       steps {
@@ -29,7 +28,6 @@ pipeline {
         anyOf {
           branch "master"
           branch "develop"
-          branch "feature/ci-pipeline"
         }
       }
       steps {
