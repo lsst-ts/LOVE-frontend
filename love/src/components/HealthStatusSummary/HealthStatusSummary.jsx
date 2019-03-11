@@ -77,9 +77,7 @@ export default class HealthStatusSummary extends Component {
       <React.Fragment>
         <div className={styles.topButtons}>
           <div className={styles.buttonWrapper}>
-            <div className={styles.buttonWrapper}>
               <UploadButton onLoadFile={this.onLoadFile} />
-            </div>
           </div>
           <div className={styles.buttonWrapper} onClick={() => this.download(this.getOutputConfig(), 'data.json')}>
             <Button>
