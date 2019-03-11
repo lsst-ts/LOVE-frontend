@@ -9,7 +9,7 @@
 }
 
 .draggableContainer {
-  padding-bottom: 0.5em;
+  margin-bottom: 0.5em;
   /* padding-bottom: 0.5em; */
 }
 
@@ -35,28 +35,54 @@
   /* background: red; */
 }
 
+.dragging > div:before {
+  /* border: dashed var(--secondary-font-color) 1px; */
+  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
+  background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
+}
+
 .dragging > div {
-  border: dashed var(--secondary-font-color) 5px;
+  background: var(--second-quaternary-background-color);
+}
+.draggableContainer > div > div {
+  background: var(--second-tertiary-background-color);
+}
+.draggableContainer > div:hover > div {
+  background: var(--second-quaternary-background-color);
+}
+.draggableContainer > div:hover > div > div {
+  background: var(--second-quaternary-background-color);
+}
+.draggableContainer > div:hover {
+  background: var(--second-quaternary-background-color);
+}
+
+.draggableContainer:hover {
+  background: var(--second-quaternary-background-color);
+  border-radius: 5px;
 }
 
 .pending {
   position: relative;
 }
 
-.pending > div::before {
+.pending > div {
   background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
     linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
-  background-size: 15px 4px, 15px 4px, 4px 15px, 4px 15px;
+  background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
   background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
   animation: border-dance 12s infinite linear;
-  content: '';
+  /* content: '';
   width: 100%;
   height: 100%;
   display: inline-block;
   position: absolute;
   top: 0;
-  left: 0;
+  left: 0; */
 }
 
 @keyframes border-dance {

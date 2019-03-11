@@ -5,6 +5,7 @@
   align-items: center;
   padding: 0.5em;
   cursor: pointer;
+  background: var(--second-tertiary-background-color);
 }
 
 .estimatedTimeContainer {
@@ -26,6 +27,7 @@
 
 .expandedSection {
   border-top: solid var(--quaternary-background-color) 2px;
+  background: var(--second-tertiary-background-color);
 }
 
 .hidden {
