@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
-import StatusText from '../../../StatusText/StatusText';
+import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 
 export default class FinishedScript extends Component {
@@ -69,8 +69,8 @@ export default class FinishedScript extends Component {
                 {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
               </div>
             </div>
-            <div className={scriptStyles.statusTextContainer}>
-              <StatusText status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</StatusText>
+            <div className={scriptStyles.ScriptStatusContainer}>
+              <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
             </div>
           </div>
           <div className={styles.timeContainer}>
