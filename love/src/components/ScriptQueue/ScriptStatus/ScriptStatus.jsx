@@ -16,6 +16,10 @@ export default class ScriptStatus extends Component {
     if (status === 'alert') statusStyle = styles.alert;
     if (status === 'invalid') statusStyle = styles.invalid;
 
-    return <span className={[styles.status, statusStyle].join(' ')}>{this.props.children}</span>;
+    return (
+      <span title={`Script status: ${this.props.children}`} className={[styles.status, statusStyle].join(' ')}>
+        {this.props.children}
+      </span>
+    );
   }
 }
