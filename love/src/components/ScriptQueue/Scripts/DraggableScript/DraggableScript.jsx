@@ -76,13 +76,17 @@ export default class AvailableScript extends Component {
   };
 
   render() {
+    let movingScriptClass = '';
+    if (this.props.draggingScriptInstance) {
+      if (this.props.draggingScriptInstance.index === this.props.index) movingScriptClass = styles.movingScript;
+    }
     const draggingClass = this.state.dragging ? styles.dragging : '';
     const dragOverClass = this.state.dragOver ? styles.dragOver : '';
     const pendingClass = this.props.pendingConfirmation ? styles.pending : '';
     const globalDraggingClass = this.props.draggingScriptInstance !== undefined ? styles.globalDragging : '';
     return (
       <div
-        className={[styles.draggableContainer, draggingClass, dragOverClass, pendingClass, globalDraggingClass].join(
+        className={[styles.draggableContainer, draggingClass, dragOverClass, pendingClass, globalDraggingClass, movingScriptClass].join(
           ' ',
         )}
         draggable={!this.props.disabled}

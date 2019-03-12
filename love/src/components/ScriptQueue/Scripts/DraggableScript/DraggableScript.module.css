@@ -60,9 +60,35 @@
   background: var(--second-quaternary-background-color);
 }
 
+.globalDragging > div:hover > div {
+  background: var(--second-tertiary-background-color);
+}
+.globalDragging > div:hover > div > div {
+  background: var(--second-tertiary-background-color);
+}
+.globalDragging > div:hover {
+  background: var(--second-tertiary-background-color);
+}
+
 .draggableContainer:hover {
   background: var(--second-quaternary-background-color);
   border-radius: 5px;
+}
+
+.movingScript {
+  background: var(--second-quaternary-background-color);
+}
+
+.movingScript > div {
+  background: var(--second-quaternary-background-color);
+}
+
+.movingScript > div > div {
+  background: var(--second-quaternary-background-color);
+}
+
+.movingScript > div > div > div {
+  background: var(--second-quaternary-background-color);
 }
 
 .pending {
@@ -76,13 +102,6 @@
   background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
   background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
   animation: border-dance 12s infinite linear;
-  /* content: '';
-  width: 100%;
-  height: 100%;
-  display: inline-block;
-  position: absolute;
-  top: 0;
-  left: 0; */
 }
 
 @keyframes border-dance {
@@ -92,13 +111,4 @@
   100% {
     background-position: 100% 0px, 0px 100%, 0px 0px, 100% 200%;
   }
-}
-
-.dragging::after {
-  background: rgba(255, 0, 0, 1);
-}
-
-.dragOver {
-  /* background: green; */
-  /* border: solid green 1px; */
 }
