@@ -66,13 +66,15 @@ export default class AvailableScript extends Component {
         </div>
         <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
           <div className={[styles.expandedSection].join(' ')}>
-            <p>Script config</p>
-            <div className={scriptStyles.uploadButtonWrapper}>
-              <UploadButton
-                className={scriptStyles.uploadConfigButton}
-                labelClassName={scriptStyles.uploadButtonLabel}
-                iconClassName={scriptStyles.uploadIcon}
-              />
+            <div className={scriptStyles.expandedTopRow}>
+              <p>Script config</p>
+              <div className={scriptStyles.uploadButtonWrapper}>
+                <UploadButton
+                  className={scriptStyles.uploadConfigButton}
+                  labelClassName={scriptStyles.uploadButtonLabel}
+                  iconClassName={scriptStyles.uploadIcon}
+                />
+              </div>
             </div>
             <JSONPretty
               data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
