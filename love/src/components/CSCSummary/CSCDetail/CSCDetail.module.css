@@ -1,5 +1,76 @@
 .CSCDetailContainer{
-  /* display: flex; */
-  padding: 1em;
+  display: flex;
   background: var(--second-quaternary-background-color);
+  align-items: center;
+  align-items: stretch;
+  align-content: center;
+  color: var(--second-base-font-color);
+  font-size: var(--font-size-small);
+}
+
+.leftSection {
+  align-self:stretch;
+  display:flex;
+  align-items:center;
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+}
+/* 
+.leftSection > span {
+  border: solid var(--status-alert-color) 1px;
+} */
+
+
+.rightSection {
+  /* background: purple; */
+  padding: 0.1em 0.5em;
+  align-self:stretch;
+  display:flex;
+  align-items:center;
+  border: solid var(--second-quinary-background-color) 1px;
+}
+
+.summaryState {
+  padding: 0.1em 0.5em;
+  user-select: none;
+}
+
+.alert {
+  background: var(--status-alert-dimmed-color-2);
+  color: var(--status-alert-color);
+}
+
+.alert.leftSection > span {
+  border: solid var(--status-alert-color) 1px;
+}
+
+.ok {
+  background: var(--status-ok-dimmed-color-2);
+  color: var(--status-ok-color);
+}
+
+.ok.leftSection > span {
+  border: solid var(--status-ok-color) 1px;
+}
+
+.disabled {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--status-disabled-color);
+}
+
+.disabled.leftSection > span {
+  border: solid var(--status-disabled-color) 1px;
+}
+
+.warning {
+  background: var(--status-warning-dimmed-color-2);
+  color: var(--status-warning-color);
+}
+
+.warning.leftSection > span {
+  border: solid var(--status-warning-color) 1px;
+}
+
+.leftSection > span:nth-child(2) {
+  border-left: none;
 }

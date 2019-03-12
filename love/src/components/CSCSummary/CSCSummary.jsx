@@ -11,27 +11,84 @@ export default class CSCSummary extends Component {
     this.state = {
       hierarchy: {
         'Aux Tel': {
-          'CSC Group 1': ['ScriptQueue', 'CSC2', 'CSC3'],
+          'CSC Group 1': [
+            'ScriptQueue',
+            'Scheduler1',
+            'ScriptQueue1',
+            'Scheduler2',
+            'ScriptQueue2',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+            'ScriptQueue',
+            'Scheduler',
+          ],
         },
         'Main Tel': {
-          'CSC Group 1': ['CSC4', 'CSC5', 'CSC6','CSC4', 'CSC5', 'CSC6'],
-          'CSC Group 2': ['CSC7', 'CSC8', 'CSC9'],
+          'CSC Group 1': ['CSC4'],
+          'CSC Group 2': [],
         },
         Observatory: {
-          'CSC Group 1': ['CSC10', 'CSC11', 'CSC12'],
+          'CSC Group 1': [],
         },
       },
       data: {
         ScriptQueue: {
-          summaryState: -1,
+          summaryState: 3,
+          detailedState: {},
+        },
+        ScriptQueue1: {
+          summaryState: 1,
+          detailedState: {},
+        },
+        ScriptQueue2: {
+          summaryState: 2,
+          detailedState: {},
+        },
+        Scheduler1: {
+          summaryState: 4,
+          detailedState: {},
+        },
+        Scheduler2: {
+          summaryState: 5,
           detailedState: {},
         },
         CSC2: {
-          summaryState: -1,
+          summaryState: 0,
           detailedState: {},
         },
         CSC3: {
-          summaryState: -1,
+          summaryState: 0,
           detailedState: {},
         },
       },
@@ -39,19 +96,49 @@ export default class CSCSummary extends Component {
     this.managerInterface = new ManagerInterface();
   }
 
+  onReceiveMessage = (msg) => {
+    const data = JSON.parse(msg.data);
+    if (!(data.data instanceof Object)) return;
+    const newData = { ...this.state.data };
+    Object.keys(data.data).map((cscKey) => {
+      newData[cscKey].summaryState = data.data[cscKey].summaryState[0].summaryState.value;
+    });
+    this.setState({
+      data: newData,
+    });
+    console.log(this.state.data);
+  };
+
   subscribeToCSCs = () => {
     Object.keys(this.state.hierarchy).map((realm) => {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
           console.log('csc', csc);
+          this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
+        });
+      });
+    });
+  };
+
+  unsubscribeToCSCs = () => {
+    Object.keys(this.state.hierarchy).map((realm) => {
+      const groupsDict = this.state.hierarchy[realm];
+      Object.keys(groupsDict).map((group) => {
+        groupsDict[group].map((csc) => {
+          console.log('csc', csc);
+          this.managerInterface.unsubscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
         });
       });
     });
   };
 
   componentDidMount() {
-    this.subscribeToCSCs();
+    // this.subscribeToCSCs();
+  }
+
+  componentDidUnmount() {
+    this.unsubscribeToCSCs();
   }
 
   render() {
