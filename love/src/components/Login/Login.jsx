@@ -1,10 +1,28 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Button from '../Button/Button';
-import styles from './Login.module.css'
+import styles from './Login.module.css';
 import ManagerInterface from '../../Utils';
 
 export default class Login extends Component {
+  static propTypes = {
+
+    /** Defines wether or not the message of "Session Expired" should be displayed */
+    showSessionExpired: PropTypes.bool,
+
+    /** Function to call in order to hide the "Session Expired" message */
+    hideSessionExpired: PropTypes.func,
+
+    /** Function to call in order to set the token state of the App component */
+    setTokenState: PropTypes.func,
+
+    /** Current router location */
+    location: PropTypes.string,
+
+    /** Token state of the App component */
+    token: PropTypes.string,
+  };
 
   constructor(props) {
     super(props);
@@ -18,11 +36,10 @@ export default class Login extends Component {
   }
 
   handleInputChange(event) {
-    const name = event.target.name;
-    const value = event.target.value;
+    const { name, value } = event.target;
     this.setState({ [name]: value });
     if (this.state.showFailedLogin) {
-      this.setState({ showFailedLogin: false});
+      this.setState({ showFailedLogin: false });
     }
     if (this.props.showSessionExpired) {
       this.props.hideSessionExpired();
@@ -31,11 +48,11 @@ export default class Login extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    ManagerInterface.requestToken(this.state.username, this.state.password).then(token => {
+    ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
       if (token) {
         this.props.setTokenState(token);
       } else {
-        this.setState({ showFailedLogin: true});
+        this.setState({ showFailedLogin: true });
         this.props.setTokenState(null);
       }
     });
@@ -43,9 +60,10 @@ export default class Login extends Component {
 
   redirect() {
     return (
-      <Redirect to={{
-        pathname: '/',
-        state: { from: this.props.location }
+      <Redirect
+        to={{
+          pathname: '/',
+          state: { from: this.props.location },
         }}
       />
     );
@@ -60,23 +78,22 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              { this.state.showFailedLogin ?
+              {this.state.showFailedLogin ? (
                 <div className={styles.incorrectCredentialsDiv}>
                   <p className={styles.incorrectCredentials}>
-                    Your username and password didn't match.
-                    Please try again.
+                    {"Your username and password didn't match. Please try again."}
                   </p>
                 </div>
-              : null }
-              { this.props.showSessionExpired ?
+              ) : null}
+              {this.props.showSessionExpired ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.incorrectCredentials}>
-                    Your session has expired, you have been logged out.
-                  </p>
+                  <p className={styles.incorrectCredentials}>Your session has expired, you have been logged out.</p>
                 </div>
-              : null }
+              ) : null}
               <p className={styles.formEntry}>
-                <label htmlFor="id_username" className={styles.label}>Username</label>
+                <label htmlFor="id_username" className={styles.label}>
+                  Username
+                </label>
                 <input
                   type="text"
                   name="username"
@@ -88,7 +105,9 @@ export default class Login extends Component {
                 />
               </p>
               <p className={styles.formEntry}>
-                <label htmlFor="id_password"  className={styles.label}>Password</label>
+                <label htmlFor="id_password" className={styles.label}>
+                  Password
+                </label>
                 <input
                   type="password"
                   name="password"
@@ -98,12 +117,14 @@ export default class Login extends Component {
                   value={this.state.password}
                 />
               </p>
-              <Button type="submit" status="primary">Login</Button>
-              { this.props.token !== null ? this.redirect() : ''}
+              <Button type="submit" status="primary">
+                Login
+              </Button>
+              {this.props.token !== null ? this.redirect() : ''}
             </form>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }

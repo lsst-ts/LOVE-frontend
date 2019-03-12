@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
@@ -13,6 +14,10 @@ import ManagerInterface from './Utils';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 
 class App extends Component {
+  static propTypes = {
+    location: PropTypes.object,
+  };
+
   constructor() {
     super();
     this.state = {
@@ -57,7 +62,7 @@ class App extends Component {
   componentDidMount = () => {
     const token = ManagerInterface.getToken();
     this.setTokenState(token);
-  }
+  };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.token && prevProps.location.pathname !== this.props.location.pathname) {
@@ -68,30 +73,30 @@ class App extends Component {
       });
     }
     if (!this.state.token && prevState.token) {
-      if(this.justLoggedOut) {
+      if (this.justLoggedOut) {
         this.justLoggedOut = false;
       } else {
         this.setState({ showSessionExpired: true });
       }
     }
-  }
+  };
 
   hideSessionExpired = () => {
-    this.setState({ showSessionExpired: false })
-  }
+    this.setState({ showSessionExpired: false });
+  };
 
   logout = () => {
     this.setTokenState(null);
     ManagerInterface.removeToken();
     this.justLoggedOut = true;
-  }
+  };
 
   setTokenState = (token) => {
-    this.setState({ token: token });
+    this.setState({ token });
     if (token) {
       this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
     }
-  }
+  };
 
   receiveAllMsg = (msg) => {
     const data = JSON.parse(msg.data);
@@ -132,14 +137,14 @@ class App extends Component {
       <div className="App">
         <Switch>
           <Route
-            path='/login'
+            path="/login"
             render={() => (
               <Login
                 token={this.state.token}
                 setTokenState={this.setTokenState}
                 showSessionExpired={this.state.showSessionExpired}
                 hideSessionExpired={this.hideSessionExpired}
-              ></Login>
+              />
             )}
           />
           <PrivateRoute
@@ -151,11 +156,7 @@ class App extends Component {
               </div>
             )}
           />
-          <PrivateRoute
-            token={this.state.token}
-            path="/dm-flow"
-            component={DataManagementFlow}
-          />
+          <PrivateRoute token={this.state.token} path="/dm-flow" component={DataManagementFlow} />
           <PrivateRoute
             token={this.state.token}
             path="/time-series"
@@ -165,19 +166,21 @@ class App extends Component {
               </div>
             )}
           />
-          <Route path="/test" render={() => (
+          <Route
+            path="/test"
+            render={() => (
               <div className="hs-container">
-                <TelemetryLog category="event" csc="ScriptQueue" stream="all"> </TelemetryLog>
+                <TelemetryLog category="event" csc="ScriptQueue" stream="all">
+                  {' '}
+                </TelemetryLog>
               </div>
             )}
           />
-          <Route path="/script-queue" component={ScriptQueue} />
+          <PrivateRoute token={this.state.token} path="/script-queue" component={ScriptQueue} />
           <PrivateRoute
             token={this.state.token}
             path="/"
-            render={() => (
-              <ComponentIndex logout={this.logout}> </ComponentIndex>
-            )}
+            render={() => <ComponentIndex logout={this.logout}> </ComponentIndex>}
           />
         </Switch>
       </div>

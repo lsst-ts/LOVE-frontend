@@ -21,6 +21,10 @@
   font-weight: bold;
 }
 
+.listTitleWrapper {
+  padding-left: 0.5em;
+}
+
 .listTitle {
   display: block;
   font-size: var(--font-size-large);
@@ -73,6 +77,8 @@
 .scriptList {
   padding: 0.5em;
   margin: 0.5em;
+  margin-left: 0;
+  padding-left: 0;
   text-align: left;
   flex-grow: 1;
   flex-basis: 50%;
@@ -82,7 +88,10 @@
 
 .waitingScriptList {
   overflow-y: hidden;
+  position:relative;
 }
+
+.waitingScriptListDragging * {pointer-events: none;}
 
 .finishedScriptList {
   overflow-y: hidden;

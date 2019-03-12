@@ -1,3 +1,7 @@
+.availableScriptContainer {
+  padding: 0.5em;
+  cursor: pointer;
+}
 
 .estimatedTimeContainer {
   /* position: absolute; */
@@ -14,4 +18,16 @@
 
 .estimatedTimeValue {
   font-weight: bold;
+}
+
+.expandedSectionWrapper {
+  padding: 0.5em;
+}
+
+.expandedSection {
+  border-top: solid var(--quaternary-background-color) 2px;
+}
+
+.hidden {
+  display: none;
 }
