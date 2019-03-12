@@ -191,11 +191,11 @@ export default class ManagerInterface {
   };
 
   subscribeToEvents = (csc, stream, callback) => {
-    this.subscribeToStream('events', csc, stream, callback);
+    this.subscribeToStream('event', csc, stream, callback);
   };
 
   unsubscribeToEvents = (csc, stream, callback) => {
-    this.unsubscribeToStream('events', csc, stream, callback);
+    this.unsubscribeToStream('event', csc, stream, callback);
   };
 }
 
