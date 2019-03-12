@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
+import moment from 'moment';
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
 import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
-import moment from 'moment';
-import styles from './TimeSeries.module.css'
+import styles from './TimeSeries.module.css';
 
 export default class TimeSeries extends PureComponent {
   constructor() {
@@ -18,18 +18,17 @@ export default class TimeSeries extends PureComponent {
       dateEnd: new Date(),
       isLive: true,
       timeWindow: 60,
-      historicalData : [],
+      historicalData: [],
       subscribedStreams: [],
       selectedRows: [],
     };
 
     this.managerInterface = new ManagerInterface();
-
   }
 
   onSetSelection = (selectedRows) => {
     const streams = selectedRows.map((rowKeyValue) => {
-      let splitKey = rowKeyValue.key.split('-')
+      const splitKey = rowKeyValue.key.split('-');
       return [splitKey[0], splitKey[1]];
     });
     const streamsSet = new Set(streams);
@@ -39,37 +38,37 @@ export default class TimeSeries extends PureComponent {
     this.setState({
       telemetryName: selectedRows[0].key,
       subscribedStreams: streamsSet,
-      selectedRows: selectedRows,
+      selectedRows,
       step: 1,
     });
   };
 
   componentWillUnmount = () => {
     this.state.subscribedStreams.forEach((stream) => {
+      // eslint-disable-next-line
       this.managerInterface.unsubscribeToTelemetry(stream[0], stream[1], (msg) => console.log(msg));
     });
   };
 
   onReceiveMsg = (msg) => {
-    if(!this.state.isLive)
-      return;
-    let data = JSON.parse(msg.data);
-    let dateEnd = new Date();
-    let dateStart = moment(dateEnd)
-    .subtract(this.state.timeWindow, 'minutes')
-    .toDate();
+    if (!this.state.isLive) return;
+    const data = JSON.parse(msg.data);
+    const dateEnd = new Date();
+    const dateStart = moment(dateEnd)
+      .subtract(this.state.timeWindow, 'minutes')
+      .toDate();
     if (typeof data.data === 'object') {
       let timestamp = new Date();
       timestamp = timestamp
-      .toISOString()
-      .slice(0, 19)
-      .replace(/-/g, '/')
-      .replace('T', ' ');
+        .toISOString()
+        .slice(0, 19)
+        .replace(/-/g, '/')
+        .replace('T', ' ');
       const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp);
       this.setState({
         lastMessageData: newEntries,
-        dateStart: dateStart,
-        dateEnd: dateEnd,
+        dateStart,
+        dateEnd,
       });
     }
   };
@@ -77,11 +76,11 @@ export default class TimeSeries extends PureComponent {
   setTimeWindow = (timeWindow) => {
     const now = new Date();
     this.setState({
-      timeWindow: timeWindow,
+      timeWindow,
       dateEnd: now,
       dateStart: moment(now)
-      .subtract(timeWindow, 'minutes')
-      .toDate(),
+        .subtract(timeWindow, 'minutes')
+        .toDate(),
     });
   };
 
@@ -91,9 +90,9 @@ export default class TimeSeries extends PureComponent {
         this.state.selectedRows,
         new Date().getTime() - 3600 * 1000,
         new Date(),
-        );
+      );
       this.setState({
-        historicalData: d
+        historicalData: d,
       });
     }
     if (prevState.timeWindow !== this.state.timeWindow) {
@@ -103,15 +102,15 @@ export default class TimeSeries extends PureComponent {
         this.state.dateEnd,
       );
       this.setState({
-        historicalData: d
+        historicalData: d,
       });
     }
   };
 
   setLiveMode = (isLive) => {
-    console.log('islive', isLive);
+    // console.log('islive', isLive);
     this.setState({
-      isLive: isLive,
+      isLive,
     });
   };
 
@@ -120,11 +119,11 @@ export default class TimeSeries extends PureComponent {
       dateStart,
       dateEnd,
       isLive: false,
-      historicalData : getFakeHistoricalTimeSeries(
+      historicalData: getFakeHistoricalTimeSeries(
         this.state.selectedRows,
         dateStart,
         dateEnd,
-      )
+      ),
     });
   };
 
@@ -157,7 +156,7 @@ export default class TimeSeries extends PureComponent {
     ) : (
       <div className={styles.timeseriesContainer}>
         <TimeSeriesControls setTimeWindow={this.setTimeWindow}
-      timeWindow={this.state.timeWindow}
+      timeWindow={String(this.state.timeWindow)}
       setLiveMode={this.setLiveMode}
       isLive={this.state.isLive}
       setHistoricalData={this.setHistoricalData}

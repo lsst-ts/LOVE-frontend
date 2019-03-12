@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import ManagerInterface from '../../Utils';
+import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
+import ManagerInterface from '../../Utils';
 import 'react-json-pretty/themes/monikai.css';
 
 export default class TelemetryLog extends Component {
+  static propTypes = {
+    category: PropTypes.string,
+    csc: PropTypes.string,
+    stream: PropTypes.string,
+  };
+
   constructor(props) {
     super();
     this.state = {
@@ -25,7 +32,7 @@ export default class TelemetryLog extends Component {
   };
 
   updateMessageList = (msg) => {
-    let newMsgList = this.state.msgList;
+    const newMsgList = this.state.msgList;
     if (this.state.msgList.length > 10) {
       newMsgList.shift();
       this.setState({
@@ -100,9 +107,7 @@ export default class TelemetryLog extends Component {
         {this.state.msgList
           .slice()
           .reverse()
-          .map((msg, index) => {
-            return <JSONPretty key={this.state.msgNumber - index} data={msg} />;
-          })}
+          .map((msg, index) => <JSONPretty key={this.state.msgNumber - index} data={msg} />)}
       </div>
     );
   }

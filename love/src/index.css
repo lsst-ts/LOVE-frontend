@@ -18,16 +18,17 @@ body {
   --tertiary-font-color: hsl(201, 15%, 54%);
   --highlighted-font-color: hsl(0, 0%, 100%);
 
-  --base-background-color: hsl(205, 40%, 8%, 1);
-  --secondary-background-color: hsl(200, 40%, 10%, 1);
+  --base-background-color: hsl(205, 40%, 8%);
+  --secondary-background-color: hsl(200, 40%, 10%);
   --secondary-background-dimmed-color: hsl(200, 51%, 13%);
-  --tertiary-background-color: hsl(201, 21%, 23%, 1); /*Transparent*/
+  --tertiary-background-color: hsl(201, 21%, 23%);
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
 
   --second-primary-background-color: hsl(202, 38%, 11%);
   --second-secondary-background-color: hsl(202, 44%, 13%);
   --second-tertiary-background-color: hsl(201, 26%, 23%);
+  --second-quaternary-background-color: hsl(201, 24%, 30%);
   --second-base-font-color: hsl(240, 4%, 90%, 0.6);
   
   /* Status */
