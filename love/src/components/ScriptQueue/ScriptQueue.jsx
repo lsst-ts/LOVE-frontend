@@ -120,6 +120,24 @@ export default class ScriptQueue extends Component {
           timestamp: 1552071362.581268,
           type: 'Standard',
         },
+        {
+          elapsed_time: 0.0,
+          index: 100005,
+          path: 'script1',
+          process_state: 'FAILED',
+          script_state: 'FAILED',
+          timestamp: 1552071362.581268,
+          type: 'Standard',
+        },
+        {
+          elapsed_time: 0.0,
+          index: 100006,
+          path: 'script1',
+          process_state: 'UNCONFIGURED',
+          script_state: 'UNCONFIGURED',
+          timestamp: 1552071362.581268,
+          type: 'Standard',
+        },
       ],
     };
     this.onReceiveMsg(data);
@@ -197,6 +215,8 @@ export default class ScriptQueue extends Component {
   };
 
   onDragEnter = () => {
+    if(!this.state.draggingScriptInstance)
+      return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
     const waitingList = [...this.state.waitingScriptList];
@@ -224,6 +244,8 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
+    if(!this.state.draggingScriptInstance)
+      return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
 

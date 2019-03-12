@@ -109,7 +109,7 @@
 }
 
 .addScriptContainer {
-  align-self: center;
+  align-self: baseline;
   padding: 0 0.5em;
 }
 
