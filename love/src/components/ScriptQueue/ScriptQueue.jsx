@@ -215,8 +215,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragEnter = () => {
-    if(!this.state.draggingScriptInstance)
-      return;
+    if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
     const waitingList = [...this.state.waitingScriptList];
@@ -244,8 +243,7 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
-    if(!this.state.draggingScriptInstance)
-      return;
+    if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
 
