@@ -116,6 +116,7 @@
 .addScriptButton {
   background: var(--quaternary-background-color);
   font-size: var(--font-size-large);
+  white-space: normal;
 }
 
 .threeColumns .availableScriptList {
