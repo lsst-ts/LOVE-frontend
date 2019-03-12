@@ -1,0 +1,5 @@
+.CSCDetailContainer{
+  /* display: flex; */
+  padding: 1em;
+  background: var(--second-quaternary-background-color);
+}

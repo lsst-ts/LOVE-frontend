@@ -1,0 +1,13 @@
+.CSCRealmContainer{
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em;
+  background: var(--second-secondary-background-color);
+}
+
+.CSCGroupContainer{
+  display: flex;
+  flex-grow: 1;
+  padding: 1em;
+}
