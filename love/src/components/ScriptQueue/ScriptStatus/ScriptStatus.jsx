@@ -12,6 +12,7 @@ export default class ScriptStatus extends Component {
     const { status } = this.props;
     let statusStyle = styles.undefined;
     if (status === 'ok') statusStyle = styles.ok;
+    if (status === 'running') statusStyle = styles.running;
     if (status === 'warning') statusStyle = styles.warning;
     if (status === 'alert') statusStyle = styles.alert;
     if (status === 'invalid') statusStyle = styles.invalid;
