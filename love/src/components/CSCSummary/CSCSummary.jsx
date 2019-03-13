@@ -143,7 +143,7 @@ export default class CSCSummary extends Component {
 
   render() {
     return (
-      <Panel title="Script Queue" className={styles.panel}>
+      <Panel title="CSC Summary" className={styles.panel}>
         <div className={styles.CSCSummaryContainer}>
           {Object.keys(this.state.hierarchy).map((realm) => {
             return (
