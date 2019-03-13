@@ -76,7 +76,7 @@ export default class CurrentScript extends Component {
               </div>
             </div>
             <div className={scriptStyles.Scriptstatus}>
-              <ScriptStatus status={'ok'}>{this.props.script_state}</ScriptStatus>
+              <ScriptStatus status={'running'}>{this.props.script_state}</ScriptStatus>
             </div>
           </div>
           <div className={styles.loadingBarContainer}>
