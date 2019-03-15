@@ -52,10 +52,6 @@ export default class CSCDetail extends Component {
     },
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = selfData ? selfData.summaryState : 0;

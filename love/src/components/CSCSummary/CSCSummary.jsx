@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
 import Panel from '../Panel/Panel';
@@ -106,7 +105,6 @@ export default class CSCSummary extends Component {
     this.setState({
       data: newData,
     });
-    console.log(this.state.data);
   };
 
   subscribeToCSCs = () => {
@@ -114,7 +112,6 @@ export default class CSCSummary extends Component {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
-          console.log('csc', csc);
           this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
         });
       });
@@ -126,16 +123,11 @@ export default class CSCSummary extends Component {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
-          console.log('csc', csc);
           this.managerInterface.unsubscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
         });
       });
     });
   };
-
-  componentDidMount() {
-    // this.subscribeToCSCs();
-  }
 
   componentDidUnmount() {
     this.unsubscribeToCSCs();
