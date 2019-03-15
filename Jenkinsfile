@@ -6,7 +6,7 @@ pipeline {
     dockerImage = ""
   }
   triggers {
-    pollSCM("0 0 * * *")
+    pollSCM("H */24 * * *")
   }
 
   stages {
