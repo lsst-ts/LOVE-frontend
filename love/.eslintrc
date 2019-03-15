@@ -5,7 +5,8 @@
     "max-len": [1, 120, 2, { "ignoreComments": true }],
     "arrow-parens": [1, "always"],
     "arrow-body-style": "off",
-    "operator-linebreak": [1, "after", { "overrides": { "?": "before", ":": "before" } }]
+    "operator-linebreak": [1, "after", { "overrides": { "?": "before", ":": "before" } }],
+    "array-callback-return": "off"
   },
   "plugins": ["only-warn"],
   "settings": {
