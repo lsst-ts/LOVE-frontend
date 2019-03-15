@@ -1,5 +1,7 @@
 import sockette from 'sockette';
 
+export const hasCommandPrivileges = false;
+
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
   // eslint-disable-next-line

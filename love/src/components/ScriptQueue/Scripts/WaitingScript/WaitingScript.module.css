@@ -5,6 +5,7 @@
   align-items: center;
   padding: 0.5em;
   cursor: pointer;
+  user-select: none;
 }
 
 .estimatedTimeContainer {

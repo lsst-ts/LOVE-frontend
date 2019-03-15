@@ -9,6 +9,7 @@ import styles from './ScriptQueue.module.css';
 import Panel from '../Panel/Panel';
 import StatusText from '../StatusText/StatusText';
 import Button from '../Button/Button';
+import { hasCommandPrivileges } from '../../Utils';
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
  *
@@ -109,7 +110,17 @@ export default class ScriptQueue extends Component {
         },
       ],
       state: 'Running',
-      waiting_scripts: [],
+      waiting_scripts: [
+        {
+          elapsed_time: 0.0,
+          index: 100008,
+          path: 'script1',
+          process_state: 'CONFIGURED',
+          script_state: 'CONFIGURED',
+          timestamp: 1552071362.581268,
+          type: 'Standard',
+        },
+      ],
       available_scripts: [
         {
           elapsed_time: 0.0,
@@ -346,6 +357,7 @@ export default class ScriptQueue extends Component {
                       onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
                       draggingScriptInstance={this.state.draggingScriptInstance}
+                      disabled={!hasCommandPrivileges}
                     >
                       <AvailableScript key={script.index} />
                     </DraggableScript>
@@ -376,6 +388,7 @@ export default class ScriptQueue extends Component {
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'waiting')}
                       draggingScriptInstance={this.state.draggingScriptInstance}
+                      disabled={!hasCommandPrivileges}
                     >
                       <WaitingScript
                         key={script.index}

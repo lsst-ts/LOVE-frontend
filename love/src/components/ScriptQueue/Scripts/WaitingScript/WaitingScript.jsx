@@ -7,6 +7,7 @@ import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import Button from '../../../Button/Button';
+import { hasCommandPrivileges } from '../../../../Utils';
 
 export default class WaitingScript extends Component {
   static propTypes = {
@@ -83,13 +84,15 @@ export default class WaitingScript extends Component {
           <div className={[styles.expandedSection].join(' ')}>
             <div className={scriptStyles.expandedTopRow}>
               <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper}>
-                <UploadButton
-                  className={scriptStyles.uploadConfigButton}
-                  labelClassName={scriptStyles.uploadButtonLabel}
-                  iconClassName={scriptStyles.uploadIcon}
-                />
-              </div>
+              {hasCommandPrivileges ? (
+                <div className={scriptStyles.uploadButtonWrapper}>
+                  <UploadButton
+                    className={scriptStyles.uploadConfigButton}
+                    labelClassName={scriptStyles.uploadButtonLabel}
+                    iconClassName={scriptStyles.uploadIcon}
+                  />
+                </div>
+              ) : null}
             </div>
             <JSONPretty
               data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
@@ -103,14 +106,16 @@ export default class WaitingScript extends Component {
               }}
             />
           </div>
-          <div className={[styles.expandedSection].join(' ')}>
-            <div className={scriptStyles.expandedTopRow}>
-              <p>Remove script</p>
-              <div className={scriptStyles.uploadButtonWrapper}>
-                <Button className={scriptStyles.uploadConfigButton}>Remove</Button>
+          {hasCommandPrivileges ? (
+            <div className={[styles.expandedSection].join(' ')}>
+              <div className={scriptStyles.expandedTopRow}>
+                <p>Remove script</p>
+                <div className={scriptStyles.uploadButtonWrapper}>
+                  <Button className={scriptStyles.uploadConfigButton}>Remove</Button>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     );
