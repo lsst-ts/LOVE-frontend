@@ -8,7 +8,6 @@ import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
 import Panel from '../Panel/Panel';
 import StatusText from '../StatusText/StatusText';
-import Button from '../Button/Button';
 import { hasCommandPrivileges } from '../../Utils';
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -67,6 +66,7 @@ export default class ScriptQueue extends Component {
       ],
       isAvailableScriptListVisible: false,
       draggingSource: '',
+      isFinishedScriptListListVisible: false,
     };
     this.lastId = 19;
   }
@@ -290,15 +290,36 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  openFinishedList = () => {
+    this.setState({
+      isFinishedScriptListListVisible: true,
+    });
+  };
+
+  closeFinishedList = () => {
+    this.setState({
+      isFinishedScriptListListVisible: false,
+    });
+  };
+
+  openAvailableList = () => {
+    this.setState({
+      isAvailableScriptListListVisible: true,
+    });
+  };
+
+  closeAvailableList = () => {
+    this.setState({
+      isAvailableScriptListListVisible: false,
+    });
+  };
+
   render() {
+    const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
+    const availableScriptListClass = this.state.isAvailableScriptListListVisible ? '' : styles.collapsedScriptList;
     return (
       <Panel title="Script Queue">
-        <div
-          className={[
-            styles.scriptQueueContainer,
-            this.state.isAvailableScriptListVisible ? styles.threeColumns : '',
-          ].join(' ')}
-        >
+        <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
           <div
             onDragEnter={(e) => {
               this.onDragLeave(e);
@@ -327,54 +348,59 @@ export default class ScriptQueue extends Component {
               </div>
             </div>
           </div>
+
+          {/* LISTS BODY */}
           <div className={styles.listsBody}>
-            <div
-              onDragEnter={(e) => {
-                this.onDragLeave(e);
-              }}
-              className={[styles.availableScriptList, styles.scriptList].join(' ')}
-            >
-              <div className={styles.listTitleWrapper}>
-                <div className={styles.listTitleLeft}>
-                  <span className={styles.listTitle}>AVAILABLE SCRIPTS ({this.state.availableScriptList.length})</span>
-                  <span className={styles.listSubtitle}>&#8203;</span>
+            <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
+              <div
+                onDragEnter={(e) => {
+                  this.onDragLeave(e);
+                }}
+                className={[styles.availableScriptList, styles.scriptList].join(' ')}
+              >
+                <div className={[styles.collapsedScriptListLabelWrapper].join(' ')} onClick={this.openAvailableList}>
+                  <div className={[styles.collapsedScriptListLabel].join(' ')}>&#8853;</div>
                 </div>
-                <div className={styles.addScriptContainer}>
-                  <Button className={styles.addScriptButton} size={'large'} onClick={this.hideAvailableScripts}>
-                    Hide column
-                  </Button>
+                <div className={styles.collapsableScriptListContent}>
+                  <div className={styles.listTitleWrapper}>
+                    <div className={styles.listTitleLeft}>
+                      <span className={styles.listTitle}>
+                        AVAILABLE SCRIPTS ({this.state.availableScriptList.length})
+                      </span>
+                      <span className={styles.listSubtitle}>&#8203;</span>
+                    </div>
+                    <div className={styles.collapseScriptListButton} onClick={this.closeAvailableList}>
+                      <span>&#8854;</span>
+                    </div>
+                  </div>
+                  <ScriptList>
+                    {this.state.availableScriptList.map((script) => {
+                      if (!script) return null;
+                      return (
+                        <DraggableScript
+                          key={`dragging-${script.index}`}
+                          {...script}
+                          dragSourceList="available"
+                          onDragOver={(e) => this.onDragLeave(e)}
+                          onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
+                          onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
+                          draggingScriptInstance={this.state.draggingScriptInstance}
+                          disabled={!hasCommandPrivileges}
+                        >
+                          <AvailableScript key={script.index} />
+                        </DraggableScript>
+                      );
+                    })}
+                  </ScriptList>
                 </div>
               </div>
-              <ScriptList>
-                {this.state.availableScriptList.map((script) => {
-                  if (!script) return null;
-                  return (
-                    <DraggableScript
-                      key={`dragging-${script.index}`}
-                      {...script}
-                      dragSourceList="available"
-                      onDragOver={(e) => this.onDragLeave(e)}
-                      onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
-                      onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
-                      draggingScriptInstance={this.state.draggingScriptInstance}
-                      disabled={!hasCommandPrivileges}
-                    >
-                      <AvailableScript key={script.index} />
-                    </DraggableScript>
-                  );
-                })}
-              </ScriptList>
             </div>
+
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
               <div className={styles.listTitleWrapper}>
                 <div className={styles.listTitleLeft}>
                   <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
                   <span className={styles.listSubtitle}>Total time: 0</span>
-                </div>
-                <div className={styles.addScriptContainer}>
-                  <Button className={styles.addScriptButton} size={'large'} onClick={this.displayAvailableScripts}>
-                    + Add script
-                  </Button>
                 </div>
               </div>
               <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
@@ -400,30 +426,43 @@ export default class ScriptQueue extends Component {
                 })}
               </ScriptList>
             </div>
-            <div
-              onDragEnter={(e) => {
-                this.onDragLeave(e);
-              }}
-              className={[styles.finishedScriptList, styles.scriptList].join(' ')}
-            >
-              <div className={styles.listTitleWrapper}>
-                <div className={styles.listTitleLeft}>
-                  <span className={styles.listTitle}>FINISHED SCRIPTS ({this.state.finishedScriptList.length})</span>
-                  <span className={styles.listSubtitle}>Total time: 0</span>
+
+            <div className={[styles.collapsableScriptList, finishedScriptListClass].join(' ')}>
+              <div
+                onDragEnter={(e) => {
+                  this.onDragLeave(e);
+                }}
+                className={[styles.finishedScriptList, styles.scriptList].join(' ')}
+              >
+                <div className={[styles.collapsedScriptListLabelWrapper].join(' ')} onClick={this.openFinishedList}>
+                  <div className={[styles.collapsedScriptListLabel].join(' ')}>&#8853;</div>
+                </div>
+                <div className={styles.collapsableScriptListContent}>
+                  <div className={styles.listTitleWrapper}>
+                    <div className={styles.listTitleLeft}>
+                      <span className={styles.listTitle}>
+                        FINISHED SCRIPTS ({this.state.finishedScriptList.length})
+                      </span>
+                      <span className={styles.listSubtitle}>Total time: 0</span>
+                    </div>
+                    <div className={styles.collapseScriptListButton} onClick={this.closeFinishedList}>
+                      <span>&#8854;</span>
+                    </div>
+                  </div>
+                  <ScriptList>
+                    {this.state.finishedScriptList.map((script, id) => (
+                      <DraggableScript
+                        key={`dragging-${script.index}`}
+                        dragSourceList="available"
+                        onDragOver={(e) => this.onDragLeave(e)}
+                        disabled
+                      >
+                        <FinishedScript key={id} {...script} isCompact={this.state.isAvailableScriptListVisible} />
+                      </DraggableScript>
+                    ))}
+                  </ScriptList>
                 </div>
               </div>
-              <ScriptList>
-                {this.state.finishedScriptList.map((script, id) => (
-                  <DraggableScript
-                    key={`dragging-${script.index}`}
-                    dragSourceList="available"
-                    onDragOver={(e) => this.onDragLeave(e)}
-                    disabled
-                  >
-                    <FinishedScript key={id} {...script} isCompact={this.state.isAvailableScriptListVisible} />
-                  </DraggableScript>
-                ))}
-              </ScriptList>
             </div>
           </div>
         </div>
