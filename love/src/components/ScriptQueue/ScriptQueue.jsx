@@ -75,7 +75,12 @@ export default class ScriptQueue extends Component {
     this.managerInterface = new ManagerInterface();
   }
 
-  onReceiveMsg = (data) => {
+  onReceiveMsg = (msg) => {
+    let {data} = JSON.parse(msg.data);
+    if ( data.ScriptQueueState === undefined) return;
+
+    data = data.ScriptQueueState.stream;
+
     const { current } = data;
     const { state } = data;
     const finishedScriptList = data.finished_scripts;
@@ -157,7 +162,7 @@ export default class ScriptQueue extends Component {
     };
     // this.onReceiveMsg(data);
 
-    this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', d => console.log(d));
+    this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
   };
 
   displayAvailableScripts = () => {
