@@ -20,52 +20,9 @@ export default class ScriptQueue extends Component {
     super(props);
     this.state = {
       current: {},
-      waitingScriptList: [
-        {
-          state: 'unconfigured',
-          index: 0,
-        },
-        {
-          state: 'configured',
-          index: 1,
-        },
-        {
-          state: 'done',
-          index: 2,
-        },
-        {
-          state: 'stopped',
-          index: 3,
-        },
-      ],
-      availableScriptList: [
-        {
-          state: 'failed',
-          index: 8,
-        },
-        {
-          state: 'failed',
-          index: 9,
-        },
-      ],
-      finishedScriptList: [
-        {
-          state: 'done',
-          index: 4,
-        },
-        {
-          state: 'terminated',
-          index: 5,
-        },
-        {
-          state: 'failed',
-          index: 6,
-        },
-        {
-          state: 'stopped',
-          index: 7,
-        },
-      ],
+      waitingScriptList: [],
+      availableScriptList: [],
+      finishedScriptList: [],
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
@@ -96,72 +53,6 @@ export default class ScriptQueue extends Component {
   }
 
   componentDidMount = () => {
-    const data = {
-      // current: 'None',
-      current: {
-        elapsed_time: 0.0,
-        index: 100000,
-        path: 'script1',
-        process_state: 'RUNNING',
-        script_state: 'RUNNING',
-        timestamp: 1552071360.648183,
-        type: 'Standard',
-      },
-      finished_scripts: [
-        {
-          elapsed_time: 0.0,
-          index: 100004,
-          path: 'script1',
-          process_state: 'CONFIGURED',
-          script_state: 'CONFIGURED',
-          timestamp: 1552071362.581268,
-          type: 'Standard',
-        },
-      ],
-      state: 'Running',
-      waiting_scripts: [
-        {
-          elapsed_time: 0.0,
-          index: 100008,
-          path: 'script1',
-          process_state: 'CONFIGURED',
-          script_state: 'CONFIGURED',
-          timestamp: 1552071362.581268,
-          type: 'Standard',
-        },
-      ],
-      available_scripts: [
-        {
-          elapsed_time: 0.0,
-          index: 100002,
-          path: 'script1',
-          process_state: 'CONFIGURED',
-          script_state: 'CONFIGURED',
-          timestamp: 1552071362.581268,
-          type: 'Standard',
-        },
-        {
-          elapsed_time: 0.0,
-          index: 100005,
-          path: 'script1',
-          process_state: 'FAILED',
-          script_state: 'FAILED',
-          timestamp: 1552071362.581268,
-          type: 'Standard',
-        },
-        {
-          elapsed_time: 0.0,
-          index: 100006,
-          path: 'script1',
-          process_state: 'UNCONFIGURED',
-          script_state: 'UNCONFIGURED',
-          timestamp: 1552071362.581268,
-          type: 'Standard',
-        },
-      ],
-    };
-    // this.onReceiveMsg(data);
-
     this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
   };
 
@@ -389,7 +280,7 @@ export default class ScriptQueue extends Component {
                       if (!script) return null;
                       return (
                         <DraggableScript
-                          key={`dragging-${script.index}`}
+                          key={`dragging-${script.type}-${script.path}`}
                           {...script}
                           dragSourceList="available"
                           onDragOver={(e) => this.onDragLeave(e)}
@@ -398,7 +289,11 @@ export default class ScriptQueue extends Component {
                           draggingScriptInstance={this.state.draggingScriptInstance}
                           disabled={!hasCommandPrivileges}
                         >
-                          <AvailableScript key={script.index} />
+                          <AvailableScript
+                          key={`${script.type}-${script.path}`}
+                          path={script.path}
+                          isStandard={script.type==="standard"}
+                          {...script}/>
                         </DraggableScript>
                       );
                     })}
