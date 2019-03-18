@@ -34,5 +34,16 @@ pipeline {
         }
       }
     }
+    stage("Trigger Deployment") {
+      when {
+        anyOf {
+          branch "master"
+          branch "develop"
+        }
+      }
+      steps {
+        build '../LOVE-integration-tools'
+      }
+    }
   }
 }
