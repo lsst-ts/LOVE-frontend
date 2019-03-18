@@ -1,5 +1,7 @@
 import sockette from 'sockette';
 
+export const hasCommandPrivileges = false;
+
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
   // eslint-disable-next-line
@@ -191,11 +193,11 @@ export default class ManagerInterface {
   };
 
   subscribeToEvents = (csc, stream, callback) => {
-    this.subscribeToStream('events', csc, stream, callback);
+    this.subscribeToStream('event', csc, stream, callback);
   };
 
   unsubscribeToEvents = (csc, stream, callback) => {
-    this.unsubscribeToStream('events', csc, stream, callback);
+    this.unsubscribeToStream('event', csc, stream, callback);
   };
 }
 

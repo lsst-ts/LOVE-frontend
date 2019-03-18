@@ -30,9 +30,9 @@ export default class AvailableScript extends Component {
     this.state = {
       dragging: false,
       dragOver: false,
-      dragBottom: null,
     };
     this.ref = React.createRef();
+    this.dragBottom = null;
   }
 
   onDragStart = (e) => {
@@ -41,8 +41,8 @@ export default class AvailableScript extends Component {
     // e.dataTransfer.setDragImage(null,50,50);
     this.setState({
       dragging: true,
-      dragBottom: null,
     });
+    this.dragBottom = null;
     this.props.onDragStart(e, this.props.index);
   };
 
@@ -51,20 +51,16 @@ export default class AvailableScript extends Component {
     const dragBottom = e.clientY > rect.top + rect.height / 2;
     this.setState({
       dragOver: true,
-      dragBottom,
     });
-    if (
-      this.props.dragSourceList !== 'waiting' ||
-      (this.state.dragBottom !== null && this.state.dragBottom !== dragBottom)
-    ) {
+    if (this.props.dragSourceList !== 'waiting' || (this.dragBottom !== null && this.dragBottom !== dragBottom)) {
       this.props.onDragOver(e, this.props.index);
     }
+    this.dragBottom = dragBottom;
   };
 
   onDragLeave = () => {
     this.setState({
       dragOver: false,
-      dragBottom: null,
     });
   };
 
@@ -76,15 +72,24 @@ export default class AvailableScript extends Component {
   };
 
   render() {
+    let movingScriptClass = '';
+    if (this.props.draggingScriptInstance) {
+      if (this.props.draggingScriptInstance.index === this.props.index) movingScriptClass = styles.movingScript;
+    }
     const draggingClass = this.state.dragging ? styles.dragging : '';
     const dragOverClass = this.state.dragOver ? styles.dragOver : '';
     const pendingClass = this.props.pendingConfirmation ? styles.pending : '';
     const globalDraggingClass = this.props.draggingScriptInstance !== undefined ? styles.globalDragging : '';
     return (
       <div
-        className={[styles.draggableContainer, draggingClass, dragOverClass, pendingClass, globalDraggingClass].join(
-          ' ',
-        )}
+        className={[
+          styles.draggableContainer,
+          draggingClass,
+          dragOverClass,
+          pendingClass,
+          globalDraggingClass,
+          movingScriptClass,
+        ].join(' ')}
         draggable={!this.props.disabled}
         onDragStart={this.onDragStart}
         onDragOver={this.onDragOver}

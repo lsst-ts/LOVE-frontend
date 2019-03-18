@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import styles from './WaitingScript.module.css';
 import scriptStyles from '../Scripts.module.css';
-import StatusText from '../../../StatusText/StatusText';
+import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import Button from '../../../Button/Button';
+import { hasCommandPrivileges } from '../../../../Utils';
 
 export default class WaitingScript extends Component {
   static propTypes = {
@@ -75,21 +76,23 @@ export default class WaitingScript extends Component {
               </span>
             </div>
           </div>
-          <div className={scriptStyles.statusTextContainer}>
-            <StatusText status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</StatusText>
+          <div className={scriptStyles.scriptStatusContainer}>
+            <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
           </div>
         </div>
         <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
           <div className={[styles.expandedSection].join(' ')}>
             <div className={scriptStyles.expandedTopRow}>
               <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper}>
-                <UploadButton
-                  className={scriptStyles.uploadConfigButton}
-                  labelClassName={scriptStyles.uploadButtonLabel}
-                  iconClassName={scriptStyles.uploadIcon}
-                />
-              </div>
+              {hasCommandPrivileges ? (
+                <div className={scriptStyles.uploadButtonWrapper}>
+                  <UploadButton
+                    className={scriptStyles.uploadConfigButton}
+                    labelClassName={scriptStyles.uploadButtonLabel}
+                    iconClassName={scriptStyles.uploadIcon}
+                  />
+                </div>
+              ) : null}
             </div>
             <JSONPretty
               data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
@@ -103,14 +106,16 @@ export default class WaitingScript extends Component {
               }}
             />
           </div>
-          <div className={[styles.expandedSection].join(' ')}>
-            <div className={scriptStyles.expandedTopRow}>
-              <p>Remove script</p>
-              <div className={scriptStyles.uploadButtonWrapper}>
-                <Button className={scriptStyles.uploadConfigButton}>Remove</Button>
+          {hasCommandPrivileges ? (
+            <div className={[styles.expandedSection].join(' ')}>
+              <div className={scriptStyles.expandedTopRow}>
+                <p>Remove script</p>
+                <div className={scriptStyles.uploadButtonWrapper}>
+                  <Button className={scriptStyles.uploadConfigButton}>Remove</Button>
+                </div>
               </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     );

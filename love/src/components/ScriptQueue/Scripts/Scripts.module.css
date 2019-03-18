@@ -36,11 +36,11 @@
   color: var(--highlighted-font-color);
 }
 
-.statusTextContainer {
+.scriptStatusContainer {
   min-width: 5em;
   text-align: center;
-  padding: 0.5em;
   text-transform: uppercase;
+  align-self: flex-start;
 }
 
 .expandedTopRow {

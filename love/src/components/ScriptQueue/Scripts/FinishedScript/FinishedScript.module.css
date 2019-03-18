@@ -2,6 +2,7 @@
 .finishedScriptContainer {
   padding: 0.5em;
   cursor: pointer;
+  user-select: none;
 }
 
 .estimatedTimeLabel {
