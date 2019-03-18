@@ -1,0 +1,10 @@
+.dataManagementFlow {
+    display: flex;
+}
+
+.processWrapper {
+    display: flex;
+    flex-direction: column;
+    width: 18%;
+    padding: 1em;
+}

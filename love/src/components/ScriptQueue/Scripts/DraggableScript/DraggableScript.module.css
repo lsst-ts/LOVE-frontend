@@ -1,0 +1,114 @@
+.draggableContainer.dragging {
+  /* position: absolute; */
+  /* border: solid red 1px; */
+  /* border: solid blueviolet 5px; */
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.draggableContainer {
+  margin-bottom: 0.5em;
+  /* padding-bottom: 0.5em; */
+}
+
+.draggableContainer > div {
+  /* border: solid red 1px; */
+  /* border: solid blueviolet 5px; */
+  box-sizing: border-box;
+}
+
+.draggableContainer > div::after {
+}
+
+.globalDragging > div::after {
+  height: 100%;
+  width: 100%;
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.dragOver > div::after {
+  /* background: red; */
+}
+
+.dragging > div:before {
+  /* border: dashed var(--secondary-font-color) 1px; */
+  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
+  background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
+}
+
+.dragging > div {
+  background: var(--second-quaternary-background-color);
+}
+.draggableContainer > div > div {
+  background: var(--second-tertiary-background-color);
+}
+.draggableContainer > div:hover > div {
+  background: var(--second-quaternary-background-color);
+}
+.draggableContainer > div:hover > div > div {
+  background: var(--second-quaternary-background-color);
+}
+.draggableContainer > div:hover {
+  background: var(--second-quaternary-background-color);
+}
+
+.globalDragging > div:hover > div {
+  background: var(--second-tertiary-background-color);
+}
+.globalDragging > div:hover > div > div {
+  background: var(--second-tertiary-background-color);
+}
+.globalDragging > div:hover {
+  background: var(--second-tertiary-background-color);
+}
+
+.draggableContainer:hover {
+  background: var(--second-quaternary-background-color);
+  border-radius: 5px;
+}
+
+.movingScript {
+  background: var(--second-quaternary-background-color);
+}
+
+.movingScript > div {
+  background: var(--second-quaternary-background-color);
+}
+
+.movingScript > div > div {
+  background: var(--second-quaternary-background-color);
+}
+
+.movingScript > div > div > div {
+  background: var(--second-quaternary-background-color);
+}
+
+.pending {
+  position: relative;
+}
+
+.pending > div {
+  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
+  background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
+  background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
+  background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
+  animation: border-dance 12s infinite linear;
+}
+
+@keyframes border-dance {
+  0% {
+    background-position: 0px 0px, 100% 100%, 0px 200%, 100% 0px;
+  }
+  100% {
+    background-position: 100% 0px, 0px 100%, 0px 0px, 100% 200%;
+  }
+}

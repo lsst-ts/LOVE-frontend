@@ -30,3 +30,9 @@
     transform: rotate(360deg);
   }
 }
+
+.hs-container {
+  height: calc(100vh - 15px);
+  padding: 15px;
+  padding-bottom: 0px;
+}

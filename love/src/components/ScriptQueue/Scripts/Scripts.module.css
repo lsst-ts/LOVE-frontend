@@ -1,0 +1,76 @@
+.scriptContainer {
+  position: relative;
+  /* height: 3em; */
+  background: var(--second-tertiary-background-color);
+  border-radius: 5px;
+  /* padding: 0.5em;
+  margin: 0.5em; */
+  overflow: hidden;
+  padding: 1px;
+}
+
+.pathTextContainer {
+  display: block;
+  text-align: left;
+  font-size: var(--font-size-large);
+  padding-bottom: 0.2em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.pathText {
+  text-align: left;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.highlighted {
+  color: var(--highlighted-font-color);
+}
+
+.externalText {
+  font-size: var(--font-size-small);
+  color: var(--highlighted-font-color);
+}
+
+.scriptStatusContainer {
+  min-width: 5em;
+  text-align: center;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.expandedTopRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  padding-top: 1em;
+}
+
+.expandedTopRow p {
+  margin: 0;
+}
+
+.uploadButtonWrapper {
+  width: 6em;
+  padding: 0em 0em;
+  /* padding-bottom: 0.3em; */
+  /* padding-left: 0.5em; */
+}
+
+.uploadConfigButton {
+  background: var(--quaternary-background-color);
+  border: solid var(--primary-background-color) 1px;
+}
+
+.uploadButtonLabel {
+  color: var(--base-font-color);
+}
+
+.uploadIcon {
+  fill: var(--base-font-color);
+}
