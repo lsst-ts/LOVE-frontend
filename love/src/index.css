@@ -1,14 +1,131 @@
+@font-face {
+  font-family: 'Arial';
+  src: local(Arial);}
+
 body {
-  margin: 0;
-  padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--base-font-color);
+  background: var(--base-background-color);
+  /* font-family: Arial; */
+  font-family: 'Arial';
+  margin: 0 10px;
+  
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+:root {
+  --base-font-color: hsl(194, 16%, 79%);
+  --secondary-font-color: hsl(201, 15%, 54%);
+  --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3);/*Transparent*/
+  --tertiary-font-color: hsl(201, 15%, 54%);
+  --highlighted-font-color: hsl(0, 0%, 100%);
+
+  --base-background-color: hsl(205, 40%, 8%);
+  --secondary-background-color: hsl(200, 40%, 10%);
+  --secondary-background-dimmed-color: hsl(200, 51%, 13%);
+  --tertiary-background-color: hsl(201, 21%, 23%);
+  --quaternary-background-color: hsl(202, 32%, 28%);
+  --quinary-background-color: hsl(196, 16%, 28%);
+
+  --second-primary-background-color: hsl(202, 38%, 11%);
+  --second-secondary-background-color: hsl(202, 34%, 13%);
+  --second-tertiary-background-color: hsl(201, 26%, 23%);
+  --second-quaternary-background-color: hsl(201, 24%, 30%);
+  --second-quinary-background-color: hsl(201, 22%, 40%);
+  --second-base-font-color: hsl(240, 4%, 90%, 0.6);
+  
+  /* Status */
+  --status-ok-color: hsl(161, 100%, 32%);
+  --status-ok-dimmed-color: hsl(161, 100%, 32%, 0.2);
+  --status-ok-dimmed-color-2: hsl(161, 100%, 20%);
+  --status-warning-color: hsl(57, 100%, 47%);
+  --status-warning-dimmed-color: hsl(57, 100%, 47%, 0.2);
+  --status-warning-dimmed-color-2: hsl(57, 100%, 27%);
+  --status-alert-color: hsl(23, 99%, 44%);
+  --status-alert-dimmed-color: hsl(23, 99%, 44%, 0.2);
+  --status-alert-dimmed-color-2: hsl(23, 99%, 27%);
+  --status-disabled-color: hsl(202, 20%, 38%);
+  --status-disabled-dimmed-color: hsl(201, 17%, 30%, 0.2);
+  --status-disabled-dimmed-color-2: hsl(202, 20%, 20%);
+  
+  /* Script status */
+  --script-ok-color: hsl(188, 79%, 56%);
+  --script-ok-dimmed-color: hsl(188, 79%, 56%, 0.2);
+  
+  --box-shadow-color: rgba(0,0,0,0.17);
+  
+  --default-background-color: #4c606a;
+  --default-font-color: #aabeca;
+  --default-active-background-color: #384850;
+  --default-active-font-color: #92a2ac;
+  --primary-active-hover-background-color:#92a2ac;
+  
+  --primary-background-color: #4c7487;
+  --primary-font-color: #b2c4ce;
+  --primary-active-background-color: #3b5d6e;
+  --primary-active-font-color: #8d9ea7;
+  --primary-active-hover-background-color:#8d9ea7;
+
+  --success-background-color: #57b18a;
+  --success-font-color: #acffd6;
+  --success-active-background-color: #4c9978;
+  --success-active-font-color: #77d9b9;
+  --success-active-hover-background-color:#428568;
+
+  --info-background-color: #5cbed4;
+  --info-font-color: #c8fbff;
+  --info-hover-background-color: #58b0c4;
+  --info-hover-font-color: #97dde9;
+  --info-active-background-color: #58b0c4;
+  --info-active-font-color: #bbe3e6;
+  --info-active-hover-background-color: #45a1b5;
+  --info-active-hover-border-color: #3e707b;
+
+  --warning-background-color: #cec34b;
+  --warning-font-color: #fffaf6;
+  --warning-hover-background-color: #c0b53f;
+  --warning-hover-font-color: #eee6d0;
+  --warning-active-background-color: #c0b53f;
+  --warning-active-font-color: #eee6d0;
+  --warning-active-hover-background-color: #b1a73d;
+
+  --danger-background-color: #d47230;
+  --danger-font-color: #fcefe8;
+  --danger-hover-background-color: #b86229;
+  --danger-hover-font-color: #e7cdc2;
+  --danger-active-background-color: #b86229;
+  --danger-active-font-color: #e7cdc2;
+  --danger-active-hover-background-color: #ad5d28;
+
+  --link-focus-font-color: red;
+  --link-font-color: #fcefe8;
+  --link-hover-font-color: #667986;
+  --link-active-font-color: #667986;
+
+  --font-size-smaller: 0.6em;
+  --font-size-small: 0.8em;
+  --font-size-medium: 1em;
+  --font-size-large: 1.2em;
+  --font-size-larger: 1.4em;
+}
+
+
+/* width */
+::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: var(--tertiary-background-color); 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  /* background: var(--quinary-background-color); */
+  background: var(--tertiary-font-color);
+  border-radius: 1.1em;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-font-color);
 }
