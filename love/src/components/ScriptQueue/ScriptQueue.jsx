@@ -9,6 +9,8 @@ import styles from './ScriptQueue.module.css';
 import Panel from '../Panel/Panel';
 import StatusText from '../StatusText/StatusText';
 import { hasCommandPrivileges } from '../../Utils';
+import ManagerInterface from '../../Utils';
+
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
  *
@@ -69,9 +71,11 @@ export default class ScriptQueue extends Component {
       isFinishedScriptListListVisible: false,
     };
     this.lastId = 19;
+
+    this.managerInterface = new ManagerInterface();
   }
 
-  onReceiveMsg(data) {
+  onReceiveMsg = (data) => {
     const { current } = data;
     const { state } = data;
     const finishedScriptList = data.finished_scripts;
@@ -151,7 +155,9 @@ export default class ScriptQueue extends Component {
         },
       ],
     };
-    this.onReceiveMsg(data);
+    // this.onReceiveMsg(data);
+
+    this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', d => console.log(d));
   };
 
   displayAvailableScripts = () => {
