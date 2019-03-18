@@ -42,7 +42,7 @@ pipeline {
         }
       }
       steps {
-        build '../LOVE-integration-tools'
+        build '../LOVE-integration-tools/develop'
       }
     }
   }
