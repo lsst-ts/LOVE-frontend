@@ -1,0 +1,19 @@
+.panel {
+  width: 100%;
+}
+
+.CSCSummaryContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-flow: wrap;
+  padding: 1em;
+  background: var(--second-primary-background-color);
+}
+
+.CSCRealmContainer{
+  display: flex;
+  flex-grow: 1;
+  flex-basis: 30%;
+  padding: 1em;
+  min-width: 20em;
+}

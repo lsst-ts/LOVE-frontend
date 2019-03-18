@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import styles from './AvailableScript.module.css';
+import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import scriptStyles from '../Scripts.module.css';
+import { hasCommandPrivileges } from '../../../../Utils';
 
 export default class AvailableScript extends Component {
   static propTypes = {
@@ -65,7 +67,18 @@ export default class AvailableScript extends Component {
         </div>
         <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
           <div className={[styles.expandedSection].join(' ')}>
-            <p>Script config</p>
+            <div className={scriptStyles.expandedTopRow}>
+              <p>Script config</p>
+              {hasCommandPrivileges ? (
+                <div className={scriptStyles.uploadButtonWrapper}>
+                  <UploadButton
+                    className={scriptStyles.uploadConfigButton}
+                    labelClassName={scriptStyles.uploadButtonLabel}
+                    iconClassName={scriptStyles.uploadIcon}
+                  />
+                </div>
+              ) : null}
+            </div>
             <JSONPretty
               data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
               theme={{

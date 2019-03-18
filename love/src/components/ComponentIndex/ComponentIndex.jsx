@@ -27,6 +27,9 @@ export default class ComponentIndex extends Component {
             <Link to="/script-queue">Script Queue</Link>
           </li>
           <li className={styles.linkListItem}>
+            <Link to="/csc-summary">CSC Summary</Link>
+          </li>
+          <li className={styles.linkListItem}>
             <Link to="/login">Login</Link>
           </li>
           <li className={styles.linkListItem}>

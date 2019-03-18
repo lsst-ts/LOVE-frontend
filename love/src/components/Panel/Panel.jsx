@@ -11,15 +11,18 @@ export default class Panel extends Component {
     /** Text to be displayed in the title */
     title: PropTypes.string,
     children: PropTypes.object,
+    className: PropTypes.string,
   };
 
   static defaultProps = {
     title: '',
+    className: '',
   };
 
   render() {
+    const classNames = [styles.panel, this.props.className].join(' ');
     return (
-      <div className={styles.panel}>
+      <div className={classNames}>
         <div className={styles.panelHeading}>
           <h3 className={styles.panelTitle}>{this.props.title}</h3>
         </div>

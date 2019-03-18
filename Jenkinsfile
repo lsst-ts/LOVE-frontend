@@ -5,10 +5,6 @@ pipeline {
     dockerImageName = "inriachile/love-frontend:${GIT_BRANCH}"
     dockerImage = ""
   }
-  triggers {
-    pollSCM("* * * * *")
-  }
-
   stages {
     stage("Build Docker image") {
       when {

@@ -8,10 +8,12 @@ export default class ScriptList extends Component {
     onDragLeave: PropTypes.func,
     onDragExit: PropTypes.func,
     onDragEnd: PropTypes.func,
+    onDragEnter: PropTypes.func,
   };
 
   static defaultProps = {
     onDragLeave: () => 0,
+    onDragEnter: () => 0,
   };
 
   constructor(props) {
@@ -23,12 +25,7 @@ export default class ScriptList extends Component {
   }
 
   onDragEnter = (e) => {
-    this.setState({
-      dragCounter: this.state.dragCounter + 1,
-    });
-    this.dragCounter += 1;
-    e.stopPropagation();
-    e.preventDefault();
+    this.props.onDragEnter(e);
   };
 
   onDragLeave = () => {

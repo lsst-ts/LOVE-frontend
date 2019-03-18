@@ -27,19 +27,29 @@ body {
   --quinary-background-color: hsl(196, 16%, 28%);
 
   --second-primary-background-color: hsl(202, 38%, 11%);
-  --second-secondary-background-color: hsl(202, 44%, 13%);
+  --second-secondary-background-color: hsl(202, 34%, 13%);
   --second-tertiary-background-color: hsl(201, 26%, 23%);
   --second-quaternary-background-color: hsl(201, 24%, 30%);
+  --second-quinary-background-color: hsl(201, 22%, 40%);
   --second-base-font-color: hsl(240, 4%, 90%, 0.6);
   
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
   --status-ok-dimmed-color: hsl(161, 100%, 32%, 0.2);
+  --status-ok-dimmed-color-2: hsl(161, 100%, 20%);
   --status-warning-color: hsl(57, 100%, 47%);
   --status-warning-dimmed-color: hsl(57, 100%, 47%, 0.2);
+  --status-warning-dimmed-color-2: hsl(57, 100%, 27%);
   --status-alert-color: hsl(23, 99%, 44%);
   --status-alert-dimmed-color: hsl(23, 99%, 44%, 0.2);
+  --status-alert-dimmed-color-2: hsl(23, 99%, 27%);
+  --status-disabled-color: hsl(202, 20%, 38%);
+  --status-disabled-dimmed-color: hsl(201, 17%, 30%, 0.2);
+  --status-disabled-dimmed-color-2: hsl(202, 20%, 20%);
   
+  /* Script status */
+  --script-ok-color: hsl(188, 79%, 56%);
+  --script-ok-dimmed-color: hsl(188, 79%, 56%, 0.2);
   
   --box-shadow-color: rgba(0,0,0,0.17);
   

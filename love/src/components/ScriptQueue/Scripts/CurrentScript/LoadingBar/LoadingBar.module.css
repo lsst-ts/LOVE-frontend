@@ -4,6 +4,6 @@
 }
 
 .loadedBar{
-  background: hsl(188, 79%, 56%);
+  background: var(--script-ok-color);
   height: 1.3em;
 }

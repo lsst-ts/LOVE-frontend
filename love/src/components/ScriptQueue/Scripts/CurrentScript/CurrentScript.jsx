@@ -4,7 +4,7 @@ import JSONPretty from 'react-json-pretty';
 import LoadingBar from './LoadingBar/LoadingBar';
 import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
-import StatusText from '../../../StatusText/StatusText';
+import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -75,8 +75,8 @@ export default class CurrentScript extends Component {
                 <span className={scriptStyles.pathText}>{fileExtension}</span>
               </div>
             </div>
-            <div className={scriptStyles.statusTextContainer}>
-              <StatusText status={'ok'}>{this.props.script_state}</StatusText>
+            <div className={scriptStyles.Scriptstatus}>
+              <ScriptStatus status={'running'}>{this.props.script_state}</ScriptStatus>
             </div>
           </div>
           <div className={styles.loadingBarContainer}>
