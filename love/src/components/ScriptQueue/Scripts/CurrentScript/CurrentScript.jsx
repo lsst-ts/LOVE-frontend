@@ -5,7 +5,7 @@ import LoadingBar from './LoadingBar/LoadingBar';
 import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
-import {getStatusStyle} from '../Scripts';
+import { getStatusStyle } from '../Scripts';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -22,7 +22,7 @@ export default class CurrentScript extends Component {
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
-    script_state: PropTypes.string,
+    scriptState: PropTypes.string,
     /** Timestamp of script creation */
     timestamp: PropTypes.number,
   };
@@ -32,7 +32,7 @@ export default class CurrentScript extends Component {
     isStandard: undefined,
     path: 'None',
     timestamp: 0,
-    script_state: 'Unknown',
+    scriptState: 'Unknown',
     estimatedTime: 0,
     elapsedTime: 0,
   };
@@ -62,15 +62,14 @@ export default class CurrentScript extends Component {
     let percentage = 0;
     const estimatedTime = Math.trunc(this.props.estimatedTime);
     const elapsedTime = Math.trunc(this.props.elapsedTime);
-    if( estimatedTime>0) {
-      percentage = Math.min( 100*elapsedTime/estimatedTime, 100);
+    if (estimatedTime > 0) {
+      percentage = Math.min((100 * elapsedTime) / estimatedTime, 100);
       percentage = Math.trunc(percentage);
     }
 
-
     let typeTag = '';
-    if (this.props.isStandard !== undefined){
-      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'
+    if (this.props.isStandard !== undefined) {
+      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
     }
 
     return (
@@ -81,12 +80,12 @@ export default class CurrentScript extends Component {
               <div className={scriptStyles.externalContainer}>
                 <span className={scriptStyles.externalText}>{typeTag}</span>
               </div>
-              {this.props.salIndex !== undefined && <div className={styles.indexContainer}>
-                <span className={styles.indexLabel}>Index: </span>
-                <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>
-                  {this.props.salIndex }
-                </span>
-              </div>}
+              {this.props.salIndex !== undefined && (
+                <div className={styles.indexContainer}>
+                  <span className={styles.indexLabel}>Index: </span>
+                  <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.salIndex}</span>
+                </div>
+              )}
               <div className={scriptStyles.pathTextContainer}>
                 <span className={scriptStyles.pathText}>{fileFolder}</span>
                 <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
@@ -119,8 +118,7 @@ export default class CurrentScript extends Component {
           <div className={[styles.expandedSection].join(' ')}>
             <div className={scriptStyles.expandedTopRow}>
               <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper}>
-              </div>
+              <div className={scriptStyles.uploadButtonWrapper} />
             </div>
             <JSONPretty
               data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
