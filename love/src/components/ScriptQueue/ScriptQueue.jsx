@@ -225,7 +225,11 @@ export default class ScriptQueue extends Component {
       Running: 'ok',
     };
     const now = new Date();
-    const currentScriptElapsedTime = this.state.current === 'None' ? 0 : now.getTime() / 1000.0 - current.timestamp;
+    // Fix time zones for next line
+    const currentScriptElapsedTime =
+      this.state.current === 'None' || Object.keys(this.state.current).length === 0
+        ? 0
+        : now.getTime() / 1000.0 - current.timestamp;
 
     return (
       <Panel title="Script Queue">
