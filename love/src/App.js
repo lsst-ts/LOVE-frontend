@@ -102,7 +102,7 @@ class App extends Component {
   receiveAllMsg = (msg) => {
     const data = JSON.parse(msg.data);
 
-    if(data.category !== 'telemetry') return;
+    if (data.category !== 'telemetry') return;
 
     if (typeof data.data === 'object') {
       let newTelemetries = Object.assign({}, this.state.telemetries);
