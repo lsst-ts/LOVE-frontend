@@ -226,7 +226,7 @@ export default class ScriptQueue extends Component {
       Running: 'ok',
     };
     const now = new Date();
-    const elapsedTime = this.state.current === 'None'? 0 : now.getTime()/1000.0 - current.timestamp;
+    const currentScriptElapsedTime = this.state.current === 'None' ? 0 : now.getTime() / 1000.0 - current.timestamp;
 
     return (
       <Panel title="Script Queue">
@@ -245,7 +245,7 @@ export default class ScriptQueue extends Component {
                 scriptState={current.script_state}
                 isStandard={current.type ? current.type === 'Standard' : undefined}
                 estimatedTime={current.expected_duration}
-                elapsedTime={elapsedTime}
+                elapsedTime={currentScriptElapsedTime}
               />
             </div>
           </div>
