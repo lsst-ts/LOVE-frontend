@@ -220,12 +220,13 @@ export default class ScriptQueue extends Component {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListListVisible ? '' : styles.collapsedScriptList;
     const current = this.state.current === 'None' ? {} : { ...this.state.current };
-
     const stateStyleDict = {
       Stopped: 'warning',
       Unknown: 'invalid',
       Running: 'ok',
     };
+    const now = new Date();
+    const elapsedTime = this.state.current === 'None'? 0 : now.getTime()/1000.0 - current.timestamp;
 
     return (
       <Panel title="Script Queue">
@@ -244,7 +245,7 @@ export default class ScriptQueue extends Component {
                 scriptState={current.script_state}
                 isStandard={current.type ? current.type === 'Standard' : undefined}
                 estimatedTime={current.expected_duration}
-                elapsedTime={current.elapsed_time}
+                elapsedTime={elapsedTime}
               />
             </div>
           </div>
