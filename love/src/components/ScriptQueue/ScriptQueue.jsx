@@ -323,7 +323,19 @@ export default class ScriptQueue extends Component {
               <div className={styles.listTitleWrapper}>
                 <div className={styles.listTitleLeft}>
                   <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
-                  <span className={styles.listSubtitle}>Total time: 0</span>
+                  <span className={styles.listSubtitle}>
+                    Total time:{' '}
+                    {this.state.waitingScriptList
+                      .reduce((previousSum, currentElement) => {
+                        if (!currentElement) return previousSum;
+
+                        if (typeof currentElement.expected_duration !== 'number') return previousSum;
+
+                        return currentElement.expected_duration + previousSum;
+                      }, 0)
+                      .toFixed(2)}{' '}
+                    s
+                  </span>
                 </div>
               </div>
               <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
@@ -374,7 +386,18 @@ export default class ScriptQueue extends Component {
                       <span className={styles.listTitle}>
                         FINISHED SCRIPTS ({this.state.finishedScriptList.length})
                       </span>
-                      <span className={styles.listSubtitle}>Total time: 0</span>
+                      <span className={styles.listSubtitle}>
+                        Total time:{' '}
+                        {this.state.finishedScriptList
+                          .reduce((previousSum, currentElement) => {
+                            if (!currentElement) return previousSum;
+
+                            if (typeof currentElement.elapsed_time !== 'number') return previousSum;
+
+                            return currentElement.elapsed_time + previousSum;
+                          }, 0)
+                          .toFixed(2)} s
+                      </span>
                     </div>
                     <div className={styles.collapseScriptListButton} onClick={this.closeFinishedList}>
                       <span>&#8854;</span>
