@@ -104,7 +104,7 @@ export default class CurrentScript extends Component {
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {estimatedTime} {estimatedTime>0?'s' :''}
+                {estimatedTime.toFixed(2)} s
               </span>
             </div>
             <div className={styles.elapsedTimeContainer}>
