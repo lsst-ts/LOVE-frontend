@@ -8,8 +8,7 @@ import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
 import Panel from '../Panel/Panel';
 import StatusText from '../StatusText/StatusText';
-import { hasCommandPrivileges } from '../../Utils';
-import ManagerInterface from '../../Utils';
+import ManagerInterface, { hasCommandPrivileges } from '../../Utils';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -396,7 +395,8 @@ export default class ScriptQueue extends Component {
 
                             return currentElement.elapsed_time + previousSum;
                           }, 0)
-                          .toFixed(2)} s
+                          .toFixed(2)}{' '}
+                        s
                       </span>
                     </div>
                     <div className={styles.collapseScriptListButton} onClick={this.closeFinishedList}>

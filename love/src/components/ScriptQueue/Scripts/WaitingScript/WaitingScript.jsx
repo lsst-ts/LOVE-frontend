@@ -59,8 +59,8 @@ export default class WaitingScript extends Component {
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
     let typeTag = '';
-    if (this.props.isStandard !== undefined){
-      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'
+    if (this.props.isStandard !== undefined) {
+      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
     }
 
     return (
