@@ -5,6 +5,7 @@ import LoadingBar from './LoadingBar/LoadingBar';
 import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
+import {getStatusStyle} from '../Scripts';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -27,9 +28,9 @@ export default class CurrentScript extends Component {
   };
 
   static defaultProps = {
-    salIndex: 0,
-    isStandard: true,
-    path: 'unknown',
+    salIndex: undefined,
+    isStandard: undefined,
+    path: 'None',
     timestamp: 0,
     script_state: 'Unknown',
     estimatedTime: 0,
@@ -57,18 +58,35 @@ export default class CurrentScript extends Component {
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
         : path.substring(path.lastIndexOf('/'));
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
+
+    let percentage = 0;
+    const estimatedTime = Math.trunc(this.props.estimatedTime);
+    const elapsedTime = Math.trunc(this.props.elapsedTime);
+    if( estimatedTime>0) {
+      percentage = Math.min( 100*elapsedTime/estimatedTime, 100);
+      percentage = Math.trunc(percentage);
+    }
+
+
+    let typeTag = '';
+    if (this.props.isStandard !== undefined){
+      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'
+    }
+
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.currentScriptContainer} onClick={this.onClick}>
           <div className={styles.topContainer}>
             <div>
               <div className={scriptStyles.externalContainer}>
-                <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
+                <span className={scriptStyles.externalText}>{typeTag}</span>
               </div>
-              <div className={styles.indexContainer}>
+              {this.props.salIndex !== undefined && <div className={styles.indexContainer}>
                 <span className={styles.indexLabel}>Index: </span>
-                <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.salIndex}</span>
-              </div>
+                <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>
+                  {this.props.salIndex }
+                </span>
+              </div>}
               <div className={scriptStyles.pathTextContainer}>
                 <span className={scriptStyles.pathText}>{fileFolder}</span>
                 <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
@@ -76,23 +94,23 @@ export default class CurrentScript extends Component {
               </div>
             </div>
             <div className={scriptStyles.Scriptstatus}>
-              <ScriptStatus status={'running'}>{this.props.script_state}</ScriptStatus>
+              <ScriptStatus status={getStatusStyle(this.props.scriptState)}>{this.props.scriptState}</ScriptStatus>
             </div>
           </div>
           <div className={styles.loadingBarContainer}>
-            <LoadingBar percentage={40} />
+            <LoadingBar percentage={percentage} />
           </div>
           <div className={styles.timeContainer}>
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime}
+                {estimatedTime.toFixed(2)} s
               </span>
             </div>
             <div className={styles.elapsedTimeContainer}>
               <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
               <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.elapsedTime}
+                {elapsedTime.toFixed(2)} s
               </span>
             </div>
           </div>
