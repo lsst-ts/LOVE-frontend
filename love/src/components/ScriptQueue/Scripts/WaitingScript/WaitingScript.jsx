@@ -29,7 +29,7 @@ export default class WaitingScript extends Component {
 
   static defaultProps = {
     salIndex: 0,
-    isStandard: true,
+    isStandard: undefined,
     path: 'auxtel/at_calsys_takedata.py',
     estimatedTime: 0,
     script_state: 'Unknown',
@@ -57,12 +57,18 @@ export default class WaitingScript extends Component {
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
         : path.substring(path.lastIndexOf('/'));
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
+
+    let typeTag = '';
+    if (this.props.isStandard !== undefined){
+      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'
+    }
+
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.waitingScriptContainer} onClick={this.onClick}>
           <div>
             <div className={scriptStyles.externalContainer}>
-              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
+              <span className={scriptStyles.externalText}>{typeTag}</span>
             </div>
             <div className={scriptStyles.pathTextContainer}>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}

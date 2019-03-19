@@ -2,6 +2,7 @@
 export const getStatusStyle = (status) => {
   if (!status) return '';
   if (status.toLowerCase() === 'done') return 'ok';
+  if (status.toLowerCase() === 'running') return 'running';
   if (status.toLowerCase() === 'configured') return 'ok';
   if (status.toLowerCase() === 'unconfigured') return 'warning';
   if (status.toLowerCase() === 'paused') return 'warning';

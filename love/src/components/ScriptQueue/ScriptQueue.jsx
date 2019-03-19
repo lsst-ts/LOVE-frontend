@@ -26,6 +26,7 @@ export default class ScriptQueue extends Component {
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
+      state: 'Unknown',
     };
     this.lastId = 19;
 
@@ -33,11 +34,10 @@ export default class ScriptQueue extends Component {
   }
 
   onReceiveMsg = (msg) => {
-    let {data} = JSON.parse(msg.data);
-    if ( data.ScriptQueueState === undefined) return;
+    let { data } = JSON.parse(msg.data);
+    if (data.ScriptQueueState === undefined) return;
 
     data = data.ScriptQueueState.stream;
-
     const { current } = data;
     const { state } = data;
     const finishedScriptList = data.finished_scripts;
@@ -50,7 +50,7 @@ export default class ScriptQueue extends Component {
       waitingScriptList,
       state,
     });
-  }
+  };
 
   componentDidMount = () => {
     this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
@@ -219,6 +219,14 @@ export default class ScriptQueue extends Component {
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListListVisible ? '' : styles.collapsedScriptList;
+    const current = this.state.current === 'None' ? {} : { ...this.state.current };
+
+    const stateStyleDict = {
+      Stopped: 'warning',
+      Unknown: 'invalid',
+      Running: 'ok',
+    };
+
     return (
       <Panel title="Script Queue">
         <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
@@ -230,7 +238,14 @@ export default class ScriptQueue extends Component {
           >
             <div className={styles.currentScriptContainer}>
               <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
-              <CurrentScript {...this.state.current} />
+              <CurrentScript
+                {...current}
+                salIndex={current.index}
+                scriptState={current.script_state}
+                isStandard={current.type ? current.type === 'Standard' : undefined}
+                estimatedTime={current.expected_duration}
+                elapsedTime={current.elapsed_time}
+              />
             </div>
           </div>
           <div
@@ -246,7 +261,7 @@ export default class ScriptQueue extends Component {
               </div>
               <div className={styles.stateContainer}>
                 QUEUE STATE
-                <StatusText status="alert">DOWN</StatusText>
+                <StatusText status={stateStyleDict[this.state.state]}>{this.state.state}</StatusText>
               </div>
             </div>
           </div>
@@ -290,10 +305,11 @@ export default class ScriptQueue extends Component {
                           disabled={!hasCommandPrivileges}
                         >
                           <AvailableScript
-                          key={`${script.type}-${script.path}`}
-                          path={script.path}
-                          isStandard={script.type==="standard"}
-                          {...script}/>
+                            key={`${script.type}-${script.path}`}
+                            path={script.path}
+                            isStandard={script.type.toLowerCase() === 'standard'}
+                            {...script}
+                          />
                         </DraggableScript>
                       );
                     })}
@@ -312,6 +328,11 @@ export default class ScriptQueue extends Component {
               <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
                 {this.state.waitingScriptList.map((script) => {
                   if (!script) return null;
+                  const estimatedTime =
+                    script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
+
+                  const isStandard = script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
+
                   return (
                     <DraggableScript
                       key={`dragging-${script.index}`}
@@ -325,6 +346,9 @@ export default class ScriptQueue extends Component {
                       <WaitingScript
                         key={script.index}
                         isCompact={this.state.isAvailableScriptListVisible}
+                        path={script.path}
+                        isStandard={isStandard}
+                        estimatedTime={estimatedTime}
                         {...script}
                       />
                     </DraggableScript>
@@ -356,16 +380,29 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.finishedScriptList.map((script, id) => (
-                      <DraggableScript
-                        key={`dragging-${script.index}`}
-                        dragSourceList="available"
-                        onDragOver={(e) => this.onDragLeave(e)}
-                        disabled
-                      >
-                        <FinishedScript key={id} {...script} isCompact={this.state.isAvailableScriptListVisible} />
-                      </DraggableScript>
-                    ))}
+                    {this.state.finishedScriptList.map((script, id) => {
+                      const isStandard =
+                        script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
+
+                      return (
+                        <DraggableScript
+                          key={`dragging-${script.index}`}
+                          dragSourceList="available"
+                          onDragOver={(e) => this.onDragLeave(e)}
+                          disabled
+                        >
+                          <FinishedScript
+                            key={id}
+                            {...script}
+                            path={script.path}
+                            isStandard={isStandard}
+                            estimatedTime={script.expected_duration}
+                            elapsedTime={script.elapsed_time}
+                            isCompact={this.state.isAvailableScriptListVisible}
+                          />
+                        </DraggableScript>
+                      );
+                    })}
                   </ScriptList>
                 </div>
               </div>
