@@ -19,56 +19,7 @@ export default class ScriptQueue extends Component {
     super(props);
     this.state = {
       current: {},
-      waitingScriptList: [
-        {
-          state: 'failed',
-          path: 'script1',
-          type: 'Standard',
-          script_state: 'Unconfigured',
-          expected_duration: 0,
-          process_state: 'Loading',
-        },
-        {
-          state: 'failed',
-          path: 'test/script1',
-          type: 'External',
-          script_state: 'Configured',
-          expected_duration: 0,
-          process_state: 'Configured',
-        },
-        {
-          state: 'failed',
-          path: 'script2',
-          type: 'Standard',
-          script_state: 'Failed',
-          expected_duration: 0,
-          process_state: 'ConfigureFailed',
-        },
-        {
-          state: 'failed',
-          path: 'folder/script3',
-          type: 'External',
-          script_state: 'Paused',
-          expected_duration: 0,
-          process_state: 'Configured',
-        },
-        {
-          state: 'failed',
-          path: '1yututy',
-          type: 'Standard',
-          script_state: 'Running',
-          expected_duration: 0,
-          process_state: 'Loading',
-        },
-        {
-          state: 'failed',
-          path: 'dsadsa/1tyuuytuytuty',
-          type: 'External',
-          script_state: 'Running',
-          expected_duration: 0,
-          process_state: 'Loading',
-        },
-      ],
+      waitingScriptList: [],
       availableScriptList: [],
       finishedScriptList: [],
       isAvailableScriptListVisible: false,
@@ -280,9 +231,7 @@ export default class ScriptQueue extends Component {
     const now = new Date();
     // Fix time zones for next line
     const currentScriptElapsedTime =
-      this.state.current === 'None' || Object.keys(this.state.current).length === 0
-        ? 0
-        : now.getTime() / 1000.0 - current.timestamp;
+      this.state.current === 'None' || current.timestamp === undefined ? 0 : now.getTime() / 1000.0 - current.timestamp;
 
     return (
       <Panel title="Script Queue">
@@ -299,6 +248,7 @@ export default class ScriptQueue extends Component {
                 {...current}
                 salIndex={current.index}
                 scriptState={current.script_state}
+                processState={current.process_state}
                 isStandard={current.type ? current.type === 'Standard' : undefined}
                 estimatedTime={current.expected_duration}
                 elapsedTime={currentScriptElapsedTime}
@@ -414,7 +364,9 @@ export default class ScriptQueue extends Component {
                     >
                       <WaitingScript
                         key={`${script.type}-${script.path}`}
-                        isCompact={this.state.isAvailableScriptListVisible || this.state.isFinishedScriptListListVisible}
+                        isCompact={
+                          this.state.isAvailableScriptListVisible || this.state.isFinishedScriptListListVisible
+                        }
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}

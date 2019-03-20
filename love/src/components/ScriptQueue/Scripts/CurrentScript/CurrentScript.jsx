@@ -6,6 +6,7 @@ import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
+import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -23,6 +24,8 @@ export default class CurrentScript extends Component {
     isCompact: PropTypes.bool,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
     scriptState: PropTypes.string,
+    /** SAL property: State of the process; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
+    processState: PropTypes.string,
     /** Timestamp of script creation */
     timestamp: PropTypes.number,
   };
@@ -33,6 +36,7 @@ export default class CurrentScript extends Component {
     path: 'None',
     timestamp: 0,
     scriptState: 'Unknown',
+    processState: 'Unknown',
     estimatedTime: 0,
     elapsedTime: 0,
   };
@@ -66,18 +70,16 @@ export default class CurrentScript extends Component {
       percentage = Math.min((100 * elapsedTime) / estimatedTime, 100);
       percentage = Math.trunc(percentage);
     }
-
-    let typeTag = '';
-    if (this.props.isStandard !== undefined) {
-      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
-    }
+    const isValid = this.props.path !== 'None';
+    const typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
+    const visibilityClass = !isValid ? styles.hidden : '';
 
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.currentScriptContainer} onClick={this.onClick}>
           <div className={styles.topContainer}>
             <div>
-              <div className={scriptStyles.externalContainer}>
+              <div className={[scriptStyles.externalContainer, visibilityClass].join(' ')}>
                 <span className={scriptStyles.externalText}>{typeTag}</span>
               </div>
               {this.props.salIndex !== undefined && (
@@ -92,8 +94,30 @@ export default class CurrentScript extends Component {
                 <span className={scriptStyles.pathText}>{fileExtension}</span>
               </div>
             </div>
-            <div className={scriptStyles.Scriptstatus}>
-              <ScriptStatus status={getStatusStyle(this.props.scriptState)}>{this.props.scriptState}</ScriptStatus>
+            <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
+              <div className={scriptStyles.heartBeatContainer}>
+                <HeartbeatIcon />
+              </div>
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
+                <ScriptStatus
+                  isCompact={this.props.isCompact}
+                  type="process"
+                  status={getStatusStyle(this.props.processState)}
+                >
+                  {this.props.processState}
+                </ScriptStatus>
+              </div>
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
+                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
+                  {this.props.scriptState}
+                </ScriptStatus>
+              </div>
             </div>
           </div>
           <div className={styles.loadingBarContainer}>
@@ -114,7 +138,7 @@ export default class CurrentScript extends Component {
             </div>
           </div>
         </div>
-        <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
+        <div className={[styles.expandedSectionWrapper, this.state.expanded && isValid ? '' : styles.hidden].join(' ')}>
           <div className={[styles.expandedSection].join(' ')}>
             <div className={scriptStyles.expandedTopRow}>
               <p>Script config</p>

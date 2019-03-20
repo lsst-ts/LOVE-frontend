@@ -4,7 +4,7 @@ import styles from './ScriptStatus.module.css';
 
 export default class ScriptStatus extends Component {
   static propTypes = {
-    type: PropTypes.oneOf[('process', 'script')],
+    type: PropTypes.oneOf(['process', 'script']),
     status: PropTypes.string,
     children: PropTypes.string,
     isCompact: PropTypes.bool,
@@ -28,9 +28,7 @@ export default class ScriptStatus extends Component {
     const child = this.props.isCompact ? this.props.children : this.props.children;
     return (
       <>
-        {
-          !this.props.isCompact && <span>{type} state</span> 
-        }
+        {!this.props.isCompact && <span>{type} state</span>}
         <span
           title={`${type} state: ${this.props.children}`}
           className={[styles.status, statusStyle, backgroundStyle].join(' ')}
