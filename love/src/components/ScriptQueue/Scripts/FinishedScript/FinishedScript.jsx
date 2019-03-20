@@ -53,7 +53,7 @@ export default class FinishedScript extends Component {
     const fileName =
       path.lastIndexOf('.') > -1
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
-        : path.substring(path.lastIndexOf('/'));
+        : path.substring(path.lastIndexOf('/') + 1);
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
