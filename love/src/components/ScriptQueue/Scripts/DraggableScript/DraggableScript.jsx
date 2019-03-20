@@ -47,6 +47,7 @@ export default class AvailableScript extends Component {
   };
 
   onDragOver = (e) => {
+    if (this.props.disabled) return;
     const rect = e.target.getBoundingClientRect();
     const dragBottom = e.clientY > rect.top + rect.height / 2;
     this.setState({
@@ -59,12 +60,14 @@ export default class AvailableScript extends Component {
   };
 
   onDragLeave = () => {
+    if (this.props.disabled) return;
     this.setState({
       dragOver: false,
     });
   };
 
   onDragEnd = (e) => {
+    if (this.props.disabled) return;
     this.setState({
       dragging: false,
     });
