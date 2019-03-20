@@ -13,6 +13,7 @@
   text-align: left;
   font-size: var(--font-size-small);
   bottom: 0.5em;
+  white-space: nowrap;
 }
 
 .estimatedTimeLabel {

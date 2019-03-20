@@ -414,7 +414,7 @@ export default class ScriptQueue extends Component {
                     >
                       <WaitingScript
                         key={`${script.type}-${script.path}`}
-                        isCompact={this.state.isAvailableScriptListVisible}
+                        isCompact={this.state.isAvailableScriptListVisible || this.state.isFinishedScriptListListVisible}
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
