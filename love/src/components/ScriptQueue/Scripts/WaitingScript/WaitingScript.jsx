@@ -66,7 +66,7 @@ export default class WaitingScript extends Component {
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.waitingScriptContainer} onClick={this.onClick}>
-          <div className={scriptStyles.scriptDetailsContainer}>
+          <div>
             <div className={scriptStyles.externalContainer}>
               <span className={scriptStyles.externalText}>{typeTag}</span>
             </div>
@@ -82,13 +82,16 @@ export default class WaitingScript extends Component {
               </span>
             </div>
           </div>
-          <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <span>Process state</span>
-            <ScriptStatus status={getStatusStyle(this.props.process_state)}>{this.props.process_state}</ScriptStatus>
-          </div>
-          <div className={scriptStyles.processStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <span>Script state</span>
-            <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
+          <div className={scriptStyles.scriptStatusContainer}>
+          {/* <div className={scriptStyles.heartBeatContainer}>AAA</div> */}
+            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <span>Process state</span>
+              <ScriptStatus status={getStatusStyle(this.props.process_state)}>{this.props.process_state}</ScriptStatus>
+            </div>
+            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <span>Script state</span>
+              <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
+            </div>
           </div>
         </div>
         <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>

@@ -1,10 +1,7 @@
 .scriptContainer {
   position: relative;
-  /* height: 3em; */
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
-  /* padding: 0.5em;
-  margin: 0.5em; */
   overflow: hidden;
   padding: 1px;
 }
@@ -40,14 +37,14 @@
   min-width: 5em;
   text-align: center;
   display: flex;
-  /* text-transform: uppercase; */
+  flex-direction: column;
   align-self: flex-start;
+  flex-grow: 1;
 }
 
 .scriptStatusContainer span {
   padding-top: 0.2em;
   margin-bottom: 0;
-  margin-right: 0.5em;
 }
 
 .expandedTopRow {
@@ -65,8 +62,6 @@
 .uploadButtonWrapper {
   width: 6em;
   padding: 0em 0em;
-  /* padding-bottom: 0.3em; */
-  /* padding-left: 0.5em; */
 }
 
 .uploadConfigButton {
@@ -85,21 +80,20 @@
 .scriptStateContainer {
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  /* width: 160px; */
-  flex-basis: 100%;
   align-items: center;
 }
 
 .processStateContainer {
   display: flex;
   justify-content: flex-end;
-  flex-direction: column;
-  /* width: 160px; */
-  flex-basis: 100%;
   align-items: center;
 }
 
-.scriptDetailsContainer{ 
-  flex-basis: 100%;  
+.scriptDetailsContainer {
+  flex-grow: 1;
+}
+
+.heartBeatContainer {
+  align-self: flex-end;
+  padding: 0 0.5em;
 }
