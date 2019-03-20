@@ -4,8 +4,15 @@ import styles from './ScriptStatus.module.css';
 
 export default class ScriptStatus extends Component {
   static propTypes = {
+    type: PropTypes.oneOf[('process', 'script')],
     status: PropTypes.string,
     children: PropTypes.string,
+    isCompact: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    type: 'script',
+    isCompact: true,
   };
 
   render() {
@@ -16,11 +23,21 @@ export default class ScriptStatus extends Component {
     if (status === 'warning') statusStyle = styles.warning;
     if (status === 'alert') statusStyle = styles.alert;
     if (status === 'invalid') statusStyle = styles.invalid;
-
+    const backgroundStyle = this.props.type === 'process' ? styles.noBackground : '';
+    const type = this.props.type === 'process' ? 'Process' : 'Script';
+    const child = this.props.isCompact ? this.props.children : this.props.children;
     return (
-      <span title={`Script status: ${this.props.children}`} className={[styles.status, statusStyle].join(' ')}>
-        {this.props.children}
-      </span>
+      <>
+        {
+          !this.props.isCompact && <span>{type} state</span> 
+        }
+        <span
+          title={`${type} state: ${this.props.children}`}
+          className={[styles.status, statusStyle, backgroundStyle].join(' ')}
+        >
+          {child}
+        </span>
+      </>
     );
   }
 }

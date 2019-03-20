@@ -71,7 +71,7 @@ export default class WaitingScript extends Component {
             <div className={scriptStyles.externalContainer}>
               <span className={scriptStyles.externalText}>{typeTag}</span>
             </div>
-            <div className={scriptStyles.pathTextContainer}>
+            <div className={scriptStyles.pathTextContainer} title={path}>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
               <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
@@ -86,12 +86,10 @@ export default class WaitingScript extends Component {
           <div className={scriptStyles.scriptStatusContainer}>
           <div className={scriptStyles.heartBeatContainer}><HeartbeatIcon></HeartbeatIcon></div>
             <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <span>Process state</span>
-              <ScriptStatus status={getStatusStyle(this.props.process_state)}>{this.props.process_state}</ScriptStatus>
+              <ScriptStatus isCompact={this.props.isCompact} type='process' status={getStatusStyle(this.props.process_state)}>{this.props.process_state}</ScriptStatus>
             </div>
             <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <span>Script state</span>
-              <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
+              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
             </div>
           </div>
         </div>
