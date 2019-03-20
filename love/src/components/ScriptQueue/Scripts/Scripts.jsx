@@ -3,6 +3,7 @@ export const getStatusStyle = (status) => {
   if (!status) return '';
   if (status.toLowerCase() === 'done') return 'ok';
   if (status.toLowerCase() === 'running') return 'running';
+  if (status.toLowerCase() === 'loading') return 'running';
   if (status.toLowerCase() === 'configured') return 'ok';
   if (status.toLowerCase() === 'unconfigured') return 'warning';
   if (status.toLowerCase() === 'paused') return 'warning';
@@ -12,5 +13,6 @@ export const getStatusStyle = (status) => {
   if (status.toLowerCase() === 'terminated') return 'alert';
   if (status.toLowerCase() === 'failed') return 'alert';
   if (status.toLowerCase() === 'failing') return 'alert';
+  if (status.toLowerCase() === 'configurefailed') return 'alert';
   return '';
 };

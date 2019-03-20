@@ -39,8 +39,15 @@
 .scriptStatusContainer {
   min-width: 5em;
   text-align: center;
-  text-transform: uppercase;
+  display: flex;
+  /* text-transform: uppercase; */
   align-self: flex-start;
+}
+
+.scriptStatusContainer span {
+  padding-top: 0.2em;
+  margin-bottom: 0;
+  margin-right: 0.5em;
 }
 
 .expandedTopRow {
@@ -73,4 +80,26 @@
 
 .uploadIcon {
   fill: var(--base-font-color);
+}
+
+.scriptStateContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /* width: 160px; */
+  flex-basis: 100%;
+  align-items: center;
+}
+
+.processStateContainer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: column;
+  /* width: 160px; */
+  flex-basis: 100%;
+  align-items: center;
+}
+
+.scriptDetailsContainer{ 
+  flex-basis: 100%;  
 }
