@@ -15,8 +15,10 @@ export default class LoadingBar extends Component {
   render() {
     return (
       <div className={styles.backgroundBar}>
-        <div style={{ width: (`${this.props.percentage}%`) }} className={styles.loadedBar}>
-          {(`${this.props.percentage}%`)}
+          <span className={[styles.percentage, this.props.percentage > 50 ? styles.dark : ''].join(' ')}>
+            {`${this.props.percentage}%`}
+          </span>
+        <div style={{ width: `${this.props.percentage}%` }} className={styles.loadedBar}>
         </div>
       </div>
     );
