@@ -1,0 +1,12 @@
+.heartbeatIcon {
+  display: inline-block;
+  fill: var(--status-disabled-color);
+}
+
+.okStatus {
+  fill: var(--status-ok-color);
+}
+
+.alertStatus {
+  fill: var(--status-alert-color);
+}
