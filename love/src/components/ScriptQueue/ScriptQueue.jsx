@@ -75,6 +75,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragStart = (e, draggingId, draggingSource) => {
+    if (!hasCommandPrivileges) return;
     // console.log('onDragStart', this.state);
     const draggingScriptInstance = this.getScriptFromId(draggingId, draggingSource);
     this.setState({
@@ -85,6 +86,7 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragEnd = (e, draggingId, draggingSource) => {
+    if (!hasCommandPrivileges) return;
     // console.log('END', e, draggingId, draggingSource, this.state.draggingScriptInstance);
     if (draggingSource === 'available') {
       const list = [...this.state.waitingScriptList];
@@ -108,7 +110,6 @@ export default class ScriptQueue extends Component {
         draggingScriptInstance: undefined,
       });
     }
-    return null;
   };
 
   removeFromWaitingList = (sourceScriptId) => {
@@ -127,6 +128,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragEnter = () => {
+    if (!hasCommandPrivileges) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
@@ -147,6 +149,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragLeave = () => {
+    if (!hasCommandPrivileges) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (this.state.draggingSource === 'available' || this.state.draggingSource === '') {
       this.removeFromWaitingList(sourceScriptId);
@@ -155,6 +158,7 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
+    if (!hasCommandPrivileges) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
@@ -351,7 +355,7 @@ export default class ScriptQueue extends Component {
 
                   return (
                     <DraggableScript
-                      key={`dragging-${script.index}`}
+                      key={`dragging-${script.type}-${script.path}`}
                       {...script}
                       onDragOver={(e, id) => this.onDragOver(e, id, 'waiting')}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
@@ -360,7 +364,7 @@ export default class ScriptQueue extends Component {
                       disabled={!hasCommandPrivileges}
                     >
                       <WaitingScript
-                        key={script.index}
+                        key={`${script.type}-${script.path}`}
                         isCompact={this.state.isAvailableScriptListVisible}
                         path={script.path}
                         isStandard={isStandard}
@@ -408,19 +412,19 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.finishedScriptList.map((script, id) => {
+                    {this.state.finishedScriptList.map((script) => {
                       const isStandard =
                         script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
 
                       return (
                         <DraggableScript
-                          key={`dragging-${script.index}`}
+                          key={`dragging-${script.type}-${script.path}`}
                           dragSourceList="available"
                           onDragOver={(e) => this.onDragLeave(e)}
                           disabled
                         >
                           <FinishedScript
-                            key={id}
+                            key={`${script.type}-${script.path}`}
                             {...script}
                             path={script.path}
                             isStandard={isStandard}
