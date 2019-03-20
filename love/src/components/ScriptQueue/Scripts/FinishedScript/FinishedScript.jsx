@@ -20,6 +20,8 @@ export default class FinishedScript extends Component {
     elapsedTime: PropTypes.number,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
     script_state: PropTypes.string,
+    /** SAL property: State of the process; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
+    process_state: PropTypes.string,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
   };
@@ -69,9 +71,22 @@ export default class FinishedScript extends Component {
                 {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
               </div>
             </div>
-            <div className={scriptStyles.ScriptStatusContainer}>
-              <ScriptStatus status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
+            <div className={scriptStyles.scriptStatusContainer}>
+            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ScriptStatus
+                isCompact={this.props.isCompact}
+                type="process"
+                status={getStatusStyle(this.props.process_state)}
+              >
+                {this.props.process_state}
+              </ScriptStatus>
             </div>
+            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                {this.props.script_state}
+              </ScriptStatus>
+            </div>
+          </div>
           </div>
           <div className={styles.timeContainer}>
             <div className={styles.estimatedTimeContainer}>

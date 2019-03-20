@@ -431,7 +431,7 @@ export default class ScriptQueue extends Component {
                             isStandard={isStandard}
                             estimatedTime={script.expected_duration}
                             elapsedTime={script.elapsed_time}
-                            isCompact={this.state.isAvailableScriptListVisible}
+                            isCompact={true}
                           />
                         </DraggableScript>
                       );
