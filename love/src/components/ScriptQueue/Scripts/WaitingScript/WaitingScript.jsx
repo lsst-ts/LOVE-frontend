@@ -24,6 +24,8 @@ export default class WaitingScript extends Component {
     isCompact: PropTypes.bool,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
     script_state: PropTypes.string,
+    /** SAL property: State of the process; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
+    process_state: PropTypes.string,
     /** Timestamp of script creation */
     timestamp: PropTypes.number,
   };
@@ -34,6 +36,7 @@ export default class WaitingScript extends Component {
     path: 'auxtel/at_calsys_takedata.py',
     estimatedTime: 0,
     script_state: 'Unknown',
+    process_state: 'Unknown',
     isCompact: false,
   };
 
@@ -84,12 +87,22 @@ export default class WaitingScript extends Component {
             </div>
           </div>
           <div className={scriptStyles.scriptStatusContainer}>
-          <div className={scriptStyles.heartBeatContainer}><HeartbeatIcon></HeartbeatIcon></div>
-            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus isCompact={this.props.isCompact} type='process' status={getStatusStyle(this.props.process_state)}>{this.props.process_state}</ScriptStatus>
+            <div className={scriptStyles.heartBeatContainer}>
+              <HeartbeatIcon />
             </div>
             <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>{this.props.script_state}</ScriptStatus>
+              <ScriptStatus
+                isCompact={this.props.isCompact}
+                type="process"
+                status={getStatusStyle(this.props.process_state)}
+              >
+                {this.props.process_state}
+              </ScriptStatus>
+            </div>
+            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                {this.props.script_state}
+              </ScriptStatus>
             </div>
           </div>
         </div>

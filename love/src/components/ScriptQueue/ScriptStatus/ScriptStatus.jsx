@@ -12,7 +12,7 @@ export default class ScriptStatus extends Component {
 
   static defaultProps = {
     type: 'script',
-    isCompact: true,
+    isCompact: false,
   };
 
   render() {
