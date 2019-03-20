@@ -8,6 +8,7 @@ import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import Button from '../../../Button/Button';
 import { hasCommandPrivileges } from '../../../../Utils';
+import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 
 export default class WaitingScript extends Component {
   static propTypes = {
@@ -83,7 +84,7 @@ export default class WaitingScript extends Component {
             </div>
           </div>
           <div className={scriptStyles.scriptStatusContainer}>
-          {/* <div className={scriptStyles.heartBeatContainer}>AAA</div> */}
+          <div className={scriptStyles.heartBeatContainer}><HeartbeatIcon></HeartbeatIcon></div>
             <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <span>Process state</span>
               <ScriptStatus status={getStatusStyle(this.props.process_state)}>{this.props.process_state}</ScriptStatus>
