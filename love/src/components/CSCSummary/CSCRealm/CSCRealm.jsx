@@ -37,7 +37,7 @@ export default class CSCRealm extends Component {
   render() {
     return (
       <div className={styles.CSCRealmContainer}>
-        <div>{this.props.name}</div>
+        <div className={styles.CSCRealmTitle}>{this.props.name}</div>
         {Object.keys(this.props.groups).map((group) => {
           return (
             <div key={group} className={styles.CSCGroupContainer}>

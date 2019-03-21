@@ -9,7 +9,7 @@ export default class CSCSummary extends Component {
     super(props);
     this.state = {
       hierarchy: {
-        'Aux Tel': {
+        'Aux Telescope': {
           'CSC Group 1': [
             'ScriptQueue',
             'Scheduler1',
@@ -53,7 +53,7 @@ export default class CSCSummary extends Component {
             'Scheduler',
           ],
         },
-        'Main Tel': {
+        'Main Telescope': {
           'CSC Group 1': ['CSC4'],
           'CSC Group 2': [],
         },
