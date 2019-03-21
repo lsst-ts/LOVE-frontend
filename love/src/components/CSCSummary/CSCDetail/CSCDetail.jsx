@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCDetail.module.css';
+import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 
 export default class CSCDetail extends Component {
   static propTypes = {
@@ -55,7 +56,6 @@ export default class CSCDetail extends Component {
   render() {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = selfData ? selfData.summaryState : 0;
-    // const summaryStateValue = Math.random();
     const summaryState = CSCDetail.states[summaryStateValue];
     return (
       <div className={styles.CSCDetailContainer}>
@@ -63,11 +63,13 @@ export default class CSCDetail extends Component {
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
-          <span className={styles.summaryState} title={summaryState.userReadable}>
-            ?
-          </span>
         </div>
-        <div className={styles.rightSection}>{this.props.name}</div>
+        <div className={styles.middleSection}>{this.props.name}</div>
+        <div className={styles.rightSection}>
+          <div className={styles.heartbeatIconWrapper}>
+            <HeartbeatIcon status='alert'/>
+          </div>
+        </div>
       </div>
     );
   }

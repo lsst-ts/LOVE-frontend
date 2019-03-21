@@ -21,8 +21,17 @@
   border-bottom-left-radius: 4px;
 }
 
-.rightSection {
+.middleSection {
   padding: 0.35em 0.5em;
+  align-self:stretch;
+  display:flex;
+  align-items:center;
+  border-radius: 4px;
+  flex-grow: 1;
+}
+
+.rightSection {
+  padding-right: 0.3em;
   align-self:stretch;
   display:flex;
   align-items:center;
@@ -32,6 +41,14 @@
 .summaryState {
   padding: 0 0.5em;
   user-select: none;
+}
+
+.heartbeatIconWrapper {
+  width: 1.6em;
+}
+
+.heartbeatIconWrapper > svg{
+  vertical-align: top;
 }
 
 .alert {
