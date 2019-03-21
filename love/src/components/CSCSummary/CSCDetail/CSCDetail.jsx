@@ -6,12 +6,18 @@ import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 export default class CSCDetail extends Component {
   static propTypes = {
     name: PropTypes.string,
+    group: PropTypes.string,
+    realm: PropTypes.string,
     data: PropTypes.object,
+    onCSCClick: PropTypes.func,
   };
 
   static defaultProps = {
     name: '',
+    group: '',
+    realm: '',
     data: {},
+    onCSCClick: () => 0,
   };
 
   static states = {
@@ -57,8 +63,12 @@ export default class CSCDetail extends Component {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = selfData ? selfData.summaryState : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
+    const { props } = this;
     return (
-      <div className={styles.CSCDetailContainer}>
+      <div
+        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
+        className={styles.CSCDetailContainer}
+      >
         <div className={[styles.leftSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
@@ -67,7 +77,7 @@ export default class CSCDetail extends Component {
         <div className={styles.middleSection}>{this.props.name}</div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
-            <HeartbeatIcon status='alert'/>
+            <HeartbeatIcon status="alert" />
           </div>
         </div>
       </div>

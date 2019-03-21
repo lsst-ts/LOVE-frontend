@@ -16,41 +16,41 @@ export default class CSCSummary extends Component {
             'ScriptQueue1',
             'Scheduler2',
             'ScriptQueue2',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
+            'Scheduler3',
+            'ScriptQueue3',
+            'Scheduler4',
+            'ScriptQueue4',
+            'Scheduler5',
+            'ScriptQueue5',
+            'Scheduler6',
+            'ScriptQueue6',
+            'Scheduler7',
+            'ScriptQueue7',
+            'Scheduler8',
+            'ScriptQueue8',
+            'Scheduler9',
+            'ScriptQueue9',
+            'Scheduler10',
+            'ScriptQueue10',
+            'Scheduler11',
+            'ScriptQueue11',
+            'Scheduler12',
+            'ScriptQueue12',
+            'Scheduler13',
+            'ScriptQueue13',
+            'Scheduler14',
+            'ScriptQueue14',
+            'Scheduler15',
+            'ScriptQueue15',
+            'Scheduler16',
+            'ScriptQueue16',
+            'Scheduler17',
+            'ScriptQueue17',
+            'Scheduler18',
+            'ScriptQueue18',
+            'Scheduler19',
+            'ScriptQueue19',
+            'Scheduler20',
           ],
         },
         'Main Telescope': {
@@ -129,9 +129,14 @@ export default class CSCSummary extends Component {
     });
   };
 
-  componentDidUnmount() {
+  componentWillUnmount() {
     this.unsubscribeToCSCs();
   }
+
+  onCSCClick = (realm, group, csc) => {
+    // eslint-disable-next-line
+    console.log(realm, group, csc);
+  };
 
   render() {
     return (
@@ -140,7 +145,12 @@ export default class CSCSummary extends Component {
           {Object.keys(this.state.hierarchy).map((realm) => {
             return (
               <div key={realm} className={styles.CSCRealmContainer}>
-                <CSCRealm name={realm} data={this.state.data} groups={this.state.hierarchy[realm]} />
+                <CSCRealm
+                  name={realm}
+                  data={this.state.data}
+                  groups={this.state.hierarchy[realm]}
+                  onCSCClick={this.onCSCClick}
+                />
               </div>
             );
           })}
