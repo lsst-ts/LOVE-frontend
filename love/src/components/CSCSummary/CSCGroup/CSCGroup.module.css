@@ -1,4 +1,4 @@
-.CSCGroupContainer{
+.CSCGroupContainer {
   display: flex;
   flex-grow: 1;
   flex-direction: column;
@@ -6,14 +6,19 @@
   background: var(--second-secondary-background-color);
 }
 
-.CSCDetailsContainer{
+.CSCDetailsContainer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 
-.CSCDetailContainer{
+.CSCDetailContainer {
   display: flex;
   padding: 0.4em 0.5em;
+}
+
+.CSCGroupTitle {
+  color: var(--base-font-color);
+  padding-bottom: 0.5em;
 }

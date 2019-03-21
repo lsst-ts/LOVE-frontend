@@ -6,14 +6,18 @@ import CSCDetail from '../CSCDetail/CSCDetail';
 export default class CSCGroup extends Component {
   static propTypes = {
     name: PropTypes.string,
+    realm: PropTypes.string,
     cscs: PropTypes.array,
     data: PropTypes.object,
+    onCSCClick: PropTypes.func,
   };
 
   static defaultProps = {
     name: '',
+    realm: '',
     cscs: [],
     data: {},
+    onCSCClick: () => 0,
   };
 
   constructor(props) {
@@ -37,12 +41,18 @@ export default class CSCGroup extends Component {
   render() {
     return (
       <div className={styles.CSCGroupContainer}>
-        <div>{this.props.name}</div>
+        <div className={styles.CSCGroupTitle}>{this.props.name}</div>
         <div className={styles.CSCDetailsContainer}>
           {this.props.cscs.map((csc) => {
             return (
               <div key={csc} className={styles.CSCDetailContainer}>
-                <CSCDetail name={csc} data={this.props.data}/>
+                <CSCDetail
+                  realm={this.props.realm}
+                  group={this.props.name}
+                  name={csc}
+                  data={this.props.data}
+                  onCSCClick={this.props.onCSCClick}
+                />
               </div>
             );
           })}
