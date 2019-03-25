@@ -9,6 +9,7 @@ export default class CSCRealm extends Component {
     groups: PropTypes.object,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
+    selectedCSCs: PropTypes.array,
   };
 
   static defaultProps = {
@@ -16,6 +17,7 @@ export default class CSCRealm extends Component {
     groups: {},
     data: {},
     onCSCClick: () => 0,
+    selectedCSCs: [],
   };
 
   constructor(props) {
@@ -49,6 +51,7 @@ export default class CSCRealm extends Component {
                 data={this.props.data}
                 cscs={this.props.groups[group]}
                 onCSCClick={this.props.onCSCClick}
+                selectedCSCs={this.props.selectedCSCs}
               />
             </div>
           );

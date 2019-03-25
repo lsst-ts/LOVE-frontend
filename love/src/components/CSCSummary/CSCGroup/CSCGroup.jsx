@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCGroup.module.css';
 import CSCDetail from '../CSCDetail/CSCDetail';
+import CSCExpanded from '../CSCExpanded/CSCExpanded';
 
 export default class CSCGroup extends Component {
   static propTypes = {
@@ -10,6 +11,7 @@ export default class CSCGroup extends Component {
     cscs: PropTypes.array,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
+    selectedCSCs: PropTypes.array,
   };
 
   static defaultProps = {
@@ -18,6 +20,7 @@ export default class CSCGroup extends Component {
     cscs: [],
     data: {},
     onCSCClick: () => 0,
+    selectedCSCs: [],
   };
 
   constructor(props) {
@@ -39,7 +42,16 @@ export default class CSCGroup extends Component {
   }
 
   render() {
-    return (
+    let selectedCSC = this.props.selectedCSCs.filter((data) => {
+      return data.realm === this.props.realm && data.group === this.props.name;
+    })
+    const expanded = selectedCSC.length > 0;
+    selectedCSC = selectedCSC[0];
+    return expanded ? (
+      <div className={styles.CSCGroupContainer}>
+        <CSCExpanded realm={selectedCSC.realm} group={selectedCSC.group} name={selectedCSC.csc} data={this.props.data} />
+      </div>
+    ) : (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCGroupTitle}>{this.props.name}</div>
         <div className={styles.CSCDetailsContainer}>
