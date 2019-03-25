@@ -66,7 +66,6 @@ export default class CSCExpanded extends Component {
     const summaryStateValue = selfData ? selfData.summaryState : 0;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
-    console.log(props, summaryState);
     return (
       <div className={styles.CSCExpandedContainer}>
         <div className={styles.topBarContainerWrapper}>
@@ -77,7 +76,7 @@ export default class CSCExpanded extends Component {
                 <BackArrowIcon />
               </div>
               <span className={styles.breadcrumbGroup}>{props.group} </span>
-              <span>> </span>
+              <span>&#62; </span>
               <span>{props.name} </span>
             </div>
             <div className={[styles.stateContainer].join(' ')}>
@@ -104,13 +103,9 @@ export default class CSCExpanded extends Component {
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
               {selfData.logMessage.map((msg) => {
                 let icon = '';
-                if(msg.level === 20)
-                  icon = <InfoIcon></InfoIcon>;
-                if(msg.level === 30)
-                  icon = <WarningIcon></WarningIcon>;
-                if(msg.level === 40)
-                  icon = <ErrorIcon></ErrorIcon>;
-                  console.log(msg.level, icon)
+                if (msg.level === 20) icon = <InfoIcon />;
+                if (msg.level === 30) icon = <WarningIcon />;
+                if (msg.level === 40) icon = <ErrorIcon />;
                 return (
                   <div key={msg.message} className={styles.logMessage}>
                     <div className={styles.messageIcon}>{icon}</div>
