@@ -74,9 +74,36 @@ export default class CSCSummary extends Component {
           summaryState: 2,
           detailedState: {},
         },
-        Scheduler1: {
-          summaryState: 4,
+        Scheduler13: {
+          summaryState: 3,
           detailedState: {},
+          errorCode: {},
+          logMessage: [
+            { level: 10, message: 'debug message', traceback: 'traceback1' },
+            { level: 20, message: 'info message', traceback: 'traceback1' },
+            { level: 30, message: 'warning message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            { level: 40, message: 'error message', traceback: 'traceback1' },
+            {
+              level: 40,
+              message:
+                'long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long error message',
+              traceback: 'traceback1',
+            },
+          ],
         },
         Scheduler2: {
           summaryState: 5,
@@ -91,6 +118,7 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
+      selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'Scheduler13' }],
     };
     this.managerInterface = new ManagerInterface();
   }
@@ -150,6 +178,7 @@ export default class CSCSummary extends Component {
                   data={this.state.data}
                   groups={this.state.hierarchy[realm]}
                   onCSCClick={this.onCSCClick}
+                  selectedCSCs={this.state.selectedCSCs}
                 />
               </div>
             );
