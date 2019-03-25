@@ -100,7 +100,12 @@ export default class CSCSummary extends Component {
             {
               level: 40,
               message:
-                'long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long long error message',
+                `long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long error message`,
               traceback: 'traceback1',
             },
           ],

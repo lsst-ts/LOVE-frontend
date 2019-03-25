@@ -44,12 +44,17 @@ export default class CSCGroup extends Component {
   render() {
     let selectedCSC = this.props.selectedCSCs.filter((data) => {
       return data.realm === this.props.realm && data.group === this.props.name;
-    })
+    });
     const expanded = selectedCSC.length > 0;
-    selectedCSC = selectedCSC[0];
+    [selectedCSC] = selectedCSC;
     return expanded ? (
       <div className={styles.CSCGroupContainer}>
-        <CSCExpanded realm={selectedCSC.realm} group={selectedCSC.group} name={selectedCSC.csc} data={this.props.data} />
+        <CSCExpanded
+          realm={selectedCSC.realm}
+          group={selectedCSC.group}
+          name={selectedCSC.csc}
+          data={this.props.data}
+        />
       </div>
     ) : (
       <div className={styles.CSCGroupContainer}>
