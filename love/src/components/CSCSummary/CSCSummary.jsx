@@ -77,26 +77,74 @@ export default class CSCSummary extends Component {
         Scheduler13: {
           summaryState: 3,
           detailedState: {},
-          errorCode: {},
+          errorCode: [
+            {
+              errorCode: 1,
+              errorReport: 'debug errorReport debug errorReport debug errorReport ',
+              traceback: '',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              errorCode: 2,
+              errorReport:
+                'errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport ',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              errorCode: 3,
+              errorReport:
+                'errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport ',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              errorCode: 4,
+              errorReport: 'errorReport errorReport errorReport ',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              errorCode: 4,
+              errorReport:
+                'errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport ',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              errorCode: 4,
+              errorReport: 'errorReport errorReport errorReport errorReport errorReport errorReport ',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            { errorCode: 4, errorReport: 'errorReport', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { errorCode: 4, errorReport: 'errorReport', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { errorCode: 4, errorReport: 'errorReport', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+          ],
           logMessage: [
-            { level: 10, message: 'debug message', traceback: 'traceback1' },
-            { level: 20, message: 'info message', traceback: 'traceback1' },
-            { level: 30, message: 'warning message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
-            { level: 40, message: 'error message', traceback: 'traceback1' },
+            {
+              level: 10,
+              message: 'debug message debug message debug message ',
+              traceback: '',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            { level: 20, message: 'info message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 30, message: 'warning message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
             {
               level: 40,
               message: `long long long long long long long long long long long long long 
@@ -106,6 +154,7 @@ export default class CSCSummary extends Component {
                 long long long long long long long long long long long long long 
                 long long long error message`,
               traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
             },
           ],
         },
@@ -122,7 +171,7 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
-      selectedCSCs: [],
+      selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'Scheduler13' }],
     };
     this.managerInterface = new ManagerInterface();
   }

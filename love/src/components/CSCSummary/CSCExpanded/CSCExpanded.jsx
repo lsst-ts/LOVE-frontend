@@ -96,16 +96,29 @@ export default class CSCExpanded extends Component {
                 </span>
               </div>
               <div className={styles.heartbeatIconWrapper}>
-                <HeartbeatIcon status="alert" />
+                <HeartbeatIcon title={`${this.props.name} heartbeat`} status="alert" />
               </div>
             </div>
           </div>
         </div>
         <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
-          <details>
-            <summary>ERROR CODE</summary>
-            <div className={[styles.log, styles.errorCodeContent].join(' ')}>ERROR CODE</div>
-          </details>
+          <div>ERROR CODE</div>
+          <div className={[styles.log, styles.messageLogContent].join(' ')}>
+            {selfData && selfData.errorCode
+              ? selfData.errorCode.map((msg) => {
+                  return (
+                    <div key={msg.errorReport} className={styles.logMessage}>
+                      <div className={styles.errorCode}>1</div>
+                      <div className={styles.messageTextContainer}>
+                        <div className={styles.timestamp}>{msg.timestamp}</div>
+                        <div className={styles.errorReport}>{msg.errorReport}</div>
+                        <div className={styles.errrorTraceback}>{msg.traceback}</div>
+                      </div>
+                    </div>
+                  );
+                })
+              : null}
+          </div>
         </div>
         <div className={[styles.logContainer, styles.messageLogContainer].join(' ')}>
           <details open>
@@ -113,20 +126,21 @@ export default class CSCExpanded extends Component {
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
               {selfData && selfData.logMessage
                 ? selfData.logMessage.map((msg) => {
-                  let icon = '';
-                  if (msg.level === 20) icon = <InfoIcon />;
-                  if (msg.level === 30) icon = <WarningIcon />;
-                  if (msg.level === 40) icon = <ErrorIcon />;
-                  return (
-                    <div key={msg.message} className={styles.logMessage}>
-                      <div className={styles.messageIcon}>{icon}</div>
-                      <div>
-                        <div className={styles.messageText}>{msg.message}</div>
-                        <div className={styles.messageTraceback}>{msg.traceback}</div>
+                    let icon = '';
+                    if (msg.level === 20) icon = <InfoIcon />;
+                    if (msg.level === 30) icon = <WarningIcon />;
+                    if (msg.level === 40) icon = <ErrorIcon />;
+                    return (
+                      <div key={msg.message} className={styles.logMessage}>
+                        <div className={styles.messageIcon}>{icon}</div>
+                        <div className={styles.messageTextContainer}>
+                          <div className={styles.timestamp}>{msg.timestamp}</div>
+                          <div className={styles.messageText}>{msg.message}</div>
+                          <div className={styles.messageTraceback}>{msg.traceback}</div>
+                        </div>
                       </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
                 : null}
             </div>
           </details>

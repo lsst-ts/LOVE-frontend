@@ -7,6 +7,8 @@
   /* font-size: var(--font-size-small); */
   border-radius: 4px;
   text-align: left;
+  max-height: 80vh;
+
 }
 
 .topBarContainerWrapper {
@@ -66,13 +68,12 @@
 .logContainer {
   width: calc(100% - 2em);
   padding: 1em;
+  overflow-y: scroll;
 }
 
 .log {
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
-  max-height: 50vh;
-  overflow-y: scroll;
 }
 
 .logMessage {
@@ -85,10 +86,40 @@
   border-bottom: none;
 }
 
+.timestamp {
+  align-self: flex-end;
+  padding: 0.5em 0;
+  color: var(--secondary-font-color)
+}
+
+.messageTextContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1em;
+  padding-bottom: 0.5em;
+}
+
 .messageIcon {
   width: 1em;
   min-width: 1em;
   padding: 0.5em;
+}
+
+.errorCode {
+  font-weight: bold;
+  width: 1em;
+  min-width: 1em;
+  padding: 0.5em;
+  font-size: var(--font-size-large);
+}
+
+.errorReport {
+
+}
+
+.errorTraceback {
+
 }
 
 .alert {
