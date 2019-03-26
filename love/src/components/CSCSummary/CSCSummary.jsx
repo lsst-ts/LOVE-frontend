@@ -79,48 +79,68 @@ export default class CSCSummary extends Component {
           detailedState: {},
           errorCode: [
             {
-              errorCode: 1,
-              errorReport: 'debug errorReport debug errorReport debug errorReport ',
+              errorCode: 4,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+          ],
+          logMessage: [
+            {
+              level: 40,
+              message: `long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long long long long long long long long long long long 
+                long long long error message`,
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 10,
+              message: 'debug message debug message debug message ',
               traceback: '',
               timestamp: '2022/04/25 20:03:10',
             },
             {
-              errorCode: 2,
-              errorReport:
-                'errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport ',
+              level: 20,
+              message: `info message info message info message info message info message 
+                info message info message info message info message info message info message 
+                info message info message info message info message info message info message 
+                info message info message info message`,
               traceback: 'traceback1',
               timestamp: '2022/04/25 20:03:10',
             },
             {
-              errorCode: 3,
-              errorReport:
-                'errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport ',
+              level: 30,
+              message: 'warning message',
               traceback: 'traceback1',
               timestamp: '2022/04/25 20:03:10',
             },
             {
-              errorCode: 4,
-              errorReport: 'errorReport errorReport errorReport ',
+              level: 40,
+              message: 'error message',
               traceback: 'traceback1',
               timestamp: '2022/04/25 20:03:10',
             },
             {
-              errorCode: 4,
-              errorReport:
-                'errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport errorReport ',
+              level: 40,
+              message: 'error message',
               traceback: 'traceback1',
               timestamp: '2022/04/25 20:03:10',
             },
             {
-              errorCode: 4,
-              errorReport: 'errorReport errorReport errorReport errorReport errorReport errorReport ',
+              level: 40,
+              message: 'error message',
               traceback: 'traceback1',
               timestamp: '2022/04/25 20:03:10',
             },
-            { errorCode: 4, errorReport: 'errorReport', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { errorCode: 4, errorReport: 'errorReport', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { errorCode: 4, errorReport: 'errorReport', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
           ],
+        },
+        Scheduler14: {
+          summaryState: 2,
+          detailedState: {},
           logMessage: [
             {
               level: 10,
@@ -128,23 +148,108 @@ export default class CSCSummary extends Component {
               traceback: '',
               timestamp: '2022/04/25 20:03:10',
             },
-            { level: 20, message: 'info message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 30, message: 'warning message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
-            { level: 40, message: 'error message', traceback: 'traceback1', timestamp: '2022/04/25 20:03:10' },
+            {
+              level: 20,
+              message: 'info message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 30,
+              message: 'warning message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
+            {
+              level: 40,
+              message: 'error message',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:10',
+            },
             {
               level: 40,
               message: `long long long long long long long long long long long long long 
