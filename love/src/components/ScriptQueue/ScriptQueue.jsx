@@ -300,9 +300,10 @@ export default class ScriptQueue extends Component {
                   <ScriptList>
                     {this.state.availableScriptList.map((script) => {
                       if (!script) return null;
+                      (`dragging-${script.type}-${script.path}`)
                       return (
                         <DraggableScript
-                          key={`dragging-${script.type}-${script.path}`}
+                          key={`dragging-available-${script.type}-${script.path}`}
                           {...script}
                           dragSourceList="available"
                           onDragOver={(e) => this.onDragLeave(e)}
@@ -354,7 +355,7 @@ export default class ScriptQueue extends Component {
 
                   return (
                     <DraggableScript
-                      key={`dragging-${script.type}-${script.path}`}
+                      key={`dragging-waiting-${script.type}-${script.path}`}
                       {...script}
                       onDragOver={(e, id) => this.onDragOver(e, id, 'waiting')}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
@@ -419,7 +420,7 @@ export default class ScriptQueue extends Component {
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
                       return (
                         <DraggableScript
-                          key={`dragging-${script.type}-${script.path}`}
+                          key={`dragging-finished-${script.type}-${script.path}-${script.index}`}
                           dragSourceList="available"
                           onDragOver={(e) => this.onDragLeave(e)}
                           disabled
