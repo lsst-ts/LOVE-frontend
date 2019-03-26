@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 export default class WarningIcon extends Component {
   static defaultProps = {
     style: '',
+    title: '',
   };
 
   render() {
@@ -15,6 +16,7 @@ export default class WarningIcon extends Component {
         y="0px"
         viewBox="0 0 497.472 497.472"
       >
+        <title>{this.props.title}</title>
         <g transform="matrix(1.25 0 0 -1.25 0 45)">
           <g>
             <g>
