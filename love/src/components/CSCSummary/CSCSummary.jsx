@@ -63,11 +63,11 @@ export default class CSCSummary extends Component {
       },
       data: {
         ScriptQueue: {
-          summaryState: 3,
+          summaryState: 2,
           detailedState: {},
         },
         ScriptQueue1: {
-          summaryState: 1,
+          summaryState: 2,
           detailedState: {},
         },
         ScriptQueue2: {
@@ -99,8 +99,7 @@ export default class CSCSummary extends Component {
             { level: 40, message: 'error message', traceback: 'traceback1' },
             {
               level: 40,
-              message:
-                `long long long long long long long long long long long long long 
+              message: `long long long long long long long long long long long long long 
                 long long long long long long long long long long long long long 
                 long long long long long long long long long long long long long 
                 long long long long long long long long long long long long long 
@@ -111,11 +110,11 @@ export default class CSCSummary extends Component {
           ],
         },
         Scheduler2: {
-          summaryState: 5,
+          summaryState: 2,
           detailedState: {},
         },
         CSC2: {
-          summaryState: 0,
+          summaryState: 3,
           detailedState: {},
         },
         CSC3: {
@@ -123,7 +122,7 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
-      selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'Scheduler13' }],
+      selectedCSCs: [],
     };
     this.managerInterface = new ManagerInterface();
   }
@@ -166,9 +165,19 @@ export default class CSCSummary extends Component {
     this.unsubscribeToCSCs();
   }
 
-  onCSCClick = (realm, group, csc) => {
-    // eslint-disable-next-line
-    console.log(realm, group, csc);
+  toggleCSCExpansion = (realm, group, csc) => {
+    for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
+      const currentCSC = this.state.selectedCSCs[i];
+      if (realm === currentCSC.realm && group === currentCSC.group && csc === currentCSC.csc) {
+        const newSelectedCSCs = [...this.state.selectedCSCs];
+        newSelectedCSCs.splice(i, 1);
+        this.setState({ selectedCSCs: newSelectedCSCs });
+        return;
+      }
+    }
+    this.setState({
+      selectedCSCs: [...this.state.selectedCSCs, { realm, group, csc }],
+    });
   };
 
   render() {
@@ -182,7 +191,7 @@ export default class CSCSummary extends Component {
                   name={realm}
                   data={this.state.data}
                   groups={this.state.hierarchy[realm]}
-                  onCSCClick={this.onCSCClick}
+                  onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}
                 />
               </div>

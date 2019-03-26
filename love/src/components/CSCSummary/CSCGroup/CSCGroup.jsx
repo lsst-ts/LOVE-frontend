@@ -54,7 +54,8 @@ export default class CSCGroup extends Component {
           group={selectedCSC.group}
           name={selectedCSC.csc}
           data={this.props.data}
-        />
+          onCSCClick={this.props.onCSCClick}
+          />
       </div>
     ) : (
       <div className={styles.CSCGroupContainer}>
