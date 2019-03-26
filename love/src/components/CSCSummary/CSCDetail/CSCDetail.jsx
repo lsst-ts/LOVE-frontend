@@ -77,7 +77,7 @@ export default class CSCDetail extends Component {
         <div className={styles.middleSection}>{this.props.name}</div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
-            <HeartbeatIcon status="ok" />
+            <HeartbeatIcon status="ok" title={`${this.props.name} script`}/>
           </div>
         </div>
       </div>
