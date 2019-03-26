@@ -92,7 +92,7 @@ export default class FinishedScript extends Component {
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime.toFixed(2)}
+                {this.props.estimatedTime>=0? this.props.estimatedTime.toFixed(2) : '?'}
               </span>
             </div>
             <div className={styles.elapsedTimeContainer}>
