@@ -13,6 +13,7 @@ export default class CSCExpanded extends Component {
     group: PropTypes.string,
     realm: PropTypes.string,
     data: PropTypes.object,
+    onCSCClick: PropTypes.func,
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ export default class CSCExpanded extends Component {
     group: '',
     realm: '',
     data: {},
+    onCSCClick: () => 0,
   };
 
   static states = {
@@ -71,11 +73,19 @@ export default class CSCExpanded extends Component {
         <div className={styles.topBarContainerWrapper}>
           <div className={styles.topBarContainer}>
             <div className={styles.breadcrumContainer}>
-              <div className={styles.backArrowIconWrapper}>
+              <div
+                className={styles.backArrowIconWrapper}
+                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name)}
+              >
                 {' '}
                 <BackArrowIcon />
               </div>
-              <span className={styles.breadcrumbGroup}>{props.group} </span>
+              <span
+                className={styles.breadcrumbGroup}
+                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name)}
+              >
+                {props.group}{' '}
+              </span>
               <span>&#62; </span>
               <span>{props.name} </span>
             </div>
@@ -101,21 +111,23 @@ export default class CSCExpanded extends Component {
           <details open>
             <summary>MESSAGE LOG</summary>
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
-              {selfData.logMessage.map((msg) => {
-                let icon = '';
-                if (msg.level === 20) icon = <InfoIcon />;
-                if (msg.level === 30) icon = <WarningIcon />;
-                if (msg.level === 40) icon = <ErrorIcon />;
-                return (
-                  <div key={msg.message} className={styles.logMessage}>
-                    <div className={styles.messageIcon}>{icon}</div>
-                    <div>
-                      <div className={styles.messageText}>{msg.message}</div>
-                      <div className={styles.messageTraceback}>{msg.traceback}</div>
+              {selfData && selfData.logMessage
+                ? selfData.logMessage.map((msg) => {
+                  let icon = '';
+                  if (msg.level === 20) icon = <InfoIcon />;
+                  if (msg.level === 30) icon = <WarningIcon />;
+                  if (msg.level === 40) icon = <ErrorIcon />;
+                  return (
+                    <div key={msg.message} className={styles.logMessage}>
+                      <div className={styles.messageIcon}>{icon}</div>
+                      <div>
+                        <div className={styles.messageText}>{msg.message}</div>
+                        <div className={styles.messageTraceback}>{msg.traceback}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+                : null}
             </div>
           </details>
         </div>
