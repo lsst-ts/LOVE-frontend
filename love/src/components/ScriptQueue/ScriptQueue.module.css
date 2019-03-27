@@ -1,6 +1,6 @@
 .scriptQueueContainer {
-  width: 60vw;
-  height: 60vh;
+  width: calc(100vw - 5em);
+  height: calc(100vh - 5em);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 6fr;
@@ -8,6 +8,10 @@
     'current current current current global global'
     'body body body body body body';
   color: var(--second-base-font-color);
+  min-width: 1000px;
+  max-width: 1300px;
+  min-height: 600px;
+  max-height: 1100px;
 }
 
 .listsBody {
