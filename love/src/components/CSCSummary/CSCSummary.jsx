@@ -262,7 +262,7 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
-      selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'Scheduler13' }],
+      selectedCSCs: [],
     };
     this.managerInterface = new ManagerInterface();
   }
