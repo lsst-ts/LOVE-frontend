@@ -29,7 +29,7 @@ export default class FinishedScript extends Component {
   static defaultProps = {
     salIndex: 0,
     isStandard: true,
-    path: 'auxtel/at_calsys_takedata.py',
+    path: 'Unknown',
     estimatedTime: 0,
     elapsedTime: 0,
     script_state: 'Unknown',
