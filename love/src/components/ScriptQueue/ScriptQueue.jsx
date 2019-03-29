@@ -35,11 +35,7 @@ export default class ScriptQueue extends Component {
           estimatedTime: 110,
         },
         {
-          path: 'path2/filename.py',
-          process_state: 'Configured',
-          script_state: 'done',
-          index: 2,
-          estimatedTime: 40,
+          path: 'Unkown',
         },
         {
           path: 'path3/filename.py',
@@ -411,10 +407,10 @@ export default class ScriptQueue extends Component {
                 {this.state.waitingScriptList.map((script, listIndex) => {
                   if (!script) return null;
                   const estimatedTime =
-                    script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
+                    script.expected_duration === undefined ? 0 : parseFloat(script.expected_duration);
 
                   const isStandard =
-                    !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
+                    !script.type || script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
 
                   const key = script.index ? script.index : `unknown-${listIndex}`;
                   return (
