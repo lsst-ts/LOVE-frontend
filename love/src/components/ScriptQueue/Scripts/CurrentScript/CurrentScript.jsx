@@ -145,7 +145,7 @@ export default class CurrentScript extends Component {
               <div className={scriptStyles.uploadButtonWrapper} />
             </div>
             <JSONPretty
-              data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
+              data={{}}
               theme={{
                 main:
                   'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
