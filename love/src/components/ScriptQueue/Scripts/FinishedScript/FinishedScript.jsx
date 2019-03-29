@@ -63,7 +63,16 @@ export default class FinishedScript extends Component {
           <div className={styles.topContainer}>
             <div>
               <div className={scriptStyles.externalContainer}>
-                <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
+                <span className={scriptStyles.externalText} title={`SAL index ${this.props.salIndex}`}>
+                  {this.props.salIndex}
+                </span>
+                <span> - </span>
+                <span
+                  className={scriptStyles.externalText}
+                  title={this.props.isStandard ? 'Standard script' : 'External script'}
+                >
+                  {this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}
+                </span>
               </div>
               <div className={scriptStyles.pathTextContainer}>
                 {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}

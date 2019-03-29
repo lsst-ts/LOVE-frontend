@@ -31,7 +31,7 @@ export default class WaitingScript extends Component {
   };
 
   static defaultProps = {
-    salIndex: 0,
+    salIndex: -1,
     isStandard: undefined,
     path: 'Unknown',
     estimatedTime: 0,
@@ -64,7 +64,7 @@ export default class WaitingScript extends Component {
 
     let typeTag = '';
     if (this.props.isStandard !== undefined) {
-      typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
+      typeTag = this.props.isStandard ? 'Standard' : 'External';
     }
 
     return (
@@ -72,7 +72,15 @@ export default class WaitingScript extends Component {
         <div className={styles.waitingScriptContainer} onClick={this.onClick}>
           <div>
             <div className={scriptStyles.externalContainer}>
-              <span className={scriptStyles.externalText}>{typeTag}</span>
+              <span className={scriptStyles.externalText} title={`SAL index ${this.props.salIndex}`}>
+                {this.props.salIndex}
+              </span>
+              {typeTag !== '' && (
+                <span className={scriptStyles.externalText} title={`${typeTag} script`}>
+                  {' - '}
+                  {`[${typeTag.toUpperCase()}]`}
+                </span>
+              )}
             </div>
             <div className={scriptStyles.pathTextContainer} title={path}>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
