@@ -8,12 +8,16 @@ export default class CSCRealm extends Component {
     name: PropTypes.string,
     groups: PropTypes.object,
     data: PropTypes.object,
+    onCSCClick: PropTypes.func,
+    selectedCSCs: PropTypes.array,
   };
 
   static defaultProps = {
     name: '',
     groups: {},
     data: {},
+    onCSCClick: () => 0,
+    selectedCSCs: [],
   };
 
   constructor(props) {
@@ -37,11 +41,18 @@ export default class CSCRealm extends Component {
   render() {
     return (
       <div className={styles.CSCRealmContainer}>
-        <div>{this.props.name}</div>
+        <div className={styles.CSCRealmTitle}>{this.props.name}</div>
         {Object.keys(this.props.groups).map((group) => {
           return (
             <div key={group} className={styles.CSCGroupContainer}>
-                <CSCGroup name={group} data={this.props.data} cscs={this.props.groups[group]} />
+              <CSCGroup
+                realm={this.props.name}
+                name={group}
+                data={this.props.data}
+                cscs={this.props.groups[group]}
+                onCSCClick={this.props.onCSCClick}
+                selectedCSCs={this.props.selectedCSCs}
+              />
             </div>
           );
         })}

@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCDetail.module.css';
+import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 
 export default class CSCDetail extends Component {
   static propTypes = {
     name: PropTypes.string,
+    group: PropTypes.string,
+    realm: PropTypes.string,
     data: PropTypes.object,
+    onCSCClick: PropTypes.func,
   };
 
   static defaultProps = {
     name: '',
+    group: '',
+    realm: '',
     data: {},
+    onCSCClick: () => 0,
   };
 
   static states = {
@@ -55,19 +62,24 @@ export default class CSCDetail extends Component {
   render() {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = selfData ? selfData.summaryState : 0;
-    // const summaryStateValue = Math.random();
     const summaryState = CSCDetail.states[summaryStateValue];
+    const { props } = this;
     return (
-      <div className={styles.CSCDetailContainer}>
+      <div
+        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
+        className={styles.CSCDetailContainer}
+      >
         <div className={[styles.leftSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
-          <span className={styles.summaryState} title={summaryState.userReadable}>
-            ?
-          </span>
         </div>
-        <div className={styles.rightSection}>{this.props.name}</div>
+        <div className={styles.middleSection}>{this.props.name}</div>
+        <div className={styles.rightSection}>
+          <div className={styles.heartbeatIconWrapper}>
+            <HeartbeatIcon status="ok" title={`${this.props.name} script`}/>
+          </div>
+        </div>
       </div>
     );
   }
