@@ -409,7 +409,7 @@ export default class ScriptQueue extends Component {
                 </div>
               </div>
               <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
-                {this.state.waitingScriptList.map((script) => {
+                {this.state.waitingScriptList.map((script, listIndex) => {
                   if (!script) return null;
                   const estimatedTime =
                     script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
@@ -417,9 +417,10 @@ export default class ScriptQueue extends Component {
                   const isStandard =
                     !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
 
+                  const key = script.index ? script.index : `unknown-${listIndex}`;
                   return (
                     <DraggableScript
-                      key={`dragging-waiting-${script.type}-${script.path}`}
+                      key={`dragging-waiting-${key}`}
                       {...script}
                       onDragOver={(e, id) => this.onDragOver(e, id, 'waiting')}
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
@@ -428,7 +429,6 @@ export default class ScriptQueue extends Component {
                       disabled={!hasCommandPrivileges}
                     >
                       <WaitingScript
-                        key={`${script.type}-${script.path}`}
                         isCompact={
                           this.state.isAvailableScriptListVisible || this.state.isFinishedScriptListListVisible
                         }
@@ -482,16 +482,16 @@ export default class ScriptQueue extends Component {
                       const isStandard =
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
+                      const key = script.index ? script.index : `unknown-${listIndex}`;
 
                       return (
                         <DraggableScript
-                          key={`dragging-finished-${script.type}-${script.path}-${script.index}`}
+                          key={`dragging-finished-${key}`}
                           dragSourceList="available"
                           onDragOver={(e) => this.onDragLeave(e)}
                           disabled
                         >
                           <FinishedScript
-                            key={`${script.type}-${script.path}`}
                             {...script}
                             path={script.path}
                             isStandard={isStandard}
