@@ -72,27 +72,33 @@ export default class FinishedScript extends Component {
               </div>
             </div>
             <div className={scriptStyles.scriptStatusContainer}>
-            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus
-                isCompact={this.props.isCompact}
-                type="process"
-                status={getStatusStyle(this.props.process_state)}
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
               >
-                {this.props.process_state}
-              </ScriptStatus>
+                <ScriptStatus
+                  isCompact={this.props.isCompact}
+                  type="process"
+                  status={getStatusStyle(this.props.process_state)}
+                >
+                  {this.props.process_state}
+                </ScriptStatus>
+              </div>
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
+                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                  {this.props.script_state}
+                </ScriptStatus>
+              </div>
             </div>
-            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
-                {this.props.script_state}
-              </ScriptStatus>
-            </div>
-          </div>
           </div>
           <div className={styles.timeContainer}>
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime>=0? this.props.estimatedTime.toFixed(2) : '?'}
+                {this.props.estimatedTime >= 0 ? this.props.estimatedTime.toFixed(2) : '?'}
               </span>
             </div>
             <div className={styles.elapsedTimeContainer}>
