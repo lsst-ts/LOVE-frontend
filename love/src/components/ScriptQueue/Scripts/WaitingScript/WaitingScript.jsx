@@ -33,7 +33,7 @@ export default class WaitingScript extends Component {
   static defaultProps = {
     salIndex: 0,
     isStandard: undefined,
-    path: 'auxtel/at_calsys_takedata.py',
+    path: 'Unknown',
     estimatedTime: 0,
     script_state: 'Unknown',
     process_state: 'Unknown',
@@ -82,7 +82,7 @@ export default class WaitingScript extends Component {
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime}
+                {this.props.estimatedTime.toFixed(2)} s
               </span>
             </div>
           </div>

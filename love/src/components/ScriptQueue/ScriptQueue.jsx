@@ -19,9 +19,72 @@ export default class ScriptQueue extends Component {
     super(props);
     this.state = {
       current: {},
-      waitingScriptList: [],
-      availableScriptList: [],
-      finishedScriptList: [],
+      waitingScriptList: [
+        {
+          path: 'path/filename.py',
+          process_state: 'Loading',
+          script_state: 'unconfigured',
+          index: 0,
+          estimatedTime: 210,
+        },
+        {
+          path: 'path/filename2.py',
+          process_state: 'Configured',
+          script_state: 'configured',
+          index: 1,
+          estimatedTime: 110,
+        },
+        {
+          path: 'path2/filename.py',
+          process_state: 'Configured',
+          script_state: 'done',
+          index: 2,
+          estimatedTime: 40,
+        },
+        {
+          path: 'path3/filename.py',
+          process_state: 'ConfigureFailed',
+          script_state: 'stopped',
+          index: 3,
+          estimatedTime: 70,
+        },
+      ],
+      availableScriptList: [
+        {
+          script_state: 'failed',
+          index: 8,
+        },
+        {
+          script_state: 'failed',
+          index: 9,
+        },
+      ],
+      finishedScriptList: [
+        {
+          path: 'path3/filename1.py',
+          process_state: 'Done',
+          script_state: 'done',
+          index: 4,
+        },
+        {
+          path: 'path3/filename2.py',
+          process_state: 'Terminated',
+          script_state: 'terminated',
+          index: 5,
+        },
+        {
+          path: 'path3/filename3.py',
+          process_state: 'Done',
+          script_state: 'failed',
+          index: 6,
+        },
+        {
+          path: 'path3/filename4.py',
+          process_state: 'Done',
+          script_state: 'stopped',
+          index: 7,
+        },
+      ],
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
@@ -300,7 +363,7 @@ export default class ScriptQueue extends Component {
                   <ScriptList>
                     {this.state.availableScriptList.map((script) => {
                       if (!script) return null;
-                      (`dragging-${script.type}-${script.path}`)
+                      `dragging-${script.type}-${script.path}`;
                       return (
                         <DraggableScript
                           key={`dragging-available-${script.type}-${script.path}`}
@@ -315,7 +378,7 @@ export default class ScriptQueue extends Component {
                           <AvailableScript
                             key={`${script.type}-${script.path}`}
                             path={script.path}
-                            isStandard={script.type.toLowerCase() === 'standard'}
+                            isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
                             {...script}
                           />
                         </DraggableScript>
@@ -351,7 +414,8 @@ export default class ScriptQueue extends Component {
                   const estimatedTime =
                     script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
 
-                  const isStandard = script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
+                  const isStandard =
+                    !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
 
                   return (
                     <DraggableScript
@@ -416,8 +480,9 @@ export default class ScriptQueue extends Component {
                   <ScriptList>
                     {this.state.finishedScriptList.map((script) => {
                       const isStandard =
-                        script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
+                        !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
+
                       return (
                         <DraggableScript
                           key={`dragging-finished-${script.type}-${script.path}-${script.index}`}

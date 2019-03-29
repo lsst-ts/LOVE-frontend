@@ -1,0 +1,177 @@
+.CSCExpandedContainer {
+  display: flex;
+  /* background: var(--second-quaternary-background-color); */
+  align-items: flex-start;
+  color: var(--base-font-color);
+  /* font-size: var(--font-size-small); */
+  border-radius: 4px;
+  text-align: left;
+  max-height: 80vh;
+  flex-direction: column;
+  /* flex-wrap: wrap; */
+}
+
+.topBarContainerWrapper {
+  display: flex;
+  width: calc(100% - 2em);
+  padding: 0em 1em;
+}
+
+.topBarContainer {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-between;
+  font-weight: bold;
+  padding-bottom: 0.5em;
+  border-bottom: solid var(--second-quinary-background-color) 1px;
+}
+
+.topBarContainer span {
+  vertical-align: middle;
+}
+
+.breadcrumbGroup {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.stateContainer {
+  display: flex;
+  align-items: center;
+}
+
+.stateContainer > div {
+  padding-right: 0.5em;
+}
+
+.backArrowIconWrapper {
+  width: 2em;
+  display: inline-block;
+  padding: 0em 1em;
+  cursor: pointer;
+}
+
+.summaryState {
+  padding: 0.25em 0.75em;
+  user-select: none;
+}
+
+.heartbeatIconWrapper {
+  width: 1.6em;
+}
+
+.heartbeatIconWrapper > svg {
+  vertical-align: top;
+}
+
+.logContainerWrapper {
+}
+
+.logContainer {
+  width: calc(100% - 2em);
+  padding: 1em;
+  flex-grow: 1;
+  /* flex-basis: 100%; */
+  display: flex;
+  flex-direction: column;
+  min-height: 8em;
+}
+
+.log {
+  background: var(--second-tertiary-background-color);
+  border-radius: 5px;
+  overflow-y: scroll;
+  min-height: 10em;
+}
+
+.logMessage {
+  display: flex;
+  /* align-items: center; */
+  border-bottom: solid var(--second-quaternary-background-color) 1px;
+}
+
+.logMessage:last-child {
+  border-bottom: none;
+}
+
+.timestamp {
+  align-self: flex-end;
+  padding: 0.5em 0;
+  color: var(--secondary-font-color);
+}
+
+.messageTextContainer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0 1em;
+  padding-bottom: 0.5em;
+}
+
+.messageIcon {
+  width: 1em;
+  min-width: 1em;
+  padding: 0.5em;
+  text-align: center;
+  user-select: none;
+}
+
+.messageText {
+  padding-bottom: 0.5em;
+}
+
+.errorCodeContainer {
+  flex-grow: 0;
+}
+
+.errorCode {
+  font-weight: bold;
+  width: 1em;
+  min-width: 1em;
+  padding: 0.5em;
+  font-size: var(--font-size-large);
+  text-align: center;
+  user-select: none;
+}
+
+.errorReport {
+}
+
+.errorTraceback {
+}
+
+.filtersContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.filtersContainer input[type="checkbox"] {
+  transform: scale(1.3);
+  vertical-align: middle;
+  padding: 1em;
+}
+
+.filtersContainer span {
+  display: inline-block;
+  padding: 0.5em 0.5em;
+}
+
+.alert {
+  background: var(--status-alert-color);
+  color: var(--second-tertiary-background-color);
+}
+
+.ok {
+  background: var(--status-ok-color);
+  color: var(--second-tertiary-background-color);
+}
+
+.disabled {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--second-quinary-background-color);
+}
+
+.warning {
+  background: var(--status-warning-color);
+  color: var(--second-tertiary-background-color);
+}
