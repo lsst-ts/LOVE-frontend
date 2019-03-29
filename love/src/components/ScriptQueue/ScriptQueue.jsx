@@ -363,7 +363,6 @@ export default class ScriptQueue extends Component {
                   <ScriptList>
                     {this.state.availableScriptList.map((script) => {
                       if (!script) return null;
-                      `dragging-${script.type}-${script.path}`;
                       return (
                         <DraggableScript
                           key={`dragging-available-${script.type}-${script.path}`}
@@ -478,7 +477,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.finishedScriptList.map((script) => {
+                    {this.state.finishedScriptList.map((script, listIndex) => {
                       const isStandard =
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
