@@ -47,10 +47,14 @@ export default class ScriptQueue extends Component {
       ],
       availableScriptList: [
         {
+          type: 'Standard',
+          path: 'path1',
           script_state: 'failed',
           index: 8,
         },
         {
+          type: 'Standard',
+          path: 'path2',
           script_state: 'failed',
           index: 9,
         },
@@ -301,17 +305,19 @@ export default class ScriptQueue extends Component {
             }}
             className={styles.currentScriptWrapper}
           >
-            <div className={styles.currentScriptContainer}>
-              <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
-              <CurrentScript
-                {...current}
-                salIndex={current.index}
-                scriptState={current.script_state}
-                processState={current.process_state}
-                isStandard={current.type ? current.type === 'Standard' : undefined}
-                estimatedTime={current.expected_duration}
-                elapsedTime={currentScriptElapsedTime}
-              />
+            <div className={styles.currentScriptContainerWrapper}>
+              <div className={styles.currentScriptContainer}>
+                <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
+                <CurrentScript
+                  {...current}
+                  salIndex={current.index}
+                  scriptState={current.script_state}
+                  processState={current.process_state}
+                  isStandard={current.type ? current.type === 'Standard' : undefined}
+                  estimatedTime={current.expected_duration}
+                  elapsedTime={currentScriptElapsedTime}
+                />
+              </div>
             </div>
           </div>
           <div
