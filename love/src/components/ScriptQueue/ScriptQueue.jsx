@@ -413,7 +413,7 @@ export default class ScriptQueue extends Component {
                 {this.state.waitingScriptList.map((script, listIndex) => {
                   if (!script) return null;
                   const estimatedTime =
-                    script.expected_duration === undefined ? 0 : parseFloat(script.expected_duration);
+                    script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
 
                   const isStandard =
                     !script.type || script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
