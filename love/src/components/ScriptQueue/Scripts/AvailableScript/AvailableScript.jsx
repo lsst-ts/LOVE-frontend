@@ -9,7 +9,7 @@ import { hasCommandPrivileges } from '../../../../Utils';
 export default class AvailableScript extends Component {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
-    salIndex: PropTypes.number,
+    index: PropTypes.number,
     /** SAL property: True if this is a standard script, False if an external script */
     isStandard: PropTypes.bool,
     /** SAL property: Path of script, relative to standard or external root directory */
@@ -21,7 +21,7 @@ export default class AvailableScript extends Component {
   };
 
   static defaultProps = {
-    salIndex: 0,
+    index: -1,
     isStandard: true,
     path: 'Unknown',
     estimatedTime: 0,
