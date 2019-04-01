@@ -11,7 +11,7 @@ import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 export default class CurrentScript extends Component {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
-    salIndex: PropTypes.number,
+    index: PropTypes.number,
     /** SAL property: True if this is a standard script, False if an external script */
     isStandard: PropTypes.bool,
     /** SAL property: Path of script, relative to standard or external root directory */
@@ -31,7 +31,7 @@ export default class CurrentScript extends Component {
   };
 
   static defaultProps = {
-    salIndex: undefined,
+    index: undefined,
     isStandard: undefined,
     path: 'None',
     timestamp: 0,
@@ -82,10 +82,10 @@ export default class CurrentScript extends Component {
               <div className={[scriptStyles.externalContainer, visibilityClass].join(' ')}>
                 <span className={scriptStyles.externalText}>{typeTag}</span>
               </div>
-              {this.props.salIndex !== undefined && (
+              {this.props.index !== undefined && (
                 <div className={styles.indexContainer}>
                   <span className={styles.indexLabel}>Index: </span>
-                  <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.salIndex}</span>
+                  <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.index}</span>
                 </div>
               )}
               <div className={scriptStyles.pathTextContainer}>
