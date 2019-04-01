@@ -81,7 +81,6 @@
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
   overflow-y: scroll;
-  min-height: 10em;
 }
 
 .logMessage {
