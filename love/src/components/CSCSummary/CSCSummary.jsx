@@ -66,11 +66,11 @@ export default class CSCSummary extends Component {
           summaryState: 2,
           detailedState: {},
         },
-        ScriptQueue1: {
+        ScriptQueue3: {
           summaryState: 2,
           detailedState: {},
         },
-        ScriptQueue2: {
+        ScriptQueue4: {
           summaryState: 2,
           detailedState: {},
           errorCode: [
@@ -100,8 +100,7 @@ export default class CSCSummary extends Component {
           errorCode: [
             {
               errorCode: 4,
-              errorReport:
-                `errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+              errorReport: `errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
                 ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
                 ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
                 ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
@@ -330,12 +329,25 @@ export default class CSCSummary extends Component {
     });
   };
 
+  onReceiveHeartbeat = (msg) => {
+    const data = JSON.parse(msg.data);
+    if (!(data.data instanceof Object)) return;
+    const newData = { ...this.state.data };
+    Object.keys(data.data).map((cscKey) => {
+      [newData[cscKey].heartbeat] = data.data[cscKey].heartbeat;
+    });
+    this.setState({
+      data: newData,
+    });
+  };
+
   subscribeToCSCs = () => {
     Object.keys(this.state.hierarchy).map((realm) => {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
           this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
+          this.managerInterface.subscribeToEvents(csc, 'heartbeat', this.onReceiveHeartbeat);
         });
       });
     });
@@ -347,6 +359,7 @@ export default class CSCSummary extends Component {
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
           this.managerInterface.unsubscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
+          this.managerInterface.unsubscribeToEvents(csc, 'heartbeat', this.onReceiveHeartbeat);
         });
       });
     });
