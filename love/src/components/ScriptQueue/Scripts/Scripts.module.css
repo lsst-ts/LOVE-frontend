@@ -30,7 +30,6 @@
 
 .externalText {
   font-size: var(--font-size-small);
-  color: var(--highlighted-font-color);
 }
 
 .scriptStatusContainer {

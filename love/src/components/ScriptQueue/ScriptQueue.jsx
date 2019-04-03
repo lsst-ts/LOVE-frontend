@@ -20,70 +20,70 @@ export default class ScriptQueue extends Component {
     this.state = {
       current: {},
       waitingScriptList: [
-        {
-          path: 'path/filename.py',
-          process_state: 'Loading',
-          script_state: 'unconfigured',
-          index: 0,
-          estimatedTime: 210,
-        },
-        {
-          path: 'path/filename2.py',
-          process_state: 'Configured',
-          script_state: 'configured',
-          index: 1,
-          estimatedTime: 110,
-        },
-        {
-          path: 'path2/filename.py',
-          process_state: 'Configured',
-          script_state: 'done',
-          index: 2,
-          estimatedTime: 40,
-        },
-        {
-          path: 'path3/filename.py',
-          process_state: 'ConfigureFailed',
-          script_state: 'stopped',
-          index: 3,
-          estimatedTime: 70,
-        },
+        // {
+        //   path: 'path/filename.py',
+        //   process_state: 'Loading',
+        //   script_state: 'unconfigured',
+        //   index: 0,
+        //   estimatedTime: 210,
+        // },
+        // {
+        //   path: 'path/filename2.py',
+        //   process_state: 'Configured',
+        //   script_state: 'configured',
+        //   index: 1,
+        //   estimatedTime: 110,
+        // },
+        // {
+        //   path: 'Unkown',
+        // },
+        // {
+        //   path: 'path3/filename.py',
+        //   process_state: 'ConfigureFailed',
+        //   script_state: 'stopped',
+        //   index: 3,
+        //   estimatedTime: 70,
+        // },
       ],
       availableScriptList: [
-        {
-          script_state: 'failed',
-          index: 8,
-        },
-        {
-          script_state: 'failed',
-          index: 9,
-        },
+        // {
+        //   type: 'Standard',
+        //   path: 'path1',
+        //   script_state: 'failed',
+        //   index: 8,
+        // },
+        // {
+        //   type: 'Standard',
+        //   path: 'path2',
+        //   script_state: 'failed',
+        //   index: 9,
+        // },
       ],
       finishedScriptList: [
-        {
-          path: 'path3/filename1.py',
-          process_state: 'Done',
-          script_state: 'done',
-          index: 4,
-        },
-        {
-          path: 'path3/filename2.py',
-          process_state: 'Terminated',
-          script_state: 'terminated',
-          index: 5,
-        },
-        {
-          path: 'path3/filename3.py',
-          process_state: 'Done',
-          script_state: 'failed',
-          index: 6,
-        },
-        {
-          path: 'path3/filename4.py',
-          process_state: 'Done',
-          script_state: 'stopped',
-          index: 7,
-        },
+        // {
+        //   path: 'path3/filename1.py',
+        //   process_state: 'Done',
+        //   script_state: 'done',
+        //   index: 4,
+        // },
+        // {
+        //   path: 'path3/filename2.py',
+        //   process_state: 'Terminated',
+        //   script_state: 'terminated',
+        //   index: 5,
+        // },
+        // {
+        //   path: 'path3/filename3.py',
+        //   process_state: 'Done',
+        //   script_state: 'failed',
+        //   index: 6,
+        // },
+        // {
+        //   path: 'path3/filename4.py',
+        //   process_state: 'Done',
+        //   script_state: 'stopped',
+        //   index: 7,
+        // },
       ],
       isAvailableScriptListVisible: false,
       draggingSource: '',
@@ -272,19 +272,19 @@ export default class ScriptQueue extends Component {
 
   openAvailableList = () => {
     this.setState({
-      isAvailableScriptListListVisible: true,
+      isAvailableScriptListVisible: true,
     });
   };
 
   closeAvailableList = () => {
     this.setState({
-      isAvailableScriptListListVisible: false,
+      isAvailableScriptListVisible: false,
     });
   };
 
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
-    const availableScriptListClass = this.state.isAvailableScriptListListVisible ? '' : styles.collapsedScriptList;
+    const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
     const current = this.state.current === 'None' ? {} : { ...this.state.current };
     const stateStyleDict = {
       Stopped: 'warning',
@@ -305,17 +305,19 @@ export default class ScriptQueue extends Component {
             }}
             className={styles.currentScriptWrapper}
           >
-            <div className={styles.currentScriptContainer}>
-              <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
-              <CurrentScript
-                {...current}
-                salIndex={current.index}
-                scriptState={current.script_state}
-                processState={current.process_state}
-                isStandard={current.type ? current.type === 'Standard' : undefined}
-                estimatedTime={current.expected_duration}
-                elapsedTime={currentScriptElapsedTime}
-              />
+            <div className={styles.currentScriptContainerWrapper}>
+              <div className={styles.currentScriptContainer}>
+                <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
+                <CurrentScript
+                  {...current}
+                  index={current.index}
+                  scriptState={current.script_state}
+                  processState={current.process_state}
+                  isStandard={current.type ? current.type === 'Standard' : undefined}
+                  estimatedTime={current.expected_duration}
+                  elapsedTime={currentScriptElapsedTime}
+                />
+              </div>
             </div>
           </div>
           <div
@@ -363,7 +365,6 @@ export default class ScriptQueue extends Component {
                   <ScriptList>
                     {this.state.availableScriptList.map((script) => {
                       if (!script) return null;
-                      `dragging-${script.type}-${script.path}`;
                       return (
                         <DraggableScript
                           key={`dragging-available-${script.type}-${script.path}`}
@@ -415,7 +416,7 @@ export default class ScriptQueue extends Component {
                     script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
 
                   const isStandard =
-                    !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
+                    !script.type || script.type === 'UNKNOWN' ? undefined : script.type.toLowerCase() === 'standard';
 
                   const key = script.index ? script.index : `unknown-${listIndex}`;
                   return (
@@ -430,7 +431,7 @@ export default class ScriptQueue extends Component {
                     >
                       <WaitingScript
                         isCompact={
-                          this.state.isAvailableScriptListVisible || this.state.isFinishedScriptListListVisible
+                          this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                         }
                         path={script.path}
                         isStandard={isStandard}
@@ -478,7 +479,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.finishedScriptList.map((script) => {
+                    {this.state.finishedScriptList.map((script, listIndex) => {
                       const isStandard =
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
@@ -497,7 +498,9 @@ export default class ScriptQueue extends Component {
                             isStandard={isStandard}
                             estimatedTime={estimatedTime}
                             elapsedTime={script.elapsed_time}
-                            isCompact={true}
+                            isCompact={
+                              this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
+                            }
                           />
                         </DraggableScript>
                       );
