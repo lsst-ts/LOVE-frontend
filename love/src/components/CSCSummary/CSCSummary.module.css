@@ -16,6 +16,7 @@
   flex-grow: 1;
   /* padding: 1em; */
   min-width: 20em;
+  width: 100%;
 }
 
 .CSCRealmContainer:last-of-type {

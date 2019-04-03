@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './CSCGroup.module.css';
 import CSCDetail from '../CSCDetail/CSCDetail';
 import CSCExpanded from '../CSCExpanded/CSCExpanded';
+import CSCGroupLog from '../CSCGroupLog/CSCGroupLog';
 
 export default class CSCGroup extends Component {
   static propTypes = {
@@ -12,6 +13,7 @@ export default class CSCGroup extends Component {
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
+    hierarchy: PropTypes.object,
   };
 
   static defaultProps = {
@@ -21,6 +23,7 @@ export default class CSCGroup extends Component {
     data: {},
     onCSCClick: () => 0,
     selectedCSCs: [],
+    hierarchy: {},
   };
 
   constructor(props) {
@@ -41,13 +44,20 @@ export default class CSCGroup extends Component {
     };
   }
 
-  render() {
-    let selectedCSC = this.props.selectedCSCs.filter((data) => {
-      return data.realm === this.props.realm && data.group === this.props.name;
-    });
-    const expanded = selectedCSC.length > 0;
-    [selectedCSC] = selectedCSC;
-    return expanded ? (
+  renderExpandedView = (selectedCSC) => {
+    const groupView = selectedCSC.csc === 'all';
+    return groupView ? (
+      <div className={styles.CSCGroupContainer}>
+        <CSCGroupLog
+          realm={selectedCSC.realm}
+          group={selectedCSC.group}
+          name={selectedCSC.csc}
+          data={this.props.data}
+          onCSCClick={this.props.onCSCClick}
+          hierarchy={this.props.hierarchy}
+        />
+      </div>
+    ) : (
       <div className={styles.CSCGroupContainer}>
         <CSCExpanded
           realm={selectedCSC.realm}
@@ -55,11 +65,27 @@ export default class CSCGroup extends Component {
           name={selectedCSC.csc}
           data={this.props.data}
           onCSCClick={this.props.onCSCClick}
-          />
+        />
       </div>
+    );
+  };
+
+  render() {
+    let selectedCSC = this.props.selectedCSCs.filter((data) => {
+      return data.realm === this.props.realm && data.group === this.props.name;
+    });
+    const expanded = selectedCSC.length > 0;
+    [selectedCSC] = selectedCSC;
+    return expanded ? (
+      this.renderExpandedView(selectedCSC)
     ) : (
       <div className={styles.CSCGroupContainer}>
-        <div className={styles.CSCGroupTitle}>{this.props.name}</div>
+        <div
+          className={styles.CSCGroupTitle}
+          onClick={() => this.props.onCSCClick(this.props.realm, this.props.name, 'all')}
+        >
+          {this.props.name}
+        </div>
         <div className={styles.CSCDetailsContainer}>
           {this.props.cscs.map((csc) => {
             return (

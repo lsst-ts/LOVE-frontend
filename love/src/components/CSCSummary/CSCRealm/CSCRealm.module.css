@@ -4,6 +4,7 @@
   flex-direction: column;
   padding: 1em 0;
   background: var(--second-primary-background-color);
+  width: inherit;
 }
 
 .CSCGroupContainer {
