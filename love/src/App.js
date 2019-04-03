@@ -22,7 +22,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      token: null,
+      token: ManagerInterface.getToken(),
       showSessionExpired: false,
       telemetries: {
         scheduler: {
