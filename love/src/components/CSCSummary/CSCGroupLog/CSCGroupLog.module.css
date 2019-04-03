@@ -1,4 +1,4 @@
-.CSCExpandedContainer {
+.CSCGroupLogContainer {
   display: flex;
   /* background: var(--second-quaternary-background-color); */
   align-items: flex-start;
@@ -31,8 +31,6 @@
 }
 
 .breadcrumbGroup {
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .stateContainer {
@@ -94,14 +92,30 @@
   border-bottom: none;
 }
 
+.messageTopSection {
+  display: flex;
+  flex-grow: 1;
+  padding: 0.5em 0;
+  justify-content: space-between;
+}
+
+.sourceCSC {
+  background: var(--second-quaternary-background-color);
+  border-radius: 4px;
+  align-self: center;
+  padding: 0.35em 0.5em;
+  color: var(--base-font-color);
+  font-weight: bold;
+  font-size: var(--font-size-small);
+}
+
 .timestamp {
   align-self: flex-end;
-  padding: 0.5em 0;
   color: var(--secondary-font-color);
 }
 
 .messageTextContainer {
-  width: calc(100% - 5em);
+  width: calc(100% - 4.5em);
   display: flex;
   flex-direction: column;
   padding: 0 1em;

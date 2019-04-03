@@ -10,6 +10,7 @@ export default class CSCRealm extends Component {
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
+    hierarchy: PropTypes.object,
   };
 
   static defaultProps = {
@@ -18,6 +19,7 @@ export default class CSCRealm extends Component {
     data: {},
     onCSCClick: () => 0,
     selectedCSCs: [],
+    hierarchy: {},
   };
 
   constructor(props) {
@@ -52,6 +54,7 @@ export default class CSCRealm extends Component {
                 cscs={this.props.groups[group]}
                 onCSCClick={this.props.onCSCClick}
                 selectedCSCs={this.props.selectedCSCs}
+                hierarchy={this.props.hierarchy}
               />
             </div>
           );

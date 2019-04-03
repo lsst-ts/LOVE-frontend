@@ -73,6 +73,26 @@ export default class CSCSummary extends Component {
         ScriptQueue2: {
           summaryState: 2,
           detailedState: {},
+          errorCode: [
+            {
+              errorCode: 1,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 18:03:10',
+            },
+            {
+              errorCode: 1,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 20:03:12',
+            },
+            {
+              errorCode: 1,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 22:03:14',
+            },
+          ],
         },
         Scheduler13: {
           summaryState: 3,
@@ -80,21 +100,39 @@ export default class CSCSummary extends Component {
           errorCode: [
             {
               errorCode: 4,
-              errorReport: 'errorReport',
+              errorReport: 'errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:10',
+              timestamp: '2022/04/25 19:03:10',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:12',
+              timestamp: '2022/04/25 19:03:11',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:14',
+              timestamp: '2022/04/25 19:03:12',
+            },
+            {
+              errorCode: 4,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 19:03:13',
+            },
+            {
+              errorCode: 4,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 21:03:12',
+            },
+            {
+              errorCode: 4,
+              errorReport: 'errorReport',
+              traceback: 'traceback1',
+              timestamp: '2022/04/25 23:03:14',
             },
           ],
           logMessage: [
@@ -262,7 +300,7 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
-      selectedCSCs: [],
+      selectedCSCs: [{realm:'Aux Telescope', group: 'CSC Group 1', csc: 'all'}],
     };
     this.managerInterface = new ManagerInterface();
   }
@@ -306,17 +344,19 @@ export default class CSCSummary extends Component {
   }
 
   toggleCSCExpansion = (realm, group, csc) => {
+    const newSelectedCSCs = [...this.state.selectedCSCs];
     for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
       const currentCSC = this.state.selectedCSCs[i];
-      if (realm === currentCSC.realm && group === currentCSC.group && csc === currentCSC.csc) {
-        const newSelectedCSCs = [...this.state.selectedCSCs];
+      if (realm === currentCSC.realm && group === currentCSC.group){
         newSelectedCSCs.splice(i, 1);
-        this.setState({ selectedCSCs: newSelectedCSCs });
-        return;
+        if(csc === currentCSC.csc){
+          this.setState({ selectedCSCs: newSelectedCSCs });
+          return;
+        }
       }
     }
     this.setState({
-      selectedCSCs: [...this.state.selectedCSCs, { realm, group, csc }],
+      selectedCSCs: [...newSelectedCSCs, { realm, group, csc }],
     });
   };
 
@@ -333,6 +373,7 @@ export default class CSCSummary extends Component {
                   groups={this.state.hierarchy[realm]}
                   onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}
+                  hierarchy={this.state.hierarchy}
                 />
               </div>
             );

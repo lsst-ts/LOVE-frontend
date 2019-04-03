@@ -101,7 +101,7 @@ export default class CSCExpanded extends Component {
               </div>
               <span
                 className={styles.breadcrumbGroup}
-                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name)}
+                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
               >
                 {props.group}{' '}
               </span>
