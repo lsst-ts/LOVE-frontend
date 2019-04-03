@@ -9,7 +9,7 @@ import { getStatusStyle } from '../Scripts';
 export default class FinishedScript extends Component {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
-    salIndex: PropTypes.number,
+    index: PropTypes.number,
     /** SAL property: True if this is a standard script, False if an external script */
     isStandard: PropTypes.bool,
     /** SAL property: Path of script, relative to standard or external root directory */
@@ -27,7 +27,7 @@ export default class FinishedScript extends Component {
   };
 
   static defaultProps = {
-    salIndex: 0,
+    index: -1,
     isStandard: true,
     path: 'Unknown',
     estimatedTime: 0,
@@ -63,7 +63,16 @@ export default class FinishedScript extends Component {
           <div className={styles.topContainer}>
             <div>
               <div className={scriptStyles.externalContainer}>
-                <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
+                <span className={scriptStyles.externalText} title={`SAL index ${this.props.index}`}>
+                  {this.props.index}
+                </span>
+                <span> - </span>
+                <span
+                  className={scriptStyles.externalText}
+                  title={this.props.isStandard ? 'Standard script' : 'External script'}
+                >
+                  {this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}
+                </span>
               </div>
               <div className={scriptStyles.pathTextContainer}>
                 {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
@@ -72,27 +81,33 @@ export default class FinishedScript extends Component {
               </div>
             </div>
             <div className={scriptStyles.scriptStatusContainer}>
-            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus
-                isCompact={this.props.isCompact}
-                type="process"
-                status={getStatusStyle(this.props.process_state)}
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
               >
-                {this.props.process_state}
-              </ScriptStatus>
+                <ScriptStatus
+                  isCompact={this.props.isCompact}
+                  type="process"
+                  status={getStatusStyle(this.props.process_state)}
+                >
+                  {this.props.process_state}
+                </ScriptStatus>
+              </div>
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
+                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                  {this.props.script_state}
+                </ScriptStatus>
+              </div>
             </div>
-            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
-                {this.props.script_state}
-              </ScriptStatus>
-            </div>
-          </div>
           </div>
           <div className={styles.timeContainer}>
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime>=0? this.props.estimatedTime.toFixed(2) : '?'}
+                {this.props.estimatedTime >= 0 ? this.props.estimatedTime.toFixed(2) : '?'}
               </span>
             </div>
             <div className={styles.elapsedTimeContainer}>
@@ -110,7 +125,7 @@ export default class FinishedScript extends Component {
               <div className={scriptStyles.uploadButtonWrapper} />
             </div>
             <JSONPretty
-              data={{ wait_time: '10.', sdasa: 1, dsadsa: true }}
+              data={{}}
               theme={{
                 main:
                   'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
