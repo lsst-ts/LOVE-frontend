@@ -8,7 +8,7 @@
   font-weight: bold;
   font-size: var(--font-size-small);
   border-radius: 4px;
-  width: 12em;
+  width: 13.5em;
   cursor: pointer;
 }
 
@@ -24,11 +24,13 @@
 
 .middleSection {
   padding: 0.35em 0.5em;
-  align-self:stretch;
-  display:flex;
-  align-items:center;
+  align-items: center;
+  text-align: left;
   border-radius: 4px;
   flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .rightSection {

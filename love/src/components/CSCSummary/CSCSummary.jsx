@@ -12,10 +12,10 @@ export default class CSCSummary extends Component {
         'Aux Telescope': {
           'CSC Group 1': [
             'ScriptQueue',
-            'Scheduler1',
-            'ScriptQueue1',
-            'Scheduler2',
-            'ScriptQueue2',
+            'scheduler',
+            'ATMonochromator',
+            'FiberSpectrograph',
+            'ATCamera',
             'Scheduler3',
             'ScriptQueue3',
             'Scheduler4',
