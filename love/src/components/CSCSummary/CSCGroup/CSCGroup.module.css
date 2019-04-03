@@ -22,4 +22,7 @@
 .CSCGroupTitle {
   color: var(--base-font-color);
   padding-bottom: 0.5em;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: var(--font-size-large);
 }

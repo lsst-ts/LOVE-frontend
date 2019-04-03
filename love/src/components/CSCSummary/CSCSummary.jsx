@@ -100,7 +100,20 @@ export default class CSCSummary extends Component {
           errorCode: [
             {
               errorCode: 4,
-              errorReport: 'errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReport',
+              errorReport:
+                `errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReport`,
               traceback: 'traceback1',
               timestamp: '2022/04/25 19:03:10',
             },
@@ -300,7 +313,7 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
-      selectedCSCs: [{realm:'Aux Telescope', group: 'CSC Group 1', csc: 'all'}],
+      selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'all' }],
     };
     this.managerInterface = new ManagerInterface();
   }
@@ -347,9 +360,9 @@ export default class CSCSummary extends Component {
     const newSelectedCSCs = [...this.state.selectedCSCs];
     for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
       const currentCSC = this.state.selectedCSCs[i];
-      if (realm === currentCSC.realm && group === currentCSC.group){
+      if (realm === currentCSC.realm && group === currentCSC.group) {
         newSelectedCSCs.splice(i, 1);
-        if(csc === currentCSC.csc){
+        if (csc === currentCSC.csc) {
           this.setState({ selectedCSCs: newSelectedCSCs });
           return;
         }

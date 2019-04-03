@@ -9,6 +9,7 @@
   font-size: var(--font-size-small);
   border-radius: 4px;
   width: 12em;
+  cursor: pointer;
 }
 
 .leftSection {

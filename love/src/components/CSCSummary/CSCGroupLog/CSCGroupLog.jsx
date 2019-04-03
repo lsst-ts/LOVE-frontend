@@ -25,19 +25,18 @@ export default class CSCGroupLog extends Component {
 
   render() {
     const { props } = this;
-    const data = this.props.data;
+    const { data } = this.props;
     const group = this.props.hierarchy[this.props.realm][this.props.group];
     const errorCodes = group
       .flatMap((csc) => {
         if (data[csc] && data[csc].errorCode) {
           return data[csc].errorCode.map((errorCode) => {
-            return { csc: csc, ...errorCode };
+            return { csc, ...errorCode };
           });
         }
         return [];
       })
       .sort((csc1, csc2) => (csc1.timestamp > csc2.timestamp ? -1 : 1));
-    console.log(errorCodes);
     return (
       <div className={styles.CSCGroupLogContainer}>
         <div className={styles.topBarContainerWrapper}>
@@ -49,10 +48,8 @@ export default class CSCGroupLog extends Component {
               >
                 <BackArrowIcon />
               </div>
-              <span
-                className={styles.breadcrumbGroup}
-              >
-                {props.group} {' (Error codes)'} 
+              <span className={styles.breadcrumbGroup}>
+                {props.group} {' (Error codes)'}
               </span>
             </div>
           </div>
@@ -68,7 +65,12 @@ export default class CSCGroupLog extends Component {
                   </div>
                   <div className={styles.messageTextContainer}>
                     <div className={styles.messageTopSection}>
-                      {/* <div className={styles.sourceCSC} onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, msg.csc)}>{msg.csc}</div> */}
+                      {/* <div
+                        className={styles.sourceCSC}
+                        onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, msg.csc)}
+                      >
+                        {msg.csc}
+                      </div> */}
                       <CSCDetail
                         realm={this.props.realm}
                         group={this.props.group}
