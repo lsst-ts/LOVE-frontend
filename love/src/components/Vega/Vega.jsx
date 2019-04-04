@@ -163,7 +163,7 @@ export default class Vega extends Component {
     };
 
     componentDidMount() {
-      this.remountPlot();
+      this.remountPlot(this.changeSpec(this.props.historicalData, this.props.telemetryName));
     }
 
     render() {
