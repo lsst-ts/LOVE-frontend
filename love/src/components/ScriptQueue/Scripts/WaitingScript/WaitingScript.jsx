@@ -83,7 +83,14 @@ export default class WaitingScript extends Component {
               )}
             </div>
             <div className={scriptStyles.pathTextContainer} title={path}>
-              {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
+              {(() => {
+                if (!this.props.isCompact) {
+                  return <span className={scriptStyles.pathText}>{fileFolder}</span>;
+                } else if (fileFolder !== '') {
+                  return <span className={scriptStyles.pathText}>.../</span>;
+                }
+                return null;
+              })()}
               <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
               {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
             </div>

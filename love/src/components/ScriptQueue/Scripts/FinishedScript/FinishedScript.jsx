@@ -74,8 +74,15 @@ export default class FinishedScript extends Component {
                   {this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}
                 </span>
               </div>
-              <div className={scriptStyles.pathTextContainer}>
-                {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileFolder}</span> : null}
+              <div className={scriptStyles.pathTextContainer} title={path}>
+                {(() => {
+                  if (!this.props.isCompact) {
+                    return <span className={scriptStyles.pathText}>{fileFolder}</span>;
+                  } else if (fileFolder !== '') {
+                    return <span className={scriptStyles.pathText}>.../</span>;
+                  }
+                  return null;
+                })()}
                 <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
                 {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
               </div>
