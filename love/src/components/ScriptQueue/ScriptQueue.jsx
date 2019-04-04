@@ -358,7 +358,7 @@ export default class ScriptQueue extends Component {
                       </span>
                       <span className={styles.listSubtitle}>&#8203;</span>
                     </div>
-                    <div className={styles.collapseScriptListButton} onClick={this.closeAvailableList}>
+                    <div className={styles.collapseScriptListButton} onClick={this.closeAvailableList} title='Collapse available script list'>
                       <span>&#8854;</span>
                     </div>
                   </div>
@@ -474,7 +474,7 @@ export default class ScriptQueue extends Component {
                         s
                       </span>
                     </div>
-                    <div className={styles.collapseScriptListButton} onClick={this.closeFinishedList}>
+                    <div className={styles.collapseScriptListButton} onClick={this.closeFinishedList} title='Collapse finished script list'>
                       <span>&#8854;</span>
                     </div>
                   </div>
