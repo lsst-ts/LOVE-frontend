@@ -296,6 +296,18 @@ export default class ScriptQueue extends Component {
     const currentScriptElapsedTime =
       this.state.current === 'None' || current.timestamp === undefined ? 0 : now.getTime() / 1000.0 - current.timestamp;
 
+    const totalWaitingSeconds = this.state.waitingScriptList.reduce((previousSum, currentElement) => {
+      if (!currentElement) return previousSum;
+      if (typeof currentElement.expected_duration !== 'number') return previousSum;
+      return currentElement.expected_duration + previousSum;
+    }, 0);
+
+    const totalFinishedSeconds = this.state.finishedScriptList.reduce((previousSum, currentElement) => {
+      if (!currentElement) return previousSum;
+      if (typeof currentElement.expected_duration !== 'number') return previousSum;
+      return currentElement.expected_duration + previousSum;
+    }, 0);
+
     return (
       <Panel title="Script Queue">
         <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
@@ -400,16 +412,11 @@ export default class ScriptQueue extends Component {
                   <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
                   <span className={styles.listSubtitle}>
                     Total time:{' '}
-                    {this.state.waitingScriptList
-                      .reduce((previousSum, currentElement) => {
-                        if (!currentElement) return previousSum;
-
-                        if (typeof currentElement.expected_duration !== 'number') return previousSum;
-
-                        return currentElement.expected_duration + previousSum;
-                      }, 0)
-                      .toFixed(2)}{' '}
-                    s
+                    {Math.trunc(totalWaitingSeconds / 3600) > 0 ? `${Math.trunc(totalWaitingSeconds / 3600)}h ` : ''}
+                    {Math.trunc(totalWaitingSeconds / 60) > 0
+                      ? `${Math.trunc(totalWaitingSeconds / 60 - Math.trunc(totalWaitingSeconds / 3600) * 60)}m `
+                      : ''}
+                    {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
               </div>
@@ -466,16 +473,13 @@ export default class ScriptQueue extends Component {
                       </span>
                       <span className={styles.listSubtitle}>
                         Total time:{' '}
-                        {this.state.finishedScriptList
-                          .reduce((previousSum, currentElement) => {
-                            if (!currentElement) return previousSum;
-
-                            if (typeof currentElement.elapsed_time !== 'number') return previousSum;
-
-                            return currentElement.elapsed_time + previousSum;
-                          }, 0)
-                          .toFixed(2)}{' '}
-                        s
+                        {Math.trunc(totalFinishedSeconds / 3600) > 0
+                          ? `${Math.trunc(totalFinishedSeconds / 3600)}h `
+                          : ''}
+                        {Math.trunc(totalFinishedSeconds / 60) > 0
+                          ? `${Math.trunc(totalFinishedSeconds / 60 - Math.trunc(totalFinishedSeconds / 3600) * 60)}m `
+                          : ''}
+                        {`${(totalFinishedSeconds - Math.trunc(totalFinishedSeconds / 60) * 60).toFixed(2)}s`}
                       </span>
                     </div>
                     <div
