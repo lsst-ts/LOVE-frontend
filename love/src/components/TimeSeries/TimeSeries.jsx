@@ -46,7 +46,7 @@ export default class TimeSeries extends PureComponent {
   componentWillUnmount = () => {
     this.state.subscribedStreams.forEach((stream) => {
       // eslint-disable-next-line
-      this.managerInterface.unsubscribeToTelemetry(stream[0], stream[1], (msg) => console.log(msg));
+      this.managerInterface.unsubscribeToTelemetry(stream[0], stream[1], () => 0);
     });
   };
 
