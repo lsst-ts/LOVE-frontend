@@ -14,7 +14,7 @@ export default class LoadingBar extends Component {
 
   render() {
     return (
-      <div className={styles.backgroundBar}>
+      <div className={styles.backgroundBar} title={`Script completion: ${this.props.percentage}%`}>
           <span className={[styles.percentage, this.props.percentage > 50 ? styles.dark : ''].join(' ')}>
             {`${this.props.percentage}%`}
           </span>

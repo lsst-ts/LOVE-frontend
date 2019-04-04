@@ -63,13 +63,14 @@ export default class CurrentScript extends Component {
         : path.substring(path.lastIndexOf('/'));
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
-    let percentage = 0;
+    let percentage = 100;
     const estimatedTime = Math.trunc(this.props.estimatedTime);
     const elapsedTime = Math.trunc(this.props.elapsedTime);
     if (estimatedTime > 0) {
       percentage = Math.min((100 * elapsedTime) / estimatedTime, 100);
       percentage = Math.trunc(percentage);
     }
+    if (path === 'None') percentage = 0;
     const isValid = this.props.path !== 'None';
     const typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
     const visibilityClass = !isValid ? styles.hidden : '';
