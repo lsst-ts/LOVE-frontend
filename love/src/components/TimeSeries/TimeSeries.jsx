@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
+import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries, hasFakeData } from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import styles from './TimeSeries.module.css';
@@ -85,22 +85,17 @@ export default class TimeSeries extends PureComponent {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    if (!hasFakeData) {
+      return;
+    }
     if (prevState.step !== this.state.step && this.state.step === 1) {
-      const d = getFakeHistoricalTimeSeries(
-        this.state.selectedRows,
-        new Date().getTime() - 3600 * 1000,
-        new Date(),
-      );
+      const d = getFakeHistoricalTimeSeries(this.state.selectedRows, new Date().getTime() - 3600 * 1000, new Date());
       this.setState({
         historicalData: d,
       });
     }
     if (prevState.timeWindow !== this.state.timeWindow) {
-      const d = getFakeHistoricalTimeSeries(
-        this.state.selectedRows,
-        this.state.dateStart,
-        this.state.dateEnd,
-      );
+      const d = getFakeHistoricalTimeSeries(this.state.selectedRows, this.state.dateStart, this.state.dateEnd);
       this.setState({
         historicalData: d,
       });
@@ -115,23 +110,21 @@ export default class TimeSeries extends PureComponent {
   };
 
   setHistoricalData = (dateStart, dateEnd) => {
-    this.setState({
-      dateStart,
-      dateEnd,
-      isLive: false,
-      historicalData: getFakeHistoricalTimeSeries(
-        this.state.selectedRows,
+    if (hasFakeData) {
+      this.setState({
         dateStart,
         dateEnd,
-      ),
-    });
+        isLive: false,
+        historicalData: getFakeHistoricalTimeSeries(this.state.selectedRows, dateStart, dateEnd),
+      });
+    }
   };
 
   goBack = () => {
     this.setState({
       step: 0,
     });
-  }
+  };
 
   render() {
     const columnsToDisplay = [
@@ -155,12 +148,14 @@ export default class TimeSeries extends PureComponent {
       />
     ) : (
       <div className={styles.timeseriesContainer}>
-        <TimeSeriesControls setTimeWindow={this.setTimeWindow}
-      timeWindow={String(this.state.timeWindow)}
-      setLiveMode={this.setLiveMode}
-      isLive={this.state.isLive}
-      setHistoricalData={this.setHistoricalData}
-      goBack={this.goBack} />
+        <TimeSeriesControls
+          setTimeWindow={this.setTimeWindow}
+          timeWindow={String(this.state.timeWindow)}
+          setLiveMode={this.setLiveMode}
+          isLive={this.state.isLive}
+          setHistoricalData={this.setHistoricalData}
+          goBack={this.goBack}
+        />
         <Vega
           telemetryName={this.state.telemetryName.split('-')[2]}
           historicalData={this.state.historicalData}
