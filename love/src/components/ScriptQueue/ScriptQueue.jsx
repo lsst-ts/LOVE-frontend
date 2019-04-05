@@ -359,7 +359,11 @@ export default class ScriptQueue extends Component {
                 }}
                 className={[styles.availableScriptList, styles.scriptList].join(' ')}
               >
-                <div className={[styles.collapsedScriptListLabelWrapper].join(' ')} onClick={this.openAvailableList}>
+                <div
+                  className={[styles.collapsedScriptListLabelWrapper].join(' ')}
+                  onClick={this.openAvailableList}
+                  title="Open available script list"
+                >
                   <div className={[styles.collapsedScriptListLabel].join(' ')}>&#8853;</div>
                 </div>
                 <div className={styles.collapsableScriptListContent}>
@@ -373,7 +377,7 @@ export default class ScriptQueue extends Component {
                     <div
                       className={styles.collapseScriptListButton}
                       onClick={this.closeAvailableList}
-                      title="Collapse available script list"
+                      title="Close available script list"
                     >
                       <span>&#8854;</span>
                     </div>
@@ -462,7 +466,11 @@ export default class ScriptQueue extends Component {
                 }}
                 className={[styles.finishedScriptList, styles.scriptList].join(' ')}
               >
-                <div className={[styles.collapsedScriptListLabelWrapper].join(' ')} onClick={this.openFinishedList}>
+                <div
+                  className={[styles.collapsedScriptListLabelWrapper].join(' ')}
+                  onClick={this.openFinishedList}
+                  title="Open finished script list"
+                >
                   <div className={[styles.collapsedScriptListLabel].join(' ')}>&#8853;</div>
                 </div>
                 <div className={styles.collapsableScriptListContent}>
@@ -485,7 +493,7 @@ export default class ScriptQueue extends Component {
                     <div
                       className={styles.collapseScriptListButton}
                       onClick={this.closeFinishedList}
-                      title="Collapse finished script list"
+                      title="Close finished script list"
                     >
                       <span>&#8854;</span>
                     </div>
