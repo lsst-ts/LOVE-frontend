@@ -51,7 +51,7 @@ export default class Button extends Component {
      * Type for the button.
      */
     type: PropTypes.string,
-    children: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+    children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   };
 
   static defaultProps = {
