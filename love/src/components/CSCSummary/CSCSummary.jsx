@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
 import Panel from '../Panel/Panel';
-import ManagerInterface from '../../Utils';
+import ManagerInterface, { hasFakeData } from '../../Utils';
 
 export default class CSCSummary extends Component {
   constructor(props) {
@@ -63,39 +63,39 @@ export default class CSCSummary extends Component {
       },
       data: {
         ScriptQueue: {
-          summaryState: 2,
+          summaryState: { priority: 1, summaryState: 2 },
           detailedState: {},
         },
         ScriptQueue3: {
-          summaryState: 2,
+          summaryState: { priority: 1, summaryState: 4 },
           detailedState: {},
         },
         ScriptQueue4: {
-          summaryState: 2,
+          summaryState: { priority: 1, summaryState: 2 },
           detailedState: {},
           errorCode: [
             {
               errorCode: 1,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 18:03:10',
+              timestamp: '2018/04/25 18:03:10',
             },
             {
               errorCode: 1,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:12',
+              timestamp: '2018/04/25 20:03:12',
             },
             {
               errorCode: 1,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 22:03:14',
+              timestamp: '2018/04/25 22:03:14',
             },
           ],
         },
         Scheduler13: {
-          summaryState: 3,
+          summaryState: { priority: 1, summaryState: 3 },
           detailedState: {},
           errorCode: [
             {
@@ -114,37 +114,37 @@ export default class CSCSummary extends Component {
                 ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
                 ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReport`,
               traceback: 'traceback1',
-              timestamp: '2022/04/25 19:03:10',
+              timestamp: '2018/04/25 19:03:10',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 19:03:11',
+              timestamp: '2018/04/25 19:03:11',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 19:03:12',
+              timestamp: '2018/04/25 19:03:12',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 19:03:13',
+              timestamp: '2018/04/25 19:03:13',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 21:03:12',
+              timestamp: '2018/04/25 21:03:12',
             },
             {
               errorCode: 4,
               errorReport: 'errorReport',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 23:03:14',
+              timestamp: '2018/04/25 23:03:14',
             },
           ],
           logMessage: [
@@ -157,13 +157,13 @@ export default class CSCSummary extends Component {
                 long long long long long long long long long long long long long 
                 long long long error message`,
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:10',
+              timestamp: '2018/04/25 20:03:10',
             },
             {
               level: 10,
               message: 'debug message debug message debug message ',
               traceback: '',
-              timestamp: '2022/04/25 20:03:11',
+              timestamp: '2018/04/25 20:03:11',
             },
             {
               level: 20,
@@ -172,13 +172,13 @@ export default class CSCSummary extends Component {
                 info message info message info message info message info message info message 
                 info message info message info message`,
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:12',
+              timestamp: '2018/04/25 20:03:12',
             },
             {
               level: 30,
               message: 'warning message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:13',
+              timestamp: '2018/04/25 20:03:13',
             },
             {
               level: 40,
@@ -186,7 +186,7 @@ export default class CSCSummary extends Component {
               error message error message error message error message error message error message 
               error message error message error message error message error message error message`,
               traceback: '',
-              timestamp: '2022/04/25 20:03:14',
+              timestamp: '2018/04/25 20:03:14',
             },
             {
               level: 40,
@@ -194,97 +194,97 @@ export default class CSCSummary extends Component {
               traceback: `traceback traceback traceback traceback traceback traceback traceback 
               traceback traceback traceback traceback traceback traceback traceback traceback 
               traceback traceback traceback `,
-              timestamp: '2022/04/25 20:03:15',
+              timestamp: '2018/04/25 20:03:15',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:16',
+              timestamp: '2018/04/25 20:03:16',
             },
           ],
         },
         Scheduler14: {
-          summaryState: 2,
+          summaryState: { priority: 1, summaryState: 2 },
           detailedState: {},
           logMessage: [
             {
               level: 10,
               message: 'debug message debug message debug message ',
               traceback: '',
-              timestamp: '2022/04/25 20:03:10',
+              timestamp: '2018/04/25 20:03:10',
             },
             {
               level: 20,
               message: 'info message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:11',
+              timestamp: '2018/04/25 20:03:11',
             },
             {
               level: 30,
               message: 'warning message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:12',
+              timestamp: '2018/04/25 20:03:12',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:13',
+              timestamp: '2018/04/25 20:03:13',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:14',
+              timestamp: '2018/04/25 20:03:14',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:15',
+              timestamp: '2018/04/25 20:03:15',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:16',
+              timestamp: '2018/04/25 20:03:16',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:17',
+              timestamp: '2018/04/25 20:03:17',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:18',
+              timestamp: '2018/04/25 20:03:18',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:19',
+              timestamp: '2018/04/25 20:03:19',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:20',
+              timestamp: '2018/04/25 20:03:20',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:21',
+              timestamp: '2018/04/25 20:03:21',
             },
             {
               level: 40,
               message: 'error message',
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:22',
+              timestamp: '2018/04/25 20:03:22',
             },
             {
               level: 40,
@@ -295,20 +295,20 @@ export default class CSCSummary extends Component {
                 long long long long long long long long long long long long long 
                 long long long error message`,
               traceback: 'traceback1',
-              timestamp: '2022/04/25 20:03:23',
+              timestamp: '2018/04/25 20:03:23',
             },
           ],
         },
         Scheduler2: {
-          summaryState: 2,
+          summaryState: { priority: 1, summaryState: 2 },
           detailedState: {},
         },
         CSC2: {
-          summaryState: 3,
+          summaryState: { priority: 1, summaryState: 3 },
           detailedState: {},
         },
         CSC3: {
-          summaryState: 0,
+          summaryState: { priority: 1, summaryState: 0 },
           detailedState: {},
         },
       },
@@ -317,12 +317,69 @@ export default class CSCSummary extends Component {
     this.managerInterface = new ManagerInterface();
   }
 
+  componentDidMount = () => {
+    this.subscribeToCSCs();
+  };
+
+  componentWillUnmount = () => {
+    this.unsubscribeToCSCs();
+  }
+
+  onReceiveSummaryState = (msg) => {
+    const data = JSON.parse(msg.data);
+    if (!(data.data instanceof Object)) return;
+    const newData = { ...this.state.data };
+    Object.keys(data.data).map((cscKey) => {
+      if (newData[cscKey] === undefined) newData[cscKey] = {};
+      newData[cscKey].summaryState = data.data[cscKey].summaryState[0].summaryState.value;
+    });
+    this.setState({
+      data: newData,
+    });
+  };
+
   onReceiveMessage = (msg) => {
     const data = JSON.parse(msg.data);
     if (!(data.data instanceof Object)) return;
     const newData = { ...this.state.data };
     Object.keys(data.data).map((cscKey) => {
-      newData[cscKey].summaryState = data.data[cscKey].summaryState[0].summaryState.value;
+      if (newData[cscKey] === undefined) newData[cscKey] = {};
+      Object.keys(data.data[cscKey]).forEach((stream) => {
+        // console.log(stream);
+        const newMessage = {};
+        Object.keys(data.data[cscKey][stream][0]).forEach((param) => {
+          newMessage[param] = data.data[cscKey][stream][0][param].value;
+        });
+        if (stream === 'summaryState') {
+          if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = {};
+          newData[cscKey][stream] = newMessage;
+          if (hasFakeData) {
+            newMessage.summaryState = [0, 1, 2, 3, 4][Math.floor(Math.random() * 5)];
+          }
+        }
+        //Process logMessage
+        else if (stream === 'logMessage') {
+          if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = [];
+          if (hasFakeData) {
+            newMessage.timestamp = new Date().toISOString();
+            newMessage.level = [10, 20, 30, 40][Math.floor(Math.random() * 4)];
+          }
+          newData[cscKey][stream].unshift(newMessage);
+          newData[cscKey][stream].length = 100;
+        }
+        //Process errorCode
+        else if (stream === 'errorCode') {
+          if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = [];
+          if (hasFakeData) newMessage.timestamp = new Date().toISOString();
+          newData[cscKey][stream].unshift(newMessage);
+          newData[cscKey][stream].length = 100;
+        }
+        //Process everything else
+        else {
+          if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = {};
+          newData[cscKey][stream] = newMessage;
+        }
+      });
     });
     this.setState({
       data: newData,
@@ -347,7 +404,8 @@ export default class CSCSummary extends Component {
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
           this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
-          this.managerInterface.subscribeToEvents(csc, 'heartbeat', this.onReceiveHeartbeat);
+          this.managerInterface.subscribeToEvents(csc, 'logMessage', this.onReceiveMessage);
+          this.managerInterface.subscribeToEvents(csc, 'errorCode', this.onReceiveMessage);
         });
       });
     });
@@ -358,16 +416,13 @@ export default class CSCSummary extends Component {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
-          this.managerInterface.unsubscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
-          this.managerInterface.unsubscribeToEvents(csc, 'heartbeat', this.onReceiveHeartbeat);
+          this.managerInterface.unsubscribeToEvents(csc, 'summaryState', () => 0);
+          this.managerInterface.unsubscribeToEvents(csc, 'logMessage', () => 0);
+          this.managerInterface.unsubscribeToEvents(csc, 'errorCode', () => 0);
         });
       });
     });
   };
-
-  componentWillUnmount() {
-    this.unsubscribeToCSCs();
-  }
 
   toggleCSCExpansion = (realm, group, csc) => {
     const newSelectedCSCs = [...this.state.selectedCSCs];

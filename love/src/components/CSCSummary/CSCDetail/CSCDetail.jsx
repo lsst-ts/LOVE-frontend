@@ -61,7 +61,7 @@ export default class CSCDetail extends Component {
 
   render() {
     const selfData = this.props.data[this.props.name];
-    const summaryStateValue = selfData ? selfData.summaryState : 0;
+    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
     return (
