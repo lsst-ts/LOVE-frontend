@@ -71,7 +71,7 @@
   width: calc(100% - 2em);
   padding: 1em;
   flex-grow: 1;
-  /* flex-basis: 100%; */
+  flex-basis: 100%;
   display: flex;
   flex-direction: column;
   min-height: 8em;

@@ -1,7 +1,7 @@
 import sockette from 'sockette';
 
 export const hasCommandPrivileges = false;
-export const hasFakeData = false;
+export const hasFakeData = true;
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {

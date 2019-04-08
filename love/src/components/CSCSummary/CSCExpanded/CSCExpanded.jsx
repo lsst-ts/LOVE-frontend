@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCExpanded.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
@@ -7,7 +7,7 @@ import InfoIcon from '../../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 
-export default class CSCExpanded extends Component {
+export default class CSCExpanded extends PureComponent {
   static propTypes = {
     name: PropTypes.string,
     group: PropTypes.string,
@@ -85,7 +85,7 @@ export default class CSCExpanded extends Component {
 
   render() {
     const selfData = this.props.data[this.props.name];
-    const summaryStateValue = selfData ? selfData.summaryState : 0;
+    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
     return (
