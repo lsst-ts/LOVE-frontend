@@ -14,6 +14,8 @@ export default class CSCGroup extends Component {
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
     hierarchy: PropTypes.object,
+    clearCSCErrorCodes: PropTypes.func,
+    clearCSCLogMessages: PropTypes.func,
   };
 
   static defaultProps = {
@@ -24,6 +26,8 @@ export default class CSCGroup extends Component {
     onCSCClick: () => 0,
     selectedCSCs: [],
     hierarchy: {},
+    clearCSCErrorCodes: () => 0,
+    clearCSCLogMessages: () => 0,
   };
 
   constructor(props) {
@@ -55,7 +59,8 @@ export default class CSCGroup extends Component {
           data={this.props.data}
           onCSCClick={this.props.onCSCClick}
           hierarchy={this.props.hierarchy}
-        />
+          clearCSCErrorCodes={this.props.clearCSCErrorCodes}
+          />
       </div>
     ) : (
       <div className={styles.CSCGroupContainer}>
@@ -65,7 +70,9 @@ export default class CSCGroup extends Component {
           name={selectedCSC.csc}
           data={this.props.data}
           onCSCClick={this.props.onCSCClick}
-        />
+          clearCSCErrorCodes={this.props.clearCSCErrorCodes}
+          clearCSCLogMessages={this.props.clearCSCLogMessages}
+          />
       </div>
     );
   };
