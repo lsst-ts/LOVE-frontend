@@ -6,6 +6,7 @@ import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import InfoIcon from '../../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
+import Button from '../../Button/Button';
 
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
@@ -14,6 +15,8 @@ export default class CSCExpanded extends PureComponent {
     realm: PropTypes.string,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
+    clearCSCErrorCodes: PropTypes.func,
+    clearCSCLogMessages: PropTypes.func,
   };
 
   static defaultProps = {
@@ -22,6 +25,8 @@ export default class CSCExpanded extends PureComponent {
     realm: '',
     data: {},
     onCSCClick: () => 0,
+    clearCSCErrorCodes: () => 0,
+    clearCSCLogMessages: () => 0,
   };
 
   constructor(props) {
@@ -122,7 +127,17 @@ export default class CSCExpanded extends PureComponent {
         </div>
         {selfData && selfData.errorCode ? (
           <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
-            <div>ERROR CODE</div>
+            <div className={styles.logContainerTopBar}>
+              <div>ERROR CODE</div>
+              <div>
+                <Button
+                  size="extra-small"
+                  onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name)}
+                >
+                  CLEAR
+                </Button>
+              </div>
+            </div>
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
               {selfData.errorCode.map((msg) => {
                 return (
@@ -142,7 +157,17 @@ export default class CSCExpanded extends PureComponent {
           </div>
         ) : null}
         <div className={[styles.logContainer, styles.messageLogContainer].join(' ')}>
-          <div>MESSAGE LOG</div>
+          <div className={styles.logContainerTopBar}>
+            <div>MESSAGE LOG</div>
+            <div>
+              <Button
+                size="extra-small"
+                onClick={() => this.props.clearCSCLogMessages(this.props.realm, this.props.group, this.props.name)}
+              >
+                CLEAR
+              </Button>
+            </div>
+          </div>
           <div className={styles.filtersContainer}>
             {Object.keys(this.state.messageFilters).map((key) => {
               return (

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './CSCGroupLog.module.css';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import CSCDetail from '../CSCDetail/CSCDetail';
+import Button from '../../Button/Button';
 
 export default class CSCGroupLog extends Component {
   static propTypes = {
@@ -12,6 +13,8 @@ export default class CSCGroupLog extends Component {
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     hierarchy: PropTypes.object,
+    clearCSCErrorCodes: PropTypes.func,
+    clearCSCLogMessages: PropTypes.func,
   };
 
   static defaultProps = {
@@ -21,6 +24,8 @@ export default class CSCGroupLog extends Component {
     data: {},
     onCSCClick: () => 0,
     hierarchy: {},
+    clearCSCErrorCodes: () => 0,
+    clearCSCLogMessages: () => 0,
   };
 
   render() {
@@ -56,7 +61,17 @@ export default class CSCGroupLog extends Component {
           </div>
         </div>
         <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
-          <div>ERROR CODE</div>
+          <div className={styles.logContainerTopBar}>
+            <div>ERROR CODE</div>
+            <div>
+              <Button
+                size="extra-small"
+                onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name)}
+              >
+                CLEAR
+              </Button>
+            </div>
+          </div>
           <div className={[styles.log, styles.messageLogContent].join(' ')}>
             {errorCodes.map((msg) => {
               return (

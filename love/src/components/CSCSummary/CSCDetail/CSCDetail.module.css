@@ -42,7 +42,7 @@
 }
 
 .summaryState {
-  padding: 0 0.5em;
+  min-width: 1.5em;
   user-select: none;
 }
 

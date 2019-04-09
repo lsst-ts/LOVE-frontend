@@ -67,6 +67,12 @@
 .logContainerWrapper {
 }
 
+.logContainerTopBar {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.5em;
+}
+
 .logContainer {
   width: calc(100% - 2em);
   padding: 1em;

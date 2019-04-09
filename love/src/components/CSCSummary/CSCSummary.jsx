@@ -312,7 +312,8 @@ export default class CSCSummary extends Component {
           detailedState: {},
         },
       },
-      selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'all' }],
+      selectedCSCs: [],
+      // selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'ATCamera' }],
     };
     this.managerInterface = new ManagerInterface();
   }
@@ -323,19 +324,6 @@ export default class CSCSummary extends Component {
 
   componentWillUnmount = () => {
     this.unsubscribeToCSCs();
-  }
-
-  onReceiveSummaryState = (msg) => {
-    const data = JSON.parse(msg.data);
-    if (!(data.data instanceof Object)) return;
-    const newData = { ...this.state.data };
-    Object.keys(data.data).map((cscKey) => {
-      if (newData[cscKey] === undefined) newData[cscKey] = {};
-      newData[cscKey].summaryState = data.data[cscKey].summaryState[0].summaryState.value;
-    });
-    this.setState({
-      data: newData,
-    });
   };
 
   onReceiveMessage = (msg) => {
@@ -344,6 +332,7 @@ export default class CSCSummary extends Component {
     const newData = { ...this.state.data };
     Object.keys(data.data).map((cscKey) => {
       if (newData[cscKey] === undefined) newData[cscKey] = {};
+      else newData[cscKey] = { ...newData[cscKey] };
       Object.keys(data.data[cscKey]).forEach((stream) => {
         // console.log(stream);
         const newMessage = {};
@@ -352,13 +341,13 @@ export default class CSCSummary extends Component {
         });
         if (stream === 'summaryState') {
           if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = {};
-          newData[cscKey][stream] = newMessage;
+          else newData[cscKey][stream] = { ...newData[cscKey][stream] };
           if (hasFakeData) {
             newMessage.summaryState = [0, 1, 2, 3, 4][Math.floor(Math.random() * 5)];
           }
-        }
-        //Process logMessage
-        else if (stream === 'logMessage') {
+          newData[cscKey][stream] = newMessage;
+        } else if (stream === 'logMessage') {
+          // Process logMessage
           if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = [];
           if (hasFakeData) {
             newMessage.timestamp = new Date().toISOString();
@@ -366,23 +355,21 @@ export default class CSCSummary extends Component {
           }
           newData[cscKey][stream].unshift(newMessage);
           newData[cscKey][stream].length = 100;
-        }
-        //Process errorCode
-        else if (stream === 'errorCode') {
+        } else if (stream === 'errorCode') {
+          // Process errorCode
           if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = [];
           if (hasFakeData) newMessage.timestamp = new Date().toISOString();
           newData[cscKey][stream].unshift(newMessage);
           newData[cscKey][stream].length = 100;
-        }
-        //Process everything else
-        else {
+        } else {
+          // Process everything else
           if (newData[cscKey][stream] === undefined) newData[cscKey][stream] = {};
           newData[cscKey][stream] = newMessage;
         }
       });
     });
     this.setState({
-      data: newData,
+      data: { ...newData },
     });
   };
 
@@ -441,6 +428,28 @@ export default class CSCSummary extends Component {
     });
   };
 
+  clearCSCErrorCodes = (realm, group, csc) => {
+    const data = { ...this.state.data };
+    if (csc === 'all') {
+      this.state.hierarchy[realm][group].forEach((cscKey) => {
+        if (data[cscKey]) data[cscKey].errorCode = undefined;
+      });
+    } else {
+      data[csc].errorCode = undefined;
+    }
+    this.setState({
+      data,
+    });
+  };
+
+  clearCSCLogMessages = (realm, group, csc) => {
+    const data = { ...this.state.data };
+    data[csc].logMessage = undefined;
+    this.setState({
+      data,
+    });
+  };
+
   render() {
     return (
       <Panel title="CSC Summary" className={styles.panel}>
@@ -455,6 +464,8 @@ export default class CSCSummary extends Component {
                   onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}
                   hierarchy={this.state.hierarchy}
+                  clearCSCErrorCodes={this.clearCSCErrorCodes}
+                  clearCSCLogMessages={this.clearCSCLogMessages}
                 />
               </div>
             );

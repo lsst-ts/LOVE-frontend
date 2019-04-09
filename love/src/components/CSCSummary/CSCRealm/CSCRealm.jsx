@@ -11,6 +11,8 @@ export default class CSCRealm extends Component {
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
     hierarchy: PropTypes.object,
+    clearCSCErrorCodes: PropTypes.func,
+    clearCSCLogMessages: PropTypes.func,
   };
 
   static defaultProps = {
@@ -20,6 +22,8 @@ export default class CSCRealm extends Component {
     onCSCClick: () => 0,
     selectedCSCs: [],
     hierarchy: {},
+    clearCSCErrorCodes: () => 0,
+    clearCSCLogMessages: () => 0,
   };
 
   constructor(props) {
@@ -55,6 +59,8 @@ export default class CSCRealm extends Component {
                 onCSCClick={this.props.onCSCClick}
                 selectedCSCs={this.props.selectedCSCs}
                 hierarchy={this.props.hierarchy}
+                clearCSCErrorCodes={this.props.clearCSCErrorCodes}
+                clearCSCLogMessages={this.props.clearCSCLogMessages}
               />
             </div>
           );
