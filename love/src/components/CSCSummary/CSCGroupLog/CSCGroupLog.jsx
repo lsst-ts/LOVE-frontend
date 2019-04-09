@@ -37,6 +37,7 @@ export default class CSCGroupLog extends Component {
         return [];
       })
       .sort((csc1, csc2) => (csc1.timestamp > csc2.timestamp ? -1 : 1));
+    errorCodes.length = 100;
     return (
       <div className={styles.CSCGroupLogContainer}>
         <div className={styles.topBarContainerWrapper}>
