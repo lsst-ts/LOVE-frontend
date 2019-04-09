@@ -59,6 +59,14 @@ export default class CSCDetail extends Component {
     },
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    const selfData = nextProps.data[nextProps.name];
+    const oldSelfData = this.props.data[this.props.name];
+    const oldSummaryStateValue = oldSelfData && oldSelfData.summaryState ? oldSelfData.summaryState.summaryState : 0;
+    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
+    return this.props.name !== nextProps.name || oldSummaryStateValue !== summaryStateValue;
+  };
+
   render() {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
@@ -74,10 +82,12 @@ export default class CSCDetail extends Component {
             {summaryState.char}
           </span>
         </div>
-        <div className={styles.middleSection} title={this.props.name}>{this.props.name}</div>
+        <div className={styles.middleSection} title={this.props.name}>
+          {this.props.name}
+        </div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
-            <HeartbeatIcon status="ok" title={`${this.props.name} heartbeat`}/>
+            <HeartbeatIcon status="ok" title={`${this.props.name} heartbeat`} />
           </div>
         </div>
       </div>
