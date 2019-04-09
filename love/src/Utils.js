@@ -26,11 +26,11 @@ export default class ManagerInterface {
   }
 
   static getApiBaseUrl() {
-    return `http://${window.location.hostname}/manager/api/`;
+    return `http://${window.location.host}/manager/api/`;
   }
 
   static getWebsocketsUrl() {
-    return `ws://${window.location.hostname}/manager/ws/subscription?token=`;
+    return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
 
   static getHeaders() {
