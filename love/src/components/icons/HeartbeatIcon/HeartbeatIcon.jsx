@@ -5,7 +5,7 @@ import styles from './HeartbeatIcon.module.css';
 export default class HeartbeatIcon extends Component {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
-    status: PropTypes.oneOf(['ok', 'alert']),
+    status: PropTypes.oneOf(['ok', 'alert', 'unknown']),
     title: PropTypes.string,
   };
 
@@ -15,6 +15,7 @@ export default class HeartbeatIcon extends Component {
   };
 
   render() {
+    
     const statusStyle = this.props.status === 'ok' ? styles.okStatus : styles.alertStatus;
     const title = this.props.title;
     return (

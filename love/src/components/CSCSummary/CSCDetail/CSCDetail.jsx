@@ -64,7 +64,14 @@ export default class CSCDetail extends Component {
     const oldSelfData = this.props.data[this.props.name];
     const oldSummaryStateValue = oldSelfData && oldSelfData.summaryState ? oldSelfData.summaryState.summaryState : 0;
     const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
-    return this.props.name !== nextProps.name || oldSummaryStateValue !== summaryStateValue;
+
+    const oldHeartbeatValue = oldSelfData && oldSelfData.heartbeat ? oldSelfData.heartbeat.lost : 0;
+    const heartbeatValue = selfData && selfData.heartbeat ? selfData.heartbeat.lost : 0;
+    return (
+      this.props.name !== nextProps.name ||
+      oldSummaryStateValue !== summaryStateValue ||
+      oldHeartbeatValue !== heartbeatValue
+    );
   };
 
   render() {
@@ -72,6 +79,13 @@ export default class CSCDetail extends Component {
     const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
+    const hearbeatAvailable = selfData && selfData.heartbeat;
+    let heartbeatStatus = 'unknown';
+    let lost = 0;
+    let timeDiff = 0;
+    if (hearbeatAvailable ) heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
+    if (hearbeatAvailable ) lost = selfData.heartbeat.lost;
+    if (hearbeatAvailable ) timeDiff = Math.ceil(new Date().getTime()/1000 - selfData.heartbeat.last_heartbeat_timestamp);
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
@@ -87,7 +101,7 @@ export default class CSCDetail extends Component {
         </div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
-            <HeartbeatIcon status="ok" title={`${this.props.name} heartbeat`} />
+            <HeartbeatIcon status={heartbeatStatus} title={`${this.props.name} heartbeat\nLost: ${lost}\nLast seen:${timeDiff} seconds ago`} />
           </div>
         </div>
       </div>
