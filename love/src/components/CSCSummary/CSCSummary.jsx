@@ -326,11 +326,23 @@ export default class CSCSummary extends Component {
     this.unsubscribeToCSCs();
   };
 
+  processHeartbeat = (data) => {
+    const newData = { ...this.state.data };
+    Object.keys(data).forEach((cscKey) => {
+      newData[cscKey] = { ...newData[cscKey], heartbeat: data[cscKey] };
+    });
+    return newData;
+  };
+
   onReceiveMessage = (msg) => {
     const data = JSON.parse(msg.data);
     if (!(data.data instanceof Object)) return;
-    const newData = { ...this.state.data };
-    Object.keys(data.data).map((cscKey) => {
+    let newData = { ...this.state.data };
+    Object.keys(data.data).forEach((cscKey) => {
+      if (cscKey === 'Heartbeat') {
+        newData = this.processHeartbeat(data.data[cscKey]);
+        return;
+      }
       if (newData[cscKey] === undefined) newData[cscKey] = {};
       else newData[cscKey] = { ...newData[cscKey] };
       Object.keys(data.data[cscKey]).forEach((stream) => {
@@ -386,6 +398,7 @@ export default class CSCSummary extends Component {
   };
 
   subscribeToCSCs = () => {
+    this.managerInterface.subscribeToEvents('Heartbeat', 'all', this.onReceiveMessage);
     Object.keys(this.state.hierarchy).map((realm) => {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
@@ -399,6 +412,7 @@ export default class CSCSummary extends Component {
   };
 
   unsubscribeToCSCs = () => {
+    this.managerInterface.subscribeToEvents('Heartbeat', 'all', () => 0);
     Object.keys(this.state.hierarchy).map((realm) => {
       const groupsDict = this.state.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
