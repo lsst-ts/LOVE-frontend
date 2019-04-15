@@ -82,10 +82,14 @@ export default class CSCDetail extends Component {
     const hearbeatAvailable = selfData && selfData.heartbeat;
     let heartbeatStatus = 'unknown';
     let lost = 0;
-    let timeDiff = 0;
-    if (hearbeatAvailable ) heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
-    if (hearbeatAvailable ) lost = selfData.heartbeat.lost;
-    if (hearbeatAvailable ) timeDiff = Math.ceil(new Date().getTime()/1000 - selfData.heartbeat.last_heartbeat_timestamp);
+    let timeDiff = -1;
+    if (hearbeatAvailable) heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
+    if (hearbeatAvailable) lost = selfData.heartbeat.lost;
+    if (hearbeatAvailable) {
+      if (selfData.heartbeat.last_heartbeat_timestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - selfData.heartbeat.last_heartbeat_timestamp);
+    }
+    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
@@ -101,7 +105,10 @@ export default class CSCDetail extends Component {
         </div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
-            <HeartbeatIcon status={heartbeatStatus} title={`${this.props.name} heartbeat\nLost: ${lost}\nLast seen:${timeDiff} seconds ago`} />
+            <HeartbeatIcon
+              status={heartbeatStatus}
+              title={`${this.props.name} heartbeat\nLost: ${lost}\nLast seen: ${timeDiffText}`}
+            />
           </div>
         </div>
       </div>
