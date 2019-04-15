@@ -28,6 +28,8 @@ export default class CurrentScript extends Component {
     processState: PropTypes.string,
     /** Timestamp of script creation */
     timestamp: PropTypes.number,
+    /** Heartbeat data with number of consecutive lost heartbeats and last received timestamp */
+    heartbeatData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -39,6 +41,7 @@ export default class CurrentScript extends Component {
     processState: 'Unknown',
     estimatedTime: 0,
     elapsedTime: 0,
+    heartbeatData: {},
   };
 
   constructor(props) {
@@ -75,6 +78,18 @@ export default class CurrentScript extends Component {
     const typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
     const visibilityClass = !isValid ? styles.hidden : '';
 
+    const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
+    let heartbeatStatus = 'unknown';
+    let {lost} = this.props.heartbeatData;
+    if(lost === undefined) lost = 0;
+    let timeDiff = -1;
+    if (isHearbeatAvailable) {
+      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
+      if (this.props.heartbeatData.lastHeartbeatTimestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.lastHeartbeatTimestamp);
+    }
+    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+
     return (
       <div className={scriptStyles.scriptContainer}>
         <div className={styles.currentScriptContainer} onClick={this.onClick}>
@@ -97,7 +112,10 @@ export default class CurrentScript extends Component {
             </div>
             <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
               <div className={scriptStyles.heartBeatContainer}>
-                <HeartbeatIcon />
+                <HeartbeatIcon
+                  status={heartbeatStatus}
+                  title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
+                />
               </div>
               <div
                 className={scriptStyles.scriptStateContainer}

@@ -79,13 +79,13 @@ export default class CSCDetail extends Component {
     const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
-    const hearbeatAvailable = selfData && selfData.heartbeat;
+    const isHearbeatAvailable = selfData && selfData.heartbeat;
     let heartbeatStatus = 'unknown';
     let lost = 0;
     let timeDiff = -1;
-    if (hearbeatAvailable) heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
-    if (hearbeatAvailable) lost = selfData.heartbeat.lost;
-    if (hearbeatAvailable) {
+    if (isHearbeatAvailable) {
+      heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
+      lost = selfData.heartbeat.lost;
       if (selfData.heartbeat.last_heartbeat_timestamp < 0) timeDiff = -1;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - selfData.heartbeat.last_heartbeat_timestamp);
     }

@@ -85,6 +85,7 @@ export default class ScriptQueue extends Component {
         //   index: 7,
         // },
       ],
+      heartbeats: {},
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
@@ -100,6 +101,12 @@ export default class ScriptQueue extends Component {
     if (data.ScriptQueueState === undefined) return;
 
     data = data.ScriptQueueState.stream;
+
+    if (data.script_heartbeat) {
+      this.processHeartbeat(data);
+      return;
+    }
+
     const { current } = data;
     const { state } = data;
     const finishedScriptList = data.finished_scripts;
@@ -114,13 +121,27 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  processHeartbeat = (data) => {
+    const { salindex, ...scriptData } = data.script_heartbeat;
+    const currentHeartbeats = { ...this.state.heartbeats };
+
+    currentHeartbeats[salindex] = {
+      lost: scriptData.lost,
+      lastHeartbeatTimestamp: scriptData.last_heartbeat_timestamp,
+    };
+
+    this.setState({
+      heartbeats: currentHeartbeats,
+    });
+  };
+
   componentDidMount = () => {
     this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
   };
 
   componentWillUnmount = () => {
     this.managerInterface.unsubscribeToEvents('ScriptQueueState', 'stream', () => 0);
-  }
+  };
 
   displayAvailableScripts = () => {
     this.setState({
@@ -332,6 +353,7 @@ export default class ScriptQueue extends Component {
                   isStandard={current.type ? current.type === 'Standard' : undefined}
                   estimatedTime={current.expected_duration}
                   elapsedTime={currentScriptElapsedTime}
+                  heartbeatData={this.state.heartbeats[current.index]}
                 />
               </div>
             </div>
@@ -455,6 +477,7 @@ export default class ScriptQueue extends Component {
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
+                        heartbeatData={this.state.heartbeats[script.index]}
                         {...script}
                       />
                     </DraggableScript>

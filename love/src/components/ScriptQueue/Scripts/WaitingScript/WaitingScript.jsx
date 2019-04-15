@@ -28,6 +28,8 @@ export default class WaitingScript extends Component {
     process_state: PropTypes.string,
     /** Timestamp of script creation */
     timestamp: PropTypes.number,
+    /** Heartbeat data with number of consecutive lost heartbeats and last received timestamp */
+    heartbeatData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -38,6 +40,7 @@ export default class WaitingScript extends Component {
     script_state: 'Unknown',
     process_state: 'Unknown',
     isCompact: false,
+    heartbeatData: {},
   };
 
   constructor(props) {
@@ -66,6 +69,18 @@ export default class WaitingScript extends Component {
     if (this.props.isStandard !== undefined) {
       typeTag = this.props.isStandard ? 'Standard' : 'External';
     }
+
+    const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
+    let heartbeatStatus = 'unknown';
+    let {lost} = this.props.heartbeatData;
+    if(lost === undefined) lost = 0;
+    let timeDiff = -1;
+    if (isHearbeatAvailable) {
+      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
+      if (this.props.heartbeatData.lastHeartbeatTimestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.lastHeartbeatTimestamp);
+    }
+    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
     return (
       <div className={scriptStyles.scriptContainer}>
@@ -104,7 +119,7 @@ export default class WaitingScript extends Component {
           </div>
           <div className={scriptStyles.scriptStatusContainer}>
             <div className={scriptStyles.heartBeatContainer}>
-              <HeartbeatIcon />
+              <HeartbeatIcon status={heartbeatStatus} title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`} />
             </div>
             <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <ScriptStatus
