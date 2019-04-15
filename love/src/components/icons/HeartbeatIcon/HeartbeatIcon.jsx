@@ -15,8 +15,9 @@ export default class HeartbeatIcon extends Component {
   };
 
   render() {
-    
-    const statusStyle = this.props.status === 'ok' ? styles.okStatus : styles.alertStatus;
+    let statusStyle = '';
+    if (this.props.status === 'ok') statusStyle = styles.okStatus;
+    if (this.props.status === 'alert') statusStyle = styles.alertStatus;
     const title = this.props.title;
     return (
       <svg
