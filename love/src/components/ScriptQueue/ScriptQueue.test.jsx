@@ -32,7 +32,10 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     server.send(message);
   });
 
-  afterEach(rtl.cleanup);
+  afterEach(() => {
+    rtl.cleanup();
+    server.close();
+  });
 
   it(`THEN should display the list of available scripts`, async () => {
     const availableListColumn = await rtl.waitForElement(() =>
