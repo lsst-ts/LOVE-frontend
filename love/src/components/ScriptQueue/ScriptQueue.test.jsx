@@ -70,9 +70,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
 
     message.data.ScriptQueueState.stream.waiting_scripts.forEach(async (script) => {
       let scripIndex = '' + script.index;
-      let scriptElement = await rtl.waitForElement(() =>
-        rtl.getByText(waitingListColumn, scripIndex, { exact: false }),
-      );
+      let scriptElement = rtl.getByText(waitingListColumn, scripIndex, { exact: false });
 
       const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
         const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
@@ -80,7 +78,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
         const hasProcessState = element.textContent.includes(`Process state${script.process_state}`);
         const hasScriptState = element.textContent.includes(`Script state${script.script_state}`);
         const hasEstimatedTime = element.textContent.includes(`Estimated time: ${script.expected_duration.toFixed(2)}`);
-
+        
         return hasType && hasPath && hasProcessState && hasScriptState && hasEstimatedTime;
       });
 
