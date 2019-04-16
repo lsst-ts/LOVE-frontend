@@ -1,0 +1,48 @@
+.summaryContainer {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+.summaryComponentWrapper {
+  min-width: 30em;
+  padding: 0.25em;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.summaryComponent {
+  background: var(--second-secondary-background-color);
+  padding: 1em;
+  height: inherit;
+}
+
+.summaryComponentTitle {
+  font-size: var(--font-size-large);
+  color: var(--base-font-color);
+  font-weight: 600;
+}
+
+.telemetryValue {
+  color: var(--base-font-color);
+}
+
+.arrow {
+  color: var(--base-font-color);
+  font-size: 2.0em;
+  animation: blinker 2.5s linear infinite;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+@keyframes blinker {
+  30% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  80% {
+    opacity: 1;
+  }
+}
