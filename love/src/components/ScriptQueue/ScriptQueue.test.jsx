@@ -4,6 +4,7 @@ import 'jest-dom/extend-expect';
 import WS from 'jest-websocket-mock';
 import ScriptQueue from '../ScriptQueue/ScriptQueue';
 import message from './QueueMessage';
+import * as testUtils from '../../TestUtils';
 
 const findFirstParent = (element, criteria) => {
   if (criteria(element)) return element;
@@ -37,7 +38,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     server.close();
   });
 
-  it(`THEN should display the list of available scripts`, async () => {
+  test(`THEN it should display the list of available scripts`, async () => {
     const availableListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('AVAILABLE SCRIPTS') && !el.textContent.includes('WAITING');
@@ -60,7 +61,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     });
   });
 
-  it(`THEN should display the list of waiting scripts`, async () => {
+  test(`THEN it should display the list of waiting scripts`, async () => {
     const waitingListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('WAITING') && !el.textContent.includes('AVAILABLE SCRIPTS');
@@ -73,7 +74,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
         rtl.getByText(waitingListColumn, scripIndex, { exact: false }),
       );
 
-      const firstParentMatching = findFirstParent(scriptElement, (element) => {
+      const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
         const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
         const hasPath = element.textContent.includes(`${script.path}`);
         const hasProcessState = element.textContent.includes(`Process state${script.process_state}`);
