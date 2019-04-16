@@ -2,7 +2,6 @@ const message = {
   data: {
     ScriptQueueState: {
       stream: {
-        max_lost_heartbeats: 5,
         heartbeat_timeout: 15,
         available_scripts: [
           { type: 'standard', path: 'script2' },
@@ -24,9 +23,7 @@ const message = {
             expected_duration: 0,
             type: 'standard',
             path: 'script1',
-            lost_heartbeats: 0,
             setup: true,
-            last_heartbeat_timestamp: 0,
           },
           {
             index: 100020,
@@ -36,9 +33,7 @@ const message = {
             expected_duration: 0,
             type: 'standard',
             path: 'script1',
-            lost_heartbeats: 0,
             setup: true,
-            last_heartbeat_timestamp: 0,
           },
           {
             index: 100019,
@@ -48,9 +43,7 @@ const message = {
             expected_duration: 0,
             type: 'standard',
             path: 'script1',
-            lost_heartbeats: 0,
             setup: true,
-            last_heartbeat_timestamp: 0,
           }
         ],
         waiting_scripts: [
@@ -62,9 +55,7 @@ const message = {
             expected_duration: 600.0,
             type: 'standard',
             path: 'script1',
-            lost_heartbeats: 1,
             setup: true,
-            last_heartbeat_timestamp: 0,
           },
         ],
         current: {
@@ -75,9 +66,7 @@ const message = {
           expected_duration: 600.0,
           type: 'standard',
           path: 'script1',
-          lost_heartbeats: 0,
           setup: true,
-          last_heartbeat_timestamp: 1555361244.419376,
         },
       },
     },
