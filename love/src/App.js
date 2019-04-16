@@ -13,6 +13,7 @@ import TimeSeries from './components/TimeSeries/TimeSeries';
 import ManagerInterface from './Utils';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import CSCSummary from './components/CSCSummary/CSCSummary';
+import AuxTel from './components/AuxTel/AuxTel';
 
 class App extends Component {
   static propTypes = {
@@ -181,6 +182,8 @@ class App extends Component {
           />
           <PrivateRoute token={this.state.token} path="/script-queue" component={ScriptQueue} />
           <PrivateRoute token={this.state.token} path="/csc-summary" component={CSCSummary} />
+          <PrivateRoute token={this.state.token} path="/aux-tel" component={AuxTel} />
+          <PrivateRoute token={this.state.token} path="/auxiliary-telescope" component={AuxTel} />
           <PrivateRoute
             token={this.state.token}
             path="/"
