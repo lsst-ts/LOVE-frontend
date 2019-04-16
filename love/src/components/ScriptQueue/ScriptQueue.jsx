@@ -350,7 +350,7 @@ export default class ScriptQueue extends Component {
                   index={current.index}
                   scriptState={current.script_state}
                   processState={current.process_state}
-                  isStandard={current.type ? current.type === 'Standard' : undefined}
+                  isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                   estimatedTime={current.expected_duration}
                   elapsedTime={currentScriptElapsedTime}
                   heartbeatData={this.state.heartbeats[current.index]}

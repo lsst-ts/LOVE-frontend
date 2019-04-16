@@ -89,18 +89,15 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
   });
 
   test(`THEN it should display the list of finished scripts`, async () => {
-    debugger;
     const waitingListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('FINISHED') && !el.textContent.includes('AVAILABLE SCRIPTS');
       }),
     );
 
-    message.data.ScriptQueueState.stream.finished_scripts.forEach(async (script) => {
+    message.data.ScriptQueueState.stream.finished_scripts.forEach((script) => {
       let scripIndex = '' + script.index;
-      let scriptElement = await rtl.waitForElement(() =>
-        rtl.getByText(waitingListColumn, scripIndex, { exact: false }),
-      );
+      let scriptElement = rtl.getByText(waitingListColumn, scripIndex, { exact: false });
 
       const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
         const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
@@ -109,13 +106,56 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
         const hasScriptState = element.textContent.includes(`Script state${script.script_state}`);
         const hasEstimatedTime = element.textContent.includes(`Estimated time: ${script.expected_duration.toFixed(2)}`);
         const hasTotalTime = element.textContent.includes(`Total time: ${script.elapsed_time.toFixed(2)}`);
-        
-        return hasType && hasPath && hasProcessState && hasScriptState && hasEstimatedTime;
+        const isInScope =
+          !element.textContent.includes('AVAILABLE') ||
+          !element.textContent.includes('WAITING') ||
+          !element.textContent.includes('FINISHED');
+        const hasIndex = element.textContent.includes(`${script.index}`);
+
+        return (
+          hasType &&
+          hasPath &&
+          hasProcessState &&
+          hasScriptState &&
+          hasEstimatedTime &&
+          hasTotalTime &&
+          isInScope &&
+          hasIndex
+        );
       });
 
       expect(firstParentMatching).toBeTruthy();
     });
-  });  
+  });
+
+  test(`THEN it should display the current script`, async () => {
+    const currentScriptElement = await rtl.waitForElement(() =>
+      scriptQueue.getByText((content, el) => {
+        return el.textContent.includes('CURRENT') && !el.textContent.includes('AVAILABLE SCRIPTS');
+      }),
+    );
+
+    const script = message.data.ScriptQueueState.stream.current;
+    let scripIndex = '' + script.index;
+    let scriptElement = rtl.getByText(currentScriptElement, scripIndex, { exact: false });
+
+    const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
+      const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
+      const hasPath = element.textContent.includes(`${script.path}`);
+      const hasProcessState = element.textContent.includes(`Process state${script.process_state}`);
+      const hasScriptState = element.textContent.includes(`Script state${script.script_state}`);
+      const hasEstimatedTime = element.textContent.includes(`Estimated time: ${script.expected_duration.toFixed(2)}`);
+      const isInScope =
+        !element.textContent.includes('AVAILABLE') ||
+        !element.textContent.includes('WAITING') ||
+        !element.textContent.includes('FINISHED');
+      const hasIndex = element.textContent.includes(`${script.index}`);
+
+      return hasType && hasPath && hasProcessState && hasScriptState && hasEstimatedTime && hasIndex && isInScope;
+    });
+
+    expect(firstParentMatching).toBeTruthy();
+  });
 });
 
 ('se ve el heartbeat de los scripts');
