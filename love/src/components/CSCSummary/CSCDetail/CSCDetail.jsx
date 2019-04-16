@@ -81,11 +81,11 @@ export default class CSCDetail extends Component {
     const { props } = this;
     const isHearbeatAvailable = selfData && selfData.heartbeat;
     let heartbeatStatus = 'unknown';
-    let lost = 0;
+    let nLost = 0;
     let timeDiff = -1;
     if (isHearbeatAvailable) {
       heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
-      lost = selfData.heartbeat.lost;
+      nLost = selfData.heartbeat.lost;
       if (selfData.heartbeat.last_heartbeat_timestamp < 0) timeDiff = -1;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - selfData.heartbeat.last_heartbeat_timestamp);
     }
@@ -107,7 +107,7 @@ export default class CSCDetail extends Component {
           <div className={styles.heartbeatIconWrapper}>
             <HeartbeatIcon
               status={heartbeatStatus}
-              title={`${this.props.name} heartbeat\nLost: ${lost}\nLast seen: ${timeDiffText}`}
+              title={`${this.props.name} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
             />
           </div>
         </div>
