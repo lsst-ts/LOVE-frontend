@@ -34,8 +34,6 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
 
   afterEach(rtl.cleanup);
 
-  rtl.getByText(scriptQueue.baseElement, 'asdf')
-
   it(`THEN should display the list of available scripts`, async () => {
     const availableListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
