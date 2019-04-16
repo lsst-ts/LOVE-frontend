@@ -87,9 +87,37 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
       expect(firstParentMatching).toBeTruthy();
     });
   });
+
+  test(`THEN it should display the list of finished scripts`, async () => {
+    debugger;
+    const waitingListColumn = await rtl.waitForElement(() =>
+      scriptQueue.getByText((content, el) => {
+        return el.textContent.includes('FINISHED') && !el.textContent.includes('AVAILABLE SCRIPTS');
+      }),
+    );
+
+    message.data.ScriptQueueState.stream.finished_scripts.forEach(async (script) => {
+      let scripIndex = '' + script.index;
+      let scriptElement = await rtl.waitForElement(() =>
+        rtl.getByText(waitingListColumn, scripIndex, { exact: false }),
+      );
+
+      const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
+        const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
+        const hasPath = element.textContent.includes(`${script.path}`);
+        const hasProcessState = element.textContent.includes(`Process state${script.process_state}`);
+        const hasScriptState = element.textContent.includes(`Script state${script.script_state}`);
+        const hasEstimatedTime = element.textContent.includes(`Estimated time: ${script.expected_duration.toFixed(2)}`);
+        const hasTotalTime = element.textContent.includes(`Total time: ${script.elapsed_time.toFixed(2)}`);
+        
+        return hasType && hasPath && hasProcessState && hasScriptState && hasEstimatedTime;
+      });
+
+      expect(firstParentMatching).toBeTruthy();
+    });
+  });  
 });
 
-('se ven los salindex  current, waiting available, finished');
 ('se ve el heartbeat de los scripts');
 ('el tooltip del heratbeat está bueno');
 ('el tooltip del process state/ script state está bueno');
