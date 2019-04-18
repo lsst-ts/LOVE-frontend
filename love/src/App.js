@@ -64,13 +64,18 @@ class App extends Component {
   componentDidMount = () => {
     const token = ManagerInterface.getToken();
     this.setTokenState(token);
+    ManagerInterface.validateToken().then((response) => {
+      if (response === false) {
+        this.logout();
+      }
+    });
   };
 
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.token && prevProps.location.pathname !== this.props.location.pathname) {
       ManagerInterface.validateToken().then((response) => {
         if (response === false) {
-          this.setTokenState(null);
+          this.logout();
         }
       });
     }
@@ -90,6 +95,7 @@ class App extends Component {
   logout = () => {
     this.setTokenState(null);
     ManagerInterface.removeToken();
+    if (this.managerInterface) this.managerInterface.logout();
     this.justLoggedOut = true;
   };
 
