@@ -40,7 +40,7 @@ pipeline {
         branch "develop"
       }
       steps {
-        build '../LOVE-integration-tools/develop'
+        build(job: '../LOVE-integration-tools/develop', wait: false)
       }
     }
     stage("Trigger master deployment") {
@@ -48,7 +48,7 @@ pipeline {
         branch "master"
       }
       steps {
-        build '../LOVE-integration-tools/master'
+        build(job: '../LOVE-integration-tools/master', wait: false)
       }
     }
   }
