@@ -5,6 +5,7 @@ import styles from './StatusText.module.css';
 export default class StatusText extends Component {
   static propTypes = {
     status: PropTypes.string,
+    title: PropTypes.string,
     children: PropTypes.string,
   };
 
@@ -12,10 +13,15 @@ export default class StatusText extends Component {
     const { status } = this.props;
     let statusStyle = styles.undefined;
     if (status === 'ok') statusStyle = styles.ok;
+    if (status === 'running') statusStyle = styles.running;
     if (status === 'warning') statusStyle = styles.warning;
     if (status === 'alert') statusStyle = styles.alert;
     if (status === 'invalid') statusStyle = styles.invalid;
 
-    return <span className={[styles.status, statusStyle].join(' ')}>{this.props.children}</span>;
+    return (
+      <span title={this.props.title} className={[styles.status, statusStyle].join(' ')}>
+        {this.props.children}
+      </span>
+    );
   }
 }

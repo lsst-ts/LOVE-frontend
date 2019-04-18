@@ -30,6 +30,9 @@ export default class ComponentIndex extends Component {
             <Link to="/csc-summary">CSC Summary</Link>
           </li>
           <li className={styles.linkListItem}>
+            <Link to="/auxiliary-telescope">Auxiliary Telescope</Link>
+          </li>
+          <li className={styles.linkListItem}>
             <Link to="/login">Login</Link>
           </li>
           <li className={styles.linkListItem}>

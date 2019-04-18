@@ -1,5 +1,3 @@
-import sockette from 'sockette';
-
 export const hasCommandPrivileges = false;
 export const hasFakeData = true;
 
@@ -15,6 +13,70 @@ if (Array.prototype.flat === undefined) {
     },
   });
 }
+
+export const sockette = (url, optsPar) => {
+  function noop() {}
+  const opts = optsPar || {};
+
+  let ws;
+  let num = 0;
+  const $ = {};
+  const max = opts.maxAttempts || Infinity;
+  let t;
+
+  $.open = () => {
+    ws = new WebSocket(url, opts.protocols || []);
+
+    ws.onmessage = opts.onmessage || noop;
+
+    ws.onopen = (e) => {
+      (opts.onopen || noop)(e);
+      num = 0;
+    };
+
+    ws.onclose = (e) => {
+      // eslint-disable-next-line
+      e.code === 1e3 || e.code === 1005 || $.reconnect(e);
+      (opts.onclose || noop)(e);
+    };
+
+    ws.onerror = (e) => {
+      // eslint-disable-next-line
+      e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
+    };
+  };
+
+  $.reconnect = (e) => {
+    if (max >= num) {
+      num += 1;
+      t = setTimeout(() => {
+        (opts.onreconnect || noop)(e);
+        $.open();
+      }, opts.timeout || 1e3);
+    } else (opts.onmaximum || noop)(e);
+  };
+
+  $.json = (x) => {
+    ws.send(JSON.stringify(x));
+  };
+
+  $.send = (x) => {
+    ws.send(x);
+  };
+
+  $.close = (x, y) => {
+    clearTimeout(t);
+    if (x === 4000) {
+      ws.onclose = (e) => (opts.onclose || noop)(e);
+      ws.onerror = (e) => (opts.onerror || noop)(e);
+    }
+    ws.close(x, y);
+  };
+
+  $.open(); // init
+
+  return $;
+};
 
 export default class ManagerInterface {
   constructor() {
@@ -122,6 +184,12 @@ export default class ManagerInterface {
     });
   }
 
+  logout = () => {
+    if (this.socket) this.socket.close(4000);
+    this.socket = null;
+    this.socketPromise = null;
+  };
+
   subscribeToStream = (category, csc, stream, callback) => {
     this.callback = callback;
     const token = ManagerInterface.getToken();
@@ -146,13 +214,17 @@ export default class ManagerInterface {
                 stream: sub[2],
               });
             });
+            resolve();
           },
           onmessage: (msg) => {
             if (this.callback) this.callback(msg);
-            resolve();
           },
           onclose: () => {
             this.connectionIsOpen = false;
+            resolve();
+          },
+          onerror: () => {
+            resolve();
           },
         });
       });

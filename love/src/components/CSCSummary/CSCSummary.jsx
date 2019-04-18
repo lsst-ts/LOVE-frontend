@@ -3,7 +3,7 @@ import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
 import Panel from '../Panel/Panel';
 import ManagerInterface, { hasFakeData } from '../../Utils';
-import {CSCSummaryHierarchy} from '../../Config';
+import { CSCSummaryHierarchy } from '../../Config';
 
 export default class CSCSummary extends Component {
   constructor(props) {

@@ -46,6 +46,8 @@ body {
   --status-disabled-color: hsl(202, 44%, 13%);
   --status-disabled-dimmed-color: hsl(202, 44%, 13%, 0.2);
   --status-disabled-dimmed-color-2: hsl(202, 20%, 20%);
+  --status-running-color: hsl(188, 79%, 56%);
+  --status-running-dimmed-color: hsl(188, 79%, 56%, 0.2);
   
   /* Script status */
   --script-ok-color: hsl(188, 79%, 56%);

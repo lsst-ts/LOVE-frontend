@@ -1,0 +1,77 @@
+.summaryContainer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.summaryComponentWrapper {
+  min-width: 20em;
+  padding: 0.25em;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.summaryComponent {
+  background: var(--second-secondary-background-color);
+  padding: 1em;
+  height: calc(100% - 2em);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.summaryComponentTitle {
+  font-size: var(--font-size-large);
+  color: var(--base-font-color);
+  font-weight: 600;
+  padding-bottom: 1em;
+}
+
+.telemetryValue {
+  color: var(--base-font-color);
+  min-width: 2em;
+  display: inline-block;
+  text-align: right;
+}
+
+.statusWrapper {
+  display: flex;
+}
+
+.statusTextLabel {
+  text-align: left;
+}
+
+.statusTextWrapper {
+  text-align: center;
+}
+
+.statusGroupWrapper {
+  display: inline-grid;
+  grid-template-columns: max-content 8em;
+  grid-row-gap: 0.5em;
+  grid-column-gap: 1em;
+  align-items: center;
+}
+
+.arrow {
+  color: var(--base-font-color);
+  font-size: 2.0em;
+  animation: blinker 2.5s linear infinite;
+  line-height: 0;
+  vertical-align: middle;
+  min-width: 1.5em;
+  display: inline-block;
+  text-align: center;
+}
+
+@keyframes blinker {
+  30% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  80% {
+    opacity: 1;
+  }
+}
