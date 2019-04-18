@@ -80,8 +80,8 @@ export default class CurrentScript extends Component {
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
     let heartbeatStatus = 'unknown';
-    let {lost} = this.props.heartbeatData;
-    if(lost === undefined) lost = 0;
+    let { lost } = this.props.heartbeatData;
+    if (lost === undefined) lost = 0;
     let timeDiff = -1;
     if (isHearbeatAvailable) {
       heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
