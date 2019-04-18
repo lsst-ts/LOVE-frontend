@@ -8,7 +8,7 @@ import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
 import Panel from '../Panel/Panel';
 import StatusText from '../StatusText/StatusText';
-import ManagerInterface, { hasCommandPrivileges } from '../../Utils';
+import ManagerInterface, { hasCommandPrivileges, hasFakeData } from '../../Utils';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -90,14 +90,53 @@ export default class ScriptQueue extends Component {
       draggingSource: '',
       isFinishedScriptListListVisible: false,
       state: 'Unknown',
+      summaryStateValue: 0,
     };
     this.lastId = 19;
 
     this.managerInterface = new ManagerInterface();
   }
 
+  static stateStyleDict = {
+    Stopped: 'warning',
+    Unknown: 'invalid',
+    Running: 'ok',
+  };
+
+  static summaryStates = {
+    0: {
+      name: 'UNKNOWN',
+      statusText: 'invalid',
+    },
+    1: {
+      name: 'DISABLED',
+      statusText: 'invalid',
+    },
+    2: {
+      name: 'ENABLED',
+      statusText: 'ok',
+    },
+    3: {
+      name: 'FAULT',
+      statusText: 'alert',
+    },
+    4: {
+      name: 'OFFLINE',
+      statusText: 'invalid',
+    },
+    5: {
+      name: 'STANDBY',
+      statusText: 'warning',
+    },
+  };
+
   onReceiveMsg = (msg) => {
     let { data } = JSON.parse(msg.data);
+
+    if(data.ScriptQueue) {
+      this.processSummaryState(data)
+    }
+
     if (data.ScriptQueueState === undefined) return;
 
     data = data.ScriptQueueState.stream;
@@ -107,19 +146,19 @@ export default class ScriptQueue extends Component {
       return;
     }
 
-    const { current } = data;
-    const { state } = data;
-    const finishedScriptList = data.finished_scripts;
-    const availableScriptList = data.available_scripts;
-    const waitingScriptList = data.waiting_scripts;
-    this.setState({
-      current,
-      finishedScriptList,
-      availableScriptList,
-      waitingScriptList,
-      state,
-    });
+    this.processQueueState(data);
   };
+
+  processSummaryState = (data) =>{
+
+    let value = data.ScriptQueue.summaryState[0].summaryState.value;
+    if( hasFakeData){
+      value = Math.floor(Math.random()*5)
+    }
+    this.setState({
+      summaryStateValue: value
+    });
+  }
 
   processHeartbeat = (data) => {
     const { salindex, ...scriptData } = data.script_heartbeat;
@@ -134,13 +173,30 @@ export default class ScriptQueue extends Component {
       heartbeats: currentHeartbeats,
     });
   };
+  
+  processQueueState = (data) =>{
+    const { current } = data;
+    const { state } = data;
+    const finishedScriptList = data.finished_scripts;
+    const availableScriptList = data.available_scripts;
+    const waitingScriptList = data.waiting_scripts;
+    this.setState({
+      current,
+      finishedScriptList,
+      availableScriptList,
+      waitingScriptList,
+      state,
+    });
+  }
 
   componentDidMount = () => {
     this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
+    this.managerInterface.subscribeToEvents('ScriptQueue', 'summaryState', this.onReceiveMsg);
   };
 
   componentWillUnmount = () => {
     this.managerInterface.unsubscribeToEvents('ScriptQueueState', 'stream', () => 0);
+    this.managerInterface.unsubscribeToEvents('ScriptQueue', 'summaryState', () => 0);
   };
 
   displayAvailableScripts = () => {
@@ -311,11 +367,7 @@ export default class ScriptQueue extends Component {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
     const current = this.state.current === 'None' ? {} : { ...this.state.current };
-    const stateStyleDict = {
-      Stopped: 'warning',
-      Unknown: 'invalid',
-      Running: 'ok',
-    };
+
     const now = new Date();
     // Fix time zones for next line
     const currentScriptElapsedTime =
@@ -350,7 +402,7 @@ export default class ScriptQueue extends Component {
                   index={current.index}
                   scriptState={current.script_state}
                   processState={current.process_state}
-                  isStandard={current.type ? current.type === 'Standard' : undefined}
+                  isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                   estimatedTime={current.expected_duration}
                   elapsedTime={currentScriptElapsedTime}
                   heartbeatData={this.state.heartbeats[current.index]}
@@ -367,11 +419,13 @@ export default class ScriptQueue extends Component {
             <div className={styles.globalStateContainer}>
               <div className={styles.stateContainer}>
                 CSC STATE
-                <StatusText status="ok">OK</StatusText>
+                <StatusText status={ScriptQueue.summaryStates[this.state.summaryStateValue].statusText}>
+                  {ScriptQueue.summaryStates[this.state.summaryStateValue].name}
+                </StatusText>
               </div>
               <div className={styles.stateContainer}>
                 QUEUE STATE
-                <StatusText status={stateStyleDict[this.state.state]}>{this.state.state}</StatusText>
+                <StatusText status={ScriptQueue.stateStyleDict[this.state.state]}>{this.state.state}</StatusText>
               </div>
             </div>
           </div>
