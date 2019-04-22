@@ -21,7 +21,6 @@ export default class PrivateRoute extends Component {
   }
 
   render() {
-    console.log(this.props)
     const { rest } = this.props;
     return <Route {...rest} render={(props) => this.renderSubComponent(props)} />;
   }
