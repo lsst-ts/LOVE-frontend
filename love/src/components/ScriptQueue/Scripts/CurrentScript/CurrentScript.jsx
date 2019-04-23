@@ -91,7 +91,7 @@ export default class CurrentScript extends Component {
     const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
     return (
-      <div className={scriptStyles.scriptContainer}>
+      <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
         <div className={styles.currentScriptContainer} onClick={this.onClick}>
           <div className={styles.topContainer}>
             <div>
@@ -139,10 +139,10 @@ export default class CurrentScript extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.loadingBarContainer}>
+          <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
             <LoadingBar percentage={percentage} />
           </div>
-          <div className={styles.timeContainer}>
+          <div className={[styles.timeContainer, visibilityClass].join(' ')}>
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
