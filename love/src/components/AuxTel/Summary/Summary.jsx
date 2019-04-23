@@ -40,7 +40,6 @@ export default class Summary extends Component {
           <div className={styles.summaryComponent}>
             <div className={styles.summaryComponentTitle}>DOME</div>
             <div className={styles.statusGroupWrapper}>
-              
               <span className={styles.statusTextLabel}>Az state: </span>
               <div className={styles.statusTextWrapper}>
                 <StatusText status={'running'} title={`Current status: MovingCW\nCommanded: ${'GoToPosition'}`}>
@@ -72,7 +71,6 @@ export default class Summary extends Component {
           <div className={styles.summaryComponent}>
             <div className={styles.summaryComponentTitle}>ATMCS</div>
             <div className={styles.statusGroupWrapper}>
-              
               <span className={styles.statusTextLabel}>Mount: </span>
               <div className={styles.statusTextWrapper}>
                 <StatusText status={'running'}>Tracking</StatusText>

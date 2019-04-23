@@ -1,0 +1,19 @@
+.skymapContainer {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.grid {
+  
+}
+
+.svgOverlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+}
+.skymapContainer {
+  width: fit-content;
+}
