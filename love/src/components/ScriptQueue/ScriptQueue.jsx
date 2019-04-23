@@ -133,8 +133,8 @@ export default class ScriptQueue extends Component {
   onReceiveMsg = (msg) => {
     let { data } = JSON.parse(msg.data);
 
-    if(data.ScriptQueue) {
-      this.processSummaryState(data)
+    if (data.ScriptQueue) {
+      this.processSummaryState(data);
     }
 
     if (data.ScriptQueueState === undefined) return;
@@ -149,16 +149,15 @@ export default class ScriptQueue extends Component {
     this.processQueueState(data);
   };
 
-  processSummaryState = (data) =>{
-
+  processSummaryState = (data) => {
     let value = data.ScriptQueue.summaryState[0].summaryState.value;
-    if( hasFakeData){
-      value = Math.floor(Math.random()*5)
+    if (hasFakeData) {
+      value = Math.floor(Math.random() * 5);
     }
     this.setState({
-      summaryStateValue: value
+      summaryStateValue: value,
     });
-  }
+  };
 
   processHeartbeat = (data) => {
     const { salindex, ...scriptData } = data.script_heartbeat;
@@ -173,8 +172,8 @@ export default class ScriptQueue extends Component {
       heartbeats: currentHeartbeats,
     });
   };
-  
-  processQueueState = (data) =>{
+
+  processQueueState = (data) => {
     const { current } = data;
     const { state } = data;
     const finishedScriptList = data.finished_scripts;
@@ -187,7 +186,7 @@ export default class ScriptQueue extends Component {
       waitingScriptList,
       state,
     });
-  }
+  };
 
   componentDidMount = () => {
     this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
@@ -371,7 +370,9 @@ export default class ScriptQueue extends Component {
     const now = new Date();
     // Fix time zones for next line
     const currentScriptElapsedTime =
-      this.state.current === 'None' || current.timestamp === undefined ? 0 : now.getTime() / 1000.0 - current.timestamp;
+      this.state.current === 'None' || current.timestampRunStart === undefined
+        ? 0
+        : now.getTime() / 1000.0 - current.timestampRunStart;
 
     const totalWaitingSeconds = this.state.waitingScriptList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
@@ -585,7 +586,10 @@ export default class ScriptQueue extends Component {
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
                       const key = script.index ? script.index : `unknown-${listIndex}`;
-
+                      const elapsedTime =
+                        script.timestampProcessEnd == 0.0 || script.timestampRunStart == 0.0
+                          ? 0.0
+                          : script.timestampProcessEnd - script.timestampRunStart;
                       return (
                         <DraggableScript
                           key={`dragging-finished-${key}`}
@@ -598,7 +602,7 @@ export default class ScriptQueue extends Component {
                             path={script.path}
                             isStandard={isStandard}
                             estimatedTime={estimatedTime}
-                            elapsedTime={script.elapsed_time}
+                            elapsedTime={elapsedTime}
                             isCompact={
                               this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                             }
