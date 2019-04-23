@@ -121,20 +121,20 @@ export default class CurrentScript extends Component {
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
               >
-                <ScriptStatus
-                  isCompact={this.props.isCompact}
-                  type="process"
-                  status={getStatusStyle(this.props.processState)}
-                >
-                  {this.props.processState}
+                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
+                  {this.props.scriptState}
                 </ScriptStatus>
               </div>
               <div
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
               >
-                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
-                  {this.props.scriptState}
+                <ScriptStatus
+                  isCompact={this.props.isCompact}
+                  type="process"
+                  status={getStatusStyle(this.props.processState)}
+                >
+                  {this.props.processState}
                 </ScriptStatus>
               </div>
             </div>
