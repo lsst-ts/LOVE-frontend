@@ -128,7 +128,7 @@ export default class Vega extends Component {
     changeSpec = (data, name) => {
       const dataType = this.getSpecDataType(this.props.dataType);
       return {
-        $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
+        $schema: 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json',
         description: "Google's stock price over time.",
         data: {
           values: data,

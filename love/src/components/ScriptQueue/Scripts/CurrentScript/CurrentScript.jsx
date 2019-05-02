@@ -18,8 +18,8 @@ export default class CurrentScript extends Component {
     path: PropTypes.string,
     /** SAL property: Estimated duration of the script, excluding slewing to the initial position required by the script */
     estimatedTime: PropTypes.number,
-    /** Estimated execution time */
-    elapsedTime: PropTypes.number,
+    /** Timestamp when the script started running as current script */
+    timestampRunStart: PropTypes.number,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
@@ -40,7 +40,7 @@ export default class CurrentScript extends Component {
     scriptState: 'Unknown',
     processState: 'Unknown',
     estimatedTime: 0,
-    elapsedTime: 0,
+    timestampRunStart: 0,
     heartbeatData: {},
   };
 
@@ -48,6 +48,7 @@ export default class CurrentScript extends Component {
     super(props);
     this.state = {
       expanded: false,
+      elapsedTime: 0,
     };
   }
 
@@ -55,6 +56,33 @@ export default class CurrentScript extends Component {
     this.setState({
       expanded: !this.state.expanded,
     });
+  };
+
+  animateProgress = () => {
+    if (this.props.index === undefined) return;
+
+    if( this.props.timestampRunStart>0){
+      this.setState({
+        elapsedTime: new Date().getTime() / 1000.0 - this.props.timestampRunStart,
+      });
+    }
+    else{
+      this.setState({elapsedTime: 0});
+    }
+
+    requestAnimationFrame(this.animateProgress);
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.index !== this.props.index && this.props.index !== undefined) {
+      this.animateProgress();
+    }
+  };
+
+  componentDidMount = () => {
+    if (this.props.index !== undefined) {
+      this.animateProgress();
+    }
   };
 
   render() {
@@ -67,11 +95,10 @@ export default class CurrentScript extends Component {
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
     let percentage = 100;
-    const estimatedTime = Math.trunc(this.props.estimatedTime);
-    const elapsedTime = Math.trunc(this.props.elapsedTime);
+    const {estimatedTime} = this.props;
+    const {elapsedTime} = this.state;
     if (estimatedTime > 0) {
-      percentage = Math.min((100 * elapsedTime) / estimatedTime, 100);
-      percentage = Math.trunc(percentage);
+      percentage = (100 * elapsedTime) / estimatedTime;
     }
     if (path === 'None') percentage = 0;
     const isValid = this.props.path !== 'None';
@@ -91,7 +118,7 @@ export default class CurrentScript extends Component {
     const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
     return (
-      <div className={scriptStyles.scriptContainer}>
+      <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
         <div className={styles.currentScriptContainer} onClick={this.onClick}>
           <div className={styles.topContainer}>
             <div>
@@ -121,6 +148,14 @@ export default class CurrentScript extends Component {
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
               >
+                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
+                  {this.props.scriptState}
+                </ScriptStatus>
+              </div>
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
                 <ScriptStatus
                   isCompact={this.props.isCompact}
                   type="process"
@@ -129,20 +164,12 @@ export default class CurrentScript extends Component {
                   {this.props.processState}
                 </ScriptStatus>
               </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
-                  {this.props.scriptState}
-                </ScriptStatus>
-              </div>
             </div>
           </div>
-          <div className={styles.loadingBarContainer}>
+          <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
             <LoadingBar percentage={percentage} />
           </div>
-          <div className={styles.timeContainer}>
+          <div className={[styles.timeContainer, visibilityClass].join(' ')}>
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>

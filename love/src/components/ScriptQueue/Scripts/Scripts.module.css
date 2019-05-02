@@ -6,6 +6,10 @@
   padding: 1px;
 }
 
+.scriptContainerOff {
+  background: transparent;
+}
+
 .pathTextContainer {
   display: block;
   text-align: left;

@@ -122,17 +122,17 @@ export default class WaitingScript extends Component {
               <HeartbeatIcon status={heartbeatStatus} title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`} />
             </div>
             <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                {this.props.script_state}
+              </ScriptStatus>
+            </div>
+            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
               <ScriptStatus
                 isCompact={this.props.isCompact}
                 type="process"
                 status={getStatusStyle(this.props.process_state)}
               >
                 {this.props.process_state}
-              </ScriptStatus>
-            </div>
-            <div className={scriptStyles.scriptStateContainer} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
-                {this.props.script_state}
               </ScriptStatus>
             </div>
           </div>
