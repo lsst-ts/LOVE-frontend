@@ -9,14 +9,18 @@ export default class Skymap extends Component {
     // prop: PropTypes
   };
 
-  azelToPixel = (pos) => {
+  azelToPixel = (pos, isProjected) => {
     const { az, el } = pos;
     const width = 596;
     const height = 596;
-    const offset = 5;
+    const offset = 30;
     const center = [width / 2, height / 2];
-    // const r = (Math.cos((el * Math.PI) / 180) * width) / 2 - offset;
-    const r = (((90-el) / 90) * width) / 2 - offset;
+    let r;
+    if (isProjected) {
+      r = Math.cos((el * Math.PI) / 180) * (width / 2 - offset);
+    } else {
+      r = ((90 - el) / 90) * (width / 2 - offset);
+    }
     const x = center[0] + r * Math.cos((az * Math.PI) / 180);
     const y = center[1] - r * Math.sin((az * Math.PI) / 180);
     return {
@@ -26,27 +30,29 @@ export default class Skymap extends Component {
   };
 
   render() {
-    let width = 1000;
-    let height = 1000;
+    let width = 500;
+    let height = 500;
     let currentPointing = {
-      az: 45,
-      el: 0,
+      az: 5,
+      el: 20,
     };
     let targetPointing = {
       az: 45,
-      el: 45,
+      el: 50,
     };
-    const pixel = this.azelToPixel(currentPointing);
+    const isProjected = false;
     return (
       <div className={styles.skymapContainer}>
+        <h2>Skymap</h2>
         <Pointing
           width={width}
           height={height}
           azelToPixel={this.azelToPixel}
           currentPointing={currentPointing}
           targetPointing={targetPointing}
+          isProjected={isProjected}
         />
-        <SkymapGrid width={width} height={height} />
+        <SkymapGrid width={width} height={height} isProjected={isProjected}/>
       </div>
     );
   }

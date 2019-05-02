@@ -1,4 +1,3 @@
-
 .cls-1,
 .cls-19,
 .cls-27,
@@ -224,4 +223,40 @@
 .cls-47 {
   stroke: #d1e6eb;
   stroke-dasharray: 8 4;
+}
+
+.backgroundRect {
+  stroke: none;
+}
+
+.backgroundCircle {
+  fill: #132631;
+  stroke: #798f9b;
+}
+
+.grid {
+  stroke: #798f9b;
+}
+
+.innerGrid {
+  opacity: 0.3;
+  fill: none;
+  stroke-miterlimit: 10;
+}
+
+.text {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  dominant-baseline: central;
+  font-family: MyriadPro-Bold, Myriad Pro;
+  font-weight: 700;
+  font-size: 20px;
+  fill: #c2cfd3;
+  stroke: none;
+}
+
+.label {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  dominant-baseline: central;
 }
