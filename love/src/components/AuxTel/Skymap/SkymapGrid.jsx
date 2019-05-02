@@ -144,10 +144,10 @@ export default class SkymapGrid extends Component {
             S
           </text>
           <text className={styles.text} y={h / 2} x={-15}>
-            W
+            E
           </text>
           <text className={styles.text} y={h / 2} x={w + 15}>
-            E
+            W
           </text>
         </g>
         <g className={styles.currentLayer}>
