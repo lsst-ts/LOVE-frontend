@@ -93,6 +93,14 @@ export default class FinishedScript extends Component {
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
               >
+                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                  {this.props.script_state}
+                </ScriptStatus>
+              </div>
+              <div
+                className={scriptStyles.scriptStateContainer}
+                style={{ display: 'flex', justifyContent: 'flex-end' }}
+              >
                 <ScriptStatus
                   isCompact={this.props.isCompact}
                   type="process"
@@ -101,27 +109,19 @@ export default class FinishedScript extends Component {
                   {this.props.process_state}
                 </ScriptStatus>
               </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
-                  {this.props.script_state}
-                </ScriptStatus>
-              </div>
             </div>
           </div>
           <div className={styles.timeContainer}>
             <div className={styles.estimatedTimeContainer}>
               <span className={styles.estimatedTimeLabel}>Estimated time: </span>
               <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime >= 0 ? this.props.estimatedTime.toFixed(2) : '?'}
+                {this.props.estimatedTime >= 0 ? this.props.estimatedTime.toFixed(2) : '?'} s
               </span>
             </div>
             <div className={styles.elapsedTimeContainer}>
               <span className={styles.elapsedTimeLabel}>Total time: </span>
               <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.elapsedTime.toFixed(2)}
+                {this.props.elapsedTime.toFixed(2)} s
               </span>
             </div>
           </div>
