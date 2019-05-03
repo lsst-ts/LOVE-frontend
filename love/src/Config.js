@@ -1,3 +1,4 @@
+// eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
     'CSC Group 1': [

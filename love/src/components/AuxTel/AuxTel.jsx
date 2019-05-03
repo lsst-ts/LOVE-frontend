@@ -8,13 +8,13 @@ export default class AuxTel extends Component {
   render() {
     return (
       <Panel title="Auxiliary Telescope" className={styles.panel}>
-      <>
-        <div className={styles.CSCSummaryContainer}>
-          <Summary />
-        </div>
-        <div className={styles.skymapContainer}>
-          <Skymap />
-        </div>
+        <>
+          <div className={styles.CSCSummaryContainer}>
+            <Summary />
+          </div>
+          <div className={styles.skymapContainer}>
+            <Skymap />
+          </div>
         </>
       </Panel>
     );
