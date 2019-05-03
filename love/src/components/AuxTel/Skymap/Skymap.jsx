@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import styles from './Skymap.module.css';
 import SkymapGrid from './SkymapGrid';
 import Pointing from './Pointing';
 
 export default class Skymap extends Component {
-  static propTypes = {
-    // prop: PropTypes
-  };
+  // static propTypes = {
+  //   prop: PropTypes
+  // };
 
   azelToPixel = (pos, isProjected) => {
     const { az, el } = pos;
@@ -30,20 +30,21 @@ export default class Skymap extends Component {
   };
 
   render() {
-    let width = 500;
-    let height = 500;
-    let currentPointing = {
-      az: 5,
+    const width = 500;
+    const height = 500;
+    const currentPointing = {
+      az: 0,
       el: 20,
     };
-    let targetPointing = {
-      az: 45,
+    const targetPointing = {
+      az: 0,
       el: 50,
     };
     const isProjected = false;
     return (
       <div className={styles.skymapContainer}>
         <h2>Skymap</h2>
+      <div className={styles.skymapGridContainer}>
         <Pointing
           width={width}
           height={height}
@@ -53,6 +54,7 @@ export default class Skymap extends Component {
           isProjected={isProjected}
         />
         <SkymapGrid width={width} height={height} isProjected={isProjected}/>
+      </div>
       </div>
     );
   }

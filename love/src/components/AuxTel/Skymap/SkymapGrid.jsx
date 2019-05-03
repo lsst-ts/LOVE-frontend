@@ -110,11 +110,31 @@ export default class SkymapGrid extends Component {
     });
   };
 
+  polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+    let angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+
+    return {
+      x: centerX + radius * Math.cos(angleInRadians),
+      y: centerY + radius * Math.sin(angleInRadians),
+    };
+  };
+
+  describeArc = (x, y, radius, startAngle, endAngle) => {
+    let start = this.polarToCartesian(x, y, radius, endAngle);
+    let end = this.polarToCartesian(x, y, radius, startAngle);
+
+    let largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+
+    let d = ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
+
+    return d;
+  };
+
   render() {
     const w = 596;
     const h = 596;
     const margin = 3;
-    const viewboxMargin = 30;
+    const viewboxMargin = 40;
 
     const tickAngles = this.getAngles(5);
     const radialLinesAngles = this.getAngles(15);
@@ -136,6 +156,10 @@ export default class SkymapGrid extends Component {
       >
         <rect className={styles.backgroundRect} width="100%" height="100%" fill="none" />
         <circle className={styles.backgroundCircle} cx={w / 2} cy={h / 2} r={w / 2 - margin} />
+        {/* <circle className={styles.domeCircle} cx={w / 2} cy={h / 2} r={w / 2 + viewboxMargin - 5} /> */}
+        <path className={styles.domeCircle} d={this.describeArc(w / 2, h / 2, w / 2 + viewboxMargin - 5, -260, 80)}>
+          <title>Dome</title>
+        </path>
         <g>
           <text className={styles.text} y={-10} x={w / 2}>
             N

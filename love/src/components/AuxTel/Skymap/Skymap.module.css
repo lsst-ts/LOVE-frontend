@@ -5,12 +5,22 @@
   width: fit-content;
 }
 
+.skymapGridContainer {
+  /* display: flex; */
+  flex-wrap: wrap;
+  position: relative;
+  width: fit-content;
+}
+
+.skymapGridContainer svg {
+  vertical-align:top;
+}
+
 .skymapContainer h2 {
   text-align: left;
 }
 
 .grid {
-  
 }
 
 .svgOverlay {

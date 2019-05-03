@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import styles from './Summary.module.css';
 import StatusText from '../../StatusText/StatusText';
 
 export default class Summary extends Component {
-  static propTypes = {
-    // prop: PropTypes
-  };
+  // static propTypes = {
+  //   prop: PropTypes
+  // };
 
   render() {
     return (
