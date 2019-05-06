@@ -31,7 +31,7 @@ export default class ComponentIndex extends Component {
           </li>
           <li className={styles.linkListItem}>
             <Link to="/auxiliary-telescope">Auxiliary Telescope</Link>
-            <ul  className={styles.linkListSubItem}>
+            <ul className={styles.linkListSubItem}>
               <Link to="/aux-tel-camera">Auxiliary Telescope Camera</Link>
             </ul>
           </li>
