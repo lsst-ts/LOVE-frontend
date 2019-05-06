@@ -150,7 +150,7 @@ export default class ScriptQueue extends Component {
   };
 
   processSummaryState = (data) => {
-    let value = data.ScriptQueue.summaryState[0].summaryState.value;
+    let { value } = data.ScriptQueue.summaryState[0].summaryState;
     if (hasFakeData) {
       value = Math.floor(Math.random() * 5);
     }
@@ -367,12 +367,12 @@ export default class ScriptQueue extends Component {
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
     const current = this.state.current === 'None' ? {} : { ...this.state.current };
 
-    const now = new Date();
+    // const now = new Date();
     // Fix time zones for next line
-    const currentScriptElapsedTime =
-      this.state.current === 'None' || current.timestampRunStart === undefined
-        ? 0
-        : now.getTime() / 1000.0 - current.timestampRunStart;
+    // const currentScriptElapsedTime =
+    //   this.state.current === 'None' || current.timestampRunStart === undefined
+    //     ? 0
+    //     : now.getTime() / 1000.0 - current.timestampRunStart;
 
     const totalWaitingSeconds = this.state.waitingScriptList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
@@ -587,7 +587,7 @@ export default class ScriptQueue extends Component {
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
                       const key = script.index ? script.index : `unknown-${listIndex}`;
                       const elapsedTime =
-                        script.timestampProcessEnd == 0.0 || script.timestampRunStart == 0.0
+                        script.timestampProcessEnd === 0.0 || script.timestampRunStart === 0.0
                           ? 0.0
                           : script.timestampProcessEnd - script.timestampRunStart;
                       return (

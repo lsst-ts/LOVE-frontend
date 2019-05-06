@@ -61,19 +61,18 @@ export default class CurrentScript extends Component {
   animateProgress = () => {
     if (this.props.index === undefined) return;
 
-    if( this.props.timestampRunStart>0){
+    if (this.props.timestampRunStart > 0) {
       this.setState({
         elapsedTime: new Date().getTime() / 1000.0 - this.props.timestampRunStart,
       });
-    }
-    else{
-      this.setState({elapsedTime: 0});
+    } else {
+      this.setState({ elapsedTime: 0 });
     }
 
     requestAnimationFrame(this.animateProgress);
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps) => {
     if (prevProps.index !== this.props.index && this.props.index !== undefined) {
       this.animateProgress();
     }
@@ -95,8 +94,8 @@ export default class CurrentScript extends Component {
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
     let percentage = 100;
-    const {estimatedTime} = this.props;
-    const {elapsedTime} = this.state;
+    const { estimatedTime } = this.props;
+    const { elapsedTime } = this.state;
     if (estimatedTime > 0) {
       percentage = (100 * elapsedTime) / estimatedTime;
     }

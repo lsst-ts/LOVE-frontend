@@ -19,13 +19,13 @@ export default class SkymapGrid extends Component {
   };
 
   getAngles = (angleStep) => {
-    let angles = [];
+    const angles = [];
     for (let i = 0; i * angleStep < 360; i += 1) angles.push(angleStep * i);
     return angles;
   };
 
   getRadii = (radiusStep, projected) => {
-    let radii = [];
+    const radii = [];
     if (projected) {
       for (let i = 0; i * radiusStep < 90; i += 1) {
         const el = radiusStep * i;
@@ -57,7 +57,7 @@ export default class SkymapGrid extends Component {
     });
   };
 
-  getRadialLines = (angles, w, h, margin) => {
+  getRadialLines = (angles, w, h) => {
     return angles.map((angle) => {
       const r1 = 0;
       const r2 = w / 2;
@@ -111,7 +111,7 @@ export default class SkymapGrid extends Component {
   };
 
   polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
-    let angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+    const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
 
     return {
       x: centerX + radius * Math.cos(angleInRadians),
@@ -120,12 +120,12 @@ export default class SkymapGrid extends Component {
   };
 
   describeArc = (x, y, radius, startAngle, endAngle) => {
-    let start = this.polarToCartesian(x, y, radius, endAngle);
-    let end = this.polarToCartesian(x, y, radius, startAngle);
+    const start = this.polarToCartesian(x, y, radius, endAngle);
+    const end = this.polarToCartesian(x, y, radius, startAngle);
 
-    let largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+    const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
 
-    let d = ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
+    const d = ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
 
     return d;
   };
