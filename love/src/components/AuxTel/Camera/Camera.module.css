@@ -28,12 +28,34 @@
   padding-bottom: 0.25em;
 }
 
+.imageDetailsCell {
+  text-align: left;
+}
+
 .statusTextLabel {
   text-align: left;
 }
 
+.readoutParameters {
+  display: grid;
+  grid-template-columns: max-content 8em;
+  grid-row-gap: 0.5em;
+  grid-column-gap: 1em;
+}
+
+.readoutParametersTitle {
+  color: var(--base-font-color);
+  font-size: var(--font-size-large);
+}
+
+.readoutParameterKey {
+}
+
+.readoutParameterValue {
+  color: var(--base-font-color);
+}
+
 .statusColumn {
-  /* display: flex; */
   position: relative;
   width: 100%;
   flex-wrap: wrap;
@@ -45,7 +67,7 @@
 .imageTableWrapper {
   height: calc(100% - 40px);
   /* background: var(--base-background-color); */
-  min-width: 1350px;
+  min-width: 750px;
 }
 
 .imageTable {
@@ -57,9 +79,9 @@
 
 .imageTable thead {
   display: table;
-  table-layout:fixed;
+  table-layout: fixed;
   width: calc(100% - var(--scrollbar-width));
-  word-wrap:break-word;
+  word-wrap: break-word;
 }
 .imageTable tbody {
   display: block;
@@ -70,53 +92,54 @@
 }
 .imageTable tbody tr {
   display: table;
-  table-layout:fixed;
+  table-layout: fixed;
   width: 100%;
 }
-.imageTable th, td {
+.imageTable th,
+td {
   width: auto;
 }
 
 .imageTable th {
-  border: 2px solid var(--base-background-color);
+  border: 1px solid var(--base-background-color);
   background: var(--tertiary-background-color);
   padding: 0em 0.5em;
-  padding-left: 1em;
+  padding-right: 20px;
   text-align: left;
   font-size: var(--font-size-large);
 }
 
 .imageTable .narrowCol {
-  width: 10%;
+  width: 120px;
 }
 
 .imageTable .mediumCol {
-  width: 15%;
+  width: 185px;
 }
 
 .imageTable .wideCol {
   width: 30%;
 }
 
-.imageTable tr:hover.dataRow{
+.imageTable tr:hover.dataRow {
   background: var(--tertiary-background-color);
 }
 
-.imageTable tr:hover td{
-  border-bottom: 1px solid var(--secondary-background-color);
-  border-top: 1px solid var(--secondary-background-color);
+.imageTable tr:hover td {
+  /* border-bottom: 1px solid var(--secondary-background-color);
+  border-top: 1px solid var(--secondary-background-color); */
 }
 
-.imageTable tr:hover.expandedRow td{
-  border-bottom: 1px solid var(--secondary-background-color);
+.imageTable tr:hover.expandedRow td {
+  border-bottom: 1px solid transparent;
   border-top: 1px solid transparent;
 }
 
-.imageTable tr:nth-child(even) {
+.imageTable tr:nth-child(even):not(.selectedRow) {
   background: var(--secondary-background-dimmed-color);
 }
 
-.imageTable tr:nth-child(odd) {
+.imageTable tr:nth-child(odd):not(.selectedRow) {
   background: var(--secondary-background-color);
 }
 
@@ -131,7 +154,7 @@
 .imageTable td {
   color: var(--secondary-font-color);
   padding: 0.4em 1em;
-  word-wrap:break-word;
+  word-wrap: break-word;
   max-width: 0;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
@@ -149,7 +172,7 @@
 
 .imageTable .valueCell {
   padding: 0.4em 0.5em;
-  word-wrap:break-word;
+  word-wrap: break-word;
   word-wrap: normal;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -175,11 +198,12 @@
   justify-content: space-around;
   align-items: center;
   padding: 0;
+  min-width: 13em;
 }
 
-.imageTable .healthStatusCell.selectedHealthStatus {
-  background: var(--tertiary-background-color);
-  border-bottom: 2px solid var(--tertiary-background-color);
+.imageTable .selectedRow {
+  background: var(--base-background-color);
+  border-bottom: 2px solid var(--base-background-color);
 }
 
 .imageTable .gearIconWrapper {
@@ -192,6 +216,6 @@
 
 .imageTable .statusTextWrapper {
   flex-grow: 1;
-  padding: 0.0em 1.5em;
+  padding: 0em 1.5em;
   /* margin-right: 2em; */
 }
