@@ -9,11 +9,13 @@ import Login from './components/Login/Login';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import ScriptQueue from './components/ScriptQueue/ScriptQueue';
 import TimeSeries from './components/TimeSeries/TimeSeries';
+import Panel from './components/Panel/Panel';
 
 import ManagerInterface from './Utils';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
+import Camera from './components/AuxTel/Camera/Camera';
 
 class App extends Component {
   static propTypes = {
@@ -190,6 +192,15 @@ class App extends Component {
           <PrivateRoute token={this.state.token} path="/csc-summary" component={CSCSummary} />
           <PrivateRoute token={this.state.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.state.token} path="/auxiliary-telescope" component={AuxTel} />
+          <PrivateRoute
+            token={this.state.token}
+            path="/aux-tel-camera"
+            render={() => (
+              <Panel title="Auxiliary Telescope Camera" className={'smallPanel'}>
+                <Camera />
+              </Panel>
+            )}
+          />
           <PrivateRoute
             token={this.state.token}
             path="/"
