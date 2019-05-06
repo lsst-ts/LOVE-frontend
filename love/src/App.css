@@ -36,3 +36,15 @@
   padding: 15px;
   padding-bottom: 0px;
 }
+
+.App .smallPanel {
+  max-width: 800px;
+}
+
+.App .mediumPanel {
+  max-width: 1500px;
+}
+
+.App .largePanel {
+  width: 100vw;
+}
