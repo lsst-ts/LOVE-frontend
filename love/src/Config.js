@@ -52,3 +52,12 @@ export const CSCSummaryHierarchy = {
     'CSC Group 1': [],
   },
 };
+
+export const getCameraStatusStyle = (status) => {
+  if (!status) return '';
+  if (status.toLowerCase() === 'integrating') return 'running';
+  if (status.toLowerCase() === 'reading_out') return 'running';
+  if (status.toLowerCase() === 'ready') return 'ok';
+  if (status.toLowerCase() === 'done') return 'ok';
+  return '';
+};
