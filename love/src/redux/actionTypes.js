@@ -1,0 +1,2 @@
+export const REQUEST_TOKEN = "REQUEST_TOKEN";
+export const RECEIVE_TOKEN = "RECEIVE_TOKEN";
