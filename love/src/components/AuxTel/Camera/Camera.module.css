@@ -14,7 +14,7 @@
 
 .stateContainer {
   display: inline-grid;
-  grid-template-columns: max-content 8em;
+  grid-template-columns: 10em 8em;
   grid-row-gap: 0.5em;
   grid-column-gap: 1em;
   align-items: center;
@@ -218,4 +218,10 @@ td {
   flex-grow: 1;
   padding: 0em 1.5em;
   /* margin-right: 2em; */
+}
+
+@media (min-width: 1020px) {
+  .stateContainer {
+    grid-template-columns: max-content 8em;
+  }
 }
