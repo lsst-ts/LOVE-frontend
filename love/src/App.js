@@ -12,6 +12,7 @@ import TimeSeries from './components/TimeSeries/TimeSeries';
 
 import ManagerInterface from './Utils';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
+import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
 import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
 
@@ -180,9 +181,10 @@ class App extends Component {
             path="/test"
             render={() => (
               <div className="hs-container">
-                <TelemetryLog category="event" csc="ScriptQueue" stream="all">
+                {/* <TelemetryLog category="event" csc="ScriptQueue" stream="all">
                   {' '}
-                </TelemetryLog>
+                </TelemetryLog> */}
+                <TelemetryLogContainer/>
               </div>
             )}
           />
