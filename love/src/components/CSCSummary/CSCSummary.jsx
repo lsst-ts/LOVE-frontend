@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
-import Panel from '../Panel/Panel';
+import Panel from '../GeneralPurpose/Panel/Panel';
 import ManagerInterface, { hasFakeData } from '../../Utils';
 import { CSCSummaryHierarchy } from '../../Config';
 

@@ -6,10 +6,10 @@ import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import Login from './components/Login/Login';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueue from './components/ScriptQueue/ScriptQueue';
 import TimeSeries from './components/TimeSeries/TimeSeries';
-import Panel from './components/Panel/Panel';
+import Panel from './components/GeneralPurpose/Panel/Panel';
 
 import ManagerInterface from './Utils';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';

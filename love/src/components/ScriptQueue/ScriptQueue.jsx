@@ -6,8 +6,8 @@ import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
-import Panel from '../Panel/Panel';
-import StatusText from '../StatusText/StatusText';
+import Panel from '../GeneralPurpose/Panel/Panel';
+import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import ManagerInterface, { hasCommandPrivileges, hasFakeData } from '../../Utils';
 
 /**

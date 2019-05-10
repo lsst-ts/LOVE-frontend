@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './CSCGroupLog.module.css';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import CSCDetail from '../CSCDetail/CSCDetail';
-import Button from '../../Button/Button';
+import Button from '../../GeneralPurpose/Button/Button';
 
 export default class CSCGroupLog extends Component {
   static propTypes = {

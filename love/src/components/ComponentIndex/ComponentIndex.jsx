@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './ComponentIndex.module.css';
-import Button from '../Button/Button';
+import Button from '../GeneralPurpose/Button/Button';
 
 export default class ComponentIndex extends Component {
   static propTypes = {
