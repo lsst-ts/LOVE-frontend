@@ -130,6 +130,7 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^3.2.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-only-warn": "^1.0.1",
     "jest-dom": "^3.0.0",
