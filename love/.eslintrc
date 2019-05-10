@@ -6,7 +6,8 @@
     "arrow-parens": [1, "always"],
     "arrow-body-style": "off",
     "operator-linebreak": [1, "after", { "overrides": { "?": "before", ":": "before" } }],
-    "array-callback-return": "off"
+    "array-callback-return": "off",
+    "object-curly-newline": "off"
   },
   "plugins": ["only-warn"],
   "settings": {
