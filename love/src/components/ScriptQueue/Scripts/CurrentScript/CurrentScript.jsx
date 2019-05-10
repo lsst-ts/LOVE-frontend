@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
-import LoadingBar from './LoadingBar/LoadingBar';
+import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
 import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
@@ -166,7 +166,7 @@ export default class CurrentScript extends Component {
             </div>
           </div>
           <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-            <LoadingBar percentage={percentage} />
+            <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`}/>
           </div>
           <div className={[styles.timeContainer, visibilityClass].join(' ')}>
             <div className={styles.estimatedTimeContainer}>
