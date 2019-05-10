@@ -4,6 +4,7 @@ import styles from './Camera.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
+import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 
 export default class Camera extends Component {
   // static propTypes = {
@@ -19,11 +20,12 @@ export default class Camera extends Component {
       imageReadinessDetailedState: 'READY',
       calibrationDetailedState: 'ENABLED',
       shutterDetailedState: 'CLOSED',
+      timers: {},
       imageSequence: {
         name: 'Sequence 1',
         imagesInSequence: 3,
-        images: [
-          {
+        images: {
+          'Image A': {
             timestamp: new Date()
               .toISOString()
               .slice(0, 19)
@@ -35,7 +37,7 @@ export default class Camera extends Component {
             state: 'INTEGRATING',
             readoutParameters: {},
           },
-          {
+          'Image B': {
             timestamp: new Date()
               .toISOString()
               .slice(0, 19)
@@ -58,7 +60,7 @@ export default class Camera extends Component {
               postCols: 1,
             },
           },
-          {
+          'Image C': {
             timestamp: new Date()
               .toISOString()
               .slice(0, 19)
@@ -81,7 +83,7 @@ export default class Camera extends Component {
               postCols: 1,
             },
           },
-          {
+          'Image D': {
             timestamp: new Date()
               .toISOString()
               .slice(0, 19)
@@ -104,11 +106,33 @@ export default class Camera extends Component {
               postCols: 1,
             },
           },
-        ],
+        },
       },
       expandedRows: {},
     };
   }
+
+  componentDidMount = () => {
+    this.startTimer('Image A', 3);
+  };
+
+  startTimer = (imageName, maxIterations) => {
+    let timer;
+    let iterations = 0;
+    const timers = this.state.timers;
+    timers[imageName] = 0;
+    this.setState({
+      timers: { ...timers },
+    });
+    timer = setInterval(() => {
+      timers[imageName] += 1;
+      this.setState({
+        timers: { ...timers },
+      });
+      iterations += 1;
+      if (iterations > maxIterations) clearInterval(timer);
+    }, 1000);
+  };
 
   clickGearIcon = (rowId) => {
     let { expandedRows } = this.state;
@@ -156,13 +180,34 @@ export default class Camera extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.imageSequence.images.map((image) => {
+                {Object.keys(this.state.imageSequence.images).map((imageName) => {
+                  const image = this.state.imageSequence.images[imageName];
+                  const isIntegrating = image.state === 'INTEGRATING';
+                  let currentExposureTime =
+                    this.state.timers[image.imageName] !== undefined
+                      ? Math.min(this.state.timers[image.imageName], image.exposureTime)
+                      : 0;
+                  if (!isIntegrating) currentExposureTime = image.exposureTime;
                   return (
                     <React.Fragment key={image.imageIndex}>
                       <tr>
                         <td className={styles.string}>{image.timestamp}</td>
                         <td className={styles.string}>{image.imageName}</td>
-                        <td className={[styles.narrowCol, styles.number].join(' ')}>{image.exposureTime} s</td>
+                        <td className={[styles.narrowCol].join(' ')}>
+                          <LoadingBar
+                            percentage={currentExposureTime/image.exposureTime*100}
+                            displayPercentage={false}
+                            isNarrow={true}
+                            backgroundClass={styles.backgroundLoadingBarClass}
+                            animationDuration={
+                              this.state.timers[image.imageName] !== undefined ? image.exposureTime : 0
+                            }
+                            title={`Exposed ${currentExposureTime} out of ${image.exposureTime} seconds`}
+                          />
+                          <span className={styles.exposureTime} title={`Exposed ${currentExposureTime} out of ${image.exposureTime} seconds`}>
+                            {currentExposureTime} s / {image.exposureTime} s
+                          </span>
+                        </td>
                         <td
                           className={[
                             styles.statusColumn,
