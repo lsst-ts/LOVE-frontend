@@ -12,12 +12,17 @@ export const receiveToken = (token) => ({
   token,
 });
 
-// const managerInterface = new ManagerInterface();
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
 
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(requestToken(username, password));
+
+    const storageToken = localStorage.getItem('LOVE-TOKEN');
+    if(storageToken && storageToken.length>0){
+      dispatch(receiveToken(storageToken));
+      return new Promise((resolve)=>resolve())
+    }
 
     return fetch(url, {
       method: 'POST',
