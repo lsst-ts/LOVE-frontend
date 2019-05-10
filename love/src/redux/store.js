@@ -1,9 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import thunkMiddleware from 'redux-thunk';
-import { fetchToken } from './actions';
-
+import { fetchToken } from './actions/auth';
+import {openWebsocketConnection} from './actions/ws';
 const store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-
-store.dispatch(fetchToken('test','test')).then(() => console.log(store.getState()));
+store.dispatch(fetchToken('test','test')).then(() => console.log('token',store.getState()));
+store.dispatch(openWebsocketConnection());
 export default store;

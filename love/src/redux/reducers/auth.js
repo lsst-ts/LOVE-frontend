@@ -1,4 +1,4 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN } from '../actionTypes';
+import { REQUEST_TOKEN, RECEIVE_TOKEN } from '../actions/actionTypes';
 
 export const tokenStates = {
   EMPTY: 'EMPTY',

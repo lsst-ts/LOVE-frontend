@@ -1,5 +1,5 @@
 import { REQUEST_TOKEN, RECEIVE_TOKEN } from './actionTypes';
-import ManagerInterface from '../Utils';
+import ManagerInterface from '../../Utils';
 
 export const requestToken = (username, password) => ({
   type: REQUEST_TOKEN,
