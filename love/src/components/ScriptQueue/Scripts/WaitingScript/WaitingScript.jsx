@@ -6,7 +6,7 @@ import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
-import Button from '../../../Button/Button';
+import Button from '../../../GeneralPurpose/Button/Button';
 import { hasCommandPrivileges } from '../../../../Utils';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 

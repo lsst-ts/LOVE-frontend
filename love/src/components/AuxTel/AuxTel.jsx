@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Panel from '../Panel/Panel';
+import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './AuxTel.module.css';
 import Summary from './Summary/Summary';
 import Skymap from './Skymap/Skymap';
