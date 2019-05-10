@@ -24,6 +24,12 @@ export default class TelemetryLog extends Component {
     this.managerInterface = new ManagerInterface();
   }
 
+  static defaultProps = {
+    category: 'event',
+    csc: 'ScriptQueue',
+    stream: 'all',
+  };
+
   receiveMessage = (msg) => {
     this.setState({
       msg: msg.data,
@@ -66,22 +72,21 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.managerInterface.subscribeToStream(
+    this.props.subscribeToStream(
       this.state.category,
       this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
+      this.state.stream
     );
   };
 
-  unsubscribeToStream = () => {
-    this.managerInterface.unsubscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
-    );
-  };
+  // unsubscribeToStream = () => {
+  //   this.managerInterface.unsubscribeToStream(
+  //     this.state.category,
+  //     this.state.csc,
+  //     this.state.stream,
+  //     this.receiveMessage,
+  //   );
+  // };
 
   render() {
     return (
@@ -107,7 +112,9 @@ export default class TelemetryLog extends Component {
         {this.state.msgList
           .slice()
           .reverse()
-          .map((msg, index) => <JSONPretty key={this.state.msgNumber - index} data={msg} />)}
+          .map((msg, index) => (
+            <JSONPretty key={this.state.msgNumber - index} data={msg} />
+          ))}
       </div>
     );
   }
