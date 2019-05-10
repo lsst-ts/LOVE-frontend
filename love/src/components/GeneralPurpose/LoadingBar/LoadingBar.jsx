@@ -34,7 +34,13 @@ export default class LoadingBar extends Component {
         <span className={[styles.percentage, this.props.percentage > 50 ? styles.dark : ''].join(' ')}>
           {this.props.displayPercentage ? `${this.props.percentage.toFixed(0)}%` : null}
         </span>
-        <div style={{ width: `${Math.min(this.props.percentage, 100)}%`, animationDuration: `${this.props.animationDuration}s` }} className={[styles.loadedBar, narrowClass].join(' ')} />
+        <div
+          style={{
+            width: `${Math.min(this.props.percentage, 100)}%`,
+            animationDuration: `${this.props.animationDuration}s`,
+          }}
+          className={[styles.loadedBar, narrowClass].join(' ')}
+        />
       </div>
     );
   }
