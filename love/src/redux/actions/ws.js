@@ -1,4 +1,4 @@
-import { ADD_SUBSCRIPTION, CHANGE_WS_STATE } from '../actions/actionTypes';
+import { RECEIVE_GROUP_SUBSCRIPTION_DATA, ADD_GROUP_SUBSCRIPTION, CHANGE_WS_STATE } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 
 export const connectionStates = {
@@ -14,6 +14,15 @@ const changeWebsocketConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
 });
+
+const receiveGroupSubscriptionData = (data) => {
+  return {
+    type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
+    data: data.data,
+    category: data.category,
+    csc: Object.keys(data.data)[0],
+  };
+};
 
 /**
  * Opens a new websocket connection assuming:
@@ -34,7 +43,14 @@ export const openWebsocketConnection = () => {
           dispatch(changeWebsocketConnectionState(connectionStates.OPEN));
           resolve();
         },
-        onmessage: (msg) => console.log(msg),
+        onmessage: (msg) => {
+          if (!msg.data) return;
+
+          const data = JSON.parse(msg.data);
+          if (data.category) {
+            dispatch(receiveGroupSubscriptionData(data));
+          }
+        },
         onclose: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
         },
@@ -48,7 +64,7 @@ export const openWebsocketConnection = () => {
 };
 
 export const addGroupSubscription = (groupName) => ({
-  type: ADD_SUBSCRIPTION,
+  type: ADD_GROUP_SUBSCRIPTION,
   groupName,
 });
 
