@@ -125,6 +125,7 @@ export default class Camera extends Component {
   }
 
   processImageUpdate = (imageData, state) => {
+    // eslint-disable-next-line
     let { imageSequenceName, imagesInSequence, imageName, ...exposureData } = imageData;
     imageSequenceName = imageSequenceName.value;
     imagesInSequence = imagesInSequence.value;
@@ -132,7 +133,7 @@ export default class Camera extends Component {
     let { imageSequence } = this.state;
     exposureData.state = { value: state };
 
-    //Hardcoded data:
+    // Hardcoded data:
     imageSequenceName = 'Image sequence one';
     exposureData.exposureTime = { value: 5 };
     if (imageSequence.name === imageSequenceName) {
@@ -145,8 +146,9 @@ export default class Camera extends Component {
       };
       imageSequence.images[imageName] = { ...exposureData };
     }
-    if(!imageSequence.images[imageName].readoutParameters)
-      imageSequence.images[imageName].readoutParameters = {value: {}};
+    if (!imageSequence.images[imageName].readoutParameters) {
+      imageSequence.images[imageName].readoutParameters = { value: {} };
+    }
     this.setState({
       imageSequence: { ...imageSequence },
     });
@@ -173,14 +175,13 @@ export default class Camera extends Component {
   };
 
   startTimer = (imageName, maxIterations) => {
-    let timer;
     let iterations = 0;
     const { timers } = this.state;
     timers[imageName] = 0;
     this.setState({
       timers: { ...timers },
     });
-    timer = setInterval(() => {
+    const timer = setInterval(() => {
       timers[imageName] += 1;
       this.setState({
         timers: { ...timers },
