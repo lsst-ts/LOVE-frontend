@@ -14,7 +14,6 @@ export default class TelemetryLog extends Component {
   constructor(props) {
     super();
     this.state = {
-      msg: '',
       msgList: [],
       msgNumber: 0,
       category: props.category,
@@ -28,13 +27,7 @@ export default class TelemetryLog extends Component {
     category: 'event',
     csc: 'ScriptQueue',
     stream: 'all',
-  };
-
-  receiveMessage = (msg) => {
-    this.setState({
-      msg: msg.data,
-    });
-    this.updateMessageList(msg.data);
+    data: {}
   };
 
   updateMessageList = (msg) => {
@@ -87,6 +80,12 @@ export default class TelemetryLog extends Component {
   //     this.receiveMessage,
   //   );
   // };
+
+  componentDidUpdate = (prevProps) => {
+    if(this.props.data !== prevProps.data){
+      this.updateMessageList(this.props.data);
+    }
+  }
 
   render() {
     return (
