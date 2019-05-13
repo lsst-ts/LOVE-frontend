@@ -30,7 +30,10 @@ body {
   --second-secondary-background-color: hsl(202, 36%, 13%);
   --second-tertiary-background-color: hsl(201, 26%, 23%);
   --second-quaternary-background-color: hsl(201, 24%, 30%);
+  --second-quaternary-background-dimmed-color: hsla(202, 32%, 28%, 0.3);
   --second-quinary-background-color: hsl(201, 22%, 40%);
+  --second-senary-background-color: hsl(201, 40%, 81%);
+  --second-senary-background-dimmed-color: hsl(201, 40%, 81%, 0.3);
   --second-base-font-color: hsl(240, 4%, 90%, 0.6);
   
   /* Status */

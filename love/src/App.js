@@ -16,6 +16,7 @@ import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
 import Camera from './components/AuxTel/Camera/Camera';
+import LATISS from './components/AuxTel/LATISS/LATISS';
 
 class App extends Component {
   static propTypes = {
@@ -201,6 +202,7 @@ class App extends Component {
               </Panel>
             )}
           />
+          <PrivateRoute token={this.state.token} path="/latiss" component={LATISS} />
           <PrivateRoute
             token={this.state.token}
             path="/"
