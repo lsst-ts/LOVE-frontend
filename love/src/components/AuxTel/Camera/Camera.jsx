@@ -132,8 +132,9 @@ export default class Camera extends Component {
     let { imageSequence } = this.state;
     exposureData.state = { value: state };
 
+    //Hardcoded data:
     imageSequenceName = 'Image sequence one';
-    exposureData.exposureTime = {value: 5};
+    exposureData.exposureTime = { value: 5 };
     if (imageSequence.name === imageSequenceName) {
       imageSequence.images[imageName] = { ...exposureData };
     } else {
@@ -144,6 +145,8 @@ export default class Camera extends Component {
       };
       imageSequence.images[imageName] = { ...exposureData };
     }
+    if(!imageSequence.images[imageName].readoutParameters)
+      imageSequence.images[imageName].readoutParameters = {value: {}};
     this.setState({
       imageSequence: { ...imageSequence },
     });
