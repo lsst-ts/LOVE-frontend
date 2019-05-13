@@ -3,16 +3,21 @@ import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
 import {requestGroupSubscription} from '../../redux/actions/ws';
 
-const TelemetryLogContainer = ({ token, subscribeToStream }) => {
-  return <TelemetryLog subscribeToStream={subscribeToStream}/>;
+const TelemetryLogContainer = ({ data, subscribeToStream }) => {
+  return <TelemetryLog data={data} subscribeToStream={subscribeToStream}/>;
 };
 
 TelemetryLogContainer.defaultProps = {
   token: 'asd',
 };
 const mapStateToProps = (state) => {
-  console.log('mapstatetoprops', state);
-  return { token: state.auth.token };
+  const scriptqueue = state.ws.subscriptions.filter(
+    s => s.groupName === 'event-ScriptQueue-all'
+  );
+
+  if( scriptqueue.length === 0)  return {}
+  if(! scriptqueue[0].data) return {}
+  return {data: scriptqueue[0].data};
 };
 
 const mapDispatchToProps = (dispatch) => {
