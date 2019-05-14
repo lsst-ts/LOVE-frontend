@@ -2,6 +2,7 @@ import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
+  REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
@@ -79,10 +80,16 @@ export const addGroupSubscription = (groupName) => ({
   groupName,
 });
 
+export const removeGroupSubscription = (groupName) => ({
+  type: REMOVE_GROUP_SUBSCRIPTION,
+  groupName,
+});
+
 export const requestGroupSubscription = (groupName) => {
   return (dispatch, getState) => {
     if (!wsPromise) {
       dispatch(openWebsocketConnection());
+      setTimeout(() => dispatch(requestGroupSubscription(groupName)), 1000);
       return;
     }
 
