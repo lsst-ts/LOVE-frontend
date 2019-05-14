@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 export const hasCommandPrivileges = false;
 export const hasFakeData = true;
@@ -26,7 +26,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
   */
-  
+
   function noop() {}
   const opts = optsPar || {};
 
@@ -393,14 +393,23 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
     .flat();
 };
 
-
 export const saveGroupSubscriptions = (Component) => {
   return () => {
     const [groupName, setGroupName] = useState('');
 
-    const changeGroup = (groupName) => {
+    const saveSubscriptionLocally = (groupName) => {
       setGroupName(groupName);
     };
-    return <Component groupName={groupName} changeGroup={changeGroup} />;
+
+    const removeSubscriptionLocally = () => {
+      setGroupName('');
+    };
+    return (
+      <Component
+        groupName={groupName}
+        saveSubscriptionLocally={saveSubscriptionLocally}
+        removeSubscriptionLocally={removeSubscriptionLocally}
+      />
+    );
   };
 };
