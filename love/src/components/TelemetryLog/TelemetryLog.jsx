@@ -73,8 +73,8 @@ export default class TelemetryLog extends Component {
   };
 
   componentDidUpdate = (prevProps) => {
-    if (this.props.data !== prevProps.data) {
-      this.updateMessageList(this.props.data);
+    if (this.props.streams !== prevProps.streams) {
+      this.updateMessageList(this.props.streams);
     }
   };
 

@@ -395,18 +395,21 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
 
 export const saveGroupSubscriptions = (Component) => {
   return () => {
-    const [groupName, setGroupName] = useState('');
+    const [subscriptionsList, setSubscriptionsList] = useState([]);
 
     const saveSubscriptionLocally = (groupName) => {
-      setGroupName(groupName);
+      if (!subscriptionsList.includes(groupName)) {
+        setSubscriptionsList([...subscriptionsList, groupName]);
+      }
     };
 
-    const removeSubscriptionLocally = () => {
-      setGroupName('');
+    const removeSubscriptionLocally = (groupName) => {
+      setSubscriptionsList(subscriptionsList.filter((name) => name !== groupName));
     };
+
     return (
       <Component
-        groupName={groupName}
+        subscriptionsList={subscriptionsList}
         saveSubscriptionLocally={saveSubscriptionLocally}
         removeSubscriptionLocally={removeSubscriptionLocally}
       />

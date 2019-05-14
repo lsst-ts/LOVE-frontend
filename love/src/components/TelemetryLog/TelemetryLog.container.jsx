@@ -5,8 +5,8 @@ import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../..
 import { saveGroupSubscriptions } from '../../Utils';
 
 const TelemetryLogContainer = ({
-  data,
-  groupName,
+  streams,
+  subscriptionsList,
   saveSubscriptionLocally,
   removeSubscriptionLocally,
   subscribeToStream,
@@ -24,19 +24,21 @@ const TelemetryLogContainer = ({
 
   return (
     <TelemetryLog
-      data={data}
+      streams={streams}
       subscribeToStream={subscribeAndSaveGroup}
       unsubscribeToStream={unsubscribeAndRemoveGroup}
+      subscriptionsList={subscriptionsList}
     />
   );
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const scriptqueue = state.ws.subscriptions.filter((s) => s.groupName === ownProps.groupName); //'event-ScriptQueue-all');
+  let streams = state.ws.subscriptions.filter((s) => ownProps.subscriptionsList.includes(s.groupName));
+  if (streams.length === 0) return {};
+  streams = streams.filter(s=>s.data);
 
-  if (scriptqueue.length === 0) return {};
-  if (!scriptqueue[0].data) return {};
-  return { data: scriptqueue[0].data };
+  if (streams.length === 0) return {};
+  return { streams: streams };
 };
 
 const mapDispatchToProps = (dispatch) => {
