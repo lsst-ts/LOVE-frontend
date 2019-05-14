@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 
-const TelemetryLogContainer = ({ data, subscribeToStream, unsubscribeToStream }) => {
-  return <TelemetryLog data={data} subscribeToStream={subscribeToStream} unsubscribeToStream={unsubscribeToStream} />;
+const TelemetryLogContainer = ({ data, groupName, changeGroup, subscribeToStream, unsubscribeToStream }) => {
+  const subscribeAndChangeGroup = (category, csc, stream) => {
+    subscribeToStream(category, csc, stream);
+    changeGroup([category, csc, stream].join('-'));
+  };
+  return (
+    <TelemetryLog data={data} subscribeToStream={subscribeAndChangeGroup} unsubscribeToStream={unsubscribeToStream} />
+  );
 };
 
-TelemetryLogContainer.defaultProps = {
-  token: 'asd',
-};
-const mapStateToProps = (state) => {
-  const scriptqueue = state.ws.subscriptions.filter((s) => s.groupName === 'event-ScriptQueue-all');
+const mapStateToProps = (state, ownProps) => {
+  const scriptqueue = state.ws.subscriptions.filter((s) => s.groupName === ownProps.groupName); //'event-ScriptQueue-all');
 
   if (scriptqueue.length === 0) return {};
   if (!scriptqueue[0].data) return {};
@@ -23,6 +26,8 @@ const mapDispatchToProps = (dispatch) => {
     subscribeToStream: (category, csc, stream) => {
       const groupName = [category, csc, stream].join('-');
       dispatch(requestGroupSubscription(groupName));
+
+      return groupName;
     },
     unsubscribeToStream: (category, csc, stream) => {
       const groupName = [category, csc, stream].join('-');
@@ -31,7 +36,18 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
+const ConnectedLogContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(TelemetryLogContainer);
+
+const StreamGroupSetter = () => {
+  const [groupName, setGroupName] = useState('');
+
+  const changeGroup = (groupName) => {
+    setGroupName(groupName);
+  };
+
+  return <ConnectedLogContainer groupName={groupName} changeGroup={changeGroup} />;
+};
+export default StreamGroupSetter;
