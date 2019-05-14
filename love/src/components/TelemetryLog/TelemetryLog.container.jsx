@@ -2,15 +2,32 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
-import {saveGroupSubscriptions} from '../../Utils';
+import { saveGroupSubscriptions } from '../../Utils';
 
-const TelemetryLogContainer = ({ data, groupName, changeGroup, subscribeToStream, unsubscribeToStream }) => {
-  const subscribeAndChangeGroup = (category, csc, stream) => {
-    subscribeToStream(category, csc, stream);
-    changeGroup([category, csc, stream].join('-'));
+const TelemetryLogContainer = ({
+  data,
+  groupName,
+  saveSubscriptionLocally,
+  removeSubscriptionLocally,
+  subscribeToStream,
+  unsubscribeToStream,
+}) => {
+  const subscribeAndSaveGroup = (groupName) => {
+    subscribeToStream(groupName);
+    saveSubscriptionLocally(groupName);
   };
+
+  const unsubscribeAndRemoveGroup = (groupName) => {
+    unsubscribeToStream(groupName);
+    removeSubscriptionLocally(groupName);
+  };
+
   return (
-    <TelemetryLog data={data} subscribeToStream={subscribeAndChangeGroup} unsubscribeToStream={unsubscribeToStream} />
+    <TelemetryLog
+      data={data}
+      subscribeToStream={subscribeAndSaveGroup}
+      unsubscribeToStream={unsubscribeAndRemoveGroup}
+    />
   );
 };
 
@@ -24,14 +41,10 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    subscribeToStream: (category, csc, stream) => {
-      const groupName = [category, csc, stream].join('-');
+    subscribeToStream: (groupName) => {
       dispatch(requestGroupSubscription(groupName));
-
-      return groupName;
     },
-    unsubscribeToStream: (category, csc, stream) => {
-      const groupName = [category, csc, stream].join('-');
+    unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));
     },
   };
