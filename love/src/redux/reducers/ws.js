@@ -1,4 +1,9 @@
-import { RECEIVE_GROUP_SUBSCRIPTION_DATA, ADD_GROUP_SUBSCRIPTION, CHANGE_WS_STATE } from '../actions/actionTypes';
+import {
+  RECEIVE_GROUP_CONFIRMATION_MESSAGE,
+  RECEIVE_GROUP_SUBSCRIPTION_DATA,
+  ADD_GROUP_SUBSCRIPTION,
+  CHANGE_WS_STATE,
+} from '../actions/actionTypes';
 import { connectionStates } from '../actions/ws';
 
 const initialState = {
@@ -25,28 +30,47 @@ export default function(state = initialState, action) {
       ];
       return { ...state, subscriptions };
     }
+    case RECEIVE_GROUP_CONFIRMATION_MESSAGE: {
+      const subscriptions = state.subscriptions.map((subscription) => {
+        const [category, csc, stream] = subscription.groupName.split('-');
+        if (action.data.includes(csc) && action.data.includes(stream)) {
+          return {
+            ...subscription,
+            confirmationMessage: action.data,
+          };
+        }
+        
+        return subscription;
+      });
+
+      return { ...state, subscriptions };
+      return state;
+    }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
-        const subscriptions = state.subscriptions.map(subscription =>{
-            const [category, csc, stream] = subscription.groupName.split('-');
+      const subscriptions = state.subscriptions.map((subscription) => {
+        const [category, csc, stream] = subscription.groupName.split('-');
 
-            if(category !== action.category) return subscription;
+        if (category !== action.category) return subscription;
 
-            if(csc !== action.csc ) return subscription;
+        if (csc !== action.csc) return subscription;
 
-            if(!Object.keys(action.data[csc]).includes(stream) && stream !== 'all' ) return subscription;
+        if (!Object.keys(action.data[csc]).includes(stream) && stream !== 'all') return subscription;
 
-            if(stream==='all'){
-                return {
-                    groupName: subscription.groupName,
-                    data: action.data[csc]
-                };
-            }
+        if (stream === 'all') {
+          return {
+            ...subscription,
+            groupName: subscription.groupName,
+            data: action.data[csc],
+          };
+        }
 
-            return {
-                groupName: subscription.groupName,
-                data: action.data[csc][stream]
-            }
-        });
+        return {
+          ...subscription,
+          groupName: subscription.groupName,
+          data: action.data[csc][stream],
+        };
+      });
+
       return { ...state, subscriptions };
     }
     default:
