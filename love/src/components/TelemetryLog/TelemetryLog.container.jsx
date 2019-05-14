@@ -1,37 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { saveGroupSubscriptions } from '../../Utils';
 
-const TelemetryLogContainer = ({ data, subscribeToStream, unsubscribeToStream }) => {
-  return <TelemetryLog data={data} subscribeToStream={subscribeToStream} unsubscribeToStream={unsubscribeToStream} />;
+const TelemetryLogContainer = ({
+  streams,
+  subscriptionsList,
+  saveSubscriptionLocally,
+  removeSubscriptionLocally,
+  subscribeToStream,
+  unsubscribeToStream,
+}) => {
+  const subscribeAndSaveGroup = (groupName) => {
+    subscribeToStream(groupName);
+    saveSubscriptionLocally(groupName);
+  };
+
+  const unsubscribeAndRemoveGroup = (groupName) => {
+    unsubscribeToStream(groupName);
+    removeSubscriptionLocally(groupName);
+  };
+
+  return (
+    <TelemetryLog
+      streams={streams}
+      subscribeToStream={subscribeAndSaveGroup}
+      unsubscribeToStream={unsubscribeAndRemoveGroup}
+      subscriptionsList={subscriptionsList}
+    />
+  );
 };
 
-TelemetryLogContainer.defaultProps = {
-  token: 'asd',
-};
-const mapStateToProps = (state) => {
-  const scriptqueue = state.ws.subscriptions.filter((s) => s.groupName === 'event-ScriptQueue-all');
+const mapStateToProps = (state, ownProps) => {
+  let streams = state.ws.subscriptions.filter((s) => ownProps.subscriptionsList.includes(s.groupName));
+  if (streams.length === 0) return {};
+  streams = streams.filter(s=>s.data);
 
-  if (scriptqueue.length === 0) return {};
-  if (!scriptqueue[0].data) return {};
-  return { data: scriptqueue[0].data };
+  if (streams.length === 0) return {};
+  return { streams: streams };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    subscribeToStream: (category, csc, stream) => {
-      const groupName = [category, csc, stream].join('-');
+    subscribeToStream: (groupName) => {
       dispatch(requestGroupSubscription(groupName));
     },
-    unsubscribeToStream: (category, csc, stream) => {
-      const groupName = [category, csc, stream].join('-');
+    unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));
     },
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TelemetryLogContainer);
+export default saveGroupSubscriptions(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(TelemetryLogContainer),
+);

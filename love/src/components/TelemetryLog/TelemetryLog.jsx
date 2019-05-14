@@ -27,7 +27,7 @@ export default class TelemetryLog extends Component {
     category: 'event',
     csc: 'ScriptQueue',
     stream: 'all',
-    data: {}
+    data: {},
   };
 
   updateMessageList = (msg) => {
@@ -65,27 +65,18 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.props.subscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream
-    );
+    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
   };
 
   unsubscribeToStream = () => {
-    this.props.unsubscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
-    );
+    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
   };
 
   componentDidUpdate = (prevProps) => {
-    if(this.props.data !== prevProps.data){
-      this.updateMessageList(this.props.data);
+    if (this.props.streams !== prevProps.streams) {
+      this.updateMessageList(this.props.streams);
     }
-  }
+  };
 
   render() {
     return (
