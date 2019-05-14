@@ -1,4 +1,9 @@
-import { RECEIVE_GROUP_SUBSCRIPTION_DATA, ADD_GROUP_SUBSCRIPTION, CHANGE_WS_STATE } from '../actions/actionTypes';
+import {
+  RECEIVE_GROUP_CONFIRMATION_MESSAGE,
+  RECEIVE_GROUP_SUBSCRIPTION_DATA,
+  ADD_GROUP_SUBSCRIPTION,
+  CHANGE_WS_STATE,
+} from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 
 export const connectionStates = {
@@ -13,6 +18,11 @@ let socket, wsPromise;
 const changeWebsocketConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
+});
+
+const receiveGroupConfirmationMessage = (data) => ({
+  type: RECEIVE_GROUP_CONFIRMATION_MESSAGE,
+  data,
 });
 
 const receiveGroupSubscriptionData = (data) => {
@@ -47,9 +57,10 @@ export const openWebsocketConnection = () => {
           if (!msg.data) return;
 
           const data = JSON.parse(msg.data);
-          if (data.category) {
-            dispatch(receiveGroupSubscriptionData(data));
+          if (!data.category) {
+            dispatch(receiveGroupConfirmationMessage(data.data));
           }
+          dispatch(receiveGroupSubscriptionData(data));
         },
         onclose: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
