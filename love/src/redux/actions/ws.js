@@ -110,3 +110,30 @@ export const requestGroupSubscription = (groupName) => {
     });
   };
 };
+
+export const requestGroupSubscriptionRemoval = (groupName) => {
+  return (dispatch, getState) => {
+    if (!wsPromise) {
+      dispatch(openWebsocketConnection());
+      setTimeout(() => dispatch(requestGroupSubscriptionRemoval(groupName)), 1000);
+      return;
+    }
+
+    const [category, csc, stream] = groupName.split('-');
+
+    wsPromise.then(() => {
+      const state = getState();
+      if(state.ws.connectionState !== connectionStates.OPEN) {
+        console.warn(`Can not unsubscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
+      }
+
+      socket.json({
+        option: 'unsubscribe',
+        category,
+        csc,
+        stream,
+      });
+
+    });
+  };
+};
