@@ -72,14 +72,14 @@ export default class TelemetryLog extends Component {
     );
   };
 
-  // unsubscribeToStream = () => {
-  //   this.managerInterface.unsubscribeToStream(
-  //     this.state.category,
-  //     this.state.csc,
-  //     this.state.stream,
-  //     this.receiveMessage,
-  //   );
-  // };
+  unsubscribeToStream = () => {
+    this.props.unsubscribeToStream(
+      this.state.category,
+      this.state.csc,
+      this.state.stream,
+      this.receiveMessage,
+    );
+  };
 
   componentDidUpdate = (prevProps) => {
     if(this.props.data !== prevProps.data){
