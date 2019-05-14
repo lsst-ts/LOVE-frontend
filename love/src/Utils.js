@@ -1,3 +1,5 @@
+import React, {useState} from 'react';
+
 export const hasCommandPrivileges = false;
 export const hasFakeData = true;
 
@@ -389,4 +391,16 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
       return currentValue;
     })
     .flat();
+};
+
+
+export const saveGroupSubscriptions = (Component) => {
+  return () => {
+    const [groupName, setGroupName] = useState('');
+
+    const changeGroup = (groupName) => {
+      setGroupName(groupName);
+    };
+    return <Component groupName={groupName} changeGroup={changeGroup} />;
+  };
 };

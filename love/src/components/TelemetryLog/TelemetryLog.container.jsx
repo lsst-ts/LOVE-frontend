@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import {saveGroupSubscriptions} from '../../Utils';
 
 const TelemetryLogContainer = ({ data, groupName, changeGroup, subscribeToStream, unsubscribeToStream }) => {
   const subscribeAndChangeGroup = (category, csc, stream) => {
@@ -36,18 +37,9 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-const ConnectedLogContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TelemetryLogContainer);
-
-const StreamGroupSetter = () => {
-  const [groupName, setGroupName] = useState('');
-
-  const changeGroup = (groupName) => {
-    setGroupName(groupName);
-  };
-
-  return <ConnectedLogContainer groupName={groupName} changeGroup={changeGroup} />;
-};
-export default StreamGroupSetter;
+export default saveGroupSubscriptions(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  )(TelemetryLogContainer),
+);
