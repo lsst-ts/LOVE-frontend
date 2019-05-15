@@ -19,6 +19,10 @@ import AuxTel from './components/AuxTel/AuxTel';
 import Camera from './components/AuxTel/Camera/Camera';
 import LATISS from './components/AuxTel/LATISS/LATISS';
 
+import { connect } from 'react-redux';
+import {getToken} from './redux/selectors';
+
+
 class App extends Component {
   static propTypes = {
     location: PropTypes.object,
@@ -27,54 +31,53 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
-      token: ManagerInterface.getToken(),
       showSessionExpired: false,
     };
-    this.managerInterface = new ManagerInterface();
+    // this.managerInterface = new ManagerInterface();
     this.justLoggedOut = false;
   }
 
-  componentDidMount = () => {
-    const token = ManagerInterface.getToken();
-    this.setTokenState(token);
-    ManagerInterface.validateToken().then((response) => {
-      if (response === false) {
-        this.logout();
-      }
-    });
-  };
+  // componentDidMount = () => {
+  //   const token = ManagerInterface.getToken();
+  //   this.setTokenState(token);
+  //   ManagerInterface.validateToken().then((response) => {
+  //     if (response === false) {
+  //       this.logout();
+  //     }
+  //   });
+  // };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (this.state.token && prevProps.location.pathname !== this.props.location.pathname) {
-      ManagerInterface.validateToken().then((response) => {
-        if (response === false) {
-          this.logout();
-        }
-      });
-    }
-    if (!this.state.token && prevState.token) {
-      if (this.justLoggedOut) {
-        this.justLoggedOut = false;
-      } else {
-        this.setState({ showSessionExpired: true });
-      }
-    }
-  };
+  // componentDidUpdate = (prevProps, prevState) => {
+  //   if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
+  //     ManagerInterface.validateToken().then((response) => {
+  //       if (response === false) {
+  //         this.logout();
+  //       }
+  //     });
+  //   }
+  //   if (!this.props.token && prevState.token) {
+  //     if (this.justLoggedOut) {
+  //       this.justLoggedOut = false;
+  //     } else {
+  //       this.setState({ showSessionExpired: true });
+  //     }
+  //   }
+  // };
 
   hideSessionExpired = () => {
-    this.setState({ showSessionExpired: false });
+    // this.setState({ showSessionExpired: false });
   };
 
   logout = () => {
-    this.setTokenState(null);
-    ManagerInterface.removeToken();
-    if (this.managerInterface) this.managerInterface.logout();
-    this.justLoggedOut = true;
+    // this.setTokenState(null);
+    // ManagerInterface.removeToken();
+    // if (this.managerInterface) this.managerInterface.logout();
+    // this.justLoggedOut = true;
   };
 
-  setTokenState = (token) => {
-    this.setState({ token });
-  };
+  // setTokenState = (token) => {
+  //   this.setState({ token });
+  // };
   render() {
     return (
       <div className="App">
@@ -83,15 +86,15 @@ class App extends Component {
             path="/login"
             render={() => (
               <LoginContainer
-                // token={this.state.token}
+                // token={this.props.token}
                 // setTokenState={this.setTokenState}
-                // showSessionExpired={this.state.showSessionExpired}
+                // showSessionExpired={this.state.showSessionExpired}e.te.token
                 // hideSessionExpired={this.hideSessionExpired}
               />
             )}
           />
           <PrivateRoute
-            token={this.state.token}
+            token={this.props.token}
             path="/health-status-summary"
             render={() => (
               <div className="hs-container">
@@ -99,9 +102,9 @@ class App extends Component {
               </div>
             )}
           />
-          <PrivateRoute token={this.state.token} path="/dm-flow" component={DataManagementFlow} />
+          <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
           <PrivateRoute
-            token={this.state.token}
+            token={this.props.token}
             path="/time-series"
             render={() => (
               <div className="hs-container">
@@ -120,12 +123,12 @@ class App extends Component {
               </div>
             )}
           />
-          <PrivateRoute token={this.state.token} path="/script-queue" component={ScriptQueue} />
-          <PrivateRoute token={this.state.token} path="/csc-summary" component={CSCSummary} />
-          <PrivateRoute token={this.state.token} path="/aux-tel" component={AuxTel} />
-          <PrivateRoute token={this.state.token} path="/auxiliary-telescope" component={AuxTel} />
+          <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueue} />
+          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummary} />
+          <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
+          <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
           <PrivateRoute
-            token={this.state.token}
+            token={this.props.token}
             path="/aux-tel-camera"
             render={() => (
               <Panel title="Auxiliary Telescope Camera" className={'smallPanel'}>
@@ -133,9 +136,9 @@ class App extends Component {
               </Panel>
             )}
           />
-          <PrivateRoute token={this.state.token} path="/latiss" component={LATISS} />
+          <PrivateRoute token={this.props.token} path="/latiss" component={LATISS} />
           <PrivateRoute
-            token={this.state.token}
+            token={this.props.token}
             path="/"
             render={() => <ComponentIndex logout={this.logout}> </ComponentIndex>}
           />
@@ -145,4 +148,8 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+
+const mapStateToProps = (state) => ({
+  token: getToken(state)
+});
+export default connect(mapStateToProps)(withRouter(App));
