@@ -28,7 +28,7 @@ export default class LATISS extends Component {
   };
 
   static FILTER_ANGLE = 5.71;
-  
+
   static FILTER_ANGLE_RAD = (5.71 * Math.PI) / 180;
 
   constructor(props) {
@@ -52,9 +52,12 @@ export default class LATISS extends Component {
         gwState: [0, 1, 2, 2, 2, 2, 2, 3][~~(Math.random() * 8)],
         lsState: [0, 1, 2, 2, 2, 2, 2, 3][~~(Math.random() * 8)],
         shutterDetailedState: [0, 1, 2, 3][~~(Math.random() * 4)],
+        raftsDetailedState: [0, 1, 2, 3, 4][~~(Math.random() * 5)],
         reportedLinearStagePosition: ~~(Math.random() * 75),
+        reportedDisperserPosition: [0, 1, 2, 3][~~(Math.random() * 4)],
+        reportedFilterPosition: [0, 1, 2, 3][~~(Math.random() * 4)],
       });
-    }, 1500);
+    }, 3000);
   };
 
   drawLightPath = (slope, index, isReceivingLight, maxX, elementSlope = 0) => {
@@ -267,13 +270,13 @@ export default class LATISS extends Component {
           <div />
           <div />
           {/** SVGS */}
-          <svg className={styles.lightpathElement} width={'100%'} viewBox="0 0 100 120">
+          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
             <g transform={`rotate(${LATISS.FILTER_ANGLE} 50 50)`}>
               {this.drawLightPathElement(50, styles.movingElement, isFilterMoving)}
             </g>
             {this.drawLightPath(slope, 1, true, isFilterBlocking ? 50 : 100, LATISS.FILTER_ANGLE_RAD)}
           </svg>
-          <svg className={styles.lightpathElement} width={'100%'} viewBox="0 0 100 120">
+          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
             {this.drawLightPathElement(
               linearStagePosition - 5,
               styles.movingElement,
@@ -282,12 +285,11 @@ export default class LATISS extends Component {
             {this.drawLightPath(slope, 2, !isFilterBlocking, isGratingBlocking ? linearStagePosition - 5 : 100)}
             {this.drawLinearStage(this.state.reportedLinearStagePosition, linearStagePosition, isLinearStageMoving)}
           </svg>
-          <svg className={styles.lightpathElement} width={'100%'} viewBox="0 0 100 120">
-            {/* {this.drawLightPathElement(45, styles.movingElement, isShutterMoving)} */}
+          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
             {this.drawShutter(45, styles.shutter, shutterState)}
             {this.drawLightPath(slope, 3, !(isFilterBlocking || isGratingBlocking), isShutterBlocking ? 45 : 100)}
           </svg>
-          <svg className={styles.lightpathElement} width={'100%'} viewBox="0 0 100 120">
+          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
             {this.drawLightPathElement(45, styles.ccd, isLinearStageMoving)}
             {this.drawLightPath(slope, 4, !(isFilterBlocking || isGratingBlocking || isShutterBlocking), 45)}
           </svg>
