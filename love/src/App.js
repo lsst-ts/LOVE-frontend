@@ -74,9 +74,6 @@ class App extends Component {
 
   setTokenState = (token) => {
     this.setState({ token });
-    if (token) {
-      this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
-    }
   };
   render() {
     return (
