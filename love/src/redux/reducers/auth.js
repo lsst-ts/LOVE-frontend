@@ -1,4 +1,5 @@
 import { REQUEST_TOKEN, RECEIVE_TOKEN, REMOVE_TOKEN } from '../actions/actionTypes';
+import ManagerInterface from '../../Utils';
 
 export const tokenStates = {
   EMPTY: 'EMPTY',
@@ -28,6 +29,7 @@ export default function(state = initialState, action) {
       });
     }
     case REMOVE_TOKEN:
+      ManagerInterface.removeToken();
       return { ...initialState };
     default:
       return state;
