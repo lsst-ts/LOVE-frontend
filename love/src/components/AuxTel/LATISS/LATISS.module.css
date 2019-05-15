@@ -1,7 +1,7 @@
 .latissContainer {
   padding: 1em;
   display: grid;
-  grid-template-columns: repeat(4, minmax(270px, 500px));
+  grid-template-columns: repeat(4, minmax(270px, 400px));
   grid-template-rows: min-content min-content min-content 1fr min-content;
   text-align: left;
   color: var(--base-font-color);
@@ -9,11 +9,6 @@
 
 .latissContainer > div {
   padding: 0.5em 1em;
-  /* position: relative;
-  width: 100%;
-  height: 100%;
-  min-height: 200px;
-  border-right: 1px solid var(--second-quaternary-background-dimmed-color); */
   border-right: 1px solid var(--second-quaternary-background-dimmed-color);
 }
 
@@ -22,7 +17,12 @@
 }
 
 .latissContainer > svg {
+  width: inherit;
   border-right: 1px solid var(--second-quaternary-background-dimmed-color);
+}
+
+.latissContainer > *:nth-child(4n) {
+  border-right: 1px solid transparent;
 }
 
 .statusTextWrapper {
