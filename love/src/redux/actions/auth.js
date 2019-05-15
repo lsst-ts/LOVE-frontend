@@ -17,14 +17,14 @@ export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
 
   return (dispatch, getState) => {
-    dispatch(requestToken(username, password));
 
     const storageToken = localStorage.getItem('LOVE-TOKEN');
     if (storageToken && storageToken.length > 0) {
       dispatch(receiveToken(storageToken));
-      return new Promise((resolve) => resolve());
+      return;
     }
 
+    dispatch(requestToken(username, password));
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
@@ -38,6 +38,7 @@ export function fetchToken(username, password) {
         const { token } = response;
         if (token !== undefined && token !== null) {
           dispatch(receiveToken(token));
+          ManagerInterface.saveToken(token);
         }
       });
   };
