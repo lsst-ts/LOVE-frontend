@@ -1,5 +1,5 @@
 .latissContainer {
-  padding: 1em;
+  padding: 0em;
   display: grid;
   grid-template-columns: repeat(4, minmax(250px, 300px));
   grid-template-rows: min-content min-content min-content 1fr min-content;
