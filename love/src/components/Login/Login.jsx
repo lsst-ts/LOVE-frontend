@@ -57,16 +57,16 @@ export default class Login extends Component {
     // });
   }
 
-  // redirect() {
-  //   return (
-  //     <Redirect
-  //       to={{
-  //         pathname: '/',
-  //         state: { from: this.props.location },
-  //       }}
-  //     />
-  //   );
-  // }
+  redirect() {
+    return (
+      <Redirect
+        to={{
+          pathname: '/',
+          state: { from: this.props.location },
+        }}
+      />
+    );
+  }
 
   render() {
     return (
@@ -119,7 +119,7 @@ export default class Login extends Component {
               <Button type="submit" status="primary">
                 Login
               </Button>
-              {/* {this.props.token !== null ? this.redirect() : ''} */}
+              {this.props.token !== null ? this.redirect() : ''}
             </form>
           </div>
         </div>
