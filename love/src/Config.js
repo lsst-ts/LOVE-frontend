@@ -1,3 +1,6 @@
+export const hasFakeData = true;
+export const hasCommandPrivileges = false;
+
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {

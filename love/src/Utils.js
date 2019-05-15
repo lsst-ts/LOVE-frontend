@@ -1,6 +1,3 @@
-export const hasCommandPrivileges = false;
-export const hasFakeData = true;
-
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
   // eslint-disable-next-line
