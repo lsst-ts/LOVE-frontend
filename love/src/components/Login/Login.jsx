@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
 import styles from './Login.module.css';
-import ManagerInterface from '../../Utils';
 
 export default class Login extends Component {
   static propTypes = {
@@ -33,27 +32,29 @@ export default class Login extends Component {
     };
   }
 
-  // handleInputChange(event) {
-  //   const { name, value } = event.target;
-  //   this.setState({ [name]: value });
-  //   if (this.state.showFailedLogin) {
-  //     this.setState({ showFailedLogin: false });
-  //   }
-  //   if (this.props.showSessionExpired) {
-  //     this.props.hideSessionExpired();
-  //   }
-  // }
+  handleInputChange = (event) => {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
+    // if (this.state.showFailedLogin) {
+    //   this.setState({ showFailedLogin: false });
+    // }
+    // if (this.props.showSessionExpired) {
+    //   this.props.hideSessionExpired();
+    // }
+  }
 
   handleSubmit = (event) => {
     event.preventDefault();
-    ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
-      if (token) {
-        this.props.setTokenState(token);
-      } else {
-        this.setState({ showFailedLogin: true });
-        this.props.setTokenState(null);
-      }
-    });
+    this.props.fetchToken(this.state.username, this.state.password);
+
+    // ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
+    //   if (token) {
+    //     this.props.setTokenState(token);
+    //   } else {
+    //     this.setState({ showFailedLogin: true });
+    //     this.props.setTokenState(null);
+    //   }
+    // });
   }
 
   // redirect() {
@@ -98,8 +99,8 @@ export default class Login extends Component {
                   autoFocus=""
                   required=""
                   id="id_username"
-                  // onChange={this.handleInputChange}
-                  // value={this.state.username}
+                  onChange={this.handleInputChange}
+                  value={this.state.username}
                 />
               </p>
               <p className={styles.formEntry}>
@@ -111,8 +112,8 @@ export default class Login extends Component {
                   name="password"
                   required=""
                   id="id_password"
-                  // onChange={this.handleInputChange}
-                  // value={this.state.password}
+                  onChange={this.handleInputChange}
+                  value={this.state.password}
                 />
               </p>
               <Button type="submit" status="primary">
