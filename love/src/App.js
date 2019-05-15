@@ -78,43 +78,6 @@ class App extends Component {
       this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
     }
   };
-
-  receiveAllMsg = (msg) => {
-    const data = JSON.parse(msg.data);
-
-    if (data.category !== 'telemetry') return;
-
-    if (typeof data.data === 'object') {
-      let newTelemetries = Object.assign({}, this.state.telemetries);
-      let timestamp = new Date();
-      timestamp = timestamp
-        .toISOString()
-        .slice(0, 19)
-        .replace(/-/g, '/')
-        .replace('T', ' ');
-      Object.entries(data.data).forEach((entry) => {
-        const [csc, cscDataString] = entry;
-        const cscData = JSON.parse(cscDataString);
-        const telemetry = {};
-        const stream = {};
-        Object.entries(cscData).forEach((cscStream) => {
-          const [streamName, parameters] = cscStream;
-          stream[streamName] = {};
-          stream[streamName].parameters = parameters;
-          stream[streamName].receptionTimestamp = timestamp;
-        });
-        telemetry[csc] = {
-          ...stream,
-        };
-        Object.assign(newTelemetries, telemetry);
-      }, this);
-
-      newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
-      this.setState({ telemetries: newTelemetries });
-      this.managerInterface.unsubscribeToTelemetry('all', 'all', () => 0);
-    }
-  };
-
   render() {
     return (
       <div className="App">
