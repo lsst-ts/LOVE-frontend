@@ -39,7 +39,6 @@ export default function(state = initialState, action) {
             confirmationMessage: action.data,
           };
         }
-        
         return subscription;
       });
 
@@ -49,7 +48,6 @@ export default function(state = initialState, action) {
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
         const [category, csc, stream] = subscription.groupName.split('-');
-
         if (category !== action.category) return subscription;
 
         if (csc !== action.csc) return subscription;
@@ -59,14 +57,11 @@ export default function(state = initialState, action) {
         if (stream === 'all') {
           return {
             ...subscription,
-            groupName: subscription.groupName,
             data: action.data[csc],
           };
         }
-
         return {
           ...subscription,
-          groupName: subscription.groupName,
           data: action.data[csc][stream],
         };
       });
