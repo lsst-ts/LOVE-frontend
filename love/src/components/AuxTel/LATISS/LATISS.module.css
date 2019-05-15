@@ -1,7 +1,7 @@
 .latissContainer {
   padding: 1em;
   display: grid;
-  grid-template-columns: repeat(4, minmax(270px, 400px));
+  grid-template-columns: repeat(4, minmax(250px, 300px));
   grid-template-rows: min-content min-content min-content 1fr min-content;
   text-align: left;
   color: var(--base-font-color);
@@ -17,7 +17,6 @@
 }
 
 .latissContainer > svg {
-  width: inherit;
   border-right: 1px solid var(--second-quaternary-background-dimmed-color);
 }
 
@@ -50,7 +49,6 @@ div.ccdContainer {
 }
 
 .svgLightpath {
-  fill: blue;
   stroke: white;
   opacity: 0.2;
   transition: x 0.5s ease;
@@ -73,7 +71,6 @@ div.ccdContainer {
   fill: var(--status-running-dimmed-color);
   stroke: var(--status-running-color);
   stroke-width: 0.5;
-  /* fill: var(--second-tertiary-background-color); */
 }
 
 div.wheelSelector {

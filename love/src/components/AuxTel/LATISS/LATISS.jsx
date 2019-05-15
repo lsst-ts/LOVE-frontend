@@ -77,7 +77,7 @@ export default class LATISS extends Component {
           0,${index * slope * 100} 
           `}
           fill="white"
-          fillOpacity="0.01"
+          fillOpacity="0.02"
         />
         <line
           x1={0}
