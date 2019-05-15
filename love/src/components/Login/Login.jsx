@@ -31,22 +31,20 @@ export default class Login extends Component {
       password: '',
       showFailedLogin: false,
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(event) {
-    const { name, value } = event.target;
-    this.setState({ [name]: value });
-    if (this.state.showFailedLogin) {
-      this.setState({ showFailedLogin: false });
-    }
-    if (this.props.showSessionExpired) {
-      this.props.hideSessionExpired();
-    }
-  }
+  // handleInputChange(event) {
+  //   const { name, value } = event.target;
+  //   this.setState({ [name]: value });
+  //   if (this.state.showFailedLogin) {
+  //     this.setState({ showFailedLogin: false });
+  //   }
+  //   if (this.props.showSessionExpired) {
+  //     this.props.hideSessionExpired();
+  //   }
+  // }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
       if (token) {
@@ -58,16 +56,16 @@ export default class Login extends Component {
     });
   }
 
-  redirect() {
-    return (
-      <Redirect
-        to={{
-          pathname: '/',
-          state: { from: this.props.location },
-        }}
-      />
-    );
-  }
+  // redirect() {
+  //   return (
+  //     <Redirect
+  //       to={{
+  //         pathname: '/',
+  //         state: { from: this.props.location },
+  //       }}
+  //     />
+  //   );
+  // }
 
   render() {
     return (
@@ -100,8 +98,8 @@ export default class Login extends Component {
                   autoFocus=""
                   required=""
                   id="id_username"
-                  onChange={this.handleInputChange}
-                  value={this.state.username}
+                  // onChange={this.handleInputChange}
+                  // value={this.state.username}
                 />
               </p>
               <p className={styles.formEntry}>
@@ -113,14 +111,14 @@ export default class Login extends Component {
                   name="password"
                   required=""
                   id="id_password"
-                  onChange={this.handleInputChange}
-                  value={this.state.password}
+                  // onChange={this.handleInputChange}
+                  // value={this.state.password}
                 />
               </p>
               <Button type="submit" status="primary">
                 Login
               </Button>
-              {this.props.token !== null ? this.redirect() : ''}
+              {/* {this.props.token !== null ? this.redirect() : ''} */}
             </form>
           </div>
         </div>
