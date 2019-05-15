@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
-import ComponentIndex from './components/ComponentIndex/ComponentIndex';
+import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LoginContainer from './components/Login/Login.container';
@@ -20,8 +20,7 @@ import Camera from './components/AuxTel/Camera/Camera';
 import LATISS from './components/AuxTel/LATISS/LATISS';
 
 import { connect } from 'react-redux';
-import {getToken} from './redux/selectors';
-
+import { getToken } from './redux/selectors';
 
 class App extends Component {
   static propTypes = {
@@ -86,10 +85,10 @@ class App extends Component {
             path="/login"
             render={() => (
               <LoginContainer
-                // token={this.props.token}
-                // setTokenState={this.setTokenState}
-                // showSessionExpired={this.state.showSessionExpired}e.te.token
-                // hideSessionExpired={this.hideSessionExpired}
+              // token={this.props.token}
+              // setTokenState={this.setTokenState}
+              // showSessionExpired={this.state.showSessionExpired}e.te.token
+              // hideSessionExpired={this.hideSessionExpired}
               />
             )}
           />
@@ -119,7 +118,7 @@ class App extends Component {
                 {/* <TelemetryLog category="event" csc="ScriptQueue" stream="all">
                   {' '}
                 </TelemetryLog> */}
-                <TelemetryLogContainer/>
+                <TelemetryLogContainer />
               </div>
             )}
           />
@@ -137,19 +136,14 @@ class App extends Component {
             )}
           />
           <PrivateRoute token={this.props.token} path="/latiss" component={LATISS} />
-          <PrivateRoute
-            token={this.props.token}
-            path="/"
-            render={() => <ComponentIndex logout={this.logout}> </ComponentIndex>}
-          />
+          <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
       </div>
     );
   }
 }
 
-
 const mapStateToProps = (state) => ({
-  token: getToken(state)
+  token: getToken(state),
 });
 export default connect(mapStateToProps)(withRouter(App));
