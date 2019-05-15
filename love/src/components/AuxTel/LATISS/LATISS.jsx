@@ -28,6 +28,7 @@ export default class LATISS extends Component {
   };
 
   static FILTER_ANGLE = 5.71;
+  
   static FILTER_ANGLE_RAD = (5.71 * Math.PI) / 180;
 
   constructor(props) {
@@ -56,10 +57,7 @@ export default class LATISS extends Component {
     }, 1500);
   };
 
-  drawLightPath = (slope, index, isReceivingLight, maxX, optElementSlope) => {
-    const elementSlope = optElementSlope ? optElementSlope : 0;
-    const pivotPoint = maxX - 10;
-    console.log(elementSlope);
+  drawLightPath = (slope, index, isReceivingLight, maxX, elementSlope = 0) => {
     let xLimitTop = isReceivingLight ? maxX : 0;
     let xLimitBot = isReceivingLight ? maxX : 0;
     if (xLimitTop < 100 && xLimitTop > 0 && elementSlope !== 0) {
@@ -213,7 +211,6 @@ export default class LATISS extends Component {
             />
           </>
         )}
-        {/* <rect x={x} y={0} width={10} height={100} className={[style, isMoving ? styles.moving : ''].join(' ')} /> */}
       </g>
     );
   };
@@ -239,7 +236,6 @@ export default class LATISS extends Component {
     const isFilterMoving = filterWheelState === 'MOVING' || filterWheelState === 'HOMING';
     const isLinearStageMoving = linearStageState === 'MOVING' || linearStageState === 'HOMING';
     const isGratingMoving = gratingWheelState === 'MOVING' || gratingWheelState === 'HOMING';
-    const isShutterMoving = shutterState === 'CLOSING' || shutterState === 'OPENING';
 
     const isFilterBlocking = filterWheelState !== 'STATIONARY';
     const isGratingBlocking = gratingWheelState !== 'STATIONARY';
