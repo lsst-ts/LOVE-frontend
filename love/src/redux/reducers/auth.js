@@ -1,4 +1,4 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN } from '../actions/actionTypes';
+import { REQUEST_TOKEN, RECEIVE_TOKEN, REMOVE_TOKEN } from '../actions/actionTypes';
 
 export const tokenStates = {
   EMPTY: 'EMPTY',
@@ -27,6 +27,8 @@ export default function(state = initialState, action) {
         status: tokenStates.RECEIVED,
       });
     }
+    case REMOVE_TOKEN:
+      return { ...initialState };
     default:
       return state;
   }

@@ -1,5 +1,6 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN } from './actionTypes';
+import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN } from './actionTypes';
 import ManagerInterface from '../../Utils';
+import { tokenStates } from '../reducers/auth';
 
 export const requestToken = (username, password) => ({
   type: REQUEST_TOKEN,
@@ -19,9 +20,9 @@ export function fetchToken(username, password) {
     dispatch(requestToken(username, password));
 
     const storageToken = localStorage.getItem('LOVE-TOKEN');
-    if(storageToken && storageToken.length>0){
+    if (storageToken && storageToken.length > 0) {
       dispatch(receiveToken(storageToken));
-      return new Promise((resolve)=>resolve())
+      return new Promise((resolve) => resolve());
     }
 
     return fetch(url, {
@@ -41,3 +42,7 @@ export function fetchToken(username, password) {
       });
   };
 }
+
+export const removeToken = {
+  type: REMOVE_TOKEN,
+};

@@ -1,5 +1,6 @@
 export const REQUEST_TOKEN = 'REQUEST_TOKEN';
 export const RECEIVE_TOKEN = 'RECEIVE_TOKEN';
+export const REMOVE_TOKEN = 'REMOVE_TOKEN';
 
 export const OPEN_WS_CONNECTION = 'START_WS_CONNECTION';
 export const CHANGE_WS_STATE = 'CHANGE_WS_STATE';
