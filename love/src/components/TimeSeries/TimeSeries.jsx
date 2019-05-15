@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
-import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries, hasFakeData } from '../../Utils';
+import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
+import { hasFakeData } from '../../Config';
 import styles from './TimeSeries.module.css';
 
 export default class TimeSeries extends PureComponent {
