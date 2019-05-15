@@ -5,7 +5,7 @@ import './App.css';
 import ComponentIndex from './components/ComponentIndex/ComponentIndex';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
-import Login from './components/Login/Login';
+import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueue from './components/ScriptQueue/ScriptQueue';
 import TimeSeries from './components/TimeSeries/TimeSeries';
@@ -82,11 +82,11 @@ class App extends Component {
           <Route
             path="/login"
             render={() => (
-              <Login
-                token={this.state.token}
-                setTokenState={this.setTokenState}
-                showSessionExpired={this.state.showSessionExpired}
-                hideSessionExpired={this.hideSessionExpired}
+              <LoginContainer
+                // token={this.state.token}
+                // setTokenState={this.setTokenState}
+                // showSessionExpired={this.state.showSessionExpired}
+                // hideSessionExpired={this.hideSessionExpired}
               />
             )}
           />
