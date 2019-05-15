@@ -1,3 +1,5 @@
+import React, { useState } from 'react';
+
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
   // eslint-disable-next-line
@@ -385,4 +387,28 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
       return currentValue;
     })
     .flat();
+};
+
+export const saveGroupSubscriptions = (Component) => {
+  return () => {
+    const [subscriptionsList, setSubscriptionsList] = useState([]);
+
+    const saveSubscriptionLocally = (groupName) => {
+      if (!subscriptionsList.includes(groupName)) {
+        setSubscriptionsList([...subscriptionsList, groupName]);
+      }
+    };
+
+    const removeSubscriptionLocally = (groupName) => {
+      setSubscriptionsList(subscriptionsList.filter((name) => name !== groupName));
+    };
+
+    return (
+      <Component
+        subscriptionsList={subscriptionsList}
+        saveSubscriptionLocally={saveSubscriptionLocally}
+        removeSubscriptionLocally={removeSubscriptionLocally}
+      />
+    );
+  };
 };

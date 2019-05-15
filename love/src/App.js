@@ -13,6 +13,7 @@ import Panel from './components/GeneralPurpose/Panel/Panel';
 
 import ManagerInterface from './Utils';
 import TelemetryLog from './components/TelemetryLog/TelemetryLog';
+import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
 import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
 import Camera from './components/AuxTel/Camera/Camera';
@@ -183,9 +184,10 @@ class App extends Component {
             path="/test"
             render={() => (
               <div className="hs-container">
-                <TelemetryLog category="event" csc="ScriptQueue" stream="all">
+                {/* <TelemetryLog category="event" csc="ScriptQueue" stream="all">
                   {' '}
-                </TelemetryLog>
+                </TelemetryLog> */}
+                <TelemetryLogContainer/>
               </div>
             )}
           />

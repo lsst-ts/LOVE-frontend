@@ -14,7 +14,6 @@ export default class TelemetryLog extends Component {
   constructor(props) {
     super();
     this.state = {
-      msg: '',
       msgList: [],
       msgNumber: 0,
       category: props.category,
@@ -24,11 +23,11 @@ export default class TelemetryLog extends Component {
     this.managerInterface = new ManagerInterface();
   }
 
-  receiveMessage = (msg) => {
-    this.setState({
-      msg: msg.data,
-    });
-    this.updateMessageList(msg.data);
+  static defaultProps = {
+    category: 'event',
+    csc: 'ScriptQueue',
+    stream: 'all',
+    data: {},
   };
 
   updateMessageList = (msg) => {
@@ -66,21 +65,17 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.managerInterface.subscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
-    );
+    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
   };
 
   unsubscribeToStream = () => {
-    this.managerInterface.unsubscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
-    );
+    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.streams !== prevProps.streams) {
+      this.updateMessageList(this.props.streams);
+    }
   };
 
   render() {
@@ -107,7 +102,9 @@ export default class TelemetryLog extends Component {
         {this.state.msgList
           .slice()
           .reverse()
-          .map((msg, index) => <JSONPretty key={this.state.msgNumber - index} data={msg} />)}
+          .map((msg, index) => (
+            <JSONPretty key={this.state.msgNumber - index} data={msg} />
+          ))}
       </div>
     );
   }
