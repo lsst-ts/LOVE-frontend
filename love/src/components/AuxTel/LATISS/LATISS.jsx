@@ -286,12 +286,12 @@ export default class LATISS extends Component {
             {this.drawLinearStage(this.state.reportedLinearStagePosition, linearStagePosition, isLinearStageMoving)}
           </svg>
           <svg className={styles.lightpathElement} viewBox="0 0 100 120">
-            {this.drawShutter(45, styles.shutter, shutterState)}
-            {this.drawLightPath(slope, 3, !(isFilterBlocking || isGratingBlocking), isShutterBlocking ? 45 : 100)}
+            {this.drawShutter(50, styles.shutter, shutterState)}
+            {this.drawLightPath(slope, 3, !(isFilterBlocking || isGratingBlocking), isShutterBlocking ? 50 : 100)}
           </svg>
           <svg className={styles.lightpathElement} viewBox="0 0 100 120">
-            {this.drawLightPathElement(45, styles.ccd, isLinearStageMoving)}
-            {this.drawLightPath(slope, 4, !(isFilterBlocking || isGratingBlocking || isShutterBlocking), 45)}
+            {this.drawLightPathElement(50, styles.ccd, isLinearStageMoving)}
+            {this.drawLightPath(slope, 4, !(isFilterBlocking || isGratingBlocking || isShutterBlocking), 50)}
           </svg>
           <div />
           <div className={styles.statusTextWrapper}>
