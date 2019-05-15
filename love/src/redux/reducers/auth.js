@@ -9,7 +9,7 @@ export const tokenStates = {
 
 const initialState = {
   username: '',
-  token: '',
+  token: null,
   status: tokenStates.EMPTY,
 };
 
