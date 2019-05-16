@@ -6,7 +6,6 @@ import styles from './Login.module.css';
 
 export default class Login extends Component {
   static propTypes = {
-
     /** Defines wether or not the message of "Session Expired" should be displayed */
     showSessionExpired: PropTypes.bool,
 
@@ -28,34 +27,20 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      showFailedLogin: false,
+      userIsEditing: false,
     };
   }
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
-    // if (this.state.showFailedLogin) {
-    //   this.setState({ showFailedLogin: false });
-    // }
-    // if (this.props.showSessionExpired) {
-    //   this.props.hideSessionExpired();
-    // }
-  }
+    this.setState({ [name]: value, userIsEditing: true });
+  };
 
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.fetchToken(this.state.username, this.state.password);
-
-    // ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
-    //   if (token) {
-    //     this.props.setTokenState(token);
-    //   } else {
-    //     this.setState({ showFailedLogin: true });
-    //     this.props.setTokenState(null);
-    //   }
-    // });
-  }
+    this.setState({ userIsEditing: false });
+  };
 
   redirect() {
     return (
@@ -69,6 +54,7 @@ export default class Login extends Component {
   }
 
   render() {
+    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing;
     return (
       <div className={styles.login}>
         <div className={styles.panel}>
@@ -77,7 +63,7 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              {this.state.showFailedLogin ? (
+              {showLoginFailed ? (
                 <div className={styles.incorrectCredentialsDiv}>
                   <p className={styles.incorrectCredentials}>
                     {"Your username and password didn't match. Please try again."}
