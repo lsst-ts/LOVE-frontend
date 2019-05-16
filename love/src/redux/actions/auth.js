@@ -1,6 +1,7 @@
-import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN } from './actionTypes';
+import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN } from './actionTypes';
 import ManagerInterface from '../../Utils';
 import { tokenStates } from '../reducers/auth';
+import {getToken} from '../selectors';
 
 export const requestToken = (username, password) => ({
   type: REQUEST_TOKEN,
@@ -47,10 +48,54 @@ export function fetchToken(username, password) {
 
         dispatch(rejectToken);
       })
-      .catch((e)=>console.log(e));
+      .catch((e) => console.log(e));
   };
 }
 
 export const removeToken = {
   type: REMOVE_TOKEN,
 };
+
+export const expireToken = {
+  type: EXPIRE_TOKEN,
+};
+
+/**
+ * Validates the token with the server.
+ * Nothing changes if everything is ok. Other cases are handled individually.
+ */
+export function validateToken() {
+  return (dispatch, getState) => {
+    const token = getToken(getState());
+    if(token === null || token === undefined){
+      return;
+    }
+    
+    const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server. Logging out\n', response);
+        dispatch(removeToken);
+        return;
+      }
+
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        dispatch(expireToken);
+        // dispatch(removeToken);
+
+        return;
+      }
+
+      return response.json().then((resp) => {
+        const { detail } = resp;
+        if (detail !== 'Token is valid') {
+          dispatch(removeToken);
+        }
+      });
+    });
+  };
+}
