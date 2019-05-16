@@ -1,4 +1,4 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN } from '../actions/actionTypes';
+import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN, EXPIRE_TOKEN } from '../actions/actionTypes';
 import ManagerInterface from '../../Utils';
 export const tokenStates = {
   EMPTY: 'EMPTY',
@@ -6,6 +6,7 @@ export const tokenStates = {
   RECEIVED: 'RECEIVED',
   ERROR: 'ERROR',
   REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED'
 };
 
 const initialState = {
@@ -37,6 +38,11 @@ export default function(state = initialState, action) {
         token: null,
         status: tokenStates.REJECTED,
       };
+    case EXPIRE_TOKEN:
+      return {
+        ...initialState,
+        status: tokenStates.EXPIRED
+      }
     default:
       return state;
   }
