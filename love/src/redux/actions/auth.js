@@ -1,4 +1,4 @@
-import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN } from './actionTypes';
+import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN } from './actionTypes';
 import ManagerInterface from '../../Utils';
 import { tokenStates } from '../reducers/auth';
 
@@ -13,11 +13,14 @@ export const receiveToken = (token) => ({
   token,
 });
 
+export const rejectToken = {
+  type: REJECT_TOKEN,
+};
+
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
 
   return (dispatch, getState) => {
-
     const storageToken = localStorage.getItem('LOVE-TOKEN');
     if (storageToken && storageToken.length > 0) {
       dispatch(receiveToken(storageToken));
@@ -35,12 +38,16 @@ export function fetchToken(username, password) {
     })
       .then((response) => response.json())
       .then((response) => {
-        const { token } = response;
+        const { token, status } = response;
         if (token !== undefined && token !== null) {
           dispatch(receiveToken(token));
           ManagerInterface.saveToken(token);
+          return;
         }
-      });
+
+        dispatch(rejectToken);
+      })
+      .catch((e)=>console.log(e));
   };
 }
 

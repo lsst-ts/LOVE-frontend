@@ -1,11 +1,11 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN, REMOVE_TOKEN } from '../actions/actionTypes';
+import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN } from '../actions/actionTypes';
 import ManagerInterface from '../../Utils';
-
 export const tokenStates = {
   EMPTY: 'EMPTY',
   REQUESTED: 'REQUESTED',
   RECEIVED: 'RECEIVED',
   ERROR: 'ERROR',
+  REJECTED: 'REJECTED',
 };
 
 const initialState = {
@@ -31,6 +31,12 @@ export default function(state = initialState, action) {
     case REMOVE_TOKEN:
       ManagerInterface.removeToken();
       return { ...initialState };
+    case REJECT_TOKEN:
+      return {
+        ...state,
+        token: null,
+        status: tokenStates.REJECTED,
+      };
     default:
       return state;
   }
