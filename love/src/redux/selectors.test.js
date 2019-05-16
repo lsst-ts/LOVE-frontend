@@ -15,6 +15,7 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.removeItem('LOVE-TOKEN');
+  server.close();
 });
 
 it('Should extract the stream correctly with a selector', async () => {
@@ -41,3 +42,7 @@ it('Should extract the stream correctly with a selector', async () => {
   // Assert
   expect(JSON.stringify(streamData)).toEqual(JSON.stringify(data.Environment.airPressure));
 });
+
+// it('Should extract the token correctly with a selector', async ()=>{
+//   expect(1).toEqual(1);
+// })
