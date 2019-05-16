@@ -36,15 +36,9 @@ class App extends Component {
     this.justLoggedOut = false;
   }
 
-  // componentDidMount = () => {
-  //   const token = ManagerInterface.getToken();
-  //   this.setTokenState(token);
-  //   ManagerInterface.validateToken().then((response) => {
-  //     if (response === false) {
-  //       this.logout();
-  //     }
-  //   });
-  // };
+  componentDidMount = () => {
+    this.props.validateToken();
+  };
 
   // componentDidUpdate = (prevProps, prevState) => {
   //   if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
