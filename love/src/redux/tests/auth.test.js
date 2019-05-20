@@ -1,18 +1,18 @@
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from '../reducers';
-import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
 import logger from 'redux-logger';
 import ManagerInterface from '../../Utils';
 
-import { validateToken } from '../actions/auth';
+import { fetchToken, validateToken } from '../actions/auth';
+import fetchMock from 'fetch-mock'
+
+import {getToken} from '../selectors';
 
 let store, server;
 beforeEach(() => {
-  fetch.resetMocks()
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', '"love-token"');
-  server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
 });
 
 afterEach(() => {
@@ -20,23 +20,15 @@ afterEach(() => {
 });
 
 it('Should not change the token state when the token is valid', async () => {
-
-  const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-  fetch.mockResponseOnce(JSON.stringify({ data: '12345' }));
-
-  let r;
-  const a = async ()=>{r = fetch('https://google.com').then(res => res.json());}
-  await a();
-  console.log(r);
+  await store.dispatch(fetchToken('asdf','asdf'));
+  const initialToken = getToken(store.getState());
   
-  // const originalState = store.getState();
-  // store.dispatch(openWebsocketConnection());
-  // store.dispatch(validateToken());
+  const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+  fetchMock.mock(url, {detail: "Token is valid"}, ManagerInterface.getHeaders());
+  
+  await store.dispatch(validateToken())
 
-  // server.send({
-  //   status: 200,
+  const newToken = getToken(store.getState()); 
+  expect(newToken).toEqual(initialToken)
 
-
-  // })
-  // const newState = store.getState();
 });

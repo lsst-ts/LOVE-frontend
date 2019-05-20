@@ -65,7 +65,7 @@ export const expireToken = {
  * Nothing changes if everything is ok. Other cases are handled individually.
  */
 export function validateToken() {
-  return (dispatch, getState) => {
+  return async (dispatch, getState) => {
     const token = getToken(getState());
     if(token === null || token === undefined){
       return;
@@ -79,15 +79,12 @@ export function validateToken() {
       if (response.status >= 500) {
         // console.error('Error communicating with the server. Logging out\n', response);
         dispatch(removeToken);
-        return;
       }
 
       if (response.status === 401 || response.status === 403) {
         // console.log('Session expired. Logging out');
         dispatch(expireToken);
-        // dispatch(removeToken);
 
-        return;
       }
 
       return response.json().then((resp) => {
