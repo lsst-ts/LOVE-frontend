@@ -5,10 +5,11 @@ import logger from 'redux-logger';
 import ManagerInterface from '../../Utils';
 
 import { fetchToken, validateToken } from '../actions/auth';
-import fetchMock from 'fetch-mock'
+import fetchMock from 'fetch-mock';
 
-import {getToken} from '../selectors';
+import { getToken, getTokenStatus } from '../selectors';
 
+import { tokenStates } from '../reducers/auth';
 let store;
 beforeEach(() => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
@@ -21,30 +22,47 @@ afterEach(() => {
 });
 
 it('Should not change the token state when the token is valid', async () => {
-  await store.dispatch(fetchToken('asdf','asdf'));
+  await store.dispatch(fetchToken('asdf', 'asdf'));
   const initialToken = getToken(store.getState());
-  
+
   const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-  fetchMock.mock(url, {detail: "Token is valid"}, ManagerInterface.getHeaders());
-  
-  await store.dispatch(validateToken())
+  fetchMock.mock(url, { detail: 'Token is valid' }, ManagerInterface.getHeaders());
 
-  const newToken = getToken(store.getState()); 
-  expect(newToken).toEqual(initialToken)
+  await store.dispatch(validateToken());
 
+  const newToken = getToken(store.getState());
+  expect(newToken).toEqual(initialToken);
 });
 
-it('Should remove the token when response status is >= 500', async () =>{
-  await store.dispatch(fetchToken('asdf','asdf'));
+it('Should remove the token when response status is >= 500', async () => {
+  await store.dispatch(fetchToken('asdf', 'asdf'));
   const initialToken = getToken(store.getState());
-  expect(initialToken).toEqual('"love-token');
-  
+  expect(initialToken).toEqual('"love-token"');
+
   const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-  fetchMock.mock(url, {status:500}, ManagerInterface.getHeaders());
-  
-  await store.dispatch(validateToken())
+  fetchMock.mock(url, { status: 500 }, ManagerInterface.getHeaders());
 
-  const newToken = getToken(store.getState()); 
-  expect(newToken).toBeNull()
+  await store.dispatch(validateToken());
 
+  const newToken = getToken(store.getState());
+  expect(newToken).toBeNull();
 });
+
+[401, 403].forEach( (status) => {
+  it(`Should set token status=EXPIRED and delete the token when response.status is ${status}`, async () => {
+    await store.dispatch(fetchToken('asdf', 'asdf'));
+    const initialToken = getToken(store.getState());
+    expect(initialToken).toEqual('"love-token"');
+  
+    const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    fetchMock.mock(url, { status: 401 }, ManagerInterface.getHeaders());
+  
+    await store.dispatch(validateToken());
+  
+    const newToken = getToken(store.getState());
+    expect(newToken).toBeNull();
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.EXPIRED);
+  });
+});
+
+
