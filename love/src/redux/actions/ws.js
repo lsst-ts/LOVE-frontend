@@ -6,6 +6,7 @@ import {
   CHANGE_WS_STATE,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
+import { receiveCameraData } from './camera';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -60,6 +61,9 @@ export const openWebsocketConnection = () => {
           const data = JSON.parse(msg.data);
           if (!data.category) {
             dispatch(receiveGroupConfirmationMessage(data.data));
+          }
+          if (data.category === 'event' && Object.keys(data.data)[0] === 'ATCamera') {
+            dispatch(receiveCameraData(data.data));
           }
           dispatch(receiveGroupSubscriptionData(data));
         },
@@ -123,8 +127,10 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
 
     wsPromise.then(() => {
       const state = getState();
-      if(state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(`Can not unsubscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
+      if (state.ws.connectionState !== connectionStates.OPEN) {
+        console.warn(
+          `Can not unsubscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`,
+        );
       }
 
       socket.json({
@@ -133,7 +139,6 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
         csc,
         stream,
       });
-
     });
   };
 };

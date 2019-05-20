@@ -80,3 +80,10 @@ export const stateToStyleLATISS = {
   CLOSING: 'running',
   OPENING: 'running',
 };
+
+export const imageStatus = {
+  INTEGRATING: 'INTEGRATING',
+  READING_OUT: 'READING_OUT',
+  END_READOUT: 'END_READOUT',
+  END_TELEMETRY: 'END_TELEMETRY',
+}

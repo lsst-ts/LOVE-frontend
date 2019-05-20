@@ -43,6 +43,8 @@
     ]
   },
   "devDependencies": {
+    "jest-websocket-mock": "^1.4.0",
+    "mock-socket": "^8.0.5",
     "react-dev-utils": "^9.0.1"
   }
 }
