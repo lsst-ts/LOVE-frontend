@@ -9,7 +9,7 @@ import fetchMock from 'fetch-mock'
 
 import {getToken} from '../selectors';
 
-let store, server;
+let store;
 beforeEach(() => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', '"love-token"');
@@ -17,6 +17,7 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.removeItem('LOVE-TOKEN');
+  fetchMock.reset();
 });
 
 it('Should not change the token state when the token is valid', async () => {
@@ -30,5 +31,20 @@ it('Should not change the token state when the token is valid', async () => {
 
   const newToken = getToken(store.getState()); 
   expect(newToken).toEqual(initialToken)
+
+});
+
+it('Should remove the token when response status is >= 500', async () =>{
+  await store.dispatch(fetchToken('asdf','asdf'));
+  const initialToken = getToken(store.getState());
+  expect(initialToken).toEqual('"love-token');
+  
+  const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+  fetchMock.mock(url, {status:500}, ManagerInterface.getHeaders());
+  
+  await store.dispatch(validateToken())
+
+  const newToken = getToken(store.getState()); 
+  expect(newToken).toBeNull()
 
 });

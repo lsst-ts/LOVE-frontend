@@ -79,6 +79,7 @@ export function validateToken() {
       if (response.status >= 500) {
         // console.error('Error communicating with the server. Logging out\n', response);
         dispatch(removeToken);
+        return;
       }
 
       if (response.status === 401 || response.status === 403) {
