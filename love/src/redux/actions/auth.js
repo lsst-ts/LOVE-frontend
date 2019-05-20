@@ -85,6 +85,7 @@ export function validateToken() {
       if (response.status === 401 || response.status === 403) {
         // console.log('Session expired. Logging out');
         dispatch(expireToken);
+        return;
 
       }
 
