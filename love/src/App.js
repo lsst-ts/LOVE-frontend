@@ -16,7 +16,7 @@ import TelemetryLog from './components/TelemetryLog/TelemetryLog';
 import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
 import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
-import Camera from './components/AuxTel/Camera/Camera';
+import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import LATISS from './components/AuxTel/LATISS/LATISS';
 
 class App extends Component {
@@ -200,7 +200,7 @@ class App extends Component {
             path="/aux-tel-camera"
             render={() => (
               <Panel title="Auxiliary Telescope Camera" className={'smallPanel'}>
-                <Camera />
+                <CameraContainer />
               </Panel>
             )}
           />
