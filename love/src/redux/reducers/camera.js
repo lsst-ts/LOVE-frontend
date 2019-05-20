@@ -1,5 +1,4 @@
-import { RECEIVE_IMAGE_DATA } from '../actions/actionTypes';
-import { imageStatus } from '../../Config';
+import { RECEIVE_IMAGE_SEQUENCE_DATA } from '../actions/actionTypes';
 
 const initialState = {
   raftsDetailedState: 'UNKNOWN',
@@ -11,9 +10,8 @@ const initialState = {
 
 export default function(state = initialState, action) {
   switch (action.type) {
-    case RECEIVE_IMAGE_DATA: {
-      if (action.data.startIntegration) {
-        const eventArray = action.data.startIntegration;
+    case RECEIVE_IMAGE_SEQUENCE_DATA: {
+        const eventArray = action.data;
         return eventArray.reduce((state, data) => {
           const imageSequence = { ...state.imageSequence };
           if (imageSequence.name !== data.imageSequenceName.value) {
@@ -25,12 +23,11 @@ export default function(state = initialState, action) {
             timeStamp: data.timeStamp.value,
             imageIndex: data.imageIndex.value,
             exposureTime: data.exposureTime.value,
-            state: imageStatus.INTEGRATING,
+            state: action.imageState,
           };
           imageSequence.name = data.imageSequenceName.value;
           return { ...state, imageSequence };
         }, state);
-      }
     }
     default:
       return state;

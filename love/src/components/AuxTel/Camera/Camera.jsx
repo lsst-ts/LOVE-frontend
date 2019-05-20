@@ -20,49 +20,7 @@ export default class Camera extends Component {
       timers: {},
       expandedRows: {},
     };
-    this.managerInterface = new ManagerInterface();
   }
-
-  processImageUpdate = (imageData, state) => {
-    // eslint-disable-next-line
-    let { imageSequenceName, imagesInSequence, imageName, ...exposureData } = imageData;
-    imageSequenceName = imageSequenceName.value;
-    imagesInSequence = imagesInSequence.value;
-    imageName = imageName.value;
-    let { imageSequence } = this.props;
-    exposureData.state = { value: state };
-
-    // Hardcoded data:
-    imageSequenceName = 'Image sequence one';
-    exposureData.exposureTime = { value: 5 };
-    if (imageSequence.name === imageSequenceName) {
-      imageSequence.images[imageName] = { ...exposureData };
-    } else {
-      imageSequence = {
-        name: imageSequenceName,
-        imagesInSequence,
-        images: {},
-      };
-      imageSequence.images[imageName] = { ...exposureData };
-    }
-    if (!imageSequence.images[imageName].readoutParameters) {
-      imageSequence.images[imageName].readoutParameters = { value: {} };
-    }
-    this.setState({
-      imageSequence: { ...imageSequence },
-    });
-  };
-
-  onReceiveMessage = (msg) => {
-    const data = JSON.parse(msg.data);
-    if (!(data.data instanceof Object)) return;
-    const cameraData = data.data.ATCamera;
-    if (cameraData === undefined) return;
-    if (cameraData.startIntegration) this.processImageUpdate(cameraData.startIntegration[0], 'state');
-    if (cameraData.startReadout) this.processImageUpdate(cameraData.startReadout[0], 'state');
-    if (cameraData.endReadout) this.processImageUpdate(cameraData.endReadout[0], 'state');
-    if (cameraData.endOfImageTelemetry) this.processImageUpdate(cameraData.endOfImageTelemetry[0], 'state');
-  };
 
   componentDidMount = () => {
     this.startTimer('Image A', 3);
@@ -103,7 +61,6 @@ export default class Camera extends Component {
   };
 
   render() {
-    console.log('this.props', this.props.imageSequence)
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>

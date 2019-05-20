@@ -6,7 +6,7 @@ import {
   CHANGE_WS_STATE,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
-import { receiveCameraData } from './camera';
+import { receiveImageSequenceData } from './camera';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -63,7 +63,7 @@ export const openWebsocketConnection = () => {
             dispatch(receiveGroupConfirmationMessage(data.data));
           }
           if (data.category === 'event' && Object.keys(data.data)[0] === 'ATCamera') {
-            dispatch(receiveCameraData(data.data));
+            dispatch(receiveImageSequenceData(data.data));
           }
           dispatch(receiveGroupSubscriptionData(data));
         },

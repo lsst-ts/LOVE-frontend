@@ -12,7 +12,7 @@ const CameraContainer = ({
   imageSequence,
   subscribeToStream,
   unsubscribeToStream,
-}) => {
+}) => {  
   return (
     <Camera
       raftsDetailedState={raftsDetailedState}
@@ -35,9 +35,15 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: () => {
       dispatch(requestGroupSubscription('event-ATCamera-startIntegration'));
+      dispatch(requestGroupSubscription('event-ATCamera-startReadout'));
+      dispatch(requestGroupSubscription('event-ATCamera-endReadout'));
+      dispatch(requestGroupSubscription('event-ATCamera-endOfImageTelemetry'));
     },
     unsubscribeToStream: () => {
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startIntegration'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startReadout'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-endReadout'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-endOfImageTelemetry'));
     },
   };
 };
