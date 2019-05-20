@@ -26,24 +26,6 @@ export default class CSCRealm extends Component {
     clearCSCLogMessages: () => 0,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      hierarchy: {
-        'Aux Tel': {
-          'CSC Group 1': ['CSC1', 'CSC2', 'CSC3'],
-        },
-        'Main Tel': {
-          'CSC Group 1': ['CSC1', 'CSC2', 'CSC3'],
-          'CSC Group 2': ['CSC1', 'CSC2', 'CSC3'],
-        },
-        Observatory: {
-          'CSC Group 1': ['CSC1', 'CSC2', 'CSC3'],
-        },
-      },
-    };
-  }
-
   render() {
     return (
       <div className={styles.CSCRealmContainer}>
