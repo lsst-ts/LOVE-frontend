@@ -20,7 +20,6 @@ export const rejectToken = {
 
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-
   return (dispatch, getState) => {
     const storageToken = localStorage.getItem('LOVE-TOKEN');
     if (storageToken && storageToken.length > 0) {
