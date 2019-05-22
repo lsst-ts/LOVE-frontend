@@ -71,7 +71,7 @@ describe('GIVEN the token exists in localStorage', () => {
 
   [401, 403].forEach((status) => {
     it(`Should set token status=EXPIRED and delete the token when invalid with response.status ${status}`, async () => {
-      fetchMock.mock(url, { status: 401 }, ManagerInterface.getHeaders());
+      fetchMock.mock(url, { status: status }, ManagerInterface.getHeaders());
 
       await store.dispatch(validateToken());
 
