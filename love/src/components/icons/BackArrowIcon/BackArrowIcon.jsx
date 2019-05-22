@@ -8,7 +8,6 @@ export default class ArrowIcon extends Component {
   };
   
   render() {
-    const status = this.props.active ? styles.active : styles.inactive;
     return (
       <svg
         version="1.1"
