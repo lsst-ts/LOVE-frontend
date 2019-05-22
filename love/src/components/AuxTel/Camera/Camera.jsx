@@ -5,7 +5,7 @@ import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
-import ManagerInterface from '../../../Utils';
+import { stateToStyleCamera } from '../../../Config';
 
 export default class Camera extends Component {
   // static propTypes = {
@@ -61,24 +61,33 @@ export default class Camera extends Component {
   };
 
   render() {
+    console.log(this.state.expandedRows)
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Rafts state:</span>
-            <StatusText status="warning">{this.props.raftsDetailedState}</StatusText>
+            <StatusText status={stateToStyleCamera[this.props.raftsDetailedState]}>
+              {this.props.raftsDetailedState}
+            </StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Image readiness state:</span>
-            <StatusText status="ok">{this.props.imageReadinessDetailedState}</StatusText>
+            <StatusText status={stateToStyleCamera[this.props.imageReadinessDetailedState]}>
+              {this.props.imageReadinessDetailedState}
+            </StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Calibration state:</span>
-            <StatusText status="ok">{this.props.calibrationDetailedState}</StatusText>
+            <StatusText status={stateToStyleCamera[this.props.calibrationDetailedState]}>
+              {this.props.calibrationDetailedState}
+            </StatusText>
           </div>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Shutter state:</span>
-            <StatusText status="ok">{this.props.shutterDetailedState}</StatusText>
+            <StatusText status={stateToStyleCamera[this.props.shutterDetailedState]}>
+              {this.props.shutterDetailedState}
+            </StatusText>
           </div>
         </div>
         <div>
@@ -94,82 +103,84 @@ export default class Camera extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.props.imageSequence.images && Object.keys(this.props.imageSequence.images).map((imageName) => {
-                  const image = this.props.imageSequence.images[imageName];
-                  const isIntegrating = image.state === 'INTEGRATING';
-                  let currentExposureTime =
-                    this.state.timers[imageName] !== undefined
-                      ? Math.min(this.state.timers[imageName], image.exposureTime.value)
-                      : 0;
-                  if (!isIntegrating) currentExposureTime = image.exposureTime.value;
-                  return (
-                    <React.Fragment key={imageName}>
-                      <tr>
-                        <td className={styles.string}>{image.timeStamp.value}</td>
-                        <td className={styles.string}>{imageName}</td>
-                        <td className={[styles.narrowCol].join(' ')}>
-                          <LoadingBar
-                            percentage={(currentExposureTime / image.exposureTime.value) * 100}
-                            displayPercentage={false}
-                            isNarrow={true}
-                            backgroundClass={styles.backgroundLoadingBarClass}
-                            animationDuration={
-                              this.state.timers[imageName] !== undefined ? image.exposureTime.value : 0
-                            }
-                            title={`Exposed ${currentExposureTime} out of ${image.exposureTime.value} seconds`}
-                          />
-                          <span
-                            className={styles.exposureTime}
-                            title={`Exposed ${currentExposureTime} out of ${image.exposureTime.value} seconds`}
+                {this.props.imageSequence.images &&
+                  Object.keys(this.props.imageSequence.images).map((imageName) => {
+                    const image = this.props.imageSequence.images[imageName];
+                    const imageKey = `${this.props.imageSequence.name}-${imageName}`;
+                    const isIntegrating = image.state === 'INTEGRATING';
+                    let currentExposureTime =
+                      this.state.timers[imageKey] !== undefined
+                        ? Math.min(this.state.timers[imageKey], image.exposureTime)
+                        : 0;
+                    if (!isIntegrating) currentExposureTime = image.exposureTime;
+                    const roundedExposureTime = Math.floor(image.exposureTime);
+                    const roundedCurrentExposureTime = Math.floor(currentExposureTime);
+                    return (
+                      <React.Fragment key={imageKey}>
+                        <tr>
+                          <td className={styles.string}>{image.timeStamp}</td>
+                          <td className={styles.string}>{imageName}</td>
+                          <td className={[styles.narrowCol].join(' ')}>
+                            <LoadingBar
+                              percentage={(currentExposureTime / image.exposureTime) * 100}
+                              displayPercentage={false}
+                              isNarrow={true}
+                              backgroundClass={styles.backgroundLoadingBarClass}
+                              animationDuration={
+                                this.state.timers[imageKey] !== undefined ? image.exposureTime : 0
+                              }
+                              title={`Exposed ${roundedCurrentExposureTime} out of ${roundedExposureTime} seconds`}
+                            />
+                            <span
+                              className={styles.exposureTime}
+                              title={`Exposed ${roundedCurrentExposureTime} out of ${roundedExposureTime} seconds`}
+                            >
+                              {roundedCurrentExposureTime} s / {roundedExposureTime} s
+                            </span>
+                          </td>
+                          <td
+                            className={[
+                              styles.statusColumn,
+                              styles.mediumCol,
+                              this.state.expandedRows[imageKey] ? styles.selectedRow : '',
+                            ].join(' ')}
                           >
-                            {currentExposureTime} s / {image.exposureTime.value} s
-                          </span>
-                        </td>
-                        <td
-                          className={[
-                            styles.statusColumn,
-                            styles.mediumCol,
-                            this.state.expandedRows[imageName] ? styles.selectedRow : '',
-                          ].join(' ')}
-                        >
-                          <div className={styles.imageStatusWrapper}>
-                            <div className={styles.statusTextWrapper}>
-                              <StatusText status={getCameraStatusStyle(image.state)}>
-                                {image.state}
-                              </StatusText>
-                            </div>
-                            <div onClick={() => this.clickGearIcon(imageName)} className={styles.gearIconWrapper}>
-                              <GearIcon active={true} />
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                      {this.state.expandedRows[imageName] ? (
-                        <tr className={styles.selectedRow} key={`expanded-${imageName}`}>
-                          <td className={styles.imageDetailsCell}>
-                            <div className={styles.readoutParametersTitle}>Readout parameters</div>
-                            <div className={styles.readoutParameters}>
-                              {Object.keys(image.readoutParameters.value).length > 0 ? (
-                                Object.keys(image.readoutParameters.value).map((key) => {
-                                  return (
-                                    <React.Fragment key={key}>
-                                      <span className={styles.readoutParameterKey}>{key}</span>{' '}
-                                      <span className={styles.readoutParameterValue}>
-                                        {image.readoutParameters.value[key]}
-                                      </span>
-                                    </React.Fragment>
-                                  );
-                                })
-                              ) : (
-                                <span>None</span>
-                              )}
+                            <div className={styles.imageStatusWrapper}>
+                              <div className={styles.statusTextWrapper}>
+                                <StatusText status={getCameraStatusStyle(image.state)}>{image.state}</StatusText>
+                              </div>
+                              <div onClick={() => this.clickGearIcon(imageKey)} className={styles.gearIconWrapper}>
+                                <GearIcon active={true} />
+                              </div>
                             </div>
                           </td>
                         </tr>
-                      ) : null}
-                    </React.Fragment>
-                  );
-                })}
+                        {this.state.expandedRows[imageKey] ? (
+                          <tr className={styles.selectedRow} key={`expanded-${imageKey}`}>
+                            <td className={styles.imageDetailsCell}>
+                              <div className={styles.readoutParametersTitle}>Readout parameters</div>
+                              <div className={styles.readoutParameters}>
+                                {image.readoutParameters && Object.keys(image.readoutParameters).length > 0 ? (
+                                  Object.keys(image.readoutParameters).map((key) => {
+                                    return (
+                                      <React.Fragment key={key}>
+                                        <span className={styles.readoutParameterKey}>{key}</span>{' '}
+                                        <span className={styles.readoutParameterValue}>
+                                          {image.readoutParameters[key]}
+                                        </span>
+                                      </React.Fragment>
+                                    );
+                                  })
+                                ) : (
+                                  <span>None</span>
+                                )}
+                              </div>
+                            </td>
+                          </tr>
+                        ) : null}
+                      </React.Fragment>
+                    );
+                  })}
               </tbody>
             </table>
           </div>

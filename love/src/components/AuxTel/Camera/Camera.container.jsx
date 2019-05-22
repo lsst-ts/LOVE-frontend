@@ -38,12 +38,20 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATCamera-startReadout'));
       dispatch(requestGroupSubscription('event-ATCamera-endReadout'));
       dispatch(requestGroupSubscription('event-ATCamera-endOfImageTelemetry'));
+      dispatch(requestGroupSubscription('event-ATCamera-raftsDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-shutterDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-imageReadinessDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-calibrationDetailedState'));
     },
     unsubscribeToStream: () => {
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startIntegration'));
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startReadout'));
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-endReadout'));
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-endOfImageTelemetry'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-raftsDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-shutterDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-imageReadinessDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-calibrationDetailedState'));
     },
   };
 };
