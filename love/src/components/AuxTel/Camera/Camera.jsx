@@ -6,13 +6,16 @@ import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
+import PropTypes from 'prop-types';
 
 export default class Camera extends Component {
-  // static propTypes = {
-  // };
-
-  // static defaultProps = {
-  // };
+  static propTypes = {
+    raftsDetailedState: PropTypes.string,
+    imageReadinessDetailedState: PropTypes.string,
+    calibrationDetailedState: PropTypes.string,
+    shutterDetailedState: PropTypes.string,
+    imageSequence: PropTypes.object,
+  };
 
   constructor(props) {
     super(props);
@@ -61,7 +64,6 @@ export default class Camera extends Component {
   };
 
   render() {
-    console.log(this.state.expandedRows)
     return (
       <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
