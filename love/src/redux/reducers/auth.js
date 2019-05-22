@@ -14,7 +14,10 @@ const initialState = {
   token: null,
   status: tokenStates.EMPTY,
 };
-
+/**
+ * Modifies the state of the authentication mainly characterized by the
+ * token received from the LOVE-manager and its status.
+ */
 export default function(state = initialState, action) {
   switch (action.type) {
     case REQUEST_TOKEN: {

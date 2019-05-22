@@ -10,7 +10,9 @@ const initialState = {
   connectionState: connectionStates.CLOSED,
   subscriptions: [],
 };
-
+/**
+ * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
+ */
 export default function(state = initialState, action) {
   switch (action.type) {
     case CHANGE_WS_STATE: {
