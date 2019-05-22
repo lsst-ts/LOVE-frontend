@@ -34,7 +34,7 @@ export default function(state = initialState, action) {
     }
     case RECEIVE_GROUP_CONFIRMATION_MESSAGE: {
       const subscriptions = state.subscriptions.map((subscription) => {
-        const [category, csc, stream] = subscription.groupName.split('-');
+        const [, csc, stream] = subscription.groupName.split('-');
         if (action.data.includes(csc) && action.data.includes(stream)) {
           return {
             ...subscription,
@@ -45,7 +45,6 @@ export default function(state = initialState, action) {
       });
 
       return { ...state, subscriptions };
-      return state;
     }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
