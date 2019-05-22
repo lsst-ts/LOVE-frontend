@@ -21,13 +21,12 @@ describe('GIVEN the token does not exist in localStorage', () => {
     localStorage.removeItem('LOVE-TOKEN');
   });
 
-  it('Should save the token in localstorage the store, and set status=RECEIVED  when fetched OK', async ()=>{
-
+  it('Should save the token in localstorage and the store, and set status=RECEIVED when fetched OK', async () => {
     const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-    const newToken = "'new-token'"
-    fetchMock.mock(url, {token: newToken}, ManagerInterface.getHeaders());    
+    const newToken = "'new-token'";
+    fetchMock.mock(url, { token: newToken }, ManagerInterface.getHeaders());
 
-    await store.dispatch(fetchToken('asdf','asdf'));
+    await store.dispatch(fetchToken('asdf', 'asdf'));
 
     const newState = store.getState();
     expect(ManagerInterface.getToken()).toEqual(newToken);
@@ -35,6 +34,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
   });
 });
+
 describe('GIVEN the token exists in localStorage', () => {
   let initialToken, url;
 
@@ -44,7 +44,6 @@ describe('GIVEN the token exists in localStorage', () => {
     initialToken = getToken(store.getState());
     expect(initialToken).toEqual('"love-token"');
     url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-
   });
 
   afterEach(() => {
@@ -52,7 +51,6 @@ describe('GIVEN the token exists in localStorage', () => {
     fetchMock.reset();
   });
 
-  
   it('Should not change the token state when the token is valid', async () => {
     fetchMock.mock(url, { detail: 'Token is valid' }, ManagerInterface.getHeaders());
 
@@ -62,7 +60,7 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(newToken).toEqual(initialToken);
   });
 
-  it('Should remove the token when response status is >= 500', async () => {
+  it('Should remove the token when invalid with response status >= 500', async () => {
     fetchMock.mock(url, { status: 500 }, ManagerInterface.getHeaders());
 
     await store.dispatch(validateToken());
@@ -72,7 +70,7 @@ describe('GIVEN the token exists in localStorage', () => {
   });
 
   [401, 403].forEach((status) => {
-    it(`Should set token status=EXPIRED and delete the token when response.status is ${status}`, async () => {
+    it(`Should set token status=EXPIRED and delete the token when invalid with response.status ${status}`, async () => {
       fetchMock.mock(url, { status: 401 }, ManagerInterface.getHeaders());
 
       await store.dispatch(validateToken());
