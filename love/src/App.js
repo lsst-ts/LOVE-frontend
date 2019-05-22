@@ -19,9 +19,6 @@ import AuxTel from './components/AuxTel/AuxTel';
 import Camera from './components/AuxTel/Camera/Camera';
 import LATISS from './components/AuxTel/LATISS/LATISS';
 
-import { connect } from 'react-redux';
-import { getToken } from './redux/selectors';
-
 class App extends Component {
   static propTypes = {
     location: PropTypes.object,
@@ -32,30 +29,28 @@ class App extends Component {
     this.state = {
       showSessionExpired: false,
     };
-    // this.managerInterface = new ManagerInterface();
     this.justLoggedOut = false;
   }
 
   componentDidMount = () => {
+    console.log('mount')
     this.props.validateToken();
   };
 
-  // componentDidUpdate = (prevProps, prevState) => {
-  //   if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
-  //     ManagerInterface.validateToken().then((response) => {
-  //       if (response === false) {
-  //         this.logout();
-  //       }
-  //     });
-  //   }
-  //   if (!this.props.token && prevState.token) {
-  //     if (this.justLoggedOut) {
-  //       this.justLoggedOut = false;
-  //     } else {
-  //       this.setState({ showSessionExpired: true });
-  //     }
-  //   }
-  // };
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
+      console.log('has token, updated path')
+      this.props.validateToken();
+      
+    }
+    // if (!this.props.token && prevState.token) {
+    //   if (this.justLoggedOut) {
+    //     this.justLoggedOut = false;
+    //   } else {
+    //     this.setState({ showSessionExpired: true });
+    //   }
+    // }
+  };
 
   hideSessionExpired = () => {
     // this.setState({ showSessionExpired: false });
@@ -68,9 +63,6 @@ class App extends Component {
     // this.justLoggedOut = true;
   };
 
-  // setTokenState = (token) => {
-  //   this.setState({ token });
-  // };
   render() {
     return (
       <div className="App">
@@ -137,7 +129,5 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  token: getToken(state),
-});
-export default connect(mapStateToProps)(withRouter(App));
+
+export default withRouter(App);
