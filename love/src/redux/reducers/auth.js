@@ -1,12 +1,11 @@
 import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN, EXPIRE_TOKEN } from '../actions/actionTypes';
-import ManagerInterface from '../../Utils';
 export const tokenStates = {
   EMPTY: 'EMPTY',
   REQUESTED: 'REQUESTED',
   RECEIVED: 'RECEIVED',
   ERROR: 'ERROR',
   REJECTED: 'REJECTED',
-  EXPIRED: 'EXPIRED'
+  EXPIRED: 'EXPIRED',
 };
 
 const initialState = {
@@ -33,19 +32,21 @@ export default function(state = initialState, action) {
       });
     }
     case REMOVE_TOKEN:
-      ManagerInterface.removeToken();
+      localStorage.removeItem('LOVE-TOKEN');
       return { ...initialState };
     case REJECT_TOKEN:
+      localStorage.removeItem('LOVE-TOKEN');
       return {
         ...state,
         token: null,
         status: tokenStates.REJECTED,
       };
     case EXPIRE_TOKEN:
+      localStorage.removeItem('LOVE-TOKEN');
       return {
         ...initialState,
-        status: tokenStates.EXPIRED
-      }
+        status: tokenStates.EXPIRED,
+      };
     default:
       return state;
   }
