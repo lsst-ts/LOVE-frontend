@@ -190,6 +190,135 @@ describe('Test camera component status data passes correctly to component', () =
     });
   });
 });
+
+it('Append readout parameters to image', async () => {
+  expect(1).toEqual(1);
+
+  const imageData = {
+    ATCamera: {
+      startIntegration: [
+        {
+          exposureTime: {
+            value: 5,
+            dataType: 'Float',
+          },
+          imageIndex: {
+            value: 0,
+            dataType: 'Int',
+          },
+          imageName: {
+            value: 'Image 1',
+            dataType: 'String',
+          },
+          imageSequenceName: {
+            value: 'Image sequence 1',
+            dataType: 'String',
+          },
+          imagesInSequence: {
+            value: 1,
+            dataType: 'Int',
+          },
+          priority: {
+            value: 1,
+            dataType: 'Int',
+          },
+          timeStamp: {
+            value: 1558368052.999,
+            dataType: 'Float',
+          },
+        },
+      ],
+    },
+  };
+
+  const data = {
+    ATCamera: {
+      imageReadoutParameters: [
+        {
+          ccdNames: {
+            value: 'a',
+            dataType: 'String',
+          },
+          ccdType: {
+            value: 0,
+            dataType: 'Int',
+          },
+          imageName: {
+            value: 'Image 1',
+            dataType: 'String',
+          },
+          overCols: {
+            value: 1,
+            dataType: 'Int',
+          },
+          overRows: {
+            value: 1,
+            dataType: 'Int',
+          },
+          postCols: {
+            value: 1,
+            dataType: 'Int',
+          },
+          preCols: {
+            value: 0,
+            dataType: 'Int',
+          },
+          preRows: {
+            value: 0,
+            dataType: 'Int',
+          },
+          priority: {
+            value: 1,
+            dataType: 'Int',
+          },
+          readCols: {
+            value: 0,
+            dataType: 'Int',
+          },
+          readCols2: {
+            value: 0,
+            dataType: 'Int',
+          },
+          readRows: {
+            value: 1,
+            dataType: 'Int',
+          },
+        },
+      ],
+    },
+  };
+
+  store.dispatch(openWebsocketConnection());
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATCamera-startIntegration'));
+  await store.dispatch(requestGroupSubscription('event-ATCamera-imageReadoutParameters'));
+  server.send({ category: 'event', data: imageData });
+  server.send({ category: 'event', data: data });
+  const streamData = getCameraState(store.getState(), 'event-ATCamera-imageReadoutParameters');
+  const expectedResult = {
+    timeStamp: 1558368052.999,
+    imageIndex: 0,
+    exposureTime: 5,
+    state: imageStates.INTEGRATING,
+    imageReadoutParameters: {
+      ccdNames: 'a',
+      ccdType: 0,
+      imageName: 'Image 1',
+      overCols: 1,
+      overRows: 1,
+      postCols: 1,
+      preCols: 0,
+      preRows: 0,
+      priority: 1,
+      readCols: 0,
+      readCols2: 0,
+      readRows: 1,
+    },
+  };
+  // Assert
+  expect(JSON.stringify(streamData.imageSequence.images['Image 1'])).toBe(JSON.stringify(expectedResult));
+});
+
 // it('Should extract the token correctly with a selector', async ()=>{
 //   expect(1).toEqual(1);
 // })

@@ -1,4 +1,4 @@
-import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA } from '../actions/actionTypes';
+import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA, RECEIVE_READOUT_DATA } from '../actions/actionTypes';
 import {cameraStates} from '../../Constants'
 
 const initialState = {
@@ -33,6 +33,20 @@ export default function(state = initialState, action) {
     case RECEIVE_CAMERA_STATE_DATA: {
       const data = action.data[action.data.length - 1];
       return { ...state, [action.cameraStateKey]: cameraStates[action.cameraStateKey][data.substate.value] };
+    }
+    case RECEIVE_READOUT_DATA: {
+      const imageSequence = {...state.imageSequence};
+      const images = {...imageSequence.images};
+      action.data.forEach((datum) => {
+        const readoutParams = {};
+        Object.keys(datum).forEach((key) => {
+          readoutParams[key] = datum[key].value;
+        })
+        if(images[datum.imageName.value])
+          images[datum.imageName.value].imageReadoutParameters = readoutParams;
+    })
+      imageSequence.images = images;
+      return { ...state,  imageSequence};
     }
     default:
       return state;
