@@ -5,7 +5,7 @@ import { fetchToken } from './actions/auth';
 import {openWebsocketConnection} from './actions/ws';
 import logger from 'redux-logger'
 
-const middleWares = [thunkMiddleware, logger];
+const middleWares = [thunkMiddleware];
 const store = createStore(rootReducer, applyMiddleware(...middleWares));
 store.dispatch(fetchToken('test','test')).then(() => console.log('token',store.getState()));
 store.dispatch(openWebsocketConnection());

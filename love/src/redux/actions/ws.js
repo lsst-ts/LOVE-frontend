@@ -6,7 +6,7 @@ import {
   CHANGE_WS_STATE,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
-import { receiveImageSequenceData } from './camera';
+import { receiveImageSequenceData, receiveCameraStateData } from './camera';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -63,7 +63,16 @@ export const openWebsocketConnection = () => {
             dispatch(receiveGroupConfirmationMessage(data.data));
           }
           if (data.category === 'event' && Object.keys(data.data)[0] === 'ATCamera') {
-            dispatch(receiveImageSequenceData(data.data));
+            if (
+              data.data.ATCamera.startIntegration !== undefined ||
+              data.data.ATCamera.endReadout ||
+              data.data.ATCamera.startReadout ||
+              data.data.ATCamera.endOfImageTelemetry
+            )
+              dispatch(receiveImageSequenceData(data.data));
+            else {
+              dispatch(receiveCameraStateData(data.data));
+            }
           }
           dispatch(receiveGroupSubscriptionData(data));
         },

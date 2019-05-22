@@ -4,8 +4,7 @@ import rootReducer from './reducers';
 import WS from 'jest-websocket-mock';
 import { openWebsocketConnection, requestGroupSubscription } from './actions/ws';
 import thunkMiddleware from 'redux-thunk';
-import logger from 'redux-logger';
-import { imageStatus } from '../Config';
+import { cameraStates, imageStates } from '../Constants';
 
 let store, server;
 beforeEach(() => {
@@ -106,12 +105,12 @@ describe('Test image sequence data passes correctly to component', () => {
       },
     },
   ];
-  
-  const imageStages = [
-    ['startIntegration', imageStatus.INTEGRATING],
-    ['startReadout', imageStatus.READING_OUT],
-    ['endReadout', imageStatus.END_READOUT],
-    ['endOfImageTelemetry', imageStatus.END_TELEMETRY],
+
+  [
+    ['startIntegration', imageStates.INTEGRATING],
+    ['startReadout', imageStates.READING_OUT],
+    ['endReadout', imageStates.END_READOUT],
+    ['endOfImageTelemetry', imageStates.END_TELEMETRY],
   ].forEach((stagePair) => {
     it(`Should extract ${stagePair[0]} data from image sequence message`, async () => {
       // Arrange
@@ -120,7 +119,7 @@ describe('Test image sequence data passes correctly to component', () => {
           [stagePair[0]]: sequenceData,
         },
       };
-    
+
       const result = {
         imageSequence: {
           images: {
@@ -142,7 +141,7 @@ describe('Test image sequence data passes correctly to component', () => {
         },
       };
       const groupName = `event-ATCamera-${stagePair[0]}`;
-    
+
       // Act
       store.dispatch(openWebsocketConnection());
       await server.connected;
@@ -152,10 +151,45 @@ describe('Test image sequence data passes correctly to component', () => {
       // Assert
       expect(JSON.stringify(streamData.imageSequence)).toBe(JSON.stringify(result.imageSequence));
     });
-  })
-
+  });
 });
 
+describe('Test camera component status data passes correctly to component', () => {
+  const stateData = [
+    {
+      priority: {
+        value: 1,
+        dataType: 'Int',
+      },
+      substate: {
+        value: 1,
+        dataType: 'Int',
+      },
+    },
+  ];
+  [
+    ['raftsDetailedState', cameraStates['raftsDetailedState'][1]],
+    ['shutterDetailedState', cameraStates['shutterDetailedState'][1]],
+    ['imageReadinessDetailedState', cameraStates['imageReadinessDetailedState'][1]],
+    ['calibrationDetailedState', cameraStates['calibrationDetailedState'][1]],
+  ].forEach((componentPair) => {
+    it(`Should extract ${componentPair[0]} data from image sequence message`, async () => {
+      const groupName = `event-ATCamera-${componentPair[0]}`;
+      const data = {
+        ATCamera: {},
+      };
+      data.ATCamera[componentPair[0]] = stateData;
+      // Act
+      store.dispatch(openWebsocketConnection());
+      await server.connected;
+      await store.dispatch(requestGroupSubscription(groupName));
+      server.send({ category: 'event', data: data });
+      const streamData = getCameraState(store.getState(), groupName);
+      // Assert
+      expect(streamData[componentPair[0]]).toBe(componentPair[1]);
+    });
+  });
+});
 // it('Should extract the token correctly with a selector', async ()=>{
 //   expect(1).toEqual(1);
 // })
