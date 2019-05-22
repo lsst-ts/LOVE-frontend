@@ -1,3 +1,6 @@
+export const hasFakeData = true;
+export const hasCommandPrivileges = false;
+
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
@@ -60,4 +63,20 @@ export const getCameraStatusStyle = (status) => {
   if (status.toLowerCase() === 'ready') return 'ok';
   if (status.toLowerCase() === 'done') return 'ok';
   return '';
+};
+
+export const stateToStyleLATISS = {
+  HOMING: 'running',
+  MOVING: 'running',
+  STATIONARY: 'ok',
+  NOTINPOSITION: 'warning',
+  NEEDS_CLEAR: 'warning',
+  CLEARING: 'running',
+  INTEGRATING: 'running',
+  READING_OUT: 'running',
+  QUIESCENT: 'ok',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  CLOSING: 'running',
+  OPENING: 'running',
 };
