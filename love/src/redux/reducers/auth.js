@@ -1,18 +1,23 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN } from '../actions/actionTypes';
-
+import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN, EXPIRE_TOKEN } from '../actions/actionTypes';
+import ManagerInterface from '../../Utils';
 export const tokenStates = {
   EMPTY: 'EMPTY',
   REQUESTED: 'REQUESTED',
   RECEIVED: 'RECEIVED',
   ERROR: 'ERROR',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED'
 };
 
 const initialState = {
   username: '',
-  token: '',
+  token: null,
   status: tokenStates.EMPTY,
 };
-
+/**
+ * Modifies the state of the authentication mainly characterized by the
+ * token received from the LOVE-manager and its status.
+ */
 export default function(state = initialState, action) {
   switch (action.type) {
     case REQUEST_TOKEN: {
@@ -27,6 +32,20 @@ export default function(state = initialState, action) {
         status: tokenStates.RECEIVED,
       });
     }
+    case REMOVE_TOKEN:
+      ManagerInterface.removeToken();
+      return { ...initialState };
+    case REJECT_TOKEN:
+      return {
+        ...state,
+        token: null,
+        status: tokenStates.REJECTED,
+      };
+    case EXPIRE_TOKEN:
+      return {
+        ...initialState,
+        status: tokenStates.EXPIRED
+      }
     default:
       return state;
   }

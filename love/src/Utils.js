@@ -123,7 +123,7 @@ export default class ManagerInterface {
     if (token === null) {
       return null;
     }
-    return JSON.parse(token);
+    return token;
   }
 
   static removeToken() {
@@ -134,7 +134,7 @@ export default class ManagerInterface {
     if (token === null) {
       return false;
     }
-    localStorage.setItem('LOVE-TOKEN', JSON.stringify(token));
+    localStorage.setItem('LOVE-TOKEN', token);
     return true;
   }
 
