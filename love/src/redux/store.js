@@ -5,7 +5,7 @@ import {receiveToken } from './actions/auth';
 import {openWebsocketConnection} from './actions/ws';
 import logger from 'redux-logger'
 
-const middleWares = [thunkMiddleware, logger];
+const middleWares = [thunkMiddleware];
 const store = createStore(rootReducer, applyMiddleware(...middleWares));
 
 const storageToken = localStorage.getItem('LOVE-TOKEN');
