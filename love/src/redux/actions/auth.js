@@ -1,7 +1,7 @@
 import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN } from './actionTypes';
 import ManagerInterface from '../../Utils';
 import { tokenStates } from '../reducers/auth';
-import {getToken} from '../selectors';
+import { getToken } from '../selectors';
 
 export const requestToken = (username, password) => ({
   type: REQUEST_TOKEN,
@@ -18,6 +18,12 @@ export const rejectToken = {
   type: REJECT_TOKEN,
 };
 
+ /**
+  * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
+  * 
+  * @param {string} username 
+  * @param {string} password 
+  */
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
@@ -66,10 +72,10 @@ export const expireToken = {
 export function validateToken() {
   return async (dispatch, getState) => {
     const token = getToken(getState());
-    if(token === null || token === undefined){
+    if (token === null || token === undefined) {
       return;
     }
-    
+
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
     return fetch(url, {
       method: 'GET',
@@ -89,7 +95,6 @@ export function validateToken() {
         // console.log('Session expired. Logging out');
         dispatch(expireToken);
         return;
-
       }
 
       return response.json().then((resp) => {
