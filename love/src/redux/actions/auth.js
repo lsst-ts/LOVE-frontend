@@ -41,7 +41,7 @@ export function fetchToken(username, password) {
         const { token, status } = response;
         if (token !== undefined && token !== null) {
           dispatch(receiveToken(token));
-          ManagerInterface.saveToken(token);
+          localStorage.setItem('LOVE-TOKEN', token);
           return;
         }
 
@@ -73,7 +73,11 @@ export function validateToken() {
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
     return fetch(url, {
       method: 'GET',
-      headers: ManagerInterface.getHeaders(),
+      headers: new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Token ${token}`,
+      }),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server. Logging out\n', response);

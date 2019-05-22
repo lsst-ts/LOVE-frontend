@@ -23,13 +23,17 @@ describe('GIVEN the token does not exist in localStorage', () => {
 
   it('Should save the token in localstorage and the store, and set status=RECEIVED when fetched OK', async () => {
     const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-    const newToken = "'new-token'";
-    fetchMock.mock(url, { token: newToken }, ManagerInterface.getHeaders());
+    const newToken = 'new-token';
+    fetchMock.mock(url, { token: newToken }, new Headers({
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: `Token ${newToken}`,
+    }));
 
     await store.dispatch(fetchToken('asdf', 'asdf'));
 
     const newState = store.getState();
-    expect(ManagerInterface.getToken()).toEqual(newToken);
+    expect(localStorage.getItem('LOVE-TOKEN')).toEqual(newToken);
     expect(getToken(newState)).toEqual(newToken);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
   });
