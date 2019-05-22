@@ -1,4 +1,4 @@
-import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA } from './actionTypes';
+import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA, RECEIVE_READOUT_DATA } from './actionTypes';
 import { imageStates } from '../../Constants';
 
 export const receiveImageSequenceData = (data) => {
@@ -50,3 +50,10 @@ export const receiveCameraStateData = (data) => {
     cameraStateKey,
   };
 };
+
+export const receiveReadoutData = (data) => {
+  return {
+    type: RECEIVE_READOUT_DATA,
+    data: data.ATCamera.imageReadoutParameters,
+  };
+}

@@ -42,6 +42,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATCamera-shutterDetailedState'));
       dispatch(requestGroupSubscription('event-ATCamera-imageReadinessDetailedState'));
       dispatch(requestGroupSubscription('event-ATCamera-calibrationDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-imageReadoutParameters'));
     },
     unsubscribeToStream: () => {
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startIntegration'));
@@ -52,6 +53,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-shutterDetailedState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-imageReadinessDetailedState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATCamera-calibrationDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-imageReadoutParameters'));
     },
   };
 };
