@@ -9,7 +9,7 @@ import logger from 'redux-logger';
 let store, server;
 beforeEach(() => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  localStorage.setItem('LOVE-TOKEN', '"love-token"');
+  localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
 });
 
