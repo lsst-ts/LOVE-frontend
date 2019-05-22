@@ -6,15 +6,6 @@ import styles from './Login.module.css';
 
 export default class Login extends Component {
   static propTypes = {
-    /** Defines wether or not the message of "Session Expired" should be displayed */
-    showSessionExpired: PropTypes.bool,
-
-    /** Function to call in order to hide the "Session Expired" message */
-    hideSessionExpired: PropTypes.func,
-
-    /** Function to call in order to set the token state of the App component */
-    setTokenState: PropTypes.func,
-
     /** Current router location */
     location: PropTypes.string,
 
@@ -28,6 +19,7 @@ export default class Login extends Component {
       username: '',
       password: '',
       userIsEditing: false,
+      userJustSubmitted: false
     };
   }
 
@@ -39,7 +31,7 @@ export default class Login extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.fetchToken(this.state.username, this.state.password);
-    this.setState({ userIsEditing: false });
+    this.setState({ userIsEditing: false,userJustSubmitted:true });
   };
 
   redirect() {
@@ -54,7 +46,7 @@ export default class Login extends Component {
   }
 
   render() {
-    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing;
+    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing && !this.state.userJustSubmitted;
     return (
       <div className={styles.login}>
         <div className={styles.panel}>
