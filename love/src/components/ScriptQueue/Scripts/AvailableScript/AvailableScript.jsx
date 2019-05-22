@@ -4,7 +4,7 @@ import JSONPretty from 'react-json-pretty';
 import styles from './AvailableScript.module.css';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import scriptStyles from '../Scripts.module.css';
-import { hasCommandPrivileges } from '../../../../Utils';
+import { hasCommandPrivileges } from '../../../../Config';
 
 export default class AvailableScript extends Component {
   static propTypes = {
