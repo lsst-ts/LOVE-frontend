@@ -1,6 +1,5 @@
 import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN } from './actionTypes';
 import ManagerInterface from '../../Utils';
-import { tokenStates } from '../reducers/auth';
 import { getToken } from '../selectors';
 
 export const requestToken = (username, password) => ({
@@ -44,7 +43,7 @@ export function fetchToken(username, password) {
     })
       .then((response) => response.json())
       .then((response) => {
-        const { token, status } = response;
+        const { token } = response;
         if (token !== undefined && token !== null) {
           dispatch(receiveToken(token));
           localStorage.setItem('LOVE-TOKEN', token);
