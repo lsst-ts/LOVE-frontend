@@ -70,7 +70,7 @@ export const stateToStyleLATISS = {
   MOVING: 'running',
   STATIONARY: 'ok',
   NOTINPOSITION: 'warning',
-  NEEDS_CLEAR: 'warning',
+  NEEDS_CLEAR: 'ok',
   CLEARING: 'running',
   INTEGRATING: 'running',
   READING_OUT: 'running',
@@ -79,4 +79,23 @@ export const stateToStyleLATISS = {
   OPEN: 'ok',
   CLOSING: 'running',
   OPENING: 'running',
+};
+
+export const stateToStyleCamera = {
+  NEEDS_CLEAR: 'ok',
+  CLEARING: 'running',
+  INTEGRATING: 'running',
+  READING_OUT: 'running',
+  QUIESCENT: 'ok',
+  READY: 'ok',
+  NOT_READY: 'warning',
+  GETTING_READY: 'running',
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  CLOSING: 'running',
+  OPENING: 'running',
+  END_READOUT: 'ok',
+  END_TELEMETRY: 'ok',
 };

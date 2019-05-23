@@ -340,6 +340,7 @@ export default class CSCSummary extends Component {
     const newData = { ...this.state.data };
     Object.keys(data.data).map((cscKey) => {
       [newData[cscKey].heartbeat] = data.data[cscKey].heartbeat;
+      return 0;
     });
     this.setState({
       data: newData,
@@ -355,8 +356,11 @@ export default class CSCSummary extends Component {
           this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
           this.managerInterface.subscribeToEvents(csc, 'logMessage', this.onReceiveMessage);
           this.managerInterface.subscribeToEvents(csc, 'errorCode', this.onReceiveMessage);
+          return 0;
         });
+        return 0;
       });
+      return 0;
     });
   };
 
@@ -369,8 +373,11 @@ export default class CSCSummary extends Component {
           this.managerInterface.unsubscribeToEvents(csc, 'summaryState', () => 0);
           this.managerInterface.unsubscribeToEvents(csc, 'logMessage', () => 0);
           this.managerInterface.unsubscribeToEvents(csc, 'errorCode', () => 0);
+          return 0;
         });
+        return 0;
       });
+      return 0;
     });
   };
 
