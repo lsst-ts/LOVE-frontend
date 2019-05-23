@@ -36,6 +36,12 @@
   text-align: left;
 }
 
+.exposureTime {
+  text-align: center;
+  padding-top: 0.1em;
+  display: block;
+}
+
 .readoutParameters {
   display: grid;
   grid-template-columns: max-content 8em;
@@ -62,6 +68,10 @@
   justify-content: space-around;
   align-items: center;
   padding: 0;
+}
+
+.backgroundLoadingBarClass {
+  background: var(--base-background-color);
 }
 
 .imageTableWrapper {
@@ -113,6 +123,7 @@ td {
 
 .imageTable .narrowCol {
   width: 120px;
+  padding-bottom: 0;
 }
 
 .imageTable .mediumCol {

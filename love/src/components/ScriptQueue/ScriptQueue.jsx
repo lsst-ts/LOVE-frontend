@@ -6,9 +6,10 @@ import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
-import Panel from '../Panel/Panel';
-import StatusText from '../StatusText/StatusText';
-import ManagerInterface, { hasCommandPrivileges, hasFakeData } from '../../Utils';
+import Panel from '../GeneralPurpose/Panel/Panel';
+import StatusText from '../GeneralPurpose/StatusText/StatusText';
+import ManagerInterface from '../../Utils';
+import { hasCommandPrivileges, hasFakeData } from '../../Config';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.

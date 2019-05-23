@@ -6,8 +6,8 @@ import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
-import Button from '../../../Button/Button';
-import { hasCommandPrivileges } from '../../../../Utils';
+import Button from '../../../GeneralPurpose/Button/Button';
+import { hasCommandPrivileges } from '../../../../Config';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 
 export default class WaitingScript extends Component {
