@@ -6,7 +6,7 @@ import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import InfoIcon from '../../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
-import Button from '../../Button/Button';
+import Button from '../../GeneralPurpose/Button/Button';
 
 export default class CSCExpanded extends PureComponent {
   static propTypes = {

@@ -1,22 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Button from '../Button/Button';
+import Button from '../GeneralPurpose/Button/Button';
 import styles from './Login.module.css';
-import ManagerInterface from '../../Utils';
 
 export default class Login extends Component {
   static propTypes = {
-
-    /** Defines wether or not the message of "Session Expired" should be displayed */
-    showSessionExpired: PropTypes.bool,
-
-    /** Function to call in order to hide the "Session Expired" message */
-    hideSessionExpired: PropTypes.func,
-
-    /** Function to call in order to set the token state of the App component */
-    setTokenState: PropTypes.func,
-
     /** Current router location */
     location: PropTypes.string,
 
@@ -29,34 +18,21 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      showFailedLogin: false,
+      userIsEditing: false,
+      userJustSubmitted: false
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value });
-    if (this.state.showFailedLogin) {
-      this.setState({ showFailedLogin: false });
-    }
-    if (this.props.showSessionExpired) {
-      this.props.hideSessionExpired();
-    }
-  }
+    this.setState({ [name]: value, userIsEditing: true });
+  };
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
-    ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
-      if (token) {
-        this.props.setTokenState(token);
-      } else {
-        this.setState({ showFailedLogin: true });
-        this.props.setTokenState(null);
-      }
-    });
-  }
+    this.props.fetchToken(this.state.username, this.state.password);
+    this.setState({ userIsEditing: false,userJustSubmitted:true });
+  };
 
   redirect() {
     return (
@@ -70,6 +46,7 @@ export default class Login extends Component {
   }
 
   render() {
+    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing && !this.state.userJustSubmitted;
     return (
       <div className={styles.login}>
         <div className={styles.panel}>
@@ -78,7 +55,7 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              {this.state.showFailedLogin ? (
+              {showLoginFailed ? (
                 <div className={styles.incorrectCredentialsDiv}>
                   <p className={styles.incorrectCredentials}>
                     {"Your username and password didn't match. Please try again."}

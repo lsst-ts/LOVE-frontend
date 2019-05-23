@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './ComponentIndex.module.css';
-import Button from '../Button/Button';
+import Button from '../GeneralPurpose/Button/Button';
 
 export default class ComponentIndex extends Component {
   static propTypes = {
@@ -31,6 +31,9 @@ export default class ComponentIndex extends Component {
           </li>
           <li className={styles.linkListItem}>
             <Link to="/auxiliary-telescope">Auxiliary Telescope</Link>
+            <ul className={styles.linkListSubItem}>
+              <Link to="/latiss">LATISS</Link>
+            </ul>
             <ul className={styles.linkListSubItem}>
               <Link to="/aux-tel-camera">Auxiliary Telescope Camera</Link>
             </ul>
