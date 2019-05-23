@@ -1,5 +1,5 @@
-describe('Login Test', function() {
-  it('Login works', function() {
+describe('Given the user just submitted its credentials', function() {
+  it('When accepted it should display the Component Index screen', function() {
     cy.visit('http://localhost');
     cy.url().should('include', '/login');
     cy.get('#id_username').type('test');
@@ -11,19 +11,31 @@ describe('Login Test', function() {
     cy.root().should('contain', 'Component index');
   });
 
-  it('Logout works', function() {
+  it('When rejected it should display a warning message', async function(){
     cy.visit('http://localhost');
-    cy.get('#id_username').type('test');
-    cy.get('#id_password').type('test');
+    cy.url().should('include', '/login');
+    cy.get('#id_username').type('asdf');
+    cy.get('#id_password').type('asdf');
     cy.get('button')
       .contains('Login')
       .click();
-
-    cy.url().should('not.include', 'login');
-    cy.get('button')
-      .contains('Logout')
-      .click();
-    cy.visit('http://localhost/auxiliary-telescope');
-    cy.url().should('include', '/login');
+    cy.root().should('contain', 'Your username and password didn\'t match. Please try again.');
   });
+
+});
+
+it('Logout works', function() {
+  cy.visit('http://localhost');
+  cy.get('#id_username').type('test');
+  cy.get('#id_password').type('test');
+  cy.get('button')
+    .contains('Login')
+    .click();
+
+  cy.url().should('not.include', 'login');
+  cy.get('button')
+    .contains('Logout')
+    .click();
+  cy.visit('http://localhost/auxiliary-telescope');
+  cy.url().should('include', '/login');
 });

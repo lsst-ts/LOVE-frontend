@@ -12,10 +12,13 @@ const LoginContainer = ({ token, fetchToken, loginFailed }) => {
 const mapStateToProps = (state) => {
   const tokenStatus = getTokenStatus(state);
   const token = getToken(state);
+
+  const notEmpty = tokenStatus !== tokenStates.EMPTY;
+  const nullButNotRequested = !token && tokenStatus !== tokenStates.REQUESTED;
+
   return {
     loginFailed:
-      tokenStatus !== tokenStates.EMPTY &&
-      (!token || tokenStatus === tokenStates.REJECTED || tokenStatus === tokenStates.ERROR),
+      notEmpty && (nullButNotRequested || tokenStatus === tokenStates.REJECTED || tokenStatus === tokenStates.ERROR),
     showSessionExpired: false,
     hideSessionExpired: () => console.log('hide session expired'),
     setTokenState: (token) => console.log('Set token state'),
