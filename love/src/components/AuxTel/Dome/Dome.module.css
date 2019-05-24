@@ -28,9 +28,12 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
+}
+
+
+.svgOverlay circle {
+  transition: transform 0.5s;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  transition: transform 1.1s;
   fill-opacity: 0.1;
-  /* webkit-perspective: 10; */
 }

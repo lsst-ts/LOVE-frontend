@@ -30,7 +30,7 @@ export default class Camera extends Component {
         az: Math.random()*360,
         el: Math.random()*90,
       })
-    }, 500);
+    }, 1000);
   };
 
   componentWillUnmount = () => {
