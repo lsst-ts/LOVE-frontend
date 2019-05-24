@@ -16,6 +16,7 @@ import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import LATISS from './components/AuxTel/LATISS/LATISS';
+import DomeContainer from './components/AuxTel/Dome/Dome.container';
 
 class App extends Component {
   static propTypes = {
@@ -79,6 +80,15 @@ class App extends Component {
             )}
           />
           <PrivateRoute token={this.props.token} path="/latiss" component={LATISS} />
+          <PrivateRoute
+            token={this.props.token}
+            path="/aux-tel-dome"
+            render={() => (
+              <Panel title="Auxiliary Telescope Dome" className={'smallPanel'}>
+                <DomeContainer />
+              </Panel>
+            )}
+          />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
       </div>

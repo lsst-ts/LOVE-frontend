@@ -1,0 +1,36 @@
+.domeContainer {
+  /* display: flex; */
+  flex-wrap: wrap;
+  position: relative;
+  width: fit-content;
+}
+
+.skymapGridContainer {
+  /* display: flex; */
+  flex-wrap: wrap;
+  position: relative;
+  width: fit-content;
+}
+
+.skymapGridContainer svg {
+  vertical-align:top;
+}
+
+.skymapContainer h2 {
+  text-align: left;
+}
+
+.grid {
+}
+
+.svgOverlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  transition: transform 1.1s;
+  fill-opacity: 0.1;
+  /* webkit-perspective: 10; */
+}
