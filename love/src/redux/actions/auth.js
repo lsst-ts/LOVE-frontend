@@ -72,7 +72,7 @@ export function validateToken() {
   return async (dispatch, getState) => {
     const token = getToken(getState());
     if (token === null || token === undefined) {
-      return;
+      return Promise.resolve();
     }
 
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
@@ -87,13 +87,13 @@ export function validateToken() {
       if (response.status >= 500) {
         // console.error('Error communicating with the server. Logging out\n', response);
         dispatch(removeToken);
-        return;
+        return Promise.resolve();
       }
 
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
+        console.log('Session expired. Logging out');
         dispatch(expireToken);
-        return;
+        return Promise.resolve();
       }
 
       return response.json().then((resp) => {
