@@ -5,8 +5,10 @@ import { getToken, getTokenStatus } from '../../redux/selectors';
 import { fetchToken } from '../../redux/actions/auth';
 import { tokenStates } from '../../redux/reducers/auth';
 
-const LoginContainer = ({ token, fetchToken, loginFailed }) => {
-  return <Login token={token} fetchToken={fetchToken} loginFailed={loginFailed} />;
+const LoginContainer = ({ token, fetchToken, loginFailed, showSessionExpired }) => {
+  return (
+    <Login token={token} fetchToken={fetchToken} loginFailed={loginFailed} showSessionExpired={showSessionExpired} />
+  );
 };
 
 const mapStateToProps = (state) => {
@@ -16,12 +18,16 @@ const mapStateToProps = (state) => {
   const notEmpty = tokenStatus !== tokenStates.EMPTY;
   const nullButNotRequested = !token && tokenStatus !== tokenStates.REQUESTED;
 
+  console.log(tokenStatus);
+
   return {
     loginFailed:
-      notEmpty && (nullButNotRequested || tokenStatus === tokenStates.REJECTED || tokenStatus === tokenStates.ERROR),
-    showSessionExpired: false,
-    hideSessionExpired: () => console.log('hide session expired'),
-    setTokenState: (token) => console.log('Set token state'),
+      notEmpty &&
+      (nullButNotRequested ||
+        tokenStatus === tokenStates.REJECTED ||
+        tokenStatus === tokenStates.ERROR ||
+        tokenStatus === tokenStates.EXPIRED),
+    showSessionExpired: tokenStatus === tokenStates.EXPIRED,
     token: getToken(state),
   };
 };
