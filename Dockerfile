@@ -9,9 +9,8 @@ ENV PATH /usr/src/love/node_modules/.bin:$PATH
 RUN npm config set unsafe-perm true
 RUN npm install react-scripts@1.1.1 -g --silent
 COPY love/package.json .
-COPY love/package-lock.json .
 COPY love/yarn.lock .
-RUN npm install
+RUN yarn install
 
 # Define url for the websockets host
 ARG WEBSOCKET_HOST=127.0.0.1
