@@ -27,10 +27,11 @@ export default class DomeShutter extends Component {
 
   render() {
     const { width, height } = this.props;
-    const offset = 50;
-    const x0 = width / 2 + offset;
-    const y0 = height / 2 + offset;
-    const r = width / 2;
+    const offset = 5;
+    const viewBoxSize = 596 - 2 * offset;
+    const x0 = viewBoxSize / 2 + offset;
+    const y0 = viewBoxSize / 2 + offset;
+    const r = viewBoxSize / 2;
     const extraApperture = r / 4;
     const alpha = Math.PI / 10;
     const rSinAlpha = r * Math.sin(alpha);
@@ -38,7 +39,13 @@ export default class DomeShutter extends Component {
     const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596" style={{transform: `translate(-50%,-50%) rotateZ(${this.props.azimuthPosition}deg)`}}>
+      <svg
+        className={styles.svgOverlay}
+        height={height}
+        width={width}
+        viewBox="0 0 596 596"
+        style={{ transform: `translate(-50%,-50%) rotateZ(${this.props.azimuthPosition}deg)` }}
+      >
         {/* Dropout door */}
         <g clipPath={`circle(${r}px at center)`}>
           <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
@@ -53,28 +60,19 @@ export default class DomeShutter extends Component {
             `}
           />
           <rect
-            x={
-              x0 +
-              mainDoorWidth -
-              extraApperture +
-              (dropoutDoorWidth * (this.props.dropoutDoorOpeningPercentage)) / 100
-            }
+            x={x0 + mainDoorWidth - extraApperture + (dropoutDoorWidth * this.props.dropoutDoorOpeningPercentage) / 100}
             y={y0 - rSinAlpha}
-            width={r - rCosAlpha + (dropoutDoorWidth * (100-this.props.dropoutDoorOpeningPercentage)) / 100}
+            width={r - rCosAlpha + (dropoutDoorWidth * (100 - this.props.dropoutDoorOpeningPercentage)) / 100}
             height={2 * rSinAlpha}
             fill="white"
-            fillOpacity={0.1+0.1*this.props.dropoutDoorOpeningPercentage/100}
+            fillOpacity={0.1 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
             stroke="white"
             strokeWidth="2"
           />
         </g>
         {/* Main door */}
         <rect
-          x={
-            x0 -
-            extraApperture -
-            (mainDoorWidth * (this.props.mainDoorOpeningPercentage)) / 100
-          }
+          x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
           y={y0 - rSinAlpha}
           width={mainDoorWidth}
           height={2 * rSinAlpha}
