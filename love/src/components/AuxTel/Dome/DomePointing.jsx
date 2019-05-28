@@ -69,7 +69,7 @@ export default class DomePointing extends Component {
         />
         <circle r={64} stroke="white" strokeWidth={2} cx={zenithPixels.x} cy={zenithPixels.y} fill="red" style={{
           transform: `rotateY(${-90+el}deg) rotate3d(${Math.cos(el*Math.PI/180)}, 0, ${Math.sin(el*Math.PI/180)},${-90+az}deg) scale(0.5)`,
-          transformOrigin: `50% 50% ${width/2+30}px`,
+          transformOrigin: `50% 50% ${280}px`,
         }} />
         {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>
