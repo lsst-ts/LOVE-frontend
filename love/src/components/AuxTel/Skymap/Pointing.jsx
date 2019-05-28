@@ -4,8 +4,6 @@ import styles from './Skymap.module.css';
 
 export default class Pointing extends Component {
   static propTypes = {
-    /** Function to convert az/el to pixels */
-    azelToPixel: PropTypes.func,
     /** Skyview width */
     width: PropTypes.number,
     /** Skyview height */
@@ -25,10 +23,31 @@ export default class Pointing extends Component {
     isProjected: true,
   };
 
+  /** Function to convert az/el to pixels */
+  azelToPixel = (pos, isProjected) => {
+    const { az, el } = pos;
+    const width = 596;
+    const height = 596;
+    const offset = 30;
+    const center = [width / 2, height / 2];
+    let r;
+    if (isProjected) {
+      r = Math.cos((el * Math.PI) / 180) * (width / 2 - offset);
+    } else {
+      r = ((90 - el) / 90) * (width / 2 - offset);
+    }
+    const x = center[0] + r * Math.cos((az * Math.PI) / 180);
+    const y = center[1] - r * Math.sin((az * Math.PI) / 180);
+    return {
+      x,
+      y,
+    };
+  };
+
   render() {
     const { width, height } = this.props;
-    const currentPixels = this.props.azelToPixel(this.props.currentPointing, this.props.isProjected);
-    const targetPixels = this.props.azelToPixel(this.props.targetPointing, this.props.isProjected);
+    const currentPixels = this.azelToPixel(this.props.currentPointing, this.props.isProjected);
+    const targetPixels = this.azelToPixel(this.props.targetPointing, this.props.isProjected);
 
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">

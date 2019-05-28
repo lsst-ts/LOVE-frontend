@@ -37,3 +37,7 @@
   transform-style: preserve-3d;
   fill-opacity: 0.1;
 }
+
+.svgOverlay rect {
+  transition: x 0.5s, width 0.5s;
+}
