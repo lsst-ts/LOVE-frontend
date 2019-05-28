@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Dome.module.css';
-import JSONPretty from 'react-json-pretty';
-import PropTypes from 'prop-types';
 import SkymapGrid from '../Skymap/SkymapGrid';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
