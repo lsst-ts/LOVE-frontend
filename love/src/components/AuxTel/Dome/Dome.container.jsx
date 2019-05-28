@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Dome from './Dome';
 import { getDomeState } from '../../../redux/selectors';
@@ -18,15 +18,31 @@ const DomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
 }) => {
+  const [currentPosition, setCurrentPosition] = useState({ az: 0, el: 0 });
+  useEffect(() => {
+    setInterval(() => {
+      setCurrentPosition({
+        az: Math.random() * 360,
+        el: Math.random() * 90,
+        domeAz: Math.random() * 360,
+        dropoutDoorOpeningPercentage: Math.random() * 100,
+        mainDoorOpeningPercentage: Math.random() * 100,
+      });
+    }, 1000);
+    return () => {};
+  }, []);
   return (
     <Dome
-      dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
-      mainDoorOpeningPercentage={mainDoorOpeningPercentage}
-      azimuthPosition={azimuthPosition}
+      dropoutDoorOpeningPercentage={currentPosition.dropoutDoorOpeningPercentage}
+      mainDoorOpeningPercentage={currentPosition.mainDoorOpeningPercentage}
+      azimuthPosition={currentPosition.domeAz}
       azimuthState={azimuthState}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
-      ATMCS_mountEncoders={ATMCS_mountEncoders}
+      ATMCS_mountEncoders={{
+        elevationCalculatedAngle: currentPosition.el,
+        azimuthCalculatedAngle: currentPosition.az,
+      }}
       detailedState={detailedState}
       atMountState={atMountState}
       target={target}
