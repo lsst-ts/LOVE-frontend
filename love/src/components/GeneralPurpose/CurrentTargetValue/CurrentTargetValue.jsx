@@ -1,0 +1,33 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styles from './CurrentTargetValue.module.css';
+
+export default class CurrentTargetValue extends Component {
+  static propTypes = {
+    /** Current value */
+    currentValue: PropTypes.number,
+    /** Target value */
+    targetValue: PropTypes.number,
+    /** Whether the value is still reaching the target value */
+    isChanging: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    currentValue: 0,
+    targetValue: 0,
+  };
+
+  render() {
+    return (
+      <span className={styles.statusTextWrapper}>
+        <span className={styles.telemetryValue}>{this.props.currentValue}º</span>
+        {this.props.isChanging ? (
+          <>
+            <span className={styles.arrow}>&#8594;</span>
+            <span className={styles.telemetryValue}>{this.props.targetValue}º</span>
+          </>
+        ) : null}
+      </span>
+    );
+  }
+}

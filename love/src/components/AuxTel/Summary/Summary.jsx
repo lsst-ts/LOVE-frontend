@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Summary.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
+import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 
 export default class Summary extends Component {
   // static propTypes = {
@@ -16,23 +17,11 @@ export default class Summary extends Component {
             <div className={styles.summaryComponentTitle}>POSITIONS</div>
             <div className={styles.statusGroupWrapper}>
               <span className={styles.statusTextLabel}>Dome Az: </span>
-              <span className={styles.statusTextWrapper}>
-                <span className={styles.telemetryValue}>90º</span>
-                <span className={styles.arrow}>&#8594;</span>
-                <span className={styles.telemetryValue}>80º</span>
-              </span>
+              <CurrentTargetValue currentValue={90} targetValue={80} isChanging={true}/>
               <span className={styles.statusTextLabel}>Mount Az: </span>
-              <span className={styles.statusTextWrapper}>
-                <span className={styles.telemetryValue}>80º</span>
-                <span className={styles.arrow}>&#8594;</span>
-                <span className={styles.telemetryValue}>70º</span>
-              </span>
+              <CurrentTargetValue currentValue={80} targetValue={70} isChanging={true}/>
               <span className={styles.statusTextLabel}>Mount El: </span>
-              <span className={styles.statusTextWrapper}>
-                <span className={styles.telemetryValue}>0º</span>
-                <span className={styles.arrow}>&#8594;</span>
-                <span className={styles.telemetryValue}>45º</span>
-              </span>
+              <CurrentTargetValue currentValue={0} targetValue={45} isChanging={true}/>
             </div>
           </div>
         </div>

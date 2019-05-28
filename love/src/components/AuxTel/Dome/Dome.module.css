@@ -42,3 +42,11 @@
 .svgOverlay rect {
   transition: x 0.5s, width 0.5s;
 }
+
+.telemetryTable {
+  padding-top: 1em;
+  display: inline-grid;
+  grid-template-columns: max-content 8em;
+  grid-row-gap: 0.5em;
+  align-items: center;
+}
