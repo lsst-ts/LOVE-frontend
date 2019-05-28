@@ -4,6 +4,7 @@ import styles from './Dome.module.css';
 import SkymapGrid from '../Skymap/SkymapGrid';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
+import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 
 export default class Camera extends Component {
   static propTypes = {
@@ -60,6 +61,26 @@ export default class Camera extends Component {
             azimuthPosition={this.props.azimuthPosition}
             dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
             mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
+          />
+        </div>
+        <div className={styles.telemetryTable}>
+          <span>Mount az: </span>
+          <CurrentTargetValue
+            currentValue={Math.floor(currentPointing.az)}
+            targetValue={Math.floor(targetPointing.az)}
+            isChanging={true}
+          />
+          <span>Mount el: </span>
+          <CurrentTargetValue
+            currentValue={Math.floor(currentPointing.el)}
+            targetValue={Math.floor(targetPointing.el)}
+            isChanging={true}
+          />
+          <span>Dome az: </span>
+          <CurrentTargetValue
+            currentValue={Math.floor(this.props.azimuthPosition)}
+            targetValue={0}
+            isChanging={false}
           />
         </div>
       </div>
