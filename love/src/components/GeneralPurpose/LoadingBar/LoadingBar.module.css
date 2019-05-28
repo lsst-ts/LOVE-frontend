@@ -12,7 +12,6 @@
   top: 0;
   left: 0;
   border-radius: 5px 0px 0px 5px;
-  transition: width 1s;
   transition-timing-function: linear;
 }
 
