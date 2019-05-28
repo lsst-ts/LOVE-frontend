@@ -44,50 +44,54 @@ export default class DomeShutter extends Component {
         height={height}
         width={width}
         viewBox="0 0 596 596"
-        style={{ transform: `translate(-50%,-50%) rotateZ(${this.props.azimuthPosition}deg)` }}
+        
       >
-        {/* Dropout door */}
-        <g clipPath={`circle(${r}px at center)`}>
-          <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
-          <path
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            d={`
+        <g className={styles.rotatingDome}
+        style={{ transform: `rotateZ(${-90+this.props.azimuthPosition}deg)`, transformOrigin: `50% 50%` }}>
+          {/* Dropout door */}
+          <g clipPath={`circle(${r}px at center)`}>
+            <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
+            <path
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              d={`
             M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
             A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
             M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
             `}
-          />
+            />
+            <rect
+              x={
+                x0 + mainDoorWidth - extraApperture + (dropoutDoorWidth * this.props.dropoutDoorOpeningPercentage) / 100
+              }
+              y={y0 - rSinAlpha}
+              width={r - rCosAlpha + (dropoutDoorWidth * (100 - this.props.dropoutDoorOpeningPercentage)) / 100}
+              height={2 * rSinAlpha}
+              fill="white"
+              fillOpacity={0.1 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
+              stroke="white"
+              strokeWidth="2"
+            />
+          </g>
+          {/* Main door */}
           <rect
-            x={x0 + mainDoorWidth - extraApperture + (dropoutDoorWidth * this.props.dropoutDoorOpeningPercentage) / 100}
+            x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
             y={y0 - rSinAlpha}
-            width={r - rCosAlpha + (dropoutDoorWidth * (100 - this.props.dropoutDoorOpeningPercentage)) / 100}
+            width={mainDoorWidth}
             height={2 * rSinAlpha}
             fill="white"
-            fillOpacity={0.1 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
+            fillOpacity="0.1"
             stroke="white"
             strokeWidth="2"
           />
-        </g>
-        {/* Main door */}
-        <rect
-          x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
-          y={y0 - rSinAlpha}
-          width={mainDoorWidth}
-          height={2 * rSinAlpha}
-          fill="white"
-          fillOpacity="0.1"
-          stroke="white"
-          strokeWidth="2"
-        />
-        {/* Dome */}
-        <path
-          fill="white"
-          fillOpacity="0.1"
-          stroke="white"
-          strokeWidth="2"
-          d={`
+          {/* Dome */}
+          <path
+            fill="white"
+            fillOpacity="0.1"
+            stroke="white"
+            strokeWidth="2"
+            d={`
           M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
           A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
         A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
@@ -95,6 +99,23 @@ export default class DomeShutter extends Component {
         L ${x0 - extraApperture} ${y0 - rSinAlpha}
         L ${x0 - extraApperture} ${y0 + rSinAlpha}
         L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+        `}
+          />
+        </g>
+
+        {/* Dome target*/}
+        <path
+          style={{ transform: `rotateZ(${-90+this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
+          fill="none"
+          strokeDasharray="4"
+          strokeOpacity="0.3"
+          stroke="white"
+          strokeWidth="2"
+          d={`
+          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+        L ${x0 - extraApperture} ${y0 + rSinAlpha}
+        L ${x0 - extraApperture} ${y0 - rSinAlpha}
+        L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
         `}
         />
       </svg>

@@ -65,7 +65,8 @@ export default class DomePointing extends Component {
           x2={targetPixels.x}
           y2={targetPixels.y}
           stroke="white"
-          strokeDasharray="5"
+          strokeDasharray="4"
+          strokeOpacity="0.3"
         />
         <circle r={64} stroke="white" strokeWidth={2} cx={zenithPixels.x} cy={zenithPixels.y} fill="red" style={{
           transform: `rotateY(${-90+el}deg) rotate3d(${Math.cos(el*Math.PI/180)}, 0, ${Math.sin(el*Math.PI/180)},${-90+az}deg) scale(0.5)`,

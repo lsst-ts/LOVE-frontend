@@ -28,9 +28,11 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%,-50%);
-  transition: transform 1s;
 }
 
+.svgOverlay .rotatingDome {
+  transition: transform 1s;  
+}
 
 .svgOverlay circle {
   transition: transform 0.5s;

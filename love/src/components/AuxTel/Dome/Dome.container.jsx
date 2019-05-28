@@ -9,6 +9,7 @@ const DomeContainer = ({
   mainDoorOpeningPercentage,
   azimuthPosition,
   azimuthState,
+  azimuthCommandedState,
   dropoutDoorState,
   mainDoorState,
   ATMCS_mountEncoders,
@@ -18,18 +19,20 @@ const DomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
 }) => {
-  const [currentPosition, setCurrentPosition] = useState({ az: 0, el: 0, targetAz: 0, targetEl: 0 });
+  const [currentPosition, setCurrentPosition] = useState({ az: 0, el: 0, domeAz: 0, targetAz: 0, targetEl: 0, targetDomeAz: 0 });
   useEffect(() => {
     setInterval(() => {
       setCurrentPosition((prevState) => {
+        const newAz = Math.random() * 360;
         return {
           az: prevState.targetAz,
           el: prevState.targetEl,
-          domeAz: Math.random() * 360,
-          targetAz: Math.random() * 360,
+          domeAz: prevState.targetDomeAz,
+          targetAz: newAz,
           targetEl: Math.random() * 90,
-          dropoutDoorOpeningPercentage: Math.random() * 100,
-          mainDoorOpeningPercentage: Math.random() * 100,
+          targetDomeAz: newAz + (Math.random()-0.5)*20,
+          dropoutDoorOpeningPercentage: 100,
+          mainDoorOpeningPercentage: 100,
         };
       });
     }, 2000);
@@ -41,6 +44,9 @@ const DomeContainer = ({
       mainDoorOpeningPercentage={currentPosition.mainDoorOpeningPercentage}
       azimuthPosition={currentPosition.domeAz}
       azimuthState={azimuthState}
+      azimuthCommandedState={{
+        azimuth: currentPosition.targetDomeAz
+      }}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
       ATMCS_mountEncoders={{
@@ -72,6 +78,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('telemetry-ATDome-mainDoorOpeningPercentage'));
       dispatch(requestGroupSubscription('telemetry-ATDome-azimuthPosition'));
       dispatch(requestGroupSubscription('event-ATDome-azimuthState'));
+      dispatch(requestGroupSubscription('event-ATDome-azimuthCommandedState'));
       dispatch(requestGroupSubscription('event-ATDome-dropoutDoorState'));
       dispatch(requestGroupSubscription('event-ATDome-mainDoorState'));
       //ATMCS
@@ -86,6 +93,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-mainDoorOpeningPercentage'));
       dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-azimuthPosition'));
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-azimuthState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-azimuthCommandedState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-dropoutDoorState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-mainDoorState'));
       //ATMCS
