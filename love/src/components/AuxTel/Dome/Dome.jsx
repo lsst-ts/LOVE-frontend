@@ -5,6 +5,7 @@ import JSONPretty from 'react-json-pretty';
 import PropTypes from 'prop-types';
 import SkymapGrid from '../Skymap/SkymapGrid';
 import DomePointing from './DomePointing';
+import DomeShutter from './DomeShutter';
 
 export default class Camera extends Component {
   static propTypes = {
@@ -25,12 +26,6 @@ export default class Camera extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStream();
-    setInterval(() => {
-      this.setState({
-        az: Math.random()*360,
-        el: Math.random()*90,
-      })
-    }, 1000);
   };
 
   componentWillUnmount = () => {
@@ -41,8 +36,8 @@ export default class Camera extends Component {
     const width = 500;
     const height = 500;
     const currentPointing = {
-      az: this.state.az,
-      el: this.state.el,
+      az: this.props.ATMCS_mountEncoders.azimuthCalculatedAngle,
+      el: this.props.ATMCS_mountEncoders.elevationCalculatedAngle,
     };
     const targetPointing = {
       az: 0,
@@ -62,6 +57,13 @@ export default class Camera extends Component {
             isProjected={isProjected}
           />
           <SkymapGrid width={width} height={height} isProjected={isProjected} />
+          <DomeShutter
+            width={width}
+            height={height}
+            azimuthPosition={this.props.azimuthPosition}
+            dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
+            mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
+          />
         </div>
       </div>
     );

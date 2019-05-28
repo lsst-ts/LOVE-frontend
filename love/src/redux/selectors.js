@@ -11,7 +11,6 @@ export const getCameraState = (state) => {
 };
 
 export const getDomeState = (state) => {
-  console.log(state.ws.subscriptions)
   return {
     dropoutDoorOpeningPercentage: state.ws.subscriptions['telemetry-ATDome-dropoutDoorOpeningPercentage'] ? state.ws.subscriptions['telemetry-ATDome-dropoutDoorOpeningPercentage'].data: {},
     mainDoorOpeningPercentage: state.ws.subscriptions['telemetry-ATDome-mainDoorOpeningPercentage'] ? state.ws.subscriptions['telemetry-ATDome-mainDoorOpeningPercentage'].data: {},
