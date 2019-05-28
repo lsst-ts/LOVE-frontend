@@ -28,7 +28,7 @@ export default class DomePointing extends Component {
     const { az, el } = pos;
     const width = 596;
     const height = 596;
-    const offset = 30;
+    const offset = 20;
     const center = [width / 2, height / 2];
     let r;
     if (isProjected) {
@@ -36,8 +36,8 @@ export default class DomePointing extends Component {
     } else {
       r = ((90 - el) / 90) * (width / 2 - offset);
     }
-    const x = center[0] + r * Math.cos((az * Math.PI) / 180);
-    const y = center[1] - r * Math.sin((az * Math.PI) / 180);
+    const x = center[0] + r * Math.sin((az * Math.PI) / 180);
+    const y = center[1] - r * Math.cos((az * Math.PI) / 180);
     return {
       x,
       y,
@@ -46,8 +46,9 @@ export default class DomePointing extends Component {
 
   render() {
     const { width, height } = this.props;
-    const currentPixels = this.azelToPixel({az: 0, el:90}, false);
-    const targetPixels = this.azelToPixel({az: 0, el:90}, false);
+    const zenithPixels = this.azelToPixel({az: 0, el:90}, false);
+    const currentPixels = this.azelToPixel(this.props.currentPointing, true);
+    const targetPixels = this.azelToPixel(this.props.targetPointing, true);
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
     return (
@@ -66,9 +67,9 @@ export default class DomePointing extends Component {
           stroke="white"
           strokeDasharray="5"
         />
-        <circle r={64} stroke="white" strokeWidth={2} cx={currentPixels.x} cy={currentPixels.y} fill="red" style={{
+        <circle r={64} stroke="white" strokeWidth={2} cx={zenithPixels.x} cy={zenithPixels.y} fill="red" style={{
           transform: `rotateY(${-90+el}deg) rotate3d(${Math.cos(el*Math.PI/180)}, 0, ${Math.sin(el*Math.PI/180)},${-90+az}deg) scale(0.5)`,
-          transformOrigin: `50% 50% 255px`,
+          transformOrigin: `50% 50% ${width/2+30}px`,
         }} />
         {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>
