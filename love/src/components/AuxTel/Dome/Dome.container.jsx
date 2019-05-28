@@ -18,17 +18,21 @@ const DomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
 }) => {
-  const [currentPosition, setCurrentPosition] = useState({ az: 0, el: 0 });
+  const [currentPosition, setCurrentPosition] = useState({ az: 0, el: 0, targetAz: 0, targetEl: 0 });
   useEffect(() => {
     setInterval(() => {
-      setCurrentPosition({
-        az: Math.random() * 360,
-        el: Math.random() * 90,
-        domeAz: Math.random() * 360,
-        dropoutDoorOpeningPercentage: Math.random() * 100,
-        mainDoorOpeningPercentage: Math.random() * 100,
+      setCurrentPosition((prevState) => {
+        return {
+          az: prevState.targetAz,
+          el: prevState.targetEl,
+          domeAz: Math.random() * 360,
+          targetAz: Math.random() * 360,
+          targetEl: Math.random() * 90,
+          dropoutDoorOpeningPercentage: Math.random() * 100,
+          mainDoorOpeningPercentage: Math.random() * 100,
+        };
       });
-    }, 1000);
+    }, 2000);
     return () => {};
   }, []);
   return (
@@ -45,7 +49,10 @@ const DomeContainer = ({
       }}
       detailedState={detailedState}
       atMountState={atMountState}
-      target={target}
+      target={{
+        elevation: currentPosition.targetEl,
+        azimuth: currentPosition.targetAz,
+      }}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
     />

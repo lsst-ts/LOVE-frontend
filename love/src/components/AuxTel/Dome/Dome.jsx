@@ -38,8 +38,8 @@ export default class Camera extends Component {
       el: this.props.ATMCS_mountEncoders.elevationCalculatedAngle,
     };
     const targetPointing = {
-      az: 0,
-      el: 90,
+      az: this.props.target.azimuth,
+      el: this.props.target.elevation,
     };
     const isProjected = true;
     return (
@@ -49,7 +49,6 @@ export default class Camera extends Component {
           <DomePointing
             width={width}
             height={height}
-            azelToPixel={this.azelToPixel}
             currentPointing={currentPointing}
             targetPointing={targetPointing}
             isProjected={isProjected}
