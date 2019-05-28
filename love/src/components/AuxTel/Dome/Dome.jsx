@@ -61,6 +61,7 @@ export default class Camera extends Component {
             azimuthPosition={this.props.azimuthPosition}
             dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
             mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
+            targetAzimuthPosition={this.props.azimuthCommandedState.azimuth}
           />
         </div>
         <div className={styles.telemetryTable}>
@@ -79,8 +80,8 @@ export default class Camera extends Component {
           <span>Dome az: </span>
           <CurrentTargetValue
             currentValue={Math.floor(this.props.azimuthPosition)}
-            targetValue={0}
-            isChanging={false}
+            targetValue={Math.floor(this.props.azimuthCommandedState.azimuth)}
+            isChanging={true}
           />
         </div>
       </div>
