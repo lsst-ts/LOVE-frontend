@@ -38,7 +38,7 @@ export default class DomeShutter extends Component {
     const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596" style={{transform: `translate(-50%,-50%) rotateZ(${this.props.azimuthPosition}deg)`}}>
         {/* Dropout door */}
         <g clipPath={`circle(${r}px at center)`}>
           <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
