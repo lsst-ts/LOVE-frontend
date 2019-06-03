@@ -33,7 +33,7 @@ export default class DomeShutter extends Component {
     const y0 = viewBoxSize / 2 + offset;
     const r = viewBoxSize / 2;
     const extraApperture = r / 4;
-    const alpha = Math.PI / 10;
+    const alpha = Math.PI / 12;
     const rSinAlpha = r * Math.sin(alpha);
     const rCosAlpha = r * Math.cos(alpha);
     const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
@@ -47,7 +47,7 @@ export default class DomeShutter extends Component {
         
       >
         <g className={styles.rotatingDome}
-        style={{ transform: `rotateZ(${-90+this.props.azimuthPosition}deg)`, transformOrigin: `50% 50%` }}>
+        style={{ transform: `rotateZ(${270+this.props.azimuthPosition}deg)`, transformOrigin: `50% 50%` }}>
           {/* Dropout door */}
           <g clipPath={`circle(${r}px at center)`}>
             <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
@@ -105,7 +105,7 @@ export default class DomeShutter extends Component {
 
         {/* Dome target*/}
         <path
-          style={{ transform: `rotateZ(${-90+this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
+          style={{ transform: `rotateZ(${270+this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
           fill="none"
           strokeDasharray="4"
           strokeOpacity="0.3"

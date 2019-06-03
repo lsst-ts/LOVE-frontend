@@ -24,6 +24,9 @@ export const getDomeState = (state) => {
     azimuthState: state.ws.subscriptions['event-ATDome-azimuthState']
       ? state.ws.subscriptions['event-ATDome-azimuthState'].data
       : undefined,
+    azimuthCommandedState: state.ws.subscriptions['event-ATDome-azimuthState']
+      ? state.ws.subscriptions['event-ATDome-azimuthState'].data
+      : undefined,
     dropoutDoorState: state.ws.subscriptions['event-ATDome-dropoutDoorState']
       ? state.ws.subscriptions['event-ATDome-dropoutDoorState'].data
       : undefined,

@@ -34,11 +34,14 @@
   transition: transform 1s;  
 }
 
-.svgOverlay circle {
-  transition: transform 0.5s;
+.svgOverlay .currentPointing {
+  transition: transform 1s;
   backface-visibility: hidden;
   transform-style: preserve-3d;
   fill-opacity: 0.1;
+}
+
+.svgOverlay .targetPointing {
 }
 
 .svgOverlay rect {

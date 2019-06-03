@@ -24,12 +24,13 @@ const DomeContainer = ({
     setInterval(() => {
       setCurrentPosition((prevState) => {
         const newAz = Math.random() * 360;
+        const newEl = Math.random() * 90;
         return {
           az: prevState.targetAz,
           el: prevState.targetEl,
           domeAz: prevState.targetDomeAz,
           targetAz: newAz,
-          targetEl: Math.random() * 90,
+          targetEl: newEl,
           targetDomeAz: newAz + (Math.random()-0.5)*20,
           dropoutDoorOpeningPercentage: 100,
           mainDoorOpeningPercentage: 100,
