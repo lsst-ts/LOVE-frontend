@@ -6,13 +6,18 @@ import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 
-export default class Camera extends Component {
+export default class Dome extends Component {
   static propTypes = {
     // raftsDetailedState: PropTypes.string,
     // imageReadinessDetailedState: PropTypes.string,
     // calibrationDetailedState: PropTypes.string,
     // shutterDetailedState: PropTypes.string,
     // imageSequence: PropTypes.object,
+  };
+
+  static defaultProps = {
+    width: 500,
+    height: 500,
   };
 
   constructor(props) {
@@ -32,8 +37,8 @@ export default class Camera extends Component {
   };
 
   render() {
-    const width = 500;
-    const height = 500;
+    const width = this.props.width;
+    const height = this.props.height;
     const currentPointing = {
       az: this.props.ATMCS_mountEncoders.azimuthCalculatedAngle,
       el: this.props.ATMCS_mountEncoders.elevationCalculatedAngle,
@@ -45,7 +50,7 @@ export default class Camera extends Component {
     const isProjected = true;
     return (
       <div className={styles.domeContainer}>
-        <h2>TOP VIEW</h2>
+        {/* <h2>TOP VIEW</h2> */}
         <div className={styles.skymapGridContainer}>
           <DomePointing
             width={width}
@@ -65,24 +70,41 @@ export default class Camera extends Component {
           />
         </div>
         <div className={styles.telemetryTable}>
-          <span>Mount az: </span>
-          <CurrentTargetValue
-            currentValue={Math.floor(currentPointing.az)}
-            targetValue={Math.floor(targetPointing.az)}
-            isChanging={true}
-          />
-          <span>Mount el: </span>
-          <CurrentTargetValue
-            currentValue={Math.floor(currentPointing.el)}
-            targetValue={Math.floor(targetPointing.el)}
-            isChanging={true}
-          />
-          <span>Dome az: </span>
-          <CurrentTargetValue
-            currentValue={Math.floor(this.props.azimuthPosition)}
-            targetValue={Math.floor(this.props.azimuthCommandedState.azimuth)}
-            isChanging={true}
-          />
+          <div className={styles.azimuthSection}>
+            <h2>Azimuth</h2>
+            <div className={styles.azimuthValues}>
+              <span>Mount az: </span>
+              <CurrentTargetValue
+                currentValue={Math.floor(currentPointing.az)}
+                targetValue={Math.floor(targetPointing.az)}
+                isChanging={true}
+              />
+              <span>Dome az: </span>
+              <CurrentTargetValue
+                currentValue={Math.floor(this.props.azimuthPosition)}
+                targetValue={Math.floor(this.props.azimuthCommandedState.azimuth)}
+                isChanging={true}
+              />
+            </div>
+          </div>
+          <div className={styles.elevationSection}>
+            <h2>Elevation</h2>
+            <span>Mount el: </span>
+            <CurrentTargetValue
+              currentValue={Math.floor(currentPointing.el)}
+              targetValue={Math.floor(targetPointing.el)}
+              isChanging={true}
+            />
+          </div>
+
+          {/* Plots */}
+          <div className={styles.azimuthPlot}>
+            <h2>Elevation</h2>
+          </div>
+
+          <div className={styles.elevationPlot}>
+            <h2>Elevation</h2>
+          </div>
         </div>
       </div>
     );

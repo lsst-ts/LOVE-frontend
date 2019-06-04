@@ -16,22 +16,25 @@ const DomeContainer = ({
   detailedState,
   atMountState,
   target,
+  width,
+  height,
   subscribeToStream,
   unsubscribeToStream,
 }) => {
-  const [currentPosition, setCurrentPosition] = useState({ az: 0, el: 0, domeAz: 0, targetAz: 0, targetEl: 0, targetDomeAz: 0 });
+  const [currentPosition, setCurrentPosition] = useState({ iter: 0, az: 0, el: 0, domeAz: 0, targetAz: 0, targetEl: 0, targetDomeAz: 0 });
   useEffect(() => {
     setInterval(() => {
       setCurrentPosition((prevState) => {
         const newAz = Math.random() * 360;
         const newEl = Math.random() * 90;
         return {
+          iter: prevState.iter === 0 ? 1 : 0,
           az: prevState.targetAz,
           el: prevState.targetEl,
           domeAz: prevState.targetDomeAz,
-          targetAz: newAz,
-          targetEl: newEl,
-          targetDomeAz: newAz + (Math.random()-0.5)*20,
+          targetAz: prevState.iter === 0 ? prevState.targetAz : newAz,
+          targetEl: prevState.iter === 0 ? prevState.targetEl : newEl,
+          targetDomeAz: prevState.iter === 0 ? prevState.targetDomeAz : newAz + (Math.random()-0.5)*20,
           dropoutDoorOpeningPercentage: 100,
           mainDoorOpeningPercentage: 100,
         };
@@ -62,6 +65,8 @@ const DomeContainer = ({
       }}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
+      width={width}
+      height={height}
     />
   );
 };
