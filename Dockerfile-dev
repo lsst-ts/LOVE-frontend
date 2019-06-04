@@ -6,14 +6,10 @@ WORKDIR /usr/src/love
 COPY love/package.json .
 COPY love/package-lock.json .
 COPY love/yarn.lock .
-RUN npm install
-
-# Define url for the websockets host
-ARG WEBSOCKET_HOST=127.0.0.1
-ENV REACT_APP_WEBSOCKET_HOST=$WEBSOCKET_HOST
+RUN yarn install
 
 # Expose port
 EXPOSE 3000
 
 # Run development server in runtime
-CMD npm start
+CMD yarn start
