@@ -6,7 +6,7 @@ WORKDIR /usr/src/love
 ENV PATH /usr/src/love/node_modules/.bin:$PATH
 
 # Install and cache app dependencies
-RUN npm install react-scripts@1.1.1 -g --silent
+RUN npm install react-scripts@3.0.1 -g 
 COPY love/package.json .
 COPY love/package-lock.json .
 COPY love/yarn.lock .
