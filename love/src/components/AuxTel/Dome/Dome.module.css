@@ -1,12 +1,14 @@
 .domeContainer {
-  /* display: flex; */
+  display: flex;
+  flex-direction: column;
   flex-wrap: wrap;
   position: relative;
-  width: fit-content;
+  width: 100%;
 }
 
 .skymapGridContainer {
-  /* display: flex; */
+  display: flex;
+  align-self: center;
   flex-wrap: wrap;
   position: relative;
   width: fit-content;
@@ -50,8 +52,19 @@
 
 .telemetryTable {
   padding-top: 1em;
-  display: inline-grid;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-row-gap: 0.5em;
+  width: 100%;
+}
+
+.azimuthSection {
+}
+
+.azimuthValues {
+  display: grid;
   grid-template-columns: max-content 8em;
   grid-row-gap: 0.5em;
   align-items: center;
+  justify-content: center;
 }
