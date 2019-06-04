@@ -17,6 +17,7 @@ import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import LATISS from './components/AuxTel/LATISS/LATISS';
 import DomeContainer from './components/AuxTel/Dome/Dome.container';
+import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountView';
 
 class App extends Component {
   static propTypes = {
@@ -80,11 +81,12 @@ class App extends Component {
             )}
           />
           <PrivateRoute token={this.props.token} path="/latiss" component={LATISS} />
+          <PrivateRoute token={this.props.token} path="/aux-tel-dome-and-mount" component={DomeAndMountView} />
           <PrivateRoute
             token={this.props.token}
             path="/aux-tel-dome"
             render={() => (
-              <Panel title="Auxiliary Telescope Dome" className={'smallPanel'}>
+              <Panel title="Auxiliary Telescope Dome & Mount" className={'smallPanel'}>
                 <DomeContainer />
               </Panel>
             )}
