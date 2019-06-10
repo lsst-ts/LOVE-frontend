@@ -12,10 +12,6 @@ export default class LabeledStatusText extends Component {
     // imageSequence: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount = () => {
     this.props.subscribeToStream(this.props.groupName);
   };

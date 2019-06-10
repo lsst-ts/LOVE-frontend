@@ -47,14 +47,8 @@ export default class DomePointing extends Component {
   render() {
     const { width, height } = this.props;
     const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
-    const currentPixels = this.azelToPixel(this.props.currentPointing, true);
-    const targetPixels = this.azelToPixel(this.props.targetPointing, true);
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
-    const r0 = 350;
-    const r1 = (90 - el) / 90;
-    const r2 = (90 + Math.abs(el - this.props.targetPointing.el)) / 90;
-    const pathR = r0 * r1 * r2;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
 
@@ -68,7 +62,6 @@ export default class DomePointing extends Component {
           strokeDasharray="4"
           strokeOpacity="0.3"
           stroke="white"
-          strokeWidth="2"
           style={{
             transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el-90}deg)`,
             transformOrigin: `50% 50% ${280}px`,
