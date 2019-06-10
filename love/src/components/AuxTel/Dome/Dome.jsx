@@ -5,6 +5,7 @@ import SkymapGrid from '../Skymap/SkymapGrid';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
+import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
 
 export default class Dome extends Component {
   static propTypes = {
@@ -40,8 +41,8 @@ export default class Dome extends Component {
     const width = this.props.width;
     const height = this.props.height;
     const currentPointing = {
-      az: this.props.ATMCS_mountEncoders.azimuthCalculatedAngle,
-      el: this.props.ATMCS_mountEncoders.elevationCalculatedAngle,
+      az: this.props.mountEncoders.azimuthCalculatedAngle,
+      el: this.props.mountEncoders.elevationCalculatedAngle,
     };
     const targetPointing = {
       az: this.props.target.azimuth,
@@ -99,11 +100,25 @@ export default class Dome extends Component {
 
           {/* Plots */}
           <div className={styles.azimuthPlot}>
-            <h2>Elevation</h2>
+            <h2></h2>
+            <div>
+              <TimeSeriesPlotContainer
+                groupName="telemetry-ATMCS-mountEncoders"
+                accessor={(data) => data.azimuthCalculatedAngle.value}
+                dataLabel={'Azimuth'}
+              />
+            </div>
           </div>
 
           <div className={styles.elevationPlot}>
-            <h2>Elevation</h2>
+            <h2></h2>
+            <div>
+              <TimeSeriesPlotContainer
+                groupName="telemetry-ATMCS-mountEncoders"
+                accessor={(data) => data.elevationCalculatedAngle.value}
+                dataLabel={'Elevation'}
+              />
+            </div>
           </div>
         </div>
       </div>
