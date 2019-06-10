@@ -12,7 +12,7 @@ const DomeContainer = ({
   azimuthCommandedState,
   dropoutDoorState,
   mainDoorState,
-  ATMCS_mountEncoders,
+  mountEncoders,
   detailedState,
   atMountState,
   target,
@@ -53,7 +53,7 @@ const DomeContainer = ({
       }}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
-      ATMCS_mountEncoders={{
+      mountEncoders={{
         elevationCalculatedAngle: currentPosition.el,
         azimuthCalculatedAngle: currentPosition.az,
       }}
@@ -88,7 +88,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATDome-dropoutDoorState'));
       dispatch(requestGroupSubscription('event-ATDome-mainDoorState'));
       //ATMCS
-      dispatch(requestGroupSubscription('telemetry-ATMCS-ATMCS_mountEncoders'));
+      dispatch(requestGroupSubscription('telemetry-ATMCS-mountEncoders'));
       dispatch(requestGroupSubscription('event-ATMCS-detailedState'));
       dispatch(requestGroupSubscription('event-ATMCS-atMountState'));
       dispatch(requestGroupSubscription('event-ATMCS-target'));
@@ -103,7 +103,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-dropoutDoorState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-mainDoorState'));
       //ATMCS
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-ATMCS_mountEncoders'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-mountEncoders'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-detailedState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-atMountState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-target'));
