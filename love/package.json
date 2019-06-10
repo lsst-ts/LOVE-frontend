@@ -22,10 +22,10 @@
     "vega-lite": "^3.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "npx react-scripts start",
+    "build": "npx react-scripts build",
+    "test": "npx react-scripts test",
+    "eject": "npx react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -43,12 +43,14 @@
     ]
   },
   "devDependencies": {
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-only-warn": "^1.0.1",
     "fetch-mock": "^7.3.3",
     "mock-socket": "^8.0.5",
     "jest-dom": "^3.2.2",
     "jest-fetch-mock": "^2.1.2",
     "jest-websocket-mock": "^1.3.0",
-    "react-testing-library": "^7.0.0",
-    "react-dev-utils": "^9.0.1"
+    "react-dev-utils": "^9.0.1",
+    "react-testing-library": "^7.0.0"
   }
 }

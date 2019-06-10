@@ -46,7 +46,7 @@ export default class Login extends Component {
   }
 
   render() {
-    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing && !this.state.userJustSubmitted;
+    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing && !this.props.showSessionExpired;
     return (
       <div className={styles.login}>
         <div className={styles.panel}>
