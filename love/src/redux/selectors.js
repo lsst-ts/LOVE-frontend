@@ -3,7 +3,20 @@ export const getToken = (state) => state.auth.token;
 export const getTokenStatus = (state) => state.auth.status;
 
 export const getStreamData = (state, groupName) => {
+  if(state.ws === undefined)
+    return undefined;
   return state.ws.subscriptions.filter((s) => s.groupName === groupName)[0] ? state.ws.subscriptions.filter((s) => s.groupName === groupName)[0].data : undefined;
+};
+
+export const getTimestampedStreamData = (state, groupName) => {
+  if(state.ws === undefined)
+    return undefined;
+  const data = state.ws.subscriptions.filter((s) => s.groupName === groupName)[0] ? state.ws.subscriptions.filter((s) => s.groupName === groupName)[0].data : undefined;
+  const timestamp = state.ws.subscriptions.filter((s) => s.groupName === groupName)[0] ? state.ws.subscriptions.filter((s) => s.groupName === groupName)[0].timestamp : undefined;
+  return {
+    data: data,
+    timestamp: timestamp,
+  }
 };
 
 export const getCameraState = (state) => {
