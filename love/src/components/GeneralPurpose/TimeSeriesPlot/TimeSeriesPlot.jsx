@@ -16,8 +16,11 @@ export default class TimeSeriesPlot extends Component {
     this.data = [];
     this.state = {
       specDataType: 'quantitative',
+      specName: 'stream'
     };
   }
+
+  static vegaSchema = 'https://vega.github.io/schema/vega-lite/v3.json'; // 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json'
 
   static propTypes = {
     /**
@@ -34,7 +37,7 @@ export default class TimeSeriesPlot extends Component {
 
   static defaultProps = {
     spec: {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
+      $schema: TimeSeriesPlot.vegaSchema,
       description: 'A simple bar chart with embedded data.',
       data: {
         values: [
@@ -98,7 +101,7 @@ export default class TimeSeriesPlot extends Component {
           .remove(() => true)
           .insert(this.data);
 
-        this.vegaEmbedResult.view.change('telemetries', changeSet).run();
+        this.vegaEmbedResult.view.change(this.state.specName, changeSet).run();
       }
     });
   };
@@ -143,11 +146,11 @@ export default class TimeSeriesPlot extends Component {
   changeSpec = (data, name) => {
     const dataType = this.getSpecDataType(this.props.dataType);
     return {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json',
-      description: "Google's stock price over time.",
+      $schema: TimeSeriesPlot.vegaSchema,
+      description: "LOVE stream time series plot",
       data: {
         values: data,
-        name: 'telemetries',
+        name: this.state.specName,
       },
       mark: { type: dataType === 'quantitative' ? 'line' : 'point', point: true },
       encoding: {
@@ -207,7 +210,7 @@ export default class TimeSeriesPlot extends Component {
   render() {
     if (this.vegaEmbedResult) {
       const changeSet = vega.changeset();
-      this.vegaEmbedResult.view.change('telemetries', changeSet).run();
+      this.vegaEmbedResult.view.change(this.state.specName, changeSet).run();
     }
     return <div className={styles.vegaContainer} ref={this.vegaContainer} />;
   }
