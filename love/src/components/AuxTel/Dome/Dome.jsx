@@ -100,23 +100,31 @@ export default class Dome extends Component {
 
           {/* Plots */}
           <div className={styles.azimuthPlot}>
-            <h2></h2>
+            <h2 />
             <div>
               <TimeSeriesPlotContainer
-                groupName="telemetry-ATMCS-mountEncoders"
-                accessor={(data) => data.azimuthCalculatedAngle.value}
-                dataLabel={'Azimuth'}
+                dataSources={['Dome Azimuth', 'Mount Azimuth']}
+                groupNames={{
+                  'Dome Azimuth': 'telemetry-ATDome-position',
+                  'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
+                }}
+                accessors={{
+                  'Dome Azimuth': (data) => data.azimuthPosition.value,
+                  'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
+                }}
               />
             </div>
           </div>
 
           <div className={styles.elevationPlot}>
-            <h2></h2>
+            <h2 />
             <div>
               <TimeSeriesPlotContainer
-                groupName="telemetry-ATMCS-mountEncoders"
-                accessor={(data) => data.elevationCalculatedAngle.value}
-                dataLabel={'Elevation'}
+                dataSources={['Mount Elevation']}
+                groupNames={{ 'Mount Elevation': 'telemetry-ATMCS-mountEncoders' }}
+                accessors={{
+                  'Mount Elevation': (data) => data.elevationCalculatedAngle.value,
+                }}
               />
             </div>
           </div>

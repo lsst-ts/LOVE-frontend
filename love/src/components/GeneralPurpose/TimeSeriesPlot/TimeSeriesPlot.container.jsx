@@ -5,8 +5,7 @@ import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../..
 import TimeSeriesPlot from './TimeSeriesPlot';
 
 const TimeSeriesPlotContainer = ({
-  data,
-  timestamp,
+  streamStates,
   groupName,
   accessor,
   subscribeToStream,
@@ -15,10 +14,9 @@ const TimeSeriesPlotContainer = ({
 }) => {
   return (
     <TimeSeriesPlot
-      data={data}
+      streamStates={streamStates}
       groupName={groupName}
       accessor={accessor}
-      timestamp={timestamp}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       {...props}
@@ -27,8 +25,13 @@ const TimeSeriesPlotContainer = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const streamState = getTimestampedStreamData(state, ownProps.groupName);
-  return { data: streamState.data, timestamp: streamState.timestamp };
+  const streamStates = {};
+  ownProps.dataSources.map(dataSource => {
+    const groupName = ownProps.groupNames[dataSource];
+    const streamState = getTimestampedStreamData(state, groupName);
+    streamStates[dataSource] = { data: streamState.data, timestamp: streamState.timestamp };
+  })
+  return {streamStates: streamStates};
 };
 
 const mapDispatchToProps = (dispatch) => {
