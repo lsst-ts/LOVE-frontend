@@ -65,36 +65,42 @@ export default class TimeSeriesPlot extends Component {
   componentDidUpdate = (prevProps) => {
     const dateInterval = this.props.dateInterval;
 
-    let shouldUpdatePlot = false;
-    const value = this.props.data ? this.props.accessor(this.props.data) : undefined;
-    const timestamp = this.props.timestamp;
+    this.props.dataSources.map((dataSource) => {
+      const accessor = this.props.accessors[dataSource];
+      const data = this.props.streamStates[dataSource].data;
+      const timestamp = this.props.streamStates[dataSource].timestamp;
+      const dataLabel = dataSource;
 
-    const vegaData = {
-      value: value,
-      timestamp: timestamp,
-      source: this.props.dataLabel,
-      dataType: 'quantitative',
-    };
-    if (prevProps.timestamp !== this.props.timestamp) {
-      this.data.push(vegaData);
+      let shouldUpdatePlot = false;
+      const value = data ? accessor(data) : undefined;
 
-      shouldUpdatePlot = true;
-    }
+      const vegaData = {
+        value: value,
+        timestamp: timestamp,
+        source: dataLabel,
+        dataType: 'quantitative',
+      };
+      if (prevProps.timestamp !== timestamp) {
+        this.data.push(vegaData);
 
-    const currDate = new Date();
-    if (this.vegaEmbedResult && shouldUpdatePlot) {
-      this.data = this.data.filter((data) => {
-        const dateDiff = currDate - data.timestamp;
-        return dateDiff < dateInterval;
-      });
+        shouldUpdatePlot = true;
+      }
 
-      const changeSet = vega
-        .changeset()
-        .remove(() => true)
-        .insert(this.data);
+      const currDate = new Date();
+      if (this.vegaEmbedResult && shouldUpdatePlot) {
+        this.data = this.data.filter((data) => {
+          const dateDiff = currDate - data.timestamp;
+          return dateDiff < dateInterval;
+        });
 
-      this.vegaEmbedResult.view.change('telemetries', changeSet).run();
-    }
+        const changeSet = vega
+          .changeset()
+          .remove(() => true)
+          .insert(this.data);
+
+        this.vegaEmbedResult.view.change('telemetries', changeSet).run();
+      }
+    });
   };
 
   getCSSColorByVariableName = (varName) => getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
@@ -185,11 +191,17 @@ export default class TimeSeriesPlot extends Component {
         this.props.dataLabel,
       ),
     );
-    this.props.subscribeToStream(this.props.groupName);
+    this.props.dataSources.map((dataSource) => {
+      const groupName = this.props.groupNames[dataSource];
+      this.props.subscribeToStream(groupName);
+    });
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStream(this.props.groupName);
+    this.props.dataSources.map((dataSource) => {
+      const groupName = this.props.groupNames[dataSource];
+      this.props.unsubscribeToStream(groupName);
+    });
   };
 
   render() {
