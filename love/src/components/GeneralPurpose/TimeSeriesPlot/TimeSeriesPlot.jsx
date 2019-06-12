@@ -16,8 +16,11 @@ export default class TimeSeriesPlot extends Component {
     this.data = {};
     this.state = {
       specDataType: 'quantitative',
+      specName: 'stream'
     };
   }
+
+  static vegaSchema = 'https://vega.github.io/schema/vega-lite/v3.json'; // 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json'
 
   static propTypes = {
     /**
@@ -34,7 +37,7 @@ export default class TimeSeriesPlot extends Component {
 
   static defaultProps = {
     spec: {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
+      $schema: TimeSeriesPlot.vegaSchema,
       description: 'A simple bar chart with embedded data.',
       data: {
         values: [
@@ -114,6 +117,7 @@ export default class TimeSeriesPlot extends Component {
     const spec = Object.assign(
       {
         config: {
+          padding: 15,
           axis: {
             labelColor: this.getCSSColorByVariableName('--base-font-color'),
             titleColor: this.getCSSColorByVariableName('--base-font-color'),
@@ -137,7 +141,7 @@ export default class TimeSeriesPlot extends Component {
       dataSpec,
     );
 
-    vegae(this.vegaContainer.current, spec, { renderer: 'svg', actions: false }).then((vegaEmbedResult) => {
+    vegae(this.vegaContainer.current, spec, { renderer: 'svg', actions: false}).then((vegaEmbedResult) => {
       this.vegaEmbedResult = vegaEmbedResult;
     });
   };
