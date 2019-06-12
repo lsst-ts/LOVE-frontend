@@ -2,17 +2,29 @@ export const getToken = (state) => state.auth.token;
 
 export const getTokenStatus = (state) => state.auth.status;
 
-export const getStreamData = (state, groupName) => {
+export const getStreamsData = (state, groupNames) => {
   if(state.ws === undefined)
-    return undefined;
-  return state.ws.subscriptions.filter((s) => s.groupName === groupName)[0] ? state.ws.subscriptions.filter((s) => s.groupName === groupName)[0].data : undefined;
+  return undefined;
+  
+  const filteredList = state.ws.subscriptions.filter((s) => groupNames.includes(s.groupName));
+  const dict = {};
+
+  filteredList.forEach(s => {
+    dict[s.groupName] = s.data
+  });
+  return dict;
+};
+
+export const getStreamData = (state, groupName) => {
+  return getStreamsData(state, [groupName])[groupName];
 };
 
 export const getTimestampedStreamData = (state, groupName) => {
   if(state.ws === undefined)
     return undefined;
-  const data = state.ws.subscriptions.filter((s) => s.groupName === groupName)[0] ? state.ws.subscriptions.filter((s) => s.groupName === groupName)[0].data : undefined;
-  const timestamp = state.ws.subscriptions.filter((s) => s.groupName === groupName)[0] ? state.ws.subscriptions.filter((s) => s.groupName === groupName)[0].timestamp : undefined;
+  const filteredElement = state.ws.subscriptions.filter((s) => s.groupName === groupName)[0];
+  const data = filteredElement ? filteredElement.data : undefined;
+  const timestamp = filteredElement ? filteredElement.timestamp : undefined;
   return {
     data: data,
     timestamp: timestamp,
