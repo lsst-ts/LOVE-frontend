@@ -88,6 +88,53 @@ export default class Dome extends Component {
               />
             </div>
           </div>
+
+          <div className={styles.azimuthPlot}>
+            <h2 />
+            <div>
+              <TimeSeriesPlotContainer
+                dataSources={['Dome Azimuth', 'Mount Azimuth', 'Mount Target']}
+                // dataSources={['Mount Target']}
+                layers={{
+                  'Dome Azimuth': {
+                    mark: {
+                      interpolate: 'linear',
+                    },
+                  },
+                  'Mount Azimuth': {
+                    mark: {
+                      interpolate: 'linear',
+                      point: false,
+                    },
+                  },
+                  'Mount Target': {
+                    mark: {
+                      interpolate: 'step-before',
+                    },
+                  },
+                }}
+                encoding={{
+                  color: {
+                    scale: {
+                      domain: ['Dome Azimuth', 'Mount Azimuth', 'Mount Target'],
+                      range: ['hsl(201, 22%, 40%)', 'hsl(160, 42%, 40%)', 'white'],
+                    },
+                  },
+                }}
+                groupNames={{
+                  'Dome Azimuth': 'telemetry-ATDome-position',
+                  'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
+                  'Mount Target': 'event-ATMCS-target',
+                }}
+                accessors={{
+                  'Dome Azimuth': (data) => data.azimuthPosition.value,
+                  'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
+                  'Mount Target': (data) => (data[0].azimuth ? data[0].azimuth.value : undefined),
+                }}
+              />
+            </div>
+          </div>
+
           <div className={styles.elevationSection}>
             <h2>Elevation</h2>
             <span>Mount el: </span>
@@ -99,31 +146,40 @@ export default class Dome extends Component {
           </div>
 
           {/* Plots */}
-          <div className={styles.azimuthPlot}>
-            <h2 />
-            <div>
-              <TimeSeriesPlotContainer
-                dataSources={['Dome Azimuth', 'Mount Azimuth']}
-                groupNames={{
-                  'Dome Azimuth': 'telemetry-ATDome-position',
-                  'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
-                }}
-                accessors={{
-                  'Dome Azimuth': (data) => data.azimuthPosition.value,
-                  'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
-                }}
-              />
-            </div>
-          </div>
 
           <div className={styles.elevationPlot}>
             <h2 />
             <div>
               <TimeSeriesPlotContainer
-                dataSources={['Mount Elevation']}
-                groupNames={{ 'Mount Elevation': 'telemetry-ATMCS-mountEncoders' }}
+                dataSources={['Mount Elevation', 'Mount Target']}
+                layers={{
+                  'Mount Elevation': {
+                    mark: {
+                      interpolate: 'linear',
+                      point: false,
+                    },
+                  },
+                  'Mount Target': {
+                    mark: {
+                      interpolate: 'step-before',
+                    },
+                  },
+                }}
+                encoding={{
+                  color: {
+                    scale: {
+                      domain: ['Mount Elevation', 'Mount Target'],
+                      range: ['hsl(201, 22%, 40%)', 'white'],
+                    },
+                  },
+                }}
+                groupNames={{
+                  'Mount Elevation': 'telemetry-ATMCS-mountEncoders',
+                  'Mount Target': 'event-ATMCS-target',
+                }}
                 accessors={{
                   'Mount Elevation': (data) => data.elevationCalculatedAngle.value,
+                  'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
                 }}
               />
             </div>

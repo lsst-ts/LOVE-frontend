@@ -13,7 +13,7 @@ export default class TimeSeriesPlot extends Component {
     super();
     this.vegaContainer = React.createRef();
     this.vegaEmbedResult = null;
-    this.data = [];
+    this.data = {};
     this.state = {
       specDataType: 'quantitative',
     };
@@ -57,6 +57,7 @@ export default class TimeSeriesPlot extends Component {
     },
     dataLabel: '',
     dateInterval: 60000,
+    encoding: {},
 
     dateEnd: Infinity,
     dateStart: -Infinity,
@@ -81,14 +82,15 @@ export default class TimeSeriesPlot extends Component {
         dataType: 'quantitative',
       };
       if (prevProps.timestamp !== timestamp) {
-        this.data.push(vegaData);
+        if (this.data[dataSource] === undefined) this.data[dataSource] = [];
+        this.data[dataSource].push(vegaData);
 
         shouldUpdatePlot = true;
       }
 
       const currDate = new Date();
       if (this.vegaEmbedResult && shouldUpdatePlot) {
-        this.data = this.data.filter((data) => {
+        this.data[dataSource] = this.data[dataSource].filter((data) => {
           const dateDiff = currDate - data.timestamp;
           return dateDiff < dateInterval;
         });
@@ -96,9 +98,9 @@ export default class TimeSeriesPlot extends Component {
         const changeSet = vega
           .changeset()
           .remove(() => true)
-          .insert(this.data);
+          .insert(this.data[dataSource]);
 
-        this.vegaEmbedResult.view.change('telemetries', changeSet).run();
+        // this.vegaEmbedResult.view.change(dataLabel, changeSet).run();
       }
     });
   };
@@ -106,7 +108,7 @@ export default class TimeSeriesPlot extends Component {
   getCSSColorByVariableName = (varName) => getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);
 
   remountPlot = (dataSpec) => {
-    this.data = [];
+    this.data = {};
     const labelFontSize = 14;
     const titleFontSize = 16;
     const spec = Object.assign(
@@ -142,33 +144,48 @@ export default class TimeSeriesPlot extends Component {
 
   changeSpec = (data, name) => {
     const dataType = this.getSpecDataType(this.props.dataType);
-    return {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json',
-      description: "Google's stock price over time.",
-      data: {
-        values: data,
-        name: 'telemetries',
-      },
-      mark: { type: dataType === 'quantitative' ? 'line' : 'point', point: true },
-      encoding: {
-        x: {
-          field: 'timestamp',
-          type: 'temporal',
-          title: 'date',
+    const encoding = this.props.encoding;
+    const layers = Object.keys(this.props.layers).map((layerName) => {
+      const layer = this.props.layers[layerName];
+      const color = layer.encoding? layer.encoding.color : undefined;
+      return {
+        data: {
+          values: data,
+          name: layerName,
         },
-        y: {
-          field: 'value',
-          type: dataType,
-          title: this.props.dataLabel,
-        },
-        color: {
-          field: 'source',
-          type: 'nominal',
-          legend: {
-            title: `Parameter Names${' '.repeat(32)}`,
+        mark: { type: dataType === 'quantitative' ? 'line' : 'point', ...layer.mark },
+        encoding: {
+          x: {
+            field: 'timestamp',
+            type: 'temporal',
+            title: 'date',
+          },
+          y: {
+            field: 'value',
+            type: dataType,
+            title: this.props.dataLabel,
+          },
+          color: {
+            field: 'source',
+            type: 'nominal',
+            legend: {
+              title: `Parameter Names${' '.repeat(32)}`,
+            },
+            ...encoding.color
           },
         },
-      },
+      };
+    });
+
+    console.log(layers);
+    return {
+      $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
+      description: "Google's stock price over time.",
+      // data: {
+      //   values: data,
+      //   name: 'telemetries',
+      // },
+      layer: layers,
     };
   };
 
@@ -206,8 +223,17 @@ export default class TimeSeriesPlot extends Component {
 
   render() {
     if (this.vegaEmbedResult) {
-      const changeSet = vega.changeset();
-      this.vegaEmbedResult.view.change('telemetries', changeSet).run();
+      // const changeSet = vega.changeset();
+      // this.vegaEmbedResult.view.change('telemetries', changeSet).run();
+
+      this.props.dataSources.map((dataSource) => {
+        const changeSet = vega
+          .changeset()
+          .remove(() => true)
+          .insert(this.data[dataSource]);
+
+        this.vegaEmbedResult.view.change(dataSource, changeSet).run();
+      });
     }
     return <div className={styles.vegaContainer} ref={this.vegaContainer} />;
   }
