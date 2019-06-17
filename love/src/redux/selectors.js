@@ -3,14 +3,13 @@ export const getToken = (state) => state.auth.token;
 export const getTokenStatus = (state) => state.auth.status;
 
 export const getStreamsData = (state, groupNames) => {
-  if(state.ws === undefined)
-  return undefined;
-  
+  if (state.ws === undefined) return undefined;
+
   const filteredList = state.ws.subscriptions.filter((s) => groupNames.includes(s.groupName));
   const dict = {};
 
-  filteredList.forEach(s => {
-    dict[s.groupName] = s.data
+  filteredList.forEach((s) => {
+    dict[s.groupName] = s.data;
   });
   return dict;
 };
@@ -20,15 +19,14 @@ export const getStreamData = (state, groupName) => {
 };
 
 export const getTimestampedStreamData = (state, groupName) => {
-  if(state.ws === undefined)
-    return undefined;
+  if (state.ws === undefined) return undefined;
   const filteredElement = state.ws.subscriptions.filter((s) => s.groupName === groupName)[0];
   const data = filteredElement ? filteredElement.data : undefined;
   const timestamp = filteredElement ? filteredElement.timestamp : undefined;
   return {
     data: data,
     timestamp: timestamp,
-  }
+  };
 };
 
 export const getCameraState = (state) => {
@@ -36,39 +34,29 @@ export const getCameraState = (state) => {
 };
 
 export const getDomeState = (state) => {
+  const domeSubscriptions = [
+    'telemetry-ATDome-position',
+    'event-ATDome-azimuthState',
+    'event-ATDome-azimuthState',
+    'event-ATDome-dropoutDoorState',
+    'event-ATDome-mainDoorState',
+    'telemetry-ATMCS-ATMCS_mountEncoders',
+    'event-ATMCS-detailedState',
+    'event-ATMCS-atMountState',
+    'event-ATMCS-target',
+  ];
+  const domeData = getStreamsData(state, domeSubscriptions);
   return {
-    dropoutDoorOpeningPercentage: state.ws.subscriptions['telemetry-ATDome-dropoutDoorOpeningPercentage']
-      ? state.ws.subscriptions['telemetry-ATDome-dropoutDoorOpeningPercentage'].data
-      : undefined,
-    mainDoorOpeningPercentage: state.ws.subscriptions['telemetry-ATDome-mainDoorOpeningPercentage']
-      ? state.ws.subscriptions['telemetry-ATDome-mainDoorOpeningPercentage'].data
-      : undefined,
-    azimuthPosition: state.ws.subscriptions['telemetry-ATDome-azimuthPosition']
-      ? state.ws.subscriptions['telemetry-ATDome-azimuthPosition'].data
-      : undefined,
-    azimuthState: state.ws.subscriptions['event-ATDome-azimuthState']
-      ? state.ws.subscriptions['event-ATDome-azimuthState'].data
-      : undefined,
-    azimuthCommandedState: state.ws.subscriptions['event-ATDome-azimuthState']
-      ? state.ws.subscriptions['event-ATDome-azimuthState'].data
-      : undefined,
-    dropoutDoorState: state.ws.subscriptions['event-ATDome-dropoutDoorState']
-      ? state.ws.subscriptions['event-ATDome-dropoutDoorState'].data
-      : undefined,
-    mainDoorState: state.ws.subscriptions['event-ATDome-mainDoorState']
-      ? state.ws.subscriptions['event-ATDome-mainDoorState'].data
-      : undefined,
-    ATMCS_mountEncoders: state.ws.subscriptions['telemetry-ATMCS-ATMCS_mountEncoders']
-      ? state.ws.subscriptions['telemetry-ATMCS-ATMCS_mountEncoders'].data
-      : undefined,
-    detailedState: state.ws.subscriptions['event-ATMCS-detailedState']
-      ? state.ws.subscriptions['event-ATMCS-detailedState'].data
-      : undefined,
-    atMountState: state.ws.subscriptions['event-ATMCS-atMountState']
-      ? state.ws.subscriptions['event-ATMCS-atMountState'].data
-      : undefined,
-    target: state.ws.subscriptions['event-ATMCS-target']
-      ? state.ws.subscriptions['event-ATMCS-target'].data
-      : undefined,
+    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['dropoutDoorOpeningPercentage']:0,
+    mainDoorOpeningPercentage: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['mainDoorOpeningPercentage']:0,
+    azimuthPosition: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['azimuthPosition']:0,
+    azimuthState: domeData['event-ATDome-azimuthState'],
+    azimuthCommandedState: domeData['event-ATDome-azimuthState'],
+    dropoutDoorState: domeData['event-ATDome-dropoutDoorState'],
+    mainDoorState: domeData['event-ATDome-mainDoorState'],
+    ATMCS_mountEncoders: domeData['telemetry-ATMCS-ATMCS_mountEncoders'],
+    detailedState: domeData['event-ATMCS-detailedState'],
+    atMountState: domeData['event-ATMCS-atMountState'],
+    target: domeData['event-ATMCS-target'],
   };
 };

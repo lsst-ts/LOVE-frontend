@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Dome from './Dome';
 import { getDomeState } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { hasFakeData } from '../../../Config';
 
 const DomeContainer = ({
   dropoutDoorOpeningPercentage,
@@ -21,7 +22,15 @@ const DomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
 }) => {
-  const [currentPosition, setCurrentPosition] = useState({ iter: 0, az: 0, el: 0, domeAz: 0, targetAz: 0, targetEl: 0, targetDomeAz: 0 });
+  const [currentPosition, setCurrentPosition] = useState({
+    iter: 0,
+    az: 0,
+    el: 0,
+    domeAz: 0,
+    targetAz: 0,
+    targetEl: 0,
+    targetDomeAz: 0,
+  });
   useEffect(() => {
     setInterval(() => {
       setCurrentPosition((prevState) => {
@@ -34,7 +43,7 @@ const DomeContainer = ({
           domeAz: prevState.targetDomeAz,
           targetAz: prevState.iter === 0 ? prevState.targetAz : newAz,
           targetEl: prevState.iter === 0 ? prevState.targetEl : newEl,
-          targetDomeAz: prevState.iter === 0 ? prevState.targetDomeAz : newAz + (Math.random()-0.5)*20,
+          targetDomeAz: prevState.iter === 0 ? prevState.targetDomeAz : newAz + (Math.random() - 0.5) * 20,
           dropoutDoorOpeningPercentage: 100,
           mainDoorOpeningPercentage: 100,
         };
@@ -42,27 +51,49 @@ const DomeContainer = ({
     }, 2000);
     return () => {};
   }, []);
+  if (hasFakeData) {
+    return (
+      <Dome
+        dropoutDoorOpeningPercentage={currentPosition.dropoutDoorOpeningPercentage}
+        mainDoorOpeningPercentage={currentPosition.mainDoorOpeningPercentage}
+        azimuthPosition={currentPosition.domeAz}
+        azimuthState={azimuthState}
+        azimuthCommandedState={{
+          azimuth: currentPosition.targetDomeAz,
+        }}
+        dropoutDoorState={dropoutDoorState}
+        mainDoorState={mainDoorState}
+        mountEncoders={{
+          elevationCalculatedAngle: currentPosition.el,
+          azimuthCalculatedAngle: currentPosition.az,
+        }}
+        detailedState={detailedState}
+        atMountState={atMountState}
+        target={{
+          elevation: currentPosition.targetEl,
+          azimuth: currentPosition.targetAz,
+        }}
+        subscribeToStream={subscribeToStream}
+        unsubscribeToStream={unsubscribeToStream}
+        width={width}
+        height={height}
+      />
+    );
+  }
+
   return (
     <Dome
-      dropoutDoorOpeningPercentage={currentPosition.dropoutDoorOpeningPercentage}
-      mainDoorOpeningPercentage={currentPosition.mainDoorOpeningPercentage}
-      azimuthPosition={currentPosition.domeAz}
+      dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
+      mainDoorOpeningPercentage={mainDoorOpeningPercentage}
+      azimuthPosition={azimuthPosition}
       azimuthState={azimuthState}
-      azimuthCommandedState={{
-        azimuth: currentPosition.targetDomeAz
-      }}
+      azimuthCommandedState={azimuthCommandedState}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
-      mountEncoders={{
-        elevationCalculatedAngle: currentPosition.el,
-        azimuthCalculatedAngle: currentPosition.az,
-      }}
+      mountEncoders={mountEncoders}
       detailedState={detailedState}
       atMountState={atMountState}
-      target={{
-        elevation: currentPosition.targetEl,
-        azimuth: currentPosition.targetAz,
-      }}
+      target={target}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       width={width}
