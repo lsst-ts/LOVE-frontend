@@ -41,14 +41,15 @@ export default class Dome extends Component {
     const width = this.props.width;
     const height = this.props.height;
     const currentPointing = {
-      az: this.props.mountEncoders.azimuthCalculatedAngle,
-      el: this.props.mountEncoders.elevationCalculatedAngle,
+      az: this.props.mountEncoders ? this.props.mountEncoders.azimuthCalculatedAngle : 0,
+      el: this.props.mountEncoders ? this.props.mountEncoders.elevationCalculatedAngle : 0,
     };
     const targetPointing = {
-      az: this.props.target.azimuth,
-      el: this.props.target.elevation,
+      az: this.props.target ? this.props.target.azimuth : 0,
+      el: this.props.target ? this.props.target.elevation : 0,
     };
     const isProjected = true;
+    // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
         {/* <h2>TOP VIEW</h2> */}
@@ -67,7 +68,7 @@ export default class Dome extends Component {
             azimuthPosition={this.props.azimuthPosition}
             dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
             mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
-            targetAzimuthPosition={this.props.azimuthCommandedState.azimuth}
+            targetAzimuthPosition={this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0}
           />
         </div>
         <div className={styles.telemetryTable}>
@@ -83,7 +84,7 @@ export default class Dome extends Component {
               <span>Dome az: </span>
               <CurrentTargetValue
                 currentValue={Math.floor(this.props.azimuthPosition)}
-                targetValue={Math.floor(this.props.azimuthCommandedState.azimuth)}
+                targetValue={Math.floor(this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0)}
                 isChanging={true}
               />
             </div>
@@ -178,7 +179,7 @@ export default class Dome extends Component {
                   'Mount Target': 'event-ATMCS-target',
                 }}
                 accessors={{
-                  'Mount Elevation': (data) => data.elevationCalculatedAngle.value,
+                  'Mount Elevation': (data) => data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value : 0,
                   'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
                 }}
               />
