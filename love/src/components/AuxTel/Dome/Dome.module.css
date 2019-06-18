@@ -15,7 +15,7 @@
 }
 
 .skymapGridContainer svg {
-  vertical-align:top;
+  vertical-align: top;
 }
 
 .skymapContainer h2 {
@@ -25,15 +25,20 @@
 .grid {
 }
 
+.topRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .svgOverlay {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%,-50%);
+  transform: translate(-50%, -50%);
 }
 
 .svgOverlay .rotatingDome {
-  transition: transform 1s;  
+  transition: transform 1s;
 }
 
 .svgOverlay .currentPointing {
@@ -67,6 +72,13 @@
   grid-row-gap: 0.5em;
   align-items: center;
   justify-content: center;
+}
+
+.windRoseContainer {
+  position: absolute;
+  left: 3%;
+  top: 1%;
+  width: 12%;
 }
 
 @media (min-width: 1600px) {

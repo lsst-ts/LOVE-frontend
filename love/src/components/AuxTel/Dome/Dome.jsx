@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Dome.module.css';
 import SkymapGrid from '../Skymap/SkymapGrid';
+import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
+import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 
 export default class Dome extends Component {
   static propTypes = {
@@ -52,24 +54,31 @@ export default class Dome extends Component {
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
-        {/* <h2>TOP VIEW</h2> */}
-        <div className={styles.skymapGridContainer}>
-          <DomePointing
-            width={width}
-            height={height}
-            currentPointing={currentPointing}
-            targetPointing={targetPointing}
-            isProjected={isProjected}
-          />
-          <SkymapGrid width={width} height={height} isProjected={isProjected} />
-          <DomeShutter
-            width={width}
-            height={height}
-            azimuthPosition={this.props.azimuthPosition}
-            dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
-            mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
-            targetAzimuthPosition={this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0}
-          />
+        <h2>TOP VIEW</h2>
+        <div className={styles.topRow}>
+          <div className={styles.summaryTable}>dsadasd</div>
+          <div className={styles.skymapGridContainer}>
+            {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
+          <div className={styles.windRoseContainer}>
+            <WindRose></WindRose>
+          </div>
+            <DomeTopView width={width} height={height} />
+            <DomeShutter
+              width={width}
+              height={height}
+              azimuthPosition={this.props.azimuthPosition}
+              dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
+              mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
+              targetAzimuthPosition={this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0}
+            />
+            <DomePointing
+              width={width}
+              height={height}
+              currentPointing={currentPointing}
+              targetPointing={targetPointing}
+              isProjected={isProjected}
+            />
+          </div>
         </div>
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
@@ -84,7 +93,9 @@ export default class Dome extends Component {
               <span>Dome az: </span>
               <CurrentTargetValue
                 currentValue={Math.floor(this.props.azimuthPosition)}
-                targetValue={Math.floor(this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0)}
+                targetValue={Math.floor(
+                  this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0,
+                )}
                 isChanging={true}
               />
             </div>
@@ -179,7 +190,8 @@ export default class Dome extends Component {
                   'Mount Target': 'event-ATMCS-target',
                 }}
                 accessors={{
-                  'Mount Elevation': (data) => data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value : 0,
+                  'Mount Elevation': (data) =>
+                    data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value : 0,
                   'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
                 }}
               />
