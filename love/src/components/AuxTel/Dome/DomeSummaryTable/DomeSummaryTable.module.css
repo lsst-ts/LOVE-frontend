@@ -1,6 +1,8 @@
 .summaryTable {
   display: grid;
   grid-template-columns: 1fr max-content;
+  grid-auto-rows: max-content;
+  grid-row-gap: 0.2em;
   padding: 0 2em;
   max-width: 25em;
   min-width: 20em;

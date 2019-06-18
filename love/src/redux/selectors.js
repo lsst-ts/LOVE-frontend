@@ -37,7 +37,7 @@ export const getDomeState = (state) => {
   const domeSubscriptions = [
     'telemetry-ATDome-position',
     'event-ATDome-azimuthState',
-    'event-ATDome-azimuthState',
+    'event-ATDome-azimuthCommandedState',
     'event-ATDome-dropoutDoorState',
     'event-ATDome-mainDoorState',
     'telemetry-ATMCS-ATMCS_mountEncoders',
@@ -51,7 +51,7 @@ export const getDomeState = (state) => {
     mainDoorOpeningPercentage: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['mainDoorOpeningPercentage']:0,
     azimuthPosition: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['azimuthPosition']:0,
     azimuthState: domeData['event-ATDome-azimuthState'],
-    azimuthCommandedState: domeData['event-ATDome-azimuthState'],
+    azimuthCommandedState: domeData['event-ATDome-azimuthCommandedState'],
     dropoutDoorState: domeData['event-ATDome-dropoutDoorState'],
     mainDoorState: domeData['event-ATDome-mainDoorState'],
     ATMCS_mountEncoders: domeData['telemetry-ATMCS-ATMCS_mountEncoders'],
