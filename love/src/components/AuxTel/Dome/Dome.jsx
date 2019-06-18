@@ -50,13 +50,27 @@ export default class Dome extends Component {
       az: this.props.target ? this.props.target.azimuth : 0,
       el: this.props.target ? this.props.target.elevation : 0,
     };
+    const domeTargetAz = this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0;
+    const mountTrackingState = this.props.atMountState ? this.props.atMountState[0].state.value : 3;
+    const azimuthState = this.props.azimuthState ? this.props.azimuthState[0].state.value : 3;
+    const dropoutDoorState = this.props.dropoutDoorState ? this.props.dropoutDoorState[0].state.value : 5;
+    const mainDoorState = this.props.mainDoorState ? this.props.mainDoorState[0].state.value : 5;
     const isProjected = true;
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
         {/* <h2>TOP VIEW</h2> */}
         <div className={styles.topRow}>
-          <DomeSummaryTable />
+          <DomeSummaryTable
+            currentPointing={currentPointing}
+            targetPointing={targetPointing}
+            domeAz={this.props.azimuthPosition}
+            domeTargetAz={domeTargetAz}
+            azimuthState={azimuthState}
+            dropoutDoorState={dropoutDoorState}
+            mainDoorState={mainDoorState}
+            mountTrackingState={mountTrackingState}
+          />
           <div className={styles.skymapGridContainer}>
             {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
             <div className={styles.windRoseContainer}>
@@ -69,7 +83,7 @@ export default class Dome extends Component {
               azimuthPosition={this.props.azimuthPosition}
               dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
               mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
-              targetAzimuthPosition={this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0}
+              targetAzimuthPosition={domeTargetAz}
             />
             <DomePointing
               width={width}

@@ -34,8 +34,8 @@ const DomeContainer = ({
   useEffect(() => {
     setInterval(() => {
       setCurrentPosition((prevState) => {
-        const newAz = Math.random() * 360;
-        const newEl = Math.random() * 90;
+        const newAz = Math.round(Math.random() * 360);
+        const newEl = Math.round(Math.random() * 90);
         return {
           iter: prevState.iter === 0 ? 1 : 0,
           az: prevState.targetAz,
@@ -43,7 +43,7 @@ const DomeContainer = ({
           domeAz: prevState.targetDomeAz,
           targetAz: prevState.iter === 0 ? prevState.targetAz : newAz,
           targetEl: prevState.iter === 0 ? prevState.targetEl : newEl,
-          targetDomeAz: prevState.iter === 0 ? prevState.targetDomeAz : newAz + (Math.random() - 0.5) * 20,
+          targetDomeAz: prevState.iter === 0 ? prevState.targetDomeAz : newAz + Math.round((Math.random() - 0.5) * 20),
           dropoutDoorOpeningPercentage: 100,
           mainDoorOpeningPercentage: 100,
         };

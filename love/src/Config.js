@@ -99,3 +99,70 @@ export const stateToStyleCamera = {
   END_READOUT: 'ok',
   END_TELEMETRY: 'ok',
 };
+
+
+// Dome and mount view
+export const domeAzimuthStateMap = {
+  0: 'NOTINMOTION',
+  1: 'MOVINGCW',
+  2: 'MOVINGCCW',
+  3: 'UNKNOWN',
+};
+
+export const dropoutDoorStateMap = {
+  0: 'CLOSED',
+  1: 'OPEN',
+  2: 'PARTIALLY_OPEN',
+  3: 'OPENING',
+  4: 'CLOSING',
+  5: 'UNKNOWN',
+};
+
+export const mainDoorStateMap = {
+  0: 'CLOSED',
+  1: 'OPEN',
+  2: 'PARTIALLY_OPEN',
+  3: 'OPENING',
+  4: 'CLOSING',
+  5: 'UNKNOWN',
+};
+
+export const mountTrackingStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'STOPPING',
+  3: 'UNKNOWN',
+};
+
+export const m3RotatorStateMap = {
+  0: 'NASMITH1',
+  1: 'NASMITH2',
+  2: 'PORT3',
+  3: 'INMOTION',
+  4: 'UNKNOWN',
+};
+
+export const m3PortStateMap = {
+  0: 'NASMITH1',
+  1: 'NASMITH2',
+  2: 'PORT3',
+};
+
+export const stateToStyleDomeAndMount = {
+  NASMITH1: 'ok',
+  NASMITH2: 'ok',
+  PORT3: 'ok',
+  UNKNOWN: 'warning',
+  INMOTION: 'running',
+  STOPPING: 'warning',
+  ENABLED: 'ok',
+  DISABLED: 'warning',
+  CLOSING: 'running',
+  OPENING: 'running',
+  PARTIALLY_OPEN: 'warning',
+  OPEN: 'ok',
+  CLOSED: 'ok',
+  NOTINMOTION: 'ok',
+  MOVINGCW: 'running',
+  MOVINGCCW: 'running',
+}
