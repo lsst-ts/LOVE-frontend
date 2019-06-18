@@ -1,0 +1,24 @@
+.summaryTable {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  padding: 0 2em;
+  max-width: 25em;
+  min-width: 20em;
+  justify-content: center;
+}
+
+.summaryTable .title {
+  margin-right: auto;
+  font-size: var(--font-size-larger);
+}
+
+.summaryTable .label {
+  margin-right: auto;
+  padding-left: 1em;
+  line-height: 2em;
+}
+
+.summaryTable .value {
+  /* font-size: var(--font-size-large); */
+  padding: 0.2em 2em;
+}

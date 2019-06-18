@@ -5,9 +5,9 @@ import SkymapGrid from '../Skymap/SkymapGrid';
 import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
-import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
+import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 
 export default class Dome extends Component {
   static propTypes = {
@@ -54,14 +54,14 @@ export default class Dome extends Component {
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
-        <h2>TOP VIEW</h2>
+        {/* <h2>TOP VIEW</h2> */}
         <div className={styles.topRow}>
-          <div className={styles.summaryTable}>dsadasd</div>
+          <DomeSummaryTable />
           <div className={styles.skymapGridContainer}>
             {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
-          <div className={styles.windRoseContainer}>
-            <WindRose></WindRose>
-          </div>
+            <div className={styles.windRoseContainer}>
+              <WindRose />
+            </div>
             <DomeTopView width={width} height={height} />
             <DomeShutter
               width={width}
@@ -83,118 +83,90 @@ export default class Dome extends Component {
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
             <h2>Azimuth</h2>
-            <div className={styles.azimuthValues}>
-              <span>Mount az: </span>
-              <CurrentTargetValue
-                currentValue={Math.floor(currentPointing.az)}
-                targetValue={Math.floor(targetPointing.az)}
-                isChanging={true}
-              />
-              <span>Dome az: </span>
-              <CurrentTargetValue
-                currentValue={Math.floor(this.props.azimuthPosition)}
-                targetValue={Math.floor(
-                  this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0,
-                )}
-                isChanging={true}
-              />
-            </div>
-          </div>
-
-          <div className={styles.azimuthPlot}>
-            <h2 />
-            <div>
-              <TimeSeriesPlotContainer
-                dataSources={['Dome Azimuth', 'Mount Azimuth', 'Mount Target']}
-                // dataSources={['Mount Target']}
-                layers={{
-                  'Dome Azimuth': {
-                    mark: {
-                      interpolate: 'linear',
+            <div className={styles.azimuthPlot}>
+              <div>
+                <TimeSeriesPlotContainer
+                  dataSources={['Dome Azimuth', 'Mount Azimuth', 'Mount Target']}
+                  // dataSources={['Mount Target']}
+                  layers={{
+                    'Dome Azimuth': {
+                      mark: {
+                        interpolate: 'linear',
+                      },
                     },
-                  },
-                  'Mount Azimuth': {
-                    mark: {
-                      interpolate: 'linear',
-                      point: false,
+                    'Mount Azimuth': {
+                      mark: {
+                        interpolate: 'linear',
+                        point: false,
+                      },
                     },
-                  },
-                  'Mount Target': {
-                    mark: {
-                      interpolate: 'step-before',
+                    'Mount Target': {
+                      mark: {
+                        interpolate: 'step-before',
+                      },
                     },
-                  },
-                }}
-                encoding={{
-                  color: {
-                    scale: {
-                      domain: ['Dome Azimuth', 'Mount Azimuth', 'Mount Target'],
-                      range: ['hsl(201, 22%, 40%)', 'hsl(160, 42%, 40%)', 'white'],
+                  }}
+                  encoding={{
+                    color: {
+                      scale: {
+                        domain: ['Dome Azimuth', 'Mount Azimuth', 'Mount Target'],
+                        range: ['hsl(201, 22%, 40%)', 'hsl(160, 42%, 40%)', 'white'],
+                      },
                     },
-                  },
-                }}
-                groupNames={{
-                  'Dome Azimuth': 'telemetry-ATDome-position',
-                  'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
-                  'Mount Target': 'event-ATMCS-target',
-                }}
-                accessors={{
-                  'Dome Azimuth': (data) => data.azimuthPosition.value,
-                  'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
-                  'Mount Target': (data) => (data[0].azimuth ? data[0].azimuth.value : undefined),
-                }}
-              />
+                  }}
+                  groupNames={{
+                    'Dome Azimuth': 'telemetry-ATDome-position',
+                    'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
+                    'Mount Target': 'event-ATMCS-target',
+                  }}
+                  accessors={{
+                    'Dome Azimuth': (data) => data.azimuthPosition.value,
+                    'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
+                    'Mount Target': (data) => (data[0].azimuth ? data[0].azimuth.value : undefined),
+                  }}
+                />
+              </div>
             </div>
           </div>
 
           <div className={styles.elevationSection}>
             <h2>Elevation</h2>
-            <span>Mount el: </span>
-            <CurrentTargetValue
-              currentValue={Math.floor(currentPointing.el)}
-              targetValue={Math.floor(targetPointing.el)}
-              isChanging={true}
-            />
-          </div>
-
-          {/* Plots */}
-
-          <div className={styles.elevationPlot}>
-            <h2 />
-            <div>
-              <TimeSeriesPlotContainer
-                dataSources={['Mount Elevation', 'Mount Target']}
-                layers={{
-                  'Mount Elevation': {
-                    mark: {
-                      interpolate: 'linear',
-                      point: false,
+            <div className={styles.elevationPlot}>
+              <div>
+                <TimeSeriesPlotContainer
+                  dataSources={['Mount Elevation', 'Mount Target']}
+                  layers={{
+                    'Mount Elevation': {
+                      mark: {
+                        interpolate: 'linear',
+                        point: false,
+                      },
                     },
-                  },
-                  'Mount Target': {
-                    mark: {
-                      interpolate: 'step-before',
+                    'Mount Target': {
+                      mark: {
+                        interpolate: 'step-before',
+                      },
                     },
-                  },
-                }}
-                encoding={{
-                  color: {
-                    scale: {
-                      domain: ['Mount Elevation', 'Mount Target'],
-                      range: ['hsl(201, 22%, 40%)', 'white'],
+                  }}
+                  encoding={{
+                    color: {
+                      scale: {
+                        domain: ['Mount Elevation', 'Mount Target'],
+                        range: ['hsl(201, 22%, 40%)', 'white'],
+                      },
                     },
-                  },
-                }}
-                groupNames={{
-                  'Mount Elevation': 'telemetry-ATMCS-mountEncoders',
-                  'Mount Target': 'event-ATMCS-target',
-                }}
-                accessors={{
-                  'Mount Elevation': (data) =>
-                    data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value : 0,
-                  'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
-                }}
-              />
+                  }}
+                  groupNames={{
+                    'Mount Elevation': 'telemetry-ATMCS-mountEncoders',
+                    'Mount Target': 'event-ATMCS-target',
+                  }}
+                  accessors={{
+                    'Mount Elevation': (data) =>
+                      data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value : 0,
+                    'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
+                  }}
+                />
+              </div>
             </div>
           </div>
         </div>
