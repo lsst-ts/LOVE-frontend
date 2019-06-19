@@ -4,47 +4,29 @@ export const hasCommandPrivileges = false;
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
-    'CSC Group 1': [
-      'ScriptQueue',
-      'scheduler',
+    'ATTCS': [
+      'ATMCS',
+      'ATPtg'
+      'ATDome',
+      'ATDomeTrajectory',
+      'ATAOS',
+      'ATPneumatics',
+      'ATHexapod',
+    ],
+    'ATCalSys':[
       'ATMonochromator',
       'FiberSpectrograph',
-      'ATCamera',
-      'Scheduler3',
-      'ScriptQueue3',
-      'Scheduler4',
-      'ScriptQueue4',
-      'Scheduler5',
-      'ScriptQueue5',
-      'Scheduler6',
-      'ScriptQueue6',
-      'Scheduler7',
-      'ScriptQueue7',
-      'Scheduler8',
-      'ScriptQueue8',
-      'Scheduler9',
-      'ScriptQueue9',
-      'Scheduler10',
-      'ScriptQueue10',
-      'Scheduler11',
-      'ScriptQueue11',
-      'Scheduler12',
-      'ScriptQueue12',
-      'Scheduler13',
-      'ScriptQueue13',
-      'Scheduler14',
-      'ScriptQueue14',
-      'Scheduler15',
-      'ScriptQueue15',
-      'Scheduler16',
-      'ScriptQueue16',
-      'Scheduler17',
-      'ScriptQueue17',
-      'Scheduler18',
-      'ScriptQueue18',
-      'Scheduler19',
-      'ScriptQueue19',
-      'Scheduler20',
+      'ATWhiteLight',
+      'Electrometer1',
+      'Electrometer2',
+      'LinearStage1',
+      'LinearStage2'
+    ],
+    'LATISS': [
+        'ATCamera',
+        'ATArchiver',
+        'ATHeaderService',
+        'ATSpectrograph'
     ],
   },
   'Main Telescope': {
@@ -52,7 +34,14 @@ export const CSCSummaryHierarchy = {
     'CSC Group 2': [],
   },
   Observatory: {
-    'CSC Group 1': [],
+    'Queue': [
+        'ScriptQueue1',
+        'ScriptQueue2',
+    ],
+    'Environment': [
+        'DIMM',
+        'Environment',
+    ],
   },
 };
 
