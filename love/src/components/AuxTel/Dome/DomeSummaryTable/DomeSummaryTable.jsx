@@ -8,8 +8,6 @@ import {
   dropoutDoorStateMap,
   mainDoorStateMap,
   mountTrackingStateMap,
-  m3RotatorStateMap,
-  m3PortStateMap,
   stateToStyleDomeAndMount,
 } from '../../../../Config';
 
@@ -40,7 +38,7 @@ export default class DomeSummaryTable extends Component {
       current: this.props.currentPointing.el,
       target: this.props.targetPointing.el,
     };
-
+    
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
     const dropoutDoorStateValue = dropoutDoorStateMap[this.props.dropoutDoorState];
     const mainDoorStateValue = mainDoorStateMap[this.props.mainDoorState];
@@ -49,7 +47,7 @@ export default class DomeSummaryTable extends Component {
     return (
       <div className={styles.summaryTable}>
         <span className={styles.title}>Track ID</span>
-        <span className={styles.value}>####</span>
+        <span className={styles.value}>{this.props.trackID}</span>
         {/* Dome */}
         <span className={styles.title}>Dome</span>
         <span className={styles.value} />
@@ -80,11 +78,11 @@ export default class DomeSummaryTable extends Component {
         <span className={styles.value} />
         <span className={styles.label}>Az</span>
         <span className={styles.value}>
-          <CurrentTargetValue currentValue={mountAz.current} targetValue={mountAz.target} isChanging={true} />
+          <CurrentTargetValue currentValue={mountAz.current.toFixed(2)} targetValue={mountAz.target.toFixed(2)} isChanging={true} />
         </span>
         <span className={styles.label}>El</span>
         <span className={styles.value}>
-          <CurrentTargetValue currentValue={mountEl.current} targetValue={mountEl.target} isChanging={true} />
+          <CurrentTargetValue currentValue={mountEl.current.toFixed(2)} targetValue={mountEl.target.toFixed(2)} isChanging={true} />
         </span>
         <span className={styles.label}>Tracking</span>
         <span className={styles.value}>

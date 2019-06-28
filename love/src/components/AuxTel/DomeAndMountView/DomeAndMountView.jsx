@@ -10,7 +10,7 @@ export default class DomeAndMountView extends Component {
     return (
       <div className={styles.mainGrid}>
         <div className={styles.statusGrid}>
-          <Panel title="Status" className={styles.panel}>
+          {/* <Panel title="Status" className={styles.panel}>
             <div className={styles.statusContainer}>
               <LabeledStatusTextContainer
                 label={'Azimuth state'}
@@ -27,12 +27,12 @@ export default class DomeAndMountView extends Component {
                 stateToStyleMap={{ 0: 'ok', 1: 'running', 2: 'running' }}
               />
             </div>
-          </Panel>
+          </Panel> */}
         </div>
         <div className={styles.domeGrid}>
-          <Panel title="Dome View" className={styles.panel}>
+          <Panel title="Dome and Mount view" className={styles.panel}>
             <div className={styles.domeContainer}>
-              <DomeContainer width={300} height={300}/>
+              <DomeContainer width={400} height={400}/>
             </div>
           </Panel>
         </div>

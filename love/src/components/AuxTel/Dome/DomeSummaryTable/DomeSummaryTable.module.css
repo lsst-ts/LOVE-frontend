@@ -1,26 +1,40 @@
 .summaryTable {
   display: grid;
-  grid-template-columns: 1fr max-content;
+  grid-template-columns: 1fr minmax(13.5em, 1fr);
   grid-auto-rows: max-content;
   grid-row-gap: 0.2em;
   padding: 0 2em;
   max-width: 25em;
   min-width: 20em;
   justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: var(--second-quaternary-background-dimmed-color);
+  padding: 2em 1em;
+  align-self: center;
 }
 
 .summaryTable .title {
   margin-right: auto;
   font-size: var(--font-size-larger);
+  color: var(--base-font-color);
 }
 
 .summaryTable .label {
   margin-right: auto;
-  padding-left: 1em;
+  padding-left: 0.5em;
   line-height: 2em;
 }
 
 .summaryTable .value {
   /* font-size: var(--font-size-large); */
   padding: 0.2em 2em;
+  color: var(--base-font-color);
+}
+
+
+@media (min-width: 1600px) {
+  .summaryTable {
+    margin-left: 2em;
+  }
 }

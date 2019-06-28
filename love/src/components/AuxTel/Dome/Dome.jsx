@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Dome.module.css';
-import SkymapGrid from '../Skymap/SkymapGrid';
+// import SkymapGrid from '../Skymap/SkymapGrid';
 import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
@@ -43,34 +43,29 @@ export default class Dome extends Component {
     const width = this.props.width;
     const height = this.props.height;
     const currentPointing = {
-      az: this.props.mountEncoders ? this.props.mountEncoders.azimuthCalculatedAngle : 0,
-      el: this.props.mountEncoders ? this.props.mountEncoders.elevationCalculatedAngle : 0,
+      az: this.props.mountEncoders ? this.props.mountEncoders.azimuthCalculatedAngle.value : 0,
+      el: this.props.mountEncoders ? this.props.mountEncoders.elevationCalculatedAngle.value : 0,
     };
     const targetPointing = {
-      az: this.props.target ? this.props.target.azimuth : 0,
-      el: this.props.target ? this.props.target.elevation : 0,
+      az: this.props.target ? this.props.target[this.props.target.length-1].azimuth.value : 0,
+      el: this.props.target ? this.props.target[this.props.target.length-1].elevation.value : 0,
     };
-    const domeTargetAz = this.props.azimuthCommandedState ? this.props.azimuthCommandedState.azimuth : 0;
-    const mountTrackingState = this.props.atMountState ? this.props.atMountState[0].state.value : 3;
-    const azimuthState = this.props.azimuthState ? this.props.azimuthState[0].state.value : 3;
-    const dropoutDoorState = this.props.dropoutDoorState ? this.props.dropoutDoorState[0].state.value : 5;
-    const mainDoorState = this.props.mainDoorState ? this.props.mainDoorState[0].state.value : 5;
+    const domeAz = this.props.azimuthPosition ? this.props.azimuthPosition.value : 0;
+    const domeTargetAz = this.props.azimuthCommandedState ? this.props.azimuthCommandedState[this.props.azimuthCommandedState.length-1].azimuth.value : 0;
+    const mountTrackingState = this.props.atMountState ? this.props.atMountState[this.props.atMountState.length-1].state.value : 0;
+    const azimuthState = this.props.azimuthState ? this.props.azimuthState[this.props.azimuthState.length-1].state.value : 0;
+    const dropoutDoorState = this.props.dropoutDoorState ? this.props.dropoutDoorState[this.props.dropoutDoorState.length-1].state.value : 0;
+    const mainDoorState = this.props.mainDoorState ? this.props.mainDoorState[this.props.mainDoorState.length-1].state.value : 0;
+
+    const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage ? this.props.dropoutDoorOpeningPercentage.value : 0;
+    const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage ? this.props.dropoutDoorOpeningPercentage.value : 0;
+    const trackID = this.props.target ? this.props.target[0].trackId.value : '';
     const isProjected = true;
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
         {/* <h2>TOP VIEW</h2> */}
         <div className={styles.topRow}>
-          <DomeSummaryTable
-            currentPointing={currentPointing}
-            targetPointing={targetPointing}
-            domeAz={this.props.azimuthPosition}
-            domeTargetAz={domeTargetAz}
-            azimuthState={azimuthState}
-            dropoutDoorState={dropoutDoorState}
-            mainDoorState={mainDoorState}
-            mountTrackingState={mountTrackingState}
-          />
           <div className={styles.skymapGridContainer}>
             {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
             <div className={styles.windRoseContainer}>
@@ -80,9 +75,9 @@ export default class Dome extends Component {
             <DomeShutter
               width={width}
               height={height}
-              azimuthPosition={this.props.azimuthPosition}
-              dropoutDoorOpeningPercentage={this.props.dropoutDoorOpeningPercentage}
-              mainDoorOpeningPercentage={this.props.mainDoorOpeningPercentage}
+              azimuthPosition={domeAz}
+              dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
+              mainDoorOpeningPercentage={mainDoorOpeningPercentage}
               targetAzimuthPosition={domeTargetAz}
             />
             <DomePointing
@@ -93,6 +88,17 @@ export default class Dome extends Component {
               isProjected={isProjected}
             />
           </div>
+          <DomeSummaryTable
+            currentPointing={currentPointing}
+            targetPointing={targetPointing}
+            domeAz={domeAz}
+            domeTargetAz={domeTargetAz}
+            azimuthState={azimuthState}
+            dropoutDoorState={dropoutDoorState}
+            mainDoorState={mainDoorState}
+            mountTrackingState={mountTrackingState}
+            trackID={trackID}
+          />
         </div>
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
