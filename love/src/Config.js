@@ -1,4 +1,4 @@
-export const hasFakeData = true;
+export const hasFakeData = false;
 export const hasCommandPrivileges = false;
 
 // eslint-disable-next-line
@@ -103,49 +103,50 @@ export const stateToStyleCamera = {
 
 // Dome and mount view
 export const domeAzimuthStateMap = {
-  0: 'NOTINMOTION',
-  1: 'MOVINGCW',
-  2: 'MOVINGCCW',
-  3: 'UNKNOWN',
+  1: 'NOT MOVING',
+  2: 'MOVING CW',
+  3: 'MOVING CCW',
+  0: 'UNKNOWN',
 };
 
 export const dropoutDoorStateMap = {
-  0: 'CLOSED',
-  1: 'OPEN',
-  2: 'PARTIALLY_OPEN',
-  3: 'OPENING',
-  4: 'CLOSING',
-  5: 'UNKNOWN',
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'PARTIALLY OPEN',
+  4: 'OPENING',
+  5: 'CLOSING',
+  0: 'UNKNOWN',
 };
 
 export const mainDoorStateMap = {
-  0: 'CLOSED',
-  1: 'OPEN',
-  2: 'PARTIALLY_OPEN',
-  3: 'OPENING',
-  4: 'CLOSING',
-  5: 'UNKNOWN',
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'PARTIALLY OPEN',
+  4: 'OPENING',
+  5: 'CLOSING',
+  0: 'UNKNOWN',
 };
 
 export const mountTrackingStateMap = {
-  0: 'DISABLED',
-  1: 'ENABLED',
-  2: 'STOPPING',
-  3: 'UNKNOWN',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'STOPPING',
+  0: 'UNKNOWN',
 };
 
 export const m3RotatorStateMap = {
-  0: 'NASMITH1',
-  1: 'NASMITH2',
-  2: 'PORT3',
-  3: 'INMOTION',
-  4: 'UNKNOWN',
+  1: 'NASMITH1',
+  2: 'NASMITH2',
+  3: 'PORT3',
+  4: 'INMOTION',
+  0: 'UNKNOWN',
 };
 
 export const m3PortStateMap = {
-  0: 'NASMITH1',
-  1: 'NASMITH2',
-  2: 'PORT3',
+  1: 'NASMITH1',
+  2: 'NASMITH2',
+  3: 'PORT3',
+  0: 'UNKNOWN',
 };
 
 export const stateToStyleDomeAndMount = {
@@ -159,10 +160,10 @@ export const stateToStyleDomeAndMount = {
   DISABLED: 'warning',
   CLOSING: 'running',
   OPENING: 'running',
-  PARTIALLY_OPEN: 'warning',
+  'PARTIALLY OPEN': 'warning',
   OPEN: 'ok',
   CLOSED: 'ok',
-  NOTINMOTION: 'ok',
-  MOVINGCW: 'running',
-  MOVINGCCW: 'running',
+  'NOT MOVING': 'ok',
+  'MOVING CW': 'running',
+  'MOVING CCW': 'running',
 }

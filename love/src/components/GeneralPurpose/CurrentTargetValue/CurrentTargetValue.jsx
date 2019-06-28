@@ -5,9 +5,9 @@ import styles from './CurrentTargetValue.module.css';
 export default class CurrentTargetValue extends Component {
   static propTypes = {
     /** Current value */
-    currentValue: PropTypes.number,
+    currentValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** Target value */
-    targetValue: PropTypes.number,
+    targetValue: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     /** Whether the value is still reaching the target value */
     isChanging: PropTypes.bool,
   };

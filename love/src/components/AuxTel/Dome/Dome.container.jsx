@@ -54,25 +54,30 @@ const DomeContainer = ({
   if (hasFakeData) {
     return (
       <Dome
-        dropoutDoorOpeningPercentage={currentPosition.dropoutDoorOpeningPercentage}
-        mainDoorOpeningPercentage={currentPosition.mainDoorOpeningPercentage}
-        azimuthPosition={currentPosition.domeAz}
+        dropoutDoorOpeningPercentage={{ value: currentPosition.dropoutDoorOpeningPercentage }}
+        mainDoorOpeningPercentage={{ value: currentPosition.mainDoorOpeningPercentage }}
+        azimuthPosition={{ value: currentPosition.domeAz }}
         azimuthState={azimuthState}
-        azimuthCommandedState={{
-          azimuth: currentPosition.targetDomeAz,
-        }}
+        azimuthCommandedState={[
+          {
+            azimuth: { value: currentPosition.targetDomeAz },
+          },
+        ]}
         dropoutDoorState={dropoutDoorState}
         mainDoorState={mainDoorState}
         mountEncoders={{
-          elevationCalculatedAngle: currentPosition.el,
-          azimuthCalculatedAngle: currentPosition.az,
+          elevationCalculatedAngle: { value: currentPosition.el },
+          azimuthCalculatedAngle: { value: currentPosition.az },
         }}
         detailedState={detailedState}
         atMountState={atMountState}
-        target={{
-          elevation: currentPosition.targetEl,
-          azimuth: currentPosition.targetAz,
-        }}
+        target={[
+          {
+            elevation: { value: currentPosition.targetEl },
+            azimuth: { value: currentPosition.targetAz },
+            trackId: { value: 0 },
+          },
+        ]}
         subscribeToStream={subscribeToStream}
         unsubscribeToStream={unsubscribeToStream}
         width={width}

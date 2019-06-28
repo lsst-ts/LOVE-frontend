@@ -39,22 +39,50 @@ export default class DomeShutter extends Component {
     const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     return (
-      <svg
-        className={styles.svgOverlay}
-        height={height}
-        width={width}
-        viewBox="0 0 596 596"
-        
-      >
-        <g className={styles.rotatingDome}
-        style={{ transform: `rotateZ(${270+this.props.azimuthPosition}deg)`, transformOrigin: `50% 50%` }}>
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
+
+        {/* Dome target*/}
+        <path
+          style={{ transform: `rotateZ(${270 + this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
+          fill="none"
+          strokeDasharray="4"
+          strokeOpacity="0.3"
+          stroke="white"
+          strokeWidth="2"
+          d={`
+          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+        L ${x0 - extraApperture} ${y0 + rSinAlpha}
+        L ${x0 - extraApperture} ${y0 - rSinAlpha}
+        L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+        `}
+        />
+        <g
+          className={styles.rotatingDome}
+          style={{ transform: `rotateZ(${270 + this.props.azimuthPosition}deg)`, transformOrigin: `50% 50%` }}
+        >
+          {/* Dome */}
+          <path
+            fill="#fff"
+            fillOpacity="0.1"
+            stroke="#152228"
+            strokeWidth="1"
+            d={`
+              M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+              A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
+              A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
+              A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+              L ${x0 - extraApperture} ${y0 - rSinAlpha}
+              L ${x0 - extraApperture} ${y0 + rSinAlpha}
+              L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+            `}
+          />
           {/* Dropout door */}
           <g clipPath={`circle(${r}px at center)`}>
             <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
             <path
               fill="none"
               stroke="white"
-              strokeWidth="2"
+              strokeWidth="1"
               d={`
             M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
             A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
@@ -69,11 +97,12 @@ export default class DomeShutter extends Component {
               width={r - rCosAlpha + (dropoutDoorWidth * (100 - this.props.dropoutDoorOpeningPercentage)) / 100}
               height={2 * rSinAlpha}
               fill="white"
-              fillOpacity={0.1 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
+              fillOpacity={0.2 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
               stroke="white"
-              strokeWidth="2"
+              strokeWidth="1"
             />
           </g>
+
           {/* Main door */}
           <rect
             x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
@@ -81,43 +110,13 @@ export default class DomeShutter extends Component {
             width={mainDoorWidth}
             height={2 * rSinAlpha}
             fill="white"
-            fillOpacity="0.1"
+            fillOpacity="0.2"
             stroke="white"
-            strokeWidth="2"
-          />
-          {/* Dome */}
-          <path
-            fill="white"
-            fillOpacity="0.1"
-            stroke="white"
-            strokeWidth="2"
-            d={`
-          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-          A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
-        A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
-        A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-        L ${x0 - extraApperture} ${y0 - rSinAlpha}
-        L ${x0 - extraApperture} ${y0 + rSinAlpha}
-        L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-        `}
+            strokeWidth="1"
           />
         </g>
+        {/* <style>.cls-1{fill:#152228;fill-opacity:0;}.cls-2{opacity:0.6;}.cls-3{fill:#18313d;stroke:#152228;stroke-miterlimit:10;}</style> */}
 
-        {/* Dome target*/}
-        <path
-          style={{ transform: `rotateZ(${270+this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
-          fill="none"
-          strokeDasharray="4"
-          strokeOpacity="0.3"
-          stroke="white"
-          strokeWidth="2"
-          d={`
-          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 - rSinAlpha}
-        L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-        `}
-        />
       </svg>
     );
   }
