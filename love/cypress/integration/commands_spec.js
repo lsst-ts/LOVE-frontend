@@ -14,11 +14,18 @@ it('Sending commands causes event messages to be received', function() {
   // subscribe to atdome-sim
   cy.get('#id_category').clear().type('event');
   cy.get('#id_csc').clear().type('ATDome');
-  cy.get('#id_stream').clear().type('all');
+  cy.get('#id_stream').clear().type('azimuthCommandedState');
   cy.get('button').contains('Subscribe').click();
 
-  cy.get('#id_commands_csc').type('csc')
-  cy.get('#id_commands').type('command')
-  cy.get('#id_parameters').type('{{}"param1":1}')
+
+  // change commanded state
+  cy.get('#id_commands_csc').clear().type('ATDome')
+  cy.get('#id_commands').clear().type('moveAzimuth')
+  cy.get('#id_parameters').clear().type('{{}"azimuth": 123.456}')
+
+  cy.get('button').contains('Launch').click();
+
+  cy.wait(2000);
+  cy.get('body').contains((`"value": 123.456`));
 
 });
