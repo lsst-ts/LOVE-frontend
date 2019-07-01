@@ -41,11 +41,11 @@
 }
 
 .svgOverlay .rotatingDome {
-  transition: transform 2s linear;
+  transition: transform 1.5s linear;
 }
 
 .svgOverlay .currentPointing {
-  transition: transform 2s linear;
+  transition: transform 1.5s linear;
   backface-visibility: hidden;
   transform-style: preserve-3d;
   fill-opacity: 0.1;

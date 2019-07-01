@@ -114,6 +114,7 @@ export default class DomeShutter extends Component {
             stroke="white"
             strokeWidth="1"
           />
+          {/* <circle cx={x0} cy={y0} r={r*0.91} fill="none" stroke="red" /> */}
         </g>
         {/* <style>.cls-1{fill:#152228;fill-opacity:0;}.cls-2{opacity:0.6;}.cls-3{fill:#18313d;stroke:#152228;stroke-miterlimit:10;}</style> */}
 

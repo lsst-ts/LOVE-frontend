@@ -38,10 +38,12 @@ export default class DomeSummaryTable extends Component {
       current: this.props.currentPointing.el,
       target: this.props.targetPointing.el,
     };
-    
+
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
     const dropoutDoorStateValue = dropoutDoorStateMap[this.props.dropoutDoorState];
     const mainDoorStateValue = mainDoorStateMap[this.props.mainDoorState];
+    const domeInPositionValue = this.props.domeInPosition ? this.props.domeInPosition[0].inPosition.value : 0;
+    const mountInPositionValue = this.props.mountInPosition ? this.props.mountInPosition[0].inPosition.value : 0;
     const mountTrackingStateValue = mountTrackingStateMap[this.props.mountTrackingState];
 
     return (
@@ -50,7 +52,11 @@ export default class DomeSummaryTable extends Component {
         <span className={styles.value}>{this.props.trackID}</span>
         {/* Dome */}
         <span className={styles.title}>Dome</span>
-        <span className={styles.value} />
+        <span className={styles.value}>
+          <StatusText title={domeInPositionValue ? 'true' : 'false'} status={domeInPositionValue ? 'ok' : 'warning'}>
+            {domeInPositionValue ? 'In Position' : 'Not in Position'}
+          </StatusText>
+        </span>
         <span className={styles.label}>Az</span>
         <span className={styles.value}>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
@@ -75,14 +81,26 @@ export default class DomeSummaryTable extends Component {
         </span>
         {/* Mount */}
         <span className={styles.title}>Mount</span>
-        <span className={styles.value} />
+        <span className={styles.value}>
+        <StatusText title={mountInPositionValue ? 'true' : 'false'} status={mountInPositionValue ? 'ok' : 'warning'}>
+            {mountInPositionValue ? 'In Position' : 'Not in Position'}
+          </StatusText>
+        </span>
         <span className={styles.label}>Az</span>
         <span className={styles.value}>
-          <CurrentTargetValue currentValue={mountAz.current.toFixed(2)} targetValue={mountAz.target.toFixed(2)} isChanging={true} />
+          <CurrentTargetValue
+            currentValue={mountAz.current.toFixed(2)}
+            targetValue={mountAz.target.toFixed(2)}
+            isChanging={true}
+          />
         </span>
         <span className={styles.label}>El</span>
         <span className={styles.value}>
-          <CurrentTargetValue currentValue={mountEl.current.toFixed(2)} targetValue={mountEl.target.toFixed(2)} isChanging={true} />
+          <CurrentTargetValue
+            currentValue={mountEl.current.toFixed(2)}
+            targetValue={mountEl.target.toFixed(2)}
+            isChanging={true}
+          />
         </span>
         <span className={styles.label}>Tracking</span>
         <span className={styles.value}>
