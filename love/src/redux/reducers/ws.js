@@ -3,12 +3,19 @@ import {
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
+  UPDATE_LAST_SAL_COMMAND
 } from '../actions/actionTypes';
-import { connectionStates } from '../actions/ws';
+import { connectionStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
   connectionState: connectionStates.CLOSED,
   subscriptions: [],
+  lastSALCommand: {
+    status: SALCommandStatus.EMPTY,
+    cmd: '',
+    params: {},
+    component: ''
+  }
 };
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
@@ -68,6 +75,19 @@ export default function(state = initialState, action) {
       });
 
       return { ...state, subscriptions };
+    }
+
+    case UPDATE_LAST_SAL_COMMAND: {
+      console.log('UPDATING')
+      return {
+        ...state,
+        lastSALCommand: {
+          status: action.status,
+          cmd: action.cmd,
+          params: action.params,
+          component: action.component
+        }
+      }
     }
     default:
       return state;
