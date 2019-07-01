@@ -70,7 +70,7 @@ export const openWebsocketConnection = () => {
               data.data.ATCamera.endOfImageTelemetry
             )
               dispatch(receiveImageSequenceData(data.data));
-            else if( data.data.ATCamera.imageReadoutParameters) {
+            else if (data.data.ATCamera.imageReadoutParameters) {
               dispatch(receiveReadoutData(data.data));
             } else {
               dispatch(receiveCameraStateData(data.data));
@@ -139,9 +139,7 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
     wsPromise.then(() => {
       const state = getState();
       if (state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(
-          `Can not unsubscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`,
-        );
+        console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
       }
 
       socket.json({
@@ -150,6 +148,38 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
         csc,
         stream,
       });
+    });
+  };
+};
+
+export const requestSALCommand = (data) => {
+  /**
+   * Sends a SAL Command through the LOVE stack (manager + producer) using a websocket connection.
+   *
+   * Tries to open a websocket connection if it does not exist and retries after 0.5s.
+   */
+  return (dispatch, getState) => {
+    if (!wsPromise) {
+      dispatch(openWebsocketConnection());
+      setTimeout(() => dispatch(requestSALCommand(data)), 500);
+      return;
+    }
+
+    wsPromise.then(() => {
+      const state = getState();
+      if (state.ws.connectionState !== connectionStates.OPEN) {
+        console.warn(`Can not send commands, websocket connection status is: ${state.ws.connectionState}`);
+      }
+
+      const commandObject = {
+        option: 'cmd',
+        type: 'command_data',
+        cmd: 'cmd_closeShutter',
+        params: {},
+        component: 'ATDome',
+      };
+
+      socket.json(commandObject);
     });
   };
 };
