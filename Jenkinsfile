@@ -48,7 +48,7 @@ pipeline {
         branch "master"
       }
       steps {
-        build(job: '../LOVE-integration-tools/master', wait: false)
+        build(job: '../LOVE-integration-tools/master', wait: false, parameters: [[$class: 'StringParameterValue', name: 'forceUpdate', value: 'true']])
       }
     }
   }
