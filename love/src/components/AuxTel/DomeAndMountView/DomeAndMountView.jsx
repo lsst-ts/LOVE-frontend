@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import DomeContainer from '../Dome/Dome.container';
 import Panel from '../../GeneralPurpose/Panel/Panel';
 import styles from './DomeAndMountView.module.css';
-import LabeledStatusTextContainer from '../../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import Mount from '../Mount/Mount';
 
 export default class DomeAndMountView extends Component {

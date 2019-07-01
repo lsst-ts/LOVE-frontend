@@ -16,7 +16,7 @@ export default class TimeSeriesPlot extends Component {
     this.data = {};
     this.state = {
       specDataType: 'quantitative',
-      specName: 'stream'
+      specName: 'stream',
     };
   }
 
@@ -98,13 +98,14 @@ export default class TimeSeriesPlot extends Component {
           return dateDiff < dateInterval;
         });
 
-        const changeSet = vega
+        vega
           .changeset()
           .remove(() => true)
           .insert(this.data[dataSource]);
 
         // this.vegaEmbedResult.view.change(dataLabel, changeSet).run();
       }
+      return 0;
     });
   };
 
@@ -141,7 +142,7 @@ export default class TimeSeriesPlot extends Component {
       dataSpec,
     );
 
-    vegae(this.vegaContainer.current, spec, { renderer: 'svg', actions: false}).then((vegaEmbedResult) => {
+    vegae(this.vegaContainer.current, spec, { renderer: 'svg', actions: false }).then((vegaEmbedResult) => {
       this.vegaEmbedResult = vegaEmbedResult;
     });
   };
@@ -151,7 +152,7 @@ export default class TimeSeriesPlot extends Component {
     const encoding = this.props.encoding;
     const layers = Object.keys(this.props.layers).map((layerName) => {
       const layer = this.props.layers[layerName];
-      const color = layer.encoding? layer.encoding.color : undefined;
+      // const color = layer.encoding ? layer.encoding.color : undefined;
       return {
         data: {
           values: data,
@@ -175,13 +176,12 @@ export default class TimeSeriesPlot extends Component {
             legend: {
               title: `Parameter Names${' '.repeat(32)}`,
             },
-            ...encoding.color
+            ...encoding.color,
           },
         },
       };
     });
 
-    console.log(layers);
     return {
       $schema: 'https://vega.github.io/schema/vega-lite/v3.json',
       description: "Google's stock price over time.",
@@ -215,6 +215,7 @@ export default class TimeSeriesPlot extends Component {
     this.props.dataSources.map((dataSource) => {
       const groupName = this.props.groupNames[dataSource];
       this.props.subscribeToStream(groupName);
+      return 0;
     });
   };
 
@@ -222,6 +223,7 @@ export default class TimeSeriesPlot extends Component {
     this.props.dataSources.map((dataSource) => {
       const groupName = this.props.groupNames[dataSource];
       this.props.unsubscribeToStream(groupName);
+      return 0;
     });
   };
 
@@ -237,6 +239,7 @@ export default class TimeSeriesPlot extends Component {
           .insert(this.data[dataSource]);
 
         this.vegaEmbedResult.view.change(dataSource, changeSet).run();
+        return 0;
       });
     }
     return <div className={styles.vegaContainer} ref={this.vegaContainer} />;

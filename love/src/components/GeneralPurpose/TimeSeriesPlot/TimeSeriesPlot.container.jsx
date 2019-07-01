@@ -10,7 +10,7 @@ const TimeSeriesPlotContainer = ({
   accessor,
   subscribeToStream,
   unsubscribeToStream,
-  ...props,
+  ...props
 }) => {
   return (
     <TimeSeriesPlot
@@ -26,12 +26,13 @@ const TimeSeriesPlotContainer = ({
 
 const mapStateToProps = (state, ownProps) => {
   const streamStates = {};
-  ownProps.dataSources.map(dataSource => {
+  ownProps.dataSources.map((dataSource) => {
     const groupName = ownProps.groupNames[dataSource];
     const streamState = getTimestampedStreamData(state, groupName);
     streamStates[dataSource] = { data: streamState.data, timestamp: streamState.timestamp };
-  })
-  return {streamStates: streamStates};
+    return 0;
+  });
+  return { streamStates: streamStates };
 };
 
 const mapDispatchToProps = (dispatch) => {
