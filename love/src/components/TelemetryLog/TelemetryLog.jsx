@@ -19,17 +19,17 @@ export default class TelemetryLog extends Component {
       category: props.category,
       csc: props.csc,
       stream: props.stream,
-      cmdComponent: undefined,
-      command: undefined,
-      cmdParams: undefined
+      cmdComponent: 'ATDome',
+      command: 'moveAzimuth',
+      cmdParams: '{"azimuth": 0}',
     };
     this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
     category: 'event',
-    csc: 'ScriptQueue',
-    stream: 'all',
+    csc: 'ATDome',
+    stream: 'azimuthCommandedState',
     data: {},
   };
 
@@ -67,25 +67,30 @@ export default class TelemetryLog extends Component {
     });
   };
 
-
-
-
-  cmdComponentChange = (e) => {
-    console.log(e);
-  }
-  cmdOnChange = (e) => {
-    console.log(e);
-  }
-  cmdParamsOnChange = (e) => {
-    console.log(e);
-  }
-
   subscribeToStream = () => {
     this.props.subscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
   };
 
   unsubscribeToStream = () => {
     this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
+  };
+
+  cmdComponentChange = (e) => {
+    this.setState({ cmdComponent: e.target.value });
+  };
+  cmdOnChange = (e) => {
+    this.setState({ command: e.target.value });
+  };
+  cmdParamsOnChange = (e) => {
+    this.setState({ cmdParams: e.target.value });
+  };
+
+  launchCommand = () => {
+    this.props.requestSALCommand({
+      cmd: `cmd_${this.state.command}`,
+      params: JSON.parse(this.state.cmdParams),
+      component: this.state.cmdComponent,
+    });
   };
 
   componentDidUpdate = (prevProps) => {
@@ -98,7 +103,7 @@ export default class TelemetryLog extends Component {
     return (
       <div style={{ textAlign: 'left' }}>
         <h1>Test log and cmd launcher</h1>
-        
+
         <h2> Command Launcher</h2>
         <div>
           <div>
@@ -113,8 +118,10 @@ export default class TelemetryLog extends Component {
             <span>params </span>
             <input id="id_parameters" onChange={this.cmdParamsOnChange} value={this.state.cmdParams} />
           </div>
+
+          <button onClick={this.launchCommand}>Launch</button>
         </div>
-        
+
         <h2>Telemetry and events</h2>
         <div>
           <div>
