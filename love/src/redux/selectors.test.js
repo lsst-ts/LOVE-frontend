@@ -1,4 +1,4 @@
-import { getStreamData, getCameraState } from './selectors';
+import { getStreamData, getTimestampedStreamData, getStreamsData, getCameraState } from './selectors';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import WS from 'jest-websocket-mock';
@@ -42,6 +42,71 @@ it('Should extract the stream correctly with a selector', async () => {
   // Assert
   expect(JSON.stringify(streamData)).toEqual(JSON.stringify(data.Environment.airPressure));
 });
+
+it('Should extract streams correctly with a selector', async () => {
+  // Arrange
+  const data = {
+    Environment: {
+      airPressure: {
+        paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
+        pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
+        patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
+        sensorName: { value: 'c', dataType: 'String' },
+      },
+      temperature: {
+        sensor1: { value: 69, dataType: 'Float' },
+      },
+    },
+  };
+  const expectedData = {
+    'telemetry-Environment-airPressure': {
+      paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
+      pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
+      patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
+      sensorName: { value: 'c', dataType: 'String' },
+    },
+    'telemetry-Environment-temperature': { sensor1: { value: 69, dataType: 'Float' } },
+  };
+  const groupNames = ['telemetry-Environment-airPressure', 'telemetry-Environment-temperature'];
+
+  // Act
+  store.dispatch(openWebsocketConnection());
+  await server.connected;
+  await store.dispatch(requestGroupSubscription(groupNames[0]));
+  await store.dispatch(requestGroupSubscription(groupNames[1]));
+  server.send({ category: 'telemetry', data: data });
+  const streamsData = getStreamsData(store.getState(), groupNames);
+
+  // Assert
+  expect(JSON.stringify(streamsData)).toEqual(JSON.stringify(expectedData));
+});
+
+it('Should extract the timestamped stream correctly with a selector', async () => {
+  // Arrange
+  const data = {
+    Environment: {
+      airPressure: {
+        paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
+        pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
+        patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
+        sensorName: { value: 'c', dataType: 'String' },
+      },
+    },
+  };
+  const groupName = 'telemetry-Environment-airPressure';
+  const timestamp = new Date();
+  // Act
+  store.dispatch(openWebsocketConnection());
+  await server.connected;
+  await store.dispatch(requestGroupSubscription(groupName));
+  server.send({ category: 'telemetry', data: data });
+  const streamData = getTimestampedStreamData(store.getState(), groupName);
+
+  // Assert
+  expect(JSON.stringify(streamData.data)).toEqual(JSON.stringify(data.Environment.airPressure));
+  expect(streamData.timestamp).toBeInstanceOf(Date);
+});
+
 describe('Test image sequence data passes correctly to component', () => {
   const sequenceData = [
     {

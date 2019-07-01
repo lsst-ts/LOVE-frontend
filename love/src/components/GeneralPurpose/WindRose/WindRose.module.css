@@ -1,0 +1,12 @@
+.colorOne,
+.colorTwo {
+  fill: #7a8e99;
+}
+.colorOne {
+  fill-rule: evenodd;
+}
+.colorTwo {
+  stroke: #7a8e99;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
