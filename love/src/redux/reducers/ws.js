@@ -59,11 +59,13 @@ export default function(state = initialState, action) {
           return {
             ...subscription,
             data: action.data[csc],
+            timestamp: new Date(),
           };
         }
         return {
           ...subscription,
           data: action.data[csc][stream],
+          timestamp: new Date(),
         };
       });
 

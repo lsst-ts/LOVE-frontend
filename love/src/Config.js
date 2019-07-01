@@ -1,4 +1,4 @@
-export const hasFakeData = true;
+export const hasFakeData = false;
 export const hasCommandPrivileges = false;
 
 // eslint-disable-next-line
@@ -99,3 +99,71 @@ export const stateToStyleCamera = {
   END_READOUT: 'ok',
   END_TELEMETRY: 'ok',
 };
+
+
+// Dome and mount view
+export const domeAzimuthStateMap = {
+  1: 'NOT MOVING',
+  2: 'MOVING CW',
+  3: 'MOVING CCW',
+  0: 'UNKNOWN',
+};
+
+export const dropoutDoorStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'PARTIALLY OPEN',
+  4: 'OPENING',
+  5: 'CLOSING',
+  0: 'UNKNOWN',
+};
+
+export const mainDoorStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'PARTIALLY OPEN',
+  4: 'OPENING',
+  5: 'CLOSING',
+  0: 'UNKNOWN',
+};
+
+export const mountTrackingStateMap = {
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'STOPPING',
+  0: 'UNKNOWN',
+};
+
+export const m3RotatorStateMap = {
+  1: 'NASMITH1',
+  2: 'NASMITH2',
+  3: 'PORT3',
+  4: 'INMOTION',
+  0: 'UNKNOWN',
+};
+
+export const m3PortStateMap = {
+  1: 'NASMITH1',
+  2: 'NASMITH2',
+  3: 'PORT3',
+  0: 'UNKNOWN',
+};
+
+export const stateToStyleDomeAndMount = {
+  NASMITH1: 'ok',
+  NASMITH2: 'ok',
+  PORT3: 'ok',
+  UNKNOWN: 'warning',
+  INMOTION: 'running',
+  STOPPING: 'warning',
+  ENABLED: 'ok',
+  DISABLED: 'warning',
+  CLOSING: 'running',
+  OPENING: 'running',
+  'PARTIALLY OPEN': 'warning',
+  OPEN: 'ok',
+  CLOSED: 'ok',
+  'NOT MOVING': 'ok',
+  'MOVING CW': 'running',
+  'MOVING CCW': 'running',
+}
