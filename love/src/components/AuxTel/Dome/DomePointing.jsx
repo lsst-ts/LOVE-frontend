@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styles from './Skymap.module.css';
+import styles from './Dome.module.css';
 
-export default class Pointing extends Component {
+export default class DomePointing extends Component {
   static propTypes = {
     /** Skyview width */
     width: PropTypes.number,
@@ -28,7 +28,7 @@ export default class Pointing extends Component {
     const { az, el } = pos;
     const width = 596;
     const height = 596;
-    const offset = 30;
+    const offset = 20;
     const center = [width / 2, height / 2];
     let r;
     if (isProjected) {
@@ -36,8 +36,8 @@ export default class Pointing extends Component {
     } else {
       r = ((90 - el) / 90) * (width / 2 - offset);
     }
-    const x = center[0] + r * Math.cos((az * Math.PI) / 180);
-    const y = center[1] - r * Math.sin((az * Math.PI) / 180);
+    const x = center[0] + r * Math.sin((az * Math.PI) / 180);
+    const y = center[1] - r * Math.cos((az * Math.PI) / 180);
     return {
       x,
       y,
@@ -46,20 +46,40 @@ export default class Pointing extends Component {
 
   render() {
     const { width, height } = this.props;
-    const currentPixels = this.azelToPixel(this.props.currentPointing, this.props.isProjected);
-    const targetPixels = this.azelToPixel(this.props.targetPointing, this.props.isProjected);
-
+    const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
+    const el = this.props.currentPointing.el;
+    const az = this.props.currentPointing.az;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-        <line
-          x1={currentPixels.x}
-          y1={currentPixels.y}
-          x2={targetPixels.x}
-          y2={targetPixels.y}
+
+        <circle
+          className={styles.targetPointing}
+          r={32}
+          strokeWidth={2}
+          cx={zenithPixels.x}
+          cy={zenithPixels.y}
+          fill="none"
+          strokeDasharray="4"
+          strokeOpacity="0.3"
           stroke="white"
-          strokeDasharray="5"
+          style={{
+            transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el-90}deg)`,
+            transformOrigin: `50% 50% ${280}px`,
+          }}
         />
-        <circle r={8} stroke="white" strokeWidth={2} cx={currentPixels.x} cy={currentPixels.y} fill="#132631" />
+        <circle
+          className={styles.currentPointing}
+          r={32}
+          stroke="white"
+          strokeWidth={2}
+          cx={zenithPixels.x}
+          cy={zenithPixels.y}
+          fill="red"
+          style={{
+            transform: `rotateZ(${az}deg) rotateX(${el-90}deg)`,
+            transformOrigin: `50% 50% ${280}px`,
+          }}
+        />
         {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>
     );

@@ -9,25 +9,6 @@ export default class Skymap extends Component {
   //   prop: PropTypes
   // };
 
-  azelToPixel = (pos, isProjected) => {
-    const { az, el } = pos;
-    const width = 596;
-    const height = 596;
-    const offset = 30;
-    const center = [width / 2, height / 2];
-    let r;
-    if (isProjected) {
-      r = Math.cos((el * Math.PI) / 180) * (width / 2 - offset);
-    } else {
-      r = ((90 - el) / 90) * (width / 2 - offset);
-    }
-    const x = center[0] + r * Math.cos((az * Math.PI) / 180);
-    const y = center[1] - r * Math.sin((az * Math.PI) / 180);
-    return {
-      x,
-      y,
-    };
-  };
 
   render() {
     const width = 500;
@@ -48,7 +29,6 @@ export default class Skymap extends Component {
         <Pointing
           width={width}
           height={height}
-          azelToPixel={this.azelToPixel}
           currentPointing={currentPointing}
           targetPointing={targetPointing}
           isProjected={isProjected}

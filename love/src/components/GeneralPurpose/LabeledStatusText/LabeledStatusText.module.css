@@ -1,0 +1,7 @@
+.container {
+  display: inline-grid;
+  grid-template-columns: max-content 10em;
+  grid-row-gap: 0.5em;
+  grid-column-gap: 1em;
+  align-items: center;
+}
