@@ -33,6 +33,9 @@ export const getCameraState = (state) => {
   return state.camera;
 };
 
+export const getLastSALCommand = (state) => {
+  return state.ws.lastSALCommand;
+}
 export const getDomeState = (state) => {
   const domeSubscriptions = [
     'telemetry-ATDome-position',

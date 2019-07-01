@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import { saveGroupSubscriptions } from '../../Utils';
 
 const TelemetryLogContainer = ({
@@ -11,6 +11,7 @@ const TelemetryLogContainer = ({
   removeSubscriptionLocally,
   subscribeToStream,
   unsubscribeToStream,
+  requestSALCommand
 }) => {
   const subscribeAndSaveGroup = (groupName) => {
     subscribeToStream(groupName);
@@ -28,6 +29,7 @@ const TelemetryLogContainer = ({
       subscribeToStream={subscribeAndSaveGroup}
       unsubscribeToStream={unsubscribeAndRemoveGroup}
       subscriptionsList={subscriptionsList}
+      requestSALCommand={requestSALCommand}
     />
   );
 };
@@ -49,6 +51,9 @@ const mapDispatchToProps = (dispatch) => {
     unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));
     },
+    requestSALCommand: (cmd) =>{
+      dispatch(requestSALCommand(cmd))
+    }
   };
 };
 

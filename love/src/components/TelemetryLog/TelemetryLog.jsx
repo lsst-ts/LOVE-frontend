@@ -19,14 +19,17 @@ export default class TelemetryLog extends Component {
       category: props.category,
       csc: props.csc,
       stream: props.stream,
+      cmdComponent: 'ATDome',
+      command: 'moveAzimuth',
+      cmdParams: '{"azimuth": 0}',
     };
     this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
     category: 'event',
-    csc: 'ScriptQueue',
-    stream: 'all',
+    csc: 'ATDome',
+    stream: 'azimuthCommandedState',
     data: {},
   };
 
@@ -72,6 +75,24 @@ export default class TelemetryLog extends Component {
     this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
   };
 
+  cmdComponentChange = (e) => {
+    this.setState({ cmdComponent: e.target.value });
+  };
+  cmdOnChange = (e) => {
+    this.setState({ command: e.target.value });
+  };
+  cmdParamsOnChange = (e) => {
+    this.setState({ cmdParams: e.target.value });
+  };
+
+  launchCommand = () => {
+    this.props.requestSALCommand({
+      cmd: `cmd_${this.state.command}`,
+      params: JSON.parse(this.state.cmdParams),
+      component: this.state.cmdComponent,
+    });
+  };
+
   componentDidUpdate = (prevProps) => {
     if (this.props.streams !== prevProps.streams) {
       this.updateMessageList(this.props.streams);
@@ -81,19 +102,39 @@ export default class TelemetryLog extends Component {
   render() {
     return (
       <div style={{ textAlign: 'left' }}>
-        <h1>Telemetry log</h1>
+        <h1>Test log and cmd launcher</h1>
+
+        <h2> Command Launcher</h2>
+        <div>
+          <div>
+            <span>Component </span>
+            <input id="id_commands_csc" onChange={this.cmdComponentChange} value={this.state.cmdComponent} />
+          </div>
+          <div>
+            <span>cmd_ </span>
+            <input id="id_commands" onChange={this.cmdOnChange} value={this.state.command} />
+          </div>
+          <div>
+            <span>params </span>
+            <input id="id_parameters" onChange={this.cmdParamsOnChange} value={this.state.cmdParams} />
+          </div>
+
+          <button onClick={this.launchCommand}>Launch</button>
+        </div>
+
+        <h2>Telemetry and events</h2>
         <div>
           <div>
             <span>Category </span>
-            <input onChange={this.categoryChange} value={this.state.category} />
+            <input id="id_category" onChange={this.categoryChange} value={this.state.category} />
           </div>
           <div>
             <span>CSC </span>
-            <input onChange={this.cscChange} value={this.state.csc} />
+            <input id="id_csc" onChange={this.cscChange} value={this.state.csc} />
           </div>
           <div>
             <span>Stream </span>
-            <input onChange={this.streamChange} value={this.state.stream} />
+            <input id="id_stream" onChange={this.streamChange} value={this.state.stream} />
           </div>
           <button onClick={this.subscribeToStream}>Subscribe</button>
           <button onClick={this.unsubscribeToStream}>Unsubscribe</button>

@@ -4,6 +4,7 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
+  UPDATE_LAST_SAL_COMMAND,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
@@ -13,6 +14,10 @@ export const connectionStates = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
   ERROR: 'ERROR',
+};
+
+export const SALCommandStatus = {
+  REQUESTED: 'REQUESTED',
 };
 
 let socket, wsPromise;
@@ -70,7 +75,7 @@ export const openWebsocketConnection = () => {
               data.data.ATCamera.endOfImageTelemetry
             )
               dispatch(receiveImageSequenceData(data.data));
-            else if( data.data.ATCamera.imageReadoutParameters) {
+            else if (data.data.ATCamera.imageReadoutParameters) {
               dispatch(receiveReadoutData(data.data));
             } else {
               dispatch(receiveCameraStateData(data.data));
@@ -139,9 +144,7 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
     wsPromise.then(() => {
       const state = getState();
       if (state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(
-          `Can not unsubscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`,
-        );
+        console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
       }
 
       socket.json({
@@ -150,6 +153,46 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
         csc,
         stream,
       });
+    });
+  };
+};
+
+export const updateLastSALCommand = (cmd, status) => {
+  return {
+    type: UPDATE_LAST_SAL_COMMAND,
+    status,
+    ...cmd,
+  };
+};
+export const requestSALCommand = (data) => {
+  /**
+   * Requests the LOVE-producer to send a command to the SAL (salobj)
+   * via a websocket message through the LOVE-manager.
+   *
+   * Tries to open a websocket connection if it does not exist and retries after 0.5s.
+   */
+  return (dispatch, getState) => {
+    if (!wsPromise) {
+      dispatch(openWebsocketConnection());
+      setTimeout(() => dispatch(requestSALCommand(data)), 500);
+      return;
+    }
+
+    wsPromise.then(() => {
+      const state = getState();
+      if (state.ws.connectionState !== connectionStates.OPEN) {
+        console.warn(`Can not send commands, websocket connection status is: ${state.ws.connectionState}`);
+      }
+
+      const commandObject = {
+        cmd: data.cmd,
+        params: data.params,
+        component: data.component,
+      };
+
+      socket.json({ option: 'cmd', type: 'command_data', ...commandObject });
+
+      dispatch(updateLastSALCommand(commandObject, SALCommandStatus.REQUESTED));
     });
   };
 };
