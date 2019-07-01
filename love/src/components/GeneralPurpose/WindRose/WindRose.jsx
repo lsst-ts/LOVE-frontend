@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import StatusText from '../StatusText/StatusText';
 // import PropTypes from 'prop-types';
 import styles from './WindRose.module.css';
 
