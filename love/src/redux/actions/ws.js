@@ -4,6 +4,7 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
+  UPDATE_LAST_SAL_COMMAND,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
@@ -13,6 +14,10 @@ export const connectionStates = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
   ERROR: 'ERROR',
+};
+
+export const SALCommandStatus = {
+  REQUESTED: 'REQUESTED',
 };
 
 let socket, wsPromise;
@@ -152,9 +157,17 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
   };
 };
 
+export const updateLastSALCommand = (cmd, status) => {
+  return {
+    type: UPDATE_LAST_SAL_COMMAND,
+    status,
+    ...cmd,
+  };
+};
 export const requestSALCommand = (data) => {
   /**
-   * Sends a SAL Command through the LOVE stack (manager + producer) using a websocket connection.
+   * Requests the LOVE-producer to send a command to the SAL (salobj)
+   * via a websocket message through the LOVE-manager.
    *
    * Tries to open a websocket connection if it does not exist and retries after 0.5s.
    */
@@ -172,14 +185,14 @@ export const requestSALCommand = (data) => {
       }
 
       const commandObject = {
-        option: 'cmd',
-        type: 'command_data',
-        cmd: 'cmd_closeShutter',
-        params: {},
-        component: 'ATDome',
+        cmd: data.cmd,
+        params: data.params,
+        component: data.component,
       };
 
-      socket.json(commandObject);
+      socket.json({ option: 'cmd', type: 'command_data', ...commandObject });
+
+      dispatch(updateLastSALCommand(commandObject, SALCommandStatus.REQUESTED));
     });
   };
 };

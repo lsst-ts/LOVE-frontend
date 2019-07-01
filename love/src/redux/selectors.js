@@ -9,3 +9,7 @@ export const getStreamData = (state, groupName) => {
 export const getCameraState = (state) => {
   return state.camera;
 };
+
+export const getLastSALCommand = (state) => {
+  return state.ws.lastSALCommand;
+}
