@@ -18,6 +18,19 @@
   margin-right: auto;
   font-size: var(--font-size-larger);
   color: var(--base-font-color);
+  padding-top: 1.5em;
+}
+
+.summaryTable .title + .value {
+  padding-top: 2.5em;
+}
+
+.summaryTable .title:first-of-type {
+  padding-top: 0;
+}
+
+.summaryTable .title:first-of-type + .value {
+  padding-top: 0;
 }
 
 .summaryTable .label {

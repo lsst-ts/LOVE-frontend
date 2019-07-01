@@ -56,6 +56,8 @@ export default class Dome extends Component {
     const azimuthState = this.props.azimuthState ? this.props.azimuthState[this.props.azimuthState.length-1].state.value : 0;
     const dropoutDoorState = this.props.dropoutDoorState ? this.props.dropoutDoorState[this.props.dropoutDoorState.length-1].state.value : 0;
     const mainDoorState = this.props.mainDoorState ? this.props.mainDoorState[this.props.mainDoorState.length-1].state.value : 0;
+    const domeInPosition = this.props.domeInPosition;
+    const mountInPosition = this.props.mountInPosition;
 
     const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage ? this.props.dropoutDoorOpeningPercentage.value : 0;
     const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage ? this.props.dropoutDoorOpeningPercentage.value : 0;
@@ -93,11 +95,13 @@ export default class Dome extends Component {
             targetPointing={targetPointing}
             domeAz={domeAz}
             domeTargetAz={domeTargetAz}
+            domeInPosition={domeInPosition}
             azimuthState={azimuthState}
             dropoutDoorState={dropoutDoorState}
             mainDoorState={mainDoorState}
             mountTrackingState={mountTrackingState}
             trackID={trackID}
+            mountInPosition={mountInPosition}
           />
         </div>
         <div className={styles.telemetryTable}>
