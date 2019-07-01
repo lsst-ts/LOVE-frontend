@@ -40,10 +40,12 @@ export const getDomeState = (state) => {
     'event-ATDome-azimuthCommandedState',
     'event-ATDome-dropoutDoorState',
     'event-ATDome-mainDoorState',
+    'event-ATDome-allAxesInPosition',
     'telemetry-ATMCS-mountEncoders',
     'event-ATMCS-detailedState',
     'event-ATMCS-atMountState',
     'event-ATMCS-target',
+    'event-ATMCS-allAxesInPosition',
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
@@ -52,11 +54,13 @@ export const getDomeState = (state) => {
     azimuthPosition: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['azimuthPosition']:0,
     azimuthState: domeData['event-ATDome-azimuthState'],
     azimuthCommandedState: domeData['event-ATDome-azimuthCommandedState'],
+    domeInPosition: domeData['event-ATDome-allAxesInPosition'],
     dropoutDoorState: domeData['event-ATDome-dropoutDoorState'],
     mainDoorState: domeData['event-ATDome-mainDoorState'],
     mountEncoders: domeData['telemetry-ATMCS-mountEncoders'],
     detailedState: domeData['event-ATMCS-detailedState'],
     atMountState: domeData['event-ATMCS-atMountState'],
+    mountInPosition: domeData['event-ATMCS-allAxesInPosition'],
     target: domeData['event-ATMCS-target'],
   };
 };

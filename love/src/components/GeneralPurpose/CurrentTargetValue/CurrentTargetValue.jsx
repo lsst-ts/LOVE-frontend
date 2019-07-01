@@ -18,10 +18,11 @@ export default class CurrentTargetValue extends Component {
   };
 
   render() {
+    const isChanging = this.props.currentValue !== this.props.targetValue;
     return (
       <span className={styles.statusTextWrapper}>
         <span className={styles.telemetryValue}>{this.props.currentValue}º</span>
-        {this.props.isChanging ? (
+        {isChanging ? (
           <>
             <span className={styles.arrow}>&#8594;</span>
             <span className={styles.telemetryValue}>{this.props.targetValue}º</span>
