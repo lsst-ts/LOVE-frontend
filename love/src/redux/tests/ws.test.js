@@ -15,20 +15,17 @@ beforeEach(() => {
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
 });
 
-it('Should save the token in localstorage and the store, and set status=RECEIVED when fetched OK', async () => {
-  await store.dispatch(
-    requestSALCommand({
-      cmd: 'cmd_closeShutter',
-      params: {},
-      component: 'ATDome',
-    }),
-  );
+it('Should send a command to the server and save it on the state properly', async () => {
 
   const commandObject = {
     cmd: 'cmd_closeShutter',
     params: {},
     component: 'ATDome',
   };
+
+  await store.dispatch(
+    requestSALCommand(commandObject),
+  );
 
   await expect(server).toReceiveMessage({ option: 'cmd', type: 'command_data', ...commandObject });
 
