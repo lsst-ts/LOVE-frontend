@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import { getCurrentScript } from '../../redux/selectors';
+import { getScriptQueueState } from '../../redux/selectors';
 
 import ScriptQueue from './ScriptQueue';
 
@@ -30,16 +30,8 @@ const ScriptQueueContainer = ({
 };
 
 const mapStateToProps = (state) => {
-  // const summaryStateValue = undefined; // getSummaryStateValue(state);
-  const current = getCurrentScript(state);
-  console.log(current);
-  return {
-    current,
-    // finishedScriptList,
-    // availableScriptList,
-    // waitingScriptList,
-    // state,
-  };
+  const queueState = getScriptQueueState(state);
+  return queueState;
 };
 
 const mapDispatchToProps = (dispatch) => {
