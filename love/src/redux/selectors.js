@@ -88,9 +88,10 @@ export const getScriptQueueState = (state) => {
   const scriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
   return {
     state: getKey(scriptQueueData, 'state', undefined),
-    availableScripts: getKey(scriptQueueData, 'available_scripts', undefined),
-    waitingScripts: getKey(scriptQueueData, 'waiting_scripts', undefined),
+    availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
+    waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     currentScript: getKey(scriptQueueData, 'current', 'None'),
-    finishedScripts: getKey(scriptQueueData, 'finished_scripts', undefined),
+    finishedScriptList: getKey(scriptQueueData, 'finished_scripts', undefined),
   }
 }
+

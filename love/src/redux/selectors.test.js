@@ -489,6 +489,8 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
     category: "event"
   };
      
+
+
   store.dispatch(openWebsocketConnection());
   await store.dispatch(requestGroupSubscription('event-ScriptQueueState-stream'));
   await server.connected;  
@@ -497,10 +499,10 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
   const streamData = getScriptQueueState(store.getState());
   const expectedData = {
     state: data.data.ScriptQueueState.stream.state,
-    availableScripts: data.data.ScriptQueueState.stream.available_scripts,
-    waitingScripts: data.data.ScriptQueueState.stream.waiting_scripts,
+    availableScriptList: data.data.ScriptQueueState.stream.available_scripts,
+    waitingScriptList: data.data.ScriptQueueState.stream.waiting_scripts,
     currentScript: data.data.ScriptQueueState.stream.current,
-    finishedScripts: data.data.ScriptQueueState.stream.finished_scripts,
+    finishedScriptList: data.data.ScriptQueueState.stream.finished_scripts,
   }
 
   // Assert
