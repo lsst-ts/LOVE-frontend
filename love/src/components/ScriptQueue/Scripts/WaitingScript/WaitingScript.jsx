@@ -80,7 +80,7 @@ export default class WaitingScript extends Component {
       if (this.props.heartbeatData.lastHeartbeatTimestamp < 0) timeDiff = -1;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.lastHeartbeatTimestamp);
     }
-    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+    const timeDiffText = this.props.heartbeatData.lastHeartbeatTimestamp <= 0 || timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
     return (
       <div className={scriptStyles.scriptContainer}>
