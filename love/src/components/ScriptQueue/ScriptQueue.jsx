@@ -373,12 +373,12 @@ export default class ScriptQueue extends Component {
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
-    const current = this.state.current === 'None' ? {} : { ...this.state.current };
+    const current = this.props.current === 'None' ? {} : { ...this.props.current };
 
     // const now = new Date();
     // Fix time zones for next line
     // const currentScriptElapsedTime =
-    //   this.state.current === 'None' || current.timestampRunStart === undefined
+    //   this.props.current === 'None' || current.timestampRunStart === undefined
     //     ? 0
     //     : now.getTime() / 1000.0 - current.timestampRunStart;
 
