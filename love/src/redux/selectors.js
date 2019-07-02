@@ -68,20 +68,12 @@ export const getDomeState = (state) => {
   };
 };
 
-
-export const getCurrentScript = (state) => {
-  const ScriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
-  if(!ScriptQueueData || !ScriptQueueData.current) return 'None';
-
-  return ScriptQueueData.current;
-}
-
 export const getKey = (dict, key, def) => {
   if (dict && dict !== {} && Object.keys(dict).includes(key)) {
     return dict[key];
   } else {
     return def;
-  }  
+  }
 }
 
 export const getScriptQueueState = (state) => {
@@ -90,8 +82,7 @@ export const getScriptQueueState = (state) => {
     state: getKey(scriptQueueData, 'state', undefined),
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
-    currentScript: getKey(scriptQueueData, 'current', 'None'),
+    current: getKey(scriptQueueData, 'current', 'None'),
     finishedScriptList: getKey(scriptQueueData, 'finished_scripts', undefined),
   }
 }
-
