@@ -91,11 +91,15 @@ export default class ScriptQueue extends Component {
       draggingSource: '',
       isFinishedScriptListListVisible: false,
       state: 'Unknown',
-      summaryStateValue: 0,
+      // summaryStateValue: 0,
     };
     this.lastId = 19;
 
     this.managerInterface = new ManagerInterface();
+  }
+
+  static defaultProps = {
+    summaryStateValue: 0
   }
 
   static stateStyleDict = {
@@ -134,9 +138,9 @@ export default class ScriptQueue extends Component {
   onReceiveMsg = (msg) => {
     let { data } = JSON.parse(msg.data);
 
-    if (data.ScriptQueue) {
-      this.processSummaryState(data);
-    }
+    // if (data.ScriptQueue) {
+    //   this.processSummaryState(data);
+    // }
 
     if (data.ScriptQueueState === undefined) return;
 
@@ -150,15 +154,15 @@ export default class ScriptQueue extends Component {
     this.processQueueState(data);
   };
 
-  processSummaryState = (data) => {
-    let { value } = data.ScriptQueue.summaryState[0].summaryState;
-    if (hasFakeData) {
-      value = Math.floor(Math.random() * 5);
-    }
-    this.setState({
-      summaryStateValue: value,
-    });
-  };
+  // processSummaryState = (data) => {
+  //   let { value } = data.ScriptQueue.summaryState[0].summaryState;
+  //   if (hasFakeData) {
+  //     value = Math.floor(Math.random() * 5);
+  //   }
+  //   this.setState({
+  //     summaryStateValue: value,
+  //   });
+  // };
 
   processHeartbeat = (data) => {
     const { salindex, ...scriptData } = data.script_heartbeat;
@@ -423,8 +427,8 @@ export default class ScriptQueue extends Component {
             <div className={styles.globalStateContainer}>
               <div className={styles.stateContainer}>
                 CSC STATE
-                <StatusText status={ScriptQueue.summaryStates[this.state.summaryStateValue].statusText}>
-                  {ScriptQueue.summaryStates[this.state.summaryStateValue].name}
+                <StatusText status={ScriptQueue.summaryStates[this.props.summaryStateValue].statusText}>
+                  {ScriptQueue.summaryStates[this.props.summaryStateValue].name}
                 </StatusText>
               </div>
               <div className={styles.stateContainer}>
