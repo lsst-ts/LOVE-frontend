@@ -67,3 +67,11 @@ export const getDomeState = (state) => {
     target: domeData['event-ATMCS-target'],
   };
 };
+
+
+export const getCurrentScript = (state) => {
+  const ScriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
+  if(!ScriptQueueData || !ScriptQueueData.current) return 'None';
+
+  return ScriptQueueData.current;
+}

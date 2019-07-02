@@ -1,24 +1,45 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import {getSummaryStateValue} from '../../redux/selectors';
+import { getCurrentScript } from '../../redux/selectors';
 
 import ScriptQueue from './ScriptQueue';
 
-const ScriptQueueContainer = ({ subscribeToStreams, unsubscribeToStreams, summaryStateValue }) => {
+const ScriptQueueContainer = ({
+  subscribeToStreams,
+  unsubscribeToStreams,
+  summaryStateValue,
+  current,
+  finishedScriptList,
+  availableScriptList,
+  waitingScriptList,
+  state,
+}) => {
   return (
     <ScriptQueue
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
       summaryStateValue={summaryStateValue}
+      current={current}
+      finishedScriptList={finishedScriptList}
+      availableScriptList={availableScriptList}
+      waitingScriptList={waitingScriptList}
+      state={state}
     />
   );
 };
 
 const mapStateToProps = (state) => {
-  const summaryStateValue = getSummaryStateValue(state);
+  // const summaryStateValue = undefined; // getSummaryStateValue(state);
+  debugger;
+  const current = getCurrentScript(state);
+  console.log(current);
   return {
-    summaryStateValue
+    current,
+    // finishedScriptList,
+    // availableScriptList,
+    // waitingScriptList,
+    // state,
   };
 };
 

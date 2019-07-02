@@ -1,10 +1,17 @@
-import { getStreamData, getTimestampedStreamData, getStreamsData, getCameraState } from './selectors';
+import {
+  getStreamData,
+  getTimestampedStreamData,
+  getStreamsData,
+  getCameraState,
+  getCurrentScript,
+} from './selectors';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import WS from 'jest-websocket-mock';
 import { openWebsocketConnection, requestGroupSubscription } from './actions/ws';
 import thunkMiddleware from 'redux-thunk';
 import { cameraStates, imageStates } from '../Constants';
+import logger from 'redux-logger'
 
 let store, server;
 beforeEach(() => {
@@ -31,9 +38,9 @@ it('Should extract the stream correctly with a selector', async () => {
     },
   };
   const groupName = 'telemetry-Environment-airPressure';
+  store.dispatch(openWebsocketConnection());
 
   // Act
-  store.dispatch(openWebsocketConnection());
   await server.connected;
   await store.dispatch(requestGroupSubscription(groupName));
   server.send({ category: 'telemetry', data: data });
@@ -384,6 +391,251 @@ it('Append readout parameters to image', async () => {
   expect(JSON.stringify(streamData.imageSequence.images['Image 1'])).toBe(JSON.stringify(expectedResult));
 });
 
-// it('Should extract the token correctly with a selector', async ()=>{
-//   expect(1).toEqual(1);
-// })
+it('Should extract the ScriptQueue summaryStateValue correctly with a selector', async () => {
+  // Arrange
+  const data = {
+    data: {
+      ScriptQueueState: {
+        stream: {
+          max_lost_heartbeats: 5,
+          heartbeat_timeout: 15,
+          available_scripts: [
+            { type: "standard", path: "unloadable" },
+            { type: "standard", path: "script2" },
+            { type: "standard", path: "script1" },
+            { type: "standard", path: "subdir/script3" },
+            { type: "standard", path: "subdir/subsubdir/script4" },
+            { type: "external", path: "script5" },
+            { type: "external", path: "script1" },
+            { type: "external", path: "subdir/script3" },
+            { type: "external", path: "subdir/script6" }
+          ],
+          state: "Running",
+          finished_scripts: [
+            {
+              index: 100000,
+              script_state: "DONE",
+              process_state: "DONE",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 1,
+              setup: true,
+              last_heartbeat_timestamp: 1562083001.530486,
+              timestampConfigureEnd: 1562079403.8510532,
+              timestampConfigureStart: 1562079403.739135,
+              timestampProcessEnd: 1562083005.9086933,
+              timestampProcessStart: 1562079400.4823232,
+              timestampRunStart: 1562079403.8522232
+            }
+          ],
+          waiting_scripts: [
+            {
+              index: 100002,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085751.474293,
+              timestampConfigureEnd: 1562079406.6482723,
+              timestampConfigureStart: 1562079406.523249,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079402.5080712,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100003,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085751.879635,
+              timestampConfigureEnd: 1562079407.207569,
+              timestampConfigureStart: 1562079407.049775,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079402.8352787,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100004,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085752.562438,
+              timestampConfigureEnd: 1562079408.020181,
+              timestampConfigureStart: 1562079407.898449,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079403.5259316,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100005,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085753.543405,
+              timestampConfigureEnd: 1562079408.8406103,
+              timestampConfigureStart: 1562079408.7258148,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079404.5491443,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100006,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085754.679062,
+              timestampConfigureEnd: 1562079409.941734,
+              timestampConfigureStart: 1562079409.8192012,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079405.5687497,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100007,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085751.269705,
+              timestampConfigureEnd: 1562079411.5360742,
+              timestampConfigureStart: 1562079411.353158,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079406.5885704,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100008,
+              script_state: "CONFIGURED",
+              process_state: "CONFIGURED",
+              elapsed_time: 0,
+              expected_duration: 3600.0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 0,
+              setup: true,
+              last_heartbeat_timestamp: 1562085751.925366,
+              timestampConfigureEnd: 1562079417.8319068,
+              timestampConfigureStart: 1562079412.2554529,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079407.6125114,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100009,
+              script_state: "UNKNOWN",
+              process_state: "LOADING",
+              elapsed_time: 0,
+              expected_duration: 0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 423,
+              setup: true,
+              last_heartbeat_timestamp: 0,
+              timestampConfigureEnd: 0.0,
+              timestampConfigureStart: 0.0,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079408.6680448,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100010,
+              script_state: "UNKNOWN",
+              process_state: "LOADING",
+              elapsed_time: 0,
+              expected_duration: 0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 422,
+              setup: true,
+              last_heartbeat_timestamp: 0,
+              timestampConfigureEnd: 0.0,
+              timestampConfigureStart: 0.0,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079409.6881685,
+              timestampRunStart: 0.0
+            },
+            {
+              index: 100011,
+              script_state: "UNKNOWN",
+              process_state: "LOADING",
+              elapsed_time: 0,
+              expected_duration: 0,
+              type: "standard",
+              path: "script1",
+              lost_heartbeats: 422,
+              setup: true,
+              last_heartbeat_timestamp: 0,
+              timestampConfigureEnd: 0.0,
+              timestampConfigureStart: 0.0,
+              timestampProcessEnd: 0.0,
+              timestampProcessStart: 1562079410.7365966,
+              timestampRunStart: 0.0
+            }
+          ],
+          current: {
+            index: 100001,
+            script_state: "RUNNING",
+            process_state: "RUNNING",
+            elapsed_time: 0,
+            expected_duration: 3600.0,
+            type: "standard",
+            path: "script1",
+            lost_heartbeats: 0,
+            setup: true,
+            last_heartbeat_timestamp: 1562085754.886316,
+            timestampConfigureEnd: 1562079405.1839786,
+            timestampConfigureStart: 1562079405.0609376,
+            timestampProcessEnd: 0.0,
+            timestampProcessStart: 1562079401.4940698,
+            timestampRunStart: 1562083005.9092648
+          }
+        }
+      }
+    },
+    category: "event"
+  };
+     
+  store.dispatch(openWebsocketConnection());
+  await store.dispatch(requestGroupSubscription('event-ScriptQueueState-stream'));
+  await server.connected;  
+  server.send(data);
+  // Act
+  const streamData = getCurrentScript(store.getState());
+
+  const current = data.data.ScriptQueueState.stream.current;
+
+  // Assert
+  expect(JSON.stringify(streamData)).toEqual(JSON.stringify(current));
+
+
+});
