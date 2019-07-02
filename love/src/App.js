@@ -7,7 +7,7 @@ import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSu
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
-import ScriptQueue from './components/ScriptQueue/ScriptQueue';
+import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
 import TimeSeries from './components/TimeSeries/TimeSeries';
 import Panel from './components/GeneralPurpose/Panel/Panel';
 
@@ -67,7 +67,7 @@ class App extends Component {
               </div>
             )}
           />
-          <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueue} />
+          <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueueContainer} />
           <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummary} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />

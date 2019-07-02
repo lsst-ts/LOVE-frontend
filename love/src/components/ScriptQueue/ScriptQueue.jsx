@@ -190,13 +190,15 @@ export default class ScriptQueue extends Component {
   };
 
   componentDidMount = () => {
-    this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
-    this.managerInterface.subscribeToEvents('ScriptQueue', 'summaryState', this.onReceiveMsg);
+    this.props.subscribeToStreams();
+    // this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
+    // this.managerInterface.subscribeToEvents('ScriptQueue', 'summaryState', this.onReceiveMsg);
   };
 
   componentWillUnmount = () => {
-    this.managerInterface.unsubscribeToEvents('ScriptQueueState', 'stream', () => 0);
-    this.managerInterface.unsubscribeToEvents('ScriptQueue', 'summaryState', () => 0);
+    // this.managerInterface.unsubscribeToEvents('ScriptQueueState', 'stream', () => 0);
+    // this.managerInterface.unsubscribeToEvents('ScriptQueue', 'summaryState', () => 0);
+    this.props.unsubscribeToStreams();
   };
 
   displayAvailableScripts = () => {
