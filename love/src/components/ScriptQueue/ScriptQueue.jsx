@@ -60,7 +60,7 @@ export default class ScriptQueue extends Component {
         //   index: 9,
         // },
       ],
-      finishedScriptList: [
+      // finishedScriptList: [
         // {
         //   path: 'path3/filename1.py',
         //   process_state: 'Done',
@@ -85,7 +85,7 @@ export default class ScriptQueue extends Component {
         //   script_state: 'stopped',
         //   index: 7,
         // },
-      ],
+      // ],
       heartbeats: {},
       isAvailableScriptListVisible: false,
       draggingSource: '',
@@ -99,7 +99,8 @@ export default class ScriptQueue extends Component {
   }
 
   static defaultProps = {
-    summaryStateValue: 0
+    summaryStateValue: 0,
+    finishedScriptList: []
   }
 
   static stateStyleDict = {
@@ -181,12 +182,12 @@ export default class ScriptQueue extends Component {
   processQueueState = (data) => {
     const { current } = data;
     const { state } = data;
-    const finishedScriptList = data.finished_scripts;
+    // const finishedScriptList = data.finished_scripts;
     const availableScriptList = data.available_scripts;
     const waitingScriptList = data.waiting_scripts;
     this.setState({
       current,
-      finishedScriptList,
+      // finishedScriptList,
       availableScriptList,
       waitingScriptList,
       state,
@@ -387,7 +388,7 @@ export default class ScriptQueue extends Component {
       return currentElement.expected_duration + previousSum;
     }, 0);
 
-    const totalFinishedSeconds = this.state.finishedScriptList.reduce((previousSum, currentElement) => {
+    const totalFinishedSeconds = this.props.finishedScriptList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
@@ -566,7 +567,7 @@ export default class ScriptQueue extends Component {
                   <div className={styles.listTitleWrapper}>
                     <div className={styles.listTitleLeft}>
                       <span className={styles.listTitle}>
-                        FINISHED SCRIPTS ({this.state.finishedScriptList.length})
+                        FINISHED SCRIPTS ({this.props.finishedScriptList.length})
                       </span>
                       <span className={styles.listSubtitle}>
                         Total time:{' '}
@@ -588,7 +589,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.finishedScriptList.map((script, listIndex) => {
+                    {this.props.finishedScriptList.map((script, listIndex) => {
                       const isStandard =
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
