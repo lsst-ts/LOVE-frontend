@@ -19,7 +19,7 @@ export default class ScriptQueue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      heartbeats: {},
+      // heartbeats: {},
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
@@ -31,6 +31,7 @@ export default class ScriptQueue extends Component {
 
   static defaultProps = {
     summaryStateValue: 0,
+    heartbeats: {},
     availableScriptList: [],
     waitingScriptList: [],
     current: 'None',
@@ -82,10 +83,10 @@ export default class ScriptQueue extends Component {
 
     data = data.ScriptQueueState.stream;
 
-    if (data.script_heartbeat) {
-      this.processHeartbeat(data);
-      return;
-    }
+    // if (data.script_heartbeat) {
+    //   this.processHeartbeat(data);
+    //   return;
+    // }
   };
 
   // processSummaryState = (data) => {
@@ -100,7 +101,7 @@ export default class ScriptQueue extends Component {
 
   processHeartbeat = (data) => {
     const { salindex, ...scriptData } = data.script_heartbeat;
-    const currentHeartbeats = { ...this.state.heartbeats };
+    const currentHeartbeats = { ...this.props.heartbeats };
 
     currentHeartbeats[salindex] = {
       lost: scriptData.lost,
@@ -326,7 +327,7 @@ export default class ScriptQueue extends Component {
                   processState={current.process_state}
                   isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                   estimatedTime={current.expected_duration}
-                  heartbeatData={this.state.heartbeats[current.index]}
+                  heartbeatData={this.props.heartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
                 />
               </div>
@@ -453,7 +454,7 @@ export default class ScriptQueue extends Component {
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
-                        heartbeatData={this.state.heartbeats[script.index]}
+                        heartbeatData={this.props.heartbeats[script.index]}
                         {...script}
                       />
                     </DraggableScript>

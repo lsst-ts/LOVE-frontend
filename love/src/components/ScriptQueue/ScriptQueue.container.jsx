@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import { getScriptQueueState } from '../../redux/selectors';
+import { getScriptQueueState, getScriptHeartbeats } from '../../redux/selectors';
 
 import ScriptQueue from './ScriptQueue';
 
@@ -9,29 +9,37 @@ const ScriptQueueContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   summaryStateValue,
-  current,
-  finishedScriptList,
-  availableScriptList,
-  waitingScriptList,
-  state,
+  // current,
+  // finishedScriptList,
+  // availableScriptList,
+  // waitingScriptList,
+  // state,
+  queueState,
+  scriptHeartbeats,
 }) => {
   return (
     <ScriptQueue
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
       summaryStateValue={summaryStateValue}
-      current={current}
-      finishedScriptList={finishedScriptList}
-      availableScriptList={availableScriptList}
-      waitingScriptList={waitingScriptList}
-      state={state}
+      current={queueState.current}
+      finishedScriptList={queueState.finishedScriptList}
+      availableScriptList={queueState.availableScriptList}
+      waitingScriptList={queueState.waitingScriptList}
+      state={queueState.state}
+      heartbeats={scriptHeartbeats}
     />
   );
 };
 
 const mapStateToProps = (state) => {
   const queueState = getScriptQueueState(state);
-  return queueState;
+  const scriptHeartbeats = getScriptHeartbeats(state);
+  // return queueState;
+  return {
+    queueState: queueState,
+    scriptHeartbeats: scriptHeartbeats,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -39,10 +47,12 @@ const mapDispatchToProps = (dispatch) => {
     subscribeToStreams: () => {
       dispatch(requestGroupSubscription('event-ScriptQueueState-stream'));
       dispatch(requestGroupSubscription('event-ScriptQueueState-summaryState'));
+      dispatch(requestGroupSubscription('event-ScriptHeartbeats-stream'));
     },
     unsubscribeToStreams: () => {
       dispatch(requestGroupSubscriptionRemoval('event-ScriptQueueState-stream'));
       dispatch(requestGroupSubscriptionRemoval('event-ScriptQueueState-summaryState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ScriptHeartbeats-stream'));
     },
   };
 };
