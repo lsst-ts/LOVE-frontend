@@ -75,3 +75,22 @@ export const getCurrentScript = (state) => {
 
   return ScriptQueueData.current;
 }
+
+export const getKey = (dict, key, def) => {
+  if (dict && dict !== {} && Object.keys(dict).includes(key)) {
+    return dict[key];
+  } else {
+    return def;
+  }  
+}
+
+export const getScriptQueueState = (state) => {
+  const scriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
+  return {
+    state: getKey(scriptQueueData, 'state', undefined),
+    availableScripts: getKey(scriptQueueData, 'available_scripts', undefined),
+    waitingScripts: getKey(scriptQueueData, 'waiting_scripts', undefined),
+    currentScript: getKey(scriptQueueData, 'current', 'None'),
+    finishedScripts: getKey(scriptQueueData, 'finished_scripts', undefined),
+  }
+}

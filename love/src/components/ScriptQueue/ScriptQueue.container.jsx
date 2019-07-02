@@ -31,7 +31,6 @@ const ScriptQueueContainer = ({
 
 const mapStateToProps = (state) => {
   // const summaryStateValue = undefined; // getSummaryStateValue(state);
-  debugger;
   const current = getCurrentScript(state);
   console.log(current);
   return {
