@@ -3,7 +3,7 @@ import {
   getTimestampedStreamData,
   getStreamsData,
   getCameraState,
-  getCurrentScript,
+  getScriptQueueState,
 } from './selectors';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
@@ -391,7 +391,7 @@ it('Append readout parameters to image', async () => {
   expect(JSON.stringify(streamData.imageSequence.images['Image 1'])).toBe(JSON.stringify(expectedResult));
 });
 
-it('Should extract the ScriptQueue summaryStateValue correctly with a selector', async () => {
+it('Should extract the ScriptQueue state correctly with a selector', async () => {
   // Arrange
   const data = {
     data: {
@@ -465,142 +465,6 @@ it('Should extract the ScriptQueue summaryStateValue correctly with a selector',
               timestampProcessStart: 1562079402.8352787,
               timestampRunStart: 0.0
             },
-            {
-              index: 100004,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085752.562438,
-              timestampConfigureEnd: 1562079408.020181,
-              timestampConfigureStart: 1562079407.898449,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079403.5259316,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100005,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085753.543405,
-              timestampConfigureEnd: 1562079408.8406103,
-              timestampConfigureStart: 1562079408.7258148,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079404.5491443,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100006,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085754.679062,
-              timestampConfigureEnd: 1562079409.941734,
-              timestampConfigureStart: 1562079409.8192012,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079405.5687497,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100007,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085751.269705,
-              timestampConfigureEnd: 1562079411.5360742,
-              timestampConfigureStart: 1562079411.353158,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079406.5885704,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100008,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085751.925366,
-              timestampConfigureEnd: 1562079417.8319068,
-              timestampConfigureStart: 1562079412.2554529,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079407.6125114,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100009,
-              script_state: "UNKNOWN",
-              process_state: "LOADING",
-              elapsed_time: 0,
-              expected_duration: 0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 423,
-              setup: true,
-              last_heartbeat_timestamp: 0,
-              timestampConfigureEnd: 0.0,
-              timestampConfigureStart: 0.0,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079408.6680448,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100010,
-              script_state: "UNKNOWN",
-              process_state: "LOADING",
-              elapsed_time: 0,
-              expected_duration: 0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 422,
-              setup: true,
-              last_heartbeat_timestamp: 0,
-              timestampConfigureEnd: 0.0,
-              timestampConfigureStart: 0.0,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079409.6881685,
-              timestampRunStart: 0.0
-            },
-            {
-              index: 100011,
-              script_state: "UNKNOWN",
-              process_state: "LOADING",
-              elapsed_time: 0,
-              expected_duration: 0,
-              type: "standard",
-              path: "script1",
-              lost_heartbeats: 422,
-              setup: true,
-              last_heartbeat_timestamp: 0,
-              timestampConfigureEnd: 0.0,
-              timestampConfigureStart: 0.0,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079410.7365966,
-              timestampRunStart: 0.0
-            }
           ],
           current: {
             index: 100001,
@@ -630,12 +494,15 @@ it('Should extract the ScriptQueue summaryStateValue correctly with a selector',
   await server.connected;  
   server.send(data);
   // Act
-  const streamData = getCurrentScript(store.getState());
-
-  const current = data.data.ScriptQueueState.stream.current;
+  const streamData = getScriptQueueState(store.getState());
+  const expectedData = {
+    state: data.data.ScriptQueueState.stream.state,
+    availableScripts: data.data.ScriptQueueState.stream.available_scripts,
+    waitingScripts: data.data.ScriptQueueState.stream.waiting_scripts,
+    currentScript: data.data.ScriptQueueState.stream.current,
+    finishedScripts: data.data.ScriptQueueState.stream.finished_scripts,
+  }
 
   // Assert
-  expect(JSON.stringify(streamData)).toEqual(JSON.stringify(current));
-
-
+  expect(JSON.stringify(streamData)).toEqual(JSON.stringify(expectedData));
 });
