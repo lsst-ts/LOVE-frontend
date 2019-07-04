@@ -152,7 +152,6 @@ export default class ScriptQueue extends Component {
   // eslint-disable-next-line
   onDragEnd = (e, draggingId, draggingSource) => {
     if (!hasCommandPrivileges) return;
-    // console.log('END', e, draggingId, draggingSource, this.state.draggingScriptInstance);
     if (draggingSource === 'available') {
       const list = [...this.props.waitingScriptList];
       for (let i = 0; i < list.length; i += 1) {

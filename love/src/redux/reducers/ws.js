@@ -80,7 +80,6 @@ export default function(state = initialState, action) {
     }
 
     case UPDATE_LAST_SAL_COMMAND: {
-      console.log('UPDATING')
       return {
         ...state,
         lastSALCommand: {
