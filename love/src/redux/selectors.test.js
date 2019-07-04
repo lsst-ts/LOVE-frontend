@@ -11,7 +11,7 @@ import WS from 'jest-websocket-mock';
 import { openWebsocketConnection, requestGroupSubscription } from './actions/ws';
 import thunkMiddleware from 'redux-thunk';
 import { cameraStates, imageStates } from '../Constants';
-import logger from 'redux-logger'
+import logger from 'redux-logger';
 
 let store, server;
 beforeEach(() => {
@@ -30,10 +30,22 @@ it('Should extract the stream correctly with a selector', async () => {
   const data = {
     Environment: {
       airPressure: {
-        paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
-        pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
-        patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
-        sensorName: { value: 'c', dataType: 'String' },
+        paAvg1M: {
+          value: 0.12092732556005037,
+          dataType: 'Float',
+        },
+        pateValue3H: {
+          value: 0.2811193740140766,
+          dataType: 'Float',
+        },
+        patrValue3H: {
+          value: 0.04326551449696192,
+          dataType: 'Float',
+        },
+        sensorName: {
+          value: 'c',
+          dataType: 'String',
+        },
       },
     },
   };
@@ -55,24 +67,56 @@ it('Should extract streams correctly with a selector', async () => {
   const data = {
     Environment: {
       airPressure: {
-        paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
-        pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
-        patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
-        sensorName: { value: 'c', dataType: 'String' },
+        paAvg1M: {
+          value: 0.12092732556005037,
+          dataType: 'Float',
+        },
+        pateValue3H: {
+          value: 0.2811193740140766,
+          dataType: 'Float',
+        },
+        patrValue3H: {
+          value: 0.04326551449696192,
+          dataType: 'Float',
+        },
+        sensorName: {
+          value: 'c',
+          dataType: 'String',
+        },
       },
       temperature: {
-        sensor1: { value: 69, dataType: 'Float' },
+        sensor1: {
+          value: 69,
+          dataType: 'Float',
+        },
       },
     },
   };
   const expectedData = {
     'telemetry-Environment-airPressure': {
-      paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
-      pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
-      patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
-      sensorName: { value: 'c', dataType: 'String' },
+      paAvg1M: {
+        value: 0.12092732556005037,
+        dataType: 'Float',
+      },
+      pateValue3H: {
+        value: 0.2811193740140766,
+        dataType: 'Float',
+      },
+      patrValue3H: {
+        value: 0.04326551449696192,
+        dataType: 'Float',
+      },
+      sensorName: {
+        value: 'c',
+        dataType: 'String',
+      },
     },
-    'telemetry-Environment-temperature': { sensor1: { value: 69, dataType: 'Float' } },
+    'telemetry-Environment-temperature': {
+      sensor1: {
+        value: 69,
+        dataType: 'Float',
+      },
+    },
   };
   const groupNames = ['telemetry-Environment-airPressure', 'telemetry-Environment-temperature'];
 
@@ -93,10 +137,22 @@ it('Should extract the timestamped stream correctly with a selector', async () =
   const data = {
     Environment: {
       airPressure: {
-        paAvg1M: { value: 0.12092732556005037, dataType: 'Float' },
-        pateValue3H: { value: 0.2811193740140766, dataType: 'Float' },
-        patrValue3H: { value: 0.04326551449696192, dataType: 'Float' },
-        sensorName: { value: 'c', dataType: 'String' },
+        paAvg1M: {
+          value: 0.12092732556005037,
+          dataType: 'Float',
+        },
+        pateValue3H: {
+          value: 0.2811193740140766,
+          dataType: 'Float',
+        },
+        patrValue3H: {
+          value: 0.04326551449696192,
+          dataType: 'Float',
+        },
+        sensorName: {
+          value: 'c',
+          dataType: 'String',
+        },
       },
     },
   };
@@ -400,26 +456,53 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
           max_lost_heartbeats: 5,
           heartbeat_timeout: 15,
           available_scripts: [
-            { type: "standard", path: "unloadable" },
-            { type: "standard", path: "script2" },
-            { type: "standard", path: "script1" },
-            { type: "standard", path: "subdir/script3" },
-            { type: "standard", path: "subdir/subsubdir/script4" },
-            { type: "external", path: "script5" },
-            { type: "external", path: "script1" },
-            { type: "external", path: "subdir/script3" },
-            { type: "external", path: "subdir/script6" }
+            {
+              type: 'standard',
+              path: 'unloadable',
+            },
+            {
+              type: 'standard',
+              path: 'script2',
+            },
+            {
+              type: 'standard',
+              path: 'script1',
+            },
+            {
+              type: 'standard',
+              path: 'subdir/script3',
+            },
+            {
+              type: 'standard',
+              path: 'subdir/subsubdir/script4',
+            },
+            {
+              type: 'external',
+              path: 'script5',
+            },
+            {
+              type: 'external',
+              path: 'script1',
+            },
+            {
+              type: 'external',
+              path: 'subdir/script3',
+            },
+            {
+              type: 'external',
+              path: 'subdir/script6',
+            },
           ],
-          state: "Running",
+          state: 'Running',
           finished_scripts: [
             {
               index: 100000,
-              script_state: "DONE",
-              process_state: "DONE",
+              script_state: 'DONE',
+              process_state: 'DONE',
               elapsed_time: 0,
               expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
+              type: 'standard',
+              path: 'script1',
               lost_heartbeats: 1,
               setup: true,
               last_heartbeat_timestamp: 1562083001.530486,
@@ -427,18 +510,18 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
               timestampConfigureStart: 1562079403.739135,
               timestampProcessEnd: 1562083005.9086933,
               timestampProcessStart: 1562079400.4823232,
-              timestampRunStart: 1562079403.8522232
-            }
+              timestampRunStart: 1562079403.8522232,
+            },
           ],
           waiting_scripts: [
             {
               index: 100002,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
+              script_state: 'CONFIGURED',
+              process_state: 'CONFIGURED',
               elapsed_time: 0,
               expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
+              type: 'standard',
+              path: 'script1',
               lost_heartbeats: 0,
               setup: true,
               last_heartbeat_timestamp: 1562085751.474293,
@@ -446,16 +529,16 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
               timestampConfigureStart: 1562079406.523249,
               timestampProcessEnd: 0.0,
               timestampProcessStart: 1562079402.5080712,
-              timestampRunStart: 0.0
+              timestampRunStart: 0.0,
             },
             {
               index: 100003,
-              script_state: "CONFIGURED",
-              process_state: "CONFIGURED",
+              script_state: 'CONFIGURED',
+              process_state: 'CONFIGURED',
               elapsed_time: 0,
               expected_duration: 3600.0,
-              type: "standard",
-              path: "script1",
+              type: 'standard',
+              path: 'script1',
               lost_heartbeats: 0,
               setup: true,
               last_heartbeat_timestamp: 1562085751.879635,
@@ -463,17 +546,17 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
               timestampConfigureStart: 1562079407.049775,
               timestampProcessEnd: 0.0,
               timestampProcessStart: 1562079402.8352787,
-              timestampRunStart: 0.0
+              timestampRunStart: 0.0,
             },
           ],
           current: {
             index: 100001,
-            script_state: "RUNNING",
-            process_state: "RUNNING",
+            script_state: 'RUNNING',
+            process_state: 'RUNNING',
             elapsed_time: 0,
             expected_duration: 3600.0,
-            type: "standard",
-            path: "script1",
+            type: 'standard',
+            path: 'script1',
             lost_heartbeats: 0,
             setup: true,
             last_heartbeat_timestamp: 1562085754.886316,
@@ -481,19 +564,17 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
             timestampConfigureStart: 1562079405.0609376,
             timestampProcessEnd: 0.0,
             timestampProcessStart: 1562079401.4940698,
-            timestampRunStart: 1562083005.9092648
-          }
-        }
-      }
+            timestampRunStart: 1562083005.9092648,
+          },
+        },
+      },
     },
-    category: "event"
+    category: 'event',
   };
-     
-
 
   store.dispatch(openWebsocketConnection());
   await store.dispatch(requestGroupSubscription('event-ScriptQueueState-stream'));
-  await server.connected;  
+  await server.connected;
   server.send(data);
   // Act
   const streamData = getScriptQueueState(store.getState());
@@ -501,9 +582,9 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
     state: data.data.ScriptQueueState.stream.state,
     availableScriptList: data.data.ScriptQueueState.stream.available_scripts,
     waitingScriptList: data.data.ScriptQueueState.stream.waiting_scripts,
-    currentScript: data.data.ScriptQueueState.stream.current,
+    current: data.data.ScriptQueueState.stream.current,
     finishedScriptList: data.data.ScriptQueueState.stream.finished_scripts,
-  }
+  };
 
   // Assert
   expect(JSON.stringify(streamData)).toEqual(JSON.stringify(expectedData));
