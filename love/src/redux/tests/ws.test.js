@@ -37,29 +37,55 @@ it('Should send a command to the server and save it on the state properly', asyn
   });
 });
 
-it('Should receive a Script Heartbeat from the server and save it on the state properly', async () => {
-  const serverMessage = {
-    data: {
-      ScriptHeartbeats: {
-        stream: {
-          script_heartbeat: {
-            salindex: 100017,
-            lost: 1,
-            last_heartbeat_timestamp: 1562258576.477827
-          }
-        },
-      },
-    },
-    category: 'event',
-  };
-  server.send(serverMessage);
-  const heartbeatsState = getScriptHeartbeats(store.getState());
-  const expectedState = [
-    {
+it('Should receive 3 sequential messages with script heartbeats (2 new and 1 update) from the server and save them on the state properly', async () => {
+  const compareSalIndex = ( (a, b) => {
+    if (a.salindex < b.salindex ) {
+      return -1;
+    } else if (a.salindex > b.salindex ) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  const heartbeats = [
+    { // New for SAL index 100017
       salindex: 100017,
       lost: 1,
       last_heartbeat_timestamp: 1562258576.477827
-    }
-  ];
-  expect(JSON.stringify(heartbeatsState)).toEqual(JSON.stringify(expectedState));
+    },
+    {  // New for SAL index 100018
+      salindex: 100018,
+      lost: 3,
+      last_heartbeat_timestamp: 1562258590.477827
+    },
+    {  // Update for SAL index 100017
+      salindex: 100017,
+      lost: 5,
+      last_heartbeat_timestamp: 1562258698.477827
+    },
+  ]
+
+  let expectedHeartbeats = [];
+  heartbeats.forEach( (heartbeat) => {
+    // Act:
+    server.send(
+      {
+        data: {
+          ScriptHeartbeats: {
+            stream: {
+              script_heartbeat: heartbeat
+            },
+          },
+        },
+        category: 'event',
+      }
+    );
+    let heartbeatsState = getScriptHeartbeats(store.getState());
+    // Assert:
+    // We expect a list with last heartbeat for each SAL index
+    expectedHeartbeats = expectedHeartbeats.filter(current => current.salindex !== heartbeat.salindex);
+    expectedHeartbeats.push(heartbeat);
+    expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(JSON.stringify(expectedHeartbeats.sort(compareSalIndex)));
+  });
 });
