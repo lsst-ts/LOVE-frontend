@@ -15,13 +15,14 @@ export default function(state = initialState, action) {
     case UPDATE_SCRIPT_HEARTBEAT: {
       const salindex = action.data.salindex;
       const currentHeartbeats = state.scripts;
-      const found = false;
+      let found = false;
 
       let newHeartbeats = currentHeartbeats.map((current) => {
-        if (current.salindex === salindex) {
-          found = true;
-          return action.data;
+        if (current.salindex !== salindex) {
+          return current;
         }
+        found = true;
+        return action.data;
       });
       if (!found) {
         newHeartbeats.push(action.data);
