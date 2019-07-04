@@ -19,7 +19,7 @@ export default class ScriptQueue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // heartbeats: {},
+      indexedHeartbeats: {},
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
@@ -37,7 +37,7 @@ export default class ScriptQueue extends Component {
     current: 'None',
     finishedScriptList: [],
     state: 'Unknown',
-  }
+  };
 
   static stateStyleDict = {
     Stopped: 'warning',
@@ -72,20 +72,22 @@ export default class ScriptQueue extends Component {
     },
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.heartbeats != prevProps.heartbeats) {
+      this.setState({
+        indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
+          map[heartbeat.salindex] = heartbeat;
+          return map;
+        }, {}),
+      });
+    }
+  };
+
   onReceiveMsg = (msg) => {
     let { data } = JSON.parse(msg.data);
 
     // if (data.ScriptQueue) {
     //   this.processSummaryState(data);
-    // }
-
-    if (data.ScriptQueueState === undefined) return;
-
-    data = data.ScriptQueueState.stream;
-
-    // if (data.script_heartbeat) {
-    //   this.processHeartbeat(data);
-    //   return;
     // }
   };
 
@@ -98,20 +100,6 @@ export default class ScriptQueue extends Component {
   //     summaryStateValue: value,
   //   });
   // };
-
-  processHeartbeat = (data) => {
-    const { salindex, ...scriptData } = data.script_heartbeat;
-    const currentHeartbeats = { ...this.props.heartbeats };
-
-    currentHeartbeats[salindex] = {
-      lost: scriptData.lost,
-      lastHeartbeatTimestamp: scriptData.last_heartbeat_timestamp,
-    };
-
-    this.setState({
-      heartbeats: currentHeartbeats,
-    });
-  };
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
@@ -326,7 +314,7 @@ export default class ScriptQueue extends Component {
                   processState={current.process_state}
                   isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                   estimatedTime={current.expected_duration}
-                  heartbeatData={this.props.heartbeats[current.index]}
+                  heartbeatData={this.state.indexedHeartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
                 />
               </div>
@@ -453,7 +441,7 @@ export default class ScriptQueue extends Component {
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
-                        heartbeatData={this.props.heartbeats[script.index]}
+                        heartbeatData={this.state.indexedHeartbeats[script.index]}
                         {...script}
                       />
                     </DraggableScript>

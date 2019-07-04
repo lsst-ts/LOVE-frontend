@@ -9,11 +9,6 @@ const ScriptQueueContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   summaryStateValue,
-  // current,
-  // finishedScriptList,
-  // availableScriptList,
-  // waitingScriptList,
-  // state,
   queueState,
   scriptHeartbeats,
 }) => {
@@ -35,7 +30,6 @@ const ScriptQueueContainer = ({
 const mapStateToProps = (state) => {
   const queueState = getScriptQueueState(state);
   const scriptHeartbeats = getScriptHeartbeats(state);
-  // return queueState;
   return {
     queueState: queueState,
     scriptHeartbeats: scriptHeartbeats,
