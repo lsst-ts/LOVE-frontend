@@ -88,16 +88,5 @@ export const getScriptQueueState = (state) => {
 }
 
 export const getScriptHeartbeats = (state) => {
-  const scriptHeartbeatsData = getStreamData(state, 'event-ScriptHeartbeats-stream');
-  const currentHeartbeats = { ...state.heartbeats };
-  console.log('\n********* scriptHeartbeatsData: ', scriptHeartbeatsData);
-  if (scriptHeartbeatsData !== undefined && scriptHeartbeatsData.script_heartbeat !== undefined) {
-    const { salindex, ...scriptData } = scriptHeartbeatsData.script_heartbeat;
-    currentHeartbeats[salindex] = {
-      lost: scriptData.lost,
-      lastHeartbeatTimestamp: scriptData.last_heartbeat_timestamp,
-    };
-  }
-  console.log('********* currentHeartbeats: ', currentHeartbeats);
-  return currentHeartbeats;
+  return state.heartbeats.scripts;
 }
