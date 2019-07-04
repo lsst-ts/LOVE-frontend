@@ -1,7 +1,6 @@
 import {
   UPDATE_SCRIPT_HEARTBEAT,
 } from '../actions/actionTypes';
-import { getScriptHeartbeats } from '../selectors';
 
 const initialState = {
   scripts: [],
