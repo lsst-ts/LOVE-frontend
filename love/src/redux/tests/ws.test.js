@@ -52,21 +52,21 @@ it('Should receive 3 sequential messages with script heartbeats (2 new and 1 upd
     { // New for SAL index 100017
       salindex: 100017,
       lost: 1,
-      last_heartbeat_timestamp: 1562258576.477827
+      lastHeartbeatTimestamp: 1562258576.477827
     },
     {  // New for SAL index 100018
       salindex: 100018,
       lost: 3,
-      last_heartbeat_timestamp: 1562258590.477827
+      lastHeartbeatTimestamp: 1562258590.477827
     },
     {  // Update for SAL index 100017
       salindex: 100017,
       lost: 5,
-      last_heartbeat_timestamp: 1562258698.477827
+      lastHeartbeatTimestamp: 1562258698.477827
     },
   ]
 
-  let expectedHeartbeats = [];
+  let expectedState = [];
   heartbeats.forEach( (heartbeat) => {
     // Act:
     server.send(
@@ -74,7 +74,11 @@ it('Should receive 3 sequential messages with script heartbeats (2 new and 1 upd
         data: {
           ScriptHeartbeats: {
             stream: {
-              script_heartbeat: heartbeat
+              script_heartbeat: {
+                salindex: heartbeat.salindex,
+                lost: heartbeat.lost,
+                last_heartbeat_timestamp: heartbeat.lastHeartbeatTimestamp,
+              },
             },
           },
         },
@@ -84,8 +88,8 @@ it('Should receive 3 sequential messages with script heartbeats (2 new and 1 upd
     let heartbeatsState = getScriptHeartbeats(store.getState());
     // Assert:
     // We expect a list with last heartbeat for each SAL index
-    expectedHeartbeats = expectedHeartbeats.filter(current => current.salindex !== heartbeat.salindex);
-    expectedHeartbeats.push(heartbeat);
-    expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(JSON.stringify(expectedHeartbeats.sort(compareSalIndex)));
+    expectedState = expectedState.filter(current => current.salindex !== heartbeat.salindex);
+    expectedState.push(heartbeat);
+    expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(JSON.stringify(expectedState.sort(compareSalIndex)));
   });
 });
