@@ -142,8 +142,7 @@ it(`GIVEN 3 script heartbeats in the State,
     WHEN we receive an event finishing one of those scripts,
     THEN we should remove that script from the heartbeat's State`, async () => {
   // Arrange:
-  const initialState = store.getState();
-  initialState.heartbeats.scripts = [
+  const mockHeartbeats = [
     {
       salindex: 100000,
       lost: 4,
@@ -160,17 +159,29 @@ it(`GIVEN 3 script heartbeats in the State,
       lastHeartbeatTimestamp: 1562258590.477827,
     },
   ];
-  let store2 = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
+  mockHeartbeats.forEach( (heartbeat) => {
+    server.send({
+      data: {
+        ScriptHeartbeats: {
+          stream: {
+            script_heartbeat: {
+              salindex: heartbeat.salindex,
+              lost: heartbeat.lost,
+              last_heartbeat_timestamp: heartbeat.lastHeartbeatTimestamp,
+            },
+          },
+        },
+      },
+      category: 'event',
+    });
+  });
 
   let expectedState = [];
   // Act:
   server.send(mockScriptQueueData);
-  console.log('store1',getScriptQueueState(store.getState()))
-  console.log('store2', getScriptQueueState(store2.getState()))
   // Assert:
+  expectedState = [mockHeartbeats[0], mockHeartbeats[2]];
   let heartbeatsState = getScriptHeartbeats(store.getState());
-  console.log('heartbeatsState', heartbeatsState)
-  expectedState = [initialState.heartbeats.scripts[0], initialState.heartbeats.scripts[2]];
   expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(
     JSON.stringify(expectedState.sort(compareSalIndex)),
   );
