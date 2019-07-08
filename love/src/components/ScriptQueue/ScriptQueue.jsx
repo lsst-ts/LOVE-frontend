@@ -19,24 +19,21 @@ export default class ScriptQueue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      indexedHeartbeats: {},
+      current: {},
+      waitingScriptList: [],
+      availableScriptList: [],
+      finishedScriptList: [],
+      heartbeats: {},
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
+      state: 'Unknown',
+      summaryStateValue: 0,
     };
     this.lastId = 19;
+
     this.managerInterface = new ManagerInterface();
   }
-
-  static defaultProps = {
-    summaryStateValue: 0,
-    heartbeats: {},
-    availableScriptList: [],
-    waitingScriptList: [],
-    current: 'None',
-    finishedScriptList: [],
-    state: 'Unknown',
-  };
 
   static stateStyleDict = {
     Stopped: 'warning',
@@ -71,23 +68,72 @@ export default class ScriptQueue extends Component {
     },
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.heartbeats != prevProps.heartbeats) {
-      this.setState({
-        indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
-          map[heartbeat.salindex] = heartbeat;
-          return map;
-        }, {}),
-      });
+  onReceiveMsg = (msg) => {
+    let { data } = JSON.parse(msg.data);
+
+    if (data.ScriptQueue) {
+      this.processSummaryState(data);
     }
+
+    if (data.ScriptQueueState === undefined) return;
+
+    data = data.ScriptQueueState.stream;
+
+    if (data.script_heartbeat) {
+      this.processHeartbeat(data);
+      return;
+    }
+
+    this.processQueueState(data);
+  };
+
+  processSummaryState = (data) => {
+    let { value } = data.ScriptQueue.summaryState[0].summaryState;
+    if (hasFakeData) {
+      value = Math.floor(Math.random() * 5);
+    }
+    this.setState({
+      summaryStateValue: value,
+    });
+  };
+
+  processHeartbeat = (data) => {
+    const { salindex, ...scriptData } = data.script_heartbeat;
+    const currentHeartbeats = { ...this.state.heartbeats };
+
+    currentHeartbeats[salindex] = {
+      lost: scriptData.lost,
+      lastHeartbeatTimestamp: scriptData.last_heartbeat_timestamp,
+    };
+
+    this.setState({
+      heartbeats: currentHeartbeats,
+    });
+  };
+
+  processQueueState = (data) => {
+    const { current } = data;
+    const { state } = data;
+    const finishedScriptList = data.finished_scripts;
+    const availableScriptList = data.available_scripts;
+    const waitingScriptList = data.waiting_scripts;
+    this.setState({
+      current,
+      finishedScriptList,
+      availableScriptList,
+      waitingScriptList,
+      state,
+    });
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStreams();
+    this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
+    this.managerInterface.subscribeToEvents('ScriptQueue', 'summaryState', this.onReceiveMsg);
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStreams();
+    this.managerInterface.unsubscribeToEvents('ScriptQueueState', 'stream', () => 0);
+    this.managerInterface.unsubscribeToEvents('ScriptQueue', 'summaryState', () => 0);
   };
 
   displayAvailableScripts = () => {
@@ -103,14 +149,15 @@ export default class ScriptQueue extends Component {
   };
 
   getScriptFromId = (index, listName) => {
-    let list = this.props.waitingScriptList;
-    if (listName === 'available') list = this.props.availableScriptList;
+    let list = this.state.waitingScriptList;
+    if (listName === 'available') list = this.state.availableScriptList;
     for (let i = 0; i < list.length; i += 1) if (list[i].index === index) return list[i];
     return null;
   };
 
   onDragStart = (e, draggingId, draggingSource) => {
     if (!hasCommandPrivileges) return;
+    // console.log('onDragStart', this.state);
     const draggingScriptInstance = this.getScriptFromId(draggingId, draggingSource);
     this.setState({
       draggingScriptInstance,
@@ -121,8 +168,9 @@ export default class ScriptQueue extends Component {
   // eslint-disable-next-line
   onDragEnd = (e, draggingId, draggingSource) => {
     if (!hasCommandPrivileges) return;
+    // console.log('END', e, draggingId, draggingSource, this.state.draggingScriptInstance);
     if (draggingSource === 'available') {
-      const list = [...this.props.waitingScriptList];
+      const list = [...this.state.waitingScriptList];
       for (let i = 0; i < list.length; i += 1) {
         // update id of newly inserted script
         if (list[i].index === draggingId) {
@@ -146,7 +194,7 @@ export default class ScriptQueue extends Component {
   };
 
   removeFromWaitingList = (sourceScriptId) => {
-    const waitingList = [...this.props.waitingScriptList];
+    const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
     let waitingListSourceId = -1;
@@ -165,7 +213,7 @@ export default class ScriptQueue extends Component {
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
-    const waitingList = [...this.props.waitingScriptList];
+    const waitingList = [...this.state.waitingScriptList];
     const waitingListLength = waitingList.length;
     let waitingListSourceId = -1;
 
@@ -196,7 +244,7 @@ export default class ScriptQueue extends Component {
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
 
-    const waitingList = [...this.props.waitingScriptList];
+    const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
     let waitingListSourceId = -1;
@@ -255,22 +303,22 @@ export default class ScriptQueue extends Component {
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
-    const current = this.props.current === 'None' ? {} : { ...this.props.current };
+    const current = this.state.current === 'None' ? {} : { ...this.state.current };
 
     // const now = new Date();
     // Fix time zones for next line
     // const currentScriptElapsedTime =
-    //   this.props.current === 'None' || current.timestampRunStart === undefined
+    //   this.state.current === 'None' || current.timestampRunStart === undefined
     //     ? 0
     //     : now.getTime() / 1000.0 - current.timestampRunStart;
 
-    const totalWaitingSeconds = this.props.waitingScriptList.reduce((previousSum, currentElement) => {
+    const totalWaitingSeconds = this.state.waitingScriptList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
     }, 0);
 
-    const totalFinishedSeconds = this.props.finishedScriptList.reduce((previousSum, currentElement) => {
+    const totalFinishedSeconds = this.state.finishedScriptList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
@@ -295,7 +343,7 @@ export default class ScriptQueue extends Component {
                   processState={current.process_state}
                   isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                   estimatedTime={current.expected_duration}
-                  heartbeatData={this.state.indexedHeartbeats[current.index]}
+                  heartbeatData={this.state.heartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
                 />
               </div>
@@ -310,13 +358,13 @@ export default class ScriptQueue extends Component {
             <div className={styles.globalStateContainer}>
               <div className={styles.stateContainer}>
                 CSC STATE
-                <StatusText status={ScriptQueue.summaryStates[this.props.summaryStateValue].statusText}>
-                  {ScriptQueue.summaryStates[this.props.summaryStateValue].name}
+                <StatusText status={ScriptQueue.summaryStates[this.state.summaryStateValue].statusText}>
+                  {ScriptQueue.summaryStates[this.state.summaryStateValue].name}
                 </StatusText>
               </div>
               <div className={styles.stateContainer}>
                 QUEUE STATE
-                <StatusText status={ScriptQueue.stateStyleDict[this.props.state]}>{this.props.state}</StatusText>
+                <StatusText status={ScriptQueue.stateStyleDict[this.state.state]}>{this.state.state}</StatusText>
               </div>
             </div>
           </div>
@@ -341,7 +389,7 @@ export default class ScriptQueue extends Component {
                   <div className={styles.listTitleWrapper}>
                     <div className={styles.listTitleLeft}>
                       <span className={styles.listTitle}>
-                        AVAILABLE SCRIPTS ({this.props.availableScriptList.length})
+                        AVAILABLE SCRIPTS ({this.state.availableScriptList.length})
                       </span>
                       <span className={styles.listSubtitle}>&#8203;</span>
                     </div>
@@ -354,7 +402,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.props.availableScriptList.map((script) => {
+                    {this.state.availableScriptList.map((script) => {
                       if (!script) return null;
                       return (
                         <DraggableScript
@@ -384,7 +432,7 @@ export default class ScriptQueue extends Component {
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
               <div className={styles.listTitleWrapper}>
                 <div className={styles.listTitleLeft}>
-                  <span className={styles.listTitle}>WAITING SCRIPTS ({this.props.waitingScriptList.length})</span>
+                  <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
                   <span className={styles.listSubtitle}>
                     Total time:{' '}
                     {Math.trunc(totalWaitingSeconds / 3600) > 0 ? `${Math.trunc(totalWaitingSeconds / 3600)}h ` : ''}
@@ -396,7 +444,7 @@ export default class ScriptQueue extends Component {
                 </div>
               </div>
               <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
-                {this.props.waitingScriptList.map((script, listIndex) => {
+                {this.state.waitingScriptList.map((script, listIndex) => {
                   if (!script) return null;
                   const estimatedTime =
                     script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
@@ -422,7 +470,7 @@ export default class ScriptQueue extends Component {
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
-                        heartbeatData={this.state.indexedHeartbeats[script.index]}
+                        heartbeatData={this.state.heartbeats[script.index]}
                         {...script}
                       />
                     </DraggableScript>
@@ -449,7 +497,7 @@ export default class ScriptQueue extends Component {
                   <div className={styles.listTitleWrapper}>
                     <div className={styles.listTitleLeft}>
                       <span className={styles.listTitle}>
-                        FINISHED SCRIPTS ({this.props.finishedScriptList.length})
+                        FINISHED SCRIPTS ({this.state.finishedScriptList.length})
                       </span>
                       <span className={styles.listSubtitle}>
                         Total time:{' '}
@@ -471,7 +519,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.props.finishedScriptList.map((script, listIndex) => {
+                    {this.state.finishedScriptList.map((script, listIndex) => {
                       const isStandard =
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
