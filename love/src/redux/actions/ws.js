@@ -8,7 +8,7 @@ import {
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
-import { receiveScriptHeartbeat } from './heartbeats';
+import { receiveScriptHeartbeat, removeScriptsHeartbeats } from './heartbeats';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -77,8 +77,7 @@ export const openWebsocketConnection = () => {
                 data.data.ATCamera.endOfImageTelemetry
               ) {
                 dispatch(receiveImageSequenceData(data.data));
-              }
-              else if (data.data.ATCamera.imageReadoutParameters) {
+              } else if (data.data.ATCamera.imageReadoutParameters) {
                 dispatch(receiveReadoutData(data.data));
               } else {
                 dispatch(receiveCameraStateData(data.data));
@@ -91,6 +90,15 @@ export const openWebsocketConnection = () => {
                 data.data.ScriptHeartbeats.stream.script_heartbeat.last_heartbeat_timestamp
               ) {
                 dispatch(receiveScriptHeartbeat(data.data.ScriptHeartbeats.stream.script_heartbeat));
+              }
+            }
+
+            if (Object.keys(data.data)[0] === 'ScriptQueueState') {
+              if (data.data.ScriptQueueState.stream.finished_scripts) {
+                const finishedIndices = data.data.ScriptQueueState.stream.finished_scripts.map(
+                  (script) => script.index,
+                );
+                dispatch(removeScriptsHeartbeats(finishedIndices));
               }
             }
           }

@@ -1,6 +1,4 @@
-import {
-  UPDATE_SCRIPT_HEARTBEAT,
-} from '../actions/actionTypes';
+import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS } from '../actions/actionTypes';
 
 const initialState = {
   scripts: [],
@@ -27,6 +25,17 @@ export default function(state = initialState, action) {
         newHeartbeats.push(action.data);
       }
       return { cscs: state.cscs, scripts: newHeartbeats };
+    }
+    case REMOVE_SCRIPTS_HEARTBEATS: {
+      const currentHeartbeats = state.scripts;
+
+      const newHeartbeats = currentHeartbeats.filter((current) => {
+        return !action.salIndices.includes(current.salindex);
+      });
+      return {
+        cscs: state.cscs,
+        scripts: newHeartbeats,
+      };
     }
     default:
       return state;
