@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import { requestSALCommand, openWebsocketConnection } from '../actions/ws';
 
 import { SALCommandStatus } from '../actions/ws';
-import { getLastSALCommand, getScriptHeartbeats } from '../selectors';
+import { getLastSALCommand, getScriptHeartbeats, getScriptQueueState } from '../selectors';
 import { mockScriptQueueData } from './mock';
 
 let store, server;
@@ -62,7 +62,6 @@ afterEach(() => {
 });
 
 it('Should send a command to the server and save it on the state properly', async () => {
-  console.log('store.getState(): ', store.getState());
   const commandObject = {
     cmd: 'cmd_closeShutter',
     params: {},
@@ -161,13 +160,16 @@ it(`GIVEN 3 script heartbeats in the State,
       lastHeartbeatTimestamp: 1562258590.477827,
     },
   ];
-  store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
+  let store2 = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
 
   let expectedState = [];
   // Act:
   server.send(mockScriptQueueData);
+  console.log('store1',getScriptQueueState(store.getState()))
+  console.log('store2', getScriptQueueState(store2.getState()))
   // Assert:
   let heartbeatsState = getScriptHeartbeats(store.getState());
+  console.log('heartbeatsState', heartbeatsState)
   expectedState = [initialState.heartbeats.scripts[0], initialState.heartbeats.scripts[2]];
   expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(
     JSON.stringify(expectedState.sort(compareSalIndex)),

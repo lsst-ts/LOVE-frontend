@@ -1,4 +1,4 @@
-import { UPDATE_SCRIPT_HEARTBEAT } from './actionTypes';
+import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS } from './actionTypes';
 
 export const receiveScriptHeartbeat = (data) => {
   return {
@@ -10,3 +10,12 @@ export const receiveScriptHeartbeat = (data) => {
     }
   };
 };
+
+
+export const removeScriptsHeartbeats = (salIndices) => {
+  console.log(salIndices);
+  return {
+    type: REMOVE_SCRIPTS_HEARTBEATS,
+    salIndices
+  }
+}
