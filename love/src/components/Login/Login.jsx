@@ -31,7 +31,7 @@ export default class Login extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.fetchToken(this.state.username, this.state.password);
-    this.setState({ userIsEditing: false,userJustSubmitted:true });
+    this.setState({ userIsEditing: false, userJustSubmitted:true });
   };
 
   redirect() {

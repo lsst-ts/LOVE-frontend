@@ -1,31 +1,24 @@
-import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN } from './actionTypes';
+import {REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN} from './actionTypes';
 import ManagerInterface from '../../Utils';
-import { getToken } from '../selectors';
+import {getToken} from '../selectors';
 
-export const requestToken = (username, password) => ({
-  type: REQUEST_TOKEN,
-  username,
-  password,
-});
+export const requestToken = (username, password) => ({type: REQUEST_TOKEN, username, password});
 
-export const receiveToken = (token) => ({
-  type: RECEIVE_TOKEN,
-  token,
-});
+export const receiveToken = (token) => ({type: RECEIVE_TOKEN, token});
 
 export const rejectToken = {
-  type: REJECT_TOKEN,
+  type: REJECT_TOKEN
 };
 
- /**
+/**
   * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
-  * 
-  * @param {string} username 
-  * @param {string} password 
+  *
+  * @param {string} username
+  * @param {string} password
   */
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-  return (dispatch, getState) => {
+  return(dispatch, getState) => {
     const storageToken = localStorage.getItem('LOVE-TOKEN');
     if (storageToken && storageToken.length > 0) {
       dispatch(receiveToken(storageToken));
@@ -36,33 +29,55 @@ export function fetchToken(username, password) {
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const { token } = response;
-        if (token !== undefined && token !== null) {
-          dispatch(receiveToken(token));
-          localStorage.setItem('LOVE-TOKEN', token);
-          return;
-        }
+      body: JSON.stringify({username, password})
+    }).then((response) => response.json()).then((response) => {
+      const {token} = response;
+      if (token !== undefined && token !== null) {
+        dispatch(receiveToken(token));
+        localStorage.setItem('LOVE-TOKEN', token);
+        return;
+      }
 
-        dispatch(rejectToken);
-      })
-      .catch((e) => console.log(e));
+      dispatch(rejectToken);
+    }).catch((e) => console.log(e));
   };
 }
 
-export const removeToken = {
-  type: REMOVE_TOKEN,
+export const expireToken = {
+  type: EXPIRE_TOKEN
 };
 
-export const expireToken = {
-  type: EXPIRE_TOKEN,
+export const removeToken = {
+  type: REMOVE_TOKEN
 };
+
+/**
+ * redux-thunk action generator that requests the deletion of a token from the LOVE-manager
+ */
+export function logout() {
+  const url = `${ManagerInterface.getApiBaseUrl()}logout/`;
+
+  return(dispatch, getState) => {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    if (!token) {
+      dispatch(removeToken);
+      return;
+    }
+
+    dispatch(removeToken);
+    return fetch(url, {
+      method: 'GET',
+      headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
+    }).then((response) => response.json()).then((response) => {
+      const status = response.status;
+      if (status === 204) {
+        dispatch(removeToken);
+        localStorage.removeItem('LOVE-TOKEN');
+        return;
+      }
+    }).catch((e) => console.log(e));
+  };
+}
 
 /**
  * Validates the token with the server.
@@ -78,11 +93,7 @@ export function validateToken() {
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
     return fetch(url, {
       method: 'GET',
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      }),
+      headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server. Logging out\n', response);
@@ -97,7 +108,7 @@ export function validateToken() {
       }
 
       return response.json().then((resp) => {
-        const { detail } = resp;
+        const {detail} = resp;
         if (detail !== 'Token is valid') {
           dispatch(removeToken);
         }

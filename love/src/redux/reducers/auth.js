@@ -6,6 +6,8 @@ export const tokenStates = {
   ERROR: 'ERROR',
   REJECTED: 'REJECTED',
   EXPIRED: 'EXPIRED',
+  DELETE_REQUESTED: 'DELETE_REQUESTED',
+  DELETED: 'DELETED',
 };
 
 const initialState = {
