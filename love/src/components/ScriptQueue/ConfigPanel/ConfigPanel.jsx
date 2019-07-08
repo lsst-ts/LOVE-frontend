@@ -12,13 +12,13 @@ export default class ConfigPanel extends Component {
   static propTypes = {
     schema: PropTypes.string,
     onClose: PropTypes.func,
-    showConfigPanel: PropTypes.bool,
+    configPanel: PropTypes.object,
   };
 
   static defaultProps = {
     schema: '{}',
     onClose: () => 0,
-    showConfigPanel: false,
+    configPanel: {},
   };
 
   constructor(props) {
@@ -50,10 +50,10 @@ export default class ConfigPanel extends Component {
 
   render() {
     return (
-      this.props.showConfigPanel ? <Rnd
+      this.props.configPanel.show ? <Rnd
         default={{
-          x: 0,
-          y: 0,
+          x: this.props.configPanel.x,
+          y: this.props.configPanel.y,
           width: this.state.width,
           height: `calc(${this.state.height} + 100px)`,
         }}

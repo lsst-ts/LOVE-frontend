@@ -24,7 +24,11 @@ export default class ScriptQueue extends Component {
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
-      showConfigPanel: false,
+      configPanel: {
+        show: false,
+        x: 0,
+        y: 0,
+      }
       // summaryStateValue: 0,
     };
     this.lastId = 19;
@@ -273,16 +277,24 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  onScriptConfigLaunch = (script) => {
-    console.log('onScriptConfigLaunch', script);
+  onScriptConfigLaunch = (e, script) => {
+    let {x, y, height} = e.target.getBoundingClientRect();
     this.setState({
-      showConfigPanel: true,
+      configPanel: {
+        show: true,
+        x: x,
+        y: y - height,
+      },
     });
   };
 
   onCloseConfigPanel = () => {
     this.setState({
-      showConfigPanel: false,
+      configPanel: {
+        show: false,
+        x: 0,
+        y: 0,
+      },
     });
   };
 
@@ -313,7 +325,11 @@ export default class ScriptQueue extends Component {
     return (
       <Panel title="Script Queue">
         <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
-          <ConfigPanel schema="{dsasa}" onClose={this.onCloseConfigPanel} showConfigPanel={this.state.showConfigPanel}/>
+          <ConfigPanel
+            schema="{dsasa}"
+            onClose={this.onCloseConfigPanel}
+            configPanel={this.state.configPanel}
+          />
           <div
             onDragEnter={(e) => {
               this.onDragLeave(e);
