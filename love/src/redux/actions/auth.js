@@ -109,7 +109,7 @@ export function logout() {
 
     dispatch(doRemoveLocalToken());
     return fetch(url, {
-      method: 'GET',
+      method: 'DELETE',
       headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
     }).then((response) => response.json()).then((response) => {
       const status = response.status;
