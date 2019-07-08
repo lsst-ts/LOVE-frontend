@@ -13,7 +13,6 @@ export const receiveScriptHeartbeat = (data) => {
 
 
 export const removeScriptsHeartbeats = (salIndices) => {
-  console.log(salIndices);
   return {
     type: REMOVE_SCRIPTS_HEARTBEATS,
     salIndices
