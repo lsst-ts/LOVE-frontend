@@ -29,9 +29,12 @@ describe('GIVEN the token does not exist in localStorage', () => {
     await store.dispatch(fetchToken('asdf', 'asdf'));
 
     const newState = store.getState();
-    expect(localStorage.getItem('LOVE-TOKEN')).toEqual(newToken);
+    const storedUsername = localStorage.getItem('LOVE-USERNAME');
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(getToken(newState)).toEqual(newToken);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
+    expect(storedUsername).toEqual('asdf');
+    expect(storedToken).toEqual(newToken);
   });
 });
 
@@ -60,7 +63,11 @@ describe('GIVEN the token exists in localStorage', () => {
     await store.dispatch(validateToken());
 
     const newToken = getToken(store.getState());
+    const storedUsername = localStorage.getItem('LOVE-USERNAME');
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toEqual(initialToken);
+    expect(storedUsername).toEqual('asdf');
+    expect(storedToken).toEqual(initialToken);
   });
 
   it('Should remove the token when invalid with response status >= 500', async () => {
@@ -71,7 +78,11 @@ describe('GIVEN the token exists in localStorage', () => {
     await store.dispatch(validateToken());
 
     const newToken = getToken(store.getState());
+    const storedUsername = localStorage.getItem('LOVE-USERNAME');
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toBeNull();
+    expect(storedUsername).toBeNull();
+    expect(storedToken).toBeNull();
   });
 
   [401, 403].forEach((status) => {
@@ -83,7 +94,11 @@ describe('GIVEN the token exists in localStorage', () => {
       await store.dispatch(validateToken());
 
       const newToken = getToken(store.getState());
+      const storedUsername = localStorage.getItem('LOVE-USERNAME');
+      const storedToken = localStorage.getItem('LOVE-TOKEN');
       expect(newToken).toBeNull();
+      expect(storedUsername).toBeNull();
+      expect(storedToken).toBeNull();
       expect(getTokenStatus(store.getState())).toEqual(tokenStates.EXPIRED);
     });
   });
@@ -101,7 +116,11 @@ describe('GIVEN the token exists in localStorage', () => {
 
     await store.dispatch(logout());
 
-    const newToken = getToken(store.getState());
-    expect(newToken).toBeNull();
+    const token = getToken(store.getState());
+    const storedUsername = localStorage.getItem('LOVE-USERNAME');
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(token).toBeNull();
+    expect(storedUsername).toBeNull();
+    expect(storedToken).toBeNull();
   });
 });
