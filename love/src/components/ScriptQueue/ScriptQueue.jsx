@@ -23,7 +23,6 @@ export default class ScriptQueue extends Component {
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
-      // summaryStateValue: 0,
     };
     this.lastId = 19;
     this.managerInterface = new ManagerInterface();
@@ -82,24 +81,6 @@ export default class ScriptQueue extends Component {
       });
     }
   };
-
-  onReceiveMsg = (msg) => {
-    let { data } = JSON.parse(msg.data);
-
-    // if (data.ScriptQueue) {
-    //   this.processSummaryState(data);
-    // }
-  };
-
-  // processSummaryState = (data) => {
-  //   let { value } = data.ScriptQueue.summaryState[0].summaryState;
-  //   if (hasFakeData) {
-  //     value = Math.floor(Math.random() * 5);
-  //   }
-  //   this.setState({
-  //     summaryStateValue: value,
-  //   });
-  // };
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
