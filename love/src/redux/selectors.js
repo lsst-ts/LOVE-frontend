@@ -67,3 +67,35 @@ export const getDomeState = (state) => {
     target: domeData['event-ATMCS-target'],
   };
 };
+
+export const getKey = (dict, key, def) => {
+  if (dict && dict !== {} && Object.keys(dict).includes(key)) {
+    return dict[key];
+  } else {
+    return def;
+  }
+}
+
+export const getScriptQueueState = (state) => {
+  const scriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
+  return {
+    state: getKey(scriptQueueData, 'state', undefined),
+    availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
+    waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
+    current: getKey(scriptQueueData, 'current', 'None'),
+    finishedScriptList: getKey(scriptQueueData, 'finished_scripts', undefined),
+  }
+}
+
+export const getScriptHeartbeats = (state) => {
+  return state.heartbeats.scripts;
+}
+
+export const getSummaryStateValue = (state, groupName) => {
+  const summaryState = getStreamData(state, groupName);
+  let summaryStateValue = undefined;
+  if (summaryState) {
+    summaryStateValue = summaryState[summaryState.length - 1].summaryState.value;
+  }
+  return summaryStateValue;
+}

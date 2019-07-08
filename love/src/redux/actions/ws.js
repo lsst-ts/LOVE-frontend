@@ -8,6 +8,7 @@ import {
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
+import { receiveScriptHeartbeat, removeScriptsHeartbeats } from './heartbeats';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -67,18 +68,38 @@ export const openWebsocketConnection = () => {
           if (!data.category) {
             dispatch(receiveGroupConfirmationMessage(data.data));
           }
-          if (data.category === 'event' && Object.keys(data.data)[0] === 'ATCamera') {
-            if (
-              data.data.ATCamera.startIntegration ||
-              data.data.ATCamera.endReadout ||
-              data.data.ATCamera.startReadout ||
-              data.data.ATCamera.endOfImageTelemetry
-            )
-              dispatch(receiveImageSequenceData(data.data));
-            else if (data.data.ATCamera.imageReadoutParameters) {
-              dispatch(receiveReadoutData(data.data));
-            } else {
-              dispatch(receiveCameraStateData(data.data));
+          if (data.category === 'event') {
+            if (Object.keys(data.data)[0] === 'ATCamera') {
+              if (
+                data.data.ATCamera.startIntegration ||
+                data.data.ATCamera.endReadout ||
+                data.data.ATCamera.startReadout ||
+                data.data.ATCamera.endOfImageTelemetry
+              ) {
+                dispatch(receiveImageSequenceData(data.data));
+              } else if (data.data.ATCamera.imageReadoutParameters) {
+                dispatch(receiveReadoutData(data.data));
+              } else {
+                dispatch(receiveCameraStateData(data.data));
+              }
+            }
+            if (Object.keys(data.data)[0] === 'ScriptHeartbeats') {
+              if (
+                data.data.ScriptHeartbeats.stream.script_heartbeat.salindex ||
+                data.data.ScriptHeartbeats.stream.script_heartbeat.lost ||
+                data.data.ScriptHeartbeats.stream.script_heartbeat.last_heartbeat_timestamp
+              ) {
+                dispatch(receiveScriptHeartbeat(data.data.ScriptHeartbeats.stream.script_heartbeat));
+              }
+            }
+
+            if (Object.keys(data.data)[0] === 'ScriptQueueState') {
+              if (data.data.ScriptQueueState.stream.finished_scripts) {
+                const finishedIndices = data.data.ScriptQueueState.stream.finished_scripts.map(
+                  (script) => script.index,
+                );
+                dispatch(removeScriptsHeartbeats(finishedIndices));
+              }
             }
           }
           dispatch(receiveGroupSubscriptionData(data));
