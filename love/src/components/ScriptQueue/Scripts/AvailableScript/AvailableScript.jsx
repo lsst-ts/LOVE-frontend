@@ -96,7 +96,7 @@ export default class AvailableScript extends PureComponent {
             </div>
           </div>
         </div>
-        <div className={scriptStyles.mainScriptButton} onClick={() => this.props.onLaunch('{adsdsa: dsada}')}>
+        <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.onLaunch(e, '{adsdsa: dsada}')}>
           <span>Add</span>
         </div>
       </div>
