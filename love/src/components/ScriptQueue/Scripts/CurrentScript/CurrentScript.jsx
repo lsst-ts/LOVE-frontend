@@ -118,88 +118,92 @@ export default class CurrentScript extends Component {
 
     return (
       <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
-        <div className={styles.currentScriptContainer} onClick={this.onClick}>
-          <div className={styles.topContainer}>
-            <div>
-              <div className={[scriptStyles.externalContainer, visibilityClass].join(' ')}>
-                <span className={scriptStyles.externalText}>{typeTag}</span>
-              </div>
-              {this.props.index !== undefined && (
-                <div className={styles.indexContainer}>
-                  <span className={styles.indexLabel}>Index: </span>
-                  <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.index}</span>
+        <div>
+          <div className={styles.currentScriptContainer} onClick={this.onClick}>
+            <div className={styles.topContainer}>
+              <div>
+                <div className={[scriptStyles.externalContainer, visibilityClass].join(' ')}>
+                  <span className={scriptStyles.externalText}>{typeTag}</span>
                 </div>
-              )}
-              <div className={scriptStyles.pathTextContainer}>
-                <span className={scriptStyles.pathText}>{fileFolder}</span>
-                <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-                <span className={scriptStyles.pathText}>{fileExtension}</span>
+                {this.props.index !== undefined && (
+                  <div className={styles.indexContainer}>
+                    <span className={styles.indexLabel}>Index: </span>
+                    <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.index}</span>
+                  </div>
+                )}
+                <div className={scriptStyles.pathTextContainer}>
+                  <span className={scriptStyles.pathText}>{fileFolder}</span>
+                  <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+                  <span className={scriptStyles.pathText}>{fileExtension}</span>
+                </div>
               </div>
-            </div>
-            <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
-              <div className={scriptStyles.heartBeatContainer}>
-                <HeartbeatIcon
-                  status={heartbeatStatus}
-                  title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
-                />
-              </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
-                  {this.props.scriptState}
-                </ScriptStatus>
-              </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus
-                  isCompact={this.props.isCompact}
-                  type="process"
-                  status={getStatusStyle(this.props.processState)}
+              <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
+                <div className={scriptStyles.heartBeatContainer}>
+                  <HeartbeatIcon
+                    status={heartbeatStatus}
+                    title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
+                  />
+                </div>
+                <div
+                  className={scriptStyles.scriptStateContainer}
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
                 >
-                  {this.props.processState}
-                </ScriptStatus>
+                  <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
+                    {this.props.scriptState}
+                  </ScriptStatus>
+                </div>
+                <div
+                  className={scriptStyles.scriptStateContainer}
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
+                  <ScriptStatus
+                    isCompact={this.props.isCompact}
+                    type="process"
+                    status={getStatusStyle(this.props.processState)}
+                  >
+                    {this.props.processState}
+                  </ScriptStatus>
+                </div>
+              </div>
+            </div>
+            <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
+              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
+            </div>
+            <div className={[styles.timeContainer, visibilityClass].join(' ')}>
+              <div className={styles.estimatedTimeContainer}>
+                <span className={styles.estimatedTimeLabel}>Estimated time: </span>
+                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {estimatedTime.toFixed(2)} s
+                </span>
+              </div>
+              <div className={styles.elapsedTimeContainer}>
+                <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
+                <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {elapsedTime.toFixed(2)} s
+                </span>
               </div>
             </div>
           </div>
-          <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-            <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`}/>
-          </div>
-          <div className={[styles.timeContainer, visibilityClass].join(' ')}>
-            <div className={styles.estimatedTimeContainer}>
-              <span className={styles.estimatedTimeLabel}>Estimated time: </span>
-              <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {estimatedTime.toFixed(2)} s
-              </span>
+          <div
+            className={[styles.expandedSectionWrapper, this.state.expanded && isValid ? '' : styles.hidden].join(' ')}
+          >
+            <div className={[styles.expandedSection].join(' ')}>
+              <div className={scriptStyles.expandedTopRow}>
+                <p>Script config</p>
+                <div className={scriptStyles.uploadButtonWrapper} />
+              </div>
+              <JSONPretty
+                data={{}}
+                theme={{
+                  main:
+                    'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
+                  key: 'color:#f92672;',
+                  string: 'color:#fd971f;',
+                  value: 'color:#a6e22e;',
+                  boolean: 'color:#ac81fe;',
+                }}
+              />
             </div>
-            <div className={styles.elapsedTimeContainer}>
-              <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
-              <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {elapsedTime.toFixed(2)} s
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className={[styles.expandedSectionWrapper, this.state.expanded && isValid ? '' : styles.hidden].join(' ')}>
-          <div className={[styles.expandedSection].join(' ')}>
-            <div className={scriptStyles.expandedTopRow}>
-              <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper} />
-            </div>
-            <JSONPretty
-              data={{}}
-              theme={{
-                main:
-                  'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                key: 'color:#f92672;',
-                string: 'color:#fd971f;',
-                value: 'color:#a6e22e;',
-                boolean: 'color:#ac81fe;',
-              }}
-            />
           </div>
         </div>
       </div>

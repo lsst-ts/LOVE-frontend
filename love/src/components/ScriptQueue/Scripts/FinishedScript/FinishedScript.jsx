@@ -59,90 +59,92 @@ export default class FinishedScript extends PureComponent {
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
-        <div className={styles.finishedScriptContainer} onClick={this.onClick}>
-          <div className={styles.topContainer}>
-            <div>
-              <div className={scriptStyles.externalContainer}>
-                <span className={scriptStyles.externalText} title={`SAL index ${this.props.index}`}>
-                  {this.props.index}
-                </span>
-                <span> - </span>
-                <span
-                  className={scriptStyles.externalText}
-                  title={this.props.isStandard ? 'Standard script' : 'External script'}
-                >
-                  {this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}
-                </span>
+        <div>
+          <div className={styles.finishedScriptContainer} onClick={this.onClick}>
+            <div className={styles.topContainer}>
+              <div>
+                <div className={scriptStyles.externalContainer}>
+                  <span className={scriptStyles.externalText} title={`SAL index ${this.props.index}`}>
+                    {this.props.index}
+                  </span>
+                  <span> - </span>
+                  <span
+                    className={scriptStyles.externalText}
+                    title={this.props.isStandard ? 'Standard script' : 'External script'}
+                  >
+                    {this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}
+                  </span>
+                </div>
+                <div className={scriptStyles.pathTextContainer} title={path}>
+                  {(() => {
+                    if (!this.props.isCompact) {
+                      return <span className={scriptStyles.pathText}>{fileFolder}</span>;
+                    }
+                    if (fileFolder !== '') {
+                      return <span className={scriptStyles.pathText}>.../</span>;
+                    }
+                    return null;
+                  })()}
+                  <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+                  {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
+                </div>
               </div>
-              <div className={scriptStyles.pathTextContainer} title={path}>
-                {(() => {
-                  if (!this.props.isCompact) {
-                    return <span className={scriptStyles.pathText}>{fileFolder}</span>;
-                  }
-                  if (fileFolder !== '') {
-                    return <span className={scriptStyles.pathText}>.../</span>;
-                  }
-                  return null;
-                })()}
-                <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-                {!this.props.isCompact ? <span className={scriptStyles.pathText}>{fileExtension}</span> : null}
+              <div className={scriptStyles.scriptStatusContainer}>
+                <div
+                  className={scriptStyles.scriptStateContainer}
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
+                  <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
+                    {this.props.script_state}
+                  </ScriptStatus>
+                </div>
+                <div
+                  className={scriptStyles.scriptStateContainer}
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
+                  <ScriptStatus
+                    isCompact={this.props.isCompact}
+                    type="process"
+                    status={getStatusStyle(this.props.process_state)}
+                  >
+                    {this.props.process_state}
+                  </ScriptStatus>
+                </div>
               </div>
             </div>
-            <div className={scriptStyles.scriptStatusContainer}>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.script_state)}>
-                  {this.props.script_state}
-                </ScriptStatus>
+            <div className={styles.timeContainer}>
+              <div className={styles.estimatedTimeContainer}>
+                <span className={styles.estimatedTimeLabel}>Estimated time: </span>
+                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {this.props.estimatedTime >= 0 ? this.props.estimatedTime.toFixed(2) : '?'} s
+                </span>
               </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus
-                  isCompact={this.props.isCompact}
-                  type="process"
-                  status={getStatusStyle(this.props.process_state)}
-                >
-                  {this.props.process_state}
-                </ScriptStatus>
+              <div className={styles.elapsedTimeContainer}>
+                <span className={styles.elapsedTimeLabel}>Total time: </span>
+                <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {this.props.elapsedTime.toFixed(2)} s
+                </span>
               </div>
             </div>
           </div>
-          <div className={styles.timeContainer}>
-            <div className={styles.estimatedTimeContainer}>
-              <span className={styles.estimatedTimeLabel}>Estimated time: </span>
-              <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.estimatedTime >= 0 ? this.props.estimatedTime.toFixed(2) : '?'} s
-              </span>
+          <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
+            <div className={[styles.expandedSection].join(' ')}>
+              <div className={scriptStyles.expandedTopRow}>
+                <p>Script config</p>
+                <div className={scriptStyles.uploadButtonWrapper} />
+              </div>
+              <JSONPretty
+                data={{}}
+                theme={{
+                  main:
+                    'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
+                  key: 'color:#f92672;',
+                  string: 'color:#fd971f;',
+                  value: 'color:#a6e22e;',
+                  boolean: 'color:#ac81fe;',
+                }}
+              />
             </div>
-            <div className={styles.elapsedTimeContainer}>
-              <span className={styles.elapsedTimeLabel}>Total time: </span>
-              <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {this.props.elapsedTime.toFixed(2)} s
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
-          <div className={[styles.expandedSection].join(' ')}>
-            <div className={scriptStyles.expandedTopRow}>
-              <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper} />
-            </div>
-            <JSONPretty
-              data={{}}
-              theme={{
-                main:
-                  'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                key: 'color:#f92672;',
-                string: 'color:#fd971f;',
-                value: 'color:#a6e22e;',
-                boolean: 'color:#ac81fe;',
-              }}
-            />
           </div>
         </div>
       </div>
