@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import styles from './FinishedScript.module.css';
@@ -6,7 +6,7 @@ import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 
-export default class FinishedScript extends Component {
+export default class FinishedScript extends PureComponent {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
     index: PropTypes.number,

@@ -1,9 +1,22 @@
 .scriptContainer {
+  display: grid;
+  grid-template-columns: 1fr min-content;
   position: relative;
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
   overflow: hidden;
   padding: 1px;
+}
+
+.mainScriptButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: var(--second-quaternary-background-color);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding: 0.25em;
+  user-select: none;
 }
 
 .scriptContainerOff {

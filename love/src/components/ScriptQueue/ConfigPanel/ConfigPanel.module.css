@@ -1,0 +1,43 @@
+.configPanelContainer {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  height: 100%;
+  background: var(--second-secondary-background-color);
+  z-index: 10;
+  box-shadow: -5px 5px 20px 0px rgba(0,0,0,0.75);
+}
+
+.topBar {
+  display: flex;
+  justify-content: space-between;
+  background: var(--second-secondary-background-color);
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  font-size: var(--font-size-large);
+  padding: 0.1em 0.5em;
+}
+
+.closeButton {
+  cursor: pointer;
+  text-align: right;
+  padding: 0 0.5em;
+}
+
+.closeButton:hover {
+  background: var(--second-tertiary-background-color);
+  font-weight: bold;
+}
+
+.bottomBar {
+  /* background: red; */
+  background: var(--second-secondary-background-color);
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--font-size-large);
+  padding: 0.1em 0.5em;
+}
+
+.body {
+  background: blue;
+}
