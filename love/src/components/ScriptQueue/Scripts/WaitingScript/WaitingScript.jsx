@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import styles from './WaitingScript.module.css';
@@ -10,7 +10,7 @@ import Button from '../../../GeneralPurpose/Button/Button';
 import { hasCommandPrivileges } from '../../../../Config';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 
-export default class WaitingScript extends Component {
+export default class WaitingScript extends PureComponent {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
     index: PropTypes.number,

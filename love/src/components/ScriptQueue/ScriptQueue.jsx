@@ -10,6 +10,7 @@ import Panel from '../GeneralPurpose/Panel/Panel';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import ManagerInterface from '../../Utils';
 import { hasCommandPrivileges, hasFakeData } from '../../Config';
+import ConfigPanel from './ConfigPanel/ConfigPanel';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -23,6 +24,7 @@ export default class ScriptQueue extends Component {
       isAvailableScriptListVisible: false,
       draggingSource: '',
       isFinishedScriptListListVisible: false,
+      showConfigPanel: false,
       // summaryStateValue: 0,
     };
     this.lastId = 19;
@@ -271,6 +273,19 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  onScriptConfigLaunch = (script) => {
+    console.log('onScriptConfigLaunch', script);
+    this.setState({
+      showConfigPanel: true,
+    });
+  };
+
+  onCloseConfigPanel = () => {
+    this.setState({
+      showConfigPanel: false,
+    });
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -298,6 +313,7 @@ export default class ScriptQueue extends Component {
     return (
       <Panel title="Script Queue">
         <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
+          <ConfigPanel schema="{dsasa}" onClose={this.onCloseConfigPanel} showConfigPanel={this.state.showConfigPanel}/>
           <div
             onDragEnter={(e) => {
               this.onDragLeave(e);
@@ -384,12 +400,13 @@ export default class ScriptQueue extends Component {
                           onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                           onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
                           draggingScriptInstance={this.state.draggingScriptInstance}
-                          disabled={!hasCommandPrivileges}
+                          disabled={true}
                         >
                           <AvailableScript
                             key={`${script.type}-${script.path}`}
                             path={script.path}
                             isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
+                            onLaunch={this.onScriptConfigLaunch}
                             {...script}
                           />
                         </DraggableScript>
