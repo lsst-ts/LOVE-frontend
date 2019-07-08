@@ -1,14 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import ComponentIndex from './ComponentIndex';
-import { removeToken } from '../../redux/actions/auth';
+import { logout } from '../../redux/actions/auth';
 const ComponentIndexContainer = ({ logout }) => {
   return <ComponentIndex logout={logout} />;
 };
 
 const mapStateToProps = () => ({});
 const mapDispatchToProps = (dispatch) => ({
-  logout: () => dispatch(removeToken),
+  logout: () => dispatch(logout()),
 });
 
 export default connect(
