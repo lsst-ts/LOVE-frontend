@@ -1,4 +1,4 @@
-import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN, EXPIRE_TOKEN } from '../actions/actionTypes';
+import { REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, REMOVE_TOKEN, REMOVE_REMOTE_TOKEN, EXPIRE_TOKEN } from '../actions/actionTypes';
 export const tokenStates = {
   EMPTY: 'EMPTY',
   REQUESTED: 'REQUESTED',
@@ -34,17 +34,16 @@ export default function(state = initialState, action) {
       });
     }
     case REMOVE_TOKEN:
-      localStorage.removeItem('LOVE-TOKEN');
+      return { ...initialState };
+    case REMOVE_REMOTE_TOKEN:
       return { ...initialState };
     case REJECT_TOKEN:
-      localStorage.removeItem('LOVE-TOKEN');
       return {
         ...state,
         token: null,
         status: tokenStates.REJECTED,
       };
     case EXPIRE_TOKEN:
-      localStorage.removeItem('LOVE-TOKEN');
       return {
         ...initialState,
         status: tokenStates.EXPIRED,
