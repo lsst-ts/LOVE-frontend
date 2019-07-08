@@ -111,7 +111,7 @@ export function logout() {
     return fetch(url, {
       method: 'DELETE',
       headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
-    }).then((response) => response.json()).then((response) => {
+    }).then((response) => {
       const status = response.status;
       if (status === 204) {
         dispatch(doRemoveRemoteToken());
