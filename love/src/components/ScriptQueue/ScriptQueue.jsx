@@ -79,7 +79,7 @@ export default class ScriptQueue extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.heartbeats != prevProps.heartbeats) {
+    if (this.props.heartbeats !== prevProps.heartbeats) {
       this.setState({
         indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
           map[heartbeat.salindex] = heartbeat;
@@ -281,6 +281,7 @@ export default class ScriptQueue extends Component {
     let {x, y, height} = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
+        name: script.name,
         show: true,
         x: x,
         y: y - height,

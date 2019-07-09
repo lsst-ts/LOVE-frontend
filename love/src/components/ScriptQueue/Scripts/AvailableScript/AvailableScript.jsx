@@ -5,6 +5,7 @@ import styles from './AvailableScript.module.css';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import scriptStyles from '../Scripts.module.css';
 import { hasCommandPrivileges } from '../../../../Config';
+import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon';
 
 export default class AvailableScript extends PureComponent {
   static propTypes = {
@@ -18,6 +19,7 @@ export default class AvailableScript extends PureComponent {
     estimatedTime: PropTypes.number,
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
     state: PropTypes.string,
+    /** Function called when launching the script configuration panel */
     onLaunch: PropTypes.func,
   };
 
@@ -96,8 +98,10 @@ export default class AvailableScript extends PureComponent {
             </div>
           </div>
         </div>
-        <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.onLaunch(e, '{adsdsa: dsada}')}>
-          <span>Add</span>
+        <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.onLaunch(e, {name: fileName, schema: '{adsdsa: dsada}'})}>
+          <span className={scriptStyles.launchIconWrapper}>
+            <LaunchScriptIcon title="Launch script: Configure" />
+          </span>
         </div>
       </div>
     );

@@ -14,7 +14,7 @@
   cursor: pointer;
   user-select: none;
   text-align: left;
-  font-size: var(--font-size-large);
+  font-size: var(--font-size-larger);
   padding: 0.1em 0.5em;
 }
 
@@ -35,9 +35,8 @@
   cursor: pointer;
   user-select: none;
   font-size: var(--font-size-large);
-  padding: 0.1em 0.5em;
+  padding: 0.5em 0.5em;
 }
 
 .body {
-  background: blue;
 }
