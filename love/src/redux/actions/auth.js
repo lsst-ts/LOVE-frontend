@@ -88,7 +88,7 @@ export function fetchToken(username, password) {
         return;
       }
 
-      dispatch(doExpireToken());
+      dispatch(doRejectToken());
     }).catch((e) => console.log(e));
   };
 }
