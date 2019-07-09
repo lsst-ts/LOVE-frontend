@@ -13,26 +13,18 @@ export default class Login extends Component {
     /** Token state of the App component */
     token: PropTypes.string,
 
+    /** The state of the token */
+    tokenStatus: PropTypes.string,
+
     /** Function to request token to Manager */
     fetchToken: PropTypes.func,
-
-    /** Boolean describing wether the login failed or not */
-    loginFailed: PropTypes.bool,
-
-    /** Boolean describing wether the session expired message should be displayed or not */
-    showSessionExpired: PropTypes.bool,
-
-    /** The state of the token */
-    tokenStates: PropTypes.string,
   };
 
   static defaultProps = {
     location: '',
     token: '',
+    tokenStatus: tokenStates.EMPTY,
     fetchToken: undefined,
-    loginFailed: false,
-    showSessionExpired: false,
-    tokenStates: tokenStates.EMPTY,
   };
 
   constructor(props) {
@@ -41,7 +33,7 @@ export default class Login extends Component {
       username: '',
       password: '',
       userIsEditing: false,
-      userJustSubmitted: false
+      userJustSubmitted: false,
     };
   }
 
@@ -53,7 +45,7 @@ export default class Login extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.fetchToken(this.state.username, this.state.password);
-    this.setState({ userIsEditing: false, userJustSubmitted:true });
+    this.setState({ userIsEditing: false, userJustSubmitted: true });
   };
 
   redirect() {
@@ -68,7 +60,6 @@ export default class Login extends Component {
   }
 
   render() {
-    const showLoginFailed = this.props.loginFailed && !this.state.userIsEditing && !this.props.showSessionExpired;
     return (
       <div className={styles.login}>
         <div className={styles.panel}>
@@ -77,16 +68,45 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              {showLoginFailed ? (
+              {this.props.tokenStatus === tokenStates.REQUESTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.incorrectCredentials}>
-                    {"Your username and password didn't match. Please try again."}
+                  <p className={styles.requesting}>
+                    Logging in, please wait
                   </p>
                 </div>
               ) : null}
-              {this.props.showSessionExpired ? (
+              {this.props.tokenStatus === tokenStates.REJECTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.incorrectCredentials}>Your session has expired, you have been logged out.</p>
+                  <p className={styles.incorrectCredentials}>
+                    Your username and password did not match, please try again
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.ERROR ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>
+                    There was an error communicating with the Server, you have been logged out
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.EXPIRED ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>Your session has expired, you have been logged out</p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.REMOVED_LOCALLY ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>
+                    There was a problem logging out of the server, please login and logout again to ensure your token is
+                    deleted
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.REMOVED_REMOTELY ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.requesting}>
+                    Logout successful
+                  </p>
                 </div>
               ) : null}
               <p className={styles.formEntry}>
