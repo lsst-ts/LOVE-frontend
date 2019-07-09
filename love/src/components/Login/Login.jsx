@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
 import styles from './Login.module.css';
+import { tokenStates } from '../../redux/reducers/auth';
 
 export default class Login extends Component {
   static propTypes = {
@@ -20,6 +21,9 @@ export default class Login extends Component {
 
     /** Boolean describing wether the session expired message should be displayed or not */
     showSessionExpired: PropTypes.bool,
+
+    /** The state of the token */
+    tokenStates: PropTypes.string,
   };
 
   static defaultProps = {
@@ -28,6 +32,7 @@ export default class Login extends Component {
     fetchToken: undefined,
     loginFailed: false,
     showSessionExpired: false,
+    tokenStates: tokenStates.EMPTY,
   };
 
   constructor(props) {

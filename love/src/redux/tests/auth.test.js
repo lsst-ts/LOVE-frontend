@@ -99,7 +99,7 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(newToken).toBeNull();
     expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
-    expect(getTokenStatus(store.getState())).toEqual(tokenStates.EMPTY);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVED_LOCALLY);
   });
 
   [401, 403].forEach((status) => {
@@ -143,6 +143,6 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(token).toBeNull();
     expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
-    expect(getTokenStatus(store.getState())).toEqual(tokenStates.EMPTY);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVED_LOCALLY);
   });
 });
