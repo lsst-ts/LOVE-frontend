@@ -13,10 +13,10 @@ export default class Login extends Component {
     token: PropTypes.string,
 
     /** Function to request token to Manager */
-    fetchToken: PropTypes.string,
+    fetchToken: PropTypes.func,
 
     /** Boolean describing wether the login failed or not */
-    loginFailed: PropTypes.func,
+    loginFailed: PropTypes.bool,
 
     /** Boolean describing wether the session expired message should be displayed or not */
     showSessionExpired: PropTypes.bool,
