@@ -5,13 +5,14 @@ import { getToken, getTokenStatus } from '../../redux/selectors';
 import { fetchToken } from '../../redux/actions/auth';
 import { tokenStates } from '../../redux/reducers/auth';
 
-const LoginContainer = ({ token, fetchToken, loginFailed, showSessionExpired }) => {
+const LoginContainer = ({ token, fetchToken, loginFailed, showSessionExpired, tokenStates }) => {
   return (
     <Login
       token={token}
       fetchToken={fetchToken}
       loginFailed={loginFailed}
       showSessionExpired={showSessionExpired}
+      tokenStates={tokenStates}
     />
   );
 };
@@ -34,6 +35,7 @@ const mapStateToProps = (state) => {
         tokenStatus === tokenStates.EXPIRED),
     showSessionExpired: tokenStatus === tokenStates.EXPIRED,
     token: getToken(state),
+    tokenStates: tokenStates,
   };
 };
 

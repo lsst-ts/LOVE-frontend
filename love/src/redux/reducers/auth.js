@@ -6,8 +6,8 @@ export const tokenStates = {
   ERROR: 'ERROR',
   REJECTED: 'REJECTED',
   EXPIRED: 'EXPIRED',
-  DELETE_REQUESTED: 'DELETE_REQUESTED',
-  DELETED: 'DELETED',
+  REMOVED_LOCALLY: 'REMOVED_LOCALLY',
+  REMOVED_REMOTELY: 'REMOVED_REMOTELY',
 };
 
 const initialState = {
@@ -34,9 +34,15 @@ export default function(state = initialState, action) {
       });
     }
     case REMOVE_TOKEN:
-      return { ...initialState };
+    return {
+      ...initialState,
+      status: tokenStates.REMOVED_LOCALLY,
+    };
     case REMOVE_REMOTE_TOKEN:
-      return { ...initialState };
+    return {
+      ...initialState,
+      status: tokenStates.REMOVED_REMOTELY,
+    };
     case REJECT_TOKEN:
       return {
         ...state,
