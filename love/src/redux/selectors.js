@@ -90,3 +90,12 @@ export const getScriptQueueState = (state) => {
 export const getScriptHeartbeats = (state) => {
   return state.heartbeats.scripts;
 }
+
+export const getSummaryStateValue = (state, groupName) => {
+  const summaryState = getStreamData(state, groupName);
+  let summaryStateValue = undefined;
+  if (summaryState) {
+    summaryStateValue = summaryState[summaryState.length - 1].summaryState.value;
+  }
+  return summaryStateValue;
+}

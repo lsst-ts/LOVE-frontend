@@ -4,6 +4,7 @@ import {
   getStreamsData,
   getCameraState,
   getScriptQueueState,
+  getSummaryStateValue,
 } from './selectors';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
@@ -588,4 +589,63 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
 
   // Assert
   expect(JSON.stringify(streamData)).toEqual(JSON.stringify(expectedData));
+});
+
+it('Should extract the SummaryStateValue stream correctly with a selector', async () => {
+  // Arrange
+  const data = {
+    ScriptQueue: {
+      summaryState: [
+        {
+          ScriptQueueID: {
+            value: 1,
+            dataType: "Int"
+          },
+          priority : {
+            value: 0,
+            dataType: "Int"
+          },
+          private_host : {
+            value: 798089283,
+            dataType: "Int"
+          },
+          private_origin : {
+            value: 56,
+            dataType: "Int"
+          },
+          private_rcvStamp : {
+            value: 1562605145.9171262,
+            dataType: "Float"
+          },
+          private_revCode : {
+            value: "16ec6358",
+            dataType: "String"
+          },
+          private_seqNum : {
+            value: 2,
+            dataType: "Int"
+          },
+          private_sndStamp : {
+            value: 1562605145.9079509,
+            dataType: "Float"
+          },
+          summaryState : {
+            value: 4,
+            dataType: "Int"
+          }
+        }
+      ]
+    }
+  };
+  const groupName = 'event-ScriptQueue-summaryState';
+  store.dispatch(openWebsocketConnection());
+
+  // Act
+  await server.connected;
+  await store.dispatch(requestGroupSubscription(groupName));
+  server.send({ category: 'event', data: data });
+  const summaryStateValue = getSummaryStateValue(store.getState(), groupName);
+
+  // Assert
+  expect(summaryStateValue).toEqual(4);
 });
