@@ -1,4 +1,13 @@
-import {REMOVE_TOKEN, REMOVE_REMOTE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN} from './actionTypes';
+import {
+  REMOVE_TOKEN,
+  REMOVE_REMOTE_TOKEN,
+  REQUEST_TOKEN,
+  RECEIVE_TOKEN,
+  REJECT_TOKEN,
+  EMPTY_TOKEN,
+  EXPIRE_TOKEN,
+  MARK_ERROR_TOKEN
+} from './actionTypes';
 import ManagerInterface from '../../Utils';
 import {getToken} from '../selectors';
 
@@ -6,8 +15,16 @@ export const requestToken = (username, password) => ({type: REQUEST_TOKEN, usern
 
 export const receiveToken = (token) => ({type: RECEIVE_TOKEN, token});
 
+export const emptyToken = {
+  type: EMPTY_TOKEN
+};
+
 export const expireToken = {
   type: EXPIRE_TOKEN
+};
+
+export const markErrorToken = {
+  type: MARK_ERROR_TOKEN
 };
 
 export const rejectToken = {
@@ -21,7 +38,6 @@ export const removeLocalToken = {
 export const removeRemoteToken = {
   type: REMOVE_REMOTE_TOKEN
 };
-
 
 function doExpireToken() {
   return(dispatch) => {
@@ -61,12 +77,20 @@ function doRemoveRemoteToken() {
   };
 }
 
+function doMarkErrorToken() {
+  return(dispatch) => {
+    dispatch(markErrorToken);
+    localStorage.removeItem('LOVE-USERNAME');
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
 /**
-  * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
-  *
-  * @param {string} username
-  * @param {string} password
-  */
+ * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
+ *
+ * @param {string} username
+ * @param {string} password
+ */
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return(dispatch, getState) => {
@@ -81,14 +105,27 @@ export function fetchToken(username, password) {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({username, password})
-    }).then((response) => response.json()).then((response) => {
-      const {token} = response;
-      if (token !== undefined && token !== null) {
-        dispatch(doReceiveToken(username, token))
-        return;
+    }).then((response) => {
+      console.log('response: ', response);
+      console.log('response.status: ', response.status);
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        dispatch(doRejectToken());
+        return false;
+      } else {
+        dispatch(doMarkErrorToken());
+        return false;
       }
-
-      dispatch(doRejectToken());
+    }).then((response) => {
+      console.log('response.json(): ', response);
+      if (response) {
+        const {token} = response;
+        if (token !== undefined && token !== null) {
+          dispatch(doReceiveToken(username, token));
+          return;
+        }
+      }
     }).catch((e) => console.log(e));
   };
 }

@@ -18,6 +18,9 @@ export default class Login extends Component {
 
     /** Function to request token to Manager */
     fetchToken: PropTypes.func,
+
+    /** Function to mark the tokenState as EMPTY */
+    emptyToken: PropTypes.func,
   };
 
   static defaultProps = {
@@ -25,6 +28,7 @@ export default class Login extends Component {
     token: '',
     tokenStatus: tokenStates.EMPTY,
     fetchToken: undefined,
+    emptyToken: undefined,
   };
 
   constructor(props) {
@@ -32,20 +36,19 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      userIsEditing: false,
-      userJustSubmitted: false,
     };
   }
 
   handleInputChange = (event) => {
     const { name, value } = event.target;
-    this.setState({ [name]: value, userIsEditing: true });
+    this.props.emptyToken();
+    this.setState({ [name]: value });
   };
 
   handleSubmit = (event) => {
     event.preventDefault();
+    this.props.emptyToken();
     this.props.fetchToken(this.state.username, this.state.password);
-    this.setState({ userIsEditing: false, userJustSubmitted: true });
   };
 
   redirect() {
