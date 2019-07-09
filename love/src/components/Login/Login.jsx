@@ -11,6 +11,23 @@ export default class Login extends Component {
 
     /** Token state of the App component */
     token: PropTypes.string,
+
+    /** Function to request token to Manager */
+    fetchToken: PropTypes.string,
+
+    /** Boolean describing wether the login failed or not */
+    loginFailed: PropTypes.func,
+
+    /** Boolean describing wether the session expired message should be displayed or not */
+    showSessionExpired: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    location: '',
+    token: '',
+    fetchToken: undefined,
+    loginFailed: false,
+    showSessionExpired: false,
   };
 
   constructor(props) {
