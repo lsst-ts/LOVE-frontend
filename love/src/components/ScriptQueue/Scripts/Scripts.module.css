@@ -15,7 +15,7 @@
   background: var(--second-quaternary-background-color);
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  padding: 0.25em;
+  padding-left: 0.4em;
   user-select: none;
 }
 
@@ -113,4 +113,8 @@
 .heartBeatContainer {
   align-self: flex-end;
   width: 1.5em;
+}
+
+.launchIconWrapper {
+  width: 1.7em;
 }
