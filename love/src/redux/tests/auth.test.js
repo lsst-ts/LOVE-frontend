@@ -19,7 +19,13 @@ describe('GIVEN the token does not exist in localStorage', () => {
     localStorage.removeItem('LOVE-TOKEN');
   });
 
+  afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
+    fetchMock.reset();
+  });
+
   it('Should save the token in localstorage and the store, and set status=RECEIVED when fetched OK', async () => {
+    // Arrange:
     const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
     const newToken = 'new-token';
     fetchMock.mock(
@@ -33,9 +39,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
         Authorization: `Token ${newToken}`,
       }),
     );
-
+    // Act:
     await store.dispatch(fetchToken('asdf', 'asdf'));
-
+    // Assert:
     const newState = store.getState();
     const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
@@ -43,6 +49,28 @@ describe('GIVEN the token does not exist in localStorage', () => {
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
     expect(storedUsername).toEqual('asdf');
     expect(storedToken).toEqual(newToken);
+  });
+
+  it('Should not save the token and set status=REJECTED when fetched Fail', async () => {
+    // Arrange:
+    const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
+    const newToken = 'new-token';
+    fetchMock.mock(
+      url,
+      {
+        status: 400,
+      }
+    );
+    // Act:
+    await store.dispatch(fetchToken('asdf', 'asdf'));
+    // Assert:
+    const newState = store.getState();
+    const storedUsername = localStorage.getItem('LOVE-USERNAME');
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(getToken(newState)).toBeNull();
+    expect(getTokenStatus(newState)).toEqual(tokenStates.REJECTED);
+    expect(storedUsername).toBeNull();
+    expect(storedToken).toBeNull();
   });
 });
 
@@ -63,6 +91,7 @@ describe('GIVEN the token exists in localStorage', () => {
   });
 
   it('Should not change the token state when the token is valid', async () => {
+    // Arrange:
     fetchMock.mock(
       url,
       {
@@ -70,19 +99,18 @@ describe('GIVEN the token exists in localStorage', () => {
       },
       ManagerInterface.getHeaders(),
     );
-
+    // Act:
     await store.dispatch(validateToken());
-
+    // Assert:
     const newToken = getToken(store.getState());
-    const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toEqual(initialToken);
-    expect(storedUsername).toEqual('asdf');
     expect(storedToken).toEqual(initialToken);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 
   it('Should remove the token when invalid with response status >= 500', async () => {
+    // Arrange:
     fetchMock.mock(
       url,
       {
@@ -90,20 +118,21 @@ describe('GIVEN the token exists in localStorage', () => {
       },
       ManagerInterface.getHeaders(),
     );
-
+    // Act:
     await store.dispatch(validateToken());
-
+    // Assert:
     const newToken = getToken(store.getState());
     const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toBeNull();
     expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
-    expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVED_LOCALLY);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.ERROR);
   });
 
   [401, 403].forEach((status) => {
     it(`Should set token status=EXPIRED and delete the token when invalid with response.status ${status}`, async () => {
+      // Arrange:
       fetchMock.mock(
         url,
         {
@@ -111,9 +140,9 @@ describe('GIVEN the token exists in localStorage', () => {
         },
         ManagerInterface.getHeaders(),
       );
-
+      // Act:
       await store.dispatch(validateToken());
-
+      // Assert:
       const newToken = getToken(store.getState());
       const storedUsername = localStorage.getItem('LOVE-USERNAME');
       const storedToken = localStorage.getItem('LOVE-TOKEN');
@@ -125,24 +154,46 @@ describe('GIVEN the token exists in localStorage', () => {
   });
 
   it('Should remove the token when logging out', async () => {
+    // Arrange:
     url = `${ManagerInterface.getApiBaseUrl()}logout/`;
     fetchMock.mock(
       url,
       {
         status: 204,
-        data: 'Logout successful, Token succesfully deleted',
       },
       ManagerInterface.getHeaders(),
     );
-
+    // Act:
     await store.dispatch(logout());
-
+    // Assert:
     const token = getToken(store.getState());
     const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(token).toBeNull();
     expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
-    expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVED_LOCALLY);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVED_REMOTELY);
+  });
+
+  it('Should remove the token when logging out, but state when it faile din the server', async () => {
+    // Arrange:
+    url = `${ManagerInterface.getApiBaseUrl()}logout/`;
+    fetchMock.mock(
+      url,
+      {
+        status: 400,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    // Act:
+    await store.dispatch(logout());
+    // ASsert:
+    const token = getToken(store.getState());
+    const storedUsername = localStorage.getItem('LOVE-USERNAME');
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(token).toBeNull();
+    expect(storedUsername).toBeNull();
+    expect(storedToken).toBeNull();
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVE_ERROR);
   });
 });
