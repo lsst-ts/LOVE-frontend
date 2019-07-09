@@ -1,12 +1,13 @@
 import {
-  REMOVE_TOKEN,
-  REMOVE_REMOTE_TOKEN,
   REQUEST_TOKEN,
   RECEIVE_TOKEN,
   REJECT_TOKEN,
-  EMPTY_TOKEN,
   EXPIRE_TOKEN,
-  MARK_ERROR_TOKEN
+  EMPTY_TOKEN,
+  MARK_ERROR_TOKEN,
+  REQUEST_REMOVE_TOKEN,
+  REMOVE_REMOTE_TOKEN,
+  MARK_ERROR_REMOVE_TOKEN
 } from './actionTypes';
 import ManagerInterface from '../../Utils';
 import {getToken} from '../selectors';
@@ -31,17 +32,29 @@ export const rejectToken = {
   type: REJECT_TOKEN
 };
 
-export const removeLocalToken = {
-  type: REMOVE_TOKEN
+export const requestRemoveToken = {
+  type: REQUEST_REMOVE_TOKEN
 };
 
 export const removeRemoteToken = {
   type: REMOVE_REMOTE_TOKEN
 };
 
+export const markErrorRemoveToken = {
+  type: MARK_ERROR_REMOVE_TOKEN
+};
+
 function doExpireToken() {
   return(dispatch) => {
     dispatch(expireToken);
+    localStorage.removeItem('LOVE-USERNAME');
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
+function doMarkErrorToken() {
+  return(dispatch) => {
+    dispatch(markErrorToken);
     localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
@@ -63,9 +76,9 @@ function doRejectToken() {
   };
 }
 
-function doRemoveLocalToken() {
+function doRequestRemoveToken() {
   return(dispatch) => {
-    dispatch(removeLocalToken);
+    dispatch(requestRemoveToken);
     localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
@@ -74,16 +87,11 @@ function doRemoveLocalToken() {
 function doRemoveRemoteToken() {
   return(dispatch) => {
     dispatch(removeRemoteToken);
-  };
-}
-
-function doMarkErrorToken() {
-  return(dispatch) => {
-    dispatch(markErrorToken);
     localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
+
 
 /**
  * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
@@ -106,8 +114,6 @@ export function fetchToken(username, password) {
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({username, password})
     }).then((response) => {
-      console.log('response: ', response);
-      console.log('response.status: ', response.status);
       if (response.status === 200) {
         return response.json();
       } else if (response.status === 400) {
@@ -118,7 +124,6 @@ export function fetchToken(username, password) {
         return false;
       }
     }).then((response) => {
-      console.log('response.json(): ', response);
       if (response) {
         const {token} = response;
         if (token !== undefined && token !== null) {
@@ -139,20 +144,23 @@ export function logout() {
   return(dispatch, getState) => {
     const token = localStorage.getItem('LOVE-TOKEN');
     if (!token) {
-      dispatch(doRemoveLocalToken());
       dispatch(doRemoveRemoteToken());
       return;
     }
 
-    dispatch(doRemoveLocalToken());
+    dispatch(doRequestRemoveToken());
     return fetch(url, {
       method: 'DELETE',
       headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
     }).then((response) => {
-      const status = response.status;
-      if (status === 204) {
+      console.log('response: ', response);
+      console.log('response.status: ', response.status);
+      console.log('response.data: ', response.data);
+      if (response.status === 204) {
         dispatch(doRemoveRemoteToken());
         return;
+      } else {
+        dispatch(markErrorRemoveToken);
       }
     }).catch((e) => console.log(e));
   };
@@ -175,8 +183,7 @@ export function validateToken() {
       headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server. Logging out\n', response);
-        dispatch(doRemoveLocalToken());
+        dispatch(doMarkErrorToken());
         return Promise.resolve();
       }
 
@@ -189,7 +196,8 @@ export function validateToken() {
       return response.json().then((resp) => {
         const {detail} = resp;
         if (detail !== 'Token is valid') {
-          dispatch(doRemoveLocalToken());
+          console.log('Session expired. Logging out');
+          dispatch(doExpireToken());
         }
       });
     });

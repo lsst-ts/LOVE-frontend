@@ -2,12 +2,14 @@ import {
   REQUEST_TOKEN,
   RECEIVE_TOKEN,
   REJECT_TOKEN,
-  REMOVE_TOKEN,
-  REMOVE_REMOTE_TOKEN,
-  EMPTY_TOKEN,
   EXPIRE_TOKEN,
-  MARK_ERROR_TOKEN
+  EMPTY_TOKEN,
+  MARK_ERROR_TOKEN,
+  REQUEST_REMOVE_TOKEN,
+  REMOVE_REMOTE_TOKEN,
+  MARK_ERROR_REMOVE_TOKEN
 } from '../actions/actionTypes';
+
 export const tokenStates = {
   EMPTY: 'EMPTY',
   REQUESTED: 'REQUESTED',
@@ -15,8 +17,9 @@ export const tokenStates = {
   ERROR: 'ERROR',
   REJECTED: 'REJECTED',
   EXPIRED: 'EXPIRED',
-  REMOVED_LOCALLY: 'REMOVED_LOCALLY',
-  REMOVED_REMOTELY: 'REMOVED_REMOTELY'
+  REMOVED_REMOTELY: 'REMOVED_REMOTELY',
+  REMOVE_REQUESTED: 'REMOVE_REQUESTED',
+  REMOVE_ERROR: 'REMOVE_ERROR',
 };
 
 const initialState = {
@@ -44,16 +47,6 @@ export default function(state = initialState, action) {
           status: tokenStates.RECEIVED
         });
       }
-    case REMOVE_TOKEN:
-      return {
-        ...initialState,
-        status: tokenStates.REMOVED_LOCALLY
-      };
-    case REMOVE_REMOTE_TOKEN:
-      return {
-        ...initialState,
-        status: tokenStates.REMOVED_REMOTELY
-      };
     case REJECT_TOKEN:
       return {
         ...state,
@@ -73,6 +66,22 @@ export default function(state = initialState, action) {
       return {
         ...initialState,
         status: tokenStates.ERROR
+      };
+
+    case REQUEST_REMOVE_TOKEN:
+      return {
+        ...initialState,
+        status: tokenStates.REMOVE_REQUESTED
+      };
+    case REMOVE_REMOTE_TOKEN:
+      return {
+        ...initialState,
+        status: tokenStates.REMOVED_REMOTELY
+      };
+    case MARK_ERROR_REMOVE_TOKEN:
+      return {
+        ...initialState,
+        status: tokenStates.REMOVE_ERROR
       };
     default:
       return state;
