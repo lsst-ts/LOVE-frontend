@@ -7,7 +7,12 @@ import { tokenStates } from '../../redux/reducers/auth';
 
 const LoginContainer = ({ token, fetchToken, loginFailed, showSessionExpired }) => {
   return (
-    <Login token={token} fetchToken={fetchToken} loginFailed={loginFailed} showSessionExpired={showSessionExpired} />
+    <Login
+      token={token}
+      fetchToken={fetchToken}
+      loginFailed={loginFailed}
+      showSessionExpired={showSessionExpired}
+    />
   );
 };
 
