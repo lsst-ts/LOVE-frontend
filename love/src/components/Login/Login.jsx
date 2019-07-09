@@ -97,11 +97,18 @@ export default class Login extends Component {
                   <p className={styles.incorrectCredentials}>Your session has expired, you have been logged out</p>
                 </div>
               ) : null}
-              {this.props.tokenStatus === tokenStates.REMOVED_LOCALLY ? (
+              {this.props.tokenStatus === tokenStates.REMOVE_ERROR ? (
                 <div className={styles.incorrectCredentialsDiv}>
                   <p className={styles.incorrectCredentials}>
                     There was a problem logging out of the server, please login and logout again to ensure your token is
                     deleted
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.REMOVE_REQUESTED ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.requesting}>
+                    Logging out, please wait
                   </p>
                 </div>
               ) : null}
