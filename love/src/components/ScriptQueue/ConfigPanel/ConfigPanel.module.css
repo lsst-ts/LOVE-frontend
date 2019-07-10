@@ -4,7 +4,7 @@
   height: 100%;
   background: var(--second-secondary-background-color);
   z-index: 10;
-  box-shadow: -5px 5px 20px 0px rgba(0,0,0,0.75);
+  box-shadow: -5px 5px 20px 0px rgba(0, 0, 0, 0.75);
 }
 
 .topBar {
@@ -36,6 +36,9 @@
   user-select: none;
   font-size: var(--font-size-large);
   padding: 0.5em 0.5em;
+}
+
+.bar {
 }
 
 .body {

@@ -229,6 +229,7 @@ export default class ScriptQueue extends Component {
     let { x, y, height } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
+        script: script,
         name: script.name,
         show: true,
         x: x,
@@ -236,6 +237,21 @@ export default class ScriptQueue extends Component {
       },
     });
   };
+
+  onScriptLaunch = (isStandard, path, config, descr, location) => {
+    this.props.requestSALCommand({
+      cmd: 'cmd_add',
+      params: {
+        isStandard,
+        path,
+        config,
+        descr,
+        location,
+      },
+      component: 'ScriptQueue',
+    });
+    this.onCloseConfigPanel();
+  }
 
   onCloseConfigPanel = () => {
     this.setState({
@@ -279,7 +295,7 @@ export default class ScriptQueue extends Component {
     return (
       <Panel title="Script Queue">
         <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
-          <ConfigPanel schema="{dsasa}" onClose={this.onCloseConfigPanel} configPanel={this.state.configPanel} />
+          <ConfigPanel onScriptLaunch={this.onScriptLaunch} onClose={this.onCloseConfigPanel} configPanel={this.state.configPanel} />
           <div
             onDragEnter={(e) => {
               this.onDragLeave(e);
@@ -372,7 +388,8 @@ export default class ScriptQueue extends Component {
                             key={`${script.type}-${script.path}`}
                             path={script.path}
                             isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
-                            onLaunch={this.onScriptConfigLaunch}
+                            onScriptConfigLaunch={this.onScriptConfigLaunch}
+                            script={script}
                             {...script}
                           />
                         </DraggableScript>

@@ -10,54 +10,23 @@ import Button from '../../GeneralPurpose/Button/Button';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
-    schema: PropTypes.string,
+    onScriptLaunch: PropTypes.func,
     onClose: PropTypes.func,
     configPanel: PropTypes.object,
   };
 
   static defaultProps = {
-    schema: '{}',
     onClose: () => 0,
+    onScriptLaunch: () => 0,
     configPanel: {},
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: `$schema: http://json-schema.org/draft-07/schema#
-      $id: https://github.com/lsst-ts/ts_salobj/tree/schema/Test.yaml
-      # title must end with one or more spaces followed by the schema version, which must begin with "v"
-      title: Test v1
-      description: Configuration for the TestCsc
-      type: object
-      properties:
-        string0:
-          type: string
-          default: default value for string0
-        bool0:
-          type: boolean
-          default: true
-        int0:
-          type: integer
-          default: 5
-        float0:
-          type: number
-          default: 3.14
-        intarr0:
-          type: array
-          default: [-1, 1]
-          items:
-            type: integer
-        multi_type:
-          anyOf:
-            - type: integer
-              minimum: 1
-            - type: string
-            - type: "null"
-          default: null
-      
-      required: [string0, bool0, int0, float0, intarr0, multi_type]
-      additionalProperties: false`,
+      value: `wait_time: 3600
+fail_run: false
+fail_cleanup: false`,
       width: '500px',
       height: '500px',
       loading: false,
@@ -86,6 +55,9 @@ export default class ConfigPanel extends Component {
     this.setState({
       loading: true,
     });
+    const script = this.props.configPanel.script;
+    const isStandard = script.type === 'standard';
+    this.props.onScriptLaunch(isStandard, script.path, this.state.value, 'description', 2);
   };
 
   render() {
@@ -125,8 +97,8 @@ export default class ConfigPanel extends Component {
             />
           </div>
           <div className={[styles.bottomBar, styles.bar].join(' ')}>
-            <Button title="Launch Script" onClick={this.onLaunch}>
-              Launch Script
+            <Button title="Enqueue script" onClick={this.onLaunch}>
+              Add to queue
             </Button>
           </div>
         </div>
