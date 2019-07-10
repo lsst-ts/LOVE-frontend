@@ -8,6 +8,7 @@ import ScriptQueue from './ScriptQueue';
 const ScriptQueueContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
+  requestSALCommand,
   summaryStateValue,
   queueState,
   scriptHeartbeats,
@@ -16,6 +17,7 @@ const ScriptQueueContainer = ({
     <ScriptQueue
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      requestSALCommand={requestSALCommand}
       summaryStateValue={summaryStateValue}
       current={queueState.current}
       finishedScriptList={queueState.finishedScriptList}
@@ -50,6 +52,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ScriptQueue-summaryState'));
       dispatch(requestGroupSubscriptionRemoval('event-ScriptHeartbeats-stream'));
     },
+    requestSALCommand: (cmd) =>{
+      dispatch(requestSALCommand(cmd))
+    }
   };
 };
 export default connect(
