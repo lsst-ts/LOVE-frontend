@@ -336,16 +336,27 @@ describe('Test camera component status data passes correctly to component', () =
     ['calibrationDetailedState', cameraStates['calibrationDetailedState'][1]],
   ].forEach((componentPair) => {
     it(`Should extract ${componentPair[0]} data from image sequence message`, async () => {
-      const groupName = `event-ATCamera-${componentPair[0]}`;
-      const data = {
-        ATCamera: {},
+      const groupName = `event-ATCamera-1-${componentPair[0]}`;
+      const streams = {
+        [componentPair[0]] : stateData
       };
-      data.ATCamera[componentPair[0]] = stateData;
       // Act
       store.dispatch(openWebsocketConnection());
       await server.connected;
       await store.dispatch(requestGroupSubscription(groupName));
-      server.send({ category: 'event', data: data });
+
+      server.send({
+        category: 'event',
+        data: [
+          {
+            csc: 'ATCamera',
+            salindex: 1,
+            data: streams,
+          },
+        ],
+      });
+
+
       const streamData = getCameraState(store.getState(), groupName);
       // Assert
       expect(streamData[componentPair[0]]).toBe(componentPair[1]);

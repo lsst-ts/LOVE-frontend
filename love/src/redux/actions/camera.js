@@ -28,20 +28,20 @@ export const receiveImageSequenceData = (data) => {
 
 export const receiveCameraStateData = (data) => {
   let cameraStateData, cameraStateKey;
-  if (data.ATCamera.raftsDetailedState) {
-    cameraStateData = data.ATCamera.raftsDetailedState;
+  if (data.raftsDetailedState) {
+    cameraStateData = data.raftsDetailedState;
     cameraStateKey = 'raftsDetailedState';
   }
-  else if (data.ATCamera.shutterDetailedState) {
-    cameraStateData = data.ATCamera.shutterDetailedState;
+  else if (data.shutterDetailedState) {
+    cameraStateData = data.shutterDetailedState;
     cameraStateKey = 'shutterDetailedState';
   }
-  else if (data.ATCamera.imageReadinessDetailedState) {
-    cameraStateData = data.ATCamera.imageReadinessDetailedState;
+  else if (data.imageReadinessDetailedState) {
+    cameraStateData = data.imageReadinessDetailedState;
     cameraStateKey = 'imageReadinessDetailedState';
   }
-  else if (data.ATCamera.calibrationDetailedState) {
-    cameraStateData = data.ATCamera.calibrationDetailedState;
+  else if (data.calibrationDetailedState) {
+    cameraStateData = data.calibrationDetailedState;
     cameraStateKey = 'calibrationDetailedState';
   }
   return {
