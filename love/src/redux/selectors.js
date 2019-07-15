@@ -76,8 +76,8 @@ export const getKey = (dict, key, def) => {
   }
 }
 
-export const getScriptQueueState = (state) => {
-  const scriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
+export const getScriptQueueState = (state, salindex) => {
+  const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
   return {
     state: getKey(scriptQueueData, 'state', undefined),
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
