@@ -11,6 +11,8 @@ import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import ManagerInterface from '../../Utils';
 import { hasCommandPrivileges, hasFakeData } from '../../Config';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
+import PauseIcon from './../icons/PauseIcon/PauseIcon';
+import ResumeIcon from './../icons/ResumeIcon/ResumeIcon';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -92,7 +94,7 @@ export default class ScriptQueue extends Component {
     if (
       this.props.waitingScriptList !== prevProps.waitingScriptList &&
       this.state.draggingScriptInstance === undefined
-      ) {
+    ) {
       this.setState({
         useLocalWaitingList: false,
         waitingScriptList: this.props.waitingScriptList,
@@ -310,6 +312,24 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  pauseScriptQueue = () => {
+    console.log('Pausing queue');
+    this.props.requestSALCommand({
+      cmd: 'cmd_pause',
+      params: {},
+      component: 'ScriptQueue',
+    });
+  };
+
+  resumeScriptQueue = () => {
+    console.log('Resuming queue');
+    this.props.requestSALCommand({
+      cmd: 'cmd_resume',
+      params: {},
+      component: 'ScriptQueue',
+    });
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -461,6 +481,26 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
+                {this.props.state === 'Stopped' && (
+                  <>
+                    <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
+                      <span>Resume</span>
+                      <div className={styles.pauseIconWrapper} title="Resume Script Queue">
+                        <ResumeIcon />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {this.props.state === 'Running' && (
+                  <>
+                    <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
+                      <span>Pause</span>
+                      <div className={styles.pauseIconWrapper} title="Pause Script Queue">
+                        <PauseIcon />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
               <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
                 {waitingList.map((script, listIndex) => {
