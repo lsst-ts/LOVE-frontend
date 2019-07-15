@@ -21,7 +21,7 @@ export default class ScriptQueue extends Component {
     super(props);
     this.state = {
       indexedHeartbeats: {},
-      isAvailableScriptListVisible: false,
+      isAvailableScriptListVisible: true,
       isFinishedScriptListListVisible: false,
       configPanel: {
         show: false,
@@ -225,7 +225,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  onScriptConfigLaunch = (e, script) => {
+  launchScriptConfig = (e, script) => {
     let { x, y, height } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
@@ -238,7 +238,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  onScriptLaunch = (isStandard, path, config, descr, location) => {
+  launchScript = (isStandard, path, config, descr, location) => {
     this.props.requestSALCommand({
       cmd: 'cmd_add',
       params: {
@@ -250,10 +250,10 @@ export default class ScriptQueue extends Component {
       },
       component: 'ScriptQueue',
     });
-    this.onCloseConfigPanel();
-  }
+    this.closeConfigPanel();
+  };
 
-  onCloseConfigPanel = () => {
+  closeConfigPanel = () => {
     this.setState({
       configPanel: {
         show: false,
@@ -263,8 +263,52 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  stopScript = (scriptIndex) => {
+    console.log('Stopping script', scriptIndex);
+    const array = new Array(400).fill(0);
+    array[0] = scriptIndex;
+    this.props.requestSALCommand({
+      cmd: 'cmd_stopScripts',
+      params: {
+        length: 1,
+        salIndices: array,
+        terminate: false,
+      },
+      component: 'ScriptQueue',
+    });
+  };
+
+  requeueScript = (scriptIndex) => {
+    console.log('Requeueing script', scriptIndex);
+    this.props.requestSALCommand({
+      cmd: 'cmd_requeue',
+      params: {
+        salIndex: scriptIndex,
+        location: 2,
+      },
+      component: 'ScriptQueue',
+    });
+  };
+
   moveScript = (scriptIndex, position) => {
     console.log(`Move script ${scriptIndex} to ${position}`);
+    let location = 3; //Before reference script
+    let locationSalIndex = 0;
+    if (position === 0) location = 1; //Location: first
+    //Location: last
+    if (position === this.state.waitingScriptList.length - 1) location = 2;
+    else {
+      locationSalIndex = this.state.waitingScriptList[position].index;
+    }
+    this.props.requestSALCommand({
+      cmd: 'cmd_move',
+      params: {
+        salIndex: scriptIndex,
+        location: location,
+        locationSalIndex: locationSalIndex,
+      },
+      component: 'ScriptQueue',
+    });
   };
 
   render() {
@@ -295,7 +339,11 @@ export default class ScriptQueue extends Component {
     return (
       <Panel title="Script Queue">
         <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
-          <ConfigPanel onScriptLaunch={this.onScriptLaunch} onClose={this.onCloseConfigPanel} configPanel={this.state.configPanel} />
+          <ConfigPanel
+            launchScript={this.launchScript}
+            closeConfigPanel={this.closeConfigPanel}
+            configPanel={this.state.configPanel}
+          />
           <div
             onDragEnter={(e) => {
               this.onDragLeave(e);
@@ -314,6 +362,7 @@ export default class ScriptQueue extends Component {
                   estimatedTime={current.expected_duration}
                   heartbeatData={this.state.indexedHeartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
+                  stopScript={this.stopScript}
                 />
               </div>
             </div>
@@ -388,7 +437,7 @@ export default class ScriptQueue extends Component {
                             key={`${script.type}-${script.path}`}
                             path={script.path}
                             isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
-                            onScriptConfigLaunch={this.onScriptConfigLaunch}
+                            launchScriptConfig={this.launchScriptConfig}
                             script={script}
                             {...script}
                           />
@@ -442,6 +491,9 @@ export default class ScriptQueue extends Component {
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
                         heartbeatData={this.state.indexedHeartbeats[script.index]}
+                        stopScript={this.stopScript}
+                        moveScript={this.moveScript}
+                        requeueScript={this.requeueScript}
                         {...script}
                       />
                     </DraggableScript>

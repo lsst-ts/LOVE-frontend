@@ -20,7 +20,7 @@ export default class AvailableScript extends PureComponent {
     /** SAL property: State of the script; see Script_Events.xml for enum values; 0 if the script is not yet loaded */
     state: PropTypes.string,
     /** Function called when launching the script configuration panel */
-    onScriptConfigLaunch: PropTypes.func,
+    launchScriptConfig: PropTypes.func,
   };
 
   static defaultProps = {
@@ -98,7 +98,7 @@ export default class AvailableScript extends PureComponent {
             </div>
           </div>
         </div>
-        <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.onScriptConfigLaunch(e, {name: fileName, ...this.props.script})}>
+        <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.launchScriptConfig(e, {name: fileName, ...this.props.script})}>
           <span className={scriptStyles.launchIconWrapper}>
             <LaunchScriptIcon title="Launch script: Configure" />
           </span>
