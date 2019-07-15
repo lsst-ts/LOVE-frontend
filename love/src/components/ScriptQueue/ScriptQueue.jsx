@@ -298,7 +298,7 @@ export default class ScriptQueue extends Component {
     //Location: last
     if (position === this.state.waitingScriptList.length - 1) location = 2;
     else {
-      locationSalIndex = this.state.waitingScriptList[position].index;
+      locationSalIndex = this.state.waitingScriptList[position + 1].index;
     }
     this.props.requestSALCommand({
       cmd: 'cmd_move',

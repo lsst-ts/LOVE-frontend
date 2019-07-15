@@ -32,6 +32,8 @@ export default class WaitingScript extends PureComponent {
     heartbeatData: PropTypes.object,
     /** Function called to stop a script */
     stopScript: PropTypes.func,
+    /** Function called to move a script */
+    moveScript: PropTypes.func,
     /** Function called to requeue a script */
     requeueScript: PropTypes.func,
   };
@@ -46,6 +48,7 @@ export default class WaitingScript extends PureComponent {
     isCompact: false,
     heartbeatData: {},
     stopScript: () => 0,
+    moveScript: () => 0,
     requeueScript: () => 0,
   };
 
