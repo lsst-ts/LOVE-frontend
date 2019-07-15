@@ -17,6 +17,11 @@
   border-bottom-right-radius: 5px;
   padding-left: 0.4em;
   user-select: none;
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.mainScriptButton:hover {
+  border: 1px solid var(--second-quinary-background-color);
 }
 
 .scriptContainerOff {
