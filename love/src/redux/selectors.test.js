@@ -658,8 +658,7 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
 
 it('Should extract the SummaryStateValue stream correctly with a selector', async () => {
   // Arrange
-  const data = {
-    ScriptQueue: {
+  const streams = {
       summaryState: [
         {
           ScriptQueueID: {
@@ -700,15 +699,25 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
           },
         },
       ],
-    },
   };
-  const groupName = 'event-ScriptQueue-summaryState';
+  const groupName = 'event-ScriptQueue-1-summaryState';
   store.dispatch(openWebsocketConnection());
 
   // Act
   await server.connected;
   await store.dispatch(requestGroupSubscription(groupName));
-  server.send({ category: 'event', data: data });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ScriptQueue',
+        salindex: 1,
+        data: streams,
+      },
+    ],
+  });
+
   const summaryStateValue = getSummaryStateValue(store.getState(), groupName);
 
   // Assert
