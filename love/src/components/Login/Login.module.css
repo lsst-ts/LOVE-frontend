@@ -72,6 +72,18 @@
   font-weight: 600;
 }
 
+.requesting {
+  text-transform: uppercase;
+  color: var(--info-font-color);
+  background: var(--primary-background-color);
+  border-left: 3px solid #53392c;
+  border-right: 3px solid #53392c;
+  margin: 5px;
+  padding: 2px;
+  font-size: 75%;
+  font-weight: 600;
+}
+
 .panelBody input {
   border: none;
   border-radius: 4px;
