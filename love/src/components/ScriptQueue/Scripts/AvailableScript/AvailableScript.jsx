@@ -70,9 +70,25 @@ export default class AvailableScript extends PureComponent {
               <span className={styles.estimatedTimeValue}>{this.props.estimatedTime}</span>
             </div>
           </div>
-          <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
-            <div className={[styles.expandedSection].join(' ')}>
-              <div className={scriptStyles.expandedTopRow}>
+          <div className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}>
+            <div className={[scriptStyles.expandedSection].join(' ')}>
+              <div className={scriptStyles.expandedSubSection}>
+                <div className={scriptStyles.subSectionTitle}>
+                  DESCRIPTION
+                </div>
+                <div className={scriptStyles.subSectionRow}>
+                  <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                  <span></span>
+                </div>
+                <div className={scriptStyles.subSectionRow}>
+                  <span className={scriptStyles.subSectionLabel}>Description:</span>
+                  <span></span>
+                </div>
+                {/* <div className={scriptStyles.subSectionTitle}>
+                  SCHEMA
+                </div> */}
+              </div>
+              {/* <div className={scriptStyles.expandedTopRow}>
                 <p>Script config</p>
                 {hasCommandPrivileges ? (
                   <div className={scriptStyles.uploadButtonWrapper}>
@@ -94,11 +110,14 @@ export default class AvailableScript extends PureComponent {
                   value: 'color:#a6e22e;',
                   boolean: 'color:#ac81fe;',
                 }}
-              />
+              /> */}
             </div>
           </div>
         </div>
-        <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.launchScriptConfig(e, {name: fileName, ...this.props.script})}>
+        <div
+          className={scriptStyles.mainScriptButton}
+          onClick={(e) => this.props.launchScriptConfig(e, { name: fileName, ...this.props.script })}
+        >
           <span className={scriptStyles.launchIconWrapper}>
             <LaunchScriptIcon title="Launch script: Configure" />
           </span>

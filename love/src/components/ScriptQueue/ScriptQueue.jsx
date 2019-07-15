@@ -92,7 +92,7 @@ export default class ScriptQueue extends Component {
     if (
       this.props.waitingScriptList !== prevProps.waitingScriptList &&
       this.state.draggingScriptInstance === undefined
-    ) {
+      ) {
       this.setState({
         useLocalWaitingList: false,
         waitingScriptList: this.props.waitingScriptList,
