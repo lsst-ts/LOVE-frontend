@@ -87,19 +87,20 @@ export const openWebsocketConnection = () => {
                 dispatch(receiveCameraStateData(stream));
               }
             }
-            if (Object.keys(data.data)[0] === 'ScriptHeartbeats') {
+            if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
-                data.data.ScriptHeartbeats.stream.script_heartbeat.salindex ||
-                data.data.ScriptHeartbeats.stream.script_heartbeat.lost ||
-                data.data.ScriptHeartbeats.stream.script_heartbeat.last_heartbeat_timestamp
+                stream.stream.script_heartbeat.salindex ||
+                stream.stream.script_heartbeat.lost ||
+                stream.stream.script_heartbeat.last_heartbeat_timestamp
               ) {
-                dispatch(receiveScriptHeartbeat(data.data.ScriptHeartbeats.stream.script_heartbeat));
+                const queueSalindex = data.data[0].salindex;
+                dispatch(receiveScriptHeartbeat(stream.stream.script_heartbeat, queueSalindex));
               }
             }
 
             if (data.data[0].csc === 'ScriptQueueState') {
-              if (stream.finished_scripts) {
-                const finishedIndices = stream.finished_scripts.map(
+              if (stream.stream.finished_scripts) {
+                const finishedIndices = stream.stream.finished_scripts.map(
                   (script) => script.index,
                 );
                 dispatch(removeScriptsHeartbeats(finishedIndices));

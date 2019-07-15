@@ -87,8 +87,14 @@ export const getScriptQueueState = (state, salindex) => {
   }
 }
 
-export const getScriptHeartbeats = (state) => {
-  return state.heartbeats.scripts;
+/**
+ * Returns all heartbeats in the state that belong to a scriptqueue of specific salindex.
+ * 
+ * @param {obj} state 
+ * @param {integer} salindex 
+ */
+export const getScriptHeartbeats = (state, salindex) => {
+  return state.heartbeats.scripts.filter(heartbeat => heartbeat.queueSalIndex === salindex);
 }
 
 export const getSummaryStateValue = (state, groupName) => {
