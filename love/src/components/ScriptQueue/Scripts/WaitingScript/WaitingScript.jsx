@@ -116,10 +116,12 @@ export default class WaitingScript extends PureComponent {
                   {this.props.index}
                 </span>
                 {typeTag !== '' && (
-                  <span className={scriptStyles.externalText} title={`${typeTag} script`}>
-                    {' - '}
-                    {`[${typeTag.toUpperCase()}]`}
-                  </span>
+                  <>
+                    <span className={scriptStyles.externalSeparator}>{' - '}</span>
+                    <span className={scriptStyles.externalText} title={`${typeTag} script`}>
+                      {`[${typeTag.toUpperCase()}]`}
+                    </span>
+                  </>
                 )}
               </div>
               <div className={scriptStyles.pathTextContainer} title={path}>
@@ -143,7 +145,7 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
             <div className={scriptStyles.scriptStatusContainer}>
-              <div className={scriptStyles.heartBeatContainer}>...</div>
+              <div className={scriptStyles.heartBeatContainer}>&nbsp;</div>
               <div
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -166,7 +168,9 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
           </div>
-          <div className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}>
+          <div
+            className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
+          >
             {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
                 <p>Script config</p>
@@ -219,7 +223,7 @@ export default class WaitingScript extends PureComponent {
                     </Button>
                   </div>
                 </div>
-                <div className={scriptStyles.expandedTopRow}>
+                <div className={scriptStyles.expandedRow}>
                   <p>Requeue script</p>
                   <div className={scriptStyles.uploadButtonWrapper}>
                     <Button
