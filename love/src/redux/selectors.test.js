@@ -26,7 +26,7 @@ afterEach(() => {
   server.close();
 });
 
-it.only('Should extract the stream correctly with a selector', async () => {
+it('Should extract the stream correctly with a selector', async () => {
   // Arrange
   const streams = {
     airPressure: {
@@ -77,8 +77,7 @@ it.only('Should extract the stream correctly with a selector', async () => {
 
 it('Should extract streams correctly with a selector', async () => {
   // Arrange
-  const data = {
-    Environment: {
+  const streams = {
       airPressure: {
         paAvg1M: {
           value: 0.12092732556005037,
@@ -103,10 +102,9 @@ it('Should extract streams correctly with a selector', async () => {
           dataType: 'Float',
         },
       },
-    },
   };
   const expectedData = {
-    'telemetry-Environment-airPressure': {
+    'telemetry-Environment-1-airPressure': {
       paAvg1M: {
         value: 0.12092732556005037,
         dataType: 'Float',
@@ -124,21 +122,30 @@ it('Should extract streams correctly with a selector', async () => {
         dataType: 'String',
       },
     },
-    'telemetry-Environment-temperature': {
+    'telemetry-Environment-1-temperature': {
       sensor1: {
         value: 69,
         dataType: 'Float',
       },
     },
   };
-  const groupNames = ['telemetry-Environment-airPressure', 'telemetry-Environment-temperature'];
+  const groupNames = ['telemetry-Environment-1-airPressure', 'telemetry-Environment-1-temperature'];
 
   // Act
   store.dispatch(openWebsocketConnection());
   await server.connected;
   await store.dispatch(requestGroupSubscription(groupNames[0]));
   await store.dispatch(requestGroupSubscription(groupNames[1]));
-  server.send({ category: 'telemetry', data: data });
+  server.send({
+    category: 'telemetry',
+    data: [
+      {
+        csc: 'Environment',
+        salindex: 1,
+        data: streams,
+      },
+    ],
+  });
   const streamsData = getStreamsData(store.getState(), groupNames);
 
   // Assert
@@ -147,39 +154,46 @@ it('Should extract streams correctly with a selector', async () => {
 
 it('Should extract the timestamped stream correctly with a selector', async () => {
   // Arrange
-  const data = {
-    Environment: {
-      airPressure: {
-        paAvg1M: {
-          value: 0.12092732556005037,
-          dataType: 'Float',
-        },
-        pateValue3H: {
-          value: 0.2811193740140766,
-          dataType: 'Float',
-        },
-        patrValue3H: {
-          value: 0.04326551449696192,
-          dataType: 'Float',
-        },
-        sensorName: {
-          value: 'c',
-          dataType: 'String',
-        },
+  const streams = {
+    airPressure: {
+      paAvg1M: {
+        value: 0.12092732556005037,
+        dataType: 'Float',
+      },
+      pateValue3H: {
+        value: 0.2811193740140766,
+        dataType: 'Float',
+      },
+      patrValue3H: {
+        value: 0.04326551449696192,
+        dataType: 'Float',
+      },
+      sensorName: {
+        value: 'c',
+        dataType: 'String',
       },
     },
   };
-  const groupName = 'telemetry-Environment-airPressure';
+  const groupName = 'telemetry-Environment-1-airPressure';
   const timestamp = new Date();
   // Act
   store.dispatch(openWebsocketConnection());
   await server.connected;
   await store.dispatch(requestGroupSubscription(groupName));
-  server.send({ category: 'telemetry', data: data });
+  server.send({
+    category: 'telemetry',
+    data: [
+      {
+        csc: 'Environment',
+        salindex: 1,
+        data: streams,
+      },
+    ],
+  });
   const streamData = getTimestampedStreamData(store.getState(), groupName);
 
   // Assert
-  expect(JSON.stringify(streamData.data)).toEqual(JSON.stringify(data.Environment.airPressure));
+  expect(JSON.stringify(streamData.data)).toEqual(JSON.stringify(streams.airPressure));
   expect(streamData.timestamp).toBeInstanceOf(Date);
 });
 
@@ -255,10 +269,8 @@ describe('Test image sequence data passes correctly to component', () => {
   ].forEach((stagePair) => {
     it(`Should extract ${stagePair[0]} data from image sequence message`, async () => {
       // Arrange
-      const data = {
-        ATCamera: {
+      const streams = {
           [stagePair[0]]: sequenceData,
-        },
       };
 
       const result = {
@@ -281,13 +293,22 @@ describe('Test image sequence data passes correctly to component', () => {
           imagesInSequence: 2,
         },
       };
-      const groupName = `event-ATCamera-${stagePair[0]}`;
+      const groupName = `event-ATCamera-1-${stagePair[0]}`;
 
       // Act
       store.dispatch(openWebsocketConnection());
       await server.connected;
       await store.dispatch(requestGroupSubscription(groupName));
-      server.send({ category: 'event', data: data });
+      server.send({
+        category: 'event',
+        data: [
+          {
+            csc: 'ATCamera',
+            salindex: 1,
+            data: streams,
+          },
+        ],
+      });
       const streamData = getCameraState(store.getState(), groupName);
       // Assert
       expect(JSON.stringify(streamData.imageSequence)).toBe(JSON.stringify(result.imageSequence));
