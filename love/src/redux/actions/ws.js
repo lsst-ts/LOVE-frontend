@@ -81,7 +81,7 @@ export const openWebsocketConnection = () => {
               ) {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
-                dispatch(receiveReadoutData(data.data));
+                dispatch(receiveReadoutData(stream));
               } else {
                 dispatch(receiveCameraStateData(stream));
               }

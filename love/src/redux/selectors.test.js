@@ -357,7 +357,7 @@ describe('Test camera component status data passes correctly to component', () =
       });
 
 
-      const streamData = getCameraState(store.getState(), groupName);
+      const streamData = getCameraState(store.getState());
       // Assert
       expect(streamData[componentPair[0]]).toBe(componentPair[1]);
     });
@@ -368,7 +368,6 @@ it('Append readout parameters to image', async () => {
   expect(1).toEqual(1);
 
   const imageData = {
-    ATCamera: {
       startIntegration: [
         {
           exposureTime: {
@@ -401,11 +400,9 @@ it('Append readout parameters to image', async () => {
           },
         },
       ],
-    },
   };
 
   const data = {
-    ATCamera: {
       imageReadoutParameters: [
         {
           ccdNames: {
@@ -458,16 +455,37 @@ it('Append readout parameters to image', async () => {
           },
         },
       ],
-    },
   };
 
   store.dispatch(openWebsocketConnection());
   await server.connected;
-  await store.dispatch(requestGroupSubscription('event-ATCamera-startIntegration'));
-  await store.dispatch(requestGroupSubscription('event-ATCamera-imageReadoutParameters'));
-  server.send({ category: 'event', data: imageData });
-  server.send({ category: 'event', data: data });
-  const streamData = getCameraState(store.getState(), 'event-ATCamera-imageReadoutParameters');
+  await store.dispatch(requestGroupSubscription('event-ATCamera-1-startIntegration'));
+  await store.dispatch(requestGroupSubscription('event-ATCamera-1-imageReadoutParameters'));
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ATCamera',
+        salindex: 1,
+        data: imageData,
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ATCamera',
+        salindex: 1,
+        data: data,
+      },
+    ],
+  });
+
+
+  const streamData = getCameraState(store.getState());
   const expectedResult = {
     timeStamp: 1558368052.999,
     imageIndex: 0,
