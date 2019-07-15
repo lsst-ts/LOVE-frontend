@@ -50,6 +50,10 @@
   font-size: var(--font-size-small);
 }
 
+.externalSeparator {
+  white-space: pre;
+}
+
 .scriptStatusContainer {
   min-width: 5em;
   text-align: center;
@@ -70,6 +74,16 @@
   align-items: center;
   align-content: center;
   padding-top: 1em;
+  border-top: solid var(--quaternary-background-color) 2px;
+}
+
+.expandedRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  padding-top: 0;
+  border-top: none;
 }
 
 .expandedTopRow p {
@@ -144,7 +158,7 @@
 }
 
 .expandedSubSection {
-  padding-top: 0.75em;
+  padding: 0.75em 0;
 }
 
 .subSectionTitle {

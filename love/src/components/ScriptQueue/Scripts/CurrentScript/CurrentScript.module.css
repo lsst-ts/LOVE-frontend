@@ -51,6 +51,19 @@
   justify-content: space-between;
 }
 
+.topContainerLeft {
+  display: flex;
+  flex-direction: column;
+}
+
 .invisible {
   visibility: hidden;
+}
+
+.filenameContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  font-size: var(--font-size-larger);
+  padding-bottom: 0;
 }

@@ -95,7 +95,7 @@ export default class CurrentScript extends Component {
     const fileName =
       path.lastIndexOf('.') > -1
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
-        : path.substring(path.lastIndexOf('/'));
+        : path.substring(path.lastIndexOf('/') + 1);
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
     let percentage = 100;
@@ -106,7 +106,7 @@ export default class CurrentScript extends Component {
     }
     if (path === 'None') percentage = 0;
     const isValid = this.props.path !== 'None';
-    const typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
+    const typeTag = this.props.isStandard ? 'STANDARD' : 'EXTERNAL';
     const visibilityClass = !isValid ? scriptStyles.hidden : '';
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
@@ -126,29 +126,40 @@ export default class CurrentScript extends Component {
         <div>
           <div className={styles.currentScriptContainer} onClick={this.onClick}>
             <div className={styles.topContainer}>
-              <div>
-                <div className={[scriptStyles.externalContainer, visibilityClass].join(' ')}>
-                  <span className={scriptStyles.externalText}>{typeTag}</span>
-                </div>
-                {this.props.index !== undefined && (
-                  <div className={styles.indexContainer}>
-                    <span className={styles.indexLabel}>Index: </span>
-                    <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.index}</span>
+              <div className={styles.topContainerLeft}>
+                <div className={[scriptStyles.scriptInfoContainer, visibilityClass].join(' ')}>
+                  <div className={scriptStyles.heartBeatContainer}>
+                    <HeartbeatIcon
+                      status={heartbeatStatus}
+                      title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
+                    />
                   </div>
-                )}
-                <div className={scriptStyles.pathTextContainer}>
+                  {this.props.index !== undefined && (
+                    <div className={styles.indexContainer}>
+                      <span className={scriptStyles.indexLabel}>salIndex: </span>
+                      <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>
+                        {this.props.index}{' '}
+                      </span>
+                    </div>
+                  )}
+                  {typeTag !== '' && (
+                    <>
+                      <span className={scriptStyles.externalSeparator}>{' - '}</span>
+                      <span className={scriptStyles.externalText} title={`${typeTag} script`}>
+                        {`[${typeTag.toUpperCase()}]`}
+                      </span>
+                    </>
+                  )}
+                </div>
+
+                <div className={[scriptStyles.pathTextContainer, styles.filenameContainer].join(' ')}>
                   <span className={scriptStyles.pathText}>{fileFolder}</span>
                   <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
                   <span className={scriptStyles.pathText}>{fileExtension}</span>
                 </div>
               </div>
               <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
-                <div className={scriptStyles.heartBeatContainer}>
-                  <HeartbeatIcon
-                    status={heartbeatStatus}
-                    title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
-                  />
-                </div>
+                <div className={scriptStyles.heartBeatContainer}>&nbsp;</div>
                 <div
                   className={scriptStyles.scriptStateContainer}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -190,7 +201,10 @@ export default class CurrentScript extends Component {
             </div>
           </div>
           <div
-            className={[scriptStyles.expandedSectionWrapper, this.state.expanded && isValid ? '' : scriptStyles.hidden].join(' ')}
+            className={[
+              scriptStyles.expandedSectionWrapper,
+              this.state.expanded && isValid ? '' : scriptStyles.hidden,
+            ].join(' ')}
           >
             {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
