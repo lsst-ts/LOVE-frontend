@@ -26,41 +26,53 @@ afterEach(() => {
   server.close();
 });
 
-it('Should extract the stream correctly with a selector', async () => {
+it.only('Should extract the stream correctly with a selector', async () => {
   // Arrange
-  const data = {
-    Environment: {
-      airPressure: {
-        paAvg1M: {
-          value: 0.12092732556005037,
-          dataType: 'Float',
-        },
-        pateValue3H: {
-          value: 0.2811193740140766,
-          dataType: 'Float',
-        },
-        patrValue3H: {
-          value: 0.04326551449696192,
-          dataType: 'Float',
-        },
-        sensorName: {
-          value: 'c',
-          dataType: 'String',
-        },
+  const streams = {
+    airPressure: {
+      paAvg1M: {
+        value: 0.12092732556005037,
+        dataType: 'Float',
+      },
+      pateValue3H: {
+        value: 0.2811193740140766,
+        dataType: 'Float',
+      },
+      patrValue3H: {
+        value: 0.04326551449696192,
+        dataType: 'Float',
+      },
+      sensorName: {
+        value: 'c',
+        dataType: 'String',
       },
     },
   };
-  const groupName = 'telemetry-Environment-airPressure';
+  const category = 'telemetry';
+  const csc = 'Environment';
+  const salindex = 1;
+  const stream = 'airPressure';
+  const groupName = [category, csc, salindex, stream].join('-');
+
   store.dispatch(openWebsocketConnection());
 
   // Act
   await server.connected;
   await store.dispatch(requestGroupSubscription(groupName));
-  server.send({ category: 'telemetry', data: data });
+  server.send({
+    category,
+    data: [
+      {
+        csc,
+        salindex,
+        data: streams,
+      },
+    ],
+  });
   const streamData = getStreamData(store.getState(), groupName);
 
   // Assert
-  expect(JSON.stringify(streamData)).toEqual(JSON.stringify(data.Environment.airPressure));
+  expect(JSON.stringify(streamData)).toEqual(JSON.stringify(streams.airPressure));
 });
 
 it('Should extract streams correctly with a selector', async () => {
@@ -599,43 +611,43 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
         {
           ScriptQueueID: {
             value: 1,
-            dataType: "Int"
+            dataType: 'Int',
           },
-          priority : {
+          priority: {
             value: 0,
-            dataType: "Int"
+            dataType: 'Int',
           },
-          private_host : {
+          private_host: {
             value: 798089283,
-            dataType: "Int"
+            dataType: 'Int',
           },
-          private_origin : {
+          private_origin: {
             value: 56,
-            dataType: "Int"
+            dataType: 'Int',
           },
-          private_rcvStamp : {
+          private_rcvStamp: {
             value: 1562605145.9171262,
-            dataType: "Float"
+            dataType: 'Float',
           },
-          private_revCode : {
-            value: "16ec6358",
-            dataType: "String"
+          private_revCode: {
+            value: '16ec6358',
+            dataType: 'String',
           },
-          private_seqNum : {
+          private_seqNum: {
             value: 2,
-            dataType: "Int"
+            dataType: 'Int',
           },
-          private_sndStamp : {
+          private_sndStamp: {
             value: 1562605145.9079509,
-            dataType: "Float"
+            dataType: 'Float',
           },
-          summaryState : {
+          summaryState: {
             value: 4,
-            dataType: "Int"
-          }
-        }
-      ]
-    }
+            dataType: 'Int',
+          },
+        },
+      ],
+    },
   };
   const groupName = 'event-ScriptQueue-summaryState';
   store.dispatch(openWebsocketConnection());

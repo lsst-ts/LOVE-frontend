@@ -33,12 +33,13 @@ const receiveGroupConfirmationMessage = (data) => ({
   data,
 });
 
-const receiveGroupSubscriptionData = (data) => {
+const receiveGroupSubscriptionData = ({category, csc, salindex, data}) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
-    data: data.data,
-    category: data.category,
-    csc: Object.keys(data.data)[0],
+    category: category,
+    csc: csc,
+    salindex: salindex,
+    data: data
   };
 };
 
@@ -67,6 +68,7 @@ export const openWebsocketConnection = () => {
           const data = JSON.parse(msg.data);
           if (!data.category) {
             dispatch(receiveGroupConfirmationMessage(data.data));
+            return;
           }
           if (data.category === 'event') {
             if (Object.keys(data.data)[0] === 'ATCamera') {
@@ -102,7 +104,14 @@ export const openWebsocketConnection = () => {
               }
             }
           }
-          dispatch(receiveGroupSubscriptionData(data));
+
+          data.data.forEach( stream =>{
+            dispatch(receiveGroupSubscriptionData({
+              category: data.category,
+              ...stream
+            }));
+
+          })
         },
         onclose: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
@@ -134,7 +143,7 @@ export const requestGroupSubscription = (groupName) => {
       return;
     }
 
-    const [category, csc, stream] = groupName.split('-');
+    const [category, csc, salindex, stream] = groupName.split('-');
     wsPromise.then(() => {
       const state = getState();
       if (state.ws.connectionState !== connectionStates.OPEN) {
@@ -145,6 +154,7 @@ export const requestGroupSubscription = (groupName) => {
         option: 'subscribe',
         category,
         csc,
+        salindex,
         stream,
       });
       dispatch(addGroupSubscription(groupName));
