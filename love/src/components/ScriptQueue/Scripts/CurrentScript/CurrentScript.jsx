@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
-import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
+import styles from './CurrentScript.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
@@ -107,7 +107,7 @@ export default class CurrentScript extends Component {
     if (path === 'None') percentage = 0;
     const isValid = this.props.path !== 'None';
     const typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
-    const visibilityClass = !isValid ? styles.hidden : '';
+    const visibilityClass = !isValid ? scriptStyles.hidden : '';
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
     let heartbeatStatus = 'unknown';
@@ -190,7 +190,7 @@ export default class CurrentScript extends Component {
             </div>
           </div>
           <div
-            className={[styles.expandedSectionWrapper, this.state.expanded && isValid ? '' : styles.hidden].join(' ')}
+            className={[scriptStyles.expandedSectionWrapper, this.state.expanded && isValid ? '' : scriptStyles.hidden].join(' ')}
           >
             {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
@@ -210,11 +210,30 @@ export default class CurrentScript extends Component {
               />
             </div> */}
             {hasCommandPrivileges ? (
-              <div className={[styles.expandedSection].join(' ')}>
+              <div className={[scriptStyles.expandedSection].join(' ')}>
+                <div className={scriptStyles.expandedSubSection}>
+                  <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                    <span />
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Description:</span>
+                    <span />
+                  </div>
+                  {/* <div className={scriptStyles.subSectionTitle}>
+                  SCHEMA
+                </div> */}
+                </div>
                 <div className={scriptStyles.expandedTopRow}>
                   <p>Remove script</p>
                   <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button className={scriptStyles.uploadConfigButton} onClick={() => this.props.stopScript(this.props.index)}>Remove</Button>
+                    <Button
+                      className={scriptStyles.uploadConfigButton}
+                      onClick={() => this.props.stopScript(this.props.index)}
+                    >
+                      Remove
+                    </Button>
                   </div>
                 </div>
               </div>

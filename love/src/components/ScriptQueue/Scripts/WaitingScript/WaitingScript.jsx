@@ -67,11 +67,11 @@ export default class WaitingScript extends PureComponent {
 
   moveToFirst = (index) => {
     this.props.moveScript(index, 0);
-  }
+  };
 
   moveToLast = (index) => {
     this.props.moveScript(index, 0);
-  }
+  };
 
   render() {
     const { path } = this.props;
@@ -105,7 +105,13 @@ export default class WaitingScript extends PureComponent {
         <div>
           <div className={styles.waitingScriptContainer} onClick={this.onClick}>
             <div>
-              <div className={scriptStyles.externalContainer}>
+              <div className={scriptStyles.scriptInfoContainer}>
+                <div className={scriptStyles.heartBeatContainer}>
+                  <HeartbeatIcon
+                    status={heartbeatStatus}
+                    title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
+                  />
+                </div>
                 <span className={scriptStyles.externalText} title={`SAL index ${this.props.index}`}>
                   {this.props.index}
                 </span>
@@ -137,12 +143,7 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
             <div className={scriptStyles.scriptStatusContainer}>
-              <div className={scriptStyles.heartBeatContainer}>
-                <HeartbeatIcon
-                  status={heartbeatStatus}
-                  title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
-                />
-              </div>
+              <div className={scriptStyles.heartBeatContainer}>...</div>
               <div
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -165,7 +166,7 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
           </div>
-          <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
+          <div className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}>
             {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
                 <p>Script config</p>
@@ -192,17 +193,41 @@ export default class WaitingScript extends PureComponent {
               />
             </div> */}
             {hasCommandPrivileges ? (
-              <div className={[styles.expandedSection].join(' ')}>
+              <div className={[scriptStyles.expandedSection].join(' ')}>
+                <div className={scriptStyles.expandedSubSection}>
+                  <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                    <span />
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Description:</span>
+                    <span />
+                  </div>
+                  {/* <div className={scriptStyles.subSectionTitle}>
+                  SCHEMA
+                </div> */}
+                </div>
                 <div className={scriptStyles.expandedTopRow}>
                   <p>Remove script</p>
                   <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button className={scriptStyles.uploadConfigButton} onClick={() => this.props.stopScript(this.props.index)}>Remove</Button>
+                    <Button
+                      className={scriptStyles.uploadConfigButton}
+                      onClick={() => this.props.stopScript(this.props.index)}
+                    >
+                      Remove
+                    </Button>
                   </div>
                 </div>
                 <div className={scriptStyles.expandedTopRow}>
                   <p>Requeue script</p>
                   <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button className={scriptStyles.uploadConfigButton} onClick={() => this.props.requeueScript(this.props.index)}>Requeue</Button>
+                    <Button
+                      className={scriptStyles.uploadConfigButton}
+                      onClick={() => this.props.requeueScript(this.props.index)}
+                    >
+                      Requeue
+                    </Button>
                   </div>
                 </div>
               </div>

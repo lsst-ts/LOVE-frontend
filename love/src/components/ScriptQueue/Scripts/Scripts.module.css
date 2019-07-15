@@ -46,6 +46,7 @@
 }
 
 .externalText {
+  color: var(--highlighted-font-color);
   font-size: var(--font-size-small);
 }
 
@@ -111,10 +112,46 @@
 }
 
 .heartBeatContainer {
+  display: inline-block;
   align-self: flex-end;
   width: 1.5em;
+  padding-right: 0.5em;
+}
+
+.scriptInfoContainer {
+  display: flex;
+  align-items: center;
 }
 
 .launchIconWrapper {
   width: 1.7em;
+}
+
+.launchIconWrapper svg {
+  vertical-align: top;
+}
+
+.expandedSectionWrapper {
+  padding: 0.5em;
+}
+
+.expandedSection {
+  border-top: solid var(--quaternary-background-color) 2px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.expandedSubSection {
+  padding-top: 0.75em;
+}
+
+.subSectionTitle {
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+}
+
+.subSectionLabel {
+  /* color: var(--highlighted-font-color); */
 }

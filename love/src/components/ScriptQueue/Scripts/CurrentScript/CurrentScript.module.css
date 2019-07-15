@@ -51,19 +51,6 @@
   justify-content: space-between;
 }
 
-.expandedSectionWrapper {
-  padding: 0.5em;
-}
-
-.expandedSection {
-  border-top: solid var(--quaternary-background-color) 2px;
-  background: var(--second-tertiary-background-color);
-}
-
-.hidden {
-  display: none;
-}
-
 .invisible {
   visibility: hidden;
 }

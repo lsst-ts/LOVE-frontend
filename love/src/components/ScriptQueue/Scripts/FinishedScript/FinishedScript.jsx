@@ -127,23 +127,22 @@ export default class FinishedScript extends PureComponent {
               </div>
             </div>
           </div>
-          <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
-            <div className={[styles.expandedSection].join(' ')}>
-              <div className={scriptStyles.expandedTopRow}>
-                <p>Script config</p>
-                <div className={scriptStyles.uploadButtonWrapper} />
+          <div className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}>
+            <div className={[scriptStyles.expandedSection].join(' ')}>
+              <div className={scriptStyles.expandedSubSection}>
+                <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
+                <div className={scriptStyles.subSectionRow}>
+                  <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                  <span />
+                </div>
+                <div className={scriptStyles.subSectionRow}>
+                  <span className={scriptStyles.subSectionLabel}>Description:</span>
+                  <span />
+                </div>
+                {/* <div className={scriptStyles.subSectionTitle}>
+                  SCHEMA
+                </div> */}
               </div>
-              <JSONPretty
-                data={{}}
-                theme={{
-                  main:
-                    'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                  key: 'color:#f92672;',
-                  string: 'color:#fd971f;',
-                  value: 'color:#a6e22e;',
-                  boolean: 'color:#ac81fe;',
-                }}
-              />
             </div>
           </div>
         </div>
