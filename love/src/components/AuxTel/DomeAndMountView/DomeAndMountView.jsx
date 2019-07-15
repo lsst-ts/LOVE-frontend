@@ -35,7 +35,7 @@ export default class DomeAndMountView extends Component {
             </div>
           </Panel>
         </div>
-        <div className={styles.mountGrid}>
+        {/* <div className={styles.mountGrid}>
           <Panel title="Mount detailed view" className={styles.panel}>
             <div className={styles.mountContainerWrapper}>
             <div className={styles.mountContainer}>
@@ -43,7 +43,7 @@ export default class DomeAndMountView extends Component {
               </div>
             </div>
           </Panel>
-        </div>
+        </div> */}
       </div>
     );
   }
