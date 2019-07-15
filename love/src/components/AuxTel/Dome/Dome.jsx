@@ -110,12 +110,19 @@ export default class Dome extends Component {
             <div className={styles.azimuthPlot}>
               <div>
                 <TimeSeriesPlotContainer
-                  dataSources={['Dome Azimuth', 'Mount Azimuth', 'Mount Target']}
+                  dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
                   layers={{
                     'Dome Azimuth': {
                       mark: {
                         interpolate: 'linear',
+                      },
+                    },
+                    'Dome Target Az': {
+                      mark: {
+                        interpolate: 'step-before',
+                        strokeWidth: 1,
+                        strokeDash: [8,8],
                       },
                     },
                     'Mount Azimuth': {
@@ -127,26 +134,30 @@ export default class Dome extends Component {
                     'Mount Target': {
                       mark: {
                         interpolate: 'step-before',
+                        strokeWidth: 1,
+                        strokeDash: [8,8],
                       },
                     },
                   }}
                   encoding={{
                     color: {
                       scale: {
-                        domain: ['Dome Azimuth', 'Mount Azimuth', 'Mount Target'],
-                        range: ['hsl(201, 22%, 40%)', 'hsl(160, 42%, 40%)', 'white'],
+                        domain: ['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target'],
+                        range: ['hsl(201, 22%, 60%)', 'hsl(201, 22%, 60%)', 'hsl(160, 42%, 60%)', 'hsl(160, 42%, 60%)'],
                       },
                     },
                   }}
                   groupNames={{
                     'Dome Azimuth': 'telemetry-ATDome-position',
+                    'Dome Target Az': 'event-ATDome-azimuthCommandedState',
                     'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
                     'Mount Target': 'event-ATMCS-target',
                   }}
                   accessors={{
                     'Dome Azimuth': (data) => data.azimuthPosition.value,
+                    'Dome Target Az': (data) => (data[data.length-1].azimuth ? data[data.length-1].azimuth.value : undefined),
                     'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
-                    'Mount Target': (data) => (data[0].azimuth ? data[0].azimuth.value : undefined),
+                    'Mount Target': (data) => (data[data.length-1].azimuth ? data[data.length-1].azimuth.value : undefined),
                   }}
                 />
               </div>
