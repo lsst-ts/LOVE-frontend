@@ -3,20 +3,20 @@ import { imageStates } from '../../Constants';
 
 export const receiveImageSequenceData = (data) => {
   let imageState, imageData;
-  if (data.ATCamera.startIntegration) {
-    imageData = data.ATCamera.startIntegration;
+  if (data.startIntegration) {
+    imageData = data.startIntegration;
     imageState = imageStates.INTEGRATING;
   }
-  else if (data.ATCamera.startReadout) {
-    imageData = data.ATCamera.startReadout;
+  else if (data.startReadout) {
+    imageData = data.startReadout;
     imageState = imageStates.READING_OUT;
   }
-  else if (data.ATCamera.endReadout) {
-    imageData = data.ATCamera.endReadout;
+  else if (data.endReadout) {
+    imageData = data.endReadout;
     imageState = imageStates.END_READOUT;
   }
-  else if (data.ATCamera.endOfImageTelemetry) {
-    imageData = data.ATCamera.endOfImageTelemetry;
+  else if (data.endOfImageTelemetry) {
+    imageData = data.endOfImageTelemetry;
     imageState = imageStates.END_TELEMETRY;
   }
   return {

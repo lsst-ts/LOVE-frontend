@@ -71,15 +71,16 @@ export const openWebsocketConnection = () => {
             return;
           }
           if (data.category === 'event') {
-            if (Object.keys(data.data)[0] === 'ATCamera') {
+            if (data.data[0].csc === 'ATCamera') {
+              const stream = data.data[0].data;
               if (
-                data.data.ATCamera.startIntegration ||
-                data.data.ATCamera.endReadout ||
-                data.data.ATCamera.startReadout ||
-                data.data.ATCamera.endOfImageTelemetry
+                stream.startIntegration ||
+                stream.endReadout ||
+                stream.startReadout ||
+                stream.endOfImageTelemetry
               ) {
-                dispatch(receiveImageSequenceData(data.data));
-              } else if (data.data.ATCamera.imageReadoutParameters) {
+                dispatch(receiveImageSequenceData(data.data[0].data));
+              } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(data.data));
               } else {
                 dispatch(receiveCameraStateData(data.data));
