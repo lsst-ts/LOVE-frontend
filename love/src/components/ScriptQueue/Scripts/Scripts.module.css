@@ -68,15 +68,6 @@
   margin-bottom: 0;
 }
 
-.expandedTopRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  padding-top: 1em;
-  border-top: solid var(--quaternary-background-color) 2px;
-}
-
 .expandedRow {
   display: flex;
   justify-content: space-between;
@@ -84,10 +75,6 @@
   align-content: center;
   padding-top: 0;
   border-top: none;
-}
-
-.expandedTopRow p {
-  margin: 0;
 }
 
 .uploadButtonWrapper {
@@ -150,7 +137,6 @@
 }
 
 .expandedSection {
-  border-top: solid var(--quaternary-background-color) 2px;
 }
 
 .hidden {
@@ -158,6 +144,7 @@
 }
 
 .expandedSubSection {
+  border-top: solid var(--quaternary-background-color) 2px;
   padding: 0.75em 0;
 }
 

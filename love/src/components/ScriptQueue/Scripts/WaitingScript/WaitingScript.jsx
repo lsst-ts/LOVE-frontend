@@ -212,26 +212,29 @@ export default class WaitingScript extends PureComponent {
                   SCHEMA
                 </div> */}
                 </div>
-                <div className={scriptStyles.expandedTopRow}>
-                  <p>Remove script</p>
-                  <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button
-                      className={scriptStyles.uploadConfigButton}
-                      onClick={() => this.props.stopScript(this.props.index)}
-                    >
-                      Remove
-                    </Button>
+                <div className={scriptStyles.expandedSubSection}>
+                  <div className={scriptStyles.subSectionTitle}>COMMANDS</div>
+                  <div className={scriptStyles.expandedRow}>
+                    <p>Remove script</p>
+                    <div className={scriptStyles.uploadButtonWrapper}>
+                      <Button
+                        className={scriptStyles.uploadConfigButton}
+                        onClick={() => this.props.stopScript(this.props.index)}
+                      >
+                        Remove
+                      </Button>
+                    </div>
                   </div>
-                </div>
-                <div className={scriptStyles.expandedRow}>
-                  <p>Requeue script</p>
-                  <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button
-                      className={scriptStyles.uploadConfigButton}
-                      onClick={() => this.props.requeueScript(this.props.index)}
-                    >
-                      Requeue
-                    </Button>
+                  <div className={scriptStyles.expandedRow}>
+                    <p>Requeue script</p>
+                    <div className={scriptStyles.uploadButtonWrapper}>
+                      <Button
+                        className={scriptStyles.uploadConfigButton}
+                        onClick={() => this.props.requeueScript(this.props.index)}
+                      >
+                        Requeue
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
