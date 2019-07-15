@@ -54,6 +54,6 @@ export const receiveCameraStateData = (data) => {
 export const receiveReadoutData = (data) => {
   return {
     type: RECEIVE_READOUT_DATA,
-    data: data.ATCamera.imageReadoutParameters,
+    data: data.imageReadoutParameters,
   };
 }
