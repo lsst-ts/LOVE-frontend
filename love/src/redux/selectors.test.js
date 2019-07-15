@@ -78,30 +78,30 @@ it('Should extract the stream correctly with a selector', async () => {
 it('Should extract streams correctly with a selector', async () => {
   // Arrange
   const streams = {
-      airPressure: {
-        paAvg1M: {
-          value: 0.12092732556005037,
-          dataType: 'Float',
-        },
-        pateValue3H: {
-          value: 0.2811193740140766,
-          dataType: 'Float',
-        },
-        patrValue3H: {
-          value: 0.04326551449696192,
-          dataType: 'Float',
-        },
-        sensorName: {
-          value: 'c',
-          dataType: 'String',
-        },
+    airPressure: {
+      paAvg1M: {
+        value: 0.12092732556005037,
+        dataType: 'Float',
       },
-      temperature: {
-        sensor1: {
-          value: 69,
-          dataType: 'Float',
-        },
+      pateValue3H: {
+        value: 0.2811193740140766,
+        dataType: 'Float',
       },
+      patrValue3H: {
+        value: 0.04326551449696192,
+        dataType: 'Float',
+      },
+      sensorName: {
+        value: 'c',
+        dataType: 'String',
+      },
+    },
+    temperature: {
+      sensor1: {
+        value: 69,
+        dataType: 'Float',
+      },
+    },
   };
   const expectedData = {
     'telemetry-Environment-1-airPressure': {
@@ -270,7 +270,7 @@ describe('Test image sequence data passes correctly to component', () => {
     it(`Should extract ${stagePair[0]} data from image sequence message`, async () => {
       // Arrange
       const streams = {
-          [stagePair[0]]: sequenceData,
+        [stagePair[0]]: sequenceData,
       };
 
       const result = {
@@ -338,7 +338,7 @@ describe('Test camera component status data passes correctly to component', () =
     it(`Should extract ${componentPair[0]} data from image sequence message`, async () => {
       const groupName = `event-ATCamera-1-${componentPair[0]}`;
       const streams = {
-        [componentPair[0]] : stateData
+        [componentPair[0]]: stateData,
       };
       // Act
       store.dispatch(openWebsocketConnection());
@@ -356,7 +356,6 @@ describe('Test camera component status data passes correctly to component', () =
         ],
       });
 
-
       const streamData = getCameraState(store.getState());
       // Assert
       expect(streamData[componentPair[0]]).toBe(componentPair[1]);
@@ -368,93 +367,93 @@ it('Append readout parameters to image', async () => {
   expect(1).toEqual(1);
 
   const imageData = {
-      startIntegration: [
-        {
-          exposureTime: {
-            value: 5,
-            dataType: 'Float',
-          },
-          imageIndex: {
-            value: 0,
-            dataType: 'Int',
-          },
-          imageName: {
-            value: 'Image 1',
-            dataType: 'String',
-          },
-          imageSequenceName: {
-            value: 'Image sequence 1',
-            dataType: 'String',
-          },
-          imagesInSequence: {
-            value: 1,
-            dataType: 'Int',
-          },
-          priority: {
-            value: 1,
-            dataType: 'Int',
-          },
-          timeStamp: {
-            value: 1558368052.999,
-            dataType: 'Float',
-          },
+    startIntegration: [
+      {
+        exposureTime: {
+          value: 5,
+          dataType: 'Float',
         },
-      ],
+        imageIndex: {
+          value: 0,
+          dataType: 'Int',
+        },
+        imageName: {
+          value: 'Image 1',
+          dataType: 'String',
+        },
+        imageSequenceName: {
+          value: 'Image sequence 1',
+          dataType: 'String',
+        },
+        imagesInSequence: {
+          value: 1,
+          dataType: 'Int',
+        },
+        priority: {
+          value: 1,
+          dataType: 'Int',
+        },
+        timeStamp: {
+          value: 1558368052.999,
+          dataType: 'Float',
+        },
+      },
+    ],
   };
 
   const data = {
-      imageReadoutParameters: [
-        {
-          ccdNames: {
-            value: 'a',
-            dataType: 'String',
-          },
-          ccdType: {
-            value: 0,
-            dataType: 'Int',
-          },
-          imageName: {
-            value: 'Image 1',
-            dataType: 'String',
-          },
-          overCols: {
-            value: 1,
-            dataType: 'Int',
-          },
-          overRows: {
-            value: 1,
-            dataType: 'Int',
-          },
-          postCols: {
-            value: 1,
-            dataType: 'Int',
-          },
-          preCols: {
-            value: 0,
-            dataType: 'Int',
-          },
-          preRows: {
-            value: 0,
-            dataType: 'Int',
-          },
-          priority: {
-            value: 1,
-            dataType: 'Int',
-          },
-          readCols: {
-            value: 0,
-            dataType: 'Int',
-          },
-          readCols2: {
-            value: 0,
-            dataType: 'Int',
-          },
-          readRows: {
-            value: 1,
-            dataType: 'Int',
-          },
+    imageReadoutParameters: [
+      {
+        ccdNames: {
+          value: 'a',
+          dataType: 'String',
         },
-      ],
+        ccdType: {
+          value: 0,
+          dataType: 'Int',
+        },
+        imageName: {
+          value: 'Image 1',
+          dataType: 'String',
+        },
+        overCols: {
+          value: 1,
+          dataType: 'Int',
+        },
+        overRows: {
+          value: 1,
+          dataType: 'Int',
+        },
+        postCols: {
+          value: 1,
+          dataType: 'Int',
+        },
+        preCols: {
+          value: 0,
+          dataType: 'Int',
+        },
+        preRows: {
+          value: 0,
+          dataType: 'Int',
+        },
+        priority: {
+          value: 1,
+          dataType: 'Int',
+        },
+        readCols: {
+          value: 0,
+          dataType: 'Int',
+        },
+        readCols2: {
+          value: 0,
+          dataType: 'Int',
+        },
+        readRows: {
+          value: 1,
+          dataType: 'Int',
+        },
+      },
+    ],
   };
 
   store.dispatch(openWebsocketConnection());
@@ -484,7 +483,6 @@ it('Append readout parameters to image', async () => {
     ],
   });
 
-
   const streamData = getCameraState(store.getState());
   const expectedResult = {
     timeStamp: 1558368052.999,
@@ -512,141 +510,146 @@ it('Append readout parameters to image', async () => {
 
 it('Should extract the ScriptQueue state correctly with a selector', async () => {
   // Arrange
-  const data = {
-    data: {
-      ScriptQueueState: {
-        stream: {
-          max_lost_heartbeats: 5,
-          heartbeat_timeout: 15,
-          available_scripts: [
-            {
-              type: 'standard',
-              path: 'unloadable',
-            },
-            {
-              type: 'standard',
-              path: 'script2',
-            },
-            {
-              type: 'standard',
-              path: 'script1',
-            },
-            {
-              type: 'standard',
-              path: 'subdir/script3',
-            },
-            {
-              type: 'standard',
-              path: 'subdir/subsubdir/script4',
-            },
-            {
-              type: 'external',
-              path: 'script5',
-            },
-            {
-              type: 'external',
-              path: 'script1',
-            },
-            {
-              type: 'external',
-              path: 'subdir/script3',
-            },
-            {
-              type: 'external',
-              path: 'subdir/script6',
-            },
-          ],
-          state: 'Running',
-          finished_scripts: [
-            {
-              index: 100000,
-              script_state: 'DONE',
-              process_state: 'DONE',
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: 'standard',
-              path: 'script1',
-              lost_heartbeats: 1,
-              setup: true,
-              last_heartbeat_timestamp: 1562083001.530486,
-              timestampConfigureEnd: 1562079403.8510532,
-              timestampConfigureStart: 1562079403.739135,
-              timestampProcessEnd: 1562083005.9086933,
-              timestampProcessStart: 1562079400.4823232,
-              timestampRunStart: 1562079403.8522232,
-            },
-          ],
-          waiting_scripts: [
-            {
-              index: 100002,
-              script_state: 'CONFIGURED',
-              process_state: 'CONFIGURED',
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: 'standard',
-              path: 'script1',
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085751.474293,
-              timestampConfigureEnd: 1562079406.6482723,
-              timestampConfigureStart: 1562079406.523249,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079402.5080712,
-              timestampRunStart: 0.0,
-            },
-            {
-              index: 100003,
-              script_state: 'CONFIGURED',
-              process_state: 'CONFIGURED',
-              elapsed_time: 0,
-              expected_duration: 3600.0,
-              type: 'standard',
-              path: 'script1',
-              lost_heartbeats: 0,
-              setup: true,
-              last_heartbeat_timestamp: 1562085751.879635,
-              timestampConfigureEnd: 1562079407.207569,
-              timestampConfigureStart: 1562079407.049775,
-              timestampProcessEnd: 0.0,
-              timestampProcessStart: 1562079402.8352787,
-              timestampRunStart: 0.0,
-            },
-          ],
-          current: {
-            index: 100001,
-            script_state: 'RUNNING',
-            process_state: 'RUNNING',
-            elapsed_time: 0,
-            expected_duration: 3600.0,
-            type: 'standard',
-            path: 'script1',
-            lost_heartbeats: 0,
-            setup: true,
-            last_heartbeat_timestamp: 1562085754.886316,
-            timestampConfigureEnd: 1562079405.1839786,
-            timestampConfigureStart: 1562079405.0609376,
-            timestampProcessEnd: 0.0,
-            timestampProcessStart: 1562079401.4940698,
-            timestampRunStart: 1562083005.9092648,
-          },
+
+  const scriptQueueStateStream = {
+    stream: {
+      max_lost_heartbeats: 5,
+      heartbeat_timeout: 15,
+      available_scripts: [
+        {
+          type: 'standard',
+          path: 'unloadable',
         },
+        {
+          type: 'standard',
+          path: 'script2',
+        },
+        {
+          type: 'standard',
+          path: 'script1',
+        },
+        {
+          type: 'standard',
+          path: 'subdir/script3',
+        },
+        {
+          type: 'standard',
+          path: 'subdir/subsubdir/script4',
+        },
+        {
+          type: 'external',
+          path: 'script5',
+        },
+        {
+          type: 'external',
+          path: 'script1',
+        },
+        {
+          type: 'external',
+          path: 'subdir/script3',
+        },
+        {
+          type: 'external',
+          path: 'subdir/script6',
+        },
+      ],
+      state: 'Running',
+      finished_scripts: [
+        {
+          index: 100000,
+          script_state: 'DONE',
+          process_state: 'DONE',
+          elapsed_time: 0,
+          expected_duration: 3600.0,
+          type: 'standard',
+          path: 'script1',
+          lost_heartbeats: 1,
+          setup: true,
+          last_heartbeat_timestamp: 1562083001.530486,
+          timestampConfigureEnd: 1562079403.8510532,
+          timestampConfigureStart: 1562079403.739135,
+          timestampProcessEnd: 1562083005.9086933,
+          timestampProcessStart: 1562079400.4823232,
+          timestampRunStart: 1562079403.8522232,
+        },
+      ],
+      waiting_scripts: [
+        {
+          index: 100002,
+          script_state: 'CONFIGURED',
+          process_state: 'CONFIGURED',
+          elapsed_time: 0,
+          expected_duration: 3600.0,
+          type: 'standard',
+          path: 'script1',
+          lost_heartbeats: 0,
+          setup: true,
+          last_heartbeat_timestamp: 1562085751.474293,
+          timestampConfigureEnd: 1562079406.6482723,
+          timestampConfigureStart: 1562079406.523249,
+          timestampProcessEnd: 0.0,
+          timestampProcessStart: 1562079402.5080712,
+          timestampRunStart: 0.0,
+        },
+        {
+          index: 100003,
+          script_state: 'CONFIGURED',
+          process_state: 'CONFIGURED',
+          elapsed_time: 0,
+          expected_duration: 3600.0,
+          type: 'standard',
+          path: 'script1',
+          lost_heartbeats: 0,
+          setup: true,
+          last_heartbeat_timestamp: 1562085751.879635,
+          timestampConfigureEnd: 1562079407.207569,
+          timestampConfigureStart: 1562079407.049775,
+          timestampProcessEnd: 0.0,
+          timestampProcessStart: 1562079402.8352787,
+          timestampRunStart: 0.0,
+        },
+      ],
+      current: {
+        index: 100001,
+        script_state: 'RUNNING',
+        process_state: 'RUNNING',
+        elapsed_time: 0,
+        expected_duration: 3600.0,
+        type: 'standard',
+        path: 'script1',
+        lost_heartbeats: 0,
+        setup: true,
+        last_heartbeat_timestamp: 1562085754.886316,
+        timestampConfigureEnd: 1562079405.1839786,
+        timestampConfigureStart: 1562079405.0609376,
+        timestampProcessEnd: 0.0,
+        timestampProcessStart: 1562079401.4940698,
+        timestampRunStart: 1562083005.9092648,
       },
     },
-    category: 'event',
   };
 
   store.dispatch(openWebsocketConnection());
-  await store.dispatch(requestGroupSubscription('event-ScriptQueueState-stream'));
+  await store.dispatch(requestGroupSubscription('event-ScriptQueueState-1-stream'));
   await server.connected;
-  server.send(data);
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ScriptQueueState',
+        salindex: 1,
+        data: scriptQueueStateStream,
+      },
+    ],
+  });
   // Act
-  const streamData = getScriptQueueState(store.getState());
+  const streamData = getScriptQueueState(store.getState(), 1);
   const expectedData = {
-    state: data.data.ScriptQueueState.stream.state,
-    availableScriptList: data.data.ScriptQueueState.stream.available_scripts,
-    waitingScriptList: data.data.ScriptQueueState.stream.waiting_scripts,
-    current: data.data.ScriptQueueState.stream.current,
-    finishedScriptList: data.data.ScriptQueueState.stream.finished_scripts,
+    state: scriptQueueStateStream.stream.state,
+    availableScriptList: scriptQueueStateStream.stream.available_scripts,
+    waitingScriptList: scriptQueueStateStream.stream.waiting_scripts,
+    current: scriptQueueStateStream.stream.current,
+    finishedScriptList: scriptQueueStateStream.stream.finished_scripts,
   };
 
   // Assert

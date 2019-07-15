@@ -34,6 +34,7 @@ const receiveGroupConfirmationMessage = (data) => ({
 });
 
 const receiveGroupSubscriptionData = ({category, csc, salindex, data}) => {
+
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
     category: category,
@@ -71,8 +72,8 @@ export const openWebsocketConnection = () => {
             return;
           }
           if (data.category === 'event') {
+            const stream = data.data[0].data;
             if (data.data[0].csc === 'ATCamera') {
-              const stream = data.data[0].data;
               if (
                 stream.startIntegration ||
                 stream.endReadout ||
@@ -96,9 +97,9 @@ export const openWebsocketConnection = () => {
               }
             }
 
-            if (Object.keys(data.data)[0] === 'ScriptQueueState') {
-              if (data.data.ScriptQueueState.stream.finished_scripts) {
-                const finishedIndices = data.data.ScriptQueueState.stream.finished_scripts.map(
+            if (data.data[0].csc === 'ScriptQueueState') {
+              if (stream.finished_scripts) {
+                const finishedIndices = stream.finished_scripts.map(
                   (script) => script.index,
                 );
                 dispatch(removeScriptsHeartbeats(finishedIndices));
