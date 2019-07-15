@@ -92,18 +92,21 @@ it('Should receive 3 sequential messages with script heartbeats (2 new and 1 upd
   const heartbeats = [
     {
       // New for SAL index 100017
+      queueSalIndex: 12,
       salindex: 100017,
       lost: 1,
       lastHeartbeatTimestamp: 1562258576.477827,
     },
     {
       // New for SAL index 100018
+      queueSalIndex: 12,
       salindex: 100018,
       lost: 3,
       lastHeartbeatTimestamp: 1562258590.477827,
     },
     {
       // Update for SAL index 100017
+      queueSalIndex: 12,
       salindex: 100017,
       lost: 5,
       lastHeartbeatTimestamp: 1562258698.477827,
@@ -114,24 +117,30 @@ it('Should receive 3 sequential messages with script heartbeats (2 new and 1 upd
   heartbeats.forEach((heartbeat) => {
     // Act:
     server.send({
-      data: {
-        ScriptHeartbeats: {
-          stream: {
-            script_heartbeat: {
-              salindex: heartbeat.salindex,
-              lost: heartbeat.lost,
-              last_heartbeat_timestamp: heartbeat.lastHeartbeatTimestamp,
+      category: 'event',
+      data: [
+        {
+          csc: 'ScriptHeartbeats',
+          salindex: 12, // scriptqueue salindex
+          data: {
+            stream: {
+              script_heartbeat: {
+                salindex: heartbeat.salindex,
+                lost: heartbeat.lost,
+                last_heartbeat_timestamp: heartbeat.lastHeartbeatTimestamp,
+              },
             },
           },
         },
-      },
-      category: 'event',
+      ],
     });
+
     // Assert:
-    let heartbeatsState = getScriptHeartbeats(store.getState());
+    let heartbeatsState = getScriptHeartbeats(store.getState(), 12);
     // We expect a list with last heartbeat for each SAL index
     expectedState = expectedState.filter((current) => current.salindex !== heartbeat.salindex);
     expectedState.push(heartbeat);
+
     expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(
       JSON.stringify(expectedState.sort(compareSalIndex)),
     );
@@ -159,7 +168,7 @@ it(`GIVEN 3 script heartbeats in the State,
       lastHeartbeatTimestamp: 1562258590.477827,
     },
   ];
-  mockHeartbeats.forEach( (heartbeat) => {
+  mockHeartbeats.forEach((heartbeat) => {
     server.send({
       data: {
         ScriptHeartbeats: {

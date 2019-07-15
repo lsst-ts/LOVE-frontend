@@ -1,9 +1,15 @@
 import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS } from './actionTypes';
 
-export const receiveScriptHeartbeat = (data) => {
+/**
+ * Receives the stream data with the heartbeat of a script in a queue of index=queueSalIndex
+ * @param {object} data 
+ * @param {number} queueSalIndex 
+ */
+export const receiveScriptHeartbeat = (data, queueSalIndex) => {
   return {
     type: UPDATE_SCRIPT_HEARTBEAT,
     data: {
+      queueSalIndex,
       salindex: data.salindex,
       lost: data.lost,
       lastHeartbeatTimestamp: data.last_heartbeat_timestamp,
