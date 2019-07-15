@@ -10,14 +10,14 @@ import Button from '../../GeneralPurpose/Button/Button';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
-    onScriptLaunch: PropTypes.func,
-    onClose: PropTypes.func,
+    launchScript: PropTypes.func,
+    closeConfigPanel: PropTypes.func,
     configPanel: PropTypes.object,
   };
 
   static defaultProps = {
-    onClose: () => 0,
-    onScriptLaunch: () => 0,
+    closeConfigPanel: () => 0,
+    launchScript: () => 0,
     configPanel: {},
   };
 
@@ -46,9 +46,8 @@ fail_cleanup: false`,
     });
   };
 
-  onClose = () => {
-    console.log('CLOSE');
-    this.props.onClose();
+  closeConfigPanel = () => {
+    this.props.closeConfigPanel();
   };
 
   onLaunch = () => {
@@ -57,7 +56,7 @@ fail_cleanup: false`,
     });
     const script = this.props.configPanel.script;
     const isStandard = script.type === 'standard';
-    this.props.onScriptLaunch(isStandard, script.path, this.state.value, 'description', 2);
+    this.props.launchScript(isStandard, script.path, this.state.value, 'description', 2);
   };
 
   render() {
@@ -79,7 +78,7 @@ fail_cleanup: false`,
         <div className={styles.configPanelContainer}>
           <div className={[styles.topBar, styles.bar].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
-            <span className={styles.closeButton} onClick={this.onClose}>
+            <span className={styles.closeButton} onClick={this.closeConfigPanel}>
               X
             </span>
           </div>

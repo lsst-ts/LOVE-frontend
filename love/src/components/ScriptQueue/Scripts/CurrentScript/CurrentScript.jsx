@@ -7,6 +7,8 @@ import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
+import { hasCommandPrivileges } from '../../../../Config';
+import Button from '../../../GeneralPurpose/Button/Button';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -30,6 +32,8 @@ export default class CurrentScript extends Component {
     timestamp: PropTypes.number,
     /** Heartbeat data with number of consecutive lost heartbeats and last received timestamp */
     heartbeatData: PropTypes.object,
+    /** Function called to stop a script */
+    stopScript: PropTypes.func,
   };
 
   static defaultProps = {
@@ -42,6 +46,7 @@ export default class CurrentScript extends Component {
     estimatedTime: 0,
     timestampRunStart: 0,
     heartbeatData: {},
+    stopScript: () => 0,
   };
 
   constructor(props) {
@@ -187,7 +192,7 @@ export default class CurrentScript extends Component {
           <div
             className={[styles.expandedSectionWrapper, this.state.expanded && isValid ? '' : styles.hidden].join(' ')}
           >
-            <div className={[styles.expandedSection].join(' ')}>
+            {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
                 <p>Script config</p>
                 <div className={scriptStyles.uploadButtonWrapper} />
@@ -203,7 +208,17 @@ export default class CurrentScript extends Component {
                   boolean: 'color:#ac81fe;',
                 }}
               />
-            </div>
+            </div> */}
+            {hasCommandPrivileges ? (
+              <div className={[styles.expandedSection].join(' ')}>
+                <div className={scriptStyles.expandedTopRow}>
+                  <p>Remove script</p>
+                  <div className={scriptStyles.uploadButtonWrapper}>
+                    <Button className={scriptStyles.uploadConfigButton} onClick={() => this.props.stopScript(this.props.index)}>Remove</Button>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>

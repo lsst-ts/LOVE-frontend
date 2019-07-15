@@ -30,6 +30,10 @@ export default class WaitingScript extends PureComponent {
     timestamp: PropTypes.number,
     /** Heartbeat data with number of consecutive lost heartbeats and last received timestamp */
     heartbeatData: PropTypes.object,
+    /** Function called to stop a script */
+    stopScript: PropTypes.func,
+    /** Function called to requeue a script */
+    requeueScript: PropTypes.func,
   };
 
   static defaultProps = {
@@ -41,6 +45,8 @@ export default class WaitingScript extends PureComponent {
     process_state: 'Unknown',
     isCompact: false,
     heartbeatData: {},
+    stopScript: () => 0,
+    requeueScript: () => 0,
   };
 
   constructor(props) {
@@ -55,6 +61,14 @@ export default class WaitingScript extends PureComponent {
       expanded: !this.state.expanded,
     });
   };
+
+  moveToFirst = (index) => {
+    this.props.moveScript(index, 0);
+  }
+
+  moveToLast = (index) => {
+    this.props.moveScript(index, 0);
+  }
 
   render() {
     const { path } = this.props;
@@ -149,7 +163,7 @@ export default class WaitingScript extends PureComponent {
             </div>
           </div>
           <div className={[styles.expandedSectionWrapper, this.state.expanded ? '' : styles.hidden].join(' ')}>
-            <div className={[styles.expandedSection].join(' ')}>
+            {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
                 <p>Script config</p>
                 {hasCommandPrivileges ? (
@@ -173,13 +187,19 @@ export default class WaitingScript extends PureComponent {
                   boolean: 'color:#ac81fe;',
                 }}
               />
-            </div>
+            </div> */}
             {hasCommandPrivileges ? (
               <div className={[styles.expandedSection].join(' ')}>
                 <div className={scriptStyles.expandedTopRow}>
                   <p>Remove script</p>
                   <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button className={scriptStyles.uploadConfigButton}>Remove</Button>
+                    <Button className={scriptStyles.uploadConfigButton} onClick={() => this.props.stopScript(this.props.index)}>Remove</Button>
+                  </div>
+                </div>
+                <div className={scriptStyles.expandedTopRow}>
+                  <p>Requeue script</p>
+                  <div className={scriptStyles.uploadButtonWrapper}>
+                    <Button className={scriptStyles.uploadConfigButton} onClick={() => this.props.requeueScript(this.props.index)}>Requeue</Button>
                   </div>
                 </div>
               </div>
