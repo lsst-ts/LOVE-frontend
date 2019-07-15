@@ -191,9 +191,8 @@ export default class ScriptQueue extends Component {
       if (waitingList[i].index === targetScriptId) waitingListTargetId = i;
     }
 
-    const temp = newWaitingList[waitingListSourceId];
-    newWaitingList[waitingListSourceId] = newWaitingList[waitingListTargetId];
-    newWaitingList[waitingListTargetId] = temp;
+    newWaitingList.splice(waitingListSourceId, 1);
+    newWaitingList.splice(waitingListTargetId, 0, waitingList[waitingListSourceId]);
 
     this.setState({
       waitingScriptList: newWaitingList,
