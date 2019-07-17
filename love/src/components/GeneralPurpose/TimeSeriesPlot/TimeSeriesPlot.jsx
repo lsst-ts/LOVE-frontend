@@ -170,6 +170,7 @@ export default class TimeSeriesPlot extends Component {
             type: dataType,
             title: this.props.dataLabel,
           },
+          
           color: {
             field: 'source',
             type: 'nominal',
