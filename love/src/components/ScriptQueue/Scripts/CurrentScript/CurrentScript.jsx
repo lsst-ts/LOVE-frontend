@@ -229,11 +229,15 @@ export default class CurrentScript extends Component {
                   <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
                   <div className={scriptStyles.subSectionRow}>
                     <span className={scriptStyles.subSectionLabel}>Classname:</span>
-                    <span />
+                    <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
                   </div>
                   <div className={scriptStyles.subSectionRow}>
                     <span className={scriptStyles.subSectionLabel}>Description:</span>
-                    <span />
+                    <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Remotes:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
                   </div>
                   {/* <div className={scriptStyles.subSectionTitle}>
                   SCHEMA

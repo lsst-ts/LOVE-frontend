@@ -161,3 +161,7 @@
 .subSectionLabel {
   /* color: var(--highlighted-font-color); */
 }
+
+.subSectionValue {
+  color: var(--highlighted-font-color);
+}
