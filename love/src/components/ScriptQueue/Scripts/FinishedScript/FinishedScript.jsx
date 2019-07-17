@@ -132,16 +132,17 @@ export default class FinishedScript extends PureComponent {
               <div className={scriptStyles.expandedSubSection}>
                 <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
                 <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Classname:</span>
-                  <span />
-                </div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Description:</span>
-                  <span />
-                </div>
-                {/* <div className={scriptStyles.subSectionTitle}>
-                  SCHEMA
-                </div> */}
+                    <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Description:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Remotes:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
+                  </div>
               </div>
             </div>
           </div>
