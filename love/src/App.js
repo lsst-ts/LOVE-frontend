@@ -12,7 +12,7 @@ import TimeSeries from './components/TimeSeries/TimeSeries';
 import Panel from './components/GeneralPurpose/Panel/Panel';
 
 import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
-import CSCSummary from './components/CSCSummary/CSCSummary';
+import CSCSummaryContainer from './components/CSCSummary/CSCSummary.container';
 import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import LATISS from './components/AuxTel/LATISS/LATISS';
@@ -68,7 +68,7 @@ class App extends Component {
             )}
           />
           <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueueContainer} />
-          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummary} />
+          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummaryContainer} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
           <PrivateRoute
