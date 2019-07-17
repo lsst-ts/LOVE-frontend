@@ -139,9 +139,9 @@ export default class Dome extends Component {
                     },
                   }}
                   groupNames={{
-                    'Dome Azimuth': 'telemetry-ATDome-position',
-                    'Mount Azimuth': 'telemetry-ATMCS-mountEncoders',
-                    'Mount Target': 'event-ATMCS-target',
+                    'Dome Azimuth': 'telemetry-ATDome-1-position',
+                    'Mount Azimuth': 'telemetry-ATMCS-1-mountEncoders',
+                    'Mount Target': 'event-ATMCS-1-target',
                   }}
                   accessors={{
                     'Dome Azimuth': (data) => data.azimuthPosition.value,
@@ -181,8 +181,8 @@ export default class Dome extends Component {
                     },
                   }}
                   groupNames={{
-                    'Mount Elevation': 'telemetry-ATMCS-mountEncoders',
-                    'Mount Target': 'event-ATMCS-target',
+                    'Mount Elevation': 'telemetry-ATMCS-1-mountEncoders',
+                    'Mount Target': 'event-ATMCS-1-target',
                   }}
                   accessors={{
                     'Mount Elevation': (data) =>
