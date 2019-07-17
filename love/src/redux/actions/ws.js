@@ -152,12 +152,11 @@ export const requestGroupSubscription = (groupName) => {
       if (state.ws.connectionState !== connectionStates.OPEN) {
         console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
       }
-
       socket.json({
         option: 'subscribe',
         category,
         csc,
-        salindex,
+        salindex: parseInt(salindex),
         stream,
       });
       dispatch(addGroupSubscription(groupName));
