@@ -3,20 +3,20 @@ import { imageStates } from '../../Constants';
 
 export const receiveImageSequenceData = (data) => {
   let imageState, imageData;
-  if (data.ATCamera.startIntegration) {
-    imageData = data.ATCamera.startIntegration;
+  if (data.startIntegration) {
+    imageData = data.startIntegration;
     imageState = imageStates.INTEGRATING;
   }
-  else if (data.ATCamera.startReadout) {
-    imageData = data.ATCamera.startReadout;
+  else if (data.startReadout) {
+    imageData = data.startReadout;
     imageState = imageStates.READING_OUT;
   }
-  else if (data.ATCamera.endReadout) {
-    imageData = data.ATCamera.endReadout;
+  else if (data.endReadout) {
+    imageData = data.endReadout;
     imageState = imageStates.END_READOUT;
   }
-  else if (data.ATCamera.endOfImageTelemetry) {
-    imageData = data.ATCamera.endOfImageTelemetry;
+  else if (data.endOfImageTelemetry) {
+    imageData = data.endOfImageTelemetry;
     imageState = imageStates.END_TELEMETRY;
   }
   return {
@@ -28,20 +28,20 @@ export const receiveImageSequenceData = (data) => {
 
 export const receiveCameraStateData = (data) => {
   let cameraStateData, cameraStateKey;
-  if (data.ATCamera.raftsDetailedState) {
-    cameraStateData = data.ATCamera.raftsDetailedState;
+  if (data.raftsDetailedState) {
+    cameraStateData = data.raftsDetailedState;
     cameraStateKey = 'raftsDetailedState';
   }
-  else if (data.ATCamera.shutterDetailedState) {
-    cameraStateData = data.ATCamera.shutterDetailedState;
+  else if (data.shutterDetailedState) {
+    cameraStateData = data.shutterDetailedState;
     cameraStateKey = 'shutterDetailedState';
   }
-  else if (data.ATCamera.imageReadinessDetailedState) {
-    cameraStateData = data.ATCamera.imageReadinessDetailedState;
+  else if (data.imageReadinessDetailedState) {
+    cameraStateData = data.imageReadinessDetailedState;
     cameraStateKey = 'imageReadinessDetailedState';
   }
-  else if (data.ATCamera.calibrationDetailedState) {
-    cameraStateData = data.ATCamera.calibrationDetailedState;
+  else if (data.calibrationDetailedState) {
+    cameraStateData = data.calibrationDetailedState;
     cameraStateKey = 'calibrationDetailedState';
   }
   return {
@@ -54,6 +54,6 @@ export const receiveCameraStateData = (data) => {
 export const receiveReadoutData = (data) => {
   return {
     type: RECEIVE_READOUT_DATA,
-    data: data.ATCamera.imageReadoutParameters,
+    data: data.imageReadoutParameters,
   };
 }

@@ -1,6 +1,9 @@
 export const mockScriptQueueData = {
-  data: {
-    ScriptQueueState: {
+  category: 'event',
+  data: [{
+    csc: 'ScriptQueueState',
+    salindex: 1,
+    data: {
       stream: {
         max_lost_heartbeats: 5,
         heartbeat_timeout: 15,
@@ -62,7 +65,6 @@ export const mockScriptQueueData = {
           timestampRunStart: 1562275970.2094963,
         },
       },
-    },
-  },
-  category: 'event',
+    }
+  }],
 };

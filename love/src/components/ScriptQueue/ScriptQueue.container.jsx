@@ -30,9 +30,9 @@ const ScriptQueueContainer = ({
 };
 
 const mapStateToProps = (state) => {
-  const queueState = getScriptQueueState(state);
-  const scriptHeartbeats = getScriptHeartbeats(state);
-  const summaryStateValue = getSummaryStateValue(state, 'event-ScriptQueue-summaryState');
+  const queueState = getScriptQueueState(state, 1);
+  const scriptHeartbeats = getScriptHeartbeats(state, 1);
+  const summaryStateValue = getSummaryStateValue(state, 'event-ScriptQueue-1-summaryState');
   return {
     queueState: queueState,
     scriptHeartbeats: scriptHeartbeats,
@@ -43,14 +43,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: () => {
-      dispatch(requestGroupSubscription('event-ScriptQueueState-stream'));
-      dispatch(requestGroupSubscription('event-ScriptQueue-summaryState'));
-      dispatch(requestGroupSubscription('event-ScriptHeartbeats-stream'));
+      dispatch(requestGroupSubscription('event-ScriptQueueState-1-stream'));
+      dispatch(requestGroupSubscription('event-ScriptQueue-1-summaryState'));
+      dispatch(requestGroupSubscription('event-ScriptHeartbeats-1-stream'));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-ScriptQueueState-stream'));
-      dispatch(requestGroupSubscriptionRemoval('event-ScriptQueue-summaryState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ScriptHeartbeats-stream'));
+      dispatch(requestGroupSubscriptionRemoval('event-ScriptQueueState-1-stream'));
+      dispatch(requestGroupSubscriptionRemoval('event-ScriptQueue-1-summaryState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ScriptHeartbeats-1-stream'));
     },
     requestSALCommand: (cmd) =>{
       dispatch(requestSALCommand(cmd))
