@@ -33,12 +33,14 @@ const receiveGroupConfirmationMessage = (data) => ({
   data,
 });
 
-const receiveGroupSubscriptionData = (data) => {
+const receiveGroupSubscriptionData = ({category, csc, salindex, data}) => {
+
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
-    data: data.data,
-    category: data.category,
-    csc: Object.keys(data.data)[0],
+    category: category,
+    csc: csc,
+    salindex: salindex,
+    data: data
   };
 };
 
@@ -67,42 +69,52 @@ export const openWebsocketConnection = () => {
           const data = JSON.parse(msg.data);
           if (!data.category) {
             dispatch(receiveGroupConfirmationMessage(data.data));
+            return;
           }
           if (data.category === 'event') {
-            if (Object.keys(data.data)[0] === 'ATCamera') {
+            const stream = data.data[0].data;
+            if (data.data[0].csc === 'ATCamera') {
               if (
-                data.data.ATCamera.startIntegration ||
-                data.data.ATCamera.endReadout ||
-                data.data.ATCamera.startReadout ||
-                data.data.ATCamera.endOfImageTelemetry
+                stream.startIntegration ||
+                stream.endReadout ||
+                stream.startReadout ||
+                stream.endOfImageTelemetry
               ) {
-                dispatch(receiveImageSequenceData(data.data));
-              } else if (data.data.ATCamera.imageReadoutParameters) {
-                dispatch(receiveReadoutData(data.data));
+                dispatch(receiveImageSequenceData(stream));
+              } else if (stream.imageReadoutParameters) {
+                dispatch(receiveReadoutData(stream));
               } else {
-                dispatch(receiveCameraStateData(data.data));
+                dispatch(receiveCameraStateData(stream));
               }
             }
-            if (Object.keys(data.data)[0] === 'ScriptHeartbeats') {
+            if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
-                data.data.ScriptHeartbeats.stream.script_heartbeat.salindex ||
-                data.data.ScriptHeartbeats.stream.script_heartbeat.lost ||
-                data.data.ScriptHeartbeats.stream.script_heartbeat.last_heartbeat_timestamp
+                stream.stream.script_heartbeat.salindex ||
+                stream.stream.script_heartbeat.lost ||
+                stream.stream.script_heartbeat.last_heartbeat_timestamp
               ) {
-                dispatch(receiveScriptHeartbeat(data.data.ScriptHeartbeats.stream.script_heartbeat));
+                const queueSalindex = data.data[0].salindex;
+                dispatch(receiveScriptHeartbeat(stream.stream.script_heartbeat, queueSalindex));
               }
             }
 
-            if (Object.keys(data.data)[0] === 'ScriptQueueState') {
-              if (data.data.ScriptQueueState.stream.finished_scripts) {
-                const finishedIndices = data.data.ScriptQueueState.stream.finished_scripts.map(
+            if (data.data[0].csc === 'ScriptQueueState') {
+              if (stream.stream.finished_scripts) {
+                const finishedIndices = stream.stream.finished_scripts.map(
                   (script) => script.index,
                 );
                 dispatch(removeScriptsHeartbeats(finishedIndices));
               }
             }
           }
-          dispatch(receiveGroupSubscriptionData(data));
+
+          data.data.forEach( stream =>{
+            dispatch(receiveGroupSubscriptionData({
+              category: data.category,
+              ...stream
+            }));
+
+          })
         },
         onclose: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
@@ -134,17 +146,17 @@ export const requestGroupSubscription = (groupName) => {
       return;
     }
 
-    const [category, csc, stream] = groupName.split('-');
+    const [category, csc, salindex, stream] = groupName.split('-');
     wsPromise.then(() => {
       const state = getState();
       if (state.ws.connectionState !== connectionStates.OPEN) {
         console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
       }
-
       socket.json({
         option: 'subscribe',
         category,
         csc,
+        salindex: parseInt(salindex),
         stream,
       });
       dispatch(addGroupSubscription(groupName));

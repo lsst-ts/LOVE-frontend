@@ -120,37 +120,37 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: () => {
       //Dome
-      dispatch(requestGroupSubscription('telemetry-ATDome-dropoutDoorOpeningPercentage'));
-      dispatch(requestGroupSubscription('telemetry-ATDome-mainDoorOpeningPercentage'));
-      dispatch(requestGroupSubscription('telemetry-ATDome-azimuthPosition'));
-      dispatch(requestGroupSubscription('event-ATDome-azimuthState'));
-      dispatch(requestGroupSubscription('event-ATDome-azimuthCommandedState'));
-      dispatch(requestGroupSubscription('event-ATDome-dropoutDoorState'));
-      dispatch(requestGroupSubscription('event-ATDome-mainDoorState'));
-      dispatch(requestGroupSubscription('event-ATDome-allAxesInPosition'));
+      dispatch(requestGroupSubscription('telemetry-ATDome-1-dropoutDoorOpeningPercentage'));
+      dispatch(requestGroupSubscription('telemetry-ATDome-1-mainDoorOpeningPercentage'));
+      dispatch(requestGroupSubscription('telemetry-ATDome-1-azimuthPosition'));
+      dispatch(requestGroupSubscription('event-ATDome-1-azimuthState'));
+      dispatch(requestGroupSubscription('event-ATDome-1-azimuthCommandedState'));
+      dispatch(requestGroupSubscription('event-ATDome-1-dropoutDoorState'));
+      dispatch(requestGroupSubscription('event-ATDome-1-mainDoorState'));
+      dispatch(requestGroupSubscription('event-ATDome-1-allAxesInPosition'));
       //ATMCS
-      dispatch(requestGroupSubscription('telemetry-ATMCS-mountEncoders'));
-      dispatch(requestGroupSubscription('event-ATMCS-detailedState'));
-      dispatch(requestGroupSubscription('event-ATMCS-atMountState'));
-      dispatch(requestGroupSubscription('event-ATMCS-target'));
-      dispatch(requestGroupSubscription('event-ATMCS-allAxesInPosition'));
+      dispatch(requestGroupSubscription('telemetry-ATMCS-1-mountEncoders'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-detailedState'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-atMountState'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-target'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
     },
     unsubscribeToStream: () => {
       //Dome
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-dropoutDoorOpeningPercentage'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-mainDoorOpeningPercentage'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-azimuthPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-azimuthState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-azimuthCommandedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-dropoutDoorState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-mainDoorState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-allAxesInPosition'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-1-dropoutDoorOpeningPercentage'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-1-mainDoorOpeningPercentage'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-1-azimuthPosition'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-azimuthState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-azimuthCommandedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-dropoutDoorState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-mainDoorState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-allAxesInPosition'));
       //ATMCS
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-mountEncoders'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-detailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-atMountState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-target'));
-      dispatch(requestGroupSubscription('event-ATMCS-allAxesInPosition'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-1-mountEncoders'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-detailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-atMountState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-target'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
     },
   };
 };
