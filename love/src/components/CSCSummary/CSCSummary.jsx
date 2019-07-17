@@ -3,13 +3,26 @@ import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import ManagerInterface from '../../Utils';
-import { hasFakeData, CSCSummaryHierarchy } from '../../Config';
+import { hasFakeData } from '../../Config';
 
 export default class CSCSummary extends Component {
+  static defaultProps = {
+    hierarchy: {
+      'Aux Telescope': {
+        'CSC Group 1': ['ScriptQueue', 'ATDome'],
+      },
+      'Main Telescope': {
+        'CSC Group 1': ['CSC4'],
+        'CSC Group 2': [],
+      },
+      Observatory: {
+        'CSC Group 1': [],
+      },
+    },
+  };
   constructor(props) {
     super(props);
     this.state = {
-      hierarchy: CSCSummaryHierarchy,
       data: {
         ScriptQueue: {
           summaryState: { priority: 1, summaryState: 2 },
@@ -349,8 +362,8 @@ export default class CSCSummary extends Component {
 
   subscribeToCSCs = () => {
     this.managerInterface.subscribeToEvents('Heartbeat', 'all', this.onReceiveMessage);
-    Object.keys(this.state.hierarchy).map((realm) => {
-      const groupsDict = this.state.hierarchy[realm];
+    Object.keys(this.props.hierarchy).map((realm) => {
+      const groupsDict = this.props.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
           this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
@@ -366,8 +379,8 @@ export default class CSCSummary extends Component {
 
   unsubscribeToCSCs = () => {
     this.managerInterface.subscribeToEvents('Heartbeat', 'all', () => 0);
-    Object.keys(this.state.hierarchy).map((realm) => {
-      const groupsDict = this.state.hierarchy[realm];
+    Object.keys(this.props.hierarchy).map((realm) => {
+      const groupsDict = this.props.hierarchy[realm];
       Object.keys(groupsDict).map((group) => {
         groupsDict[group].map((csc) => {
           this.managerInterface.unsubscribeToEvents(csc, 'summaryState', () => 0);
@@ -401,7 +414,7 @@ export default class CSCSummary extends Component {
   clearCSCErrorCodes = (realm, group, csc) => {
     const data = { ...this.state.data };
     if (csc === 'all') {
-      this.state.hierarchy[realm][group].forEach((cscKey) => {
+      this.props.hierarchy[realm][group].forEach((cscKey) => {
         if (data[cscKey]) data[cscKey].errorCode = undefined;
       });
     } else {
@@ -424,16 +437,16 @@ export default class CSCSummary extends Component {
     return (
       <Panel title="CSC Summary" className={styles.panel}>
         <div className={styles.CSCSummaryContainer}>
-          {Object.keys(this.state.hierarchy).map((realm) => {
+          {Object.keys(this.props.hierarchy).map((realm) => {
             return (
               <div key={realm} className={styles.CSCRealmContainer}>
                 <CSCRealm
                   name={realm}
                   data={this.state.data}
-                  groups={this.state.hierarchy[realm]}
+                  groups={this.props.hierarchy[realm]}
                   onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}
-                  hierarchy={this.state.hierarchy}
+                  hierarchy={this.props.hierarchy}
                   clearCSCErrorCodes={this.clearCSCErrorCodes}
                   clearCSCLogMessages={this.clearCSCLogMessages}
                 />
