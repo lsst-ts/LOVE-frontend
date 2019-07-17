@@ -76,8 +76,8 @@ export const getKey = (dict, key, def) => {
   }
 }
 
-export const getScriptQueueState = (state) => {
-  const scriptQueueData = getStreamData(state, 'event-ScriptQueueState-stream');
+export const getScriptQueueState = (state, salindex) => {
+  const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
   return {
     state: getKey(scriptQueueData, 'state', undefined),
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
@@ -87,8 +87,14 @@ export const getScriptQueueState = (state) => {
   }
 }
 
-export const getScriptHeartbeats = (state) => {
-  return state.heartbeats.scripts;
+/**
+ * Returns all heartbeats in the state that belong to a scriptqueue of specific salindex.
+ * 
+ * @param {obj} state 
+ * @param {integer} salindex 
+ */
+export const getScriptHeartbeats = (state, salindex) => {
+  return state.heartbeats.scripts.filter(heartbeat => heartbeat.queueSalIndex === salindex);
 }
 
 export const getSummaryStateValue = (state, groupName) => {
