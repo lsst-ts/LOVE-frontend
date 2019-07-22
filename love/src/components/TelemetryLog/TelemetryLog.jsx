@@ -17,11 +17,13 @@ export default class TelemetryLog extends Component {
       msgList: [],
       msgNumber: 0,
       category: props.category,
+      salindex: 1,
       csc: props.csc,
       stream: props.stream,
       cmdComponent: 'ATDome',
       command: 'moveAzimuth',
       cmdParams: '{"azimuth": 0}',
+      cmdSalindex: 1,
     };
     this.managerInterface = new ManagerInterface();
   }
@@ -55,6 +57,12 @@ export default class TelemetryLog extends Component {
     });
   };
 
+  salindexChange = (e) => {
+    this.setState({
+      salindex: e.target.value,
+    });
+  };
+
   cscChange = (e) => {
     this.setState({
       csc: e.target.value,
@@ -68,11 +76,11 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
+    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
   };
 
   unsubscribeToStream = () => {
-    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.stream].join('-'));
+    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
   };
 
   cmdComponentChange = (e) => {
@@ -83,6 +91,9 @@ export default class TelemetryLog extends Component {
   };
   cmdParamsOnChange = (e) => {
     this.setState({ cmdParams: e.target.value });
+  };
+  cmdSalindexChange = (e) => {
+    this.setState({ cmdSalindex: e.target.value });
   };
 
   launchCommand = () => {
@@ -111,6 +122,10 @@ export default class TelemetryLog extends Component {
             <input id="id_commands_csc" onChange={this.cmdComponentChange} value={this.state.cmdComponent} />
           </div>
           <div>
+            <span>salindex </span>
+            <input id="id_cmd_salindex" onChange={this.cmdSalindexChange} value={this.state.cmdSalindex} />
+          </div>
+          <div>
             <span>cmd_ </span>
             <input id="id_commands" onChange={this.cmdOnChange} value={this.state.command} />
           </div>
@@ -127,6 +142,10 @@ export default class TelemetryLog extends Component {
           <div>
             <span>Category </span>
             <input id="id_category" onChange={this.categoryChange} value={this.state.category} />
+          </div>
+          <div>
+            <span>salindex </span>
+            <input id="id_salindex" onChange={this.salindexChange} value={this.state.salindex} />
           </div>
           <div>
             <span>CSC </span>

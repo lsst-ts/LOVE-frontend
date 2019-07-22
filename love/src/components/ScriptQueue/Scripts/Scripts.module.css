@@ -1,9 +1,27 @@
 .scriptContainer {
+  display: grid;
+  grid-template-columns: 1fr min-content;
   position: relative;
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
   overflow: hidden;
   padding: 1px;
+}
+
+.mainScriptButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: var(--second-quaternary-background-color);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-left: 0.4em;
+  user-select: none;
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.mainScriptButton:hover {
+  border: 1px solid var(--second-quinary-background-color);
 }
 
 .scriptContainerOff {
@@ -33,7 +51,12 @@
 }
 
 .externalText {
+  color: var(--highlighted-font-color);
   font-size: var(--font-size-small);
+}
+
+.externalSeparator {
+  white-space: pre;
 }
 
 .scriptStatusContainer {
@@ -50,16 +73,13 @@
   margin-bottom: 0;
 }
 
-.expandedTopRow {
+.expandedRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  padding-top: 1em;
-}
-
-.expandedTopRow p {
-  margin: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .uploadButtonWrapper {
@@ -98,6 +118,50 @@
 }
 
 .heartBeatContainer {
+  display: inline-block;
   align-self: flex-end;
   width: 1.5em;
+  padding-right: 0.5em;
+}
+
+.scriptInfoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.launchIconWrapper {
+  width: 1.7em;
+}
+
+.launchIconWrapper svg {
+  vertical-align: top;
+}
+
+.expandedSectionWrapper {
+  padding: 0.5em;
+}
+
+.expandedSection {
+}
+
+.hidden {
+  display: none !important;
+}
+
+.expandedSubSection {
+  border-top: solid var(--quaternary-background-color) 2px;
+  padding: 0.75em 0;
+}
+
+.subSectionTitle {
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+}
+
+.subSectionLabel {
+  /* color: var(--highlighted-font-color); */
+}
+
+.subSectionValue {
+  color: var(--highlighted-font-color);
 }

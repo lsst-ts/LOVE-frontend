@@ -1,5 +1,5 @@
 export const hasFakeData = false;
-export const hasCommandPrivileges = false;
+export const hasCommandPrivileges = true;
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
