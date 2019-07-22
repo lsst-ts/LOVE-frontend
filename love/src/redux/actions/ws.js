@@ -8,7 +8,7 @@ import {
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
-import { receiveScriptHeartbeat, removeScriptsHeartbeats } from './heartbeats';
+import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -105,6 +105,11 @@ export const openWebsocketConnection = () => {
                 );
                 dispatch(removeScriptsHeartbeats(finishedIndices));
               }
+            }
+
+
+            if (data.data[0].csc === 'Heartbeat') {
+              dispatch(receiveCSCHeartbeat(stream.stream))
             }
           }
 
