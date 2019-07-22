@@ -15,6 +15,7 @@ THEN it should receive the updated data inside the message of the azimuthCommand
   cy.visit('http://localhost/test')
   // subscribe to the ATDome sim  
   cy.get('#id_category').clear().type('event');
+  cy.get('#id_salindex').clear().type('1');
   cy.get('#id_csc').clear().type('ATDome');
   cy.get('#id_stream').clear().type('azimuthCommandedState');
   cy.get('button').contains('Subscribe').click();
@@ -23,6 +24,7 @@ THEN it should receive the updated data inside the message of the azimuthCommand
   //---Act---
   // change the azimuth
   cy.get('#id_commands_csc').clear().type('ATDome')
+  cy.get('#id_cmd_salindex').clear().type('1')
   cy.get('#id_commands').clear().type('moveAzimuth')
   cy.get('#id_parameters').clear().type('{{}"azimuth": 123.456}')
   cy.get('button').contains('Launch').click();
