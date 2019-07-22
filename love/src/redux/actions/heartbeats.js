@@ -1,4 +1,4 @@
-import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS, UPDATE_CSC_HEARTBEAT } from './actionTypes';
+import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS, UPDATE_CSC_HEARTBEATS } from './actionTypes';
 
 /**
  * Receives the stream data with the heartbeat of a script in a queue of index=queueSalIndex
@@ -27,7 +27,7 @@ export const removeScriptsHeartbeats = (salIndices) => {
 
 export const receiveCSCHeartbeat = (heartbeat) => {
   return {
-    type: UPDATE_CSC_HEARTBEAT,
+    type: UPDATE_CSC_HEARTBEATS,
     data: heartbeat
   }
 }

@@ -203,45 +203,55 @@ it(`GIVEN 3 script heartbeats in the State,
   );
 });
 
-it('Should receive two CSC heartbeats from the server and select them from the state properly', async () => {
-  const heartbeats = [
-    {
-      csc: 'ScriptQueue',
-      salindex: 2,
-      lost: 5,
-      last_heartbeat_timestamp: 1563801983.963551,
-      max_lost_heartbeats: 5,
-    },
-    {
-      csc: 'ATDome',
-      salindex: 1,
-      lost: 5,
-      last_heartbeat_timestamp: 1563801984.226387,
-      max_lost_heartbeats: 5,
-    },
-  ];
+describe('GIVEN 2 csc salindices in different combinations', () => {
+  const salindices = [1, 2];
 
-  
-  heartbeats.forEach((heartbeat) => {
-    // Act:
-    server.send({
-      category: 'event',
-      data: [
-        {
-          csc: 'Heartbeat',
-          salindex: 0, // scriptqueue salindex
-          data: {
-            stream:  {
-                ...heartbeat
-              }
+  salindices.forEach((salindex1) => {
+    salindices.forEach((salindex2) => {
+      it(`WHEN the server sends two heartbeats with salindices of these combinations
+        THEN it should receive two CSC heartbeats with these salindices and select them from the state properly`, async () => {
+        const heartbeats = [
+          {
+            csc: 'ScriptQueue',
+            salindex: salindex1,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801983.963551,
+            max_lost_heartbeats: 5,
           },
-        },
-      ],
+          {
+            csc: 'ATDome',
+            salindex: salindex2,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801984.226387,
+            max_lost_heartbeats: 5,
+          },
+        ];
+        
+      
+        heartbeats.forEach((heartbeat) => {
+          // Act:
+          server.send({
+            category: 'event',
+            data: [
+              {
+                csc: 'Heartbeat',
+                salindex: 0, // scriptqueue salindex
+                data: {
+                  stream: {
+                    ...heartbeat,
+                  },
+                },
+              },
+            ],
+          });
+        });
+      
+        const heartbeatsState = getCSCHeartbeats(store.getState());
+      
+        expect(heartbeats).toEqual(heartbeatsState);
+      });
     });
   });
-
-  const heartbeatsState = getCSCHeartbeats(store.getState());
-
-  expect(JSON.stringify(heartbeats)).toEqual(JSON.stringify(heartbeatsState));
-  
 });
+
+
