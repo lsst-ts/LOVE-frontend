@@ -13,6 +13,7 @@ export default class CSCRealm extends Component {
     hierarchy: PropTypes.object,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
+    heartbeatsData: PropTypes.arrayOf(PropTypes.object)
   };
 
   static defaultProps = {
@@ -24,9 +25,11 @@ export default class CSCRealm extends Component {
     hierarchy: {},
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
+    heartbeatsData: []
   };
 
   render() {
+
     return (
       <div className={styles.CSCRealmContainer}>
         <div className={styles.CSCRealmTitle}>{this.props.name}</div>
@@ -37,6 +40,7 @@ export default class CSCRealm extends Component {
                 realm={this.props.name}
                 name={group}
                 data={this.props.data}
+                heartbeatsData={this.props.heartbeatsData}
                 cscs={this.props.groups[group]}
                 onCSCClick={this.props.onCSCClick}
                 selectedCSCs={this.props.selectedCSCs}

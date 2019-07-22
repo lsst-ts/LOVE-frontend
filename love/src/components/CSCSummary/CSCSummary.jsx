@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
 import Panel from '../GeneralPurpose/Panel/Panel';
@@ -6,6 +7,10 @@ import ManagerInterface from '../../Utils';
 import { hasFakeData } from '../../Config';
 
 export default class CSCSummary extends Component {
+  static propTypes = {
+    hierarchy: PropTypes.object,
+    heartbeatsData: PropTypes.arrayOf(PropTypes.object)
+  }
   static defaultProps = {
     hierarchy: {
       'Aux Telescope': {
@@ -18,262 +23,263 @@ export default class CSCSummary extends Component {
       Observatory: {
         'CSC Group 1': [],
       },
+      heartbeatsData: []
     },
   };
   constructor(props) {
     super(props);
     this.state = {
-      data: {
-        ScriptQueue: {
-          summaryState: { priority: 1, summaryState: 2 },
-          detailedState: {},
-        },
-        ScriptQueue3: {
-          summaryState: { priority: 1, summaryState: 4 },
-          detailedState: {},
-        },
-        ScriptQueue4: {
-          summaryState: { priority: 1, summaryState: 2 },
-          detailedState: {},
-          errorCode: [
-            {
-              errorCode: 1,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 18:03:10',
-            },
-            {
-              errorCode: 1,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:12',
-            },
-            {
-              errorCode: 1,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 22:03:14',
-            },
-          ],
-        },
-        Scheduler13: {
-          summaryState: { priority: 1, summaryState: 3 },
-          detailedState: {},
-          errorCode: [
-            {
-              errorCode: 4,
-              errorReport: `errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
-                ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReport`,
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 19:03:10',
-            },
-            {
-              errorCode: 4,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 19:03:11',
-            },
-            {
-              errorCode: 4,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 19:03:12',
-            },
-            {
-              errorCode: 4,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 19:03:13',
-            },
-            {
-              errorCode: 4,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 21:03:12',
-            },
-            {
-              errorCode: 4,
-              errorReport: 'errorReport',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 23:03:14',
-            },
-          ],
-          logMessage: [
-            {
-              level: 40,
-              message: `long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long error message`,
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:10',
-            },
-            {
-              level: 10,
-              message: 'debug message debug message debug message ',
-              traceback: '',
-              timestamp: '2018/04/25 20:03:11',
-            },
-            {
-              level: 20,
-              message: `info message info message info message info message info message 
-                info message info message info message info message info message info message 
-                info message info message info message info message info message info message 
-                info message info message info message`,
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:12',
-            },
-            {
-              level: 30,
-              message: 'warning message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:13',
-            },
-            {
-              level: 40,
-              message: `error message error message error message error message error message 
-              error message error message error message error message error message error message 
-              error message error message error message error message error message error message`,
-              traceback: '',
-              timestamp: '2018/04/25 20:03:14',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: `traceback traceback traceback traceback traceback traceback traceback 
-              traceback traceback traceback traceback traceback traceback traceback traceback 
-              traceback traceback traceback `,
-              timestamp: '2018/04/25 20:03:15',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:16',
-            },
-          ],
-        },
-        Scheduler14: {
-          summaryState: { priority: 1, summaryState: 2 },
-          detailedState: {},
-          logMessage: [
-            {
-              level: 10,
-              message: 'debug message debug message debug message ',
-              traceback: '',
-              timestamp: '2018/04/25 20:03:10',
-            },
-            {
-              level: 20,
-              message: 'info message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:11',
-            },
-            {
-              level: 30,
-              message: 'warning message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:12',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:13',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:14',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:15',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:16',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:17',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:18',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:19',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:20',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:21',
-            },
-            {
-              level: 40,
-              message: 'error message',
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:22',
-            },
-            {
-              level: 40,
-              message: `long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long long long long long long long long long long long 
-                long long long error message`,
-              traceback: 'traceback1',
-              timestamp: '2018/04/25 20:03:23',
-            },
-          ],
-        },
-        Scheduler2: {
-          summaryState: { priority: 1, summaryState: 2 },
-          detailedState: {},
-        },
-        CSC2: {
-          summaryState: { priority: 1, summaryState: 3 },
-          detailedState: {},
-        },
-        CSC3: {
-          summaryState: { priority: 1, summaryState: 0 },
-          detailedState: {},
-        },
-      },
+      // data: {
+      //   ScriptQueue: {
+      //     summaryState: { priority: 1, summaryState: 2 },
+      //     detailedState: {},
+      //   },
+      //   ScriptQueue3: {
+      //     summaryState: { priority: 1, summaryState: 4 },
+      //     detailedState: {},
+      //   },
+      //   ScriptQueue4: {
+      //     summaryState: { priority: 1, summaryState: 2 },
+      //     detailedState: {},
+      //     errorCode: [
+      //       {
+      //         errorCode: 1,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 18:03:10',
+      //       },
+      //       {
+      //         errorCode: 1,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:12',
+      //       },
+      //       {
+      //         errorCode: 1,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 22:03:14',
+      //       },
+      //     ],
+      //   },
+      //   Scheduler13: {
+      //     summaryState: { priority: 1, summaryState: 3 },
+      //     detailedState: {},
+      //     errorCode: [
+      //       {
+      //         errorCode: 4,
+      //         errorReport: `errorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReporterror
+      //           ReporterrorReporterrorReporterrorReporterrorReporterrorReporterrorReport`,
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 19:03:10',
+      //       },
+      //       {
+      //         errorCode: 4,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 19:03:11',
+      //       },
+      //       {
+      //         errorCode: 4,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 19:03:12',
+      //       },
+      //       {
+      //         errorCode: 4,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 19:03:13',
+      //       },
+      //       {
+      //         errorCode: 4,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 21:03:12',
+      //       },
+      //       {
+      //         errorCode: 4,
+      //         errorReport: 'errorReport',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 23:03:14',
+      //       },
+      //     ],
+      //     logMessage: [
+      //       {
+      //         level: 40,
+      //         message: `long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long error message`,
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:10',
+      //       },
+      //       {
+      //         level: 10,
+      //         message: 'debug message debug message debug message ',
+      //         traceback: '',
+      //         timestamp: '2018/04/25 20:03:11',
+      //       },
+      //       {
+      //         level: 20,
+      //         message: `info message info message info message info message info message 
+      //           info message info message info message info message info message info message 
+      //           info message info message info message info message info message info message 
+      //           info message info message info message`,
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:12',
+      //       },
+      //       {
+      //         level: 30,
+      //         message: 'warning message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:13',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: `error message error message error message error message error message 
+      //         error message error message error message error message error message error message 
+      //         error message error message error message error message error message error message`,
+      //         traceback: '',
+      //         timestamp: '2018/04/25 20:03:14',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: `traceback traceback traceback traceback traceback traceback traceback 
+      //         traceback traceback traceback traceback traceback traceback traceback traceback 
+      //         traceback traceback traceback `,
+      //         timestamp: '2018/04/25 20:03:15',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:16',
+      //       },
+      //     ],
+      //   },
+      //   Scheduler14: {
+      //     summaryState: { priority: 1, summaryState: 2 },
+      //     detailedState: {},
+      //     logMessage: [
+      //       {
+      //         level: 10,
+      //         message: 'debug message debug message debug message ',
+      //         traceback: '',
+      //         timestamp: '2018/04/25 20:03:10',
+      //       },
+      //       {
+      //         level: 20,
+      //         message: 'info message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:11',
+      //       },
+      //       {
+      //         level: 30,
+      //         message: 'warning message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:12',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:13',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:14',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:15',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:16',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:17',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:18',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:19',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:20',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:21',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: 'error message',
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:22',
+      //       },
+      //       {
+      //         level: 40,
+      //         message: `long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long long long long long long long long long long long 
+      //           long long long error message`,
+      //         traceback: 'traceback1',
+      //         timestamp: '2018/04/25 20:03:23',
+      //       },
+      //     ],
+      //   },
+      //   Scheduler2: {
+      //     summaryState: { priority: 1, summaryState: 2 },
+      //     detailedState: {},
+      //   },
+      //   CSC2: {
+      //     summaryState: { priority: 1, summaryState: 3 },
+      //     detailedState: {},
+      //   },
+      //   CSC3: {
+      //     summaryState: { priority: 1, summaryState: 0 },
+      //     detailedState: {},
+      //   },
+      // },
       selectedCSCs: [],
       // selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'ATCamera' }],
     };
@@ -445,6 +451,7 @@ export default class CSCSummary extends Component {
                 <CSCRealm
                   name={realm}
                   data={this.state.data}
+                  heartbeatsData={this.props.heartbeatsData}
                   groups={this.props.hierarchy[realm]}
                   onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}

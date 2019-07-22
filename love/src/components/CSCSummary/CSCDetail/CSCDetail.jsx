@@ -10,6 +10,7 @@ export default class CSCDetail extends Component {
     realm: PropTypes.string,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
+    heartbeatData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -18,6 +19,7 @@ export default class CSCDetail extends Component {
     realm: '',
     data: {},
     onCSCClick: () => 0,
+    heartbeatData: null,
   };
 
   static states = {
@@ -70,7 +72,8 @@ export default class CSCDetail extends Component {
     return (
       this.props.name !== nextProps.name ||
       oldSummaryStateValue !== summaryStateValue ||
-      oldHeartbeatValue !== heartbeatValue
+      // oldHeartbeatValue !== heartbeatValue
+      nextProps.heartbeatData !== this.props.heartbeatData
     );
   };
 
@@ -79,17 +82,17 @@ export default class CSCDetail extends Component {
     const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
-    const isHearbeatAvailable = selfData && selfData.heartbeat;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
     let timeDiff = -1;
-    if (isHearbeatAvailable) {
-      heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
-      nLost = selfData.heartbeat.lost;
-      if (selfData.heartbeat.last_heartbeat_timestamp < 0) timeDiff = -1;
-      else timeDiff = Math.ceil(new Date().getTime() / 1000 - selfData.heartbeat.last_heartbeat_timestamp);
+    if (this.props.heartbeatData) {
+      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
+      nLost = this.props.heartbeatData.lost;
+      if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
     }
     const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
