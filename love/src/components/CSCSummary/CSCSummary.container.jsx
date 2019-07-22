@@ -3,19 +3,23 @@ import { connect } from 'react-redux';
 import CSCSummary from './CSCSummary';
 import { hasFakeData, CSCSummaryHierarchy } from '../../Config';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-
-const CSCSummaryContainer = ({ subscribeToStreams, unsubscribeToStreams }) => {
+import {getCSCHeartbeats} from '../../redux/selectors';
+const CSCSummaryContainer = ({ subscribeToStreams, unsubscribeToStreams, heartbeatsData }) => {
   return (
     <CSCSummary
       hierarchy={CSCSummaryHierarchy}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      heartbeatsData={heartbeatsData}
     />
   );
 };
 
 const mapStateToProps = (state) => {
-  console.log(state.ws);
+  const heartbeatsData = getCSCHeartbeats(state);
+  return {
+    heartbeatsData
+  }
 };
 
 const mapDispatchToProps = (dispatch) => {
