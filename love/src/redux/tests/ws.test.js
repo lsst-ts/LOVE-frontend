@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import { requestSALCommand, openWebsocketConnection } from '../actions/ws';
 
 import { SALCommandStatus } from '../actions/ws';
-import { getLastSALCommand, getScriptHeartbeats, getScriptQueueState } from '../selectors';
+import { getLastSALCommand, getScriptHeartbeats, getCSCHeartbeats } from '../selectors';
 import { mockScriptQueueData } from './mock';
 
 let store, server;
@@ -172,7 +172,6 @@ it(`GIVEN 3 script heartbeats in the State,
     },
   ];
   mockHeartbeats.forEach((heartbeat) => {
-
     server.send({
       category: 'event',
       data: [
@@ -191,7 +190,6 @@ it(`GIVEN 3 script heartbeats in the State,
         },
       ],
     });
-    
   });
 
   let expectedState = [];
@@ -203,4 +201,47 @@ it(`GIVEN 3 script heartbeats in the State,
   expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(
     JSON.stringify(expectedState.sort(compareSalIndex)),
   );
+});
+
+it('Should receive two CSC heartbeats from the server and select them from the state properly', async () => {
+  const heartbeats = [
+    {
+      csc: 'ScriptQueue',
+      salindex: 2,
+      lost: 5,
+      last_heartbeat_timestamp: 1563801983.963551,
+      max_lost_heartbeats: 5,
+    },
+    {
+      csc: 'ATDome',
+      salindex: 1,
+      lost: 5,
+      last_heartbeat_timestamp: 1563801984.226387,
+      max_lost_heartbeats: 5,
+    },
+  ];
+
+  
+  heartbeats.forEach((heartbeat) => {
+    // Act:
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'Heartbeat',
+          salindex: 0, // scriptqueue salindex
+          data: {
+            stream:  {
+                ...heartbeat
+              }
+          },
+        },
+      ],
+    });
+  });
+
+  const heartbeatsState = getCSCHeartbeats(store.getState());
+
+  expect(JSON.stringify(heartbeats)).toEqual(JSON.stringify(heartbeatsState));
+  
 });
