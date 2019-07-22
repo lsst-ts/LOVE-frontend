@@ -14,7 +14,7 @@ import {getToken} from '../selectors';
 
 export const requestToken = (username, password) => ({type: REQUEST_TOKEN, username, password});
 
-export const receiveToken = (username, token) => ({type: RECEIVE_TOKEN, username, token});
+export const receiveToken = (username, token, permissions) => ({type: RECEIVE_TOKEN, username, token, permissions});
 
 export const emptyToken = {
   type: EMPTY_TOKEN
@@ -58,9 +58,9 @@ function doMarkErrorToken() {
   };
 }
 
-function doReceiveToken(username, token) {
+function doReceiveToken(username, token, permissions) {
   return(dispatch) => {
-    dispatch(receiveToken(username, token));
+    dispatch(receiveToken(username, token, permissions));
     localStorage.setItem('LOVE-TOKEN', token);
   };
 }
@@ -98,7 +98,7 @@ export function fetchToken(username, password) {
   return (dispatch, getState) => {
     const storageToken = localStorage.getItem('LOVE-TOKEN');
     if (storageToken && storageToken.length > 0) {
-      dispatch(receiveToken(null, storageToken));
+      dispatch(receiveToken(null, storageToken, null));
       return;
     }
 
@@ -121,8 +121,9 @@ export function fetchToken(username, password) {
       if (response) {
         const username = response.username;
         const token = response.token;
+        const permissions = response.permissions;
         if (token !== undefined && token !== null) {
-          dispatch(doReceiveToken(username, token));
+          dispatch(doReceiveToken(username, token, permissions));
           return;
         }
       }
@@ -188,11 +189,12 @@ export function validateToken() {
       return response.json().then((resp) => {
         const detail = resp.detail;
         const username = resp.username;
+        const permissions = resp.permissions;
         if (detail !== 'Token is valid') {
           console.log('Session expired. Logging out');
           dispatch(doExpireToken());
         } else {
-          dispatch(doReceiveToken(username, token));
+          dispatch(doReceiveToken(username, token, permissions));
         }
       });
     });

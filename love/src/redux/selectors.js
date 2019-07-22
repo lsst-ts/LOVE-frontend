@@ -2,6 +2,8 @@ export const getToken = (state) => state.auth.token;
 
 export const getUsername = (state) => state.auth.username;
 
+export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
+
 export const getTokenStatus = (state) => state.auth.status;
 
 export const getStreamsData = (state, groupNames) => {

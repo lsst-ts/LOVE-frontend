@@ -7,7 +7,7 @@ import ManagerInterface from '../../Utils';
 
 import { fetchToken, validateToken, logout } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
-import { getToken, getUsername, getTokenStatus } from '../selectors';
+import { getToken, getUsername, getTokenStatus, getPermCmdExec } from '../selectors';
 
 let store;
 beforeEach(() => {
@@ -33,6 +33,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
       {
         token: newToken,
         username: 'my-user',
+        permissions: {
+          execute_command: true
+        }
       },
       new Headers({
         Accept: 'application/json',
@@ -48,6 +51,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
     expect(getToken(newState)).toEqual(newToken);
     expect(getUsername(newState)).toEqual('my-user');
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
+    expect(getPermCmdExec(newState)).toEqual(true);
     expect(storedToken).toEqual(newToken);
   });
 
@@ -95,6 +99,9 @@ describe('GIVEN the token exists in localStorage', () => {
       {
         detail: 'Token is valid',
         username: 'my-user',
+        permissions: {
+          execute_command: true
+        }
       },
       ManagerInterface.getHeaders(),
     );
@@ -106,6 +113,7 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(newToken).toEqual(initialToken);
     expect(storedToken).toEqual(initialToken);
     expect(getUsername(store.getState())).toEqual('my-user');
+    expect(getPermCmdExec(store.getState())).toEqual(true);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 

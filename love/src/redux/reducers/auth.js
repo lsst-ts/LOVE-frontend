@@ -25,7 +25,10 @@ export const tokenStates = {
 const initialState = {
   username: '',
   token: null,
-  status: tokenStates.EMPTY
+  status: tokenStates.EMPTY,
+  permissions: {
+    cmd_exec: false,
+  }
 };
 /**
  * Modifies the state of the authentication mainly characterized by the
@@ -41,15 +44,26 @@ export default function(state = initialState, action) {
       }
     case RECEIVE_TOKEN:
       {
+        if (action.permissions === null || action.permissions === undefined) {
+          return Object.assign({}, state, {
+            username: action.username,
+            token: action.token,
+            status: tokenStates.RECEIVED,
+            permissions: initialState.permissions,
+          });
+        }
         return Object.assign({}, state, {
           username: action.username,
           token: action.token,
-          status: tokenStates.RECEIVED
+          status: tokenStates.RECEIVED,
+          permissions: {
+            cmd_exec: action.permissions['execute_command'],
+          }
         });
       }
     case REJECT_TOKEN:
       return {
-        ...state,
+        ...initialState,
         token: null,
         status: tokenStates.REJECTED
       };
