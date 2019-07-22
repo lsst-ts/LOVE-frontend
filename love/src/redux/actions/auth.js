@@ -14,7 +14,7 @@ import {getToken} from '../selectors';
 
 export const requestToken = (username, password) => ({type: REQUEST_TOKEN, username, password});
 
-export const receiveToken = (token) => ({type: RECEIVE_TOKEN, token});
+export const receiveToken = (username, token) => ({type: RECEIVE_TOKEN, username, token});
 
 export const emptyToken = {
   type: EMPTY_TOKEN
@@ -47,7 +47,6 @@ export const markErrorRemoveToken = {
 function doExpireToken() {
   return(dispatch) => {
     dispatch(expireToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -55,15 +54,13 @@ function doExpireToken() {
 function doMarkErrorToken() {
   return(dispatch) => {
     dispatch(markErrorToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
 
 function doReceiveToken(username, token) {
   return(dispatch) => {
-    dispatch(receiveToken(token));
-    localStorage.setItem('LOVE-USERNAME', username);
+    dispatch(receiveToken(username, token));
     localStorage.setItem('LOVE-TOKEN', token);
   };
 }
@@ -71,7 +68,6 @@ function doReceiveToken(username, token) {
 function doRejectToken() {
   return(dispatch) => {
     dispatch(rejectToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -79,7 +75,6 @@ function doRejectToken() {
 function doRequestRemoveToken() {
   return(dispatch) => {
     dispatch(requestRemoveToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -87,7 +82,6 @@ function doRequestRemoveToken() {
 function doRemoveRemoteToken() {
   return(dispatch) => {
     dispatch(removeRemoteToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -101,10 +95,10 @@ function doRemoveRemoteToken() {
  */
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-  return(dispatch, getState) => {
+  return (dispatch, getState) => {
     const storageToken = localStorage.getItem('LOVE-TOKEN');
     if (storageToken && storageToken.length > 0) {
-      dispatch(receiveToken(storageToken));
+      dispatch(receiveToken(null, storageToken));
       return;
     }
 
@@ -125,7 +119,8 @@ export function fetchToken(username, password) {
       }
     }).then((response) => {
       if (response) {
-        const {token} = response;
+        const username = response.username;
+        const token = response.token;
         if (token !== undefined && token !== null) {
           dispatch(doReceiveToken(username, token));
           return;
@@ -191,10 +186,13 @@ export function validateToken() {
       }
 
       return response.json().then((resp) => {
-        const {detail} = resp;
+        const detail = resp.detail;
+        const username = resp.username;
         if (detail !== 'Token is valid') {
           console.log('Session expired. Logging out');
           dispatch(doExpireToken());
+        } else {
+          dispatch(doReceiveToken(username, token));
         }
       });
     });

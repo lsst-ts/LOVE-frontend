@@ -36,13 +36,13 @@ export default function(state = initialState, action) {
     case REQUEST_TOKEN:
       {
         return Object.assign({}, state, {
-          username: action.username,
           status: tokenStates.REQUESTED
         });
       }
     case RECEIVE_TOKEN:
       {
         return Object.assign({}, state, {
+          username: action.username,
           token: action.token,
           status: tokenStates.RECEIVED
         });
