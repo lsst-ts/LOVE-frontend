@@ -105,3 +105,8 @@ export const getSummaryStateValue = (state, groupName) => {
   }
   return summaryStateValue;
 }
+
+
+export const getCSCHeartbeats = (state) => {
+  return state.heartbeats.cscs;
+}
