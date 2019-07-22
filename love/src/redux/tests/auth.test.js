@@ -32,7 +32,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
       url,
       {
         token: newToken,
-        username: 'my-user',
+        user_data: {
+          username: 'my-user',
+        },
         permissions: {
           execute_command: true
         }
@@ -98,7 +100,9 @@ describe('GIVEN the token exists in localStorage', () => {
       url,
       {
         detail: 'Token is valid',
-        username: 'my-user',
+        user_data: {
+          username: 'my-user',
+        },
         permissions: {
           execute_command: true
         }
