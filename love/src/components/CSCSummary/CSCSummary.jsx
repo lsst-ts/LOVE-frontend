@@ -281,11 +281,13 @@ export default class CSCSummary extends Component {
   }
 
   componentDidMount = () => {
-    this.subscribeToCSCs();
+    this.props.subscribeToStreams();
+    // this.subscribeToCSCs();
   };
 
   componentWillUnmount = () => {
-    this.unsubscribeToCSCs();
+    // this.unsubscribeToCSCs();
+    this.props.unsubscribeToStreams();
   };
 
   processHeartbeat = (data) => {

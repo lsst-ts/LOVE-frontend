@@ -10,7 +10,7 @@ export const CSCSummaryHierarchy = {
     ],
   },
   'Main Telescope': {
-    'CSC Group 1': ['CSC4'],
+    'CSC Group 1': [],
     'CSC Group 2': [],
   },
   Observatory: {

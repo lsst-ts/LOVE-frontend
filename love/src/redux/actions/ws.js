@@ -156,7 +156,7 @@ export const requestGroupSubscription = (groupName) => {
         option: 'subscribe',
         category,
         csc,
-        salindex: parseInt(salindex),
+        salindex,
         stream,
       });
       dispatch(addGroupSubscription(groupName));
