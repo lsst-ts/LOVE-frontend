@@ -172,7 +172,7 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
       return;
     }
 
-    const [category, csc, stream] = groupName.split('-');
+    const [category, csc, salindex, stream] = groupName.split('-');
 
     wsPromise.then(() => {
       const state = getState();
@@ -184,6 +184,7 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
         option: 'unsubscribe',
         category,
         csc,
+        salindex: parseInt(salindex),
         stream,
       });
     });
@@ -218,12 +219,20 @@ export const requestSALCommand = (data) => {
       }
 
       const commandObject = {
-        cmd: data.cmd,
-        params: data.params,
-        component: data.component,
+        category: 'cmd',
+        data: [{
+          csc: data.component,
+          salindex: 1,
+          data: {
+            stream: {
+              cmd: data.cmd,
+              params: data.params,
+            }
+          }
+        }]
       };
 
-      socket.json({ option: 'cmd', type: 'command_data', ...commandObject });
+      socket.json(commandObject);
 
       dispatch(updateLastSALCommand(commandObject, SALCommandStatus.REQUESTED));
     });
