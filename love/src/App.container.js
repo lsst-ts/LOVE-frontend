@@ -1,25 +1,26 @@
 import React from 'react';
 import App from './App';
 import { connect } from 'react-redux';
-import { validateToken, getAndValidateTokenFromStorage } from './redux/actions/auth';
+import { validateToken } from './redux/actions/auth';
 import {getToken} from './redux/selectors';
 
-const AppContainer = ({ validateToken, getAndValidateTokenFromStorage, token }) => {
+const AppContainer = ({ validateToken, token }) => {
   return <App
     validateToken={validateToken}
-    getAndValidateTokenFromStorage={getAndValidateTokenFromStorage}
     token={token}
   />;
 };
 
 const mapDispatchToProps = (dispatch) => ({
     validateToken: () => dispatch(validateToken()),
-    getAndValidateTokenFromStorage: () => dispatch(getAndValidateTokenFromStorage()),
 });
 
-const mapStateToProps = (state) => ({
-  token: getToken(state),
-});
+const mapStateToProps = (state) => {
+  console.log('MAP STATE TO PROPS getToken(state): ', getToken(state));
+  return {
+    token: getToken(state),
+  };
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

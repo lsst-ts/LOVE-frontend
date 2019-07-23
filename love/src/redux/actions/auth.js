@@ -47,6 +47,13 @@ export const markErrorRemoveToken = {
   type: MARK_ERROR_REMOVE_TOKEN
 };
 
+export function doGetTokenFromStorage() {
+  return (dispatch) => {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    dispatch(getTokenFromStorage(token))
+  };
+}
+
 function doExpireToken() {
   return(dispatch) => {
     dispatch(expireToken);
@@ -167,7 +174,6 @@ export function validateToken() {
   return async (dispatch, getState) => {
     const token = getToken(getState());
     if (token === null || token === undefined) {
-      dispatch(doExpireToken());
       return Promise.resolve();
     }
 
@@ -204,13 +210,5 @@ export function validateToken() {
         }
       });
     });
-  };
-}
-
-export function getAndValidateTokenFromStorage() {
-  return (dispatch) => {
-    const token = localStorage.getItem('LOVE-TOKEN');
-    dispatch(getTokenFromStorage(token))
-    dispatch(validateToken);
   };
 }
