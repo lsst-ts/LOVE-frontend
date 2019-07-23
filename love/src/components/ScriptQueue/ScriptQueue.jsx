@@ -16,6 +16,8 @@ import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
+import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
+import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -405,13 +407,13 @@ export default class ScriptQueue extends Component {
       return currentElement.expected_duration + previousSum;
     }, 0);
     const currentContextMenu = [
-      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
       { icon: <TerminateIcon />, text: 'Terminate', action: this.stopSelectedScript },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
     ];
     const waitingContextMenu = [
+      { icon: <MoveToTopIcon />, text: 'Move to top', action: this.moveSelectedScriptToTop },
+      { icon: <MoveToBottomIcon />, text: 'Move to bottom', action: this.moveSelectedScriptToBottom },
       { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
-      { icon: <RequeueIcon />, text: 'moveSelectedScriptToTop', action: this.moveSelectedScriptToTop },
-      { icon: <RequeueIcon />, text: 'moveSelectedScriptToBottom', action: this.moveSelectedScriptToBottom },
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
