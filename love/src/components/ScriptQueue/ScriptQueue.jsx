@@ -272,7 +272,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  stopScript = (scriptIndex) => {
+  stopScript = (scriptIndex, terminate=false) => {
     console.log('Stopping script', scriptIndex);
     const array = new Array(400).fill(0);
     array[0] = scriptIndex;
@@ -281,7 +281,7 @@ export default class ScriptQueue extends Component {
       params: {
         length: 1,
         salIndices: array,
-        terminate: false,
+        terminate: terminate,
       },
       component: 'ScriptQueue',
     });
@@ -353,8 +353,8 @@ export default class ScriptQueue extends Component {
     this.requeueScript(this.state.selectedScriptIndex);
   };
 
-  stopSelectedScript = () => {
-    this.stopScript(this.state.selectedScriptIndex);
+  stopSelectedScript = (terminate=false) => {
+    this.stopScript(this.state.selectedScriptIndex, terminate);
     this.setState({ isContextMenuOpen: false });
   };
 
@@ -407,7 +407,7 @@ export default class ScriptQueue extends Component {
       return currentElement.expected_duration + previousSum;
     }, 0);
     const currentContextMenu = [
-      { icon: <TerminateIcon />, text: 'Terminate', action: this.stopSelectedScript },
+      { icon: <TerminateIcon />, text: 'Terminate', action: () => this.stopSelectedScript(true) },
       { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
     ];
     const waitingContextMenu = [
