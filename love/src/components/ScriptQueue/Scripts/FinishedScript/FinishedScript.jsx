@@ -5,6 +5,7 @@ import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
+import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 
 export default class FinishedScript extends PureComponent {
   static propTypes = {
@@ -24,6 +25,8 @@ export default class FinishedScript extends PureComponent {
     process_state: PropTypes.string,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
+    /** Function called to requeue a script */
+    requeueScript: PropTypes.func,
   };
 
   static defaultProps = {
@@ -34,6 +37,7 @@ export default class FinishedScript extends PureComponent {
     elapsedTime: 0,
     script_state: 'Unknown',
     isCompact: false,
+    requeueScript: () => 0,
   };
 
   constructor(props) {
@@ -146,6 +150,14 @@ export default class FinishedScript extends PureComponent {
               </div>
             </div>
           </div>
+        </div>
+        <div
+          className={scriptStyles.mainScriptButton}
+          onClick={(e) => this.props.requeueScript(this.props.index)}
+        >
+          <span className={scriptStyles.launchIconWrapper}>
+            <LaunchScriptIcon title="Launch script: Configure" />
+          </span>
         </div>
       </div>
     );

@@ -36,8 +36,6 @@ export default class WaitingScript extends PureComponent {
     stopScript: PropTypes.func,
     /** Function called to move a script */
     moveScript: PropTypes.func,
-    /** Function called to requeue a script */
-    requeueScript: PropTypes.func,
     /** Function called when the context menu button is clicked */
     onClickContextMenu: PropTypes.func,
     /** Function called to move the script up in the waiting queue */
@@ -59,7 +57,6 @@ export default class WaitingScript extends PureComponent {
     moveScript: () => 0,
     moveScriptUp: () => 0,
     moveScriptDown: () => 0,
-    requeueScript: () => 0,
     onClickContextMenu: () => 0,
   };
 
@@ -274,37 +271,6 @@ export default class WaitingScript extends PureComponent {
                   {/* <div className={scriptStyles.subSectionTitle}>
                   SCHEMA
                 </div> */}
-                </div>
-                <div className={scriptStyles.expandedSubSection}>
-                  <div className={scriptStyles.subSectionTitle}>COMMANDS</div>
-                  <div className={scriptStyles.expandedRow}>
-                    <p>Remove script</p>
-                    <div className={scriptStyles.uploadButtonWrapper}>
-                      <Button
-                        className={scriptStyles.uploadConfigButton}
-                        onClick={(e) => {
-                          this.props.stopScript(this.props.index);
-                          e.stopPropagation();
-                        }}
-                      >
-                        Remove
-                      </Button>
-                    </div>
-                  </div>
-                  <div className={scriptStyles.expandedRow}>
-                    <p>Requeue script</p>
-                    <div className={scriptStyles.uploadButtonWrapper}>
-                      <Button
-                        className={scriptStyles.uploadConfigButton}
-                        onClick={(e) => {
-                          this.props.requeueScript(this.props.index);
-                          e.stopPropagation();
-                        }}
-                      >
-                        Requeue
-                      </Button>
-                    </div>
-                  </div>
                 </div>
               </div>
             ) : null}
