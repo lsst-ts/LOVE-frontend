@@ -13,6 +13,9 @@ import { hasCommandPrivileges, hasFakeData } from '../../Config';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import PauseIcon from './../icons/PauseIcon/PauseIcon';
 import ResumeIcon from './../icons/ResumeIcon/ResumeIcon';
+import ContextMenu from './Scripts/ContextMenu/ContextMenu';
+import RequeueIcon from '../icons/RequeueIcon/RequeueIcon';
+import TerminateIcon from '../icons/TerminateIcon/TerminateIcon';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -34,6 +37,8 @@ export default class ScriptQueue extends Component {
       summaryStateValue: 0,
       useLocalWaitingList: false,
       waitingScriptList: this.props.waitingScriptList,
+      isContextMenuOpen: false,
+      contextMenuData: {},
     };
     this.lastId = 19;
     this.managerInterface = new ManagerInterface();
@@ -291,15 +296,16 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  moveScript = (scriptIndex, position) => {
+  moveScript = (scriptIndex, position, offset=true) => {
     console.log(`Move script ${scriptIndex} to ${position}`);
     let location = 3; //Before reference script
     let locationSalIndex = 0;
     if (position === 0) location = 1; //Location: first
     //Location: last
-    if (position === this.state.waitingScriptList.length - 1) location = 2;
+    if (position >= this.state.waitingScriptList.length - 1) location = 2;
     else {
-      locationSalIndex = this.state.waitingScriptList[position + 1].index;
+      const offsetValue = offset ? 1 : 0;
+      locationSalIndex = this.state.waitingScriptList[position+offsetValue].index;
     }
     this.props.requestSALCommand({
       cmd: 'cmd_move',
@@ -330,6 +336,38 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  onClickContextMenu = (event, index) => {
+    this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
+    event.stopPropagation();
+    this.setState({
+      contextMenuData: event.target.getBoundingClientRect(),
+      selectedScriptIndex: index,
+    });
+  };
+
+  requeueSelectedScript = () => {
+    this.requeueScript(this.state.selectedScriptIndex);
+  };
+
+  stopSelectedScript = () => {
+    this.stopScript(this.state.selectedScriptIndex);
+    this.setState({ isContextMenuOpen: false });
+  };
+
+  moveScriptUp = (scriptIndex) => {
+    let i = 0;
+    for (; i < this.props.waitingScriptList.length; i++) if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    console.log(i)
+    this.moveScript(scriptIndex, i-1, false);
+  };
+
+  moveScriptDown = (scriptIndex) => {
+    let i = 0;
+    for (; i < this.props.waitingScriptList.length; i++) if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    console.log(i)
+    this.moveScript(scriptIndex, i+1, true);
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -357,11 +395,24 @@ export default class ScriptQueue extends Component {
 
     return (
       <Panel title="Script Queue">
-        <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
+        <div
+          onClick={() => {
+            this.setState({ isContextMenuOpen: false });
+          }}
+          className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
+        >
           <ConfigPanel
             launchScript={this.launchScript}
             closeConfigPanel={this.closeConfigPanel}
             configPanel={this.state.configPanel}
+          />
+          <ContextMenu
+            isOpen={this.state.isContextMenuOpen}
+            contextMenuData={this.state.contextMenuData}
+            options={[
+              { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+              { icon: <TerminateIcon />, text: 'Terminate', action: this.stopSelectedScript },
+            ]}
           />
           <div
             onDragEnter={(e) => {
@@ -533,6 +584,9 @@ export default class ScriptQueue extends Component {
                         stopScript={this.stopScript}
                         moveScript={this.moveScript}
                         requeueScript={this.requeueScript}
+                        onClickContextMenu={this.onClickContextMenu}
+                        moveScriptUp={this.moveScriptUp}
+                        moveScriptDown={this.moveScriptDown}
                         {...script}
                       />
                     </DraggableScript>

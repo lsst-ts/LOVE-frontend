@@ -5,10 +5,12 @@ import styles from './WaitingScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
-import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import Button from '../../../GeneralPurpose/Button/Button';
 import { hasCommandPrivileges } from '../../../../Config';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
+import StopIcon from '../../../icons/StopIcon/StopIcon';
+import MoveUpIcon from '../../../icons/MoveUpIcon/MoveUpIcon';
+import MoveDownIcon from '../../../icons/MoveDownIcon/MoveDownIcon';
 
 export default class WaitingScript extends PureComponent {
   static propTypes = {
@@ -36,6 +38,12 @@ export default class WaitingScript extends PureComponent {
     moveScript: PropTypes.func,
     /** Function called to requeue a script */
     requeueScript: PropTypes.func,
+    /** Function called when the context menu button is clicked */
+    onClickContextMenu: PropTypes.func,
+    /** Function called to move the script up in the waiting queue */
+    moveScriptUp: PropTypes.func,
+    /** Function called to move the script down in the waiting queue */
+    moveScriptDown: PropTypes.func,
   };
 
   static defaultProps = {
@@ -49,7 +57,10 @@ export default class WaitingScript extends PureComponent {
     heartbeatData: {},
     stopScript: () => 0,
     moveScript: () => 0,
+    moveScriptUp: () => 0,
+    moveScriptDown: () => 0,
     requeueScript: () => 0,
+    onClickContextMenu: () => 0,
   };
 
   constructor(props) {
@@ -144,7 +155,56 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
             <div className={scriptStyles.scriptStatusContainer}>
-              <div className={scriptStyles.heartBeatContainer}>&nbsp;</div>
+              <div className={scriptStyles.buttonsContainer}>
+                <div
+                  className={scriptStyles.buttonContainer}
+                  onClick={(e) => {
+                    this.props.moveScriptUp(this.props.index);
+                    e.stopPropagation();
+                  }}
+                >
+                  <div className={scriptStyles.commandButton}>
+                    <div>
+                      <MoveUpIcon />
+                    </div>
+                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move up'}</div>
+                  </div>
+                </div>
+                <div
+                  className={scriptStyles.buttonContainer}
+                  onClick={(e) => {
+                    this.props.moveScriptDown(this.props.index);
+                    e.stopPropagation();
+                  }}
+                >
+                  <div className={scriptStyles.commandButton}>
+                    <div>
+                      <MoveDownIcon />
+                    </div>
+                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move down'}</div>
+                  </div>
+                </div>
+                <div
+                  className={scriptStyles.buttonContainer}
+                  onClick={(e) => {
+                    this.props.stopScript(this.props.index);
+                    e.stopPropagation();
+                  }}
+                >
+                  <div className={scriptStyles.commandButton}>
+                    <div>
+                      <StopIcon />
+                    </div>
+                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                  </div>
+                </div>
+                <div
+                  className={scriptStyles.buttonContainer}
+                  onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
+                >
+                  &#8943;
+                </div>
+              </div>
               <div
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -222,7 +282,10 @@ export default class WaitingScript extends PureComponent {
                     <div className={scriptStyles.uploadButtonWrapper}>
                       <Button
                         className={scriptStyles.uploadConfigButton}
-                        onClick={() => this.props.stopScript(this.props.index)}
+                        onClick={(e) => {
+                          this.props.stopScript(this.props.index);
+                          e.stopPropagation();
+                        }}
                       >
                         Remove
                       </Button>
@@ -233,7 +296,10 @@ export default class WaitingScript extends PureComponent {
                     <div className={scriptStyles.uploadButtonWrapper}>
                       <Button
                         className={scriptStyles.uploadConfigButton}
-                        onClick={() => this.props.requeueScript(this.props.index)}
+                        onClick={(e) => {
+                          this.props.requeueScript(this.props.index);
+                          e.stopPropagation();
+                        }}
                       >
                         Requeue
                       </Button>
