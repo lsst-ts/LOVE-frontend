@@ -5,7 +5,7 @@ import styles from './AvailableScript.module.css';
 import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import scriptStyles from '../Scripts.module.css';
 import { hasCommandPrivileges } from '../../../../Config';
-import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon';
+import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 
 export default class AvailableScript extends PureComponent {
   static propTypes = {

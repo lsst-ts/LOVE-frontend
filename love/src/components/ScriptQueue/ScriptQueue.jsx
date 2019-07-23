@@ -11,11 +11,11 @@ import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import ManagerInterface from '../../Utils';
 import { hasCommandPrivileges, hasFakeData } from '../../Config';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
-import PauseIcon from './../icons/PauseIcon/PauseIcon';
-import ResumeIcon from './../icons/ResumeIcon/ResumeIcon';
+import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
+import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import ContextMenu from './Scripts/ContextMenu/ContextMenu';
-import RequeueIcon from '../icons/RequeueIcon/RequeueIcon';
-import TerminateIcon from '../icons/TerminateIcon/TerminateIcon';
+import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -297,7 +297,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  moveScript = (scriptIndex, position, offset=true) => {
+  moveScript = (scriptIndex, position, offset = true) => {
     console.log(`Move script ${scriptIndex} to ${position}`);
     let location = 3; //Before reference script
     let locationSalIndex = 0;
@@ -306,7 +306,7 @@ export default class ScriptQueue extends Component {
     if (position >= this.state.waitingScriptList.length - 1) location = 2;
     else {
       const offsetValue = offset ? 1 : 0;
-      locationSalIndex = this.state.waitingScriptList[position+offsetValue].index;
+      locationSalIndex = this.state.waitingScriptList[position + offsetValue].index;
     }
     this.props.requestSALCommand({
       cmd: 'cmd_move',
@@ -337,7 +337,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  onClickContextMenu = (event, index, currentMenuSelected=false) => {
+  onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
     this.setState({
@@ -358,14 +358,26 @@ export default class ScriptQueue extends Component {
 
   moveScriptUp = (scriptIndex) => {
     let i = 0;
-    for (; i < this.props.waitingScriptList.length; i++) if (this.props.waitingScriptList[i].index === scriptIndex) break;
-    this.moveScript(scriptIndex, i-1, false);
+    for (; i < this.props.waitingScriptList.length; i++)
+      if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    this.moveScript(scriptIndex, i - 1, false);
   };
 
   moveScriptDown = (scriptIndex) => {
     let i = 0;
-    for (; i < this.props.waitingScriptList.length; i++) if (this.props.waitingScriptList[i].index === scriptIndex) break;
-    this.moveScript(scriptIndex, i+1, true);
+    for (; i < this.props.waitingScriptList.length; i++)
+      if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    this.moveScript(scriptIndex, i + 1, true);
+  };
+
+  moveSelectedScriptToTop = () => {
+    this.moveScript(this.state.selectedScriptIndex, 0);
+    this.setState({ isContextMenuOpen: false });
+  };
+
+  moveSelectedScriptToBottom = () => {
+    this.moveScript(this.state.selectedScriptIndex, Infinity);
+    this.setState({ isContextMenuOpen: false });
   };
 
   render() {
@@ -398,6 +410,8 @@ export default class ScriptQueue extends Component {
     ];
     const waitingContextMenu = [
       { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+      { icon: <RequeueIcon />, text: 'moveSelectedScriptToTop', action: this.moveSelectedScriptToTop },
+      { icon: <RequeueIcon />, text: 'moveSelectedScriptToBottom', action: this.moveSelectedScriptToBottom },
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
@@ -440,7 +454,7 @@ export default class ScriptQueue extends Component {
                   timestampRunStart={current.timestampRunStart}
                   stopScript={this.stopScript}
                   onClickContextMenu={this.onClickContextMenu}
-                  />
+                />
               </div>
             </div>
           </div>
