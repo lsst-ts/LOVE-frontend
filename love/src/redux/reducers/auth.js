@@ -7,11 +7,13 @@ import {
   MARK_ERROR_TOKEN,
   REQUEST_REMOVE_TOKEN,
   REMOVE_REMOTE_TOKEN,
-  MARK_ERROR_REMOVE_TOKEN
+  MARK_ERROR_REMOVE_TOKEN,
+  GET_TOKEN_FROM_LOCALSTORAGE
 } from '../actions/actionTypes';
 
 export const tokenStates = {
   EMPTY: 'EMPTY',
+  READ_FROM_STORAGE: 'READ_FROM_STORAGE',
   REQUESTED: 'REQUESTED',
   RECEIVED: 'RECEIVED',
   ERROR: 'ERROR',
@@ -40,6 +42,13 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           status: tokenStates.REQUESTED
+        });
+      }
+    case GET_TOKEN_FROM_LOCALSTORAGE:
+      {
+        return Object.assign({}, state, {
+          status: tokenStates.READ_FROM_STORAGE,
+          token: action.token,
         });
       }
     case RECEIVE_TOKEN:
