@@ -211,6 +211,14 @@ export default class CurrentScript extends Component {
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
               <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
             </div>
+            <div className={[styles.checkpointContainer, visibilityClass].join(' ')}>
+              <div className={styles.estimatedTimeContainer}>
+                <span className={styles.estimatedTimeLabel}>Last checkpoint: </span>
+                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {this.props.last_checkpoint}
+                </span>
+              </div>
+            </div>
             <div className={[styles.timeContainer, visibilityClass].join(' ')}>
               <div className={styles.estimatedTimeContainer}>
                 <span className={styles.estimatedTimeLabel}>Estimated time: </span>
