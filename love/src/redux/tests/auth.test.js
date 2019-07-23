@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 
-import { fetchToken, validateToken, logout } from '../actions/auth';
+import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
 import { getToken, getUsername, getTokenStatus, getPermCmdExec } from '../selectors';
 
@@ -82,10 +82,11 @@ describe('GIVEN the token exists in localStorage', () => {
   let initialToken, url;
 
   beforeEach(async () => {
-    localStorage.setItem('LOVE-TOKEN', '"love-token"');
-    await store.dispatch(fetchToken('asdf', 'asdf'));
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
     initialToken = getToken(store.getState());
-    expect(initialToken).toEqual('"love-token"');
+    expect(initialToken).toEqual(token);
     url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
   });
 
