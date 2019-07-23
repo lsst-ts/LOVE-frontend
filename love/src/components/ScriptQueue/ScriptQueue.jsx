@@ -39,6 +39,7 @@ export default class ScriptQueue extends Component {
       waitingScriptList: this.props.waitingScriptList,
       isContextMenuOpen: false,
       contextMenuData: {},
+      currentMenuSelected: false,
     };
     this.lastId = 19;
     this.managerInterface = new ManagerInterface();
@@ -336,12 +337,13 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  onClickContextMenu = (event, index) => {
-    this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
+  onClickContextMenu = (event, index, currentMenuSelected=false) => {
     event.stopPropagation();
+    this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
     this.setState({
       contextMenuData: event.target.getBoundingClientRect(),
       selectedScriptIndex: index,
+      currentMenuSelected: currentMenuSelected,
     });
   };
 
@@ -357,14 +359,12 @@ export default class ScriptQueue extends Component {
   moveScriptUp = (scriptIndex) => {
     let i = 0;
     for (; i < this.props.waitingScriptList.length; i++) if (this.props.waitingScriptList[i].index === scriptIndex) break;
-    console.log(i)
     this.moveScript(scriptIndex, i-1, false);
   };
 
   moveScriptDown = (scriptIndex) => {
     let i = 0;
     for (; i < this.props.waitingScriptList.length; i++) if (this.props.waitingScriptList[i].index === scriptIndex) break;
-    console.log(i)
     this.moveScript(scriptIndex, i+1, true);
   };
 
@@ -392,6 +392,15 @@ export default class ScriptQueue extends Component {
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
     }, 0);
+    const currentContextMenu = [
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+      { icon: <TerminateIcon />, text: 'Terminate', action: this.stopSelectedScript },
+    ];
+    const waitingContextMenu = [
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ];
+
+    const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
 
     return (
       <Panel title="Script Queue">
@@ -409,10 +418,7 @@ export default class ScriptQueue extends Component {
           <ContextMenu
             isOpen={this.state.isContextMenuOpen}
             contextMenuData={this.state.contextMenuData}
-            options={[
-              { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
-              { icon: <TerminateIcon />, text: 'Terminate', action: this.stopSelectedScript },
-            ]}
+            options={contextMenuOption}
           />
           <div
             onDragEnter={(e) => {
@@ -433,7 +439,8 @@ export default class ScriptQueue extends Component {
                   heartbeatData={this.state.indexedHeartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
                   stopScript={this.stopScript}
-                />
+                  onClickContextMenu={this.onClickContextMenu}
+                  />
               </div>
             </div>
           </div>
