@@ -70,7 +70,16 @@ it('Should send a command to the server and save it on the state properly', asyn
 
   await store.dispatch(requestSALCommand(commandObject));
 
-  await expect(server).toReceiveMessage({ option: 'cmd', type: 'command_data', ...commandObject });
+  await expect(server).toReceiveMessage({
+    category: 'cmd',
+    data: [
+      {
+        csc: 'ATDome',
+        data: { stream: { cmd: 'cmd_closeShutter', params: {} } },
+        salindex: 1,
+      },
+    ],
+  });
 
   expect(getLastSALCommand(store.getState())).toEqual({
     status: SALCommandStatus.REQUESTED,
@@ -226,8 +235,7 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
             max_lost_heartbeats: 5,
           },
         ];
-        
-      
+
         heartbeats.forEach((heartbeat) => {
           // Act:
           server.send({
@@ -245,13 +253,11 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
             ],
           });
         });
-      
+
         const heartbeatsState = getCSCHeartbeats(store.getState());
-      
+
         expect(heartbeats).toEqual(heartbeatsState);
       });
     });
   });
 });
-
-

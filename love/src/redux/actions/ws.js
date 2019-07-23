@@ -33,14 +33,13 @@ const receiveGroupConfirmationMessage = (data) => ({
   data,
 });
 
-const receiveGroupSubscriptionData = ({category, csc, salindex, data}) => {
-
+const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
     category: category,
     csc: csc,
     salindex: salindex,
-    data: data
+    data: data,
   };
 };
 
@@ -74,12 +73,7 @@ export const openWebsocketConnection = () => {
           if (data.category === 'event') {
             const stream = data.data[0].data;
             if (data.data[0].csc === 'ATCamera') {
-              if (
-                stream.startIntegration ||
-                stream.endReadout ||
-                stream.startReadout ||
-                stream.endOfImageTelemetry
-              ) {
+              if (stream.startIntegration || stream.endReadout || stream.startReadout || stream.endOfImageTelemetry) {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
@@ -100,26 +94,24 @@ export const openWebsocketConnection = () => {
 
             if (data.data[0].csc === 'ScriptQueueState') {
               if (stream.stream.finished_scripts) {
-                const finishedIndices = stream.stream.finished_scripts.map(
-                  (script) => script.index,
-                );
+                const finishedIndices = stream.stream.finished_scripts.map((script) => script.index);
                 dispatch(removeScriptsHeartbeats(finishedIndices));
               }
             }
 
-
             if (data.data[0].csc === 'Heartbeat') {
-              dispatch(receiveCSCHeartbeat(stream.stream))
+              dispatch(receiveCSCHeartbeat(stream.stream));
             }
           }
 
-          data.data.forEach( stream =>{
-            dispatch(receiveGroupSubscriptionData({
-              category: data.category,
-              ...stream
-            }));
-
-          })
+          data.data.forEach((stream) => {
+            dispatch(
+              receiveGroupSubscriptionData({
+                category: data.category,
+                ...stream,
+              }),
+            );
+          });
         },
         onclose: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
@@ -224,20 +216,20 @@ export const requestSALCommand = (data) => {
       }
 
       const commandObject = {
-        category: 'cmd',
-        data: [{
-          csc: data.component,
-          salindex: 1,
-          data: {
-            stream: {
-              cmd: data.cmd,
-              params: data.params,
-            }
-          }
-        }]
+        csc: data.component,
+        salindex: 1,
+        data: {
+          stream: {
+            cmd: data.cmd,
+            params: data.params,
+          },
+        },
       };
 
-      socket.json(commandObject);
+      socket.json({
+        category: 'cmd',
+        data: [commandObject],
+      });
 
       dispatch(updateLastSALCommand(commandObject, SALCommandStatus.REQUESTED));
     });
