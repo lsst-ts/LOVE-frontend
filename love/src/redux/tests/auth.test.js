@@ -36,7 +36,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
           username: 'my-user',
         },
         permissions: {
-          execute_command: true
+          execute_commands: true
         }
       },
       new Headers({
@@ -104,7 +104,7 @@ describe('GIVEN the token exists in localStorage', () => {
           username: 'my-user',
         },
         permissions: {
-          execute_command: true
+          execute_commands: true
         }
       },
       ManagerInterface.getHeaders(),

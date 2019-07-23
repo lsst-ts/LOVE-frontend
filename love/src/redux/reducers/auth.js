@@ -66,7 +66,7 @@ export default function(state = initialState, action) {
           token: action.token,
           status: tokenStates.RECEIVED,
           permissions: {
-            cmd_exec: action.permissions['execute_command'],
+            cmd_exec: action.permissions['execute_commands'],
           }
         });
       }
