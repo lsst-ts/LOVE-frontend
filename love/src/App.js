@@ -23,11 +23,13 @@ class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
+    getAndValidateTokenFromStorage: PropTypes.func,
+    async: PropTypes.func,
     token: PropTypes.string
   };
 
   componentDidMount = () => {
-    this.props.validateToken();
+    this.props.getAndValidateTokenFromStorage();
   };
 
   componentDidUpdate = (prevProps, prevState) => {

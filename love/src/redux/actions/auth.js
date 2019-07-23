@@ -7,7 +7,8 @@ import {
   MARK_ERROR_TOKEN,
   REQUEST_REMOVE_TOKEN,
   REMOVE_REMOTE_TOKEN,
-  MARK_ERROR_REMOVE_TOKEN
+  MARK_ERROR_REMOVE_TOKEN,
+  GET_TOKEN_FROM_LOCALSTORAGE
 } from './actionTypes';
 import ManagerInterface from '../../Utils';
 import {getToken} from '../selectors';
@@ -15,6 +16,8 @@ import {getToken} from '../selectors';
 export const requestToken = (username, password) => ({type: REQUEST_TOKEN, username, password});
 
 export const receiveToken = (username, token, permissions) => ({type: RECEIVE_TOKEN, username, token, permissions});
+
+export const getTokenFromStorage = (token) => ({type: GET_TOKEN_FROM_LOCALSTORAGE, token});
 
 export const emptyToken = {
   type: EMPTY_TOKEN
@@ -96,12 +99,6 @@ function doRemoveRemoteToken() {
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
-    const storageToken = localStorage.getItem('LOVE-TOKEN');
-    if (storageToken && storageToken.length > 0) {
-      dispatch(receiveToken(null, storageToken, null));
-      return;
-    }
-
     dispatch(requestToken(username, password));
     return fetch(url, {
       method: 'POST',
@@ -170,6 +167,7 @@ export function validateToken() {
   return async (dispatch, getState) => {
     const token = getToken(getState());
     if (token === null || token === undefined) {
+      dispatch(doExpireToken());
       return Promise.resolve();
     }
 
@@ -199,10 +197,20 @@ export function validateToken() {
         if (detail !== 'Token is valid') {
           console.log('Session expired. Logging out');
           dispatch(doExpireToken());
+          return Promise.resolve();
         } else {
           dispatch(doReceiveToken(username, token, permissions));
+          return Promise.resolve();
         }
       });
     });
+  };
+}
+
+export function getAndValidateTokenFromStorage() {
+  return (dispatch) => {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    dispatch(getTokenFromStorage(token))
+    dispatch(validateToken);
   };
 }
