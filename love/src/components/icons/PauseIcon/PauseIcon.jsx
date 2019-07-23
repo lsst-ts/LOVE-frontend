@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import styles from './PauseIcon.module.css';
 
 export default class PauseIcon extends Component {
