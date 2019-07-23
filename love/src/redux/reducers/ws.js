@@ -61,7 +61,7 @@ export default function(state = initialState, action) {
           csc !== action.csc ||
           parseInt(salindex) !== parseInt(action.salindex) ||
           (!Object.keys(action.data).includes(stream) && stream !== 'all')
-        ){
+        ) {
           return subscription;
         }
 
@@ -87,9 +87,9 @@ export default function(state = initialState, action) {
         ...state,
         lastSALCommand: {
           status: action.status,
-          cmd: action.cmd,
-          params: action.params,
-          component: action.component,
+          cmd: action.data.stream.cmd,
+          params: action.data.stream.params,
+          component: action.csc,
         },
       };
     }
