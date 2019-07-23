@@ -35,7 +35,7 @@ export const getCameraState = (state) => {
 
 export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
-}
+};
 export const getDomeState = (state) => {
   const domeSubscriptions = [
     'telemetry-ATDome-position',
@@ -52,9 +52,15 @@ export const getDomeState = (state) => {
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
-    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['dropoutDoorOpeningPercentage']:0,
-    mainDoorOpeningPercentage: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['mainDoorOpeningPercentage']:0,
-    azimuthPosition: domeData['telemetry-ATDome-position'] ? domeData['telemetry-ATDome-position']['azimuthPosition']:0,
+    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-position']
+      ? domeData['telemetry-ATDome-position']['dropoutDoorOpeningPercentage']
+      : 0,
+    mainDoorOpeningPercentage: domeData['telemetry-ATDome-position']
+      ? domeData['telemetry-ATDome-position']['mainDoorOpeningPercentage']
+      : 0,
+    azimuthPosition: domeData['telemetry-ATDome-position']
+      ? domeData['telemetry-ATDome-position']['azimuthPosition']
+      : 0,
     azimuthState: domeData['event-ATDome-azimuthState'],
     azimuthCommandedState: domeData['event-ATDome-azimuthCommandedState'],
     domeInPosition: domeData['event-ATDome-allAxesInPosition'],
@@ -74,7 +80,7 @@ export const getKey = (dict, key, def) => {
   } else {
     return def;
   }
-}
+};
 
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
@@ -84,18 +90,18 @@ export const getScriptQueueState = (state, salindex) => {
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     current: getKey(scriptQueueData, 'current', 'None'),
     finishedScriptList: getKey(scriptQueueData, 'finished_scripts', undefined),
-  }
-}
+  };
+};
 
 /**
  * Returns all heartbeats in the state that belong to a scriptqueue of specific salindex.
- * 
- * @param {obj} state 
- * @param {integer} salindex 
+ *
+ * @param {obj} state
+ * @param {integer} salindex
  */
 export const getScriptHeartbeats = (state, salindex) => {
-  return state.heartbeats.scripts.filter(heartbeat => heartbeat.queueSalIndex === salindex);
-}
+  return state.heartbeats.scripts.filter((heartbeat) => heartbeat.queueSalIndex === salindex);
+};
 
 export const getSummaryStateValue = (state, groupName) => {
   const summaryState = getStreamData(state, groupName);
@@ -104,9 +110,28 @@ export const getSummaryStateValue = (state, groupName) => {
     summaryStateValue = summaryState[summaryState.length - 1].summaryState.value;
   }
   return summaryStateValue;
-}
-
+};
 
 export const getCSCHeartbeats = (state) => {
   return state.heartbeats.cscs;
-}
+};
+
+/**
+ * Returns a dictionary with summaryState for each csc in the cscsList if found in the state tree.
+ * It is indexed by csc name instead of groupname.
+ * @param {object} state
+ * @param {array} cscsList
+ */
+export const getCSCsSummaryStates = (state, cscsList) => {
+  const groupNames = cscsList.map((csc) => `event-${csc}-1-summaryState`);
+  const streams = getStreamsData(state, groupNames);
+
+  const summariesDictionary = {};
+  cscsList.forEach((csc) => {
+    if (Object.keys(streams).includes(`event-${csc}-1-summaryState`)) {
+      summariesDictionary[csc] = streams[`event-${csc}-1-summaryState`][0];
+    }
+  });
+
+  return summariesDictionary;
+};

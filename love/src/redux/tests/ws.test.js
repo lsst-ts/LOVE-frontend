@@ -2,10 +2,10 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { requestSALCommand, openWebsocketConnection } from '../actions/ws';
+import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
 
 import { SALCommandStatus } from '../actions/ws';
-import { getLastSALCommand, getScriptHeartbeats, getCSCHeartbeats } from '../selectors';
+import { getLastSALCommand, getScriptHeartbeats, getCSCHeartbeats, getCSCsSummaryStates } from '../selectors';
 import { mockScriptQueueData } from './mock';
 
 let store, server;
@@ -260,4 +260,71 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
       });
     });
   });
+});
+
+it('It should extract the summary messages properly from the state', async () => {
+  const summaryATDome = {
+    ATDomeID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: 'c38fc5a2', dataType: 'String' },
+    private_sndStamp: { value: 1563885828.2869709, dataType: 'Float' },
+    private_rcvStamp: { value: 1563885828.3042052, dataType: 'Float' },
+    private_seqNum: { value: 4, dataType: 'Int' },
+    private_origin: { value: 32, dataType: 'Int' },
+    private_host: { value: 843720695, dataType: 'Int' },
+    summaryState: { value: 1, dataType: 'Int' },
+    priority: { value: 0, dataType: 'Int' },
+  };
+
+  const summaryScriptqueue = {
+    ScriptQueueID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: '16ec6358', dataType: 'String' },
+    private_sndStamp: { value: 1563885938.2406523, dataType: 'Float' },
+    private_rcvStamp: { value: 1563885938.2410805, dataType: 'Float' },
+    private_seqNum: { value: 4, dataType: 'Int' },
+    private_origin: { value: 44, dataType: 'Int' },
+    private_host: { value: 619616180, dataType: 'Int' },
+    summaryState: { value: 1, dataType: 'Int' },
+    priority: { value: 0, dataType: 'Int' },
+  };
+
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-summaryState'));
+  await store.dispatch(requestGroupSubscription('event-ScriptQueue-1-summaryState'));
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          summaryState: [summaryATDome],
+        },
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ScriptQueue',
+        salindex: 1,
+        data: {
+          summaryState: [summaryScriptqueue],
+        },
+      },
+    ],
+  });
+
+const cscsList = ['ATDome', 'ScriptQueue'];
+
+  const summariesDictionary = getCSCsSummaryStates(store.getState(), cscsList)
+
+  const expected = {
+    'ScriptQueue': summaryScriptqueue,
+    'ATDome': summaryATDome
+  }
+
+  expect(summariesDictionary).toEqual(expected);
 });
