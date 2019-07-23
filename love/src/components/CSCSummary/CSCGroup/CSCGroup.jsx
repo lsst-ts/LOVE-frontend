@@ -36,6 +36,7 @@ export default class CSCGroup extends Component {
 
   renderExpandedView = (selectedCSC) => {
     const groupView = selectedCSC.csc === 'all';
+    
     return groupView ? (
       <div className={styles.CSCGroupContainer}>
         <CSCGroupLog
@@ -55,6 +56,7 @@ export default class CSCGroup extends Component {
           group={selectedCSC.group}
           name={selectedCSC.csc}
           data={this.props.data}
+          summaryStateData={this.props.summaryStateData[selectedCSC.csc]}
           onCSCClick={this.props.onCSCClick}
           clearCSCErrorCodes={this.props.clearCSCErrorCodes}
           clearCSCLogMessages={this.props.clearCSCLogMessages}
