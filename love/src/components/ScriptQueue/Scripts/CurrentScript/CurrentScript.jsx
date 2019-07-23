@@ -164,28 +164,28 @@ export default class CurrentScript extends Component {
                 </div>
               </div>
               <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
-              <div className={scriptStyles.buttonsContainer}>
-                <div
-                  className={scriptStyles.buttonContainer}
-                  onClick={(e) => {
-                    this.props.stopScript(this.props.index);
-                    e.stopPropagation();
-                  }}
-                >
-                  <div className={scriptStyles.commandButton}>
-                    <div>
-                      <StopIcon />
+                <div className={scriptStyles.buttonsContainer}>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => {
+                      this.props.stopScript(this.props.index);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <div className={scriptStyles.commandButton}>
+                      <div>
+                        <StopIcon />
+                      </div>
+                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
                     </div>
-                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                  </div>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
+                  >
+                    &#8943;
                   </div>
                 </div>
-                <div
-                  className={scriptStyles.buttonContainer}
-                  onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
-                >
-                  &#8943;
-                </div>
-              </div>
                 <div
                   className={scriptStyles.scriptStateContainer}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -232,23 +232,6 @@ export default class CurrentScript extends Component {
               this.state.expanded && isValid ? '' : scriptStyles.hidden,
             ].join(' ')}
           >
-            {/* <div className={[styles.expandedSection].join(' ')}>
-              <div className={scriptStyles.expandedTopRow}>
-                <p>Script config</p>
-                <div className={scriptStyles.uploadButtonWrapper} />
-              </div>
-              <JSONPretty
-                data={{}}
-                theme={{
-                  main:
-                    'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                  key: 'color:#f92672;',
-                  string: 'color:#fd971f;',
-                  value: 'color:#a6e22e;',
-                  boolean: 'color:#ac81fe;',
-                }}
-              />
-            </div> */}
             {hasCommandPrivileges ? (
               <div className={[scriptStyles.expandedSection].join(' ')}>
                 <div className={scriptStyles.expandedSubSection}>
@@ -268,17 +251,6 @@ export default class CurrentScript extends Component {
                   {/* <div className={scriptStyles.subSectionTitle}>
                   SCHEMA
                 </div> */}
-                </div>
-                <div className={scriptStyles.expandedTopRow}>
-                  <p>Remove script</p>
-                  <div className={scriptStyles.uploadButtonWrapper}>
-                    <Button
-                      className={scriptStyles.uploadConfigButton}
-                      onClick={() => this.props.stopScript(this.props.index)}
-                    >
-                      Remove
-                    </Button>
-                  </div>
                 </div>
               </div>
             ) : null}

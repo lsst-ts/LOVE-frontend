@@ -606,7 +606,6 @@ export default class ScriptQueue extends Component {
                         heartbeatData={this.state.indexedHeartbeats[script.index]}
                         stopScript={this.stopScript}
                         moveScript={this.moveScript}
-                        requeueScript={this.requeueScript}
                         onClickContextMenu={this.onClickContextMenu}
                         moveScriptUp={this.moveScriptUp}
                         moveScriptDown={this.moveScriptDown}
@@ -683,6 +682,7 @@ export default class ScriptQueue extends Component {
                             isCompact={
                               this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                             }
+                            requeueScript={this.requeueScript}
                           />
                         </DraggableScript>
                       );
