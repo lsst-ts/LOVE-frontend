@@ -11,6 +11,7 @@ export default class CSCDetail extends Component {
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     heartbeatData: PropTypes.object,
+    summaryStateData: PropTypes.object
   };
 
   static defaultProps = {
@@ -20,6 +21,7 @@ export default class CSCDetail extends Component {
     data: {},
     onCSCClick: () => 0,
     heartbeatData: null,
+    summaryStateData: undefined
   };
 
   static states = {
@@ -71,15 +73,16 @@ export default class CSCDetail extends Component {
     const heartbeatValue = selfData && selfData.heartbeat ? selfData.heartbeat.lost : 0;
     return (
       this.props.name !== nextProps.name ||
-      oldSummaryStateValue !== summaryStateValue ||
-      // oldHeartbeatValue !== heartbeatValue
+      this.props.summaryStateData !== nextProps.summaryStateData ||
       nextProps.heartbeatData !== this.props.heartbeatData
     );
   };
 
+  
   render() {
     const selfData = this.props.data[this.props.name];
-    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
+    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value: 0 ;
+
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
     let heartbeatStatus = 'unknown';

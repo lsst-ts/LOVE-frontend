@@ -17,6 +17,7 @@ export default class CSCGroup extends Component {
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
     heartbeatsData: PropTypes.arrayOf(PropTypes.object),
+    summaryStateData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -30,6 +31,7 @@ export default class CSCGroup extends Component {
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
     heartbeatsData: [],
+    summaryStateData: {},
   };
 
   renderExpandedView = (selectedCSC) => {
@@ -86,7 +88,8 @@ export default class CSCGroup extends Component {
                   group={this.props.name}
                   name={csc}
                   data={this.props.data}
-                  heartbeatData={this.props.heartbeatsData.filter(heartbeat => heartbeat.csc === csc)[0]}
+                  heartbeatData={this.props.heartbeatsData.filter((heartbeat) => heartbeat.csc === csc)[0]}
+                  summaryStateData={this.props.summaryStateData[csc]}
                   onCSCClick={this.props.onCSCClick}
                 />
               </div>
