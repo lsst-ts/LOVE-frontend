@@ -17,6 +17,7 @@ export default class CSCExpanded extends PureComponent {
     onCSCClick: PropTypes.func,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
+    summaryStateData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -27,6 +28,7 @@ export default class CSCExpanded extends PureComponent {
     onCSCClick: () => 0,
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
+    summaryStateData: undefined
   };
 
   constructor(props) {
@@ -90,7 +92,7 @@ export default class CSCExpanded extends PureComponent {
 
   render() {
     const selfData = this.props.data[this.props.name];
-    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
+    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value: 0 ;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
     return (
@@ -188,23 +190,23 @@ export default class CSCExpanded extends PureComponent {
           <div className={[styles.log, styles.messageLogContent].join(' ')}>
             {selfData && selfData.logMessage
               ? selfData.logMessage.map((msg) => {
-                const filter = this.state.messageFilters[msg.level];
-                if (filter && !filter.value) return null;
-                let icon = <span title="Debug">d</span>;
-                if (msg.level === 20) icon = <InfoIcon title="Information" />;
-                if (msg.level === 30) icon = <WarningIcon title="Warning" />;
-                if (msg.level === 40) icon = <ErrorIcon title="Error" />;
-                return (
-                  <div key={msg.timestamp} className={styles.logMessage}>
-                    <div className={styles.messageIcon}>{icon}</div>
-                    <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp}>{msg.timestamp}</div>
-                      <div className={styles.messageText}>{msg.message}</div>
-                      <div className={styles.messageTraceback}>{msg.traceback}</div>
+                  const filter = this.state.messageFilters[msg.level];
+                  if (filter && !filter.value) return null;
+                  let icon = <span title="Debug">d</span>;
+                  if (msg.level === 20) icon = <InfoIcon title="Information" />;
+                  if (msg.level === 30) icon = <WarningIcon title="Warning" />;
+                  if (msg.level === 40) icon = <ErrorIcon title="Error" />;
+                  return (
+                    <div key={msg.timestamp} className={styles.logMessage}>
+                      <div className={styles.messageIcon}>{icon}</div>
+                      <div className={styles.messageTextContainer}>
+                        <div className={styles.timestamp}>{msg.timestamp}</div>
+                        <div className={styles.messageText}>{msg.message}</div>
+                        <div className={styles.messageTraceback}>{msg.traceback}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })
               : null}
           </div>
         </div>
