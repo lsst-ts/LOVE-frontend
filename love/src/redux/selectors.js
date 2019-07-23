@@ -129,7 +129,10 @@ export const getCSCsSummaryStates = (state, cscsList) => {
   const summariesDictionary = {};
   cscsList.forEach((csc) => {
     if (Object.keys(streams).includes(`event-${csc}-1-summaryState`)) {
-      summariesDictionary[csc] = streams[`event-${csc}-1-summaryState`][0];
+      summariesDictionary[csc] = streams[`event-${csc}-1-summaryState`];
+      if(summariesDictionary[csc]){
+        summariesDictionary[csc] = summariesDictionary[csc][0];
+      }
     }
   });
 
