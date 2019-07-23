@@ -8,9 +8,9 @@ import { getStatusStyle } from '../Scripts';
 import Button from '../../../GeneralPurpose/Button/Button';
 import { hasCommandPrivileges } from '../../../../Config';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
-import StopIcon from '../../../icons/StopIcon/StopIcon';
-import MoveUpIcon from '../../../icons/MoveUpIcon/MoveUpIcon';
-import MoveDownIcon from '../../../icons/MoveDownIcon/MoveDownIcon';
+import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
+import MoveUpIcon from '../../../icons/ScriptQueue/MoveUpIcon/MoveUpIcon';
+import MoveDownIcon from '../../../icons/ScriptQueue/MoveDownIcon/MoveDownIcon';
 
 export default class WaitingScript extends PureComponent {
   static propTypes = {
