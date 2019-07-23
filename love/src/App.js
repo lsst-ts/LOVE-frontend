@@ -23,21 +23,28 @@ class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
-    getAndValidateTokenFromStorage: PropTypes.func,
-    async: PropTypes.func,
     token: PropTypes.string
   };
 
+  static defaultProps = {
+    location: null,
+    validateToken: () => {},
+    token: null
+  };
+
   componentDidMount = () => {
-    this.props.getAndValidateTokenFromStorage();
+    console.log('DID MOUNT this.props.token: ', this.props.token);
+    this.props.validateToken();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    console.log('UPDATE this.props.token: ', this.props.token);
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }
   };
   render() {
+    console.log('RENDER this.props.token: ', this.props.token);
     return (
       <div className="App">
         <Switch>
