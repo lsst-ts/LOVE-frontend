@@ -2,11 +2,16 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
 import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
-import styles from './CurrentScript.module.css';
 import scriptStyles from '../Scripts.module.css';
+import styles from './CurrentScript.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
+import { hasCommandPrivileges } from '../../../../Config';
+import Button from '../../../GeneralPurpose/Button/Button';
+import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
+import MoveUpIcon from '../../../icons/ScriptQueue/MoveUpIcon/MoveUpIcon';
+import MoveDownIcon from '../../../icons/ScriptQueue/MoveDownIcon/MoveDownIcon';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -30,6 +35,10 @@ export default class CurrentScript extends Component {
     timestamp: PropTypes.number,
     /** Heartbeat data with number of consecutive lost heartbeats and last received timestamp */
     heartbeatData: PropTypes.object,
+    /** Function called to stop a script */
+    stopScript: PropTypes.func,
+    /** Function called when the context menu button is clicked */
+    onClickContextMenu: PropTypes.func,
   };
 
   static defaultProps = {
@@ -42,6 +51,7 @@ export default class CurrentScript extends Component {
     estimatedTime: 0,
     timestampRunStart: 0,
     heartbeatData: {},
+    stopScript: () => 0,
   };
 
   constructor(props) {
@@ -90,7 +100,7 @@ export default class CurrentScript extends Component {
     const fileName =
       path.lastIndexOf('.') > -1
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
-        : path.substring(path.lastIndexOf('/'));
+        : path.substring(path.lastIndexOf('/') + 1);
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
 
     let percentage = 100;
@@ -101,8 +111,8 @@ export default class CurrentScript extends Component {
     }
     if (path === 'None') percentage = 0;
     const isValid = this.props.path !== 'None';
-    const typeTag = this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]';
-    const visibilityClass = !isValid ? styles.hidden : '';
+    const typeTag = this.props.isStandard ? 'STANDARD' : 'EXTERNAL';
+    const visibilityClass = !isValid ? scriptStyles.hidden : '';
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
     let heartbeatStatus = 'unknown';
@@ -118,88 +128,140 @@ export default class CurrentScript extends Component {
 
     return (
       <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
-        <div className={styles.currentScriptContainer} onClick={this.onClick}>
-          <div className={styles.topContainer}>
-            <div>
-              <div className={[scriptStyles.externalContainer, visibilityClass].join(' ')}>
-                <span className={scriptStyles.externalText}>{typeTag}</span>
-              </div>
-              {this.props.index !== undefined && (
-                <div className={styles.indexContainer}>
-                  <span className={styles.indexLabel}>Index: </span>
-                  <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>{this.props.index}</span>
+        <div>
+          <div className={styles.currentScriptContainer} onClick={this.onClick}>
+            <div className={styles.topContainer}>
+              <div className={styles.topContainerLeft}>
+                <div className={[scriptStyles.scriptInfoContainer, visibilityClass].join(' ')}>
+                  <div className={scriptStyles.heartBeatContainer}>
+                    <HeartbeatIcon
+                      status={heartbeatStatus}
+                      title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
+                    />
+                  </div>
+                  {this.props.index !== undefined && (
+                    <div className={styles.indexContainer}>
+                      <span className={scriptStyles.indexLabel}>salIndex: </span>
+                      <span className={[styles.indexValue, scriptStyles.highlighted].join(' ')}>
+                        {this.props.index}{' '}
+                      </span>
+                    </div>
+                  )}
+                  {typeTag !== '' && (
+                    <>
+                      <span className={scriptStyles.externalSeparator}>{' - '}</span>
+                      <span className={scriptStyles.externalText} title={`${typeTag} script`}>
+                        {`[${typeTag.toUpperCase()}]`}
+                      </span>
+                    </>
+                  )}
                 </div>
-              )}
-              <div className={scriptStyles.pathTextContainer}>
-                <span className={scriptStyles.pathText}>{fileFolder}</span>
-                <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-                <span className={scriptStyles.pathText}>{fileExtension}</span>
+
+                <div className={[scriptStyles.pathTextContainer, styles.filenameContainer].join(' ')}>
+                  <span className={scriptStyles.pathText}>{fileFolder}</span>
+                  <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+                  <span className={scriptStyles.pathText}>{fileExtension}</span>
+                </div>
               </div>
-            </div>
-            <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
-              <div className={scriptStyles.heartBeatContainer}>
-                <HeartbeatIcon
-                  status={heartbeatStatus}
-                  title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
-                />
-              </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
-                  {this.props.scriptState}
-                </ScriptStatus>
-              </div>
-              <div
-                className={scriptStyles.scriptStateContainer}
-                style={{ display: 'flex', justifyContent: 'flex-end' }}
-              >
-                <ScriptStatus
-                  isCompact={this.props.isCompact}
-                  type="process"
-                  status={getStatusStyle(this.props.processState)}
+              <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
+                <div className={scriptStyles.buttonsContainer}>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => {
+                      this.props.stopScript(this.props.index);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <div className={scriptStyles.commandButton}>
+                      <div>
+                        <StopIcon />
+                      </div>
+                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                    </div>
+                  </div>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
+                  >
+                    &#8943;
+                  </div>
+                </div>
+                <div
+                  className={scriptStyles.scriptStateContainer}
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
                 >
-                  {this.props.processState}
-                </ScriptStatus>
+                  <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
+                    {this.props.scriptState}
+                  </ScriptStatus>
+                </div>
+                <div
+                  className={scriptStyles.scriptStateContainer}
+                  style={{ display: 'flex', justifyContent: 'flex-end' }}
+                >
+                  <ScriptStatus
+                    isCompact={this.props.isCompact}
+                    type="process"
+                    status={getStatusStyle(this.props.processState)}
+                  >
+                    {this.props.processState}
+                  </ScriptStatus>
+                </div>
+              </div>
+            </div>
+            <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
+              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
+            </div>
+            <div className={[styles.checkpointContainer, visibilityClass].join(' ')}>
+              <div className={styles.estimatedTimeContainer}>
+                <span className={styles.estimatedTimeLabel}>Last checkpoint: </span>
+                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {this.props.last_checkpoint}
+                </span>
+              </div>
+            </div>
+            <div className={[styles.timeContainer, visibilityClass].join(' ')}>
+              <div className={styles.estimatedTimeContainer}>
+                <span className={styles.estimatedTimeLabel}>Estimated time: </span>
+                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {estimatedTime.toFixed(2)} s
+                </span>
+              </div>
+              <div className={styles.elapsedTimeContainer}>
+                <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
+                <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+                  {elapsedTime.toFixed(2)} s
+                </span>
               </div>
             </div>
           </div>
-          <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-            <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`}/>
-          </div>
-          <div className={[styles.timeContainer, visibilityClass].join(' ')}>
-            <div className={styles.estimatedTimeContainer}>
-              <span className={styles.estimatedTimeLabel}>Estimated time: </span>
-              <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {estimatedTime.toFixed(2)} s
-              </span>
-            </div>
-            <div className={styles.elapsedTimeContainer}>
-              <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
-              <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
-                {elapsedTime.toFixed(2)} s
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className={[styles.expandedSectionWrapper, this.state.expanded && isValid ? '' : styles.hidden].join(' ')}>
-          <div className={[styles.expandedSection].join(' ')}>
-            <div className={scriptStyles.expandedTopRow}>
-              <p>Script config</p>
-              <div className={scriptStyles.uploadButtonWrapper} />
-            </div>
-            <JSONPretty
-              data={{}}
-              theme={{
-                main:
-                  'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                key: 'color:#f92672;',
-                string: 'color:#fd971f;',
-                value: 'color:#a6e22e;',
-                boolean: 'color:#ac81fe;',
-              }}
-            />
+          <div
+            className={[
+              scriptStyles.expandedSectionWrapper,
+              this.state.expanded && isValid ? '' : scriptStyles.hidden,
+            ].join(' ')}
+          >
+            {hasCommandPrivileges ? (
+              <div className={[scriptStyles.expandedSection].join(' ')}>
+                <div className={scriptStyles.expandedSubSection}>
+                  <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Description:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
+                  </div>
+                  <div className={scriptStyles.subSectionRow}>
+                    <span className={scriptStyles.subSectionLabel}>Remotes:</span>
+                    <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
+                  </div>
+                  {/* <div className={scriptStyles.subSectionTitle}>
+                  SCHEMA
+                </div> */}
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
