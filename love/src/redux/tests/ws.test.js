@@ -343,8 +343,8 @@ it.only('It should extract the summary and log messages properly from the state 
   const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 
   const expectedSummaries = {
-    ScriptQueue: [summaryScriptqueue],
-    ATDome: [summaryATDome],
+    ScriptQueue: summaryScriptqueue,
+    ATDome: summaryATDome,
   };
 
   expect(summariesDictionary).toEqual(expectedSummaries);

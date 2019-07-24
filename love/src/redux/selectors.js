@@ -134,7 +134,7 @@ export const getAllStreamsAsDictionary = (state, category, CSCsList, stream, las
   CSCsList.forEach((CSC) => {
     if (Object.keys(streams).includes(`${category}-${CSC}-1-${stream}`)) {
       dictionary[CSC] = streams[`${category}-${CSC}-1-${stream}`];
-      if (dictionary[CSC] & lastDataOnly) {
+      if (dictionary[CSC] && lastDataOnly) {
         dictionary[CSC] = dictionary[CSC][0];
       }
     }
