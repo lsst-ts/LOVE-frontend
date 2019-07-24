@@ -122,20 +122,21 @@ export const getCSCHeartbeats = (state) => {
  * Currently hardcoded to use salindex=1 only
  * @param {object} state
  * @param {string} category
- * @param {array} CSCsList: array of strings with csc names (should be [cscname, salindex] pairs soon)
+ * @param {array} CSCsSalindexList: array [cscname {string}, salindex {int}] pairs 
  * @param {string} stream
  * @param {bool} lastDataOnly: flag to return the last data only instead of the whole array, e.g., {csc: Object} instead of {csc: Array[]}
  */
-export const getAllStreamsAsDictionary = (state, category, CSCsList, stream, lastDataOnly=false) => {
-  const groupNames = CSCsList.map((CSC) => `${category}-${CSC}-1-${stream}`);
+export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, stream, lastDataOnly=false) => {
+  const groupNames = CSCsSalindexList.map( ([CSC,salindex]) => `${category}-${CSC}-${salindex}-${stream}`);
   const streams = getStreamsData(state, groupNames);
 
   const dictionary = {};
-  CSCsList.forEach((CSC) => {
-    if (Object.keys(streams).includes(`${category}-${CSC}-1-${stream}`)) {
-      dictionary[CSC] = streams[`${category}-${CSC}-1-${stream}`];
-      if (dictionary[CSC] && lastDataOnly) {
-        dictionary[CSC] = dictionary[CSC][0];
+  CSCsSalindexList.forEach(([CSC, salindex]) => {
+    const groupName = `${category}-${CSC}-${salindex}-${stream}`;
+    if (Object.keys(streams).includes(groupName)) {
+      dictionary[`${CSC}-${salindex}`] = streams[groupName];
+      if (dictionary[`${CSC}-${salindex}`] && lastDataOnly) {
+        dictionary[`${CSC}-${salindex}`] = dictionary[`${CSC}-${salindex}`][0];
       }
     }
   });
