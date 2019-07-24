@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import CSCSummary from './CSCSummary';
 import { hasFakeData, CSCSummaryHierarchy } from '../../Config';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import {getCSCHeartbeats, getAllStreamsAsDictionary} from '../../redux/selectors';
+import { getCSCHeartbeats, getAllStreamsAsDictionary } from '../../redux/selectors';
 const CSCSummaryContainer = ({ subscribeToStreams, unsubscribeToStreams, heartbeatsData, summaryStateData }) => {
   return (
     <CSCSummary
@@ -24,17 +24,16 @@ const mapStateToProps = (state) => {
     const groupsDict = CSCSummaryHierarchy[realm];
     Object.keys(groupsDict).forEach((group) => {
       groupsDict[group].forEach((csc) => {
-        cscsList.push(csc)
+        cscsList.push(csc);
       });
     });
   });
 
- 
-  const summaryStateData = getAllStreamsAsDictionary(state, 'event', cscsList, 'summaryState');
+  const summaryStateData = getAllStreamsAsDictionary(state, 'event', cscsList, 'summaryState', true);
   return {
     heartbeatsData,
-    summaryStateData
-  }
+    summaryStateData,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
