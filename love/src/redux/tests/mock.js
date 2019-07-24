@@ -1,4 +1,4 @@
-export const mockScriptQueueData = {
+export const ScriptQueueData = {
   category: 'event',
   data: [{
     csc: 'ScriptQueueState',
@@ -68,3 +68,62 @@ export const mockScriptQueueData = {
     }
   }],
 };
+
+
+export const ATDomeLogMessages = [
+  {
+    ATDomeID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: '7e3adbb4', dataType: 'String' },
+    private_sndStamp: { value: 1563975795.264409, dataType: 'Float' },
+    private_rcvStamp: { value: 1563975795.265255, dataType: 'Float' },
+    private_seqNum: { value: 1, dataType: 'Int' },
+    private_origin: { value: 32, dataType: 'Int' },
+    private_host: { value: 148518437, dataType: 'Int' },
+    level: { value: 20, dataType: 'Int' },
+    message: { value: 'Read historical data in 5.55 sec', dataType: 'String' },
+    traceback: { value: '', dataTyp: 'String' },
+    priority: { value: 0, dataType: 'Int' },
+  },
+  {
+    ATDomeID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: '7e3adbb4', dataType: 'String' },
+    private_sndStamp: { value: 1563975795.274168, dataType: 'Float' },
+    private_rcvStamp: { value: 1563975795.275134, dataType: 'Float' },
+    private_seqNum: { value: 2, dataType: 'Int' },
+    private_origin: { value: 32, dataType: 'Int' },
+    private_host: { value: 148518437, dataType: 'Int' },
+    level: { value: 30, dataType: 'Int' },
+    message: {
+      value: "Labeled config files ['sim.yaml'] not found in /home/saluser/repos/ts_config_attcs/ATDome/v1",
+      dataType: 'String',
+    },
+    traceback: { value: '', dataTyp: 'String' },
+    priority: { value: 0, dataType: 'Int' },
+  },
+  {
+    ATDomeID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: '7e3adbb4', dataType: 'String' },
+    private_sndStamp: { value: 1563975795.363577, dataType: 'Float' },
+    private_rcvStamp: { value: 1563975795.3644, dataType: 'Float' },
+    private_seqNum: { value: 3, dataType: 'Int' },
+    private_origin: { value: 32, dataType: 'Int' },
+    private_host: { value: 148518437, dataType: 'Int' },
+    level: { value: 10, dataType: 'Int' },
+    message: { value: 'connect', dataType: 'String' },
+    traceback: { value: '', dataTyp: 'String' },
+    priority: { value: 0, dataType: 'Int' },
+  },
+  {
+    ATDomeID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: '7e3adbb4', dataType: 'String' },
+    private_sndStamp: { value: 1563975795.37173, dataType: 'Float' },
+    private_rcvStamp: { value: 1563975795.37262, dataType: 'Float' },
+    private_seqNum: { value: 4, dataType: 'Int' },
+    private_origin: { value: 32, dataType: 'Int' },
+    private_host: { value: 148518437, dataType: 'Int' },
+    level: { value: 10, dataType: 'Int' },
+    message: { value: 'connected', dataType: 'String' },
+    traceback: { value: '', dataTyp: 'String' },
+    priority: { value: 0, dataType: 'Int' },
+  },
+];

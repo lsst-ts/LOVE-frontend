@@ -13,7 +13,7 @@ import {
   getCSCsLogsMessageData,
   getAllStreamsAsDictionary,
 } from '../selectors';
-import { mockScriptQueueData } from './mock';
+import * as mockData from './mock';
 
 let store, server;
 const initialState = {
@@ -210,7 +210,7 @@ it(`GIVEN 3 script heartbeats in the State,
 
   let expectedState = [];
   // Act:
-  server.send(mockScriptQueueData);
+  server.send(mockData.ScriptQueueData);
   // Assert:
   expectedState = [mockHeartbeats[0], mockHeartbeats[2]];
   let heartbeatsState = getScriptHeartbeats(store.getState(), 1);
@@ -269,7 +269,7 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
   });
 });
 
-it.only('It should extract the summary messages properly from the state', async () => {
+it.only('It should extract the summary and log messages properly from the state with the generic reshape selector', async () => {
   const summaryATDome = {
     ATDomeID: { value: 1, dataType: 'Int' },
     private_revCode: { value: 'c38fc5a2', dataType: 'String' },
@@ -296,6 +296,7 @@ it.only('It should extract the summary messages properly from the state', async 
 
   await server.connected;
   await store.dispatch(requestGroupSubscription('event-ATDome-1-summaryState'));
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
   await store.dispatch(requestGroupSubscription('event-ScriptQueue-1-summaryState'));
 
   server.send({
@@ -324,15 +325,40 @@ it.only('It should extract the summary messages properly from the state', async 
     ],
   });
 
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          logMessage: mockData.ATDomeLogMessages
+        }
+      }
+    ]
+  })
+
   const cscsList = ['ATDome', 'ScriptQueue'];
 
-  const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState');
+  const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 
-  const expected = {
-    ScriptQueue: summaryScriptqueue,
-    ATDome: summaryATDome,
+  const expectedSummaries = {
+    ScriptQueue: [summaryScriptqueue],
+    ATDome: [summaryATDome],
   };
 
-  expect(summariesDictionary).toEqual(expected);
+  expect(summariesDictionary).toEqual(expectedSummaries);
+
+  /**
+   * When some cscs dont have data the keys return undefined values
+   */
+  const logMessagesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'logMessage');
+
+  const expectedLogMessages = {
+    ATDome: mockData.ATDomeLogMessages
+  };
+
+  expect(logMessagesDictionary).toEqual(expectedLogMessages);
+
 });
 
