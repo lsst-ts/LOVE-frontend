@@ -117,21 +117,21 @@ export const getCSCHeartbeats = (state) => {
 };
 
 /**
- * Returns a dictionary with summaryState for each csc in the cscsList if found in the state tree.
+ * Returns a dictionary with summaryState for each csc in the CSCsList if found in the state tree.
  * It is indexed by csc name instead of groupname.
  * @param {object} state
- * @param {array} cscsList
+ * @param {array} CSCsList
  */
-export const getCSCsSummaryStates = (state, cscsList) => {
-  const groupNames = cscsList.map((csc) => `event-${csc}-1-summaryState`);
+export const getCSCsSummaryStates = (state, CSCsList) => {
+  const groupNames = CSCsList.map((csc) => `event-${csc}-1-summaryState`);
   const streams = getStreamsData(state, groupNames);
 
   const summariesDictionary = {};
-  cscsList.forEach((csc) => {
-    if (Object.keys(streams).includes(`event-${csc}-1-summaryState`)) {
-      summariesDictionary[csc] = streams[`event-${csc}-1-summaryState`];
-      if(summariesDictionary[csc]){
-        summariesDictionary[csc] = summariesDictionary[csc][0];
+  CSCsList.forEach((CSC) => {
+    if (Object.keys(streams).includes(`event-${CSC}-1-summaryState`)) {
+      summariesDictionary[CSC] = streams[`event-${CSC}-1-summaryState`];
+      if(summariesDictionary[CSC]){
+        summariesDictionary[CSC] = summariesDictionary[CSC][0];
       }
     }
   });
