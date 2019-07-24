@@ -124,8 +124,9 @@ export const getCSCHeartbeats = (state) => {
  * @param {string} category
  * @param {array} CSCsList: array of strings with csc names (should be [cscname, salindex] pairs soon)
  * @param {string} stream
+ * @param {bool} lastDataOnly: flag to return the last data only instead of the whole array, e.g., {csc: Object} instead of {csc: Array[]}
  */
-export const getAllStreamsAsDictionary = (state, category, CSCsList, stream) => {
+export const getAllStreamsAsDictionary = (state, category, CSCsList, stream, lastDataOnly=false) => {
   const groupNames = CSCsList.map((CSC) => `${category}-${CSC}-1-${stream}`);
   const streams = getStreamsData(state, groupNames);
 
@@ -133,7 +134,7 @@ export const getAllStreamsAsDictionary = (state, category, CSCsList, stream) => 
   CSCsList.forEach((CSC) => {
     if (Object.keys(streams).includes(`${category}-${CSC}-1-${stream}`)) {
       dictionary[CSC] = streams[`${category}-${CSC}-1-${stream}`];
-      if (dictionary[CSC]) {
+      if (dictionary[CSC] & lastDataOnly) {
         dictionary[CSC] = dictionary[CSC][0];
       }
     }
