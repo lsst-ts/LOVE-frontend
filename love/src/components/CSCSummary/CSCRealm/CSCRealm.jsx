@@ -15,6 +15,7 @@ export default class CSCRealm extends Component {
     clearCSCLogMessages: PropTypes.func,
     heartbeatsData: PropTypes.arrayOf(PropTypes.object),
     summaryStateData: PropTypes.object,
+    logMessageData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -28,6 +29,7 @@ export default class CSCRealm extends Component {
     clearCSCLogMessages: () => 0,
     heartbeatsData: [],
     summaryStateData: {},
+    logMessageData: {},
   };
 
   render() {
@@ -49,6 +51,7 @@ export default class CSCRealm extends Component {
                 hierarchy={this.props.hierarchy}
                 clearCSCErrorCodes={this.props.clearCSCErrorCodes}
                 clearCSCLogMessages={this.props.clearCSCLogMessages}
+                logMessageData={this.props.logMessageData}
               />
             </div>
           );

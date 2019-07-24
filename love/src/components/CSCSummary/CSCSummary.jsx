@@ -10,8 +10,9 @@ export default class CSCSummary extends Component {
   static propTypes = {
     hierarchy: PropTypes.object,
     heartbeatsData: PropTypes.arrayOf(PropTypes.object),
-    summaryStateData: PropTypes.object
-  }
+    summaryStateData: PropTypes.object,
+    logMessageData: PropTypes.object,
+  };
   static defaultProps = {
     hierarchy: {
       'Aux Telescope': {
@@ -25,7 +26,8 @@ export default class CSCSummary extends Component {
         'CSC Group 1': [],
       },
       heartbeatsData: [],
-      summaryStateData: {}
+      summaryStateData: {},
+      logMessageData: {},
     },
   };
   constructor(props) {
@@ -120,11 +122,11 @@ export default class CSCSummary extends Component {
       //     logMessage: [
       //       {
       //         level: 40,
-      //         message: `long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
+      //         message: `long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
       //           long long long error message`,
       //         traceback: 'traceback1',
       //         timestamp: '2018/04/25 20:03:10',
@@ -137,9 +139,9 @@ export default class CSCSummary extends Component {
       //       },
       //       {
       //         level: 20,
-      //         message: `info message info message info message info message info message 
-      //           info message info message info message info message info message info message 
-      //           info message info message info message info message info message info message 
+      //         message: `info message info message info message info message info message
+      //           info message info message info message info message info message info message
+      //           info message info message info message info message info message info message
       //           info message info message info message`,
       //         traceback: 'traceback1',
       //         timestamp: '2018/04/25 20:03:12',
@@ -152,8 +154,8 @@ export default class CSCSummary extends Component {
       //       },
       //       {
       //         level: 40,
-      //         message: `error message error message error message error message error message 
-      //         error message error message error message error message error message error message 
+      //         message: `error message error message error message error message error message
+      //         error message error message error message error message error message error message
       //         error message error message error message error message error message error message`,
       //         traceback: '',
       //         timestamp: '2018/04/25 20:03:14',
@@ -161,8 +163,8 @@ export default class CSCSummary extends Component {
       //       {
       //         level: 40,
       //         message: 'error message',
-      //         traceback: `traceback traceback traceback traceback traceback traceback traceback 
-      //         traceback traceback traceback traceback traceback traceback traceback traceback 
+      //         traceback: `traceback traceback traceback traceback traceback traceback traceback
+      //         traceback traceback traceback traceback traceback traceback traceback traceback
       //         traceback traceback traceback `,
       //         timestamp: '2018/04/25 20:03:15',
       //       },
@@ -258,11 +260,11 @@ export default class CSCSummary extends Component {
       //       },
       //       {
       //         level: 40,
-      //         message: `long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
-      //           long long long long long long long long long long long long long 
+      //         message: `long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
+      //           long long long long long long long long long long long long long
       //           long long long error message`,
       //         traceback: 'traceback1',
       //         timestamp: '2018/04/25 20:03:23',
@@ -444,7 +446,6 @@ export default class CSCSummary extends Component {
   };
 
   render() {
-
     return (
       <Panel title="CSC Summary" className={styles.panel}>
         <div className={styles.CSCSummaryContainer}>
@@ -455,6 +456,7 @@ export default class CSCSummary extends Component {
                   name={realm}
                   data={this.state.data}
                   heartbeatsData={this.props.heartbeatsData}
+                  logMessageData={this.props.logMessageData}
                   summaryStateData={this.props.summaryStateData}
                   groups={this.props.hierarchy[realm]}
                   onCSCClick={this.toggleCSCExpansion}
