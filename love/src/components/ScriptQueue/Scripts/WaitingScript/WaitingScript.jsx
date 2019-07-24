@@ -1,11 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import JSONPretty from 'react-json-pretty';
 import styles from './WaitingScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
-import Button from '../../../GeneralPurpose/Button/Button';
 import { hasCommandPrivileges } from '../../../../Config';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';

@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import JSONPretty from 'react-json-pretty';
 import styles from './AvailableScript.module.css';
-import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import scriptStyles from '../Scripts.module.css';
-import { hasCommandPrivileges } from '../../../../Config';
 import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 
 export default class AvailableScript extends PureComponent {

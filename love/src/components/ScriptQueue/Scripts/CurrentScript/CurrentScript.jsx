@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import JSONPretty from 'react-json-pretty';
 import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
 import scriptStyles from '../Scripts.module.css';
 import styles from './CurrentScript.module.css';
@@ -8,10 +7,7 @@ import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import { hasCommandPrivileges } from '../../../../Config';
-import Button from '../../../GeneralPurpose/Button/Button';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
-import MoveUpIcon from '../../../icons/ScriptQueue/MoveUpIcon/MoveUpIcon';
-import MoveDownIcon from '../../../icons/ScriptQueue/MoveDownIcon/MoveDownIcon';
 
 export default class CurrentScript extends Component {
   static propTypes = {
