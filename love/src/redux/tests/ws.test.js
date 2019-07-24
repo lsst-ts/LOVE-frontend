@@ -338,13 +338,13 @@ it.only('It should extract the summary and log messages properly from the state 
     ]
   })
 
-  const cscsList = ['ATDome', 'ScriptQueue'];
+  const cscsList = [['ATDome',1], ['ScriptQueue',1]];
 
   const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 
   const expectedSummaries = {
-    ScriptQueue: summaryScriptqueue,
-    ATDome: summaryATDome,
+    'ScriptQueue-1': summaryScriptqueue,
+    'ATDome-1': summaryATDome,
   };
 
   expect(summariesDictionary).toEqual(expectedSummaries);
@@ -355,7 +355,7 @@ it.only('It should extract the summary and log messages properly from the state 
   const logMessagesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'logMessage');
 
   const expectedLogMessages = {
-    ATDome: mockData.ATDomeLogMessages
+    'ATDome-1': mockData.ATDomeLogMessages
   };
 
   expect(logMessagesDictionary).toEqual(expectedLogMessages);
