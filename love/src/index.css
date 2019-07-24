@@ -17,7 +17,7 @@ body {
   --secondary-font-color: hsl(201, 15%, 54%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3);/*Transparent*/
   --tertiary-font-color: hsl(201, 15%, 54%);
-  --highlighted-font-color: hsl(0, 0%, 100%);
+  --highlighted-font-color: hsl(0, 0%, 90%);
 
   --base-background-color: hsl(205, 40%, 8%);
   --secondary-background-color: hsl(200, 40%, 10%);
@@ -34,7 +34,7 @@ body {
   --second-quinary-background-color: hsl(201, 22%, 40%);
   --second-senary-background-color: hsl(201, 40%, 81%);
   --second-senary-background-dimmed-color: hsl(201, 40%, 81%, 0.3);
-  --second-base-font-color: hsl(240, 4%, 90%, 0.6);
+  --second-base-font-color: hsl(240, 4%, 90%, 0.7);
   
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
