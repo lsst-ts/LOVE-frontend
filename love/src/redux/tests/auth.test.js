@@ -5,9 +5,9 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 
-import { fetchToken, validateToken, logout } from '../actions/auth';
+import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
-import { getToken, getTokenStatus } from '../selectors';
+import { getToken, getUsername, getTokenStatus, getPermCmdExec } from '../selectors';
 
 let store;
 beforeEach(() => {
@@ -32,6 +32,12 @@ describe('GIVEN the token does not exist in localStorage', () => {
       url,
       {
         token: newToken,
+        user_data: {
+          username: 'my-user',
+        },
+        permissions: {
+          execute_commands: true
+        }
       },
       new Headers({
         Accept: 'application/json',
@@ -40,14 +46,14 @@ describe('GIVEN the token does not exist in localStorage', () => {
       }),
     );
     // Act:
-    await store.dispatch(fetchToken('asdf', 'asdf'));
+    await store.dispatch(fetchToken('asdds', 'asdf'));
     // Assert:
     const newState = store.getState();
-    const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(getToken(newState)).toEqual(newToken);
+    expect(getUsername(newState)).toEqual('my-user');
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
-    expect(storedUsername).toEqual('asdf');
+    expect(getPermCmdExec(newState)).toEqual(true);
     expect(storedToken).toEqual(newToken);
   });
 
@@ -65,11 +71,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
     await store.dispatch(fetchToken('asdf', 'asdf'));
     // Assert:
     const newState = store.getState();
-    const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(getToken(newState)).toBeNull();
     expect(getTokenStatus(newState)).toEqual(tokenStates.REJECTED);
-    expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
   });
 });
@@ -78,10 +82,11 @@ describe('GIVEN the token exists in localStorage', () => {
   let initialToken, url;
 
   beforeEach(async () => {
-    localStorage.setItem('LOVE-TOKEN', '"love-token"');
-    await store.dispatch(fetchToken('asdf', 'asdf'));
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
     initialToken = getToken(store.getState());
-    expect(initialToken).toEqual('"love-token"');
+    expect(initialToken).toEqual(token);
     url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
   });
 
@@ -96,6 +101,12 @@ describe('GIVEN the token exists in localStorage', () => {
       url,
       {
         detail: 'Token is valid',
+        user_data: {
+          username: 'my-user',
+        },
+        permissions: {
+          execute_commands: true
+        }
       },
       ManagerInterface.getHeaders(),
     );
@@ -106,6 +117,8 @@ describe('GIVEN the token exists in localStorage', () => {
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toEqual(initialToken);
     expect(storedToken).toEqual(initialToken);
+    expect(getUsername(store.getState())).toEqual('my-user');
+    expect(getPermCmdExec(store.getState())).toEqual(true);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 
@@ -122,10 +135,8 @@ describe('GIVEN the token exists in localStorage', () => {
     await store.dispatch(validateToken());
     // Assert:
     const newToken = getToken(store.getState());
-    const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toBeNull();
-    expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.ERROR);
   });
@@ -144,10 +155,8 @@ describe('GIVEN the token exists in localStorage', () => {
       await store.dispatch(validateToken());
       // Assert:
       const newToken = getToken(store.getState());
-      const storedUsername = localStorage.getItem('LOVE-USERNAME');
       const storedToken = localStorage.getItem('LOVE-TOKEN');
       expect(newToken).toBeNull();
-      expect(storedUsername).toBeNull();
       expect(storedToken).toBeNull();
       expect(getTokenStatus(store.getState())).toEqual(tokenStates.EXPIRED);
     });
@@ -167,10 +176,8 @@ describe('GIVEN the token exists in localStorage', () => {
     await store.dispatch(logout());
     // Assert:
     const token = getToken(store.getState());
-    const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(token).toBeNull();
-    expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVED_REMOTELY);
   });
@@ -189,10 +196,8 @@ describe('GIVEN the token exists in localStorage', () => {
     await store.dispatch(logout());
     // ASsert:
     const token = getToken(store.getState());
-    const storedUsername = localStorage.getItem('LOVE-USERNAME');
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(token).toBeNull();
-    expect(storedUsername).toBeNull();
     expect(storedToken).toBeNull();
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVE_ERROR);
   });

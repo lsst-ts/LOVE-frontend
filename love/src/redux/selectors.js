@@ -1,5 +1,9 @@
 export const getToken = (state) => state.auth.token;
 
+export const getUsername = (state) => state.auth.username;
+
+export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
+
 export const getTokenStatus = (state) => state.auth.status;
 
 export const getStreamsData = (state, groupNames) => {
@@ -89,9 +93,9 @@ export const getScriptQueueState = (state, salindex) => {
 
 /**
  * Returns all heartbeats in the state that belong to a scriptqueue of specific salindex.
- * 
- * @param {obj} state 
- * @param {integer} salindex 
+ *
+ * @param {obj} state
+ * @param {integer} salindex
  */
 export const getScriptHeartbeats = (state, salindex) => {
   return state.heartbeats.scripts.filter(heartbeat => heartbeat.queueSalIndex === salindex);
