@@ -421,7 +421,10 @@ export default class ScriptQueue extends Component {
     return (
       <Panel title="Script Queue">
         <div
-          onClick={() => {
+          onMouseDown={() => {
+            this.setState({ isContextMenuOpen: false });
+          }}
+          onScroll={() => {
             this.setState({ isContextMenuOpen: false });
           }}
           className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}

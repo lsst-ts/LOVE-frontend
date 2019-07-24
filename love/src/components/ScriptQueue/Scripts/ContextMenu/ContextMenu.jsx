@@ -29,6 +29,7 @@ export default class ContextMenu extends Component {
           className={styles.container}
           style={{ left: this.props.contextMenuData.right, top: this.props.contextMenuData.bottom }}
           onClick={(e) => e.stopPropagation()}
+          onMouseDown={(e) => e.stopPropagation()}
         >
           {this.props.options.map((child, index) => {
             return (
