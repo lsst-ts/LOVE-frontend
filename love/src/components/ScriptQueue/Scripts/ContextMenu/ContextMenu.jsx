@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './ContextMenu.module.css';
-import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 
 export default class ContextMenu extends Component {
   static propTypes = {
