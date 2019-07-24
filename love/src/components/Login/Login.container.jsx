@@ -19,9 +19,6 @@ const LoginContainer = ({ token, tokenStatus, fetchToken, emptyToken }) => {
 const mapStateToProps = (state) => {
   const tokenStatus = getTokenStatus(state);
   const token = getToken(state);
-
-  console.log(tokenStatus);
-
   return {
     token: getToken(state),
     tokenStatus: tokenStatus,

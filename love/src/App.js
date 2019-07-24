@@ -26,6 +26,12 @@ class App extends Component {
     token: PropTypes.string
   };
 
+  static defaultProps = {
+    location: null,
+    validateToken: () => {},
+    token: null
+  };
+
   componentDidMount = () => {
     this.props.validateToken();
   };
