@@ -33,18 +33,15 @@ class App extends Component {
   };
 
   componentDidMount = () => {
-    console.log('DID MOUNT this.props.token: ', this.props.token);
     this.props.validateToken();
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    console.log('UPDATE this.props.token: ', this.props.token);
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }
   };
   render() {
-    console.log('RENDER this.props.token: ', this.props.token);
     return (
       <div className="App">
         <Switch>

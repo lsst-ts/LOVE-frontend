@@ -16,7 +16,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 const mapStateToProps = (state) => {
-  console.log('MAP STATE TO PROPS getToken(state): ', getToken(state));
   return {
     token: getToken(state),
   };
