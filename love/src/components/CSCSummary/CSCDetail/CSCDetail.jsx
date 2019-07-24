@@ -82,7 +82,8 @@ export default class CSCDetail extends Component {
   render() {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value: 0 ;
-
+    console.log('name', this.props.name)
+    console.log('group', this.props.group)
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
     let heartbeatStatus = 'unknown';
@@ -106,14 +107,14 @@ export default class CSCDetail extends Component {
             {summaryState.char}
           </span>
         </div>
-        <div className={styles.middleSection} title={this.props.name}>
-          {this.props.name}
+        <div className={styles.middleSection} title={this.props.name+'-'+this.props.salindex}>
+          {this.props.name+'-'+this.props.salindex}
         </div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
             <HeartbeatIcon
               status={heartbeatStatus}
-              title={`${this.props.name} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
+              title={`${this.props.name+'-'+this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
             />
           </div>
         </div>

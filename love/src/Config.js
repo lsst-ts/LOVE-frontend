@@ -4,10 +4,7 @@ export const hasCommandPrivileges = true;
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
-    'CSC Group 1': [
-      'ScriptQueue',
-      'ATDome'
-    ],
+    'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 }],
   },
   'Main Telescope': {
     'CSC Group 1': [],
@@ -61,7 +58,6 @@ export const stateToStyleCamera = {
   END_READOUT: 'ok',
   END_TELEMETRY: 'ok',
 };
-
 
 // Dome and mount view
 export const domeAzimuthStateMap = {
@@ -128,4 +124,4 @@ export const stateToStyleDomeAndMount = {
   'NOT MOVING': 'ok',
   'MOVING CW': 'running',
   'MOVING CCW': 'running',
-}
+};

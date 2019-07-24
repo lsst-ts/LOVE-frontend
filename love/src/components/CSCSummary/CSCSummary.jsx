@@ -16,10 +16,10 @@ export default class CSCSummary extends Component {
   static defaultProps = {
     hierarchy: {
       'Aux Telescope': {
-        'CSC Group 1': ['ScriptQueue', 'ATDome'],
+        'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 }],
       },
       'Main Telescope': {
-        'CSC Group 1': ['CSC4'],
+        'CSC Group 1': [{ name: 'CSC4', salindex: 0 }],
         'CSC Group 2': [],
       },
       Observatory: {

@@ -269,7 +269,7 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
   });
 });
 
-it.only('It should extract the summary and log messages properly from the state with the generic reshape selector', async () => {
+it('It should extract the summary and log messages properly from the state with the generic reshape selector', async () => {
   const summaryATDome = {
     ATDomeID: { value: 1, dataType: 'Int' },
     private_revCode: { value: 'c38fc5a2', dataType: 'String' },
