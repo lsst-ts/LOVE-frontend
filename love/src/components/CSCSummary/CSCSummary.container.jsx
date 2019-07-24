@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import CSCSummary from './CSCSummary';
 import { hasFakeData, CSCSummaryHierarchy } from '../../Config';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import {getCSCHeartbeats, getCSCsSummaryStates} from '../../redux/selectors';
+import {getCSCHeartbeats, getAllStreamsAsDictionary} from '../../redux/selectors';
 const CSCSummaryContainer = ({ subscribeToStreams, unsubscribeToStreams, heartbeatsData, summaryStateData }) => {
   return (
     <CSCSummary
@@ -30,7 +30,7 @@ const mapStateToProps = (state) => {
   });
 
  
-  const summaryStateData = getCSCsSummaryStates(state, cscsList)
+  const summaryStateData = getAllStreamsAsDictionary(state, 'event', cscsList, 'summaryState');
   return {
     heartbeatsData,
     summaryStateData

@@ -117,24 +117,27 @@ export const getCSCHeartbeats = (state) => {
 };
 
 /**
- * Returns a dictionary with summaryState for each csc in the CSCsList if found in the state tree.
- * It is indexed by csc name instead of groupname.
+ * Reshape the output of getStreamsData into a dictionary indexed by "csc-salindex" for all "csc-salindex" pairs
+ * for which a subscription to a given category and stream exists in the state.
+ * Currently hardcoded to use salindex=1 only
  * @param {object} state
- * @param {array} CSCsList
+ * @param {string} category
+ * @param {array} CSCsList: array of strings with csc names (should be [cscname, salindex] pairs soon)
+ * @param {string} stream
  */
-export const getCSCsSummaryStates = (state, CSCsList) => {
-  const groupNames = CSCsList.map((csc) => `event-${csc}-1-summaryState`);
+export const getAllStreamsAsDictionary = (state, category, CSCsList, stream) => {
+  const groupNames = CSCsList.map((CSC) => `${category}-${CSC}-1-${stream}`);
   const streams = getStreamsData(state, groupNames);
 
-  const summariesDictionary = {};
+  const dictionary = {};
   CSCsList.forEach((CSC) => {
-    if (Object.keys(streams).includes(`event-${CSC}-1-summaryState`)) {
-      summariesDictionary[CSC] = streams[`event-${CSC}-1-summaryState`];
-      if(summariesDictionary[CSC]){
-        summariesDictionary[CSC] = summariesDictionary[CSC][0];
+    if (Object.keys(streams).includes(`${category}-${CSC}-1-${stream}`)) {
+      dictionary[CSC] = streams[`${category}-${CSC}-1-${stream}`];
+      if (dictionary[CSC]) {
+        dictionary[CSC] = dictionary[CSC][0];
       }
     }
   });
 
-  return summariesDictionary;
+  return dictionary;
 };

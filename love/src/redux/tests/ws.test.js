@@ -5,7 +5,14 @@ import thunkMiddleware from 'redux-thunk';
 import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
 
 import { SALCommandStatus } from '../actions/ws';
-import { getLastSALCommand, getScriptHeartbeats, getCSCHeartbeats, getCSCsSummaryStates } from '../selectors';
+import {
+  getLastSALCommand,
+  getScriptHeartbeats,
+  getCSCHeartbeats,
+  getCSCsSummaryStates,
+  getCSCsLogsMessageData,
+  getAllStreamsAsDictionary,
+} from '../selectors';
 import { mockScriptQueueData } from './mock';
 
 let store, server;
@@ -262,7 +269,7 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
   });
 });
 
-it('It should extract the summary messages properly from the state', async () => {
+it.only('It should extract the summary messages properly from the state', async () => {
   const summaryATDome = {
     ATDomeID: { value: 1, dataType: 'Int' },
     private_revCode: { value: 'c38fc5a2', dataType: 'String' },
@@ -317,14 +324,15 @@ it('It should extract the summary messages properly from the state', async () =>
     ],
   });
 
-const cscsList = ['ATDome', 'ScriptQueue'];
+  const cscsList = ['ATDome', 'ScriptQueue'];
 
-  const summariesDictionary = getCSCsSummaryStates(store.getState(), cscsList)
+  const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState');
 
   const expected = {
-    'ScriptQueue': summaryScriptqueue,
-    'ATDome': summaryATDome
-  }
+    ScriptQueue: summaryScriptqueue,
+    ATDome: summaryATDome,
+  };
 
   expect(summariesDictionary).toEqual(expected);
 });
+
