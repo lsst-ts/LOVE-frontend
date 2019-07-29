@@ -49,6 +49,8 @@ export default class CSCGroup extends Component {
           onCSCClick={this.props.onCSCClick}
           hierarchy={this.props.hierarchy}
           clearCSCErrorCodes={this.props.clearCSCErrorCodes}
+          summaryStateData={this.props.summaryStateData}
+          logMessageData={this.props.logMessageData}
         />
       </div>
     ) : (
@@ -57,9 +59,10 @@ export default class CSCGroup extends Component {
           realm={selectedCSC.realm}
           group={selectedCSC.group}
           name={selectedCSC.csc}
+          salindex={selectedCSC.salindex}
           data={this.props.data}
-          summaryStateData={this.props.summaryStateData[selectedCSC.csc]}
-          logMessageData={this.props.logMessageData[selectedCSC]}
+          summaryStateData={this.props.summaryStateData[`${selectedCSC.csc}-${selectedCSC.salindex}`]}
+          logMessageData={this.props.logMessageData[`${selectedCSC.csc}-${selectedCSC.salindex}`]}
           onCSCClick={this.props.onCSCClick}
           clearCSCErrorCodes={this.props.clearCSCErrorCodes}
           clearCSCLogMessages={this.props.clearCSCLogMessages}
@@ -69,7 +72,7 @@ export default class CSCGroup extends Component {
   };
 
   render() {
-    console.log('group>summary', this.props.summaryStateData)
+
     let selectedCSC = this.props.selectedCSCs.filter((data) => {
       return data.realm === this.props.realm && data.group === this.props.name;
     });
