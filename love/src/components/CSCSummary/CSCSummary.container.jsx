@@ -10,6 +10,7 @@ const CSCSummaryContainer = ({
   heartbeatsData,
   summaryStateData,
   logMessageData,
+  errorCodeData,
 }) => {
   return (
     <CSCSummary
@@ -19,6 +20,7 @@ const CSCSummaryContainer = ({
       heartbeatsData={heartbeatsData}
       summaryStateData={summaryStateData}
       logMessageData={logMessageData}
+      errorCodeData={errorCodeData}
     />
   );
 };
@@ -38,11 +40,12 @@ const mapStateToProps = (state) => {
 
   const summaryStateData = getAllStreamsAsDictionary(state, 'event', cscsList, 'summaryState', true);
   const logMessageData = getAllStreamsAsDictionary(state, 'event', cscsList, 'logMessage');
-
+  const errorCodeData =  getAllStreamsAsDictionary(state, 'event', cscsList, 'errorCode');
   return {
     heartbeatsData,
     summaryStateData,
     logMessageData,
+    errorCodeData
   };
 };
 

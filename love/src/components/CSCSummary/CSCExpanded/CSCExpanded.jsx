@@ -14,12 +14,12 @@ export default class CSCExpanded extends PureComponent {
     salindex: PropTypes.number,
     group: PropTypes.string,
     realm: PropTypes.string,
-    data: PropTypes.object,
     onCSCClick: PropTypes.func,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.array,
+    errorCodeData: PropTypes.array,
   };
 
   static defaultProps = {
@@ -27,12 +27,12 @@ export default class CSCExpanded extends PureComponent {
     salindex: undefined,
     group: '',
     realm: '',
-    data: {},
     onCSCClick: () => 0,
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
     summaryStateData: undefined,
     logMessageData: [],
+    errorCodeData: []
   };
 
   constructor(props) {
@@ -95,7 +95,6 @@ export default class CSCExpanded extends PureComponent {
   };
 
   render() {
-    const selfData = this.props.data[this.props.name];
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
@@ -106,7 +105,9 @@ export default class CSCExpanded extends PureComponent {
             <div className={styles.breadcrumContainer}>
               <div
                 className={styles.backArrowIconWrapper}
-                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)}
+                onClick={() =>
+                  this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)
+                }
               >
                 <BackArrowIcon />
               </div>
@@ -131,30 +132,30 @@ export default class CSCExpanded extends PureComponent {
             </div>
           </div>
         </div>
-        {selfData && selfData.errorCode ? (
+        {this.props.errorCodeData.length>0 ? (
           <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
             <div className={styles.logContainerTopBar}>
               <div>ERROR CODE</div>
               <div>
                 <Button
                   size="extra-small"
-                  onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name)}
+                  onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name, this.props.salindex)}
                 >
                   CLEAR
                 </Button>
               </div>
             </div>
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
-              {selfData.errorCode.map((msg) => {
+              {this.props.errorCodeData.map((msg) => {
                 return (
                   <div key={msg.timestamp} className={styles.logMessage}>
-                    <div className={styles.errorCode} title={`Error code ${msg.errorCode}`}>
-                      {msg.errorCode}
+                    <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
+                      {msg.errorCode.value}
                     </div>
                     <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp}>{msg.timestamp}</div>
-                      <div className={styles.messageText}>{msg.errorReport}</div>
-                      <div className={styles.messageTraceback}>{msg.traceback}</div>
+                      <div className={styles.timestamp}>{msg.private_rcvStamp.value}</div>
+                      <div className={styles.messageText}>{msg.errorReport.value}</div>
+                      <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                     </div>
                   </div>
                 );
@@ -168,7 +169,7 @@ export default class CSCExpanded extends PureComponent {
             <div>
               <Button
                 size="extra-small"
-                onClick={() => this.props.clearCSCLogMessages(this.props.realm, this.props.group, this.props.name)}
+                onClick={() => this.props.clearCSCLogMessages(this.props.realm, this.props.group, this.props.name, this.props.salindex)}
               >
                 CLEAR
               </Button>

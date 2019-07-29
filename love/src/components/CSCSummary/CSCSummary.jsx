@@ -12,6 +12,7 @@ export default class CSCSummary extends Component {
     heartbeatsData: PropTypes.arrayOf(PropTypes.object),
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.object,
+    errorCodeData: PropTypes.object,
   };
   static defaultProps = {
     hierarchy: {
@@ -28,6 +29,7 @@ export default class CSCSummary extends Component {
       heartbeatsData: [],
       summaryStateData: {},
       logMessageData: {},
+      errorCodeData: {}
     },
   };
   constructor(props) {
@@ -447,6 +449,7 @@ export default class CSCSummary extends Component {
   };
 
   render() {
+
     return (
       <Panel title="CSC Summary" className={styles.panel}>
         <div className={styles.CSCSummaryContainer}>
@@ -457,8 +460,9 @@ export default class CSCSummary extends Component {
                   name={realm}
                   data={this.state.data}
                   heartbeatsData={this.props.heartbeatsData}
-                  logMessageData={this.props.logMessageData}
                   summaryStateData={this.props.summaryStateData}
+                  logMessageData={this.props.logMessageData}
+                  errorCodeData={this.props.errorCodeData}
                   groups={this.props.hierarchy[realm]}
                   onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}

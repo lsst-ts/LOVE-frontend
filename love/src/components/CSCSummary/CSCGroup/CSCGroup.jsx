@@ -19,6 +19,7 @@ export default class CSCGroup extends Component {
     heartbeatsData: PropTypes.arrayOf(PropTypes.object),
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.object,
+    errorCodeData: PropTypes.object
   };
 
   static defaultProps = {
@@ -34,6 +35,7 @@ export default class CSCGroup extends Component {
     heartbeatsData: [],
     summaryStateData: {},
     logMessageData: {},
+    errorCodeData: {},
   };
 
   renderExpandedView = (selectedCSC) => {
@@ -66,6 +68,7 @@ export default class CSCGroup extends Component {
           onCSCClick={this.props.onCSCClick}
           clearCSCErrorCodes={this.props.clearCSCErrorCodes}
           clearCSCLogMessages={this.props.clearCSCLogMessages}
+          errorCodeData={this.props.errorCodeData[`${selectedCSC.csc}-${selectedCSC.salindex}`]}
         />
       </div>
     );
