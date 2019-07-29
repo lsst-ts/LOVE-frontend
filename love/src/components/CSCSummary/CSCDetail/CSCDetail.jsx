@@ -82,8 +82,6 @@ export default class CSCDetail extends Component {
   render() {
     const selfData = this.props.data[this.props.name];
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value: 0 ;
-    console.log('name', this.props.name)
-    console.log('group', this.props.group)
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
     let heartbeatStatus = 'unknown';
@@ -99,7 +97,7 @@ export default class CSCDetail extends Component {
 
     return (
       <div
-        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
+        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
         className={styles.CSCDetailContainer}
       >
         <div className={[styles.leftSection, summaryState.class].join(' ')}>

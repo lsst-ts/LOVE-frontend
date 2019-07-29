@@ -406,20 +406,21 @@ export default class CSCSummary extends Component {
     });
   };
 
-  toggleCSCExpansion = (realm, group, csc) => {
+  toggleCSCExpansion = (realm, group, csc, salindex) => {
     const newSelectedCSCs = [...this.state.selectedCSCs];
+
     for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
       const currentCSC = this.state.selectedCSCs[i];
       if (realm === currentCSC.realm && group === currentCSC.group) {
         newSelectedCSCs.splice(i, 1);
-        if (csc === currentCSC.csc) {
+        if (csc === currentCSC.csc && salindex === currentCSC.salindex) {
           this.setState({ selectedCSCs: newSelectedCSCs });
           return;
         }
       }
     }
     this.setState({
-      selectedCSCs: [...newSelectedCSCs, { realm, group, csc }],
+      selectedCSCs: [...newSelectedCSCs, { realm, group, csc, salindex }],
     });
   };
 

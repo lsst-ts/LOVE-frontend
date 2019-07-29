@@ -11,6 +11,7 @@ import Button from '../../GeneralPurpose/Button/Button';
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
     name: PropTypes.string,
+    salindex: PropTypes.number,
     group: PropTypes.string,
     realm: PropTypes.string,
     data: PropTypes.object,
@@ -23,6 +24,7 @@ export default class CSCExpanded extends PureComponent {
 
   static defaultProps = {
     name: '',
+    salindex: undefined,
     group: '',
     realm: '',
     data: {},
@@ -104,7 +106,7 @@ export default class CSCExpanded extends PureComponent {
             <div className={styles.breadcrumContainer}>
               <div
                 className={styles.backArrowIconWrapper}
-                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name)}
+                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)}
               >
                 <BackArrowIcon />
               </div>
