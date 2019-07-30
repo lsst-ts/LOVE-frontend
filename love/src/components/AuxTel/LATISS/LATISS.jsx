@@ -33,31 +33,14 @@ export default class LATISS extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      fwState: 0,
-      gwState: 1,
-      lsState: 2,
-      shutterDetailedState: 0,
-      raftsDetailedState: 0,
-      reportedLinearStagePosition: 30,
-      reportedDisperserPosition: 0,
-      reportedFilterPosition: 0,
-    };
   }
 
   componentDidMount = () => {
-    setInterval(() => {
-      this.setState({
-        fwState: [0, 1, 2, 2, 2, 2, 2, 3][~~(Math.random() * 8)],
-        gwState: [0, 1, 2, 2, 2, 2, 2, 3][~~(Math.random() * 8)],
-        lsState: [0, 1, 2, 2, 2, 2, 2, 3][~~(Math.random() * 8)],
-        shutterDetailedState: [0, 1, 2, 3][~~(Math.random() * 4)],
-        raftsDetailedState: [0, 1, 2, 3, 4][~~(Math.random() * 5)],
-        reportedLinearStagePosition: ~~(Math.random() * 75),
-        reportedDisperserPosition: [0, 1, 2, 3][~~(Math.random() * 4)],
-        reportedFilterPosition: [0, 1, 2, 3][~~(Math.random() * 4)],
-      });
-    }, 3000);
+    this.props.subscribeToStreams();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
   };
 
   drawLightPath = (slope, index, isReceivingLight, maxX, elementSlope = 0) => {
@@ -228,13 +211,13 @@ export default class LATISS extends Component {
 
   render() {
     const slope = 0.08;
-    const linearStagePosition = this.linearStageValueToPosition(this.state.reportedLinearStagePosition);
+    const linearStagePosition = this.linearStageValueToPosition(this.props.reportedLinearStagePosition);
 
-    const filterWheelState = LATISS.movingElementStateMap[this.state.fwState];
-    const gratingWheelState = LATISS.movingElementStateMap[this.state.gwState];
-    const linearStageState = LATISS.movingElementStateMap[this.state.lsState];
-    const shutterState = LATISS.shutterStateMap[this.state.shutterDetailedState];
-    const ccdState = LATISS.raftsStateMap[this.state.raftsDetailedState];
+    const filterWheelState = LATISS.movingElementStateMap[this.props.fwState];
+    const gratingWheelState = LATISS.movingElementStateMap[this.props.gwState];
+    const linearStageState = LATISS.movingElementStateMap[this.props.lsState];
+    const shutterState = LATISS.shutterStateMap[this.props.shutterDetailedState];
+    const ccdState = LATISS.raftsStateMap[this.props.raftsDetailedState];
 
     const isFilterMoving = filterWheelState === 'MOVING' || filterWheelState === 'HOMING';
     const isLinearStageMoving = linearStageState === 'MOVING' || linearStageState === 'HOMING';
@@ -265,8 +248,8 @@ export default class LATISS extends Component {
           <div className={styles.statusTextWrapper}>
             <span>CCD STATE</span> <StatusText status={stateToStyleLATISS[ccdState]}>{ccdState}</StatusText>
           </div>
-          {this.wheelSelector('FILTER POSITION', this.state.reportedFilterPosition, 'Filter name')}
-          {this.wheelSelector('GRATING POSITION', this.state.reportedDisperserPosition, 'Grating name')}
+          {this.wheelSelector('FILTER POSITION', this.props.reportedFilterPosition, this.props.reportedFilterName)}
+          {this.wheelSelector('GRATING POSITION', this.props.reportedDisperserPosition, this.props.reportedDisperserName)}
           <div />
           <div />
           {/** SVGS */}
@@ -283,7 +266,7 @@ export default class LATISS extends Component {
               isLinearStageMoving || isGratingMoving,
             )}
             {this.drawLightPath(slope, 2, !isFilterBlocking, isGratingBlocking ? linearStagePosition - 5 : 100)}
-            {this.drawLinearStage(this.state.reportedLinearStagePosition, linearStagePosition, isLinearStageMoving)}
+            {this.drawLinearStage(Math.round(this.props.reportedLinearStagePosition), linearStagePosition, isLinearStageMoving)}
           </svg>
           <svg className={styles.lightpathElement} viewBox="0 0 100 120">
             {this.drawShutter(50, styles.shutter, shutterState)}
