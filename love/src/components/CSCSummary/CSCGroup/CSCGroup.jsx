@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCGroup.module.css';
-import CSCDetail from '../CSCDetail/CSCDetail';
+import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import CSCExpanded from '../CSCExpanded/CSCExpanded';
 import CSCGroupLog from '../CSCGroupLog/CSCGroupLog';
 
@@ -82,7 +82,7 @@ export default class CSCGroup extends Component {
           {this.props.cscs.map((csc) => {
             return (
               <div key={csc.name+csc.salindex} className={styles.CSCDetailContainer}>
-                <CSCDetail
+                <CSCDetailContainer
                   realm={this.props.realm}
                   group={this.props.name}
                   name={csc.name}
