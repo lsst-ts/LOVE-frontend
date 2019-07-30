@@ -94,7 +94,7 @@ export default class CSCGroup extends Component {
         <div className={styles.CSCDetailsContainer}>
           {this.props.cscs.map((csc) => {
             return (
-              <div key={csc} className={styles.CSCDetailContainer}>
+              <div key={csc.name+csc.salindex} className={styles.CSCDetailContainer}>
                 <CSCDetail
                   realm={this.props.realm}
                   group={this.props.name}
