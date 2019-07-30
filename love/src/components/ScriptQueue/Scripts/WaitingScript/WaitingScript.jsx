@@ -150,56 +150,58 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
             <div className={scriptStyles.scriptStatusContainer}>
-              <div className={scriptStyles.buttonsContainer}>
-                <div
-                  className={scriptStyles.buttonContainer}
-                  onClick={(e) => {
-                    this.props.moveScriptUp(this.props.index);
-                    e.stopPropagation();
-                  }}
-                >
-                  <div className={scriptStyles.commandButton}>
-                    <div>
-                      <MoveUpIcon />
+              {this.props.commandExecutePermission && (
+                <div className={scriptStyles.buttonsContainer}>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => {
+                      this.props.moveScriptUp(this.props.index);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <div className={scriptStyles.commandButton}>
+                      <div>
+                        <MoveUpIcon />
+                      </div>
+                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move up'}</div>
                     </div>
-                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move up'}</div>
+                  </div>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => {
+                      this.props.moveScriptDown(this.props.index);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <div className={scriptStyles.commandButton}>
+                      <div>
+                        <MoveDownIcon />
+                      </div>
+                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move down'}</div>
+                    </div>
+                  </div>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => {
+                      this.props.stopScript(this.props.index);
+                      e.stopPropagation();
+                    }}
+                  >
+                    <div className={scriptStyles.commandButton}>
+                      <div>
+                        <StopIcon />
+                      </div>
+                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                    </div>
+                  </div>
+                  <div
+                    className={scriptStyles.buttonContainer}
+                    onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
+                  >
+                    &#8943;
                   </div>
                 </div>
-                <div
-                  className={scriptStyles.buttonContainer}
-                  onClick={(e) => {
-                    this.props.moveScriptDown(this.props.index);
-                    e.stopPropagation();
-                  }}
-                >
-                  <div className={scriptStyles.commandButton}>
-                    <div>
-                      <MoveDownIcon />
-                    </div>
-                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move down'}</div>
-                  </div>
-                </div>
-                <div
-                  className={scriptStyles.buttonContainer}
-                  onClick={(e) => {
-                    this.props.stopScript(this.props.index);
-                    e.stopPropagation();
-                  }}
-                >
-                  <div className={scriptStyles.commandButton}>
-                    <div>
-                      <StopIcon />
-                    </div>
-                    <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
-                  </div>
-                </div>
-                <div
-                  className={scriptStyles.buttonContainer}
-                  onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
-                >
-                  &#8943;
-                </div>
-              </div>
+              )}
               <div
                 className={scriptStyles.scriptStateContainer}
                 style={{ display: 'flex', justifyContent: 'flex-end' }}
