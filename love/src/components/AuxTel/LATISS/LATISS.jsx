@@ -9,10 +9,6 @@ export default class LATISS extends Component {
 
   static FILTER_ANGLE_RAD = (5.71 * Math.PI) / 180;
 
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount = () => {
     this.props.subscribeToStreams();
   };
