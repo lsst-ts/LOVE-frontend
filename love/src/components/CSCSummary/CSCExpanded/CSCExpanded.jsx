@@ -148,7 +148,7 @@ export default class CSCExpanded extends PureComponent {
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
               {this.props.errorCodeData.map((msg) => {
                 return (
-                  <div key={msg.private_rcvStamp} className={styles.logMessage}>
+                  <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
                     <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
                       {msg.errorCode.value}
                     </div>
@@ -202,7 +202,7 @@ export default class CSCExpanded extends PureComponent {
                   if (msg.level.value === 30) icon = <WarningIcon title="Warning" />;
                   if (msg.level.value === 40) icon = <ErrorIcon title="Error" />;
                   return (
-                    <div key={`${msg.private_rcvStamp}-${msg.level.value}`} className={styles.logMessage}>
+                    <div key={`${msg.private_rcvStamp.value}-${msg.level.value}`} className={styles.logMessage}>
                       <div className={styles.messageIcon}>{icon}</div>
                       <div className={styles.messageTextContainer}>
                         <div className={styles.timestamp}>{msg.private_rcvStamp.value}</div>

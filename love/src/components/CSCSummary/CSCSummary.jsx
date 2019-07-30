@@ -9,10 +9,6 @@ import { hasFakeData } from '../../Config';
 export default class CSCSummary extends Component {
   static propTypes = {
     hierarchy: PropTypes.object,
-    heartbeatsData: PropTypes.arrayOf(PropTypes.object),
-    summaryStateData: PropTypes.object,
-    logMessageData: PropTypes.object,
-    errorCodeData: PropTypes.object,
   };
   static defaultProps = {
     hierarchy: {
@@ -26,10 +22,6 @@ export default class CSCSummary extends Component {
       Observatory: {
         'CSC Group 1': [],
       },
-      heartbeatsData: [],
-      summaryStateData: {},
-      logMessageData: {},
-      errorCodeData: {}
     },
   };
   constructor(props) {
@@ -459,10 +451,6 @@ export default class CSCSummary extends Component {
                 <CSCRealm
                   name={realm}
                   data={this.state.data}
-                  heartbeatsData={this.props.heartbeatsData}
-                  summaryStateData={this.props.summaryStateData}
-                  logMessageData={this.props.logMessageData}
-                  errorCodeData={this.props.errorCodeData}
                   groups={this.props.hierarchy[realm]}
                   onCSCClick={this.toggleCSCExpansion}
                   selectedCSCs={this.state.selectedCSCs}

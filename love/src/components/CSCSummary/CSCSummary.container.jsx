@@ -8,45 +8,14 @@ const CSCSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   heartbeatsData,
-  summaryStateData,
-  logMessageData,
-  errorCodeData,
 }) => {
   return (
     <CSCSummary
       hierarchy={CSCSummaryHierarchy}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
-      heartbeatsData={heartbeatsData}
-      summaryStateData={summaryStateData}
-      logMessageData={logMessageData}
-      errorCodeData={errorCodeData}
     />
   );
-};
-
-const mapStateToProps = (state) => {
-  const heartbeatsData = getCSCHeartbeats(state);
-
-  const cscsList = [];
-  Object.keys(CSCSummaryHierarchy).forEach((realm) => {
-    const groupsDict = CSCSummaryHierarchy[realm];
-    Object.keys(groupsDict).forEach((group) => {
-      groupsDict[group].forEach((csc) => {
-        cscsList.push([csc.name, csc.salindex]);
-      });
-    });
-  });
-
-  const summaryStateData = getAllStreamsAsDictionary(state, 'event', cscsList, 'summaryState', true);
-  const logMessageData = getAllStreamsAsDictionary(state, 'event', cscsList, 'logMessage');
-  const errorCodeData =  getAllStreamsAsDictionary(state, 'event', cscsList, 'errorCode');
-  return {
-    heartbeatsData,
-    summaryStateData,
-    logMessageData,
-    errorCodeData
-  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -80,6 +49,6 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(CSCSummaryContainer);
