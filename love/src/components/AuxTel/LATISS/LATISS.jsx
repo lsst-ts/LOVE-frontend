@@ -2,31 +2,9 @@ import React, { Component } from 'react';
 import Panel from '../../GeneralPurpose/Panel/Panel';
 import styles from './LATISS.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import { stateToStyleLATISS } from '../../../Config';
+import { stateToStyleLATISS, movingElementStateMap, raftsStateMap, shutterStateMap } from '../../../Config';
 
 export default class LATISS extends Component {
-  static movingElementStateMap = {
-    0: 'HOMING',
-    1: 'MOVING',
-    2: 'STATIONARY',
-    3: 'NOTINPOSITION',
-  };
-
-  static raftsStateMap = {
-    0: 'NEEDS_CLEAR',
-    1: 'CLEARING',
-    2: 'INTEGRATING',
-    3: 'READING_OUT',
-    4: 'QUIESCENT',
-  };
-
-  static shutterStateMap = {
-    0: 'CLOSED',
-    1: 'OPEN',
-    2: 'CLOSING',
-    3: 'OPENING',
-  };
-
   static FILTER_ANGLE = 5.71;
 
   static FILTER_ANGLE_RAD = (5.71 * Math.PI) / 180;
@@ -213,11 +191,11 @@ export default class LATISS extends Component {
     const slope = 0.08;
     const linearStagePosition = this.linearStageValueToPosition(this.props.reportedLinearStagePosition);
 
-    const filterWheelState = LATISS.movingElementStateMap[this.props.fwState];
-    const gratingWheelState = LATISS.movingElementStateMap[this.props.gwState];
-    const linearStageState = LATISS.movingElementStateMap[this.props.lsState];
-    const shutterState = LATISS.shutterStateMap[this.props.shutterDetailedState];
-    const ccdState = LATISS.raftsStateMap[this.props.raftsDetailedState];
+    const filterWheelState = movingElementStateMap[this.props.fwState];
+    const gratingWheelState = movingElementStateMap[this.props.gwState];
+    const linearStageState = movingElementStateMap[this.props.lsState];
+    const shutterState = shutterStateMap[this.props.shutterDetailedState];
+    const ccdState = raftsStateMap[this.props.raftsDetailedState];
 
     const isFilterMoving = filterWheelState === 'MOVING' || filterWheelState === 'HOMING';
     const isLinearStageMoving = linearStageState === 'MOVING' || linearStageState === 'HOMING';
@@ -249,7 +227,11 @@ export default class LATISS extends Component {
             <span>CCD STATE</span> <StatusText status={stateToStyleLATISS[ccdState]}>{ccdState}</StatusText>
           </div>
           {this.wheelSelector('FILTER POSITION', this.props.reportedFilterPosition, this.props.reportedFilterName)}
-          {this.wheelSelector('GRATING POSITION', this.props.reportedDisperserPosition, this.props.reportedDisperserName)}
+          {this.wheelSelector(
+            'GRATING POSITION',
+            this.props.reportedDisperserPosition,
+            this.props.reportedDisperserName,
+          )}
           <div />
           <div />
           {/** SVGS */}
@@ -266,7 +248,11 @@ export default class LATISS extends Component {
               isLinearStageMoving || isGratingMoving,
             )}
             {this.drawLightPath(slope, 2, !isFilterBlocking, isGratingBlocking ? linearStagePosition - 5 : 100)}
-            {this.drawLinearStage(Math.round(this.props.reportedLinearStagePosition), linearStagePosition, isLinearStageMoving)}
+            {this.drawLinearStage(
+              Math.round(this.props.reportedLinearStagePosition),
+              linearStagePosition,
+              isLinearStageMoving,
+            )}
           </svg>
           <svg className={styles.lightpathElement} viewBox="0 0 100 120">
             {this.drawShutter(50, styles.shutter, shutterState)}
