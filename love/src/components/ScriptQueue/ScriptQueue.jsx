@@ -9,7 +9,6 @@ import styles from './ScriptQueue.module.css';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import ManagerInterface from '../../Utils';
-import { hasCommandPrivileges } from '../../Config';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
 import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
@@ -137,7 +136,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragStart = (e, draggingId) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     const draggingScriptInstance = this.getScriptFromId(draggingId);
     this.setState({
       draggingScriptInstance,
@@ -147,7 +146,7 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragEnd = (e, draggingId) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     this.setState({
       draggingScriptInstance: undefined,
     });
@@ -158,7 +157,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragEnter = () => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
@@ -180,7 +179,7 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
@@ -412,7 +411,6 @@ export default class ScriptQueue extends Component {
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
-
     return (
       <Panel title="Script Queue">
         <div
@@ -449,6 +447,7 @@ export default class ScriptQueue extends Component {
                   timestampRunStart={current.timestampRunStart}
                   stopScript={this.stopScript}
                   onClickContextMenu={this.onClickContextMenu}
+                  commandExecutePermission={this.props.commandExecutePermission}
                 />
               </div>
             </div>
@@ -514,6 +513,7 @@ export default class ScriptQueue extends Component {
                             isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
                             launchScriptConfig={this.launchScriptConfig}
                             script={script}
+                            commandExecutePermission={this.props.commandExecutePermission}
                             {...script}
                           />
                         </DraggableScript>
@@ -537,7 +537,7 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
-                {this.props.state === 'Stopped' && (
+                {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
                       <span>Resume</span>
@@ -547,7 +547,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </>
                 )}
-                {this.props.state === 'Running' && (
+                {this.props.state === 'Running' && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
                       <span>Pause</span>
@@ -576,7 +576,7 @@ export default class ScriptQueue extends Component {
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'waiting')}
                       draggingScriptInstance={this.state.draggingScriptInstance}
-                      disabled={!hasCommandPrivileges}
+                      disabled={!this.props.commandExecutePermission}
                     >
                       <WaitingScript
                         isCompact={
@@ -591,6 +591,7 @@ export default class ScriptQueue extends Component {
                         onClickContextMenu={this.onClickContextMenu}
                         moveScriptUp={this.moveScriptUp}
                         moveScriptDown={this.moveScriptDown}
+                        commandExecutePermission={this.props.commandExecutePermission}
                         {...script}
                       />
                     </DraggableScript>
@@ -655,6 +656,7 @@ export default class ScriptQueue extends Component {
                               this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                             }
                             requeueScript={this.requeueScript}
+                            commandExecutePermission={this.props.commandExecutePermission}
                           />
                         </DraggableScript>
                       );
