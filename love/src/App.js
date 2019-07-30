@@ -15,9 +15,9 @@ import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.contai
 import CSCSummary from './components/CSCSummary/CSCSummary';
 import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
-import LATISS from './components/AuxTel/LATISS/LATISS';
 import DomeContainer from './components/AuxTel/Dome/Dome.container';
 import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountView';
+import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 
 class App extends Component {
   static propTypes = {
@@ -86,7 +86,7 @@ class App extends Component {
               </Panel>
             )}
           />
-          <PrivateRoute token={this.props.token} path="/latiss" component={LATISS} />
+          <PrivateRoute token={this.props.token} path="/latiss" component={LATISSContainer} />
           <PrivateRoute token={this.props.token} path="/aux-tel-dome-and-mount" component={DomeAndMountView} />
           <PrivateRoute
             token={this.props.token}
