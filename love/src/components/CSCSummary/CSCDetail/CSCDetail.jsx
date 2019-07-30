@@ -11,7 +11,8 @@ export default class CSCDetail extends Component {
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     heartbeatData: PropTypes.object,
-    summaryStateData: PropTypes.object
+    summaryStateData: PropTypes.object,
+    subscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
@@ -21,7 +22,8 @@ export default class CSCDetail extends Component {
     data: {},
     onCSCClick: () => 0,
     heartbeatData: null,
-    summaryStateData: undefined
+    summaryStateData: undefined,
+    subscribeToStreams: () =>{},
   };
 
   static states = {
@@ -78,6 +80,9 @@ export default class CSCDetail extends Component {
     );
   };
 
+  componentDidMount = () => {
+    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+  }
   
   render() {
     const selfData = this.props.data[this.props.name];
