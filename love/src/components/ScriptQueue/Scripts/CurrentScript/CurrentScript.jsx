@@ -160,28 +160,30 @@ export default class CurrentScript extends Component {
                 </div>
               </div>
               <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
-                <div className={scriptStyles.buttonsContainer}>
-                  <div
-                    className={scriptStyles.buttonContainer}
-                    onClick={(e) => {
-                      this.props.stopScript(this.props.index);
-                      e.stopPropagation();
-                    }}
-                  >
-                    <div className={scriptStyles.commandButton}>
-                      <div>
-                        <StopIcon />
+                {this.props.commandExecutePermission && (
+                  <div className={scriptStyles.buttonsContainer}>
+                    <div
+                      className={scriptStyles.buttonContainer}
+                      onClick={(e) => {
+                        this.props.stopScript(this.props.index);
+                        e.stopPropagation();
+                      }}
+                    >
+                      <div className={scriptStyles.commandButton}>
+                        <div>
+                          <StopIcon />
+                        </div>
+                        <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
                       </div>
-                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                    </div>
+                    <div
+                      className={scriptStyles.buttonContainer}
+                      onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
+                    >
+                      &#8943;
                     </div>
                   </div>
-                  <div
-                    className={scriptStyles.buttonContainer}
-                    onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
-                  >
-                    &#8943;
-                  </div>
-                </div>
+                )}
                 <div
                   className={scriptStyles.scriptStateContainer}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
