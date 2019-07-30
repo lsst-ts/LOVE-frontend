@@ -16,10 +16,6 @@ export default class CSCGroup extends Component {
     hierarchy: PropTypes.object,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
-    heartbeatsData: PropTypes.arrayOf(PropTypes.object),
-    summaryStateData: PropTypes.object,
-    logMessageData: PropTypes.object,
-    errorCodeData: PropTypes.object
   };
 
   static defaultProps = {
@@ -32,10 +28,6 @@ export default class CSCGroup extends Component {
     hierarchy: {},
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
-    heartbeatsData: [],
-    summaryStateData: {},
-    logMessageData: {},
-    errorCodeData: {},
   };
 
   renderExpandedView = (selectedCSC) => {
@@ -51,8 +43,6 @@ export default class CSCGroup extends Component {
           onCSCClick={this.props.onCSCClick}
           hierarchy={this.props.hierarchy}
           clearCSCErrorCodes={this.props.clearCSCErrorCodes}
-          summaryStateData={this.props.summaryStateData}
-          logMessageData={this.props.logMessageData}
         />
       </div>
     ) : (
@@ -63,12 +53,9 @@ export default class CSCGroup extends Component {
           name={selectedCSC.csc}
           salindex={selectedCSC.salindex}
           data={this.props.data}
-          summaryStateData={this.props.summaryStateData[`${selectedCSC.csc}-${selectedCSC.salindex}`]}
-          logMessageData={this.props.logMessageData[`${selectedCSC.csc}-${selectedCSC.salindex}`]}
           onCSCClick={this.props.onCSCClick}
           clearCSCErrorCodes={this.props.clearCSCErrorCodes}
           clearCSCLogMessages={this.props.clearCSCLogMessages}
-          errorCodeData={this.props.errorCodeData[`${selectedCSC.csc}-${selectedCSC.salindex}`]}
         />
       </div>
     );
@@ -101,8 +88,6 @@ export default class CSCGroup extends Component {
                   name={csc.name}
                   salindex={csc.salindex}
                   data={this.props.data}
-                  heartbeatData={this.props.heartbeatsData.filter((heartbeat) => heartbeat.csc === csc.name && heartbeat.salindex == csc.salindex)[0]}
-                  summaryStateData={this.props.summaryStateData[csc.name+'-'+csc.salindex]}
                   onCSCClick={this.props.onCSCClick}
                 />
               </div>
