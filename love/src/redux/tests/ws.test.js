@@ -9,6 +9,7 @@ import {
   getLastSALCommand,
   getScriptHeartbeats,
   getCSCHeartbeats,
+  getCSCHeartbeat,
   getCSCsSummaryStates,
   getCSCsLogsMessageData,
   getAllStreamsAsDictionary,
@@ -265,6 +266,49 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
 
         expect(heartbeats).toEqual(heartbeatsState);
       });
+
+      it(`WHEN the server sends two heartbeats with salindices of these combinations
+        THEN it should receive two CSC heartbeats with these salindices and select them individually from the state`, async () => {
+        const heartbeats = [
+          {
+            csc: 'ScriptQueue',
+            salindex: salindex1,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801983.963551,
+            max_lost_heartbeats: 5,
+          },
+          {
+            csc: 'ATDome',
+            salindex: salindex2,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801984.226387,
+            max_lost_heartbeats: 5,
+          },
+        ];
+
+        heartbeats.forEach((heartbeat) => {
+          // Act:
+          server.send({
+            category: 'event',
+            data: [
+              {
+                csc: 'Heartbeat',
+                salindex: 0, // scriptqueue salindex
+                data: {
+                  stream: {
+                    ...heartbeat,
+                  },
+                },
+              },
+            ],
+          });
+        });
+
+        const heartbeat = heartbeats[0];
+        const heartbeatsState = getCSCHeartbeat(store.getState(), heartbeat.csc, heartbeat.salindex);
+        expect(heartbeat).toEqual(heartbeatsState);
+      });
+
     });
   });
 });
@@ -332,13 +376,13 @@ it('It should extract the summary and log messages properly from the state with 
         csc: 'ATDome',
         salindex: 1,
         data: {
-          logMessage: mockData.ATDomeLogMessages
-        }
-      }
-    ]
-  })
+          logMessage: mockData.ATDomeLogMessages,
+        },
+      },
+    ],
+  });
 
-  const cscsList = [['ATDome',1], ['ScriptQueue',1]];
+  const cscsList = [['ATDome', 1], ['ScriptQueue', 1]];
 
   const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 
@@ -355,10 +399,8 @@ it('It should extract the summary and log messages properly from the state with 
   const logMessagesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'logMessage');
 
   const expectedLogMessages = {
-    'ATDome-1': mockData.ATDomeLogMessages
+    'ATDome-1': mockData.ATDomeLogMessages,
   };
 
   expect(logMessagesDictionary).toEqual(expectedLogMessages);
-
 });
-

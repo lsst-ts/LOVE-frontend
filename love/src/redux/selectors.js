@@ -112,8 +112,22 @@ export const getSummaryStateValue = (state, groupName) => {
   return summaryStateValue;
 };
 
+/**
+ * Returns the whole lits of heartbeats
+ * @param {object} state
+ */
 export const getCSCHeartbeats = (state) => {
   return state.heartbeats.cscs;
+};
+
+/**
+ * Selects the heartbeat object of a (csc, salindex)
+ * @param {object} state
+ * @param {string} csc
+ * @param {number} salindex
+ */
+export const getCSCHeartbeat = (state, csc, salindex) => {
+  return state.heartbeats.cscs.find((heartbeat) => heartbeat.csc === csc && heartbeat.salindex === salindex);
 };
 
 /**
@@ -122,12 +136,12 @@ export const getCSCHeartbeats = (state) => {
  * Currently hardcoded to use salindex=1 only
  * @param {object} state
  * @param {string} category
- * @param {array} CSCsSalindexList: array [cscname {string}, salindex {int}] pairs 
+ * @param {array} CSCsSalindexList: array [cscname {string}, salindex {int}] pairs
  * @param {string} stream
  * @param {bool} lastDataOnly: flag to return the last data only instead of the whole array, e.g., {csc: Object} instead of {csc: Array[]}
  */
-export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, stream, lastDataOnly=false) => {
-  const groupNames = CSCsSalindexList.map( ([CSC,salindex]) => `${category}-${CSC}-${salindex}-${stream}`);
+export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, stream, lastDataOnly = false) => {
+  const groupNames = CSCsSalindexList.map(([CSC, salindex]) => `${category}-${CSC}-${salindex}-${stream}`);
   const streams = getStreamsData(state, groupNames);
 
   const dictionary = {};
