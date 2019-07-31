@@ -50,14 +50,19 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state, ownProps) => {
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
+  let logMessageData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-logMessage`);
+  let errorCodeData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-errorCode`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
-  if (!summaryStateData) {
-    summaryStateData = {};
-  }
+
+  summaryStateData = summaryStateData ? summaryStateData : {};
+  logMessageData = logMessageData ? logMessageData : {};
+  errorCodeData = errorCodeData ? errorCodeData : {};
 
   return {
     summaryStateData: summaryStateData[0],
     heartbeatData,
+    logMessageData,
+    errorCodeData,
   };
 };
 
