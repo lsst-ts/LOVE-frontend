@@ -9,6 +9,7 @@ import {
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
+import { receiveLogMessageData } from './summaryData';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -101,6 +102,10 @@ export const openWebsocketConnection = () => {
 
             if (data.data[0].csc === 'Heartbeat') {
               dispatch(receiveCSCHeartbeat(stream.stream));
+            }
+
+            if (data.data[0].data.logMessage) {
+              dispatch(receiveLogMessageData(data.data[0].data));
             }
           }
 
