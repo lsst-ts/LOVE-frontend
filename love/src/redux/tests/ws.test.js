@@ -10,8 +10,7 @@ import {
   getScriptHeartbeats,
   getCSCHeartbeats,
   getCSCHeartbeat,
-  getCSCsSummaryStates,
-  getCSCsLogsMessageData,
+  getCSCLogMessages,
   getAllStreamsAsDictionary,
 } from '../selectors';
 import * as mockData from './mock';
@@ -403,4 +402,34 @@ it('It should extract the summary and log messages properly from the state with 
   };
 
   expect(logMessagesDictionary).toEqual(expectedLogMessages);
+});
+
+
+it('It should extract all received logMessages from the state for a given CSC', async () =>{
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+
+  let messages = [];
+  mockData.ATDomeLogMessages.forEach(message => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ATDome',
+          salindex: 1,
+          data: {
+            logMessage: message
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+
+    const storedMessages = getCSCLogMessages(store.getState(), 'ATDome', 1);
+
+    expect(storedMessages).toEqual(messages);    
+
+  })
+
 });
