@@ -37,7 +37,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-summaryState`));
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-logMessage`));
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
     },
   };
 };
