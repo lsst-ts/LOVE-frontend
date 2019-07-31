@@ -98,6 +98,18 @@ export default class CSCExpanded extends PureComponent {
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
+
+    let heartbeatStatus = 'unknown';
+    let nLost = 0;
+    let timeDiff = -1;
+    if (this.props.heartbeatData) {
+      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
+      nLost = this.props.heartbeatData.lost;
+      if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
+    }
+    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+
     return (
       <div className={styles.CSCExpandedContainer}>
         <div className={styles.topBarContainerWrapper}>
@@ -127,19 +139,31 @@ export default class CSCExpanded extends PureComponent {
                 </span>
               </div>
               <div className={styles.heartbeatIconWrapper}>
-                <HeartbeatIcon title={`${this.props.name} heartbeat`} status="ok" />
+                <HeartbeatIcon
+                  status={heartbeatStatus}
+                  title={`${this.props.name +
+                    '-' +
+                    this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
+                />
               </div>
             </div>
           </div>
         </div>
-        {this.props.errorCodeData.length>0 ? (
+        {this.props.errorCodeData.length > 0 ? (
           <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
             <div className={styles.logContainerTopBar}>
               <div>ERROR CODE</div>
               <div>
                 <Button
                   size="extra-small"
-                  onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name, this.props.salindex)}
+                  onClick={() =>
+                    this.props.clearCSCErrorCodes(
+                      this.props.realm,
+                      this.props.group,
+                      this.props.name,
+                      this.props.salindex,
+                    )
+                  }
                 >
                   CLEAR
                 </Button>
@@ -169,7 +193,14 @@ export default class CSCExpanded extends PureComponent {
             <div>
               <Button
                 size="extra-small"
-                onClick={() => this.props.clearCSCLogMessages(this.props.realm, this.props.group, this.props.name, this.props.salindex)}
+                onClick={() =>
+                  this.props.clearCSCLogMessages(
+                    this.props.realm,
+                    this.props.group,
+                    this.props.name,
+                    this.props.salindex,
+                  )
+                }
               >
                 CLEAR
               </Button>
