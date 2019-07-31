@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CSCDetail from './CSCDetail';
 import { requestGroupSubscription } from '../../../redux/actions/ws';
-import { getStreamData } from '../../../redux/selectors';
+import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
 const CSCDetailContainer = ({
   realm,
@@ -13,6 +13,7 @@ const CSCDetailContainer = ({
   summaryStateData,
   onCSCClick,
   subscribeToStreams,
+  heartbeatData,
 }) => {
   return (
     <CSCDetail
@@ -24,6 +25,7 @@ const CSCDetailContainer = ({
       summaryStateData={summaryStateData}
       onCSCClick={onCSCClick}
       subscribeToStreams={subscribeToStreams}
+      heartbeatData={heartbeatData}
     />
   );
 };
@@ -31,18 +33,25 @@ const CSCDetailContainer = ({
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (cscName, index) => {
+      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-summaryState`));
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-logMessage`));
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
     },
   };
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
-  if (!summaryStateData) return {};
+  let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
+  let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
+  if (!summaryStateData) {
+    summaryStateData = {};
+  }
+
   return {
     summaryStateData: summaryStateData[0],
+    heartbeatData,
   };
 };
 
