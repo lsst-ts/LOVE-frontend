@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCGroup.module.css';
 import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
-import CSCExpanded from '../CSCExpanded/CSCExpanded';
+import CSCExpandedContainer from '../CSCExpanded/CSCExpanded.container';
 import CSCGroupLog from '../CSCGroupLog/CSCGroupLog';
 
 export default class CSCGroup extends Component {
@@ -47,7 +47,7 @@ export default class CSCGroup extends Component {
       </div>
     ) : (
       <div className={styles.CSCGroupContainer}>
-        <CSCExpanded
+        <CSCExpandedContainer
           realm={selectedCSC.realm}
           group={selectedCSC.group}
           name={selectedCSC.csc}
