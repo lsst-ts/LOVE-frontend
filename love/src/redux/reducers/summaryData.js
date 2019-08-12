@@ -97,7 +97,7 @@ export default function(state = initialState, action) {
       };
 
       return {
-        errorCodeData: state.errorCodeData,
+        logMessageData: state.logMessageData,
         errorCodeData: newErrorCodeData,
       };
     }
