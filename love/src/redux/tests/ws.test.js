@@ -408,6 +408,8 @@ it('It should extract all received logMessages from the state for a given CSC', 
   await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
 
   let messages = [];
+
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
   mockData.ATDomeLogMessages.forEach((message) => {
     server.send({
       category: 'event',
