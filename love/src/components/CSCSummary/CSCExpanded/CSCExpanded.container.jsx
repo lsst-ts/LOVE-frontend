@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CSCExpanded from './CSCExpanded';
 import { requestGroupSubscription } from '../../../redux/actions/ws';
+import {removeCSCLogMessages} from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages } from '../../../redux/selectors';
 
 const CSCExpandedContainer = ({
@@ -26,12 +27,12 @@ const CSCExpandedContainer = ({
       realm={realm}
       onCSCClick={onCSCClick}
       clearCSCErrorCodes={clearCSCErrorCodes}
-      clearCSCLogMessages={clearCSCLogMessages}
-      summaryStateData={summaryStateData}
-      logMessageData={logMessageData}
       // errorCodeData={errorCodeData}
+      summaryStateData={summaryStateData}
       subscribeToStreams={subscribeToStreams}
+      logMessageData={logMessageData}
       heartbeatData={heartbeatData}
+      clearCSCLogMessages={clearCSCLogMessages}
     />
   );
 };
@@ -45,6 +46,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
       dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
     },
+    clearCSCLogMessages: (csc, salindex) => {
+      console.log('removeCSCLogMessages', csc, salindex)
+      dispatch(removeCSCLogMessages(csc, salindex))
+    }
   };
 };
 

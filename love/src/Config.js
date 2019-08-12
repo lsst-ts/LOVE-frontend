@@ -4,10 +4,10 @@ export const hasCommandPrivileges = true;
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
-    'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 }],
+    'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 },{ name: 'Test', salindex:3},{ name: 'Test', salindex:4}],
   },
   'Main Telescope': {
-    'CSC Group 1': [],
+    'CSC Group 1': [{ name: 'Test', salindex:1},{ name: 'Test', salindex:2}],
     'CSC Group 2': [],
   },
   Observatory: {
