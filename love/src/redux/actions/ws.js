@@ -105,7 +105,7 @@ export const openWebsocketConnection = () => {
             }
 
             if (data.data[0].data.logMessage) {
-              dispatch(receiveLogMessageData(data.data[0].data));
+              dispatch(receiveLogMessageData(data.data[0].csc, data.data[0].salindex, data.data[0].data.logMessage));
             }
           }
 

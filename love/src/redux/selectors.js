@@ -160,5 +160,7 @@ export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, str
 
 
 export const getCSCLogMessages = (state, csc, salindex) => {
-  return state.summaryData.logMessageEvents.find( data => data.csc === csc && data.salindex === salindex);
+  const logMessageData =  state.summaryData.logMessageData.find( data => data.csc === csc && data.salindex === salindex);
+
+  return logMessageData.messages;
 }
