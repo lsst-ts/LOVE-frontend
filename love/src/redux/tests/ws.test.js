@@ -3,7 +3,7 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
-import { removeCSCLogMessages } from '../actions/summaryData';
+import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import { SALCommandStatus } from '../actions/ws';
 import {
   getLastSALCommand,
@@ -490,4 +490,40 @@ it('It should extract all errorCode event data  from the state for a given CSC',
     const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
     expect(storedMessages).toEqual(messages);
   });
+});
+
+
+it('It should delete errorCode event data  from the state for a given CSC', async () => {
+  // Arrange
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
+
+  let messages = [];
+
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual(messages);
+  mockData.TestCSCErrorCodeData.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'Test',
+          salindex: 1,
+          data: {
+            errorCode: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+  });
+  const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
+  expect(storedMessages).toEqual(messages);
+
+  // Act
+  store.dispatch(removeCSCErrorCodeData('Test',1));
+  
+  // Assert
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
+
 });
