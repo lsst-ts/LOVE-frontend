@@ -3,7 +3,7 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
-
+import { removeCSCLogMessages } from '../actions/summaryData';
 import { SALCommandStatus } from '../actions/ws';
 import {
   getLastSALCommand,
@@ -428,4 +428,38 @@ it('It should extract all received logMessages from the state for a given CSC', 
     const storedMessages = getCSCLogMessages(store.getState(), 'ATDome', 1);
     expect(storedMessages).toEqual(messages);
   });
+});
+
+it('It delete all logMessages of a CSC with an action ', async () => {
+  // Arrange
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+
+  let messages = [];
+
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
+  mockData.ATDomeLogMessages.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ATDome',
+          salindex: 1,
+          data: {
+            logMessage: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+  });
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
+
+  // Act
+
+  store.dispatch(removeCSCLogMessages('ATDome', 1));
+
+  // Assert
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual([]);
 });
