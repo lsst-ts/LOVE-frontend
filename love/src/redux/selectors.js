@@ -170,7 +170,6 @@ export const getCSCLogMessages = (state, csc, salindex) => {
 
 export const getCSCErrorCodeData = (state, csc, salindex) => {
   const errorCodeData = state.summaryData.errorCodeData.find((data) => data.csc === csc && data.salindex === salindex);
-
   if (!errorCodeData) return [];
 
   return errorCodeData.errorCodeData;

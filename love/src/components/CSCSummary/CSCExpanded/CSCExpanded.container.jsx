@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CSCExpanded from './CSCExpanded';
 import { requestGroupSubscription } from '../../../redux/actions/ws';
-import {removeCSCLogMessages} from '../../../redux/actions/summaryData';
-import { getStreamData, getCSCHeartbeat, getCSCLogMessages } from '../../../redux/selectors';
+import { removeCSCLogMessages } from '../../../redux/actions/summaryData';
+import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
 
 const CSCExpandedContainer = ({
   name,
@@ -27,7 +27,7 @@ const CSCExpandedContainer = ({
       realm={realm}
       onCSCClick={onCSCClick}
       clearCSCErrorCodes={clearCSCErrorCodes}
-      // errorCodeData={errorCodeData}
+      errorCodeData={errorCodeData}
       summaryStateData={summaryStateData}
       subscribeToStreams={subscribeToStreams}
       logMessageData={logMessageData}
@@ -47,20 +47,18 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
     },
     clearCSCLogMessages: (csc, salindex) => {
-      console.log('removeCSCLogMessages', csc, salindex)
-      dispatch(removeCSCLogMessages(csc, salindex))
-    }
+      dispatch(removeCSCLogMessages(csc, salindex));
+    },
   };
 };
 
 const mapStateToProps = (state, ownProps) => {
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
-  let errorCodeData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-errorCode`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
 
   const logMessageData = getCSCLogMessages(state, ownProps.name, ownProps.salindex);
+  const errorCodeData = getCSCErrorCodeData(state, ownProps.name, ownProps.salindex);
   summaryStateData = summaryStateData ? summaryStateData : {};
-  errorCodeData = errorCodeData ? errorCodeData : {};
 
   return {
     summaryStateData: summaryStateData[0],
