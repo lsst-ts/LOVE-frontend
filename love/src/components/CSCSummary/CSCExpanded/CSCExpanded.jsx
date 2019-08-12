@@ -29,6 +29,7 @@ export default class CSCExpanded extends PureComponent {
     realm: '',
     onCSCClick: () => 0,
     clearCSCErrorCodes: () => 0,
+    clearCSCLogMessages: () => 0,
     summaryStateData: undefined,
     logMessageData: [],
     errorCodeData: [],
@@ -155,14 +156,7 @@ export default class CSCExpanded extends PureComponent {
               <div>
                 <Button
                   size="extra-small"
-                  onClick={() =>
-                    this.props.clearCSCErrorCodes(
-                      this.props.realm,
-                      this.props.group,
-                      this.props.name,
-                      this.props.salindex,
-                    )
-                  }
+                  onClick={() => this.props.clearCSCErrorCodes(this.props.name, this.props.salindex)}
                 >
                   CLEAR
                 </Button>
