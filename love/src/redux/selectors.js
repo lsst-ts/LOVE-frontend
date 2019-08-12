@@ -1,3 +1,5 @@
+import { flatMap } from '../Utils';
+
 export const getToken = (state) => state.auth.token;
 
 export const getTokenStatus = (state) => state.auth.status;
@@ -173,4 +175,32 @@ export const getCSCErrorCodeData = (state, csc, salindex) => {
   if (!errorCodeData) return [];
 
   return errorCodeData.errorCodeData;
+};
+
+/**
+ * Returns a sorted list of errorCode data for a CSC group
+ * @param {object} state Redux state
+ * @param {array} group Group of CSCs as in the hierarchy [{name: 'Test', salindex:1}, {name: 'Test', salindex: 2}]
+ */
+export const getGroupSortedErrorCodeData = (state, group) => {
+  const filtered = state.summaryData.errorCodeData.filter((cscData) => {
+    const searchIndex = group.findIndex((csc) => cscData.csc === csc.name && cscData.salindex === csc.salindex);
+    return searchIndex > -1;
+  });
+
+  const flatMapped = flatMap(filtered, (cscData) => {
+    return cscData.errorCodeData.map((data) => {
+      return {
+        csc: cscData.csc,
+        salindex: cscData.salindex,
+        ...data,
+      };
+    });
+  });
+
+  const sorted = flatMapped.sort((msg1, msg2) => {
+    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+  });
+
+  return sorted;
 };
