@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './CSCGroup.module.css';
 import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import CSCExpandedContainer from '../CSCExpanded/CSCExpanded.container';
-import CSCGroupLog from '../CSCGroupLog/CSCGroupLog';
+import CSCGroupLogContainer from '../CSCGroupLog/CSCGroupLog.container';
 
 export default class CSCGroup extends Component {
   static propTypes = {
@@ -35,7 +35,7 @@ export default class CSCGroup extends Component {
     
     return groupView ? (
       <div className={styles.CSCGroupContainer}>
-        <CSCGroupLog
+        <CSCGroupLogContainer
           realm={selectedCSC.realm}
           group={selectedCSC.group}
           name={selectedCSC.csc}
