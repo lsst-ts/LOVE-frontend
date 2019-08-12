@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CSCExpanded from './CSCExpanded';
 import { requestGroupSubscription } from '../../../redux/actions/ws';
-import { removeCSCLogMessages } from '../../../redux/actions/summaryData';
+import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
 
 const CSCExpandedContainer = ({
@@ -49,6 +49,9 @@ const mapDispatchToProps = (dispatch) => {
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
     },
+    clearCSCErrorCodes: (csc, salindex) => {
+      dispatch(removeCSCErrorCodeData(csc, salindex))
+    }
   };
 };
 
