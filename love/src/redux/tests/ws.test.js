@@ -13,8 +13,10 @@ import {
   getCSCLogMessages,
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
+  getGroupSortedErrorCodeData,
 } from '../selectors';
 import * as mockData from './mock';
+import { flatMap } from '../../Utils';
 
 let store, server;
 const initialState = {
@@ -492,7 +494,6 @@ it('It should extract all errorCode event data  from the state for a given CSC',
   });
 });
 
-
 it('It should delete errorCode event data  from the state for a given CSC', async () => {
   // Arrange
   await server.connected;
@@ -521,9 +522,73 @@ it('It should delete errorCode event data  from the state for a given CSC', asyn
   expect(storedMessages).toEqual(messages);
 
   // Act
-  store.dispatch(removeCSCErrorCodeData('Test',1));
-  
+  store.dispatch(removeCSCErrorCodeData('Test', 1));
+
   // Assert
   expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
+});
 
+it('Should extract a sorted list of a subset of errorCode event data ', async () => {
+  // Arrange
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
+  await store.dispatch(requestGroupSubscription('event-Test-2-errorCode'));
+
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'Test',
+        salindex: 1,
+        data: {
+          errorCode: mockData.TestCSCErrorCodeData,
+        },
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'Test',
+        salindex: 2,
+        data: {
+          errorCode: mockData.TestCSCErrorCodeData,
+        },
+      },
+    ],
+  });
+
+  const flat1 = flatMap(mockData.TestCSCErrorCodeData, (msg) => {
+    return {
+      csc: 'Test',
+      salindex: 1,
+      ...msg,
+    };
+  });
+  const flat2 = flatMap(mockData.TestCSCErrorCodeData, (msg) => {
+    return {
+      csc: 'Test',
+      salindex: 2,
+      ...msg,
+    };
+  });
+
+  let sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
+    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+  });
+
+  // Act
+  const storedMessages = getGroupSortedErrorCodeData(store.getState(), [
+    { name: 'Test', salindex: 1 },
+    { name: 'Test', salindex: 2 },
+  ]);
+
+  // Assert
+  storedMessages.forEach((msg, index) => {
+    expect(msg.csc).toEqual(sortedMessages[index].csc);
+    expect(msg.salindex).toEqual(sortedMessages[index].salindex);
+  });
 });

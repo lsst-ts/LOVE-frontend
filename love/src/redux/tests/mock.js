@@ -133,8 +133,8 @@ export const TestCSCErrorCodeData = [
   {
     TestID: { value: 3, dataType: 'Int' },
     private_revCode: { value: '5b705f39', dataType: 'String' },
-    private_sndStamp: { value: 1565640757.1655345, dataType: 'Float' },
-    private_rcvStamp: { value: 1565640757.1674786, dataType: 'Float' },
+    private_sndStamp: { value: 156500000 + 50000, dataType: 'Float' },
+    private_rcvStamp: { value: 156500000 + 50000, dataType: 'Float' },
     private_seqNum: { value: 10, dataType: 'Int' },
     private_origin: { value: 44, dataType: 'Int' },
     private_host: { value: 2045309654, dataType: 'Int' },
@@ -152,8 +152,8 @@ export const TestCSCErrorCodeData = [
   {
     TestID: { value: 3, dataType: 'Int' },
     private_revCode: { value: '5b705f39', dataType: 'String' },
-    private_sndStamp: { value: 1565640757.1655345, dataType: 'Float' },
-    private_rcvStamp: { value: 1565640757.1674786, dataType: 'Float' },
+    private_sndStamp: { value: 156500000 + 20000, dataType: 'Float' },
+    private_rcvStamp: { value: 156500000 + 20000, dataType: 'Float' },
     private_seqNum: { value: 10, dataType: 'Int' },
     private_origin: { value: 44, dataType: 'Int' },
     private_host: { value: 2045309654, dataType: 'Int' },
@@ -171,8 +171,8 @@ export const TestCSCErrorCodeData = [
   {
     TestID: { value: 3, dataType: 'Int' },
     private_revCode: { value: '5b705f39', dataType: 'String' },
-    private_sndStamp: { value: 1565640757.1655345, dataType: 'Float' },
-    private_rcvStamp: { value: 1565640757.1674786, dataType: 'Float' },
+    private_sndStamp: { value: 156500000 + 30000, dataType: 'Float' },
+    private_rcvStamp: { value: 156500000 + 30000, dataType: 'Float' },
     private_seqNum: { value: 10, dataType: 'Int' },
     private_origin: { value: 44, dataType: 'Int' },
     private_host: { value: 2045309654, dataType: 'Int' },
