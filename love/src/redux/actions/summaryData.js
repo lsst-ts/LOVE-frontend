@@ -1,4 +1,4 @@
-import { UPDATE_LOG_MESSAGE_DATA, UPDATE_ERROR_CODE_DATA, REMOVE_CSC_LOG_MESSAGES } from './actionTypes';
+import { UPDATE_LOG_MESSAGE_DATA, UPDATE_ERROR_CODE_DATA, REMOVE_CSC_LOG_MESSAGES, REMOVE_CSC_ERROR_CODE_DATA } from './actionTypes';
 
 export const receiveLogMessageData = (csc, salindex, messages) => {
   return {
@@ -23,5 +23,13 @@ export const receiveErrorCodeData = (csc, salindex, errorCodeData) => {
     csc,
     salindex,
     errorCodeData,
+  };
+};
+
+export const removeCSCErrorCodeData = (csc, salindex) => {
+  return {
+    type: REMOVE_CSC_ERROR_CODE_DATA,
+    csc,
+    salindex,
   };
 };
