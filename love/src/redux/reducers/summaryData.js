@@ -1,4 +1,4 @@
-import { UPDATE_LOG_MESSAGE_DATA, REMOVE_CSC_LOG_MESSAGES } from '../actions/actionTypes';
+import { UPDATE_LOG_MESSAGE_DATA, REMOVE_CSC_LOG_MESSAGES, UPDATE_ERROR_CODE_DATA } from '../actions/actionTypes';
 
 const initialState = {
   logMessageData: [],
@@ -45,7 +45,6 @@ export default function(state = initialState, action) {
       };
     }
     case REMOVE_CSC_LOG_MESSAGES: {
-      console.log(REMOVE_CSC_LOG_MESSAGES)
       const cscDataIndex = state.logMessageData.findIndex(
         (CSCData) => CSCData.salindex === action.salindex && CSCData.csc === action.csc,
       );
@@ -63,6 +62,43 @@ export default function(state = initialState, action) {
       return {
         errorCodeData: state.errorCodeData,
         logMessageData: newLogMessageData,
+      };
+    }
+    case UPDATE_ERROR_CODE_DATA: {
+      let pastMessages = [];
+      if (state.errorCodeData.length > 0) {
+        pastMessages = state.errorCodeData;
+      }
+
+      const cscDataIndex = state.errorCodeData.findIndex(
+        (CSCData) => CSCData.salindex === action.salindex && CSCData.csc === action.csc,
+      );
+
+      if (cscDataIndex === -1) {
+        return {
+          logMessageData: state.logMessageData,
+          errorCodeData: [
+            ...state.errorCodeData,
+            {
+              csc: action.csc,
+              salindex: action.salindex,
+              errorCodeData: action.errorCodeData,
+            },
+          ],
+        };
+      }
+
+      const newErrorCodeData = [...state.errorCodeData];
+      const cscData = newErrorCodeData[cscDataIndex];
+      newErrorCodeData[cscDataIndex] = {
+        csc: action.csc,
+        salindex: action.salindex,
+        errorCodeData: [...cscData.errorCodeData, ...action.errorCodeData],
+      };
+
+      return {
+        errorCodeData: state.errorCodeData,
+        errorCodeData: newErrorCodeData,
       };
     }
     default:

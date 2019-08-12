@@ -11,6 +11,7 @@ import {
   getCSCHeartbeats,
   getCSCHeartbeat,
   getCSCLogMessages,
+  getCSCErrorCodeData,
   getAllStreamsAsDictionary,
 } from '../selectors';
 import * as mockData from './mock';
@@ -430,7 +431,7 @@ it('It should extract all received logMessages from the state for a given CSC', 
   });
 });
 
-it('It delete all logMessages of a CSC with an action ', async () => {
+it('Should delete all logMessages of a CSC with an action ', async () => {
   // Arrange
   await server.connected;
   await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
@@ -462,4 +463,31 @@ it('It delete all logMessages of a CSC with an action ', async () => {
 
   // Assert
   expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual([]);
+});
+
+it('It should extract all errorCode event data  from the state for a given CSC', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
+
+  let messages = [];
+
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual(messages);
+  mockData.TestCSCErrorCodeData.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'Test',
+          salindex: 1,
+          data: {
+            errorCode: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+    const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
+    expect(storedMessages).toEqual(messages);
+  });
 });

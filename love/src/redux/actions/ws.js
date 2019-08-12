@@ -9,7 +9,7 @@ import {
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
-import { receiveLogMessageData } from './summaryData';
+import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -106,6 +106,10 @@ export const openWebsocketConnection = () => {
 
             if (data.data[0].data.logMessage) {
               dispatch(receiveLogMessageData(data.data[0].csc, data.data[0].salindex, data.data[0].data.logMessage));
+            }
+
+            if (data.data[0].data.errorCode) {
+              dispatch(receiveErrorCodeData(data.data[0].csc, data.data[0].salindex, data.data[0].data.errorCode));
             }
           }
 

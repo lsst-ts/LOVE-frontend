@@ -158,11 +158,20 @@ export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, str
   return dictionary;
 };
 
-
 export const getCSCLogMessages = (state, csc, salindex) => {
-  const logMessageData =  state.summaryData.logMessageData.find( data => data.csc === csc && data.salindex === salindex);
+  const logMessageData = state.summaryData.logMessageData.find(
+    (data) => data.csc === csc && data.salindex === salindex,
+  );
 
-  if(!logMessageData)  return [];
+  if (!logMessageData) return [];
 
   return logMessageData.messages;
-}
+};
+
+export const getCSCErrorCodeData = (state, csc, salindex) => {
+  const errorCodeData = state.summaryData.errorCodeData.find((data) => data.csc === csc && data.salindex === salindex);
+
+  if (!errorCodeData) return [];
+
+  return errorCodeData.errorCodeData;
+};
