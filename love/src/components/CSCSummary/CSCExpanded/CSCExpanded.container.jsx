@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CSCExpanded from './CSCExpanded';
 import { requestGroupSubscription } from '../../../redux/actions/ws';
-import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
+import { getStreamData, getCSCHeartbeat, getCSCLogMessages } from '../../../redux/selectors';
 
 const CSCExpandedContainer = ({
   name,
@@ -29,7 +29,7 @@ const CSCExpandedContainer = ({
       clearCSCLogMessages={clearCSCLogMessages}
       summaryStateData={summaryStateData}
       logMessageData={logMessageData}
-      errorCodeData={errorCodeData}
+      // errorCodeData={errorCodeData}
       subscribeToStreams={subscribeToStreams}
       heartbeatData={heartbeatData}
     />
@@ -50,12 +50,11 @@ const mapDispatchToProps = (dispatch) => {
 
 const mapStateToProps = (state, ownProps) => {
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
-  let logMessageData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-logMessage`);
   let errorCodeData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-errorCode`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
 
+  const logMessageData = getCSCLogMessages(state, ownProps.name, ownProps.salindex);
   summaryStateData = summaryStateData ? summaryStateData : {};
-  logMessageData = logMessageData ? logMessageData : {};
   errorCodeData = errorCodeData ? errorCodeData : {};
 
   return {
