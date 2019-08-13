@@ -10,39 +10,31 @@ export default class CSCGroup extends Component {
     name: PropTypes.string,
     realm: PropTypes.string,
     cscs: PropTypes.array,
-    data: PropTypes.object,
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
     hierarchy: PropTypes.object,
-    clearCSCErrorCodes: PropTypes.func,
-    clearCSCLogMessages: PropTypes.func,
   };
 
   static defaultProps = {
     name: '',
     realm: '',
     cscs: [],
-    data: {},
     onCSCClick: () => 0,
     selectedCSCs: [],
     hierarchy: {},
-    clearCSCErrorCodes: () => 0,
-    clearCSCLogMessages: () => 0,
   };
 
   renderExpandedView = (selectedCSC) => {
     const groupView = selectedCSC.csc === 'all';
-    
+
     return groupView ? (
       <div className={styles.CSCGroupContainer}>
         <CSCGroupLogContainer
           realm={selectedCSC.realm}
           group={selectedCSC.group}
           name={selectedCSC.csc}
-          data={this.props.data}
           onCSCClick={this.props.onCSCClick}
           hierarchy={this.props.hierarchy}
-          clearCSCErrorCodes={this.props.clearCSCErrorCodes}
         />
       </div>
     ) : (
@@ -52,17 +44,13 @@ export default class CSCGroup extends Component {
           group={selectedCSC.group}
           name={selectedCSC.csc}
           salindex={selectedCSC.salindex}
-          data={this.props.data}
           onCSCClick={this.props.onCSCClick}
-          clearCSCErrorCodes={this.props.clearCSCErrorCodes}
-          clearCSCLogMessages={this.props.clearCSCLogMessages}
         />
       </div>
     );
   };
 
   render() {
-
     let selectedCSC = this.props.selectedCSCs.filter((data) => {
       return data.realm === this.props.realm && data.group === this.props.name;
     });
@@ -81,13 +69,12 @@ export default class CSCGroup extends Component {
         <div className={styles.CSCDetailsContainer}>
           {this.props.cscs.map((csc) => {
             return (
-              <div key={csc.name+csc.salindex} className={styles.CSCDetailContainer}>
+              <div key={csc.name + csc.salindex} className={styles.CSCDetailContainer}>
                 <CSCDetailContainer
                   realm={this.props.realm}
                   group={this.props.name}
                   name={csc.name}
                   salindex={csc.salindex}
-                  data={this.props.data}
                   onCSCClick={this.props.onCSCClick}
                 />
               </div>
