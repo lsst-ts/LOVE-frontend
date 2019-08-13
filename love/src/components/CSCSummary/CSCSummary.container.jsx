@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCSummary from './CSCSummary';
-import { hasFakeData, CSCSummaryHierarchy } from '../../Config';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import { getCSCHeartbeats, getAllStreamsAsDictionary } from '../../redux/selectors';
+import {  CSCSummaryHierarchy } from '../../Config';
+import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 const CSCSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
-  heartbeatsData,
 }) => {
   return (
     <CSCSummary

@@ -66,13 +66,6 @@ export default class CSCDetail extends Component {
   };
 
   shouldComponentUpdate = (nextProps) => {
-    const selfData = nextProps.data[nextProps.name];
-    const oldSelfData = this.props.data[this.props.name];
-    const oldSummaryStateValue = oldSelfData && oldSelfData.summaryState ? oldSelfData.summaryState.summaryState : 0;
-    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
-
-    const oldHeartbeatValue = oldSelfData && oldSelfData.heartbeat ? oldSelfData.heartbeat.lost : 0;
-    const heartbeatValue = selfData && selfData.heartbeat ? selfData.heartbeat.lost : 0;
     return (
       this.props.name !== nextProps.name ||
       this.props.summaryStateData !== nextProps.summaryStateData ||
@@ -85,7 +78,6 @@ export default class CSCDetail extends Component {
   }
   
   render() {
-    const selfData = this.props.data[this.props.name];
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value: 0 ;
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
