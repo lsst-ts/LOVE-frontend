@@ -170,7 +170,7 @@ export default class CSCExpanded extends PureComponent {
                       {msg.errorCode.value}
                     </div>
                     <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp}>{new Date(msg.private_rcvStamp.value).toUTCString()}</div>
+                      <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
                       <div className={styles.messageText}>{msg.errorReport.value}</div>
                       <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                     </div>
@@ -222,7 +222,7 @@ export default class CSCExpanded extends PureComponent {
                     <div key={`${msg.private_rcvStamp.value}-${msg.level.value}`} className={styles.logMessage}>
                       <div className={styles.messageIcon}>{icon}</div>
                       <div className={styles.messageTextContainer}>
-                        <div className={styles.timestamp}>{new Date(msg.private_rcvStamp.value).toUTCString()}</div>
+                        <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
                         <div className={styles.messageText}>{msg.message.value}</div>
                         <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                       </div>
