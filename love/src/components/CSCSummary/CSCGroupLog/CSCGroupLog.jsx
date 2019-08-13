@@ -36,6 +36,12 @@ export default class CSCGroupLog extends Component {
       this.props.subscribeToStream(name, salindex);
     });
   };
+
+  clearGroupErrorCodes = () => {
+    this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
+      this.props.clearCSCErrorCodes(name, salindex);
+    });
+  };
   render() {
     const { props } = this;
 
@@ -60,10 +66,7 @@ export default class CSCGroupLog extends Component {
           <div className={styles.logContainerTopBar}>
             <div>ERROR CODE</div>
             <div>
-              <Button
-                size="extra-small"
-                onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name)}
-              >
+              <Button size="extra-small" onClick={() => this.clearGroupErrorCodes()}>
                 CLEAR
               </Button>
             </div>
