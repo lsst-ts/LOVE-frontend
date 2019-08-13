@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCGroupLog.module.css';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
-import CSCDetail from '../CSCDetail/CSCDetail';
+import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import Button from '../../GeneralPurpose/Button/Button';
 
 export default class CSCGroupLog extends Component {
@@ -83,10 +83,11 @@ export default class CSCGroupLog extends Component {
                       >
                         {msg.csc}
                       </div> */}
-                      <CSCDetail
+                      <CSCDetailContainer
                         realm={this.props.realm}
-                        group={this.props.group}
+                        group={this.props.name}
                         name={msg.csc}
+                        salindex={msg.salindex}
                         data={this.props.data}
                         onCSCClick={this.props.onCSCClick}
                       />
