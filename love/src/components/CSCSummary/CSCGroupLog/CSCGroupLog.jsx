@@ -94,7 +94,7 @@ export default class CSCGroupLog extends Component {
                         data={this.props.data}
                         onCSCClick={this.props.onCSCClick}
                       />
-                      <div className={styles.timestamp}>{msg.private_rcvStamp.value}</div>
+                      <div className={styles.timestamp}>{new Date(msg.private_rcvStamp.value).toUTCString()}</div>
                     </div>
                     <div className={styles.messageText}>{msg.errorReport.value}</div>
                     <div className={styles.messageTraceback}>{msg.traceback.value}</div>
