@@ -4,6 +4,7 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
+  UPDATE_LAST_SAL_COMMAND_STATUS,
 } from '../actions/actionTypes';
 import { connectionStates, SALCommandStatus } from '../actions/ws';
 
@@ -87,12 +88,24 @@ export default function(state = initialState, action) {
         ...state,
         lastSALCommand: {
           status: action.status,
-          cmd: action.data.stream.cmd,
-          params: action.data.stream.params,
-          component: action.csc,
+          cmd: action.cmd,
+          params: action.params,
+          component: action.component,
+          cmd_id: action.cmd_id,
         },
       };
     }
+
+    case UPDATE_LAST_SAL_COMMAND_STATUS: {
+      return {
+        ...state,
+        lastSALCommand: {
+          ...state.lastSALCommand,
+          status: action.status,
+        },
+      };
+    }
+
     default:
       return state;
   }
