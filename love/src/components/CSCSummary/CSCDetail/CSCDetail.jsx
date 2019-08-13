@@ -65,14 +65,6 @@ export default class CSCDetail extends Component {
     },
   };
 
-  shouldComponentUpdate = (nextProps) => {
-    return (
-      this.props.name !== nextProps.name ||
-      this.props.summaryStateData !== nextProps.summaryStateData ||
-      nextProps.heartbeatData !== this.props.heartbeatData
-    );
-  };
-
   componentDidMount = () => {
     this.props.subscribeToStreams(this.props.name, this.props.salindex);
   }
