@@ -8,8 +8,7 @@ import { removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 const CSCGroupLogContainer = ({
   realm,
   group,
-  csc,
-  data,
+  name,
   onCSCClick,
   hierarchy,
   clearCSCErrorCodes,
@@ -20,8 +19,7 @@ const CSCGroupLogContainer = ({
     <CSCGroupLog
       realm={realm}
       group={group}
-      name={csc}
-      data={data}
+      name={name}
       onCSCClick={onCSCClick}
       hierarchy={hierarchy}
       clearCSCErrorCodes={clearCSCErrorCodes}

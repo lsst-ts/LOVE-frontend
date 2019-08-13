@@ -73,6 +73,7 @@ export default class CSCGroupLog extends Component {
           </div>
           <div className={[styles.log, styles.messageLogContent].join(' ')}>
             {this.props.errorCodeData.map((msg) => {
+              console.log(this.props.realm, ',', this.props.group, ',', msg.csc, ', ', msg.salindex);
               return (
                 <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
                   <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
@@ -88,7 +89,7 @@ export default class CSCGroupLog extends Component {
                       </div> */}
                       <CSCDetailContainer
                         realm={this.props.realm}
-                        group={this.props.name}
+                        group={this.props.group}
                         name={msg.csc}
                         salindex={msg.salindex}
                         data={this.props.data}

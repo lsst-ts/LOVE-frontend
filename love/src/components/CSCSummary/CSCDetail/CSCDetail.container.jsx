@@ -9,7 +9,6 @@ const CSCDetailContainer = ({
   group,
   name,
   salindex,
-  data,
   summaryStateData,
   onCSCClick,
   subscribeToStreams,
@@ -21,7 +20,6 @@ const CSCDetailContainer = ({
       group={group}
       name={name}
       salindex={salindex}
-      data={data}
       summaryStateData={summaryStateData}
       onCSCClick={onCSCClick}
       subscribeToStreams={subscribeToStreams}
