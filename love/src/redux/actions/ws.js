@@ -5,6 +5,7 @@ import {
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
+  UPDATE_LAST_SAL_COMMAND_STATUS,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
@@ -20,6 +21,7 @@ export const connectionStates = {
 
 export const SALCommandStatus = {
   REQUESTED: 'REQUESTED',
+  ACK: 'ACK',
 };
 
 let socket, wsPromise;
@@ -113,6 +115,10 @@ export const openWebsocketConnection = () => {
             }
           }
 
+          if (data.category === 'ack') {
+            dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK));
+          }
+
           data.data.forEach((stream) => {
             dispatch(
               receiveGroupSubscriptionData({
@@ -204,6 +210,14 @@ export const updateLastSALCommand = (cmd, status) => {
     ...cmd,
   };
 };
+
+export const updateLastSALCommandStatus = (status) => {
+  return {
+    type: UPDATE_LAST_SAL_COMMAND_STATUS,
+    status,
+  };
+};
+
 export const requestSALCommand = (data) => {
   /**
    * Requests the LOVE-producer to send a command to the SAL (salobj)
@@ -211,6 +225,7 @@ export const requestSALCommand = (data) => {
    *
    * Tries to open a websocket connection if it does not exist and retries after 0.5s.
    */
+  const commandID = `${Date.now()}-${data.cmd}`;
   return (dispatch, getState) => {
     if (!wsPromise) {
       dispatch(openWebsocketConnection());
@@ -231,6 +246,7 @@ export const requestSALCommand = (data) => {
           stream: {
             cmd: data.cmd,
             params: data.params,
+            cmd_id: commandID,
           },
         },
       };
@@ -240,7 +256,16 @@ export const requestSALCommand = (data) => {
         data: [commandObject],
       });
 
-      dispatch(updateLastSALCommand(commandObject, SALCommandStatus.REQUESTED));
+      const commandStatus = {
+        cmd: data.cmd,
+        params: data.params,
+        component: data.component,
+        cmd_id: commandID,
+      };
+
+      dispatch(updateLastSALCommand(commandStatus, SALCommandStatus.REQUESTED));
     });
-  };
-};
+
+    return commandID;
+  }
+}
