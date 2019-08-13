@@ -8,6 +8,7 @@ import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
+import Loader from '../GeneralPurpose/Loader/Loader';
 import ManagerInterface from '../../Utils';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
@@ -17,6 +18,7 @@ import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
+import { SALCommandStatus } from '../../redux/actions/ws';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -422,6 +424,7 @@ export default class ScriptQueue extends Component {
           }}
           className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
         >
+          <Loader display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED} />
           <ConfigPanel
             launchScript={this.launchScript}
             closeConfigPanel={this.closeConfigPanel}
