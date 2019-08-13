@@ -5,6 +5,7 @@ import {
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
+  UPDATE_LAST_SAL_COMMAND_STATUS,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
@@ -19,6 +20,7 @@ export const connectionStates = {
 
 export const SALCommandStatus = {
   REQUESTED: 'REQUESTED',
+  ACK: 'ACK',
 };
 
 let socket, wsPromise;
@@ -33,14 +35,13 @@ const receiveGroupConfirmationMessage = (data) => ({
   data,
 });
 
-const receiveGroupSubscriptionData = ({category, csc, salindex, data}) => {
-
+const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
     category: category,
     csc: csc,
     salindex: salindex,
-    data: data
+    data: data,
   };
 };
 
@@ -74,12 +75,7 @@ export const openWebsocketConnection = () => {
           if (data.category === 'event') {
             const stream = data.data[0].data;
             if (data.data[0].csc === 'ATCamera') {
-              if (
-                stream.startIntegration ||
-                stream.endReadout ||
-                stream.startReadout ||
-                stream.endOfImageTelemetry
-              ) {
+              if (stream.startIntegration || stream.endReadout || stream.startReadout || stream.endOfImageTelemetry) {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
@@ -100,21 +96,23 @@ export const openWebsocketConnection = () => {
 
             if (data.data[0].csc === 'ScriptQueueState') {
               if (stream.stream.finished_scripts) {
-                const finishedIndices = stream.stream.finished_scripts.map(
-                  (script) => script.index,
-                );
+                const finishedIndices = stream.stream.finished_scripts.map((script) => script.index);
                 dispatch(removeScriptsHeartbeats(finishedIndices));
               }
             }
           }
+          if (data.category === 'ack') {
+            dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK));
+          }
 
-          data.data.forEach( stream =>{
-            dispatch(receiveGroupSubscriptionData({
-              category: data.category,
-              ...stream
-            }));
-
-          })
+          data.data.forEach((stream) => {
+            dispatch(
+              receiveGroupSubscriptionData({
+                category: data.category,
+                ...stream,
+              }),
+            );
+          });
         },
         onclose: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
@@ -198,6 +196,14 @@ export const updateLastSALCommand = (cmd, status) => {
     ...cmd,
   };
 };
+
+export const updateLastSALCommandStatus = (status) => {
+  return {
+    type: UPDATE_LAST_SAL_COMMAND_STATUS,
+    status,
+  };
+};
+
 export const requestSALCommand = (data) => {
   /**
    * Requests the LOVE-producer to send a command to the SAL (salobj)
@@ -205,6 +211,7 @@ export const requestSALCommand = (data) => {
    *
    * Tries to open a websocket connection if it does not exist and retries after 0.5s.
    */
+  const commandID = `${Date.now()}-${data.cmd}`;
   return (dispatch, getState) => {
     if (!wsPromise) {
       dispatch(openWebsocketConnection());
@@ -220,21 +227,33 @@ export const requestSALCommand = (data) => {
 
       const commandObject = {
         category: 'cmd',
-        data: [{
-          csc: data.component,
-          salindex: 1,
-          data: {
-            stream: {
-              cmd: data.cmd,
-              params: data.params,
-            }
-          }
-        }]
+        data: [
+          {
+            csc: data.component,
+            salindex: 1,
+            data: {
+              stream: {
+                cmd: data.cmd,
+                params: data.params,
+                cmd_id: commandID,
+              },
+            },
+          },
+        ],
       };
 
       socket.json(commandObject);
 
-      dispatch(updateLastSALCommand(commandObject, SALCommandStatus.REQUESTED));
+      const commandStatus = {
+        cmd: data.cmd,
+        params: data.params,
+        component: data.component,
+        cmd_id: commandID,
+      };
+
+      dispatch(updateLastSALCommand(commandStatus, SALCommandStatus.REQUESTED));
     });
+
+    return commandID;
   };
 };
