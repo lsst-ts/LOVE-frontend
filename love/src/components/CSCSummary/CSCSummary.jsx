@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
 import Panel from '../GeneralPurpose/Panel/Panel';
-import ManagerInterface from '../../Utils';
-import { hasFakeData } from '../../Config';
 
 export default class CSCSummary extends Component {
   static propTypes = {
