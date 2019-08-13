@@ -107,6 +107,30 @@ export const m3PortStateMap = {
   0: 'UNKNOWN',
 };
 
+// LATISS
+export const movingElementStateMap = {
+  0: 'HOMING',
+  1: 'MOVING',
+  2: 'STATIONARY',
+  3: 'NOTINPOSITION',
+};
+
+export const raftsStateMap = {
+  0: 'NEEDS_CLEAR',
+  1: 'CLEARING',
+  2: 'INTEGRATING',
+  3: 'READING_OUT',
+  4: 'QUIESCENT',
+};
+
+export const shutterStateMap = {
+  0: 'CLOSED',
+  1: 'OPEN',
+  2: 'CLOSING',
+  3: 'OPENING',
+};
+
+
 export const stateToStyleDomeAndMount = {
   NASMITH1: 'ok',
   NASMITH2: 'ok',

@@ -7,14 +7,17 @@ import {
   MARK_ERROR_TOKEN,
   REQUEST_REMOVE_TOKEN,
   REMOVE_REMOTE_TOKEN,
-  MARK_ERROR_REMOVE_TOKEN
+  MARK_ERROR_REMOVE_TOKEN,
+  GET_TOKEN_FROM_LOCALSTORAGE
 } from './actionTypes';
 import ManagerInterface from '../../Utils';
 import {getToken} from '../selectors';
 
 export const requestToken = (username, password) => ({type: REQUEST_TOKEN, username, password});
 
-export const receiveToken = (token) => ({type: RECEIVE_TOKEN, token});
+export const receiveToken = (username, token, permissions) => ({type: RECEIVE_TOKEN, username, token, permissions});
+
+export const getTokenFromStorage = (token) => ({type: GET_TOKEN_FROM_LOCALSTORAGE, token});
 
 export const emptyToken = {
   type: EMPTY_TOKEN
@@ -44,10 +47,16 @@ export const markErrorRemoveToken = {
   type: MARK_ERROR_REMOVE_TOKEN
 };
 
+export function doGetTokenFromStorage() {
+  return (dispatch) => {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    dispatch(getTokenFromStorage(token))
+  };
+}
+
 function doExpireToken() {
   return(dispatch) => {
     dispatch(expireToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -55,15 +64,13 @@ function doExpireToken() {
 function doMarkErrorToken() {
   return(dispatch) => {
     dispatch(markErrorToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
 
-function doReceiveToken(username, token) {
+function doReceiveToken(username, token, permissions) {
   return(dispatch) => {
-    dispatch(receiveToken(token));
-    localStorage.setItem('LOVE-USERNAME', username);
+    dispatch(receiveToken(username, token, permissions));
     localStorage.setItem('LOVE-TOKEN', token);
   };
 }
@@ -71,7 +78,6 @@ function doReceiveToken(username, token) {
 function doRejectToken() {
   return(dispatch) => {
     dispatch(rejectToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -79,7 +85,6 @@ function doRejectToken() {
 function doRequestRemoveToken() {
   return(dispatch) => {
     dispatch(requestRemoveToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -87,7 +92,6 @@ function doRequestRemoveToken() {
 function doRemoveRemoteToken() {
   return(dispatch) => {
     dispatch(removeRemoteToken);
-    localStorage.removeItem('LOVE-USERNAME');
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -101,13 +105,7 @@ function doRemoveRemoteToken() {
  */
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-  return(dispatch, getState) => {
-    const storageToken = localStorage.getItem('LOVE-TOKEN');
-    if (storageToken && storageToken.length > 0) {
-      dispatch(receiveToken(storageToken));
-      return;
-    }
-
+  return (dispatch, getState) => {
     dispatch(requestToken(username, password));
     return fetch(url, {
       method: 'POST',
@@ -125,9 +123,14 @@ export function fetchToken(username, password) {
       }
     }).then((response) => {
       if (response) {
-        const {token} = response;
+        const token = response.token;
+        let username = '';
+        if (response.user_data) {
+          username = response.user_data.username;
+        }
+        const permissions = response.permissions;
         if (token !== undefined && token !== null) {
-          dispatch(doReceiveToken(username, token));
+          dispatch(doReceiveToken(username, token, permissions));
           return;
         }
       }
@@ -191,10 +194,19 @@ export function validateToken() {
       }
 
       return response.json().then((resp) => {
-        const {detail} = resp;
+        const detail = resp.detail;
+        let username = '';
+        if (resp.user_data) {
+          username = resp.user_data.username;
+        }
+        const permissions = resp.permissions;
         if (detail !== 'Token is valid') {
           console.log('Session expired. Logging out');
           dispatch(doExpireToken());
+          return Promise.resolve();
+        } else {
+          dispatch(doReceiveToken(username, token, permissions));
+          return Promise.resolve();
         }
       });
     });

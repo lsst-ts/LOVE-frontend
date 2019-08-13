@@ -9,10 +9,14 @@ import styles from './ScriptQueue.module.css';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import ManagerInterface from '../../Utils';
-import { hasCommandPrivileges, hasFakeData } from '../../Config';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
-import PauseIcon from './../icons/PauseIcon/PauseIcon';
-import ResumeIcon from './../icons/ResumeIcon/ResumeIcon';
+import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
+import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
+import ContextMenu from './Scripts/ContextMenu/ContextMenu';
+import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
+import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
+import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -34,6 +38,9 @@ export default class ScriptQueue extends Component {
       summaryStateValue: 0,
       useLocalWaitingList: false,
       waitingScriptList: this.props.waitingScriptList,
+      isContextMenuOpen: false,
+      contextMenuData: {},
+      currentMenuSelected: false,
     };
     this.lastId = 19;
     this.managerInterface = new ManagerInterface();
@@ -129,7 +136,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragStart = (e, draggingId) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     const draggingScriptInstance = this.getScriptFromId(draggingId);
     this.setState({
       draggingScriptInstance,
@@ -139,7 +146,7 @@ export default class ScriptQueue extends Component {
 
   // eslint-disable-next-line
   onDragEnd = (e, draggingId) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     this.setState({
       draggingScriptInstance: undefined,
     });
@@ -150,7 +157,7 @@ export default class ScriptQueue extends Component {
   };
 
   onDragEnter = () => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
@@ -170,14 +177,9 @@ export default class ScriptQueue extends Component {
     }
   };
 
-  onDragLeave = () => {
-    if (!hasCommandPrivileges) return;
-    const sourceScriptId = this.state.draggingScriptInstance.index;
-  };
-
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
@@ -264,7 +266,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  stopScript = (scriptIndex) => {
+  stopScript = (scriptIndex, terminate = false) => {
     console.log('Stopping script', scriptIndex);
     const array = new Array(400).fill(0);
     array[0] = scriptIndex;
@@ -273,7 +275,7 @@ export default class ScriptQueue extends Component {
       params: {
         length: 1,
         salIndices: array,
-        terminate: false,
+        terminate: terminate,
       },
       component: 'ScriptQueue',
     });
@@ -291,15 +293,16 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  moveScript = (scriptIndex, position) => {
+  moveScript = (scriptIndex, position, offset = true) => {
     console.log(`Move script ${scriptIndex} to ${position}`);
     let location = 3; //Before reference script
     let locationSalIndex = 0;
     if (position === 0) location = 1; //Location: first
     //Location: last
-    if (position === this.state.waitingScriptList.length - 1) location = 2;
+    if (position >= this.state.waitingScriptList.length - 1) location = 2;
     else {
-      locationSalIndex = this.state.waitingScriptList[position + 1].index;
+      const offsetValue = offset ? 1 : 0;
+      locationSalIndex = this.state.waitingScriptList[position + offsetValue].index;
     }
     this.props.requestSALCommand({
       cmd: 'cmd_move',
@@ -330,6 +333,49 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  onClickContextMenu = (event, index, currentMenuSelected = false) => {
+    event.stopPropagation();
+    this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
+    this.setState({
+      contextMenuData: event.target.getBoundingClientRect(),
+      selectedScriptIndex: index,
+      currentMenuSelected: currentMenuSelected,
+    });
+  };
+
+  requeueSelectedScript = () => {
+    this.requeueScript(this.state.selectedScriptIndex);
+  };
+
+  stopSelectedScript = (terminate = false) => {
+    this.stopScript(this.state.selectedScriptIndex, terminate);
+    this.setState({ isContextMenuOpen: false });
+  };
+
+  moveScriptUp = (scriptIndex) => {
+    let i = 0;
+    for (; i < this.props.waitingScriptList.length; i++)
+      if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    this.moveScript(scriptIndex, i - 1, false);
+  };
+
+  moveScriptDown = (scriptIndex) => {
+    let i = 0;
+    for (; i < this.props.waitingScriptList.length; i++)
+      if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    this.moveScript(scriptIndex, i + 1, true);
+  };
+
+  moveSelectedScriptToTop = () => {
+    this.moveScript(this.state.selectedScriptIndex, 0);
+    this.setState({ isContextMenuOpen: false });
+  };
+
+  moveSelectedScriptToBottom = () => {
+    this.moveScript(this.state.selectedScriptIndex, Infinity);
+    this.setState({ isContextMenuOpen: false });
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -354,21 +400,39 @@ export default class ScriptQueue extends Component {
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
     }, 0);
+    const currentContextMenu = [
+      { icon: <TerminateIcon />, text: 'Terminate', action: () => this.stopSelectedScript(true) },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ];
+    const waitingContextMenu = [
+      { icon: <MoveToTopIcon />, text: 'Move to top', action: this.moveSelectedScriptToTop },
+      { icon: <MoveToBottomIcon />, text: 'Move to bottom', action: this.moveSelectedScriptToBottom },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ];
 
+    const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
     return (
       <Panel title="Script Queue">
-        <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
+        <div
+          onMouseDown={() => {
+            this.setState({ isContextMenuOpen: false });
+          }}
+          onScroll={() => {
+            this.setState({ isContextMenuOpen: false });
+          }}
+          className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
+        >
           <ConfigPanel
             launchScript={this.launchScript}
             closeConfigPanel={this.closeConfigPanel}
             configPanel={this.state.configPanel}
           />
-          <div
-            onDragEnter={(e) => {
-              this.onDragLeave(e);
-            }}
-            className={styles.currentScriptWrapper}
-          >
+          <ContextMenu
+            isOpen={this.state.isContextMenuOpen}
+            contextMenuData={this.state.contextMenuData}
+            options={contextMenuOption}
+          />
+          <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>
                 <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
@@ -382,16 +446,13 @@ export default class ScriptQueue extends Component {
                   heartbeatData={this.state.indexedHeartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
                   stopScript={this.stopScript}
+                  onClickContextMenu={this.onClickContextMenu}
+                  commandExecutePermission={this.props.commandExecutePermission}
                 />
               </div>
             </div>
           </div>
-          <div
-            onDragEnter={(e) => {
-              this.onDragLeave(e);
-            }}
-            className={styles.globalStateWrapper}
-          >
+          <div className={styles.globalStateWrapper}>
             <div className={styles.globalStateContainer}>
               <div className={styles.stateContainer}>
                 CSC STATE
@@ -409,12 +470,7 @@ export default class ScriptQueue extends Component {
           {/* LISTS BODY */}
           <div className={styles.listsBody}>
             <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
-              <div
-                onDragEnter={(e) => {
-                  this.onDragLeave(e);
-                }}
-                className={[styles.availableScriptList, styles.scriptList].join(' ')}
-              >
+              <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
                 <div
                   className={[styles.collapsedScriptListLabelWrapper].join(' ')}
                   onClick={this.openAvailableList}
@@ -446,7 +502,6 @@ export default class ScriptQueue extends Component {
                           key={`dragging-available-${script.type}-${script.path}`}
                           {...script}
                           dragSourceList="available"
-                          onDragOver={(e) => this.onDragLeave(e)}
                           onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                           onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
                           draggingScriptInstance={this.state.draggingScriptInstance}
@@ -458,6 +513,7 @@ export default class ScriptQueue extends Component {
                             isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
                             launchScriptConfig={this.launchScriptConfig}
                             script={script}
+                            commandExecutePermission={this.props.commandExecutePermission}
                             {...script}
                           />
                         </DraggableScript>
@@ -481,7 +537,7 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
-                {this.props.state === 'Stopped' && (
+                {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
                       <span>Resume</span>
@@ -491,7 +547,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </>
                 )}
-                {this.props.state === 'Running' && (
+                {this.props.state === 'Running' && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
                       <span>Pause</span>
@@ -502,7 +558,7 @@ export default class ScriptQueue extends Component {
                   </>
                 )}
               </div>
-              <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
+              <ScriptList onDragEnter={this.onDragEnter}>
                 {waitingList.map((script, listIndex) => {
                   if (!script) return null;
                   const estimatedTime =
@@ -520,7 +576,7 @@ export default class ScriptQueue extends Component {
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'waiting')}
                       draggingScriptInstance={this.state.draggingScriptInstance}
-                      disabled={!hasCommandPrivileges}
+                      disabled={!this.props.commandExecutePermission}
                     >
                       <WaitingScript
                         isCompact={
@@ -532,7 +588,10 @@ export default class ScriptQueue extends Component {
                         heartbeatData={this.state.indexedHeartbeats[script.index]}
                         stopScript={this.stopScript}
                         moveScript={this.moveScript}
-                        requeueScript={this.requeueScript}
+                        onClickContextMenu={this.onClickContextMenu}
+                        moveScriptUp={this.moveScriptUp}
+                        moveScriptDown={this.moveScriptDown}
+                        commandExecutePermission={this.props.commandExecutePermission}
                         {...script}
                       />
                     </DraggableScript>
@@ -542,12 +601,7 @@ export default class ScriptQueue extends Component {
             </div>
 
             <div className={[styles.collapsableScriptList, finishedScriptListClass].join(' ')}>
-              <div
-                onDragEnter={(e) => {
-                  this.onDragLeave(e);
-                }}
-                className={[styles.finishedScriptList, styles.scriptList].join(' ')}
-              >
+              <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
                 <div
                   className={[styles.collapsedScriptListLabelWrapper].join(' ')}
                   onClick={this.openFinishedList}
@@ -591,12 +645,7 @@ export default class ScriptQueue extends Component {
                           ? 0.0
                           : script.timestampProcessEnd - script.timestampRunStart;
                       return (
-                        <DraggableScript
-                          key={`dragging-finished-${key}`}
-                          dragSourceList="available"
-                          onDragOver={(e) => this.onDragLeave(e)}
-                          disabled
-                        >
+                        <DraggableScript key={`dragging-finished-${key}`} dragSourceList="available" disabled>
                           <FinishedScript
                             {...script}
                             path={script.path}
@@ -606,6 +655,8 @@ export default class ScriptQueue extends Component {
                             isCompact={
                               this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                             }
+                            requeueScript={this.requeueScript}
+                            commandExecutePermission={this.props.commandExecutePermission}
                           />
                         </DraggableScript>
                       );

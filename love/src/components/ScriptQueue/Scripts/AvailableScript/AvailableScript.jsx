@@ -1,11 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import JSONPretty from 'react-json-pretty';
 import styles from './AvailableScript.module.css';
-import UploadButton from '../../../HealthStatusSummary/Button/UploadButton';
 import scriptStyles from '../Scripts.module.css';
-import { hasCommandPrivileges } from '../../../../Config';
-import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon';
+import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 
 export default class AvailableScript extends PureComponent {
   static propTypes = {
@@ -92,40 +89,19 @@ export default class AvailableScript extends PureComponent {
                   SCHEMA
                 </div> */}
               </div>
-              {/* <div className={scriptStyles.expandedTopRow}>
-                <p>Script config</p>
-                {hasCommandPrivileges ? (
-                  <div className={scriptStyles.uploadButtonWrapper}>
-                    <UploadButton
-                      className={scriptStyles.uploadConfigButton}
-                      labelClassName={scriptStyles.uploadButtonLabel}
-                      iconClassName={scriptStyles.uploadIcon}
-                    />
-                  </div>
-                ) : null}
-              </div>
-              <JSONPretty
-                data={{}}
-                theme={{
-                  main:
-                    'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                  key: 'color:#f92672;',
-                  string: 'color:#fd971f;',
-                  value: 'color:#a6e22e;',
-                  boolean: 'color:#ac81fe;',
-                }}
-              /> */}
             </div>
           </div>
         </div>
-        <div
-          className={scriptStyles.mainScriptButton}
-          onClick={(e) => this.props.launchScriptConfig(e, { name: fileName, ...this.props.script })}
-        >
-          <span className={scriptStyles.launchIconWrapper}>
-            <LaunchScriptIcon title="Launch script: Configure" />
-          </span>
-        </div>
+        {this.props.commandExecutePermission && (
+          <div
+            className={scriptStyles.mainScriptButton}
+            onClick={(e) => this.props.launchScriptConfig(e, { name: fileName, ...this.props.script })}
+          >
+            <span className={scriptStyles.launchIconWrapper}>
+              <LaunchScriptIcon title="Launch script: Configure" />
+            </span>
+          </div>
+        )}
       </div>
     );
   }
