@@ -165,3 +165,40 @@
 .subSectionValue {
   color: var(--highlighted-font-color);
 }
+
+.buttonsContainer {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 0.25em;
+  align-self: flex-end;
+  padding-right: 0.15em;
+
+}
+
+.buttonContainer {
+  padding: 0 0.25em;
+  border: 1px solid transparent;
+}
+
+.buttonContainer:hover {
+  background: var(--second-quaternary-background-color);
+  padding: 0 0.25em;
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.commandButton{
+  display: grid;
+  grid-template-columns: 2em 1fr;
+  padding: 0em;
+  text-align: left;
+  align-items: center;
+  user-select: none;
+}
+
+.commandButton div {
+  padding: 0 0.5em;
+}
+
+div.commandButtonText {
+  padding-left: 0em;
+}

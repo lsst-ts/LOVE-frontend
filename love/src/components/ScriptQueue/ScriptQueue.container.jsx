@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import { getScriptQueueState, getScriptHeartbeats, getSummaryStateValue } from '../../redux/selectors';
+import { getScriptQueueState, getScriptHeartbeats, getSummaryStateValue, getPermCmdExec } from '../../redux/selectors';
 
 import ScriptQueue from './ScriptQueue';
 
@@ -12,6 +12,7 @@ const ScriptQueueContainer = ({
   summaryStateValue,
   queueState,
   scriptHeartbeats,
+  commandExecutePermission,
 }) => {
   return (
     <ScriptQueue
@@ -25,6 +26,7 @@ const ScriptQueueContainer = ({
       waitingScriptList={queueState.waitingScriptList}
       state={queueState.state}
       heartbeats={scriptHeartbeats}
+      commandExecutePermission={commandExecutePermission}
     />
   );
 };
@@ -33,10 +35,12 @@ const mapStateToProps = (state) => {
   const queueState = getScriptQueueState(state, 1);
   const scriptHeartbeats = getScriptHeartbeats(state, 1);
   const summaryStateValue = getSummaryStateValue(state, 'event-ScriptQueue-1-summaryState');
+  const commandExecutePermission = getPermCmdExec(state);
   return {
     queueState: queueState,
     scriptHeartbeats: scriptHeartbeats,
     summaryStateValue: summaryStateValue,
+    commandExecutePermission: commandExecutePermission,
   };
 };
 

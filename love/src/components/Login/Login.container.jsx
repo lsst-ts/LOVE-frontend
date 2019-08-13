@@ -3,7 +3,6 @@ import Login from './Login';
 import { connect } from 'react-redux';
 import { getToken, getTokenStatus } from '../../redux/selectors';
 import { fetchToken, emptyToken } from '../../redux/actions/auth';
-import { tokenStates } from '../../redux/reducers/auth';
 
 const LoginContainer = ({ token, tokenStatus, fetchToken, emptyToken }) => {
   return (
@@ -19,11 +18,8 @@ const LoginContainer = ({ token, tokenStatus, fetchToken, emptyToken }) => {
 const mapStateToProps = (state) => {
   const tokenStatus = getTokenStatus(state);
   const token = getToken(state);
-
-  console.log(tokenStatus);
-
   return {
-    token: getToken(state),
+    token: token,
     tokenStatus: tokenStatus,
   };
 };

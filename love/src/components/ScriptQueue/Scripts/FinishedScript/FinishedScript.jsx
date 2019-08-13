@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import JSONPretty from 'react-json-pretty';
 import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
+import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
 
 export default class FinishedScript extends PureComponent {
   static propTypes = {
@@ -24,6 +24,8 @@ export default class FinishedScript extends PureComponent {
     process_state: PropTypes.string,
     /** True if the script is displayed in compact view */
     isCompact: PropTypes.bool,
+    /** Function called to requeue a script */
+    requeueScript: PropTypes.func,
   };
 
   static defaultProps = {
@@ -34,6 +36,7 @@ export default class FinishedScript extends PureComponent {
     elapsedTime: 0,
     script_state: 'Unknown',
     isCompact: false,
+    requeueScript: () => 0,
   };
 
   constructor(props) {
@@ -127,26 +130,35 @@ export default class FinishedScript extends PureComponent {
               </div>
             </div>
           </div>
-          <div className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}>
+          <div
+            className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
+          >
             <div className={[scriptStyles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedSubSection}>
                 <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
                 <div className={scriptStyles.subSectionRow}>
-                    <span className={scriptStyles.subSectionLabel}>Classname:</span>
-                    <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
-                  </div>
-                  <div className={scriptStyles.subSectionRow}>
-                    <span className={scriptStyles.subSectionLabel}>Description:</span>
-                    <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
-                  </div>
-                  <div className={scriptStyles.subSectionRow}>
-                    <span className={scriptStyles.subSectionLabel}>Remotes:</span>
-                    <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
-                  </div>
+                  <span className={scriptStyles.subSectionLabel}>Classname:</span>
+                  <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
+                </div>
+                <div className={scriptStyles.subSectionRow}>
+                  <span className={scriptStyles.subSectionLabel}>Description:</span>
+                  <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
+                </div>
+                <div className={scriptStyles.subSectionRow}>
+                  <span className={scriptStyles.subSectionLabel}>Remotes:</span>
+                  <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {this.props.commandExecutePermission && (
+          <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.requeueScript(this.props.index)}>
+            <span className={scriptStyles.launchIconWrapper}>
+              <LaunchScriptIcon title="Launch script: Requeue" />
+            </span>
+          </div>
+        )}
       </div>
     );
   }
