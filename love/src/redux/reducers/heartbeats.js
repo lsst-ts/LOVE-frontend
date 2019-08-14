@@ -1,4 +1,4 @@
-import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS } from '../actions/actionTypes';
+import { UPDATE_SCRIPT_HEARTBEAT, REMOVE_SCRIPTS_HEARTBEATS, UPDATE_CSC_HEARTBEATS } from '../actions/actionTypes';
 
 const initialState = {
   scripts: [],
@@ -35,6 +35,27 @@ export default function(state = initialState, action) {
       return {
         cscs: state.cscs,
         scripts: newHeartbeats,
+      };
+    }
+    case UPDATE_CSC_HEARTBEATS: {
+      const currentHeartbeats = state.cscs;
+      let found = false;
+      const salindex = action.data.salindex;
+      const newHeartbeats = currentHeartbeats.map((current) => {
+        if (current.csc !== action.data.csc || current.salindex !== salindex) {
+          return current;
+        }
+        found = true;
+        return action.data;
+      });
+
+      if (!found) {
+        newHeartbeats.push(action.data);
+      }
+
+      return {
+        cscs: newHeartbeats,
+        scripts: state.scripts,
       };
     }
     default:
