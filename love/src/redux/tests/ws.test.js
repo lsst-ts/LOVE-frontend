@@ -2,11 +2,21 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { requestSALCommand, openWebsocketConnection } from '../actions/ws';
-
+import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
+import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import { SALCommandStatus } from '../actions/ws';
-import { getLastSALCommand, getScriptHeartbeats, getScriptQueueState } from '../selectors';
-import { mockScriptQueueData } from './mock';
+import {
+  getLastSALCommand,
+  getScriptHeartbeats,
+  getCSCHeartbeats,
+  getCSCHeartbeat,
+  getCSCLogMessages,
+  getCSCErrorCodeData,
+  getAllStreamsAsDictionary,
+  getGroupSortedErrorCodeData,
+} from '../selectors';
+import * as mockData from './mock';
+import { flatMap } from '../../Utils';
 
 let store, server;
 const initialState = {
@@ -70,7 +80,16 @@ it('Should send a command to the server and save it on the state properly', asyn
 
   await store.dispatch(requestSALCommand(commandObject));
 
-  await expect(server).toReceiveMessage({ option: 'cmd', type: 'command_data', ...commandObject });
+  await expect(server).toReceiveMessage({
+    category: 'cmd',
+    data: [
+      {
+        csc: 'ATDome',
+        data: { stream: { cmd: 'cmd_closeShutter', params: {} } },
+        salindex: 1,
+      },
+    ],
+  });
 
   expect(getLastSALCommand(store.getState())).toEqual({
     status: SALCommandStatus.REQUESTED,
@@ -172,7 +191,6 @@ it(`GIVEN 3 script heartbeats in the State,
     },
   ];
   mockHeartbeats.forEach((heartbeat) => {
-
     server.send({
       category: 'event',
       data: [
@@ -191,16 +209,386 @@ it(`GIVEN 3 script heartbeats in the State,
         },
       ],
     });
-    
   });
 
   let expectedState = [];
   // Act:
-  server.send(mockScriptQueueData);
+  server.send(mockData.ScriptQueueData);
   // Assert:
   expectedState = [mockHeartbeats[0], mockHeartbeats[2]];
   let heartbeatsState = getScriptHeartbeats(store.getState(), 1);
   expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(
     JSON.stringify(expectedState.sort(compareSalIndex)),
   );
+});
+
+describe('GIVEN 2 csc salindices in different combinations', () => {
+  const salindices = [1, 2];
+
+  salindices.forEach((salindex1) => {
+    salindices.forEach((salindex2) => {
+      it(`WHEN the server sends two heartbeats with salindices of these combinations
+        THEN it should receive two CSC heartbeats with these salindices and select them from the state properly`, async () => {
+        const heartbeats = [
+          {
+            csc: 'ScriptQueue',
+            salindex: salindex1,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801983.963551,
+            max_lost_heartbeats: 5,
+          },
+          {
+            csc: 'ATDome',
+            salindex: salindex2,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801984.226387,
+            max_lost_heartbeats: 5,
+          },
+        ];
+
+        heartbeats.forEach((heartbeat) => {
+          // Act:
+          server.send({
+            category: 'event',
+            data: [
+              {
+                csc: 'Heartbeat',
+                salindex: 0, // scriptqueue salindex
+                data: {
+                  stream: {
+                    ...heartbeat,
+                  },
+                },
+              },
+            ],
+          });
+        });
+
+        const heartbeatsState = getCSCHeartbeats(store.getState());
+
+        expect(heartbeats).toEqual(heartbeatsState);
+      });
+
+      it(`WHEN the server sends two heartbeats with salindices of these combinations
+        THEN it should receive two CSC heartbeats with these salindices and select them individually from the state`, async () => {
+        const heartbeats = [
+          {
+            csc: 'ScriptQueue',
+            salindex: salindex1,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801983.963551,
+            max_lost_heartbeats: 5,
+          },
+          {
+            csc: 'ATDome',
+            salindex: salindex2,
+            lost: 5,
+            last_heartbeat_timestamp: 1563801984.226387,
+            max_lost_heartbeats: 5,
+          },
+        ];
+
+        heartbeats.forEach((heartbeat) => {
+          // Act:
+          server.send({
+            category: 'event',
+            data: [
+              {
+                csc: 'Heartbeat',
+                salindex: 0, // scriptqueue salindex
+                data: {
+                  stream: {
+                    ...heartbeat,
+                  },
+                },
+              },
+            ],
+          });
+        });
+
+        const heartbeat = heartbeats[0];
+        const heartbeatsState = getCSCHeartbeat(store.getState(), heartbeat.csc, heartbeat.salindex);
+        expect(heartbeat).toEqual(heartbeatsState);
+      });
+    });
+  });
+});
+
+it('It should extract the summary and log messages properly from the state with the generic reshape selector', async () => {
+  const summaryATDome = {
+    ATDomeID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: 'c38fc5a2', dataType: 'String' },
+    private_sndStamp: { value: 1563885828.2869709, dataType: 'Float' },
+    private_rcvStamp: { value: 1563885828.3042052, dataType: 'Float' },
+    private_seqNum: { value: 4, dataType: 'Int' },
+    private_origin: { value: 32, dataType: 'Int' },
+    private_host: { value: 843720695, dataType: 'Int' },
+    summaryState: { value: 1, dataType: 'Int' },
+    priority: { value: 0, dataType: 'Int' },
+  };
+
+  const summaryScriptqueue = {
+    ScriptQueueID: { value: 1, dataType: 'Int' },
+    private_revCode: { value: '16ec6358', dataType: 'String' },
+    private_sndStamp: { value: 1563885938.2406523, dataType: 'Float' },
+    private_rcvStamp: { value: 1563885938.2410805, dataType: 'Float' },
+    private_seqNum: { value: 4, dataType: 'Int' },
+    private_origin: { value: 44, dataType: 'Int' },
+    private_host: { value: 619616180, dataType: 'Int' },
+    summaryState: { value: 1, dataType: 'Int' },
+    priority: { value: 0, dataType: 'Int' },
+  };
+
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-summaryState'));
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+  await store.dispatch(requestGroupSubscription('event-ScriptQueue-1-summaryState'));
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          summaryState: [summaryATDome],
+        },
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ScriptQueue',
+        salindex: 1,
+        data: {
+          summaryState: [summaryScriptqueue],
+        },
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          logMessage: mockData.ATDomeLogMessages,
+        },
+      },
+    ],
+  });
+
+  const cscsList = [['ATDome', 1], ['ScriptQueue', 1]];
+
+  const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
+
+  const expectedSummaries = {
+    'ScriptQueue-1': summaryScriptqueue,
+    'ATDome-1': summaryATDome,
+  };
+
+  expect(summariesDictionary).toEqual(expectedSummaries);
+
+  /**
+   * When some cscs dont have data the keys return undefined values
+   */
+  const logMessagesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'logMessage');
+
+  const expectedLogMessages = {
+    'ATDome-1': mockData.ATDomeLogMessages,
+  };
+
+  expect(logMessagesDictionary).toEqual(expectedLogMessages);
+});
+
+it('It should extract all received logMessages from the state for a given CSC', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+
+  let messages = [];
+
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
+  mockData.ATDomeLogMessages.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ATDome',
+          salindex: 1,
+          data: {
+            logMessage: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+    const storedMessages = getCSCLogMessages(store.getState(), 'ATDome', 1);
+    expect(storedMessages).toEqual(messages);
+  });
+});
+
+it('Should delete all logMessages of a CSC with an action ', async () => {
+  // Arrange
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+
+  let messages = [];
+
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
+  mockData.ATDomeLogMessages.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ATDome',
+          salindex: 1,
+          data: {
+            logMessage: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+  });
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
+
+  // Act
+
+  store.dispatch(removeCSCLogMessages('ATDome', 1));
+
+  // Assert
+  expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual([]);
+});
+
+it('It should extract all errorCode event data  from the state for a given CSC', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
+
+  let messages = [];
+
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual(messages);
+  mockData.TestCSCErrorCodeData.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'Test',
+          salindex: 1,
+          data: {
+            errorCode: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+    const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
+    expect(storedMessages).toEqual(messages);
+  });
+});
+
+it('It should delete errorCode event data  from the state for a given CSC', async () => {
+  // Arrange
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
+
+  let messages = [];
+
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual(messages);
+  mockData.TestCSCErrorCodeData.forEach((message) => {
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'Test',
+          salindex: 1,
+          data: {
+            errorCode: [message],
+          },
+        },
+      ],
+    });
+
+    messages = [...messages, message];
+  });
+  const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
+  expect(storedMessages).toEqual(messages);
+
+  // Act
+  store.dispatch(removeCSCErrorCodeData('Test', 1));
+
+  // Assert
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
+});
+
+it('Should extract a sorted list of a subset of errorCode event data ', async () => {
+  // Arrange
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
+  await store.dispatch(requestGroupSubscription('event-Test-2-errorCode'));
+
+  expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'Test',
+        salindex: 1,
+        data: {
+          errorCode: mockData.TestCSCErrorCodeData,
+        },
+      },
+    ],
+  });
+
+  server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'Test',
+        salindex: 2,
+        data: {
+          errorCode: mockData.TestCSCErrorCodeData,
+        },
+      },
+    ],
+  });
+
+  const flat1 = flatMap(mockData.TestCSCErrorCodeData, (msg) => {
+    return {
+      csc: 'Test',
+      salindex: 1,
+      ...msg,
+    };
+  });
+  const flat2 = flatMap(mockData.TestCSCErrorCodeData, (msg) => {
+    return {
+      csc: 'Test',
+      salindex: 2,
+      ...msg,
+    };
+  });
+
+  let sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
+    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+  });
+
+  // Act
+  const storedMessages = getGroupSortedErrorCodeData(store.getState(), [
+    { name: 'Test', salindex: 1 },
+    { name: 'Test', salindex: 2 },
+  ]);
+
+  // Assert
+  storedMessages.forEach((msg, index) => {
+    expect(msg.csc).toEqual(sortedMessages[index].csc);
+    expect(msg.salindex).toEqual(sortedMessages[index].salindex);
+  });
 });

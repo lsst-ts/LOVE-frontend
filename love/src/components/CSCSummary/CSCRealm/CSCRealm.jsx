@@ -7,23 +7,17 @@ export default class CSCRealm extends Component {
   static propTypes = {
     name: PropTypes.string,
     groups: PropTypes.object,
-    data: PropTypes.object,
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
     hierarchy: PropTypes.object,
-    clearCSCErrorCodes: PropTypes.func,
-    clearCSCLogMessages: PropTypes.func,
   };
 
   static defaultProps = {
     name: '',
     groups: {},
-    data: {},
     onCSCClick: () => 0,
     selectedCSCs: [],
     hierarchy: {},
-    clearCSCErrorCodes: () => 0,
-    clearCSCLogMessages: () => 0,
   };
 
   render() {
@@ -36,13 +30,10 @@ export default class CSCRealm extends Component {
               <CSCGroup
                 realm={this.props.name}
                 name={group}
-                data={this.props.data}
                 cscs={this.props.groups[group]}
                 onCSCClick={this.props.onCSCClick}
                 selectedCSCs={this.props.selectedCSCs}
                 hierarchy={this.props.hierarchy}
-                clearCSCErrorCodes={this.props.clearCSCErrorCodes}
-                clearCSCLogMessages={this.props.clearCSCLogMessages}
               />
             </div>
           );

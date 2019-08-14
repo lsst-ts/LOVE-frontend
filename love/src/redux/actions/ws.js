@@ -9,7 +9,8 @@ import {
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
-import { receiveScriptHeartbeat, removeScriptsHeartbeats } from './heartbeats';
+import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
+import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -100,7 +101,20 @@ export const openWebsocketConnection = () => {
                 dispatch(removeScriptsHeartbeats(finishedIndices));
               }
             }
+
+            if (data.data[0].csc === 'Heartbeat') {
+              dispatch(receiveCSCHeartbeat(stream.stream));
+            }
+
+            if (data.data[0].data.logMessage) {
+              dispatch(receiveLogMessageData(data.data[0].csc, data.data[0].salindex, data.data[0].data.logMessage));
+            }
+
+            if (data.data[0].data.errorCode) {
+              dispatch(receiveErrorCodeData(data.data[0].csc, data.data[0].salindex, data.data[0].data.errorCode));
+            }
           }
+
           if (data.category === 'ack') {
             dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK));
           }
@@ -154,7 +168,7 @@ export const requestGroupSubscription = (groupName) => {
         option: 'subscribe',
         category,
         csc,
-        salindex: parseInt(salindex),
+        salindex,
         stream,
       });
       dispatch(addGroupSubscription(groupName));
@@ -226,23 +240,21 @@ export const requestSALCommand = (data) => {
       }
 
       const commandObject = {
-        category: 'cmd',
-        data: [
-          {
-            csc: data.component,
-            salindex: 1,
-            data: {
-              stream: {
-                cmd: data.cmd,
-                params: data.params,
-                cmd_id: commandID,
-              },
-            },
+        csc: data.component,
+        salindex: 1,
+        data: {
+          stream: {
+            cmd: data.cmd,
+            params: data.params,
+            cmd_id: commandID,
           },
-        ],
+        },
       };
 
-      socket.json(commandObject);
+      socket.json({
+        category: 'cmd',
+        data: [commandObject],
+      });
 
       const commandStatus = {
         cmd: data.cmd,
@@ -255,5 +267,5 @@ export const requestSALCommand = (data) => {
     });
 
     return commandID;
-  };
-};
+  }
+}
