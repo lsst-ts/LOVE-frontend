@@ -10,6 +10,7 @@ import {
   mountTrackingStateMap,
   stateToStyleDomeAndMount,
 } from '../../../../Config';
+import Limits from '../../../GeneralPurpose/Limits/Limits';
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -57,10 +58,7 @@ export default class DomeSummaryTable extends Component {
             {domeInPositionValue ? 'In Position' : 'Not in Position'}
           </StatusText>
         </span>
-        <span className={styles.label}>Az</span>
-        <span className={styles.value}>
-          <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
-        </span>
+        
         <span className={styles.label}>Azimuth</span>
         <span className={styles.value}>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]}>
@@ -79,11 +77,21 @@ export default class DomeSummaryTable extends Component {
             {mainDoorStateValue}
           </StatusText>
         </span>
+        <span className={styles.label}>Az</span>
+        <span className={styles.value}>
+          <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
+        </span>
         {/* Mount */}
         <span className={styles.title}>Mount</span>
         <span className={styles.value}>
-        <StatusText title={mountInPositionValue ? 'true' : 'false'} status={mountInPositionValue ? 'ok' : 'warning'}>
+          <StatusText title={mountInPositionValue ? 'true' : 'false'} status={mountInPositionValue ? 'ok' : 'warning'}>
             {mountInPositionValue ? 'In Position' : 'Not in Position'}
+          </StatusText>
+        </span>
+        <span className={styles.label}>Tracking</span>
+        <span className={styles.value}>
+          <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]}>
+            {mountTrackingStateValue}
           </StatusText>
         </span>
         <span className={styles.label}>Az</span>
@@ -94,6 +102,9 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
+        <span className={styles.wide}>
+          <Limits lowerLimit={-270} upperLimit={270} currentValue={mountAz.current} targetValue={mountAz.target} />
+        </span>
         <span className={styles.label}>El</span>
         <span className={styles.value}>
           <CurrentTargetValue
@@ -102,26 +113,21 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.label}>Tracking</span>
-        <span className={styles.value}>
-          <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]}>
-            {mountTrackingStateValue}
-          </StatusText>
+        <span className={styles.wide}>
+          <Limits lowerLimit={15} upperLimit={90} currentValue={mountEl.current} targetValue={mountEl.target} />
         </span>
-        {/* <span className={styles.label}>M3 rot</span>
+        {/* <span className={styles.label}>M3 rotator (R1)</span>
         <span className={styles.value}>
-          <StatusText title={'stateLabel'} status={'ok'}>
-            {'stateLabel'}
-          </StatusText>
+          <CurrentTargetValue
+            currentValue={mountEl.current.toFixed(2)}
+            targetValue={mountEl.target.toFixed(2)}
+            isChanging={true}
+          />
         </span>
-        <span className={styles.label}>M3 port</span>
-        <span className={styles.value}>
-          <StatusText title={'stateLabel'} status={'ok'}>
-            {'stateLabel'}
-          </StatusText>
+        <span className={styles.wide}>
+          <Limits lowerLimit={15} upperLimit={90} currentValue={mountEl.current} targetValue={mountEl.target} />
         </span> */}
-
-        {/* <StatusText title={stateLabel} status={stateStyle}>{stateLabel}</StatusText> */}
+        
       </div>
     );
   }

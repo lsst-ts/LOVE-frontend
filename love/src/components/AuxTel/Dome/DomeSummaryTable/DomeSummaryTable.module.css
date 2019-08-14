@@ -45,6 +45,10 @@
   color: var(--base-font-color);
 }
 
+.summaryTable .wide {
+  grid-column: span 2;
+  padding-right: 2em;
+}
 
 @media (min-width: 1600px) {
   .summaryTable {
