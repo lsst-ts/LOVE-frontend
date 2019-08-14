@@ -1,0 +1,32 @@
+.container {
+}
+
+.backgroundBar {
+  stroke: var(--second-quaternary-background-color);
+}
+
+.currentValue {
+  fill: white;
+  transition: x 0.2s ease;
+}
+
+.targetValue {
+  stroke: white;
+  stroke-width: 0.5;
+  stroke-dasharray: 1;
+}
+
+.text {
+  fill: var(--base-font-color);
+  font-size: 0.3em;
+  text-anchor: middle;
+  transition: x 0.2s ease;
+}
+
+.top {
+  dominant-baseline: text-after-edge;
+}
+
+.bottom {
+  dominant-baseline: text-before-edge;
+}
