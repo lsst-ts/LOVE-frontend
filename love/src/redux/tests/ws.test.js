@@ -596,3 +596,34 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
     expect(msg.salindex).toEqual(sortedMessages[index].salindex);
   });
 });
+
+it.only('Should properly interpret an ack message', async () => {
+  const commandObject = {
+    cmd: 'cmd_closeShutter',
+    params: {},
+    component: 'ATDome',
+    cmd_id: '10-cmd_closeShutter',
+  };
+  const realDate = Date;
+  global.Date.now = () => 10;
+
+  await store.dispatch(requestSALCommand(commandObject));
+  await server.nextMessage;
+
+  server.send({
+    category: 'ack',
+    data: [
+      {
+        csc: 'ATDome',
+        data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {}, result: 'Done' } },
+        salindex: 1,
+      },
+    ],
+  });
+
+  await expect(getLastSALCommand(store.getState())).toEqual({
+    status: SALCommandStatus.ACK,
+    ...commandObject,
+  });
+  global.Date = realDate;
+});
