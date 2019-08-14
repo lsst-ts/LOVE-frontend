@@ -4,51 +4,10 @@ export const hasCommandPrivileges = true;
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
-    'CSC Group 1': [
-      'ScriptQueue',
-      'scheduler',
-      'ATMonochromator',
-      'FiberSpectrograph',
-      'ATCamera',
-      'Scheduler3',
-      'ScriptQueue3',
-      'Scheduler4',
-      'ScriptQueue4',
-      'Scheduler5',
-      'ScriptQueue5',
-      'Scheduler6',
-      'ScriptQueue6',
-      'Scheduler7',
-      'ScriptQueue7',
-      'Scheduler8',
-      'ScriptQueue8',
-      'Scheduler9',
-      'ScriptQueue9',
-      'Scheduler10',
-      'ScriptQueue10',
-      'Scheduler11',
-      'ScriptQueue11',
-      'Scheduler12',
-      'ScriptQueue12',
-      'Scheduler13',
-      'ScriptQueue13',
-      'Scheduler14',
-      'ScriptQueue14',
-      'Scheduler15',
-      'ScriptQueue15',
-      'Scheduler16',
-      'ScriptQueue16',
-      'Scheduler17',
-      'ScriptQueue17',
-      'Scheduler18',
-      'ScriptQueue18',
-      'Scheduler19',
-      'ScriptQueue19',
-      'Scheduler20',
-    ],
+    'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 },{ name: 'Test', salindex:3},{ name: 'Test', salindex:4}],
   },
   'Main Telescope': {
-    'CSC Group 1': ['CSC4'],
+    'CSC Group 1': [{ name: 'Test', salindex:1},{ name: 'Test', salindex:2}],
     'CSC Group 2': [],
   },
   Observatory: {
@@ -99,7 +58,6 @@ export const stateToStyleCamera = {
   END_READOUT: 'ok',
   END_TELEMETRY: 'ok',
 };
-
 
 // Dome and mount view
 export const domeAzimuthStateMap = {
@@ -190,4 +148,4 @@ export const stateToStyleDomeAndMount = {
   'NOT MOVING': 'ok',
   'MOVING CW': 'running',
   'MOVING CCW': 'running',
-}
+};

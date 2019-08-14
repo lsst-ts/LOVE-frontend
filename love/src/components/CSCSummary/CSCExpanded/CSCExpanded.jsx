@@ -11,22 +11,28 @@ import Button from '../../GeneralPurpose/Button/Button';
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
     name: PropTypes.string,
+    salindex: PropTypes.number,
     group: PropTypes.string,
     realm: PropTypes.string,
-    data: PropTypes.object,
     onCSCClick: PropTypes.func,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
+    summaryStateData: PropTypes.object,
+    logMessageData: PropTypes.array,
+    errorCodeData: PropTypes.array,
   };
 
   static defaultProps = {
     name: '',
+    salindex: undefined,
     group: '',
     realm: '',
-    data: {},
     onCSCClick: () => 0,
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
+    summaryStateData: undefined,
+    logMessageData: [],
+    errorCodeData: [],
   };
 
   constructor(props) {
@@ -89,10 +95,21 @@ export default class CSCExpanded extends PureComponent {
   };
 
   render() {
-    const selfData = this.props.data[this.props.name];
-    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
+    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
+
+    let heartbeatStatus = 'unknown';
+    let nLost = 0;
+    let timeDiff = -1;
+    if (this.props.heartbeatData) {
+      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
+      nLost = this.props.heartbeatData.lost;
+      if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
+    }
+    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+
     return (
       <div className={styles.CSCExpandedContainer}>
         <div className={styles.topBarContainerWrapper}>
@@ -100,7 +117,9 @@ export default class CSCExpanded extends PureComponent {
             <div className={styles.breadcrumContainer}>
               <div
                 className={styles.backArrowIconWrapper}
-                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, this.props.name)}
+                onClick={() =>
+                  this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)
+                }
               >
                 <BackArrowIcon />
               </div>
@@ -120,35 +139,40 @@ export default class CSCExpanded extends PureComponent {
                 </span>
               </div>
               <div className={styles.heartbeatIconWrapper}>
-                <HeartbeatIcon title={`${this.props.name} heartbeat`} status="ok" />
+                <HeartbeatIcon
+                  status={heartbeatStatus}
+                  title={`${this.props.name +
+                    '-' +
+                    this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
+                />
               </div>
             </div>
           </div>
         </div>
-        {selfData && selfData.errorCode ? (
+        {this.props.errorCodeData.length > 0 ? (
           <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
             <div className={styles.logContainerTopBar}>
               <div>ERROR CODE</div>
               <div>
                 <Button
                   size="extra-small"
-                  onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name)}
+                  onClick={() => this.props.clearCSCErrorCodes(this.props.name, this.props.salindex)}
                 >
                   CLEAR
                 </Button>
               </div>
             </div>
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
-              {selfData.errorCode.map((msg) => {
+              {this.props.errorCodeData.map((msg) => {
                 return (
-                  <div key={msg.timestamp} className={styles.logMessage}>
-                    <div className={styles.errorCode} title={`Error code ${msg.errorCode}`}>
-                      {msg.errorCode}
+                  <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
+                    <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
+                      {msg.errorCode.value}
                     </div>
                     <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp}>{msg.timestamp}</div>
-                      <div className={styles.messageText}>{msg.errorReport}</div>
-                      <div className={styles.messageTraceback}>{msg.traceback}</div>
+                      <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
+                      <div className={styles.messageText}>{msg.errorReport.value}</div>
+                      <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                     </div>
                   </div>
                 );
@@ -162,7 +186,7 @@ export default class CSCExpanded extends PureComponent {
             <div>
               <Button
                 size="extra-small"
-                onClick={() => this.props.clearCSCLogMessages(this.props.realm, this.props.group, this.props.name)}
+                onClick={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
               >
                 CLEAR
               </Button>
@@ -186,25 +210,25 @@ export default class CSCExpanded extends PureComponent {
             })}
           </div>
           <div className={[styles.log, styles.messageLogContent].join(' ')}>
-            {selfData && selfData.logMessage
-              ? selfData.logMessage.map((msg) => {
-                const filter = this.state.messageFilters[msg.level];
-                if (filter && !filter.value) return null;
-                let icon = <span title="Debug">d</span>;
-                if (msg.level === 20) icon = <InfoIcon title="Information" />;
-                if (msg.level === 30) icon = <WarningIcon title="Warning" />;
-                if (msg.level === 40) icon = <ErrorIcon title="Error" />;
-                return (
-                  <div key={msg.timestamp} className={styles.logMessage}>
-                    <div className={styles.messageIcon}>{icon}</div>
-                    <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp}>{msg.timestamp}</div>
-                      <div className={styles.messageText}>{msg.message}</div>
-                      <div className={styles.messageTraceback}>{msg.traceback}</div>
+            {this.props.logMessageData.length > 0
+              ? this.props.logMessageData.map((msg) => {
+                  const filter = this.state.messageFilters[msg.level.value];
+                  if (filter && !filter.value) return null;
+                  let icon = <span title="Debug">d</span>;
+                  if (msg.level.value === 20) icon = <InfoIcon title="Information" />;
+                  if (msg.level.value === 30) icon = <WarningIcon title="Warning" />;
+                  if (msg.level.value === 40) icon = <ErrorIcon title="Error" />;
+                  return (
+                    <div key={`${msg.private_rcvStamp.value}-${msg.level.value}`} className={styles.logMessage}>
+                      <div className={styles.messageIcon}>{icon}</div>
+                      <div className={styles.messageTextContainer}>
+                        <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
+                        <div className={styles.messageText}>{msg.message.value}</div>
+                        <div className={styles.messageTraceback}>{msg.traceback.value}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })
               : null}
           </div>
         </div>
