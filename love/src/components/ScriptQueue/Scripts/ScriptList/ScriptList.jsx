@@ -5,14 +5,12 @@ import styles from './ScriptList.module.css';
 export default class ScriptList extends Component {
   static propTypes = {
     children: PropTypes.array,
-    onDragLeave: PropTypes.func,
     onDragExit: PropTypes.func,
     onDragEnd: PropTypes.func,
     onDragEnter: PropTypes.func,
   };
 
   static defaultProps = {
-    onDragLeave: () => 0,
     onDragEnter: () => 0,
   };
 
@@ -30,8 +28,6 @@ export default class ScriptList extends Component {
 
   onDragLeave = () => {
     this.dragCounter -= 1;
-    // if(this.state.dragCounter-1 === 0)
-    //   this.props.onDragLeave(e);
     this.setState({
       dragCounter: this.state.dragCounter - 1,
     });

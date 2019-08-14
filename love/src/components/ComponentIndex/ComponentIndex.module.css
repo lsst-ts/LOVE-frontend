@@ -14,6 +14,10 @@
     padding: 0.2em;
 }
 
+.linkListSubItem {
+    padding-top: 0.25em;
+}
+
 a {
     color: var(--secondary-font-color);
     text-decoration: none;

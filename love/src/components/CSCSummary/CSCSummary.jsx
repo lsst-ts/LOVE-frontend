@@ -1,146 +1,75 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './CSCSummary.module.css';
 import CSCRealm from './CSCRealm/CSCRealm';
-import Panel from '../Panel/Panel';
-import ManagerInterface from '../../Utils';
+import Panel from '../GeneralPurpose/Panel/Panel';
 
 export default class CSCSummary extends Component {
+  static propTypes = {
+    hierarchy: PropTypes.object,
+  };
+  static defaultProps = {
+    hierarchy: {
+      'Aux Telescope': {
+        'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 }],
+      },
+      'Main Telescope': {
+        'CSC Group 1': [{ name: 'CSC4', salindex: 0 }],
+        'CSC Group 2': [],
+      },
+      Observatory: {
+        'CSC Group 1': [],
+      },
+    },
+  };
   constructor(props) {
     super(props);
     this.state = {
-      hierarchy: {
-        'Aux Tel': {
-          'CSC Group 1': [
-            'ScriptQueue',
-            'Scheduler1',
-            'ScriptQueue1',
-            'Scheduler2',
-            'ScriptQueue2',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-            'ScriptQueue',
-            'Scheduler',
-          ],
-        },
-        'Main Tel': {
-          'CSC Group 1': ['CSC4'],
-          'CSC Group 2': [],
-        },
-        Observatory: {
-          'CSC Group 1': [],
-        },
-      },
-      data: {
-        ScriptQueue: {
-          summaryState: 3,
-          detailedState: {},
-        },
-        ScriptQueue1: {
-          summaryState: 1,
-          detailedState: {},
-        },
-        ScriptQueue2: {
-          summaryState: 2,
-          detailedState: {},
-        },
-        Scheduler1: {
-          summaryState: 4,
-          detailedState: {},
-        },
-        Scheduler2: {
-          summaryState: 5,
-          detailedState: {},
-        },
-        CSC2: {
-          summaryState: 0,
-          detailedState: {},
-        },
-        CSC3: {
-          summaryState: 0,
-          detailedState: {},
-        },
-      },
+      selectedCSCs: [],
+      // selectedCSCs: [{ realm: 'Aux Telescope', group: 'CSC Group 1', csc: 'ATCamera' }],
     };
-    this.managerInterface = new ManagerInterface();
   }
 
-  onReceiveMessage = (msg) => {
-    const data = JSON.parse(msg.data);
-    if (!(data.data instanceof Object)) return;
-    const newData = { ...this.state.data };
-    Object.keys(data.data).map((cscKey) => {
-      newData[cscKey].summaryState = data.data[cscKey].summaryState[0].summaryState.value;
-    });
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
+  };
+
+  toggleCSCExpansion = (realm, group, csc, salindex) => {
+    const newSelectedCSCs = [...this.state.selectedCSCs];
+
+    for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
+      const currentCSC = this.state.selectedCSCs[i];
+      if (realm === currentCSC.realm && group === currentCSC.group) {
+        newSelectedCSCs.splice(i, 1);
+        if (csc === currentCSC.csc && salindex === currentCSC.salindex) {
+          this.setState({ selectedCSCs: newSelectedCSCs });
+          return;
+        }
+      }
+    }
     this.setState({
-      data: newData,
+      selectedCSCs: [...newSelectedCSCs, { realm, group, csc, salindex }],
     });
   };
-
-  subscribeToCSCs = () => {
-    Object.keys(this.state.hierarchy).map((realm) => {
-      const groupsDict = this.state.hierarchy[realm];
-      Object.keys(groupsDict).map((group) => {
-        groupsDict[group].map((csc) => {
-          this.managerInterface.subscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
-        });
-      });
-    });
-  };
-
-  unsubscribeToCSCs = () => {
-    Object.keys(this.state.hierarchy).map((realm) => {
-      const groupsDict = this.state.hierarchy[realm];
-      Object.keys(groupsDict).map((group) => {
-        groupsDict[group].map((csc) => {
-          this.managerInterface.unsubscribeToEvents(csc, 'summaryState', this.onReceiveMessage);
-        });
-      });
-    });
-  };
-
-  componentDidUnmount() {
-    this.unsubscribeToCSCs();
-  }
 
   render() {
     return (
       <Panel title="CSC Summary" className={styles.panel}>
         <div className={styles.CSCSummaryContainer}>
-          {Object.keys(this.state.hierarchy).map((realm) => {
+          {Object.keys(this.props.hierarchy).map((realm) => {
             return (
               <div key={realm} className={styles.CSCRealmContainer}>
-                <CSCRealm name={realm} data={this.state.data} groups={this.state.hierarchy[realm]} />
+                <CSCRealm
+                  name={realm}
+                  groups={this.props.hierarchy[realm]}
+                  onCSCClick={this.toggleCSCExpansion}
+                  selectedCSCs={this.state.selectedCSCs}
+                  hierarchy={this.props.hierarchy}
+                />
               </div>
             );
           })}

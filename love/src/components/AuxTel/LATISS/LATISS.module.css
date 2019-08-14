@@ -1,0 +1,186 @@
+.latissContainer {
+  padding: 0em;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(250px, 300px));
+  grid-template-rows: min-content min-content min-content 1fr min-content;
+  text-align: left;
+  color: var(--base-font-color);
+}
+
+.latissContainer > div {
+  padding: 0.5em 1em;
+  border-right: 1px solid var(--second-quaternary-background-dimmed-color);
+}
+
+.latissContainer > span {
+  border-right: 1px solid var(--second-quaternary-background-dimmed-color);
+}
+
+.latissContainer > svg {
+  border-right: 1px solid var(--second-quaternary-background-dimmed-color);
+}
+
+.latissContainer > *:nth-child(4n) {
+  border-right: 1px solid transparent;
+}
+
+.statusTextWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: min-content;
+  align-items: center;
+}
+
+.statusTextWrapper > span:first-child {
+  font-size: var(--font-size-small);
+}
+.statusTextWrapper > span:last-child {
+  text-align: center;
+}
+
+div.ccdContainer {
+  border-right: none;
+}
+
+.sectionTitle {
+  font-size: var(--font-size-medium);
+  padding: 1em;
+  font-weight: bold;
+}
+
+.svgLightpath {
+  stroke: white;
+  opacity: 0.2;
+  transition: x 0.5s ease;
+}
+
+
+.lightpathElement .ccd {
+  fill: var(--second-tertiary-background-color);
+  stroke: var(--second-quaternary-background-color);
+}
+
+.lightpathElement .movingElement {
+  fill: var(--status-ok-dimmed-color);
+  stroke: var(--status-ok-color);
+  stroke-width: 0.5;
+  transition: x 0.5s ease;
+}
+
+.lightpathElement .movingElement.moving {
+  fill: var(--status-running-dimmed-color);
+  stroke: var(--status-running-color);
+  stroke-width: 0.5;
+}
+
+div.wheelSelector {
+  display: grid;
+  grid-template-columns: 8em minmax(20px, 1fr) minmax(20px, 1fr) minmax(20px, 1fr) minmax(20px, 1fr);
+  grid-template-rows: min-content 1fr 2fr;
+  justify-items: center;
+  align-items: center;
+  padding-right: 2em;
+}
+
+.selectionBoxLabel {
+  font-size: var(--font-size-small);
+}
+
+.selectionBoxTitle {
+  font-size: var(--font-size-small);
+  white-space: nowrap;
+  justify-self: start;
+}
+
+.selectionBox {
+  width: 1.4em;
+  height: 1.4em;
+  background: var(--second-tertiary-background-color);
+  border: 1px solid var(--second-quaternary-background-color);
+  border-radius: 0.1em;
+}
+
+.filterName {
+  position: relative;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.filterName.selected::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: calc(50% - 0.5px);
+  height: 8px;
+  border-right: 1px solid white;
+}
+
+div.selected {
+  background: var(--second-senary-background-color);
+  border: 1px solid white;
+}
+
+span.selected {
+  font-weight: bold;
+}
+
+.linearStage .backgroundLine {
+  stroke: var(--second-tertiary-background-color);
+  stroke-width: 0.5;
+}
+
+.linearStage .ticks {
+  stroke: var(--second-quaternary-background-color);
+  stroke-width: 1;
+  stroke-dasharray: 0.5 2;
+}
+
+.linearStage .currentPosition {
+  stroke: var(--status-ok-color);
+}
+
+.linearStage .targetPosition {
+  stroke: var(--status-ok-color);
+}
+
+.linearStage .valueText {
+  fill: var(--status-ok-color);
+  font-size: 0.32em;
+  stroke-width: 0;
+}
+
+.linearStage .labelText {
+  fill: var(--base-font-color);
+  font-size: 0.25em;
+}
+
+.linearStage .moving {
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
+}
+
+.shutter .backgroundRect {
+  stroke-dasharray: 2 2;
+  stroke: var(--second-quaternary-background-color);
+  stroke-width: 0.5;
+  fill: none;
+}
+
+.shutter .shutterRect {
+  fill: var(--status-ok-dimmed-color);
+  stroke: var(--status-ok-color);
+  stroke-width: 0.5;
+  transition: y 0.2s ease;
+}
+
+.shutter .shutterRect.moving {
+  fill: var(--status-running-dimmed-color);
+  stroke: var(--status-running-color);
+}
+
+.shutter .shutterTargetRect {
+  fill: none;
+  stroke: var(--status-running-color);
+  stroke-dasharray: 2 2;
+  stroke-width: 0.5;
+}

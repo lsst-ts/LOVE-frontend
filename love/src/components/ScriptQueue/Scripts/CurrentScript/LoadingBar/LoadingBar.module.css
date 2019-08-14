@@ -1,9 +1,0 @@
-.backgroundBar{
-  background: var(--second-primary-background-color);
-  border-radius: 5px;
-}
-
-.loadedBar{
-  background: var(--script-ok-color);
-  height: 1.3em;
-}

@@ -1,0 +1,50 @@
+.mainGrid {
+  display: grid;
+  grid-template-areas:
+    'status status'
+    'dome mount';
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 1fr;
+}
+
+.statusGrid {
+  grid-area: status;
+  padding: 1em;
+  padding-bottom: 0;
+}
+
+.domeGrid {
+  grid-area: dome;
+  padding: 1em;
+  padding-right: 0.5em;
+}
+
+.mountGrid {
+  grid-area: mount;
+  padding: 1em;
+  padding-left: 0.5em;
+}
+
+.panel {
+  width: 100%;
+}
+
+.domeContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.mountContainerWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.mountContainer {
+  width: 78%;
+}
+
+.statusContainer {
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 5em;
+}

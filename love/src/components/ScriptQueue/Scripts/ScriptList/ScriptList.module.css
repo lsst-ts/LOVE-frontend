@@ -1,7 +1,8 @@
 .scriptListWrapper {
   padding: 0.5em;
+  padding-bottom: 0;
   background: var(--second-secondary-background-color);
-  height: calc( 100% - 3em);
+  height: calc( 100% - 5.5em);
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 5px;
@@ -9,7 +10,7 @@
 
 .scriptListContainer {
   background: var(--second-secondary-background-color);
-  padding: 0.0em;
+  padding: 0.25em;
 }
 
 /* width */

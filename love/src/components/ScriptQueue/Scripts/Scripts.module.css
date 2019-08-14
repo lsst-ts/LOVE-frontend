@@ -1,12 +1,31 @@
 .scriptContainer {
+  display: grid;
+  grid-template-columns: 1fr min-content;
   position: relative;
-  /* height: 3em; */
   background: var(--second-tertiary-background-color);
   border-radius: 5px;
-  /* padding: 0.5em;
-  margin: 0.5em; */
   overflow: hidden;
   padding: 1px;
+}
+
+.mainScriptButton {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background: var(--second-quaternary-background-color);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+  padding-left: 0.4em;
+  user-select: none;
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.mainScriptButton:hover {
+  border: 1px solid var(--second-quinary-background-color);
+}
+
+.scriptContainerOff {
+  background: transparent;
 }
 
 .pathTextContainer {
@@ -32,34 +51,40 @@
 }
 
 .externalText {
-  font-size: var(--font-size-small);
   color: var(--highlighted-font-color);
+  font-size: var(--font-size-small);
+}
+
+.externalSeparator {
+  white-space: pre;
 }
 
 .scriptStatusContainer {
   min-width: 5em;
   text-align: center;
-  text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
   align-self: flex-start;
+  flex-grow: 1;
 }
 
-.expandedTopRow {
+.scriptStatusContainer span {
+  padding-top: 0.2em;
+  margin-bottom: 0;
+}
+
+.expandedRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
   align-content: center;
-  padding-top: 1em;
-}
-
-.expandedTopRow p {
-  margin: 0;
+  padding-top: 0;
+  border-top: none;
 }
 
 .uploadButtonWrapper {
   width: 6em;
   padding: 0em 0em;
-  /* padding-bottom: 0.3em; */
-  /* padding-left: 0.5em; */
 }
 
 .uploadConfigButton {
@@ -73,4 +98,107 @@
 
 .uploadIcon {
   fill: var(--base-font-color);
+}
+
+.scriptStateContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.processStateContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.scriptDetailsContainer {
+  flex-grow: 1;
+}
+
+.heartBeatContainer {
+  display: inline-block;
+  align-self: flex-end;
+  width: 1.5em;
+  padding-right: 0.5em;
+}
+
+.scriptInfoContainer {
+  display: flex;
+  align-items: center;
+}
+
+.launchIconWrapper {
+  width: 1.7em;
+}
+
+.launchIconWrapper svg {
+  vertical-align: top;
+}
+
+.expandedSectionWrapper {
+  padding: 0.5em;
+}
+
+.expandedSection {
+}
+
+.hidden {
+  display: none !important;
+}
+
+.expandedSubSection {
+  border-top: solid var(--quaternary-background-color) 2px;
+  padding: 0.75em 0;
+}
+
+.subSectionTitle {
+  color: var(--highlighted-font-color);
+  font-size: var(--font-size-large);
+}
+
+.subSectionLabel {
+  /* color: var(--highlighted-font-color); */
+}
+
+.subSectionValue {
+  color: var(--highlighted-font-color);
+}
+
+.buttonsContainer {
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: 0.25em;
+  align-self: flex-end;
+  padding-right: 0.15em;
+
+}
+
+.buttonContainer {
+  padding: 0 0.25em;
+  border: 1px solid transparent;
+}
+
+.buttonContainer:hover {
+  background: var(--second-quaternary-background-color);
+  padding: 0 0.25em;
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.commandButton{
+  display: grid;
+  grid-template-columns: 2em 1fr;
+  padding: 0em;
+  text-align: left;
+  align-items: center;
+  user-select: none;
+}
+
+.commandButton div {
+  padding: 0 0.5em;
+}
+
+div.commandButtonText {
+  padding-left: 0em;
 }
