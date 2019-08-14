@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     registryCredential = "dockerhub-inriachile"
-    dockerImageName = "inriachile/love-frontend:${GIT_BRANCH}"
+    dockerImageName = "inriachile/love-frontend:"
     dockerImage = ""
   }
   stages {
@@ -11,10 +11,23 @@ pipeline {
         anyOf {
           branch "master"
           branch "develop"
+          branch "release/*"
         }
       }
       steps {
         script {
+          def git_branch = "${GIT_BRANCH}"
+          def image_tag = git_branch
+          def slashPosition = git_branch.indexOf('/')
+          if (slashPosition > 0) {
+            git_tag = git_branch.substring(slashPosition + 1, git_branch.length())
+            git_branch = git_branch.substring(0, slashPosition)
+            if (git_branch == "release") {
+              image_tag = git_tag
+            }
+          }
+          dockerImageName = dockerImageName + image_tag
+          echo "dockerImageName: ${dockerImageName}"
           dockerImage = docker.build dockerImageName
         }
       }
@@ -24,6 +37,7 @@ pipeline {
         anyOf {
           branch "master"
           branch "develop"
+          branch "release/*"
         }
       }
       steps {
