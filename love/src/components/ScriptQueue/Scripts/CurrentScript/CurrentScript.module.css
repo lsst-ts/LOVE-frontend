@@ -51,15 +51,19 @@
   justify-content: space-between;
 }
 
-.expandedSectionWrapper {
-  padding: 0.5em;
+.topContainerLeft {
+  display: flex;
+  flex-direction: column;
 }
 
-.expandedSection {
-  border-top: solid var(--quaternary-background-color) 2px;
-  background: var(--second-tertiary-background-color);
+.invisible {
+  visibility: hidden;
 }
 
-.hidden {
-  display: none;
+.filenameContainer {
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  font-size: var(--font-size-larger);
+  padding-bottom: 0;
 }

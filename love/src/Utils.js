@@ -1,6 +1,4 @@
-import sockette from 'sockette';
-
-export const hasCommandPrivileges = false;
+import React, { useState } from 'react';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -15,6 +13,79 @@ if (Array.prototype.flat === undefined) {
   });
 }
 
+export const sockette = (url, optsPar) => {
+  /**
+   MIT License
+Copyright (c) Luke Edwards <luke.edwards05@gmail.com> (lukeed.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  */
+
+  function noop() {}
+  const opts = optsPar || {};
+
+  let ws;
+  let num = 0;
+  const $ = {};
+  const max = opts.maxAttempts || Infinity;
+  let t;
+
+  $.open = () => {
+    ws = new WebSocket(url, opts.protocols || []);
+
+    ws.onmessage = opts.onmessage || noop;
+
+    ws.onopen = (e) => {
+      (opts.onopen || noop)(e);
+      num = 0;
+    };
+
+    ws.onclose = (e) => {
+      // eslint-disable-next-line
+      e.code === 1e3 || e.code === 1005 || $.reconnect(e);
+      (opts.onclose || noop)(e);
+    };
+
+    ws.onerror = (e) => {
+      // eslint-disable-next-line
+      e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
+    };
+  };
+
+  $.reconnect = (e) => {
+    if (max >= num) {
+      num += 1;
+      t = setTimeout(() => {
+        (opts.onreconnect || noop)(e);
+        $.open();
+      }, opts.timeout || 1e3);
+    } else (opts.onmaximum || noop)(e);
+  };
+
+  $.json = (x) => {
+    ws.send(JSON.stringify(x));
+  };
+
+  $.send = (x) => {
+    ws.send(x);
+  };
+
+  $.close = (x, y) => {
+    clearTimeout(t);
+    if (x === 4000) {
+      ws.onclose = (e) => (opts.onclose || noop)(e);
+      ws.onerror = (e) => (opts.onerror || noop)(e);
+    }
+    ws.close(x, y);
+  };
+
+  $.open(); // init
+
+  return $;
+};
+
 export default class ManagerInterface {
   constructor() {
     this.callback = null;
@@ -25,11 +96,11 @@ export default class ManagerInterface {
   }
 
   static getApiBaseUrl() {
-    return `http://${window.location.hostname}/manager/api/`;
+    return `http://${window.location.host}/manager/api/`;
   }
 
   static getWebsocketsUrl() {
-    return `ws://${window.location.hostname}/manager/ws/subscription?token=`;
+    return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
 
   static getHeaders() {
@@ -52,7 +123,7 @@ export default class ManagerInterface {
     if (token === null) {
       return null;
     }
-    return JSON.parse(token);
+    return token;
   }
 
   static removeToken() {
@@ -63,7 +134,7 @@ export default class ManagerInterface {
     if (token === null) {
       return false;
     }
-    localStorage.setItem('LOVE-TOKEN', JSON.stringify(token));
+    localStorage.setItem('LOVE-TOKEN', token);
     return true;
   }
 
@@ -121,6 +192,12 @@ export default class ManagerInterface {
     });
   }
 
+  logout = () => {
+    if (this.socket) this.socket.close(4000);
+    this.socket = null;
+    this.socketPromise = null;
+  };
+
   subscribeToStream = (category, csc, stream, callback) => {
     this.callback = callback;
     const token = ManagerInterface.getToken();
@@ -145,13 +222,17 @@ export default class ManagerInterface {
                 stream: sub[2],
               });
             });
+            resolve();
           },
           onmessage: (msg) => {
             if (this.callback) this.callback(msg);
-            resolve();
           },
           onclose: () => {
             this.connectionIsOpen = false;
+            resolve();
+          },
+          onerror: () => {
+            resolve();
           },
         });
       });
@@ -307,3 +388,29 @@ export const getFakeHistoricalTimeSeries = (selectedRows, dateStart, dateEnd) =>
     })
     .flat();
 };
+
+export const saveGroupSubscriptions = (Component) => {
+  return () => {
+    const [subscriptionsList, setSubscriptionsList] = useState([]);
+
+    const saveSubscriptionLocally = (groupName) => {
+      if (!subscriptionsList.includes(groupName)) {
+        setSubscriptionsList([...subscriptionsList, groupName]);
+      }
+    };
+
+    const removeSubscriptionLocally = (groupName) => {
+      setSubscriptionsList(subscriptionsList.filter((name) => name !== groupName));
+    };
+
+    return (
+      <Component
+        subscriptionsList={subscriptionsList}
+        saveSubscriptionLocally={saveSubscriptionLocally}
+        removeSubscriptionLocally={removeSubscriptionLocally}
+      />
+    );
+  };
+};
+
+export const flatMap = (a, cb) => [].concat(...a.map(cb));

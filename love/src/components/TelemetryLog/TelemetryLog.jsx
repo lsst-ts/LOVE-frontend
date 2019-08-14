@@ -14,21 +14,25 @@ export default class TelemetryLog extends Component {
   constructor(props) {
     super();
     this.state = {
-      msg: '',
       msgList: [],
       msgNumber: 0,
       category: props.category,
+      salindex: 1,
       csc: props.csc,
       stream: props.stream,
+      cmdComponent: 'ATDome',
+      command: 'moveAzimuth',
+      cmdParams: '{"azimuth": 0}',
+      cmdSalindex: 1,
     };
     this.managerInterface = new ManagerInterface();
   }
 
-  receiveMessage = (msg) => {
-    this.setState({
-      msg: msg.data,
-    });
-    this.updateMessageList(msg.data);
+  static defaultProps = {
+    category: 'event',
+    csc: 'ATDome',
+    stream: 'azimuthCommandedState',
+    data: {},
   };
 
   updateMessageList = (msg) => {
@@ -53,6 +57,12 @@ export default class TelemetryLog extends Component {
     });
   };
 
+  salindexChange = (e) => {
+    this.setState({
+      salindex: e.target.value,
+    });
+  };
+
   cscChange = (e) => {
     this.setState({
       csc: e.target.value,
@@ -66,39 +76,84 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.managerInterface.subscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
-    );
+    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
   };
 
   unsubscribeToStream = () => {
-    this.managerInterface.unsubscribeToStream(
-      this.state.category,
-      this.state.csc,
-      this.state.stream,
-      this.receiveMessage,
-    );
+    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
+  };
+
+  cmdComponentChange = (e) => {
+    this.setState({ cmdComponent: e.target.value });
+  };
+  cmdOnChange = (e) => {
+    this.setState({ command: e.target.value });
+  };
+  cmdParamsOnChange = (e) => {
+    this.setState({ cmdParams: e.target.value });
+  };
+  cmdSalindexChange = (e) => {
+    this.setState({ cmdSalindex: e.target.value });
+  };
+
+  launchCommand = () => {
+    this.props.requestSALCommand({
+      cmd: `cmd_${this.state.command}`,
+      params: JSON.parse(this.state.cmdParams),
+      component: this.state.cmdComponent,
+    });
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (this.props.streams !== prevProps.streams) {
+      this.updateMessageList(this.props.streams);
+    }
   };
 
   render() {
     return (
       <div style={{ textAlign: 'left' }}>
-        <h1>Telemetry log</h1>
+        <h1>Test log and cmd launcher</h1>
+
+        <h2> Command Launcher</h2>
+        <div>
+          <div>
+            <span>Component </span>
+            <input id="id_commands_csc" onChange={this.cmdComponentChange} value={this.state.cmdComponent} />
+          </div>
+          <div>
+            <span>salindex </span>
+            <input id="id_cmd_salindex" onChange={this.cmdSalindexChange} value={this.state.cmdSalindex} />
+          </div>
+          <div>
+            <span>cmd_ </span>
+            <input id="id_commands" onChange={this.cmdOnChange} value={this.state.command} />
+          </div>
+          <div>
+            <span>params </span>
+            <input id="id_parameters" onChange={this.cmdParamsOnChange} value={this.state.cmdParams} />
+          </div>
+
+          <button onClick={this.launchCommand}>Launch</button>
+        </div>
+
+        <h2>Telemetry and events</h2>
         <div>
           <div>
             <span>Category </span>
-            <input onChange={this.categoryChange} value={this.state.category} />
+            <input id="id_category" onChange={this.categoryChange} value={this.state.category} />
+          </div>
+          <div>
+            <span>salindex </span>
+            <input id="id_salindex" onChange={this.salindexChange} value={this.state.salindex} />
           </div>
           <div>
             <span>CSC </span>
-            <input onChange={this.cscChange} value={this.state.csc} />
+            <input id="id_csc" onChange={this.cscChange} value={this.state.csc} />
           </div>
           <div>
             <span>Stream </span>
-            <input onChange={this.streamChange} value={this.state.stream} />
+            <input id="id_stream" onChange={this.streamChange} value={this.state.stream} />
           </div>
           <button onClick={this.subscribeToStream}>Subscribe</button>
           <button onClick={this.unsubscribeToStream}>Unsubscribe</button>
@@ -107,7 +162,9 @@ export default class TelemetryLog extends Component {
         {this.state.msgList
           .slice()
           .reverse()
-          .map((msg, index) => <JSONPretty key={this.state.msgNumber - index} data={msg} />)}
+          .map((msg, index) => (
+            <JSONPretty key={this.state.msgNumber - index} data={msg} />
+          ))}
       </div>
     );
   }

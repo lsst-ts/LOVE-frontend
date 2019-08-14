@@ -1,0 +1,36 @@
+.status {
+    padding: 0.2em 0.3em;
+    text-transform: uppercase;
+    display: block;
+    white-space: nowrap; 
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.ok {
+    color: var(--status-ok-color);
+    background: var(--status-ok-dimmed-color);
+    border-left: 3px solid var(--status-ok-color);
+    border-right: 3px solid var(--status-ok-color);
+}
+
+.warning {
+    color: var(--status-warning-color);
+    background: var(--status-warning-dimmed-color);
+    border-left: 3px solid var(--status-warning-color);
+    border-right: 3px solid var(--status-warning-color);
+}
+
+.alert {
+    color: var(--status-alert-color);
+    background: var(--status-alert-dimmed-color);
+    border-left: 3px solid var(--status-alert-color);
+    border-right: 3px solid var(--status-alert-color);
+}
+
+.running {
+    color: var(--status-running-color);
+    background: var(--status-running-dimmed-color);
+    border-left: 3px solid var(--status-running-color);
+    border-right: 3px solid var(--status-running-color);
+}

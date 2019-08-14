@@ -1,0 +1,32 @@
+.backgroundBar {
+  position: relative;
+  background: var(--second-primary-background-color);
+  border-radius: 5px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.loadedBar {
+  background: var(--script-ok-color);
+  height: 1.3em;
+  top: 0;
+  left: 0;
+  border-radius: 5px 0px 0px 5px;
+  transition-timing-function: linear;
+}
+
+.narrow {
+  height: 0.3em;
+}
+
+.percentage {
+  position: absolute;
+  left: 48%;
+  top: 0;
+  z-index: 1;
+  color: white;
+}
+
+.dark {
+  color: var(--second-primary-background-color);
+}

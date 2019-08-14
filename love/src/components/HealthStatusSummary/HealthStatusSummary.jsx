@@ -6,6 +6,7 @@ import Button from './Button/Button';
 import ExportIcon from '../icons/ExportIcon/ExportIcon';
 import styles from './HealthStatusSummary.module.css';
 import UploadButton from './Button/UploadButton';
+import ManagerInterface from '../../Utils';
 
 /**
  * Configurable summary displaying the health status of an arbitrary subset
@@ -38,12 +39,55 @@ export default class HealthStatusSummary extends Component {
     } else {
       healthFunctions = JSON.parse(healthFunctions);
     }
+    this.managerInterface = new ManagerInterface();
 
     this.state = {
       healthFunctions,
       setHealthFunctions: this.setHealthFunctions,
+      telemetries: {},
     };
   }
+
+  componentDidMount = () => {
+    this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
+  };
+
+  componentWillUnmount = () => {
+    this.managerInterface.unsubscribeToTelemetry('all', 'all', () => 0);
+  };
+
+  receiveAllMsg = (msg) => {
+    const data = JSON.parse(msg.data);
+    if (data.category !== 'telemetry') return;
+    if (typeof data.data === 'object') {
+      let newTelemetries = Object.assign({}, this.state.telemetries);
+      let timestamp = new Date();
+      timestamp = timestamp
+        .toISOString()
+        .slice(0, 19)
+        .replace(/-/g, '/')
+        .replace('T', ' ');
+      Object.entries(data.data).forEach((entry) => {
+        const [csc, cscDataString] = entry;
+        const cscData = JSON.parse(cscDataString);
+        const telemetry = {};
+        const stream = {};
+        Object.entries(cscData).forEach((cscStream) => {
+          const [streamName, parameters] = cscStream;
+          stream[streamName] = {};
+          stream[streamName].parameters = parameters;
+          stream[streamName].receptionTimestamp = timestamp;
+        });
+        telemetry[csc] = {
+          ...stream,
+        };
+        Object.assign(newTelemetries, telemetry);
+      }, this);
+
+      newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
+      this.setState({ telemetries: newTelemetries });
+    }
+  };
 
   setHealthFunctions = (healthFunctions) => {
     this.setState({
@@ -77,7 +121,7 @@ export default class HealthStatusSummary extends Component {
       <React.Fragment>
         <div className={styles.topButtons}>
           <div className={styles.buttonWrapper}>
-              <UploadButton onLoadFile={this.onLoadFile} />
+            <UploadButton onLoadFile={this.onLoadFile} />
           </div>
           <div className={styles.buttonWrapper} onClick={() => this.download(this.getOutputConfig(), 'data.json')}>
             <Button>
@@ -88,7 +132,7 @@ export default class HealthStatusSummary extends Component {
           </div>
         </div>
         <RawTelemetryTable
-          telemetries={this.props.telemetries}
+          telemetries={this.state.telemetries !== {} ? this.state.telemetries : this.props.telemetries}
           {...this.state}
           checkedFilterColumn="units"
           // eslint-disable-next-line

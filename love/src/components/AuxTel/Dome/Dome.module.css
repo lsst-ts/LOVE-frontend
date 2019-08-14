@@ -1,0 +1,109 @@
+.domeContainer {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  position: relative;
+  width: 100%;
+}
+
+.skymapGridContainer {
+  display: flex;
+  align-self: center;
+  flex-wrap: wrap;
+  position: relative;
+  width: fit-content;
+}
+
+.skymapGridContainer svg {
+  vertical-align: top;
+}
+
+.skymapContainer h2 {
+  text-align: left;
+}
+
+.grid {
+}
+
+.topRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  row-gap: 2em;
+  padding: 1em 0;
+}
+
+.svgOverlay {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.svgOverlay .rotatingDome {
+  transition: transform 1.5s linear;
+}
+
+.svgOverlay .currentPointing {
+  transition: transform 1.5s linear;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  fill-opacity: 0.1;
+}
+
+.svgOverlay .targetPointing {
+}
+
+.svgOverlay rect {
+  transition: x 0.5s, width 0.5s;
+}
+
+.telemetryTable {
+  display: grid;
+  padding-top: 1em;
+  grid-template-columns: minmax(350px, 1fr);
+  grid-row-gap: 0.5em;
+  width: 100%;
+}
+
+.telemetryTable h2 {
+  margin-bottom: 0;
+}
+
+.azimuthSection {
+}
+
+.azimuthValues {
+  display: grid;
+  grid-template-columns: max-content 8em;
+  grid-row-gap: 0.5em;
+  align-items: center;
+  justify-content: center;
+}
+
+.windRoseContainer {
+  position: absolute;
+  left: 3%;
+  top: 1%;
+  width: 12%;
+}
+
+
+@media (min-width: 1600px) {
+  .telemetryTable {
+    display: grid;
+    padding-top: 1em;
+    grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+    grid-template-rows: max-content 1fr;
+    grid-row-gap: 0.5em;
+    width: 100%;
+  }
+
+  .topRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    row-gap: 2em;
+    padding: 1em 0;
+  }
+}

@@ -9,25 +9,20 @@
 
 .ok {
   color: var(--status-ok-color);
-  background: var(--status-ok-dimmed-color);
-  /* color: var(--status-ok-color);
-  background: var(--status-ok-dimmed-color); */
-
-  /* border-left: 3px solid var(--script-ok-color); */
-  /* border-right: 3px solid var(--script-ok-color); */
+  /* background: var(--status-ok-dimmed-color); */
 }
 
 .warning {
   color: var(--status-warning-color);
-  background: var(--status-warning-dimmed-color);
+  /* background: var(--status-warning-dimmed-color); */
 }
 
 .alert {
   color: var(--status-alert-color);
-  background: var(--status-alert-dimmed-color);
+  /* background: var(--status-alert-dimmed-color); */
 }
 
 .running {
   color: var(--script-ok-color);
-  background: var(--script-ok-dimmed-color);
+  /* background: var(--script-ok-dimmed-color); */
 }

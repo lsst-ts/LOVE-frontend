@@ -35,16 +35,16 @@ export default class TimeWindow extends PureComponent {
   };
 
   render() {
-    const timewindowPresets = [[60, '1h'], [15, '15min'], [1, '1min']];
+    const timewindowPresets = [['60', '1h'], ['15', '15min'], ['1', '1min']];
     return (
       <div className={styles.timeWindowOptionsContainer}>
         <span className={styles.timeWindowTitle}>Time window: </span>
-        <div className={styles.timeWindowOption}>
-          {timewindowPresets.map((preset) => {
-            const [duration, label] = preset;
-            return (
-              <UID key={label}>
-                {(id) => (
+        {timewindowPresets.map((preset) => {
+          const [duration, label] = preset;
+          return (
+            <UID key={label}>
+              {(id) => (
+                <div className={styles.timeWindowOption}>
                   <div className={styles.timeWindowOption}>
                     <input
                       type="radio"
@@ -57,11 +57,11 @@ export default class TimeWindow extends PureComponent {
                       {label}
                     </label>
                   </div>
-                )}
-              </UID>
-            );
-          })}
-        </div>
+                </div>
+              )}
+            </UID>
+          );
+        })}
         <div className={styles.timeWindowOption}>
           <UID>
             {(id) => (

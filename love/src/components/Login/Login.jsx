@@ -1,27 +1,34 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Button from '../Button/Button';
+import Button from '../GeneralPurpose/Button/Button';
 import styles from './Login.module.css';
-import ManagerInterface from '../../Utils';
+import { tokenStates } from '../../redux/reducers/auth';
 
 export default class Login extends Component {
   static propTypes = {
-
-    /** Defines wether or not the message of "Session Expired" should be displayed */
-    showSessionExpired: PropTypes.bool,
-
-    /** Function to call in order to hide the "Session Expired" message */
-    hideSessionExpired: PropTypes.func,
-
-    /** Function to call in order to set the token state of the App component */
-    setTokenState: PropTypes.func,
-
     /** Current router location */
     location: PropTypes.string,
 
     /** Token state of the App component */
     token: PropTypes.string,
+
+    /** The state of the token */
+    tokenStatus: PropTypes.string,
+
+    /** Function to request token to Manager */
+    fetchToken: PropTypes.func,
+
+    /** Function to mark the tokenState as EMPTY */
+    emptyToken: PropTypes.func,
+  };
+
+  static defaultProps = {
+    location: '',
+    token: '',
+    tokenStatus: tokenStates.EMPTY,
+    fetchToken: undefined,
+    emptyToken: undefined,
   };
 
   constructor(props) {
@@ -29,34 +36,20 @@ export default class Login extends Component {
     this.state = {
       username: '',
       password: '',
-      showFailedLogin: false,
     };
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleInputChange(event) {
+  handleInputChange = (event) => {
     const { name, value } = event.target;
+    this.props.emptyToken();
     this.setState({ [name]: value });
-    if (this.state.showFailedLogin) {
-      this.setState({ showFailedLogin: false });
-    }
-    if (this.props.showSessionExpired) {
-      this.props.hideSessionExpired();
-    }
-  }
+  };
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
-    ManagerInterface.requestToken(this.state.username, this.state.password).then((token) => {
-      if (token) {
-        this.props.setTokenState(token);
-      } else {
-        this.setState({ showFailedLogin: true });
-        this.props.setTokenState(null);
-      }
-    });
-  }
+    this.props.emptyToken();
+    this.props.fetchToken(this.state.username, this.state.password);
+  };
 
   redirect() {
     return (
@@ -78,16 +71,52 @@ export default class Login extends Component {
           </div>
           <div className={styles.panelBody}>
             <form onSubmit={this.handleSubmit}>
-              {this.state.showFailedLogin ? (
+              {this.props.tokenStatus === tokenStates.REQUESTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.incorrectCredentials}>
-                    {"Your username and password didn't match. Please try again."}
+                  <p className={styles.requesting}>
+                    Logging in, please wait
                   </p>
                 </div>
               ) : null}
-              {this.props.showSessionExpired ? (
+              {this.props.tokenStatus === tokenStates.REJECTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.incorrectCredentials}>Your session has expired, you have been logged out.</p>
+                  <p className={styles.incorrectCredentials}>
+                    Your username and password did not match, please try again
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.ERROR ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>
+                    There was an error communicating with the Server, you have been logged out
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.EXPIRED ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>Your session has expired, you have been logged out</p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.REMOVE_ERROR ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.incorrectCredentials}>
+                    There was a problem logging out of the server, please login and logout again to ensure your token is
+                    deleted
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.REMOVE_REQUESTED ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.requesting}>
+                    Logging out, please wait
+                  </p>
+                </div>
+              ) : null}
+              {this.props.tokenStatus === tokenStates.REMOVED_REMOTELY ? (
+                <div className={styles.incorrectCredentialsDiv}>
+                  <p className={styles.requesting}>
+                    Logout successful
+                  </p>
                 </div>
               ) : null}
               <p className={styles.formEntry}>
