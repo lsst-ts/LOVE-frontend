@@ -76,7 +76,10 @@ it('Should send a command to the server and save it on the state properly', asyn
     cmd: 'cmd_closeShutter',
     params: {},
     component: 'ATDome',
+    cmd_id: '10-cmd_closeShutter',
   };
+  const realDate = Date;
+  global.Date.now = () => 10;
 
   await store.dispatch(requestSALCommand(commandObject));
 
@@ -85,7 +88,7 @@ it('Should send a command to the server and save it on the state properly', asyn
     data: [
       {
         csc: 'ATDome',
-        data: { stream: { cmd: 'cmd_closeShutter', params: {} } },
+        data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {} } },
         salindex: 1,
       },
     ],
@@ -95,6 +98,7 @@ it('Should send a command to the server and save it on the state properly', asyn
     status: SALCommandStatus.REQUESTED,
     ...commandObject,
   });
+  global.Date = realDate;
 });
 
 const compareSalIndex = (a, b) => {
