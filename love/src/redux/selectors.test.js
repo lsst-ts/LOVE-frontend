@@ -721,5 +721,5 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
   const summaryStateValue = getSummaryStateValue(store.getState(), groupName);
 
   // Assert
-  expect(summaryStateValue).toEqual(4);
+  expect(summaryStateValue).toEqual(streams.summaryState[0].summaryState.value);
 });

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCGroupLog.module.css';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
-import CSCDetail from '../CSCDetail/CSCDetail';
+import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import Button from '../../GeneralPurpose/Button/Button';
 
 export default class CSCGroupLog extends Component {
@@ -15,6 +15,8 @@ export default class CSCGroupLog extends Component {
     hierarchy: PropTypes.object,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
+    subscribeToStream: PropTypes.func,
+    errorCodeData: PropTypes.array,
   };
 
   static defaultProps = {
@@ -26,23 +28,23 @@ export default class CSCGroupLog extends Component {
     hierarchy: {},
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
+    errorCodeData: [],
   };
 
+  componentDidMount = () => {
+    this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
+      this.props.subscribeToStream(name, salindex);
+    });
+  };
+
+  clearGroupErrorCodes = () => {
+    this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
+      this.props.clearCSCErrorCodes(name, salindex);
+    });
+  };
   render() {
     const { props } = this;
-    const { data } = this.props;
-    const group = this.props.hierarchy[this.props.realm][this.props.group];
-    const errorCodes = group
-      .flatMap((csc) => {
-        if (data[csc] && data[csc].errorCode) {
-          return data[csc].errorCode.map((errorCode) => {
-            return { csc, ...errorCode };
-          });
-        }
-        return [];
-      })
-      .sort((csc1, csc2) => (csc1.timestamp > csc2.timestamp ? -1 : 1));
-    errorCodes.length = 100;
+
     return (
       <div className={styles.CSCGroupLogContainer}>
         <div className={styles.topBarContainerWrapper}>
@@ -64,20 +66,17 @@ export default class CSCGroupLog extends Component {
           <div className={styles.logContainerTopBar}>
             <div>ERROR CODE</div>
             <div>
-              <Button
-                size="extra-small"
-                onClick={() => this.props.clearCSCErrorCodes(this.props.realm, this.props.group, this.props.name)}
-              >
+              <Button size="extra-small" onClick={() => this.clearGroupErrorCodes()}>
                 CLEAR
               </Button>
             </div>
           </div>
           <div className={[styles.log, styles.messageLogContent].join(' ')}>
-            {errorCodes.map((msg) => {
+            {this.props.errorCodeData.map((msg) => {
               return (
-                <div key={msg.timestamp} className={styles.logMessage}>
-                  <div className={styles.errorCode} title={`Error code ${msg.errorCode}`}>
-                    {msg.errorCode}
+                <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
+                  <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
+                    {msg.errorCode.value}
                   </div>
                   <div className={styles.messageTextContainer}>
                     <div className={styles.messageTopSection}>
@@ -87,17 +86,18 @@ export default class CSCGroupLog extends Component {
                       >
                         {msg.csc}
                       </div> */}
-                      <CSCDetail
+                      <CSCDetailContainer
                         realm={this.props.realm}
                         group={this.props.group}
                         name={msg.csc}
+                        salindex={msg.salindex}
                         data={this.props.data}
                         onCSCClick={this.props.onCSCClick}
                       />
-                      <div className={styles.timestamp}>{msg.timestamp}</div>
+                      <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
                     </div>
-                    <div className={styles.messageText}>{msg.errorReport}</div>
-                    <div className={styles.messageTraceback}>{msg.traceback}</div>
+                    <div className={styles.messageText}>{msg.errorReport.value}</div>
+                    <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                   </div>
                 </div>
               );

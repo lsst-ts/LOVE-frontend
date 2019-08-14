@@ -412,3 +412,5 @@ export const saveGroupSubscriptions = (Component) => {
     );
   };
 };
+
+export const flatMap = (a, cb) => [].concat(...a.map(cb));
