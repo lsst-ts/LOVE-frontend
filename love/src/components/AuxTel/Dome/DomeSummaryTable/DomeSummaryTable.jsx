@@ -94,6 +94,23 @@ export default class DomeSummaryTable extends Component {
         <span className={styles.value}>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
         </span>
+        {/* <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+          <span className={styles.label}>TTL:</span>
+          <span className={styles.value}>{Math.round(2)}min</span>
+        </span>
+        <span
+          className={[styles.subRow, styles.value].join(' ')}
+          title={`Current value: ${domeAz.current}\nTarget value: ${domeAz.target}\nLimits: [0º, 360º]`}
+        >
+          <Limits
+            lowerLimit={0}
+            upperLimit={360}
+            currentValue={domeAz.current}
+            targetValue={domeAz.target}
+            height={35}
+            displayLabels={false}
+          />
+        </span> */}
         {/* Mount */}
         <span className={styles.title}>Mount</span>
         <span className={styles.value}>
@@ -115,8 +132,22 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.wide}>
-          <Limits lowerLimit={-270} upperLimit={270} currentValue={mountAz.current} targetValue={mountAz.target} />
+        <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+          <span className={styles.label}>TTL:</span>
+          <span className={styles.value}>{Math.round(2)}min</span>
+        </span>
+        <span
+          className={[styles.subRow, styles.value].join(' ')}
+          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [-270º, 270º]`}
+        >
+          <Limits
+            lowerLimit={-270}
+            upperLimit={270}
+            currentValue={mountAz.current}
+            targetValue={mountAz.target}
+            height={35}
+            displayLabels={false}
+          />
         </span>
         <span className={styles.label}>El</span>
         <span className={styles.value}>
@@ -126,10 +157,23 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.wide}>
-          <Limits lowerLimit={15} upperLimit={90} currentValue={mountEl.current} targetValue={mountEl.target} />
+        <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+          <span className={styles.label}>TTL:</span>
+          <span className={styles.value}>{Math.round(2)}min</span>
         </span>
-
+        <span
+          className={[styles.subRow, styles.value].join(' ')}
+          title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [15º, 90º]`}
+        >
+          <Limits
+            lowerLimit={15}
+            upperLimit={90}
+            currentValue={mountEl.current}
+            targetValue={mountEl.target}
+            height={35}
+            displayLabels={false}
+          />
+        </span>
         <span className={styles.label}>{mountRotator.name}</span>
         <span className={styles.value}>
           <CurrentTargetValue
@@ -138,8 +182,22 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.wide}>
-          <Limits lowerLimit={-175} upperLimit={175} currentValue={mountRotator.current} targetValue={mountRotator.target} />
+        <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+          <span className={styles.label}>TTL:</span>
+          <span className={styles.value}>{Math.round(2)}min</span>
+        </span>
+        <span
+          className={[styles.subRow, styles.value].join(' ')}
+          title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [-175º, 175º]`}
+        >
+          <Limits
+            lowerLimit={-175}
+            upperLimit={175}
+            currentValue={mountRotator.current}
+            targetValue={mountRotator.target}
+            height={35}
+            displayLabels={false}
+          />
         </span>
       </div>
     );
