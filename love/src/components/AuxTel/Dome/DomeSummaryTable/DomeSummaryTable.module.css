@@ -18,11 +18,11 @@
   margin-right: auto;
   font-size: var(--font-size-larger);
   color: var(--base-font-color);
-  padding-top: 1.5em;
+  padding-top: 1em;
 }
 
 .summaryTable .title + .value {
-  padding-top: 2.5em;
+  padding-top: 1.5em;
 }
 
 .summaryTable .title:first-of-type {
@@ -34,8 +34,8 @@
 }
 
 .summaryTable .label {
-  margin-right: auto;
-  padding-left: 0.5em;
+  text-align: left;
+  padding-left: 0.4rem;
   line-height: 2em;
 }
 
@@ -47,7 +47,19 @@
 
 .summaryTable .wide {
   grid-column: span 2;
-  padding-right: 2em;
+  padding-right: 1em;
+}
+
+.summaryTable .subRow {
+  text-align: left;
+  margin-top: -1.56rem;
+  margin-bottom: -0.8rem;
+  font-size: var(--font-size-small);
+}
+
+.summaryTable .subRow .value {
+  margin-right: auto;
+  padding: 0.2em 0.5em;
 }
 
 @media (min-width: 1600px) {
