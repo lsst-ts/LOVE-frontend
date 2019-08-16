@@ -69,6 +69,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATMCS-1-atMountState'));
       dispatch(requestGroupSubscription('event-ATMCS-1-target'));
       dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-m3State'));
     },
     unsubscribeToStream: () => {
       //Dome
@@ -86,6 +87,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-atMountState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-target'));
       dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
+      dispatch(requestGroupSubscription('event-ATMCS-1-m3State'));
     },
   };
 };
