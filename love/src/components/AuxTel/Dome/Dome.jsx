@@ -81,6 +81,8 @@ export default class Dome extends Component {
       : 0;
     const trackID = this.props.target ? this.props.target[0].trackId.value : '';
     const m3State = this.props.m3State ? this.props.m3State[0].value: 2;
+    const currentTimesToLimits = this.props.currentTimeToLimits ? this.props.currentTimesToLimits : {};
+    
     const isProjected = true;
     let azDiff = Math.abs(domeAz - currentPointing.az);
     if (azDiff > 180) azDiff = azDiff - 360;
@@ -132,6 +134,7 @@ export default class Dome extends Component {
             trackID={trackID}
             mountInPosition={mountInPosition}
             m3State={m3State}
+            currentTimesToLimits={currentTimesToLimits}
           />
         </div>
         <div className={styles.telemetryTable}>

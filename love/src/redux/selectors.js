@@ -56,6 +56,7 @@ export const getDomeState = (state) => {
     'event-ATMCS-1-target',
     'event-ATMCS-1-allAxesInPosition',
     'event-ATMCS-1-m3State',
+    'telemetry-ATPtg-1-currentTimesToLimits',
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
@@ -79,6 +80,7 @@ export const getDomeState = (state) => {
     mountInPosition: domeData['event-ATMCS-1-allAxesInPosition'],
     target: domeData['event-ATMCS-1-target'],
     m3State: domeData['event-ATMCS-1-m3State'],
+    currentTimesToLimits: domeData['currentTimesToLimits'],
   };
 };
 
