@@ -59,7 +59,12 @@ export default class DomeSummaryTable extends Component {
             current: this.props.currentPointing.nasmyth2,
             target: this.props.targetPointing.nasmyth2,
           };
-
+    const currentTimesToLimits = this.props.currentTimesToLimits;
+    const timeToAzLimit = currentTimesToLimits.timeToAzlim ? currentTimesToLimits.timeToAzlim.value: 0;
+    const timeToRotLimit = currentTimesToLimits.timeToRotlim ? currentTimesToLimits.timeToRotlim.value: 0;
+    const timeToUnobservable = currentTimesToLimits.timeToUnobservable ? currentTimesToLimits.timeToUnobservable.value: 0;
+    // const timeToBlindSpot = currentTimesToLimits.timeToBlindSpot ? currentTimesToLimits.timeToBlindSpot.value: 0;
+    // const timeToElLimit =
     return (
       <div className={styles.summaryTable}>
         <span className={styles.title}>Track ID</span>
@@ -94,9 +99,9 @@ export default class DomeSummaryTable extends Component {
         <span className={styles.value}>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
         </span>
-        {/* <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+        {/* <span className={styles.subRow} title={`Time to limit: ${2} min`}>
           <span className={styles.label}>TTL:</span>
-          <span className={styles.value}>{Math.round(2)}min</span>
+          <span className={styles.value}>{Math.round(2)} min</span>
         </span>
         <span
           className={[styles.subRow, styles.value].join(' ')}
@@ -132,9 +137,9 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+        <span className={styles.subRow} title={`Time to limit: ${timeToAzLimit} min`}>
           <span className={styles.label}>TTL:</span>
-          <span className={styles.value}>{Math.round(2)}min</span>
+          <span className={styles.value}>{Math.round(timeToAzLimit)} min</span>
         </span>
         <span
           className={[styles.subRow, styles.value].join(' ')}
@@ -157,9 +162,9 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+        <span className={styles.subRow} title={`Time to unobservable: ${timeToUnobservable} min`}>
           <span className={styles.label}>TTL:</span>
-          <span className={styles.value}>{Math.round(2)}min</span>
+          <span className={styles.value}>{Math.round(timeToUnobservable)} min</span>
         </span>
         <span
           className={[styles.subRow, styles.value].join(' ')}
@@ -182,9 +187,9 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.subRow} title={`Time to limit: ${2}min`}>
+        <span className={styles.subRow} title={`Time to limit: ${timeToRotLimit} min`}>
           <span className={styles.label}>TTL:</span>
-          <span className={styles.value}>{Math.round(2)}min</span>
+          <span className={styles.value}>{Math.round(timeToRotLimit)} min</span>
         </span>
         <span
           className={[styles.subRow, styles.value].join(' ')}

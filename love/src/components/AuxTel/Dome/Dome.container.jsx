@@ -18,6 +18,7 @@ const DomeContainer = ({
   atMountState,
   target,
   mountInPosition,
+  currentTimesToLimits,
   width,
   height,
   subscribeToStream,
@@ -42,6 +43,7 @@ const DomeContainer = ({
       unsubscribeToStream={unsubscribeToStream}
       width={width}
       height={height}
+      currentTimesToLimits={currentTimesToLimits}
     />
   );
 };
@@ -70,6 +72,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATMCS-1-target'));
       dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
       dispatch(requestGroupSubscription('event-ATMCS-1-m3State'));
+      //ATPtg
+      dispatch(requestGroupSubscription('telemetry-ATPtg-1-currentTimesToLimits'));
     },
     unsubscribeToStream: () => {
       //Dome
@@ -86,8 +90,10 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-detailedState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-atMountState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-target'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-m3State'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-allAxesInPosition'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-m3State'));
+      //ATPtg
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATPtg-1-currentTimesToLimits'));
     },
   };
 };
