@@ -88,6 +88,15 @@
   width: 12%;
 }
 
+.vignettingDistanceContainer {
+  position: absolute;
+  left: 3%;
+  bottom: 2%;
+}
+
+.vignettingDistanceContainer .value {
+  color: var(--base-font-color);
+}
 
 @media (min-width: 1600px) {
   .telemetryTable {
