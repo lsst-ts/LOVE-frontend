@@ -59,12 +59,14 @@ export default class DomeSummaryTable extends Component {
             current: this.props.currentPointing.nasmyth2,
             target: this.props.targetPointing.nasmyth2,
           };
-    const currentTimesToLimits = this.props.currentTimesToLimits;
-    const timeToAzLimit = currentTimesToLimits.timeToAzlim ? currentTimesToLimits.timeToAzlim.value: 0;
-    const timeToRotLimit = currentTimesToLimits.timeToRotlim ? currentTimesToLimits.timeToRotlim.value: 0;
-    const timeToUnobservable = currentTimesToLimits.timeToUnobservable ? currentTimesToLimits.timeToUnobservable.value: 0;
-    // const timeToBlindSpot = currentTimesToLimits.timeToBlindSpot ? currentTimesToLimits.timeToBlindSpot.value: 0;
-    // const timeToElLimit =
+    const timesToLimit = this.props.currentTimesToLimits;
+    const timeToAzLimit = timesToLimit.timeToAzlim ? timesToLimit.timeToAzlim.value : 0;
+    const timeToRotLimit = timesToLimit.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
+    const timeToUnobservable = timesToLimit.timeToUnobservable ? timesToLimit.timeToUnobservable.value : 0;
+    const timeToBlindSpot = timesToLimit.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
+    const closestLimit = timeToBlindSpot > timeToUnobservable && timeToBlindSpot > 0 ? 'blind spot' : 'unobservable';
+    const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
+
     return (
       <div className={styles.summaryTable}>
         <span className={styles.title}>Track ID</span>
@@ -162,9 +164,9 @@ export default class DomeSummaryTable extends Component {
             isChanging={true}
           />
         </span>
-        <span className={styles.subRow} title={`Time to unobservable: ${timeToUnobservable} min`}>
+        <span className={styles.subRow} title={`Time to ${closestLimit}: ${timeToElLimit} min`}>
           <span className={styles.label}>TTL:</span>
-          <span className={styles.value}>{Math.round(timeToUnobservable)} min</span>
+          <span className={styles.value}>{Math.round(timeToElLimit)} min</span>
         </span>
         <span
           className={[styles.subRow, styles.value].join(' ')}
