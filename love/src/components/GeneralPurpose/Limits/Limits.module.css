@@ -17,7 +17,7 @@
 }
 
 .text {
-  fill: var(--base-font-color);
+  fill: var(--secondary-font-color);
   font-size: 0.3em;
   text-anchor: middle;
   transition: x 0.2s ease;

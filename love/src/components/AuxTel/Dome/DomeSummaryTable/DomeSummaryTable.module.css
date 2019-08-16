@@ -47,7 +47,7 @@
 
 .summaryTable .wide {
   grid-column: span 2;
-  padding-right: 2em;
+  padding-right: 1em;
 }
 
 @media (min-width: 1600px) {
