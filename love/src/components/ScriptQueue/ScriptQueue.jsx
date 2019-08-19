@@ -416,7 +416,7 @@ export default class ScriptQueue extends Component {
     return (
       <Panel title="Script Queue">
         <div
-          onMouseDown={() => {
+          onClick={(e) => {
             this.setState({ isContextMenuOpen: false });
           }}
           onScroll={() => {
