@@ -198,7 +198,7 @@ export default class WaitingScript extends PureComponent {
                     className={scriptStyles.buttonContainer}
                     onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
                   >
-                    &#8943;
+                    {' '}&#8943;{' '}
                   </div>
                 </div>
               )}

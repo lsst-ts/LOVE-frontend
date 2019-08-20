@@ -177,11 +177,11 @@
 .buttonContainer {
   padding: 0;
   border: 1px solid transparent;
+  white-space: pre;
 }
 
 .buttonContainer:hover {
   background: var(--second-quaternary-background-color);
-  padding: 0 0.25em;
   border: 1px solid var(--second-quaternary-background-color);
 }
 

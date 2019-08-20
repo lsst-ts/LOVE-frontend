@@ -180,7 +180,7 @@ export default class CurrentScript extends Component {
                       className={scriptStyles.buttonContainer}
                       onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
                     >
-                      &#8943;
+                      {' '}&#8943;{' '}
                     </div>
                   </div>
                 )}
