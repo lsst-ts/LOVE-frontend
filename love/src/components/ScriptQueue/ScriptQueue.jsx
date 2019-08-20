@@ -56,6 +56,7 @@ export default class ScriptQueue extends Component {
     current: 'None',
     finishedScriptList: [],
     state: 'Unknown',
+    username: '',
   };
 
   static stateStyleDict = {
@@ -244,13 +245,15 @@ export default class ScriptQueue extends Component {
   };
 
   launchScript = (isStandard, path, config, descr, location) => {
+    const user = this.props.username;
+    const newDescription =  `${descr}\n\n-------\nSent by ${user}`;
     this.props.requestSALCommand({
       cmd: 'cmd_add',
       params: {
         isStandard,
         path,
         config,
-        descr,
+        descr: newDescription,
         location,
       },
       component: 'ScriptQueue',
