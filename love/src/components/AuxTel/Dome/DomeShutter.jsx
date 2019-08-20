@@ -61,7 +61,7 @@ export default class DomeShutter extends Component {
         <path
           style={{ transform: `rotateZ(${270 + this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
           fill="none"
-          strokeDasharray="4"
+          strokeDasharray="10"
           strokeOpacity="0.3"
           stroke="white"
           strokeWidth="2"
@@ -81,7 +81,7 @@ export default class DomeShutter extends Component {
             fill="#fff"
             fillOpacity="0.1"
             stroke="#152228"
-            strokeWidth="1"
+            strokeWidth="2"
             d={`
               M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
@@ -98,7 +98,7 @@ export default class DomeShutter extends Component {
             <path
               fill="none"
               stroke="white"
-              strokeWidth="1"
+              strokeWidth="2"
               d={`
             M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
             A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
@@ -115,7 +115,7 @@ export default class DomeShutter extends Component {
               fill="white"
               fillOpacity={0.2 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
               stroke="white"
-              strokeWidth="1"
+              strokeWidth="2"
             />
           </g>
 
@@ -128,7 +128,7 @@ export default class DomeShutter extends Component {
             fill="white"
             fillOpacity="0.2"
             stroke="white"
-            strokeWidth="1"
+            strokeWidth="2"
           />
           {/* <circle cx={x0} cy={y0} r={r*0.91} fill="none" stroke="red" /> */}
         </g>
