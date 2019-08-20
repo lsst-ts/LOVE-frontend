@@ -246,7 +246,7 @@ export default class ScriptQueue extends Component {
 
   launchScript = (isStandard, path, config, descr, location) => {
     const user = this.props.username;
-    const newDescription =  `${descr}\n\n-------\nSent by ${user}`;
+    const newDescription = `${descr}\n\n-------\nSent by ${user}`;
     this.props.requestSALCommand({
       cmd: 'cmd_add',
       params: {
@@ -427,7 +427,10 @@ export default class ScriptQueue extends Component {
           }}
           className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
         >
-          <Loader display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED} />
+          <Loader
+            display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED}
+            message={`Running command: ${this.props.lastSALCommand.cmd}`}
+          />
           <ConfigPanel
             launchScript={this.launchScript}
             closeConfigPanel={this.closeConfigPanel}
