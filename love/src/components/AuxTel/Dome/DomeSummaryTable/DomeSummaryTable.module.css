@@ -1,6 +1,6 @@
 .summaryTable {
   display: grid;
-  grid-template-columns: 1fr minmax(13.5em, 1fr);
+  grid-template-columns: 0.35fr minmax(10em, 0.5fr);
   grid-auto-rows: max-content;
   grid-row-gap: 0.2em;
   padding: 0 2em;
@@ -10,13 +10,16 @@
   align-items: center;
   align-content: center;
   background: var(--second-quaternary-background-dimmed-color);
-  padding: 2em 1em;
+  padding: 1em 0em;
   align-self: center;
+  border-radius: 5px;
 }
 
 .summaryTable .title {
   margin-right: auto;
-  font-size: var(--font-size-larger);
+  font-size: var(--font-size-mediun);
+  font-weight: bold;
+  text-transform: uppercase;
   color: var(--base-font-color);
   padding-top: 1em;
 }
@@ -43,23 +46,32 @@
   /* font-size: var(--font-size-large); */
   padding: 0.2em 2em;
   color: var(--base-font-color);
+  padding-right: 0em;
 }
 
 .summaryTable .wide {
   grid-column: span 2;
-  padding-right: 1em;
 }
 
 .summaryTable .subRow {
-  text-align: left;
-  margin-top: -1.56rem;
-  margin-bottom: -0.8rem;
+  display: flex;
+  flex-direction: column;
+  margin-top: -2.5rem;
+  margin-bottom: 0.5rem;
   font-size: var(--font-size-small);
+}
+
+.summaryTable .subRow span:first-child {
+  margin-bottom: -0.3rem;
 }
 
 .summaryTable .subRow .value {
   margin-right: auto;
   padding: 0.2em 0.5em;
+}
+
+.highlight {
+  color: var(--base-font-color);
 }
 
 @media (min-width: 1600px) {
