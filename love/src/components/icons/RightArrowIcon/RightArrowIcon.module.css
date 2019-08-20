@@ -1,6 +1,6 @@
 .arrow {
   fill: none;
-  stroke: var(--secondary-font-color);
+  stroke: var(--base-font-color);
   stroke-linecap: 'round';
   stroke-linejoin: 'round';
 }
