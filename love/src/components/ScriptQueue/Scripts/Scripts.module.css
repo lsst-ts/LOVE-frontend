@@ -15,7 +15,6 @@
   background: var(--second-quaternary-background-color);
   border-top-right-radius: 5px;
   border-bottom-right-radius: 5px;
-  padding-left: 0.4em;
   user-select: none;
   border: 1px solid var(--second-quaternary-background-color);
 }
@@ -131,6 +130,16 @@
 
 .launchIconWrapper {
   width: 1.7em;
+  padding: 0.3em;
+}
+
+.requeueIconWrapper {
+  width: 1.3em;
+  padding: 0.4em;
+}
+
+.requeueIconWrapper svg {
+  vertical-align: top;
 }
 
 .launchIconWrapper svg {
