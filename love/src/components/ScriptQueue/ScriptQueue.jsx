@@ -302,11 +302,11 @@ export default class ScriptQueue extends Component {
     console.log(`Move script ${scriptIndex} to ${position}`);
     let location = 3; //Before reference script
     let locationSalIndex = 0;
-    if (position === 0) location = 1; //Location: first
+    const offsetValue = offset || position <= 0 ? 1 : 0;
+    if (position <= 0) location = 1; //Location: first
     //Location: last
     if (position >= this.state.waitingScriptList.length - 1) location = 2;
     else {
-      const offsetValue = offset ? 1 : 0;
       locationSalIndex = this.state.waitingScriptList[position + offsetValue].index;
     }
     this.props.requestSALCommand({
