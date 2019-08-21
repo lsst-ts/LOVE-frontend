@@ -116,7 +116,7 @@ export const openWebsocketConnection = () => {
           }
 
           if (data.category === 'ack') {
-            dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK));
+            dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, data.data[0].data.stream.result));
           }
 
           data.data.forEach((stream) => {
@@ -211,10 +211,11 @@ export const updateLastSALCommand = (cmd, status) => {
   };
 };
 
-export const updateLastSALCommandStatus = (status) => {
+export const updateLastSALCommandStatus = (status, result) => {
   return {
     type: UPDATE_LAST_SAL_COMMAND_STATUS,
     status,
+    result,
   };
 };
 
