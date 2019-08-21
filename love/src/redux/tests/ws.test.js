@@ -623,6 +623,7 @@ it.only('Should properly interpret an ack message', async () => {
 
   await expect(getLastSALCommand(store.getState())).toEqual({
     status: SALCommandStatus.ACK,
+    result: 'Done',
     ...commandObject,
   });
   global.Date = realDate;

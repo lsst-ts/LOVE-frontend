@@ -19,6 +19,8 @@ import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -109,6 +111,15 @@ export default class ScriptQueue extends Component {
         useLocalWaitingList: false,
         waitingScriptList: this.props.waitingScriptList,
       });
+    }
+    /* Checkcommand ack for toast*/
+    if(prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED && this.props.lastSALCommand.status === SALCommandStatus.ACK){
+      const cmd = this.props.lastSALCommand.cmd;
+      const result = this.props.lastSALCommand.result;
+      if(result === 'Done')
+        toast.success(`Command '${cmd}' ran successfully`);
+      else
+        toast.info(`Command '${cmd}' returned ${result}`);
     }
   };
 
@@ -246,7 +257,7 @@ export default class ScriptQueue extends Component {
 
   launchScript = (isStandard, path, config, descr, location) => {
     const user = this.props.username;
-    const newDescription =  `${descr}\n\n-------\nSent by ${user}`;
+    const newDescription = `${descr}\n\n-------\nSent by ${user}`;
     this.props.requestSALCommand({
       cmd: 'cmd_add',
       params: {
@@ -302,11 +313,11 @@ export default class ScriptQueue extends Component {
     console.log(`Move script ${scriptIndex} to ${position}`);
     let location = 3; //Before reference script
     let locationSalIndex = 0;
-    if (position === 0) location = 1; //Location: first
+    const offsetValue = offset || position <= 0 ? 1 : 0;
+    if (position <= 0) location = 1; //Location: first
     //Location: last
     if (position >= this.state.waitingScriptList.length - 1) location = 2;
     else {
-      const offsetValue = offset ? 1 : 0;
       locationSalIndex = this.state.waitingScriptList[position + offsetValue].index;
     }
     this.props.requestSALCommand({
@@ -427,7 +438,10 @@ export default class ScriptQueue extends Component {
           }}
           className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
         >
-          <Loader display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED} />
+          <Loader
+            display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED}
+            message={`Running command: ${this.props.lastSALCommand.cmd}`}
+          />
           <ConfigPanel
             launchScript={this.launchScript}
             closeConfigPanel={this.closeConfigPanel}
@@ -438,6 +452,7 @@ export default class ScriptQueue extends Component {
             contextMenuData={this.state.contextMenuData}
             options={contextMenuOption}
           />
+          <ToastContainer position={toast.POSITION.BOTTOM_CENTER}/>
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>
