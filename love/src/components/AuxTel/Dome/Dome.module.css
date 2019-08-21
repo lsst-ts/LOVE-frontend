@@ -68,6 +68,10 @@
 
 .telemetryTable h2 {
   margin-bottom: 0;
+  font-size: var(--font-size-mediun);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--base-font-color);
 }
 
 .azimuthSection {
@@ -90,8 +94,9 @@
 
 .vignettingDistanceContainer {
   position: absolute;
-  left: 3%;
+  left: 50%;
   bottom: 2%;
+  transform: translate(-50%,0);
 }
 
 .vignettingDistanceContainer .value {

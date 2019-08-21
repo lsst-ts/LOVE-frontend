@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CurrentTargetValue.module.css';
+import RightArrowIcon from '../../icons/RightArrowIcon/RightArrowIcon';
 
 export default class CurrentTargetValue extends Component {
   static propTypes = {
@@ -24,7 +25,9 @@ export default class CurrentTargetValue extends Component {
         <span className={styles.telemetryValue}>{this.props.currentValue}º</span>
         {isChanging ? (
           <>
-            <span className={styles.arrow}>&#8594;</span>
+            <span className={styles.arrow}>
+              <RightArrowIcon />
+            </span>
             <span className={styles.telemetryValue}>{this.props.targetValue}º</span>
           </>
         ) : null}

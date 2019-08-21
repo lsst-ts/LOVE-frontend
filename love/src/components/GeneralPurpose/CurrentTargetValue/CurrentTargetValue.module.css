@@ -22,8 +22,9 @@
   font-size: 2.0em;
   animation: blinker 2.5s linear infinite;
   line-height: 0;
-  vertical-align: middle;
-  min-width: 1.5em;
+  vertical-align: baseline;
+  width: 0.5em;
+  padding: 0 0.2em;
   display: inline-block;
   text-align: center;
 }

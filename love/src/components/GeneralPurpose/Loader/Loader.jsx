@@ -8,6 +8,12 @@ export default class Loader extends Component {
   };
 
   render() {
-    return this.props.display && <div className={styles.container}><div className={styles.loader} /></div>;
+    return this.props.display && <div className={styles.container}>
+    <div className={styles.loader} />
+      
+      <div className={styles.text}>
+        {this.props.message}
+      </div>
+      </div>;
   }
 }

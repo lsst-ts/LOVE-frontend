@@ -97,13 +97,7 @@ export default class Dome extends Component {
             <div className={styles.windRoseContainer}>
               <WindRose />
             </div>
-            <div
-              className={styles.vignettingDistanceContainer}
-              title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
-            >
-              <span>Vignetting distance: </span>
-              <span className={styles.value}>{vignettingDistance}º</span>
-            </div>
+            
             <DomeTopView width={width} height={height} />
             <DomeShutter
               width={width}
@@ -120,6 +114,13 @@ export default class Dome extends Component {
               targetPointing={targetPointing}
               isProjected={isProjected}
             />
+            <div
+              className={styles.vignettingDistanceContainer}
+              title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
+            >
+              <span>Vignetting distance: </span>
+              <span className={styles.value}>{vignettingDistance}º</span>
+            </div>
           </div>
           <DomeSummaryTable
             currentPointing={currentPointing}

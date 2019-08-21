@@ -25,11 +25,11 @@ export default class Limits extends Component {
     const { lowerLimit, upperLimit } = this.props;
     const { currentValue, targetValue } = this.props;
     const height = this.props.height;
-    const barHeight = this.props.displayLabels ? height / 8 : height / 8;
+    const barHeight = height / 7;
     const xMargin = 5;
     const currentValueX = xMargin + ((100 - 2 * xMargin) * (currentValue - lowerLimit)) / (upperLimit - lowerLimit);
     const targetValueX = xMargin + ((100 - 2 * xMargin) * (targetValue - lowerLimit)) / (upperLimit - lowerLimit);
-    const yOffset = 0;
+    const yOffset = height/3;
     return (
       <div className={styles.container}>
         <svg version="1.1" x="0px" y="0px" viewBox={`0 0 100 ${height}`} className={styles.container}>

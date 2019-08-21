@@ -102,6 +102,7 @@ export default function(state = initialState, action) {
         lastSALCommand: {
           ...state.lastSALCommand,
           status: action.status,
+          result: action.result,
         },
       };
     }
