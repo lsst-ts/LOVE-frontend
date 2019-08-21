@@ -1,0 +1,29 @@
+.container {
+  position: fixed;
+  top: 0;
+  background: var(--second-quaternary-background-color);
+  z-index: 1;
+  transform: translate(-100%, 0);
+  display: grid;
+  grid-template-columns: 2em 1fr;
+  padding: 0.5em;
+  text-align: left;
+  user-select: none;
+}
+
+.container div {
+  padding: 0.25em 0.5em;
+}
+
+.row {
+  display: contents;
+  cursor: pointer;
+}
+
+.row:hover > div {
+  background: var(--second-quinary-background-color);
+}
+
+div.buttonText {
+  padding-left: 0em;
+}

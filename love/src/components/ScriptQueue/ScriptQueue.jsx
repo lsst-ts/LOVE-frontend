@@ -8,8 +8,17 @@ import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
+import Loader from '../GeneralPurpose/Loader/Loader';
 import ManagerInterface from '../../Utils';
-import { hasCommandPrivileges, hasFakeData } from '../../Config';
+import ConfigPanel from './ConfigPanel/ConfigPanel';
+import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
+import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
+import ContextMenu from './Scripts/ContextMenu/ContextMenu';
+import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
+import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
+import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
+import { SALCommandStatus } from '../../redux/actions/ws';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -19,84 +28,36 @@ export default class ScriptQueue extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      current: {},
-      waitingScriptList: [
-        // {
-        //   path: 'path/filename.py',
-        //   process_state: 'Loading',
-        //   script_state: 'unconfigured',
-        //   index: 0,
-        //   estimatedTime: 210,
-        // },
-        // {
-        //   path: 'path/filename2.py',
-        //   process_state: 'Configured',
-        //   script_state: 'configured',
-        //   index: 1,
-        //   estimatedTime: 110,
-        // },
-        // {
-        //   path: 'Unkown',
-        // },
-        // {
-        //   path: 'path3/filename.py',
-        //   process_state: 'ConfigureFailed',
-        //   script_state: 'stopped',
-        //   index: 3,
-        //   estimatedTime: 70,
-        // },
-      ],
-      availableScriptList: [
-        // {
-        //   type: 'Standard',
-        //   path: 'path1',
-        //   script_state: 'failed',
-        //   index: 8,
-        // },
-        // {
-        //   type: 'Standard',
-        //   path: 'path2',
-        //   script_state: 'failed',
-        //   index: 9,
-        // },
-      ],
-      finishedScriptList: [
-        // {
-        //   path: 'path3/filename1.py',
-        //   process_state: 'Done',
-        //   script_state: 'done',
-        //   index: 4,
-        // },
-        // {
-        //   path: 'path3/filename2.py',
-        //   process_state: 'Terminated',
-        //   script_state: 'terminated',
-        //   index: 5,
-        // },
-        // {
-        //   path: 'path3/filename3.py',
-        //   process_state: 'Done',
-        //   script_state: 'failed',
-        //   index: 6,
-        // },
-        // {
-        //   path: 'path3/filename4.py',
-        //   process_state: 'Done',
-        //   script_state: 'stopped',
-        //   index: 7,
-        // },
-      ],
-      heartbeats: {},
-      isAvailableScriptListVisible: false,
-      draggingSource: '',
+      indexedHeartbeats: {},
+      isAvailableScriptListVisible: true,
       isFinishedScriptListListVisible: false,
+      configPanel: {
+        show: false,
+        x: 0,
+        y: 0,
+      },
       state: 'Unknown',
       summaryStateValue: 0,
+      useLocalWaitingList: false,
+      waitingScriptList: this.props.waitingScriptList,
+      isContextMenuOpen: false,
+      contextMenuData: {},
+      currentMenuSelected: false,
     };
     this.lastId = 19;
-
     this.managerInterface = new ManagerInterface();
   }
+
+  static defaultProps = {
+    summaryStateValue: 0,
+    heartbeats: {},
+    availableScriptList: [],
+    waitingScriptList: [],
+    current: 'None',
+    finishedScriptList: [],
+    state: 'Unknown',
+    username: '',
+  };
 
   static stateStyleDict = {
     Stopped: 'warning',
@@ -131,72 +92,32 @@ export default class ScriptQueue extends Component {
     },
   };
 
-  onReceiveMsg = (msg) => {
-    let { data } = JSON.parse(msg.data);
-
-    if (data.ScriptQueue) {
-      this.processSummaryState(data);
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.heartbeats !== prevProps.heartbeats) {
+      this.setState({
+        indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
+          map[heartbeat.salindex] = heartbeat;
+          return map;
+        }, {}),
+      });
     }
-
-    if (data.ScriptQueueState === undefined) return;
-
-    data = data.ScriptQueueState.stream;
-
-    if (data.script_heartbeat) {
-      this.processHeartbeat(data);
-      return;
+    if (
+      this.props.waitingScriptList !== prevProps.waitingScriptList &&
+      this.state.draggingScriptInstance === undefined
+    ) {
+      this.setState({
+        useLocalWaitingList: false,
+        waitingScriptList: this.props.waitingScriptList,
+      });
     }
-
-    this.processQueueState(data);
-  };
-
-  processSummaryState = (data) => {
-    let { value } = data.ScriptQueue.summaryState[0].summaryState;
-    if (hasFakeData) {
-      value = Math.floor(Math.random() * 5);
-    }
-    this.setState({
-      summaryStateValue: value,
-    });
-  };
-
-  processHeartbeat = (data) => {
-    const { salindex, ...scriptData } = data.script_heartbeat;
-    const currentHeartbeats = { ...this.state.heartbeats };
-
-    currentHeartbeats[salindex] = {
-      lost: scriptData.lost,
-      lastHeartbeatTimestamp: scriptData.last_heartbeat_timestamp,
-    };
-
-    this.setState({
-      heartbeats: currentHeartbeats,
-    });
-  };
-
-  processQueueState = (data) => {
-    const { current } = data;
-    const { state } = data;
-    const finishedScriptList = data.finished_scripts;
-    const availableScriptList = data.available_scripts;
-    const waitingScriptList = data.waiting_scripts;
-    this.setState({
-      current,
-      finishedScriptList,
-      availableScriptList,
-      waitingScriptList,
-      state,
-    });
   };
 
   componentDidMount = () => {
-    this.managerInterface.subscribeToEvents('ScriptQueueState', 'stream', this.onReceiveMsg);
-    this.managerInterface.subscribeToEvents('ScriptQueue', 'summaryState', this.onReceiveMsg);
+    this.props.subscribeToStreams();
   };
 
   componentWillUnmount = () => {
-    this.managerInterface.unsubscribeToEvents('ScriptQueueState', 'stream', () => 0);
-    this.managerInterface.unsubscribeToEvents('ScriptQueue', 'summaryState', () => 0);
+    this.props.unsubscribeToStreams();
   };
 
   displayAvailableScripts = () => {
@@ -211,72 +132,39 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  getScriptFromId = (index, listName) => {
-    let list = this.state.waitingScriptList;
-    if (listName === 'available') list = this.state.availableScriptList;
+  getScriptFromId = (index) => {
+    let list = this.props.waitingScriptList;
     for (let i = 0; i < list.length; i += 1) if (list[i].index === index) return list[i];
     return null;
   };
 
-  onDragStart = (e, draggingId, draggingSource) => {
-    if (!hasCommandPrivileges) return;
-    // console.log('onDragStart', this.state);
-    const draggingScriptInstance = this.getScriptFromId(draggingId, draggingSource);
+  onDragStart = (e, draggingId) => {
+    if (!this.props.commandExecutePermission) return;
+    const draggingScriptInstance = this.getScriptFromId(draggingId);
     this.setState({
       draggingScriptInstance,
-      draggingSource,
+      waitingScriptList: this.props.waitingScriptList,
     });
   };
 
   // eslint-disable-next-line
-  onDragEnd = (e, draggingId, draggingSource) => {
-    if (!hasCommandPrivileges) return;
-    // console.log('END', e, draggingId, draggingSource, this.state.draggingScriptInstance);
-    if (draggingSource === 'available') {
-      const list = [...this.state.waitingScriptList];
-      for (let i = 0; i < list.length; i += 1) {
-        // update id of newly inserted script
-        if (list[i].index === draggingId) {
-          const newItem = { ...list[i] };
-          newItem.index = this.lastId + 1;
-          newItem.pendingConfirmation = true;
-          list[i] = newItem;
-          this.lastId += 1;
-          break;
-        }
-      }
-      this.setState({
-        waitingScriptList: [...list],
-        draggingScriptInstance: undefined,
-      });
-    } else {
-      this.setState({
-        draggingScriptInstance: undefined,
-      });
-    }
-  };
-
-  removeFromWaitingList = (sourceScriptId) => {
-    const waitingList = [...this.state.waitingScriptList];
-    const newWaitingList = [...waitingList];
-    const waitingListLength = waitingList.length;
-    let waitingListSourceId = -1;
-
-    for (let i = 0; i < waitingListLength; i += 1) {
-      if (waitingList[i].index === sourceScriptId) waitingListSourceId = i;
-    }
-    if (waitingListSourceId !== -1) newWaitingList.splice(waitingListSourceId, 1);
+  onDragEnd = (e, draggingId) => {
+    if (!this.props.commandExecutePermission) return;
     this.setState({
-      waitingScriptList: newWaitingList,
+      draggingScriptInstance: undefined,
     });
+    let i = 0;
+    for (; i < this.state.waitingScriptList.length; ++i)
+      if (this.state.waitingScriptList[i].index === draggingId) break;
+    this.moveScript(draggingId, i);
   };
 
   onDragEnter = () => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
-    const waitingList = [...this.state.waitingScriptList];
+    const waitingList = [...this.props.waitingScriptList];
     const waitingListLength = waitingList.length;
     let waitingListSourceId = -1;
 
@@ -292,17 +180,9 @@ export default class ScriptQueue extends Component {
     }
   };
 
-  onDragLeave = () => {
-    if (!hasCommandPrivileges) return;
-    const sourceScriptId = this.state.draggingScriptInstance.index;
-    if (this.state.draggingSource === 'available' || this.state.draggingSource === '') {
-      this.removeFromWaitingList(sourceScriptId);
-    }
-  };
-
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
-    if (!hasCommandPrivileges) return;
+    if (!this.props.commandExecutePermission) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
@@ -318,24 +198,12 @@ export default class ScriptQueue extends Component {
       if (waitingList[i].index === targetScriptId) waitingListTargetId = i;
     }
 
-    if (this.state.draggingSource === 'available' || this.state.draggingSource === '') {
-      // get available list id
-      // remove script from waiting list
-      if (waitingListSourceId !== -1) newWaitingList.splice(waitingListSourceId, 1);
-      // reinsert it
-      newWaitingList.splice(waitingListTargetId, 0, this.state.draggingScriptInstance);
-      this.setState({
-        waitingScriptList: newWaitingList,
-        dragOverId: targetScriptId,
-      });
-      return;
-    }
-
     newWaitingList.splice(waitingListSourceId, 1);
     newWaitingList.splice(waitingListTargetId, 0, waitingList[waitingListSourceId]);
 
     this.setState({
       waitingScriptList: newWaitingList,
+      useLocalWaitingList: true,
     });
   };
 
@@ -363,39 +231,214 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  launchScriptConfig = (e, script) => {
+    let { x, y, height } = e.target.getBoundingClientRect();
+    this.setState({
+      configPanel: {
+        script: script,
+        name: script.name,
+        show: true,
+        x: x,
+        y: y - height,
+      },
+    });
+  };
+
+  launchScript = (isStandard, path, config, descr, location) => {
+    const user = this.props.username;
+    const newDescription =  `${descr}\n\n-------\nSent by ${user}`;
+    this.props.requestSALCommand({
+      cmd: 'cmd_add',
+      params: {
+        isStandard,
+        path,
+        config,
+        descr: newDescription,
+        location,
+      },
+      component: 'ScriptQueue',
+    });
+    this.closeConfigPanel();
+  };
+
+  closeConfigPanel = () => {
+    this.setState({
+      configPanel: {
+        show: false,
+        x: 0,
+        y: 0,
+      },
+    });
+  };
+
+  stopScript = (scriptIndex, terminate = false) => {
+    console.log('Stopping script', scriptIndex);
+    const array = new Array(400).fill(0);
+    array[0] = scriptIndex;
+    this.props.requestSALCommand({
+      cmd: 'cmd_stopScripts',
+      params: {
+        length: 1,
+        salIndices: array,
+        terminate: terminate,
+      },
+      component: 'ScriptQueue',
+    });
+  };
+
+  requeueScript = (scriptIndex) => {
+    console.log('Requeueing script', scriptIndex);
+    this.props.requestSALCommand({
+      cmd: 'cmd_requeue',
+      params: {
+        salIndex: scriptIndex,
+        location: 2,
+      },
+      component: 'ScriptQueue',
+    });
+  };
+
+  moveScript = (scriptIndex, position, offset = true) => {
+    console.log(`Move script ${scriptIndex} to ${position}`);
+    let location = 3; //Before reference script
+    let locationSalIndex = 0;
+    if (position === 0) location = 1; //Location: first
+    //Location: last
+    if (position >= this.state.waitingScriptList.length - 1) location = 2;
+    else {
+      const offsetValue = offset ? 1 : 0;
+      locationSalIndex = this.state.waitingScriptList[position + offsetValue].index;
+    }
+    this.props.requestSALCommand({
+      cmd: 'cmd_move',
+      params: {
+        salIndex: scriptIndex,
+        location: location,
+        locationSalIndex: locationSalIndex,
+      },
+      component: 'ScriptQueue',
+    });
+  };
+
+  pauseScriptQueue = () => {
+    console.log('Pausing queue');
+    this.props.requestSALCommand({
+      cmd: 'cmd_pause',
+      params: {},
+      component: 'ScriptQueue',
+    });
+  };
+
+  resumeScriptQueue = () => {
+    console.log('Resuming queue');
+    this.props.requestSALCommand({
+      cmd: 'cmd_resume',
+      params: {},
+      component: 'ScriptQueue',
+    });
+  };
+
+  onClickContextMenu = (event, index, currentMenuSelected = false) => {
+    event.stopPropagation();
+    this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
+    this.setState({
+      contextMenuData: event.target.getBoundingClientRect(),
+      selectedScriptIndex: index,
+      currentMenuSelected: currentMenuSelected,
+    });
+  };
+
+  requeueSelectedScript = () => {
+    this.requeueScript(this.state.selectedScriptIndex);
+  };
+
+  stopSelectedScript = (terminate = false) => {
+    this.stopScript(this.state.selectedScriptIndex, terminate);
+    this.setState({ isContextMenuOpen: false });
+  };
+
+  moveScriptUp = (scriptIndex) => {
+    let i = 0;
+    for (; i < this.props.waitingScriptList.length; i++)
+      if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    this.moveScript(scriptIndex, i - 1, false);
+  };
+
+  moveScriptDown = (scriptIndex) => {
+    let i = 0;
+    for (; i < this.props.waitingScriptList.length; i++)
+      if (this.props.waitingScriptList[i].index === scriptIndex) break;
+    this.moveScript(scriptIndex, i + 1, true);
+  };
+
+  moveSelectedScriptToTop = () => {
+    this.moveScript(this.state.selectedScriptIndex, 0);
+    this.setState({ isContextMenuOpen: false });
+  };
+
+  moveSelectedScriptToBottom = () => {
+    this.moveScript(this.state.selectedScriptIndex, Infinity);
+    this.setState({ isContextMenuOpen: false });
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
-    const current = this.state.current === 'None' ? {} : { ...this.state.current };
+    const current = this.props.current === 'None' ? {} : { ...this.props.current };
 
     // const now = new Date();
     // Fix time zones for next line
     // const currentScriptElapsedTime =
-    //   this.state.current === 'None' || current.timestampRunStart === undefined
+    //   this.props.current === 'None' || current.timestampRunStart === undefined
     //     ? 0
     //     : now.getTime() / 1000.0 - current.timestampRunStart;
+    const waitingList = this.state.useLocalWaitingList ? this.state.waitingScriptList : this.props.waitingScriptList;
 
-    const totalWaitingSeconds = this.state.waitingScriptList.reduce((previousSum, currentElement) => {
+    const totalWaitingSeconds = waitingList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
     }, 0);
 
-    const totalFinishedSeconds = this.state.finishedScriptList.reduce((previousSum, currentElement) => {
+    const totalFinishedSeconds = this.props.finishedScriptList.reduce((previousSum, currentElement) => {
       if (!currentElement) return previousSum;
       if (typeof currentElement.expected_duration !== 'number') return previousSum;
       return currentElement.expected_duration + previousSum;
     }, 0);
+    const currentContextMenu = [
+      { icon: <TerminateIcon />, text: 'Terminate', action: () => this.stopSelectedScript(true) },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ];
+    const waitingContextMenu = [
+      { icon: <MoveToTopIcon />, text: 'Move to top', action: this.moveSelectedScriptToTop },
+      { icon: <MoveToBottomIcon />, text: 'Move to bottom', action: this.moveSelectedScriptToBottom },
+      { icon: <RequeueIcon />, text: 'Requeue', action: this.requeueSelectedScript },
+    ];
 
+    const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
     return (
       <Panel title="Script Queue">
-        <div className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}>
-          <div
-            onDragEnter={(e) => {
-              this.onDragLeave(e);
-            }}
-            className={styles.currentScriptWrapper}
-          >
+        <div
+          onClick={(e) => {
+            this.setState({ isContextMenuOpen: false });
+          }}
+          onScroll={() => {
+            this.setState({ isContextMenuOpen: false });
+          }}
+          className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
+        >
+          <Loader display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED} />
+          <ConfigPanel
+            launchScript={this.launchScript}
+            closeConfigPanel={this.closeConfigPanel}
+            configPanel={this.state.configPanel}
+          />
+          <ContextMenu
+            isOpen={this.state.isContextMenuOpen}
+            contextMenuData={this.state.contextMenuData}
+            options={contextMenuOption}
+          />
+          <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>
                 <span className={styles.currentScriptTitle}>CURRENT SCRIPT</span>
@@ -406,28 +449,26 @@ export default class ScriptQueue extends Component {
                   processState={current.process_state}
                   isStandard={current.type ? current.type.toUpperCase() === 'STANDARD' : undefined}
                   estimatedTime={current.expected_duration}
-                  heartbeatData={this.state.heartbeats[current.index]}
+                  heartbeatData={this.state.indexedHeartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
+                  stopScript={this.stopScript}
+                  onClickContextMenu={this.onClickContextMenu}
+                  commandExecutePermission={this.props.commandExecutePermission}
                 />
               </div>
             </div>
           </div>
-          <div
-            onDragEnter={(e) => {
-              this.onDragLeave(e);
-            }}
-            className={styles.globalStateWrapper}
-          >
+          <div className={styles.globalStateWrapper}>
             <div className={styles.globalStateContainer}>
               <div className={styles.stateContainer}>
                 CSC STATE
-                <StatusText status={ScriptQueue.summaryStates[this.state.summaryStateValue].statusText}>
-                  {ScriptQueue.summaryStates[this.state.summaryStateValue].name}
+                <StatusText status={ScriptQueue.summaryStates[this.props.summaryStateValue].statusText}>
+                  {ScriptQueue.summaryStates[this.props.summaryStateValue].name}
                 </StatusText>
               </div>
               <div className={styles.stateContainer}>
                 QUEUE STATE
-                <StatusText status={ScriptQueue.stateStyleDict[this.state.state]}>{this.state.state}</StatusText>
+                <StatusText status={ScriptQueue.stateStyleDict[this.props.state]}>{this.props.state}</StatusText>
               </div>
             </div>
           </div>
@@ -435,12 +476,7 @@ export default class ScriptQueue extends Component {
           {/* LISTS BODY */}
           <div className={styles.listsBody}>
             <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
-              <div
-                onDragEnter={(e) => {
-                  this.onDragLeave(e);
-                }}
-                className={[styles.availableScriptList, styles.scriptList].join(' ')}
-              >
+              <div className={[styles.availableScriptList, styles.scriptList].join(' ')}>
                 <div
                   className={[styles.collapsedScriptListLabelWrapper].join(' ')}
                   onClick={this.openAvailableList}
@@ -452,7 +488,7 @@ export default class ScriptQueue extends Component {
                   <div className={styles.listTitleWrapper}>
                     <div className={styles.listTitleLeft}>
                       <span className={styles.listTitle}>
-                        AVAILABLE SCRIPTS ({this.state.availableScriptList.length})
+                        AVAILABLE SCRIPTS ({this.props.availableScriptList.length})
                       </span>
                       <span className={styles.listSubtitle}>&#8203;</span>
                     </div>
@@ -465,23 +501,25 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.availableScriptList.map((script) => {
+                    {this.props.availableScriptList.map((script) => {
                       if (!script) return null;
                       return (
                         <DraggableScript
                           key={`dragging-available-${script.type}-${script.path}`}
                           {...script}
                           dragSourceList="available"
-                          onDragOver={(e) => this.onDragLeave(e)}
                           onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
                           onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
                           draggingScriptInstance={this.state.draggingScriptInstance}
-                          disabled={!hasCommandPrivileges}
+                          disabled={true}
                         >
                           <AvailableScript
                             key={`${script.type}-${script.path}`}
                             path={script.path}
                             isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
+                            launchScriptConfig={this.launchScriptConfig}
+                            script={script}
+                            commandExecutePermission={this.props.commandExecutePermission}
                             {...script}
                           />
                         </DraggableScript>
@@ -495,7 +533,7 @@ export default class ScriptQueue extends Component {
             <div className={[styles.waitingScriptList, styles.scriptList].join(' ')}>
               <div className={styles.listTitleWrapper}>
                 <div className={styles.listTitleLeft}>
-                  <span className={styles.listTitle}>WAITING SCRIPTS ({this.state.waitingScriptList.length})</span>
+                  <span className={styles.listTitle}>WAITING SCRIPTS ({waitingList.length})</span>
                   <span className={styles.listSubtitle}>
                     Total time:{' '}
                     {Math.trunc(totalWaitingSeconds / 3600) > 0 ? `${Math.trunc(totalWaitingSeconds / 3600)}h ` : ''}
@@ -505,9 +543,29 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
+                {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
+                  <>
+                    <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
+                      <span>Resume</span>
+                      <div className={styles.pauseIconWrapper} title="Resume Script Queue">
+                        <ResumeIcon />
+                      </div>
+                    </div>
+                  </>
+                )}
+                {this.props.state === 'Running' && this.props.commandExecutePermission && (
+                  <>
+                    <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
+                      <span>Pause</span>
+                      <div className={styles.pauseIconWrapper} title="Pause Script Queue">
+                        <PauseIcon />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
-              <ScriptList onDragLeave={this.onDragLeave} onDragEnter={this.onDragEnter}>
-                {this.state.waitingScriptList.map((script, listIndex) => {
+              <ScriptList onDragEnter={this.onDragEnter}>
+                {waitingList.map((script, listIndex) => {
                   if (!script) return null;
                   const estimatedTime =
                     script.expected_duration === 'UNKNOWN' ? 0 : parseFloat(script.expected_duration);
@@ -524,7 +582,7 @@ export default class ScriptQueue extends Component {
                       onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
                       onDragEnd={(e, id) => this.onDragEnd(e, id, 'waiting')}
                       draggingScriptInstance={this.state.draggingScriptInstance}
-                      disabled={!hasCommandPrivileges}
+                      disabled={!this.props.commandExecutePermission}
                     >
                       <WaitingScript
                         isCompact={
@@ -533,7 +591,13 @@ export default class ScriptQueue extends Component {
                         path={script.path}
                         isStandard={isStandard}
                         estimatedTime={estimatedTime}
-                        heartbeatData={this.state.heartbeats[script.index]}
+                        heartbeatData={this.state.indexedHeartbeats[script.index]}
+                        stopScript={this.stopScript}
+                        moveScript={this.moveScript}
+                        onClickContextMenu={this.onClickContextMenu}
+                        moveScriptUp={this.moveScriptUp}
+                        moveScriptDown={this.moveScriptDown}
+                        commandExecutePermission={this.props.commandExecutePermission}
                         {...script}
                       />
                     </DraggableScript>
@@ -543,12 +607,7 @@ export default class ScriptQueue extends Component {
             </div>
 
             <div className={[styles.collapsableScriptList, finishedScriptListClass].join(' ')}>
-              <div
-                onDragEnter={(e) => {
-                  this.onDragLeave(e);
-                }}
-                className={[styles.finishedScriptList, styles.scriptList].join(' ')}
-              >
+              <div className={[styles.finishedScriptList, styles.scriptList].join(' ')}>
                 <div
                   className={[styles.collapsedScriptListLabelWrapper].join(' ')}
                   onClick={this.openFinishedList}
@@ -560,7 +619,7 @@ export default class ScriptQueue extends Component {
                   <div className={styles.listTitleWrapper}>
                     <div className={styles.listTitleLeft}>
                       <span className={styles.listTitle}>
-                        FINISHED SCRIPTS ({this.state.finishedScriptList.length})
+                        FINISHED SCRIPTS ({this.props.finishedScriptList.length})
                       </span>
                       <span className={styles.listSubtitle}>
                         Total time:{' '}
@@ -582,7 +641,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </div>
                   <ScriptList>
-                    {this.state.finishedScriptList.map((script, listIndex) => {
+                    {this.props.finishedScriptList.map((script, listIndex) => {
                       const isStandard =
                         !script.type || script.type === 'UNKNOWN' ? true : script.type.toLowerCase() === 'standard';
                       const estimatedTime = script.expected_duration === 'UNKNOWN' ? -1 : script.expected_duration;
@@ -592,12 +651,7 @@ export default class ScriptQueue extends Component {
                           ? 0.0
                           : script.timestampProcessEnd - script.timestampRunStart;
                       return (
-                        <DraggableScript
-                          key={`dragging-finished-${key}`}
-                          dragSourceList="available"
-                          onDragOver={(e) => this.onDragLeave(e)}
-                          disabled
-                        >
+                        <DraggableScript key={`dragging-finished-${key}`} dragSourceList="available" disabled>
                           <FinishedScript
                             {...script}
                             path={script.path}
@@ -607,6 +661,8 @@ export default class ScriptQueue extends Component {
                             isCompact={
                               this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                             }
+                            requeueScript={this.requeueScript}
+                            commandExecutePermission={this.props.commandExecutePermission}
                           />
                         </DraggableScript>
                       );

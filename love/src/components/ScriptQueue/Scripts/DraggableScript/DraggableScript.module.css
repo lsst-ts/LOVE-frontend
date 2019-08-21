@@ -48,12 +48,12 @@
   background: var(--second-quaternary-background-color);
 }
 .draggableContainer > div > div {
-  background: var(--second-tertiary-background-color);
+  /* background: var(--second-tertiary-background-color); */
 }
 .draggableContainer > div:hover > div {
-  background: var(--second-quaternary-background-color);
+  /* background: var(--second-quaternary-background-color); */
 }
-.draggableContainer > div:hover > div > div {
+/* .draggableContainer > div:hover > div > div {
   background: var(--second-quaternary-background-color);
 }
 .draggableContainer > div:hover {
@@ -73,7 +73,7 @@
 .draggableContainer:hover {
   background: var(--second-quaternary-background-color);
   border-radius: 5px;
-}
+} */
 
 .movingScript {
   background: var(--second-quaternary-background-color);

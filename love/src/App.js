@@ -7,21 +7,29 @@ import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSu
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
-import ScriptQueue from './components/ScriptQueue/ScriptQueue';
+import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
 import TimeSeries from './components/TimeSeries/TimeSeries';
 import Panel from './components/GeneralPurpose/Panel/Panel';
 
 import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
-import CSCSummary from './components/CSCSummary/CSCSummary';
+import CSCSummaryContainer from './components/CSCSummary/CSCSummary.container';
 import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
-import LATISS from './components/AuxTel/LATISS/LATISS';
+import DomeContainer from './components/AuxTel/Dome/Dome.container';
+import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountView';
+import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 
 class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
     token: PropTypes.string
+  };
+
+  static defaultProps = {
+    location: null,
+    validateToken: () => {},
+    token: null
   };
 
   componentDidMount = () => {
@@ -65,8 +73,8 @@ class App extends Component {
               </div>
             )}
           />
-          <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueue} />
-          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummary} />
+          <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueueContainer} />
+          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummaryContainer} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
           <PrivateRoute
@@ -78,7 +86,17 @@ class App extends Component {
               </Panel>
             )}
           />
-          <PrivateRoute token={this.props.token} path="/latiss" component={LATISS} />
+          <PrivateRoute token={this.props.token} path="/latiss" component={LATISSContainer} />
+          <PrivateRoute token={this.props.token} path="/aux-tel-dome-and-mount" component={DomeAndMountView} />
+          <PrivateRoute
+            token={this.props.token}
+            path="/aux-tel-dome"
+            render={() => (
+              <Panel title="Auxiliary Telescope Dome & Mount" className={'smallPanel'}>
+                <DomeContainer />
+              </Panel>
+            )}
+          />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
       </div>

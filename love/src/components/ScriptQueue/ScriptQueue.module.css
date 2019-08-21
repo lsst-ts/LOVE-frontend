@@ -11,6 +11,7 @@
   min-width: 1000px;
   max-width: 1300px;
   min-height: 600px;
+  position: relative;
 }
 
 .listsBody {
@@ -27,6 +28,7 @@
 .listTitleWrapper {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-left: 0.5em;
 }
 
@@ -106,10 +108,12 @@
 
 .waitingScriptList {
   overflow-y: hidden;
-  position:relative;
+  position: relative;
 }
 
-.waitingScriptListDragging * {pointer-events: none;}
+.waitingScriptListDragging * {
+  pointer-events: none;
+}
 
 .finishedScriptList {
   overflow-y: hidden;
@@ -161,7 +165,7 @@
 
 .collapsedScriptListLabel {
   font-size: 2.8em;
-  white-space:nowrap;
+  white-space: nowrap;
   align-self: center;
 }
 
@@ -180,22 +184,45 @@
   background: var(--second-primary-background-color);
 }
 
-.collapsedScriptList{
+.collapsedScriptList {
   flex-basis: 50px;
   flex-shrink: 0;
   overflow: hidden;
 }
 
-.collapsedScriptList .collapsableScriptListContent{
+.collapsedScriptList .collapsableScriptListContent {
   left: 50px;
 }
 
 .collapseScriptListButton {
-  font-size: 2.8em;
+  font-size: 2.5em;
   align-self: center;
   cursor: pointer;
 }
 
 .collapsedScriptList .collapsedScriptListLabelWrapper {
   opacity: 1;
+}
+
+.pauseIconContainer {
+  display: flex;
+  align-items: center;
+  padding: 0.25em 0.5em;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.pauseIconContainer:hover {
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.pauseIconContainer > span {
+  padding-right: 0.5em; 
+}
+
+.pauseIconWrapper {
+  width: 1em;
+  background: var(--second-tertiary-background-color);
+  padding: 0.25em 0.5em;
+  border-radius: 1em;
 }

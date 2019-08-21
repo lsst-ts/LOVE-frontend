@@ -1,68 +1,170 @@
-import { REMOVE_TOKEN, REQUEST_TOKEN, RECEIVE_TOKEN, REJECT_TOKEN, EXPIRE_TOKEN } from './actionTypes';
+import {
+  REQUEST_TOKEN,
+  RECEIVE_TOKEN,
+  REJECT_TOKEN,
+  EXPIRE_TOKEN,
+  EMPTY_TOKEN,
+  MARK_ERROR_TOKEN,
+  REQUEST_REMOVE_TOKEN,
+  REMOVE_REMOTE_TOKEN,
+  MARK_ERROR_REMOVE_TOKEN,
+  GET_TOKEN_FROM_LOCALSTORAGE
+} from './actionTypes';
 import ManagerInterface from '../../Utils';
-import { getToken } from '../selectors';
+import {getToken} from '../selectors';
 
-export const requestToken = (username, password) => ({
-  type: REQUEST_TOKEN,
-  username,
-  password,
-});
+export const requestToken = (username, password) => ({type: REQUEST_TOKEN, username, password});
 
-export const receiveToken = (token) => ({
-  type: RECEIVE_TOKEN,
-  token,
-});
+export const receiveToken = (username, token, permissions) => ({type: RECEIVE_TOKEN, username, token, permissions});
 
-export const rejectToken = {
-  type: REJECT_TOKEN,
+export const getTokenFromStorage = (token) => ({type: GET_TOKEN_FROM_LOCALSTORAGE, token});
+
+export const emptyToken = {
+  type: EMPTY_TOKEN
 };
 
- /**
-  * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
-  * 
-  * @param {string} username 
-  * @param {string} password 
-  */
+export const expireToken = {
+  type: EXPIRE_TOKEN
+};
+
+export const markErrorToken = {
+  type: MARK_ERROR_TOKEN
+};
+
+export const rejectToken = {
+  type: REJECT_TOKEN
+};
+
+export const requestRemoveToken = {
+  type: REQUEST_REMOVE_TOKEN
+};
+
+export const removeRemoteToken = {
+  type: REMOVE_REMOTE_TOKEN
+};
+
+export const markErrorRemoveToken = {
+  type: MARK_ERROR_REMOVE_TOKEN
+};
+
+export function doGetTokenFromStorage() {
+  return (dispatch) => {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    dispatch(getTokenFromStorage(token))
+  };
+}
+
+function doExpireToken() {
+  return(dispatch) => {
+    dispatch(expireToken);
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
+function doMarkErrorToken() {
+  return(dispatch) => {
+    dispatch(markErrorToken);
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
+function doReceiveToken(username, token, permissions) {
+  return(dispatch) => {
+    dispatch(receiveToken(username, token, permissions));
+    localStorage.setItem('LOVE-TOKEN', token);
+  };
+}
+
+function doRejectToken() {
+  return(dispatch) => {
+    dispatch(rejectToken);
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
+function doRequestRemoveToken() {
+  return(dispatch) => {
+    dispatch(requestRemoveToken);
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
+function doRemoveRemoteToken() {
+  return(dispatch) => {
+    dispatch(removeRemoteToken);
+    localStorage.removeItem('LOVE-TOKEN');
+  };
+}
+
+
+/**
+ * redux-thunk action generator that requests a token from the LOVE-manager in case it does not exist in the localstorage and handles its response.
+ *
+ * @param {string} username
+ * @param {string} password
+ */
 export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
-    const storageToken = localStorage.getItem('LOVE-TOKEN');
-    if (storageToken && storageToken.length > 0) {
-      dispatch(receiveToken(storageToken));
-      return;
-    }
-
     dispatch(requestToken(username, password));
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify({
-        username,
-        password,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const { token } = response;
+      body: JSON.stringify({username, password})
+    }).then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 400) {
+        dispatch(doRejectToken());
+        return false;
+      } else {
+        dispatch(doMarkErrorToken());
+        return false;
+      }
+    }).then((response) => {
+      if (response) {
+        const token = response.token;
+        let username = '';
+        if (response.user_data) {
+          username = response.user_data.username;
+        }
+        const permissions = response.permissions;
         if (token !== undefined && token !== null) {
-          dispatch(receiveToken(token));
-          localStorage.setItem('LOVE-TOKEN', token);
+          dispatch(doReceiveToken(username, token, permissions));
           return;
         }
-
-        dispatch(rejectToken);
-      })
-      .catch((e) => console.log(e));
+      }
+    }).catch((e) => console.log(e));
   };
 }
 
-export const removeToken = {
-  type: REMOVE_TOKEN,
-};
+/**
+ * redux-thunk action generator that requests the deletion of a token from the LOVE-manager
+ */
+export function logout() {
+  const url = `${ManagerInterface.getApiBaseUrl()}logout/`;
 
-export const expireToken = {
-  type: EXPIRE_TOKEN,
-};
+  return(dispatch, getState) => {
+    const token = localStorage.getItem('LOVE-TOKEN');
+    if (!token) {
+      dispatch(doRemoveRemoteToken());
+      return;
+    }
+
+    dispatch(doRequestRemoveToken());
+    return fetch(url, {
+      method: 'DELETE',
+      headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
+    }).then((response) => {
+      if (response.status === 204) {
+        dispatch(doRemoveRemoteToken());
+        return;
+      } else {
+        dispatch(markErrorRemoveToken);
+      }
+    }).catch((e) => console.log(e));
+  };
+}
 
 /**
  * Validates the token with the server.
@@ -78,28 +180,33 @@ export function validateToken() {
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
     return fetch(url, {
       method: 'GET',
-      headers: new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Token ${token}`,
-      }),
+      headers: new Headers({Accept: 'application/json', 'Content-Type': 'application/json', Authorization: `Token ${token}`})
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server. Logging out\n', response);
-        dispatch(removeToken);
+        dispatch(doMarkErrorToken());
         return Promise.resolve();
       }
 
       if (response.status === 401 || response.status === 403) {
         console.log('Session expired. Logging out');
-        dispatch(expireToken);
+        dispatch(doExpireToken());
         return Promise.resolve();
       }
 
       return response.json().then((resp) => {
-        const { detail } = resp;
+        const detail = resp.detail;
+        let username = '';
+        if (resp.user_data) {
+          username = resp.user_data.username;
+        }
+        const permissions = resp.permissions;
         if (detail !== 'Token is valid') {
-          dispatch(removeToken);
+          console.log('Session expired. Logging out');
+          dispatch(doExpireToken());
+          return Promise.resolve();
+        } else {
+          dispatch(doReceiveToken(username, token, permissions));
+          return Promise.resolve();
         }
       });
     });

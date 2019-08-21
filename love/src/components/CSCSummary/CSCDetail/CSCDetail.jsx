@@ -10,6 +10,9 @@ export default class CSCDetail extends Component {
     realm: PropTypes.string,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
+    heartbeatData: PropTypes.object,
+    summaryStateData: PropTypes.object,
+    subscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
@@ -18,6 +21,9 @@ export default class CSCDetail extends Component {
     realm: '',
     data: {},
     onCSCClick: () => 0,
+    heartbeatData: null,
+    summaryStateData: undefined,
+    subscribeToStreams: () =>{},
   };
 
   static states = {
@@ -59,40 +65,28 @@ export default class CSCDetail extends Component {
     },
   };
 
-  shouldComponentUpdate = (nextProps) => {
-    const selfData = nextProps.data[nextProps.name];
-    const oldSelfData = this.props.data[this.props.name];
-    const oldSummaryStateValue = oldSelfData && oldSelfData.summaryState ? oldSelfData.summaryState.summaryState : 0;
-    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
-
-    const oldHeartbeatValue = oldSelfData && oldSelfData.heartbeat ? oldSelfData.heartbeat.lost : 0;
-    const heartbeatValue = selfData && selfData.heartbeat ? selfData.heartbeat.lost : 0;
-    return (
-      this.props.name !== nextProps.name ||
-      oldSummaryStateValue !== summaryStateValue ||
-      oldHeartbeatValue !== heartbeatValue
-    );
-  };
-
+  componentDidMount = () => {
+    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+  }
+  
   render() {
-    const selfData = this.props.data[this.props.name];
-    const summaryStateValue = selfData && selfData.summaryState ? selfData.summaryState.summaryState : 0;
+    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value: 0 ;
     const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
-    const isHearbeatAvailable = selfData && selfData.heartbeat;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
     let timeDiff = -1;
-    if (isHearbeatAvailable) {
-      heartbeatStatus = selfData.heartbeat.lost > 0 ? 'alert' : 'ok';
-      nLost = selfData.heartbeat.lost;
-      if (selfData.heartbeat.last_heartbeat_timestamp < 0) timeDiff = -1;
-      else timeDiff = Math.ceil(new Date().getTime() / 1000 - selfData.heartbeat.last_heartbeat_timestamp);
+    if (this.props.heartbeatData) {
+      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
+      nLost = this.props.heartbeatData.lost;
+      if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
+      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
     }
     const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+
     return (
       <div
-        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name)}
+        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
         className={styles.CSCDetailContainer}
       >
         <div className={[styles.leftSection, summaryState.class].join(' ')}>
@@ -100,14 +94,14 @@ export default class CSCDetail extends Component {
             {summaryState.char}
           </span>
         </div>
-        <div className={styles.middleSection} title={this.props.name}>
-          {this.props.name}
+        <div className={styles.middleSection} title={this.props.name+'-'+this.props.salindex}>
+          {this.props.name+'-'+this.props.salindex}
         </div>
         <div className={styles.rightSection}>
           <div className={styles.heartbeatIconWrapper}>
             <HeartbeatIcon
               status={heartbeatStatus}
-              title={`${this.props.name} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
+              title={`${this.props.name+'-'+this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
             />
           </div>
         </div>
