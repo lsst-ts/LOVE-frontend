@@ -5,6 +5,11 @@
     white-space: nowrap; 
     text-overflow: ellipsis;
     overflow: hidden;
+    font-weight: bold;
+}
+
+.small {
+    font-size: var(--font-size-small);
 }
 
 .ok {

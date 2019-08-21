@@ -1,9 +1,9 @@
 .classOne {
   fill: none;
-  stroke: #798d99;
+  stroke: var(--second-base-font-color);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 .classTwo {
-  fill: #798d99;
+  fill: var(--second-base-font-color);
 }

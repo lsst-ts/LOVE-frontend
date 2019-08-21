@@ -45,24 +45,48 @@ export default class Dome extends Component {
     const currentPointing = {
       az: this.props.mountEncoders ? this.props.mountEncoders.azimuthCalculatedAngle.value : 0,
       el: this.props.mountEncoders ? this.props.mountEncoders.elevationCalculatedAngle.value : 0,
+      nasmyth1: this.props.mountEncoders ? this.props.mountEncoders.nasmyth1CalculatedAngle.value : 0,
+      nasmyth2: this.props.mountEncoders ? this.props.mountEncoders.nasmyth2CalculatedAngle.value : 0,
     };
     const targetPointing = {
-      az: this.props.target ? this.props.target[this.props.target.length-1].azimuth.value : 0,
-      el: this.props.target ? this.props.target[this.props.target.length-1].elevation.value : 0,
+      az: this.props.target ? this.props.target[this.props.target.length - 1].azimuth.value : 0,
+      el: this.props.target ? this.props.target[this.props.target.length - 1].elevation.value : 0,
+      nasmyth1: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth1RotatorAngle.value : 0,
+      nasmyth2: this.props.target ? this.props.target[this.props.target.length - 1].nasmyth2RotatorAngle.value : 0,
     };
     const domeAz = this.props.azimuthPosition ? this.props.azimuthPosition.value : 0;
-    const domeTargetAz = this.props.azimuthCommandedState ? this.props.azimuthCommandedState[this.props.azimuthCommandedState.length-1].azimuth.value : 0;
-    const mountTrackingState = this.props.atMountState ? this.props.atMountState[this.props.atMountState.length-1].state.value : 0;
-    const azimuthState = this.props.azimuthState ? this.props.azimuthState[this.props.azimuthState.length-1].state.value : 0;
-    const dropoutDoorState = this.props.dropoutDoorState ? this.props.dropoutDoorState[this.props.dropoutDoorState.length-1].state.value : 0;
-    const mainDoorState = this.props.mainDoorState ? this.props.mainDoorState[this.props.mainDoorState.length-1].state.value : 0;
+    const domeTargetAz = this.props.azimuthCommandedState
+      ? this.props.azimuthCommandedState[this.props.azimuthCommandedState.length - 1].azimuth.value
+      : 0;
+    const mountTrackingState = this.props.atMountState
+      ? this.props.atMountState[this.props.atMountState.length - 1].state.value
+      : 0;
+    const azimuthState = this.props.azimuthState
+      ? this.props.azimuthState[this.props.azimuthState.length - 1].state.value
+      : 0;
+    const dropoutDoorState = this.props.dropoutDoorState
+      ? this.props.dropoutDoorState[this.props.dropoutDoorState.length - 1].state.value
+      : 0;
+    const mainDoorState = this.props.mainDoorState
+      ? this.props.mainDoorState[this.props.mainDoorState.length - 1].state.value
+      : 0;
     const domeInPosition = this.props.domeInPosition;
     const mountInPosition = this.props.mountInPosition;
 
-    const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage ? this.props.dropoutDoorOpeningPercentage.value : 0;
-    const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage ? this.props.dropoutDoorOpeningPercentage.value : 0;
+    const dropoutDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
+      ? this.props.dropoutDoorOpeningPercentage.value
+      : 0;
+    const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
+      ? this.props.dropoutDoorOpeningPercentage.value
+      : 0;
     const trackID = this.props.target ? this.props.target[0].trackId.value : '';
+    const m3State = this.props.m3State ? this.props.m3State[0].value: 2;
+    const currentTimesToLimits = this.props.currentTimeToLimits ? this.props.currentTimesToLimits : {};
+    
     const isProjected = true;
+    let azDiff = Math.abs(domeAz - currentPointing.az);
+    if (azDiff > 180) azDiff = azDiff - 360;
+    const vignettingDistance = (Math.abs(azDiff) * Math.cos((currentPointing.el * Math.PI) / 180)).toFixed(2);
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
@@ -73,6 +97,7 @@ export default class Dome extends Component {
             <div className={styles.windRoseContainer}>
               <WindRose />
             </div>
+            
             <DomeTopView width={width} height={height} />
             <DomeShutter
               width={width}
@@ -89,6 +114,13 @@ export default class Dome extends Component {
               targetPointing={targetPointing}
               isProjected={isProjected}
             />
+            <div
+              className={styles.vignettingDistanceContainer}
+              title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
+            >
+              <span>Vignetting distance: </span>
+              <span className={styles.value}>{vignettingDistance}º</span>
+            </div>
           </div>
           <DomeSummaryTable
             currentPointing={currentPointing}
@@ -102,6 +134,8 @@ export default class Dome extends Component {
             mountTrackingState={mountTrackingState}
             trackID={trackID}
             mountInPosition={mountInPosition}
+            m3State={m3State}
+            currentTimesToLimits={currentTimesToLimits}
           />
         </div>
         <div className={styles.telemetryTable}>
@@ -122,7 +156,7 @@ export default class Dome extends Component {
                       mark: {
                         interpolate: 'step-before',
                         strokeWidth: 1,
-                        strokeDash: [8,8],
+                        strokeDash: [8, 8],
                       },
                     },
                     'Mount Azimuth': {
@@ -135,7 +169,7 @@ export default class Dome extends Component {
                       mark: {
                         interpolate: 'step-before',
                         strokeWidth: 1,
-                        strokeDash: [8,8],
+                        strokeDash: [8, 8],
                       },
                     },
                   }}
@@ -155,9 +189,11 @@ export default class Dome extends Component {
                   }}
                   accessors={{
                     'Dome Azimuth': (data) => data.azimuthPosition.value,
-                    'Dome Target Az': (data) => (data[data.length-1].azimuth ? data[data.length-1].azimuth.value : undefined),
+                    'Dome Target Az': (data) =>
+                      data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                     'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
-                    'Mount Target': (data) => (data[data.length-1].azimuth ? data[data.length-1].azimuth.value : undefined),
+                    'Mount Target': (data) =>
+                      data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                   }}
                 />
               </div>

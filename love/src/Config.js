@@ -4,14 +4,44 @@ export const hasCommandPrivileges = true;
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
-    'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 },{ name: 'Test', salindex:3},{ name: 'Test', salindex:4}],
+    'ATTCS': [
+      {name: 'ATMCS', salindex: 0 },
+      {name: 'ATPtg', salindex: 0},
+      {name: 'ATDome', salindex: 0 },
+      {name: 'ATDomeTrajectory', salindex: 0 },
+      {name: 'ATAOS', salindex: 0 },
+      {name: 'ATPneumatics', salindex: 0 },
+      {name: 'ATHexapod', salindex: 0 },
+    ],
+    'ATCalSys':[
+      {name:'ATMonochromator', salindex: 0},
+      {name:'FiberSpectrograph', salindex: 0},
+      {name:'ATWhiteLight', salindex: 0},
+      {name:'Electrometer', salindex: 1},
+      {name:'Electrometer', salindex: 2},
+      {name:'LinearStage', salindex: 1},
+      {name: 'LinearStage', salindex: 2}
+    ],
+    'LATISS': [
+        {name:'ATCamera', salindex: 0},
+        {name:'ATArchiver', salindex: 0},
+        {name:'ATHeaderService', salindex: 0},
+        {name: 'ATSpectrograph', salindex: 0}
+    ],
   },
   'Main Telescope': {
     'CSC Group 1': [{ name: 'Test', salindex:1},{ name: 'Test', salindex:2}],
     'CSC Group 2': [],
   },
   Observatory: {
-    'CSC Group 1': [],
+    'Queue': [
+        {name: 'ScriptQueue', salindex: 1},
+        {name: 'ScriptQueue', salindex: 2},
+    ],
+    'Environment': [
+        {name: 'DIMM', salindex: 0},
+        {name: 'Environment', salindex: 0},
+    ],
   },
 };
 

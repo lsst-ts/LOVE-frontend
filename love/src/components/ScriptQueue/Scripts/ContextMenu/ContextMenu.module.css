@@ -1,5 +1,5 @@
 .container {
-  position: absolute;
+  position: fixed;
   top: 0;
   background: var(--second-quaternary-background-color);
   z-index: 1;

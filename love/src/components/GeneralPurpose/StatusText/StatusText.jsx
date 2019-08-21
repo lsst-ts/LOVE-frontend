@@ -7,6 +7,7 @@ export default class StatusText extends Component {
     status: PropTypes.string,
     title: PropTypes.string,
     children: PropTypes.string,
+    small: PropTypes.bool,
   };
 
   render() {
@@ -19,7 +20,10 @@ export default class StatusText extends Component {
     if (status === 'invalid') statusStyle = styles.invalid;
 
     return (
-      <span title={this.props.title} className={[styles.status, statusStyle].join(' ')}>
+      <span
+        title={this.props.title}
+        className={[styles.status, statusStyle, this.props.small ? styles.small : ''].join(' ')}
+      >
         {this.props.children}
       </span>
     );
