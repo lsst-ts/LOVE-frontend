@@ -7,20 +7,21 @@
 
 .currentValue {
   fill: white;
-  transition: x 0.2s ease;
+  transition: x 0.5s ease;
 }
 
 .targetValue {
   stroke: white;
-  stroke-width: 0.5;
-  stroke-dasharray: 1;
+  stroke-width: 1;
+  stroke-dasharray: 1.3;
+  stroke-opacity: 0.5;
 }
 
 .text {
-  fill: var(--base-font-color);
+  fill: var(--secondary-font-color);
   font-size: 0.3em;
   text-anchor: middle;
-  transition: x 0.2s ease;
+  transition: x 0.5s ease;
 }
 
 .top {

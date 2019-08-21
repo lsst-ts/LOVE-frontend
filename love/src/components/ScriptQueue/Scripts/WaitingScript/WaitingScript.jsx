@@ -159,7 +159,7 @@ export default class WaitingScript extends PureComponent {
                       e.stopPropagation();
                     }}
                   >
-                    <div className={scriptStyles.commandButton}>
+                    <div className={[scriptStyles.commandButton, this.props.isCompact ? scriptStyles.compact : ''].join(' ')}>
                       <div>
                         <MoveUpIcon />
                       </div>
@@ -173,7 +173,7 @@ export default class WaitingScript extends PureComponent {
                       e.stopPropagation();
                     }}
                   >
-                    <div className={scriptStyles.commandButton}>
+                    <div className={[scriptStyles.commandButton, this.props.isCompact ? scriptStyles.compact : ''].join(' ')}>
                       <div>
                         <MoveDownIcon />
                       </div>
@@ -187,7 +187,7 @@ export default class WaitingScript extends PureComponent {
                       e.stopPropagation();
                     }}
                   >
-                    <div className={scriptStyles.commandButton}>
+                    <div className={[scriptStyles.commandButton, this.props.isCompact ? scriptStyles.compact : ''].join(' ')}>
                       <div>
                         <StopIcon />
                       </div>
@@ -198,7 +198,7 @@ export default class WaitingScript extends PureComponent {
                     className={scriptStyles.buttonContainer}
                     onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
                   >
-                    &#8943;
+                    {' '}&#8943;{' '}
                   </div>
                 </div>
               )}

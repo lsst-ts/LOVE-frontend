@@ -1,7 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
-import { getScriptQueueState, getScriptHeartbeats, getSummaryStateValue, getPermCmdExec, getLastSALCommand } from '../../redux/selectors';
+import {
+  getScriptQueueState,
+  getScriptHeartbeats,
+  getSummaryStateValue,
+  getPermCmdExec,
+  getLastSALCommand,
+  getUsername,
+} from '../../redux/selectors';
 
 import ScriptQueue from './ScriptQueue';
 
@@ -14,7 +21,8 @@ const ScriptQueueContainer = ({
   scriptHeartbeats,
   commandExecutePermission,
   lastSALCommand,
-  }) => {
+  username,
+}) => {
   return (
     <ScriptQueue
       subscribeToStreams={subscribeToStreams}
@@ -29,7 +37,8 @@ const ScriptQueueContainer = ({
       heartbeats={scriptHeartbeats}
       commandExecutePermission={commandExecutePermission}
       lastSALCommand={lastSALCommand}
-  />
+      username={username}
+    />
   );
 };
 
@@ -39,12 +48,14 @@ const mapStateToProps = (state) => {
   const summaryStateValue = getSummaryStateValue(state, 'event-ScriptQueue-1-summaryState');
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
+  const username = getUsername(state);
   return {
     queueState: queueState,
     scriptHeartbeats: scriptHeartbeats,
     summaryStateValue: summaryStateValue,
     commandExecutePermission: commandExecutePermission,
     lastSALCommand: lastSALCommand,
+    username: username,
   };
 };
 
@@ -60,9 +71,9 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ScriptQueue-1-summaryState'));
       dispatch(requestGroupSubscriptionRemoval('event-ScriptHeartbeats-1-stream'));
     },
-    requestSALCommand: (cmd) =>{
-      return dispatch(requestSALCommand(cmd))
-    }
+    requestSALCommand: (cmd) => {
+      return dispatch(requestSALCommand(cmd));
+    },
   };
 };
 export default connect(

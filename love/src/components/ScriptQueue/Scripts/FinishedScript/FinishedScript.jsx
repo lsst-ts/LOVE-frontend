@@ -4,7 +4,7 @@ import styles from './FinishedScript.module.css';
 import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
-import LaunchScriptIcon from '../../../icons/ScriptQueue/LaunchScriptIcon/LaunchScriptIcon';
+import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 
 export default class FinishedScript extends PureComponent {
   static propTypes = {
@@ -154,8 +154,8 @@ export default class FinishedScript extends PureComponent {
         </div>
         {this.props.commandExecutePermission && (
           <div className={scriptStyles.mainScriptButton} onClick={(e) => this.props.requeueScript(this.props.index)}>
-            <span className={scriptStyles.launchIconWrapper}>
-              <LaunchScriptIcon title="Launch script: Requeue" />
+            <span className={scriptStyles.requeueIconWrapper}>
+              <RequeueIcon title="Launch script: Requeue" />
             </span>
           </div>
         )}

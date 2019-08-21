@@ -31,18 +31,18 @@ export default class DomeShutter extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps.azimuthPosition !== this.props.azimuthPosition)
+    if (prevProps.azimuthPosition !== this.props.azimuthPosition)
       this.prevAzimuth = this.closestEquivalentAngle(this.prevAzimuth, prevProps.azimuthPosition);
   }
 
   closestEquivalentAngle = (from, to) => {
     const delta = ((((to - from) % 360) + 540) % 360) - 180;
     return from + delta;
-  }
+  };
 
   render() {
     const { width, height } = this.props;
-    const offset = 5;
+    const offset = 10;
     const viewBoxSize = 596 - 2 * offset;
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
@@ -56,12 +56,16 @@ export default class DomeShutter extends Component {
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-
+        <defs>
+          <mask x="0" y="0" width="596" height="596" id="domeMask">
+            <circle cx={x0} cy={y0} r={r} fill="#fff" stroke="#fff" strokeWidth="2" />
+          </mask>
+        </defs>
         {/* Dome target*/}
         <path
           style={{ transform: `rotateZ(${270 + this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
           fill="none"
-          strokeDasharray="4"
+          strokeDasharray="10"
           strokeOpacity="0.3"
           stroke="white"
           strokeWidth="2"
@@ -81,7 +85,7 @@ export default class DomeShutter extends Component {
             fill="#fff"
             fillOpacity="0.1"
             stroke="#152228"
-            strokeWidth="1"
+            strokeWidth="2"
             d={`
               M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
@@ -92,13 +96,32 @@ export default class DomeShutter extends Component {
               L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
             `}
           />
+          <rect
+            x={x0 - rCosAlpha - 10}
+            y={y0 + rSinAlpha}
+            width={2 * r - 2}
+            height={10}
+            fill="#fff"
+            fillOpacity="0.1"
+            stroke="#152228"
+          />
+          <rect
+            x={x0 - rCosAlpha - 10}
+            y={y0 - rSinAlpha - 10}
+            width={2 * r - 2}
+            height={10}
+            fill="#fff"
+            fillOpacity="0.1"
+            stroke="#152228"
+          />
+          <rect x={0} y={0} width={4} height={4} />
           {/* Dropout door */}
-          <g clipPath={`circle(${r}px at center)`}>
+          <g clipPath={`circle(${r}px at center)`} style={{ mask: 'url(#domeMask)' }}>
             <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
             <path
               fill="none"
               stroke="white"
-              strokeWidth="1"
+              strokeWidth="2"
               d={`
             M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
             A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
@@ -115,7 +138,7 @@ export default class DomeShutter extends Component {
               fill="white"
               fillOpacity={0.2 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
               stroke="white"
-              strokeWidth="1"
+              strokeWidth="2"
             />
           </g>
 
@@ -128,12 +151,11 @@ export default class DomeShutter extends Component {
             fill="white"
             fillOpacity="0.2"
             stroke="white"
-            strokeWidth="1"
+            strokeWidth="2"
           />
           {/* <circle cx={x0} cy={y0} r={r*0.91} fill="none" stroke="red" /> */}
         </g>
         {/* <style>.cls-1{fill:#152228;fill-opacity:0;}.cls-2{opacity:0.6;}.cls-3{fill:#18313d;stroke:#152228;stroke-miterlimit:10;}</style> */}
-
       </svg>
     );
   }

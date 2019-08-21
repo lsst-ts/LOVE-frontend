@@ -8,13 +8,12 @@ body {
   /* font-family: Arial; */
   font-family: 'Arial';
   margin: 0 10px;
-  
 }
 
 :root {
   --base-font-color: hsl(194, 16%, 79%);
   --secondary-font-color: hsl(201, 15%, 54%);
-  --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3);/*Transparent*/
+  --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3); /*Transparent*/
   --tertiary-font-color: hsl(201, 15%, 54%);
   --highlighted-font-color: hsl(0, 0%, 90%);
 
@@ -35,46 +34,50 @@ body {
   --second-senary-background-color: hsl(201, 40%, 81%);
   --second-senary-background-dimmed-color: hsl(201, 40%, 81%, 0.3);
   --second-base-font-color: hsl(240, 4%, 90%, 0.7);
-  
+
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
   --status-ok-dimmed-color: hsl(161, 100%, 32%, 0.2);
   --status-ok-dimmed-color-2: hsl(161, 100%, 20%);
+  --status-ok-dimmed-color-3: hsl(173, 61%, 14%);
   --status-warning-color: hsl(57, 100%, 47%);
   --status-warning-dimmed-color: hsl(57, 100%, 47%, 0.2);
   --status-warning-dimmed-color-2: hsl(57, 100%, 27%);
+  --status-warning-dimmed-color-3: hsl(74, 39%, 20%);
   --status-alert-color: hsl(23, 99%, 44%);
   --status-alert-dimmed-color: hsl(23, 99%, 44%, 0.2);
   --status-alert-dimmed-color-2: hsl(23, 99%, 27%);
+  --status-alert-dimmed-color-3: hsl(24, 31%, 18%);
   --status-disabled-color: hsl(202, 44%, 13%);
   --status-disabled-dimmed-color: hsl(202, 44%, 13%, 0.2);
   --status-disabled-dimmed-color-2: hsl(202, 20%, 20%);
   --status-running-color: hsl(188, 79%, 56%);
   --status-running-dimmed-color: hsl(188, 79%, 56%, 0.2);
-  
+  --status-running-dimmed-color-3: hsl(191, 52%, 20%);
+
   /* Script status */
   --script-ok-color: hsl(188, 79%, 56%);
   --script-ok-dimmed-color: hsl(188, 79%, 56%, 0.2);
-  
-  --box-shadow-color: rgba(0,0,0,0.17);
-  
+
+  --box-shadow-color: rgba(0, 0, 0, 0.17);
+
   --default-background-color: #4c606a;
   --default-font-color: #aabeca;
   --default-active-background-color: #384850;
   --default-active-font-color: #92a2ac;
-  --primary-active-hover-background-color:#92a2ac;
-  
+  --primary-active-hover-background-color: #92a2ac;
+
   --primary-background-color: #4c7487;
   --primary-font-color: #b2c4ce;
   --primary-active-background-color: #3b5d6e;
   --primary-active-font-color: #8d9ea7;
-  --primary-active-hover-background-color:#8d9ea7;
+  --primary-active-hover-background-color: #8d9ea7;
 
   --success-background-color: #57b18a;
   --success-font-color: #acffd6;
   --success-active-background-color: #4c9978;
   --success-active-font-color: #77d9b9;
-  --success-active-hover-background-color:#428568;
+  --success-active-hover-background-color: #428568;
 
   --info-background-color: #5cbed4;
   --info-font-color: #c8fbff;
@@ -113,7 +116,6 @@ body {
   --font-size-larger: 1.4em;
 }
 
-
 /* width */
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
@@ -121,7 +123,7 @@ body {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--tertiary-background-color); 
+  background: var(--tertiary-background-color);
 }
 
 /* Handle */
@@ -134,4 +136,61 @@ body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: var(--secondary-font-color);
+}
+
+/* Toasts */
+.Toastify__toast.Toastify__toast--success {
+  background: var(--status-ok-dimmed-color-3);
+  color: var(--status-ok-color);
+  border-radius: 4px;
+}
+
+.Toastify__close-button.Toastify__close-button--success {
+  color: #00a370e8;
+}
+
+.Toastify__toast.Toastify__toast--success .Toastify__progress-bar {
+  background-color: #00a370e8;
+}
+
+.Toastify__toast.Toastify__toast--info {
+  background: var(--status-running-dimmed-color-3);
+  color: var(--status-running-color);
+  border-radius: 4px;
+}
+
+.Toastify__close-button.Toastify__close-button--info {
+  color: var(--status-running-color);
+}
+
+.Toastify__toast.Toastify__toast--info .Toastify__progress-bar {
+  background-color: var(--status-running-color);
+}
+
+.Toastify__toast.Toastify__toast--warning {
+  background: var(--status-warning-dimmed-color-3);
+  color: var(--status-warning-color);
+  border-radius: 4px;
+}
+
+.Toastify__close-button.Toastify__close-button--warning {
+  color: var(--status-warning-color);
+}
+
+.Toastify__toast.Toastify__toast--warning .Toastify__progress-bar {
+  background-color: var(--status-warning-color);
+}
+
+.Toastify__toast.Toastify__toast--error {
+  background: var(--status-alert-dimmed-color-3);
+  color: var(--status-alert-color);
+  border-radius: 4px;
+}
+
+.Toastify__close-button.Toastify__close-button--error {
+  color: var(--status-alert-color);
+}
+
+.Toastify__toast.Toastify__toast--error .Toastify__progress-bar {
+  background-color: var(--status-alert-color);
 }
