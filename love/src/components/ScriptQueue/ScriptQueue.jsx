@@ -19,6 +19,8 @@ import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -109,6 +111,15 @@ export default class ScriptQueue extends Component {
         useLocalWaitingList: false,
         waitingScriptList: this.props.waitingScriptList,
       });
+    }
+    /* Checkcommand ack for toast*/
+    if(prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED && this.props.lastSALCommand.status === SALCommandStatus.ACK){
+      const cmd = this.props.lastSALCommand.cmd;
+      const result = this.props.lastSALCommand.result;
+      if(result === 'Done')
+        toast.success(`Command '${cmd}' ran successfully`);
+      else
+        toast.info(`Command '${cmd}' returned ${result}`);
     }
   };
 
@@ -441,6 +452,7 @@ export default class ScriptQueue extends Component {
             contextMenuData={this.state.contextMenuData}
             options={contextMenuOption}
           />
+          <ToastContainer position={toast.POSITION.BOTTOM_CENTER}/>
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>
