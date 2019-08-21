@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     registryCredential = "dockerhub-inriachile"
-    dockerImageName = "inriachile/love-frontend:"
+    dockerImageName = "lsstts/love-frontend:"
     dockerImage = ""
   }
   stages {
