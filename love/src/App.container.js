@@ -5,16 +5,21 @@ import { validateToken } from './redux/actions/auth';
 import {getToken} from './redux/selectors';
 
 const AppContainer = ({ validateToken, token }) => {
-  return <App validateToken={validateToken} token={token} />;
+  return <App
+    validateToken={validateToken}
+    token={token}
+  />;
 };
 
 const mapDispatchToProps = (dispatch) => ({
     validateToken: () => dispatch(validateToken()),
 });
 
-const mapStateToProps = (state) => ({
-  token: getToken(state),
-});
+const mapStateToProps = (state) => {
+  return {
+    token: getToken(state),
+  };
+};
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

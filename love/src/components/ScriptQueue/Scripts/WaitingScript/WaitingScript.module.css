@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.25em 0.5em;
+  padding: 0.5em;
   cursor: pointer;
   user-select: none;
 }
@@ -20,17 +20,4 @@
 }
 
 .estimatedTimeValue {
-}
-
-.expandedSectionWrapper {
-  padding: 0.5em;
-}
-
-.expandedSection {
-  border-top: solid var(--quaternary-background-color) 2px;
-  background: var(--second-tertiary-background-color);
-}
-
-.hidden {
-  display: none;
 }

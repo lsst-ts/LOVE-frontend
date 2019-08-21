@@ -4,9 +4,12 @@ import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import AppContainer from './App.container';
 import * as serviceWorker from './serviceWorker';
+import { doGetTokenFromStorage } from './redux/actions/auth';
 
 import { Provider } from 'react-redux';
 import store from './redux/store';
+
+store.dispatch(doGetTokenFromStorage());
 
 ReactDOM.render(
   <Provider store={store}>

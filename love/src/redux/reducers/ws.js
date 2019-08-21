@@ -3,12 +3,20 @@ import {
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
+  UPDATE_LAST_SAL_COMMAND,
+  UPDATE_LAST_SAL_COMMAND_STATUS,
 } from '../actions/actionTypes';
-import { connectionStates } from '../actions/ws';
+import { connectionStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
   connectionState: connectionStates.CLOSED,
   subscriptions: [],
+  lastSALCommand: {
+    status: SALCommandStatus.EMPTY,
+    cmd: '',
+    params: {},
+    component: '',
+  },
 };
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
@@ -48,27 +56,56 @@ export default function(state = initialState, action) {
     }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
-        const [category, csc, stream] = subscription.groupName.split('-');
-        if (category !== action.category) return subscription;
-
-        if (csc !== action.csc) return subscription;
-
-        if (!Object.keys(action.data[csc]).includes(stream) && stream !== 'all') return subscription;
+        const [category, csc, salindex, stream] = subscription.groupName.split('-');
+        if (
+          category !== action.category ||
+          csc !== action.csc ||
+          parseInt(salindex) !== parseInt(action.salindex) ||
+          (!Object.keys(action.data).includes(stream) && stream !== 'all')
+        ) {
+          return subscription;
+        }
 
         if (stream === 'all') {
           return {
             ...subscription,
-            data: action.data[csc],
+            data: action.data,
+            timestamp: new Date(),
           };
         }
         return {
           ...subscription,
-          data: action.data[csc][stream],
+          data: action.data[stream],
+          timestamp: new Date(),
         };
       });
 
       return { ...state, subscriptions };
     }
+
+    case UPDATE_LAST_SAL_COMMAND: {
+      return {
+        ...state,
+        lastSALCommand: {
+          status: action.status,
+          cmd: action.cmd,
+          params: action.params,
+          component: action.component,
+          cmd_id: action.cmd_id,
+        },
+      };
+    }
+
+    case UPDATE_LAST_SAL_COMMAND_STATUS: {
+      return {
+        ...state,
+        lastSALCommand: {
+          ...state.lastSALCommand,
+          status: action.status,
+        },
+      };
+    }
+
     default:
       return state;
   }
