@@ -103,12 +103,29 @@ export default class CSCExpanded extends PureComponent {
     let nLost = 0;
     let timeDiff = -1;
     if (this.props.heartbeatData) {
-      heartbeatStatus = this.props.heartbeatData.lost > 0 ? 'alert' : 'ok';
       nLost = this.props.heartbeatData.lost;
       if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
+      if (this.props.heartbeatData.last_heartbeat_timestamp == -2) timeDiff = -2;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
+      heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
-    const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+
+    let timeDiffText = 'Unknown';
+
+    if (timeDiff == -2) {
+      timeDiffText = 'No heartbeat event in Remote.';
+    } else if (timeDiff == -1) {
+      timeDiffText = 'Never';
+    } else if (timeDiff >= 0) {
+      timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+    }
+
+    let heartbeatTitle = `${this.props.name +
+      '-' +
+      this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
+    if (timeDiff == -2) {
+      heartbeatTitle = `${this.props.name + '-' + this.props.salindex} heartbeat\n${timeDiffText}`;
+    }
 
     return (
       <div className={styles.CSCExpandedContainer}>
@@ -139,12 +156,7 @@ export default class CSCExpanded extends PureComponent {
                 </span>
               </div>
               <div className={styles.heartbeatIconWrapper}>
-                <HeartbeatIcon
-                  status={heartbeatStatus}
-                  title={`${this.props.name +
-                    '-' +
-                    this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`}
-                />
+                <HeartbeatIcon status={heartbeatStatus} title={heartbeatTitle} />
               </div>
             </div>
           </div>
@@ -170,7 +182,9 @@ export default class CSCExpanded extends PureComponent {
                       {msg.errorCode.value}
                     </div>
                     <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
+                      <div className={styles.timestamp} title="private_rcvStamp">
+                        {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                      </div>
                       <div className={styles.messageText}>{msg.errorReport.value}</div>
                       <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                     </div>
@@ -222,7 +236,9 @@ export default class CSCExpanded extends PureComponent {
                     <div key={`${msg.private_rcvStamp.value}-${msg.level.value}`} className={styles.logMessage}>
                       <div className={styles.messageIcon}>{icon}</div>
                       <div className={styles.messageTextContainer}>
-                        <div className={styles.timestamp} title="private_rcvStamp">{new Date(msg.private_rcvStamp.value*1000).toUTCString()}</div>
+                        <div className={styles.timestamp} title="private_rcvStamp">
+                          {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                        </div>
                         <div className={styles.messageText}>{msg.message.value}</div>
                         <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                       </div>
