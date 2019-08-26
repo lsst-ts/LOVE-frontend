@@ -536,6 +536,9 @@ export default class ScriptQueue extends Component {
                             script={script}
                             commandExecutePermission={this.props.commandExecutePermission}
                             {...script}
+                            isCompact={
+                              this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
+                            }
                           />
                         </DraggableScript>
                       );
