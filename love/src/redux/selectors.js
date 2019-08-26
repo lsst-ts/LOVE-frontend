@@ -261,3 +261,13 @@ export const getGroupSortedErrorCodeData = (state, group) => {
 
   return sorted;
 };
+
+export const getAllTelemetries = (state) => {
+  if (state.ws === undefined) return undefined;
+  return getStreamData(state, 'telemetry-all-all-all');
+};
+
+export const getAllEvents = (state) => {
+  if (state.ws === undefined) return undefined;
+  return getStreamData(state, 'event-all-all-all');
+};

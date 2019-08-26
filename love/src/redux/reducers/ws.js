@@ -57,6 +57,16 @@ export default function(state = initialState, action) {
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
         const [category, csc, salindex, stream] = subscription.groupName.split('-');
+        if (csc === 'all' && salindex === 'all' && stream === 'all') {
+          const newData = { ...subscription.data };
+          newData[action.csc] = { ...newData[action.csc], ...action.data };
+          return {
+            ...subscription,
+            data: newData,
+            timestamp: new Date(),
+          };
+        }
+
         if (
           category !== action.category ||
           csc !== action.csc ||
