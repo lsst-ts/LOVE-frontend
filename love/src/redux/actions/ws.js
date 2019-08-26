@@ -80,9 +80,15 @@ export const openWebsocketConnection = () => {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
-              } else {
-                dispatch(receiveCameraStateData(stream));
-              }
+              } else if(stream.startIntegration || 
+                stream.raftsDetailedState || 
+                stream.shutterDetailedState || 
+                stream.imageReadinessDetailedState || 
+                stream.calibrationDetailedState){
+                  dispatch(receiveCameraStateData(stream));
+
+              } 
+              
             }
             if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
