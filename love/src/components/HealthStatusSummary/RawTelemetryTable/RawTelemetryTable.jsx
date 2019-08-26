@@ -69,37 +69,7 @@ export default class RawTelemetryTable extends PureComponent {
       'units',
       'health_status',
     ],
-    telemetries: {
-      scheduler: {
-        interestedProposal: {
-          parameters: {},
-          receptionTimeStamp: '2018/11/23 21:12:24.',
-        },
-        bulkCloud: {
-          parameters: {
-            bulkCloud: {
-              value: 0.6713680575252166,
-              dataType: 'Float',
-            },
-            timestamp: {
-              value: 0.5309269973966433,
-              dataType: 'Float',
-            },
-          },
-          receptionTimeStamp: '2018/11/25 12:21:12',
-        },
-      },
-      ScriptQueue: {
-        stream1: {
-          parameters: {
-            exists: {
-              value: 1,
-              dataType: 'Boolean',
-            },
-          },
-        },
-      },
-    },
+    telemetries: {},
   };
 
   constructor() {
@@ -151,6 +121,14 @@ export default class RawTelemetryTable extends PureComponent {
       setFilters: this.setFilters,
     };
   }
+
+  componentDidMount = () => {
+    this.props.subscribeToStream();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStream();
+  };
 
   setFilters = (filters) => {
     Object.keys(filters).map((key) => {
@@ -242,8 +220,13 @@ export default class RawTelemetryTable extends PureComponent {
 
   changeFilter = (column) => (event) => {
     const filters = { ...this.state.filters };
-    filters[column].value = new RegExp(event.target.value, 'i');
-    this.state.setFilters(filters);
+    try{
+      filters[column].value = new RegExp(event.target.value, 'i');
+      this.state.setFilters(filters);
+    }
+    catch(e){
+      console.log('Invalid filter')
+    }
   };
 
   getHealthStatusCode = (paramName, value) => {
@@ -353,7 +336,7 @@ export default class RawTelemetryTable extends PureComponent {
 
   updateSelectedList = (checked, key) => {
     const splitKey = key.split('-');
-    const params = this.props.telemetries[splitKey[0]][splitKey[1]].parameters;
+    const params = this.props.allTelemetries[splitKey[0]][splitKey[1]].parameters;
     const value = params[splitKey[2]];
     const { selectedRows } = this.state;
     const newRow = {
@@ -390,20 +373,23 @@ export default class RawTelemetryTable extends PureComponent {
 
   getData = () => {
     let data = Object.assign({}, fakeData); // load "fake" data as template;
-    const telemetryCSCs = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
+    const telemetryCSCs = this.props.allTelemetries ? Object.keys(this.props.allTelemetries) : []; // the raw telemetry as it comes from the manager
     telemetryCSCs.forEach((telemetryCSC) => {
       data[telemetryCSC] = {};
       // look at one telemetry
-      const streamsData = this.props.telemetries[telemetryCSC];
+      const streamsData = this.props.allTelemetries[telemetryCSC];
       const streamKeys = Object.keys(streamsData);
       streamKeys.forEach((streamKey) => {
         const streamData = streamsData[streamKey];
+        const parameters = Object.keys(streamData).filter((p) => !p.startsWith('private_'));
         data[telemetryCSC][streamKey] = {
-          timestamp: streamData.receptionTimestamp,
-          parameters: Object.entries(streamData.parameters).map((parameter) => {
+          timestamp: streamData.private_rcvStamp ? streamData.private_rcvStamp.value : 0,
+          parameters: parameters.map((p) => {
             // look at one parameter
-            const [name, measurement, units] = parameter;
-
+            const parameter = streamData[p];
+            const name = p;
+            const measurement = parameter;
+            const units = undefined;
             return {
               name,
               param_name: name,

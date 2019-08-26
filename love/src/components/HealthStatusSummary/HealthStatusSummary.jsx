@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import saveAs from 'file-saver';
 import PropTypes from 'prop-types';
-import RawTelemetryTable from './RawTelemetryTable/RawTelemetryTable';
+import RawTelemetryTableContainer from './RawTelemetryTable/RawTelemetryTable.container';
 import Button from './Button/Button';
 import ExportIcon from '../icons/ExportIcon/ExportIcon';
 import styles from './HealthStatusSummary.module.css';
@@ -17,12 +17,6 @@ import ManagerInterface from '../../Utils';
  *
  */
 export default class HealthStatusSummary extends Component {
-  static propTypes = {
-    /** Dictionary of telemetries that are displayed. See examples below
-     */
-    telemetries: PropTypes.object,
-  };
-
   constructor() {
     super();
     // eslint-disable-next-line
@@ -44,50 +38,8 @@ export default class HealthStatusSummary extends Component {
     this.state = {
       healthFunctions,
       setHealthFunctions: this.setHealthFunctions,
-      telemetries: {},
     };
   }
-
-  componentDidMount = () => {
-    this.managerInterface.subscribeToTelemetry('all', 'all', this.receiveAllMsg);
-  };
-
-  componentWillUnmount = () => {
-    this.managerInterface.unsubscribeToTelemetry('all', 'all', () => 0);
-  };
-
-  receiveAllMsg = (msg) => {
-    const data = JSON.parse(msg.data);
-    if (data.category !== 'telemetry') return;
-    if (typeof data.data === 'object') {
-      let newTelemetries = Object.assign({}, this.state.telemetries);
-      let timestamp = new Date();
-      timestamp = timestamp
-        .toISOString()
-        .slice(0, 19)
-        .replace(/-/g, '/')
-        .replace('T', ' ');
-      Object.entries(data.data).forEach((entry) => {
-        const [csc, cscDataString] = entry;
-        const cscData = JSON.parse(cscDataString);
-        const telemetry = {};
-        const stream = {};
-        Object.entries(cscData).forEach((cscStream) => {
-          const [streamName, parameters] = cscStream;
-          stream[streamName] = {};
-          stream[streamName].parameters = parameters;
-          stream[streamName].receptionTimestamp = timestamp;
-        });
-        telemetry[csc] = {
-          ...stream,
-        };
-        Object.assign(newTelemetries, telemetry);
-      }, this);
-
-      newTelemetries = JSON.parse(JSON.stringify(newTelemetries));
-      this.setState({ telemetries: newTelemetries });
-    }
-  };
 
   setHealthFunctions = (healthFunctions) => {
     this.setState({
@@ -131,8 +83,7 @@ export default class HealthStatusSummary extends Component {
             {/* </a> */}
           </div>
         </div>
-        <RawTelemetryTable
-          telemetries={this.state.telemetries !== {} ? this.state.telemetries : this.props.telemetries}
+        <RawTelemetryTableContainer
           {...this.state}
           checkedFilterColumn="units"
           // eslint-disable-next-line
