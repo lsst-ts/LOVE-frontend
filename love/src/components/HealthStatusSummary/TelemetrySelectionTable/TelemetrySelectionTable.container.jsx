@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getAllTelemetries } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
-import RawTelemetryTable from './RawTelemetryTable';
+import TelemetrySelectionTable from './TelemetrySelectionTable';
 
-const RawTelemetryTableContainer = ({ allTelemetries, subscribeToStream, unsubscribeToStream,
+const TelemetrySelectionTableContainer = ({ allTelemetries, subscribeToStream, unsubscribeToStream,
   ...props
 }) => {
   return (
-    <RawTelemetryTable
+    <TelemetrySelectionTable
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
@@ -25,11 +25,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: () => {
-      //All telemetries
+      //All telemetriesdsa
       dispatch(requestGroupSubscription('telemetry-all-all-all'));
     },
     unsubscribeToStream: () => {
-      //All telemetries
+      //All telemetriesdsa
       dispatch(requestGroupSubscriptionRemoval('telemetry-all-all-all'));
     },
   };
@@ -38,4 +38,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(RawTelemetryTableContainer);
+)(TelemetrySelectionTableContainer);
