@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import styles from './RawTelemetryTable.module.css';
+import styles from './TelemetrySelectionTable.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
@@ -16,7 +16,7 @@ import { getFakeUnits } from '../../../Utils';
  * By pressing the Set button, the list of telemetries is passed to a callback function in the component props.
  *
  */
-export default class RawTelemetryTable extends PureComponent {
+export default class TelemetrySelectionTable extends PureComponent {
   static propTypes = {
     /** Display the selection column or not */
     columnsToDisplay: PropTypes.arrayOf(
@@ -423,8 +423,8 @@ export default class RawTelemetryTable extends PureComponent {
       });
     }
     return (
-      <div className={styles.rawTelemetryTableWrapper}>
-        <table className={styles.rawTelemetryTable}>
+      <div className={styles.telemetrySelectionTableWrapper}>
+        <table className={styles.telemetrySelectionTable}>
           <thead>
             <tr>
               {this.props.columnsToDisplay.includes('selection_column') ? (

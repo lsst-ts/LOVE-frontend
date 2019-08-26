@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
+import TelemetrySelectionTableContainer from '../HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.container';
 import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
@@ -140,7 +140,7 @@ export default class TimeSeries extends PureComponent {
     ];
 
     return this.state.step === 0 ? (
-      <RawTelemetryTable
+      <TelemetrySelectionTableContainer
         telemetries={this.props.telemetries}
         {...this.state}
         columnsToDisplay={columnsToDisplay}

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import saveAs from 'file-saver';
 import PropTypes from 'prop-types';
-import RawTelemetryTableContainer from './RawTelemetryTable/RawTelemetryTable.container';
+import TelemetrySelectionTableContainer from './TelemetrySelectionTable/TelemetrySelectionTable.container';
 import Button from './Button/Button';
 import ExportIcon from '../icons/ExportIcon/ExportIcon';
 import styles from './HealthStatusSummary.module.css';
@@ -11,7 +11,7 @@ import ManagerInterface from '../../Utils';
 /**
  * Configurable summary displaying the health status of an arbitrary subset
  * of telemetries provided in the component props. The user first faces the
- * [**RawTelemetryTable**](#rawtelemetrytable) component for filtering,
+ * [**TelemetrySelectionTable**](#TelemetrySelectionTable) component for filtering,
  * selecting telemetries and configuring the definition of health
  * status. Then the user launches another YET TO BE IMPLEMENTED "printed" table.
  *
@@ -83,7 +83,7 @@ export default class HealthStatusSummary extends Component {
             {/* </a> */}
           </div>
         </div>
-        <RawTelemetryTableContainer
+        <TelemetrySelectionTableContainer
           {...this.state}
           checkedFilterColumn="units"
           // eslint-disable-next-line
