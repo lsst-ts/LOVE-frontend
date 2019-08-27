@@ -70,7 +70,7 @@ export default class HealthStatusSummary extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <div className={styles.container}>
         <div className={styles.topButtons}>
           <div className={styles.buttonWrapper}>
             <UploadButton onLoadFile={this.onLoadFile} />
@@ -83,12 +83,15 @@ export default class HealthStatusSummary extends Component {
             {/* </a> */}
           </div>
         </div>
-        <TelemetrySelectionTableContainer
-          {...this.state}
-          // eslint-disable-next-line
-          onClick={() => console.log('RawTel Click')}
-        />
-      </React.Fragment>
+        <div className={styles.telemetryTableWrapper}>
+          <TelemetrySelectionTableContainer
+            {...this.state}
+            // eslint-disable-next-line
+            onClick={() => console.log('RawTel Click')}
+            showSelection={false}
+          />
+        </div>
+      </div>
     );
   }
 }

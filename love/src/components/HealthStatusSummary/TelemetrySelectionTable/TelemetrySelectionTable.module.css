@@ -3,16 +3,19 @@
 }
 
 .telemetrySelectionTableWrapper {
-    height: calc(100% - 40px);
+    display: grid;
+    height: 100%;
+    grid-template-rows: minmax(0, 1fr) min-content;
     background: var(--base-background-color);
     min-width: 1350px;
 }
 
 .telemetrySelectionTable {
+    display: grid;
+    grid-template-rows: min-content minmax(0, 1fr);
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    height: calc(100% - 60px);
 }
 
 .telemetrySelectionTable thead {
