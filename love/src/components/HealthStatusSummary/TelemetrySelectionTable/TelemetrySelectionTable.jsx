@@ -305,7 +305,7 @@ export default class TelemetrySelectionTable extends PureComponent {
     const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
     const aKey = [a.component, a.stream, a.param_name].join('-');
     const bKey = [b.component, b.stream, b.param_name].join('-');
-    const selectedKeys = this.state.selectedRows.map((r) => r.key);
+    const selectedKeys = this.state.selectedRows;
     const column = this.state.sortingColumn;
     if (selectedKeys.indexOf(aKey) > -1 && !(selectedKeys.indexOf(bKey) > -1)) {
       return -1;
@@ -343,8 +343,8 @@ export default class TelemetrySelectionTable extends PureComponent {
       key,
       value,
     };
-    if (checked && selectedRows.indexOf(key) < 0) selectedRows.push(newRow);
-    if (!checked) selectedRows.splice(selectedRows.map((row) => row.key).indexOf(key), 1);
+    if (checked && selectedRows.indexOf(key) < 0) selectedRows.push(key);
+    if (!checked) selectedRows.splice(selectedRows.map((row) => row).indexOf(key), 1);
     if (selectedRows.length === 0) this.setCheckedFilterColumn();
     this.setState({
       selectedRows: [...selectedRows],
@@ -354,7 +354,7 @@ export default class TelemetrySelectionTable extends PureComponent {
   selectAllRows = (checked) => {
     const data = this.getData();
     data.sort(this.sortData).map((row) => {
-      if (this.testFilter(row)) {
+      if (this.testFilter(row) || !checked) {
         const key = [row.component, row.stream, row.param_name].join('-');
         this.onRowSelection(checked, key, row);
       }
@@ -540,7 +540,7 @@ export default class TelemetrySelectionTable extends PureComponent {
             {data.sort(this.sortData).map((row) => {
               if (this.testFilter(row)) {
                 const key = [row.component, row.stream, row.param_name].join('-');
-                const isChecked = this.state.selectedRows.map((r) => r.key).indexOf(key) >= 0;
+                const isChecked = this.state.selectedRows.indexOf(key) >= 0;
 
                 return (
                   <React.Fragment key={key}>
@@ -672,8 +672,7 @@ export default class TelemetrySelectionTable extends PureComponent {
         <div className={styles.selectionContainer}>
           TELEMETRIES:
           <span className={styles.selectionList}>
-            {this.state.selectedRows.map((telemetryKeyValue) => {
-              const telemetryKey = telemetryKeyValue.key;
+            {this.state.selectedRows.map((telemetryKey) => {
               const telemetryName = telemetryKey.split('-')[2];
               return (
                 <TelemetrySelectionTag
