@@ -42,7 +42,7 @@
 }
 
 .telemetrySelectionTable th {
-    border: 2px solid var(--base-background-color);
+    border: 1px solid var(--base-background-color);
     background: var(--tertiary-background-color);
     padding: 0em 0.5em;
     padding-left: 1em;
@@ -146,7 +146,7 @@
 
 .telemetrySelectionTable .healthStatusCell.selectedHealthStatus {
     background: var(--tertiary-background-color);
-    border-bottom: 2px solid var(--tertiary-background-color);
+    border-bottom: 1px solid var(--tertiary-background-color);
 }
 
 .telemetrySelectionTable .gearIconWrapper {
@@ -236,7 +236,7 @@
     background: var(--base-background-color);
     padding: 0em 0.5em;
     text-align: center;
-    border: 2px solid var(--base-background-color)
+    border: 1px solid var(--base-background-color)
 }
 
 .telemetrySelectionTable .firstColumn input {
@@ -249,6 +249,10 @@
 }
 
 .telemetrySelectionTable tr:nth-child(even).expandedRow {
+    background: var(--tertiary-background-color);
+}
+
+.telemetrySelectionTable tr:nth-child(odd).expandedRow {
     background: var(--tertiary-background-color);
 }
 
