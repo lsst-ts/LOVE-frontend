@@ -85,7 +85,6 @@ export default class HealthStatusSummary extends Component {
         </div>
         <TelemetrySelectionTableContainer
           {...this.state}
-          checkedFilterColumn="units"
           // eslint-disable-next-line
           onClick={() => console.log('RawTel Click')}
         />
