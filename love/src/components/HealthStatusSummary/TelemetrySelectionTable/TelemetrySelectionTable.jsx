@@ -336,8 +336,8 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   updateSelectedList = (checked, key) => {
     const splitKey = key.split('-');
-    const params = this.props.allTelemetries[splitKey[0]][splitKey[1]].parameters;
-    const value = params[splitKey[2]];
+    const params = this.props.allTelemetries[splitKey[0]][splitKey[1]];
+    const value = params[splitKey[2]].value;
     const { selectedRows } = this.state;
     const newRow = {
       key,
