@@ -53,6 +53,8 @@ export default class TelemetrySelectionTable extends PureComponent {
     telemetries: PropTypes.object,
     /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
     onSetSelection: PropTypes.func,
+    /** Indicates if component should display bottom selection bar*/
+    showSelection: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -70,6 +72,7 @@ export default class TelemetrySelectionTable extends PureComponent {
       'health_status',
     ],
     telemetries: {},
+    showSelection: true,
   };
 
   constructor() {
@@ -220,12 +223,11 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   changeFilter = (column) => (event) => {
     const filters = { ...this.state.filters };
-    try{
+    try {
       filters[column].value = new RegExp(event.target.value, 'i');
       this.state.setFilters(filters);
-    }
-    catch(e){
-      console.log('Invalid filter')
+    } catch (e) {
+      console.log('Invalid filter');
     }
   };
 
@@ -669,32 +671,34 @@ export default class TelemetrySelectionTable extends PureComponent {
           </tbody>
         </table>
 
-        <div className={styles.selectionContainer}>
-          TELEMETRIES:
-          <span className={styles.selectionList}>
-            {this.state.selectedRows.map((telemetryKey) => {
-              const telemetryName = telemetryKey.split('-')[2];
-              return (
-                <TelemetrySelectionTag
-                  key={telemetryKey}
-                  telemetryKey={telemetryKey}
-                  telemetryName={telemetryName}
-                  remove={() => this.updateSelectedList(false, telemetryKey)}
-                />
-              );
-            })}
-          </span>
-          <Button
-            title="Set selected telemetries"
-            className={styles.selectionSetButton}
-            onClick={(ev) => {
-              this.setSelection(this.state.selectedRows, ev);
-            }}
-          >
-            {' '}
-            Set{' '}
-          </Button>
-        </div>
+        {this.props.showSelection && (
+          <div className={styles.selectionContainer}>
+            TELEMETRIES:
+            <span className={styles.selectionList}>
+              {this.state.selectedRows.map((telemetryKey) => {
+                const telemetryName = telemetryKey.split('-')[2];
+                return (
+                  <TelemetrySelectionTag
+                    key={telemetryKey}
+                    telemetryKey={telemetryKey}
+                    telemetryName={telemetryName}
+                    remove={() => this.updateSelectedList(false, telemetryKey)}
+                  />
+                );
+              })}
+            </span>
+            <Button
+              title="Set selected telemetries"
+              className={styles.selectionSetButton}
+              onClick={(ev) => {
+                this.setSelection(this.state.selectedRows, ev);
+              }}
+            >
+              {' '}
+              Set{' '}
+            </Button>
+          </div>
+        )}
       </div>
     );
   }

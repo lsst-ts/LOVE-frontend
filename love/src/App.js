@@ -23,13 +23,13 @@ class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
-    token: PropTypes.string
+    token: PropTypes.string,
   };
 
   static defaultProps = {
     location: null,
     validateToken: () => {},
-    token: null
+    token: null,
   };
 
   componentDidMount = () => {
@@ -49,11 +49,7 @@ class App extends Component {
           <PrivateRoute
             token={this.props.token}
             path="/health-status-summary"
-            render={() => (
-              <div className="hs-container">
-                <HealthStatusSummary> </HealthStatusSummary>
-              </div>
-            )}
+            render={() => <HealthStatusSummary> </HealthStatusSummary>}
           />
           <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
           <PrivateRoute
