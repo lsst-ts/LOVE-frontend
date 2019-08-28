@@ -23,13 +23,13 @@ class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
-    token: PropTypes.string
+    token: PropTypes.string,
   };
 
   static defaultProps = {
     location: null,
     validateToken: () => {},
-    token: null
+    token: null,
   };
 
   componentDidMount = () => {
@@ -73,7 +73,16 @@ class App extends Component {
               </div>
             )}
           />
-          <PrivateRoute token={this.props.token} path="/script-queue" component={ScriptQueueContainer} />
+          <PrivateRoute
+            token={this.props.token}
+            path="/script-queue-1"
+            render={() => <ScriptQueueContainer salindex={1} />}
+          />
+          <PrivateRoute
+            token={this.props.token}
+            path="/script-queue-2"
+            render={() => <ScriptQueueContainer salindex={2} />}
+          />
           <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummaryContainer} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />

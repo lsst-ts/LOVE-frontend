@@ -293,7 +293,6 @@ export default class ScriptQueue extends Component {
         salIndices: array,
         terminate: terminate,
       },
-      component: 'ScriptQueue',
     });
   };
 
@@ -305,7 +304,6 @@ export default class ScriptQueue extends Component {
         salIndex: scriptIndex,
         location: 2,
       },
-      component: 'ScriptQueue',
     });
   };
 
@@ -327,7 +325,6 @@ export default class ScriptQueue extends Component {
         location: location,
         locationSalIndex: locationSalIndex,
       },
-      component: 'ScriptQueue',
     });
   };
 
@@ -336,7 +333,6 @@ export default class ScriptQueue extends Component {
     this.props.requestSALCommand({
       cmd: 'cmd_pause',
       params: {},
-      component: 'ScriptQueue',
     });
   };
 
@@ -345,7 +341,6 @@ export default class ScriptQueue extends Component {
     this.props.requestSALCommand({
       cmd: 'cmd_resume',
       params: {},
-      component: 'ScriptQueue',
     });
   };
 
@@ -428,7 +423,7 @@ export default class ScriptQueue extends Component {
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
     return (
-      <Panel title="Script Queue">
+      <Panel title={`Script Queue   | SalIndex = ${this.props.salindex}`}>
         <div
           onClick={(e) => {
             this.setState({ isContextMenuOpen: false });

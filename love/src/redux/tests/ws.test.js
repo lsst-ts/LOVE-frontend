@@ -77,6 +77,7 @@ it('Should send a command to the server and save it on the state properly', asyn
     params: {},
     component: 'ATDome',
     cmd_id: '10-cmd_closeShutter',
+    salindex: 2
   };
   const realDate = Date;
   global.Date.now = () => 10;
@@ -89,7 +90,7 @@ it('Should send a command to the server and save it on the state properly', asyn
       {
         csc: 'ATDome',
         data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {} } },
-        salindex: 1,
+        salindex: 2,
       },
     ],
   });
@@ -597,7 +598,7 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
   });
 });
 
-it.only('Should properly interpret an ack message', async () => {
+it('Should properly interpret an ack message', async () => {
   const commandObject = {
     cmd: 'cmd_closeShutter',
     params: {},
