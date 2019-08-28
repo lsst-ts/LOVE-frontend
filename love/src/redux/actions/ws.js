@@ -248,7 +248,7 @@ export const requestSALCommand = (data) => {
 
       const commandObject = {
         csc: data.component,
-        salindex: 1,
+        salindex: data.salindex,
         data: {
           stream: {
             cmd: data.cmd,
@@ -267,6 +267,7 @@ export const requestSALCommand = (data) => {
         cmd: data.cmd,
         params: data.params,
         component: data.component,
+        salindex: data.salindex,
         cmd_id: commandID,
       };
 

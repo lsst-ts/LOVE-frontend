@@ -16,6 +16,7 @@ const initialState = {
     cmd: '',
     params: {},
     component: '',
+    salindex: 0
   },
 };
 /**
@@ -91,7 +92,9 @@ export default function(state = initialState, action) {
           cmd: action.cmd,
           params: action.params,
           component: action.component,
+          salindex: action.salindex,
           cmd_id: action.cmd_id,
+
         },
       };
     }
