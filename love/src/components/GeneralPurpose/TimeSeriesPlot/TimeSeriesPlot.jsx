@@ -77,7 +77,7 @@ export default class TimeSeriesPlot extends Component {
       const data = this.props.streamStates[dataSource].data;
       const timestamp = this.props.streamStates[dataSource].timestamp;
       const dataLabel = dataSource;
-
+      
       let shouldUpdatePlot = false;
       const value = data ? accessor(data) : undefined;
 

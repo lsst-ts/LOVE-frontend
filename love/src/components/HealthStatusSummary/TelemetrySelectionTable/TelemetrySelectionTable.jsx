@@ -409,7 +409,11 @@ export default class TelemetrySelectionTable extends PureComponent {
   };
 
   setSelection = (event) => {
-    this.props.onSetSelection(this.state.selectedRows, event);
+    const data = this.getData().filter((row) => {
+      const key = `${row.component}-${row.stream}-${row.param_name}`;
+      return this.state.selectedRows.indexOf(key) >= 0;
+    });
+    this.props.onSetSelection(this.state.selectedRows, data, event);
   };
 
   render() {
