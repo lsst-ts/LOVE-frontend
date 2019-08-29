@@ -59,7 +59,7 @@ export default function(state = initialState, action) {
         const [category, csc, salindex, stream] = subscription.groupName.split('-');
         if (csc === 'all' && salindex === 'all' && stream === 'all') {
           const newData = { ...subscription.data };
-          newData[action.csc] = { ...newData[action.csc], ...action.data };
+          newData[`${action.csc}-${action.salindex}`] = { ...newData[action.csc], ...action.data };
           return {
             ...subscription,
             data: newData,

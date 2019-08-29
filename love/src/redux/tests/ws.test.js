@@ -650,10 +650,10 @@ it.only('Should save all telemetries when subscribed to all', async () => {
   msg.data[0].csc = 'ATMCS';
   server.send(msg);
   const expected = {
-    ATDome: {
+    'ATDome-1': {
       param1: 1234,
     },
-    ATMCS: {
+    'ATMCS-1': {
       param1: 1234,
     },
   };
@@ -680,10 +680,10 @@ it.only('Should save all events when subscribed to all', async () => {
   msg.data[0].csc = 'ATMCS';
   server.send(msg);
   const expected = {
-    ATDome: {
+    'ATDome-1': {
       param1: 1234,
     },
-    ATMCS: {
+    'ATMCS-1': {
       param1: 1234,
     },
   };
