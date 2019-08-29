@@ -196,7 +196,7 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
         option: 'unsubscribe',
         category,
         csc,
-        salindex: parseInt(salindex),
+        salindex: salindex,
         stream,
       });
     });
