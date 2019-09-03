@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import styles from './RawTelemetryTable.module.css';
+import styles from './TelemetrySelectionTable.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
@@ -16,7 +16,7 @@ import { getFakeUnits } from '../../../Utils';
  * By pressing the Set button, the list of telemetries is passed to a callback function in the component props.
  *
  */
-export default class RawTelemetryTable extends PureComponent {
+export default class TelemetrySelectionTable extends PureComponent {
   static propTypes = {
     /** Display the selection column or not */
     columnsToDisplay: PropTypes.arrayOf(
@@ -53,6 +53,8 @@ export default class RawTelemetryTable extends PureComponent {
     telemetries: PropTypes.object,
     /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
     onSetSelection: PropTypes.func,
+    /** Indicates if component should display bottom selection bar*/
+    showSelection: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -69,37 +71,8 @@ export default class RawTelemetryTable extends PureComponent {
       'units',
       'health_status',
     ],
-    telemetries: {
-      scheduler: {
-        interestedProposal: {
-          parameters: {},
-          receptionTimeStamp: '2018/11/23 21:12:24.',
-        },
-        bulkCloud: {
-          parameters: {
-            bulkCloud: {
-              value: 0.6713680575252166,
-              dataType: 'Float',
-            },
-            timestamp: {
-              value: 0.5309269973966433,
-              dataType: 'Float',
-            },
-          },
-          receptionTimeStamp: '2018/11/25 12:21:12',
-        },
-      },
-      ScriptQueue: {
-        stream1: {
-          parameters: {
-            exists: {
-              value: 1,
-              dataType: 'Boolean',
-            },
-          },
-        },
-      },
-    },
+    telemetries: {},
+    showSelection: true,
   };
 
   constructor() {
@@ -151,6 +124,14 @@ export default class RawTelemetryTable extends PureComponent {
       setFilters: this.setFilters,
     };
   }
+
+  componentDidMount = () => {
+    this.props.subscribeToStream();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStream();
+  };
 
   setFilters = (filters) => {
     Object.keys(filters).map((key) => {
@@ -242,8 +223,12 @@ export default class RawTelemetryTable extends PureComponent {
 
   changeFilter = (column) => (event) => {
     const filters = { ...this.state.filters };
-    filters[column].value = new RegExp(event.target.value, 'i');
-    this.state.setFilters(filters);
+    try {
+      filters[column].value = new RegExp(event.target.value, 'i');
+      this.state.setFilters(filters);
+    } catch (e) {
+      console.log('Invalid filter');
+    }
   };
 
   getHealthStatusCode = (paramName, value) => {
@@ -322,7 +307,7 @@ export default class RawTelemetryTable extends PureComponent {
     const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
     const aKey = [a.component, a.stream, a.param_name].join('-');
     const bKey = [b.component, b.stream, b.param_name].join('-');
-    const selectedKeys = this.state.selectedRows.map((r) => r.key);
+    const selectedKeys = this.state.selectedRows;
     const column = this.state.sortingColumn;
     if (selectedKeys.indexOf(aKey) > -1 && !(selectedKeys.indexOf(bKey) > -1)) {
       return -1;
@@ -353,15 +338,15 @@ export default class RawTelemetryTable extends PureComponent {
 
   updateSelectedList = (checked, key) => {
     const splitKey = key.split('-');
-    const params = this.props.telemetries[splitKey[0]][splitKey[1]].parameters;
-    const value = params[splitKey[2]];
+    const params = this.props.allTelemetries[`${splitKey[0]}-${splitKey[1]}`][splitKey[2]];
+    const value = params[splitKey[3]].value;
     const { selectedRows } = this.state;
     const newRow = {
       key,
       value,
     };
-    if (checked && selectedRows.indexOf(key) < 0) selectedRows.push(newRow);
-    if (!checked) selectedRows.splice(selectedRows.map((row) => row.key).indexOf(key), 1);
+    if (checked && selectedRows.indexOf(key) < 0) selectedRows.push(key);
+    if (!checked) selectedRows.splice(selectedRows.map((row) => row).indexOf(key), 1);
     if (selectedRows.length === 0) this.setCheckedFilterColumn();
     this.setState({
       selectedRows: [...selectedRows],
@@ -371,7 +356,7 @@ export default class RawTelemetryTable extends PureComponent {
   selectAllRows = (checked) => {
     const data = this.getData();
     data.sort(this.sortData).map((row) => {
-      if (this.testFilter(row)) {
+      if (this.testFilter(row) || !checked) {
         const key = [row.component, row.stream, row.param_name].join('-');
         this.onRowSelection(checked, key, row);
       }
@@ -390,20 +375,23 @@ export default class RawTelemetryTable extends PureComponent {
 
   getData = () => {
     let data = Object.assign({}, fakeData); // load "fake" data as template;
-    const telemetryCSCs = Object.keys(this.props.telemetries); // the raw telemetry as it comes from the manager
+    const telemetryCSCs = this.props.allTelemetries ? Object.keys(this.props.allTelemetries) : []; // the raw telemetry as it comes from the manager
     telemetryCSCs.forEach((telemetryCSC) => {
       data[telemetryCSC] = {};
       // look at one telemetry
-      const streamsData = this.props.telemetries[telemetryCSC];
+      const streamsData = this.props.allTelemetries[telemetryCSC];
       const streamKeys = Object.keys(streamsData);
       streamKeys.forEach((streamKey) => {
         const streamData = streamsData[streamKey];
+        const parameters = Object.keys(streamData).filter((p) => !p.startsWith('private_'));
         data[telemetryCSC][streamKey] = {
-          timestamp: streamData.receptionTimestamp,
-          parameters: Object.entries(streamData.parameters).map((parameter) => {
+          timestamp: streamData.private_rcvStamp ? streamData.private_rcvStamp.value : 0,
+          parameters: parameters.map((p) => {
             // look at one parameter
-            const [name, measurement, units] = parameter;
-
+            const parameter = streamData[p];
+            const name = p;
+            const measurement = parameter;
+            const units = undefined;
             return {
               name,
               param_name: name,
@@ -421,7 +409,11 @@ export default class RawTelemetryTable extends PureComponent {
   };
 
   setSelection = (event) => {
-    this.props.onSetSelection(this.state.selectedRows, event);
+    const data = this.getData().filter((row) => {
+      const key = `${row.component}-${row.stream}-${row.param_name}`;
+      return this.state.selectedRows.indexOf(key) >= 0;
+    });
+    this.props.onSetSelection(this.state.selectedRows, data, event);
   };
 
   render() {
@@ -437,8 +429,8 @@ export default class RawTelemetryTable extends PureComponent {
       });
     }
     return (
-      <div className={styles.rawTelemetryTableWrapper}>
-        <table className={styles.rawTelemetryTable}>
+      <div className={styles.telemetrySelectionTableWrapper}>
+        <table className={styles.telemetrySelectionTable}>
           <thead>
             <tr>
               {this.props.columnsToDisplay.includes('selection_column') ? (
@@ -554,7 +546,7 @@ export default class RawTelemetryTable extends PureComponent {
             {data.sort(this.sortData).map((row) => {
               if (this.testFilter(row)) {
                 const key = [row.component, row.stream, row.param_name].join('-');
-                const isChecked = this.state.selectedRows.map((r) => r.key).indexOf(key) >= 0;
+                const isChecked = this.state.selectedRows.indexOf(key) >= 0;
 
                 return (
                   <React.Fragment key={key}>
@@ -683,33 +675,34 @@ export default class RawTelemetryTable extends PureComponent {
           </tbody>
         </table>
 
-        <div className={styles.selectionContainer}>
-          TELEMETRIES:
-          <span className={styles.selectionList}>
-            {this.state.selectedRows.map((telemetryKeyValue) => {
-              const telemetryKey = telemetryKeyValue.key;
-              const telemetryName = telemetryKey.split('-')[2];
-              return (
-                <TelemetrySelectionTag
-                  key={telemetryKey}
-                  telemetryKey={telemetryKey}
-                  telemetryName={telemetryName}
-                  remove={() => this.updateSelectedList(false, telemetryKey)}
-                />
-              );
-            })}
-          </span>
-          <Button
-            title="Set selected telemetries"
-            className={styles.selectionSetButton}
-            onClick={(ev) => {
-              this.setSelection(this.state.selectedRows, ev);
-            }}
-          >
-            {' '}
-            Set{' '}
-          </Button>
-        </div>
+        {this.props.showSelection && (
+          <div className={styles.selectionContainer}>
+            TELEMETRIES:
+            <span className={styles.selectionList}>
+              {this.state.selectedRows.map((telemetryKey) => {
+                const telemetryName = telemetryKey.split('-')[2];
+                return (
+                  <TelemetrySelectionTag
+                    key={telemetryKey}
+                    telemetryKey={telemetryKey}
+                    telemetryName={telemetryName}
+                    remove={() => this.updateSelectedList(false, telemetryKey)}
+                  />
+                );
+              })}
+            </span>
+            <Button
+              title="Set selected telemetries"
+              className={styles.selectionSetButton}
+              onClick={(ev) => {
+                this.setSelection(this.state.selectedRows, ev);
+              }}
+            >
+              {' '}
+              Set{' '}
+            </Button>
+          </div>
+        )}
       </div>
     );
   }

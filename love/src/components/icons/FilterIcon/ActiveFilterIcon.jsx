@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-export default class DefaultFilterIcon extends Component {
+export default class ActiveFilterIcon extends Component {
   static propTypes = {
-    style: PropTypes.object,
+    style: PropTypes.string,
   };
 
   render() {

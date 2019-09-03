@@ -14,6 +14,8 @@ import {
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
   getGroupSortedErrorCodeData,
+  getAllTelemetries,
+  getAllEvents,
 } from '../selectors';
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
@@ -628,4 +630,64 @@ it('Should properly interpret an ack message', async () => {
     ...commandObject,
   });
   global.Date = realDate;
+});
+
+it.only('Should save all telemetries when subscribed to all', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
+  let msg = {
+    category: 'telemetry',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          param1: 1234,
+        },
+      },
+    ],
+  };
+  server.send(msg);
+  msg.data[0].csc = 'ATMCS';
+  server.send(msg);
+  const expected = {
+    'ATDome-1': {
+      param1: 1234,
+    },
+    'ATMCS-1': {
+      param1: 1234,
+    },
+  };
+  const result = getAllTelemetries(store.getState());
+  expect(result).toEqual(expected);
+});
+
+it.only('Should save all events when subscribed to all', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-all-all-all'));
+  let msg = {
+    category: 'event',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          param1: 1234,
+        },
+      },
+    ],
+  };
+  server.send(msg);
+  msg.data[0].csc = 'ATMCS';
+  server.send(msg);
+  const expected = {
+    'ATDome-1': {
+      param1: 1234,
+    },
+    'ATMCS-1': {
+      param1: 1234,
+    },
+  };
+  const result = getAllEvents(store.getState());
+  expect(result).toEqual(expected);
 });

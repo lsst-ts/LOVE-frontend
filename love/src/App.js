@@ -49,11 +49,7 @@ class App extends Component {
           <PrivateRoute
             token={this.props.token}
             path="/health-status-summary"
-            render={() => (
-              <div className="hs-container">
-                <HealthStatusSummary> </HealthStatusSummary>
-              </div>
-            )}
+            render={() => <HealthStatusSummary> </HealthStatusSummary>}
           />
           <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
           <PrivateRoute
