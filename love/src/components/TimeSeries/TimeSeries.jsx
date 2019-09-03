@@ -1,11 +1,12 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import RawTelemetryTable from '../HealthStatusSummary/RawTelemetryTable/RawTelemetryTable';
+import TelemetrySelectionTableContainer from '../HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.container';
 import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
 import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import { hasFakeData } from '../../Config';
 import styles from './TimeSeries.module.css';
+import TimeSeriesPlotContainer from '../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
 
 export default class TimeSeries extends PureComponent {
   constructor() {
@@ -27,27 +28,19 @@ export default class TimeSeries extends PureComponent {
     this.managerInterface = new ManagerInterface();
   }
 
-  onSetSelection = (selectedRows) => {
-    const streams = selectedRows.map((rowKeyValue) => {
-      const splitKey = rowKeyValue.key.split('-');
-      return [splitKey[0], splitKey[1]];
-    });
-    const streamsSet = new Set(streams);
-    streamsSet.forEach((stream) => {
-      this.managerInterface.subscribeToTelemetry(stream[0], stream[1], this.onReceiveMsg);
+  onSetSelection = (selectedRows, data) => {
+    let streams = {};
+    data.forEach((row) => {
+      streams[row.name] = {
+        paramName: row.param_name,
+        streamKey: `telemetry-${row.component}-${row.stream}`,
+      };
     });
     this.setState({
       telemetryName: selectedRows[0].key,
-      subscribedStreams: streamsSet,
+      subscribedStreams: streams,
       selectedRows,
       step: 1,
-    });
-  };
-
-  componentWillUnmount = () => {
-    this.state.subscribedStreams.forEach((stream) => {
-      // eslint-disable-next-line
-      this.managerInterface.unsubscribeToTelemetry(stream[0], stream[1], () => 0);
     });
   };
 
@@ -139,8 +132,36 @@ export default class TimeSeries extends PureComponent {
       'units',
     ];
 
+    const streams = this.state.subscribedStreams;
+    const dataSources = Object.keys(streams);
+    let layers = {};
+    let groupNames = {};
+    let accessors = {};
+    const encoding = {
+      color: {
+        scale: {
+          domain: dataSources,
+        },
+      },
+      x: {
+        axis: {
+          format: '%X',
+          labelOverlap: 'parity',
+        },
+      },
+    };
+    dataSources.forEach((key) => {
+      layers[key] = {
+        mark: {
+          interpolate: 'linear',
+        },
+      };
+      groupNames[key] = streams[key].streamKey;
+      accessors[key] = (stream) => stream[streams[key].paramName].value;
+    });
+
     return this.state.step === 0 ? (
-      <RawTelemetryTable
+      <TelemetrySelectionTableContainer
         telemetries={this.props.telemetries}
         {...this.state}
         columnsToDisplay={columnsToDisplay}
@@ -157,13 +178,15 @@ export default class TimeSeries extends PureComponent {
           setHistoricalData={this.setHistoricalData}
           goBack={this.goBack}
         />
-        <Vega
-          telemetryName={this.state.telemetryName.split('-')[2]}
-          historicalData={this.state.historicalData}
-          lastMessageData={this.state.lastMessageData}
-          dateStart={this.state.dateStart}
-          dateEnd={this.state.dateEnd}
-          dataType={this.state.selectedRows[0].value.dataType}
+        <TimeSeriesPlotContainer
+          dataSources={dataSources}
+          layers={layers}
+          encoding={encoding}
+          groupNames={groupNames}
+          accessors={accessors}
+          dateInterval={this.state.timeWindow * 60 * 1000}
+          width={600}
+          height={600 / 1.77}
         />
       </div>
     );
