@@ -12,6 +12,8 @@ pipeline {
           branch "master"
           branch "develop"
           branch "release/*"
+          branch "bugfix/*"
+          branch "hotfix/*"
         }
       }
       steps {
@@ -38,6 +40,8 @@ pipeline {
           branch "master"
           branch "develop"
           branch "release/*"
+          branch "bugfix/*"
+          branch "hotfix/*"
         }
       }
       steps {
