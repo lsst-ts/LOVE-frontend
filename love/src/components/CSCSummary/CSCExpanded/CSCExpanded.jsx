@@ -130,7 +130,7 @@ export default class CSCExpanded extends PureComponent {
                 {props.group}{' '}
               </span>
               <span>&#62; </span>
-              <span>{props.name} </span>
+              <span>{props.name}-{props.salindex} </span>
             </div>
             <div className={[styles.stateContainer].join(' ')}>
               <div>

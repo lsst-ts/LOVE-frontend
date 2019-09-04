@@ -12,6 +12,8 @@ pipeline {
           branch "master"
           branch "develop"
           branch "release/*"
+          branch "bugfix/*"
+          branch "hotfix/*"
         }
       }
       steps {
@@ -22,7 +24,7 @@ pipeline {
           if (slashPosition > 0) {
             git_tag = git_branch.substring(slashPosition + 1, git_branch.length())
             git_branch = git_branch.substring(0, slashPosition)
-            if (git_branch == "release") {
+            if (git_branch == "release" || git_branch == "hotfix" || git_branch == "bugfix") {
               image_tag = git_tag
             }
           }
@@ -38,6 +40,8 @@ pipeline {
           branch "master"
           branch "develop"
           branch "release/*"
+          branch "bugfix/*"
+          branch "hotfix/*"
         }
       }
       steps {
