@@ -14,8 +14,6 @@ pipeline {
           branch "bugfix/*"
           branch "hotfix/*"
           branch "release/*"
-          branch "bugfix/*"
-          branch "hotfix/*"
         }
       }
       steps {
@@ -44,8 +42,6 @@ pipeline {
           branch "bugfix/*"
           branch "hotfix/*"
           branch "release/*"
-          branch "bugfix/*"
-          branch "hotfix/*"
         }
       }
       steps {
