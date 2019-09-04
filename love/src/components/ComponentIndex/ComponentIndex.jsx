@@ -41,6 +41,9 @@ export default class ComponentIndex extends Component {
               <Link to="/aux-tel-dome">Dome</Link>
             </ul>
             <ul className={styles.linkListSubItem}>
+              <Link to="/aux-tel-mount">Mount</Link>
+            </ul>
+            <ul className={styles.linkListSubItem}>
               <Link to="/latiss">LATISS</Link>
             </ul>
             <ul className={styles.linkListSubItem}>

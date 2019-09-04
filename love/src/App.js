@@ -17,6 +17,7 @@ import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import DomeContainer from './components/AuxTel/Dome/Dome.container';
 import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountView';
+import MountDetailContainer from './components/AuxTel/Mount/MountDetail.container';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 
 class App extends Component {
@@ -99,6 +100,15 @@ class App extends Component {
             render={() => (
               <Panel title="Auxiliary Telescope Dome & Mount" className={'smallPanel'}>
                 <DomeContainer />
+              </Panel>
+            )}
+          />
+          <PrivateRoute
+            token={this.props.token}
+            path="/aux-tel-mount"
+            render={() => (
+              <Panel title="Auxiliary Telescope Mount" className={'smallPanel'}>
+                <MountDetailContainer />
               </Panel>
             )}
           />
