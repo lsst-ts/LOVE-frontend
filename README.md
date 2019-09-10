@@ -1,4 +1,4 @@
-# LOVE-frontend
+# LOVE-frontend instructions
 
 This repository contains the code of the LOVE-frontend application, that provides the user interface of the LOVE project.
 
