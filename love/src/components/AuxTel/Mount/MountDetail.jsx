@@ -2,8 +2,16 @@ import React from 'react';
 import styles from './MountDetail.module.css';
 
 const SvgComponent = (props) => {
-  const m3Angle = 45;
-  const mirrorCoversAngle = 40;
+  const m3Position = 3;
+  const mirrorCoverState = 3;
+  const m3Angle = m3Position === 1 ? -45 : 45;
+  let mirrorCoversAngle;
+  if(mirrorCoverState === 1)
+    mirrorCoversAngle = 0;
+  if(mirrorCoverState === 2)
+    mirrorCoversAngle = 90;
+  if(mirrorCoverState === 3)
+    mirrorCoversAngle = 45;
   return (
     <div className={styles.container}>
       <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve" {...props}>
@@ -44,17 +52,20 @@ const SvgComponent = (props) => {
           d="M100.7 275.4h4.3v-9h32.7v72l1 2h-18l-17-.1 1.3-1.9V301h-4.3zM133.5 390.4v-21.9l3.2-.1-1.3-6H108l-1.3 5.8h3.3v22.2z"
         />
         {/* M3 */}
-        <rect
-          className={styles.highlighted}
-          x={121.5 - 30 / 2}
-          y={290}
-          width={30}
-          height={5}
-          style={{
-            transform: `rotateZ(${m3Angle}deg)`,
-            transformOrigin: `121.5px ${290 + 5 / 2}px`,
-          }}
-        ></rect>
+        {m3Position < 3 ? (
+          <rect
+            className={styles.highlighted}
+            x={121.5 - 30 / 2}
+            y={290}
+            width={30}
+            height={5}
+            style={{
+              transform: `rotateZ(${m3Angle}deg)`,
+              transformOrigin: `121.5px ${290 + 5 / 2}px`,
+            }}
+          ></rect>
+        ) : null}
+        {m3Position === 3 ? <circle cx={121.5} cy={292} r={15} className={styles.highlighted}></circle> : null}
         {/* M2 */}
         <rect className={styles.highlighted} x={121.5 - 30 / 2} y={30} width={30} height={5}></rect>
         {/* Port 1 */}
@@ -76,7 +87,7 @@ const SvgComponent = (props) => {
           height={3}
           style={{
             transform: `rotateZ(${-mirrorCoversAngle}deg)`,
-            transformOrigin: `42px ${263+3}px`,
+            transformOrigin: `42px ${263 + 3}px`,
           }}
         ></rect>
         <rect
@@ -87,7 +98,7 @@ const SvgComponent = (props) => {
           height={3}
           style={{
             transform: `rotateZ(${mirrorCoversAngle}deg)`,
-            transformOrigin: `${141+60}px ${263+3}px`,
+            transformOrigin: `${141 + 60}px ${263 + 3}px`,
           }}
         ></rect>
       </svg>
