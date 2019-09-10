@@ -6,23 +6,24 @@ module.exports = {
     require: [
       path.join(__dirname, 'src/index.css')
     ],
+    assetsDir: 'docsrc/assets',
     pagePerSection: true,
     sections: [
       {
         name: 'Overview',
-        content: 'docs/overview.md'
+        content: 'docsrc/overview.md'
       },
       {
         name: 'How to use it',
-        content: 'docs/howtouseit.md'
+        content: 'docsrc/howtouseit.md'
       },
       {
         name: 'How it works',
-        content: 'docs/howitworks.md'
+        content: 'docsrc/howitworks.md'
       },
       {
         name: 'UI Components',
-        content: 'docs/ui.md',
+        content: 'docsrc/ui.md',
         components: ['src/components/GeneralPurpose/**/*.jsx'],
         exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
         usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
