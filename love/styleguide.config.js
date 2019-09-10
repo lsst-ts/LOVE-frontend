@@ -9,32 +9,21 @@ module.exports = {
     pagePerSection: true,
     sections: [
       {
-        name: 'Introduction',
-        content: 'docs/introduction.md'
+        name: 'Overview',
+        content: 'docs/overview.md'
       },
       {
-        name: 'Documentation',
-        sections: [
-          {
-            name: 'Installation',
-            content: 'docs/installation.md',
-            description: 'The description for the installation section'
-          },
-          {
-            name: 'Configuration',
-            content: 'docs/configuration.md'
-          },
-          {
-            name: 'Live Demo',
-            external: true,
-            href: 'http://example.com'
-          }
-        ]
+        name: 'How to use it',
+        content: 'docs/howtouseit.md'
+      },
+      {
+        name: 'How it works',
+        content: 'docs/howitworks.md'
       },
       {
         name: 'UI Components',
         content: 'docs/ui.md',
-        components: ['src/components/GeneralPurpose/Button/*.jsx'],
+        components: ['src/components/GeneralPurpose/**/*.jsx'],
         exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
         usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
       }
