@@ -84,6 +84,62 @@ export const getDomeState = (state) => {
   };
 };
 
+export const getMountSubscriptions = (index) => {
+  return [
+    //ATHexapod
+    `event-ATHexapod-${index}-inPosition`,
+    `event-ATHexapod-${index}-readyForCommand`,
+    `telemetry-ATHexapod-${index}-positionStatus`,
+    //ATPneumatics
+    `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
+    `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
+    `telemetry-ATPneumatics-${index}-loadCell`,
+    `telemetry-ATPneumatics-${index}-m1AirPressure`,
+    //ATMCS
+    `event-ATMCS-${index}-m3InPosition`,
+    `event-ATMCS-${index}-m3State`,
+    `event-ATMCS-${index}-m3PortSelected`,
+    `event-ATMCS-${index}-nasmyth1InPosition`,
+    `event-ATMCS-${index}-nasmyth2InPosition`,
+  ];
+}
+
+export const getMountState = (state, index) => {
+  const mountSubscriptions = getMountSubscriptions(index);
+  const mountData = getStreamsData(state, mountSubscriptions);
+  return {
+    //ATHexapod
+    hexapodInPosition: mountData[`event-ATHexapod-${index}-inPosition`]
+      ? mountData[`event-ATHexapod-${index}-inPosition`]['inPosition']
+      : 0,
+    hexapodReadyForCommand: mountData[`event-ATHexapod-${index}-readyForCommand`]
+      ? mountData[`event-ATHexapod-${index}-readyForCommand`]['ready']
+      : 0,
+    hexapodReportedPosition: mountData[`telemetry-ATHexapod-${index}-positionStatus`]
+      ? mountData[`telemetry-ATHexapod-${index}-positionStatus`]['reportedPosition']
+      : 0,
+    //ATPneumatics
+    m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`],
+    m1VentsLimitSwitches: mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`],
+    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`],
+    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`],
+    //ATMCS
+    m3InPosition: mountData[`event-ATMCS-${index}-m3InPosition`]
+      ? mountData[`event-ATMCS-${index}-m3InPosition`]['inPosition']
+      : 0,
+    nasmyth1InPosition: mountData[`event-ATMCS-${index}-nasmyth1InPosition`]
+      ? mountData[`event-ATMCS-${index}-nasmyth1InPosition`]['inPosition']
+      : 0,
+    nasmyth2InPosition: mountData[`event-ATMCS-${index}-nasmyth2InPosition`]
+      ? mountData[`event-ATMCS-${index}-nasmyth2InPosition`]['inPosition']
+      : 0,
+    m3State: mountData[`event-ATMCS-${index}-m3State`] ? mountData[`event-ATMCS-${index}-m3State`]['state'] : 0,
+    m3PortSelected: mountData[`event-ATMCS-${index}-m3PortSelected`]
+      ? mountData[`event-ATMCS-${index}-m3PortSelected`]['selected']
+      : 0,
+  };
+};
+
 export const getLATISSState = (state) => {
   const latissSubscriptions = [
     // Spectrograph
