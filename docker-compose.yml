@@ -9,8 +9,8 @@ services:
       dockerfile: Dockerfile-dev
     image: love-frontend-image-mount
     volumes:
-      - ./love:/usr/src/love
-      - /usr/src/love/node_modules
+      - .:/usr/src/love
+      - /usr/src/love/love/node_modules
     command: ""
     ports:
       - "3000:3000"

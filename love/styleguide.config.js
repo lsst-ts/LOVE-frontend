@@ -1,7 +1,7 @@
 
 const path = require('path')
 
-module.exports = { 
+module.exports = {
     serverPort: 3001,
     require: [
       path.join(__dirname, 'src/index.css')
@@ -38,12 +38,13 @@ module.exports = {
         exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
         usageMode: 'expand' // 'hide' | 'collapse' | 'expand'
       }
-    ]
+    ],
+    styleguideDir: '../docs',
     // ignore: ['**/*']
-    // ignore: ['**/__tests__/**', 
-    // '**/*.test.{js,jsx,ts,tsx}', 
-    // '**/*.spec.{js,jsx,ts,tsx}', 
-    // '**/*.d.ts', 
+    // ignore: ['**/__tests__/**',
+    // '**/*.test.{js,jsx,ts,tsx}',
+    // '**/*.spec.{js,jsx,ts,tsx}',
+    // '**/*.d.ts',
     // '**/components/HealthStatusSummary/Button/Button.jsx',
     // '**/components/HealthStatusSummary/Button/UploadButton.jsx',
     // '**/components/HealthStatusSummary/RawTelemetryTable/ColumnHeader/ColumnHeader.jsx',
@@ -67,7 +68,7 @@ module.exports = {
     //     error: '#c00',
     //     baseBackground: '#0c161d', // right panel, color taken from uiguide
     //     codeBackground: '#f5f5f5',
-    //     sidebarBackground: '0c161d', // of the list of components 
+    //     sidebarBackground: '0c161d', // of the list of components
     //     ribbonBackground: '#0c161d',
     //     ribbonText: '#788F9B',
     //     // Based on default Prism theme
