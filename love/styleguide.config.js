@@ -14,8 +14,9 @@ module.exports = {
         content: 'docsrc/overview.md'
       },
       {
-        name: 'How to use it',
-        content: 'docsrc/howtouseit.md'
+        name: 'Instructions',
+        external: true,
+        href: 'https://github.com/lsst-ts/LOVE-frontend/blob/develop/README.md'
       },
       {
         name: 'How it works',
