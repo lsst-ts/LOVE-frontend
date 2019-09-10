@@ -3,13 +3,15 @@ import styles from './MountDetail.module.css';
 
 const SvgComponent = (props) => {
   const m3Angle = 45;
+  const mirrorCoversAngle = 40;
   return (
     <div className={styles.container}>
       <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve" {...props}>
         {/* baffles */}
+        <path className={styles.st1} d="M141.7 80.4h-42l1.6-42.9h38.8z M104.5 11.4h33.9v26.1h-33.9z" />
         <path
           className={styles.st1}
-          d="M141.7 80.4h-42l1.6-42.9h38.8zM103.8 11.4h33.9v26.1h-33.9zM138.7 269.4h-34l2.4-59.9 1.7-5.3-.2-27.2 1.1-1.3.3-12.5 1.8-.6.2-6.2h19.4l.3 6.1 1.8 1 .2 12.1 1.2 1.6-.2 26.8 1.7 5.2z"
+          d="M138.7 269.4h-34l2.4 -59.9 1.7 -5.3 -.2 -27.2 1.1 -1.3 .3 -12.5 1.8-.6.2-6.2h19.4l.3 6.1 1.8 1 .2 12.1 1.2 1.6-.2 26.8 1.7 5.2z"
         />
         <path className={styles.st1} d="M37.7 268.4h168v34h-168zM43.7 390.4h156v12h-156z" />
         {/* frame back */}
@@ -26,7 +28,7 @@ const SvgComponent = (props) => {
         {/* top rod */}
         <path className={styles.st1} strokeWidth={3} strokeMiterlimit={10} d="M59.5 25.9h126.4" />
         {/* M1 */}
-        <svg viewBox="0 0 100 10" x={122 - 140 / 2} y={307} width={140} height={15}>
+        <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={307} width={140} height={15}>
           <path
             className={styles.highlighted}
             d="M 0 0 
@@ -44,13 +46,48 @@ const SvgComponent = (props) => {
         {/* M3 */}
         <rect
           className={styles.highlighted}
-          x={122 - 30 / 2}
+          x={121.5 - 30 / 2}
           y={290}
           width={30}
           height={5}
           style={{
             transform: `rotateZ(${m3Angle}deg)`,
-            transformOrigin: `122px ${290+5/2}px`,
+            transformOrigin: `121.5px ${290 + 5 / 2}px`,
+          }}
+        ></rect>
+        {/* M2 */}
+        <rect className={styles.highlighted} x={121.5 - 30 / 2} y={30} width={30} height={5}></rect>
+        {/* Port 1 */}
+        <g>
+          <rect className={styles.highlighted} x={32 - 30 / 2} y={281} width={20} height={16}></rect>
+          <rect className={styles.highlighted} x={32 - 5 - 30 / 2} y={279} width={5} height={20}></rect>
+        </g>
+        {/* Port 2 */}
+        <g>
+          <rect className={styles.highlighted} x={221 - 30 / 2} y={281} width={20} height={16}></rect>
+          <rect className={styles.highlighted} x={221 + 20 - 30 / 2} y={279} width={5} height={20}></rect>
+        </g>
+        {/* M1 cover */}
+        <rect
+          className={styles.highlighted}
+          x={42}
+          y={263}
+          width={60}
+          height={3}
+          style={{
+            transform: `rotateZ(${-mirrorCoversAngle}deg)`,
+            transformOrigin: `42px ${263+3}px`,
+          }}
+        ></rect>
+        <rect
+          className={styles.highlighted}
+          x={141}
+          y={263}
+          width={60}
+          height={3}
+          style={{
+            transform: `rotateZ(${mirrorCoversAngle}deg)`,
+            transformOrigin: `${141+60}px ${263+3}px`,
           }}
         ></rect>
       </svg>
