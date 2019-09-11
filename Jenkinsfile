@@ -11,9 +11,9 @@ pipeline {
         anyOf {
           branch "master"
           branch "develop"
-          branch "release/*"
           branch "bugfix/*"
           branch "hotfix/*"
+          branch "release/*"
         }
       }
       steps {
@@ -39,9 +39,9 @@ pipeline {
         anyOf {
           branch "master"
           branch "develop"
-          branch "release/*"
           branch "bugfix/*"
           branch "hotfix/*"
+          branch "release/*"
         }
       }
       steps {

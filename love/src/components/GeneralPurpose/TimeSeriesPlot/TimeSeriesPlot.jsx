@@ -33,6 +33,8 @@ export default class TimeSeriesPlot extends Component {
     historicalData: PropTypes.array,
     telemetryName: PropTypes.string,
     dataType: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
   };
 
   static defaultProps = {
@@ -61,7 +63,8 @@ export default class TimeSeriesPlot extends Component {
     dataLabel: '',
     dateInterval: 60000,
     encoding: {},
-
+    width: 300,
+    height: 100,
     dateEnd: Infinity,
     dateStart: -Infinity,
   };
@@ -74,7 +77,7 @@ export default class TimeSeriesPlot extends Component {
       const data = this.props.streamStates[dataSource].data;
       const timestamp = this.props.streamStates[dataSource].timestamp;
       const dataLabel = dataSource;
-
+      
       let shouldUpdatePlot = false;
       const value = data ? accessor(data) : undefined;
 
@@ -134,8 +137,8 @@ export default class TimeSeriesPlot extends Component {
             orient: 'right',
           },
           view: {
-            width: 300,
-            height: 100,
+            width: this.props.width,
+            height: this.props.height,
             fill: this.getCSSColorByVariableName('--second-secondary-background-color'),
             stroke: 'none',
             strokeWidth: 0,
@@ -167,13 +170,18 @@ export default class TimeSeriesPlot extends Component {
             field: 'timestamp',
             type: 'temporal',
             title: 'date',
+            axis: {
+              format: '%X',
+              labelOverlap: 'parity',
+            },
+            ...encoding.x,
           },
           y: {
             field: 'value',
             type: dataType,
             title: this.props.dataLabel,
+            ...encoding.y,
           },
-          
           color: {
             field: 'source',
             type: 'nominal',

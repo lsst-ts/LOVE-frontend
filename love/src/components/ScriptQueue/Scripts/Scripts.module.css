@@ -1,6 +1,6 @@
 .scriptContainer {
   display: grid;
-  grid-template-columns: 1fr min-content;
+  grid-template-columns: minmax(1px, 1fr) min-content;
   position: relative;
   background: var(--second-tertiary-background-color);
   border-radius: 5px;

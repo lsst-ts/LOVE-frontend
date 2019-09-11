@@ -1,6 +1,6 @@
 FROM node:10.16-alpine as builder
 
-WORKDIR /usr/src/love
+WORKDIR /usr/src/love/love
 
 # Install and cache app dependencies
 COPY love/package.json .

@@ -14,6 +14,8 @@ import {
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
   getGroupSortedErrorCodeData,
+  getAllTelemetries,
+  getAllEvents,
 } from '../selectors';
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
@@ -77,6 +79,7 @@ it('Should send a command to the server and save it on the state properly', asyn
     params: {},
     component: 'ATDome',
     cmd_id: '10-cmd_closeShutter',
+    salindex: 2
   };
   const realDate = Date;
   global.Date.now = () => 10;
@@ -89,7 +92,7 @@ it('Should send a command to the server and save it on the state properly', asyn
       {
         csc: 'ATDome',
         data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {} } },
-        salindex: 1,
+        salindex: 2,
       },
     ],
   });
@@ -597,7 +600,7 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
   });
 });
 
-it.only('Should properly interpret an ack message', async () => {
+it('Should properly interpret an ack message', async () => {
   const commandObject = {
     cmd: 'cmd_closeShutter',
     params: {},
@@ -627,4 +630,64 @@ it.only('Should properly interpret an ack message', async () => {
     ...commandObject,
   });
   global.Date = realDate;
+});
+
+it.only('Should save all telemetries when subscribed to all', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
+  let msg = {
+    category: 'telemetry',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          param1: 1234,
+        },
+      },
+    ],
+  };
+  server.send(msg);
+  msg.data[0].csc = 'ATMCS';
+  server.send(msg);
+  const expected = {
+    'ATDome-1': {
+      param1: 1234,
+    },
+    'ATMCS-1': {
+      param1: 1234,
+    },
+  };
+  const result = getAllTelemetries(store.getState());
+  expect(result).toEqual(expected);
+});
+
+it.only('Should save all events when subscribed to all', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-all-all-all'));
+  let msg = {
+    category: 'event',
+    data: [
+      {
+        csc: 'ATDome',
+        salindex: 1,
+        data: {
+          param1: 1234,
+        },
+      },
+    ],
+  };
+  server.send(msg);
+  msg.data[0].csc = 'ATMCS';
+  server.send(msg);
+  const expected = {
+    'ATDome-1': {
+      param1: 1234,
+    },
+    'ATMCS-1': {
+      param1: 1234,
+    },
+  };
+  const result = getAllEvents(store.getState());
+  expect(result).toEqual(expected);
 });
