@@ -22,6 +22,7 @@ const ScriptQueueContainer = ({
   commandExecutePermission,
   lastSALCommand,
   username,
+  salindex,
 }) => {
   return (
     <ScriptQueue
@@ -38,14 +39,15 @@ const ScriptQueueContainer = ({
       commandExecutePermission={commandExecutePermission}
       lastSALCommand={lastSALCommand}
       username={username}
+      salindex={salindex}
     />
   );
 };
 
-const mapStateToProps = (state) => {
-  const queueState = getScriptQueueState(state, 1);
-  const scriptHeartbeats = getScriptHeartbeats(state, 1);
-  const summaryStateValue = getSummaryStateValue(state, 'event-ScriptQueue-1-summaryState');
+const mapStateToProps = (state, ownProps) => {
+  const queueState = getScriptQueueState(state, ownProps.salindex);
+  const scriptHeartbeats = getScriptHeartbeats(state, ownProps.salindex);
+  const summaryStateValue = getSummaryStateValue(state, `event-ScriptQueue-${ownProps.salindex}-summaryState`);
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
@@ -59,24 +61,30 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
-      dispatch(requestGroupSubscription('event-ScriptQueueState-1-stream'));
-      dispatch(requestGroupSubscription('event-ScriptQueue-1-summaryState'));
-      dispatch(requestGroupSubscription('event-ScriptHeartbeats-1-stream'));
+      dispatch(requestGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
+      dispatch(requestGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
+      dispatch(requestGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-ScriptQueueState-1-stream'));
-      dispatch(requestGroupSubscriptionRemoval('event-ScriptQueue-1-summaryState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ScriptHeartbeats-1-stream'));
+      dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueueState-${ownProps.salindex}-stream`));
+      dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
+      dispatch(requestGroupSubscriptionRemoval(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
     },
     requestSALCommand: (cmd) => {
-      return dispatch(requestSALCommand(cmd));
+      return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }));
     },
   };
 };
-export default connect(
+const connectedContainer = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(ScriptQueueContainer);
+
+connectedContainer.defaultProps = {
+  salindex: 1,
+};
+
+export default connectedContainer;

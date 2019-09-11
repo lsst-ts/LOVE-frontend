@@ -1,11 +1,22 @@
+.container {
+  display: grid;
+  grid-template-rows: min-content minmax(10px, 1fr);
+  max-height: 100vh;
+}
+
 .topButtons {
-    display: flex;
-    justify-content: flex-end;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 10px;
+}
+
+.telemetryTableWrapper {
+    padding-bottom: 10px;
 }
 
 .buttonWrapper {
-    padding: 0em 0em;
-    align-self: baseline;
-    padding-bottom: 0.3em;
-    padding-left: 0.5em;
+  padding: 0em 0em;
+  align-self: baseline;
+  padding-bottom: 0.3em;
+  padding-left: 0.5em;
 }

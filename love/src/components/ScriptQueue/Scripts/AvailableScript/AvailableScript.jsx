@@ -18,6 +18,8 @@ export default class AvailableScript extends PureComponent {
     state: PropTypes.string,
     /** Function called when launching the script configuration panel */
     launchScriptConfig: PropTypes.func,
+    /** True if the script is displayed in compact view */
+    isCompact: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -27,6 +29,7 @@ export default class AvailableScript extends PureComponent {
     estimatedTime: 0,
     state: 'Unknown',
     onLaunch: () => 0,
+    isCompact: false,
   };
 
   constructor(props) {
@@ -45,7 +48,7 @@ export default class AvailableScript extends PureComponent {
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
-    const fileName =
+    const fileName = 
       path.lastIndexOf('.') > -1
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
         : path.substring(path.lastIndexOf('/') + 1);
@@ -57,8 +60,17 @@ export default class AvailableScript extends PureComponent {
             <div className={scriptStyles.externalContainer}>
               <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
             </div>
-            <div className={scriptStyles.pathTextContainer}>
-              <span className={scriptStyles.pathText}>{fileFolder}</span>
+            <div className={scriptStyles.pathTextContainer} title={path}>
+              {(() => {
+                if (!this.props.isCompact) {
+                  return <span className={scriptStyles.pathText}>{fileFolder}</span>;
+                }
+                if (fileFolder !== '') {
+                  return <span className={scriptStyles.pathText}>.../</span>;
+                }
+                return null;
+              })()}
+              {/* <span className={scriptStyles.pathText}>{fileFolder}</span> */}
               <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
               <span className={scriptStyles.pathText}>{fileExtension}</span>
             </div>

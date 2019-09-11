@@ -7,7 +7,7 @@ export const CSCSummaryHierarchy = {
     'ATTCS': [
       {name: 'ATMCS', salindex: 0 },
       {name: 'ATPtg', salindex: 0},
-      {name: 'ATDome', salindex: 0 },
+      {name: 'ATDome', salindex: 1 },
       {name: 'ATDomeTrajectory', salindex: 0 },
       {name: 'ATAOS', salindex: 0 },
       {name: 'ATPneumatics', salindex: 0 },
