@@ -2,26 +2,29 @@
     --scrollbar-width: 10px;
 }
 
-.rawTelemetryTableWrapper {
-    height: calc(100% - 40px);
+.telemetrySelectionTableWrapper {
+    display: grid;
+    height: 100%;
+    grid-template-rows: minmax(0, 1fr) min-content;
     background: var(--base-background-color);
     min-width: 1350px;
 }
 
-.rawTelemetryTable {
+.telemetrySelectionTable {
+    display: grid;
+    grid-template-rows: min-content minmax(0, 1fr);
     width: 100%;
     table-layout: fixed;
     border-collapse: collapse;
-    height: calc(100% - 60px);
 }
 
-.rawTelemetryTable thead {
+.telemetrySelectionTable thead {
     display: table;
     table-layout:fixed;
     width: calc(100% - var(--scrollbar-width));
     word-wrap:break-word;
 }
-.rawTelemetryTable tbody {
+.telemetrySelectionTable tbody {
     /* background: var(--secondary-background-color); */
     display: block;
     height: inherit; /* necessary for scroll */
@@ -29,54 +32,54 @@
     overflow-y: scroll;
     overflow-x: hidden;
 }
-.rawTelemetryTable tbody tr {
+.telemetrySelectionTable tbody tr {
     display: table;
     table-layout:fixed;
     width: 100%;
 }
-.rawTelemetryTable th, td {
+.telemetrySelectionTable th, td {
     width: auto;
 }
 
-.rawTelemetryTable th {
-    border: 2px solid var(--base-background-color);
+.telemetrySelectionTable th {
+    border: 1px solid var(--base-background-color);
     background: var(--tertiary-background-color);
     padding: 0em 0.5em;
     padding-left: 1em;
     text-align: left;
 }
 
-.rawTelemetryTable .narrowCol {
+.telemetrySelectionTable .narrowCol {
     width: 7%;
 }
 
-.rawTelemetryTable .mediumCol {
+.telemetrySelectionTable .mediumCol {
     width: 9%;
 }
 
-.rawTelemetryTable .wideCol {
+.telemetrySelectionTable .wideCol {
     width: 12%;
 }
 
-.rawTelemetryTable tr:hover.dataRow{
+.telemetrySelectionTable tr:hover.dataRow{
     background: var(--tertiary-background-color);
 }
 
-.rawTelemetryTable tr:hover td{
+.telemetrySelectionTable tr:hover td{
     border-bottom: 1px solid var(--secondary-background-color);
     border-top: 1px solid var(--secondary-background-color);
 }
 
-.rawTelemetryTable tr:hover.expandedRow td{
+.telemetrySelectionTable tr:hover.expandedRow td{
     border-bottom: 1px solid var(--secondary-background-color);
     border-top: 1px solid transparent;
 }
 
-.rawTelemetryTable tr:nth-child(even) {
+.telemetrySelectionTable tr:nth-child(even) {
     background: var(--secondary-background-dimmed-color);
 }
 
-.rawTelemetryTable tr:nth-child(odd) {
+.telemetrySelectionTable tr:nth-child(odd) {
     background: var(--secondary-background-color);
 }
 
@@ -84,15 +87,15 @@
     /* cursor: pointer; */
 }
 
-.rawTelemetryTable th:first-of-type {
+.telemetrySelectionTable th:first-of-type {
     border-top-left-radius: 7px;
 }
 
-.rawTelemetryTable th:last-of-type {
+.telemetrySelectionTable th:last-of-type {
     border-top-right-radius: 7px;
 }
 
-.rawTelemetryTable td {
+.telemetrySelectionTable td {
     color: var(--secondary-font-color);
     padding: 0.4em 1em;
     word-wrap:break-word;
@@ -103,15 +106,15 @@
     border-right: 1px solid var(--base-background-color);
 }
 
-.rawTelemetryTable td.string {
+.telemetrySelectionTable td.string {
     text-align: left;
 }
 
-.rawTelemetryTable td.number {
+.telemetrySelectionTable td.number {
     text-align: right;
 }
 
-.rawTelemetryTable .valueCell {
+.telemetrySelectionTable .valueCell {
     padding: 0.4em 0.5em;
     word-wrap:break-word;
     word-wrap: normal;
@@ -119,19 +122,19 @@
     overflow: hidden;
 }
 
-.rawTelemetryTable td input {
+.telemetrySelectionTable td input {
     min-width: 10px;
 }
 
-.rawTelemetryTable tr:last-of-type td:first-of-type {
+.telemetrySelectionTable tr:last-of-type td:first-of-type {
     border-bottom-left-radius: 7px;
 }
 
-.rawTelemetryTable tr:last-of-type td:last-of-type {
+.telemetrySelectionTable tr:last-of-type td:last-of-type {
     border-bottom-right-radius: 7px;
 }
 
-.rawTelemetryTable .healthStatusWrapper {
+.telemetrySelectionTable .healthStatusWrapper {
     display: flex;
     position: relative;
     width: 100%;
@@ -141,12 +144,12 @@
     padding: 0;
 }
 
-.rawTelemetryTable .healthStatusCell.selectedHealthStatus {
+.telemetrySelectionTable .healthStatusCell.selectedHealthStatus {
     background: var(--tertiary-background-color);
-    border-bottom: 2px solid var(--tertiary-background-color);
+    border-bottom: 1px solid var(--tertiary-background-color);
 }
 
-.rawTelemetryTable .gearIconWrapper {
+.telemetrySelectionTable .gearIconWrapper {
     position: absolute;
     right: 0;
     width: 1.5em;
@@ -155,47 +158,47 @@
     padding-right: 0.3em;
 }
 
-.rawTelemetryTable .statusTextWrapper {
+.telemetrySelectionTable .statusTextWrapper {
     flex-grow: 1;
     padding: 0.0em 1.5em;
     margin-right: 2em;
 }
 
-.rawTelemetryTable .snippetsContainer {
+.telemetrySelectionTable .snippetsContainer {
     /* display: flex; */
 }
 
-.rawTelemetryTable .snippetsList {
+.telemetrySelectionTable .snippetsList {
     display: flex;
     flex-wrap: wrap;
     list-style: none;
 }
 
 
-.rawTelemetryTable .snippetButtonWrapper {
+.telemetrySelectionTable .snippetButtonWrapper {
     padding: 0.3em 1em;
     padding-left:0;
     flex-grow: 1;
 }
 
-.rawTelemetryTable .setButton {
+.telemetrySelectionTable .setButton {
     padding: 0em 2em;
     margin: auto;
     display:flex;
 }
 
-.rawTelemetryTable .snippetButton {
+.telemetrySelectionTable .snippetButton {
     width: 100%;
     height: auto;
     padding: 0;
 }
 
-.rawTelemetryTable .snippetButton span {
+.telemetrySelectionTable .snippetButton span {
     padding: 0.25em 0.5em;
     height: auto;
 }
 
-.rawTelemetryTable .valuesList {
+.telemetrySelectionTable .valuesList {
     counter-reset: values-list-counter -1;
     list-style: none;
     -webkit-padding-start: 0;
@@ -203,7 +206,7 @@
 }
 
 
-.rawTelemetryTable .valuesListItem::before {
+.telemetrySelectionTable .valuesListItem::before {
     content: counter(values-list-counter) ". ";
     color: var(--secondary-font-dimmed-color);
     white-space: pre-wrap;
@@ -214,52 +217,56 @@
 }
 
 
-.rawTelemetryTable .valuesListItem {
+.telemetrySelectionTable .valuesListItem {
     counter-increment: values-list-counter;
     padding: 0 0.4em;
 }
 
-.rawTelemetryTable .valuesListItemValue {
+.telemetrySelectionTable .valuesListItemValue {
     position: relative;
     padding: 0 0.4em;
     left: 3em;
 }
-/* .rawTelemetryTable .addedColumn {
+/* .telemetrySelectionTable .addedColumn {
     width: 5%;
 } */
 
-.rawTelemetryTable .firstColumn {
+.telemetrySelectionTable .firstColumn {
     width: 1em;
     background: var(--base-background-color);
     padding: 0em 0.5em;
     text-align: center;
-    border: 2px solid var(--base-background-color)
+    border: 1px solid var(--base-background-color)
 }
 
-.rawTelemetryTable .firstColumn input {
+.telemetrySelectionTable .firstColumn input {
     margin: 0;
 }
 
-.rawTelemetryTable .expandedRow {
+.telemetrySelectionTable .expandedRow {
     text-align: left;
     background: var(--tertiary-background-color);
 }
 
-.rawTelemetryTable tr:nth-child(even).expandedRow {
+.telemetrySelectionTable tr:nth-child(even).expandedRow {
     background: var(--tertiary-background-color);
 }
 
-.rawTelemetryTable .expandedRow td {
+.telemetrySelectionTable tr:nth-child(odd).expandedRow {
+    background: var(--tertiary-background-color);
+}
+
+.telemetrySelectionTable .expandedRow td {
     vertical-align: top;
     border: 1px solid transparent;
     padding: 1em;
 }
 
-.rawTelemetryTable .expandedRow p {
+.telemetrySelectionTable .expandedRow p {
     line-height: 0;
 }
 
-.rawTelemetryTable .expandedRow textarea {
+.telemetrySelectionTable .expandedRow textarea {
     background: var(--secondary-background-dimmed-color);
     color: var(--base-font-color);
     border: none;
@@ -272,38 +279,38 @@
     padding: 0.6em 0.6em;
 }
 
-.rawTelemetryTable .healthStatusCell {
+.telemetrySelectionTable .healthStatusCell {
     padding: 0.4em 0.5em;
     border-bottom: 1px solid transparent;
 }
 
-.rawTelemetryTable .healthStatusCell:hover {
+.telemetrySelectionTable .healthStatusCell:hover {
     background: var(--tertiary-background-color);
 }
 
-.rawTelemetryTable .healthStatusCell:hover .gearIconWrapper {
+.telemetrySelectionTable .healthStatusCell:hover .gearIconWrapper {
     visibility: visible;
 }
 
 /* width */
-.rawTelemetryTable ::-webkit-scrollbar {
+.telemetrySelectionTable ::-webkit-scrollbar {
     width: var(--scrollbar-width);
 }
 
 /* Track */
-.rawTelemetryTable ::-webkit-scrollbar-track {
+.telemetrySelectionTable ::-webkit-scrollbar-track {
     background: var(--tertiary-background-color); 
 }
  
 /* Handle */
-.rawTelemetryTable ::-webkit-scrollbar-thumb {
+.telemetrySelectionTable ::-webkit-scrollbar-thumb {
     /* background: var(--quinary-background-color); */
     background: var(--tertiary-font-color);
     border-radius: 1.1em;
 }
 
 /* Handle on hover */
-.rawTelemetryTable ::-webkit-scrollbar-thumb:hover {
+.telemetrySelectionTable ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-font-color);
 }
 
