@@ -2,6 +2,7 @@
 const path = require('path')
 
 module.exports = {
+    title: "LOVE-frontend",
     serverPort: 3001,
     require: [
       path.join(__dirname, 'src/index.css')
