@@ -1,0 +1,1 @@
+This sections documents a few components of the LOVE-frontend. More components will be added soon.
