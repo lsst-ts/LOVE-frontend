@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/static/css/main.25874eb3.chunk.css",
+    "main.js": "/build/main.7dcd4199.js",
+    "runtime~main.js": "/build/bundle.bcec71db.js",
+    "build/2.346127f9.js": "/build/2.346127f9.js",
+    "Frontend_overview.svg": "/Frontend_overview.svg",
+    "details.svg": "/details.svg",
+    "index.html": "/index.html",
+    "precache-manifest.a675b6860da4f1f8b7b7b76243c9e9ea.js": "/precache-manifest.a675b6860da4f1f8b7b7b76243c9e9ea.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/main.25874eb3.chunk.css.map": "/static/css/main.25874eb3.chunk.css.map",
+    "static/media/index.css": "/static/media/AvenirLTStd-Light.0b78ec9d.otf"
+  }
+}
