@@ -2,7 +2,7 @@
 
 This repository contains the code of the LOVE-frontend application, that provides the user interface of the LOVE project.
 
-See the documentation here: https://lsst-ts.github.io/LOVE-frontend/html/index.html
+See the documentation here: https://lsst-ts.github.io/LOVE-frontend
 
 ## 1. Use as part of the LOVE system
 In order to use the LOVE-frontend as part of the LOVE system we recommend to use the docker-compose and configuration files provided in the [LOVE-integration-tools](https://github.com/lsst-ts/LOVE-integration-tools) repo. Please follow the instructions there.
