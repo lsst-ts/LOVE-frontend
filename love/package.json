@@ -1,5 +1,5 @@
 {
-  "name": "love2",
+  "name": "love",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -29,7 +29,9 @@
     "start": "npx react-scripts start",
     "build": "npx react-scripts build",
     "test": "npx react-scripts test",
-    "eject": "npx react-scripts eject"
+    "eject": "npx react-scripts eject",
+    "guide:start": "npx styleguidist server",
+    "guide:build": "npx styleguidist build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -56,6 +58,7 @@
     "jest-websocket-mock": "^1.3.0",
     "mock-socket": "^8.0.5",
     "react-dev-utils": "^9.0.1",
+    "react-styleguidist": "9.0.4",
     "react-testing-library": "^7.0.0"
   }
 }
