@@ -1,2 +1,1 @@
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quam vulputate dignissim suspendisse in est. Vitae congue mauris rhoncus aenean vel elit scelerisque mauris pellentesque. Semper viverra nam libero justo laoreet sit amet cursus. Enim ut tellus elementum sagittis vitae et leo duis ut. Pellentesque habitant morbi tristique senectus. Morbi tristique senectus et netus et. Quis commodo odio aenean sed adipiscing diam donec adipiscing tristique. Elit ut aliquam purus sit. Sed egestas egestas fringilla phasellus faucibus scelerisque eleifend donec pretium.
-
+This sections documents a few components of the LOVE-frontend. More components will be added soon.
