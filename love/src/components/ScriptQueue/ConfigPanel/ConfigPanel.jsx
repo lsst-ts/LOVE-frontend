@@ -24,9 +24,13 @@ export default class ConfigPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: `wait_time: 3600
-fail_run: false
-fail_cleanup: false`,
+      value: 
+`# Insert your schema here:
+# e.g.: 
+# wait_time: 3600
+# fail_run: false
+# fail_cleanup: false
+`,
       width: '500px',
       height: '500px',
       loading: false,

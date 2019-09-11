@@ -1,4 +1,4 @@
-
+.DS_Store
 webpack-stats.dev.json
 webpack-stats.prod.json
 .vscode/launch.json

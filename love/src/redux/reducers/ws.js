@@ -16,6 +16,7 @@ const initialState = {
     cmd: '',
     params: {},
     component: '',
+    salindex: 0
   },
 };
 /**
@@ -57,6 +58,16 @@ export default function(state = initialState, action) {
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
         const [category, csc, salindex, stream] = subscription.groupName.split('-');
+        if (csc === 'all' && salindex === 'all' && stream === 'all') {
+          const newData = { ...subscription.data };
+          newData[`${action.csc}-${action.salindex}`] = { ...newData[action.csc], ...action.data };
+          return {
+            ...subscription,
+            data: newData,
+            timestamp: new Date(),
+          };
+        }
+
         if (
           category !== action.category ||
           csc !== action.csc ||
@@ -91,7 +102,9 @@ export default function(state = initialState, action) {
           cmd: action.cmd,
           params: action.params,
           component: action.component,
+          salindex: action.salindex,
           cmd_id: action.cmd_id,
+
         },
       };
     }

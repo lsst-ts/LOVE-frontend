@@ -80,9 +80,15 @@ export const openWebsocketConnection = () => {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
-              } else {
-                dispatch(receiveCameraStateData(stream));
-              }
+              } else if(stream.startIntegration || 
+                stream.raftsDetailedState || 
+                stream.shutterDetailedState || 
+                stream.imageReadinessDetailedState || 
+                stream.calibrationDetailedState){
+                  dispatch(receiveCameraStateData(stream));
+
+              } 
+              
             }
             if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
@@ -196,7 +202,7 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
         option: 'unsubscribe',
         category,
         csc,
-        salindex: parseInt(salindex),
+        salindex: salindex,
         stream,
       });
     });
@@ -242,7 +248,7 @@ export const requestSALCommand = (data) => {
 
       const commandObject = {
         csc: data.component,
-        salindex: 1,
+        salindex: data.salindex,
         data: {
           stream: {
             cmd: data.cmd,
@@ -261,6 +267,7 @@ export const requestSALCommand = (data) => {
         cmd: data.cmd,
         params: data.params,
         component: data.component,
+        salindex: data.salindex,
         cmd_id: commandID,
       };
 
