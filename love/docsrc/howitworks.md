@@ -1,4 +1,4 @@
-![frontend details](/details.svg 'Logo Title Text 1')
+![frontend details](./details.svg 'Logo Title Text 1')
 
 ## Redux: Global state management
 [Redux](https://redux.js.org/) is a state container library that facilitates building more predictable apps by centralizing both the state and its changes. In LOVE, a Redux `store` is used to save all the data that comes from the LOVE-manager, enabling having a unique websockets connection per client, avoiding unnecessary data redundancy, while also giving a robust characterization to the authentication process. 
