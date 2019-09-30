@@ -73,7 +73,7 @@ export default class DomeSummaryTable extends Component {
     const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
 
     return (
-      <SummaryPanel>
+      <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
         <Value>{this.props.trackID}</Value>
         {/* Dome */}
