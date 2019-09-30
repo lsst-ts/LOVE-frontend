@@ -91,6 +91,7 @@ export const getMountSubscriptions = (index) => {
     `event-ATHexapod-${index}-readyForCommand`,
     `telemetry-ATHexapod-${index}-positionStatus`,
     //ATPneumatics
+    `event-ATPneumatics-${index}-m1CoverState`,
     `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
     `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
     `telemetry-ATPneumatics-${index}-loadCell`,
@@ -102,7 +103,7 @@ export const getMountSubscriptions = (index) => {
     `event-ATMCS-${index}-nasmyth1InPosition`,
     `event-ATMCS-${index}-nasmyth2InPosition`,
   ];
-}
+};
 
 export const getMountState = (state, index) => {
   const mountSubscriptions = getMountSubscriptions(index);
@@ -119,6 +120,9 @@ export const getMountState = (state, index) => {
       ? mountData[`telemetry-ATHexapod-${index}-positionStatus`]['reportedPosition']
       : 0,
     //ATPneumatics
+    m1CoverState: mountData[`event-ATPneumatics-${index}-m1CoverState`]
+      ? mountData[`event-ATPneumatics-${index}-m1CoverState`]
+      : 0,
     m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`],
     m1VentsLimitSwitches: mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`],
     loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`],
