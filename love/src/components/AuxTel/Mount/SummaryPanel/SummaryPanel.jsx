@@ -49,10 +49,11 @@ export default class SummaryTable extends Component {
     //ATMCS
     const m3State = m3RotatorStateMap[this.props.m3State];
     const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected];
-    const m3InPosition = m3InPositionStateMap[this.props.m3PortSelected];
+    const m3InPosition = m3InPositionStateMap[this.props.m3InPosition];
     const nasmyth1InPosition = nasmyth1InPositionStateMap[this.props.nasmyth1InPosition];
-    //ATPNEUMATICS
+    //ATPneumatics
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState];
+    //Hexapod
     const hexapodInPosition = hexpodInPositionStateMap[this.props.hexapodInPosition];
     console.log(this.props);
     return (

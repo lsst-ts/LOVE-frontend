@@ -4,13 +4,13 @@ import LightPath from './LightPath';
 import { getMountState, getMountSubscriptions } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 
-const LightPathContainer = () => {
-  return <LightPath />;
+const LightPathContainer = ({ ...props }) => {
+  return <LightPath {...props} />;
 };
 
 const mapStateToProps = (state) => {
-  const domeState = getMountState(state);
-  return domeState;
+  const mountState = getMountState(state);
+  return mountState;
 };
 
 const mapDispatchToProps = (dispatch) => {

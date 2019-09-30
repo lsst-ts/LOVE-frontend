@@ -1,20 +1,46 @@
 import React from 'react';
+import {
+  m3RotatorStateMap,
+  m3PortSelectedStateMap,
+  m3InPositionStateMap,
+  m1CoverStateStateMap,
+  nasmyth1InPositionStateMap,
+  hexpodInPositionStateMap,
+  stateToStyleMount,
+} from '../../../Config';
+
 import styles from './LightPath.module.css';
 
-const SvgComponent = (props) => {
-  const m3Position = 3;
-  const mirrorCoverState = 3;
-  const m3Angle = m3Position === 1 ? -45 : 45;
+const LightPath = (props) => {
+  //ATMCS
+  const m3State = props.m3State;
+  const m3PortSelected = props.m3PortSelected;
+  const m3InPosition = props.m3InPosition;
+  const nasmyth1InPosition = props.nasmyth1InPosition;
+  const nasmyth2InPosition = props.nasmyth2InPosition;
+  //ATPneumatics
+  const m1CoverState = props.m1CoverState;
+  //Hexapod
+  const hexapodInPosition = props.hexapodInPosition;
+
+  const m3Class = m3InPosition === 1 ? styles.ok : styles.warning;
+  const hexapodClass = hexapodInPosition === 1 ? styles.ok : styles.warning;
+  let m1CoverClass = styles.ok;
+  if (m1CoverState === 4) m1CoverClass = styles.warning;
+  if (m1CoverState === 3) m1CoverClass = styles.moving;
+  let nasmyth1Class = nasmyth1InPosition ? styles.ok : styles.warning;
+  if (m3PortSelected != 1) nasmyth1Class = styles.disabled;
+  let nasmyth2Class = nasmyth2InPosition ? styles.ok : styles.warning;
+  if (m3PortSelected != 2) nasmyth2Class = styles.disabled;
+
   let mirrorCoversAngle;
-  if(mirrorCoverState === 1)
-    mirrorCoversAngle = 0;
-  if(mirrorCoverState === 2)
-    mirrorCoversAngle = 90;
-  if(mirrorCoverState === 3)
-    mirrorCoversAngle = 45;
+  const m3Angle = m3State === 1 ? -45 : 45;
+  if (m1CoverState === 1) mirrorCoversAngle = 0;
+  if (m1CoverState === 2) mirrorCoversAngle = 90;
+  if (m1CoverState === 3) mirrorCoversAngle = 45;
   return (
     <div className={styles.container}>
-      <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve" {...props}>
+      <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve">
         {/* baffles */}
         <path className={styles.st1} d="M141.7 80.4h-42l1.6-42.9h38.8z M104.5 11.4h33.9v26.1h-33.9z" />
         <path
@@ -52,9 +78,9 @@ const SvgComponent = (props) => {
           d="M100.7 275.4h4.3v-9h32.7v72l1 2h-18l-17-.1 1.3-1.9V301h-4.3zM133.5 390.4v-21.9l3.2-.1-1.3-6H108l-1.3 5.8h3.3v22.2z"
         />
         {/* M3 */}
-        {m3Position < 3 ? (
+        {m3State < 3 ? (
           <rect
-            className={styles.highlighted}
+            className={[styles.highlighted, m3Class].join(' ')}
             x={121.5 - 30 / 2}
             y={290}
             width={30}
@@ -65,22 +91,28 @@ const SvgComponent = (props) => {
             }}
           ></rect>
         ) : null}
-        {m3Position === 3 ? <circle cx={121.5} cy={292} r={15} className={styles.highlighted}></circle> : null}
+        {m3State === 3 ? <circle cx={121.5} cy={292} r={15} className={styles.highlighted}></circle> : null}
         {/* M2 */}
-        <rect className={styles.highlighted} x={121.5 - 30 / 2} y={30} width={30} height={5}></rect>
+        <rect
+          className={[styles.highlighted, hexapodClass].join(' ')}
+          x={121.5 - 30 / 2}
+          y={30}
+          width={30}
+          height={5}
+        ></rect>
         {/* Port 1 */}
         <g>
-          <rect className={styles.highlighted} x={32 - 30 / 2} y={281} width={20} height={16}></rect>
-          <rect className={styles.highlighted} x={32 - 5 - 30 / 2} y={279} width={5} height={20}></rect>
+          <rect className={[styles.highlighted,nasmyth1Class].join(' ')} x={32 - 30 / 2} y={281} width={20} height={16}></rect>
+          <rect className={[styles.highlighted,nasmyth1Class].join(' ')} x={32 - 5 - 30 / 2} y={279} width={5} height={20}></rect>
         </g>
         {/* Port 2 */}
         <g>
-          <rect className={styles.highlighted} x={221 - 30 / 2} y={281} width={20} height={16}></rect>
-          <rect className={styles.highlighted} x={221 + 20 - 30 / 2} y={279} width={5} height={20}></rect>
+          <rect className={[styles.highlighted,nasmyth2Class].join(' ')} x={221 - 30 / 2} y={281} width={20} height={16}></rect>
+          <rect className={[styles.highlighted,nasmyth2Class].join(' ')} x={221 + 20 - 30 / 2} y={279} width={5} height={20}></rect>
         </g>
         {/* M1 cover */}
         <rect
-          className={styles.highlighted}
+          className={[styles.highlighted, m1CoverClass].join(' ')}
           x={42}
           y={263}
           width={60}
@@ -91,7 +123,7 @@ const SvgComponent = (props) => {
           }}
         ></rect>
         <rect
-          className={styles.highlighted}
+          className={[styles.highlighted, m1CoverClass].join(' ')}
           x={141}
           y={263}
           width={60}
@@ -106,4 +138,4 @@ const SvgComponent = (props) => {
   );
 };
 
-export default SvgComponent;
+export default LightPath;
