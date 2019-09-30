@@ -1,9 +1,9 @@
 import React from 'react'
 import styles from './SummaryPanel.module.css'
 
-const SummaryPanel = ({children}) => {
+const SummaryPanel = ({className, children}) => {
     return (
-        <div className={styles.summaryTable}>
+        <div className={[styles.summaryTable, className].join(' ')}>
             {children}
         </div>
     )
