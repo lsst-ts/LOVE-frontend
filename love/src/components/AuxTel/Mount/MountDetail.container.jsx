@@ -14,6 +14,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const index = 1;
   const mountSubscriptions = getMountSubscriptions(index);
   return {
     subscribeToStream: () => {
