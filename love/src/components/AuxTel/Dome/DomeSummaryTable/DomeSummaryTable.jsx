@@ -11,6 +11,11 @@ import {
   stateToStyleDomeAndMount,
 } from '../../../../Config';
 import Limits from '../../../GeneralPurpose/Limits/Limits';
+import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from '../../../GeneralPurpose/SummaryPanel/Row';
+import Label from '../../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -68,12 +73,12 @@ export default class DomeSummaryTable extends Component {
     const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
 
     return (
-      <div className={styles.summaryTable}>
-        <span className={styles.title}>Track ID</span>
-        <span className={styles.value}>{this.props.trackID}</span>
+      <SummaryPanel>
+        <Title>Track ID</Title>
+        <Value>{this.props.trackID}</Value>
         {/* Dome */}
-        <span className={styles.title}>Dome</span>
-        <span className={styles.value}>
+        <Title>Dome</Title>
+        <Value>
           <StatusText
             title={domeInPositionValue ? 'true' : 'false'}
             status={domeInPositionValue ? 'ok' : 'warning'}
@@ -81,30 +86,30 @@ export default class DomeSummaryTable extends Component {
           >
             {domeInPositionValue ? 'In Position' : 'Not in Position'}
           </StatusText>
-        </span>
+        </Value>
 
-        <span className={styles.label}>Azimuth</span>
-        <span className={styles.value}>
+        <Label>Azimuth</Label>
+        <Value>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} small>
             {azimuthStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Dropout door</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Dropout door</Label>
+        <Value>
           <StatusText title={dropoutDoorStateValue} status={stateToStyleDomeAndMount[dropoutDoorStateValue]} small>
             {dropoutDoorStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Main door</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Main door</Label>
+        <Value>
           <StatusText title={mainDoorStateValue} status={stateToStyleDomeAndMount[mainDoorStateValue]} small>
             {mainDoorStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Az</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Az</Label>
+        <Value>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
-        </span>
+        </Value>
         {/* <span className={[styles.subRow, styles.wide].join(' ')} title={`Time to limit: ${2} min`}>
           <span>
             <Limits
@@ -122,8 +127,8 @@ export default class DomeSummaryTable extends Component {
           </span>
         </span> */}
         {/* Mount */}
-        <span className={styles.title}>Mount</span>
-        <span className={styles.value}>
+        <Title>Mount</Title>
+        <Value>
           <StatusText
             title={mountInPositionValue ? 'true' : 'false'}
             status={mountInPositionValue ? 'ok' : 'warning'}
@@ -131,26 +136,23 @@ export default class DomeSummaryTable extends Component {
           >
             {mountInPositionValue ? 'In Position' : 'Not in Position'}
           </StatusText>
-        </span>
-        <span className={styles.label}>Tracking</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Tracking</Label>
+        <Value>
           <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]} small>
             {mountTrackingStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Az</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Az</Label>
+        <Value>
           <CurrentTargetValue
             currentValue={mountAz.current.toFixed(2)}
             targetValue={mountAz.target.toFixed(2)}
             isChanging={true}
           />
-        </span>
+        </Value>
 
-        <span
-          className={[styles.subRow, styles.wide].join(' ')}
-          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [-270º, 270º]`}
-        >
+        <Row title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [-270º, 270º]`}>
           <span>
             <Limits
               lowerLimit={-270}
@@ -165,21 +167,17 @@ export default class DomeSummaryTable extends Component {
             <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToAzLimit)} min</span>
           </span>
-        </span>
-
-        <span className={styles.label}>El</span>
-        <span className={styles.value}>
+        </Row>
+        <Label>El</Label>
+        <Value>
           <CurrentTargetValue
             currentValue={mountEl.current.toFixed(2)}
             targetValue={mountEl.target.toFixed(2)}
             isChanging={true}
           />
-        </span>
+        </Value>
 
-        <span
-          className={[styles.subRow, styles.wide].join(' ')}
-          title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [15º, 90º]`}
-        >
+        <Row title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [15º, 90º]`}>
           <span>
             <Limits
               lowerLimit={15}
@@ -194,20 +192,18 @@ export default class DomeSummaryTable extends Component {
             <span>{`Time to ${closestLimit}: `}</span>
             <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
           </span>
-        </span>
-
-        <span className={styles.label}>
+        </Row>
+        <Label>
           Nasmyth <span className={styles.highlight}>{mountRotator.name}</span>
-        </span>
-        <span className={styles.value}>
+        </Label>
+        <Value>
           <CurrentTargetValue
             currentValue={mountRotator.current.toFixed(2)}
             targetValue={mountRotator.target.toFixed(2)}
             isChanging={true}
           />
-        </span>
-        <span
-          className={[styles.subRow, styles.wide].join(' ')}
+        </Value>
+        <Row
           title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [-175º, 175º]`}
         >
           <span>
@@ -224,8 +220,8 @@ export default class DomeSummaryTable extends Component {
             <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToRotLimit)} min</span>
           </span>
-        </span>
-      </div>
+        </Row>
+      </SummaryPanel>
     );
   }
 }
