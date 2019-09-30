@@ -17,7 +17,7 @@ import AuxTel from './components/AuxTel/AuxTel';
 import CameraContainer from './components/AuxTel/Camera/Camera.container';
 import DomeContainer from './components/AuxTel/Dome/Dome.container';
 import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountView';
-import MountDetailContainer from './components/AuxTel/Mount/MountDetail.container';
+import LightPath from './components/AuxTel/Mount/LightPath.container';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 
 class App extends Component {
@@ -108,7 +108,7 @@ class App extends Component {
             path="/aux-tel-mount"
             render={() => (
               <Panel title="Auxiliary Telescope Mount" className={'smallPanel'}>
-                <MountDetailContainer />
+                <LightPath />
               </Panel>
             )}
           />
