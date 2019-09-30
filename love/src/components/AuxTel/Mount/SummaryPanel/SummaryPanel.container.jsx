@@ -9,8 +9,8 @@ const SummaryPanelContainer = ({ ...props }) => {
 };
 
 const mapStateToProps = (state) => {
-  const domeState = getMountState(state);
-  return domeState;
+  const mountState = getMountState(state);
+  return mountState;
 };
 
 const mapDispatchToProps = (dispatch) => {

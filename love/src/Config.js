@@ -84,12 +84,12 @@ export const stateToStyleCamera = {
 };
 
 export const stateToStyleMount = {
-  'NOT READY': 'running',
+  'NOT READY': 'warning',
   'IN POSITION': 'ok',
   NASMITH1: 'ok',
   NASMITH2: 'ok',
   PORT3: 'ok',
-  UNKNOWN: 'warning',
+  UNKNOWN: 'invalid',
   CLOSED: 'ok',
   OPEN: 'ok',
   INVALID: 'warning',

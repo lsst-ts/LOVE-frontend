@@ -22,3 +22,24 @@
   stroke: #ffffff;
   fill-opacity: 0.45;
 }
+
+.disabled {
+  stroke: hsl(197, 34%, 23%);
+  fill: #bcd8e2;
+  fill-opacity: 0.45;
+}
+
+.moving {
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
+}
+
+.ok {
+  fill: var(--status-ok-color);
+  stroke: var(--status-ok-color);
+}
+
+.warning {
+  fill: var(--status-warning-color);
+  stroke: var(--status-warning-color);
+}
