@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './MountDetail.module.css';
+import styles from './LightPath.module.css';
 
 const SvgComponent = (props) => {
   const m3Position = 3;

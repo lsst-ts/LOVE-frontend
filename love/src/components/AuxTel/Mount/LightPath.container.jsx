@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import MountDetail from './MountDetail';
+import LightPath from './LightPath';
 import { getMountState, getMountSubscriptions } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 
-const MountDetailContainer = () => {
-  return <MountDetail />;
+const LightPathContainer = () => {
+  return <LightPath />;
 };
 
 const mapStateToProps = (state) => {
@@ -29,4 +29,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(MountDetailContainer);
+)(LightPathContainer);
