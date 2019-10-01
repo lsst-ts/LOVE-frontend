@@ -22,6 +22,8 @@ export default class Hoverable extends Component {
     center: PropTypes.bool,
     /** Display float component right */
     right: PropTypes.bool,
+    /** Indicates if second component should be placed inside the first */
+    inside: PropTypes.bool,
   };
 
   static defaultProps = {};
@@ -58,14 +60,21 @@ export default class Hoverable extends Component {
 
   render() {
     return (
-      <Trigger {...this.props} show={this.show} hide={this.hide} setPosition={this.state.setPosition}>
-        {this.props.children[0]}
-        {this.state.display && (
+      <>
+        <Trigger {...this.props} show={this.show} hide={this.hide} setPosition={this.state.setPosition}>
+          {this.props.children[0]}
+          {this.state.display && this.props.inside && (
+            <Float {...this.props} hide={this.hide} position={this.state.position}>
+              {this.props.children[1]}
+            </Float>
+          )}
+        </Trigger>
+        {this.state.display && !this.props.inside && (
           <Float {...this.props} hide={this.hide} position={this.state.position}>
             {this.props.children[1]}
           </Float>
         )}
-      </Trigger>
+      </>
     );
   }
 }

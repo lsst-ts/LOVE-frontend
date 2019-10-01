@@ -1,13 +1,13 @@
 import React from 'react';
 
 const Float = (props) => {
-  let vOff = 100;
+  let vOff = 0;
   if (props.middle) vOff = 50;
-  if (props.bottom) vOff = 0;
+  if (props.top) vOff = 100;
 
-  let hOff = 100;
+  let hOff = 0;
   if (props.center) hOff = 50;
-  if (props.right) hOff = 0;
+  if (props.left) hOff = 100;
 
   const newProps = {
     style: {
