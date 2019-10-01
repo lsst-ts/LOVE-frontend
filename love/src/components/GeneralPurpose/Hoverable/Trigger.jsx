@@ -18,7 +18,7 @@ const Trigger = (props) => {
     },
     onMouseLeave: () => props.hide(),
   };
-  const trigger = props.children[0];
+  const trigger = props.children.length > 1 ? props.children[0] : props.children;
   const float = props.children[1];
   if (float) {
     if (trigger.props.children) {
