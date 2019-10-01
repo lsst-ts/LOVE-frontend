@@ -94,7 +94,7 @@ export default class SummaryTable extends Component {
         </Value>
         <Label>Position value</Label>
         <Value>
-        {this.props.positionStatus ? this.props.positionStatus.reportedPosition: 'None'}
+        {this.props.hexapodReportedPosition}
         </Value>
       </SummaryPanel>
     );
