@@ -9,13 +9,14 @@ const Float = (props) => {
   if (props.center) hOff = 50;
   if (props.left) hOff = 100;
 
+  let style = {
+    position: 'absolute',
+    left: props.position[0],
+    top: props.position[1],
+  };
+  if (hOff !== 0 || vOff !== 0) style.transform = `translate(-${hOff}%, -${vOff}%)`;
   const newProps = {
-    style: {
-      position: 'absolute',
-      left: props.position[0],
-      top: props.position[1],
-      transform: `translate(-${hOff}%, -${vOff}%)`,
-    },
+    style,
     onMouseLeave: () => props.hide(),
   };
   return React.cloneElement(props.children, newProps);
