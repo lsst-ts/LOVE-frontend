@@ -2,6 +2,10 @@
   width: 35em;
 }
 
+.container svg{
+  overflow: visible;
+}
+
 .st1,
 .st2 {
   fill: hsl(201, 40%, 16%);
@@ -42,4 +46,19 @@
 .warning {
   fill: var(--status-warning-color);
   stroke: var(--status-warning-color);
+}
+
+.summaryPanel {
+  margin-left: 0;
+  background: none;
+  grid-template-columns: minmax(7em, 0.5fr) minmax(10em, 0.5fr);
+  min-width: 0;
+}
+
+.m1Panel {
+  grid-template-columns: minmax(7.5em, 0.5fr) minmax(10em, 0.5fr);
+}
+
+.rotatorPanel {
+  grid-template-columns: minmax(8em, 0.5fr) minmax(10em, 0.5fr);
 }
