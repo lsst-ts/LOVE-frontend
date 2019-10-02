@@ -159,8 +159,9 @@ export const m1CoverStateStateMap = {
 };
 
 export const m1CoverLimitSwitchesStateMap = {
-  0: 'NOT READY',
-  1: 'IN POSITION',
+  0: 'UNKNOWN',
+  1: 'OPEN',
+  2: 'CLOSED',
 };
 
 export const m1VentsLimitSwitchesStateMap = {
@@ -183,7 +184,7 @@ export const movingElementStateMap = {
   0: 'UNKNOWN',
 };
 
-export const nasmyth1InPositionStateMap = {
+export const nasmythRotatorInPositionStateMap = {
   0: 'NOT READY',
   1: 'IN POSITION',
 };
