@@ -100,8 +100,12 @@ export const getMountSubscriptions = (index) => {
     `event-ATMCS-${index}-m3InPosition`,
     `event-ATMCS-${index}-m3State`,
     `event-ATMCS-${index}-m3PortSelected`,
-    `event-ATMCS-${index}-nasmyth1InPosition`,
-    `event-ATMCS-${index}-nasmyth2InPosition`,
+    `event-ATMCS-${index}-nasmyth1RotatorInPosition`,
+    `event-ATMCS-${index}-nasmyth2RotatorInPosition`,
+    `event-ATMCS-${index}-nasmyth1LimitSwitchCCW`,
+    `event-ATMCS-${index}-nasmyth1LimitSwitchCW`,
+    `event-ATMCS-${index}-nasmyth2LimitSwitchCCW`,
+    `event-ATMCS-${index}-nasmyth2LimitSwitchCW`,
   ];
 };
 
@@ -123,24 +127,42 @@ export const getMountState = (state, index) => {
     m1CoverState: mountData[`event-ATPneumatics-${index}-m1CoverState`]
       ? mountData[`event-ATPneumatics-${index}-m1CoverState`]
       : 0,
-    m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`],
+    m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`]
+      ? mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`]
+      : {},
     m1VentsLimitSwitches: mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`],
-    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`] ? mountData[`telemetry-ATPneumatics-${index}-loadCell`]['cellLoad'] : 'Unknown',
-    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`] ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]['pressure'] : 'Unknown',
+    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`]
+      ? mountData[`telemetry-ATPneumatics-${index}-loadCell`]['cellLoad']
+      : 'Unknown',
+    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]
+      ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]['pressure']
+      : 'Unknown',
     //ATMCS
     m3InPosition: mountData[`event-ATMCS-${index}-m3InPosition`]
       ? mountData[`event-ATMCS-${index}-m3InPosition`]['inPosition']
       : 0,
-    nasmyth1InPosition: mountData[`event-ATMCS-${index}-nasmyth1InPosition`]
-      ? mountData[`event-ATMCS-${index}-nasmyth1InPosition`]['inPosition']
+    nasmyth1RotatorInPosition: mountData[`event-ATMCS-${index}-nasmyth1RotatorInPosition`]
+      ? mountData[`event-ATMCS-${index}-nasmyth1RotatorInPosition`]['inPosition']
       : 0,
-    nasmyth2InPosition: mountData[`event-ATMCS-${index}-nasmyth2InPosition`]
-      ? mountData[`event-ATMCS-${index}-nasmyth2InPosition`]['inPosition']
+    nasmyth2RotatorInPosition: mountData[`event-ATMCS-${index}-nasmyth2RotatorInPosition`]
+      ? mountData[`event-ATMCS-${index}-nasmyth2RotatorInPosition`]['inPosition']
       : 0,
     m3State: mountData[`event-ATMCS-${index}-m3State`] ? mountData[`event-ATMCS-${index}-m3State`]['state'] : 0,
     m3PortSelected: mountData[`event-ATMCS-${index}-m3PortSelected`]
       ? mountData[`event-ATMCS-${index}-m3PortSelected`]['selected']
       : 0,
+    nasmyth1LimitSwitchCCW: mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCCW`]
+      ? mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCCW`]['active']
+      : 'Unknown',
+    nasmyth1LimitSwitchCW: mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCW`]
+      ? mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCW`]['active']
+      : 'Unknown',
+    nasmyth2LimitSwitchCCW: mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCCW`]
+      ? mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCCW`]['active']
+      : 'Unknown',
+    nasmyth2LimitSwitchCW: mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCW`]
+      ? mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCW`]['active']
+      : 'Unknown',
   };
 };
 
