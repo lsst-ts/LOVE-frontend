@@ -118,15 +118,15 @@ export const getMountState = (state, index) => {
       : 0,
     hexapodReportedPosition: mountData[`telemetry-ATHexapod-${index}-positionStatus`]
       ? mountData[`telemetry-ATHexapod-${index}-positionStatus`]['reportedPosition']
-      : 0,
+      : 'Unknown',
     //ATPneumatics
     m1CoverState: mountData[`event-ATPneumatics-${index}-m1CoverState`]
       ? mountData[`event-ATPneumatics-${index}-m1CoverState`]
       : 0,
     m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`],
     m1VentsLimitSwitches: mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`],
-    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`],
-    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`],
+    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`] ? mountData[`telemetry-ATPneumatics-${index}-loadCell`]['cellLoad'] : 'Unknown',
+    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`] ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]['pressure'] : 'Unknown',
     //ATMCS
     m3InPosition: mountData[`event-ATMCS-${index}-m3InPosition`]
       ? mountData[`event-ATMCS-${index}-m3InPosition`]['inPosition']
