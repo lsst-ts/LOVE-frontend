@@ -1,5 +1,6 @@
 .container {
   width: 35em;
+  z-index: 1;
 }
 
 .container svg{
