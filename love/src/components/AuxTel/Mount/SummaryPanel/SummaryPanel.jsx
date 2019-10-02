@@ -7,7 +7,7 @@ import {
   m3PortSelectedStateMap,
   m3InPositionStateMap,
   m1CoverStateStateMap,
-  nasmyth1InPositionStateMap,
+  nasmythRotatorInPositionStateMap,
   hexpodInPositionStateMap,
   stateToStyleMount,
 } from '../../../../Config';
@@ -43,14 +43,15 @@ export default class SummaryTable extends Component {
     // `event-ATMCS-${index}-m3InPosition`,
     // `event-ATMCS-${index}-m3State`,
     // `event-ATMCS-${index}-m3PortSelected`,
-    // `event-ATMCS-${index}-nasmyth1InPosition`,
-    // `event-ATMCS-${index}-nasmyth2InPosition`,
+    // `event-ATMCS-${index}-nasmyth1RotatorInPosition`,
+    // `event-ATMCS-${index}-nasmyth2RotatorInPosition`,
 
     //ATMCS
     const m3State = m3RotatorStateMap[this.props.m3State];
     const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected];
     const m3InPosition = m3InPositionStateMap[this.props.m3InPosition];
-    const nasmyth1InPosition = nasmyth1InPositionStateMap[this.props.nasmyth1InPosition];
+    const nasmyth1RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth1RotatorInPosition];
+    const nasmyth2RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth2RotatorInPosition];
     //ATPneumatics
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState];
     //Hexapod
@@ -72,10 +73,22 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[m3InPosition]}>{m3InPosition}</StatusText>
         </Value>
-        <Label>Nasmyth pos.</Label>
-        <Value>
-          <StatusText status={stateToStyleMount[nasmyth1InPosition]}>{nasmyth1InPosition}</StatusText>
-        </Value>
+        {this.props.m3PortSelected === 1 ? (
+          <>
+            <Label>Nasmyth 1 pos.</Label>
+            <Value>
+              <StatusText status={stateToStyleMount[nasmyth1RotatorInPosition]}>{nasmyth1RotatorInPosition}</StatusText>
+            </Value>
+          </>
+        ) : null}
+        {this.props.m3PortSelected === 2 ? (
+          <>
+            <Label>Nasmyth 2 pos.</Label>
+            <Value>
+              <StatusText status={stateToStyleMount[nasmyth2RotatorInPosition]}>{nasmyth2RotatorInPosition}</StatusText>
+            </Value>
+          </>
+        ) : null}
         {/* ATMCS */}
         <Title wide>ATPneumatics</Title>
         <Label>M1 cover</Label>
@@ -93,9 +106,7 @@ export default class SummaryTable extends Component {
           <StatusText status={stateToStyleMount[hexapodInPosition]}>{hexapodInPosition}</StatusText>
         </Value>
         <Label>Position value</Label>
-        <Value>
-        {this.props.hexapodReportedPosition}
-        </Value>
+        <Value>{this.props.hexapodReportedPosition}</Value>
       </SummaryPanel>
     );
   }
