@@ -82,7 +82,7 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[m1CoverState]}>{m1CoverState}</StatusText>
         </Value>
-        <Label>Load cell</Label>
+        <Label>Cell load</Label>
         <Value>{this.props.loadCell}</Value>
         <Label>M1 Air pressure</Label>
         <Value>{this.props.m1AirPressure}</Value>
