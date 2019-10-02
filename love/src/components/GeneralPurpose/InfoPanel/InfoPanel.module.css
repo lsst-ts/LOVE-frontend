@@ -1,0 +1,36 @@
+/*--------- PANEL ---------*/
+/*DEFAULT*/
+.panel {
+    background-color: var(--second-primary-background-color);
+    /* background-color: var(--second-quaternary-background-dimmed-color); */
+    border: 1px solid var(--secondary-font-color);
+    border-radius: 6px;
+    height: fit-content;
+    width: fit-content;
+}
+
+.panelHeading {
+    color: var(--secondary-font-color);
+    font-weight: 300;
+    border-bottom: none;
+    border-radius: 6px;
+    padding: 10px 15px;
+}
+
+.panelTitle {
+    text-transform: uppercase;
+    text-align: left;
+    font-size: 16px;
+    margin: 0;
+    line-height: 1.1;
+}
+
+.panelBody {
+    border-top-left-radius: 8px;
+    border-top: 1px solid var(--secondary-font-color);
+    margin: 0px 8px;
+    color: var(--secondary-font-color);
+    font-weight: 400;
+    font-size: 1em;
+    line-height: 1.4;
+}
