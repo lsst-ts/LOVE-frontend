@@ -99,8 +99,9 @@ const drawM1Cover = (props) => {
     cover4Status: getLimitSwitchStatus(4),
   };
   let m1CoverClass = styles.ok;
-  if (m1CoverState === 4) m1CoverClass = styles.warning;
   if (m1CoverState === 3) m1CoverClass = styles.moving;
+  if (m1CoverState === 4) m1CoverClass = styles.warning;
+  if (m1CoverState === 0) m1CoverClass = styles.warning;
 
   let mirrorCoversAngle = 0;
   if (m1CoverState === 1) mirrorCoversAngle = 0;
@@ -355,7 +356,7 @@ const drawPort2 = (props) => {
         transform-origin={`${240} ${270}`}
         transform="scale(0.5,0.5)"
       >
-        <InfoPanel title="Nasmyth rotator 1">
+        <InfoPanel title="Nasmyth rotator 2">
           <SummaryPanel className={[styles.summaryPanel, styles.rotatorPanel].join(' ')}>
             <Label>Position state</Label>
             <Value>
