@@ -57,41 +57,41 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: () => {
       //Dome
-      dispatch(requestGroupSubscription('telemetry-ATDome-1-dropoutDoorOpeningPercentage'));
-      dispatch(requestGroupSubscription('telemetry-ATDome-1-mainDoorOpeningPercentage'));
-      dispatch(requestGroupSubscription('telemetry-ATDome-1-azimuthPosition'));
-      dispatch(requestGroupSubscription('event-ATDome-1-azimuthState'));
-      dispatch(requestGroupSubscription('event-ATDome-1-azimuthCommandedState'));
-      dispatch(requestGroupSubscription('event-ATDome-1-dropoutDoorState'));
-      dispatch(requestGroupSubscription('event-ATDome-1-mainDoorState'));
-      dispatch(requestGroupSubscription('event-ATDome-1-allAxesInPosition'));
+      dispatch(requestGroupSubscription('telemetry-ATDome-0-dropoutDoorOpeningPercentage'));
+      dispatch(requestGroupSubscription('telemetry-ATDome-0-mainDoorOpeningPercentage'));
+      dispatch(requestGroupSubscription('telemetry-ATDome-0-azimuthPosition'));
+      dispatch(requestGroupSubscription('event-ATDome-0-azimuthState'));
+      dispatch(requestGroupSubscription('event-ATDome-0-azimuthCommandedState'));
+      dispatch(requestGroupSubscription('event-ATDome-0-dropoutDoorState'));
+      dispatch(requestGroupSubscription('event-ATDome-0-mainDoorState'));
+      dispatch(requestGroupSubscription('event-ATDome-0-allAxesInPosition'));
       //ATMCS
-      dispatch(requestGroupSubscription('telemetry-ATMCS-1-mountEncoders'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-detailedState'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-atMountState'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-target'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-allAxesInPosition'));
-      dispatch(requestGroupSubscription('event-ATMCS-1-m3State'));
+      dispatch(requestGroupSubscription('telemetry-ATMCS-0-mountEncoders'));
+      dispatch(requestGroupSubscription('event-ATMCS-0-detailedState'));
+      dispatch(requestGroupSubscription('event-ATMCS-0-atMountState'));
+      dispatch(requestGroupSubscription('event-ATMCS-0-target'));
+      dispatch(requestGroupSubscription('event-ATMCS-0-allAxesInPosition'));
+      dispatch(requestGroupSubscription('event-ATMCS-0-m3State'));
       //ATPtg
       dispatch(requestGroupSubscription('telemetry-ATPtg-1-currentTimesToLimits'));
     },
     unsubscribeToStream: () => {
       //Dome
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-1-dropoutDoorOpeningPercentage'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-1-mainDoorOpeningPercentage'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-1-azimuthPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-azimuthState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-azimuthCommandedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-dropoutDoorState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-mainDoorState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-1-allAxesInPosition'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-0-dropoutDoorOpeningPercentage'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-0-mainDoorOpeningPercentage'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-0-azimuthPosition'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-azimuthState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-azimuthCommandedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-dropoutDoorState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-mainDoorState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-allAxesInPosition'));
       //ATMCS
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-1-mountEncoders'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-detailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-atMountState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-target'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-allAxesInPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-1-m3State'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-0-mountEncoders'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-detailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-atMountState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-target'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-allAxesInPosition'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-m3State'));
       //ATPtg
       dispatch(requestGroupSubscriptionRemoval('telemetry-ATPtg-1-currentTimesToLimits'));
     },

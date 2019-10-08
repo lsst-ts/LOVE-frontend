@@ -9,12 +9,12 @@ const SummaryPanelContainer = ({ ...props }) => {
 };
 
 const mapStateToProps = (state) => {
-  const mountState = getMountState(state);
+  const mountState = getMountState(state, 0);
   return mountState;
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const index = 1;
+  const index = 0;
   const mountSubscriptions = getMountSubscriptions(index);
   return {
     subscribeToStream: () => {

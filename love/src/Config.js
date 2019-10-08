@@ -7,7 +7,7 @@ export const CSCSummaryHierarchy = {
     ATTCS: [
       { name: 'ATMCS', salindex: 0 },
       { name: 'ATPtg', salindex: 0 },
-      { name: 'ATDome', salindex: 1 },
+      { name: 'ATDome', salindex: 0 },
       { name: 'ATDomeTrajectory', salindex: 0 },
       { name: 'ATAOS', salindex: 0 },
       { name: 'ATPneumatics', salindex: 0 },
@@ -133,7 +133,7 @@ export const m3RotatorStateMap = {
   1: 'NASMITH1',
   2: 'NASMITH2',
   3: 'PORT3',
-  4: 'INMOTION',
+  4: 'IN MOTION',
   0: 'UNKNOWN',
 };
 
@@ -147,6 +147,8 @@ export const m3PortSelectedStateMap = {
 export const m3InPositionStateMap = {
   0: 'NOT READY',
   1: 'IN POSITION',
+  false: 'NOT READY',
+  true: 'IN POSITION',
 };
 
 //ATPneumatics
