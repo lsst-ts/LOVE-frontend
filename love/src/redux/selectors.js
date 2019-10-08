@@ -44,43 +44,130 @@ export const getLastSALCommand = (state) => {
 };
 export const getDomeState = (state) => {
   const domeSubscriptions = [
-    'telemetry-ATDome-1-position',
-    'event-ATDome-1-azimuthState',
-    'event-ATDome-1-azimuthCommandedState',
-    'event-ATDome-1-dropoutDoorState',
-    'event-ATDome-1-mainDoorState',
-    'event-ATDome-1-allAxesInPosition',
-    'telemetry-ATMCS-1-mountEncoders',
-    'event-ATMCS-1-detailedState',
-    'event-ATMCS-1-atMountState',
-    'event-ATMCS-1-target',
-    'event-ATMCS-1-allAxesInPosition',
-    'event-ATMCS-1-m3State',
+    'telemetry-ATDome-0-position',
+    'event-ATDome-0-azimuthState',
+    'event-ATDome-0-azimuthCommandedState',
+    'event-ATDome-0-dropoutDoorState',
+    'event-ATDome-0-mainDoorState',
+    'event-ATDome-0-allAxesInPosition',
+    'telemetry-ATMCS-0-mountEncoders',
+    'event-ATMCS-0-detailedState',
+    'event-ATMCS-0-atMountState',
+    'event-ATMCS-0-target',
+    'event-ATMCS-0-allAxesInPosition',
+    'event-ATMCS-0-m3State',
     'telemetry-ATPtg-1-currentTimesToLimits',
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
-    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-1-position']
-      ? domeData['telemetry-ATDome-1-position']['dropoutDoorOpeningPercentage']
+    dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']
+      ? domeData['telemetry-ATDome-0-position']['dropoutDoorOpeningPercentage']
       : 0,
-    mainDoorOpeningPercentage: domeData['telemetry-ATDome-1-position']
-      ? domeData['telemetry-ATDome-1-position']['mainDoorOpeningPercentage']
+    mainDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']
+      ? domeData['telemetry-ATDome-0-position']['mainDoorOpeningPercentage']
       : 0,
-    azimuthPosition: domeData['telemetry-ATDome-1-position']
-      ? domeData['telemetry-ATDome-1-position']['azimuthPosition']
+    azimuthPosition: domeData['telemetry-ATDome-0-position']
+      ? domeData['telemetry-ATDome-0-position']['azimuthPosition']
       : 0,
-    azimuthState: domeData['event-ATDome-1-azimuthState'],
-    azimuthCommandedState: domeData['event-ATDome-1-azimuthCommandedState'],
-    domeInPosition: domeData['event-ATDome-1-allAxesInPosition'],
-    dropoutDoorState: domeData['event-ATDome-1-dropoutDoorState'],
-    mainDoorState: domeData['event-ATDome-1-mainDoorState'],
-    mountEncoders: domeData['telemetry-ATMCS-1-mountEncoders'],
-    detailedState: domeData['event-ATMCS-1-detailedState'],
-    atMountState: domeData['event-ATMCS-1-atMountState'],
-    mountInPosition: domeData['event-ATMCS-1-allAxesInPosition'],
-    target: domeData['event-ATMCS-1-target'],
-    m3State: domeData['event-ATMCS-1-m3State'],
+    azimuthState: domeData['event-ATDome-0-azimuthState'],
+    azimuthCommandedState: domeData['event-ATDome-0-azimuthCommandedState'],
+    domeInPosition: domeData['event-ATDome-0-allAxesInPosition'],
+    dropoutDoorState: domeData['event-ATDome-0-dropoutDoorState'],
+    mainDoorState: domeData['event-ATDome-0-mainDoorState'],
+    mountEncoders: domeData['telemetry-ATMCS-0-mountEncoders'],
+    detailedState: domeData['event-ATMCS-0-detailedState'],
+    atMountState: domeData['event-ATMCS-0-atMountState'],
+    mountInPosition: domeData['event-ATMCS-0-allAxesInPosition'],
+    target: domeData['event-ATMCS-0-target'],
+    m3State: domeData['event-ATMCS-0-m3State'],
     currentTimesToLimits: domeData['currentTimesToLimits'],
+  };
+};
+
+export const getMountSubscriptions = (index) => {
+  return [
+    //ATHexapod
+    `event-ATHexapod-${index}-inPosition`,
+    `event-ATHexapod-${index}-readyForCommand`,
+    `telemetry-ATHexapod-${index}-positionStatus`,
+    //ATPneumatics
+    `event-ATPneumatics-${index}-m1CoverState`,
+    `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
+    `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
+    `telemetry-ATPneumatics-${index}-loadCell`,
+    `telemetry-ATPneumatics-${index}-m1AirPressure`,
+    //ATMCS
+    `event-ATMCS-${index}-m3InPosition`,
+    `event-ATMCS-${index}-m3State`,
+    `event-ATMCS-${index}-m3PortSelected`,
+    `event-ATMCS-${index}-nasmyth1RotatorInPosition`,
+    `event-ATMCS-${index}-nasmyth2RotatorInPosition`,
+    `event-ATMCS-${index}-nasmyth1LimitSwitchCCW`,
+    `event-ATMCS-${index}-nasmyth1LimitSwitchCW`,
+    `event-ATMCS-${index}-nasmyth2LimitSwitchCCW`,
+    `event-ATMCS-${index}-nasmyth2LimitSwitchCW`,
+  ];
+};
+
+export const getMountState = (state, index) => {
+  const mountSubscriptions = getMountSubscriptions(index);
+  const mountData = getStreamsData(state, mountSubscriptions);
+  const m3InPosition = mountData[`event-ATMCS-${index}-m3InPosition`];
+  const nasmyth1RotatorInPosition = mountData[`event-ATMCS-${index}-nasmyth1RotatorInPosition`];
+  const nasmyth2RotatorInPosition = mountData[`event-ATMCS-${index}-nasmyth2RotatorInPosition`];
+  const m3State = mountData[`event-ATMCS-${index}-m3State`];
+  const m3PortSelected = mountData[`event-ATMCS-${index}-m3PortSelected`];
+  const nasmyth1LimitSwitchCCW = mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCCW`];
+  const nasmyth1LimitSwitchCW = mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCW`];
+  const nasmyth2LimitSwitchCCW = mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCCW`];
+  const nasmyth2LimitSwitchCW = mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCW`];
+  return {
+    //ATHexapod
+    hexapodInPosition: mountData[`event-ATHexapod-${index}-inPosition`]
+      ? mountData[`event-ATHexapod-${index}-inPosition`]['inPosition']
+      : 0,
+    hexapodReadyForCommand: mountData[`event-ATHexapod-${index}-readyForCommand`]
+      ? mountData[`event-ATHexapod-${index}-readyForCommand`]['ready']
+      : 0,
+    hexapodReportedPosition: mountData[`telemetry-ATHexapod-${index}-positionStatus`]
+      ? mountData[`telemetry-ATHexapod-${index}-positionStatus`]['reportedPosition']
+      : 'Unknown',
+    //ATPneumatics
+    m1CoverState: mountData[`event-ATPneumatics-${index}-m1CoverState`]
+      ? mountData[`event-ATPneumatics-${index}-m1CoverState`]
+      : 0,
+    m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`]
+      ? mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`]
+      : {},
+    m1VentsLimitSwitches: mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`],
+    loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`]
+      ? mountData[`telemetry-ATPneumatics-${index}-loadCell`]['cellLoad']
+      : 'Unknown',
+    m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]
+      ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]['pressure']
+      : 'Unknown',
+    //ATMCS
+    m3InPosition: m3InPosition ? m3InPosition[m3InPosition.length - 1]['inPosition'].value : 0,
+    nasmyth1RotatorInPosition: nasmyth1RotatorInPosition
+      ? nasmyth1RotatorInPosition[nasmyth1RotatorInPosition.length - 1]['inPosition'].value
+      : 0,
+    nasmyth2RotatorInPosition: nasmyth2RotatorInPosition
+      ? nasmyth2RotatorInPosition[nasmyth2RotatorInPosition.length - 1]['inPosition'].value
+      : 0,
+    m3State: m3State ? m3State[m3State.length - 1]['state'].value : 0,
+    m3PortSelected: m3PortSelected ? m3PortSelected[m3PortSelected.length - 1]['selected'].value : 0,
+    nasmyth1LimitSwitchCCW: nasmyth1LimitSwitchCCW
+      ? nasmyth1LimitSwitchCCW[nasmyth1LimitSwitchCCW.length - 1]['active'].value
+      : 'Unknown',
+    nasmyth1LimitSwitchCW: nasmyth1LimitSwitchCW
+      ? nasmyth1LimitSwitchCW[nasmyth1LimitSwitchCW.length - 1]['active'].value
+      : 'Unknown',
+    nasmyth2LimitSwitchCCW: nasmyth2LimitSwitchCCW
+      ? nasmyth2LimitSwitchCCW[nasmyth2LimitSwitchCCW.length - 1]['active'].value
+      : 'Unknown',
+    nasmyth2LimitSwitchCW: nasmyth2LimitSwitchCW
+      ? nasmyth2LimitSwitchCW[nasmyth2LimitSwitchCW.length - 1]['active'].value
+      : 'Unknown',
   };
 };
 
