@@ -4,44 +4,38 @@ export const hasCommandPrivileges = true;
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
-    'ATTCS': [
-      {name: 'ATMCS', salindex: 0 },
-      {name: 'ATPtg', salindex: 0},
-      {name: 'ATDome', salindex: 1 },
-      {name: 'ATDomeTrajectory', salindex: 0 },
-      {name: 'ATAOS', salindex: 0 },
-      {name: 'ATPneumatics', salindex: 0 },
-      {name: 'ATHexapod', salindex: 0 },
+    ATTCS: [
+      { name: 'ATMCS', salindex: 0 },
+      { name: 'ATPtg', salindex: 0 },
+      { name: 'ATDome', salindex: 0 },
+      { name: 'ATDomeTrajectory', salindex: 0 },
+      { name: 'ATAOS', salindex: 0 },
+      { name: 'ATPneumatics', salindex: 0 },
+      { name: 'ATHexapod', salindex: 0 },
     ],
-    'ATCalSys':[
-      {name:'ATMonochromator', salindex: 0},
-      {name:'FiberSpectrograph', salindex: 0},
-      {name:'ATWhiteLight', salindex: 0},
-      {name:'Electrometer', salindex: 1},
-      {name:'Electrometer', salindex: 2},
-      {name:'LinearStage', salindex: 1},
-      {name: 'LinearStage', salindex: 2}
+    ATCalSys: [
+      { name: 'ATMonochromator', salindex: 0 },
+      { name: 'FiberSpectrograph', salindex: 0 },
+      { name: 'ATWhiteLight', salindex: 0 },
+      { name: 'Electrometer', salindex: 1 },
+      { name: 'Electrometer', salindex: 2 },
+      { name: 'LinearStage', salindex: 1 },
+      { name: 'LinearStage', salindex: 2 },
     ],
-    'LATISS': [
-        {name:'ATCamera', salindex: 0},
-        {name:'ATArchiver', salindex: 0},
-        {name:'ATHeaderService', salindex: 0},
-        {name: 'ATSpectrograph', salindex: 0}
+    LATISS: [
+      { name: 'ATCamera', salindex: 0 },
+      { name: 'ATArchiver', salindex: 0 },
+      { name: 'ATHeaderService', salindex: 0 },
+      { name: 'ATSpectrograph', salindex: 0 },
     ],
   },
   'Main Telescope': {
-    'CSC Group 1': [{ name: 'Test', salindex:1},{ name: 'Test', salindex:2}],
+    'CSC Group 1': [{ name: 'Test', salindex: 1 }, { name: 'Test', salindex: 2 }],
     'CSC Group 2': [],
   },
   Observatory: {
-    'Queue': [
-        {name: 'ScriptQueue', salindex: 1},
-        {name: 'ScriptQueue', salindex: 2},
-    ],
-    'Environment': [
-        {name: 'DIMM', salindex: 0},
-        {name: 'Environment', salindex: 0},
-    ],
+    Queue: [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ScriptQueue', salindex: 2 }],
+    Environment: [{ name: 'DIMM', salindex: 0 }, { name: 'Environment', salindex: 0 }],
   },
 };
 
@@ -89,6 +83,19 @@ export const stateToStyleCamera = {
   END_TELEMETRY: 'ok',
 };
 
+export const stateToStyleMount = {
+  'NOT READY': 'warning',
+  'IN POSITION': 'ok',
+  NASMITH1: 'ok',
+  NASMITH2: 'ok',
+  PORT3: 'ok',
+  UNKNOWN: 'invalid',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  INVALID: 'warning',
+  'IN MOTION': 'running',
+};
+
 // Dome and mount view
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
@@ -126,40 +133,80 @@ export const m3RotatorStateMap = {
   1: 'NASMITH1',
   2: 'NASMITH2',
   3: 'PORT3',
-  4: 'INMOTION',
+  4: 'IN MOTION',
   0: 'UNKNOWN',
 };
 
-export const m3PortStateMap = {
+export const m3PortSelectedStateMap = {
   1: 'NASMITH1',
   2: 'NASMITH2',
   3: 'PORT3',
   0: 'UNKNOWN',
 };
 
+export const m3InPositionStateMap = {
+  0: 'NOT READY',
+  1: 'IN POSITION',
+  false: 'NOT READY',
+  true: 'IN POSITION',
+};
+
+//ATPneumatics
+export const m1CoverStateStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'IN MOTION',
+  4: 'INVALID',
+  0: 'UNKNOWN',
+};
+
+export const m1CoverLimitSwitchesStateMap = {
+  0: 'UNKNOWN',
+  1: 'OPEN',
+  2: 'CLOSED',
+};
+
+export const m1VentsLimitSwitchesStateMap = {
+  0: 'NOT READY',
+  1: 'IN POSITION',
+};
+
+//ATHexapod
+export const hexpodInPositionStateMap = {
+  0: 'NOT READY',
+  1: 'IN POSITION',
+};
+
 // LATISS
 export const movingElementStateMap = {
-  0: 'HOMING',
-  1: 'MOVING',
-  2: 'STATIONARY',
-  3: 'NOTINPOSITION',
+  1: 'HOMING',
+  2: 'MOVING',
+  3: 'STATIONARY',
+  4: 'NOTINPOSITION',
+  0: 'UNKNOWN',
+};
+
+export const nasmythRotatorInPositionStateMap = {
+  0: 'NOT READY',
+  1: 'IN POSITION',
 };
 
 export const raftsStateMap = {
-  0: 'NEEDS_CLEAR',
-  1: 'CLEARING',
-  2: 'INTEGRATING',
-  3: 'READING_OUT',
-  4: 'QUIESCENT',
+  1: 'NEEDS_CLEAR',
+  2: 'CLEARING',
+  3: 'INTEGRATING',
+  4: 'READING_OUT',
+  5: 'QUIESCENT',
+  0: 'UNKNOWN',
 };
 
 export const shutterStateMap = {
-  0: 'CLOSED',
-  1: 'OPEN',
-  2: 'CLOSING',
-  3: 'OPENING',
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'CLOSING',
+  4: 'OPENING',
+  0: 'UNKNOWN',
 };
-
 
 export const stateToStyleDomeAndMount = {
   NASMITH1: 'ok',
