@@ -26,6 +26,7 @@
   fill: #bcd8e2;
   stroke: #ffffff;
   fill-opacity: 0.45;
+  transition: transform 1.5s linear;
 }
 
 .disabled {
