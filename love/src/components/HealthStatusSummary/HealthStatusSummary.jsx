@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import saveAs from 'file-saver';
-import PropTypes from 'prop-types';
 import TelemetrySelectionTableContainer from './TelemetrySelectionTable/TelemetrySelectionTable.container';
 import Button from './Button/Button';
 import ExportIcon from '../icons/ExportIcon/ExportIcon';

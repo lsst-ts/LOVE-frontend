@@ -105,16 +105,16 @@ export default class CSCExpanded extends PureComponent {
     if (this.props.heartbeatData) {
       nLost = this.props.heartbeatData.lost;
       if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
-      if (this.props.heartbeatData.last_heartbeat_timestamp == -2) timeDiff = -2;
+      if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
 
     let timeDiffText = 'Unknown';
 
-    if (timeDiff == -2) {
+    if (timeDiff === -2) {
       timeDiffText = 'No heartbeat event in Remote.';
-    } else if (timeDiff == -1) {
+    } else if (timeDiff === -1) {
       timeDiffText = 'Never';
     } else if (timeDiff >= 0) {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
@@ -123,7 +123,7 @@ export default class CSCExpanded extends PureComponent {
     let heartbeatTitle = `${this.props.name +
       '-' +
       this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
-    if (timeDiff == -2) {
+    if (timeDiff === -2) {
       heartbeatTitle = `${this.props.name + '-' + this.props.salindex} heartbeat\n${timeDiffText}`;
     }
 
