@@ -106,6 +106,8 @@ export const getMountSubscriptions = (index) => {
     `event-ATMCS-${index}-nasmyth1LimitSwitchCW`,
     `event-ATMCS-${index}-nasmyth2LimitSwitchCCW`,
     `event-ATMCS-${index}-nasmyth2LimitSwitchCW`,
+    `event-ATMCS-${index}-target`,
+    `telemetry-ATMCS-${index}-mountEncoders`,
   ];
 };
 
@@ -121,6 +123,8 @@ export const getMountState = (state, index) => {
   const nasmyth1LimitSwitchCW = mountData[`event-ATMCS-${index}-nasmyth1LimitSwitchCW`];
   const nasmyth2LimitSwitchCCW = mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCCW`];
   const nasmyth2LimitSwitchCW = mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCW`];
+  const target = mountData[`event-ATMCS-${index}-target`];
+  const mountEncoders = mountData[`telemetry-ATMCS-${index}-mountEncoders`];
   return {
     //ATHexapod
     hexapodInPosition: mountData[`event-ATHexapod-${index}-inPosition`]
@@ -168,6 +172,8 @@ export const getMountState = (state, index) => {
     nasmyth2LimitSwitchCW: nasmyth2LimitSwitchCW
       ? nasmyth2LimitSwitchCW[nasmyth2LimitSwitchCW.length - 1]['active'].value
       : 'Unknown',
+    target: target ? target[target.length - 1] : {},
+    mountEncoders: mountEncoders ? mountEncoders : {},
   };
 };
 
