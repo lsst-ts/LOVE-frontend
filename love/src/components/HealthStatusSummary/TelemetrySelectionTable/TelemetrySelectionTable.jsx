@@ -337,14 +337,7 @@ export default class TelemetrySelectionTable extends PureComponent {
   };
 
   updateSelectedList = (checked, key) => {
-    const splitKey = key.split('-');
-    const params = this.props.allTelemetries[`${splitKey[0]}-${splitKey[1]}`][splitKey[2]];
-    const value = params[splitKey[3]].value;
     const { selectedRows } = this.state;
-    const newRow = {
-      key,
-      value,
-    };
     if (checked && selectedRows.indexOf(key) < 0) selectedRows.push(key);
     if (!checked) selectedRows.splice(selectedRows.map((row) => row).indexOf(key), 1);
     if (selectedRows.length === 0) this.setCheckedFilterColumn();

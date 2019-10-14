@@ -16,8 +16,10 @@ import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../GeneralPurpose/SummaryPanel/Title';
+import Row from '../../GeneralPurpose/SummaryPanel/Row';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
+import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
+import Limits from '../../GeneralPurpose/Limits/Limits';
 
 export default class LightPath extends Component {
   componentDidMount = () => {
@@ -200,7 +202,6 @@ export default class LightPath extends Component {
     let m3Class = m3InPosition ? styles.ok : styles.warning;
     if (m3State === 4) m3Class = styles.moving;
     const m3Angle = portSelected === 1 ? -45 : 45;
-    console.log(props);
     return (
       <Hoverable>
         <g>
@@ -291,8 +292,13 @@ export default class LightPath extends Component {
     const nasmyth1RotatorInPosition = props.nasmyth1RotatorInPosition;
     const nasmyth1RotatorInPositionText = nasmythRotatorInPositionStateMap[props.nasmyth1RotatorInPosition];
     let nasmyth1Class = nasmyth1RotatorInPosition ? styles.ok : styles.warning;
-    if (m3PortSelected != 1) nasmyth1Class = styles.disabled;
-    // console.log('nasmyth1RotatorInPosition', nasmyth1RotatorInPosition)
+    if (m3PortSelected !== 1) nasmyth1Class = styles.disabled;
+    const mountEncoders = props.mountEncoders;
+    const target = props.target;
+    const mountRotator = {
+      current: mountEncoders.nasmyth1CalculatedAngle ? mountEncoders.nasmyth1CalculatedAngle.value : 0,
+      target: target.nasmyth1RotatorAngle ? target.nasmyth1RotatorAngle.value : 0,
+    };
     return (
       <Hoverable>
         <g>
@@ -332,6 +338,32 @@ export default class LightPath extends Component {
               <Value>{props.nasmyth1LimitSwitchCW}</Value>
               <Label>CCW limit switch</Label>
               <Value>{props.nasmyth1LimitSwitchCCW}</Value>
+              <Label>Nasmyth 1</Label>
+              <Value>
+                <CurrentTargetValue
+                  currentValue={mountRotator.current.toFixed(2)}
+                  targetValue={mountRotator.target.toFixed(2)}
+                  isChanging={true}
+                />
+              </Value>
+              <Row
+                title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [-175º, 175º]`}
+              >
+                <span>
+                  <Limits
+                    lowerLimit={-175}
+                    upperLimit={175}
+                    currentValue={mountRotator.current}
+                    targetValue={mountRotator.target}
+                    height={20}
+                    displayLabels={false}
+                  />
+                </span>
+                <span>
+                  <span>Time to limit: </span>
+                  <span className={styles.highlight}>{Math.round(0)} min</span>
+                </span>
+              </Row>
             </SummaryPanel>
           </InfoPanel>
         </foreignObject>
@@ -344,8 +376,13 @@ export default class LightPath extends Component {
     const nasmyth2RotatorInPosition = props.nasmyth2RotatorInPosition;
     const nasmyth2RotatorInPositionText = nasmythRotatorInPositionStateMap[props.nasmyth2RotatorInPosition];
     let nasmyth2Class = nasmyth2RotatorInPosition ? styles.ok : styles.warning;
-    if (m3PortSelected != 2) nasmyth2Class = styles.disabled;
-    // console.log('nasmyth2RotatorInPosition', nasmyth2RotatorInPosition)
+    if (m3PortSelected !== 2) nasmyth2Class = styles.disabled;
+    const mountEncoders = props.mountEncoders;
+    const target = props.target;
+    const mountRotator = {
+      current: mountEncoders.nasmyth2CalculatedAngle ? mountEncoders.nasmyth2CalculatedAngle.value : 0,
+      target: target.nasmyth2RotatorAngle ? target.nasmyth2RotatorAngle.value : 0,
+    };
     return (
       <Hoverable>
         <g>
@@ -385,6 +422,32 @@ export default class LightPath extends Component {
               <Value>{props.nasmyth2LimitSwitchCW}</Value>
               <Label>CCW limit switch</Label>
               <Value>{props.nasmyth2LimitSwitchCCW}</Value>
+              <Label>Nasmyth 2</Label>
+              <Value>
+                <CurrentTargetValue
+                  currentValue={mountRotator.current.toFixed(2)}
+                  targetValue={mountRotator.target.toFixed(2)}
+                  isChanging={true}
+                />
+              </Value>
+              <Row
+                title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [-175º, 175º]`}
+              >
+                <span>
+                  <Limits
+                    lowerLimit={-175}
+                    upperLimit={175}
+                    currentValue={mountRotator.current}
+                    targetValue={mountRotator.target}
+                    height={20}
+                    displayLabels={false}
+                  />
+                </span>
+                <span>
+                  <span>Time to limit: </span>
+                  <span className={styles.highlight}>{Math.round(0)} min</span>
+                </span>
+              </Row>
             </SummaryPanel>
           </InfoPanel>
         </foreignObject>
