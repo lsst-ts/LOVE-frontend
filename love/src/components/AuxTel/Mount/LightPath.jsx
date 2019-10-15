@@ -200,7 +200,6 @@ export default class LightPath extends Component {
     let m3Class = m3InPosition ? styles.ok : styles.warning;
     if (m3State === 4) m3Class = styles.moving;
     const m3Angle = portSelected === 1 ? -45 : 45;
-    console.log(props);
     return (
       <Hoverable>
         <g>

@@ -1,0 +1,118 @@
+:root {
+  --scrollbar-width: 10px;
+}
+
+.table {
+  width: 100%;
+  table-layout: auto;
+  border-collapse: collapse;
+}
+
+.table thead {
+  /* display: table; */
+  width: 100%;
+  word-wrap: break-word;
+}
+.table tbody {
+  /* display: block; */
+  height: inherit;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+.table tbody tr {
+  /* display: table; */
+  width: 100%;
+}
+.table th,
+td {
+  width: auto;
+  white-space: pre;
+}
+
+.table th {
+  border: 1px solid var(--base-background-color);
+  background: var(--tertiary-background-color);
+  padding: 0.2em 0.5em;
+  padding-left: 1em;
+  text-align: left;
+}
+
+.table tr:hover.dataRow {
+  background: var(--tertiary-background-color);
+}
+
+.table tr:hover td {
+  border-bottom: 1px solid var(--secondary-background-color);
+  border-top: 1px solid var(--secondary-background-color);
+}
+
+.table tr:nth-child(even) {
+  background: var(--secondary-background-dimmed-color);
+}
+
+.table tr:nth-child(odd) {
+  background: var(--secondary-background-color);
+}
+
+.table th:first-of-type {
+  border-top-left-radius: 7px;
+}
+
+.table th:last-of-type {
+  border-top-right-radius: 7px;
+}
+
+.table td {
+  color: var(--secondary-font-color);
+  padding: 0.4em 1em;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid var(--base-background-color);
+  border-right: 1px solid var(--base-background-color);
+}
+
+.table td.string {
+  text-align: left;
+}
+
+.table td.number {
+  text-align: right;
+}
+
+.table tr:last-of-type td:first-of-type {
+  border-bottom-left-radius: 7px;
+}
+
+.table tr:last-of-type td:last-of-type {
+  border-bottom-right-radius: 7px;
+}
+
+.table .firstColumn {
+  width: 1em;
+  background: var(--base-background-color);
+  padding: 0em 0.5em;
+  text-align: center;
+  border: 1px solid var(--base-background-color);
+}
+
+/* width */
+.table ::-webkit-scrollbar {
+  width: var(--scrollbar-width);
+}
+
+/* Track */
+.table ::-webkit-scrollbar-track {
+  background: var(--tertiary-background-color);
+}
+
+/* Handle */
+.table ::-webkit-scrollbar-thumb {
+  background: var(--tertiary-font-color);
+  border-radius: 1.1em;
+}
+
+/* Handle on hover */
+.table ::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-font-color);
+}
