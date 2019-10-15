@@ -171,6 +171,86 @@ export const getMountState = (state, index) => {
   };
 };
 
+export const getMountMotorsSubscriptions = (index) => {
+  return [
+    // Status
+    `event-ATMCS-${index}-azimuthDrive1Status`,
+    `event-ATMCS-${index}-azimuthDrive2Status`,
+    `event-ATMCS-${index}-elevationDriveStatus`,
+    `event-ATMCS-${index}-nasmyth1DriveStatus`,
+    `event-ATMCS-${index}-nasmyth2DriveStatus`,
+    `event-ATMCS-${index}-m3DriveStatus`,
+    // Brakes
+    `event-ATMCS-${index}-azimuthBrake1`,
+    `event-ATMCS-${index}-azimuthBrake2`,
+    `event-ATMCS-${index}-elevationBrake`,
+    `event-ATMCS-${index}-nasmyth1Brake`,
+    `event-ATMCS-${index}-nasmyth2Brake`,
+    // Motors
+    `telemetry-ATMCS-${index}-measuredMotorVelocity`,
+    `telemetry-ATMCS-${index}-measuredTorque`,
+    `telemetry-ATMCS-${index}-mountEncoders`,
+    `telemetry-ATMCS-${index}-mountMotorEncoders`,
+    `telemetry-ATMCS-${index}-torqueDemand`,
+  ];
+};
+
+export const getMountMotorsState = (state, index) => {
+  const mountMotorSubscriptions = getMountMotorsSubscriptions(index);
+  const mountMotorData = getStreamsData(state, mountMotorSubscriptions);
+  // Status
+  const azimuthDrive1Status = mountMotorData[`event-ATMCS-${index}-azimuthDrive1Status`];
+  const azimuthDrive2Status = mountMotorData[`event-ATMCS-${index}-azimuthDrive2Status`];
+  const elevationDriveStatus = mountMotorData[`event-ATMCS-${index}-elevationDriveStatus`];
+  const nasmyth1DriveStatus = mountMotorData[`event-ATMCS-${index}-nasmyth1DriveStatus`];
+  const nasmyth2DriveStatus = mountMotorData[`event-ATMCS-${index}-nasmyth2DriveStatus`];
+  const m3DriveStatus = mountMotorData[`event-ATMCS-${index}-m3DriveStatus`];
+  // Brakes
+  const azimuthBrake1 = mountMotorData[`event-ATMCS-${index}-azimuthBrake1`];
+  const azimuthBrake2 = mountMotorData[`event-ATMCS-${index}-azimuthBrake2`];
+  const elevationBrake = mountMotorData[`event-ATMCS-${index}-elevationBrake`];
+  const nasmyth1Brake = mountMotorData[`event-ATMCS-${index}-nasmyth1Brake`];
+  const nasmyth2Brake = mountMotorData[`event-ATMCS-${index}-nasmyth2Brake`];
+  // Motors
+  const measuredMotorVelocity = mountMotorData[`telemetry-ATMCS-${index}-measuredMotorVelocity`];
+  const measuredTorque = mountMotorData[`telemetry-ATMCS-${index}-measuredTorque`];
+  const mountEncoders = mountMotorData[`telemetry-ATMCS-${index}-mountEncoders`];
+  const mountMotorEncoders = mountMotorData[`telemetry-ATMCS-${index}-mountMotorEncoders`];
+  const torqueDemand = mountMotorData[`telemetry-ATMCS-${index}-torqueDemand`];
+
+  return {
+    // Status
+    azimuthDrive1Status: azimuthDrive1Status
+      ? azimuthDrive1Status[azimuthDrive1Status.length - 1].enable
+      : 'Unknown',
+    azimuthDrive2Status: azimuthDrive2Status
+      ? azimuthDrive2Status[azimuthDrive2Status.length - 1].enable
+      : 'Unknown',
+    elevationDriveStatus: elevationDriveStatus
+      ? elevationDriveStatus[elevationDriveStatus.length - 1].enable
+      : 'Unknown',
+    nasmyth1DriveStatus: nasmyth1DriveStatus
+      ? nasmyth1DriveStatus[nasmyth1DriveStatus.length - 1].enable
+      : 'Unknown',
+    nasmyth2DriveStatus: nasmyth2DriveStatus
+      ? nasmyth2DriveStatus[nasmyth2DriveStatus.length - 1].enable
+      : 'Unknown',
+    m3DriveStatus: m3DriveStatus ? m3DriveStatus[m3DriveStatus.length - 1].enable : 'Unknown',
+    // Brakes
+    azimuthBrake1: azimuthBrake1 ? azimuthBrake1[azimuthBrake1.length - 1].engaged : 'Unknown',
+    azimuthBrake2: azimuthBrake2 ? azimuthBrake2[azimuthBrake2.length - 1].engaged : 'Unknown',
+    elevationBrake: elevationBrake ? elevationBrake[elevationBrake.length - 1].engaged : 'Unknown',
+    nasmyth1Brake: nasmyth1Brake ? nasmyth1Brake[nasmyth1Brake.length - 1].engaged : 'Unknown',
+    nasmyth2Brake: nasmyth2Brake ? nasmyth2Brake[nasmyth2Brake.length - 1].engaged : 'Unknown',
+    // Motors
+    measuredMotorVelocity: measuredMotorVelocity ? measuredMotorVelocity : {},
+    measuredTorque: measuredTorque ? measuredTorque : {},
+    mountEncoders: mountEncoders ? mountEncoders : {},
+    mountMotorEncoders: mountMotorEncoders ? mountMotorEncoders : {},
+    torqueDemand: torqueDemand ? torqueDemand : {},
+  };
+};
+
 export const getLATISSState = (state) => {
   const latissSubscriptions = [
     // Spectrograph
