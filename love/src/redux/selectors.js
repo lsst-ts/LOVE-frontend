@@ -171,6 +171,7 @@ export const getMountState = (state, index) => {
   };
 };
 
+/** Returns all the ATMCS motor subscriptions */
 export const getMountMotorsSubscriptions = (index) => {
   return [
     // Status
@@ -195,6 +196,12 @@ export const getMountMotorsSubscriptions = (index) => {
   ];
 };
 
+/**
+ * Returns events related to the motors and drives in the AT Mount.
+ *
+ * @param {obj} state
+ * @param {integer} salindex
+ */
 export const getMountMotorsState = (state, index) => {
   const mountMotorSubscriptions = getMountMotorsSubscriptions(index);
   const mountMotorData = getStreamsData(state, mountMotorSubscriptions);
@@ -251,6 +258,11 @@ export const getMountMotorsState = (state, index) => {
   };
 };
 
+/**
+ * Returns events related to the LATISS instrument in the state.
+ *
+ * @param {obj} state
+ */
 export const getLATISSState = (state) => {
   const latissSubscriptions = [
     // Spectrograph
