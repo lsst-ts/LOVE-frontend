@@ -6,6 +6,7 @@
   width: 100%;
   table-layout: auto;
   border-collapse: collapse;
+  grid-column: span 2;
 }
 
 .table thead {
@@ -34,7 +35,6 @@ td {
   border: 1px solid var(--base-background-color);
   background: var(--tertiary-background-color);
   padding: 0.2em 0.5em;
-  padding-left: 1em;
   text-align: left;
 }
 
@@ -72,11 +72,11 @@ td {
   border-right: 1px solid var(--base-background-color);
 }
 
-.table td.string {
+.string {
   text-align: left;
 }
 
-.table td.number {
+.number {
   text-align: right;
 }
 

@@ -13,7 +13,7 @@ export function Tbody({ children, className }) {
   return <tbody className={[styles.common, styles.tbody, className].join(' ')}>{children}</tbody>;
 }
 
-export function Td({ children, className, isNumber }) {
+export function Td({ children, isNumber, className }) {
   return (
     <td className={[styles.common, styles.td, className, isNumber ? styles.number : styles.string].join(' ')}>
       {children}
