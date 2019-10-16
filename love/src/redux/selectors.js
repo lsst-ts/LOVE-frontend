@@ -221,27 +221,27 @@ export const getMountMotorsState = (state, index) => {
   return {
     // Status
     azimuthDrive1Status: azimuthDrive1Status
-      ? azimuthDrive1Status[azimuthDrive1Status.length - 1].enable
+      ? azimuthDrive1Status[azimuthDrive1Status.length - 1].enable.value
       : 'Unknown',
     azimuthDrive2Status: azimuthDrive2Status
-      ? azimuthDrive2Status[azimuthDrive2Status.length - 1].enable
+      ? azimuthDrive2Status[azimuthDrive2Status.length - 1].enable.value
       : 'Unknown',
     elevationDriveStatus: elevationDriveStatus
-      ? elevationDriveStatus[elevationDriveStatus.length - 1].enable
+      ? elevationDriveStatus[elevationDriveStatus.length - 1].enable.value
       : 'Unknown',
     nasmyth1DriveStatus: nasmyth1DriveStatus
-      ? nasmyth1DriveStatus[nasmyth1DriveStatus.length - 1].enable
+      ? nasmyth1DriveStatus[nasmyth1DriveStatus.length - 1].enable.value
       : 'Unknown',
     nasmyth2DriveStatus: nasmyth2DriveStatus
-      ? nasmyth2DriveStatus[nasmyth2DriveStatus.length - 1].enable
+      ? nasmyth2DriveStatus[nasmyth2DriveStatus.length - 1].enable.value
       : 'Unknown',
-    m3DriveStatus: m3DriveStatus ? m3DriveStatus[m3DriveStatus.length - 1].enable : 'Unknown',
+    m3DriveStatus: m3DriveStatus ? m3DriveStatus[m3DriveStatus.length - 1].enable.value : 'Unknown',
     // Brakes
-    azimuthBrake1: azimuthBrake1 ? azimuthBrake1[azimuthBrake1.length - 1].engaged : 'Unknown',
-    azimuthBrake2: azimuthBrake2 ? azimuthBrake2[azimuthBrake2.length - 1].engaged : 'Unknown',
-    elevationBrake: elevationBrake ? elevationBrake[elevationBrake.length - 1].engaged : 'Unknown',
-    nasmyth1Brake: nasmyth1Brake ? nasmyth1Brake[nasmyth1Brake.length - 1].engaged : 'Unknown',
-    nasmyth2Brake: nasmyth2Brake ? nasmyth2Brake[nasmyth2Brake.length - 1].engaged : 'Unknown',
+    azimuthBrake1: azimuthBrake1 ? azimuthBrake1[azimuthBrake1.length - 1].engaged.value : 'Unknown',
+    azimuthBrake2: azimuthBrake2 ? azimuthBrake2[azimuthBrake2.length - 1].engaged.value : 'Unknown',
+    elevationBrake: elevationBrake ? elevationBrake[elevationBrake.length - 1].engaged.value : 'Unknown',
+    nasmyth1Brake: nasmyth1Brake ? nasmyth1Brake[nasmyth1Brake.length - 1].engaged.value : 'Unknown',
+    nasmyth2Brake: nasmyth2Brake ? nasmyth2Brake[nasmyth2Brake.length - 1].engaged.value : 'Unknown',
     // Motors
     measuredMotorVelocity: measuredMotorVelocity ? measuredMotorVelocity : {},
     measuredTorque: measuredTorque ? measuredTorque : {},

@@ -226,3 +226,23 @@ export const stateToStyleDomeAndMount = {
   'MOVING CW': 'running',
   'MOVING CCW': 'running',
 };
+
+export const motorDriveStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const stateToStyleMotorDrive = {
+  DISABLED: 'ok',
+  ENABLED: 'running',
+};
+
+export const motorBrakeStateMap = {
+  false: 'DISENGAGED',
+  true: 'ENGAGED',
+};
+
+export const stateToStyleMotorBrake = {
+  DISENGAGED: 'running',
+  ENGAGED: 'ok',
+};
