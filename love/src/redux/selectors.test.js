@@ -5,6 +5,7 @@ import {
   getCameraState,
   getScriptQueueState,
   getSummaryStateValue,
+  getMountMotorsState,
 } from './selectors';
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
@@ -659,46 +660,46 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
 it('Should extract the SummaryStateValue stream correctly with a selector', async () => {
   // Arrange
   const streams = {
-      summaryState: [
-        {
-          ScriptQueueID: {
-            value: 1,
-            dataType: 'Int',
-          },
-          priority: {
-            value: 0,
-            dataType: 'Int',
-          },
-          private_host: {
-            value: 798089283,
-            dataType: 'Int',
-          },
-          private_origin: {
-            value: 56,
-            dataType: 'Int',
-          },
-          private_rcvStamp: {
-            value: 1562605145.9171262,
-            dataType: 'Float',
-          },
-          private_revCode: {
-            value: '16ec6358',
-            dataType: 'String',
-          },
-          private_seqNum: {
-            value: 2,
-            dataType: 'Int',
-          },
-          private_sndStamp: {
-            value: 1562605145.9079509,
-            dataType: 'Float',
-          },
-          summaryState: {
-            value: 4,
-            dataType: 'Int',
-          },
+    summaryState: [
+      {
+        ScriptQueueID: {
+          value: 1,
+          dataType: 'Int',
         },
-      ],
+        priority: {
+          value: 0,
+          dataType: 'Int',
+        },
+        private_host: {
+          value: 798089283,
+          dataType: 'Int',
+        },
+        private_origin: {
+          value: 56,
+          dataType: 'Int',
+        },
+        private_rcvStamp: {
+          value: 1562605145.9171262,
+          dataType: 'Float',
+        },
+        private_revCode: {
+          value: '16ec6358',
+          dataType: 'String',
+        },
+        private_seqNum: {
+          value: 2,
+          dataType: 'Int',
+        },
+        private_sndStamp: {
+          value: 1562605145.9079509,
+          dataType: 'Float',
+        },
+        summaryState: {
+          value: 4,
+          dataType: 'Int',
+        },
+      },
+    ],
   };
   const groupName = 'event-ScriptQueue-1-summaryState';
   store.dispatch(openWebsocketConnection());
@@ -722,4 +723,157 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
 
   // Assert
   expect(summaryStateValue).toEqual(streams.summaryState[0].summaryState.value);
+});
+
+it('Should extract the Mount motors values correctly with a selector', async () => {
+  // Arrange
+  const dataStreams = {
+    torqueDemand: [
+      {
+        elevationMotorTorque: { value: 0.0, dataType: 'Float' },
+        azimuthMotor1Torque: { value: 0.0, dataType: 'Float' },
+        azimuthMotor2Torque: { value: 0.0, dataType: 'Float' },
+        nasmyth1MotorTorque: { value: 0.0, dataType: 'Float' },
+        nasmyth2MotorTorque: { value: 0.0, dataType: 'Float' },
+      },
+    ],
+    measuredMotorVelocity: [
+      {
+        elevationMotorVelocity: { value: 0.0, dataType: 'Float' },
+        azimuthMotor1Velocity: { value: 0.0, dataType: 'Float' },
+        azimuthMotor2Velocity: { value: 0.0, dataType: 'Float' },
+        nasmyth1MotorVelocity: { value: 0.0, dataType: 'Float' },
+        nasmyth2MotorVelocity: { value: 0.0, dataType: 'Float' },
+        m3Velocity: { value: 0.0, dataType: 'Float' },
+      },
+    ],
+    mountEncoders: [
+      {
+        elevationCalculatedAngle: { value: 23.019065046896525, dataType: 'Float' },
+        azimuthCalculatedAngle: { value: -94.28605043926653, dataType: 'Float' },
+        nasmyth1CalculatedAngle: { value: 19.595513971283157, dataType: 'Float' },
+        nasmyth2CalculatedAngle: { value: 19.59460890961316, dataType: 'Float' },
+        trackId: { value: 1, dataType: 'Int' },
+      },
+    ],
+  };
+
+  const groupNames = [
+    'telemetry-ATMCS-0-torqueDemand',
+    'telemetry-ATMCS-0-measuredMotorVelocity',
+    'telemetry-ATMCS-0-mountEncoders',
+  ];
+  store.dispatch(openWebsocketConnection());
+
+  const expected = {
+    azimuthBrake1: 'Unknown',
+    azimuthBrake2: 'Unknown',
+    azimuthDrive1Status: 'Unknown',
+    azimuthDrive2Status: 'Unknown',
+    elevationBrake: 'Unknown',
+    elevationDriveStatus: 'Unknown',
+    m3DriveStatus: 'Unknown',
+    measuredMotorVelocity: [
+      {
+        azimuthMotor1Velocity: {
+          dataType: 'Float',
+          value: 0,
+        },
+        azimuthMotor2Velocity: {
+          dataType: 'Float',
+          value: 0,
+        },
+        elevationMotorVelocity: {
+          dataType: 'Float',
+          value: 0,
+        },
+        m3Velocity: {
+          dataType: 'Float',
+          value: 0,
+        },
+        nasmyth1MotorVelocity: {
+          dataType: 'Float',
+          value: 0,
+        },
+        nasmyth2MotorVelocity: {
+          dataType: 'Float',
+          value: 0,
+        },
+      },
+    ],
+    measuredTorque: {},
+    mountEncoders: [
+      {
+        azimuthCalculatedAngle: {
+          dataType: 'Float',
+          value: -94.28605043926653,
+        },
+        elevationCalculatedAngle: {
+          dataType: 'Float',
+          value: 23.019065046896525,
+        },
+        nasmyth1CalculatedAngle: {
+          dataType: 'Float',
+          value: 19.595513971283157,
+        },
+        nasmyth2CalculatedAngle: {
+          dataType: 'Float',
+          value: 19.59460890961316,
+        },
+        trackId: {
+          dataType: 'Int',
+          value: 1,
+        },
+      },
+    ],
+    mountMotorEncoders: {},
+    nasmyth1Brake: 'Unknown',
+    nasmyth1DriveStatus: 'Unknown',
+    nasmyth2Brake: 'Unknown',
+    nasmyth2DriveStatus: 'Unknown',
+    torqueDemand: [
+      {
+        azimuthMotor1Torque: {
+          dataType: 'Float',
+          value: 0,
+        },
+        azimuthMotor2Torque: {
+          dataType: 'Float',
+          value: 0,
+        },
+        elevationMotorTorque: {
+          dataType: 'Float',
+          value: 0,
+        },
+        nasmyth1MotorTorque: {
+          dataType: 'Float',
+          value: 0,
+        },
+        nasmyth2MotorTorque: {
+          dataType: 'Float',
+          value: 0,
+        },
+      },
+    ],
+  };
+  // Act
+  await server.connected;
+  await store.dispatch(requestGroupSubscription(groupNames[0]));
+  await store.dispatch(requestGroupSubscription(groupNames[1]));
+  await store.dispatch(requestGroupSubscription(groupNames[2]));
+  server.send({
+    category: 'telemetry',
+    data: [
+      {
+        csc: 'ATMCS',
+        salindex: 0,
+        data: dataStreams,
+      },
+    ],
+  });
+
+  const mountMotorsStateValue = getMountMotorsState(store.getState(), 0);
+  console.log(mountMotorsStateValue);
+  // Assert
+  expect(mountMotorsStateValue).toEqual(expected);
 });

@@ -7,6 +7,7 @@ import InfoIcon from '../../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import Button from '../../GeneralPurpose/Button/Button';
+import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
@@ -147,7 +148,9 @@ export default class CSCExpanded extends PureComponent {
                 {props.group}{' '}
               </span>
               <span>&#62; </span>
-              <span>{props.name}-{props.salindex} </span>
+              <span>
+                {props.name}-{props.salindex}
+              </span>
             </div>
             <div className={[styles.stateContainer].join(' ')}>
               <div>
@@ -194,60 +197,11 @@ export default class CSCExpanded extends PureComponent {
             </div>
           </div>
         ) : null}
-        <div className={[styles.logContainer, styles.messageLogContainer].join(' ')}>
-          <div className={styles.logContainerTopBar}>
-            <div>MESSAGE LOG</div>
-            <div>
-              <Button
-                size="extra-small"
-                onClick={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
-              >
-                CLEAR
-              </Button>
-            </div>
-          </div>
-          <div className={styles.filtersContainer}>
-            {Object.keys(this.state.messageFilters).map((key) => {
-              return (
-                <div key={key}>
-                  <label>
-                    <input
-                      onChange={(event) => this.updateFilter(key, event.target.checked)}
-                      type="checkbox"
-                      alt={`select ${key}`}
-                      checked={this.state.messageFilters[key].value}
-                    />
-                    <span>{this.state.messageFilters[key].name}</span>
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-          <div className={[styles.log, styles.messageLogContent].join(' ')}>
-            {this.props.logMessageData.length > 0
-              ? this.props.logMessageData.map((msg) => {
-                  const filter = this.state.messageFilters[msg.level.value];
-                  if (filter && !filter.value) return null;
-                  let icon = <span title="Debug">d</span>;
-                  if (msg.level.value === 20) icon = <InfoIcon title="Information" />;
-                  if (msg.level.value === 30) icon = <WarningIcon title="Warning" />;
-                  if (msg.level.value === 40) icon = <ErrorIcon title="Error" />;
-                  return (
-                    <div key={`${msg.private_rcvStamp.value}-${msg.level.value}`} className={styles.logMessage}>
-                      <div className={styles.messageIcon}>{icon}</div>
-                      <div className={styles.messageTextContainer}>
-                        <div className={styles.timestamp} title="private_rcvStamp">
-                          {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
-                        </div>
-                        <div className={styles.messageText}>{msg.message.value}</div>
-                        <div className={styles.messageTraceback}>{msg.traceback.value}</div>
-                      </div>
-                    </div>
-                  );
-                })
-              : null}
-          </div>
-        </div>
+
+        <LogMessageDisplay
+          logMessageData={this.props.logMessageData}
+          clearCSCLogMessages={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
+        />
       </div>
     );
   }
