@@ -632,7 +632,7 @@ it('Should properly interpret an ack message', async () => {
   global.Date = realDate;
 });
 
-it.only('Should save all telemetries when subscribed to all', async () => {
+it('Should save all telemetries when subscribed to all', async () => {
   await server.connected;
   await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
   let msg = {
@@ -662,7 +662,7 @@ it.only('Should save all telemetries when subscribed to all', async () => {
   expect(result).toEqual(expected);
 });
 
-it.only('Should save all events when subscribed to all', async () => {
+it('Should save all events when subscribed to all', async () => {
   await server.connected;
   await store.dispatch(requestGroupSubscription('event-all-all-all'));
   let msg = {
