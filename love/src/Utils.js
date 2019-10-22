@@ -99,6 +99,10 @@ export default class ManagerInterface {
     return `http://${window.location.host}/manager/api/`;
   }
 
+  static getUifBaseUrl() {
+    return `http://${window.location.host}/manager/ui_framework/`;
+  }
+
   static getWebsocketsUrl() {
     return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
