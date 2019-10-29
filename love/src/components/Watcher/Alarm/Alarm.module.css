@@ -1,0 +1,6 @@
+.alarmContainer {
+    display: grid;
+    grid-template-columns: 8em 2em 2em;
+    grid-column-gap: 1em;
+    justify-content: center;
+}
