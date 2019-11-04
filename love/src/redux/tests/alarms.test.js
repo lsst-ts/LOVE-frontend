@@ -37,6 +37,9 @@ const initialState = {
       component: '',
     },
   },
+  watcher: {
+    alarms: [],
+  },
   camera: {
     raftsDetailedState: 'UNKNOWN',
     imageReadinessDetailedState: 'UNKNOWN',
@@ -75,7 +78,8 @@ afterEach(() => {
 
 describe('GIVEN we have no alarms in the state', () => {
   describe('WHEN we receive alarm events', () => {
-    it('THEN the latest alarm is updated in event state', async () => {
+    it('THEN the latest alarm is updated in the generic events state for the Watcher CSC,' +
+      'and each alarm is stored/updated in the watcher state accordingly ', async () => {
       // Arrange:
       await server.connected;
       await store.dispatch(requestGroupSubscription('event-all-all-all'));
@@ -123,7 +127,7 @@ describe('GIVEN we have no alarms in the state', () => {
           timestampUnmute: 0,
         },
       ];
-
+      let expectedAlarms = [];
       alarms.forEach((alarm) => {
         // Act:
         server.send({
@@ -140,13 +144,16 @@ describe('GIVEN we have no alarms in the state', () => {
         });
 
         // Assert:
-        const expected = {
+        const expectedEventState = {
           'Watcher-1': {
             alarm: alarm,
           },
         };
-        const result = getAllEvents(store.getState());
-        expect(result).toEqual(expected);
+        expectedAlarms.append(alarm);
+        const resultEventState = getAllEvents(store.getState());
+        const resultAlarms = getAllAlarms(store.getState());
+        expect(resultEventState).toEqual(expectedEventState);
+        expect(resultAlarms).toEqual(expectedAlarms);
       });
     });
   });
