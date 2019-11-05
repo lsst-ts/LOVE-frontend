@@ -5,7 +5,7 @@ import AcknowledgeIcon from '../../icons/Watcher/AcknowledgeIcon/AcknowledgeIcon
 import MutedIcon from '../../icons/Watcher/MutedIcon/MutedIcon';
 import SeverityArrowIcon from '../../icons/Watcher/SeverityArrowIcon/SeverityArrowIcon';
 
-export default function Alarm({ severity, increase, decrease, ack, snoozed }) {
+export default function Alarm({ severity, sevIncrease, sevDecrease, acknowledged, snoozed }) {
   const severityToStatus = {
     0: 'ok',
     1: 'warning',
@@ -17,8 +17,8 @@ export default function Alarm({ severity, increase, decrease, ack, snoozed }) {
     <div className={styles.alarmContainer}>
       <StatusText status={status}>{status}</StatusText>
       <div className={styles.ackContainer}>
-        <AcknowledgeIcon active={!ack}></AcknowledgeIcon>
-        <SeverityArrowIcon increase={increase} decrease={decrease}></SeverityArrowIcon>
+        <AcknowledgeIcon active={!acknowledged}></AcknowledgeIcon>
+        <SeverityArrowIcon increase={sevIncrease} decrease={sevDecrease}></SeverityArrowIcon>
       </div>
       <MutedIcon active={!snoozed}></MutedIcon>
     </div>
