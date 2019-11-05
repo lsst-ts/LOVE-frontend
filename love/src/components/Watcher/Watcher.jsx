@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './Watcher.module.css';
 import Alarm from './Alarm/Alarm';
-import AlarmsTable from './AlarmsTable/AlarmsTable';
+import AlarmsTableContainer from './AlarmsTable/AlarmsTable.container';
 
 export default class Watcher extends Component {
   render() {
@@ -46,7 +46,7 @@ PageMaker including versions of Lorem Ipsum.`,
           <Alarm severity={1} ack />
           <Alarm severity={2} snoozed />
           <Alarm severity={3} />
-          <AlarmsTable alarms={alarms}></AlarmsTable>
+          <AlarmsTableContainer></AlarmsTableContainer>
         </>
       </Panel>
     );
