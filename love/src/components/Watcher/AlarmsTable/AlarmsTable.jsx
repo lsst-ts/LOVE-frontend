@@ -5,6 +5,7 @@ import Alarm from '../Alarm/Alarm';
 import Button from '../../GeneralPurpose/Button/Button';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import GearIcon from '../../icons/GearIcon/GearIcon';
+import { timeDifference } from '../../../Utils';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -142,6 +143,7 @@ export default class AlarmsTable extends PureComponent {
 
   render() {
     let data = this.props.alarms;
+    const currentTime = new Date().getTime();
     return (
       <div className={styles.telemetrySelectionTableWrapper}>
         <table className={styles.telemetrySelectionTable}>
@@ -162,9 +164,9 @@ export default class AlarmsTable extends PureComponent {
                   <>
                     <ColumnHeader
                       {...defaultColumnProps}
-                      header={'Status'}
-                      filterName={'severity'}
-                      filter={this.state.filters.severity}
+                      header={'Name'}
+                      filterName={'name'}
+                      filter={this.state.filters.name}
                     />
                     <ColumnHeader
                       {...defaultColumnProps}
@@ -174,15 +176,15 @@ export default class AlarmsTable extends PureComponent {
                     />
                     <ColumnHeader
                       {...defaultColumnProps}
-                      header={'Name'}
-                      filterName={'name'}
-                      filter={this.state.filters.name}
-                    />
-                    <ColumnHeader
-                      {...defaultColumnProps}
                       header={'Severity update'}
                       filterName={'timestampSeverityNewest'}
                       filter={this.state.filters.timestampSeverityNewest}
+                    />
+                    <ColumnHeader
+                      {...defaultColumnProps}
+                      header={'Status'}
+                      filterName={'severity'}
+                      filter={this.state.filters.severity}
                     />
                   </>
                 );
@@ -196,19 +198,12 @@ export default class AlarmsTable extends PureComponent {
 
                 return (
                   <React.Fragment key={key}>
-                    <tr className={styles.dataRow} onClick={() => this.clickRow(key)}>
-                      <td className={styles.string}>
-                        {<Alarm severity={row.severity === 0 ? 'ok' : 'warning'} ack snoozed />}
-                      </td>
-                      <td className={styles.string}>{row.maxSeverity}</td>
+                    <tr className={styles.dataRow} onClick={() => this.clickGearIcon(key)}>
                       <td className={styles.string}>{row.name}</td>
+                      <td className={styles.string}>{row.maxSeverity}</td>
+                      <td className={styles.string}>{timeDifference(currentTime, row.timestampSeverityNewest)}</td>
                       <td className={styles.string}>
-                        <div>
-                          <div>{row.timestampSeverityNewest}</div>
-                          <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                            <GearIcon active={this.state.expandedRows[key]} />
-                          </div>
-                        </div>
+                        {<Alarm severity={row.severity} ack snoozed />}
                       </td>
                     </tr>
                     {this.state.expandedRows[key] ? (
