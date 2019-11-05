@@ -201,7 +201,7 @@ export default class AlarmsTable extends PureComponent {
                     <tr className={styles.dataRow} onClick={() => this.clickGearIcon(key)}>
                       <td className={styles.string}>{row.name}</td>
                       <td className={styles.string}>{row.maxSeverity}</td>
-                      <td className={styles.string}>{timeDifference(currentTime, row.timestampSeverityNewest)}</td>
+                      <td className={styles.string} title={new Date(row.timestampSeverityNewest).toString()}>{timeDifference(currentTime, row.timestampSeverityNewest)}</td>
                       <td className={styles.string}>
                         {<Alarm severity={row.severity} ack snoozed />}
                       </td>
