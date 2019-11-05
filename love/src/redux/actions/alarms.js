@@ -1,8 +1,8 @@
-import { RECEIVE_ALARM } from './actionTypes';
+import { RECEIVE_ALARMS } from './actionTypes';
 
-export const receiveAlarm = (alarm) => {
+export const receiveAlarms = (alarms) => {
   return {
-    type: RECEIVE_ALARM,
-    alarm,
+    type: RECEIVE_ALARMS,
+    alarms,
   };
 };

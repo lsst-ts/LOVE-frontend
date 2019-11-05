@@ -11,7 +11,7 @@ import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
-import { receiveAlarm } from './alarms';
+import { receiveAlarms } from './alarms';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -113,7 +113,7 @@ export const openWebsocketConnection = () => {
             }
 
             if (data.data[0].csc === 'Watcher') {
-              dispatch(receiveAlarm(stream.alarm));
+              dispatch(receiveAlarms(stream.alarm));
             }
 
             if (data.data[0].data.logMessage) {
