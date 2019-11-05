@@ -13,6 +13,14 @@ import {
 
 let store, server;
 
+function cleanAlarm(alarm) {
+  const cleanAlarm = {};
+  Object.keys(alarm).map((key) => {
+    cleanAlarm[key] = alarm[key].value;
+  });
+  return cleanAlarm;
+}
+
 const alarms = [
   {
     // New alarm 1
@@ -101,6 +109,9 @@ const updatedAlarm = {
   timestampUnmute: {value: 0, dataType: 'Float'},
 };
 
+const cleanAlarms = alarms.map( (alarm) => { return cleanAlarm(alarm) });
+const cleanUpdatedAlarm = cleanAlarm(updatedAlarm);
+
 afterEach(() => {
   server.close();
 });
@@ -142,7 +153,7 @@ describe('GIVEN we have no alarms in the state', () => {
       'and each alarm is stored in the watcher state accordingly ', async () => {
       // Arrange:
       let expectedAlarms = [];
-      alarms.forEach((alarm) => {
+      alarms.forEach((alarm, index) => {
         // Act:
         server.send({
           category: 'event',
@@ -158,12 +169,13 @@ describe('GIVEN we have no alarms in the state', () => {
         });
 
         // Assert:
-        expectedAlarms.push(alarm);
+        const expectedAlarm = cleanAlarms[index]
+        expectedAlarms.push(cleanAlarms[index]);
         const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
         const lastAlarm = getLastAlarm(store.getState());
         const allAlarms = getAllAlarms(store.getState());
         expect(watcherAlarmStream).toEqual(alarm);
-        expect(lastAlarm).toEqual(alarm);
+        expect(lastAlarm).toEqual(expectedAlarm);
         expect(allAlarms).toEqual(expectedAlarms);
       });
     });
@@ -220,12 +232,12 @@ describe('GIVEN we have some alarms in the state', () => {
       });
 
       // Assert:
-      const expectedAlarms = [alarms[0], updatedAlarm, alarms[2]];
+      const expectedAlarms = [cleanAlarms[0], cleanUpdatedAlarm, cleanAlarms[2]];
       const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
       const lastAlarm = getLastAlarm(store.getState());
       const allAlarms = getAllAlarms(store.getState());
       expect(watcherAlarmStream).toEqual(updatedAlarm);
-      expect(lastAlarm).toEqual(updatedAlarm);
+      expect(lastAlarm).toEqual(cleanUpdatedAlarm);
       expect(allAlarms).toEqual(expectedAlarms);
     });
   });
@@ -262,7 +274,7 @@ describe('GIVEN we have no alarms in the state', () => {
       await store.dispatch(receiveAlarms(alarms[0]));
       // Assert:
       const allAlarms = getAllAlarms(store.getState());
-      expect(allAlarms).toEqual([alarms[0]]);
+      expect(allAlarms).toEqual([cleanAlarms[0]]);
     });
   });
 
@@ -272,7 +284,7 @@ describe('GIVEN we have no alarms in the state', () => {
       await store.dispatch(receiveAlarms(alarms));
       // Assert:
       const allAlarms = getAllAlarms(store.getState());
-      expect(allAlarms).toEqual(alarms);
+      expect(allAlarms).toEqual(cleanAlarms);
     });
   });
 });
