@@ -4,8 +4,8 @@ import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
 import {
-  getAllEvents,
   getStreamData,
+  getLastAlarm,
   getAllAlarms,
 } from '../selectors';
 
@@ -135,10 +135,12 @@ describe('GIVEN we have no alarms in the state', () => {
 
         // Assert:
         expectedAlarms.push(alarm);
-        const resultEventState = getStreamData(store.getState(), 'event-Watcher-0-alarm');
-        const resultAlarms = getAllAlarms(store.getState());
-        expect(resultEventState).toEqual(alarm);
-        expect(resultAlarms).toEqual(expectedAlarms);
+        const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
+        const lastAlarm = getLastAlarm(store.getState());
+        const allAlarms = getAllAlarms(store.getState());
+        expect(watcherAlarmStream).toEqual(alarm);
+        expect(lastAlarm).toEqual(alarm);
+        expect(allAlarms).toEqual(expectedAlarms);
       });
     });
   });
@@ -216,11 +218,13 @@ describe('GIVEN we have some alarms in the state', () => {
       });
 
       // Assert:
-      const resultEventState = getStreamData(store.getState(), 'event-Watcher-0-alarm');
       const expectedAlarms = [alarms[0], alarm, alarms[2]];
-      const resultAlarms = getAllAlarms(store.getState());
-      expect(resultEventState).toEqual(alarm);
-      expect(resultAlarms).toEqual(expectedAlarms);
+      const watcherAlarmStream = getStreamData(store.getState(), 'event-Watcher-0-alarm');
+      const lastAlarm = getLastAlarm(store.getState());
+      const allAlarms = getAllAlarms(store.getState());
+      expect(watcherAlarmStream).toEqual(alarm);
+      expect(lastAlarm).toEqual(alarm);
+      expect(allAlarms).toEqual(expectedAlarms);
     });
   });
 });
