@@ -1,0 +1,41 @@
+.filterIconWrapper {
+    width: 12px;
+    min-width: 12px;
+    position:absolute;
+    right:0;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 0.3em;
+}
+
+.filterIcon {
+    display: inline-block;
+    max-height:100%;
+    stroke-miterlimit:10;stroke-width:2px;
+    vertical-align: middle;
+
+}
+
+.default{
+    stroke: var(--base-font-color);
+    fill: var(--base-font-color);
+}
+
+.selected, .filterIconWrapper:hover{
+    stroke: var(--base-font-color);
+    fill: var(--base-font-color);
+    background-color: #3c4d53;
+    /* stroke: #3c4d53;
+    fill: #3c4d53;
+    background-color: var(--base-font-color);; */
+    border-radius: 5px;
+}
+
+.wrapperSorted{
+    width: 25px;
+}
+
+.iconSorted {
+    width: 50%;
+}
