@@ -28,7 +28,7 @@ export default class AlarmsTable extends PureComponent {
     const expandedRows = {};
 
     const filters = {
-      status: { type: 'regexp', value: new RegExp('(?:)') },
+      severity: { type: 'regexp', value: new RegExp('(?:)') },
       maxSeverity: { type: 'regexp', value: new RegExp('(?:)') },
       name: { type: 'regexp', value: new RegExp('(?:)') },
       timestampSeverityNewest: { type: 'regexp', value: new RegExp('(?:)') },
@@ -37,7 +37,7 @@ export default class AlarmsTable extends PureComponent {
     this.state = {
       expandedRows,
       activeFilterDialog: 'None',
-      sortingColumn: 'status',
+      sortingColumn: 'severity',
       sortDirection: 'descending',
       filters,
       setFilters: this.setFilters,
@@ -136,6 +136,7 @@ export default class AlarmsTable extends PureComponent {
   sortData = (a, b) => {
     const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
     const column = this.state.sortingColumn;
+    console.log(direction, column)
     return a[column] <= b[column] ? -direction : direction;
   };
 
@@ -162,8 +163,8 @@ export default class AlarmsTable extends PureComponent {
                     <ColumnHeader
                       {...defaultColumnProps}
                       header={'Status'}
-                      filterName={'status'}
-                      filter={this.state.filters.status}
+                      filterName={'severity'}
+                      filter={this.state.filters.severity}
                     />
                     <ColumnHeader
                       {...defaultColumnProps}
