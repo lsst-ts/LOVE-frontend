@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllTelemetries } from '../../../redux/selectors';
+import { getUsername, getAllAlarms } from '../../../redux/selectors';
 import {
   requestGroupSubscription,
   requestGroupSubscriptionRemoval,
@@ -8,7 +8,7 @@ import {
 } from '../../../redux/actions/ws';
 import AlarmsTable from './AlarmsTable';
 
-const AlarmsTableContainer = ({ alarms, subscribeToStream, unsubscribeToStream, ...props }) => {
+const AlarmsTableContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream, ...props }) => {
   return (
     <AlarmsTable
       {...props}
@@ -20,51 +20,20 @@ const AlarmsTableContainer = ({ alarms, subscribeToStream, unsubscribeToStream, 
 };
 
 const mapStateToProps = (state) => {
-  //   const alarms = getAlarms(state);
-  const alarms = [
-    {
-      severity: 1,
-      maxSeverity: 3,
-      name: 'test.ConfiguredSeverities.Rule1',
-      reason: `Lorem Ipsum is simply dummy text of the printing and typesetting 
-industry. Lorem Ipsum has been the industry's standard dummy text 
-ever since the 1500s, when an unknown printer took a galley of type 
-and scrambled it to make a type specimen book. It has survived not 
-only five centuries, but also the leap into electronic typesetting, 
-remaining essentially unchanged. It was popularised in the 1960s 
-with the release of Letraset sheets containing Lorem Ipsum passages, 
-and more recently with desktop publishing software like Aldus 
-PageMaker including versions of Lorem Ipsum.`,
-      timestampSeverityNewest: new Date().getTime(),
-    },
-    {
-      severity: 2,
-      maxSeverity: 2,
-      name: 'test.ConfiguredSeverities.Rule2',
-      reason: `Lorem Ipsum is simply dummy text of the printing and typesetting 
-industry. Lorem Ipsum has been the industry's standard dummy text 
-ever since the 1500s, when an unknown printer took a galley of type 
-and scrambled it to make a type specimen book. It has survived not 
-only five centuries, but also the leap into electronic typesetting, 
-remaining essentially unchanged. It was popularised in the 1960s 
-with the release of Letraset sheets containing Lorem Ipsum passages, 
-and more recently with desktop publishing software like Aldus 
-PageMaker including versions of Lorem Ipsum.`,
-      timestampSeverityNewest: new Date().getTime(),
-    },
-  ];
-  return { alarms };
+  const alarms = getAllAlarms(state);
+  const user = getUsername(state);
+  return { alarms, user };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    subscribeToStream: () => {
-      //All telemetriesdsa
-      //   dispatch(requestGroupSubscription('telemetry-all-all-all'));
+    subscribeToStreams: () => {
+      //Alarms
+      dispatch(requestGroupSubscription('event-Watcher-0-alarm'));
     },
-    unsubscribeToStream: () => {
-      //All telemetriesdsa
-      //   dispatch(requestGroupSubscriptionRemoval('telemetry-all-all-all'));
+    unsubscribeToStreams: () => {
+      //Alarms
+      dispatch(requestGroupSubscriptionRemoval('event-Watcher-0-alarm'));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
       return dispatch(
@@ -76,6 +45,33 @@ const mapDispatchToProps = (dispatch) => {
             name,
             severity,
             acknowledgedBy,
+          },
+        }),
+      );
+    },
+    muteAlarm: (name, severity, duration, mutedBy) => {
+      return dispatch(
+        requestSALCommand({
+          cmd: 'cmd_mute',
+          component: 'Watcher',
+          salindex: 0,
+          params: {
+            name,
+            duration,
+            severity,
+            mutedBy,
+          },
+        }),
+      );
+    },
+    unmuteAlarm: (name) => {
+      return dispatch(
+        requestSALCommand({
+          cmd: 'cmd_unmute',
+          component: 'Watcher',
+          salindex: 0,
+          params: {
+            name,
           },
         }),
       );
