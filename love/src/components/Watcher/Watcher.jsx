@@ -42,10 +42,10 @@ PageMaker including versions of Lorem Ipsum.`,
     return (
       <Panel title="Auxiliary Telescope" className={styles.panel}>
         <>
-          <Alarm severity="ok" ack snoozed />
-          <Alarm severity="warning" ack />
-          <Alarm severity="serious" snoozed />
-          <Alarm severity="critical" />
+          <Alarm severity={0} ack snoozed />
+          <Alarm severity={1} ack />
+          <Alarm severity={2} snoozed />
+          <Alarm severity={3} />
           <AlarmsTable alarms={alarms}></AlarmsTable>
         </>
       </Panel>
