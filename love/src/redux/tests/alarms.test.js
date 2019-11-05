@@ -6,19 +6,10 @@ import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } 
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import { SALCommandStatus } from '../actions/ws';
 import {
-  getLastSALCommand,
-  getScriptHeartbeats,
-  getCSCHeartbeats,
-  getCSCHeartbeat,
-  getCSCLogMessages,
-  getCSCErrorCodeData,
-  getAllStreamsAsDictionary,
-  getGroupSortedErrorCodeData,
-  getAllTelemetries,
   getAllEvents,
+  getAllAlarms,
 } from '../selectors';
 import * as mockData from './mock';
-import { flatMap } from '../../Utils';
 
 let store, server;
 const initialState = {
@@ -79,13 +70,13 @@ afterEach(() => {
 describe('GIVEN we have no alarms in the state', () => {
   describe('WHEN we receive alarm events', () => {
     it('THEN the latest alarm is updated in the generic events state for the Watcher CSC,' +
-      'and each alarm is stored/updated in the watcher state accordingly ', async () => {
+      'and each alarm is stored in the watcher state accordingly ', async () => {
       // Arrange:
       await server.connected;
       await store.dispatch(requestGroupSubscription('event-all-all-all'));
       const alarms = [
         {
-          // New for SAL index 100017
+          // New alarm 1
           name: 'Alarm-1',
           severity: 1,
           reason: 'Because of reasons',
@@ -106,7 +97,7 @@ describe('GIVEN we have no alarms in the state', () => {
           timestampUnmute: 0,
         },
         {
-          // New for SAL index 100017
+          // New alarm 2
           name: 'Alarm-2',
           severity: 3,
           reason: 'Because of other reasons',
@@ -126,6 +117,27 @@ describe('GIVEN we have no alarms in the state', () => {
           timestampEscalate: 0,
           timestampUnmute: 0,
         },
+        {
+          // Updated alarm 3
+          name: 'Alarm-3',
+          severity: 2,
+          reason: 'Because of yet other reasons',
+          maxSeverity: 2,
+          acknowledged: false,
+          acknowledgedBy: '',
+          escalated: false,
+          escalatedTo: '',
+          mutedSeverity: 0,
+          mutedBy: '',
+          timestampSeverityOldest: 1562258579.477827,
+          timestampSeverityNewest: 1562258579.477827,
+          timestampMaxSeverity: 1562258579.477827,
+          timestampAcknowledged: 0,
+          timestampAutoAcknowledge: 0,
+          timestampAutoUnacknowledge: 0,
+          timestampEscalate: 0,
+          timestampUnmute: 0,
+        },
       ];
       let expectedAlarms = [];
       alarms.forEach((alarm) => {
@@ -135,7 +147,7 @@ describe('GIVEN we have no alarms in the state', () => {
           data: [
             {
               csc: 'Watcher',
-              salindex: 1, // watcher salindex
+              salindex: 0, // watcher salindex
               data: {
                 alarm: alarm
               },
@@ -145,11 +157,11 @@ describe('GIVEN we have no alarms in the state', () => {
 
         // Assert:
         const expectedEventState = {
-          'Watcher-1': {
+          'Watcher-0': {
             alarm: alarm,
           },
         };
-        expectedAlarms.append(alarm);
+        expectedAlarms.push(alarm);
         const resultEventState = getAllEvents(store.getState());
         const resultAlarms = getAllAlarms(store.getState());
         expect(resultEventState).toEqual(expectedEventState);
