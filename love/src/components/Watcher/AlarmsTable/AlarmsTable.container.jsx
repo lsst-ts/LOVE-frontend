@@ -1,7 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getAllTelemetries } from '../../../redux/selectors';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../../redux/actions/ws';
+import {
+  requestGroupSubscription,
+  requestGroupSubscriptionRemoval,
+  requestSALCommand,
+} from '../../../redux/actions/ws';
 import AlarmsTable from './AlarmsTable';
 
 const AlarmsTableContainer = ({ alarms, subscribeToStream, unsubscribeToStream, ...props }) => {
@@ -49,7 +53,7 @@ PageMaker including versions of Lorem Ipsum.`,
       timestampSeverityNewest: new Date().getTime(),
     },
   ];
-  return alarms;
+  return { alarms };
 };
 
 const mapDispatchToProps = (dispatch) => {
