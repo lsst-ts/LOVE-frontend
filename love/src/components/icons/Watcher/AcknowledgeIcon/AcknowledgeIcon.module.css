@@ -1,0 +1,8 @@
+.active {
+  fill: #1ecfe8;
+}
+
+.inactive {
+    fill:#798D99;
+    opacity: 0.5;
+}
