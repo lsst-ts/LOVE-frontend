@@ -84,7 +84,7 @@
 }
 
 .dataRow {
-    /* cursor: pointer; */
+    cursor: pointer;
 }
 
 .telemetrySelectionTable th:first-of-type {
