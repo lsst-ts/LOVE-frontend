@@ -42,8 +42,8 @@ PageMaker including versions of Lorem Ipsum.`,
     return (
       <Panel title="Auxiliary Telescope" className={styles.panel}>
         <>
-          <Alarm severity={0} ack snoozed />
-          <Alarm severity={1} ack />
+          <Alarm severity={0} acknowledged snoozed />
+          <Alarm severity={1} acknowledged />
           <Alarm severity={2} snoozed />
           <Alarm severity={3} />
           <AlarmsTableContainer></AlarmsTableContainer>

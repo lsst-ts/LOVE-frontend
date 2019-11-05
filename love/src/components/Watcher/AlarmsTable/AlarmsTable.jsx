@@ -211,7 +211,7 @@ export default class AlarmsTable extends PureComponent {
                       <td className={styles.string}>{row.maxSeverity}</td>
                       <td className={styles.string} title={new Date(row.timestampSeverityNewest).toString()}>{timeDifference(currentTime, row.timestampSeverityNewest)}</td>
                       <td className={styles.string}>
-                        {<Alarm severity={row.severity} ack snoozed />}
+                        {<Alarm severity={row.severity} acknowledged snoozed />}
                       </td>
                     </tr>
                     {this.state.expandedRows[key] ? (
