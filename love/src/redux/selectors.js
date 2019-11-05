@@ -456,3 +456,8 @@ export const getAllEvents = (state) => {
   if (state.ws === undefined) return undefined;
   return getStreamData(state, 'event-all-all-all');
 };
+
+export const getAllAlarms = (state) => {
+  if (state.ws === undefined) return undefined;
+  return state.ws.alarms;
+};
