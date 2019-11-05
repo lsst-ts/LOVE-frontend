@@ -5,10 +5,12 @@ import {
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
+  RECEIVE_ALARM,
 } from '../actions/actionTypes';
 import { connectionStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
+  alarms: [],
   connectionState: connectionStates.CLOSED,
   subscriptions: [],
   lastSALCommand: {
@@ -117,6 +119,21 @@ export default function(state = initialState, action) {
           status: action.status,
           result: action.result,
         },
+      };
+    }
+
+    case RECEIVE_ALARM: {
+      let newAlarms = Array.from(state.alarms);
+      const alarmIndex = state.alarms.findIndex((alarm) => { return alarm.name == action.alarm.name});
+      if (alarmIndex === -1) {
+        newAlarms.push(action.alarm);
+      } else {
+        newAlarms[alarmIndex] = action.alarm;
+      }
+
+      return {
+        ...state,
+        alarms: newAlarms,
       };
     }
 
