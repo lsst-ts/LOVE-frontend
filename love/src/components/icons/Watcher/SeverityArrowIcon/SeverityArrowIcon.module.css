@@ -1,0 +1,10 @@
+.increase {
+  fill: var(--status-alert-color);
+  stroke: var(--status-alert-color);
+}
+
+.decrease {
+  fill: var(--status-warning-color);
+  stroke: var(--status-warning-color);
+  transform: scaleY(-1);
+}
