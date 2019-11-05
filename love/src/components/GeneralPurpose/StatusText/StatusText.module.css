@@ -6,6 +6,7 @@
     text-overflow: ellipsis;
     overflow: hidden;
     font-weight: bold;
+    text-align: center;
 }
 
 .small {
