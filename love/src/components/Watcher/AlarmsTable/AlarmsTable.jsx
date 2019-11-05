@@ -4,6 +4,7 @@ import styles from './AlarmsTable.module.css';
 import Alarm from '../Alarm/Alarm';
 import Button from '../../GeneralPurpose/Button/Button';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
+import GearIcon from '../../icons/GearIcon/GearIcon';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -136,7 +137,6 @@ export default class AlarmsTable extends PureComponent {
   sortData = (a, b) => {
     const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
     const column = this.state.sortingColumn;
-    console.log(direction, column)
     return a[column] <= b[column] ? -direction : direction;
   };
 
@@ -202,65 +202,39 @@ export default class AlarmsTable extends PureComponent {
                       </td>
                       <td className={styles.string}>{row.maxSeverity}</td>
                       <td className={styles.string}>{row.name}</td>
-                      <td className={styles.string}>{row.timestampSeverityNewest}</td>
+                      <td className={styles.string}>
+                        <div>
+                          <div>{row.timestampSeverityNewest}</div>
+                          <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
+                            <GearIcon active={this.state.expandedRows[key]} />
+                          </div>
+                        </div>
+                      </td>
                     </tr>
-                    {/* {this.state.expandedRows[key] ? (
+                    {this.state.expandedRows[key] ? (
                       <tr onClick={this.closeFilterDialogs} key={`${key}-expanded`} className={styles.expandedRow}>
                         <td colSpan={4}>
-                          <div>
-                            <p>Value</p>
-                            {row.value.length > 1
-                              ? this.renderValueAsList(row.value)
-                              : this.renderValueAsList([row.value])}
-                          </div>
-                        </td>
-                        <td colSpan={4}>
-                          <div>
-                            <p>{'function ( value ) {'}</p>
-                            <textarea
-                              id={`${key}-healthFunction`}
-                              defaultValue={
-                                this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText
-                              }
-                            />
-                            <p>{'}'}</p>
-                            <div onClick={() => this.setHealthFunction(key)}>
-                              <Button title="Set health status function" className={styles.setButton}>
-                                Set
-                              </Button>
-                            </div>
-                          </div>
-                        </td>
-                        <td colSpan={1}>
-                          <div>
-                            <div className={styles.snippetsContainer}>
-                              <p className={styles.lineJump}> </p>
-
-                              <div className={styles.snippetsTitle}>Snippets</div>
-                              <div className={styles.snippetsList}>
-                                <div className={styles.snippetButtonWrapper}>
-                                  <Button secondary className={styles.snippetButton}>
-                                    <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
-                                  </Button>
-                                </div>
-                                <div className={styles.snippetButtonWrapper}>
-                                  <Button secondary className={styles.snippetButton}>
-                                    <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
-                                  </Button>
-                                </div>
+                          <div className={styles.expandedColumn}>
+                            <div>
+                              <div className={styles.title}>Reason:</div>
+                              <div>
+                                <p>{row.reason}</p>
                               </div>
-
-                              <div className={styles.statusConfigTitle}> Available Status:</div>
-                              <div className={styles.statusList}>
-                                <div> OK</div>
-                                <div> WARNING</div>
-                                <div> ALERT</div>
+                            </div>
+                            <div>
+                              <div className={styles.title}>Acknowledged by:</div>
+                              <div>
+                                <p>-</p>
+                              </div>
+                              <div className={styles.title}>Muted by:</div>
+                              <div>
+                                <p>-</p>
                               </div>
                             </div>
                           </div>
                         </td>
                       </tr>
-                    ) : null} */}
+                    ) : null}
                   </React.Fragment>
                 );
               }
