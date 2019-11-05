@@ -3,6 +3,7 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
+import { receiveAlarms } from '../actions/alarms';
 import {
   getStreamData,
   getLastAlarm,
@@ -225,6 +226,51 @@ describe('GIVEN we have some alarms in the state', () => {
       expect(watcherAlarmStream).toEqual(alarm);
       expect(lastAlarm).toEqual(alarm);
       expect(allAlarms).toEqual(expectedAlarms);
+    });
+  });
+});
+
+describe('GIVEN we have no alarms in the state', () => {
+  const initialState = {
+    auth: {
+      username: '',
+      token: null,
+      status: 'EMPTY',
+    },
+    ws: {
+      alarms: [],
+      connectionState: 'CLOSED',
+      subscriptions: [],
+      lastSALCommand: {
+        status: undefined,
+        cmd: '',
+        params: {},
+        component: '',
+      },
+    },
+  };
+
+  beforeEach(async () => {
+    store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
+  });
+
+  describe('WHEN we dispatch a receiveAlarms event with 1 alarm', () => {
+    it('THEN the alarm is stored in the watcher state accordingly ', async () => {
+      // Act:
+      await store.dispatch(receiveAlarms(alarms[0]));
+      // Assert:
+      const allAlarms = getAllAlarms(store.getState());
+      expect(allAlarms).toEqual([alarms[0]]);
+    });
+  });
+
+  describe('WHEN we dispatch a receiveAlarms event with multiple alarms', () => {
+    it('THEN all the alarms are stored in the watcher state accordingly ', async () => {
+      // Act:
+      await store.dispatch(receiveAlarms(alarms));
+      // Assert:
+      const allAlarms = getAllAlarms(store.getState());
+      expect(allAlarms).toEqual(alarms);
     });
   });
 });

@@ -5,7 +5,7 @@ import {
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
-  RECEIVE_ALARM,
+  RECEIVE_ALARMS,
 } from '../actions/actionTypes';
 import { connectionStates, SALCommandStatus } from '../actions/ws';
 
@@ -122,13 +122,20 @@ export default function(state = initialState, action) {
       };
     }
 
-    case RECEIVE_ALARM: {
+    case RECEIVE_ALARMS: {
+      let actionAlarms = action.alarms;
+      if (!Array.isArray(action.alarms)) {
+        actionAlarms = [actionAlarms];
+      }
       let newAlarms = Array.from(state.alarms);
-      const alarmIndex = state.alarms.findIndex((alarm) => { return alarm.name == action.alarm.name});
-      if (alarmIndex === -1) {
-        newAlarms.push(action.alarm);
-      } else {
-        newAlarms[alarmIndex] = action.alarm;
+
+      for (const actionAlarm of actionAlarms) {
+        const alarmIndex = newAlarms.findIndex((stateAlarm) => { return stateAlarm.name == actionAlarm.name});
+        if (alarmIndex === -1) {
+          newAlarms.push(actionAlarm);
+        } else {
+          newAlarms[alarmIndex] = actionAlarm;
+        }
       }
 
       return {
