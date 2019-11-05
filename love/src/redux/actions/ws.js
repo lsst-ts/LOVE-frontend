@@ -85,9 +85,8 @@ export const openWebsocketConnection = () => {
                 stream.raftsDetailedState ||
                 stream.shutterDetailedState ||
                 stream.imageReadinessDetailedState ||
-                stream.calibrationDetailedState){
+                stream.calibrationDetailedState) {
                   dispatch(receiveCameraStateData(stream));
-
               }
 
             }

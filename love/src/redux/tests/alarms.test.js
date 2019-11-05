@@ -5,6 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import { openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
 import {
   getAllEvents,
+  getStreamData,
   getAllAlarms,
 } from '../selectors';
 
@@ -108,12 +109,12 @@ describe('GIVEN we have no alarms in the state', () => {
     localStorage.setItem('LOVE-TOKEN', 'love-token');
     server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
     await store.dispatch(openWebsocketConnection());
-    await store.dispatch(requestGroupSubscription('event-all-all-all'));
+    await store.dispatch(requestGroupSubscription('event-Watcher-0-alarm'));
     await server.connected;
   });
 
   describe('WHEN we receive alarm events', () => {
-    it('THEN the latest alarm is updated in the generic events state for the Watcher CSC,' +
+    it('THEN the latest alarm is updated in the group event-Watcher-0-alarm,' +
       'and each alarm is stored in the watcher state accordingly ', async () => {
       // Arrange:
       let expectedAlarms = [];
@@ -133,15 +134,10 @@ describe('GIVEN we have no alarms in the state', () => {
         });
 
         // Assert:
-        const expectedEventState = {
-          'Watcher-0': {
-            alarm: alarm,
-          },
-        };
         expectedAlarms.push(alarm);
-        const resultEventState = getAllEvents(store.getState());
+        const resultEventState = getStreamData(store.getState(), 'event-Watcher-0-alarm');
         const resultAlarms = getAllAlarms(store.getState());
-        expect(resultEventState).toEqual(expectedEventState);
+        expect(resultEventState).toEqual(alarm);
         expect(resultAlarms).toEqual(expectedAlarms);
       });
     });
@@ -175,12 +171,13 @@ describe('GIVEN we have some alarms in the state', () => {
     localStorage.setItem('LOVE-TOKEN', 'love-token');
     server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
     await store.dispatch(openWebsocketConnection());
-    await store.dispatch(requestGroupSubscription('event-all-all-all'));
+    await store.dispatch(requestGroupSubscription('event-Watcher-0-alarm'));
     await server.connected;
   });
 
   describe('WHEN we receive alarm events', () => {
-    it('THEN the alarm is updated (not re-added) in the watcher state accordingly ', async () => {
+    it('THEN the latest alarm is updated in the group event-Watcher-0-alarm,' +
+      'the alarm is updated (not re-added) in the watcher state accordingly ', async () => {
       // Arrange:
       const alarm = {
         // Updated alarm 1
@@ -219,8 +216,10 @@ describe('GIVEN we have some alarms in the state', () => {
       });
 
       // Assert:
+      const resultEventState = getStreamData(store.getState(), 'event-Watcher-0-alarm');
       const expectedAlarms = [alarms[0], alarm, alarms[2]];
       const resultAlarms = getAllAlarms(store.getState());
+      expect(resultEventState).toEqual(alarm);
       expect(resultAlarms).toEqual(expectedAlarms);
     });
   });
