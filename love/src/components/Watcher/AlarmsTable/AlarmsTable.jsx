@@ -46,6 +46,14 @@ export default class AlarmsTable extends PureComponent {
     };
   }
 
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
+  };
+
   setFilters = (filters) => {
     Object.keys(filters).map((key) => {
       if (!(key in filters) || (filters[key].type === 'regexp' && typeof filters[key].value === 'string')) {
