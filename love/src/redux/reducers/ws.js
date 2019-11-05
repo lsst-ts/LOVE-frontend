@@ -123,9 +123,13 @@ export default function(state = initialState, action) {
     }
 
     case RECEIVE_ALARM: {
-      console.log('++++++ REDUCER, action.alarm: ', action.alarm);
-      const newAlarms = state.alarms.concat(action.alarm);
-      console.log('++++++ REDUCER, newAlarms: ', newAlarms);
+      let newAlarms = Array.from(state.alarms);
+      const alarmIndex = state.alarms.findIndex((alarm) => { return alarm.name == action.alarm.name});
+      if (alarmIndex === -1) {
+        newAlarms.push(action.alarm);
+      } else {
+        newAlarms[alarmIndex] = action.alarm;
+      }
 
       return {
         ...state,
