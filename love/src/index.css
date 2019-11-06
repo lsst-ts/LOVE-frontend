@@ -53,6 +53,7 @@ body {
   --status-disabled-dimmed-color-2: hsl(202, 20%, 20%);
   --status-running-color: hsl(188, 79%, 56%);
   --status-running-dimmed-color: hsl(188, 79%, 56%, 0.2);
+  --status-running-dimmed-color-2: hsl(191, 52%, 20%);
   --status-running-dimmed-color-3: hsl(191, 52%, 20%);
 
   /* Script status */
