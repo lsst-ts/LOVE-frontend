@@ -5,6 +5,11 @@
     justify-content: center;
 }
 
+.statusOnly {
+    grid-template-columns: 8em;
+    grid-column-gap: 0;
+}
+
 .ackContainer {
     display: grid;
     grid-template-columns: 2em 0.55em;
