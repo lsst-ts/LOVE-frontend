@@ -11,3 +11,7 @@
 .flip {
   transform: scaleY(-1);
 }
+
+.hidden {
+  display: none;
+}
