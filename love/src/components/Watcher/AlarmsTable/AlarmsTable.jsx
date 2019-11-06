@@ -208,10 +208,24 @@ export default class AlarmsTable extends PureComponent {
                   <React.Fragment key={key}>
                     <tr className={styles.dataRow} onClick={() => this.clickGearIcon(key)}>
                       <td className={styles.string}>{row.name}</td>
-                      <td className={styles.string}>{row.maxSeverity}</td>
-                      <td className={styles.string} title={new Date(row.timestampSeverityNewest).toString()}>{timeDifference(currentTime, row.timestampSeverityNewest)}</td>
                       <td className={styles.string}>
-                        {<Alarm severity={row.severity} acknowledged snoozed />}
+                        <Alarm severity={row.maxSeverity} statusOnly />
+                      </td>
+                      <td className={styles.string} title={new Date(row.timestampSeverityNewest * 1000).toString()}>
+                        {timeDifference(currentTime, row.timestampSeverityNewest * 1000)}
+                      </td>
+                      <td className={styles.string}>
+                        {
+                          <Alarm
+                            severity={row.severity}
+                            acknowledged={row.acknowledged}
+                            muted={row.mutedSeverity <= row.severity}
+                            ackAlarm={(event) => {
+                              event.stopPropagation();
+                              this.props.ackAlarm(row.name, row.severity, this.props.user);
+                            }}
+                          />
+                        }
                       </td>
                     </tr>
                     {this.state.expandedRows[key] ? (
@@ -227,11 +241,11 @@ export default class AlarmsTable extends PureComponent {
                             <div>
                               <div className={styles.title}>Acknowledged by:</div>
                               <div>
-                                <p>-</p>
+                                <p>{row.acknowledgedBy}</p>
                               </div>
                               <div className={styles.title}>Muted by:</div>
                               <div>
-                                <p>-</p>
+                                <p>{row.mutedBy}</p>
                               </div>
                             </div>
                           </div>

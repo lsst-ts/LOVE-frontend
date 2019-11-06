@@ -280,7 +280,7 @@
 
 .telemetrySelectionTable .expandedColumn {
     display: grid;
-    grid-template-columns: min-content 1fr;
+    grid-template-columns: minmax(30em, min-content) 1fr;
     column-gap: 2em;
 }
 
