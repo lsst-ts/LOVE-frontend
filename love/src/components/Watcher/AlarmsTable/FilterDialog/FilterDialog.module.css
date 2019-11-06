@@ -1,0 +1,76 @@
+.superContainer {
+    position:relative;
+    width: 100%;
+    min-width: 170px;
+    z-index: 2;
+}
+
+.filterContainer {
+    position: absolute;
+    background-color: var(--quinary-background-color);
+    width: 100%;
+    padding: 0.5em;
+    padding-top: 0em;
+    right: -0.5em;
+    border-radius: 4px 0 4px 4px;
+    box-shadow: -5px 4px 3px -1px var(--box-shadow-color);
+}
+.show {
+    display:block;    
+    text-align: left;
+}
+
+.hide {
+    display: none;
+}
+
+.filterInput {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--base-font-color);
+    border: none;
+    border-radius: 3px;
+    padding: 0.4em;
+}
+
+.filterText {
+    vertical-align: text-top;
+}
+
+.sortOption {
+    color: var(--tertiary-font-color);
+    padding: 0.3em 0em;
+}
+
+.dialogRow {
+    padding: 0.2em 0.5em;
+    font-size: 0.8em;
+    cursor: pointer;
+}
+
+.dialogRow:hover {
+    background-color: var(--secondary-font-dimmed-color);
+}
+
+.dialogRowTitle {
+    padding: 0.2em 0.5em;
+    padding-top: 0.5em;
+}
+
+.line {
+    background-color: var(--secondary-font-dimmed-color);
+    height: 1px;
+}
+
+.filterIconWrapper {
+    display: inline-block;
+    width: 1.2em;
+    padding-right: 0.3em;
+}
+
+.clearAll{
+    float: right;
+    color: var(--tertiary-font-color);
+    font-size: small;
+    cursor: pointer;
+}
