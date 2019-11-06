@@ -6,5 +6,8 @@
 .decrease {
   fill: var(--status-warning-color);
   stroke: var(--status-warning-color);
+}
+
+.flip {
   transform: scaleY(-1);
 }
