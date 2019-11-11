@@ -1,6 +1,6 @@
 .alarmContainer {
     display: grid;
-    grid-template-columns: 8em 2.75em 2em;
+    grid-template-columns: 8em 3.75em 3em;
     grid-column-gap: 1em;
     justify-content: center;
 }
@@ -12,6 +12,6 @@
 
 .ackContainer {
     display: grid;
-    grid-template-columns: 2em 0.55em;
+    grid-template-columns: 3em 0.55em;
     grid-column-gap: 0.2em;
 }
