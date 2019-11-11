@@ -222,7 +222,7 @@ export default class AlarmsTable extends PureComponent {
                             muted={row.mutedSeverity <= row.severity}
                             ackAlarm={(event) => {
                               event.stopPropagation();
-                              this.props.ackAlarm(row.name, row.severity, this.props.user);
+                              this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
                             }}
                           />
                         }
