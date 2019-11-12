@@ -2,8 +2,6 @@ import React from 'react';
 import styles from './Alarm.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import Button from '../../GeneralPurpose/Button/Button';
-import AcknowledgeIcon from '../../icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
-import MutedIcon from '../../icons/Watcher/MutedIcon/MutedIcon';
 import SeverityArrowIcon from '../../icons/Watcher/SeverityArrowIcon/SeverityArrowIcon';
 
 export const severityToStatus = {
@@ -18,17 +16,15 @@ export default function Alarm({ severity, statusOnly, sevIncrease, sevDecrease, 
   const status = severityToStatus[severity];
   return (
     <div className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}>
-      <StatusText status={status}>{status}</StatusText>
+      <div className={styles.statusContainer}>
+        <StatusText status={status}>{status}</StatusText>
+        <SeverityArrowIcon increase={sevIncrease} decrease={sevDecrease}></SeverityArrowIcon>
+      </div>
       {statusOnly ? null : (
-        <>
-          <div className={styles.ackContainer} onClick={(event) => ackAlarm(event)}>
-            {/*<AcknowledgeIcon active={!acknowledged}></AcknowledgeIcon>*/}
-            <SeverityArrowIcon increase={sevIncrease} decrease={sevDecrease}></SeverityArrowIcon>
-            <Button status='info' size='extra-small' className={styles.ackButton} onClick={() => {}}> ACK </Button>
-          </div>
-          {/*<MutedIcon active={!muted}></MutedIcon>*/}
-          <Button status='primary' size='extra-small'> MUTE </Button>
-        </>
+        <div className={styles.buttonContainer}>
+          <Button title='ack' status='info' size='extra-small' className={styles.ackButton} onClick={(event) => {ackAlarm(event)}}> ACK </Button>
+          <Button status='info' size='extra-small'> MUTE </Button>
+        </div>
       )}
     </div>
   );
