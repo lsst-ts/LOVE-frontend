@@ -14,11 +14,24 @@ export const severityToStatus = {
 
 export default function Alarm({ severity, statusOnly, sevIncrease, sevDecrease, acknowledged, muted, ackAlarm }) {
   const status = severityToStatus[severity];
+  let change = '';
+  if (acknowledged) {
+    change = 'clear';
+  }
+  else if (sevIncrease) {
+    change = 'increase';
+  }
+  else if (sevDecrease) {
+    change = 'decrease';
+  }
+  else if (!sevIncrease && !sevDecrease) {
+    change = 'static';
+  }
   return (
     <div className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}>
       <div className={styles.statusContainer}>
         <StatusText status={status}>{status}</StatusText>
-        <SeverityArrowIcon increase={sevIncrease} decrease={sevDecrease}></SeverityArrowIcon>
+        <SeverityArrowIcon change={change}></SeverityArrowIcon>
       </div>
       {statusOnly ? null : (
         <Button title='ack' status='info' size='small' disabled={acknowledged} onClick={(event) => {ackAlarm(event)}}> ACK </Button>
