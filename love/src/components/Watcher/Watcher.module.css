@@ -1,0 +1,9 @@
+.panelRow {
+  display: inline-flex;
+}
+
+.legend {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: 24em 10em;
+}
