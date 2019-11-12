@@ -1,6 +1,6 @@
 .alarmContainer {
     display: grid;
-    grid-template-columns: 8.85em 6.5em;
+    grid-template-columns: 8.85em 4em;
     grid-column-gap: 0.5em;
     justify-content: center;
 }
@@ -13,10 +13,4 @@
   display: grid;
   grid-template-columns: 8em 0.55em;
   grid-column-gap: 0.3em;
-}
-
-.buttonContainer {
-    display: grid;
-    grid-template-columns: 3em 3em;
-    grid-column-gap: 0.5em;
 }
