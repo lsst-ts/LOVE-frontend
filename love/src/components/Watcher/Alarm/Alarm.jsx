@@ -12,19 +12,19 @@ export const severityToStatus = {
   4: 'critical',
 };
 
-export default function Alarm({ severity, statusOnly, sevIncrease, sevDecrease, acknowledged, muted, ackAlarm }) {
+export default function Alarm({ severity, maxSeverity, statusOnly, acknowledged, muted, ackAlarm }) {
   const status = severityToStatus[severity];
   let change = '';
   if (acknowledged) {
     change = 'clear';
   }
-  else if (sevIncrease) {
+  else if (severity < maxSeverity) {
     change = 'increase';
   }
-  else if (sevDecrease) {
+  else if (severity > maxSeverity) {
     change = 'decrease';
   }
-  else if (!sevIncrease && !sevDecrease) {
+  else if (severity === maxSeverity) {
     change = 'static';
   }
   return (

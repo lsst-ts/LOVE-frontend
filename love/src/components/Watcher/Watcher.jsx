@@ -43,10 +43,17 @@ PageMaker including versions of Lorem Ipsum.`,
       <Panel title="Auxiliary Telescope" className={styles.panel}>
         <>
           <div className={styles.legend}>
-            Ok, acknowledged &nbsp; &nbsp; <Alarm severity={1} acknowledged />
-            Warning, unacknowledged sev increase &nbsp; &nbsp; <Alarm severity={2} sevIncrease />
-            Alert, unacknowledged sev decrease &nbsp; &nbsp; <Alarm severity={3} sevDecrease />
-            Critical, unacknowledged sev equal &nbsp; &nbsp; <Alarm severity={4} />
+            Ok, acknowledged &nbsp; &nbsp;
+            <Alarm severity={1} maxSeverity={2} acknowledged />
+
+            Warning, unacknowledged sev increase &nbsp; &nbsp;
+            <Alarm severity={2} maxSeverity={3} />
+
+            Alert, unacknowledged sev decrease &nbsp; &nbsp
+             <Alarm severity={3} maxSeverity={2} />
+
+            Critical, unacknowledged sev equal &nbsp; &nbsp;
+            <Alarm severity={4} maxSeverity={4} />
           </div>
 
           <AlarmsTableContainer></AlarmsTableContainer>
