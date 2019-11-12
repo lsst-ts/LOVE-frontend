@@ -23,7 +23,7 @@ export default function Alarm({ severity, statusOnly, sevIncrease, sevDecrease, 
         <>
           <div className={styles.ackContainer} onClick={(event) => ackAlarm(event)}>
             {/*<AcknowledgeIcon active={!acknowledged}></AcknowledgeIcon>*/}
-            <Button status='primary' size='extra-small'> ACK </Button>
+            <Button status='info' size='extra-small' className={styles.ackButton} onClick={() => {}}> ACK </Button>
             <SeverityArrowIcon increase={sevIncrease} decrease={sevDecrease}></SeverityArrowIcon>
           </div>
           {/*<MutedIcon active={!muted}></MutedIcon>*/}

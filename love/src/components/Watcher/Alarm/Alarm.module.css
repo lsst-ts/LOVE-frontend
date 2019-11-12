@@ -10,6 +10,10 @@
     grid-column-gap: 0;
 }
 
+.ackButton {
+    font-weight: 500;
+}
+
 .ackContainer {
     display: grid;
     grid-template-columns: 3em 0.55em;
