@@ -22,8 +22,8 @@ export default function Alarm({ severity, statusOnly, sevIncrease, sevDecrease, 
       </div>
       {statusOnly ? null : (
         <div className={styles.buttonContainer}>
-          <Button title='ack' status='info' size='extra-small' className={styles.ackButton} onClick={(event) => {ackAlarm(event)}}> ACK </Button>
-          <Button status='info' size='extra-small'> MUTE </Button>
+          <Button title='ack' status='info' size='extra-small' onClick={(event) => {ackAlarm(event)}}> ACK </Button>
+          <Button title='mute' status='info' size='extra-small'> MUTE </Button>
         </div>
       )}
     </div>
