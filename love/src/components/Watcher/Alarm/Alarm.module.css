@@ -1,17 +1,16 @@
 .alarmContainer {
     display: grid;
-    grid-template-columns: 8em 2.75em 2em;
-    grid-column-gap: 1em;
+    grid-template-columns: 8.85em 4em;
+    grid-column-gap: 0.5em;
     justify-content: center;
 }
 
 .statusOnly {
-    grid-template-columns: 8em;
-    grid-column-gap: 0;
+    grid-template-columns: 8.85em;
 }
 
-.ackContainer {
-    display: grid;
-    grid-template-columns: 2em 0.55em;
-    grid-column-gap: 0.2em;
+.statusContainer {
+  display: grid;
+  grid-template-columns: 8em 0.55em;
+  grid-column-gap: 0.3em;
 }

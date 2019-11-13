@@ -33,7 +33,7 @@ export default class AlarmsTable extends PureComponent {
       severity: { type: 'regexp', value: new RegExp('(?:)') },
       maxSeverity: { type: 'regexp', value: new RegExp('(?:)') },
       name: { type: 'regexp', value: new RegExp('(?:)') },
-      timestampSeverityNewest: { type: 'regexp', value: new RegExp('(?:)') },
+      timestampSeverityOldest: { type: 'regexp', value: new RegExp('(?:)') },
     };
 
     this.state = {
@@ -172,9 +172,9 @@ export default class AlarmsTable extends PureComponent {
                   <>
                     <ColumnHeader
                       {...defaultColumnProps}
-                      header={'Name'}
-                      filterName={'name'}
-                      filter={this.state.filters.name}
+                      header={'Status'}
+                      filterName={'severity'}
+                      filter={this.state.filters.severity}
                     />
                     <ColumnHeader
                       {...defaultColumnProps}
@@ -184,15 +184,15 @@ export default class AlarmsTable extends PureComponent {
                     />
                     <ColumnHeader
                       {...defaultColumnProps}
-                      header={'Severity update'}
-                      filterName={'timestampSeverityNewest'}
-                      filter={this.state.filters.timestampSeverityNewest}
+                      header={'Name'}
+                      filterName={'name'}
+                      filter={this.state.filters.name}
                     />
                     <ColumnHeader
                       {...defaultColumnProps}
-                      header={'Status'}
-                      filterName={'severity'}
-                      filter={this.state.filters.severity}
+                      header={'Severity update'}
+                      filterName={'timestampSeverityOldest'}
+                      filter={this.state.filters.timestampSeverityOldest}
                     />
                   </>
                 );
@@ -207,17 +207,11 @@ export default class AlarmsTable extends PureComponent {
                 return (
                   <React.Fragment key={key}>
                     <tr className={styles.dataRow} onClick={() => this.clickGearIcon(key)}>
-                      <td className={styles.string}>{row.name}</td>
-                      <td className={styles.string}>
-                        <Alarm severity={row.maxSeverity} statusOnly />
-                      </td>
-                      <td className={styles.string} title={new Date(row.timestampSeverityNewest * 1000).toString()}>
-                        {timeDifference(currentTime, row.timestampSeverityNewest * 1000)}
-                      </td>
                       <td className={styles.string}>
                         {
                           <Alarm
                             severity={row.severity}
+                            severity={row.maxSeverity}
                             acknowledged={row.acknowledged}
                             muted={row.mutedSeverity <= row.severity}
                             ackAlarm={(event) => {
@@ -226,6 +220,15 @@ export default class AlarmsTable extends PureComponent {
                             }}
                           />
                         }
+                      </td>
+                      <td className={styles.string}>
+                        <Alarm severity={row.maxSeverity} statusOnly />
+                      </td>
+                      <td className={styles.string}>
+                        {row.name}
+                      </td>
+                      <td className={styles.string} title={new Date(row.timestampSeverityOldest * 1000).toString()}>
+                        {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
                       </td>
                     </tr>
                     {this.state.expandedRows[key] ? (
