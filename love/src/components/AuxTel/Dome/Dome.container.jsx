@@ -13,7 +13,8 @@ const DomeContainer = ({
   azimuthCommandedState,
   dropoutDoorState,
   mainDoorState,
-  mountEncoders,
+  azElMountEncoders,
+  nasmythMountEncoders,
   detailedState,
   atMountState,
   target,
@@ -34,7 +35,8 @@ const DomeContainer = ({
       azimuthCommandedState={azimuthCommandedState}
       dropoutDoorState={dropoutDoorState}
       mainDoorState={mainDoorState}
-      mountEncoders={mountEncoders}
+      azElMountEncoders={azElMountEncoders}
+      nasmythMountEncoders={nasmythMountEncoders}
       detailedState={detailedState}
       atMountState={atMountState}
       target={target}
@@ -66,7 +68,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATDome-0-mainDoorState'));
       dispatch(requestGroupSubscription('event-ATDome-0-allAxesInPosition'));
       //ATMCS
-      dispatch(requestGroupSubscription('telemetry-ATMCS-0-mountEncoders'));
+      dispatch(requestGroupSubscription('telemetry-ATMCS-0-mount_AzEl_Encoders'));
+      dispatch(requestGroupSubscription('telemetry-ATMCS-0-mount_Nasmyth_Encoders'));
       dispatch(requestGroupSubscription('event-ATMCS-0-detailedState'));
       dispatch(requestGroupSubscription('event-ATMCS-0-atMountState'));
       dispatch(requestGroupSubscription('event-ATMCS-0-target'));
@@ -86,7 +89,8 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-mainDoorState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-allAxesInPosition'));
       //ATMCS
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-0-mountEncoders'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-0-mount_AzEl_Encoders'));
+      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-0-mount_Nasmyth_Encoders'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-detailedState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-atMountState'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-target'));

@@ -100,7 +100,7 @@ class App extends Component {
             token={this.props.token}
             path="/aux-tel-dome"
             render={() => (
-              <Panel title="Auxiliary Telescope Dome & Mount" className={'smallPanel'}>
+              <Panel title="Auxiliary Telescope Dome & Mount" className={'mediumPanel'}>
                 <DomeContainer />
               </Panel>
             )}
