@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 
-import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
+import { fetchToken, doReceiveToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
 import { getToken, getUsername, getTokenStatus, getPermCmdExec } from '../selectors';
 
@@ -15,31 +15,48 @@ beforeEach(() => {
 });
 
 describe('GIVEN there are no worspaces in the store', () => {
+  let initialToken, url;
+
+  beforeEach(async () => {
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
+    initialToken = getToken(store.getState());
+    expect(initialToken).toEqual(token);
+    url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+  });
 
   afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
     fetchMock.reset();
   });
 
   it('WHEN the workspaces are requested, THEN the state should contain the workspaces', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/`;
+    // const url = `${ManagerInterface.getUifBaseUrl()}workspaces/`;
+    url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
     fetchMock.mock(
-      url
-      new Headers({
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: `Token ${newToken}`,
-      }),
+      url,
+      {
+        detail: 'Token is valid',
+        user: {
+          username: 'my-user',
+        },
+        permissions: {
+          execute_commands: true
+        }
+      },
+      ManagerInterface.getHeaders(),
     );
     // Act:
-    await store.dispatch(fetchToken('asdds', 'asdf'));
+    await store.dispatch(validateToken());
     // Assert:
-    const newState = store.getState();
+    const newToken = getToken(store.getState());
     const storedToken = localStorage.getItem('LOVE-TOKEN');
-    expect(getToken(newState)).toEqual(newToken);
-    expect(getUsername(newState)).toEqual('my-user');
-    expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
-    expect(getPermCmdExec(newState)).toEqual(true);
-    expect(storedToken).toEqual(newToken);
+    expect(newToken).toEqual(initialToken);
+    expect(storedToken).toEqual(initialToken);
+    expect(getUsername(store.getState())).toEqual('my-user');
+    expect(getPermCmdExec(store.getState())).toEqual(true);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 });
