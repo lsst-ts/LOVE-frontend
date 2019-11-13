@@ -355,7 +355,7 @@ export default class LightPath extends Component {
                     upperLimit={175}
                     currentValue={mountRotator.current}
                     targetValue={mountRotator.target}
-                    height={20}
+                    height={30}
                     displayLabels={false}
                   />
                 </span>
@@ -439,7 +439,7 @@ export default class LightPath extends Component {
                     upperLimit={175}
                     currentValue={mountRotator.current}
                     targetValue={mountRotator.target}
-                    height={20}
+                    height={30}
                     displayLabels={false}
                   />
                 </span>
