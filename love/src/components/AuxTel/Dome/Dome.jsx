@@ -43,10 +43,10 @@ export default class Dome extends Component {
     const width = this.props.width;
     const height = this.props.height;
     const currentPointing = {
-      az: this.props.mountEncoders ? this.props.mountEncoders.azimuthCalculatedAngle.value : 0,
-      el: this.props.mountEncoders ? this.props.mountEncoders.elevationCalculatedAngle.value : 0,
-      nasmyth1: this.props.mountEncoders ? this.props.mountEncoders.nasmyth1CalculatedAngle.value : 0,
-      nasmyth2: this.props.mountEncoders ? this.props.mountEncoders.nasmyth2CalculatedAngle.value : 0,
+      az: this.props.azElMountEncoders ? this.props.azElMountEncoders.azimuthCalculatedAngle.value[0] : 0,
+      el: this.props.azElMountEncoders ? this.props.azElMountEncoders.elevationCalculatedAngle.value[0] : 0,
+      nasmyth1: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth1CalculatedAngle.value[0] : 0,
+      nasmyth2: this.props.nasmythMountEncoders ? this.props.nasmythMountEncoders.nasmyth2CalculatedAngle.value[0] : 0,
     };
     const targetPointing = {
       az: this.props.target ? this.props.target[this.props.target.length - 1].azimuth.value : 0,
@@ -80,9 +80,9 @@ export default class Dome extends Component {
       ? this.props.dropoutDoorOpeningPercentage.value
       : 0;
     const trackID = this.props.target ? this.props.target[0].trackId.value : '';
-    const m3State = this.props.m3State ? this.props.m3State[0].value: 2;
+    const m3State = this.props.m3State ? this.props.m3State[0].value : 2;
     const currentTimesToLimits = this.props.currentTimeToLimits ? this.props.currentTimesToLimits : {};
-    
+
     const isProjected = true;
     let azDiff = Math.abs(domeAz - currentPointing.az);
     if (azDiff > 180) azDiff = azDiff - 360;
@@ -97,7 +97,7 @@ export default class Dome extends Component {
             <div className={styles.windRoseContainer}>
               <WindRose />
             </div>
-            
+
             <DomeTopView width={width} height={height} />
             <DomeShutter
               width={width}
@@ -184,14 +184,14 @@ export default class Dome extends Component {
                   groupNames={{
                     'Dome Azimuth': 'telemetry-ATDome-0-position',
                     'Dome Target Az': 'event-ATDome-0-azimuthCommandedState',
-                    'Mount Azimuth': 'telemetry-ATMCS-0-mountEncoders',
+                    'Mount Azimuth': 'telemetry-ATMCS-0-azElMountEncoders',
                     'Mount Target': 'event-ATMCS-0-target',
                   }}
                   accessors={{
                     'Dome Azimuth': (data) => data.azimuthPosition.value,
                     'Dome Target Az': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
-                    'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value,
+                    'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value[0],
                     'Mount Target': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                   }}
@@ -228,12 +228,12 @@ export default class Dome extends Component {
                     },
                   }}
                   groupNames={{
-                    'Mount Elevation': 'telemetry-ATMCS-0-mountEncoders',
+                    'Mount Elevation': 'telemetry-ATMCS-0-mount_AzEl_Encoders',
                     'Mount Target': 'event-ATMCS-0-target',
                   }}
                   accessors={{
                     'Mount Elevation': (data) =>
-                      data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value : 0,
+                      data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value[0] : 0,
                     'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
                   }}
                 />
