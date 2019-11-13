@@ -11,6 +11,7 @@ import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
+import { receiveAlarms } from './alarms';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -80,15 +81,14 @@ export const openWebsocketConnection = () => {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
-              } else if(stream.startIntegration || 
-                stream.raftsDetailedState || 
-                stream.shutterDetailedState || 
-                stream.imageReadinessDetailedState || 
-                stream.calibrationDetailedState){
+              } else if(stream.startIntegration ||
+                stream.raftsDetailedState ||
+                stream.shutterDetailedState ||
+                stream.imageReadinessDetailedState ||
+                stream.calibrationDetailedState) {
                   dispatch(receiveCameraStateData(stream));
+              }
 
-              } 
-              
             }
             if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
@@ -110,6 +110,10 @@ export const openWebsocketConnection = () => {
 
             if (data.data[0].csc === 'Heartbeat') {
               dispatch(receiveCSCHeartbeat(stream.stream));
+            }
+
+            if (data.data[0].csc === 'Watcher') {
+              dispatch(receiveAlarms(stream.alarm));
             }
 
             if (data.data[0].data.logMessage) {

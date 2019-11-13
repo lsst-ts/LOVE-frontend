@@ -20,6 +20,7 @@ import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountV
 import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
+import Watcher from './components/Watcher/Watcher';
 
 class App extends Component {
   static propTypes = {
@@ -122,6 +123,7 @@ class App extends Component {
               </Panel>
             )}
           />
+          <PrivateRoute token={this.props.token} path="/watcher" component={Watcher} />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
       </div>

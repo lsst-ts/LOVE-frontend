@@ -17,6 +17,7 @@ export default class StatusText extends Component {
     if (status === 'running') statusStyle = styles.running;
     if (status === 'warning') statusStyle = styles.warning;
     if (status === 'alert') statusStyle = styles.alert;
+    if (status === 'critical') statusStyle = styles.critical;
     if (status === 'invalid') statusStyle = styles.invalid;
 
     return (
