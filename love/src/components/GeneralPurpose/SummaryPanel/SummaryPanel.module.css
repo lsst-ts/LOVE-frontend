@@ -5,7 +5,7 @@
     grid-row-gap: 0.2em;
     padding: 0 2em;
     max-width: 25em;
-    min-width: 20em;
+    min-width: 22em;
     justify-content: center;
     align-items: center;
     align-content: center;
@@ -51,7 +51,7 @@
   .summaryTable .row {
     display: flex;
     flex-direction: column;
-    margin-top: -2.5rem;
+    margin-top: -3.7rem;
     margin-bottom: 0.5rem;
     font-size: var(--font-size-small);
     grid-column: span 2;
