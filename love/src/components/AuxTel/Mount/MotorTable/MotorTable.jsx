@@ -137,7 +137,7 @@ export default class MotorTable extends Component {
                   if (col === 'angle') {
                     return (
                       <Td key={col} isNumber>
-                        {isNaN(value) || Number.isInteger(value) ? value : `${Math.round(value * 100) / 100}º`}
+                        {isNaN(value) || Number.isInteger(value) ? value : `${Math.round(value * 10000) / 10000}º`}
                       </Td>
                     );
                   }
@@ -166,7 +166,7 @@ export default class MotorTable extends Component {
                   }
                   return (
                     <Td isNumber key={col}>
-                      {Number.isInteger(value) ? value : Math.round(value * 100) / 100}
+                      {Number.isInteger(value) ? value : Math.round(value * 10000) / 10000}
                     </Td>
                   );
                 })}

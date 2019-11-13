@@ -125,8 +125,8 @@ export function fetchToken(username, password) {
       if (response) {
         const token = response.token;
         let username = '';
-        if (response.user_data) {
-          username = response.user_data.username;
+        if (response.user) {
+          username = response.user.username;
         }
         const permissions = response.permissions;
         if (token !== undefined && token !== null) {
@@ -196,18 +196,12 @@ export function validateToken() {
       return response.json().then((resp) => {
         const detail = resp.detail;
         let username = '';
-        if (resp.user_data) {
-          username = resp.user_data.username;
+        if (resp.user) {
+          username = resp.user.username;
         }
         const permissions = resp.permissions;
-        if (detail !== 'Token is valid') {
-          console.log('Session expired. Logging out');
-          dispatch(doExpireToken());
-          return Promise.resolve();
-        } else {
-          dispatch(doReceiveToken(username, token, permissions));
-          return Promise.resolve();
-        }
+        dispatch(doReceiveToken(username, token, permissions));
+        return Promise.resolve();
       });
     });
   };

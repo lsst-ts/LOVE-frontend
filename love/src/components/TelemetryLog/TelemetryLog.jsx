@@ -17,21 +17,21 @@ export default class TelemetryLog extends Component {
       msgList: [],
       msgNumber: 0,
       category: props.category,
-      salindex: 1,
+      salindex: 0,
       csc: props.csc,
       stream: props.stream,
-      cmdComponent: 'ATDome',
-      command: 'moveAzimuth',
-      cmdParams: '{"azimuth": 0}',
-      cmdSalindex: 1,
+      cmdComponent: 'Watcher',
+      command: 'acknowledge',
+      cmdParams: '{"name": "test.ConfiguredSeverities.Rule1", "severity": 1, "acknowledgedBy":"test"}',
+      cmdSalindex: 0,
     };
     this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
     category: 'event',
-    csc: 'ATDome',
-    stream: 'azimuthCommandedState',
+    csc: 'Watcher',
+    stream: 'alarm',
     data: {},
   };
 
@@ -101,6 +101,7 @@ export default class TelemetryLog extends Component {
       cmd: `cmd_${this.state.command}`,
       params: JSON.parse(this.state.cmdParams),
       component: this.state.cmdComponent,
+      salindex: this.state.cmdSalindex
     });
   };
 
