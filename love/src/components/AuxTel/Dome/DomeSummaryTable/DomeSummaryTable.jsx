@@ -117,7 +117,7 @@ export default class DomeSummaryTable extends Component {
               upperLimit={360}
               currentValue={domeAz.current}
               targetValue={domeAz.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -159,7 +159,7 @@ export default class DomeSummaryTable extends Component {
               upperLimit={270}
               currentValue={mountAz.current}
               targetValue={mountAz.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -184,7 +184,7 @@ export default class DomeSummaryTable extends Component {
               upperLimit={90}
               currentValue={mountEl.current}
               targetValue={mountEl.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -212,7 +212,7 @@ export default class DomeSummaryTable extends Component {
               upperLimit={175}
               currentValue={mountRotator.current}
               targetValue={mountRotator.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
