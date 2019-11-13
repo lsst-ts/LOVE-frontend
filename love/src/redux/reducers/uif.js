@@ -5,8 +5,7 @@ const initialState = {
 };
 
 /**
- * Modifies the state of the authentication mainly characterized by the
- * token received from the LOVE-manager and its status.
+ * Modifies the state of the UI Framework
  */
 export default function(state = initialState, action) {
   switch (action.type) {

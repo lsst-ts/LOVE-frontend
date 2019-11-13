@@ -476,8 +476,3 @@ export const getLastAlarm = (state) => {
   if (state.ws === undefined) return undefined;
   return cleanAlarm(getStreamData(state, 'event-Watcher-0-alarm'));
 };
-
-export const getWorkspaces = (state) => {
-  if (state.uif === undefined) return undefined;
-  return state.uif.workspaces;
-};
