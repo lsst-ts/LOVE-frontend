@@ -134,20 +134,24 @@
     background-image: none;
     background-color: var(--info-background-color);
     color: var(--info-font-color);
+    font-weight: 500;
 }
 .btnInfo:hover, .btnInfo:active:hover {
     background-image: none;
     background-color: var(--info-hover-background-color);
     color: var(--info-hover-font-color);
+    font-weight: 500;
 }
 .btnInfo.active {
     background-image: none;
     background-color: var(--info-active-background-color);
     color: var(--info-active-font-color);
+    font-weight: 500;
 }
 .btnInfo.active:hover {
     background-color: var(--info-active-hover-background-color);
     color: var(--info-active-font-color);
+    font-weight: 500;
     border-color: var(--info-active-hover-border-color);
 }
 
@@ -190,12 +194,12 @@
 .btnDanger.active {
     background-image: none;
     background-color: var(--danger-active-background-color);
-    color: var(--danger-active-font-color);    
+    color: var(--danger-active-font-color);
 }
 .btnDanger.active:hover {
     background-image: none;
     background-color: var(--danger-active-hover-background-color);
-    color: var(--danger-active-hover-font-color);    
+    color: var(--danger-active-hover-font-color);
 }
 
 
@@ -218,5 +222,3 @@
 .btnLink, .btnLink.active, .btnLink:active, .btnLink[disabled], fieldset[disabled] .btnLink {
     background-color: transparent;
 }
-
-

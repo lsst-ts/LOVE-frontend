@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './Alarm.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import AcknowledgeIcon from '../../icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
-import MutedIcon from '../../icons/Watcher/MutedIcon/MutedIcon';
+import Button from '../../GeneralPurpose/Button/Button';
 import SeverityArrowIcon from '../../icons/Watcher/SeverityArrowIcon/SeverityArrowIcon';
 
 export const severityToStatus = {
@@ -13,19 +12,29 @@ export const severityToStatus = {
   4: 'critical',
 };
 
-export default function Alarm({ severity, statusOnly, sevIncrease, sevDecrease, acknowledged, muted, ackAlarm }) {
+export default function Alarm({ severity, maxSeverity, statusOnly, acknowledged, muted, ackAlarm }) {
   const status = severityToStatus[severity];
+  let change = '';
+  if (acknowledged) {
+    change = 'clear';
+  }
+  else if (severity < maxSeverity) {
+    change = 'increase';
+  }
+  else if (severity > maxSeverity) {
+    change = 'decrease';
+  }
+  else if (severity === maxSeverity) {
+    change = 'static';
+  }
   return (
     <div className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}>
-      <StatusText status={status}>{status}</StatusText>
+      <div className={styles.statusContainer}>
+        <StatusText status={status}>{status}</StatusText>
+        <SeverityArrowIcon change={change}></SeverityArrowIcon>
+      </div>
       {statusOnly ? null : (
-        <>
-          <div className={styles.ackContainer} onClick={(event) => ackAlarm(event)}>
-            <AcknowledgeIcon active={!acknowledged}></AcknowledgeIcon>
-            <SeverityArrowIcon increase={sevIncrease} decrease={sevDecrease}></SeverityArrowIcon>
-          </div>
-          <MutedIcon active={!muted}></MutedIcon>
-        </>
+        <Button title='ack' status='info' size='small' disabled={acknowledged} onClick={(event) => {ackAlarm(event)}}> ACK </Button>
       )}
     </div>
   );

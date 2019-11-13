@@ -1,15 +1,27 @@
 import React from 'react';
 import styles from './SeverityArrowIcon.module.css';
 
-const SeverityArrowIcon = ({ increase, decrease }) => (
+const SeverityArrowIcon = ({ change }) => (
   <svg
     viewBox="0 0 6.41 19.42"
-    className={[increase || decrease ? '' : styles.hidden, decrease ? styles.flip : ''].join(' ')}
+    className={[
+      change === 'clear' ? styles.hidden: '',
+      change === 'decrease' ? styles.flip : ''
+    ].join(' ')}
   >
-    <title>{increase ? 'Severity increased' : 'Severity decreased'}</title>
+    <title>{
+        change === 'increase' ? 'Severity increased' : '',
+        change === 'decrease' ? 'Severity decreased' : '',
+        change === 'static' ? 'Severity static' : ''
+    }</title>
     <path
-      d="M3.46 6v4.75a.17.17 0 010 .14.49.49 0 01-.17.06.24.24 0 01-.23-.2V6H.67a.2.2 0 01-.18-.12.18.18 0 010-.2l2.58-2.55a.18.18 0 01.25 0h0l2.55 2.53a.19.19 0 01-.14.34z"
-      className={[increase ? styles.increase : '', decrease ? styles.decrease : ''].join(' ')}
+      d="M3.5,6v9.1c0,0.1-0.1,0.1-0.1,0.2c-0.1,0-0.1,0.1-0.2,0c-0.1,0-0.2-0.1-0.2-0.2V6H0.7C0.6,6,0.5,6,0.5,5.9c0-0.1,0-0.1,0-0.2l2.6-2.6c0.1-0.1,0.2-0.1,0.2,0l0,0l2.5,2.5C6,5.7,6,5.8,5.9,5.9C5.9,6,5.8,6,5.7,6L3.5,6z"
+      className={[
+        change === 'increase' ? styles.increase : '',
+        change === 'decrease' ? styles.decrease : '',
+        change === 'static' ? styles.hidden : '',
+        change === 'clear' ? styles.hidden : ''
+      ].join(' ')}
       strokeMiterlimit={10}
       strokeWidth={0.5}
     />
