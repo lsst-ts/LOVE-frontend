@@ -79,9 +79,12 @@ export default class Dome extends Component {
     const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
       ? this.props.dropoutDoorOpeningPercentage.value
       : 0;
-    const trackID = this.props.target ? this.props.target[0].trackId.value : '';
-    const m3State = this.props.m3State ? this.props.m3State[0].value : 2;
-    const currentTimesToLimits = this.props.currentTimeToLimits ? this.props.currentTimesToLimits : {};
+    const trackID = this.props.target ? this.props.target[this.props.target.length - 1].trackId.value : '';
+    const m3State = this.props.m3State ? this.props.m3State[this.props.m3State.length - 1].value : 2;
+    const currentTimesToLimits = this.props.currentTimesToLimits ? this.props.currentTimesToLimits : {};
+    const positionLimits = this.props.positionLimits
+      ? this.props.positionLimits[this.props.positionLimits.length - 1]
+      : {};
 
     const isProjected = true;
     let azDiff = Math.abs(domeAz - currentPointing.az);
@@ -136,6 +139,7 @@ export default class Dome extends Component {
             mountInPosition={mountInPosition}
             m3State={m3State}
             currentTimesToLimits={currentTimesToLimits}
+            positionLimits={positionLimits}
           />
         </div>
         <div className={styles.telemetryTable}>

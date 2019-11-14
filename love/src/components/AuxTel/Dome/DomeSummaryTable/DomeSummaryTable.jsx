@@ -52,18 +52,7 @@ export default class DomeSummaryTable extends Component {
     const mountInPositionValue = this.props.mountInPosition ? this.props.mountInPosition[0].inPosition.value : 0;
     const mountTrackingStateValue = mountTrackingStateMap[this.props.mountTrackingState];
     const m3State = this.props.m3State;
-    const mountRotator =
-      m3State === 1
-        ? {
-            name: '(1)',
-            current: this.props.currentPointing.nasmyth1,
-            target: this.props.targetPointing.nasmyth1,
-          }
-        : {
-            name: '(2)',
-            current: this.props.currentPointing.nasmyth2,
-            target: this.props.targetPointing.nasmyth2,
-          };
+    const { positionLimits } = this.props;
     const timesToLimit = this.props.currentTimesToLimits;
     const timeToAzLimit = timesToLimit.timeToAzlim ? timesToLimit.timeToAzlim.value : 0;
     const timeToRotLimit = timesToLimit.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
@@ -71,7 +60,40 @@ export default class DomeSummaryTable extends Component {
     const timeToBlindSpot = timesToLimit.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
     const closestLimit = timeToBlindSpot > timeToUnobservable && timeToBlindSpot > 0 ? 'blind spot' : 'unobservable';
     const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
-
+    // L1 (software) position limits, in order elevation, azimuth, Nasmyth 1, Nasmyth 2 and M3.
+    const { maximum, minimum } = positionLimits;
+    let [maxEl, maxAz, maxNas1, maxNas2, maxM3] = maximum ? maximum.value : [];
+    let [minEl, minAz, minNas1, minNas2, minM3] = minimum ? minimum.value : [];
+    [maxEl, maxAz, maxNas1, maxNas2, maxM3] = [
+      maxEl ? maxEl : 90,
+      maxAz ? maxAz : 270,
+      maxNas1 ? maxNas1 : 165,
+      maxNas2 ? maxNas2 : 165,
+      maxM3 ? maxM3 : 180,
+    ];
+    [minEl, minAz, minNas1, minNas2, minM3] = [
+      minEl ? minEl : 5,
+      minAz ? minAz : -270,
+      minNas1 ? minNas1 : -165,
+      minNas2 ? minNas2 : -165,
+      minM3 ? minM3 : 0,
+    ];
+    const mountRotator =
+      m3State === 1
+        ? {
+            name: '(1)',
+            current: this.props.currentPointing.nasmyth1,
+            target: this.props.targetPointing.nasmyth1,
+            minRot: minNas1,
+            maxRot: maxNas1,
+          }
+        : {
+            name: '(2)',
+            current: this.props.currentPointing.nasmyth2,
+            target: this.props.targetPointing.nasmyth2,
+            minRot: minNas2,
+            maxRot: maxNas2,
+          };
     return (
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
@@ -152,11 +174,13 @@ export default class DomeSummaryTable extends Component {
           />
         </Value>
 
-        <Row title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [-270º, 270º]`}>
+        <Row
+          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
+        >
           <span>
             <Limits
-              lowerLimit={-270}
-              upperLimit={270}
+              lowerLimit={minAz}
+              upperLimit={maxAz}
               currentValue={mountAz.current}
               targetValue={mountAz.target}
               height={30}
@@ -177,11 +201,13 @@ export default class DomeSummaryTable extends Component {
           />
         </Value>
 
-        <Row title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [15º, 90º]`}>
+        <Row
+          title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
+        >
           <span>
             <Limits
-              lowerLimit={15}
-              upperLimit={90}
+              lowerLimit={minEl}
+              upperLimit={maxEl}
               currentValue={mountEl.current}
               targetValue={mountEl.target}
               height={30}
@@ -204,12 +230,12 @@ export default class DomeSummaryTable extends Component {
           />
         </Value>
         <Row
-          title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [-175º, 175º]`}
+          title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [${mountRotator.minRot}º, ${mountRotator.maxRot}º]`}
         >
           <span>
             <Limits
-              lowerLimit={-175}
-              upperLimit={175}
+              lowerLimit={mountRotator.minRot}
+              upperLimit={mountRotator.maxRot}
               currentValue={mountRotator.current}
               targetValue={mountRotator.target}
               height={30}
