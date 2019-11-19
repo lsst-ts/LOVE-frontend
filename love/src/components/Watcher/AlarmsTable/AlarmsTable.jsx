@@ -206,7 +206,7 @@ export default class AlarmsTable extends PureComponent {
 
                 return (
                   <React.Fragment key={key}>
-                    <tr className={styles.dataRow} onClick={() => this.clickGearIcon(key)}>
+                    <tr className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')} onClick={() => this.clickGearIcon(key)}>
                       <td className={styles.string}>
                         {
                           <Alarm
