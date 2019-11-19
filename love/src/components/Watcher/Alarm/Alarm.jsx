@@ -17,24 +17,34 @@ export default function Alarm({ severity, maxSeverity, statusOnly, acknowledged,
   let change = '';
   if (acknowledged) {
     change = 'clear';
-  }
-  else if (severity < maxSeverity) {
+  } else if (severity < maxSeverity) {
     change = 'increase';
-  }
-  else if (severity > maxSeverity) {
+  } else if (severity > maxSeverity) {
     change = 'decrease';
-  }
-  else if (severity === maxSeverity) {
+  } else if (severity === maxSeverity) {
     change = 'static';
   }
   return (
     <div className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}>
       <div className={styles.statusContainer}>
         <StatusText status={status}>{status}</StatusText>
-        <SeverityArrowIcon change={change}></SeverityArrowIcon>
+        <span>
+          <SeverityArrowIcon change={change}></SeverityArrowIcon>
+        </span>
       </div>
       {statusOnly ? null : (
-        <Button title='ack' status='info' size='small' disabled={acknowledged} onClick={(event) => {ackAlarm(event)}}> ACK </Button>
+        <Button
+          title="ack"
+          status="info"
+          size="small"
+          disabled={acknowledged}
+          onClick={(event) => {
+            ackAlarm(event);
+          }}
+        >
+          {' '}
+          ACK{' '}
+        </Button>
       )}
     </div>
   );
