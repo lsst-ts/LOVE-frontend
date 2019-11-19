@@ -5,8 +5,8 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 import { getTokenFromStorage } from '../actions/auth';
-import { requestWorkspaces, requestWorkspace } from '../actions/uif';
-import { getWorkspaces, getCurrentWorkspace } from '../selectors';
+import { requestWorkspaces, requestWorkspace, receiveWorkspaces } from '../actions/uif';
+import { getViews, getWorkspaces, getCurrentWorkspace } from '../selectors';
 
 let store;
 beforeEach(() => {
@@ -94,6 +94,21 @@ describe('GIVEN the store is empty', () => {
     const retrievedWorkspaces = getWorkspaces(store.getState());
     expect(retrievedWorkspaces).toEqual(mockWorkspaces);
   });
+});
+
+describe('GIVEN the store contains the list of workspaces', () => {
+
+  beforeEach(async () => {
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
+    await store.dispatch(receiveWorkspaces(mockWorkspaces));
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
+    fetchMock.reset();
+  });
 
   it('WHEN a full workspace is requested, THEN the state should contain the workspace', async () => {
     // Arrange:
@@ -106,7 +121,9 @@ describe('GIVEN the store is empty', () => {
     // Act:
     await store.dispatch(requestWorkspace(0));
     // Assert:
-    const retrievedWorkspace = getCurrentWorkspace(store.getState());
-    expect(retrievedWorkspace).toEqual(mockFullWorkspace);
+    const retrievedCurrentWorkspace = getCurrentWorkspace(store.getState());
+    const retrievedViews = getViews(store.getState());
+    expect(retrievedViews).toEqual(mockViews);
+    expect(retrievedCurrentWorkspace).toEqual(mockWorkspaces[0]);
   });
 });
