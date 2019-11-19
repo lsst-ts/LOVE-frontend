@@ -1,11 +1,16 @@
-import { RECEIVE_WORKSPACES } from '../actions/actionTypes';
+import { RECEIVE_WORKSPACES, RECEIVE_WORKSPACE } from '../actions/actionTypes';
 
 const initialState = {
   workspaces: [],
 };
 
+
 /**
- * Modifies the state of the UI Framework
+ * export default - Modifies the state of the UI Framework
+ *
+ * @param  {object} state = initialState the current UI Frmaework state
+ * @param  {object} action               the action that is being applied to the state
+ * @return {object}                      the modified state
  */
 export default function(state = initialState, action) {
   switch (action.type) {
@@ -13,6 +18,12 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           workspaces: action.workspaces,
+        });
+      }
+    case RECEIVE_WORKSPACE:
+      {
+        return Object.assign({}, state, {
+          current_workspace: action.workspace,
         });
       }
     default:
