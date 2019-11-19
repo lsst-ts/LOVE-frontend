@@ -44,16 +44,28 @@ PageMaker including versions of Lorem Ipsum.`,
         <>
           <div className={styles.legend}>
             Ok, acknowledged &nbsp; &nbsp;
-            <Alarm severity={1} maxSeverity={2} acknowledged />
+            <Alarm severity={1} acknowledged />
 
-            Warning, unacknowledged sev increase &nbsp; &nbsp;
-            <Alarm severity={2} maxSeverity={3} />
+            Ok, unacknowledged &nbsp; &nbsp;
+            <Alarm severity={1} />
 
-            Alert, unacknowledged sev decrease &nbsp; &nbsp
-             <Alarm severity={3} maxSeverity={2} />
+            Warning, acknowledged
+            <Alarm severity={2} acknowledged/>
 
-            Critical, unacknowledged sev equal &nbsp; &nbsp;
-            <Alarm severity={4} maxSeverity={4} />
+            Warning, unacknowledged
+            <Alarm severity={2} />
+
+            Alert, acknowledged
+             <Alarm severity={3} acknowledged />
+
+            Alert, unacknowledged
+             <Alarm severity={3} />
+
+            Critical, acknowledged
+            <Alarm severity={4} acknowledged/>
+
+            Critical, unacknowledged
+            <Alarm severity={4} />
           </div>
 
           <AlarmsTableContainer></AlarmsTableContainer>

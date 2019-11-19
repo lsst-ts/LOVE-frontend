@@ -1,8 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './Alarm.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import Button from '../../GeneralPurpose/Button/Button';
-import SeverityArrowIcon from '../../icons/Watcher/SeverityArrowIcon/SeverityArrowIcon';
 
 export const severityToStatus = {
   0: 'unkown',
@@ -12,29 +11,31 @@ export const severityToStatus = {
   4: 'critical',
 };
 
-export default function Alarm({ severity, maxSeverity, statusOnly, acknowledged, muted, ackAlarm }) {
+export default function Alarm({ severity, statusOnly, acknowledged, muted, ackAlarm }) {
+  const [showButton, setShowButton] = useState(false);
   const status = severityToStatus[severity];
-  let change = '';
-  if (acknowledged) {
-    change = 'clear';
-  }
-  else if (severity < maxSeverity) {
-    change = 'increase';
-  }
-  else if (severity > maxSeverity) {
-    change = 'decrease';
-  }
-  else if (severity === maxSeverity) {
-    change = 'static';
-  }
   return (
-    <div className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}>
-      <div className={styles.statusContainer}>
-        <StatusText status={status}>{status}</StatusText>
-        <SeverityArrowIcon change={change}></SeverityArrowIcon>
-      </div>
-      {statusOnly ? null : (
-        <Button title='ack' status='info' size='small' disabled={acknowledged} onClick={(event) => {ackAlarm(event)}}> ACK </Button>
+    <div
+      className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}
+      onMouseEnter={() => {setShowButton(true)}}
+      onMouseLeave={() => {setShowButton(false)}}
+    >
+      <StatusText status={status}>{status}</StatusText>
+      {statusOnly || acknowledged ? null : (
+        !showButton ? (
+          <div className={styles.newLabel}>
+            NEW
+          </div>
+        ) : (
+          <Button
+            title='ack'
+            status='success'
+            disabled={acknowledged}
+            onClick={(event) => {ackAlarm(event)}}
+          >
+            ACK
+          </Button>
+        )
       )}
     </div>
   );

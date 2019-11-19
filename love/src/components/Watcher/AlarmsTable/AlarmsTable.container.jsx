@@ -36,6 +36,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-Watcher-0-alarm'));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
+      console.log('ackAlarm:, name: ', name);
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_acknowledge',
