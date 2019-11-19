@@ -84,7 +84,7 @@ export const stateToStyleCamera = {
 };
 
 export const stateToStyleMount = {
-  'NOT READY': 'warning',
+  'NOT READY': 'running',
   'IN POSITION': 'ok',
   NASMITH1: 'ok',
   NASMITH2: 'ok',
@@ -94,8 +94,22 @@ export const stateToStyleMount = {
   OPEN: 'ok',
   INVALID: 'warning',
   'IN MOTION': 'running',
+  'NOT IN POSITION': 'running',
 };
 
+export const stateToStyleDome = {
+  'IN POSITION': 'ok',
+  'NOT IN POSITION': 'running',
+};
+
+export const stateToStyleLightpath = {
+  'CLOSED': 'ok',
+  'OPEN': 'ok',
+  'IN MOTION': 'running',
+  'INVALID': 'warning',
+  'NOT READY': 'running',
+  'IN POSITION': 'ok',
+};
 // Dome and mount view
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
@@ -172,7 +186,7 @@ export const m1VentsLimitSwitchesStateMap = {
 };
 
 //ATHexapod
-export const hexpodInPositionStateMap = {
+export const hexapodInPositionStateMap = {
   0: 'NOT READY',
   1: 'IN POSITION',
 };
