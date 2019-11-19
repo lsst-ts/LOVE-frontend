@@ -16,6 +16,7 @@ import Row from '../../../GeneralPurpose/SummaryPanel/Row';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import {stateToStyleDome, stateToStyleMount} from '../../../../Config'
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -94,6 +95,8 @@ export default class DomeSummaryTable extends Component {
             minRot: minNas2,
             maxRot: maxNas2,
           };
+    const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION'
+    const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     return (
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
@@ -103,10 +106,10 @@ export default class DomeSummaryTable extends Component {
         <Value>
           <StatusText
             title={domeInPositionValue ? 'true' : 'false'}
-            status={domeInPositionValue ? 'ok' : 'warning'}
+            status={stateToStyleDome[domeInPositionLabel]}
             small
           >
-            {domeInPositionValue ? 'In Position' : 'Not in Position'}
+            {domeInPositionLabel}
           </StatusText>
         </Value>
 
@@ -153,10 +156,10 @@ export default class DomeSummaryTable extends Component {
         <Value>
           <StatusText
             title={mountInPositionValue ? 'true' : 'false'}
-            status={mountInPositionValue ? 'ok' : 'warning'}
+            status={stateToStyleMount[mountInPositionLabel]}
             small
           >
-            {mountInPositionValue ? 'In Position' : 'Not in Position'}
+            {mountInPositionLabel}
           </StatusText>
         </Value>
         <Label>Tracking</Label>
