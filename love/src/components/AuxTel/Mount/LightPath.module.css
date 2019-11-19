@@ -35,7 +35,7 @@
   fill-opacity: 0.45;
 }
 
-.moving {
+.running {
   fill: var(--status-running-color);
   stroke: var(--status-running-color);
 }
