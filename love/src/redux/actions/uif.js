@@ -1,4 +1,4 @@
-import { RECEIVE_WORKSPACES, RECEIVE_WORKSPACE } from './actionTypes';
+import { RECEIVE_WORKSPACES, RECEIVE_CURRENT_WORKSPACE } from './actionTypes';
 import ManagerInterface from '../../Utils';
 
 
@@ -14,11 +14,11 @@ export const receiveWorkspaces = (workspaces) => {
 
 
 /**
- * Action to receive a particular workspace
+ * Action to receive a particular (the current) workspace
  */
-export const receiveWorkspace = (workspace) => {
+export const receiveCurrentWorkspace = (workspace) => {
   return {
-    type: RECEIVE_WORKSPACE,
+    type: RECEIVE_CURRENT_WORKSPACE,
     workspace,
   };
 };
@@ -60,7 +60,7 @@ export function requestWorkspace(id) {
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       return response.json().then((workspace) => {
-        dispatch(receiveWorkspace(workspace));
+        dispatch(receiveCurrentWorkspace(workspace));
         return Promise.resolve();
       });
     }).catch((e) => console.error(e));
