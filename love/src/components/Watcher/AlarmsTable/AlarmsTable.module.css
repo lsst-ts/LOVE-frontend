@@ -33,7 +33,6 @@
     overflow-x: hidden;
 }
 .telemetrySelectionTable tbody tr {
-    color: red;
     display: table;
     table-layout:fixed;
     width: 100%;
@@ -62,13 +61,22 @@
     width: 12%;
 }
 
-.telemetrySelectionTable tr:hover.dataRow{
+
+.unackRow td {
+    font-weight: bold;
+    color: var(--base-font-color);
     background: var(--tertiary-background-color);
 }
 
 .telemetrySelectionTable tr:hover td{
-    border-bottom: 1px solid var(--secondary-background-color);
-    border-top: 1px solid var(--secondary-background-color);
+    border-bottom: 1px solid var(--quinary-background-color);
+    border-top: 1px solid var(--quinary-background-color);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--quinary-background-color),
+      inset 0px -8px 8px -8px var(--quinary-background-color);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--quinary-background-color),
+      inset 0px -8px 8px -8px var(--quinary-background-color);
+    box-shadow: inset 0px 8px 8px -8px var(--quinary-background-color),
+      inset 0px -8px 8px -8px var(--quinary-background-color);
 }
 
 .telemetrySelectionTable tr:hover.expandedRow td{
@@ -86,10 +94,6 @@
 
 .dataRow {
     cursor: pointer;
-}
-
-.unackRow {
-  font-weight: bolder;
 }
 
 .telemetrySelectionTable th:first-of-type {
@@ -110,6 +114,12 @@
     border-left: 1px solid var(--base-background-color);
     border-right: 1px solid var(--base-background-color);
 }
+
+/* .unackRow td {
+    font-weight: bold;
+    color: var(--base-font-color);
+    background: var(--tertiary-background-color);
+} */
 
 .telemetrySelectionTable td.string {
     text-align: left;
