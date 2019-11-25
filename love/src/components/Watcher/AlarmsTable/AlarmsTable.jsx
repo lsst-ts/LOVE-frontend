@@ -211,7 +211,7 @@ export default class AlarmsTable extends PureComponent {
                         {
                           <Alarm
                             severity={row.severity}
-                            severity={row.maxSeverity}
+                            maxSeverity={row.maxSeverity}
                             acknowledged={row.acknowledged}
                             muted={row.mutedSeverity <= row.severity}
                             ackAlarm={(event) => {
