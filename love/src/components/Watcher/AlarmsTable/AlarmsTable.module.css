@@ -61,22 +61,15 @@
     width: 12%;
 }
 
-
-.unackRow td {
-    font-weight: bold;
-    color: var(--base-font-color);
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable tr:hover td{
-    border-bottom: 1px solid var(--quinary-background-color);
-    border-top: 1px solid var(--quinary-background-color);
-    -moz-box-shadow: inset 0px 8px 8px -8px var(--quinary-background-color),
-      inset 0px -8px 8px -8px var(--quinary-background-color);
-    -webkit-box-shadow: inset 0px 8px 8px -8px var(--quinary-background-color),
-      inset 0px -8px 8px -8px var(--quinary-background-color);
-    box-shadow: inset 0px 8px 8px -8px var(--quinary-background-color),
-      inset 0px -8px 8px -8px var(--quinary-background-color);
+.telemetrySelectionTable tr:hover {
+    border-bottom: 1px solid var(--second-senary-background-dimmed-color);
+    border-top: 1px solid var(--second-senary-background-dimmed-color);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
+      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
+      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+    box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
+      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
 }
 
 .telemetrySelectionTable tr:hover.expandedRow td{
@@ -90,6 +83,17 @@
 
 .telemetrySelectionTable tr:nth-child(odd) {
     background: var(--secondary-background-color);
+}
+
+
+.telemetrySelectionTable tr.unackRow {
+    background: var(--tertiary-background-color);
+}
+
+.telemetrySelectionTable tr.unackRow td {
+    font-weight: bold;
+    color: var(--base-font-color);
+    border-bottom: 1px solid var(--base-background-color);
 }
 
 .dataRow {
@@ -114,12 +118,6 @@
     border-left: 1px solid var(--base-background-color);
     border-right: 1px solid var(--base-background-color);
 }
-
-/* .unackRow td {
-    font-weight: bold;
-    color: var(--base-font-color);
-    background: var(--tertiary-background-color);
-} */
 
 .telemetrySelectionTable td.string {
     text-align: left;
@@ -161,7 +159,7 @@
 
 .telemetrySelectionTable .healthStatusCell.selectedHealthStatus {
     background: var(--tertiary-background-color);
-    border-bottom: 1px solid var(--tertiary-background-color);
+    /* border-bottom: 1px solid var(--tertiary-background-color); */
 }
 
 .telemetrySelectionTable .gearIconWrapper {
