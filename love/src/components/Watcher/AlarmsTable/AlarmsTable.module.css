@@ -27,7 +27,7 @@
 }
 .telemetrySelectionTable tbody tr {
     display: table;
-    table-layout:fixed;
+    table-layout: fixed;
     width: 100%;
 }
 .telemetrySelectionTable th, td {

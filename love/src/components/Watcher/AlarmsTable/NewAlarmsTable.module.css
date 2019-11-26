@@ -1,0 +1,66 @@
+:root{
+    --scrollbar-width: 10px;
+}
+
+.watcherTable {
+  display: grid;
+  grid-template-rows: min-content minmax(0, 1fr);
+  grid-template-columns:
+    minmax(150px, 1fr)
+    minmax(150px, 1.67fr)
+    minmax(150px, 1.67fr)
+    minmax(150px, 1.67fr);
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+/*
+* This "display: contents;" makes the thead, tbody and tr "bypass" the display:grid
+* This allows the internal td and th to use the grid properties
+*/
+.watcherTable thead, tbody, tr {
+  display: contents;
+}
+
+.watcherTable thead {
+  width: calc(100% - var(--scrollbar-width));
+}
+
+.watcherTable tbody {
+  height: inherit; /* necessary for scroll */
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.watcherTable th, td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.watcherTable th {
+  border: 1px solid var(--base-background-color);
+  background: var(--tertiary-background-color);
+  padding: 0em 0.5em;
+  padding-left: 1em;
+  text-align: left;
+}
+
+.watcherTable td {
+  color: var(--secondary-font-color);
+  padding: 0.4em 1em;
+  /* border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+  border-left: 1px solid var(--base-background-color);
+  border-right: 1px solid var(--base-background-color); */
+}
+
+.watcherTable td.string {
+  text-align: left;
+}
+
+.watcherTable td.number {
+  text-align: right;
+}
