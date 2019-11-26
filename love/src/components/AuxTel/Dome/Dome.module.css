@@ -103,21 +103,13 @@
   color: var(--base-font-color);
 }
 
-@media (min-width: 1600px) {
+@media (min-width: 1200px) {
   .telemetryTable {
-    display: grid;
-    padding-top: 1em;
     grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
     grid-template-rows: max-content 1fr;
-    grid-row-gap: 0.5em;
-    width: 100%;
   }
 
   .topRow {
-    display: grid;
     grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    row-gap: 2em;
-    padding: 1em 0;
   }
 }
