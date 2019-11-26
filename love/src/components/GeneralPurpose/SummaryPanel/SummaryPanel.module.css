@@ -70,7 +70,7 @@
     color: var(--base-font-color);
   }
   
-  @media (min-width: 1600px) {
+  @media (min-width: 1200px) {
     .summaryTable {
       margin-left: 2em;
     }
