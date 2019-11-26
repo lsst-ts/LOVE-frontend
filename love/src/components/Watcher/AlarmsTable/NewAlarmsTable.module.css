@@ -35,7 +35,6 @@
 }
 
 .watcherTable th, td {
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -90,6 +89,14 @@
     inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
   box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
     inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+}
+
+.watcherTable th:first-of-type {
+    border-top-left-radius: 7px;
+}
+
+.watcherTable th:last-of-type {
+    border-top-right-radius: 7px;
 }
 
 .watcherTable tr:last-of-type td:first-of-type {
