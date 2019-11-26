@@ -2,14 +2,6 @@
     --scrollbar-width: 10px;
 }
 
-.telemetrySelectionTableWrapper {
-    display: grid;
-    height: 100%;
-    grid-template-rows: minmax(0, 1fr) min-content;
-    background: var(--base-background-color);
-    min-width: 900px;
-}
-
 .telemetrySelectionTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
@@ -24,6 +16,7 @@
     width: calc(100% - var(--scrollbar-width));
     word-wrap:break-word;
 }
+
 .telemetrySelectionTable tbody {
     /* background: var(--secondary-background-color); */
     display: block;
@@ -147,101 +140,6 @@
     border-bottom-right-radius: 7px;
 }
 
-.telemetrySelectionTable .healthStatusWrapper {
-    display: flex;
-    position: relative;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0;
-}
-
-.telemetrySelectionTable .healthStatusCell.selectedHealthStatus {
-    background: var(--tertiary-background-color);
-    /* border-bottom: 1px solid var(--tertiary-background-color); */
-}
-
-.telemetrySelectionTable .gearIconWrapper {
-    width: 1.5em;
-    min-width: 1em;
-    cursor: pointer;
-    padding-right: 0.3em;
-}
-
-.telemetrySelectionTable .statusTextWrapper {
-    flex-grow: 1;
-    padding: 0.0em 1.5em;
-    margin-right: 2em;
-}
-
-.telemetrySelectionTable .snippetsContainer {
-    /* display: flex; */
-}
-
-.telemetrySelectionTable .snippetsList {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-}
-
-
-.telemetrySelectionTable .snippetButtonWrapper {
-    padding: 0.3em 1em;
-    padding-left:0;
-    flex-grow: 1;
-}
-
-.telemetrySelectionTable .setButton {
-    padding: 0em 2em;
-    margin: auto;
-    display:flex;
-}
-
-.telemetrySelectionTable .snippetButton {
-    width: 100%;
-    height: auto;
-    padding: 0;
-}
-
-.telemetrySelectionTable .snippetButton span {
-    padding: 0.25em 0.5em;
-    height: auto;
-}
-
-.telemetrySelectionTable .valuesList {
-    counter-reset: values-list-counter -1;
-    list-style: none;
-    -webkit-padding-start: 0;
-    position: relative;
-}
-
-
-.telemetrySelectionTable .valuesListItem::before {
-    content: counter(values-list-counter) ". ";
-    color: var(--secondary-font-dimmed-color);
-    white-space: pre-wrap;
-    font-family: monospace;
-    text-align: right;
-    position: absolute;
-    width: 4em;
-}
-
-
-.telemetrySelectionTable .valuesListItem {
-    counter-increment: values-list-counter;
-    padding: 0 0.4em;
-}
-
-.telemetrySelectionTable .valuesListItemValue {
-    position: relative;
-    padding: 0 0.4em;
-    left: 3em;
-}
-/* .telemetrySelectionTable .addedColumn {
-    width: 5%;
-} */
-
 .telemetrySelectionTable .firstColumn {
     width: 1em;
     background: var(--base-background-color);
@@ -297,19 +195,6 @@
     column-gap: 2em;
 }
 
-.telemetrySelectionTable .healthStatusCell {
-    padding: 0.4em 0.5em;
-    border-bottom: 1px solid transparent;
-}
-
-.telemetrySelectionTable .healthStatusCell:hover {
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable .healthStatusCell:hover .gearIconWrapper {
-    visibility: visible;
-}
-
 /* width */
 .telemetrySelectionTable ::-webkit-scrollbar {
     width: var(--scrollbar-width);
@@ -330,70 +215,4 @@
 /* Handle on hover */
 .telemetrySelectionTable ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-font-color);
-}
-
-/* for describing sections in the expandable row */
-.statusConfigTitle, .snippetsTitle{
-    color: var(--base-font-color);
-    margin-bottom: 0.2em;
-}
-
-.statusConfigTitle {
-    margin-top:0.8em;
-}
-
-.lineJump{
-    white-space: pre;
-}
-
-.statusList {
-    font-size:small;
-}
-
-.selectionContainer {
-    display:flex;
-    align-items:center;
-    color: var(--base-font-color);
-    text-align:left;
-    padding: 1em;
-    background: var(--base-background-color);
-}
-
-.selectionList{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    background:#cfd7d9;
-    width:100%;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    padding: 4px 6px;
-    color: #555;
-    vertical-align: middle;
-    border-radius: 4px;
-    max-width: 100%;
-    line-height: 22px;
-    cursor: text;
-    box-sizing: border-box;
-    min-height:2em;
-    margin-left:0.5em;
-}
-
-button.selectionSetButton {
-    margin-left: 0.5em;
-    padding-left: 1em;
-    padding-right: 1em;
-    font-size: 14pt;
-    border-radius: 0.3em;
-    padding-top:0.3em;
-}
-
-.hidden {
-    visibility: hidden;
-}
-
-.checkboxCell input[type="checkbox"] {
-    cursor: pointer;
-    transform: scale(1.6);
 }
