@@ -1,47 +1,16 @@
 import React, { Component } from 'react';
 import GridLayout from 'react-grid-layout';
+import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
+import '../../AuxTel/Mount/MotorTable/MotorTable.container';
 
 export default class CustomView extends Component {
-  constructor() {
-    super();
+  static propTypes = {
+    layout: PropTypes.object,
+    baseColWidth: PropTypes.number,
+  };
 
-    const topComp = {
-      properties: { type: 'component', x: 0, y: 0, w: 5, h: 1 },
-      content: 'MotorTable',
-    };
-
-    const bottomComp = {
-      properties: { type: 'component', x: 0, y: 1, w: 5, h: 1 },
-      content: 'TimeSeries',
-    };
-
-    const rightPanel = {
-      properties: { type: 'container', x: 5, y: 0, w: 5, h: 2, cols: 5 },
-      content: {
-        TopComponent: topComp,
-        BottomComponent: bottomComp,
-      },
-    };
-
-    const leftPanel = {
-      properties: { type: 'component', x: 0, y: 0, w: 5, h: 2 },
-      content: 'LightPath',
-    };
-
-    const mainContainer = {
-      properties: { type: 'container', x: 0, y: 0, w: 10, h: 2, cols: 10 },
-      content: {
-        LeftPanel: leftPanel,
-        RightPanel: rightPanel,
-      },
-    };
-
-    this.state = {
-      mainContainer,
-      baseColWidth: 100,
-    };
-  }
+  static defaultProps = {};
 
   parseElement = (element, index) => {
     return element.properties.type === 'container'
@@ -52,7 +21,13 @@ export default class CustomView extends Component {
   parseComponent = (component, index) => {
     return (
       <div key={index.toString()} className={styles.componentWrapper}>
-        <span>{`${component.content}-${index}`}</span>
+        {typeof component.content === 'string' ? (
+          <span>
+            `${component.content}-${index}`
+          </span>
+        ) : (
+          <component.content />
+        )}
       </div>
     );
   };
@@ -78,7 +53,7 @@ export default class CustomView extends Component {
           rowHeight={50}
           onLayoutChange={() => {}}
           cols={container.properties.cols}
-          width={this.state.baseColWidth * container.properties.w}
+          width={this.props.baseColWidth * container.properties.w}
           margin={[0, 0]}
           verticalCompact={false}
         >
@@ -89,7 +64,7 @@ export default class CustomView extends Component {
   };
 
   render() {
-    const parsedTree = this.parseElement(this.state.mainContainer, 0);
+    const parsedTree = this.parseElement(this.props.layout, 0);
     return parsedTree;
   }
 }

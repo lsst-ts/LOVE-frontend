@@ -4,6 +4,7 @@
 
 .componentWrapper {
   background: hotpink;
+  /* overflow: hidden; */
 }
 
 .componentWrapper :global(.react-resizable-handle) {
