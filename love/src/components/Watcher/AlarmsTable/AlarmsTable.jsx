@@ -155,114 +155,6 @@ export default class AlarmsTable extends PureComponent {
     const currentTime = new Date().getTime();
     return (
       <>
-      <table className={styles.telemetrySelectionTable}>
-        <thead>
-          <tr>
-            {(() => {
-              const defaultColumnProps = {
-                changeFilter: this.changeFilter,
-                activeFilterDialog: this.state.activeFilterDialog,
-                closeFilterDialogs: this.closeFilterDialogs,
-                columnOnClick: this.columnOnClick,
-                changeSortDirection: this.changeSortDirection,
-                sortDirection: this.state.sortDirection,
-                sortingColumn: this.state.sortingColumn,
-              };
-
-              return (
-                <>
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    header={'Status'}
-                    filterName={'severity'}
-                    filter={this.state.filters.severity}
-                  />
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    header={'Max severity'}
-                    filterName={'maxSeverity'}
-                    filter={this.state.filters.maxSeverity}
-                  />
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    header={'Name'}
-                    filterName={'name'}
-                    filter={this.state.filters.name}
-                  />
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    header={'Severity update'}
-                    filterName={'timestampSeverityOldest'}
-                    filter={this.state.filters.timestampSeverityOldest}
-                  />
-                </>
-              );
-            })()}
-          </tr>
-        </thead>
-        <tbody onClick={this.closeFilterDialogs}>
-          {data.sort(this.sortData).map((row) => {
-            if (this.testFilter(row)) {
-              const key = row.name;
-
-              return (
-                <React.Fragment key={key}>
-                  <tr className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')} onClick={() => this.clickGearIcon(key)}>
-                    <td className={styles.string}>
-                      {
-                        <Alarm
-                          severity={row.severity}
-                          maxSeverity={row.maxSeverity}
-                          acknowledged={row.acknowledged}
-                          muted={row.mutedSeverity <= row.severity}
-                          ackAlarm={(event) => {
-                            event.stopPropagation();
-                            this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
-                          }}
-                        />
-                      }
-                    </td>
-                    <td className={styles.string}>
-                      <Alarm severity={row.maxSeverity} statusOnly />
-                    </td>
-                    <td className={styles.string}>
-                      {row.name}
-                    </td>
-                    <td className={styles.string} title={new Date(row.timestampSeverityOldest * 1000).toString()}>
-                      {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
-                    </td>
-                  </tr>
-                  {this.state.expandedRows[key] ? (
-                    <tr onClick={this.closeFilterDialogs} key={`${key}-expanded`} className={styles.expandedRow}>
-                      <td colSpan={4}>
-                        <div className={styles.expandedColumn}>
-                          <div>
-                            <div className={styles.title}>Reason:</div>
-                            <div>
-                              <p>{row.reason}</p>
-                            </div>
-                          </div>
-                          <div>
-                            <div className={styles.title}>Acknowledged by:</div>
-                            <div>
-                              <p>{row.acknowledgedBy}</p>
-                            </div>
-                            <div className={styles.title}>Muted by:</div>
-                            <div>
-                              <p>{row.mutedBy}</p>
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  ) : null}
-                </React.Fragment>
-              );
-            }
-            return null;
-          })}
-        </tbody>
-      </table>
 
       <table className={newStyles.watcherTable}>
         <thead>
@@ -357,6 +249,120 @@ export default class AlarmsTable extends PureComponent {
                               <p>{row.acknowledgedBy}</p>
                             </div>
                             <div className={newStyles.title}>Muted by:</div>
+                            <div>
+                              <p>{row.mutedBy}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : null}
+                </React.Fragment>
+              );
+            }
+            return null;
+          })}
+        </tbody>
+      </table>
+
+
+
+
+
+
+      <table className={styles.telemetrySelectionTable}>
+        <thead>
+          <tr>
+            {(() => {
+              const defaultColumnProps = {
+                changeFilter: this.changeFilter,
+                activeFilterDialog: this.state.activeFilterDialog,
+                closeFilterDialogs: this.closeFilterDialogs,
+                columnOnClick: this.columnOnClick,
+                changeSortDirection: this.changeSortDirection,
+                sortDirection: this.state.sortDirection,
+                sortingColumn: this.state.sortingColumn,
+              };
+
+              return (
+                <>
+                  <ColumnHeader
+                    {...defaultColumnProps}
+                    header={'Status'}
+                    filterName={'severity'}
+                    filter={this.state.filters.severity}
+                  />
+                  <ColumnHeader
+                    {...defaultColumnProps}
+                    header={'Max severity'}
+                    filterName={'maxSeverity'}
+                    filter={this.state.filters.maxSeverity}
+                  />
+                  <ColumnHeader
+                    {...defaultColumnProps}
+                    header={'Name'}
+                    filterName={'name'}
+                    filter={this.state.filters.name}
+                  />
+                  <ColumnHeader
+                    {...defaultColumnProps}
+                    header={'Severity update'}
+                    filterName={'timestampSeverityOldest'}
+                    filter={this.state.filters.timestampSeverityOldest}
+                  />
+                </>
+              );
+            })()}
+          </tr>
+        </thead>
+        <tbody onClick={this.closeFilterDialogs}>
+          {data.sort(this.sortData).map((row) => {
+            if (this.testFilter(row)) {
+              const key = row.name;
+
+              return (
+                <React.Fragment key={key}>
+                  <tr className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')} onClick={() => this.clickGearIcon(key)}>
+                    <td className={styles.string}>
+                      {
+                        <Alarm
+                          severity={row.severity}
+                          maxSeverity={row.maxSeverity}
+                          acknowledged={row.acknowledged}
+                          muted={row.mutedSeverity <= row.severity}
+                          ackAlarm={(event) => {
+                            event.stopPropagation();
+                            this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
+                          }}
+                        />
+                      }
+                    </td>
+                    <td className={styles.string}>
+                      <Alarm severity={row.maxSeverity} statusOnly />
+                    </td>
+                    <td className={styles.string}>
+                      {row.name}
+                    </td>
+                    <td className={styles.string} title={new Date(row.timestampSeverityOldest * 1000).toString()}>
+                      {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
+                    </td>
+                  </tr>
+                  {this.state.expandedRows[key] ? (
+                    <tr onClick={this.closeFilterDialogs} key={`${key}-expanded`} className={styles.expandedRow}>
+                      <td colSpan={4}>
+                        <div className={styles.expandedColumn}>
+                          <div>
+                            <div className={styles.title}>Reason:</div>
+                            <div>
+                              <p>{row.reason}</p>
+                            </div>
+                          </div>
+                          <div>
+                            <div className={styles.title}>Acknowledged by:</div>
+                            <div>
+                              <p>{row.acknowledgedBy}</p>
+                            </div>
+                            <div className={styles.title}>Muted by:</div>
                             <div>
                               <p>{row.mutedBy}</p>
                             </div>
