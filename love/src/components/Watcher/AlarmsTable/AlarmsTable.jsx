@@ -206,12 +206,12 @@ export default class AlarmsTable extends PureComponent {
 
                 return (
                   <React.Fragment key={key}>
-                    <tr className={styles.dataRow} onClick={() => this.clickGearIcon(key)}>
+                    <tr className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')} onClick={() => this.clickGearIcon(key)}>
                       <td className={styles.string}>
                         {
                           <Alarm
                             severity={row.severity}
-                            severity={row.maxSeverity}
+                            maxSeverity={row.maxSeverity}
                             acknowledged={row.acknowledged}
                             muted={row.mutedSeverity <= row.severity}
                             ackAlarm={(event) => {
