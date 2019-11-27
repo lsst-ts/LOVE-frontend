@@ -14,18 +14,23 @@
 /****************** Columns styles ***************/
 .dataTable .status {
     width: 13em;
+    text-align: center;
 }
 
 .dataTable .maxSeverity {
     width: 9em;
+    text-align: center;
 }
 
 .dataTable .name {
     width: 30em;
+    text-align: left;
 }
 
 .dataTable .timestamp {
     width: 13em;
+    text-align: left;
+
 }
 
 /****************** Make rows look clickable ***************/
@@ -56,13 +61,15 @@
     width: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
+    padding-left: 1em;
+    padding-right: 0.5em;
 }
 
 .dataTable th {
     border: 1px solid var(--base-background-color);
     background: var(--tertiary-background-color);
-    padding: 0em 1em;
-    padding-left: 1em;
+    padding-top: 0em;
+    padding-bottom: 0em;
     text-align: left;
 }
 
@@ -78,7 +85,8 @@
 /****************** Table body cells style ***************/
 .dataTable td {
     color: var(--secondary-font-color);
-    padding: 0.4em 1em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
     word-wrap:break-word;
     max-width: 0;
     border-top: 1px solid transparent;
