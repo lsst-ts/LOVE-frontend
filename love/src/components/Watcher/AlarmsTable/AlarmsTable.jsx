@@ -221,6 +221,7 @@ export default class AlarmsTable extends PureComponent {
                           maxSeverity={row.maxSeverity}
                           acknowledged={row.acknowledged}
                           muted={row.mutedSeverity <= row.severity}
+                          ackButtonLocation='left'
                           ackAlarm={(event) => {
                             event.stopPropagation();
                             this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
@@ -232,7 +233,7 @@ export default class AlarmsTable extends PureComponent {
                       title={reasonStr}
                       className={[styles.string, styles.maxSeverity].join(' ')}
                     >
-                      <Alarm severity={row.maxSeverity} statusOnly />
+                      <Alarm severity={row.maxSeverity} />
                     </td>
                     <td
                       title={reasonStr}

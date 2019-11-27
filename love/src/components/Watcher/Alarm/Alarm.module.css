@@ -1,13 +1,21 @@
 .alarmContainer {
-    display: grid;
-    grid-template-columns: 8em 4em;
-    grid-column-gap: 0.5em;
-    justify-content: center;
-    width: fit-content;
+  display: grid;
+  grid-template-columns: 8em;
+  grid-column-gap: 0.5em;
+  justify-content: center;
+  width: fit-content;
 }
 
 .statusOnly {
-    grid-template-columns: 8em;
+  grid-template-columns: 8em;
+}
+
+.leftAckButton {
+  grid-template-columns: 4em 8em;
+}
+
+.rightAckButton {
+  grid-template-columns: 8em 4em;
 }
 
 .newLabel {
