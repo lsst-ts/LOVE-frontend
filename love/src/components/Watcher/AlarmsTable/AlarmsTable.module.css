@@ -1,5 +1,11 @@
 :root{
     --scrollbar-width: 10px;
+    --header-background: var(--second-quaternary-background-color);
+    --row-background: var(--second-secondary-background-color);
+    --row-border: var(--second-tertiary-background-color);
+    --unack-row-background: var(--second-tertiary-background-color);
+    --unack-row-border: var(--second-secondary-background-color);
+    --hover-border: var(--second-senary-background-dimmed-color);
 }
 
 .dataTableWrapper {
@@ -93,8 +99,8 @@
 }
 
 .dataTable th {
-    border: 1px solid var(--base-background-color);
-    background: var(--second-quaternary-background-color);
+    border: 1px solid var(--row-background);
+    background: var(--header-background);
     color: var(--highlighted-font-color);
     padding-top: 0em;
     padding-bottom: 0em;
@@ -109,23 +115,23 @@
     word-wrap:break-word;
     max-width: 0;
     border-top: 1px solid transparent;
-    border-bottom: 1px solid var(--second-tertiary-background-color);
+    border-bottom: 1px solid var(--row-border);
 }
 
 /****************** Table rows style ***************/
 .dataTable tr {
-    background: var(--second-secondary-background-color);
+    background: var(--row-background);
 }
 
 /****************** Table Unack rows style ***************/
 .dataTable tr.unackRow {
-    background: var(--second-tertiary-background-color);
+    background: var(--unack-row-background);
 }
 
 .dataTable tr.unackRow td {
     font-weight: bold;
     color: var(--base-font-color);
-    border-bottom: 1px solid var(--second-secondary-background-color);
+    border-bottom: 1px solid var(--unack-row-border);
 }
 
 /**** Remove bottom border from the row that has been expanded *****/
@@ -135,14 +141,14 @@
 
 /****************** Table rows hover style ***************/
 .dataTable tr:hover {
-    border-bottom: 1px solid var(--second-senary-background-dimmed-color);
-    border-top: 1px solid var(--second-senary-background-dimmed-color);
-    -moz-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
-      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
-    -webkit-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
-      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
-    box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
-      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+    border-bottom: 1px solid var(--hover-border);
+    border-top: 1px solid var(--hover-border);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--hover-border),
+      inset 0px -8px 8px -8px var(--hover-border);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--hover-border),
+      inset 0px -8px 8px -8px var(--hover-border);
+    box-shadow: inset 0px 8px 8px -8px var(--hover-border),
+      inset 0px -8px 8px -8px var(--hover-border);
 }
 
 .dataTable .valueCell {
@@ -166,13 +172,13 @@
     display: block;
     width: 100%;
     text-align: left;
-    background: var(--second-secondary-background-color);
-    border-bottom: 1px solid var(--second-tertiary-background-color);
+    background: var(--row-background);
+    border-bottom: 1px solid var(--row-border);
 }
 
 .dataTable .unackExpandedRow {
-    background: var(--second-tertiary-background-color);
-    border-bottom: 1px solid var(--second-secondary-background-color);
+    background: var(--unack-row-background);
+    border-bottom: 1px solid var(--unack-row-border);
 }
 
 .dataTable .expandedRow .title {
