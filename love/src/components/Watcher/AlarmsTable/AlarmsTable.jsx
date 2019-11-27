@@ -155,7 +155,8 @@ export default class AlarmsTable extends PureComponent {
     const currentTime = new Date().getTime();
     return (
       <>
-
+      {/*<div className={newStyles.watcherTableWrapper}>
+      <div className={newStyles.watcherTableWrapperFill}>
       <table className={newStyles.watcherTable}>
         <thead>
           <tr>
@@ -264,6 +265,8 @@ export default class AlarmsTable extends PureComponent {
           })}
         </tbody>
       </table>
+      </div>
+      </div>*/}
 
 
 
@@ -288,24 +291,28 @@ export default class AlarmsTable extends PureComponent {
                 <>
                   <ColumnHeader
                     {...defaultColumnProps}
+                    className={styles.status}
                     header={'Status'}
                     filterName={'severity'}
                     filter={this.state.filters.severity}
                   />
                   <ColumnHeader
                     {...defaultColumnProps}
+                    className={styles.maxSeverity}
                     header={'Max severity'}
                     filterName={'maxSeverity'}
                     filter={this.state.filters.maxSeverity}
                   />
                   <ColumnHeader
                     {...defaultColumnProps}
+                    className={styles.name}
                     header={'Name'}
                     filterName={'name'}
                     filter={this.state.filters.name}
                   />
                   <ColumnHeader
                     {...defaultColumnProps}
+                    className={styles.timestamp}
                     header={'Severity update'}
                     filterName={'timestampSeverityOldest'}
                     filter={this.state.filters.timestampSeverityOldest}
@@ -323,7 +330,7 @@ export default class AlarmsTable extends PureComponent {
               return (
                 <React.Fragment key={key}>
                   <tr className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')} onClick={() => this.clickGearIcon(key)}>
-                    <td className={styles.string}>
+                    <td className={[styles.string, styles.status].join(' ')}>
                       {
                         <Alarm
                           severity={row.severity}
@@ -337,13 +344,13 @@ export default class AlarmsTable extends PureComponent {
                         />
                       }
                     </td>
-                    <td className={styles.string}>
+                    <td className={[styles.string, styles.maxSeverity].join(' ')}>
                       <Alarm severity={row.maxSeverity} statusOnly />
                     </td>
-                    <td className={styles.string}>
+                    <td className={[styles.string, styles.name].join(' ')}>
                       {row.name}
                     </td>
-                    <td className={styles.string} title={new Date(row.timestampSeverityOldest * 1000).toString()}>
+                    <td className={[styles.string, styles.timestamp].join(' ')} title={new Date(row.timestampSeverityOldest * 1000).toString()}>
                       {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
                     </td>
                   </tr>

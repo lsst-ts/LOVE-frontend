@@ -3,6 +3,7 @@
     grid-template-columns: 8em 4em;
     grid-column-gap: 0.5em;
     justify-content: center;
+    width: fit-content;
 }
 
 .statusOnly {

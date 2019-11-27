@@ -2,6 +2,19 @@
     --scrollbar-width: 10px;
 }
 
+.watcherTableWrapper {
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  grid-area: content;
+  overflow-y: hidden;
+}
+
+.watcherTableWrapperFill {
+  flex: 1;
+  /* overflow-y: scroll; */
+}
+
 .watcherTable {
   display: grid;
   grid-template-rows: min-content minmax(0, 1fr);
@@ -105,4 +118,26 @@
 
 .watcherTable tr:last-of-type td:last-of-type {
   border-bottom-right-radius: 7px;
+}
+
+/* width */
+.watcherTable ::-webkit-scrollbar {
+    width: var(--scrollbar-width);
+}
+
+/* Track */
+.watcherTable ::-webkit-scrollbar-track {
+    background: var(--tertiary-background-color);
+}
+
+/* Handle */
+.watcherTable ::-webkit-scrollbar-thumb {
+    /* background: var(--quinary-background-color); */
+    background: var(--tertiary-font-color);
+    border-radius: 1.1em;
+}
+
+/* Handle on hover */
+.watcherTable ::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-font-color);
 }
