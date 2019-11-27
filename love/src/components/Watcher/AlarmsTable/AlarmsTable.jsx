@@ -233,6 +233,7 @@ export default class AlarmsTable extends PureComponent {
                                 this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
                               }}
                             />
+                            <div className={styles.expansionIconWrapper}/>
                           </div>
                         </>
                       }
