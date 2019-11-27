@@ -218,7 +218,7 @@ export default class AlarmsTable extends PureComponent {
                     >
                       {
                         <>
-                          <div className={styles.alarmWrapper}>
+                          <div className={styles.statusWrapper}>
                             <div className={styles.expansionIconWrapper}>
                               <RowExpansionIcon expanded={this.state.expandedRows[key]}/>
                             </div>
@@ -242,8 +242,8 @@ export default class AlarmsTable extends PureComponent {
                       title={reasonStr}
                       className={styles.maxSeverity}
                     >
-                      <div className={styles.alarmWrapper}>
-                      <Alarm severity={row.maxSeverity} />
+                      <div className={styles.maxSeverityWrapper}>
+                        <Alarm severity={row.maxSeverity} />
                       </div>
                     </td>
                     <td
