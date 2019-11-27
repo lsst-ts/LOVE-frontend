@@ -2,6 +2,14 @@
     --scrollbar-width: 10px;
 }
 
+.dataTableWrapper {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  width: inherit;
+  height: inherit;
+}
+
 .dataTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
