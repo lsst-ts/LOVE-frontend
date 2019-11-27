@@ -213,9 +213,10 @@ export default class AlarmsTable extends PureComponent {
                   >
                     <td
                       title={reasonStr}
-                      className={[styles.string, styles.status].join(' ')}
+                      className={styles.status}
                     >
                       {
+                        <div className={styles.alarmWrapper}>
                         <Alarm
                           severity={row.severity}
                           maxSeverity={row.maxSeverity}
@@ -227,24 +228,27 @@ export default class AlarmsTable extends PureComponent {
                             this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
                           }}
                         />
+                        </div>
                       }
                     </td>
                     <td
                       title={reasonStr}
-                      className={[styles.string, styles.maxSeverity].join(' ')}
+                      className={styles.maxSeverity}
                     >
+                      <div className={styles.alarmWrapper}>
                       <Alarm severity={row.maxSeverity} />
+                      </div>
                     </td>
                     <td
                       title={reasonStr}
-                      className={[styles.string, styles.name].join(' ')}
+                      className={styles.name}
                     >
                       {row.name}
                     </td>
                     <td
                       // title={reasonStr}
                       title={new Date(row.timestampSeverityOldest * 1000).toString()}
-                      className={[styles.string, styles.timestamp].join(' ')}
+                      className={styles.timestamp}
                     >
                       {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
                     </td>

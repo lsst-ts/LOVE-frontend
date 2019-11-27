@@ -13,12 +13,12 @@
 
 /****************** Columns styles ***************/
 .dataTable .status {
-    width: 13em;
+    width: 20em;
     text-align: center;
 }
 
 .dataTable .maxSeverity {
-    width: 9em;
+    width: 20em;
     text-align: center;
 }
 
@@ -30,7 +30,12 @@
 .dataTable .timestamp {
     width: 13em;
     text-align: left;
+}
 
+.alarmWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 /****************** Make rows look clickable ***************/
@@ -71,15 +76,6 @@
     padding-top: 0em;
     padding-bottom: 0em;
     text-align: left;
-}
-
-/****************** Styles for content alignment ***************/
-.dataTable td.string {
-    text-align: left;
-}
-
-.dataTable td.number {
-    text-align: right;
 }
 
 /****************** Table body cells style ***************/
