@@ -208,8 +208,8 @@ export default class AlarmsTable extends PureComponent {
               const key = row.name;
               const isExpanded = this.state.expandedRows[key];
               const reasonStr = 'Reason: ' + row.reason;
-              const acknowledgedBy = row.acknowledgedBy ? row.acknowledgedBy : 'not acknowledged'
-              const mutedBy = row.mutedBy ? row.mutedBy : 'not muted'
+              const acknowledgedBy = row.acknowledgedBy ? row.acknowledgedBy : 'Not acknowledged'
+              const mutedBy = row.mutedBy ? row.mutedBy : 'Not muted'
               return (
                 <React.Fragment key={key}>
                   <tr
