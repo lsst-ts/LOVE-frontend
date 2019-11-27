@@ -204,11 +204,17 @@ export default class AlarmsTable extends PureComponent {
           {data.sort(this.sortData).map((row) => {
             if (this.testFilter(row)) {
               const key = row.name;
-
+              const reasonStr = 'Reason: ' + row.reason;
               return (
                 <React.Fragment key={key}>
-                  <tr className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')} onClick={() => this.clickGearIcon(key)}>
-                    <td className={[styles.string, styles.status].join(' ')}>
+                  <tr
+                    className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')}
+                    onClick={() => this.clickGearIcon(key)}
+                  >
+                    <td
+                      title={reasonStr}
+                      className={[styles.string, styles.status].join(' ')}
+                    >
                       {
                         <Alarm
                           severity={row.severity}
@@ -222,13 +228,23 @@ export default class AlarmsTable extends PureComponent {
                         />
                       }
                     </td>
-                    <td className={[styles.string, styles.maxSeverity].join(' ')}>
+                    <td
+                      title={reasonStr}
+                      className={[styles.string, styles.maxSeverity].join(' ')}
+                    >
                       <Alarm severity={row.maxSeverity} statusOnly />
                     </td>
-                    <td className={[styles.string, styles.name].join(' ')}>
+                    <td
+                      title={reasonStr}
+                      className={[styles.string, styles.name].join(' ')}
+                    >
                       {row.name}
                     </td>
-                    <td className={[styles.string, styles.timestamp].join(' ')} title={new Date(row.timestampSeverityOldest * 1000).toString()}>
+                    <td
+                      // title={reasonStr}
+                      title={new Date(row.timestampSeverityOldest * 1000).toString()}
+                      className={[styles.string, styles.timestamp].join(' ')}
+                    >
                       {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
                     </td>
                   </tr>
