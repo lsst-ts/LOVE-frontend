@@ -2,7 +2,7 @@
     --scrollbar-width: 10px;
 }
 
-.telemetrySelectionTable {
+.dataTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
     width: fit-content;
@@ -12,19 +12,19 @@
 }
 
 /****************** Columns styles ***************/
-.telemetrySelectionTable .status {
+.dataTable .status {
     width: 13em;
 }
 
-.telemetrySelectionTable .maxSeverity {
+.dataTable .maxSeverity {
     width: 9em;
 }
 
-.telemetrySelectionTable .name {
+.dataTable .name {
     width: 30em;
 }
 
-.telemetrySelectionTable .timestamp {
+.dataTable .timestamp {
     width: 13em;
 }
 
@@ -34,31 +34,31 @@
 }
 
 /****************** General table head and body styles ***************/
-.telemetrySelectionTable thead {
+.dataTable thead {
     display: table;
     table-layout:fixed;
     width: fit-content;
     word-wrap:break-word;
 }
 
-.telemetrySelectionTable tbody {
+.dataTable tbody {
     display: block;
     height: inherit; /* necessary for scroll */
     overflow-y: scroll;
     overflow-x: hidden;
 }
-.telemetrySelectionTable tbody tr {
+.dataTable tbody tr {
     display: table;
     table-layout: fixed;
     width: fit-content;
 }
-.telemetrySelectionTable th, td {
+.dataTable th, td {
     width: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
-.telemetrySelectionTable th {
+.dataTable th {
     border: 1px solid var(--base-background-color);
     background: var(--tertiary-background-color);
     padding: 0em 1em;
@@ -67,16 +67,16 @@
 }
 
 /****************** Styles for content alignment ***************/
-.telemetrySelectionTable td.string {
+.dataTable td.string {
     text-align: left;
 }
 
-.telemetrySelectionTable td.number {
+.dataTable td.number {
     text-align: right;
 }
 
 /****************** Table body cells style ***************/
-.telemetrySelectionTable td {
+.dataTable td {
     color: var(--secondary-font-color);
     padding: 0.4em 1em;
     word-wrap:break-word;
@@ -88,27 +88,27 @@
 }
 
 /****************** Table rows stripped style ***************/
-.telemetrySelectionTable tr:nth-child(even) {
+.dataTable tr:nth-child(even) {
     background: var(--secondary-background-dimmed-color);
 }
 
-.telemetrySelectionTable tr:nth-child(odd) {
+.dataTable tr:nth-child(odd) {
     background: var(--secondary-background-color);
 }
 
 /****************** Table Unack rows style ***************/
-.telemetrySelectionTable tr.unackRow {
+.dataTable tr.unackRow {
     background: var(--tertiary-background-color);
 }
 
-.telemetrySelectionTable tr.unackRow td {
+.dataTable tr.unackRow td {
     font-weight: bold;
     color: var(--base-font-color);
     border-bottom: 1px solid var(--base-background-color);
 }
 
 /****************** Table rows hover style ***************/
-.telemetrySelectionTable tr:hover {
+.dataTable tr:hover {
     border-bottom: 1px solid var(--second-senary-background-dimmed-color);
     border-top: 1px solid var(--second-senary-background-dimmed-color);
     -moz-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
@@ -119,7 +119,7 @@
       inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
 }
 
-.telemetrySelectionTable .valueCell {
+.dataTable .valueCell {
     padding: 0.4em 0.5em;
     word-wrap:break-word;
     word-wrap: normal;
@@ -127,32 +127,32 @@
     overflow: hidden;
 }
 
-.telemetrySelectionTable td input {
+.dataTable td input {
     min-width: 10px;
 }
 
-.telemetrySelectionTable .firstColumn input {
+.dataTable .firstColumn input {
     margin: 0;
 }
 
 /****************** Styles to make the Table corners rounded ***************/
-.telemetrySelectionTable th:first-of-type {
+.dataTable th:first-of-type {
     border-top-left-radius: 7px;
 }
 
-.telemetrySelectionTable th:last-of-type {
+.dataTable th:last-of-type {
     border-top-right-radius: 7px;
 }
 
-.telemetrySelectionTable tr:last-of-type td:first-of-type {
+.dataTable tr:last-of-type td:first-of-type {
     border-bottom-left-radius: 7px;
 }
 
-.telemetrySelectionTable tr:last-of-type td:last-of-type {
+.dataTable tr:last-of-type td:last-of-type {
     border-bottom-right-radius: 7px;
 }
 
-.telemetrySelectionTable .firstColumn {
+.dataTable .firstColumn {
     width: 1em;
     background: var(--base-background-color);
     padding: 0em 0.5em;
@@ -161,31 +161,31 @@
 }
 
 /****************** Styles for the Expanded row ***************/
-.telemetrySelectionTable .expandedRow {
+.dataTable .expandedRow {
     text-align: left;
     background: var(--tertiary-background-color);
 }
 
-.telemetrySelectionTable tr:nth-child(even).expandedRow {
+.dataTable tr:nth-child(even).expandedRow {
     background: var(--tertiary-background-color);
 }
 
-.telemetrySelectionTable tr:nth-child(odd).expandedRow {
+.dataTable tr:nth-child(odd).expandedRow {
     background: var(--tertiary-background-color);
 }
 
-.telemetrySelectionTable .expandedRow .title {
+.dataTable .expandedRow .title {
     font-weight: bold;
     color: var(--base-font-color);
 }
 
-.telemetrySelectionTable .expandedRow td {
+.dataTable .expandedRow td {
     vertical-align: top;
     border: 1px solid transparent;
     padding: 1em;
 }
 
-.telemetrySelectionTable .expandedRow textarea {
+.dataTable .expandedRow textarea {
     background: var(--secondary-background-dimmed-color);
     color: var(--base-font-color);
     border: none;
@@ -198,35 +198,35 @@
     padding: 0.6em 0.6em;
 }
 
-.telemetrySelectionTable .expandedColumn {
+.dataTable .expandedColumn {
     display: grid;
     grid-template-columns: minmax(30em, min-content) 1fr;
     column-gap: 2em;
 }
 
-.telemetrySelectionTable tr:hover.expandedRow td{
+.dataTable tr:hover.expandedRow td{
     border-bottom: 1px solid var(--secondary-background-color);
     border-top: 1px solid transparent;
 }
 
 /*************** Styles for the Table Body Scroller ***************/
 /* width */
-.telemetrySelectionTable ::-webkit-scrollbar {
+.dataTable ::-webkit-scrollbar {
     width: var(--scrollbar-width);
 }
 
 /* Track */
-.telemetrySelectionTable ::-webkit-scrollbar-track {
+.dataTable ::-webkit-scrollbar-track {
     background: var(--tertiary-background-color);
 }
 
 /* Handle */
-.telemetrySelectionTable ::-webkit-scrollbar-thumb {
+.dataTable ::-webkit-scrollbar-thumb {
     background: var(--tertiary-font-color);
     border-radius: 1.1em;
 }
 
 /* Handle on hover */
-.telemetrySelectionTable ::-webkit-scrollbar-thumb:hover {
+.dataTable ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-font-color);
 }
