@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
+import Panel from '../Panel/Panel';
 
 export default class CustomView extends Component {
   static propTypes = {
@@ -49,18 +50,21 @@ export default class CustomView extends Component {
     });
     return (
       <div key={container.properties.i.toString()} className={[styles.container, styles.noOverflow].join(' ')}>
-        <GridLayout
-          layout={layout}
-          items={layout.length}
-          rowHeight={50}
-          onLayoutChange={this.props.onLayoutChange}
-          cols={container.properties.cols}
-          width={this.props.baseColWidth * container.properties.w}
-          margin={[0, 0]}
-          verticalCompact={false}
-        >
-          {elements}
-        </GridLayout>
+        <Panel title={`Component ${container.properties.i.toString()}`} className={styles.containerPanel}>
+          <GridLayout
+            layout={layout}
+            items={layout.length}
+            rowHeight={50}
+            onLayoutChange={this.props.onLayoutChange}
+            cols={container.properties.cols}
+            width={this.props.baseColWidth * container.properties.w}
+            margin={[0, 0]}
+            verticalCompact={false}
+            className={styles.gridLayout}
+          >
+            {elements}
+          </GridLayout>
+        </Panel>
       </div>
     );
   };

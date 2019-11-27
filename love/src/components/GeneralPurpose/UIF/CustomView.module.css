@@ -2,6 +2,14 @@
   background: rgba(255, 0, 0, 0.8);
 }
 
+.containerPanel {
+  width: 100%;
+}
+
+.gridLayout {
+  position: relative;
+}
+
 .componentWrapper {
   background: hotpink;
   border: 1px solid white;
@@ -19,13 +27,13 @@
   cursor: se-resize;
 }
 
-.componentWrapper :global(.react-resizable-handle)::after {
+.container :global(.react-resizable-handle)::after {
   content: '';
   position: absolute;
   right: 3px;
   bottom: 3px;
   width: 5px;
   height: 5px;
-  border-right: 2px solid rgba(0, 0, 0, 0.4);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.4);
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 }
