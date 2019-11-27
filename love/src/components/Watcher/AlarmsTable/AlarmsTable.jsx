@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
 import styles from './AlarmsTable.module.css';
 import Alarm from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
@@ -216,19 +217,24 @@ export default class AlarmsTable extends PureComponent {
                       className={styles.status}
                     >
                       {
-                        <div className={styles.alarmWrapper}>
-                        <Alarm
-                          severity={row.severity}
-                          maxSeverity={row.maxSeverity}
-                          acknowledged={row.acknowledged}
-                          muted={row.mutedSeverity <= row.severity}
-                          ackButtonLocation='left'
-                          ackAlarm={(event) => {
-                            event.stopPropagation();
-                            this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
-                          }}
-                        />
-                        </div>
+                        <>
+                          <div className={styles.alarmWrapper}>
+                            <div className={styles.expansionIconWrapper}>
+                              <RowExpansionIcon expanded={this.state.expandedRows[key]}/>
+                            </div>
+                            <Alarm
+                              severity={row.severity}
+                              maxSeverity={row.maxSeverity}
+                              acknowledged={row.acknowledged}
+                              muted={row.mutedSeverity <= row.severity}
+                              ackButtonLocation='left'
+                              ackAlarm={(event) => {
+                                event.stopPropagation();
+                                this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
+                              }}
+                            />
+                          </div>
+                        </>
                       }
                     </td>
                     <td

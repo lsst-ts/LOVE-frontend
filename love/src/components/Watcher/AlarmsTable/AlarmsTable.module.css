@@ -18,7 +18,7 @@
 }
 
 .dataTable .maxSeverity {
-    width: 20em;
+    width: 10em;
     text-align: center;
 }
 
@@ -28,8 +28,15 @@
 }
 
 .dataTable .timestamp {
-    width: 13em;
+    width: 15em;
     text-align: left;
+}
+
+.expansionIconWrapper {
+    min-width: 1em;
+    height: 1em;
+    cursor: pointer;
+    padding: 0.3em;
 }
 
 .alarmWrapper {
