@@ -11,39 +11,7 @@
     border-collapse: collapse;
 }
 
-.telemetrySelectionTable thead {
-    display: table;
-    table-layout:fixed;
-    width: fit-content;
-    /* width: calc(100% - var(--scrollbar-width)); */
-    word-wrap:break-word;
-}
-
-.telemetrySelectionTable tbody {
-    /* background: var(--secondary-background-color); */
-    display: block;
-    height: inherit; /* necessary for scroll */
-    /* width: 100%; */
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.telemetrySelectionTable tbody tr {
-    display: table;
-    table-layout: fixed;
-    width: fit-content;
-}
-.telemetrySelectionTable th, td {
-    width: auto;
-}
-
-.telemetrySelectionTable th {
-    border: 1px solid var(--base-background-color);
-    background: var(--tertiary-background-color);
-    padding: 0em 1em;
-    padding-left: 1em;
-    text-align: left;
-}
-
+/****************** Columns styles ***************/
 .telemetrySelectionTable .status {
     width: 13em;
 }
@@ -60,22 +28,66 @@
     width: 13em;
 }
 
-.telemetrySelectionTable tr:hover {
-    border-bottom: 1px solid var(--second-senary-background-dimmed-color);
-    border-top: 1px solid var(--second-senary-background-dimmed-color);
-    -moz-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
-      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
-    -webkit-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
-      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
-    box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
-      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+/****************** Make rows look clickable ***************/
+.dataRow {
+    cursor: pointer;
 }
 
-.telemetrySelectionTable tr:hover.expandedRow td{
-    border-bottom: 1px solid var(--secondary-background-color);
+/****************** General table head and body styles ***************/
+.telemetrySelectionTable thead {
+    display: table;
+    table-layout:fixed;
+    width: fit-content;
+    word-wrap:break-word;
+}
+
+.telemetrySelectionTable tbody {
+    display: block;
+    height: inherit; /* necessary for scroll */
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+.telemetrySelectionTable tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: fit-content;
+}
+.telemetrySelectionTable th, td {
+    width: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.telemetrySelectionTable th {
+    border: 1px solid var(--base-background-color);
+    background: var(--tertiary-background-color);
+    padding: 0em 1em;
+    padding-left: 1em;
+    text-align: left;
+}
+
+/****************** Styles for content alignment ***************/
+.telemetrySelectionTable td.string {
+    text-align: left;
+}
+
+.telemetrySelectionTable td.number {
+    text-align: right;
+}
+
+/****************** Table body cells style ***************/
+.telemetrySelectionTable td {
+    color: var(--secondary-font-color);
+    padding: 0.4em 1em;
+    word-wrap:break-word;
+    max-width: 0;
     border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
+    border-left: 1px solid transparent;
+    border-right: 1px solid var(--base-background-color);
 }
 
+/****************** Table rows stripped style ***************/
 .telemetrySelectionTable tr:nth-child(even) {
     background: var(--secondary-background-dimmed-color);
 }
@@ -84,7 +96,7 @@
     background: var(--secondary-background-color);
 }
 
-
+/****************** Table Unack rows style ***************/
 .telemetrySelectionTable tr.unackRow {
     background: var(--tertiary-background-color);
 }
@@ -95,35 +107,16 @@
     border-bottom: 1px solid var(--base-background-color);
 }
 
-.dataRow {
-    cursor: pointer;
-}
-
-.telemetrySelectionTable th:first-of-type {
-    border-top-left-radius: 7px;
-}
-
-.telemetrySelectionTable th:last-of-type {
-    border-top-right-radius: 7px;
-}
-
-.telemetrySelectionTable td {
-    color: var(--secondary-font-color);
-    padding: 0.4em 1em;
-    word-wrap:break-word;
-    max-width: 0;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid var(--base-background-color);
-    border-right: 1px solid var(--base-background-color);
-}
-
-.telemetrySelectionTable td.string {
-    text-align: left;
-}
-
-.telemetrySelectionTable td.number {
-    text-align: right;
+/****************** Table rows hover style ***************/
+.telemetrySelectionTable tr:hover {
+    border-bottom: 1px solid var(--second-senary-background-dimmed-color);
+    border-top: 1px solid var(--second-senary-background-dimmed-color);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
+      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
+      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
+    box-shadow: inset 0px 8px 8px -8px var(--second-senary-background-dimmed-color),
+      inset 0px -8px 8px -8px var(--second-senary-background-dimmed-color);
 }
 
 .telemetrySelectionTable .valueCell {
@@ -136,6 +129,19 @@
 
 .telemetrySelectionTable td input {
     min-width: 10px;
+}
+
+.telemetrySelectionTable .firstColumn input {
+    margin: 0;
+}
+
+/****************** Styles to make the Table corners rounded ***************/
+.telemetrySelectionTable th:first-of-type {
+    border-top-left-radius: 7px;
+}
+
+.telemetrySelectionTable th:last-of-type {
+    border-top-right-radius: 7px;
 }
 
 .telemetrySelectionTable tr:last-of-type td:first-of-type {
@@ -154,10 +160,7 @@
     border: 1px solid var(--base-background-color)
 }
 
-.telemetrySelectionTable .firstColumn input {
-    margin: 0;
-}
-
+/****************** Styles for the Expanded row ***************/
 .telemetrySelectionTable .expandedRow {
     text-align: left;
     background: var(--tertiary-background-color);
@@ -201,6 +204,12 @@
     column-gap: 2em;
 }
 
+.telemetrySelectionTable tr:hover.expandedRow td{
+    border-bottom: 1px solid var(--secondary-background-color);
+    border-top: 1px solid transparent;
+}
+
+/*************** Styles for the Table Body Scroller ***************/
 /* width */
 .telemetrySelectionTable ::-webkit-scrollbar {
     width: var(--scrollbar-width);
@@ -213,7 +222,6 @@
 
 /* Handle */
 .telemetrySelectionTable ::-webkit-scrollbar-thumb {
-    /* background: var(--quinary-background-color); */
     background: var(--tertiary-font-color);
     border-radius: 1.1em;
 }
