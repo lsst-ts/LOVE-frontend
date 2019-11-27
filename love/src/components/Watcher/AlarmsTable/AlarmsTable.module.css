@@ -32,17 +32,17 @@
     text-align: left;
 }
 
+.alarmWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .expansionIconWrapper {
     min-width: 1em;
     height: 1em;
     cursor: pointer;
     padding: 0.3em;
-}
-
-.alarmWrapper {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 }
 
 /****************** Make rows look clickable ***************/
