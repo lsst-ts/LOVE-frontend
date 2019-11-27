@@ -13,7 +13,7 @@ export const severityToStatus = {
 
 export default function Alarm({ severity, ackButtonLocation, acknowledged, muted, ackAlarm }) {
   const status = severityToStatus[severity];
-  const ackButton = acknowledged ? (
+  const ackButton = !acknowledged ? (
     <Button
       title='ack'
       status='info'
