@@ -94,7 +94,8 @@
 
 .dataTable th {
     border: 1px solid var(--base-background-color);
-    background: var(--tertiary-background-color);
+    background: var(--second-quaternary-background-color);
+    color: var(--highlighted-font-color);
     padding-top: 0em;
     padding-bottom: 0em;
     text-align: left;
@@ -108,29 +109,27 @@
     word-wrap:break-word;
     max-width: 0;
     border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid var(--base-background-color);
-    border-right: 1px solid var(--base-background-color);
+    border-bottom: 1px solid var(--second-tertiary-background-color);
 }
 
 /****************** Table rows stripped style ***************/
 .dataTable tr:nth-child(even) {
-    background: var(--secondary-background-dimmed-color);
+    background: var(--second-secondary-background-color);
 }
 
 .dataTable tr:nth-child(odd) {
-    background: var(--secondary-background-color);
+    background: var(--second-secondary-background-color);
 }
 
 /****************** Table Unack rows style ***************/
 .dataTable tr.unackRow {
-    background: var(--tertiary-background-color);
+    background: var(--second-tertiary-background-color);
 }
 
 .dataTable tr.unackRow td {
     font-weight: bold;
     color: var(--base-font-color);
-    border-bottom: 1px solid var(--base-background-color);
+    border-bottom: 1px solid var(--second-secondary-background-color);
 }
 
 /****************** Table rows hover style ***************/
