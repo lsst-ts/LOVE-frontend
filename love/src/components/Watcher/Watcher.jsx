@@ -68,7 +68,9 @@ PageMaker including versions of Lorem Ipsum.`,
             <Alarm severity={4} />
           </div>
 
-          <AlarmsTableContainer></AlarmsTableContainer>
+          <div className={styles.alarmsTableWrapper}>
+            <AlarmsTableContainer/>
+          </div>
         </>
       </Panel>
     );
