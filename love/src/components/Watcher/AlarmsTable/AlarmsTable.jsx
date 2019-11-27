@@ -206,11 +206,18 @@ export default class AlarmsTable extends PureComponent {
           {data.sort(this.sortData).map((row) => {
             if (this.testFilter(row)) {
               const key = row.name;
+              const isExpanded = this.state.expandedRows[key];
               const reasonStr = 'Reason: ' + row.reason;
+              const acknowledgedBy = row.acknowledgedBy ? row.acknowledgedBy : 'not acknowledged'
+              const mutedBy = row.mutedBy ? row.mutedBy : 'not muted'
               return (
                 <React.Fragment key={key}>
                   <tr
-                    className={[styles.dataRow, !row.acknowledged ? styles.unackRow : ''].join(' ')}
+                    className={[
+                      styles.dataRow,
+                      !row.acknowledged ? styles.unackRow : '',
+                      isExpanded ? styles.expandedRowParent : '',
+                    ].join(' ')}
                     onClick={() => this.clickGearIcon(key)}
                   >
                     <td
@@ -221,7 +228,7 @@ export default class AlarmsTable extends PureComponent {
                         <>
                           <div className={styles.statusWrapper}>
                             <div className={styles.expansionIconWrapper}>
-                              <RowExpansionIcon expanded={this.state.expandedRows[key]}/>
+                              <RowExpansionIcon expanded={isExpanded}/>
                             </div>
                             <Alarm
                               severity={row.severity}
@@ -261,8 +268,15 @@ export default class AlarmsTable extends PureComponent {
                       {timeDifference(currentTime, row.timestampSeverityOldest * 1000)}
                     </td>
                   </tr>
-                  {this.state.expandedRows[key] ? (
-                    <tr onClick={this.closeFilterDialogs} key={`${key}-expanded`} className={styles.expandedRow}>
+                  {isExpanded ? (
+                    <tr
+                      onClick={this.closeFilterDialogs}
+                      key={`${key}-expanded`}
+                      className={[
+                        styles.expandedRow,
+                        !row.acknowledged ? styles.unackExpandedRow : '',
+                      ].join(' ')}
+                    >
                       <td colSpan={4}>
                         <div className={styles.expandedColumn}>
                           <div>
@@ -274,11 +288,11 @@ export default class AlarmsTable extends PureComponent {
                           <div>
                             <div className={styles.title}>Acknowledged by:</div>
                             <div>
-                              <p>{row.acknowledgedBy}</p>
+                              <p>{acknowledgedBy}</p>
                             </div>
                             <div className={styles.title}>Muted by:</div>
                             <div>
-                              <p>{row.mutedBy}</p>
+                              <p>{mutedBy}</p>
                             </div>
                           </div>
                         </div>

@@ -112,12 +112,8 @@
     border-bottom: 1px solid var(--second-tertiary-background-color);
 }
 
-/****************** Table rows stripped style ***************/
-.dataTable tr:nth-child(even) {
-    background: var(--second-secondary-background-color);
-}
-
-.dataTable tr:nth-child(odd) {
+/****************** Table rows style ***************/
+.dataTable tr {
     background: var(--second-secondary-background-color);
 }
 
@@ -130,6 +126,11 @@
     font-weight: bold;
     color: var(--base-font-color);
     border-bottom: 1px solid var(--second-secondary-background-color);
+}
+
+/**** Remove bottom border from the row that has been expanded *****/
+.dataTable tr.expandedRowParent td {
+    border-bottom: 1px solid transparent;
 }
 
 /****************** Table rows hover style ***************/
@@ -160,43 +161,18 @@
     margin: 0;
 }
 
-/****************** Styles to make the Table corners rounded ***************/
-.dataTable th:first-of-type {
-    border-top-left-radius: 7px;
-}
-
-.dataTable th:last-of-type {
-    border-top-right-radius: 7px;
-}
-
-.dataTable tr:last-of-type td:first-of-type {
-    border-bottom-left-radius: 7px;
-}
-
-.dataTable tr:last-of-type td:last-of-type {
-    border-bottom-right-radius: 7px;
-}
-
-.dataTable .firstColumn {
-    width: 1em;
-    background: var(--base-background-color);
-    padding: 0em 0.5em;
-    text-align: center;
-    border: 1px solid var(--base-background-color)
-}
-
 /****************** Styles for the Expanded row ***************/
 .dataTable .expandedRow {
+    display: block;
+    width: 100%;
     text-align: left;
-    background: var(--tertiary-background-color);
+    background: var(--second-secondary-background-color);
+    border-bottom: 1px solid var(--second-tertiary-background-color);
 }
 
-.dataTable tr:nth-child(even).expandedRow {
-    background: var(--tertiary-background-color);
-}
-
-.dataTable tr:nth-child(odd).expandedRow {
-    background: var(--tertiary-background-color);
+.dataTable .unackExpandedRow {
+    background: var(--second-tertiary-background-color);
+    border-bottom: 1px solid var(--second-secondary-background-color);
 }
 
 .dataTable .expandedRow .title {
@@ -232,6 +208,32 @@
 .dataTable tr:hover.expandedRow td{
     border-bottom: 1px solid var(--secondary-background-color);
     border-top: 1px solid transparent;
+}
+
+
+/****************** Styles to make the Table corners rounded ***************/
+.dataTable th:first-of-type {
+    border-top-left-radius: 7px;
+}
+
+.dataTable th:last-of-type {
+    border-top-right-radius: 7px;
+}
+
+.dataTable tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 7px;
+}
+
+.dataTable tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 7px;
+}
+
+.dataTable .firstColumn {
+    width: 1em;
+    background: var(--base-background-color);
+    padding: 0em 0.5em;
+    text-align: center;
+    border: 1px solid var(--base-background-color)
 }
 
 /*************** Styles for the Table Body Scroller ***************/
