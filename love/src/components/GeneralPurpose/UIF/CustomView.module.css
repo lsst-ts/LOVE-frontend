@@ -4,9 +4,12 @@
 
 .componentWrapper {
   background: hotpink;
-  /* overflow: hidden; */
+  border: 1px solid white;
 }
 
+.noOverflow {
+  overflow: hidden;
+}
 .componentWrapper :global(.react-resizable-handle) {
   position: absolute;
   width: 20px;

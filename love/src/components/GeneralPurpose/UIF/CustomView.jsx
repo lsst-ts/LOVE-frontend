@@ -3,55 +3,57 @@ import GridLayout from 'react-grid-layout';
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../../AuxTel/Mount/MotorTable/MotorTable.container';
+import componentIndex from './ComponentIndex';
 
 export default class CustomView extends Component {
   static propTypes = {
     layout: PropTypes.object,
     baseColWidth: PropTypes.number,
+    onLayoutChange: PropTypes.func,
   };
 
-  static defaultProps = {};
-
-  parseElement = (element, index) => {
-    return element.properties.type === 'container'
-      ? this.parseContainer(element, index)
-      : this.parseComponent(element, index);
+  static defaultProps = {
+    layout: undefined,
+    baseColWidth: 100,
+    onLayoutChange: () => {},
   };
 
-  parseComponent = (component, index) => {
+  parseElement = (element) => {
+    if (!element || !element.properties) return null;
+    return element.properties.type === 'container' ? this.parseContainer(element) : this.parseComponent(element);
+  };
+
+  parseComponent = (component) => {
+    let comp = '';
+    const LoveComp = componentIndex[component.content];
+    comp = <LoveComp />;
     return (
-      <div key={index.toString()} className={styles.componentWrapper}>
-        {typeof component.content === 'string' ? (
-          <span>
-            `${component.content}-${index}`
-          </span>
-        ) : (
-          <component.content />
-        )}
+      <div key={component.properties.i.toString()} className={[styles.componentWrapper, styles.noOverflow].join(' ')}>
+        {comp}
       </div>
     );
   };
 
-  parseContainer = (container, index) => {
-    const elements = Object.values(container.content).map((x, i) => {
-      return this.parseElement(x, i);
+  parseContainer = (container) => {
+    const elements = Object.values(container.content).map((x) => {
+      return this.parseElement(x);
     });
-    const layout = Object.values(container.content).map((x, i) => {
+    const layout = Object.values(container.content).map((x) => {
       return {
         x: x.properties.x,
         y: x.properties.y,
         w: x.properties.w,
         h: x.properties.h,
-        i: i.toString(),
+        i: x.properties.i.toString(),
       };
     });
     return (
-      <div key={index} className={styles.container}>
+      <div key={container.properties.i.toString()} className={[styles.container, styles.noOverflow].join(' ')}>
         <GridLayout
           layout={layout}
           items={layout.length}
           rowHeight={50}
-          onLayoutChange={() => {}}
+          onLayoutChange={this.props.onLayoutChange}
           cols={container.properties.cols}
           width={this.props.baseColWidth * container.properties.w}
           margin={[0, 0]}
@@ -65,6 +67,6 @@ export default class CustomView extends Component {
 
   render() {
     const parsedTree = this.parseElement(this.props.layout, 0);
-    return parsedTree;
+    return <>{parsedTree}</>;
   }
 }
