@@ -21,8 +21,8 @@ import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 import Watcher from './components/Watcher/Watcher';
-import CustomView from './components/GeneralPurpose/UIF/CustomView';
 import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
+import CustomViewEditor from './components/GeneralPurpose/UIF/CustomViewEditor/CustomViewEditor';
 
 class App extends Component {
   static propTypes = {
@@ -129,6 +129,11 @@ class App extends Component {
             token={this.props.token}
             path="/custom-view"
             component={CustomViewSample}
+          />
+          <PrivateRoute
+            token={this.props.token}
+            path="/custom-view-editor"
+            component={CustomViewEditor}
           />
           <PrivateRoute token={this.props.token} path="/watcher" component={Watcher} />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
