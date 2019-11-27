@@ -5,7 +5,8 @@
 .telemetrySelectionTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
-    width: 100%;
+    width: fit-content;
+    height: 400px;
     table-layout: fixed;
     border-collapse: collapse;
 }
@@ -13,7 +14,8 @@
 .telemetrySelectionTable thead {
     display: table;
     table-layout:fixed;
-    width: calc(100% - var(--scrollbar-width));
+    width: fit-content;
+    /* width: calc(100% - var(--scrollbar-width)); */
     word-wrap:break-word;
 }
 
@@ -21,14 +23,14 @@
     /* background: var(--secondary-background-color); */
     display: block;
     height: inherit; /* necessary for scroll */
-    width: 100%;
+    /* width: 100%; */
     overflow-y: scroll;
     overflow-x: hidden;
 }
 .telemetrySelectionTable tbody tr {
     display: table;
     table-layout: fixed;
-    width: 100%;
+    width: fit-content;
 }
 .telemetrySelectionTable th, td {
     width: auto;
@@ -37,21 +39,25 @@
 .telemetrySelectionTable th {
     border: 1px solid var(--base-background-color);
     background: var(--tertiary-background-color);
-    padding: 0em 0.5em;
+    padding: 0em 1em;
     padding-left: 1em;
     text-align: left;
 }
 
-.telemetrySelectionTable .narrowCol {
-    width: 7%;
+.telemetrySelectionTable .status {
+    width: 13em;
 }
 
-.telemetrySelectionTable .mediumCol {
-    width: 9%;
+.telemetrySelectionTable .maxSeverity {
+    width: 9em;
 }
 
-.telemetrySelectionTable .wideCol {
-    width: 12%;
+.telemetrySelectionTable .name {
+    width: 30em;
+}
+
+.telemetrySelectionTable .timestamp {
+    width: 13em;
 }
 
 .telemetrySelectionTable tr:hover {
