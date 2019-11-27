@@ -6,7 +6,7 @@
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
     width: fit-content;
-    height: 400px;
+    height: inherit; /* necessary for scroll, but parent component must define height */
     table-layout: fixed;
     border-collapse: collapse;
 }
@@ -43,7 +43,7 @@
 
 .dataTable tbody {
     display: block;
-    height: inherit; /* necessary for scroll */
+    height: 100%; /* necessary for scroll */
     overflow-y: scroll;
     overflow-x: hidden;
 }
@@ -83,7 +83,7 @@
     max-width: 0;
     border-top: 1px solid transparent;
     border-bottom: 1px solid transparent;
-    border-left: 1px solid transparent;
+    border-left: 1px solid var(--base-background-color);
     border-right: 1px solid var(--base-background-color);
 }
 
