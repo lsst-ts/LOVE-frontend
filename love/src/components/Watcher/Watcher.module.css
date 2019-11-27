@@ -10,5 +10,6 @@
 
 .alarmsTableWrapper {
   display: block;
-  height: 900px;
+  height: 90vh;
+  width: 1200px;
 }

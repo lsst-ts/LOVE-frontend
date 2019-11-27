@@ -152,6 +152,7 @@ export default class AlarmsTable extends PureComponent {
     let data = this.props.alarms;
     const currentTime = new Date().getTime();
     return (
+      <div className={styles.dataTableWrapper}>
       <table className={styles.dataTable}>
         <thead>
           <tr>
@@ -291,6 +292,7 @@ export default class AlarmsTable extends PureComponent {
           })}
         </tbody>
       </table>
+      </div>
     );
   }
 }
