@@ -27,7 +27,8 @@ export default class CustomView extends Component {
   parseComponent = (component) => {
     let comp = '';
     const LoveComp = componentIndex[component.content];
-    comp = <LoveComp />;
+    const { config } = component;
+    comp = <LoveComp {...config} />;
     return (
       <div key={component.properties.i.toString()} className={[styles.componentWrapper, styles.noOverflow].join(' ')}>
         {comp}

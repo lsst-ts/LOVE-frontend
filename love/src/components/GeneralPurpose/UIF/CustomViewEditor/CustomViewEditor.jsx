@@ -26,44 +26,48 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 12,
-            "h": 5,
+            "w": 3,
+            "h": 1,
             "i": 1
           },
-          "content": "MotorTable"
+          "content": "LabeledStatusText",
+          "config": {
+            "label": "Azimuth state",
+            "groupName": "event-ATMCS-0-atMountState",
+            "stateToLabelMap": {
+              "0": "TRACK_DISABLED",
+              "1": "TRACK_ENABLED",
+              "2": "STOPPING"
+            },
+            "stateToStyleMap": {
+              "0": "ok",
+              "1": "running",
+              "2": "running"
+            }
+          }
         },
-        "RightPanel": {
+        "LeftPanel2": {
           "properties": {
-            "type": "container",
+            "type": "component",
             "x": 0,
-            "y": 5,
-            "w": 5,
-            "h": 2,
-            "cols": 5,
+            "y": 1,
+            "w": 3,
+            "h": 1,
             "i": 2
           },
-          "content": {
-            "TopComponent": {
-              "properties": {
-                "type": "component",
-                "x": 0,
-                "y": 0,
-                "w": 5,
-                "h": 9,
-                "i": 3
-              },
-              "content": "SummaryPanel"
+          "content": "LabeledStatusText",
+          "config": {
+            "label": "Azimuth state2",
+            "groupName": "event-ATMCS-0-m3State",
+            "stateToLabelMap": {
+              "0": "TRACK_DISABLED",
+              "1": "TRACK_ENABLED",
+              "2": "STOPPING"
             },
-            "BottomComponent": {
-              "properties": {
-                "type": "component",
-                "x": 0,
-                "y": 1,
-                "w": 4,
-                "h": 14,
-                "i": 4
-              },
-              "content": "LightPath"
+            "stateToStyleMap": {
+              "0": "ok",
+              "1": "running",
+              "2": "running"
             }
           }
         }
@@ -130,10 +134,12 @@ export default class CustomViewEditor extends Component {
 
   render() {
     return (
+      <>
       <div className={styles.container}>
         <div>
           <CustomView layout={this.state.parsedLayout} onLayoutChange={this.onLayoutChange}></CustomView>
         </div>
+      </div>
         <Rnd
           default={{
             x: 0,
@@ -162,7 +168,7 @@ export default class CustomViewEditor extends Component {
             <button onClick={this.setLayout}>Set</button>
           </div>
         </Rnd>
-      </div>
+        </>
     );
   }
 }
