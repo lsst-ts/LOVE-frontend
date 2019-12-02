@@ -68,7 +68,9 @@ export default class CustomViewEditor extends Component {
               "0": "ok",
               "1": "running",
               "2": "running"
-            }
+            },
+            "accessor": "(event) => event.state.value",
+            "_functionProps": ["accessor"]
           }
         }
       }
