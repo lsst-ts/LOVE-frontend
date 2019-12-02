@@ -8,8 +8,32 @@ import Panel from '../Panel/Panel';
 
 export default class CustomView extends Component {
   static propTypes = {
+    /** Layout object describing the view, composed of recursively nested Elements, with the following format:
+      <Element>: {
+        "properties": {
+          "type": <string:element type, one of ["container","component"]>,
+          "x": <int:x position>,
+          "y": <int:y position>,
+          "w": <int:element width>,
+          "h": <int:element height>,
+          "i": <int:element index>,
+          "cols": <int:number of columns>
+        },
+        "content": <ContainerContent> or ComponentContent>
+      }
+
+      <ContainerContent>: {
+        <string:Element name>: <Element>,
+        <string:Element name>: <Element>,
+        ...
+      }
+
+      <ComponentContent>: <string: component name>
+     */
     layout: PropTypes.object,
+    /** Width for each column defined in layout */
     baseColWidth: PropTypes.number,
+    /** Callback called when layout changes */
     onLayoutChange: PropTypes.func,
   };
 
