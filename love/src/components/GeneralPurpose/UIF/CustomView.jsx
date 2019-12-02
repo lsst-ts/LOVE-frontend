@@ -19,7 +19,8 @@ export default class CustomView extends Component {
           "i": <int:element index>,
           "cols": <int:number of columns>
         },
-        "content": <ContainerContent> or ComponentContent>
+        "content": <ContainerContent> or ComponentContent>,
+        "config": <string:element configuration>,
       }
 
       <ContainerContent>: {
@@ -29,6 +30,9 @@ export default class CustomView extends Component {
       }
 
       <ComponentContent>: <string: component name>
+
+      The config object may contain a special field '_functionProps', an array containing the
+      prop fields which are functions, to be parsed with eval
      */
     layout: PropTypes.object,
     /** Width for each column defined in layout */
@@ -43,6 +47,17 @@ export default class CustomView extends Component {
     onLayoutChange: () => {},
   };
 
+  parseConfig = (config) => {
+    const newConfig = { ...config };
+    if (config._functionProps) {
+      config._functionProps.forEach((fProp) => {
+        // eslint-disable-next-line
+        newConfig[fProp] = eval(config[fProp]);
+      });
+    }
+    return newConfig;
+  };
+
   parseElement = (element) => {
     if (!element || !element.properties) return null;
     return element.properties.type === 'container' ? this.parseContainer(element) : this.parseComponent(element);
@@ -52,7 +67,8 @@ export default class CustomView extends Component {
     let comp = '';
     const LoveComp = componentIndex[component.content];
     const { config } = component;
-    comp = <LoveComp {...config} />;
+    const parsedConfig = this.parseConfig(config);
+    comp = <LoveComp {...parsedConfig} />;
     return (
       <div key={component.properties.i.toString()} className={[styles.componentWrapper, styles.noOverflow].join(' ')}>
         {comp}
