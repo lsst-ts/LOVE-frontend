@@ -15,3 +15,22 @@
   word-break: break-all;
   white-space: normal;
 }
+
+.dropDownClassName {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+  width: 20em;
+}
+
+.dropDownControlClassName {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+}
+
+.dropDownMenuClassName {
+  background-color: var(--second-tertiary-background-color);
+  border-color: var(--tertiary-background-color);
+  color: var(--base-font-color);
+}
