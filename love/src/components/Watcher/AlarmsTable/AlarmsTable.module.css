@@ -181,18 +181,13 @@
     border-bottom: 1px solid var(--unack-row-border);
 }
 
-.dataTable .expandedRow .title {
-    font-weight: bold;
-    color: var(--base-font-color);
-}
-
 .dataTable .expandedRow td {
     vertical-align: top;
     border: 1px solid transparent;
     padding: 1em;
 }
 
-.dataTable .expandedRow textarea {
+/* .dataTable .expandedRow textarea {
     background: var(--secondary-background-dimmed-color);
     color: var(--base-font-color);
     border: none;
@@ -203,13 +198,7 @@
     resize: none;
     border-radius: 5px;
     padding: 0.6em 0.6em;
-}
-
-.dataTable .expandedColumn {
-    display: grid;
-    grid-template-columns: minmax(30em, min-content) 1fr;
-    column-gap: 2em;
-}
+} */
 
 .dataTable tr:hover.expandedRow td{
     border-bottom: 1px solid var(--secondary-background-color);

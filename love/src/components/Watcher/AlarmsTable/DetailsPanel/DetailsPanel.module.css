@@ -1,0 +1,10 @@
+.expandedColumn {
+    display: grid;
+    grid-template-columns: minmax(30em, min-content) 1fr;
+    column-gap: 2em;
+}
+
+.title {
+  font-weight: bold;
+  color: var(--base-font-color);
+}
