@@ -286,9 +286,9 @@ export default class AlarmsTable extends PureComponent {
                         <DetailsPanel
                           alarm={row}
                           muteAlarm={
-                            (event, duration) => {
+                            (event, duration, severity) => {
                               event.stopPropagation();
-                              this.props.muteAlarm(row.name, row.maxSeverity, duration, user);
+                              this.props.muteAlarm(row.name, severity, duration, user);
                             }
                           }
                           unmuteAlarm={
