@@ -22,7 +22,10 @@
 }
 
 .tab {
-  display: block;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: left;
+  align-items: center;
   padding: 0.5em 2em;
   margin-left: 0.3em;
   margin-right: 0.3em;
@@ -36,6 +39,13 @@
   border: 1px solid hsl(199, 43%, 16%);
   border-bottom: 1px solid var(--second-secondary-background-color);
   z-index: 1;
+  color: var(--base-font-color);
+}
+
+.iconWrapper {
+  width: 2em;
+  height: 2em;
+  padding-right: 1em;
 }
 
 .alarmsTableWrapper {
