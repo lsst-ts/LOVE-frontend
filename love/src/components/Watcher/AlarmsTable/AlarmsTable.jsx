@@ -15,7 +15,7 @@ import { timeDifference } from '../../../Utils';
  */
 export default class AlarmsTable extends PureComponent {
   static propTypes = {
-    /** Dictionary of telemetries that are displayed. See examples below */
+    /** List of alarms that are displayed. See examples below */
     alarms: PropTypes.array,
   };
 
@@ -25,7 +25,6 @@ export default class AlarmsTable extends PureComponent {
 
   constructor() {
     super();
-
     const expandedRows = {};
 
     const filters = {

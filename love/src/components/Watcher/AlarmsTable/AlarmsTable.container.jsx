@@ -9,20 +9,26 @@ import {
 import AlarmsTable from './AlarmsTable';
 import mockAlarms from './mock';
 
-const AlarmsTableContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream, ...props }) => {
+const AlarmsTableContainer = ({
+  alarms,
+  filterCallback = () => true,
+  user,
+  subscribeToStream,
+  unsubscribeToStream,
+  ...props }) => {
   return (
     <AlarmsTable
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
-      alarms={alarms}
+      alarms={alarms.filter(filterCallback)}
     />
   );
 };
 
 const mapStateToProps = (state) => {
-  const alarms = getAllAlarms(state).concat(mockAlarms);
-  // const alarms = getAllAlarms(state);
+  // const alarms = getAllAlarms(state).concat(mockAlarms);
+  const alarms = getAllAlarms(state);
   const user = getUsername(state);
   return { alarms, user };
 };
