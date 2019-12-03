@@ -16,7 +16,7 @@ const mockAlarms = [
     private_revCode: "ebe18429",
     private_seqNum: 157,
     private_sndStamp: 1574193720.7318604,
-    reason: "Commanded severity",
+    reason: "Commanded severity, Commanded severity, Commanded severity, Commanded severity, Commanded severity, Commanded severity, Commanded severity, Commanded severity, Commanded severity, Commanded severity",
     severity: 4,
     timestampAcknowledged: 0,
     timestampAutoAcknowledge: 0,
