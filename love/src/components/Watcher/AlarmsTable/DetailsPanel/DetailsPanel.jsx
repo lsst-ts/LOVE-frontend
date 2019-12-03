@@ -9,21 +9,37 @@ export default function DetailsPanel({ alarm }) {
   return (
     <div className={styles.expandedColumn}>
       <div>
-        <div className={styles.title}>Reason:</div>
-        <div>
-          <p>{alarm.reason}</p>
-        </div>
-      </div>
-      <div>
         <div className={styles.title}>Acknowledged by:</div>
         <div>
           <p>{acknowledgedBy}</p>
         </div>
-        <div className={styles.title}>Muted by:</div>
+
+        <div className={styles.title}>Alarm reason:</div>
         <div>
-          <p>{mutedBy}</p>
+          <p>{alarm.reason}</p>
         </div>
       </div>
+
+      {alarm.mutedBy !== '' ? (
+        <div>
+          <div className={styles.title}> Muted for: </div>
+          <div>
+            <p>{acknowledgedBy}</p>
+          </div>
+          <div className={styles.title}> Time remaining: </div>
+          <div>
+            <p>{acknowledgedBy}</p>
+          </div>
+          <div className={styles.title}> Muted by: </div>
+          <div>
+            <p>{mutedBy}</p>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div className={styles.title}> Select the muting time range: </div>
+        </div>
+      )}
     </div>
   );
 }
