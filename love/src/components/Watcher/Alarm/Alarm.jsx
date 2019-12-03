@@ -11,23 +11,33 @@ export const severityToStatus = {
   4: 'critical',
 };
 
-export default function Alarm({ severity, statusOnly, acknowledged, muted, ackAlarm }) {
+export default function Alarm({ severity, ackButtonLocation, acknowledged, muted, ackAlarm }) {
   const status = severityToStatus[severity];
-  return (
-    <div
-      className={[styles.alarmContainer, statusOnly ? styles.statusOnly : ''].join(' ')}
+  const ackButton = !acknowledged ? (
+    <Button
+      title='ack'
+      status='info'
+      disabled={acknowledged}
+      onClick={(event) => {ackAlarm(event)}}
     >
+      ACK
+    </Button>
+  ) : (
+    <div></div>
+  );
+  return (
+    <>
+    <div
+      className={[
+        styles.alarmContainer,
+        ackButtonLocation === 'left'? styles.leftAckButton : '',
+        ackButtonLocation === 'right'? styles.rightAckButton : ''
+      ].join(' ')}
+    >
+      {ackButtonLocation === 'left' ? (ackButton) : null}
       <StatusText status={status}>{status}</StatusText>
-      {statusOnly || acknowledged ? null : (
-        <Button
-          title='ack'
-          status='info'
-          disabled={acknowledged}
-          onClick={(event) => {ackAlarm(event)}}
-        >
-          ACK
-        </Button>
-      )}
+      {ackButtonLocation === 'right' ? (ackButton) : null}
     </div>
+    </>
   );
 }
