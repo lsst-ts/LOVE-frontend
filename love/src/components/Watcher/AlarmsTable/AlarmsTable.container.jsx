@@ -9,27 +9,22 @@ import {
 import AlarmsTable from './AlarmsTable';
 import mockAlarms from './mock';
 
-const AlarmsTableContainer = ({ alarms, filters, user, subscribeToStream, unsubscribeToStream, ...props }) => {
-  console.log('filters: ', filters);
+const AlarmsTableContainer = ({
+  alarms,
+  filterCallback = () => true,
+  user,
+  subscribeToStream,
+  unsubscribeToStream,
+  ...props }) => {
   return (
     <AlarmsTable
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
-      // alarms={alarms}
-      alarms={applyFilter(alarms, filters)}
+      alarms={alarms.filter(filterCallback)}
     />
   );
 };
-
-const applyFilter = (data, filters) => {
-
-  console.log('data: ', data);
-  console.log('filters: ', filters);
-  const filteredData = data.filter(dataValue => Object.keys(filters).every(filterKey => dataValue[filterKey] === filters[filterKey]));
-  console.log('filteredData: ', filteredData);
-  return filteredData;
-}
 
 const mapStateToProps = (state) => {
   const alarms = getAllAlarms(state).concat(mockAlarms);
