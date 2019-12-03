@@ -18,6 +18,12 @@ export default class AlarmsTable extends PureComponent {
   static propTypes = {
     /** List of alarms that are displayed. See examples below */
     alarms: PropTypes.array,
+    /** Function to dispatch an alarm acknowledgement */
+    ackAlarm: PropTypes.func,
+    /** Function to dispatch an alarm mute */
+    muteAlarm: PropTypes.func,
+    /** Function to dispatch an alarm unmute */
+    unmuteAlarm: PropTypes.func,
   };
 
   static defaultProps = {
@@ -276,7 +282,21 @@ export default class AlarmsTable extends PureComponent {
                       ].join(' ')}
                     >
                       <td colSpan={4}>
-                        <DetailsPanel alarm={row} />
+                        <DetailsPanel
+                          alarm={row}
+                          muteAlarm={
+                            (event, duration) => {
+                              event.stopPropagation();
+                              this.props.muteAlarm(row.name, row.maxSeverity, duration, this.props.user);
+                            }
+                          }
+                          unmuteAlarm={
+                            (event) => {
+                              event.stopPropagation();
+                              this.props.unmuteAlarm(row.name);
+                            }
+                          }
+                        />
                       </td>
                     </tr>
                   ) : null}
