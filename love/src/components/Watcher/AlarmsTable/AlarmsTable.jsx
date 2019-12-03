@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
-import styles from './AlarmsTable.module.css';
 import Alarm from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
+import DetailsPanel from './DetailsPanel/DetailsPanel';
 import { timeDifference } from '../../../Utils';
+import styles from './AlarmsTable.module.css';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -207,8 +208,6 @@ export default class AlarmsTable extends PureComponent {
               const key = row.name;
               const isExpanded = this.state.expandedRows[key];
               const reasonStr = 'Reason: ' + row.reason;
-              const acknowledgedBy = row.acknowledgedBy ? row.acknowledgedBy : 'Not acknowledged'
-              const mutedBy = row.mutedBy ? row.mutedBy : 'Not muted'
               return (
                 <React.Fragment key={key}>
                   <tr
@@ -277,24 +276,7 @@ export default class AlarmsTable extends PureComponent {
                       ].join(' ')}
                     >
                       <td colSpan={4}>
-                        <div className={styles.expandedColumn}>
-                          <div>
-                            <div className={styles.title}>Reason:</div>
-                            <div>
-                              <p>{row.reason}</p>
-                            </div>
-                          </div>
-                          <div>
-                            <div className={styles.title}>Acknowledged by:</div>
-                            <div>
-                              <p>{acknowledgedBy}</p>
-                            </div>
-                            <div className={styles.title}>Muted by:</div>
-                            <div>
-                              <p>{mutedBy}</p>
-                            </div>
-                          </div>
-                        </div>
+                        <DetailsPanel alarm={row} />
                       </td>
                     </tr>
                   ) : null}
