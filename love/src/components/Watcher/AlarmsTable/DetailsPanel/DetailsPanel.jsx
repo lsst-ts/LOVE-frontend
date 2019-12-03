@@ -1,10 +1,12 @@
 import React from 'react';
+import Button from '../../../GeneralPurpose/Button/Button';
 import styles from './DetailsPanel.module.css';
 
-export default function DetailsPanel({ alarm }) {
+export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
   const acknowledgedBy = alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Not acknowledged';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
+  const muted = alarm.mutedBy !== '';
 
   return (
     <div className={styles.expandedColumn}>
@@ -20,7 +22,7 @@ export default function DetailsPanel({ alarm }) {
         </div>
       </div>
 
-      {alarm.mutedBy !== '' ? (
+      { muted ? (
         <div>
           <div className={styles.title}> Muted for: </div>
           <div>
@@ -34,10 +36,29 @@ export default function DetailsPanel({ alarm }) {
           <div>
             <p>{mutedBy}</p>
           </div>
+          <Button
+            title='unmute'
+            status='primary'
+            disabled={!muted}
+            onClick={(event) => {unmuteAlarm(event)}}
+          >
+            UNMUTE
+          </Button>
         </div>
+
       ) : (
         <div>
-          <div className={styles.title}> Select the muting time range: </div>
+          <div>
+            <div className={styles.title}> Select the muting time range: </div>
+          </div>
+          <Button
+            title='mute'
+            status='info'
+            disabled={muted}
+            onClick={(event) => {muteAlarm(event, 'duration')}}
+          >
+            MUTE
+          </Button>
         </div>
       )}
     </div>

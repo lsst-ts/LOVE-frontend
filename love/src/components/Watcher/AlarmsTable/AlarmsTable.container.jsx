@@ -58,6 +58,7 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     muteAlarm: (name, severity, duration, mutedBy) => {
+      console.log('muteAlarm:', {name, severity, duration, mutedBy});
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_mute',
@@ -73,6 +74,7 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     unmuteAlarm: (name) => {
+      console.log('unmuteAlarm:', {name});
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_unmute',
