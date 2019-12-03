@@ -47,7 +47,7 @@ export default class Watcher extends Component {
           </div>
 
           <div className={styles.alarmsTableWrapper}>
-            <AlarmsTableContainer/>
+            <AlarmsTableContainer filters={{ acknowledged: this.state.selectedTab === 'muted' }}/>
           </div>
         </div>
       </Panel>
