@@ -48,14 +48,15 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
       ) : (
         <div>
-          <div>
-            <div className={styles.title}> Select the muting time range: </div>
-          </div>
+          <div className={styles.title}> Select the muting time range: </div>
+
+          <div className={styles.title}> Select the muting severity: </div>
+
           <Button
             title='mute'
             status='info'
             disabled={muted}
-            onClick={(event) => {muteAlarm(event, 'duration')}}
+            onClick={(event) => {muteAlarm(event, 60)}}
           >
             MUTE
           </Button>

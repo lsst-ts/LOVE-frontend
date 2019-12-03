@@ -157,6 +157,7 @@ export default class AlarmsTable extends PureComponent {
   render() {
     let data = this.props.alarms;
     const currentTime = new Date().getTime();
+    const user = this.props.user ? this.props.user : 'Unknown User';
     return (
       <div className={styles.dataTableWrapper}>
       <table className={styles.dataTable}>
@@ -242,7 +243,7 @@ export default class AlarmsTable extends PureComponent {
                               ackButtonLocation='left'
                               ackAlarm={(event) => {
                                 event.stopPropagation();
-                                this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
+                                this.props.ackAlarm(row.name, row.maxSeverity, user);
                               }}
                             />
                             <div className={styles.expansionIconWrapper}/>
@@ -287,7 +288,7 @@ export default class AlarmsTable extends PureComponent {
                           muteAlarm={
                             (event, duration) => {
                               event.stopPropagation();
-                              this.props.muteAlarm(row.name, row.maxSeverity, duration, this.props.user);
+                              this.props.muteAlarm(row.name, row.maxSeverity, duration, user);
                             }
                           }
                           unmuteAlarm={
