@@ -73,6 +73,9 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
         <div>
           <div className={styles.title}> Select the muting time range: </div>
           <Dropdown
+            lassName={styles.dropDownClassName}
+            controlClassName={styles.dropDownControlClassName}
+            menuClassName={styles.dropDownMenuClassName}
             options={timeoutOptions}
             onChange={(option) => setTimeout(option)}
             value={timeout}
