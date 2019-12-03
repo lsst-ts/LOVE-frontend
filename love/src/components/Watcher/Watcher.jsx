@@ -40,36 +40,10 @@ PageMaker including versions of Lorem Ipsum.`,
       },
     ];
     return (
-      <Panel title="Auxiliary Telescope" className={styles.panel}>
-        <>
-          <div className={styles.legend}>
-            Ok, acknowledged &nbsp; &nbsp;
-            <Alarm severity={1} acknowledged />
-
-            Ok, unacknowledged &nbsp; &nbsp;
-            <Alarm severity={1} />
-
-            Warning, acknowledged
-            <Alarm severity={2} acknowledged/>
-
-            Warning, unacknowledged
-            <Alarm severity={2} />
-
-            Alert, acknowledged
-             <Alarm severity={3} acknowledged />
-
-            Alert, unacknowledged
-             <Alarm severity={3} />
-
-            Critical, acknowledged
-            <Alarm severity={4} acknowledged/>
-
-            Critical, unacknowledged
-            <Alarm severity={4} />
-          </div>
-
-          <AlarmsTableContainer></AlarmsTableContainer>
-        </>
+      <Panel title="Watcher" className={styles.panel}>
+        <div className={styles.alarmsTableWrapper}>
+          <AlarmsTableContainer/>
+        </div>
       </Panel>
     );
   }

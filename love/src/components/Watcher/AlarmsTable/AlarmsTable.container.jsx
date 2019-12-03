@@ -21,8 +21,8 @@ const AlarmsTableContainer = ({ alarms, user, subscribeToStream, unsubscribeToSt
 };
 
 const mapStateToProps = (state) => {
-  // const alarms = getAllAlarms(state).concat(mockAlarms);
-  const alarms = getAllAlarms(state);
+  const alarms = getAllAlarms(state).concat(mockAlarms);
+  // const alarms = getAllAlarms(state);
   const user = getUsername(state);
   return { alarms, user };
 };

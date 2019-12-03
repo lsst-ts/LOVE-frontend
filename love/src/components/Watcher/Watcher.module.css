@@ -7,3 +7,9 @@
   justify-content: center;
   grid-template-columns: 24em 10em;
 }
+
+.alarmsTableWrapper {
+  display: block;
+  height: 90vh;
+  width: 1200px;
+}
