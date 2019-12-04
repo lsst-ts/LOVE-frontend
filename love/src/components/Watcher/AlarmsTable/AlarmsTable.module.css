@@ -1,11 +1,11 @@
 :root{
-    --scrollbar-width: 10px;
-    --header-background: var(--second-quaternary-background-color);
-    --row-background: var(--second-secondary-background-color);
-    --row-border: var(--second-tertiary-background-color);
-    --unack-row-background: var(--second-tertiary-background-color);
-    --unack-row-border: var(--second-secondary-background-color);
-    --hover-border: var(--second-senary-background-dimmed-color);
+    --table-scrollbar-width: 10px;
+    --table-header-background: var(--second-quaternary-background-color);
+    --table-row-background: var(--second-secondary-background-color);
+    --table-row-border: var(--second-tertiary-background-color);
+    --table-unack-row-background: var(--second-tertiary-background-color);
+    --table-unack-row-border: var(--second-secondary-background-color);
+    --table-hover-border: var(--second-senary-background-dimmed-color);
 }
 
 .dataTableWrapper {
@@ -99,8 +99,8 @@
 }
 
 .dataTable th {
-    border: 1px solid var(--row-background);
-    background: var(--header-background);
+    border: 1px solid var(--table-row-background);
+    background: var(--table-header-background);
     color: var(--highlighted-font-color);
     padding-top: 0em;
     padding-bottom: 0em;
@@ -115,23 +115,23 @@
     word-wrap:break-word;
     max-width: 0;
     border-top: 1px solid transparent;
-    border-bottom: 1px solid var(--row-border);
+    border-bottom: 1px solid var(--table-row-border);
 }
 
 /****************** Table rows style ***************/
 .dataTable tr {
-    background: var(--row-background);
+    background: var(--table-row-background);
 }
 
 /****************** Table Unack rows style ***************/
 .dataTable tr.unackRow {
-    background: var(--unack-row-background);
+    background: var(--table-unack-row-background);
 }
 
 .dataTable tr.unackRow td {
     font-weight: bold;
     color: var(--base-font-color);
-    border-bottom: 1px solid var(--unack-row-border);
+    border-bottom: 1px solid var(--table-unack-row-border);
 }
 
 /**** Remove bottom border from the row that has been expanded *****/
@@ -141,14 +141,14 @@
 
 /****************** Table rows hover style ***************/
 .dataTable tr:hover {
-    border-bottom: 1px solid var(--hover-border);
-    border-top: 1px solid var(--hover-border);
-    -moz-box-shadow: inset 0px 8px 8px -8px var(--hover-border),
-      inset 0px -8px 8px -8px var(--hover-border);
-    -webkit-box-shadow: inset 0px 8px 8px -8px var(--hover-border),
-      inset 0px -8px 8px -8px var(--hover-border);
-    box-shadow: inset 0px 8px 8px -8px var(--hover-border),
-      inset 0px -8px 8px -8px var(--hover-border);
+    border-bottom: 1px solid var(--table-hover-border);
+    border-top: 1px solid var(--table-hover-border);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+    box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
 }
 
 .dataTable .valueCell {
@@ -172,13 +172,13 @@
     display: block;
     width: 100%;
     text-align: left;
-    background: var(--row-background);
-    border-bottom: 1px solid var(--row-border);
+    background: var(--table-row-background);
+    border-bottom: 1px solid var(--table-row-border);
 }
 
 .dataTable .unackExpandedRow {
-    background: var(--unack-row-background);
-    border-bottom: 1px solid var(--unack-row-border);
+    background: var(--table-unack-row-background);
+    border-bottom: 1px solid var(--table-unack-row-border);
 }
 
 .dataTable .expandedRow td {
@@ -234,7 +234,7 @@
 /*************** Styles for the Table Body Scroller ***************/
 /* width */
 .dataTable ::-webkit-scrollbar {
-    width: var(--scrollbar-width);
+    width: var(--table-scrollbar-width);
 }
 
 /* Track */
