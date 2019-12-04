@@ -31,14 +31,14 @@
 }
 
 .dropDownMenuClassName {
-  background-color: var(--second-secondary-background-color);
+  background-color: var(--table-row-background);
   border: 1px solid;
   border-color: inherit;
   color: inherit;
 }
 
 .unack {
-  background-color: var(--second-tertiary-background-color);
+  background-color: var(--table-unack-row-background);
 }
 
 .dropDownMenuClassName div {
