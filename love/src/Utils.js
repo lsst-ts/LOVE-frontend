@@ -425,40 +425,21 @@ export const timeDifference = (current, previous) => {
   const msPerDay = msPerHour * 24;
   const msPerMonth = msPerDay * 30;
 
-  if (previous < current) {
-    const elapsed = current - previous;
-
-    if (elapsed < msPerMinute) {
-      return '< 1 minute ago';
-    }
-    if (elapsed < msPerHour) {
-      return `${Math.round(elapsed / msPerMinute)} minutes ago`;
-    }
-    if (elapsed < msPerDay) {
-      return `${Math.round(elapsed / msPerHour)} hours ago`;
-    }
-    if (elapsed < msPerMonth) {
-      return `approximately ${Math.round(elapsed / msPerDay)} days ago`;
-    }
-    return `approximately ${Math.round(elapsed / msPerMonth)} months ago`;
-  }
-
-  const elapsed = previous - current;
+  const elapsed = current - previous;
 
   if (elapsed < msPerMinute) {
-    return ' in < 1 minute';
+    return '< 1 minute ago';
   }
   if (elapsed < msPerHour) {
-    return `In ${Math.round(elapsed / msPerMinute)} minutes`;
+    return `${Math.round(elapsed / msPerMinute)} minutes ago`;
   }
   if (elapsed < msPerDay) {
-    return `In ${Math.round(elapsed / msPerHour)} hours`;
+    return `${Math.round(elapsed / msPerHour)} hours ago`;
   }
   if (elapsed < msPerMonth) {
-    return `In approximately ${Math.round(elapsed / msPerDay)} days`;
+    return `approximately ${Math.round(elapsed / msPerDay)} days ago`;
   }
-  return `In approximately ${Math.round(elapsed / msPerMonth)} months`;
-
+  return `approximately ${Math.round(elapsed / msPerMonth)} months ago`;
 };
 
 export const timeDiff = (t1, t2) => {
