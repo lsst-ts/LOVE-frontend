@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
 import Button from '../../../GeneralPurpose/Button/Button';
+import { severityToStatus } from '../../Alarm/Alarm';
+import { timeDiff } from '../../../../Utils';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
@@ -12,9 +14,9 @@ const timeoutOptions = [
 ];
 
 const severityOptions = [
-  { value: 1, label: 'WARNING' },
-  { value: 2, label: 'ALERT' },
-  { value: 3, label: 'CRITICAL' },
+  { value: 2, label: 'WARNING' },
+  { value: 3, label: 'ALERT' },
+  { value: 4, label: 'CRITICAL' },
 ];
 
 const initialState = {
@@ -26,10 +28,14 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
   const [timeout, setTimeout] = useState(initialState.timeout);
   const [muteSeverity, setMuteSeverity] = useState(initialState.muteSeverity);
+  const currentTime = new Date().getTime();
 
   const acknowledgedBy = alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Not acknowledged';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
+  const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
+  const timeRemaining = timeDiff(currentTime, alarm.timestampUnmute * 1000);
   const muted = alarm.mutedBy !== '';
+  console.log('alarm: ', alarm);
 
   return (
     <div className={styles.expandedColumn}>
@@ -47,13 +53,13 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
       { muted ? (
         <div>
-          <div className={styles.title}> Muted for: </div>
+          <div className={styles.title}> Will unmute: </div>
           <div>
-            <p>{acknowledgedBy}</p>
+            <p>{timeRemaining}</p>
           </div>
-          <div className={styles.title}> Time remaining: </div>
+          <div className={styles.title}> Muted Severity: </div>
           <div>
-            <p>{acknowledgedBy}</p>
+            <p>{mutedSeverity}</p>
           </div>
           <div className={styles.title}> Muted by: </div>
           <div>
