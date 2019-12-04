@@ -18,9 +18,10 @@
 
 .dropDownClassName {
   background-color: inherit;
-  border-color: inherit;
+  border-color: var(--secondary-font-dimmed-color);
   color: inherit;
-  width: 20em;
+  width: 15em;
+  margin: 0.2em 0 1em 0;
 }
 
 .dropDownControlClassName {
@@ -30,7 +31,25 @@
 }
 
 .dropDownMenuClassName {
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid;
+  border-color: inherit;
+  color: inherit;
+}
+
+.unack {
   background-color: var(--second-tertiary-background-color);
-  border-color: var(--tertiary-background-color);
-  color: var(--base-font-color);
+}
+
+.dropDownMenuClassName div {
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
+.dropDownMenuClassName div:hover {
+  color: var(--base-font-color) !important;
+}
+
+.arrowClassName {
+  border-color: var(--secondary-font-dimmed-color) transparent transparent;
 }

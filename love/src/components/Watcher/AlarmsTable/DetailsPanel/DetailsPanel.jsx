@@ -73,9 +73,10 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
         <div>
           <div className={styles.title}> Select the muting time range: </div>
           <Dropdown
-            lassName={styles.dropDownClassName}
+            className={styles.dropDownClassName}
             controlClassName={styles.dropDownControlClassName}
-            menuClassName={styles.dropDownMenuClassName}
+            menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged ? null : styles.unack].join(' ')}
+            arrowClassName={styles.arrowClassName}
             options={timeoutOptions}
             onChange={(option) => setTimeout(option)}
             value={timeout}
@@ -84,6 +85,10 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
           <div className={styles.title}> Select the muting severity: </div>
             <Dropdown
+              className={styles.dropDownClassName}
+              controlClassName={styles.dropDownControlClassName}
+              menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged ? null : styles.unack].join(' ')}
+              arrowClassName={styles.arrowClassName}
               options={severityOptions}
               onChange={(option) => setMuteSeverity(option)}
               value={muteSeverity}
