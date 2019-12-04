@@ -1,0 +1,55 @@
+.expandedColumn {
+  display: grid;
+  grid-template-columns: minmax(30em, min-content) minmax(30em, min-content);
+  column-gap: 2em;
+}
+
+.title {
+  font-weight: bold;
+  color: var(--base-font-color);
+}
+
+.expandedColumn p {
+  margin-top: 0.2em;
+  width: 100%;
+  word-break: break-all;
+  white-space: normal;
+}
+
+.dropDownClassName {
+  background-color: inherit;
+  border-color: var(--secondary-font-dimmed-color);
+  color: inherit;
+  width: 15em;
+  margin: 0.2em 0 1em 0;
+}
+
+.dropDownControlClassName {
+  background-color: inherit;
+  border-color: inherit;
+  color: inherit;
+}
+
+.dropDownMenuClassName {
+  background-color: var(--table-row-background);
+  border: 1px solid;
+  border-color: inherit;
+  color: inherit;
+}
+
+.unack {
+  background-color: var(--table-unack-row-background);
+}
+
+.dropDownMenuClassName div {
+  color: inherit !important;
+  background-color: inherit !important;
+}
+
+.dropDownMenuClassName div:hover {
+  color: var(--base-font-color) !important;
+}
+
+.arrowClassName {
+  border-color: var(--secondary-font-dimmed-color) transparent transparent;
+}

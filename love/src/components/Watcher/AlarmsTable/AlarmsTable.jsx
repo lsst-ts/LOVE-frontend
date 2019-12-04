@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
-import styles from './AlarmsTable.module.css';
 import Alarm from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
+import DetailsPanel from './DetailsPanel/DetailsPanel';
 import { timeDifference } from '../../../Utils';
+import styles from './AlarmsTable.module.css';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -17,6 +18,12 @@ export default class AlarmsTable extends PureComponent {
   static propTypes = {
     /** List of alarms that are displayed. See examples below */
     alarms: PropTypes.array,
+    /** Function to dispatch an alarm acknowledgement */
+    ackAlarm: PropTypes.func,
+    /** Function to dispatch an alarm mute */
+    muteAlarm: PropTypes.func,
+    /** Function to dispatch an alarm unmute */
+    unmuteAlarm: PropTypes.func,
   };
 
   static defaultProps = {
@@ -150,6 +157,7 @@ export default class AlarmsTable extends PureComponent {
   render() {
     let data = this.props.alarms;
     const currentTime = new Date().getTime();
+    const user = this.props.user ? this.props.user : 'Unknown User';
     return (
       <div className={styles.dataTableWrapper}>
       <table className={styles.dataTable}>
@@ -207,8 +215,6 @@ export default class AlarmsTable extends PureComponent {
               const key = row.name;
               const isExpanded = this.state.expandedRows[key];
               const reasonStr = 'Reason: ' + row.reason;
-              const acknowledgedBy = row.acknowledgedBy ? row.acknowledgedBy : 'Not acknowledged'
-              const mutedBy = row.mutedBy ? row.mutedBy : 'Not muted'
               return (
                 <React.Fragment key={key}>
                   <tr
@@ -237,7 +243,7 @@ export default class AlarmsTable extends PureComponent {
                               ackButtonLocation='left'
                               ackAlarm={(event) => {
                                 event.stopPropagation();
-                                this.props.ackAlarm(row.name, row.maxSeverity, this.props.user);
+                                this.props.ackAlarm(row.name, row.maxSeverity, user);
                               }}
                             />
                             <div className={styles.expansionIconWrapper}/>
@@ -277,24 +283,21 @@ export default class AlarmsTable extends PureComponent {
                       ].join(' ')}
                     >
                       <td colSpan={4}>
-                        <div className={styles.expandedColumn}>
-                          <div>
-                            <div className={styles.title}>Reason:</div>
-                            <div>
-                              <p>{row.reason}</p>
-                            </div>
-                          </div>
-                          <div>
-                            <div className={styles.title}>Acknowledged by:</div>
-                            <div>
-                              <p>{acknowledgedBy}</p>
-                            </div>
-                            <div className={styles.title}>Muted by:</div>
-                            <div>
-                              <p>{mutedBy}</p>
-                            </div>
-                          </div>
-                        </div>
+                        <DetailsPanel
+                          alarm={row}
+                          muteAlarm={
+                            (event, duration, severity) => {
+                              event.stopPropagation();
+                              this.props.muteAlarm(row.name, severity, duration, user);
+                            }
+                          }
+                          unmuteAlarm={
+                            (event) => {
+                              event.stopPropagation();
+                              this.props.unmuteAlarm(row.name);
+                            }
+                          }
+                        />
                       </td>
                     </tr>
                   ) : null}
