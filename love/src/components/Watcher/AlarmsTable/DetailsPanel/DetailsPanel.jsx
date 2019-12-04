@@ -35,7 +35,6 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
   const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
   const timeRemaining = timeDiff(currentTime, alarm.timestampUnmute * 1000);
   const muted = alarm.mutedBy !== '';
-  console.log('alarm: ', alarm);
 
   return (
     <div className={styles.expandedColumn}>

@@ -27,8 +27,8 @@ const AlarmsTableContainer = ({
 };
 
 const mapStateToProps = (state) => {
-  const alarms = getAllAlarms(state).concat(mockAlarms);
-  // const alarms = getAllAlarms(state);
+  // const alarms = getAllAlarms(state).concat(mockAlarms);
+  const alarms = getAllAlarms(state);
   const user = getUsername(state);
   return { alarms, user };
 };
@@ -58,7 +58,6 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     muteAlarm: (name, severity, duration, mutedBy) => {
-      console.log('muteAlarm:', {name, severity, duration, mutedBy});
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_mute',
