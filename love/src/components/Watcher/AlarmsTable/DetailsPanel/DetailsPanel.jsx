@@ -34,21 +34,22 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
   const lastUpdate = relativeTime(alarm.timestampSeverityNewest * 1000);
 
   const acked = alarm.acknowledged;
-  const acknowledgedBy = acked ? alarm.acknowledgedBy : 'Not acknowledged';
+  // const acknowledgedBy = acked ? alarm.acknowledgedBy : 'Not acknowledged';
+  const acknowledgedBy = !acked ? 'Not acknowledged' : (alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Nobody');
   const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
   const ackTime = relativeTime(alarm.timestampAcknowledged * 1000);
-  const willAutoAckTime = acked? relativeTime(alarm.timestampAutoAcknowledge * 1000) : 'Already acknowledged';
+  const willAutoAckTime = !acked? relativeTime(alarm.timestampAutoAcknowledge * 1000) : 'Already acknowledged';
 
   const escalated = alarm.escalated;
   const escalatedToTitle = escalated ? 'Escalated to:' : 'Will escalate to:';
   const escalatedTo = alarm.escalatedTo ? alarm.escalatedTo : 'Nobody';
   const escalatedTimeTitle = escalated ? 'Escalated at:' : 'Will escalate at:';
-  const escalatedTime = relativeTime(alarm.timestampEscalate * 1000);
+  const escalatedTime = alarm.timestampEscalate ? relativeTime(alarm.timestampEscalate * 1000) : 'Never';
 
   const muted = alarm.mutedBy !== '';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
   const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
-  const willUnmuteTime = relativeTime(alarm.timestampUnmute * 1000);
+  const willUnmuteTime = alarm.timestampUnmute ? relativeTime(alarm.timestampUnmute * 1000) : 'Never';
 
   return (
     <div className={styles.expandedColumn}>
@@ -56,7 +57,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
       <div>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
-          <div className={styles.dataCell}> {acknowledgedBy} </div>
+          <div className={styles.dataCell}> {sevUpdate} </div>
 
           <div className={styles.title}> Max sev. update: </div>
           <div className={styles.dataCell}> {maxSevUpdate} </div>
@@ -74,13 +75,13 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
       <div>
         <div className={styles.dataTable}>
           <div className={styles.title}> Acknowledged by: </div>
-          <div className={styles.dataCell}> {sevUpdate} </div>
+          <div className={styles.dataCell}> {acknowledgedBy} </div>
 
           <div className={styles.title}> {ackTimeTitle} </div>
           <div className={styles.dataCell}> {ackTime} </div>
 
           <div className={styles.title}> Will auto-ack at: </div>
-          <div className={styles.dataCell}> {willUnmuteTime} </div>
+          <div className={styles.dataCell}> {willAutoAckTime} </div>
         </div>
 
         <div className={styles.dataTable}>
