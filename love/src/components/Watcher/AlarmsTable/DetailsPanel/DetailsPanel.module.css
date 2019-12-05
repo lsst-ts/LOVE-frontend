@@ -29,10 +29,6 @@
   grid-row-gap: 0.3em;
 }
 
-.dataCell {
-  cursor: pointer;
-}
-
 .dropDownClassName {
   background-color: inherit;
   border-color: var(--secondary-font-dimmed-color);

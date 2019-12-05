@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
 import Button from '../../../GeneralPurpose/Button/Button';
+import TimestampDisplay from '../../../GeneralPurpose/TimestampDisplay/TimestampDisplay';
 import { severityToStatus } from '../../Alarm/Alarm';
-import { relativeTime, msToStr } from '../../../../Utils';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
@@ -24,32 +24,6 @@ const initialState = {
   muteSeverity: severityOptions[0],
 };
 
-export function DataDisplay({ children, copyData, tooltipData, className }) {
-  return (
-    <div
-      className={[className, styles.dataCell].join(' ')}
-      title={tooltipData + " (click to copy)"}
-      onClick={() => {navigator.clipboard.writeText(copyData)}}
-    >
-      {children}
-    </div>
-  );
-}
-
-export function TstampDisplay({ time, className, defValue='' }) {
-  const copyValue = msToStr(time);
-  const displayValue = time ? relativeTime(time) : defValue;
-  return (
-    <div
-      className={[className, styles.dataCell].join(' ')}
-      title={copyValue + " (click to copy)"}
-      onClick={() => {navigator.clipboard.writeText(copyValue)}}
-    >
-      {displayValue}
-    </div>
-  );
-}
-
 export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
   const [timeout, setTimeout] = useState(initialState.timeout);
@@ -60,7 +34,6 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
   const lastUpdate = alarm.timestampSeverityNewest * 1000;
 
   const acked = alarm.acknowledged;
-  // const acknowledgedBy = acked ? alarm.acknowledgedBy : 'Not acknowledged';
   const acknowledgedBy = !acked ? 'Not acknowledged' : (alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Nobody');
   const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
   const ackTime = alarm.timestampAcknowledged * 1000;
@@ -83,13 +56,13 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
       <div>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
-          <TstampDisplay time={sevUpdate}/>
+          <TimestampDisplay time={sevUpdate} defValue="Never"/>
 
           <div className={styles.title}> Max sev. update: </div>
-          <TstampDisplay time={maxSevUpdate} />
+          <TimestampDisplay time={maxSevUpdate} defValue="Never"/>
 
           <div className={styles.title}> Last update: </div>
-          <TstampDisplay time={lastUpdate} />
+          <TimestampDisplay time={lastUpdate} defValue="Never"/>
         </div>
 
         <div className={styles.title}>Alarm reason:</div>
@@ -104,10 +77,10 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           <div className={styles.dataCell}> {acknowledgedBy} </div>
 
           <div className={styles.title}> {ackTimeTitle} </div>
-          <TstampDisplay time={ackTime}/>
+          <TimestampDisplay time={ackTime} defValue="Never"/>
 
           <div className={styles.title}> Will auto-ack at: </div>
-          <TstampDisplay time={willAutoAckTime} defValue="Already acknowledged"/>
+          <TimestampDisplay time={willAutoAckTime} defValue="Already acknowledged"/>
         </div>
 
         <div className={styles.dataTable}>
@@ -115,7 +88,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           <div className={styles.dataCell}> {escalatedTo} </div>
 
           <div className={styles.title}> {escalatedTimeTitle} </div>
-          <TstampDisplay time={willAutoAckTime} defValue="Never"/>
+          <TimestampDisplay time={escalatedTime} defValue="Never"/>
         </div>
       </div>
 
@@ -127,7 +100,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
               <div className={styles.dataCell}> {mutedBy} </div>
 
               <div className={styles.title}> Will unmute at: </div>
-              <TstampDisplay time={willUnmuteTime} defValue="Never"/>
+              <TimestampDisplay time={willUnmuteTime} defValue="Never"/>
 
               <div className={styles.title}> Muted severity: </div>
               <div className={styles.dataCell}> {mutedSeverity} </div>
