@@ -1,11 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
 import Alarm from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import DetailsPanel from './DetailsPanel/DetailsPanel';
-import { timeDifference, timeDiff } from '../../../Utils';
+import { relativeTime } from '../../../Utils';
 import styles from './AlarmsTable.module.css';
 
 /**
@@ -270,8 +269,7 @@ export default class AlarmsTable extends PureComponent {
                       title={new Date(row.timestampSeverityOldest * 1000).toString()}
                       className={styles.timestamp}
                     >
-                      {timeDiff(row.timestampSeverityOldest * 1000, currentTime)}
-                      {/*{moment(row.timestampSeverityOldest * 1000).fromNow()}*/}
+                      {relativeTime(row.timestampSeverityOldest * 1000)}
                     </td>
                   </tr>
                   {isExpanded ? (
