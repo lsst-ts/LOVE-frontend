@@ -445,4 +445,8 @@ export const timeDifference = (current, previous) => {
 
 export const relativeTime = (timeMs) => {
   return moment(timeMs).fromNow();
-}
+};
+
+export const msToStr = (timeMs) => {
+  return moment(timeMs).toISOString();
+};

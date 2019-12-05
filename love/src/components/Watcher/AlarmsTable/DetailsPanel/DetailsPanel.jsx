@@ -3,7 +3,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css'
 import Button from '../../../GeneralPurpose/Button/Button';
 import { severityToStatus } from '../../Alarm/Alarm';
-import { relativeTime } from '../../../../Utils';
+import { relativeTime, msToStr } from '../../../../Utils';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
@@ -24,32 +24,58 @@ const initialState = {
   muteSeverity: severityOptions[0],
 };
 
+export function DataDisplay({ children, copyData, tooltipData, className }) {
+  return (
+    <div
+      className={[className, styles.dataCell].join(' ')}
+      title={tooltipData + " (click to copy)"}
+      onClick={() => {navigator.clipboard.writeText(copyData)}}
+    >
+      {children}
+    </div>
+  );
+}
+
+export function TstampDisplay({ time, className, defValue='' }) {
+  const copyValue = msToStr(time);
+  const displayValue = time ? relativeTime(time) : defValue;
+  return (
+    <div
+      className={[className, styles.dataCell].join(' ')}
+      title={copyValue + " (click to copy)"}
+      onClick={() => {navigator.clipboard.writeText(copyValue)}}
+    >
+      {displayValue}
+    </div>
+  );
+}
+
 export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
 
   const [timeout, setTimeout] = useState(initialState.timeout);
   const [muteSeverity, setMuteSeverity] = useState(initialState.muteSeverity);
 
-  const sevUpdate = relativeTime(alarm.timestampSeverityOldest * 1000);
-  const maxSevUpdate = relativeTime(alarm.timestampMaxSeverity * 1000);
-  const lastUpdate = relativeTime(alarm.timestampSeverityNewest * 1000);
+  const sevUpdate = alarm.timestampSeverityOldest * 1000;
+  const maxSevUpdate = alarm.timestampMaxSeverity * 1000;
+  const lastUpdate = alarm.timestampSeverityNewest * 1000;
 
   const acked = alarm.acknowledged;
   // const acknowledgedBy = acked ? alarm.acknowledgedBy : 'Not acknowledged';
   const acknowledgedBy = !acked ? 'Not acknowledged' : (alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Nobody');
   const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
-  const ackTime = relativeTime(alarm.timestampAcknowledged * 1000);
-  const willAutoAckTime = !acked? relativeTime(alarm.timestampAutoAcknowledge * 1000) : 'Already acknowledged';
+  const ackTime = alarm.timestampAcknowledged * 1000;
+  const willAutoAckTime = alarm.timestampAutoAcknowledge * 1000;
 
   const escalated = alarm.escalated;
   const escalatedToTitle = escalated ? 'Escalated to:' : 'Will escalate to:';
   const escalatedTo = alarm.escalatedTo ? alarm.escalatedTo : 'Nobody';
   const escalatedTimeTitle = escalated ? 'Escalated at:' : 'Will escalate at:';
-  const escalatedTime = alarm.timestampEscalate ? relativeTime(alarm.timestampEscalate * 1000) : 'Never';
+  const escalatedTime = alarm.timestampEscalate * 1000;
 
   const muted = alarm.mutedBy !== '';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
   const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
-  const willUnmuteTime = alarm.timestampUnmute ? relativeTime(alarm.timestampUnmute * 1000) : 'Never';
+  const willUnmuteTime = alarm.timestampUnmute * 1000;
 
   return (
     <div className={styles.expandedColumn}>
@@ -57,13 +83,13 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
       <div>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
-          <div className={styles.dataCell}> {sevUpdate} </div>
+          <TstampDisplay time={sevUpdate}/>
 
           <div className={styles.title}> Max sev. update: </div>
-          <div className={styles.dataCell}> {maxSevUpdate} </div>
+          <TstampDisplay time={maxSevUpdate} />
 
           <div className={styles.title}> Last update: </div>
-          <div className={styles.dataCell}> {lastUpdate} </div>
+          <TstampDisplay time={lastUpdate} />
         </div>
 
         <div className={styles.title}>Alarm reason:</div>
@@ -78,10 +104,10 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           <div className={styles.dataCell}> {acknowledgedBy} </div>
 
           <div className={styles.title}> {ackTimeTitle} </div>
-          <div className={styles.dataCell}> {ackTime} </div>
+          <TstampDisplay time={ackTime}/>
 
           <div className={styles.title}> Will auto-ack at: </div>
-          <div className={styles.dataCell}> {willAutoAckTime} </div>
+          <TstampDisplay time={willAutoAckTime} defValue="Already acknowledged"/>
         </div>
 
         <div className={styles.dataTable}>
@@ -89,7 +115,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           <div className={styles.dataCell}> {escalatedTo} </div>
 
           <div className={styles.title}> {escalatedTimeTitle} </div>
-          <div className={styles.dataCell}> {escalatedTime} </div>
+          <TstampDisplay time={willAutoAckTime} defValue="Never"/>
         </div>
       </div>
 
@@ -101,18 +127,10 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
               <div className={styles.dataCell}> {mutedBy} </div>
 
               <div className={styles.title}> Will unmute at: </div>
-              <div className={styles.dataCell}> {willUnmuteTime} </div>
+              <TstampDisplay time={willUnmuteTime} defValue="Never"/>
 
               <div className={styles.title}> Muted severity: </div>
               <div className={styles.dataCell}> {mutedSeverity} </div>
-            </div>
-
-            <div className={styles.dataTable}>
-              <div className={styles.title}> {escalatedToTitle} </div>
-              <div className={styles.dataCell}> {escalatedTo} </div>
-
-              <div className={styles.title}> {escalatedTimeTitle} </div>
-              <div className={styles.dataCell}> {escalatedTime} </div>
             </div>
           </div>
 
