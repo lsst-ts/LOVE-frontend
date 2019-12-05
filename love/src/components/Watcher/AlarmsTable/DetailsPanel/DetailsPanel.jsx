@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-dropdown';
-import moment from 'moment';
 import 'react-dropdown/style.css'
 import Button from '../../../GeneralPurpose/Button/Button';
 import { severityToStatus } from '../../Alarm/Alarm';
-import { timeDiff } from '../../../../Utils';
+import { relativeTime } from '../../../../Utils';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
@@ -34,14 +33,8 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
   const acknowledgedBy = alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Not acknowledged';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
   const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
-  const timeRemaining = moment(alarm.timestampUnmute * 1000).fromNow();
+  const timeRemaining = relativeTime(alarm.timestampUnmute * 1000)
   const muted = alarm.mutedBy !== '';
-
-  console.log('current, date: ', new Date());
-  console.log('alarm, time: ', alarm.timestampSeverityOldest * 1000);
-  console.log('alarm, date: ', new Date(alarm.timestampSeverityOldest * 1000));
-  console.log('moment, date: ', moment(alarm.timestampSeverityOldest * 1000).format('MMMM Do YYYY, h:mm:ss a'));
-  console.log('moment, diff: ', moment(alarm.timestampSeverityOldest * 1000).fromNow());
 
   return (
     <div className={styles.expandedColumn}>
