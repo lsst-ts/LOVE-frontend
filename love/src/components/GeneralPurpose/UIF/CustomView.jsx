@@ -49,7 +49,7 @@ export default class CustomView extends Component {
 
   parseConfig = (config) => {
     const newConfig = { ...config };
-    if (config._functionProps) {
+    if (config && config._functionProps) {
       config._functionProps.forEach((fProp) => {
         // eslint-disable-next-line
         newConfig[fProp] = eval(config[fProp]);
