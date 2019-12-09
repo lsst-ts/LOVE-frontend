@@ -41,6 +41,10 @@ export default class AlarmsTable extends PureComponent {
       timestampSeverityOldest: { type: 'regexp', value: new RegExp('(?:)') },
     };
 
+    this.sortFunctions = {
+      severity: row => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
+    };
+
     this.state = {
       expandedRows,
       activeFilterDialog: 'None',
@@ -58,6 +62,10 @@ export default class AlarmsTable extends PureComponent {
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams();
   };
+
+  evalSortFunction = (column, row) => {
+    return this.sortFunctions[column] ? this.sortFunctions[column](row) : row[column];
+  }
 
   setFilters = (filters) => {
     Object.keys(filters).map((key) => {
@@ -151,7 +159,10 @@ export default class AlarmsTable extends PureComponent {
   sortData = (a, b) => {
     const direction = this.state.sortDirection === 'ascending' ? 1 : -1;
     const column = this.state.sortingColumn;
-    return a[column] <= b[column] ? -direction : direction;
+    const f_a = this.evalSortFunction(column, a);
+    const f_b = this.evalSortFunction(column, b);
+    return f_a <= f_b ? -direction : direction;
+    // return a[column] <= b[column] ? -direction : direction;
   };
 
   render() {
