@@ -24,10 +24,16 @@ export default class AlarmsTable extends PureComponent {
     muteAlarm: PropTypes.func,
     /** Function to dispatch an alarm unmute */
     unmuteAlarm: PropTypes.func,
+    /**
+     * Map of functions to evaluate the value of rows for sorting.
+     * The functions are indexed by the column or 'field? to use for sorting'
+     */
+    sortFunctions: PropTypes.object,
   };
 
   static defaultProps = {
     alarms: [],
+    sortFunctions: {},
   };
 
   constructor() {
@@ -40,10 +46,10 @@ export default class AlarmsTable extends PureComponent {
       name: { type: 'regexp', value: new RegExp('(?:)') },
       timestampSeverityOldest: { type: 'regexp', value: new RegExp('(?:)') },
     };
-
-    this.sortFunctions = {
-      severity: row => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
-    };
+    //
+    // this.sortFunctions = {
+    //   severity: row => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
+    // };
 
     this.state = {
       expandedRows,
@@ -64,7 +70,7 @@ export default class AlarmsTable extends PureComponent {
   };
 
   evalSortFunction = (column, row) => {
-    return this.sortFunctions[column] ? this.sortFunctions[column](row) : row[column];
+    return this.props.sortFunctions[column] ? this.props.sortFunctions[column](row) : row[column];
   }
 
   setFilters = (filters) => {

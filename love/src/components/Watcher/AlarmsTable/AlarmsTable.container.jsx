@@ -12,6 +12,7 @@ import mockAlarms from './mock';
 const AlarmsTableContainer = ({
   alarms,
   filterCallback = () => true,
+  sortFunctions,
   user,
   subscribeToStream,
   unsubscribeToStream,
@@ -21,6 +22,7 @@ const AlarmsTableContainer = ({
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
+      sortFunctions={sortFunctions}
       alarms={alarms.filter(filterCallback)}
     />
   );
