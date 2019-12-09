@@ -5,7 +5,6 @@ import AlarmsTableContainer from './AlarmsTable/AlarmsTable.container';
 import styles from './Watcher.module.css';
 
 export default class Watcher extends Component {
-
   constructor() {
     super();
     this.state = {
@@ -14,33 +13,31 @@ export default class Watcher extends Component {
   }
 
   changeTab(tab) {
-    this.setState({selectedTab: tab});
+    this.setState({ selectedTab: tab });
   }
 
   render() {
     this.test = null;
     return (
       <Panel title="Watcher" className={styles.panel}>
-
         <div className={styles.tabsWrapper}>
           <div className={styles.tabsRow}>
-
             <div
-              className={[styles.tab, this.state.selectedTab === "unmuted" ? styles.selected : ''].join(' ')}
+              className={[styles.tab, this.state.selectedTab === 'unmuted' ? styles.selected : ''].join(' ')}
               onClick={() => this.changeTab('unmuted')}
             >
               <div className={styles.iconWrapper}>
-                <MuteIcon unmuted style={this.state.selectedTab === "unmuted" ? styles.selectedIcon : ''}/>
+                <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
               </div>
               UNMUTED ALARMS
             </div>
 
             <div
-              className={[styles.tab, this.state.selectedTab === "muted" ? styles.selected : ''].join(' ')}
+              className={[styles.tab, this.state.selectedTab === 'muted' ? styles.selected : ''].join(' ')}
               onClick={() => this.changeTab('muted')}
             >
               <div className={styles.iconWrapper}>
-                <MuteIcon style={this.state.selectedTab === "muted" ? styles.selectedIcon : ''}/>
+                <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
               </div>
               MUTED ALARMS
             </div>
@@ -48,8 +45,9 @@ export default class Watcher extends Component {
 
           <div className={styles.alarmsTableWrapper}>
             <AlarmsTableContainer
-              filterCallback={
-                (row) => this.state.selectedTab === 'unmuted' ? row['mutedBy'] === '' : row['mutedBy'] !== ''
+              filterCallback={(row) =>
+                (this.state.selectedTab === 'unmuted' ? row['mutedBy'] === '' : row['mutedBy'] !== '') &&
+                !(row['severity'] <= 1 && row['maxSeverity'] <= 1 && row['acknowledged'])
               }
             />
           </div>
