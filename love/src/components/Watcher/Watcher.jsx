@@ -17,6 +17,9 @@ export default class Watcher extends Component {
   }
 
   render() {
+    const customUnmutedSortFunctions = {
+      severity: row => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
+    };
     this.test = null;
     return (
       <Panel title="Watcher" className={styles.panel}>
@@ -49,6 +52,7 @@ export default class Watcher extends Component {
                 (this.state.selectedTab === 'unmuted' ? row['mutedBy'] === '' : row['mutedBy'] !== '') &&
                 !(row['severity'] <= 1 && row['maxSeverity'] <= 1 && row['acknowledged'])
               }
+              sortFunctions={this.state.selectedTab === 'unmuted' ? customUnmutedSortFunctions : {}}
             />
           </div>
         </div>
