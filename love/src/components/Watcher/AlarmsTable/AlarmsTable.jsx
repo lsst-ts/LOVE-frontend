@@ -243,7 +243,11 @@ export default class AlarmsTable extends PureComponent {
                     <tr
                       className={[
                         !row.acknowledged ? styles.unackRow : '',
-                        isExpanded ? styles.expandedRowParent : '',
+                        isExpanded
+                          ? row.acknowledged
+                            ? styles.expandedRowParent
+                            : styles.unackExpandedRowParent
+                          : '',
                       ].join(' ')}
                       onClick={() => this.clickGearIcon(key)}
                     >
@@ -296,9 +300,7 @@ export default class AlarmsTable extends PureComponent {
                         title={new Date(row.timestampSeverityOldest * 1000).toString()}
                         className={[styles.cell, styles.timestamp].join(' ')}
                       >
-                        <div className={styles.textWrapper}>
-                          {relativeTime(row.timestampSeverityOldest * 1000)}
-                        </div>
+                        <div className={styles.textWrapper}>{relativeTime(row.timestampSeverityOldest * 1000)}</div>
                       </td>
                     </tr>
                     {isExpanded ? (
