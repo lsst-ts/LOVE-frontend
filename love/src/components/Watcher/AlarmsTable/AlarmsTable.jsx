@@ -190,14 +190,7 @@ export default class AlarmsTable extends PureComponent {
 
                 return (
                   <>
-                    <ColumnHeader
-                      {...defaultColumnProps}
-                      className={styles.ackButton}
-                      header={'Ack?'}
-                      filterName={'severity'}
-                      filter={this.state.filters.severity}
-                      sortLabels={['Less critical first', 'More critical first']}
-                    />
+                    <td className={styles.ackButton}/>
                     <ColumnHeader
                       {...defaultColumnProps}
                       className={styles.status}
