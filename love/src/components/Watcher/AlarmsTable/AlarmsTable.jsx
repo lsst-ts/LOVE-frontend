@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import Button from '../../GeneralPurpose/Button/Button';
 import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
 import Alarm from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
@@ -192,6 +193,14 @@ export default class AlarmsTable extends PureComponent {
                   <>
                     <ColumnHeader
                       {...defaultColumnProps}
+                      className={styles.ackButton}
+                      header={'Ack?'}
+                      filterName={'severity'}
+                      filter={this.state.filters.severity}
+                      sortLabels={['Less critical first', 'More critical first']}
+                    />
+                    <ColumnHeader
+                      {...defaultColumnProps}
                       className={styles.status}
                       header={'Severity'}
                       filterName={'severity'}
@@ -240,28 +249,42 @@ export default class AlarmsTable extends PureComponent {
                       ].join(' ')}
                       onClick={() => this.clickGearIcon(key)}
                     >
-                      <td title={reasonStr} className={styles.status}>
-                        {
+                      <td title={reasonStr} className={styles.ackButton}>
+                        { row.acknowledged ? null : (
                           <>
                             <div className={styles.statusWrapper}>
-                              <div className={styles.expansionIconWrapper}>
-                                <RowExpansionIcon expanded={isExpanded} />
-                              </div>
-                              <Alarm
-                                severity={row.severity}
-                                maxSeverity={row.maxSeverity}
-                                acknowledged={row.acknowledged}
-                                muted={row.mutedSeverity <= row.severity}
-                                ackButtonLocation="left"
-                                ackAlarm={(event) => {
+                              <Button
+                                title='ack'
+                                status='info'
+                                disabled={row.acknowledged}
+                                onClick={(event) => {
                                   event.stopPropagation();
                                   this.props.ackAlarm(row.name, row.maxSeverity, user);
                                 }}
-                              />
-                              <div className={styles.expansionIconWrapper} />
+                              >
+                                ACK
+                              </Button>
                             </div>
                           </>
-                        }
+                        )}
+                      </td>
+                      <td title={reasonStr} className={styles.status}>
+                        <div className={styles.statusWrapper}>
+                          <div className={styles.expansionIconWrapper}>
+                            <RowExpansionIcon expanded={isExpanded} />
+                          </div>
+                          <Alarm
+                            severity={row.severity}
+                            maxSeverity={row.maxSeverity}
+                            acknowledged={row.acknowledged}
+                            muted={row.mutedSeverity <= row.severity}
+                            ackAlarm={(event) => {
+                              event.stopPropagation();
+                              this.props.ackAlarm(row.name, row.maxSeverity, user);
+                            }}
+                          />
+                          <div className={styles.expansionIconWrapper} />
+                        </div>
                       </td>
                       <td title={reasonStr} className={styles.maxSeverity}>
                         <div className={styles.maxSeverityWrapper}>
@@ -281,7 +304,9 @@ export default class AlarmsTable extends PureComponent {
                         key={`${key}-expanded`}
                         className={[styles.expandedRow, !row.acknowledged ? styles.unackExpandedRow : ''].join(' ')}
                       >
-                        <td colSpan={4}>
+                        <td colSpan={1} className={styles.ackButton}>
+                        </td>
+                        <td colSpan={4} className={styles.expandedRowContent}>
                           <DetailsPanel
                             alarm={row}
                             muteAlarm={(event, duration, severity) => {

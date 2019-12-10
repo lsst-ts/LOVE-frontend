@@ -5,6 +5,7 @@
     minmax(25em, min-content)
     minmax(25em, min-content);
   column-gap: 2em;
+  width: fit-content;
 }
 
 .title {
