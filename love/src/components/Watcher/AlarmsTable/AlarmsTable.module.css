@@ -69,6 +69,11 @@ table {
     justify-content: center;
 }
 
+.textWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
 .expansionIconWrapper {
     min-width: 1em;
     height: 1em;
