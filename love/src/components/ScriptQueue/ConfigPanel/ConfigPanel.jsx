@@ -7,6 +7,7 @@ import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
+import TextField from '../../TextField/TextField';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -24,8 +25,7 @@ export default class ConfigPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 
-`# Insert your schema here:
+      value: `# Insert your schema here:
 # e.g.: 
 # wait_time: 3600
 # fail_run: false
@@ -100,6 +100,15 @@ export default class ConfigPanel extends Component {
             />
           </div>
           <div className={[styles.bottomBar, styles.bar].join(' ')}>
+            <div className={styles.checkpointsRegexpContainer}>
+              <span>Pause checkpoints</span>
+              <span>.*</span>
+              <TextField className={styles.checkpointsInput} />
+
+              <span>Stop checkpoints</span>
+              <span> .*</span>
+              <TextField className={styles.checkpointsInput} />
+            </div>
             <Button title="Enqueue script" onClick={this.onLaunch}>
               Add to queue
             </Button>
