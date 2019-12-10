@@ -34,6 +34,8 @@ export default class ConfigPanel extends Component {
       width: '500px',
       height: '500px',
       loading: false,
+      pauseCheckpoints: '',
+      stopCheckpoints: '',
     };
   }
 
@@ -43,6 +45,11 @@ export default class ConfigPanel extends Component {
     });
   };
 
+  onCheckpointChange = (name) => (event) => {
+    this.setState({
+      [name]: event.target.value
+    })
+  };
   onResize = (event, direction, element) => {
     this.setState({
       width: element.style.width,
@@ -65,6 +72,7 @@ export default class ConfigPanel extends Component {
 
   render() {
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
+    console.log(this.state);
     return this.props.configPanel.show ? (
       <Rnd
         default={{
@@ -103,11 +111,11 @@ export default class ConfigPanel extends Component {
             <div className={styles.checkpointsRegexpContainer}>
               <span>Pause checkpoints</span>
               <span>.*</span>
-              <TextField className={styles.checkpointsInput} />
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange("pauseCheckpoints")} />
 
               <span>Stop checkpoints</span>
               <span> .*</span>
-              <TextField className={styles.checkpointsInput} />
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange("stopCheckpoints")} />
             </div>
             <Button title="Enqueue script" onClick={this.onLaunch}>
               Add to queue
