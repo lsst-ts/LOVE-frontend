@@ -11,8 +11,10 @@
 }
 
 .componentWrapper {
-  /* background: hotpink; */
+  background: rgba(255, 0, 0, 0.3);
   border: 1px solid white;
+  display: flex;
+  justify-content: center;
 }
 
 .noOverflow {
