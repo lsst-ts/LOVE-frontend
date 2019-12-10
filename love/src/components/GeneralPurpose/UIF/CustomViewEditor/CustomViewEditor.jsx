@@ -26,23 +26,26 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 16,
-            "h": 25,
+            "w": 20,
+            "h": 30,
+            "allowOverflow": "true",
             "i": 1
           },
-          "content": "MountSummaryPanel",
+          "content": "LightPath",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
             "stateToLabelMap": {
-              "0": "TRACK_DISABLED",
-              "1": "TRACK_ENABLED",
-              "2": "STOPPING"
+              "0": "unknown",
+              "1": "TRACK_DISABLED",
+              "2": "TRACK_ENABLED",
+              "3": "STOPPING"
             },
             "stateToStyleMap": {
-              "0": "ok",
-              "1": "running",
-              "2": "running"
+              "0": "unknown",
+              "1": "ok",
+              "2": "running",
+              "3": "running"
             }
           }
         },
@@ -105,6 +108,7 @@ export default class CustomViewEditor extends Component {
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
+      parsedProperties.allowOverflow = elementProperties.allowOverflow;
       newParsedLayout = this.updateElementProperties(newParsedLayout, parsedProperties);
     });
     this.setState({

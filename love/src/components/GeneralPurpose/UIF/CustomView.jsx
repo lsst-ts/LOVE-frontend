@@ -70,7 +70,10 @@ export default class CustomView extends Component {
     const parsedConfig = this.parseConfig(config);
     comp = <LoveComp {...parsedConfig} />;
     return (
-      <div key={component.properties.i.toString()} className={[styles.componentWrapper, styles.noOverflow].join(' ')}>
+      <div
+        key={component.properties.i.toString()}
+        className={[styles.componentWrapper, component.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
+      >
         {comp}
       </div>
     );
@@ -87,10 +90,14 @@ export default class CustomView extends Component {
         w: x.properties.w,
         h: x.properties.h,
         i: x.properties.i.toString(),
+        allowOverflow: x.allowOverflow,
       };
     });
     return (
-      <div key={container.properties.i.toString()} className={[styles.container, styles.noOverflow].join(' ')}>
+      <div
+        key={container.properties.i.toString()}
+        className={[styles.container, layout.allowOverflow ? '' : styles.noOverflow].join(' ')}
+      >
         <Panel title={`Component ${container.properties.i.toString()}`} className={styles.containerPanel}>
           <GridLayout
             layout={layout}
