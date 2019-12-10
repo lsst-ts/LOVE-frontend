@@ -46,6 +46,7 @@ export default class AlarmsTable extends PureComponent {
       timestampSeverityOldest: {
         type: 'regexp',
         value: new RegExp('(?:)'),
+        function: value => relativeTime(value * 1000),
       },
     },
     activeFilterDialog: 'None',
@@ -110,12 +111,12 @@ export default class AlarmsTable extends PureComponent {
   testFilter = (row) => {
     const values = Object.keys(this.state.filters).map((key) => {
       if (row[key] !== undefined && this.state.filters[key].type === 'regexp') {
-        return this.state.filters[key].value.test(row[key]);
+        const func = this.state.filters[key].function ? this.state.filters[key].function : value => value;
+        return this.state.filters[key].value.test(func(row[key]));
       }
       return true;
     });
-    const value = values.reduce((a, b) => a && b, true);
-    return value;
+    return values.reduce((a, b) => a && b, true);
   };
 
   changeFilter = (column) => (event) => {
