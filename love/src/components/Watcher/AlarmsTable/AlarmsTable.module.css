@@ -139,7 +139,11 @@ table {
 }
 
 /**** Remove bottom border from the row that has been expanded *****/
-.dataTable tr.expandedRowParent td {
+.dataTable tr.expandedRowParent td.cell {
+    border-bottom: 1px solid transparent !important;
+}
+
+.expandedRowParent td {
     border-bottom: 1px solid transparent;
 }
 
@@ -171,37 +175,22 @@ table {
   background-color: var(--table-row-background);
 }
 
-.dataTable .firstColumn input {
-    margin: 0;
-}
-
 /****************** Styles for the Expanded row ***************/
 .dataTable .expandedRow {
-    /* display: block; */
     width: 100%;
     text-align: left;
     background: var(--table-row-background);
-    border-bottom: 1px solid var(--table-row-border);
-}
-
-.dataTable .unackExpandedRow {
-    background: var(--table-unack-row-background);
-    border-bottom: 1px solid var(--table-unack-row-border);
-}
-
-.dataTable .expandedRow td {
-    /* display: block; */
-    vertical-align: top;
-    border: 1px solid transparent;
-    padding: 1em;
 }
 
 .dataTable .expandedRow .expandedRowContent {
-  /* width: calc(100% - 4em); */
-  /* width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width) + var(--cell-padding)); */
   vertical-align: top;
-  border: 1px solid transparent;
+  border-bottom: 1px solid var(--table-row-border);
   padding: 1em;
+}
+
+.dataTable .unackExpandedRow .expandedRowContent{
+    background: var(--table-unack-row-background);
+    border-bottom: 1px solid var(--table-unack-row-border);
 }
 
 /* .dataTable .expandedRow textarea {
@@ -217,7 +206,7 @@ table {
     padding: 0.6em 0.6em;
 } */
 
-.dataTable tr:hover.expandedRow td{
+.dataTable tr:hover.expandedRow td.cell{
     border-bottom: 1px solid var(--secondary-background-color);
     border-top: 1px solid transparent;
 }
