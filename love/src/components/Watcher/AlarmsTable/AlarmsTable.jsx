@@ -199,6 +199,7 @@ export default class AlarmsTable extends PureComponent {
                     header={'Status'}
                     filterName={'severity'}
                     filter={this.state.filters.severity}
+                    sortLabels={['Least Critical', 'Most Critical']}
                   />
                   <ColumnHeader
                     {...defaultColumnProps}

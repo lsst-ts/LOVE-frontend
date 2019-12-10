@@ -12,6 +12,7 @@ export default class ColumnHeader extends Component {
     filter: PropTypes.object,
     sortingColumn: PropTypes.string,
     sortDirection: PropTypes.string,
+    sortLabels: PropTypes.array,
     className: PropTypes.string,
     header: PropTypes.string,
     secondaryText: PropTypes.string,
@@ -45,6 +46,7 @@ export default class ColumnHeader extends Component {
           changeSortDirection={this.props.changeSortDirection}
           columnName={this.props.filterName}
           sortingColumn={this.props.sortingColumn}
+          sortLabels={this.props.sortLabels}
         />
       </th>
     );
