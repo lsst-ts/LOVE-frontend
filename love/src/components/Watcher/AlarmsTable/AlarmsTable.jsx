@@ -290,13 +290,15 @@ export default class AlarmsTable extends PureComponent {
                         </div>
                       </td>
                       <td title={reasonStr} className={[styles.cell, styles.name].join(' ')}>
-                        {row.name}
+                        <div className={styles.textWrapper}> {row.name} </div>
                       </td>
                       <td
                         title={new Date(row.timestampSeverityOldest * 1000).toString()}
                         className={[styles.cell, styles.timestamp].join(' ')}
                       >
-                        {relativeTime(row.timestampSeverityOldest * 1000)}
+                        <div className={styles.textWrapper}>
+                          {relativeTime(row.timestampSeverityOldest * 1000)}
+                        </div>
                       </td>
                     </tr>
                     {isExpanded ? (
