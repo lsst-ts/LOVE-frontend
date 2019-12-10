@@ -242,19 +242,18 @@ export default class AlarmsTable extends PureComponent {
                   <React.Fragment key={key}>
                     <tr
                       className={[
-                        styles.dataRow,
                         !row.acknowledged ? styles.unackRow : '',
                         isExpanded ? styles.expandedRowParent : '',
                       ].join(' ')}
                       onClick={() => this.clickGearIcon(key)}
                     >
-                      <td title={reasonStr} className={styles.ackButton}>
-                        { row.acknowledged ? null : (
+                      <td title={reasonStr} className={[styles.firstColumn, styles.ackButton].join(' ')}>
+                        {row.acknowledged ? null : (
                           <>
                             <div className={styles.statusWrapper}>
                               <Button
-                                title='ack'
-                                status='info'
+                                title="ack"
+                                status="info"
                                 disabled={row.acknowledged}
                                 onClick={(event) => {
                                   event.stopPropagation();
@@ -267,7 +266,7 @@ export default class AlarmsTable extends PureComponent {
                           </>
                         )}
                       </td>
-                      <td title={reasonStr} className={styles.status}>
+                      <td title={reasonStr} className={[styles.cell, styles.status].join(' ')}>
                         <div className={styles.statusWrapper}>
                           <div className={styles.expansionIconWrapper}>
                             <RowExpansionIcon expanded={isExpanded} />
@@ -285,15 +284,18 @@ export default class AlarmsTable extends PureComponent {
                           <div className={styles.expansionIconWrapper} />
                         </div>
                       </td>
-                      <td title={reasonStr} className={styles.maxSeverity}>
+                      <td title={reasonStr} className={[styles.cell, styles.maxSeverity].join(' ')}>
                         <div className={styles.maxSeverityWrapper}>
                           <Alarm severity={row.maxSeverity} />
                         </div>
                       </td>
-                      <td title={reasonStr} className={styles.name}>
+                      <td title={reasonStr} className={[styles.cell, styles.name].join(' ')}>
                         {row.name}
                       </td>
-                      <td title={new Date(row.timestampSeverityOldest * 1000).toString()} className={styles.timestamp}>
+                      <td
+                        title={new Date(row.timestampSeverityOldest * 1000).toString()}
+                        className={[styles.cell, styles.timestamp].join(' ')}
+                      >
                         {relativeTime(row.timestampSeverityOldest * 1000)}
                       </td>
                     </tr>
@@ -303,8 +305,7 @@ export default class AlarmsTable extends PureComponent {
                         key={`${key}-expanded`}
                         className={[styles.expandedRow, !row.acknowledged ? styles.unackExpandedRow : ''].join(' ')}
                       >
-                        <td colSpan={1} className={styles.ackButton}>
-                        </td>
+                        <td colSpan={1} className={styles.ackButton}></td>
                         <td colSpan={4} className={styles.expandedRowContent}>
                           <DetailsPanel
                             alarm={row}
