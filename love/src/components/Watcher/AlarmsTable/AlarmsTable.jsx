@@ -43,7 +43,10 @@ export default class AlarmsTable extends PureComponent {
       severity: { type: 'regexp', value: new RegExp('(?:)') },
       maxSeverity: { type: 'regexp', value: new RegExp('(?:)') },
       name: { type: 'regexp', value: new RegExp('(?:)') },
-      timestampSeverityOldest: { type: 'regexp', value: new RegExp('(?:)') },
+      timestampSeverityOldest: {
+        type: 'regexp',
+        value: new RegExp('(?:)'),
+      },
     },
     activeFilterDialog: 'None',
     sortingColumn: 'default',
@@ -105,22 +108,9 @@ export default class AlarmsTable extends PureComponent {
   };
 
   testFilter = (row) => {
-    const values = Object.keys(row).map((rowKey) => {
-      const key = [row.component, row.stream, row.param_name].join('-');
-      if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'regexp') {
-        const regexpFilterResult = this.state.filters[rowKey].value.test(row[rowKey]);
-        let checkedFilterResult = true;
-        if (this.state.checkedFilter && this.state.checkedFilter[rowKey]) {
-          checkedFilterResult = this.state.checkedFilter[rowKey].test(row[rowKey]);
-        }
-        return regexpFilterResult && checkedFilterResult;
-      }
-      if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'health') {
-        let healthStatus = 0;
-        if (this.props.healthFunctions !== undefined) {
-          healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
-        }
-        return this.state.filters[rowKey].value.test(healthStatus);
+    const values = Object.keys(this.state.filters).map((key) => {
+      if (row[key] !== undefined && this.state.filters[key].type === 'regexp') {
+        return this.state.filters[key].value.test(row[key]);
       }
       return true;
     });
@@ -190,7 +180,7 @@ export default class AlarmsTable extends PureComponent {
 
                 return (
                   <>
-                    <td className={styles.ackButton}/>
+                    <td className={styles.ackButton} />
                     <ColumnHeader
                       {...defaultColumnProps}
                       className={styles.status}
@@ -236,11 +226,7 @@ export default class AlarmsTable extends PureComponent {
                     <tr
                       className={[
                         !row.acknowledged ? styles.unackRow : '',
-                        isExpanded
-                          ? row.acknowledged
-                            ? styles.expandedRowParent
-                            : styles.unackExpandedRowParent
-                          : '',
+                        isExpanded ? (row.acknowledged ? styles.expandedRowParent : styles.unackExpandedRowParent) : '',
                       ].join(' ')}
                       onClick={() => this.clickGearIcon(key)}
                     >
