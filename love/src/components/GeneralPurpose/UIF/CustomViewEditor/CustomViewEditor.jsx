@@ -26,11 +26,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 13,
-            "h": 1,
+            "w": 16,
+            "h": 25,
             "i": 1
           },
-          "content": "LabeledStatusText",
+          "content": "MountSummaryPanel",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
