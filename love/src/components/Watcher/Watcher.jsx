@@ -24,8 +24,9 @@ export default class Watcher extends Component {
       name: row => (row['name'] + (row['acknowledged'] ? '-0' : '-1')),
       timestampSeverityOldest: row => (row['timestampSeverityOldest'] + (row['acknowledged'] ? '-0' : '-1')),
     };
-    const customUnmutedSortFunctions = {
-      severity: row => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
+    const mutedSortFunctions = {
+      ...sortFunctions,
+      default: sortFunctions['severity'],
     };
     this.test = null;
     return (
@@ -59,7 +60,7 @@ export default class Watcher extends Component {
                 (this.state.selectedTab === 'unmuted' ? row['mutedBy'] === '' : row['mutedBy'] !== '') &&
                 !(row['severity'] <= 1 && row['maxSeverity'] <= 1 && row['acknowledged'])
               }
-              sortFunctions={sortFunctions}
+              sortFunctions={this.state.selectedTab === 'unmuted' ? sortFunctions : mutedSortFunctions }
             />
           </div>
         </div>
