@@ -43,7 +43,7 @@ export default class CustomView extends Component {
 
   static defaultProps = {
     layout: undefined,
-    baseColWidth: 100,
+    baseColWidth: 20,
     onLayoutChange: () => {},
   };
 
@@ -95,7 +95,7 @@ export default class CustomView extends Component {
           <GridLayout
             layout={layout}
             items={layout.length}
-            rowHeight={50}
+            rowHeight={20}
             onLayoutChange={this.props.onLayoutChange}
             cols={container.properties.cols}
             width={this.props.baseColWidth * container.properties.w}
