@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../GeneralPurpose/Button/Button';
 import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
-import Alarm from '../Alarm/Alarm';
+import Alarm, { severityToStatus } from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import DetailsPanel from './DetailsPanel/DetailsPanel';
 import { relativeTime } from '../../../Utils';
@@ -40,13 +40,24 @@ export default class AlarmsTable extends PureComponent {
   initialState = {
     expandedRows: {},
     filters: {
-      severity: { type: 'regexp', value: new RegExp('(?:)') },
-      maxSeverity: { type: 'regexp', value: new RegExp('(?:)') },
-      name: { type: 'regexp', value: new RegExp('(?:)') },
+      severity: {
+        type: 'regexp',
+        value: new RegExp('(?:)'),
+        function: (value) => severityToStatus[value],
+      },
+      maxSeverity: {
+        type: 'regexp',
+        value: new RegExp('(?:)'),
+        function: (value) => severityToStatus[value],
+      },
+      name: {
+        type: 'regexp',
+        value: new RegExp('(?:)'),
+      },
       timestampSeverityOldest: {
         type: 'regexp',
         value: new RegExp('(?:)'),
-        function: value => relativeTime(value * 1000),
+        function: (value) => relativeTime(value * 1000),
       },
     },
     activeFilterDialog: 'None',
@@ -111,7 +122,7 @@ export default class AlarmsTable extends PureComponent {
   testFilter = (row) => {
     const values = Object.keys(this.state.filters).map((key) => {
       if (row[key] !== undefined && this.state.filters[key].type === 'regexp') {
-        const func = this.state.filters[key].function ? this.state.filters[key].function : value => value;
+        const func = this.state.filters[key].function ? this.state.filters[key].function : (value) => value;
         return this.state.filters[key].value.test(func(row[key]));
       }
       return true;
