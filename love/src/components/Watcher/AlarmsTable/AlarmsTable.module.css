@@ -10,6 +10,7 @@ table {
     --status-width: 12em;
     --name-width: 30em;
     --timestamp-width: 15em;
+    --cell-padding: 1em;
 }
 
 .dataTableWrapper {
@@ -23,8 +24,8 @@ table {
 .dataTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
-    /* width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width)); */
-    width: fit-content;
+    width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width) + 10*var(--cell-padding));
+    /* width: fit-content; */
     height: inherit; /* necessary for scroll, but parent component must define height */
     table-layout: fixed;
     border-collapse: collapse;
@@ -104,8 +105,8 @@ table {
     width: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: var(--cell-padding);
+    padding-right: var(--cell-padding);
 }
 
 .dataTable th {
@@ -179,7 +180,7 @@ table {
 
 /****************** Styles for the Expanded row ***************/
 .dataTable .expandedRow {
-    display: block;
+    /* display: block; */
     width: 100%;
     text-align: left;
     background: var(--table-row-background);
@@ -200,6 +201,7 @@ table {
 
 .dataTable .expandedRow .expandedRowContent {
   /* width: calc(100% - 4em); */
+  /* width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width) + var(--cell-padding)); */
   vertical-align: top;
   border: 1px solid transparent;
   padding: 1em;
