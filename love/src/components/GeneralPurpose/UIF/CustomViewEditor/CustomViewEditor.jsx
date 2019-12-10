@@ -26,12 +26,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 20,
-            "h": 30,
-            "allowOverflow": "true",
+            "w": 50,
+            "h": 13,
             "i": 1
           },
-          "content": "LightPath",
+          "content": "MotorTable",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
