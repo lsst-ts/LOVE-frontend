@@ -36,27 +36,23 @@ export default class AlarmsTable extends PureComponent {
     sortFunctions: {},
   };
 
-  constructor() {
-    super();
-    const expandedRows = {};
-
-    const filters = {
+  initialState = {
+    expandedRows: {},
+    filters: {
       severity: { type: 'regexp', value: new RegExp('(?:)') },
       maxSeverity: { type: 'regexp', value: new RegExp('(?:)') },
       name: { type: 'regexp', value: new RegExp('(?:)') },
       timestampSeverityOldest: { type: 'regexp', value: new RegExp('(?:)') },
-    };
-    //
-    // this.sortFunctions = {
-    //   severity: row => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
-    // };
+    },
+    activeFilterDialog: 'None',
+    sortingColumn: 'default',
+    sortDirection: 'descending',
+  };
 
+  constructor() {
+    super();
     this.state = {
-      expandedRows,
-      activeFilterDialog: 'None',
-      sortingColumn: 'severity',
-      sortDirection: 'descending',
-      filters,
+      ...this.initialState,
       setFilters: this.setFilters,
     };
   }
@@ -71,7 +67,7 @@ export default class AlarmsTable extends PureComponent {
 
   evalSortFunction = (column, row) => {
     return this.props.sortFunctions[column] ? this.props.sortFunctions[column](row) : row[column];
-  }
+  };
 
   setFilters = (filters) => {
     Object.keys(filters).map((key) => {
@@ -154,12 +150,14 @@ export default class AlarmsTable extends PureComponent {
   };
 
   changeSortDirection = (direction, column) => {
+    const newColumn =
+      column === this.state.sortingColumn && direction === 'None' ? this.initialState.sortingColumn : column;
     /*
       direction can be "ascending" or "descending", otherwise no
       sorting will be applied
       Sorting is applied before filtering
     */
-    this.setState({ sortDirection: direction, sortingColumn: column });
+    this.setState({ sortDirection: direction, sortingColumn: newColumn });
   };
 
   sortData = (a, b) => {
@@ -168,7 +166,6 @@ export default class AlarmsTable extends PureComponent {
     const f_a = this.evalSortFunction(column, a);
     const f_b = this.evalSortFunction(column, b);
     return f_a <= f_b ? -direction : direction;
-    // return a[column] <= b[column] ? -direction : direction;
   };
 
   render() {
@@ -177,154 +174,135 @@ export default class AlarmsTable extends PureComponent {
     const user = this.props.user ? this.props.user : 'Unknown User';
     return (
       <div className={styles.dataTableWrapper}>
-      <table className={styles.dataTable}>
-        <thead>
-          <tr>
-            {(() => {
-              const defaultColumnProps = {
-                changeFilter: this.changeFilter,
-                activeFilterDialog: this.state.activeFilterDialog,
-                closeFilterDialogs: this.closeFilterDialogs,
-                columnOnClick: this.columnOnClick,
-                changeSortDirection: this.changeSortDirection,
-                sortDirection: this.state.sortDirection,
-                sortingColumn: this.state.sortingColumn,
-              };
+        <table className={styles.dataTable}>
+          <thead>
+            <tr>
+              {(() => {
+                const defaultColumnProps = {
+                  changeFilter: this.changeFilter,
+                  activeFilterDialog: this.state.activeFilterDialog,
+                  closeFilterDialogs: this.closeFilterDialogs,
+                  columnOnClick: this.columnOnClick,
+                  changeSortDirection: this.changeSortDirection,
+                  sortDirection: this.state.sortDirection,
+                  sortingColumn: this.state.sortingColumn,
+                };
 
-              return (
-                <>
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    className={styles.status}
-                    header={'Status'}
-                    filterName={'severity'}
-                    filter={this.state.filters.severity}
-                    sortLabels={['Least Critical', 'Most Critical']}
-                  />
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    className={styles.maxSeverity}
-                    header={'Max severity'}
-                    filterName={'maxSeverity'}
-                    filter={this.state.filters.maxSeverity}
-                  />
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    className={styles.name}
-                    header={'Name'}
-                    filterName={'name'}
-                    filter={this.state.filters.name}
-                  />
-                  <ColumnHeader
-                    {...defaultColumnProps}
-                    className={styles.timestamp}
-                    header={'Severity update'}
-                    filterName={'timestampSeverityOldest'}
-                    filter={this.state.filters.timestampSeverityOldest}
-                  />
-                </>
-              );
-            })()}
-          </tr>
-        </thead>
-        <tbody onClick={this.closeFilterDialogs}>
-          {data.sort(this.sortData).map((row) => {
-            if (this.testFilter(row)) {
-              const key = row.name;
-              const isExpanded = this.state.expandedRows[key];
-              const reasonStr = 'Reason: ' + row.reason;
-              return (
-                <React.Fragment key={key}>
-                  <tr
-                    className={[
-                      styles.dataRow,
-                      !row.acknowledged ? styles.unackRow : '',
-                      isExpanded ? styles.expandedRowParent : '',
-                    ].join(' ')}
-                    onClick={() => this.clickGearIcon(key)}
-                  >
-                    <td
-                      title={reasonStr}
+                return (
+                  <>
+                    <ColumnHeader
+                      {...defaultColumnProps}
                       className={styles.status}
-                    >
-                      {
-                        <>
-                          <div className={styles.statusWrapper}>
-                            <div className={styles.expansionIconWrapper}>
-                              <RowExpansionIcon expanded={isExpanded}/>
-                            </div>
-                            <Alarm
-                              severity={row.severity}
-                              maxSeverity={row.maxSeverity}
-                              acknowledged={row.acknowledged}
-                              muted={row.mutedSeverity <= row.severity}
-                              ackButtonLocation='left'
-                              ackAlarm={(event) => {
-                                event.stopPropagation();
-                                this.props.ackAlarm(row.name, row.maxSeverity, user);
-                              }}
-                            />
-                            <div className={styles.expansionIconWrapper}/>
-                          </div>
-                        </>
-                      }
-                    </td>
-                    <td
-                      title={reasonStr}
+                      header={'Severity'}
+                      filterName={'severity'}
+                      filter={this.state.filters.severity}
+                      sortLabels={['Less critical first', 'More critical first']}
+                    />
+                    <ColumnHeader
+                      {...defaultColumnProps}
                       className={styles.maxSeverity}
-                    >
-                      <div className={styles.maxSeverityWrapper}>
-                        <Alarm severity={row.maxSeverity} />
-                      </div>
-                    </td>
-                    <td
-                      title={reasonStr}
+                      header={'Max severity'}
+                      filterName={'maxSeverity'}
+                      filter={this.state.filters.maxSeverity}
+                    />
+                    <ColumnHeader
+                      {...defaultColumnProps}
                       className={styles.name}
-                    >
-                      {row.name}
-                    </td>
-                    <td
-                      title={new Date(row.timestampSeverityOldest * 1000).toString()}
+                      header={'Name'}
+                      filterName={'name'}
+                      filter={this.state.filters.name}
+                    />
+                    <ColumnHeader
+                      {...defaultColumnProps}
                       className={styles.timestamp}
-                    >
-                      {relativeTime(row.timestampSeverityOldest * 1000)}
-                    </td>
-                  </tr>
-                  {isExpanded ? (
+                      header={'Severity update'}
+                      filterName={'timestampSeverityOldest'}
+                      filter={this.state.filters.timestampSeverityOldest}
+                    />
+                  </>
+                );
+              })()}
+            </tr>
+          </thead>
+          <tbody onClick={this.closeFilterDialogs}>
+            {data.sort(this.sortData).map((row) => {
+              if (this.testFilter(row)) {
+                const key = row.name;
+                const isExpanded = this.state.expandedRows[key];
+                const reasonStr = 'Reason: ' + row.reason;
+                return (
+                  <React.Fragment key={key}>
                     <tr
-                      onClick={this.closeFilterDialogs}
-                      key={`${key}-expanded`}
                       className={[
-                        styles.expandedRow,
-                        !row.acknowledged ? styles.unackExpandedRow : '',
+                        styles.dataRow,
+                        !row.acknowledged ? styles.unackRow : '',
+                        isExpanded ? styles.expandedRowParent : '',
                       ].join(' ')}
+                      onClick={() => this.clickGearIcon(key)}
                     >
-                      <td colSpan={4}>
-                        <DetailsPanel
-                          alarm={row}
-                          muteAlarm={
-                            (event, duration, severity) => {
-                              event.stopPropagation();
-                              this.props.muteAlarm(row.name, severity, duration, user);
-                            }
-                          }
-                          unmuteAlarm={
-                            (event) => {
-                              event.stopPropagation();
-                              this.props.unmuteAlarm(row.name);
-                            }
-                          }
-                        />
+                      <td title={reasonStr} className={styles.status}>
+                        {
+                          <>
+                            <div className={styles.statusWrapper}>
+                              <div className={styles.expansionIconWrapper}>
+                                <RowExpansionIcon expanded={isExpanded} />
+                              </div>
+                              <Alarm
+                                severity={row.severity}
+                                maxSeverity={row.maxSeverity}
+                                acknowledged={row.acknowledged}
+                                muted={row.mutedSeverity <= row.severity}
+                                ackButtonLocation="left"
+                                ackAlarm={(event) => {
+                                  event.stopPropagation();
+                                  this.props.ackAlarm(row.name, row.maxSeverity, user);
+                                }}
+                              />
+                              <div className={styles.expansionIconWrapper} />
+                            </div>
+                          </>
+                        }
+                      </td>
+                      <td title={reasonStr} className={styles.maxSeverity}>
+                        <div className={styles.maxSeverityWrapper}>
+                          <Alarm severity={row.maxSeverity} />
+                        </div>
+                      </td>
+                      <td title={reasonStr} className={styles.name}>
+                        {row.name}
+                      </td>
+                      <td title={new Date(row.timestampSeverityOldest * 1000).toString()} className={styles.timestamp}>
+                        {relativeTime(row.timestampSeverityOldest * 1000)}
                       </td>
                     </tr>
-                  ) : null}
-                </React.Fragment>
-              );
-            }
-            return null;
-          })}
-        </tbody>
-      </table>
+                    {isExpanded ? (
+                      <tr
+                        onClick={this.closeFilterDialogs}
+                        key={`${key}-expanded`}
+                        className={[styles.expandedRow, !row.acknowledged ? styles.unackExpandedRow : ''].join(' ')}
+                      >
+                        <td colSpan={4}>
+                          <DetailsPanel
+                            alarm={row}
+                            muteAlarm={(event, duration, severity) => {
+                              event.stopPropagation();
+                              this.props.muteAlarm(row.name, severity, duration, user);
+                            }}
+                            unmuteAlarm={(event) => {
+                              event.stopPropagation();
+                              this.props.unmuteAlarm(row.name);
+                            }}
+                          />
+                        </td>
+                      </tr>
+                    ) : null}
+                  </React.Fragment>
+                );
+              }
+              return null;
+            })}
+          </tbody>
+        </table>
       </div>
     );
   }
