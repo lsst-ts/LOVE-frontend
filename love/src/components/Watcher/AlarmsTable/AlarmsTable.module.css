@@ -1,4 +1,4 @@
-:root{
+table {
     --table-scrollbar-width: 10px;
     --table-header-background: var(--second-quaternary-background-color);
     --table-row-background: var(--second-secondary-background-color);
@@ -6,6 +6,10 @@
     --table-unack-row-background: var(--second-tertiary-background-color);
     --table-unack-row-border: var(--second-secondary-background-color);
     --table-hover-border: var(--second-senary-background-dimmed-color);
+    --ack-width: 4em;
+    --status-width: 12em;
+    --name-width: 30em;
+    --timestamp-width: 15em;
 }
 
 .dataTableWrapper {
@@ -19,6 +23,7 @@
 .dataTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
+    /* width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width)); */
     width: fit-content;
     height: inherit; /* necessary for scroll, but parent component must define height */
     table-layout: fixed;
@@ -26,23 +31,28 @@
 }
 
 /****************** Columns styles ***************/
+.dataTable .ackButton {
+    width: var(--ack-width);
+    text-align: center;
+}
+
 .dataTable .status {
-    width: 16em;
+    width: var(--status-width);
     text-align: center;
 }
 
 .dataTable .maxSeverity {
-    width: 10em;
+    width: var(--status-width);
     text-align: center;
 }
 
 .dataTable .name {
-    width: 30em;
+    width: var(--name-width);
     text-align: left;
 }
 
 .dataTable .timestamp {
-    width: 15em;
+    width: var(--timestamp-width);
     text-align: left;
 }
 
@@ -182,9 +192,17 @@
 }
 
 .dataTable .expandedRow td {
+    /* display: block; */
     vertical-align: top;
     border: 1px solid transparent;
     padding: 1em;
+}
+
+.dataTable .expandedRow .expandedRowContent {
+  /* width: calc(100% - 4em); */
+  vertical-align: top;
+  border: 1px solid transparent;
+  padding: 1em;
 }
 
 /* .dataTable .expandedRow textarea {
