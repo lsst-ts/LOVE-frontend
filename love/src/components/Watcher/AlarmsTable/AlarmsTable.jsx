@@ -138,7 +138,7 @@ export default class AlarmsTable extends PureComponent {
     }
   };
 
-  columnOnClick = (ev, filterName) => {
+  columnOnClick = (_ev, filterName) => {
     if (this.state.activeFilterDialog === filterName) {
       this.closeFilterDialogs();
       return;
@@ -171,7 +171,6 @@ export default class AlarmsTable extends PureComponent {
 
   render() {
     let data = this.props.alarms;
-    const currentTime = new Date().getTime();
     const user = this.props.user ? this.props.user : 'Unknown User';
     return (
       <div className={styles.dataTableWrapper}>
