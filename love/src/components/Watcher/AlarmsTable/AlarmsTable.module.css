@@ -77,11 +77,6 @@ table {
     padding-right: 1em;
 }
 
-/****************** Make rows look clickable ***************/
-.dataRow {
-    cursor: pointer;
-}
-
 /****************** General table head and body styles ***************/
 .dataTable thead {
     display: table;
@@ -119,7 +114,8 @@ table {
 }
 
 /****************** Table body cells style ***************/
-.dataTable td {
+.dataTable td.cell {
+    cursor: pointer;
     color: var(--secondary-font-color);
     padding-top: 0.4em;
     padding-bottom: 0.4em;
@@ -135,11 +131,8 @@ table {
 }
 
 /****************** Table Unack rows style ***************/
-.dataTable tr.unackRow {
+.dataTable tr.unackRow td.cell {
     background: var(--table-unack-row-background);
-}
-
-.dataTable tr.unackRow td {
     font-weight: bold;
     color: var(--base-font-color);
     border-bottom: 1px solid var(--table-unack-row-border);
@@ -151,7 +144,7 @@ table {
 }
 
 /****************** Table rows hover style ***************/
-.dataTable tr:hover {
+.dataTable tr:hover td.cell {
     border-bottom: 1px solid var(--table-hover-border);
     border-top: 1px solid var(--table-hover-border);
     -moz-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
@@ -172,6 +165,10 @@ table {
 
 .dataTable td input {
     min-width: 10px;
+}
+
+.dataTable .firstColumn td {
+  background-color: var(--table-row-background);
 }
 
 .dataTable .firstColumn input {
@@ -243,13 +240,13 @@ table {
     border-bottom-right-radius: 7px;
 }
 
-.dataTable .firstColumn {
+/* .dataTable .firstColumn {
     width: 1em;
     background: var(--base-background-color);
     padding: 0em 0.5em;
     text-align: center;
     border: 1px solid var(--base-background-color)
-}
+} */
 
 /*************** Styles for the Table Body Scroller ***************/
 /* width */
