@@ -15,10 +15,10 @@ export default class CustomViewEditor extends Component {
         "type": "container",
         "x": 0,
         "y": 0,
-        "w": 20,
+        "w": 100,
         "h": 2,
         "i": 0,
-        "cols": 20
+        "cols": 100
       },
       "content": {
         "LeftPanel": {
@@ -26,7 +26,7 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 3,
+            "w": 13,
             "h": 1,
             "i": 1
           },
@@ -51,7 +51,7 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 1,
-            "w": 3,
+            "w": 13,
             "h": 1,
             "i": 2
           },
@@ -144,7 +144,7 @@ export default class CustomViewEditor extends Component {
       </div>
         <Rnd
           default={{
-            x: 0,
+            x: 800,
             y: 50,
             width: 500,
             height: 200,
