@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './FilterDialog.module.css';
 import FilterIcon from '../../../icons/FilterIcon/FilterIcon';
 import ArrowIcon from '../../../icons/ArrowIcon/ArrowIcon';
+import TextField from '../../../TextField/TextField';
 
 export default class FilterDialog extends Component {
   static propTypes = {
@@ -93,10 +94,8 @@ export default class FilterDialog extends Component {
             </div>
             <span className={styles.filterText}>Filter...</span>
           </div>
-          <input
+          <TextField 
             ref={this.textInput}
-            type="text"
-            className={styles.filterInput}
             onChange={this.props.changeFilter}
             onKeyUp={this.onInputKeyUp}
           />
