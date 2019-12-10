@@ -145,11 +145,11 @@ table {
 
 /**** Remove bottom border from the row that has been expanded *****/
 .dataTable tr.expandedRowParent td.cell {
-    border-bottom: 1px solid transparent !important;
+    border-bottom: 1px solid transparent;
 }
 
-.expandedRowParent td {
-    border-bottom: 1px solid transparent;
+.dataTable tr.unackExpandedRowParent td.cell {
+    border-bottom: 1px solid var(--table-unack-row-background);
 }
 
 /****************** Table rows hover style ***************/
@@ -188,9 +188,9 @@ table {
 }
 
 .dataTable .expandedRow .expandedRowContent {
-  vertical-align: top;
-  border-bottom: 1px solid var(--table-row-border);
-  padding: 1em;
+    vertical-align: top;
+    border-bottom: 1px solid var(--table-row-border);
+    padding: 1em;
 }
 
 .dataTable .unackExpandedRow .expandedRowContent{
