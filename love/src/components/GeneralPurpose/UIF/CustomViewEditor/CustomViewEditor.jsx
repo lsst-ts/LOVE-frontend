@@ -18,6 +18,7 @@ export default class CustomViewEditor extends Component {
         "w": 100,
         "h": 2,
         "i": 0,
+        "allowOverflow": true,
         "cols": 100
       },
       "content": {
@@ -26,11 +27,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 50,
-            "h": 13,
+            "w": 55,
+            "h": 33,
             "i": 1
           },
-          "content": "MotorTable",
+          "content": "ScriptQueue",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
@@ -51,8 +52,8 @@ export default class CustomViewEditor extends Component {
         "LeftPanel2": {
           "properties": {
             "type": "component",
-            "x": 0,
-            "y": 1,
+            "x": 66,
+            "y": 98,
             "w": 13,
             "h": 1,
             "i": 2

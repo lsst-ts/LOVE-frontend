@@ -1,15 +1,14 @@
 .scriptQueueContainer {
-  width: calc(100vw - 5em);
-  height: calc(100vh - 5em);
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr 6fr;
+  grid-template-rows: min-content 1fr;
   grid-template-areas:
     'current current current current global global'
     'body body body body body body';
   color: var(--second-base-font-color);
-  min-width: 1000px;
-  max-width: 1300px;
+  min-width: 1050px;
+  max-width: 1900px;
+  height: 100%;
   min-height: 600px;
   position: relative;
 }
@@ -93,16 +92,14 @@
 }
 
 .scriptList {
+  display: grid;
+  grid-template-rows: min-content 1fr;
   padding: 0.5em;
-  margin: 0.5em;
-  /* margin-left: 0;
-  padding-left: 0; */
+  margin: 0 0.5em;
   text-align: left;
   flex-grow: 1;
   flex-basis: 100%;
   transition: all 500ms ease-in-out;
-  padding-bottom: 1.5em;
-  height: 100%;
   background: var(--second-primary-background-color);
 }
 
@@ -125,13 +122,6 @@
   overflow-y: hidden;
   display: flex;
   align-items: stretch;
-
-  /* flex-basis: 0px;
-  padding-left: 0;
-  padding-right: 0;
-  margin-left: 0;
-  margin-right: 0;
-  overflow: hidden; */
 }
 
 .addScriptContainer {
