@@ -52,7 +52,7 @@ export default class CustomView extends Component {
     if (config && config._functionProps) {
       config._functionProps.forEach((fProp) => {
         // eslint-disable-next-line
-        newConfig[fProp] = eval(config[fProp]);
+        newConfig[fProp] = eval(`(${config[fProp]})`);
       });
     }
     return newConfig;
