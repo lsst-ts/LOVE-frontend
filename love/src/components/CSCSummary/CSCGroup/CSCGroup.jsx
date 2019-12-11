@@ -28,25 +28,21 @@ export default class CSCGroup extends Component {
     const groupView = selectedCSC.csc === 'all';
 
     return groupView ? (
-      <div className={styles.CSCGroupContainer}>
-        <CSCGroupLogContainer
-          realm={selectedCSC.realm}
-          group={selectedCSC.group}
-          name={selectedCSC.csc}
-          onCSCClick={this.props.onCSCClick}
-          hierarchy={this.props.hierarchy}
-        />
-      </div>
+      <CSCGroupLogContainer
+        realm={selectedCSC.realm}
+        group={selectedCSC.group}
+        name={selectedCSC.csc}
+        onCSCClick={this.props.onCSCClick}
+        hierarchy={this.props.hierarchy}
+      />
     ) : (
-      <div className={styles.CSCGroupContainer}>
-        <CSCExpandedContainer
-          realm={selectedCSC.realm}
-          group={selectedCSC.group}
-          name={selectedCSC.csc}
-          salindex={selectedCSC.salindex}
-          onCSCClick={this.props.onCSCClick}
-        />
-      </div>
+      <CSCExpandedContainer
+        realm={selectedCSC.realm}
+        group={selectedCSC.group}
+        name={selectedCSC.csc}
+        salindex={selectedCSC.salindex}
+        onCSCClick={this.props.onCSCClick}
+      />
     );
   };
 
