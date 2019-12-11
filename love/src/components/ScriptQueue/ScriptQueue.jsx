@@ -302,6 +302,19 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  pauseScript = (scriptIndex, terminate = false) => {
+    const array = new Array(400).fill(0);
+    array[0] = scriptIndex;
+    this.props.requestSALCommand({
+      cmd: 'cmd_stopScripts',
+      params: {
+        length: 1,
+        salIndices: array,
+        terminate: terminate,
+      },
+    });
+  };
+
   requeueScript = (scriptIndex) => {
     console.log('Requeueing script', scriptIndex);
     this.props.requestSALCommand({
@@ -468,6 +481,7 @@ export default class ScriptQueue extends Component {
                   heartbeatData={this.state.indexedHeartbeats[current.index]}
                   timestampRunStart={current.timestampRunStart}
                   stopScript={this.stopScript}
+                  pauseScript={this.pauseScript}
                   onClickContextMenu={this.onClickContextMenu}
                   commandExecutePermission={this.props.commandExecutePermission}
                 />
