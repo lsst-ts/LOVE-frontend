@@ -160,11 +160,17 @@
 .expandedSubSection {
   border-top: solid var(--quaternary-background-color) 2px;
   padding: 0.75em 0;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-column-gap: 0.5rem;
+  grid-auto-flow: row;
+  justify-content: space-between;
 }
 
 .subSectionTitle {
   color: var(--highlighted-font-color);
   font-size: var(--font-size-large);
+  grid-column-start: span 3;
 }
 
 .subSectionLabel {
