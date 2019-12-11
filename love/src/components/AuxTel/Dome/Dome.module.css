@@ -1,9 +1,9 @@
 .domeContainer {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   position: relative;
   width: 100%;
+  overflow: auto;
 }
 
 .skymapGridContainer {
@@ -11,11 +11,13 @@
   align-self: center;
   flex-wrap: wrap;
   position: relative;
-  width: fit-content;
+  width: 70%;
 }
 
 .skymapGridContainer svg {
   vertical-align: top;
+  margin: auto;
+  height: auto;
 }
 
 .skymapContainer h2 {
@@ -27,16 +29,18 @@
 
 .topRow {
   display: grid;
-  grid-template-columns: 1fr;
   justify-items: center;
   row-gap: 2em;
   padding: 1em 0;
+  min-width: 900px;
+  grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
 }
 
 .svgOverlay {
   position: absolute;
   left: 50%;
   top: 50%;
+  width: 80%;
   transform: translate(-50%, -50%);
 }
 
@@ -61,9 +65,12 @@
 .telemetryTable {
   display: grid;
   padding-top: 1em;
-  grid-template-columns: minmax(350px, 1fr);
   grid-row-gap: 0.5em;
   width: 100%;
+  min-width: 900px;
+  overflow: hidden;
+  grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+  grid-template-rows: max-content 1fr;
 }
 
 .telemetryTable h2 {
@@ -101,15 +108,4 @@
 
 .vignettingDistanceContainer .value {
   color: var(--base-font-color);
-}
-
-@media (min-width: 1200px) {
-  .telemetryTable {
-    grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
-    grid-template-rows: max-content 1fr;
-  }
-
-  .topRow {
-    grid-template-columns: 1fr 1fr;
-  }
 }

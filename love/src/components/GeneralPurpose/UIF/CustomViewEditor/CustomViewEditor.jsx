@@ -27,11 +27,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 55,
-            "h": 33,
+            "w": 48,
+            "h": 38,
             "i": 1
           },
-          "content": "Camera",
+          "content": "Dome",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
