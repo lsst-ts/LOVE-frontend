@@ -35,6 +35,9 @@
 .estimatedTimeValue {
 }
 
+.checkpointContainer{
+  text-align:right;
+}
 .elapsedTimeContainer {
   display: inline-block;
   min-width: 10em;

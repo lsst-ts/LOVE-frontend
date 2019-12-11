@@ -123,6 +123,8 @@ export default class CurrentScript extends Component {
     }
     const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
+    const isPaused = this.props.scriptState.toLowerCase() === 'paused';
+
     return (
       <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
         <div>
@@ -181,10 +183,19 @@ export default class CurrentScript extends Component {
                       className={scriptStyles.buttonContainer}
                       onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
                     >
-                      {' '}&#8943;{' '}
+                      {' '}
+                      &#8943;{' '}
                     </div>
                   </div>
                 )}
+                <div className={[styles.checkpointContainer, visibilityClass].join(' ')}>
+                  <div className={styles.estimatedTimeContainer}>
+                    <span className={styles.estimatedTimeLabel}>{isPaused ? 'Current' : 'Last'} checkpoint: </span>
+                    <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                      {this.props.last_checkpoint}
+                    </span>
+                  </div>
+                </div>
                 <div
                   className={scriptStyles.scriptStateContainer}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -192,6 +203,14 @@ export default class CurrentScript extends Component {
                   <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
                     {this.props.scriptState}
                   </ScriptStatus>
+                  {isPaused ? (
+                    <div className={styles.checkpointContainer}>
+                      <span> at </span>
+                      <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                        {this.props.last_checkpoint}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div
                   className={scriptStyles.scriptStateContainer}
@@ -210,14 +229,7 @@ export default class CurrentScript extends Component {
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
               <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
             </div>
-            <div className={[styles.checkpointContainer, visibilityClass].join(' ')}>
-              <div className={styles.estimatedTimeContainer}>
-                <span className={styles.estimatedTimeLabel}>Last checkpoint: </span>
-                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                  {this.props.last_checkpoint}
-                </span>
-              </div>
-            </div>
+
             <div className={[styles.timeContainer, visibilityClass].join(' ')}>
               <div className={styles.estimatedTimeContainer}>
                 <span className={styles.estimatedTimeLabel}>Estimated time: </span>
@@ -239,9 +251,7 @@ export default class CurrentScript extends Component {
               this.state.expanded && isValid ? '' : scriptStyles.hidden,
             ].join(' ')}
           >
-            {hasCommandPrivileges ? (
-              <ScriptDetails {...this.props}/>              
-            ) : null}
+            {hasCommandPrivileges ? <ScriptDetails {...this.props} /> : null}
           </div>
         </div>
       </div>
