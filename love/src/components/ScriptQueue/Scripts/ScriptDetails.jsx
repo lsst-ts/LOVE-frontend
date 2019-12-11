@@ -2,48 +2,76 @@ import React from 'react';
 import scriptStyles from './Scripts.module.css';
 
 const logLevelLabels = {
-    "-1": '...',
-    10: 'Info',
-    20: 'Warning',
-    30: 'Debug',
-    40: 'Error'
+  '-1': '...',
+  10: 'Info',
+  20: 'Warning',
+  30: 'Debug',
+  40: 'Error',
 };
 
 export default ({ classname, description, remotes, pause_checkpoints, stop_checkpoints, log_level, ...props }) => {
-    const logLevelLabel = logLevelLabels[log_level] ? logLevelLabels[log_level] : log_level;
-    return (
+  const logLevelLabel = logLevelLabels[log_level] ? logLevelLabels[log_level] : log_level;
+
+  const fields = [
+    {
+      label: 'Classname:',
+      defaultDisplayed: '""',
+      defaultValue: '',
+      value: classname,
+    },
+    {
+      label: 'Description:',
+      defaultDisplayed: '""',
+      defaultValue: '',
+      value: description,
+    },
+    {
+      label: 'Remotes:',
+      defaultDisplayed: '""',
+      defaultValue: '',
+      value: remotes,
+    },
+    {
+      label: 'Pause checkpoints:',
+      defaultDisplayed: '""',
+      defaultValue: '',
+      value: pause_checkpoints,
+    },
+    {
+      label: 'Stop checkpoints:',
+      defaultDisplayed: '""',
+      defaultValue: '',
+      value: stop_checkpoints,
+    },
+    {
+      label: 'Log level:',
+      defaultDisplayed: '...',
+      defaultValue: -1,
+      value: logLevelLabel,
+    },
+  ];
+
+  const { label, defaultDisplayed, defaultValue, value } = fields[0];
+  return (
     <div className={[scriptStyles.expandedSection].join(' ')}>
       <div className={scriptStyles.expandedSubSection}>
         <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
-        <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Class Name:</span>
-          <span className={scriptStyles.subSectionValue}> {classname} </span>
-        </div>
-        <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Description:</span>
-          <span className={scriptStyles.subSectionValue}> {description} </span>
-        </div>
-        <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Remotes:</span>
-          <span className={scriptStyles.subSectionValue}> {remotes} </span>
-        </div>
-        <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Pause checkpoints:</span>
-          <span className={scriptStyles.subSectionValue}> {pause_checkpoints} </span>
-        </div>
 
-        <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Stop checkpoints:</span>
-          <span className={scriptStyles.subSectionValue}> {stop_checkpoints} </span>
-        </div>
-
-        <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Log level:</span>
-          <span className={scriptStyles.subSectionValue}> {logLevelLabel} </span>
-        </div>
-        {/* <div className={scriptStyles.subSectionTitle}>
-      SCHEMA
-    </div> */}
+        {fields.map(({ label, defaultDisplayed, defaultValue, value }) => {
+          return (
+            <div key={label} className={scriptStyles.subSectionRow}>
+              <span className={scriptStyles.subSectionLabel}>{label}</span>
+              {value === defaultValue ? (
+                <span className={[scriptStyles.subSectionValue, scriptStyles.subSectionValueUnknown]}>
+                  {' '}
+                  {defaultDisplayed}
+                </span>
+              ) : (
+                <span className={scriptStyles.subSectionValue}> {value}</span>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
