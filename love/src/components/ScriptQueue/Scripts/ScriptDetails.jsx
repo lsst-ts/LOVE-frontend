@@ -1,14 +1,22 @@
 import React from 'react';
 import scriptStyles from './Scripts.module.css';
 
+const logLevelLabels = {
+    "-1": '...',
+    10: 'Info',
+    20: 'Warning',
+    30: 'Debug',
+    40: 'Error'
+};
+
 export default ({ classname, description, remotes, pause_checkpoints, stop_checkpoints, log_level, ...props }) => {
-    console.log(props);
-  return (
+    const logLevelLabel = logLevelLabels[log_level] ? logLevelLabels[log_level] : log_level;
+    return (
     <div className={[scriptStyles.expandedSection].join(' ')}>
       <div className={scriptStyles.expandedSubSection}>
         <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
         <div className={scriptStyles.subSectionRow}>
-          <span className={scriptStyles.subSectionLabel}>Classname:</span>
+          <span className={scriptStyles.subSectionLabel}>Class Name:</span>
           <span className={scriptStyles.subSectionValue}> {classname} </span>
         </div>
         <div className={scriptStyles.subSectionRow}>
@@ -31,7 +39,7 @@ export default ({ classname, description, remotes, pause_checkpoints, stop_check
 
         <div className={scriptStyles.subSectionRow}>
           <span className={scriptStyles.subSectionLabel}>Log level:</span>
-          <span className={scriptStyles.subSectionValue}> {log_level} </span>
+          <span className={scriptStyles.subSectionValue}> {logLevelLabel} </span>
         </div>
         {/* <div className={scriptStyles.subSectionTitle}>
       SCHEMA
