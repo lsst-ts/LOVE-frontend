@@ -8,6 +8,7 @@ import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import { hasCommandPrivileges } from '../../../../Config';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
+import ResumeIcon from '../../../icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import ScriptDetails from '../ScriptDetails';
 
 export default class CurrentScript extends Component {
@@ -164,7 +165,7 @@ export default class CurrentScript extends Component {
               </div>
               <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
                 {this.props.commandExecutePermission && (
-                  <div className={scriptStyles.buttonsContainer}>
+                  <div className={[scriptStyles.buttonsContainer, styles.currentScriptButtonContainer].join(' ')}>
                     <div
                       className={scriptStyles.buttonContainer}
                       onClick={(e) => {
@@ -179,6 +180,24 @@ export default class CurrentScript extends Component {
                         <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
                       </div>
                     </div>
+                    {isPaused ? (
+                      <div
+                        className={scriptStyles.buttonContainer}
+                        onClick={(e) => {
+                          console.log('pause')
+                          // this.props.stopScript(this.props.index);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <div className={scriptStyles.commandButton}>
+                          <div>
+                            <ResumeIcon />
+                          </div>
+                          <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Resume'}</div>
+                        </div>
+                      </div>
+                    ) : null}
+
                     <div
                       className={scriptStyles.buttonContainer}
                       onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
