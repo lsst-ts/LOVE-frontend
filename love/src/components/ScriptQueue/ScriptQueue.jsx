@@ -35,8 +35,10 @@ export default class ScriptQueue extends Component {
       isFinishedScriptListListVisible: false,
       configPanel: {
         show: false,
-        x: 0,
-        y: 0,
+        x: 500,
+        y: 300,
+        // name: undefined,
+        // script: {},
       },
       state: 'Unknown',
       summaryStateValue: 0,
@@ -113,13 +115,14 @@ export default class ScriptQueue extends Component {
       });
     }
     /* Checkcommand ack for toast*/
-    if(prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED && this.props.lastSALCommand.status === SALCommandStatus.ACK){
+    if (
+      prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED &&
+      this.props.lastSALCommand.status === SALCommandStatus.ACK
+    ) {
       const cmd = this.props.lastSALCommand.cmd;
       const result = this.props.lastSALCommand.result;
-      if(result === 'Done')
-        toast.success(`Command '${cmd}' ran successfully`);
-      else
-        toast.info(`Command '${cmd}' returned ${result}`);
+      if (result === 'Done') toast.success(`Command '${cmd}' ran successfully`);
+      else toast.info(`Command '${cmd}' returned ${result}`);
     }
   };
 
@@ -255,7 +258,7 @@ export default class ScriptQueue extends Component {
     });
   };
 
-  launchScript = (isStandard, path, config, descr, location) => {
+  launchScript = (isStandard, path, config, descr, location, pauseCheckpoint, stopCheckpoint, logLevel) => {
     const user = this.props.username;
     const newDescription = `${descr}\n\n-------\nSent by ${user}`;
     this.props.requestSALCommand({
@@ -266,6 +269,9 @@ export default class ScriptQueue extends Component {
         config,
         descr: newDescription,
         location,
+        pauseCheckpoint,
+        stopCheckpoint,
+        logLevel,
       },
       component: 'ScriptQueue',
     });
@@ -447,7 +453,7 @@ export default class ScriptQueue extends Component {
             contextMenuData={this.state.contextMenuData}
             options={contextMenuOption}
           />
-          <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide}/>
+          <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} />
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>

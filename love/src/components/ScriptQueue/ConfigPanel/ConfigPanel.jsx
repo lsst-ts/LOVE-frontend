@@ -34,9 +34,9 @@ export default class ConfigPanel extends Component {
       width: '500px',
       height: '500px',
       loading: false,
-      pauseCheckpoints: '',
-      stopCheckpoints: '',
-      logLevel: 20
+      pauseCheckpoint: '',
+      stopCheckpoint: '',
+      logLevel: 20,
     };
   }
 
@@ -52,11 +52,11 @@ export default class ConfigPanel extends Component {
     });
   };
 
-  onLogLevelChange = (event) =>{
+  onLogLevelChange = (event) => {
     this.setState({
-      logLevel: event.target.value
+      logLevel: event.target.value,
     });
-  }
+  };
   onResize = (event, direction, element) => {
     this.setState({
       width: element.style.width,
@@ -74,12 +74,20 @@ export default class ConfigPanel extends Component {
     });
     const script = this.props.configPanel.script;
     const isStandard = script.type === 'standard';
-    this.props.launchScript(isStandard, script.path, this.state.value, 'description', 2);
+    this.props.launchScript(
+      isStandard,
+      script.path,
+      this.state.value,
+      'description',
+      2,
+      this.state.pauseCheckpoint,
+      this.state.stopCheckpoint,
+      this.state.logLevel,
+    );
   };
 
   render() {
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
-    console.log(this.state);
     return this.props.configPanel.show ? (
       <Rnd
         default={{
@@ -118,11 +126,11 @@ export default class ConfigPanel extends Component {
             <div className={styles.checkpointsRegexpContainer}>
               <span>Pause checkpoints</span>
               <span>.*</span>
-              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('pauseCheckpoints')} />
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('pauseCheckpoint')} />
 
               <span>Stop checkpoints</span>
               <span> .*</span>
-              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoints')} />
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
 
               <span className={styles.logLevelLabel}>Log level</span>
               <select className={styles.logLevelSelect}>
