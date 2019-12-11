@@ -31,7 +31,7 @@ export default class CustomViewEditor extends Component {
             "h": 33,
             "i": 1
           },
-          "content": "ScriptQueue",
+          "content": "Camera",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
