@@ -27,11 +27,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 61,
-            "h": 31,
+            "w": 57,
+            "h": 35,
             "i": 1
           },
-          "content": "LATISS",
+          "content": "CSCSummary",
           "config": {
             "label": "Azimuth state",
             "groupName": "event-ATMCS-0-atMountState",
