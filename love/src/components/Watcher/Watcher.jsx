@@ -20,7 +20,7 @@ export default class Watcher extends Component {
   render() {
     this.test = null;
     return (
-      <Panel title="Watcher" className={styles.panel}>
+      <Panel title="Watcher" className={styles.panel} fit>
 
         <div className={styles.tabsWrapper}>
           <div className={styles.tabsRow}>
