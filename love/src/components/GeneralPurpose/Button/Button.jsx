@@ -35,11 +35,6 @@ export default class Button extends Component {
      * *extra-small*: Makes an extra small button
      */
     size: PropTypes.string,
-    /** Changes the geometry of the button to change its shape according to these values:
-     *
-     * *rounder*: Makes a rounder button (but not circular)
-     */
-    shape: PropTypes.string,
     /**
      * Callback for the onClick event of the `<button>` element.
      */
@@ -87,16 +82,10 @@ export default class Button extends Component {
       'extra-small': styles.btnXS,
     };
 
-    const shapeStyleDict = {
-      default: '',
-      rounder: styles.btnRounder,
-    };
-
     const { btn } = styles;
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
-    const shapeStyle = shapeStyleDict[this.props.shape];
-    const style = [btn, statusStyle, sizeStyle, shapeStyle, this.props.className].join(' ');
+    const style = [btn, statusStyle, sizeStyle, this.props.className].join(' ');
 
     return (
       <button title={this.props.title} className={style} type={this.props.type} onClick={this.props.onClick}>

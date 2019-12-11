@@ -16,6 +16,7 @@
     width: 1.5em;
     height: 1.5em;
     outline: none;
+    font-weight: bold;
 }
 
 /* ------------SIZES-------*/
@@ -35,7 +36,6 @@
     background-color: var(--default-background-color);
     color: var(--default-font-color);
     border: none;
-    font-weight: bolder;
 }
 
 
