@@ -35,6 +35,7 @@
   border-top-right-radius: 7px;
   margin-bottom: -1px;
   cursor: pointer;
+  width: 20em;
 }
 
 .selected {
@@ -60,6 +61,6 @@
   border-radius: 7px;
   display: block;
   height: 70vh;
-  width: 1500px;
+  width: 1200px;
   padding: 2em;
 }
