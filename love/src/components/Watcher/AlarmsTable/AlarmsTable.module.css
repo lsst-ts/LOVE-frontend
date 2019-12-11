@@ -6,11 +6,15 @@ table {
     --table-unack-row-background: var(--second-tertiary-background-color);
     --table-unack-row-border: var(--second-secondary-background-color);
     --table-hover-border: var(--second-senary-background-dimmed-color);
-    --ack-width: 4em;
+    --ack-width: 3.5em;
     --status-width: 12em;
     --name-width: 30em;
     --timestamp-width: 15em;
     --cell-padding: 1em;
+}
+
+.button {
+  border-radius: 10px;
 }
 
 .dataTableWrapper {

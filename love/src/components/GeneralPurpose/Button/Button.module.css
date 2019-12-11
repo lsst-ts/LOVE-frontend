@@ -221,3 +221,7 @@
 .btnLink, .btnLink.active, .btnLink:active, .btnLink[disabled], fieldset[disabled] .btnLink {
     background-color: transparent;
 }
+
+.btnRounder {
+    border-radius: 10px;
+}

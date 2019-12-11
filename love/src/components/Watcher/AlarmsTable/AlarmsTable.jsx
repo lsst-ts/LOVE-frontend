@@ -247,9 +247,10 @@ export default class AlarmsTable extends PureComponent {
                           <>
                             <div className={styles.statusWrapper}>
                               <Button
-                                title="ack"
+                                title="Acknowledge this alarm"
                                 status="info"
                                 disabled={row.acknowledged}
+                                shape="rounder"
                                 onClick={(event) => {
                                   event.stopPropagation();
                                   this.props.ackAlarm(row.name, row.maxSeverity, user);
