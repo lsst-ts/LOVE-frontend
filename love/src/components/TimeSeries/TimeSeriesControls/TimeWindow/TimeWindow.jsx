@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { UID } from 'react-uid';
 import styles from './TimeWindow.module.css';
+import TextField from '../../../TextField/TextField';
 
 export default class TimeWindow extends PureComponent {
   static propTypes = {
@@ -88,7 +89,7 @@ export default class TimeWindow extends PureComponent {
                   )}
                 >
                   <label htmlFor={id}>: </label>
-                  <input
+                  <TextField
                     id={id}
                     className={styles.customTimeWindowInput}
                     type="text"
