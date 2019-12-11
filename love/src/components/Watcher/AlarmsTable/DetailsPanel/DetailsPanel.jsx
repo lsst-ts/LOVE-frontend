@@ -15,7 +15,7 @@ const timeoutOptions = [
 
 const severityOptions = Object.keys(severityToStatus)
   .map((key) => {
-    return { value: key, label: severityToStatus[key].toUpperCase() };
+    return { value: Number(key), label: severityToStatus[key].toUpperCase() };
   })
   .slice(2);
 
