@@ -1,16 +1,44 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
 import Panel from '../GeneralPurpose/Panel/Panel';
-import AlarmsTableContainer from './AlarmsTable/AlarmsTable.container';
+import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
 
 export default class Watcher extends Component {
+  static propTypes = {
+    /** List of alarms that are displayed. See examples below */
+    alarms: PropTypes.array,
+    /** Function to dispatch an alarm acknowledgement */
+    ackAlarm: PropTypes.func,
+    /** Function to dispatch an alarm mute */
+    muteAlarm: PropTypes.func,
+    /** Function to dispatch an alarm unmute */
+    unmuteAlarm: PropTypes.func,
+    /** Function to subscribe to streams to receive the alarms */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving the alarms */
+    unsubscribeToStreams: PropTypes.func,
+  };
+
+  static defaultProps = {
+    alarms: [],
+  };
+
   constructor() {
     super();
     this.state = {
       selectedTab: 'unmuted',
     };
   }
+
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
+  };
 
   changeTab(tab) {
     this.setState({ selectedTab: tab });
@@ -24,6 +52,11 @@ export default class Watcher extends Component {
       name: row => (row['name'] + (row['acknowledged'] ? '-0' : '-1')),
       timestampSeverityOldest: row => (row['timestampSeverityOldest'] + (row['acknowledged'] ? '-0' : '-1')),
     };
+
+    const preFilter = (alarm) =>
+      (this.state.selectedTab === 'unmuted' ? alarm['mutedBy'] === '' : alarm['mutedBy'] !== '') &&
+      !(alarm['severity'] <= 1 && alarm['maxSeverity'] <= 1 && alarm['acknowledged']);
+
     const mutedSortFunctions = {
       ...sortFunctions,
       default: sortFunctions['severity'],
@@ -55,11 +88,11 @@ export default class Watcher extends Component {
           </div>
 
           <div className={styles.alarmsTableWrapper}>
-            <AlarmsTableContainer
-              filterCallback={(row) =>
-                (this.state.selectedTab === 'unmuted' ? row['mutedBy'] === '' : row['mutedBy'] !== '') &&
-                !(row['severity'] <= 1 && row['maxSeverity'] <= 1 && row['acknowledged'])
-              }
+            <AlarmsTable
+              alarms={this.props.alarms.filter(preFilter)}
+              ackAlarm={this.props.ackAlarm}
+              muteAlarm={this.props.muteAlarm}
+              unmuteAlarm={this.props.unmuteAlarm}
               sortFunctions={this.state.selectedTab === 'unmuted' ? sortFunctions : mutedSortFunctions }
             />
           </div>

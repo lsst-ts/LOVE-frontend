@@ -73,14 +73,6 @@ export default class AlarmsTable extends PureComponent {
     };
   }
 
-  componentDidMount = () => {
-    this.props.subscribeToStreams();
-  };
-
-  componentWillUnmount = () => {
-    this.props.unsubscribeToStreams();
-  };
-
   evalSortFunction = (column, row) => {
     return this.props.sortFunctions[column] ? this.props.sortFunctions[column](row) : row[column];
   };

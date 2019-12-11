@@ -1,29 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms } from '../../../redux/selectors';
+import { getUsername, getAllAlarms } from '../../redux/selectors';
 import {
   requestGroupSubscription,
   requestGroupSubscriptionRemoval,
   requestSALCommand,
-} from '../../../redux/actions/ws';
-import AlarmsTable from './AlarmsTable';
-import mockAlarms from './mock';
+} from '../../redux/actions/ws';
+import Watcher from './Watcher';
+import mockAlarms from './AlarmsTable/mock';
 
-const AlarmsTableContainer = ({
+const WatcherContainer = ({
   alarms,
-  filterCallback = () => true,
-  sortFunctions,
   user,
   subscribeToStream,
   unsubscribeToStream,
   ...props }) => {
   return (
-    <AlarmsTable
+    <Watcher
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
-      sortFunctions={sortFunctions}
-      alarms={alarms.filter(filterCallback)}
+      alarms={alarms}
     />
   );
 };
@@ -46,6 +43,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-Watcher-0-alarm'));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
+      console.log('acknowledge: ', name, severity, acknowledgedBy);
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_acknowledge',
@@ -60,6 +58,8 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     muteAlarm: (name, severity, duration, mutedBy) => {
+      console.log('mute: ', name, severity, duration, mutedBy);
+
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_mute',
@@ -75,6 +75,8 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     unmuteAlarm: (name) => {
+      console.log('unmute: ', name);
+
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_unmute',
@@ -92,4 +94,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AlarmsTableContainer);
+)(WatcherContainer);
