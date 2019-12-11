@@ -28,32 +28,15 @@ export default class CustomViewEditor extends Component {
             "x": 0,
             "y": 0,
             "w": 31,
-            "h": 8,
+            "h": 35,
             "i": 1
           },
-          "content": "TimeSeriesPlot",
+          "content": "CSCExpanded",
           "config": {
-            "dataSources": ["Dome Azimuth"],
-            "layers": {
-                "Dome Azimuth": {
-                    "mark": {
-                        "interpolate": "linear"
-                    }
-                }
-            },
-            "encoding": {
-                "color": {
-                    "scale": {
-                    "domain": ["Dome Azimuth"],
-                    "range": ["hsl(201, 70%, 40%)"]
-                    }
-                }
-            },
-            "groupNames": {
-                "Dome Azimuth": "telemetry-ATDome-0-position"
-            },
-            "accessors": "{'Dome Azimuth': (data) => data.azimuthPosition.value}",
-            "_functionProps": ["accessors"]
+            "name": "Test",
+            "salindex": 1,
+            "onCSCClick": "() => {}",
+            "_functionProps": ["onCSCClick"]
           }
         },
         "LeftPanel2": {
