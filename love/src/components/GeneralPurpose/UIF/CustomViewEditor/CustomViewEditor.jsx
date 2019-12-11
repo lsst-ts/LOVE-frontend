@@ -39,6 +39,40 @@ export default class CustomViewEditor extends Component {
             "_functionProps": ["onCSCClick"]
           }
         },
+        "LeftPanel3": {
+          "properties": {
+            "type": "component",
+            "x": 31,
+            "y": 0,
+            "w": 31,
+            "h": 35,
+            "i": 4
+          },
+          "content": "CSCExpanded",
+          "config": {
+            "name": "ATMCS",
+            "salindex": 0,
+            "onCSCClick": "() => {}",
+            "_functionProps": ["onCSCClick"]
+          }
+        },
+        "LeftPanel5": {
+          "properties": {
+            "type": "component",
+            "x": 51,
+            "y": 0,
+            "w": 31,
+            "h": 35,
+            "i": 5
+          },
+          "content": "CSCSummary",
+          "config": {
+            "name": "ATMCS",
+            "salindex": 0,
+            "onCSCClick": "() => {}",
+            "_functionProps": ["onCSCClick"]
+          }
+        },
         "LeftPanel2": {
           "properties": {
             "type": "component",
