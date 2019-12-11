@@ -181,6 +181,10 @@
   color: var(--highlighted-font-color);
 }
 
+.subSectionValueUnknown {
+  color: var(--base-font-color)
+}
+
 .buttonsContainer {
   display: grid;
   grid-auto-flow: column;
