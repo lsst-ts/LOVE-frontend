@@ -13,8 +13,26 @@ table {
     --cell-padding: 1em;
 }
 
-.button {
-  border-radius: 10px;
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  width: inherit;
+  height: inherit;
+}
+
+.controlsContainer {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  padding-right: 1.5em;
+  padding-bottom: 1em;
+  height: 300px;
+  width: 100%;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .dataTableWrapper {
