@@ -27,26 +27,33 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 57,
-            "h": 35,
+            "w": 31,
+            "h": 8,
             "i": 1
           },
-          "content": "CSCSummary",
+          "content": "TimeSeriesPlot",
           "config": {
-            "label": "Azimuth state",
-            "groupName": "event-ATMCS-0-atMountState",
-            "stateToLabelMap": {
-              "0": "unknown",
-              "1": "TRACK_DISABLED",
-              "2": "TRACK_ENABLED",
-              "3": "STOPPING"
+            "dataSources": ["Dome Azimuth"],
+            "layers": {
+                "Dome Azimuth": {
+                    "mark": {
+                        "interpolate": "linear"
+                    }
+                }
             },
-            "stateToStyleMap": {
-              "0": "unknown",
-              "1": "ok",
-              "2": "running",
-              "3": "running"
-            }
+            "encoding": {
+                "color": {
+                    "scale": {
+                    "domain": ["Dome Azimuth"],
+                    "range": ["hsl(201, 70%, 40%)"]
+                    }
+                }
+            },
+            "groupNames": {
+                "Dome Azimuth": "telemetry-ATDome-0-position"
+            },
+            "accessors": "{'Dome Azimuth': (data) => data.azimuthPosition.value}",
+            "_functionProps": ["accessors"]
           }
         },
         "LeftPanel2": {
@@ -63,14 +70,16 @@ export default class CustomViewEditor extends Component {
             "label": "Azimuth state2",
             "groupName": "event-ATMCS-0-m3State",
             "stateToLabelMap": {
-              "0": "TRACK_DISABLED",
-              "1": "TRACK_ENABLED",
-              "2": "STOPPING"
+              "0": "UNKOWN",
+              "1": "TRACK_DISABLED",
+              "2": "TRACK_ENABLED",
+              "3": "STOPPING"
             },
             "stateToStyleMap": {
-              "0": "ok",
-              "1": "running",
-              "2": "running"
+              "0": "unknown",
+              "1": "ok",
+              "2": "running",
+              "3": "running"
             },
             "accessor": "(event) => event.state.value",
             "_functionProps": ["accessor"]
