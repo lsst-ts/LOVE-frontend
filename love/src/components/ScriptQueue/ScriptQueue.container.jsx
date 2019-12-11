@@ -23,6 +23,7 @@ const ScriptQueueContainer = ({
   lastSALCommand,
   username,
   salindex,
+  fit,
 }) => {
   return (
     <ScriptQueue
@@ -40,6 +41,7 @@ const ScriptQueueContainer = ({
       lastSALCommand={lastSALCommand}
       username={username}
       salindex={salindex}
+      fit={fit}
     />
   );
 };

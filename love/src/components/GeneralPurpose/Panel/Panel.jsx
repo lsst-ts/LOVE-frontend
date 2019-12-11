@@ -12,6 +12,8 @@ export default class Panel extends Component {
     title: PropTypes.string,
     children: PropTypes.object,
     className: PropTypes.string,
+    /** Wether to fit with to content */
+    fit: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -20,7 +22,7 @@ export default class Panel extends Component {
   };
 
   render() {
-    const classNames = [styles.panel, this.props.className].join(' ');
+    const classNames = [styles.panel, this.props.className, this.props.fit ? styles.fit : ''].join(' ');
     return (
       <div className={classNames}>
         <div className={styles.panelHeading}>

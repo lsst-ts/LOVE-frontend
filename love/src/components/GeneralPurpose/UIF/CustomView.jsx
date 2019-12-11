@@ -90,13 +90,13 @@ export default class CustomView extends Component {
         w: x.properties.w,
         h: x.properties.h,
         i: x.properties.i.toString(),
-        allowOverflow: x.allowOverflow,
+        allowOverflow: x.properties.allowOverflow,
       };
     });
     return (
       <div
         key={container.properties.i.toString()}
-        className={[styles.container, layout.allowOverflow ? '' : styles.noOverflow].join(' ')}
+        className={[styles.container, container.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
       >
         <Panel title={`Component ${container.properties.i.toString()}`} className={styles.containerPanel}>
           <GridLayout

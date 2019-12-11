@@ -202,7 +202,7 @@ export default class LATISS extends Component {
     const isShutterBlocking = shutterState === 'CLOSED' || shutterState === 'OPENING';
 
     return (
-      <Panel title="LATISS" className={styles.panel}>
+      <Panel title="LATISS" className={styles.panel} fit>
         <div className={styles.latissContainer}>
           <span className={styles.sectionTitle}>FILTER</span>
           <span className={styles.sectionTitle}>GRATING</span>
