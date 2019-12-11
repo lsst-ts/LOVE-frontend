@@ -109,6 +109,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
             title="unmute"
             status="primary"
             disabled={!muted}
+            shape="rounder"
             onClick={(event) => {
               unmuteAlarm(event);
             }}
@@ -146,6 +147,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
             title="mute"
             status="info"
             disabled={muted}
+            shape="rounder"
             onClick={(event) => {
               muteAlarm(event, timeout.value, muteSeverity.value);
             }}
