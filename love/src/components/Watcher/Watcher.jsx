@@ -100,9 +100,11 @@ export default class Watcher extends Component {
                 </div>
                 UNMUTED ALARMS ({unmutedAlarmsCount})
               </div>
-              <Badge status='info'>
-                {unackUnmutedAlarmsCount}
-              </Badge>
+              { unackUnmutedAlarmsCount === 0 ? null : (
+                <Badge status='info'>
+                  {unackUnmutedAlarmsCount}
+                </Badge>
+              )}
             </div>
 
             <div
@@ -115,9 +117,11 @@ export default class Watcher extends Component {
                 </div>
                 MUTED ALARMS ({mutedAlarmsCount})
               </div>
-              <Badge status='info'>
-                {unackMutedAlarmsCount}
-              </Badge>
+              { unackMutedAlarmsCount === 0 ? null : (
+                <Badge status='info'>
+                  {unackMutedAlarmsCount}
+                </Badge>
+              )}
             </div>
           </div>
 
