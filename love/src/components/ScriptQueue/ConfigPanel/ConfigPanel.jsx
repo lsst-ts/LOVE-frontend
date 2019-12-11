@@ -36,6 +36,7 @@ export default class ConfigPanel extends Component {
       loading: false,
       pauseCheckpoints: '',
       stopCheckpoints: '',
+      logLevel: 20
     };
   }
 
@@ -47,9 +48,15 @@ export default class ConfigPanel extends Component {
 
   onCheckpointChange = (name) => (event) => {
     this.setState({
-      [name]: event.target.value
-    })
+      [name]: event.target.value,
+    });
   };
+
+  onLogLevelChange = (event) =>{
+    this.setState({
+      logLevel: event.target.value
+    });
+  }
   onResize = (event, direction, element) => {
     this.setState({
       width: element.style.width,
@@ -111,11 +118,25 @@ export default class ConfigPanel extends Component {
             <div className={styles.checkpointsRegexpContainer}>
               <span>Pause checkpoints</span>
               <span>.*</span>
-              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange("pauseCheckpoints")} />
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('pauseCheckpoints')} />
 
               <span>Stop checkpoints</span>
               <span> .*</span>
-              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange("stopCheckpoints")} />
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoints')} />
+
+              <span className={styles.logLevelLabel}>Log level</span>
+              <select className={styles.logLevelSelect}>
+                {[
+                  { value: 10, label: 'Debug' },
+                  { value: 20, label: 'Info' },
+                  { value: 30, label: 'Warning' },
+                  { value: 40, label: 'Error' },
+                ].map(({ value, label }) => (
+                  <option key={value} value={value} selected={this.state.logLevel === value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
             </div>
             <Button title="Enqueue script" onClick={this.onLaunch}>
               Add to queue
