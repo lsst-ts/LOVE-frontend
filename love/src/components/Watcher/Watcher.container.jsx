@@ -43,7 +43,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-Watcher-0-alarm'));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
-      console.log('acknowledge: ', name, severity, acknowledgedBy);
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_acknowledge',
@@ -58,8 +57,6 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     muteAlarm: (name, severity, duration, mutedBy) => {
-      console.log('mute: ', name, severity, duration, mutedBy);
-
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_mute',
@@ -75,8 +72,6 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     unmuteAlarm: (name) => {
-      console.log('unmute: ', name);
-
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_unmute',
