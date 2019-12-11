@@ -133,14 +133,14 @@ export default class ConfigPanel extends Component {
               <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
 
               <span className={styles.logLevelLabel}>Log level</span>
-              <select className={styles.logLevelSelect}>
+              <select className={styles.logLevelSelect} defaultValue={this.state.logLevel}>
                 {[
                   { value: 10, label: 'Debug' },
                   { value: 20, label: 'Info' },
                   { value: 30, label: 'Warning' },
                   { value: 40, label: 'Error' },
                 ].map(({ value, label }) => (
-                  <option key={value} value={value} selected={this.state.logLevel === value}>
+                  <option key={value} value={value} >
                     {label}
                   </option>
                 ))}
