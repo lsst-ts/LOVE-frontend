@@ -1,0 +1,80 @@
+.badge {
+    border: none;
+    font-weight: 400;
+    text-shadow: none;
+    border-radius: 100%;
+    /* boostrap inherited */
+    display: inline-block;
+    margin-bottom: 0;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    touch-action: manipulation;
+    user-select: none;
+    font-size: 14px;
+    line-height: 1.7;
+    width: 1.5em;
+    height: 1.5em;
+    outline: none;
+}
+
+/* ------------SIZES-------*/
+.badgeLG {
+    font-size: 18px;
+}
+
+.badgeSM {
+    font-size: 12px;
+}
+
+/* ------------STATUS-----------*/
+
+/* DEFAULT */
+.badgeDefault, .badgeDefault.disabled, .badgeDefault.disabled:hover {
+    background-image: none;
+    background-color: var(--default-background-color);
+    color: var(--default-font-color);
+    border: none;
+    font-weight: bolder;
+}
+
+
+/* PRIMARY */
+.badgePrimary {
+    background-repeat: repeat-x;
+}
+.badgePrimary, .badgePrimary.disabled, .badgePrimary.disabled:hover {
+    background-image: none;
+    background-color: var(--primary-background-color);
+    color: var(--primary-font-color);
+}
+
+
+/* SUCCESS */
+.badgeSuccess, .badgeSuccess.disabled, .badgeSuccess.disabled:hover {
+    background-image: none;
+    background-color: var(--success-background-color);
+    color: var(--success-font-color);
+}
+
+/*INFO*/
+.badgeInfo, .badgeInfo.disabled, .badgeInfo.disabled:hover {
+    background-image: none;
+    background-color: var(--info-background-color);
+    color: var(--info-font-color);
+}
+
+
+/*WARNING*/
+.badgeWarning, .badgeWarning.disabled, .badgeWarning.disabled:hover {
+    background-image: none;
+    background-color: var(--warning-background-color);
+    color: var(--warning-font-color);
+}
+
+/*DANGER*/
+.badgeDanger, .badgeDanger.disabled, .badgeDanger.disabled:hover {
+    background-image: none;
+    background-color: var(--danger-background-color);
+    color: var(--danger-font-color);
+}

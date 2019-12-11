@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
 import Panel from '../GeneralPurpose/Panel/Panel';
+import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
 
@@ -58,11 +59,6 @@ export default class Watcher extends Component {
   };
 
   render() {
-
-    const preFilter = (alarm) =>
-      (this.state.selectedTab === 'unmuted' ? alarm['mutedBy'] === '' : alarm['mutedBy'] !== '') &&
-      !(alarm['severity'] <= 1 && alarm['maxSeverity'] <= 1 && alarm['acknowledged']);
-
     let alarmsToShow = [];
     let mutedAlarmsCount = 0;
     let unmutedAlarmsCount = 0;
@@ -98,20 +94,30 @@ export default class Watcher extends Component {
               className={[styles.tab, this.state.selectedTab === 'unmuted' ? styles.selected : ''].join(' ')}
               onClick={() => this.changeTab('unmuted')}
             >
-              <div className={styles.iconWrapper}>
-                <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
+              <div className={styles.tabLabel}>
+                <div className={styles.iconWrapper}>
+                  <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
+                </div>
+                UNMUTED ALARMS ({unmutedAlarmsCount})
               </div>
-              UNMUTED ALARMS ({unmutedAlarmsCount})
+              <Badge status='info'>
+                {unackUnmutedAlarmsCount}
+              </Badge>
             </div>
 
             <div
               className={[styles.tab, this.state.selectedTab === 'muted' ? styles.selected : ''].join(' ')}
               onClick={() => this.changeTab('muted')}
             >
-              <div className={styles.iconWrapper}>
-                <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
+              <div className={styles.tabLabel}>
+                <div className={styles.iconWrapper}>
+                  <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
+                </div>
+                MUTED ALARMS ({mutedAlarmsCount})
               </div>
-              MUTED ALARMS ({mutedAlarmsCount})
+              <Badge status='info'>
+                {unackMutedAlarmsCount}
+              </Badge>
             </div>
           </div>
 
