@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css'
+import 'react-dropdown/style.css';
 import Button from '../../../GeneralPurpose/Button/Button';
+import TimestampDisplay from '../../../GeneralPurpose/TimestampDisplay/TimestampDisplay';
 import { severityToStatus } from '../../Alarm/Alarm';
-import { timeDiff } from '../../../../Utils';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
@@ -13,11 +13,11 @@ const timeoutOptions = [
   { value: 7200, label: '2 hours' },
 ];
 
-const severityOptions = [
-  { value: 2, label: 'WARNING' },
-  { value: 3, label: 'ALERT' },
-  { value: 4, label: 'CRITICAL' },
-];
+const severityOptions = Object.keys(severityToStatus)
+  .map((key) => {
+    return { value: Number(key), label: severityToStatus[key].toUpperCase() };
+  })
+  .slice(2);
 
 const initialState = {
   timeout: timeoutOptions[0],
@@ -25,23 +25,42 @@ const initialState = {
 };
 
 export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
-
   const [timeout, setTimeout] = useState(initialState.timeout);
   const [muteSeverity, setMuteSeverity] = useState(initialState.muteSeverity);
-  const currentTime = new Date().getTime();
 
-  const acknowledgedBy = alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Not acknowledged';
+  const sevUpdate = alarm.timestampSeverityOldest * 1000;
+  const maxSevUpdate = alarm.timestampMaxSeverity * 1000;
+  const lastUpdate = alarm.timestampSeverityNewest * 1000;
+
+  const acked = alarm.acknowledged;
+  const acknowledgedBy = !acked ? 'Not acknowledged' : alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Nobody';
+  const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
+  const ackTime = alarm.timestampAcknowledged * 1000;
+  const willAutoAckTime = alarm.timestampAutoAcknowledge * 1000;
+
+  const escalated = alarm.escalated;
+  const escalatedToTitle = escalated ? 'Escalated to:' : 'Will escalate to:';
+  const escalatedTo = alarm.escalatedTo ? alarm.escalatedTo : 'Nobody';
+  const escalatedTimeTitle = escalated ? 'Escalated at:' : 'Will escalate at:';
+  const escalatedTime = alarm.timestampEscalate * 1000;
+
+  const muted = alarm.mutedBy !== '';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
   const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
-  const timeRemaining = timeDiff(currentTime, alarm.timestampUnmute * 1000);
-  const muted = alarm.mutedBy !== '';
+  const willUnmuteTime = alarm.timestampUnmute * 1000;
 
   return (
     <div className={styles.expandedColumn}>
       <div>
-        <div className={styles.title}>Acknowledged by:</div>
-        <div>
-          <p>{acknowledgedBy}</p>
+        <div className={styles.dataTable}>
+          <div className={styles.title}> Severity update: </div>
+          <TimestampDisplay time={sevUpdate} defValue="Never" />
+
+          <div className={styles.title}> Max sev. update: </div>
+          <TimestampDisplay time={maxSevUpdate} defValue="Never" />
+
+          <div className={styles.title}> Last update: </div>
+          <TimestampDisplay time={lastUpdate} defValue="Never" />
         </div>
 
         <div className={styles.title}>Alarm reason:</div>
@@ -50,30 +69,54 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
         </div>
       </div>
 
-      { muted ? (
+      <div>
+        <div className={styles.dataTable}>
+          <div className={styles.title}> Acknowledged by: </div>
+          <div className={styles.dataCell}> {acknowledgedBy} </div>
+
+          <div className={styles.title}> {ackTimeTitle} </div>
+          <TimestampDisplay time={ackTime} defValue="Never" />
+
+          <div className={styles.title}> Will auto-ack at: </div>
+          <TimestampDisplay time={willAutoAckTime} defValue="Already acknowledged" />
+        </div>
+
+        <div className={styles.dataTable}>
+          <div className={styles.title}> {escalatedToTitle} </div>
+          <div className={styles.dataCell}> {escalatedTo} </div>
+
+          <div className={styles.title}> {escalatedTimeTitle} </div>
+          <TimestampDisplay time={escalatedTime} defValue="Never" />
+        </div>
+      </div>
+
+      {muted ? (
         <div>
-          <div className={styles.title}> Will unmute: </div>
           <div>
-            <p>{timeRemaining}</p>
+            <div className={styles.dataTable}>
+              <div className={styles.title}> Muted by: </div>
+              <div className={styles.dataCell}> {mutedBy} </div>
+
+              <div className={styles.title}> Will unmute at: </div>
+              <TimestampDisplay time={willUnmuteTime} defValue="Never" />
+
+              <div className={styles.title}> Muted severity: </div>
+              <div className={styles.dataCell}> {mutedSeverity} </div>
+            </div>
           </div>
-          <div className={styles.title}> Muted Severity: </div>
-          <div>
-            <p>{mutedSeverity}</p>
-          </div>
-          <div className={styles.title}> Muted by: </div>
-          <div>
-            <p>{mutedBy}</p>
-          </div>
+
           <Button
-            title='unmute'
-            status='primary'
+            title="unmute"
+            status="primary"
             disabled={!muted}
-            onClick={(event) => {unmuteAlarm(event)}}
+            shape="rounder"
+            onClick={(event) => {
+              unmuteAlarm(event);
+            }}
           >
             UNMUTE
           </Button>
         </div>
-
       ) : (
         <div>
           <div className={styles.title}> Select the muting time range: </div>
@@ -89,22 +132,25 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           />
 
           <div className={styles.title}> Select the muting severity: </div>
-            <Dropdown
-              className={styles.dropDownClassName}
-              controlClassName={styles.dropDownControlClassName}
-              menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged ? null : styles.unack].join(' ')}
-              arrowClassName={styles.arrowClassName}
-              options={severityOptions}
-              onChange={(option) => setMuteSeverity(option)}
-              value={muteSeverity}
-              placeholder="Select an option"
-            />
+          <Dropdown
+            className={styles.dropDownClassName}
+            controlClassName={styles.dropDownControlClassName}
+            menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged ? null : styles.unack].join(' ')}
+            arrowClassName={styles.arrowClassName}
+            options={severityOptions}
+            onChange={(option) => setMuteSeverity(option)}
+            value={muteSeverity}
+            placeholder="Select an option"
+          />
 
           <Button
-            title='mute'
-            status='info'
+            title="mute"
+            status="info"
             disabled={muted}
-            onClick={(event) => {muteAlarm(event, timeout.value, muteSeverity.value)}}
+            shape="rounder"
+            onClick={(event) => {
+              muteAlarm(event, timeout.value, muteSeverity.value);
+            }}
           >
             MUTE
           </Button>

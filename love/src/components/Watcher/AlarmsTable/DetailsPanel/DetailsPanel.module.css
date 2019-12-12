@@ -1,7 +1,11 @@
 .expandedColumn {
   display: grid;
-  grid-template-columns: minmax(30em, min-content) minmax(30em, min-content);
+  grid-template-columns:
+    minmax(25em, min-content)
+    minmax(25em, min-content)
+    minmax(25em, min-content);
   column-gap: 2em;
+  width: fit-content;
 }
 
 .title {
@@ -14,6 +18,16 @@
   width: 100%;
   word-break: break-all;
   white-space: normal;
+}
+
+.dataTable {
+  display: grid;
+  margin-bottom: 1em;
+  column-gap: 1em;
+  grid-template-columns:
+    minmax(8em, min-content)
+    minmax(13em, min-content);
+  grid-row-gap: 0.3em;
 }
 
 .dropDownClassName {
