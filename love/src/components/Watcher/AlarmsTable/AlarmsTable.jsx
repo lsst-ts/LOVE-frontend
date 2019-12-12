@@ -37,39 +37,42 @@ export default class AlarmsTable extends PureComponent {
     sortFunctions: {},
   };
 
-  initialState = {
-    expandedRows: {},
-    filters: {
-      severity: {
-        type: 'regexp',
-        value: new RegExp('(?:)'),
-        function: (value) => severityToStatus[value],
+  initialState = () => {
+    return {
+      cleared: true,
+      expandedRows: {},
+      filters: {
+        severity: {
+          type: 'regexp',
+          value: new RegExp('(?:)'),
+          function: (value) => severityToStatus[value],
+        },
+        maxSeverity: {
+          type: 'regexp',
+          value: new RegExp('(?:)'),
+          function: (value) => severityToStatus[value],
+        },
+        name: {
+          type: 'regexp',
+          value: new RegExp('(?:)'),
+        },
+        timestampSeverityOldest: {
+          type: 'regexp',
+          value: new RegExp('(?:)'),
+          function: (value) => relativeTime(value * 1000),
+        },
       },
-      maxSeverity: {
-        type: 'regexp',
-        value: new RegExp('(?:)'),
-        function: (value) => severityToStatus[value],
-      },
-      name: {
-        type: 'regexp',
-        value: new RegExp('(?:)'),
-      },
-      timestampSeverityOldest: {
-        type: 'regexp',
-        value: new RegExp('(?:)'),
-        function: (value) => relativeTime(value * 1000),
-      },
-    },
-    activeFilterDialog: 'None',
-    sortingColumn: 'default',
-    sortDirection: 'descending',
+      activeFilterDialog: 'None',
+      sortingColumn: 'default',
+      sortDirection: 'descending',
+    }
   };
 
   constructor() {
     super();
     this.state = {
-      ...this.initialState,
-      filters: {...this.initialState.filters},
+      ...this.initialState(),
+      filters: {...this.initialState().filters},
       setFilters: this.setFilters,
     };
   }
@@ -125,12 +128,14 @@ export default class AlarmsTable extends PureComponent {
 
   changeFilter = (column) => (event) => {
     const filters = { ...this.state.filters };
+    const value = event.target.value;
     try {
       filters[column].value = new RegExp(event.target.value, 'i');
       this.state.setFilters(filters);
     } catch (e) {
       console.log('Invalid filter');
     }
+    this.setState({ cleared: value === undefined || value === '' });
   };
 
   columnOnClick = (_ev, filterName) => {
@@ -147,13 +152,13 @@ export default class AlarmsTable extends PureComponent {
 
   changeSortDirection = (direction, column) => {
     const newColumn =
-      column === this.state.sortingColumn && direction === 'None' ? this.initialState.sortingColumn : column;
+      column === this.state.sortingColumn && direction === 'None' ? this.initialState().sortingColumn : column;
     /*
       direction can be "ascending" or "descending", otherwise no
       sorting will be applied
       Sorting is applied before filtering
     */
-    this.setState({ sortDirection: direction, sortingColumn: newColumn });
+    this.setState({ sortDirection: direction, sortingColumn: newColumn, cleared: false });
   };
 
   sortData = (a, b) => {
@@ -167,28 +172,15 @@ export default class AlarmsTable extends PureComponent {
   render() {
     let data = this.props.alarms;
     const user = this.props.user ? this.props.user : 'Unknown User';
-    const areSettingsClear =
-      this.state.sortingColumn === this.initialState.sortingColumn &&
-      this.state.sortingDirection === this.initialState.sortingDirection &&
-      Object.keys(this.state.filters).every(
-        (key) => {
-          console.log('key: ', key);
-          console.log('this.state.filters[key]: ', this.state.filters[key]);
-          console.log('this.initialState.filters[key]: ', this.initialState.filters[key]);
-          return this.state.filters[key].value === this.initialState.filters[key].value
-        }
-      );
-    console.log('state: ', this.state);
-    console.log('initialState: ', this.initialState);
     return (
       <div className={styles.wrapper}>
         <div className={styles.controlsContainer}>
           <Button
-            className={areSettingsClear ? styles.hidden : null}
+            className={this.state.cleared ? styles.hidden : null}
             title="Clear all filters and sorting options"
             onClick={(event) => {
               event.stopPropagation();
-              this.setState(this.initialState);
+              this.setState(this.initialState());
             }}
             >
             &#10005; &nbsp; Clear filters and sort
