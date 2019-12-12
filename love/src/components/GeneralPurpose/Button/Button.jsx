@@ -61,6 +61,7 @@ export default class Button extends Component {
     className: '',
     title: '',
     type: 'button',
+    shape: 'default',
   };
 
   render() {

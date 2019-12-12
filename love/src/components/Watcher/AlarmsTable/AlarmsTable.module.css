@@ -1,4 +1,4 @@
-:root{
+table {
     --table-scrollbar-width: 10px;
     --table-header-background: var(--second-quaternary-background-color);
     --table-row-background: var(--second-secondary-background-color);
@@ -6,6 +6,33 @@
     --table-unack-row-background: var(--second-tertiary-background-color);
     --table-unack-row-border: var(--second-secondary-background-color);
     --table-hover-border: var(--second-senary-background-dimmed-color);
+    --ack-width: 3.5em;
+    --status-width: 12em;
+    --name-width: 30em;
+    --timestamp-width: 15em;
+    --cell-padding: 1em;
+}
+
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  width: inherit;
+  height: inherit;
+}
+
+.controlsContainer {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  padding-right: 1.5em;
+  padding-bottom: 1em;
+  height: 300px;
+  width: 100%;
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .dataTableWrapper {
@@ -19,30 +46,36 @@
 .dataTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
-    width: fit-content;
+    width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width) + 10*var(--cell-padding));
+    /* width: fit-content; */
     height: inherit; /* necessary for scroll, but parent component must define height */
     table-layout: fixed;
     border-collapse: collapse;
 }
 
 /****************** Columns styles ***************/
+.dataTable .ackButton {
+    width: var(--ack-width);
+    text-align: center;
+}
+
 .dataTable .status {
-    width: 16em;
+    width: var(--status-width);
     text-align: center;
 }
 
 .dataTable .maxSeverity {
-    width: 10em;
+    width: var(--status-width);
     text-align: center;
 }
 
 .dataTable .name {
-    width: 30em;
+    width: var(--name-width);
     text-align: left;
 }
 
 .dataTable .timestamp {
-    width: 15em;
+    width: var(--timestamp-width);
     text-align: left;
 }
 
@@ -58,17 +91,17 @@
     justify-content: center;
 }
 
+.textWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
 .expansionIconWrapper {
     min-width: 1em;
     height: 1em;
     cursor: pointer;
     padding: 0.3em;
     padding-right: 1em;
-}
-
-/****************** Make rows look clickable ***************/
-.dataRow {
-    cursor: pointer;
 }
 
 /****************** General table head and body styles ***************/
@@ -94,8 +127,8 @@
     width: auto;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: var(--cell-padding);
+    padding-right: var(--cell-padding);
 }
 
 .dataTable th {
@@ -108,7 +141,8 @@
 }
 
 /****************** Table body cells style ***************/
-.dataTable td {
+.dataTable td.cell {
+    cursor: pointer;
     color: var(--secondary-font-color);
     padding-top: 0.4em;
     padding-bottom: 0.4em;
@@ -124,23 +158,24 @@
 }
 
 /****************** Table Unack rows style ***************/
-.dataTable tr.unackRow {
+.dataTable tr.unackRow td.cell {
     background: var(--table-unack-row-background);
-}
-
-.dataTable tr.unackRow td {
     font-weight: bold;
     color: var(--base-font-color);
     border-bottom: 1px solid var(--table-unack-row-border);
 }
 
 /**** Remove bottom border from the row that has been expanded *****/
-.dataTable tr.expandedRowParent td {
+.dataTable tr.expandedRowParent td.cell {
     border-bottom: 1px solid transparent;
 }
 
+.dataTable tr.unackExpandedRowParent td.cell {
+    border-bottom: 1px solid var(--table-unack-row-background);
+}
+
 /****************** Table rows hover style ***************/
-.dataTable tr:hover {
+.dataTable tr:hover td.cell {
     border-bottom: 1px solid var(--table-hover-border);
     border-top: 1px solid var(--table-hover-border);
     -moz-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
@@ -163,28 +198,26 @@
     min-width: 10px;
 }
 
-.dataTable .firstColumn input {
-    margin: 0;
+.dataTable .firstColumn td {
+  background-color: var(--table-row-background);
 }
 
 /****************** Styles for the Expanded row ***************/
 .dataTable .expandedRow {
-    display: block;
     width: 100%;
     text-align: left;
     background: var(--table-row-background);
-    border-bottom: 1px solid var(--table-row-border);
 }
 
-.dataTable .unackExpandedRow {
+.dataTable .expandedRow .expandedRowContent {
+    vertical-align: top;
+    border-bottom: 1px solid var(--table-row-border);
+    padding: 1em;
+}
+
+.dataTable .unackExpandedRow .expandedRowContent{
     background: var(--table-unack-row-background);
     border-bottom: 1px solid var(--table-unack-row-border);
-}
-
-.dataTable .expandedRow td {
-    vertical-align: top;
-    border: 1px solid transparent;
-    padding: 1em;
 }
 
 /* .dataTable .expandedRow textarea {
@@ -200,7 +233,7 @@
     padding: 0.6em 0.6em;
 } */
 
-.dataTable tr:hover.expandedRow td{
+.dataTable tr:hover.expandedRow td.cell{
     border-bottom: 1px solid var(--secondary-background-color);
     border-top: 1px solid transparent;
 }
@@ -223,13 +256,13 @@
     border-bottom-right-radius: 7px;
 }
 
-.dataTable .firstColumn {
+/* .dataTable .firstColumn {
     width: 1em;
     background: var(--base-background-color);
     padding: 0em 0.5em;
     text-align: center;
     border: 1px solid var(--base-background-color)
-}
+} */
 
 /*************** Styles for the Table Body Scroller ***************/
 /* width */
