@@ -140,15 +140,17 @@ export default class ConfigPanel extends Component {
                   { value: 30, label: 'Warning' },
                   { value: 40, label: 'Error' },
                 ].map(({ value, label }) => (
-                  <option key={value} value={value} >
+                  <option key={value} value={value}>
                     {label}
                   </option>
                 ))}
               </select>
             </div>
-            <Button title="Enqueue script" onClick={this.onLaunch}>
-              Add to queue
-            </Button>
+            <div className={styles.addBtnContainer}>
+              <Button title="Enqueue script" size="large" onClick={this.onLaunch}>
+                Add
+              </Button>
+            </div>
           </div>
         </div>
       </Rnd>
