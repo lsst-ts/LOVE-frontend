@@ -16,6 +16,10 @@
     max-height: 100vh;
 }
 
+.expandHeight {
+    height: 100vh;
+}
+
 .panelHeading {
     color: var(--secondary-font-color);
     font-weight: 300;
