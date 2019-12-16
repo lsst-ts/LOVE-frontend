@@ -184,8 +184,7 @@ export default class CurrentScript extends Component {
                       <div
                         className={scriptStyles.buttonContainer}
                         onClick={(e) => {
-                          console.log('pause')
-                          // this.props.stopScript(this.props.index);
+                          this.props.resumeScript(this.props.index);
                           e.stopPropagation();
                         }}
                       >
