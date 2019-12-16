@@ -101,3 +101,9 @@
   outline: var(--primary-active-font-color) auto 5px; 
   outline: none;
 }
+
+.addBtnContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
