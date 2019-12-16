@@ -78,14 +78,14 @@ class App extends Component {
           <PrivateRoute
             token={this.props.token}
             path="/script-queue-1"
-            render={() => <ScriptQueueContainer salindex={1} fit/>}
+            render={() => <ScriptQueueContainer salindex={1} fit />}
           />
           <PrivateRoute
             token={this.props.token}
             path="/script-queue-2"
-            render={() => <ScriptQueueContainer salindex={2} fit/>}
+            render={() => <ScriptQueueContainer salindex={2} fit />}
           />
-          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummaryContainer} />
+          <PrivateRoute token={this.props.token} path="/csc-summary" render={() => <CSCSummaryContainer expandHeight />} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
           <PrivateRoute
@@ -126,16 +126,8 @@ class App extends Component {
               </Panel>
             )}
           />
-          <PrivateRoute
-            token={this.props.token}
-            path="/custom-view"
-            component={CustomViewSample}
-          />
-          <PrivateRoute
-            token={this.props.token}
-            path="/custom-view-editor"
-            component={CustomViewEditor}
-          />
+          <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
+          <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
           <PrivateRoute token={this.props.token} path="/watcher" component={Watcher} />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
