@@ -89,6 +89,7 @@ export default class CSCGroupLog extends Component {
                           salindex={msg.salindex}
                           data={this.props.data}
                           onCSCClick={this.props.onCSCClick}
+                          hasMinWidth={true}
                         />
                         <div className={styles.timestamp} title="private_rcvStamp">
                           {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}

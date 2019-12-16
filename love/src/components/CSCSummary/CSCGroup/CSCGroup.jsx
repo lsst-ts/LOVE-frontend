@@ -72,6 +72,7 @@ export default class CSCGroup extends Component {
                   name={csc.name}
                   salindex={csc.salindex}
                   onCSCClick={this.props.onCSCClick}
+                  hasMinWidth={true}
                 />
               </div>
             );

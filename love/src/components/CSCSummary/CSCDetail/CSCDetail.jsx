@@ -13,6 +13,7 @@ export default class CSCDetail extends Component {
     heartbeatData: PropTypes.object,
     summaryStateData: PropTypes.object,
     subscribeToStreams: PropTypes.func,
+    hasMinWidth: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -24,6 +25,7 @@ export default class CSCDetail extends Component {
     heartbeatData: null,
     summaryStateData: undefined,
     subscribeToStreams: () => {},
+    hasMinWidth: false,
   };
 
   static states = {
@@ -102,7 +104,7 @@ export default class CSCDetail extends Component {
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
-        className={styles.CSCDetailContainer}
+        className={[styles.CSCDetailContainer, this.props.hasMinWidth ? styles.minWidth : ''].join(' ')}
       >
         <div className={[styles.leftSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
