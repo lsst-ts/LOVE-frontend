@@ -37,6 +37,7 @@ export default class ScriptQueue extends Component {
         show: false,
         x: 500,
         y: 300,
+        configSchema: '',
         // name: undefined,
         // script: {},
       },
@@ -254,6 +255,7 @@ export default class ScriptQueue extends Component {
         show: true,
         x: x,
         y: y - height,
+        configSchema: script.configSchema,
       },
     });
   };
@@ -307,7 +309,7 @@ export default class ScriptQueue extends Component {
     array[0] = scriptIndex;
     this.props.requestSALCommand({
       csc: 'Script',
-      salindex: 0, 
+      salindex: 0,
       cmd: 'cmd_resume',
       params: {
         ScriptID: scriptIndex,
