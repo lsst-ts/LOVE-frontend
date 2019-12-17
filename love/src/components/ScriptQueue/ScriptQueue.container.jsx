@@ -76,6 +76,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(requestGroupSubscriptionRemoval(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
     },
     requestSALCommand: (cmd) => {
+      if(cmd.csc === 'Script'){
+        return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
+      }
       return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }));
     },
   };

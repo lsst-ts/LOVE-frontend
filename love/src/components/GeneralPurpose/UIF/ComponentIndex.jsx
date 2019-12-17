@@ -13,5 +13,5 @@ export default {
     LabeledStatusText: require('../../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
     TimeSeriesPlot: require('../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
     TelemetryLog: require('../../TelemetryLog/TelemetryLog.container').default,
-    AlarmsTable: require('../../Watcher/AlarmsTable/AlarmsTable.container').default,
+    Watcher: require('../../Watcher/Watcher.container').default,
 }

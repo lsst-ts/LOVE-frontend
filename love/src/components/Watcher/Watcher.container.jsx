@@ -1,32 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms } from '../../../redux/selectors';
+import { getUsername, getAllAlarms } from '../../redux/selectors';
 import {
   requestGroupSubscription,
   requestGroupSubscriptionRemoval,
   requestSALCommand,
-} from '../../../redux/actions/ws';
-import AlarmsTable from './AlarmsTable';
-import mockAlarms from './mock';
+} from '../../redux/actions/ws';
+import Watcher from './Watcher';
+import mockAlarms from './AlarmsTable/mock';
 
-const AlarmsTableContainer = ({
+const WatcherContainer = ({
   alarms,
-  filterCallback = () => true,
   user,
   subscribeToStream,
   unsubscribeToStream,
   ...props }) => {
   return (
-    <AlarmsTable
+    <Watcher
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
-      alarms={alarms.filter(filterCallback)}
+      alarms={alarms}
     />
   );
 };
 
 const mapStateToProps = (state) => {
+  // const alarms = mockAlarms;
   // const alarms = getAllAlarms(state).concat(mockAlarms);
   const alarms = getAllAlarms(state);
   const user = getUsername(state);
@@ -90,4 +90,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AlarmsTableContainer);
+)(WatcherContainer);

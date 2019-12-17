@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -425,75 +426,27 @@ export const timeDifference = (current, previous) => {
   const msPerDay = msPerHour * 24;
   const msPerMonth = msPerDay * 30;
 
-  if (previous < current) {
-    const elapsed = current - previous;
-
-    if (elapsed < msPerMinute) {
-      return '< 1 minute ago';
-    }
-    if (elapsed < msPerHour) {
-      return `${Math.round(elapsed / msPerMinute)} minutes ago`;
-    }
-    if (elapsed < msPerDay) {
-      return `${Math.round(elapsed / msPerHour)} hours ago`;
-    }
-    if (elapsed < msPerMonth) {
-      return `approximately ${Math.round(elapsed / msPerDay)} days ago`;
-    }
-    return `approximately ${Math.round(elapsed / msPerMonth)} months ago`;
-  }
-
-  const elapsed = previous - current;
+  const elapsed = current - previous;
 
   if (elapsed < msPerMinute) {
-    return ' in < 1 minute';
+    return '< 1 minute ago';
   }
   if (elapsed < msPerHour) {
-    return `In ${Math.round(elapsed / msPerMinute)} minutes`;
+    return `${Math.round(elapsed / msPerMinute)} minutes ago`;
   }
   if (elapsed < msPerDay) {
-    return `In ${Math.round(elapsed / msPerHour)} hours`;
+    return `${Math.round(elapsed / msPerHour)} hours ago`;
   }
   if (elapsed < msPerMonth) {
-    return `In approximately ${Math.round(elapsed / msPerDay)} days`;
+    return `approximately ${Math.round(elapsed / msPerDay)} days ago`;
   }
-  return `In approximately ${Math.round(elapsed / msPerMonth)} months`;
-
+  return `approximately ${Math.round(elapsed / msPerMonth)} months ago`;
 };
 
-export const timeDiff = (t1, t2) => {
-  const msPerMinute = 60 * 1000;
-  const msPerHour = msPerMinute * 60;
-  const msPerDay = msPerHour * 24;
-  const msPerMonth = msPerDay * 30;
+export const relativeTime = (timeMs) => {
+  return moment(timeMs).fromNow();
+};
 
-  const future = t1 <= t2;
-  const dt = future? t2 - t1 : t1 -  t2;
-  let returnValue = '';
-
-  if (dt < msPerMinute) {
-    returnValue = '< 1 minute';
-  }
-  else if (dt < msPerHour) {
-    returnValue = `${Math.round(dt / msPerMinute)} minutes`;
-  }
-  else if (dt < msPerDay) {
-    const hours = Math.floor(dt / msPerHour);
-    const minutes = Math.round((dt - hours*msPerHour) / msPerMinute);
-    returnValue = `${hours} hours and ${minutes} minutes`;
-  }
-  else if (dt < msPerMonth) {
-    const days = Math.floor(dt / msPerDay);
-    const hours = Math.round((dt - days*msPerDay) / msPerHour);
-    returnValue = `approx. ${days} days and ${hours} hours`;
-  } else {
-    returnValue = `approx. ${Math.round(dt / msPerMonth)} months`;
-  }
-
-  if (future) {
-    return 'In ' + returnValue;
-  } else {
-    return returnValue + ' ago';
-  }
-
+export const msToStr = (timeMs) => {
+  return moment(timeMs).toISOString();
 };

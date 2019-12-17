@@ -7,6 +7,7 @@ import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
+import TextField from '../../TextField/TextField';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -24,8 +25,7 @@ export default class ConfigPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 
-`# Insert your schema here:
+      value: `# Insert your schema here:
 # e.g.: 
 # wait_time: 3600
 # fail_run: false
@@ -34,6 +34,9 @@ export default class ConfigPanel extends Component {
       width: '500px',
       height: '500px',
       loading: false,
+      pauseCheckpoint: '',
+      stopCheckpoint: '',
+      logLevel: 20,
     };
   }
 
@@ -43,6 +46,17 @@ export default class ConfigPanel extends Component {
     });
   };
 
+  onCheckpointChange = (name) => (event) => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
+  onLogLevelChange = (event) => {
+    this.setState({
+      logLevel: event.target.value,
+    });
+  };
   onResize = (event, direction, element) => {
     this.setState({
       width: element.style.width,
@@ -60,7 +74,16 @@ export default class ConfigPanel extends Component {
     });
     const script = this.props.configPanel.script;
     const isStandard = script.type === 'standard';
-    this.props.launchScript(isStandard, script.path, this.state.value, 'description', 2);
+    this.props.launchScript(
+      isStandard,
+      script.path,
+      this.state.value,
+      'description',
+      2,
+      this.state.pauseCheckpoint,
+      this.state.stopCheckpoint,
+      this.state.logLevel,
+    );
   };
 
   render() {
@@ -100,9 +123,34 @@ export default class ConfigPanel extends Component {
             />
           </div>
           <div className={[styles.bottomBar, styles.bar].join(' ')}>
-            <Button title="Enqueue script" onClick={this.onLaunch}>
-              Add to queue
-            </Button>
+            <div className={styles.checkpointsRegexpContainer}>
+              <span>Pause checkpoints</span>
+              <span>.*</span>
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('pauseCheckpoint')} />
+
+              <span>Stop checkpoints</span>
+              <span> .*</span>
+              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
+
+              <span className={styles.logLevelLabel}>Log level</span>
+              <select className={styles.logLevelSelect} defaultValue={this.state.logLevel}>
+                {[
+                  { value: 10, label: 'Debug' },
+                  { value: 20, label: 'Info' },
+                  { value: 30, label: 'Warning' },
+                  { value: 40, label: 'Error' },
+                ].map(({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className={styles.addBtnContainer}>
+              <Button title="Enqueue script" size="large" onClick={this.onLaunch}>
+                Add
+              </Button>
+            </div>
           </div>
         </div>
       </Rnd>

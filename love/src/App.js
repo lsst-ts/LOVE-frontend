@@ -20,9 +20,9 @@ import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountV
 import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
-import Watcher from './components/Watcher/Watcher';
 import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
 import CustomViewEditor from './components/GeneralPurpose/UIF/CustomViewEditor/CustomViewEditor';
+import WatcherContainer from './components/Watcher/Watcher.container';
 
 class App extends Component {
   static propTypes = {
@@ -41,7 +41,7 @@ class App extends Component {
     this.props.validateToken();
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps, _prevState) => {
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }
@@ -128,7 +128,7 @@ class App extends Component {
           />
           <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
           <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
-          <PrivateRoute token={this.props.token} path="/watcher" component={Watcher} />
+          <PrivateRoute token={this.props.token} path="/watcher" component={WatcherContainer} />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
       </div>
