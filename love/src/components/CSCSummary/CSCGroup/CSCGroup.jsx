@@ -34,6 +34,7 @@ export default class CSCGroup extends Component {
         name={selectedCSC.csc}
         onCSCClick={this.props.onCSCClick}
         hierarchy={this.props.hierarchy}
+        embedded={true}
       />
     ) : (
       <CSCExpandedContainer
@@ -72,7 +73,7 @@ export default class CSCGroup extends Component {
                   name={csc.name}
                   salindex={csc.salindex}
                   onCSCClick={this.props.onCSCClick}
-                  hasMinWidth={true}
+                  embedded={true}
                 />
               </div>
             );

@@ -25,18 +25,16 @@ export default class CustomViewEditor extends Component {
         "LeftPanel": {
           "properties": {
             "type": "component",
-            "x": 8,
-            "y": 3,
-            "w": 8,
-            "h": 2,
+            "x": 0,
+            "y": 0,
+            "w": 26,
+            "h": 36,
             "i": 1
           },
-          "content": "CSCDetail",
+          "content": "CSCGroupLog",
           "config": {
-            "name": "Test",
-            "salindex": 1,
-            "onCSCClick": "() => {}",
-            "_functionProps": ["onCSCClick"]
+            "group": "ATMCS & Test",
+            "cscList": [{"name":"ATMCS", "salindex": 0},{"name":"Test", "salindex": 1}]
           }
         },
         "LeftPanel2": {
