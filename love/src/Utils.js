@@ -443,8 +443,14 @@ export const timeDifference = (current, previous) => {
   return `approximately ${Math.round(elapsed / msPerMonth)} months ago`;
 };
 
-export const relativeTime = (timeMs) => {
-  return moment(timeMs).fromNow();
+export const relativeTime = (secs, taiToUtc) => {
+  const newSecs = secs + taiToUtc;
+  const old = moment.unix(secs).utc();
+  const mom = moment.unix(newSecs).utc();
+  const now = moment().utc();
+  const delta = mom.fromNow();
+  console.log('relativeTime, taiToUtc: ', taiToUtc, ', secs: ', secs, ' newSecs: ', newSecs, 'nowSecs: ', now.unix(), ' old: ', old, ' mom: ', mom, ', now: ', now, ' delta: ', delta);
+  return delta;
 };
 
 export const msToStr = (timeMs) => {

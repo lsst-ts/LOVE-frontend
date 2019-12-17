@@ -44,7 +44,6 @@ export default class AlarmsTable extends PureComponent {
   };
 
   initialState = (taiToUtc) => {
-    console.log('initialState, taiToUtc: ', taiToUtc);
     return {
       cleared: true,
       expandedRows: {},
@@ -67,8 +66,8 @@ export default class AlarmsTable extends PureComponent {
           type: 'regexp',
           value: new RegExp('(?:)'),
           function: (value) => {
-            console.log('func, taiToUtc: ', taiToUtc);
-            return relativeTime((value + taiToUtc) * 1000)
+            return value;
+            // return relativeTime(value, taiToUtc);
           },
         },
       },
@@ -192,6 +191,7 @@ export default class AlarmsTable extends PureComponent {
     let data = this.props.alarms;
     const user = this.props.user;
     const taiToUtc = this.props.taiToUtc;
+    console.log('AT, taiToUtc: ', taiToUtc);
     return (
       <div className={styles.wrapper}>
         <div className={styles.controlsContainer}>
@@ -326,7 +326,7 @@ export default class AlarmsTable extends PureComponent {
                           title={new Date(row.timestampSeverityOldest * 1000).toString()}
                           className={[styles.cell, styles.timestamp].join(' ')}
                         >
-                          <div className={styles.textWrapper}>{relativeTime((row.timestampSeverityOldest + taiToUtc) * 1000)}</div>
+                          <div className={styles.textWrapper}>{relativeTime(row.timestampSeverityOldest, taiToUtc)}</div>
                         </td>
                       </tr>
                       {isExpanded ? (
