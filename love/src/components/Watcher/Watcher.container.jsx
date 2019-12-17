@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms } from '../../redux/selectors';
+import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
 import {
   requestGroupSubscription,
   requestGroupSubscriptionRemoval,
@@ -30,7 +30,8 @@ const mapStateToProps = (state) => {
   // const alarms = getAllAlarms(state).concat(mockAlarms);
   const alarms = getAllAlarms(state);
   const user = getUsername(state);
-  return { alarms, user };
+  const taiToUtc = getTaiToUtc(state);
+  return { alarms, user, taiToUtc };
 };
 
 const mapDispatchToProps = (dispatch) => {
