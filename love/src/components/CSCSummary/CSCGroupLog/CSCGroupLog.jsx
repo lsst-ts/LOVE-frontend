@@ -17,6 +17,7 @@ export default class CSCGroupLog extends Component {
     clearCSCLogMessages: PropTypes.func,
     subscribeToStream: PropTypes.func,
     errorCodeData: PropTypes.array,
+    embedded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -29,35 +30,49 @@ export default class CSCGroupLog extends Component {
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
     errorCodeData: [],
+    embedded: false,
   };
 
   componentDidMount = () => {
-    this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
-      this.props.subscribeToStream(name, salindex);
-    });
+    if (this.props.hierarchy[this.props.realm]) {
+      this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
+        this.props.subscribeToStream(name, salindex);
+      });
+    } else if (this.props.cscList) {
+      this.props.cscList.forEach(({ name, salindex }) => {
+        this.props.subscribeToStream(name, salindex);
+      });
+    }
   };
 
   clearGroupErrorCodes = () => {
-    this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
-      this.props.clearCSCErrorCodes(name, salindex);
-    });
+    if (this.props.hierarchy[this.props.realm]) {
+      this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
+        this.props.clearCSCErrorCodes(name, salindex);
+      });
+    } else if (this.props.cscList) {
+      this.props.cscList.forEach(({ name, salindex }) => {
+        this.props.clearCSCErrorCodes(name, salindex);
+      });
+    }
   };
 
   render() {
     const { props } = this;
-
     return (
       <div className={styles.CSCGroupContainer}>
         <div className={styles.CSCGroupLogContainer}>
           <div className={styles.topBarContainerWrapper}>
             <div className={styles.topBarContainer}>
               <div className={styles.breadcrumContainer}>
-                <div
-                  className={styles.backArrowIconWrapper}
-                  onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
-                >
-                  <BackArrowIcon />
-                </div>
+                {this.props.embedded && (
+                  <div
+                    className={styles.backArrowIconWrapper}
+                    onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
+                  >
+                    <BackArrowIcon />
+                  </div>
+                )}
                 <span className={styles.breadcrumbGroup}>
                   {props.group} {' (Error codes)'}
                 </span>
@@ -74,9 +89,9 @@ export default class CSCGroupLog extends Component {
               </div>
             </div>
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
-              {this.props.errorCodeData.map((msg) => {
+              {this.props.errorCodeData.map((msg, index) => {
                 return (
-                  <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
+                  <div key={`${msg.private_rcvStamp.value}-${index}`} className={styles.logMessage}>
                     <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
                       {msg.errorCode.value}
                     </div>
@@ -89,7 +104,7 @@ export default class CSCGroupLog extends Component {
                           salindex={msg.salindex}
                           data={this.props.data}
                           onCSCClick={this.props.onCSCClick}
-                          hasMinWidth={true}
+                          embedded={true}
                         />
                         <div className={styles.timestamp} title="private_rcvStamp">
                           {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}

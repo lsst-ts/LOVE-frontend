@@ -8,12 +8,13 @@ export default class CSCDetail extends Component {
     name: PropTypes.string,
     group: PropTypes.string,
     realm: PropTypes.string,
+    salindex: PropTypes.number,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     heartbeatData: PropTypes.object,
     summaryStateData: PropTypes.object,
     subscribeToStreams: PropTypes.func,
-    hasMinWidth: PropTypes.bool,
+    embedded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -25,7 +26,7 @@ export default class CSCDetail extends Component {
     heartbeatData: null,
     summaryStateData: undefined,
     subscribeToStreams: () => {},
-    hasMinWidth: false,
+    embedded: false,
   };
 
   static states = {
@@ -68,7 +69,7 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    if (!this.props.embedded) this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   render() {
@@ -104,7 +105,7 @@ export default class CSCDetail extends Component {
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
-        className={[styles.CSCDetailContainer, this.props.hasMinWidth ? styles.minWidth : ''].join(' ')}
+        className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
         <div className={[styles.leftSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
