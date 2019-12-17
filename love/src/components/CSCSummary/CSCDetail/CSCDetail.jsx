@@ -15,6 +15,8 @@ export default class CSCDetail extends Component {
     summaryStateData: PropTypes.object,
     subscribeToStreams: PropTypes.func,
     embedded: PropTypes.bool,
+    /* Whether the component should subscribe to streams*/
+    shouldSubscribe: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -27,6 +29,7 @@ export default class CSCDetail extends Component {
     summaryStateData: undefined,
     subscribeToStreams: () => {},
     embedded: false,
+    shouldSubscribe: true,
   };
 
   static states = {
@@ -69,7 +72,7 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    if (!this.props.embedded) this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    if (!this.props.shoudlSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   render() {
