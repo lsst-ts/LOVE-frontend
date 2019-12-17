@@ -26,7 +26,7 @@ export default class ConfigPanel extends Component {
     super(props);
     this.state = {
       value: `# Insert your schema here:
-# e.g.: 
+# e.g.:
 # wait_time: 3600
 # fail_run: false
 # fail_cleanup: false
@@ -38,6 +38,18 @@ export default class ConfigPanel extends Component {
       stopCheckpoint: '',
       logLevel: 20,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    const configSchema = this.props.configPanel.configSchema;
+    if (configSchema && configSchema !== '' && configSchema !== prevProps.configPanel.configSchema) {
+      this.setState({
+        value: this.props.configPanel.configSchema
+          .split('\n')
+          .map((x) => '# ' + x)
+          .join('\n'),
+      });
+    }
   }
 
   onChange = (newValue) => {
