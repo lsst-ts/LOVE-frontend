@@ -12,6 +12,11 @@ export default class FilterDialog extends Component {
     changeSortDirection: PropTypes.func,
     closeFilterDialogs: PropTypes.func,
     changeFilter: PropTypes.func,
+    sortLabels: PropTypes.array,
+  };
+
+  static defaultProps = {
+    sortLabels: ['A - Z', 'Z - A'],
   };
 
   constructor(props) {
@@ -77,13 +82,13 @@ export default class FilterDialog extends Component {
             <div className={styles.filterIconWrapper}>
               <ArrowIcon active={false} up />
             </div>
-            <span className={styles.sortOption}>A - Z</span>
+            <span className={styles.sortOption}> {this.props.sortLabels[0]} </span>
           </div>
           <div onClick={this.sortDescending} className={styles.dialogRow}>
             <div className={styles.filterIconWrapper}>
               <ArrowIcon active={false} />
             </div>
-            <span className={styles.sortOption}>Z - A</span>
+            <span className={styles.sortOption}> {this.props.sortLabels[1]} </span>
           </div>
 
           <div className={styles.line}> </div>
