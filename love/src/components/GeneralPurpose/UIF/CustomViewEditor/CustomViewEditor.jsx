@@ -27,11 +27,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 26,
-            "h": 36,
+            "w": 64,
+            "h": 23,
             "i": 1
           },
-          "content": "CSCGroupLog",
+          "content": "Watcher",
           "config": {
             "group": "ATMCS & Test",
             "cscList": [{"name":"ATMCS", "salindex": 0},{"name":"Test", "salindex": 1}]

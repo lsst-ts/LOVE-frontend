@@ -11,6 +11,7 @@
 .tabsWrapper {
   display: flex;
   flex-flow: column nowrap;
+  height: 100%;
 }
 
 .tabsRow {
@@ -19,6 +20,7 @@
   align-items: left;
   padding-left: 1.7em;
   border: 0;
+  flex: 0;
 }
 
 .tab {
@@ -67,7 +69,8 @@
   border: 1px solid hsl(199, 43%, 16%);
   border-radius: 7px;
   display: block;
-  height: 70vh;
   width: 1200px;
-  padding: 2em;
+  padding: 1em;
+  flex: 1;
+  min-height: 0;
 }

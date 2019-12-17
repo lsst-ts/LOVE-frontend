@@ -20,6 +20,8 @@ export default class Watcher extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
     unsubscribeToStreams: PropTypes.func,
+    /** Whether to expand panel height or not */
+    expandHeight: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -86,7 +88,7 @@ export default class Watcher extends Component {
     this.test = null;
 
     return (
-      <Panel title="Watcher" className={styles.panel} fit>
+      <Panel title="Watcher" className={styles.panel} fit expandHeight={this.props.expandHeight}>
         <div className={styles.tabsWrapper}>
           <div className={styles.tabsRow}>
             <div
