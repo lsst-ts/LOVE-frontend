@@ -78,12 +78,12 @@ class App extends Component {
           <PrivateRoute
             token={this.props.token}
             path="/script-queue-1"
-            render={() => <ScriptQueueContainer salindex={1} fit />}
+            render={() => <ScriptQueueContainer salindex={1} fit embedded/>}
           />
           <PrivateRoute
             token={this.props.token}
             path="/script-queue-2"
-            render={() => <ScriptQueueContainer salindex={2} fit />}
+            render={() => <ScriptQueueContainer salindex={2} fit embedded/>}
           />
           <PrivateRoute token={this.props.token} path="/csc-summary" render={() => <CSCSummaryContainer expandHeight />} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
