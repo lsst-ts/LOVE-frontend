@@ -27,8 +27,8 @@ table {
   justify-content: flex-end;
   padding-right: 1.5em;
   padding-bottom: 1em;
-  height: 300px;
   width: 100%;
+  flex: 0;
 }
 
 .hidden {
@@ -40,7 +40,7 @@ table {
   flex-flow: row;
   justify-content: center;
   width: inherit;
-  height: inherit;
+  flex: 1;
 }
 
 .dataTable {
