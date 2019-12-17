@@ -141,8 +141,8 @@
 
 .errorCode {
   font-weight: bold;
-  width: 1em;
-  min-width: 1em;
+  width: 1.5em;
+  min-width: 1.5em;
   padding: 0.5em;
   font-size: var(--font-size-large);
   text-align: center;

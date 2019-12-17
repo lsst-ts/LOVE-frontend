@@ -9,6 +9,7 @@ export default {
     CSCDetail: require('../../CSCSummary/CSCDetail/CSCDetail.container').default,
     CSCExpanded: require('../../CSCSummary/CSCExpanded/CSCExpanded.container').default,
     CSCGroupLog: require('../../CSCSummary/CSCGroupLog/CSCGroupLog.container').default,
+    CSCGroup: require('../../CSCSummary/CSCGroup/CSCGroup').default,
     CSCSummary: require('../../CSCSummary/CSCSummary.container').default,
     LabeledStatusText: require('../../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
     TimeSeriesPlot: require('../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,

@@ -27,14 +27,43 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 0,
             "y": 0,
-            "w": 64,
-            "h": 23,
+            "w": 13,
+            "h": 17,
             "i": 1
           },
-          "content": "Watcher",
+          "content": "CSCGroup",
           "config": {
-            "group": "ATMCS & Test",
-            "cscList": [{"name":"ATMCS", "salindex": 0},{"name":"Test", "salindex": 1}]
+            "name": "ATMCS",
+            "cscs": [
+              {
+                "name": "ATMCS",
+                "salindex": 0
+              },
+              {
+                "name": "ATPtg",
+                "salindex": 0
+              },
+              {
+                "name": "ATDome",
+                "salindex": 0
+              },
+              {
+                "name": "ATDomeTrajectory",
+                "salindex": 0
+              },
+              {
+                "name": "ATAOS",
+                "salindex": 0
+              },
+              {
+                "name": "ATPneumatics",
+                "salindex": 0
+              },
+              {
+                "name": "ATHexapod",
+                "salindex": 0
+              }
+            ]
           }
         },
         "LeftPanel2": {

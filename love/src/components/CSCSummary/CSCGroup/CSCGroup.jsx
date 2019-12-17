@@ -13,6 +13,7 @@ export default class CSCGroup extends Component {
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
     hierarchy: PropTypes.object,
+    embedded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -22,6 +23,7 @@ export default class CSCGroup extends Component {
     onCSCClick: () => 0,
     selectedCSCs: [],
     hierarchy: {},
+    embedded: false,
   };
 
   renderExpandedView = (selectedCSC) => {
@@ -74,6 +76,7 @@ export default class CSCGroup extends Component {
                   salindex={csc.salindex}
                   onCSCClick={this.props.onCSCClick}
                   embedded={true}
+                  shouldSubscribe={true}
                 />
               </div>
             );
