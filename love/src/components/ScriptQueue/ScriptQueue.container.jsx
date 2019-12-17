@@ -24,6 +24,7 @@ const ScriptQueueContainer = ({
   username,
   salindex,
   fit,
+  embedded,
 }) => {
   return (
     <ScriptQueue
@@ -42,6 +43,7 @@ const ScriptQueueContainer = ({
       username={username}
       salindex={salindex}
       fit={fit}
+      embedded={embedded}
     />
   );
 };

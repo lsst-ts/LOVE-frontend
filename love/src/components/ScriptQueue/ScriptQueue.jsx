@@ -61,6 +61,7 @@ export default class ScriptQueue extends Component {
     finishedScriptList: [],
     state: 'Unknown',
     username: '',
+    embedded: false,
   };
 
   static stateStyleDict = {
@@ -450,7 +451,7 @@ export default class ScriptQueue extends Component {
           onScroll={() => {
             this.setState({ isContextMenuOpen: false });
           }}
-          className={[styles.scriptQueueContainer, styles.threeColumns].join(' ')}
+          className={[styles.scriptQueueContainer, styles.threeColumns, this.props.embedded ? styles.embedded : ''].join(' ')}
         >
           <Loader
             display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED}
