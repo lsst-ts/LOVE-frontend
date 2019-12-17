@@ -99,7 +99,7 @@ export default class Watcher extends Component {
                 <div className={styles.iconWrapper}>
                   <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
                 </div>
-                UNMUTED ALARMS ({unmutedAlarmsCount})
+                ACTIVE ALARMS ({unmutedAlarmsCount})
               </div>
               {unackUnmutedAlarmsCount === 0 ? null : <Badge status="info">{unackUnmutedAlarmsCount}</Badge>}
             </div>
