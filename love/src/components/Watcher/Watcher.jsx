@@ -20,8 +20,8 @@ export default class Watcher extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
     unsubscribeToStreams: PropTypes.func,
-    /** Whether to expand panel height or not */
-    expandHeight: PropTypes.bool,
+    /** Whether is embedded into other or is isolated */
+    embedded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -88,7 +88,7 @@ export default class Watcher extends Component {
     this.test = null;
 
     return (
-      <Panel title="Watcher" className={styles.panel} fit expandHeight={this.props.expandHeight}>
+      <Panel title="Watcher" className={styles.panel} expandHeight={this.props.embedded}>
         <div className={styles.tabsWrapper}>
           <div className={styles.tabsRow}>
             <div
@@ -118,7 +118,7 @@ export default class Watcher extends Component {
             </div>
           </div>
 
-          <div className={styles.alarmsTableWrapper}>
+          <div className={[styles.alarmsTableWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
             <AlarmsTable
               alarms={alarmsToShow}
               ackAlarm={this.props.ackAlarm}
