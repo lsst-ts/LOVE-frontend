@@ -7,7 +7,7 @@ import ManagerInterface from '../../Utils';
 
 import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
-import { getToken, getUsername, getTokenStatus, getPermCmdExec } from '../selectors';
+import { getToken, getUsername, getTokenStatus, getPermCmdExec, getTaiToUTC } from '../selectors';
 
 let store;
 beforeEach(() => {
@@ -37,7 +37,8 @@ describe('GIVEN the token does not exist in localStorage', () => {
         },
         permissions: {
           execute_commands: true
-        }
+        },
+        tai_to_utc: -37,
       },
       new Headers({
         Accept: 'application/json',
@@ -52,6 +53,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(getToken(newState)).toEqual(newToken);
     expect(getUsername(newState)).toEqual('my-user');
+    expect(getTaiToUTC(newState)).toEqual(-37);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
     expect(getPermCmdExec(newState)).toEqual(true);
     expect(storedToken).toEqual(newToken);
@@ -106,7 +108,8 @@ describe('GIVEN the token exists in localStorage', () => {
         },
         permissions: {
           execute_commands: true
-        }
+        },
+        tai_to_utc: -37,
       },
       ManagerInterface.getHeaders(),
     );
@@ -117,6 +120,7 @@ describe('GIVEN the token exists in localStorage', () => {
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toEqual(initialToken);
     expect(storedToken).toEqual(initialToken);
+    expect(getTaiToUTC(store.getState())).toEqual(-37);
     expect(getUsername(store.getState())).toEqual('my-user');
     expect(getPermCmdExec(store.getState())).toEqual(true);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
