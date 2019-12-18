@@ -110,18 +110,18 @@ export default class CSCDetail extends Component {
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
-        <div className={[styles.leftSection, summaryState.class].join(' ')}>
+        <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
         </div>
-        <div className={styles.middleSection} title={this.props.name + '-' + this.props.salindex}>
-          {this.props.name + '-' + this.props.salindex}
-        </div>
-        <div className={styles.rightSection}>
+        <div className={[styles.heartbeatSection, summaryState.class].join(' ')}>
           <div className={styles.heartbeatIconWrapper}>
             <HeartbeatIcon status={heartbeatStatus} title={title} />
           </div>
+        </div>
+        <div className={[styles.nameSection, summaryState.class].join(' ')} title={this.props.name + '-' + this.props.salindex}>
+          {this.props.name + '-' + this.props.salindex}
         </div>
       </div>
     );
