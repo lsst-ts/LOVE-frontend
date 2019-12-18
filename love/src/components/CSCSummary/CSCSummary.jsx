@@ -7,11 +7,16 @@ import Panel from '../GeneralPurpose/Panel/Panel';
 export default class CSCSummary extends Component {
   static propTypes = {
     hierarchy: PropTypes.object,
+    expandHeight: PropTypes.bool,
   };
+
   static defaultProps = {
     hierarchy: {
       'Aux Telescope': {
-        'CSC Group 1': [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ATDome', salindex: 1 }],
+        'CSC Group 1': [
+          { name: 'ScriptQueue', salindex: 1 },
+          { name: 'ATDome', salindex: 1 },
+        ],
       },
       'Main Telescope': {
         'CSC Group 1': [{ name: 'CSC4', salindex: 0 }],
@@ -22,6 +27,7 @@ export default class CSCSummary extends Component {
       },
     },
   };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +64,7 @@ export default class CSCSummary extends Component {
 
   render() {
     return (
-      <Panel title="CSC Summary" className={styles.panel}>
+      <Panel title="CSC Summary" className={styles.panel} expandHeight={this.props.expandHeight}>
         <div className={styles.CSCSummaryContainer}>
           {Object.keys(this.props.hierarchy).map((realm) => {
             return (

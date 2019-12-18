@@ -20,6 +20,8 @@ import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountV
 import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
+import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
+import CustomViewEditor from './components/GeneralPurpose/UIF/CustomViewEditor/CustomViewEditor';
 import WatcherContainer from './components/Watcher/Watcher.container';
 
 class App extends Component {
@@ -44,6 +46,7 @@ class App extends Component {
       this.props.validateToken();
     }
   };
+
   render() {
     return (
       <div className="App">
@@ -75,21 +78,21 @@ class App extends Component {
           <PrivateRoute
             token={this.props.token}
             path="/script-queue-1"
-            render={() => <ScriptQueueContainer salindex={1} />}
+            render={() => <ScriptQueueContainer salindex={1} fit embedded/>}
           />
           <PrivateRoute
             token={this.props.token}
             path="/script-queue-2"
-            render={() => <ScriptQueueContainer salindex={2} />}
+            render={() => <ScriptQueueContainer salindex={2} fit embedded/>}
           />
-          <PrivateRoute token={this.props.token} path="/csc-summary" component={CSCSummaryContainer} />
+          <PrivateRoute token={this.props.token} path="/csc-summary" render={() => <CSCSummaryContainer expandHeight />} />
           <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
           <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
           <PrivateRoute
             token={this.props.token}
             path="/aux-tel-camera"
             render={() => (
-              <Panel title="Auxiliary Telescope Camera" className={'smallPanel'}>
+              <Panel title="Auxiliary Telescope Camera" className={'smallPanel'} fit>
                 <CameraContainer />
               </Panel>
             )}
@@ -100,7 +103,7 @@ class App extends Component {
             token={this.props.token}
             path="/aux-tel-dome"
             render={() => (
-              <Panel title="Auxiliary Telescope Dome & Mount" className={'mediumPanel'}>
+              <Panel title="Auxiliary Telescope Dome & Mount" className={'mediumPanel'} fit>
                 <DomeContainer />
               </Panel>
             )}
@@ -109,7 +112,7 @@ class App extends Component {
             token={this.props.token}
             path="/aux-tel-lightpath"
             render={() => (
-              <Panel title="Auxiliary Telescope Lightpath" className={'smallPanel'}>
+              <Panel title="Auxiliary Telescope Lightpath" className={'smallPanel'} fit>
                 <LightPath />
               </Panel>
             )}
@@ -118,12 +121,14 @@ class App extends Component {
             token={this.props.token}
             path="/aux-tel-mount"
             render={() => (
-              <Panel title="Auxiliary Telescope Mount" className={'mediumPanel'}>
+              <Panel title="Auxiliary Telescope Mount" className={'mediumPanel'} fit>
                 <Mount />
               </Panel>
             )}
           />
-          <PrivateRoute token={this.props.token} path="/watcher" component={WatcherContainer} />
+          <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
+          <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
+          <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
           <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
         </Switch>
       </div>

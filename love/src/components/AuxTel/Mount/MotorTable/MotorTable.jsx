@@ -113,7 +113,7 @@ export default class MotorTable extends Component {
     // console.log(data);
     // console.log(this.props);
     return (
-      <Table>
+      <Table className={styles.table}>
         <Thead>
           <Tr className={styles.headerRow}>
             <Th>Motor</Th>

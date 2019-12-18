@@ -2,7 +2,7 @@
   padding: 0.5em;
   padding-bottom: 0;
   background: var(--second-secondary-background-color);
-  height: calc( 100% - 5.5em);
+  height: 100%;
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 5px;
