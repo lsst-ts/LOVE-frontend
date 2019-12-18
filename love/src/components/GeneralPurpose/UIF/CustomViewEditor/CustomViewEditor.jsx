@@ -66,33 +66,27 @@ export default class CustomViewEditor extends Component {
             ]
           }
         },
-        "LeftPanel2": {
+        "RightPanel": {
           "properties": {
             "type": "component",
-            "x": 66,
-            "y": 98,
+            "x": 13,
+            "y": 0,
             "w": 13,
-            "h": 1,
+            "h": 17,
             "i": 2
           },
-          "content": "LabeledStatusText",
+          "content": "CSCGroup",
           "config": {
-            "label": "Azimuth state2",
-            "groupName": "event-ATMCS-0-m3State",
-            "stateToLabelMap": {
-              "0": "UNKOWN",
-              "1": "TRACK_DISABLED",
-              "2": "TRACK_ENABLED",
-              "3": "STOPPING"
-            },
-            "stateToStyleMap": {
-              "0": "unknown",
-              "1": "ok",
-              "2": "running",
-              "3": "running"
-            },
-            "accessor": "(event) => event.state.value",
-            "_functionProps": ["accessor"]
+            "name": "ATCalSys",
+            "cscs": [
+              { "name": "ATMonochromator", "salindex": 0 },
+              { "name": "FiberSpectrograph", "salindex": 0 },
+              { "name": "ATWhiteLight", "salindex": 0 },
+              { "name": "Electrometer", "salindex": 1 },
+              { "name": "Electrometer", "salindex": 2 },
+              { "name": "LinearStage", "salindex": 1 },
+              { "name": "LinearStage", "salindex": 2 }
+            ]
           }
         }
       }
@@ -117,6 +111,7 @@ export default class CustomViewEditor extends Component {
     } catch (error) {
       parsedLayout = {};
     }
+    console.log(parsedLayout)
     this.setState({
       parsedLayout,
     });
