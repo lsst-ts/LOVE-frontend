@@ -25,68 +25,47 @@ export default class CustomViewEditor extends Component {
         "LeftPanel": {
           "properties": {
             "type": "component",
-            "x": 0,
-            "y": 0,
-            "w": 13,
-            "h": 17,
+            "x": 8,
+            "y": 3,
+            "w": 8,
+            "h": 2,
             "i": 1
           },
-          "content": "CSCGroup",
+          "content": "CSCDetail",
           "config": {
-            "name": "ATMCS",
-            "cscs": [
-              {
-                "name": "ATMCS",
-                "salindex": 0
-              },
-              {
-                "name": "ATPtg",
-                "salindex": 0
-              },
-              {
-                "name": "ATDome",
-                "salindex": 0
-              },
-              {
-                "name": "ATDomeTrajectory",
-                "salindex": 0
-              },
-              {
-                "name": "ATAOS",
-                "salindex": 0
-              },
-              {
-                "name": "ATPneumatics",
-                "salindex": 0
-              },
-              {
-                "name": "ATHexapod",
-                "salindex": 0
-              }
-            ]
+            "name": "Test",
+            "salindex": 1,
+            "onCSCClick": "() => {}",
+            "_functionProps": ["onCSCClick"]
           }
         },
-        "RightPanel": {
+        "LeftPanel2": {
           "properties": {
             "type": "component",
-            "x": 13,
-            "y": 0,
+            "x": 66,
+            "y": 98,
             "w": 13,
-            "h": 17,
+            "h": 1,
             "i": 2
           },
-          "content": "CSCGroup",
+          "content": "LabeledStatusText",
           "config": {
-            "name": "ATCalSys",
-            "cscs": [
-              { "name": "ATMonochromator", "salindex": 0 },
-              { "name": "FiberSpectrograph", "salindex": 0 },
-              { "name": "ATWhiteLight", "salindex": 0 },
-              { "name": "Electrometer", "salindex": 1 },
-              { "name": "Electrometer", "salindex": 2 },
-              { "name": "LinearStage", "salindex": 1 },
-              { "name": "LinearStage", "salindex": 2 }
-            ]
+            "label": "Azimuth state2",
+            "groupName": "event-ATMCS-0-m3State",
+            "stateToLabelMap": {
+              "0": "UNKOWN",
+              "1": "TRACK_DISABLED",
+              "2": "TRACK_ENABLED",
+              "3": "STOPPING"
+            },
+            "stateToStyleMap": {
+              "0": "unknown",
+              "1": "ok",
+              "2": "running",
+              "3": "running"
+            },
+            "accessor": "(event) => event.state.value",
+            "_functionProps": ["accessor"]
           }
         }
       }
