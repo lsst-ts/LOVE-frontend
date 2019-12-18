@@ -14,6 +14,8 @@ const CSCGroupLogContainer = ({
   clearCSCErrorCodes,
   subscribeToStream,
   errorCodeData,
+  cscList,
+  embedded,
 }) => {
   return (
     <CSCGroupLog
@@ -25,6 +27,8 @@ const CSCGroupLogContainer = ({
       clearCSCErrorCodes={clearCSCErrorCodes}
       subscribeToStream={subscribeToStream}
       errorCodeData={errorCodeData}
+      cscList={cscList}
+      embedded={embedded}
     />
   );
 };
@@ -41,13 +45,21 @@ const mapDispatchtoProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.hierarchy[ownProps.realm][ownProps.group]);
+  if (ownProps.realm && ownProps.hierarchy[ownProps.realm] && ownProps.hierarchy[ownProps.realm][ownProps.group]) {
+    const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.hierarchy[ownProps.realm][ownProps.group]);
+    return {
+      errorCodeData: errorCodeData,
+    };
+  }
+  if (ownProps.cscList) {
+    const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.cscList);
+    return {
+      errorCodeData: errorCodeData,
+    };
+  }
   return {
-    errorCodeData: errorCodeData,
+    errorCodeData: [],
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchtoProps,
-)(CSCGroupLogContainer);
+export default connect(mapStateToProps, mapDispatchtoProps)(CSCGroupLogContainer);

@@ -6,12 +6,14 @@ import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../..
 const CSCSummaryContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
+  expandHeight,
 }) => {
   return (
     <CSCSummary
       hierarchy={CSCSummaryHierarchy}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      expandHeight={expandHeight}
     />
   );
 };

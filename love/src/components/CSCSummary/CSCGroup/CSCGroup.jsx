@@ -13,6 +13,7 @@ export default class CSCGroup extends Component {
     onCSCClick: PropTypes.func,
     selectedCSCs: PropTypes.array,
     hierarchy: PropTypes.object,
+    embedded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -22,31 +23,29 @@ export default class CSCGroup extends Component {
     onCSCClick: () => 0,
     selectedCSCs: [],
     hierarchy: {},
+    embedded: false,
   };
 
   renderExpandedView = (selectedCSC) => {
     const groupView = selectedCSC.csc === 'all';
 
     return groupView ? (
-      <div className={styles.CSCGroupContainer}>
-        <CSCGroupLogContainer
-          realm={selectedCSC.realm}
-          group={selectedCSC.group}
-          name={selectedCSC.csc}
-          onCSCClick={this.props.onCSCClick}
-          hierarchy={this.props.hierarchy}
-        />
-      </div>
+      <CSCGroupLogContainer
+        realm={selectedCSC.realm}
+        group={selectedCSC.group}
+        name={selectedCSC.csc}
+        onCSCClick={this.props.onCSCClick}
+        hierarchy={this.props.hierarchy}
+        embedded={true}
+      />
     ) : (
-      <div className={styles.CSCGroupContainer}>
-        <CSCExpandedContainer
-          realm={selectedCSC.realm}
-          group={selectedCSC.group}
-          name={selectedCSC.csc}
-          salindex={selectedCSC.salindex}
-          onCSCClick={this.props.onCSCClick}
-        />
-      </div>
+      <CSCExpandedContainer
+        realm={selectedCSC.realm}
+        group={selectedCSC.group}
+        name={selectedCSC.csc}
+        salindex={selectedCSC.salindex}
+        onCSCClick={this.props.onCSCClick}
+      />
     );
   };
 
@@ -76,6 +75,8 @@ export default class CSCGroup extends Component {
                   name={csc.name}
                   salindex={csc.salindex}
                   onCSCClick={this.props.onCSCClick}
+                  embedded={true}
+                  shouldSubscribe={true}
                 />
               </div>
             );
