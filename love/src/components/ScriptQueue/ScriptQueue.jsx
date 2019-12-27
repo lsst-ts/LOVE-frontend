@@ -397,6 +397,32 @@ export default class ScriptQueue extends Component {
     this.setState({ isContextMenuOpen: false });
   };
 
+  renderAvailableScript = (script) => {
+    if (!script) return null;
+    return (
+      <DraggableScript
+        key={`dragging-available-${script.type}-${script.path}`}
+        {...script}
+        dragSourceList="available"
+        onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
+        onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
+        draggingScriptInstance={this.state.draggingScriptInstance}
+        disabled={true}
+      >
+        <AvailableScript
+          key={`${script.type}-${script.path}`}
+          path={script.path}
+          isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
+          launchScriptConfig={this.launchScriptConfig}
+          script={script}
+          commandExecutePermission={this.props.commandExecutePermission}
+          {...script}
+          isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
+        />
+      </DraggableScript>
+    );
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -528,34 +554,24 @@ export default class ScriptQueue extends Component {
                       <span>&#8854;</span>
                     </div>
                   </div>
-                  <ScriptList>
-                    {this.props.availableScriptList.map((script) => {
-                      if (!script) return null;
-                      return (
-                        <DraggableScript
-                          key={`dragging-available-${script.type}-${script.path}`}
-                          {...script}
-                          dragSourceList="available"
-                          onDragStart={(e, id) => this.onDragStart(e, id, 'available')}
-                          onDragEnd={(e, id) => this.onDragEnd(e, id, 'available')}
-                          draggingScriptInstance={this.state.draggingScriptInstance}
-                          disabled={true}
-                        >
-                          <AvailableScript
-                            key={`${script.type}-${script.path}`}
-                            path={script.path}
-                            isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
-                            launchScriptConfig={this.launchScriptConfig}
-                            script={script}
-                            commandExecutePermission={this.props.commandExecutePermission}
-                            {...script}
-                            isCompact={
-                              this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
-                            }
-                          />
-                        </DraggableScript>
-                      );
-                    })}
+                  <ScriptList noOverflow={true}>
+                    <div className={styles.standardExternalContainer}>
+                      <div className={styles.availableScriptTypeTitle}>Standard scripts</div>
+                      <div className={styles.standardScriptsContainer}>
+                        {this.props.availableScriptList.map((script) => {
+                          if (script.type && script.type.toLowerCase() !== 'standard') return null;
+                          return this.renderAvailableScript(script);
+                        })}
+                      </div>
+                      <div className={styles.availableScriptTypeSeparator}></div>
+                      <div className={styles.availableScriptTypeTitle}>External scripts</div>
+                      <div className={styles.externalScriptsContainer}>
+                        {this.props.availableScriptList.map((script) => {
+                          if (script.type && script.type.toLowerCase() !== 'external') return null;
+                          return this.renderAvailableScript(script);
+                        })}
+                      </div>
+                    </div>
                   </ScriptList>
                 </div>
               </div>
