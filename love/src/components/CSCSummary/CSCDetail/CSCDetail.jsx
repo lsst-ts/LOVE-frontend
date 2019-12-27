@@ -100,10 +100,12 @@ export default class CSCDetail extends Component {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let title = `${this.props.name + '-' + this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
+    let title = `${this.props.name + '.' + this.props.salindex} heartbeat\nLost: ${nLost}\n`;
 
     if (timeDiff === -2) {
-      title = `${this.props.name + '-' + this.props.salindex} heartbeat\n${timeDiffText}`;
+      title += `${timeDiffText}`;
+    } else {
+      title += `Last seen: ${timeDiffText}`;
     }
     return (
       <div
@@ -120,8 +122,8 @@ export default class CSCDetail extends Component {
             <HeartbeatIcon status={heartbeatStatus} title={title} />
           </div>
         </div>
-        <div className={[styles.nameSection, summaryState.class].join(' ')} title={this.props.name + '-' + this.props.salindex}>
-          {this.props.name + '-' + this.props.salindex}
+        <div className={[styles.nameSection, summaryState.class].join(' ')} title={this.props.name + '.' + this.props.salindex}>
+          {this.props.name + '.' + this.props.salindex}
         </div>
       </div>
     );
