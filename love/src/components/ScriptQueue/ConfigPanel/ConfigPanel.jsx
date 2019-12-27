@@ -9,6 +9,35 @@ import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
 
+const SCHEMA = `
+$id: https://github.com/lsst-ts/ts_salobj/TestScript.yaml
+$schema: http://json-schema.org/draft-07/schema#
+additionalProperties: false
+description: Configuration for TestScript
+properties:
+  fail_cleanup:
+    default: false
+    description: If true then raise an exception in the "cleanup" method.
+    type: boolean
+  fail_run:
+    default: false
+    description: If true then raise an exception in the "run" method afer the "start"
+      checkpoint but before waiting.
+    type: boolean
+  wait_time:
+    default: 0
+    description: Time to wait, in seconds
+    minimum: 0
+    type: number
+required:
+- wait_time
+- fail_run
+- fail_cleanup
+title: TestScript v1
+type: object
+
+`;
+
 export default class ConfigPanel extends Component {
   static propTypes = {
     launchScript: PropTypes.func,
@@ -31,8 +60,8 @@ export default class ConfigPanel extends Component {
 # fail_run: false
 # fail_cleanup: false
 `,
-      width: '500px',
-      height: '500px',
+      width: 800,
+      height: 800,
       loading: false,
       pauseCheckpoint: '',
       stopCheckpoint: '',
@@ -71,8 +100,8 @@ export default class ConfigPanel extends Component {
   };
   onResize = (event, direction, element) => {
     this.setState({
-      width: element.style.width,
-      height: element.style.height,
+      width: parseInt(element.style.width.replace(/px/g,'')),
+      height: parseInt(element.style.height.replace(/px/g,'')),
     });
   };
 
@@ -105,8 +134,8 @@ export default class ConfigPanel extends Component {
         default={{
           x: this.props.configPanel.x,
           y: this.props.configPanel.y,
-          width: this.state.width,
-          height: `calc(${this.state.height} + 100px)`,
+          width: `${this.state.width}px`,
+          height: `calc(${this.state.height}px + 100px)`,
         }}
         style={{ zIndex: 1000 }}
         bounds={'parent'}
@@ -127,8 +156,8 @@ export default class ConfigPanel extends Component {
               theme="solarized_dark"
               name="UNIQUE_ID_OF_DIV"
               onChange={this.onChange}
-              width={this.state.width}
-              height={`calc(${this.state.height} - 4em)`}
+              width={`${this.state.width}px`}
+              height={`calc(${this.state.height}px - 4em)`}
               value={this.state.value}
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
