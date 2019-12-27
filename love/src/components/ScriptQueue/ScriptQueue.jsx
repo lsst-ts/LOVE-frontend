@@ -19,8 +19,7 @@ import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import { toast } from 'react-toastify';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -469,7 +468,6 @@ export default class ScriptQueue extends Component {
             contextMenuData={this.state.contextMenuData}
             options={contextMenuOption}
           />
-          <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} />
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>
