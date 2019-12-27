@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Hoverable from '../Hoverable/Hoverable';
-import { relativeTime, msToStr } from '../../../Utils';
+import { relativeTime, msToIsoStr } from '../../../Utils';
 import styles from './TimestampDisplay.module.css';
 
 
 export default function TimestampDisplay({ time, className, defValue='' }) {
   const [copied, setCopied] = useState(false);
-  const copyValue = msToStr(time);
+  const copyValue = msToIsoStr(time);
   const displayValue = time ? relativeTime(time) : defValue;
 
   const onClick = () => {
