@@ -463,3 +463,7 @@ export const getNotificationMessage = (salCommand) => {
     return [`Command '${cmd}' returned ${result}`, result];
   }
 };
+
+export const cscText = (csc, salindex) => {
+  return csc + (salindex === 0 ? '' : `.${salindex}`);
+};
