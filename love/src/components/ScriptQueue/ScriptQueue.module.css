@@ -228,8 +228,8 @@
 .standardExternalContainer {
   display: grid;
   height: 100%;
-  grid-template-rows: min-content minmax(0, auto) min-content min-content minmax(0, auto);
-  grid-row-gap: 1em;
+  grid-template-rows: min-content minmax(0, min-content) min-content min-content minmax(0, min-content);
+  max-height: 100%;
 }
 
 .standardExternalContainer div {
@@ -238,4 +238,19 @@
 
 .standardExternalContainer .availableScriptTypeSeparator {
   border-top: 1px solid var(--second-quaternary-background-color);
+}
+
+.standardExternalContainer .availableScriptTypeTitle {
+  display: grid;
+  grid-template-columns: 1fr 1.3em;
+  padding: 1em 0;
+}
+
+.externalScriptsContainer, .standardScriptsContainer {
+  max-height: 100%;
+  transition: max-height 0.2s;
+}
+
+.standardExternalContainer .availableListCollapsed {
+  max-height: 0;
 }
