@@ -54,7 +54,7 @@ export default class ConfigPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: `# Insert your schema here:
+      value: `# Insert your config here:
 # e.g.:
 # wait_time: 3600
 # fail_run: false
@@ -100,8 +100,8 @@ export default class ConfigPanel extends Component {
   };
   onResize = (event, direction, element) => {
     this.setState({
-      width: parseInt(element.style.width.replace(/px/g,'')),
-      height: parseInt(element.style.height.replace(/px/g,'')),
+      width: parseInt(element.style.width.replace(/px/g, '')),
+      height: parseInt(element.style.height.replace(/px/g, '')),
     });
   };
 
@@ -151,17 +151,38 @@ export default class ConfigPanel extends Component {
             </span>
           </div>
           <div className={styles.body}>
-            <AceEditor
-              mode="yaml"
-              theme="solarized_dark"
-              name="UNIQUE_ID_OF_DIV"
-              onChange={this.onChange}
-              width={`${this.state.width}px`}
-              height={`calc(${this.state.height}px - 4em)`}
-              value={this.state.value}
-              editorProps={{ $blockScrolling: true }}
-              fontSize={18}
-            />
+            <div className={styles.sidePanel}>
+              <h3>SCHEMA</h3>
+              <AceEditor
+                mode="yaml"
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                width={`${this.state.width / 2}px`}
+                height={`calc(${this.state.height}px - 4em)`}
+                value={SCHEMA}
+                editorProps={{ $blockScrolling: true }}
+                fontSize={18}
+                readOnly
+              />
+            </div>
+
+            <div className={styles.verticalDivider} style={{ height: `calc(${this.state.height}px - 5em)` }}></div>
+
+            <div className={styles.sidePanel}>
+              <h3>CONFIG</h3>
+              <AceEditor
+                mode="yaml"
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                onChange={this.onChange}
+                width={`${this.state.width / 2}px`}
+                height={`calc(${this.state.height}px - 4em)`}
+                value={this.state.value}
+                editorProps={{ $blockScrolling: true }}
+                fontSize={18}
+                tabSize={2}
+              />
+            </div>
           </div>
           <div className={[styles.bottomBar, styles.bar].join(' ')}>
             <div className={styles.checkpointsRegexpContainer}>
