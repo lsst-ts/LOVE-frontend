@@ -427,7 +427,7 @@ export const relativeTime = (secs, taiToUtc) => {
   return delta;
 };
 
-export const msToStr = (timeMs) => {
+export const msToIsoStr = (timeMs) => {
   return moment(timeMs).toISOString();
 };
 
