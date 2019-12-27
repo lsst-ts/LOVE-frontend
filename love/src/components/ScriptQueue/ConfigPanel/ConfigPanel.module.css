@@ -143,3 +143,8 @@
   border: 0.5px solid var(--tertiary-background-color);
   margin: 0.5px;
 }
+
+
+.readOnly{
+  color: var(--secondary-font-color)
+}
