@@ -20,6 +20,7 @@ import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
 import RowExpansionIcon from '../icons/RowExpansionIcon/RowExpansionIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
+import Input from '../GeneralPurpose/Input/Input';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -49,6 +50,7 @@ export default class ScriptQueue extends Component {
       currentMenuSelected: false,
       availableScriptsStandardExpanded: true,
       availableScriptsExternalExpanded: true,
+      availableScriptsFilter: '',
     };
     this.lastId = 19;
     this.managerInterface = new ManagerInterface();
@@ -439,6 +441,12 @@ export default class ScriptQueue extends Component {
     }
   };
 
+  onAvailableScriptsFilterChange = (e) => {
+    this.setState({
+      availableScriptsFilter: e.target.value,
+    });
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -560,7 +568,13 @@ export default class ScriptQueue extends Component {
                       <span className={styles.listTitle}>
                         AVAILABLE SCRIPTS ({this.props.availableScriptList.length})
                       </span>
-                      <span className={styles.listSubtitle}>&#8203;</span>
+                      <span className={styles.listSubtitle}>
+                        Filter:{' '}
+                        <Input
+                          onChange={this.onAvailableScriptsFilterChange}
+                          className={styles.availableScriptsInput}
+                        />
+                      </span>
                     </div>
                     <div
                       className={styles.collapseScriptListButton}
@@ -589,14 +603,7 @@ export default class ScriptQueue extends Component {
                       >
                         {this.props.availableScriptList.map((script) => {
                           if (script.type && script.type.toLowerCase() !== 'standard') return null;
-                          return this.renderAvailableScript(script);
-                        })}
-                        {this.props.availableScriptList.map((script) => {
-                          if (script.type && script.type.toLowerCase() !== 'standard') return null;
-                          return this.renderAvailableScript(script);
-                        })}
-                        {this.props.availableScriptList.map((script) => {
-                          if (script.type && script.type.toLowerCase() !== 'standard') return null;
+                          if (script.path.indexOf(this.state.availableScriptsFilter) < 0) return null;
                           return this.renderAvailableScript(script);
                         })}
                       </div>
@@ -618,14 +625,7 @@ export default class ScriptQueue extends Component {
                       >
                         {this.props.availableScriptList.map((script) => {
                           if (script.type && script.type.toLowerCase() !== 'external') return null;
-                          return this.renderAvailableScript(script);
-                        })}
-                        {this.props.availableScriptList.map((script) => {
-                          if (script.type && script.type.toLowerCase() !== 'external') return null;
-                          return this.renderAvailableScript(script);
-                        })}
-                        {this.props.availableScriptList.map((script) => {
-                          if (script.type && script.type.toLowerCase() !== 'external') return null;
+                          if (script.path.indexOf(this.state.availableScriptsFilter) < 0) return null;
                           return this.renderAvailableScript(script);
                         })}
                       </div>

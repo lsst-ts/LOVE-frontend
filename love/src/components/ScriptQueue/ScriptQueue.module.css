@@ -237,7 +237,9 @@
 }
 
 .standardExternalContainer .availableScriptTypeSeparator {
-  border-top: 1px solid var(--second-quaternary-background-color);
+  border-bottom: 1px solid var(--second-quaternary-background-color);
+  padding-top: 1em;
+  transform: translateY(-0.5em);
 }
 
 .standardExternalContainer .availableScriptTypeTitle {
@@ -253,4 +255,9 @@
 
 .standardExternalContainer .availableListCollapsed {
   max-height: 0;
+}
+
+.availableScriptsInput {
+  line-height: 1em;
+  height: 1em;
 }
