@@ -19,8 +19,6 @@ import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -98,7 +96,7 @@ export default class ScriptQueue extends Component {
     },
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps, _prevState) => {
     if (this.props.heartbeats !== prevProps.heartbeats) {
       this.setState({
         indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
@@ -115,16 +113,6 @@ export default class ScriptQueue extends Component {
         useLocalWaitingList: false,
         waitingScriptList: this.props.waitingScriptList,
       });
-    }
-    /* Checkcommand ack for toast*/
-    if (
-      prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED &&
-      this.props.lastSALCommand.status === SALCommandStatus.ACK
-    ) {
-      const cmd = this.props.lastSALCommand.cmd;
-      const result = this.props.lastSALCommand.result;
-      if (result === 'Done') toast.success(`Command '${cmd}' ran successfully`);
-      else toast.info(`Command '${cmd}' returned ${result}`);
     }
   };
 
@@ -453,10 +441,17 @@ export default class ScriptQueue extends Component {
           onScroll={() => {
             this.setState({ isContextMenuOpen: false });
           }}
-          className={[styles.scriptQueueContainer, styles.threeColumns, this.props.embedded ? styles.embedded : ''].join(' ')}
+          className={[
+            styles.scriptQueueContainer,
+            styles.threeColumns,
+            this.props.embedded ? styles.embedded : '',
+          ].join(' ')}
         >
           <Loader
-            display={this.props.lastSALCommand.status === SALCommandStatus.REQUESTED}
+            display={
+              this.props.lastSALCommand.component === 'ScriptQueue' &&
+              this.props.lastSALCommand.status === SALCommandStatus.REQUESTED
+            }
             message={`Running command: ${this.props.lastSALCommand.cmd}`}
           />
           <ConfigPanel
@@ -469,7 +464,6 @@ export default class ScriptQueue extends Component {
             contextMenuData={this.state.contextMenuData}
             options={contextMenuOption}
           />
-          <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} />
           <div className={styles.currentScriptWrapper}>
             <div className={styles.currentScriptContainerWrapper}>
               <div className={styles.currentScriptContainer}>
