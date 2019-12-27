@@ -35,8 +35,8 @@ export default class ConfigPanel extends Component {
 # fail_run: false
 # fail_cleanup: false
 `,
-      width: 800,
-      height: 800,
+      width: 500,
+      height: 500,
       loading: false,
       pauseCheckpoint: '',
       stopCheckpoint: '',
@@ -125,7 +125,6 @@ export default class ConfigPanel extends Component {
     }
 
     const dividerSizer = orientation === 'beside' ? 'height' : 'width';
-    console.log(this.props.configPanel);
     return this.props.configPanel.show ? (
       <Rnd
         default={{
