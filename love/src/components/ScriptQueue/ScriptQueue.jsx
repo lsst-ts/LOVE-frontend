@@ -17,6 +17,7 @@ import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
 import MoveToTopIcon from '../icons/ScriptQueue/MoveToTopIcon/MoveToTopIcon';
+import RowExpansionIcon from '../icons/RowExpansionIcon/RowExpansionIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
 
@@ -46,6 +47,8 @@ export default class ScriptQueue extends Component {
       isContextMenuOpen: false,
       contextMenuData: {},
       currentMenuSelected: false,
+      availableScriptsStandardExpanded: true,
+      availableScriptsExternalExpanded: true,
     };
     this.lastId = 19;
     this.managerInterface = new ManagerInterface();
@@ -423,6 +426,19 @@ export default class ScriptQueue extends Component {
     );
   };
 
+  toggleAvailableScriptsExpanded = (scriptType) => {
+    if (scriptType === 'standard') {
+      this.setState({
+        availableScriptsStandardExpanded: !this.state.availableScriptsStandardExpanded,
+      });
+    }
+    if (scriptType === 'external') {
+      this.setState({
+        availableScriptsExternalExpanded: !this.state.availableScriptsExternalExpanded,
+      });
+    }
+  };
+
   render() {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
@@ -556,16 +572,58 @@ export default class ScriptQueue extends Component {
                   </div>
                   <ScriptList noOverflow={true}>
                     <div className={styles.standardExternalContainer}>
-                      <div className={styles.availableScriptTypeTitle}>Standard scripts</div>
-                      <div className={styles.standardScriptsContainer}>
+                      <div
+                        className={styles.availableScriptTypeTitle}
+                        onClick={() => this.toggleAvailableScriptsExpanded('standard')}
+                      >
+                        <span>Standard scripts</span>
+                        <span>
+                          <RowExpansionIcon expanded={this.state.availableScriptsStandardExpanded} />
+                        </span>
+                      </div>
+                      <div
+                        className={[
+                          styles.standardScriptsContainer,
+                          this.state.availableScriptsStandardExpanded ? '' : styles.availableListCollapsed,
+                        ].join(' ')}
+                      >
+                        {this.props.availableScriptList.map((script) => {
+                          if (script.type && script.type.toLowerCase() !== 'standard') return null;
+                          return this.renderAvailableScript(script);
+                        })}
+                        {this.props.availableScriptList.map((script) => {
+                          if (script.type && script.type.toLowerCase() !== 'standard') return null;
+                          return this.renderAvailableScript(script);
+                        })}
                         {this.props.availableScriptList.map((script) => {
                           if (script.type && script.type.toLowerCase() !== 'standard') return null;
                           return this.renderAvailableScript(script);
                         })}
                       </div>
                       <div className={styles.availableScriptTypeSeparator}></div>
-                      <div className={styles.availableScriptTypeTitle}>External scripts</div>
-                      <div className={styles.externalScriptsContainer}>
+                      <div
+                        className={styles.availableScriptTypeTitle}
+                        onClick={() => this.toggleAvailableScriptsExpanded('external')}
+                      >
+                        <span>External scripts</span>
+                        <span>
+                          <RowExpansionIcon expanded={this.state.availableScriptsExternalExpanded} />
+                        </span>
+                      </div>
+                      <div
+                        className={[
+                          styles.externalScriptsContainer,
+                          this.state.availableScriptsExternalExpanded ? '' : styles.availableListCollapsed,
+                        ].join(' ')}
+                      >
+                        {this.props.availableScriptList.map((script) => {
+                          if (script.type && script.type.toLowerCase() !== 'external') return null;
+                          return this.renderAvailableScript(script);
+                        })}
+                        {this.props.availableScriptList.map((script) => {
+                          if (script.type && script.type.toLowerCase() !== 'external') return null;
+                          return this.renderAvailableScript(script);
+                        })}
                         {this.props.availableScriptList.map((script) => {
                           if (script.type && script.type.toLowerCase() !== 'external') return null;
                           return this.renderAvailableScript(script);
