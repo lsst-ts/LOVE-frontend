@@ -66,8 +66,7 @@ export default class AlarmsTable extends PureComponent {
           type: 'regexp',
           value: new RegExp('(?:)'),
           function: (value) => {
-            return value;
-            // return relativeTime(value, taiToUtc);
+            return relativeTime(value, taiToUtc);
           },
         },
       },
@@ -191,7 +190,6 @@ export default class AlarmsTable extends PureComponent {
     let data = this.props.alarms;
     const user = this.props.user;
     const taiToUtc = this.props.taiToUtc;
-    console.log('AT, taiToUtc: ', taiToUtc);
     return (
       <div className={styles.wrapper}>
         <div className={styles.controlsContainer}>
