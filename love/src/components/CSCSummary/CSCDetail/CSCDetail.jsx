@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCDetail.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
+import { cscText } from '../../../Utils';
 
 export default class CSCDetail extends Component {
   static propTypes = {
@@ -100,7 +101,7 @@ export default class CSCDetail extends Component {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let title = `${this.props.name + '.' + this.props.salindex} heartbeat\nLost: ${nLost}\n`;
+    let title = `$${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
 
     if (timeDiff === -2) {
       title += `${timeDiffText}`;
@@ -123,7 +124,7 @@ export default class CSCDetail extends Component {
           </div>
         </div>
         <div className={[styles.nameSection, summaryState.class].join(' ')} title={this.props.name + '.' + this.props.salindex}>
-          {this.props.name + '.' + this.props.salindex}
+          {cscText(this.props.name, this.props.salindex)}
         </div>
       </div>
     );

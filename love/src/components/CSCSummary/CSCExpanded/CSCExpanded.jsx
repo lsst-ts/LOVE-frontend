@@ -5,6 +5,7 @@ import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import { cscText } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
@@ -122,7 +123,7 @@ export default class CSCExpanded extends PureComponent {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let heartbeatTitle = `${this.props.name + '.' + this.props.salindex} heartbeat\nLost: ${nLost}\n`;
+    let heartbeatTitle = `${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
 
     if (timeDiff === -2) {
       heartbeatTitle += `${timeDiffText}`;
@@ -156,7 +157,7 @@ export default class CSCExpanded extends PureComponent {
                   </>
                 }
                 <span>
-                  {props.name}.{props.salindex}
+                  {cscText(this.props.name, this.props.salindex)}
                 </span>
               </div>
               <div className={[styles.stateContainer].join(' ')}>
