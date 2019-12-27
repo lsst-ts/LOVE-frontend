@@ -106,6 +106,7 @@
   flex-basis: 100%;
   transition: all 500ms ease-in-out;
   background: var(--second-primary-background-color);
+  height: calc(100% - 1em);
 }
 
 .waitingScriptList {
@@ -171,6 +172,8 @@
 }
 
 .collapsableScriptListContent {
+  display: grid;
+  grid-template-rows: min-content 1fr;
   position: absolute;
   left: 0px;
   width: 100%;
@@ -212,7 +215,7 @@
 }
 
 .pauseIconContainer > span {
-  padding-right: 0.5em; 
+  padding-right: 0.5em;
 }
 
 .pauseIconWrapper {
@@ -220,4 +223,19 @@
   background: var(--second-tertiary-background-color);
   padding: 0.25em 0.5em;
   border-radius: 1em;
+}
+
+.standardExternalContainer {
+  display: grid;
+  height: 100%;
+  grid-template-rows: min-content minmax(0, auto) min-content min-content minmax(0, auto);
+  grid-row-gap: 1em;
+}
+
+.standardExternalContainer div {
+  overflow: auto;
+}
+
+.standardExternalContainer .availableScriptTypeSeparator {
+  border-top: 1px solid var(--second-quaternary-background-color);
 }
