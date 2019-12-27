@@ -46,8 +46,12 @@
 
 .body {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: flex-end;
+}
+
+.sideBySide {
+  flex-direction: row;
 }
 
 .checkpointsRegexpContainer {

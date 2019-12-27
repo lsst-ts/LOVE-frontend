@@ -66,6 +66,7 @@ export default class ConfigPanel extends Component {
       pauseCheckpoint: '',
       stopCheckpoint: '',
       logLevel: 20,
+      orientation: 'below',
     };
   }
 
@@ -128,14 +129,29 @@ export default class ConfigPanel extends Component {
   };
 
   render() {
+    const {orientation} = this.state;
+
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
+    let sidePanelSize = {
+      width: `${this.state.width / 2}px`,
+      height: `calc(${this.state.height}px - 4em)`,
+    };
+    if (orientation === 'below') {
+      sidePanelSize = {
+        width: `${this.state.width}px`,
+        height: `calc(${this.state.height / 2}px - 4em)`,
+      };
+    }
+
+    const dividerSizer = orientation === 'beside' ? 'height' : 'width';
+
     return this.props.configPanel.show ? (
       <Rnd
         default={{
           x: this.props.configPanel.x,
           y: this.props.configPanel.y,
           width: `${this.state.width}px`,
-          height: `calc(${this.state.height}px + 100px)`,
+          height: `calc(${this.state.height}px + 100px + 2.5em)`,
         }}
         style={{ zIndex: 1000 }}
         bounds={'parent'}
@@ -150,15 +166,15 @@ export default class ConfigPanel extends Component {
               X
             </span>
           </div>
-          <div className={styles.body}>
+          <div className={[styles.body, orientation==='beside'? styles.sideBySide : ''].join(' ')}>
             <div className={styles.sidePanel}>
               <h3>SCHEMA</h3>
               <AceEditor
                 mode="yaml"
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
-                width={`${this.state.width / 2}px`}
-                height={`calc(${this.state.height}px - 4em)`}
+                width={sidePanelSize.width}
+                height={sidePanelSize.height}
                 value={SCHEMA}
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
@@ -166,7 +182,7 @@ export default class ConfigPanel extends Component {
               />
             </div>
 
-            <div className={styles.verticalDivider} style={{ height: `calc(${this.state.height}px - 5em)` }}></div>
+            {/* <div className={styles.verticalDivider} style={{ [dividerSizer]: sidePanelSize[dividerSizer] }}></div> */}
 
             <div className={styles.sidePanel}>
               <h3>CONFIG</h3>
@@ -175,8 +191,8 @@ export default class ConfigPanel extends Component {
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
                 onChange={this.onChange}
-                width={`${this.state.width / 2}px`}
-                height={`calc(${this.state.height}px - 4em)`}
+                width={sidePanelSize.width}
+                height={sidePanelSize.height}
                 value={this.state.value}
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
