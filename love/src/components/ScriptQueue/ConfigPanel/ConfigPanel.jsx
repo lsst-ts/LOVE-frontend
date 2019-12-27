@@ -185,7 +185,8 @@ export default class ConfigPanel extends Component {
           </div>
           <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
             <div className={styles.sidePanel}>
-              <h3>SCHEMA</h3>
+              <h3>SCHEMA <span className={styles.readOnly}>(Read only)</span></h3>
+              
               <AceEditor
                 mode="yaml"
                 theme="solarized_dark"
