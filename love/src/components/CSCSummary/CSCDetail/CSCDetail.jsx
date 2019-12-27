@@ -8,11 +8,15 @@ export default class CSCDetail extends Component {
     name: PropTypes.string,
     group: PropTypes.string,
     realm: PropTypes.string,
+    salindex: PropTypes.number,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     heartbeatData: PropTypes.object,
     summaryStateData: PropTypes.object,
     subscribeToStreams: PropTypes.func,
+    embedded: PropTypes.bool,
+    /* Whether the component should subscribe to streams*/
+    shouldSubscribe: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -24,6 +28,8 @@ export default class CSCDetail extends Component {
     heartbeatData: null,
     summaryStateData: undefined,
     subscribeToStreams: () => {},
+    embedded: false,
+    shouldSubscribe: true,
   };
 
   static states = {
@@ -66,7 +72,7 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    if (!this.props.shoudlSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   render() {
@@ -102,20 +108,20 @@ export default class CSCDetail extends Component {
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
-        className={styles.CSCDetailContainer}
+        className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
-        <div className={[styles.leftSection, summaryState.class].join(' ')}>
+        <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
         </div>
-        <div className={styles.middleSection} title={this.props.name + '-' + this.props.salindex}>
-          {this.props.name + '-' + this.props.salindex}
-        </div>
-        <div className={styles.rightSection}>
+        <div className={[styles.heartbeatSection, summaryState.class].join(' ')}>
           <div className={styles.heartbeatIconWrapper}>
             <HeartbeatIcon status={heartbeatStatus} title={title} />
           </div>
+        </div>
+        <div className={[styles.nameSection, summaryState.class].join(' ')} title={this.props.name + '-' + this.props.salindex}>
+          {this.props.name + '-' + this.props.salindex}
         </div>
       </div>
     );

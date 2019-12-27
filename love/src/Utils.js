@@ -456,3 +456,36 @@ export const relativeTime = (secs, taiToUtc) => {
 export const msToStr = (timeMs) => {
   return moment(timeMs).toISOString();
 };
+
+const watcherSuccessfulCmds = {
+  'cmd_acknowledge': 'acknowledged',
+  'cmd_mute': 'muted',
+  'cmd_unmute': 'unmuted',
+};
+
+const watcherErrorCmds = {
+  'cmd_acknowledge': 'acknowledging',
+  'cmd_mute': 'muting',
+  'cmd_unmute': 'unmuting',
+};
+
+export const getNotificationMessage = (salCommand) => {
+  const cmd = salCommand.cmd;
+  const result = salCommand.result;
+  const component = salCommand.component;
+
+  if (component === 'Watcher') {
+    const alarm = salCommand.params.name;
+    if (result === 'Done') {
+      return [`Alarm '${alarm}' ${watcherSuccessfulCmds[cmd]} successfully`, result];
+    } else {
+      return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
+    }
+  }
+
+  if (result === 'Done') {
+    return [`Command '${cmd}' ran successfully`, result];
+  } else {
+    return [`Command '${cmd}' returned ${result}`, result];
+  }
+};

@@ -13,6 +13,7 @@ const CSCDetailContainer = ({
   onCSCClick,
   subscribeToStreams,
   heartbeatData,
+  embedded,
 }) => {
   return (
     <CSCDetail
@@ -24,7 +25,8 @@ const CSCDetailContainer = ({
       onCSCClick={onCSCClick}
       subscribeToStreams={subscribeToStreams}
       heartbeatData={heartbeatData}
-    />
+      embedded={embedded}
+  />
   );
 };
 

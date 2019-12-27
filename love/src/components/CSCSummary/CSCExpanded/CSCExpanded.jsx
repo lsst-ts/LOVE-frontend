@@ -36,6 +36,10 @@ export default class CSCExpanded extends PureComponent {
     errorCodeData: [],
   };
 
+  componentDidMount = () => {
+    this.props.subscribeToStreams(this.props.name, this.props.salindex);
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -121,87 +125,94 @@ export default class CSCExpanded extends PureComponent {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let heartbeatTitle = `${this.props.name +
-      '-' +
-      this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
+    let heartbeatTitle = `${this.props.name}-${this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
     if (timeDiff === -2) {
-      heartbeatTitle = `${this.props.name + '-' + this.props.salindex} heartbeat\n${timeDiffText}`;
+      heartbeatTitle = `${this.props.name}-${this.props.salindex} heartbeat\n${timeDiffText}`;
     }
 
     return (
-      <div className={styles.CSCExpandedContainer}>
-        <div className={styles.topBarContainerWrapper}>
-          <div className={styles.topBarContainer}>
-            <div className={styles.breadcrumContainer}>
-              <div
-                className={styles.backArrowIconWrapper}
-                onClick={() =>
-                  this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)
+      <div className={styles.CSCGroupContainer}>
+        <div className={styles.CSCExpandedContainer}>
+          <div className={styles.topBarContainerWrapper}>
+            <div className={styles.topBarContainer}>
+              <div className={styles.breadcrumContainer}>
+                {
+                  this.props.realm && this.props.group && <>
+                    <div
+                      className={styles.backArrowIconWrapper}
+                      onClick={() =>
+                        this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)
+                      }
+                    >
+                      <BackArrowIcon />
+                    </div>
+                    <span
+                      className={styles.breadcrumbGroup}
+                      onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
+                    >
+                      {props.group}{' '}
+                    </span>
+                    <span>&#62; </span>
+                  </>
                 }
-              >
-                <BackArrowIcon />
-              </div>
-              <span
-                className={styles.breadcrumbGroup}
-                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
-              >
-                {props.group}{' '}
-              </span>
-              <span>&#62; </span>
-              <span>
-                {props.name}-{props.salindex}
-              </span>
-            </div>
-            <div className={[styles.stateContainer].join(' ')}>
-              <div>
-                <span className={[styles.summaryState, summaryState.class].join(' ')} title={summaryState.userReadable}>
-                  {summaryState.name}
+                <span>
+                  {props.name}-{props.salindex}
                 </span>
               </div>
-              <div className={styles.heartbeatIconWrapper}>
-                <HeartbeatIcon status={heartbeatStatus} title={heartbeatTitle} />
+              <div className={[styles.stateContainer].join(' ')}>
+                <div>
+                  <span
+                    className={[styles.summaryState, summaryState.class].join(' ')}
+                    title={summaryState.userReadable}
+                  >
+                    {summaryState.name}
+                  </span>
+                </div>
+                <div className={styles.heartbeatIconWrapper}>
+                  <HeartbeatIcon status={heartbeatStatus} title={heartbeatTitle} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {this.props.errorCodeData.length > 0 ? (
-          <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
-            <div className={styles.logContainerTopBar}>
-              <div>ERROR CODE</div>
-              <div>
-                <Button
-                  size="extra-small"
-                  onClick={() => this.props.clearCSCErrorCodes(this.props.name, this.props.salindex)}
-                >
-                  CLEAR
-                </Button>
+          {this.props.errorCodeData.length > 0 ? (
+            <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
+              <div className={styles.logContainerTopBar}>
+                <div>ERROR CODE</div>
+                <div>
+                  <Button
+                    size="extra-small"
+                    onClick={() => this.props.clearCSCErrorCodes(this.props.name, this.props.salindex)}
+                  >
+                    CLEAR
+                  </Button>
+                </div>
               </div>
-            </div>
-            <div className={[styles.log, styles.messageLogContent].join(' ')}>
-              {this.props.errorCodeData.map((msg) => {
-                return (
-                  <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
-                    <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
-                      {msg.errorCode.value}
-                    </div>
-                    <div className={styles.messageTextContainer}>
-                      <div className={styles.timestamp} title="private_rcvStamp">
-                        {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+              <div className={[styles.log, styles.messageLogContent].join(' ')}>
+                {this.props.errorCodeData.map((msg, index) => {
+                  return (
+                    <div key={`${msg.private_rcvStamp.value}-${index}`} className={styles.logMessage}>
+                      <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
+                        {msg.errorCode.value}
                       </div>
-                      <div className={styles.messageText}>{msg.errorReport.value}</div>
-                      <div className={styles.messageTraceback}>{msg.traceback.value}</div>
+                      <div className={styles.messageTextContainer}>
+                        <div className={styles.timestamp} title="private_rcvStamp">
+                          {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                        </div>
+                        <div className={styles.messageText}>{msg.errorReport.value}</div>
+                        <div className={styles.messageTraceback}>{msg.traceback.value}</div>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
 
-        <LogMessageDisplay
-          logMessageData={this.props.logMessageData}
-          clearCSCLogMessages={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
-        />
+          <LogMessageDisplay
+            logMessageData={this.props.logMessageData}
+            clearCSCLogMessages={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
+          />
+        </div>
       </div>
     );
   }

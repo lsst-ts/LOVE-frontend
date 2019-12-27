@@ -1,0 +1,42 @@
+.container {
+  background: rgba(255, 0, 0, 0.8);
+}
+
+.containerPanel {
+  width: 100%;
+}
+
+.gridLayout {
+  position: relative;
+}
+
+.componentWrapper {
+  background: rgba(255, 0, 0, 0.3);
+  border: 1px solid white;
+  display: flex;
+  justify-content: center;
+}
+
+.noOverflow {
+  overflow: hidden;
+}
+.componentWrapper :global(.react-resizable-handle) {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 10;
+}
+
+.container :global(.react-resizable-handle)::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 5px;
+  height: 5px;
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}

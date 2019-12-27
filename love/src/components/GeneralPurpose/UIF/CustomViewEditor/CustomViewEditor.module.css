@@ -1,0 +1,15 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.bar {
+  display: flex;
+  justify-content: space-between;
+  background: var(--second-secondary-background-color);
+  cursor: pointer;
+  user-select: none;
+  text-align: left;
+  font-size: var(--font-size-larger);
+  padding: 0.1em 0.5em;
+}
