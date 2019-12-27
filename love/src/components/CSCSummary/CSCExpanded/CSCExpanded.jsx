@@ -3,9 +3,6 @@ import PropTypes from 'prop-types';
 import styles from './CSCExpanded.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
-import InfoIcon from '../../icons/InfoIcon/InfoIcon';
-import WarningIcon from '../../icons/WarningIcon/WarningIcon';
-import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 
@@ -125,9 +122,12 @@ export default class CSCExpanded extends PureComponent {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let heartbeatTitle = `${this.props.name}-${this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
+    let heartbeatTitle = `${this.props.name + '.' + this.props.salindex} heartbeat\nLost: ${nLost}\n`;
+
     if (timeDiff === -2) {
-      heartbeatTitle = `${this.props.name}-${this.props.salindex} heartbeat\n${timeDiffText}`;
+      heartbeatTitle += `${timeDiffText}`;
+    } else {
+      heartbeatTitle += `Last seen: ${timeDiffText}`;
     }
 
     return (
@@ -156,7 +156,7 @@ export default class CSCExpanded extends PureComponent {
                   </>
                 }
                 <span>
-                  {props.name}-{props.salindex}
+                  {props.name}.{props.salindex}
                 </span>
               </div>
               <div className={[styles.stateContainer].join(' ')}>
