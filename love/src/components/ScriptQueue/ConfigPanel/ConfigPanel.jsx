@@ -110,6 +110,12 @@ export default class ConfigPanel extends Component {
     this.props.closeConfigPanel();
   };
 
+  rotatePanel = () => {
+    this.setState({
+      orientation: this.state.orientation === 'beside' ? 'below' : 'beside',
+    });
+  };
+
   onLaunch = () => {
     this.setState({
       loading: true,
@@ -129,7 +135,7 @@ export default class ConfigPanel extends Component {
   };
 
   render() {
-    const {orientation} = this.state;
+    const { orientation } = this.state;
 
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
     let sidePanelSize = {
@@ -162,11 +168,22 @@ export default class ConfigPanel extends Component {
         <div className={styles.configPanelContainer}>
           <div className={[styles.topBar, styles.bar].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
-            <span className={styles.closeButton} onClick={this.closeConfigPanel}>
-              X
-            </span>
+            <div className={styles.topButtonsContainer}>
+              {orientation === 'below' ? (
+                <span className={styles.rotateButton} onClick={this.rotatePanel}>
+                  &#8758;
+                </span>
+              ) : (
+                <span className={styles.rotateButton} onClick={this.rotatePanel}>
+                  &#8229;{' '}
+                </span>
+              )}
+              <span className={styles.closeButton} onClick={this.closeConfigPanel}>
+                X
+              </span>
+            </div>
           </div>
-          <div className={[styles.body, orientation==='beside'? styles.sideBySide : ''].join(' ')}>
+          <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
             <div className={styles.sidePanel}>
               <h3>SCHEMA</h3>
               <AceEditor

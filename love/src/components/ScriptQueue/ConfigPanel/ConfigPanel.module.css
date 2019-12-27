@@ -18,11 +18,28 @@
   padding: 0.1em 0.5em;
 }
 
+.topButtonsContainer {
+  display: grid;
+  grid-template-columns: 1.5em 1.5em;
+}
 .closeButton {
   cursor: pointer;
   text-align: right;
   padding: 0 0.5em;
 }
+
+.rotateButton {
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.rotateButton:hover {
+  background: var(--second-tertiary-background-color);
+  font-weight: bold;
+  padding: 0 0.5em;
+}
+
 
 .closeButton:hover {
   background: var(--second-tertiary-background-color);
