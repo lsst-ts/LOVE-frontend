@@ -9,34 +9,7 @@ import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
 
-const SCHEMA = `
-$id: https://github.com/lsst-ts/ts_salobj/TestScript.yaml
-$schema: http://json-schema.org/draft-07/schema#
-additionalProperties: false
-description: Configuration for TestScript
-properties:
-  fail_cleanup:
-    default: false
-    description: If true then raise an exception in the "cleanup" method.
-    type: boolean
-  fail_run:
-    default: false
-    description: If true then raise an exception in the "run" method afer the "start"
-      checkpoint but before waiting.
-    type: boolean
-  wait_time:
-    default: 0
-    description: Time to wait, in seconds
-    minimum: 0
-    type: number
-required:
-- wait_time
-- fail_run
-- fail_cleanup
-title: TestScript v1
-type: object
-
-`;
+const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -48,7 +21,9 @@ export default class ConfigPanel extends Component {
   static defaultProps = {
     closeConfigPanel: () => 0,
     launchScript: () => 0,
-    configPanel: {},
+    configPanel: {
+      configSchema: NO_SCHEMA_MESSAGE
+    },
   };
 
   constructor(props) {
@@ -70,17 +45,17 @@ export default class ConfigPanel extends Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    const configSchema = this.props.configPanel.configSchema;
-    if (configSchema && configSchema !== '' && configSchema !== prevProps.configPanel.configSchema) {
-      this.setState({
-        value: this.props.configPanel.configSchema
-          .split('\n')
-          .map((x) => '# ' + x)
-          .join('\n'),
-      });
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const configSchema = this.props.configPanel.configSchema;
+  //   if (configSchema && configSchema !== '' && configSchema !== prevProps.configPanel.configSchema) {
+  //     this.setState({
+  //       value: this.props.configPanel.configSchema
+  //         .split('\n')
+  //         .map((x) => '# ' + x)
+  //         .join('\n'),
+  //     });
+  //   }
+  // }
 
   onChange = (newValue) => {
     this.setState({
@@ -140,24 +115,24 @@ export default class ConfigPanel extends Component {
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
     let sidePanelSize = {
       width: `${this.state.width / 2}px`,
-      height: `calc(${this.state.height}px - 4em)`,
+      height: `calc(${this.state.height}px - 6em)`,
     };
     if (orientation === 'below') {
       sidePanelSize = {
         width: `${this.state.width}px`,
-        height: `calc(${this.state.height / 2}px - 4em)`,
+        height: `calc(${this.state.height / 2}px - 6em)`,
       };
     }
 
     const dividerSizer = orientation === 'beside' ? 'height' : 'width';
-
+    console.log(this.props.configPanel);
     return this.props.configPanel.show ? (
       <Rnd
         default={{
           x: this.props.configPanel.x,
           y: this.props.configPanel.y,
           width: `${this.state.width}px`,
-          height: `calc(${this.state.height}px + 100px + 2.5em)`,
+          height: `calc(${this.state.height}px)`,
         }}
         style={{ zIndex: 1000 }}
         bounds={'parent'}
@@ -185,15 +160,19 @@ export default class ConfigPanel extends Component {
           </div>
           <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
             <div className={styles.sidePanel}>
-              <h3>SCHEMA <span className={styles.readOnly}>(Read only)</span></h3>
-              
+              <h3>
+                SCHEMA <span className={styles.readOnly}>(Read only)</span>
+              </h3>
+
               <AceEditor
                 mode="yaml"
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
                 width={sidePanelSize.width}
                 height={sidePanelSize.height}
-                value={SCHEMA}
+                value={
+                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
+                }
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
                 readOnly
