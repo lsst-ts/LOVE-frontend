@@ -34,6 +34,7 @@ export default class CSCRealm extends Component {
                 onCSCClick={this.props.onCSCClick}
                 selectedCSCs={this.props.selectedCSCs}
                 hierarchy={this.props.hierarchy}
+                embedded={true}
               />
             </div>
           );

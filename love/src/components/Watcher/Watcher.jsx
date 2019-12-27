@@ -24,6 +24,8 @@ export default class Watcher extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
     unsubscribeToStreams: PropTypes.func,
+    /** Whether is embedded into other or is isolated */
+    embedded: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -47,7 +49,7 @@ export default class Watcher extends Component {
 
   changeTab(tab) {
     this.setState({ selectedTab: tab });
-  };
+  }
 
   sortFunctions = {
     default: (row) => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
@@ -78,8 +80,7 @@ export default class Watcher extends Component {
         if (this.state.selectedTab === 'unmuted') {
           alarmsToShow.push(alarm);
         }
-      }
-      else {
+      } else {
         mutedAlarmsCount += 1;
         unackMutedAlarmsCount += alarm['acknowledged'] ? 0 : 1;
         if (this.state.selectedTab === 'muted') {
@@ -91,7 +92,7 @@ export default class Watcher extends Component {
     this.test = null;
 
     return (
-      <Panel title="Watcher" className={styles.panel}>
+      <Panel title="Watcher" className={styles.panel} expandHeight={this.props.embedded}>
         <div className={styles.tabsWrapper}>
           <div className={styles.tabsRow}>
             <div
@@ -102,13 +103,9 @@ export default class Watcher extends Component {
                 <div className={styles.iconWrapper}>
                   <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
                 </div>
-                UNMUTED ALARMS ({unmutedAlarmsCount})
+                ACTIVE ALARMS ({unmutedAlarmsCount})
               </div>
-              { unackUnmutedAlarmsCount === 0 ? null : (
-                <Badge status='info'>
-                  {unackUnmutedAlarmsCount}
-                </Badge>
-              )}
+              {unackUnmutedAlarmsCount === 0 ? null : <Badge status="info">{unackUnmutedAlarmsCount}</Badge>}
             </div>
 
             <div
@@ -121,15 +118,11 @@ export default class Watcher extends Component {
                 </div>
                 MUTED ALARMS ({mutedAlarmsCount})
               </div>
-              { unackMutedAlarmsCount === 0 ? null : (
-                <Badge status='info'>
-                  {unackMutedAlarmsCount}
-                </Badge>
-              )}
+              {unackMutedAlarmsCount === 0 ? null : <Badge status="info">{unackMutedAlarmsCount}</Badge>}
             </div>
           </div>
 
-          <div className={styles.alarmsTableWrapper}>
+          <div className={[styles.alarmsTableWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
             <AlarmsTable
               user={this.props.user}
               taiToUtc={this.props.taiToUtc}

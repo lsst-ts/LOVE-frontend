@@ -12,15 +12,25 @@ export default class Panel extends Component {
     title: PropTypes.string,
     children: PropTypes.object,
     className: PropTypes.string,
+    /** Wether to fit width to content */
+    fit: PropTypes.bool,
+    /** Wether to expand height to 100vh */
+    expandHeight: PropTypes.bool,
   };
 
   static defaultProps = {
     title: '',
     className: '',
+    expandHeight: false,
   };
 
   render() {
-    const classNames = [styles.panel, this.props.className].join(' ');
+    const classNames = [
+      styles.panel,
+      this.props.className,
+      this.props.fit ? styles.fit : '',
+      this.props.expandHeight ? styles.expandHeight : '',
+    ].join(' ');
     return (
       <div className={classNames}>
         <div className={styles.panelHeading}>
