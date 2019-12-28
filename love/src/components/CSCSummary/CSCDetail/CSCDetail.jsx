@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCDetail.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
+import { cscText } from '../../../Utils';
 
 export default class CSCDetail extends Component {
   static propTypes = {
@@ -72,7 +73,7 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    if (!this.props.shoudlSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    if (!this.props.shouldSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   render() {
@@ -98,10 +99,12 @@ export default class CSCDetail extends Component {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let title = `${this.props.name}-${this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
+    let title = `$${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
 
     if (timeDiff === -2) {
-      title = `${this.props.name}-${this.props.salindex} heartbeat\n${timeDiffText}`;
+      title += `${timeDiffText}`;
+    } else {
+      title += `Last seen: ${timeDiffText}`;
     }
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
@@ -121,8 +124,8 @@ export default class CSCDetail extends Component {
             <HeartbeatIcon status={heartbeatStatus === 'alert' ? 'unknown' : heartbeatStatus} title={title} />
           </div>
         </div>
-        <div className={[styles.nameSection, stateClass].join(' ')} title={`${this.props.name}-${this.props.salindex}`}>
-          {`${this.props.name}-${this.props.salindex}`}
+        <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
+          {cscText(this.props.name, this.props.salindex)}
         </div>
       </div>
     );

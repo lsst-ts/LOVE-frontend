@@ -8,6 +8,10 @@ import styles from './Watcher.module.css';
 
 export default class Watcher extends Component {
   static propTypes = {
+    /** Name of the current user */
+    user: PropTypes.string,
+    /** Number of seconds to add to a TAI timestamp to convert it in UTC */
+    taiToUtc: PropTypes.number,
     /** List of alarms that are displayed. See examples below */
     alarms: PropTypes.array,
     /** Function to dispatch an alarm acknowledgement */
@@ -120,6 +124,8 @@ export default class Watcher extends Component {
 
           <div className={[styles.alarmsTableWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
             <AlarmsTable
+              user={this.props.user}
+              taiToUtc={this.props.taiToUtc}
               alarms={alarmsToShow}
               ackAlarm={this.props.ackAlarm}
               muteAlarm={this.props.muteAlarm}

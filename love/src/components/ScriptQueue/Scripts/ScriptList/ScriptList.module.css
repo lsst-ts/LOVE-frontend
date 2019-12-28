@@ -2,7 +2,7 @@
   padding: 0.5em;
   padding-bottom: 0;
   background: var(--second-secondary-background-color);
-  height: 100%;
+  height: calc(100% - 1em);
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 5px;
@@ -11,6 +11,11 @@
 .scriptListContainer {
   background: var(--second-secondary-background-color);
   padding: 0.25em;
+  height: calc(100% - 0.5em);
+}
+
+.noOverflow {
+  overflow-y: initial;
 }
 
 /* width */
