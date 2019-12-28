@@ -3,7 +3,7 @@
   vertical-align: top;
   fill: var(--status-disabled-color);
   stroke: var(--status-disabled-color);
-  margin: 0.1em;
+  margin: 0.2em;
 }
 
 .okStatus {
