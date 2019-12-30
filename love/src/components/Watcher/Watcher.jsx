@@ -7,6 +7,8 @@ import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
 
+const TIMEOUT = 3;
+
 export default class Watcher extends Component {
   static propTypes = {
     /** Name of the current user */
@@ -48,7 +50,6 @@ export default class Watcher extends Component {
   };
 
   componentWillUnmount = () => {
-    console.log('clearingTimeout willUnmount');
     clearTimeout(this.timer);
     this.props.unsubscribeToStreams();
   };
@@ -72,12 +73,10 @@ export default class Watcher extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.waiting === false && this.state.waiting === true) {
-      console.log('setting waiting = true');
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        console.log('timeout, waiting: ', this.state.waiting);
         this.setState({ waiting: false });
-      }, 3100);
+      }, TIMEOUT * 1000 + 100);
     }
   }
 
@@ -94,7 +93,7 @@ export default class Watcher extends Component {
         alarm['severity'] <= 1 &&
         alarm['maxSeverity'] <= 1 &&
         alarm['acknowledged'] &&
-        now - alarm['timestampAcknowledged'] >= 3
+        now - alarm['timestampAcknowledged'] >= TIMEOUT
       ) {
         continue;
       }
