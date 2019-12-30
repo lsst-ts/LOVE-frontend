@@ -87,7 +87,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
       </div>*/}
 
       {muted ? (
-        <div className={styles.firstColumn}>
+        <div className={styles.panel1}>
           <div>
             <div className={styles.dataTable}>
               <div className={styles.title}> Muted by: </div>
@@ -114,7 +114,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           </Button>
         </div>
       ) : (
-        <div className={styles.firstColumn}>
+        <div className={styles.panel1}>
           <div className={styles.title}> Select the muting time range: </div>
           <Dropdown
             className={styles.dropDownClassName}
@@ -152,7 +152,8 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           </Button>
         </div>
       )}
-      <div>
+
+      <div className={styles.panel2}>
         <div className={styles.dataTable}>
           <div className={styles.title}> Acknowledged by: </div>
           <div className={styles.dataCell}> {acknowledgedBy} </div>
@@ -162,9 +163,8 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
 
           <div className={styles.title}> Will auto-ack at: </div>
           <TimestampDisplay taiToUtc={taiToUtc} time={willAutoAckTime} defValue="Already acknowledged" />
-        </div>
 
-        <div className={styles.dataTable}>
+          <div>&nbsp;</div> <div>&nbsp;</div>
           <div className={styles.title}> {escalatedToTitle} </div>
           <div className={styles.dataCell}> {escalatedTo} </div>
 
@@ -173,7 +173,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
         </div>
       </div>
 
-      <div>
+      <div className={styles.panel3}>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
           <TimestampDisplay taiToUtc={taiToUtc} time={sevUpdate} defValue="Never" />
@@ -186,10 +186,9 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
         </div>
       </div>
 
-      <div> </div>
-      <div className={styles.reason}>
+      <div className={styles.panel4}>
         <div className={styles.title}>Alarm reason:</div>
-        <div>
+        <div className={styles.reason}>
           <p>{alarm.reason}</p>
         </div>
       </div>
