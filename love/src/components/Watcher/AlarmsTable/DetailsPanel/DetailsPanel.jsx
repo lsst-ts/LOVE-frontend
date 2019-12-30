@@ -50,8 +50,9 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
   const willUnmuteTime = alarm.timestampUnmute;
 
   return (
+    <>
     <div className={styles.expandedColumn}>
-      <div>
+      {/*<div>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
           <TimestampDisplay taiToUtc={taiToUtc} time={sevUpdate} defValue="Never" />
@@ -61,11 +62,6 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
 
           <div className={styles.title}> Last update: </div>
           <TimestampDisplay taiToUtc={taiToUtc} time={lastUpdate} defValue="Never" />
-        </div>
-
-        <div className={styles.title}>Alarm reason:</div>
-        <div>
-          <p>{alarm.reason}</p>
         </div>
       </div>
 
@@ -88,10 +84,10 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           <div className={styles.title}> {escalatedTimeTitle} </div>
           <TimestampDisplay taiToUtc={taiToUtc} time={escalatedTime} defValue="Never" />
         </div>
-      </div>
+      </div>*/}
 
       {muted ? (
-        <div>
+        <div className={styles.firstColumn}>
           <div>
             <div className={styles.dataTable}>
               <div className={styles.title}> Muted by: </div>
@@ -118,7 +114,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           </Button>
         </div>
       ) : (
-        <div>
+        <div className={styles.firstColumn}>
           <div className={styles.title}> Select the muting time range: </div>
           <Dropdown
             className={styles.dropDownClassName}
@@ -156,6 +152,48 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           </Button>
         </div>
       )}
+      <div>
+        <div className={styles.dataTable}>
+          <div className={styles.title}> Acknowledged by: </div>
+          <div className={styles.dataCell}> {acknowledgedBy} </div>
+
+          <div className={styles.title}> {ackTimeTitle} </div>
+          <TimestampDisplay taiToUtc={taiToUtc} time={ackTime} defValue="Never" />
+
+          <div className={styles.title}> Will auto-ack at: </div>
+          <TimestampDisplay taiToUtc={taiToUtc} time={willAutoAckTime} defValue="Already acknowledged" />
+        </div>
+
+        <div className={styles.dataTable}>
+          <div className={styles.title}> {escalatedToTitle} </div>
+          <div className={styles.dataCell}> {escalatedTo} </div>
+
+          <div className={styles.title}> {escalatedTimeTitle} </div>
+          <TimestampDisplay taiToUtc={taiToUtc} time={escalatedTime} defValue="Never" />
+        </div>
+      </div>
+
+      <div>
+        <div className={styles.dataTable}>
+          <div className={styles.title}> Severity update: </div>
+          <TimestampDisplay taiToUtc={taiToUtc} time={sevUpdate} defValue="Never" />
+
+          <div className={styles.title}> Max sev. update: </div>
+          <TimestampDisplay taiToUtc={taiToUtc} time={maxSevUpdate} defValue="Never" />
+
+          <div className={styles.title}> Last update: </div>
+          <TimestampDisplay taiToUtc={taiToUtc} time={lastUpdate} defValue="Never" />
+        </div>
+      </div>
+
+      <div> </div>
+      <div className={styles.reason}>
+        <div className={styles.title}>Alarm reason:</div>
+        <div>
+          <p>{alarm.reason}</p>
+        </div>
+      </div>
     </div>
+    </>
   );
 }

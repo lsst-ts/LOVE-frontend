@@ -1,11 +1,36 @@
 .expandedColumn {
   display: grid;
   grid-template-columns:
-    minmax(25em, min-content)
+    minmax(20em, min-content)
     minmax(25em, min-content)
     minmax(25em, min-content);
   column-gap: 2em;
   width: fit-content;
+}
+
+.secondRow {
+  display: grid;
+  grid-template-columns:
+    minmax(25em, min-content)
+    minmax(52em, min-content);
+  column-gap: 2em;
+  width: fit-content;
+}
+
+.firstColumn {
+  grid-row: 1 / 2;
+}
+
+.reason {
+  display: block;
+  grid-column: span 2;
+}
+
+.reason p {
+  max-height: 20em;
+  overflow-y: auto;
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 
 .title {
