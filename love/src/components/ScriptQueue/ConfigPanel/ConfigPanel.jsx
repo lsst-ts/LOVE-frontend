@@ -42,6 +42,8 @@ export default class ConfigPanel extends Component {
       stopCheckpoint: '',
       logLevel: 20,
       orientation: 'below',
+      sizeWeight: 0.5,
+      resizingStart: undefined,
     };
   }
 
@@ -109,6 +111,33 @@ export default class ConfigPanel extends Component {
     );
   };
 
+  startResizingWithMouse = (ev) => {
+    this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
+    document.onmousemove = this.onMouseMove
+    document.onmouseup = this.onMouseUp
+  };
+
+  onMouseMove = (ev) =>{
+    if(this.state.resizingStart){
+      const currentX = ev.clientX;
+      const currentY = ev.clientY;
+
+      const {orientation, resizingStart, width, height, sizeWeight} = this.state;
+      const displacement = orientation === "below" ? currentY - resizingStart.y: currentX - resizingStart.x
+      const total = orientation === 'below' ? height : width;
+      const boundary = 150/height;//150px aprox of titles and buttons
+      const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1- boundary);
+      this.setState({
+        sizeWeight: newWeight,
+      });     
+      ev.preventDefault();
+    }
+  }
+  onMouseUp = () =>{
+    document.onmousemove = null;
+    document.onmouseup = null;
+  }
+
   render() {
     const { orientation } = this.state;
 
@@ -116,14 +145,14 @@ export default class ConfigPanel extends Component {
     const sidePanelSize = {
       below: {
         firstWidth: `${this.state.width}px`,
-        firstHeight: `calc(${this.state.height / 2}px - 6em)`,
+        firstHeight: `calc(${this.state.height * this.state.sizeWeight}px - 6em)`,
         secondWidth: `${this.state.width}px`,
-        secondHeight: `calc(${this.state.height / 2}px - 6em)`,
+        secondHeight: `calc(${this.state.height * (1 - this.state.sizeWeight)}px - 6em)`,
       },
       beside: {
-        firstWidth: `calc(${this.state.width / 2}px - 1em)`,
+        firstWidth: `calc(${this.state.width * this.state.sizeWeight}px - 1em)`,
         firstHeight: `calc(${this.state.height}px - 9em)`,
-        secondWidth: `calc(${this.state.width / 2}px - 1em)`,
+        secondWidth: `calc(${this.state.width * (1 - this.state.sizeWeight)}px - 1em)`,
         secondHeight: `calc(${this.state.height}px - 9em)`,
       },
     };
@@ -185,7 +214,7 @@ export default class ConfigPanel extends Component {
                 value={
                   this.props.configPanel.configSchema === ''
                     ? NO_SCHEMA_MESSAGE
-                    : [this.props.configPanel.configSchema, this.props.configPanel.configSchema].join('\n')
+                    : this.props.configPanel.configSchema
                 }
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
@@ -197,6 +226,9 @@ export default class ConfigPanel extends Component {
             <div
               className={[styles.divider, dividerClassName[orientation]].join(' ')}
               style={dividerSizer[orientation]}
+              onMouseDown={this.startResizingWithMouse}
+              // onMouseLeave={this.stopResizingWithMouse}
+              // onMouseOut={this.stopResizingWithMouse}
             ></div>
 
             <div className={styles.sidePanel}>
