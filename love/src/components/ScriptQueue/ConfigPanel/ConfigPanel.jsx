@@ -196,6 +196,7 @@ export default class ConfigPanel extends Component {
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
                 tabSize={2}
+                showPrintMargin={false}
               />
             </div>
           </div>
