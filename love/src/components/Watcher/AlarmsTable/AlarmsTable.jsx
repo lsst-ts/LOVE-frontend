@@ -236,6 +236,7 @@ export default class AlarmsTable extends PureComponent {
                         header={'Max severity'}
                         filterName={'maxSeverity'}
                         filter={this.state.filters.maxSeverity}
+                        sortLabels={['Less critical first', 'More critical first']}
                       />
                       <ColumnHeader
                         {...defaultColumnProps}
@@ -250,6 +251,7 @@ export default class AlarmsTable extends PureComponent {
                         header={'Severity update'}
                         filterName={'timestampSeverityOldest'}
                         filter={this.state.filters.timestampSeverityOldest}
+                        sortLabels={['Recents last', 'Recents first']}
                       />
                     </>
                   );
