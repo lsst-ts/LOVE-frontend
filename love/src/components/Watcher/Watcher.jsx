@@ -7,7 +7,6 @@ import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
 
-
 export default class Watcher extends Component {
   static propTypes = {
     /** Name of the current user */
@@ -38,14 +37,19 @@ export default class Watcher extends Component {
     super();
     this.state = {
       selectedTab: 'unmuted',
+      waiting: false,
     };
+    let timer = null;
   }
+
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
   };
 
   componentWillUnmount = () => {
+    console.log('clearingTimeout willUnmount');
+    clearTimeout(this.timer);
     this.props.unsubscribeToStreams();
   };
 
@@ -66,6 +70,17 @@ export default class Watcher extends Component {
     default: this.sortFunctions['severity'],
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.waiting === false && this.state.waiting === true) {
+      console.log('setting waiting = true');
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        console.log('timeout, waiting: ', this.state.waiting);
+        this.setState({ waiting: false });
+      }, 3100);
+    }
+  }
+
   render() {
     let alarmsToShow = [];
     let mutedAlarmsCount = 0;
@@ -79,7 +94,7 @@ export default class Watcher extends Component {
         alarm['severity'] <= 1 &&
         alarm['maxSeverity'] <= 1 &&
         alarm['acknowledged'] &&
-        now - alarm['timestampSeverityOldest'] >= 10
+        now - alarm['timestampAcknowledged'] >= 3
       ) {
         continue;
       }
@@ -136,7 +151,12 @@ export default class Watcher extends Component {
               user={this.props.user}
               taiToUtc={this.props.taiToUtc}
               alarms={alarmsToShow}
-              ackAlarm={this.props.ackAlarm}
+              ackAlarm={
+                (name, severity, acknowledgedBy) => {
+                  this.setState({ waiting: true });
+                  this.props.ackAlarm(name, severity, acknowledgedBy);
+                }
+              }
               muteAlarm={this.props.muteAlarm}
               unmuteAlarm={this.props.unmuteAlarm}
               sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}

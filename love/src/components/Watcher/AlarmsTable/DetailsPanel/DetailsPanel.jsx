@@ -24,43 +24,43 @@ const initialState = {
   muteSeverity: severityOptions[0],
 };
 
-export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
+export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }) {
   const [timeout, setTimeout] = useState(initialState.timeout);
   const [muteSeverity, setMuteSeverity] = useState(initialState.muteSeverity);
 
-  const sevUpdate = alarm.timestampSeverityOldest * 1000;
-  const maxSevUpdate = alarm.timestampMaxSeverity * 1000;
-  const lastUpdate = alarm.timestampSeverityNewest * 1000;
+  const sevUpdate = alarm.timestampSeverityOldest;
+  const maxSevUpdate = alarm.timestampMaxSeverity;
+  const lastUpdate = alarm.timestampSeverityNewest;
 
   const acked = alarm.acknowledged;
   const acknowledgedBy = !acked ? 'Not acknowledged' : alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Nobody';
   const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
-  const ackTime = alarm.timestampAcknowledged * 1000;
-  const willAutoAckTime = alarm.timestampAutoAcknowledge * 1000;
+  const ackTime = alarm.timestampAcknowledged;
+  const willAutoAckTime = alarm.timestampAutoAcknowledge;
 
   const escalated = alarm.escalated;
   const escalatedToTitle = escalated ? 'Escalated to:' : 'Will escalate to:';
   const escalatedTo = alarm.escalatedTo ? alarm.escalatedTo : 'Nobody';
   const escalatedTimeTitle = escalated ? 'Escalated at:' : 'Will escalate at:';
-  const escalatedTime = alarm.timestampEscalate * 1000;
+  const escalatedTime = alarm.timestampEscalate;
 
   const muted = alarm.mutedBy !== '';
   const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
   const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
-  const willUnmuteTime = alarm.timestampUnmute * 1000;
+  const willUnmuteTime = alarm.timestampUnmute;
 
   return (
     <div className={styles.expandedColumn}>
       <div>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
-          <TimestampDisplay time={sevUpdate} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} time={sevUpdate} defValue="Never" />
 
           <div className={styles.title}> Max sev. update: </div>
-          <TimestampDisplay time={maxSevUpdate} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} time={maxSevUpdate} defValue="Never" />
 
           <div className={styles.title}> Last update: </div>
-          <TimestampDisplay time={lastUpdate} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} time={lastUpdate} defValue="Never" />
         </div>
 
         <div className={styles.title}>Alarm reason:</div>
@@ -75,10 +75,10 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           <div className={styles.dataCell}> {acknowledgedBy} </div>
 
           <div className={styles.title}> {ackTimeTitle} </div>
-          <TimestampDisplay time={ackTime} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} time={ackTime} defValue="Never" />
 
           <div className={styles.title}> Will auto-ack at: </div>
-          <TimestampDisplay time={willAutoAckTime} defValue="Already acknowledged" />
+          <TimestampDisplay taiToUtc={taiToUtc} time={willAutoAckTime} defValue="Already acknowledged" />
         </div>
 
         <div className={styles.dataTable}>
@@ -86,7 +86,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
           <div className={styles.dataCell}> {escalatedTo} </div>
 
           <div className={styles.title}> {escalatedTimeTitle} </div>
-          <TimestampDisplay time={escalatedTime} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} time={escalatedTime} defValue="Never" />
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export default function DetailsPanel({ alarm, muteAlarm, unmuteAlarm }) {
               <div className={styles.dataCell}> {mutedBy} </div>
 
               <div className={styles.title}> Will unmute at: </div>
-              <TimestampDisplay time={willUnmuteTime} defValue="Never" />
+              <TimestampDisplay taiToUtc={taiToUtc} time={willUnmuteTime} defValue="Never" />
 
               <div className={styles.title}> Muted severity: </div>
               <div className={styles.dataCell}> {mutedSeverity} </div>
