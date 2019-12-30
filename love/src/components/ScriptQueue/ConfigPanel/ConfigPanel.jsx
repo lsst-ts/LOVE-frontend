@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
+import Ajv from 'ajv';
+import YAML from 'yaml'
 
 import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
@@ -45,21 +47,18 @@ export default class ConfigPanel extends Component {
       sizeWeight: 0.5,
       resizingStart: undefined,
     };
+    this.ajv = new Ajv();
   }
 
-  // componentDidUpdate(prevProps) {
-  //   const configSchema = this.props.configPanel.configSchema;
-  //   if (configSchema && configSchema !== '' && configSchema !== prevProps.configPanel.configSchema) {
-  //     this.setState({
-  //       value: this.props.configPanel.configSchema
-  //         .split('\n')
-  //         .map((x) => '# ' + x)
-  //         .join('\n'),
-  //     });
-  //   }
-  // }
-
   onChange = (newValue) => {
+    console.log(newValue);
+    const schema = YAML.parse(this.props.configPanel.configSchema)
+    const config = YAML.parse(newValue);
+    const valid = this.ajv.validate(schema, config);
+    console.log('valid', valid, this.ajv.errors);
+    if(this.ajv.errors && this.ajv.errors[0]){
+      console.log('error', this.ajv.errors[0])
+    }
     this.setState({
       value: newValue,
     });
@@ -157,10 +156,6 @@ export default class ConfigPanel extends Component {
       },
     };
 
-    const dividerSizer = {
-      below: { width: sidePanelSize.below.firstWidth },
-      beside: { height: sidePanelSize.beside.firstHeight },
-    };
 
     const dividerClassName = {
       below: styles.horizontalDivider,
@@ -225,7 +220,6 @@ export default class ConfigPanel extends Component {
 
             <div
               className={[styles.divider, dividerClassName[orientation]].join(' ')}
-              style={dividerSizer[orientation]}
               onMouseDown={this.startResizingWithMouse}
               // onMouseLeave={this.stopResizingWithMouse}
               // onMouseOut={this.stopResizingWithMouse}
