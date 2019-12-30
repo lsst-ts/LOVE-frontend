@@ -22,7 +22,7 @@ export default class ConfigPanel extends Component {
     closeConfigPanel: () => 0,
     launchScript: () => 0,
     configPanel: {
-      configSchema: NO_SCHEMA_MESSAGE
+      configSchema: NO_SCHEMA_MESSAGE,
     },
   };
 
@@ -113,16 +113,16 @@ export default class ConfigPanel extends Component {
     const { orientation } = this.state;
 
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
-    const sidePanelSize= {
-      'below': {
+    const sidePanelSize = {
+      below: {
         width: `${this.state.width}px`,
         height: `calc(${this.state.height / 2}px - 6em)`,
       },
-      'beside':{
+      beside: {
         width: `${this.state.width / 2}px`,
         height: `calc(${this.state.height}px - 9em)`,
-      }
-    }
+      },
+    };
 
     const dividerSizer = orientation === 'beside' ? 'height' : 'width';
     return this.props.configPanel.show ? (
@@ -170,15 +170,18 @@ export default class ConfigPanel extends Component {
                 width={sidePanelSize[orientation].width}
                 height={sidePanelSize[orientation].height}
                 value={
-                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : [this.props.configPanel.configSchema,this.props.configPanel.configSchema].join('\n')
+                  this.props.configPanel.configSchema === ''
+                    ? NO_SCHEMA_MESSAGE
+                    : [this.props.configPanel.configSchema, this.props.configPanel.configSchema].join('\n')
                 }
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
                 readOnly
+                showPrintMargin={false}
               />
             </div>
 
-            {/* <div className={styles.verticalDivider} style={{ [dividerSizer]: sidePanelSize[dividerSizer] }}></div> */}
+            <div className={styles.verticalDivider} style={{ [dividerSizer]: sidePanelSize[dividerSizer] }}></div>
 
             <div className={styles.sidePanel}>
               <h3>CONFIG</h3>
