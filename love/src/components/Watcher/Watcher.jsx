@@ -41,7 +41,6 @@ export default class Watcher extends Component {
       selectedTab: 'unmuted',
       waiting: false,
     };
-    let timer = null;
   }
 
 
@@ -84,7 +83,6 @@ export default class Watcher extends Component {
     let alarmsToShow = [];
     let mutedAlarmsCount = 0;
     let unmutedAlarmsCount = 0;
-    let unackMutedAlarmsCount = 0;
     let unackUnmutedAlarmsCount = 0;
     const now = moment().unix() - this.props.taiToUtc;
 
@@ -106,7 +104,6 @@ export default class Watcher extends Component {
         }
       } else {
         mutedAlarmsCount += 1;
-        unackMutedAlarmsCount += alarm['acknowledged'] ? 0 : 1;
         if (this.state.selectedTab === 'muted') {
           alarmsToShow.push(alarm);
         }
