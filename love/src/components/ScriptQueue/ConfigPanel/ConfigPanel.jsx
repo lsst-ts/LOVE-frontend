@@ -113,15 +113,15 @@ export default class ConfigPanel extends Component {
     const { orientation } = this.state;
 
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
-    let sidePanelSize = {
-      width: `${this.state.width / 2}px`,
-      height: `calc(${this.state.height}px - 6em)`,
-    };
-    if (orientation === 'below') {
-      sidePanelSize = {
+    const sidePanelSize= {
+      'below': {
         width: `${this.state.width}px`,
         height: `calc(${this.state.height / 2}px - 6em)`,
-      };
+      },
+      'beside':{
+        width: `${this.state.width / 2}px`,
+        height: `calc(${this.state.height}px - 9em)`,
+      }
     }
 
     const dividerSizer = orientation === 'beside' ? 'height' : 'width';
@@ -167,10 +167,10 @@ export default class ConfigPanel extends Component {
                 mode="yaml"
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
-                width={sidePanelSize.width}
-                height={sidePanelSize.height}
+                width={sidePanelSize[orientation].width}
+                height={sidePanelSize[orientation].height}
                 value={
-                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
+                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : [this.props.configPanel.configSchema,this.props.configPanel.configSchema].join('\n')
                 }
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
@@ -187,8 +187,8 @@ export default class ConfigPanel extends Component {
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
                 onChange={this.onChange}
-                width={sidePanelSize.width}
-                height={sidePanelSize.height}
+                width={sidePanelSize[orientation].width}
+                height={sidePanelSize[orientation].height}
                 value={this.state.value}
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
