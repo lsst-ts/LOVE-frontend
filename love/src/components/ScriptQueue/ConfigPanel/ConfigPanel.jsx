@@ -119,12 +119,21 @@ export default class ConfigPanel extends Component {
         height: `calc(${this.state.height / 2}px - 6em)`,
       },
       beside: {
-        width: `${this.state.width / 2}px`,
+        width: `calc(${this.state.width / 2}px - 1em)`,
         height: `calc(${this.state.height}px - 9em)`,
       },
     };
 
-    const dividerSizer = orientation === 'beside' ? 'height' : 'width';
+    const dividerSizer = {
+      below: { width: sidePanelSize.below.width },
+      beside: { height: sidePanelSize.beside.height },
+    };
+
+    const dividerClassName = {
+      below: styles.horizontalDivider,
+      beside: styles.verticalDivider,
+    };
+
     return this.props.configPanel.show ? (
       <Rnd
         default={{
@@ -181,7 +190,10 @@ export default class ConfigPanel extends Component {
               />
             </div>
 
-            <div className={styles.verticalDivider} style={{ [dividerSizer]: sidePanelSize[dividerSizer] }}></div>
+            <div
+              className={[styles.divider, dividerClassName[orientation]].join(' ')}
+              style={dividerSizer[orientation]}
+            ></div>
 
             <div className={styles.sidePanel}>
               <h3>CONFIG</h3>
