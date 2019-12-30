@@ -4,10 +4,11 @@ import styles from './ScriptList.module.css';
 
 export default class ScriptList extends Component {
   static propTypes = {
-    children: PropTypes.array,
+    children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     onDragExit: PropTypes.func,
     onDragEnd: PropTypes.func,
     onDragEnter: PropTypes.func,
+    noOverflow: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -36,7 +37,7 @@ export default class ScriptList extends Component {
   render() {
     return (
       <div
-        className={styles.scriptListWrapper}
+        className={[styles.scriptListWrapper, this.props.noOverflow ? styles.noOverflow : ''].join(' ')}
         onDragEnter={this.onDragEnter}
         onDragLeave={this.onDragLeave}
         onDragExit={this.props.onDragExit}
