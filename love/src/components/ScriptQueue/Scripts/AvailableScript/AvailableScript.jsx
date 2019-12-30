@@ -39,69 +39,29 @@ export default class AvailableScript extends PureComponent {
     };
   }
 
-  onClick = () => {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
-  };
-
   render() {
     const { path } = this.props;
     const fileFolder = path.substring(0, path.lastIndexOf('/') + 1);
-    const fileName = 
+    const fileName =
       path.lastIndexOf('.') > -1
         ? path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf('.'))
         : path.substring(path.lastIndexOf('/') + 1);
     const fileExtension = path.lastIndexOf('.') > -1 ? path.substring(path.lastIndexOf('.')) : '';
     return (
       <div className={scriptStyles.scriptContainer}>
-        <div>
-          <div className={styles.availableScriptContainer} onClick={this.onClick}>
-            <div className={scriptStyles.externalContainer}>
-              <span className={scriptStyles.externalText}>{this.props.isStandard ? '[STANDARD]' : '[EXTERNAL]'}</span>
-            </div>
-            <div className={scriptStyles.pathTextContainer} title={path}>
-              {(() => {
-                if (!this.props.isCompact) {
-                  return <span className={scriptStyles.pathText}>{fileFolder}</span>;
-                }
-                if (fileFolder !== '') {
-                  return <span className={scriptStyles.pathText}>.../</span>;
-                }
-                return null;
-              })()}
-              {/* <span className={scriptStyles.pathText}>{fileFolder}</span> */}
-              <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
-              <span className={scriptStyles.pathText}>{fileExtension}</span>
-            </div>
-            <div className={styles.estimatedTimeContainer}>
-              <span className={styles.estimatedTimeLabel}>Estimated time:</span>
-              <span className={styles.estimatedTimeValue}>{this.props.estimatedTime}</span>
-            </div>
-          </div>
-          <div
-            className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
-          >
-            <div className={[scriptStyles.expandedSection].join(' ')}>
-              <div className={scriptStyles.expandedSubSection}>
-                <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Classname:</span>
-                  <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
-                </div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Description:</span>
-                  <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
-                </div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Remotes:</span>
-                  <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
-                </div>
-                {/* <div className={scriptStyles.subSectionTitle}>
-                  SCHEMA
-                </div> */}
-              </div>
-            </div>
+        <div className={styles.availableScriptContainer}>
+          <div className={scriptStyles.pathTextContainer} title={path}>
+            {(() => {
+              if (!this.props.isCompact) {
+                return <span className={scriptStyles.pathText}>{fileFolder}</span>;
+              }
+              if (fileFolder !== '') {
+                return <span className={scriptStyles.pathText}>.../</span>;
+              }
+              return null;
+            })()}
+            <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
+            <span className={scriptStyles.pathText}>{fileExtension}</span>
           </div>
         </div>
         {this.props.commandExecutePermission && (

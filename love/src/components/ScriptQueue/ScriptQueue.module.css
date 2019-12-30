@@ -9,7 +9,7 @@
   min-width: 1050px;
   max-width: 1900px;
   height: 100%;
-  min-height: 600px;
+  min-height: 800px;
   position: relative;
 }
 
@@ -106,6 +106,7 @@
   flex-basis: 100%;
   transition: all 500ms ease-in-out;
   background: var(--second-primary-background-color);
+  height: calc(100% - 1em);
 }
 
 .waitingScriptList {
@@ -171,6 +172,8 @@
 }
 
 .collapsableScriptListContent {
+  display: grid;
+  grid-template-rows: min-content 1fr;
   position: absolute;
   left: 0px;
   width: 100%;
@@ -212,7 +215,7 @@
 }
 
 .pauseIconContainer > span {
-  padding-right: 0.5em; 
+  padding-right: 0.5em;
 }
 
 .pauseIconWrapper {
@@ -220,4 +223,41 @@
   background: var(--second-tertiary-background-color);
   padding: 0.25em 0.5em;
   border-radius: 1em;
+}
+
+.standardExternalContainer {
+  display: grid;
+  height: 100%;
+  grid-template-rows: min-content minmax(0, min-content) min-content min-content minmax(0, min-content);
+  max-height: 100%;
+}
+
+.standardExternalContainer div {
+  overflow: auto;
+}
+
+.standardExternalContainer .availableScriptTypeSeparator {
+  border-bottom: 1px solid var(--second-quaternary-background-color);
+  padding-top: 1em;
+  transform: translateY(-0.5em);
+}
+
+.standardExternalContainer .availableScriptTypeTitle {
+  display: grid;
+  grid-template-columns: 1fr 1.3em;
+  padding: 1em 0;
+}
+
+.externalScriptsContainer, .standardScriptsContainer {
+  max-height: 100%;
+  transition: max-height 0.2s;
+}
+
+.standardExternalContainer .availableListCollapsed {
+  max-height: 0;
+}
+
+.availableScriptsInput {
+  line-height: 1em;
+  height: 1em;
 }
