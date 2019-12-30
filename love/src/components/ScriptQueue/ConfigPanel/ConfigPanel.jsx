@@ -9,6 +9,8 @@ import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
 
+const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
+
 export default class ConfigPanel extends Component {
   static propTypes = {
     launchScript: PropTypes.func,
@@ -19,38 +21,43 @@ export default class ConfigPanel extends Component {
   static defaultProps = {
     closeConfigPanel: () => 0,
     launchScript: () => 0,
-    configPanel: {},
+    configPanel: {
+      configSchema: NO_SCHEMA_MESSAGE,
+    },
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: `# Insert your schema here:
+      value: `# Insert your config here:
 # e.g.:
 # wait_time: 3600
 # fail_run: false
 # fail_cleanup: false
 `,
-      width: '500px',
-      height: '500px',
+      width: 500,
+      height: 500,
       loading: false,
       pauseCheckpoint: '',
       stopCheckpoint: '',
       logLevel: 20,
+      orientation: 'below',
+      sizeWeight: 0.5,
+      resizingStart: undefined,
     };
   }
 
-  componentDidUpdate(prevProps) {
-    const configSchema = this.props.configPanel.configSchema;
-    if (configSchema && configSchema !== '' && configSchema !== prevProps.configPanel.configSchema) {
-      this.setState({
-        value: this.props.configPanel.configSchema
-          .split('\n')
-          .map((x) => '# ' + x)
-          .join('\n'),
-      });
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const configSchema = this.props.configPanel.configSchema;
+  //   if (configSchema && configSchema !== '' && configSchema !== prevProps.configPanel.configSchema) {
+  //     this.setState({
+  //       value: this.props.configPanel.configSchema
+  //         .split('\n')
+  //         .map((x) => '# ' + x)
+  //         .join('\n'),
+  //     });
+  //   }
+  // }
 
   onChange = (newValue) => {
     this.setState({
@@ -71,13 +78,19 @@ export default class ConfigPanel extends Component {
   };
   onResize = (event, direction, element) => {
     this.setState({
-      width: element.style.width,
-      height: element.style.height,
+      width: parseInt(element.style.width.replace(/px/g, '')),
+      height: parseInt(element.style.height.replace(/px/g, '')),
     });
   };
 
   closeConfigPanel = () => {
     this.props.closeConfigPanel();
+  };
+
+  rotatePanel = () => {
+    this.setState({
+      orientation: this.state.orientation === 'beside' ? 'below' : 'beside',
+    });
   };
 
   onLaunch = () => {
@@ -98,15 +111,69 @@ export default class ConfigPanel extends Component {
     );
   };
 
+  startResizingWithMouse = (ev) => {
+    this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
+    document.onmousemove = this.onMouseMove
+    document.onmouseup = this.onMouseUp
+  };
+
+  onMouseMove = (ev) =>{
+    if(this.state.resizingStart){
+      const currentX = ev.clientX;
+      const currentY = ev.clientY;
+
+      const {orientation, resizingStart, width, height, sizeWeight} = this.state;
+      const displacement = orientation === "below" ? currentY - resizingStart.y: currentX - resizingStart.x
+      const total = orientation === 'below' ? height : width;
+      const boundary = 150/height;//150px aprox of titles and buttons
+      const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1- boundary);
+      this.setState({
+        sizeWeight: newWeight,
+      });     
+      ev.preventDefault();
+    }
+  }
+  onMouseUp = () =>{
+    document.onmousemove = null;
+    document.onmouseup = null;
+  }
+
   render() {
+    const { orientation } = this.state;
+
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
+    const sidePanelSize = {
+      below: {
+        firstWidth: `${this.state.width}px`,
+        firstHeight: `calc(${this.state.height * this.state.sizeWeight}px - 6em)`,
+        secondWidth: `${this.state.width}px`,
+        secondHeight: `calc(${this.state.height * (1 - this.state.sizeWeight)}px - 6em)`,
+      },
+      beside: {
+        firstWidth: `calc(${this.state.width * this.state.sizeWeight}px - 1em)`,
+        firstHeight: `calc(${this.state.height}px - 9em)`,
+        secondWidth: `calc(${this.state.width * (1 - this.state.sizeWeight)}px - 1em)`,
+        secondHeight: `calc(${this.state.height}px - 9em)`,
+      },
+    };
+
+    const dividerSizer = {
+      below: { width: sidePanelSize.below.firstWidth },
+      beside: { height: sidePanelSize.beside.firstHeight },
+    };
+
+    const dividerClassName = {
+      below: styles.horizontalDivider,
+      beside: styles.verticalDivider,
+    };
+
     return this.props.configPanel.show ? (
       <Rnd
         default={{
           x: this.props.configPanel.x,
           y: this.props.configPanel.y,
-          width: this.state.width,
-          height: `calc(${this.state.height} + 100px)`,
+          width: `${this.state.width}px`,
+          height: `calc(${this.state.height}px)`,
         }}
         style={{ zIndex: 1000 }}
         bounds={'parent'}
@@ -117,22 +184,69 @@ export default class ConfigPanel extends Component {
         <div className={styles.configPanelContainer}>
           <div className={[styles.topBar, styles.bar].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
-            <span className={styles.closeButton} onClick={this.closeConfigPanel}>
-              X
-            </span>
+            <div className={styles.topButtonsContainer}>
+              {orientation === 'below' ? (
+                <span className={styles.rotateButton} onClick={this.rotatePanel}>
+                  &#8758;
+                </span>
+              ) : (
+                <span className={styles.rotateButton} onClick={this.rotatePanel}>
+                  &#8229;{' '}
+                </span>
+              )}
+              <span className={styles.closeButton} onClick={this.closeConfigPanel}>
+                X
+              </span>
+            </div>
           </div>
-          <div className={styles.body}>
-            <AceEditor
-              mode="yaml"
-              theme="solarized_dark"
-              name="UNIQUE_ID_OF_DIV"
-              onChange={this.onChange}
-              width={this.state.width}
-              height={`calc(${this.state.height} - 4em)`}
-              value={this.state.value}
-              editorProps={{ $blockScrolling: true }}
-              fontSize={18}
-            />
+          <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
+            <div className={styles.sidePanel}>
+              <h3>
+                SCHEMA <span className={styles.readOnly}>(Read only)</span>
+              </h3>
+
+              <AceEditor
+                mode="yaml"
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                width={sidePanelSize[orientation].firstWidth}
+                height={sidePanelSize[orientation].firstHeight}
+                value={
+                  this.props.configPanel.configSchema === ''
+                    ? NO_SCHEMA_MESSAGE
+                    : this.props.configPanel.configSchema
+                }
+                editorProps={{ $blockScrolling: true }}
+                fontSize={18}
+                readOnly
+                showPrintMargin={false}
+              />
+            </div>
+
+            <div
+              className={[styles.divider, dividerClassName[orientation]].join(' ')}
+              style={dividerSizer[orientation]}
+              onMouseDown={this.startResizingWithMouse}
+              // onMouseLeave={this.stopResizingWithMouse}
+              // onMouseOut={this.stopResizingWithMouse}
+            ></div>
+
+            <div className={styles.sidePanel}>
+              <h3>CONFIG</h3>
+              <AceEditor
+                mode="yaml"
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                onChange={this.onChange}
+                width={sidePanelSize[orientation].secondWidth}
+                height={sidePanelSize[orientation].secondHeight}
+                value={this.state.value}
+                editorProps={{ $blockScrolling: true }}
+                fontSize={18}
+                tabSize={2}
+                showPrintMargin={false}
+              />
+            </div>
           </div>
           <div className={[styles.bottomBar, styles.bar].join(' ')}>
             <div className={styles.checkpointsRegexpContainer}>
