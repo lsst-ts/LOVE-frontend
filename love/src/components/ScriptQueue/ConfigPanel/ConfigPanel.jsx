@@ -115,18 +115,22 @@ export default class ConfigPanel extends Component {
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
     const sidePanelSize = {
       below: {
-        width: `${this.state.width}px`,
-        height: `calc(${this.state.height / 2}px - 6em)`,
+        firstWidth: `${this.state.width}px`,
+        firstHeight: `calc(${this.state.height / 2}px - 6em)`,
+        secondWidth: `${this.state.width}px`,
+        secondHeight: `calc(${this.state.height / 2}px - 6em)`,
       },
       beside: {
-        width: `calc(${this.state.width / 2}px - 1em)`,
-        height: `calc(${this.state.height}px - 9em)`,
+        firstWidth: `calc(${this.state.width / 2}px - 1em)`,
+        firstHeight: `calc(${this.state.height}px - 9em)`,
+        secondWidth: `calc(${this.state.width / 2}px - 1em)`,
+        secondHeight: `calc(${this.state.height}px - 9em)`,
       },
     };
 
     const dividerSizer = {
-      below: { width: sidePanelSize.below.width },
-      beside: { height: sidePanelSize.beside.height },
+      below: { width: sidePanelSize.below.firstWidth },
+      beside: { height: sidePanelSize.beside.firstHeight },
     };
 
     const dividerClassName = {
@@ -176,8 +180,8 @@ export default class ConfigPanel extends Component {
                 mode="yaml"
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
-                width={sidePanelSize[orientation].width}
-                height={sidePanelSize[orientation].height}
+                width={sidePanelSize[orientation].firstWidth}
+                height={sidePanelSize[orientation].firstHeight}
                 value={
                   this.props.configPanel.configSchema === ''
                     ? NO_SCHEMA_MESSAGE
@@ -202,8 +206,8 @@ export default class ConfigPanel extends Component {
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
                 onChange={this.onChange}
-                width={sidePanelSize[orientation].width}
-                height={sidePanelSize[orientation].height}
+                width={sidePanelSize[orientation].secondWidth}
+                height={sidePanelSize[orientation].secondHeight}
                 value={this.state.value}
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
