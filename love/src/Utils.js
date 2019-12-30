@@ -427,8 +427,8 @@ export const relativeTime = (secs, taiToUtc) => {
   return delta;
 };
 
-export const msToIsoStr = (timeMs) => {
-  return moment(timeMs).toISOString();
+export const secsToIsoStr = (secs) => {
+  return moment(secs * 1000).toISOString();
 };
 
 const watcherSuccessfulCmds = {

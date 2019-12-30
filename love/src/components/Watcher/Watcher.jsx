@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
+
+const TIMEOUT = 3;
 
 export default class Watcher extends Component {
   static propTypes = {
@@ -36,14 +39,17 @@ export default class Watcher extends Component {
     super();
     this.state = {
       selectedTab: 'unmuted',
+      waiting: false,
     };
   }
+
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
   };
 
   componentWillUnmount = () => {
+    clearTimeout(this.timer);
     this.props.unsubscribeToStreams();
   };
 
@@ -64,15 +70,31 @@ export default class Watcher extends Component {
     default: this.sortFunctions['severity'],
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.waiting === false && this.state.waiting === true) {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.setState({ waiting: false });
+      }, TIMEOUT * 1000 + 100);
+    }
+  }
+
   render() {
     let alarmsToShow = [];
     let mutedAlarmsCount = 0;
     let unmutedAlarmsCount = 0;
-    let unackMutedAlarmsCount = 0;
     let unackUnmutedAlarmsCount = 0;
+    const now = moment().unix() - this.props.taiToUtc;
 
     for (let alarm of this.props.alarms) {
-      if (alarm['severity'] <= 1 && alarm['maxSeverity'] <= 1 && alarm['acknowledged']) continue;
+      if (
+        alarm['severity'] <= 1 &&
+        alarm['maxSeverity'] <= 1 &&
+        alarm['acknowledged'] &&
+        now - alarm['timestampAcknowledged'] >= TIMEOUT
+      ) {
+        continue;
+      }
 
       if (alarm['mutedBy'] === '') {
         unmutedAlarmsCount += 1;
@@ -82,7 +104,6 @@ export default class Watcher extends Component {
         }
       } else {
         mutedAlarmsCount += 1;
-        unackMutedAlarmsCount += alarm['acknowledged'] ? 0 : 1;
         if (this.state.selectedTab === 'muted') {
           alarmsToShow.push(alarm);
         }
@@ -118,7 +139,6 @@ export default class Watcher extends Component {
                 </div>
                 MUTED ALARMS ({mutedAlarmsCount})
               </div>
-              {unackMutedAlarmsCount === 0 ? null : <Badge status="info">{unackMutedAlarmsCount}</Badge>}
             </div>
           </div>
 
@@ -127,7 +147,12 @@ export default class Watcher extends Component {
               user={this.props.user}
               taiToUtc={this.props.taiToUtc}
               alarms={alarmsToShow}
-              ackAlarm={this.props.ackAlarm}
+              ackAlarm={
+                (name, severity, acknowledgedBy) => {
+                  this.setState({ waiting: true });
+                  this.props.ackAlarm(name, severity, acknowledgedBy);
+                }
+              }
               muteAlarm={this.props.muteAlarm}
               unmuteAlarm={this.props.unmuteAlarm}
               sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
