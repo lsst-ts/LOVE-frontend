@@ -118,7 +118,6 @@ export default class Watcher extends Component {
                 </div>
                 MUTED ALARMS ({mutedAlarmsCount})
               </div>
-              {unackMutedAlarmsCount === 0 ? null : <Badge status="info">{unackMutedAlarmsCount}</Badge>}
             </div>
           </div>
 
