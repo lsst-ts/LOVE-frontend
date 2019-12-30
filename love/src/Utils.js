@@ -420,33 +420,50 @@ export const saveGroupSubscriptions = (Component) => {
 
 export const flatMap = (a, cb) => [].concat(...a.map(cb));
 
-export const timeDifference = (current, previous) => {
-  const msPerMinute = 60 * 1000;
-  const msPerHour = msPerMinute * 60;
-  const msPerDay = msPerHour * 24;
-  const msPerMonth = msPerDay * 30;
-
-  const elapsed = current - previous;
-
-  if (elapsed < msPerMinute) {
-    return '< 1 minute ago';
-  }
-  if (elapsed < msPerHour) {
-    return `${Math.round(elapsed / msPerMinute)} minutes ago`;
-  }
-  if (elapsed < msPerDay) {
-    return `${Math.round(elapsed / msPerHour)} hours ago`;
-  }
-  if (elapsed < msPerMonth) {
-    return `approximately ${Math.round(elapsed / msPerDay)} days ago`;
-  }
-  return `approximately ${Math.round(elapsed / msPerMonth)} months ago`;
+export const relativeTime = (secs, taiToUtc) => {
+  const newSecs = secs + taiToUtc;
+  const mom = moment.unix(newSecs).utc();
+  const delta = mom.fromNow();
+  return delta;
 };
 
-export const relativeTime = (timeMs) => {
-  return moment(timeMs).fromNow();
-};
-
-export const msToStr = (timeMs) => {
+export const msToIsoStr = (timeMs) => {
   return moment(timeMs).toISOString();
+};
+
+const watcherSuccessfulCmds = {
+  'cmd_acknowledge': 'acknowledged',
+  'cmd_mute': 'muted',
+  'cmd_unmute': 'unmuted',
+};
+
+const watcherErrorCmds = {
+  'cmd_acknowledge': 'acknowledging',
+  'cmd_mute': 'muting',
+  'cmd_unmute': 'unmuting',
+};
+
+export const getNotificationMessage = (salCommand) => {
+  const cmd = salCommand.cmd;
+  const result = salCommand.result;
+  const component = salCommand.component;
+
+  if (component === 'Watcher') {
+    const alarm = salCommand.params.name;
+    if (result === 'Done') {
+      return [`Alarm '${alarm}' ${watcherSuccessfulCmds[cmd]} successfully`, result];
+    } else {
+      return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
+    }
+  }
+
+  if (result === 'Done') {
+    return [`Command '${cmd}' ran successfully`, result];
+  } else {
+    return [`Command '${cmd}' returned ${result}`, result];
+  }
+};
+
+export const cscText = (csc, salindex) => {
+  return csc + (salindex === 0 ? '' : `.${salindex}`);
 };

@@ -17,6 +17,10 @@ import styles from './AlarmsTable.module.css';
  */
 export default class AlarmsTable extends PureComponent {
   static propTypes = {
+    /** Name of the current user */
+    user: PropTypes.string,
+    /** Number of seconds to add to a TAI timestamp to convert it in UTC */
+    taiToUtc: PropTypes.number,
     /** List of alarms that are displayed. See examples below */
     alarms: PropTypes.array,
     /** Function to dispatch an alarm acknowledgement */
@@ -33,11 +37,13 @@ export default class AlarmsTable extends PureComponent {
   };
 
   static defaultProps = {
+    user: 'Unknown User',
+    taiToUtc: 0,
     alarms: [],
     sortFunctions: {},
   };
 
-  initialState = () => {
+  initialState = (taiToUtc) => {
     return {
       cleared: true,
       expandedRows: {},
@@ -59,7 +65,9 @@ export default class AlarmsTable extends PureComponent {
         timestampSeverityOldest: {
           type: 'regexp',
           value: new RegExp('(?:)'),
-          function: (value) => relativeTime(value * 1000),
+          function: (value) => {
+            return relativeTime(value, taiToUtc);
+          },
         },
       },
       activeFilterDialog: 'None',
@@ -68,13 +76,22 @@ export default class AlarmsTable extends PureComponent {
     }
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      ...this.initialState(),
-      filters: {...this.initialState().filters},
+      ...this.initialState(this.props.taiToUtc),
       setFilters: this.setFilters,
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.taiToUtc !== this.props.taiToUtc) {
+      this.resetState(this.props.taiToUtc);
+    }
+  }
+
+  resetState(taiToUtc) {
+    this.setState(this.initialState(taiToUtc));
   }
 
   evalSortFunction = (column, row) => {
@@ -152,7 +169,7 @@ export default class AlarmsTable extends PureComponent {
 
   changeSortDirection = (direction, column) => {
     const newColumn =
-      column === this.state.sortingColumn && direction === 'None' ? this.initialState().sortingColumn : column;
+      column === this.state.sortingColumn && direction === 'None' ? this.initialState(this.props.taiToUtc).sortingColumn : column;
     /*
       direction can be "ascending" or "descending", otherwise no
       sorting will be applied
@@ -171,7 +188,8 @@ export default class AlarmsTable extends PureComponent {
 
   render() {
     let data = this.props.alarms;
-    const user = this.props.user ? this.props.user : 'Unknown User';
+    const user = this.props.user;
+    const taiToUtc = this.props.taiToUtc;
     return (
       <div className={styles.wrapper}>
         <div className={styles.controlsContainer}>
@@ -180,7 +198,7 @@ export default class AlarmsTable extends PureComponent {
             title="Clear all filters and sorting options"
             onClick={(event) => {
               event.stopPropagation();
-              this.setState(this.initialState());
+              this.resetState(this.props.taiToUtc);
             }}
             >
             &#10005; &nbsp; Clear filters and sort
@@ -306,7 +324,7 @@ export default class AlarmsTable extends PureComponent {
                           title={new Date(row.timestampSeverityOldest * 1000).toString()}
                           className={[styles.cell, styles.timestamp].join(' ')}
                         >
-                          <div className={styles.textWrapper}>{relativeTime(row.timestampSeverityOldest * 1000)}</div>
+                          <div className={styles.textWrapper}>{relativeTime(row.timestampSeverityOldest, taiToUtc)}</div>
                         </td>
                       </tr>
                       {isExpanded ? (

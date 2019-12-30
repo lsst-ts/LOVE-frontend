@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './CSCDetail.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
+import { cscText } from '../../../Utils';
 
 export default class CSCDetail extends Component {
   static propTypes = {
@@ -72,12 +73,10 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    if (!this.props.shoudlSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    if (!this.props.shouldSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   render() {
-    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
-    const summaryState = CSCDetail.states[summaryStateValue];
     const { props } = this;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
@@ -100,28 +99,33 @@ export default class CSCDetail extends Component {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let title = `${this.props.name + '-' + this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
+    let title = `$${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
 
     if (timeDiff === -2) {
-      title = `${this.props.name + '-' + this.props.salindex} heartbeat\n${timeDiffText}`;
+      title += `${timeDiffText}`;
+    } else {
+      title += `Last seen: ${timeDiffText}`;
     }
+    const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
+    const summaryState = CSCDetail.states[summaryStateValue];
+    const stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
-        <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
+        <div className={[styles.summaryStateSection, stateClass].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
         </div>
-        <div className={[styles.heartbeatSection, summaryState.class].join(' ')}>
-          <div className={styles.heartbeatIconWrapper}>
-            <HeartbeatIcon status={heartbeatStatus} title={title} />
+        <div className={[styles.heartbeatSection, stateClass].join(' ')}>
+          <div className={[styles.heartbeatIconWrapper, heartbeatStatus === 'ok' ? styles.hidden : ''].join(' ')}>
+            <HeartbeatIcon status={heartbeatStatus === 'alert' ? 'unknown' : heartbeatStatus} title={title} />
           </div>
         </div>
-        <div className={[styles.nameSection, summaryState.class].join(' ')} title={this.props.name + '-' + this.props.salindex}>
-          {this.props.name + '-' + this.props.salindex}
+        <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
+          {cscText(this.props.name, this.props.salindex)}
         </div>
       </div>
     );

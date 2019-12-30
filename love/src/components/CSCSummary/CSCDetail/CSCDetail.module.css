@@ -11,6 +11,7 @@
   cursor: pointer;
   width: 100%;
   max-height: 100%;
+  user-select: none;
 }
 
 .minWidth {
@@ -65,11 +66,15 @@
 .alert {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
+  /* color: var(--status-alert-color);
+  background: var(--status-alert-dimmed-color-2); */
 }
 
 .ok {
   background: var(--status-ok-color);
   color: var(--second-tertiary-background-color);
+  /* color: var(--status-ok-color);
+  background: var(--status-ok-dimmed-color-2); */
 }
 
 .disabled {
@@ -78,6 +83,12 @@
 }
 
 .warning {
-  background: var(--status-warning-color);
-  color: var(--second-tertiary-background-color);
+  /* background: var(--status-warning-color); */
+  /* color: var(--second-tertiary-background-color); */
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-2);
+}
+
+.hidden {
+  display: none;
 }
