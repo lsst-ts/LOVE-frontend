@@ -339,6 +339,7 @@ export default class AlarmsTable extends PureComponent {
                           <td colSpan={4} className={styles.expandedRowContent}>
                             <DetailsPanel
                               alarm={row}
+                              taiToUtc={taiToUtc}
                               muteAlarm={(event, duration, severity) => {
                                 event.stopPropagation();
                                 this.props.muteAlarm(row.name, severity, duration, user);
