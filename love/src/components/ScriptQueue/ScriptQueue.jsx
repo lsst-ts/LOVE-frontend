@@ -35,8 +35,8 @@ export default class ScriptQueue extends Component {
       isFinishedScriptListListVisible: false,
       configPanel: {
         show: false,
-        x: 500,
-        y: 300,
+        x: 100,
+        y: 100,
         configSchema: '',
         // name: undefined,
         // script: {},
@@ -118,6 +118,22 @@ export default class ScriptQueue extends Component {
         useLocalWaitingList: false,
         waitingScriptList: this.props.waitingScriptList,
       });
+    }
+    /* Check schema from available scripts */
+
+    if (this.state.configPanel.show) {
+      const panel = this.state.configPanel;
+      const script = this.props.availableScriptList.find(
+        (s) => s.type === panel.script.type && s.path === panel.script.path,
+      );
+      const prevScript = prevProps.availableScriptList.find(
+        (s) => s.type === panel.script.type && s.path === panel.script.path,
+      );
+
+      /** If the schema was updated, update the state too */
+      if (script && script.configSchema !== prevScript.configSchema) {
+        this.setState({ configPanel: { ...this.state.configPanel, configSchema: script.configSchema } });
+      }
     }
   };
 
