@@ -49,7 +49,7 @@ export default class ConfigPanel extends Component {
       orientation: 'below',
       sizeWeight: 0.5,
       resizingStart: undefined,
-      configErrorTrace: '',
+      configErrors: [],
       configErrorTitle: '',
     };
     this.ajv = new Ajv({ allErrors: true });
@@ -71,7 +71,7 @@ export default class ConfigPanel extends Component {
     } catch (error) {
       this.setState({
         configErrorTitle: 'Error while parsing YAML string',
-        configErrorTrace: `${error}`,
+        configErrors: [{ name: error.name, message: error.message }],
         value: newValue,
       });
       return;
@@ -80,28 +80,26 @@ export default class ConfigPanel extends Component {
     /** Look for schema validation errors */
     const valid = this.ajv.validate(schema, config);
     if (!valid) {
-      const message = `${this.ajv.errors
-        .map((e) => {
-          if (e.dataPath && e.keyword) {
-            return `${e.dataPath} ${e.keyword}: ${e.message}\n`;
-          }
+      const errors = this.ajv.errors.map((e) => {
+        if (e.dataPath && e.keyword) {
+          return { name: `${e.dataPath} ${e.keyword}`, message: e.message };
+        }
 
-          if (e.dataPath && !e.keyword) {
-            return `${e.dataPath}: ${e.message}\n`;
-          }
+        if (e.dataPath && !e.keyword) {
+          return { name: `${e.dataPath}`, message: e.message };
+        }
 
-          if (!e.dataPath && e.keyword) {
-            return `${e.keyword}: ${e.message}\n`;
-          }
+        if (!e.dataPath && e.keyword) {
+          return { name: e.keyword, message: e.message };
+        }
 
-          return `${e.message}\n`;
-        })
-        .join('')}`;
+        return { name: '', message: `${e.message}\n` };
+      });
 
       this.setState({
         value: newValue,
         configErrorTitle: 'Invalid config YAML',
-        configErrorTrace: message,
+        configErrors: errors,
       });
       return;
     }
@@ -109,8 +107,8 @@ export default class ConfigPanel extends Component {
     /** Valid schema should show no message */
     this.setState({
       value: newValue,
-      configErrorTrace: '',
-      configErrorTitle: ''
+      configErrors: [],
+      configErrorTitle: '',
     });
   };
 
@@ -279,21 +277,29 @@ export default class ConfigPanel extends Component {
                 <Hoverable>
                   <div style={{ display: 'flex' }}>
                     <h3>CONFIG</h3>
-                    {this.state.configErrorTrace.length > 0 && (
+                    {this.state.configErrors.length > 0 && (
                       <h3 className={styles.schemaErrorIcon}>
                         <ErrorIcon svgProps={{ style: { height: '1em' } }} />
                       </h3>
                     )}
                   </div>
-                  {this.state.configErrorTrace && (
+                  {this.state.configErrors.length > 0 && (
                     <InfoPanel className={styles.infoPanel}>
                       <div className={styles.infoPanelBody}>
-                        <div className={styles.infoPanelFirstLine}>
-                          {this.state.configErrorTitle}
-                        </div>
-                        {this.state.configErrorTrace.split('\n').map((line) => (
-                          <span key={line}>{line}</span>
-                        ))}
+                        <div className={styles.infoPanelFirstLine}>{this.state.configErrorTitle}</div>
+                        <ul>
+                          {this.state.configErrors.map((error, index) => {
+                            if (!error.name) {
+                              return <span key={`noname-${index}`}>{error.message}</span>;
+                            }
+                            return (
+                              <li key={`${error.name}-${index}`}>
+                                <span className={styles.errorName}>{error.name}:</span>
+                                <span> {error.message}</span>
+                              </li>
+                            );
+                          })}
+                        </ul>
                       </div>
                     </InfoPanel>
                   )}
