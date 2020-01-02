@@ -61,6 +61,9 @@ export default class ComponentIndex extends Component {
             <ul className={styles.linkListItem}>
               <Link to="/custom-view-editor">View editor</Link>
             </ul>
+            <ul className={styles.linkListItem}>
+              <Link to="/view-editor">New View editor</Link>
+            </ul>
           </li>
           <li className={styles.linkListItem}>
             <Link to="/login">Login</Link>
