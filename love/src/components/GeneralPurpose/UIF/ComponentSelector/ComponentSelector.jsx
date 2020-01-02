@@ -19,7 +19,11 @@ export default class ComponentSelector extends Component {
     return (
       <>
         <div className={styles.container}>
-          Blah
+          <h2> Select Components to add to the view </h2>
+          <h3> UI Framework </h3>
+          <h3> Auxiliary Telescope </h3>
+          <h3> Main Telescope </h3>
+          <h3> General Purpose </h3>
         </div>
       </>
     );

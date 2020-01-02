@@ -6,6 +6,7 @@ import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import Modal from '../GeneralPurpose/Modal/Modal';
+import ComponentSelector from '../GeneralPurpose/UIF/ComponentSelector/ComponentSelector';
 import styles from './Layout.module.css';
 
 
@@ -67,16 +68,7 @@ export default class Layout extends Component {
           onRequestClose={this.hideModal}
           contentLabel="Component selection modal"
         >
-          <h2>Hello</h2>
-          <button onClick={this.hideModal}>close</button>
-          <div>I am a modal</div>
-          <form>
-            <input />
-            <button>tab navigation</button>
-            <button>stays</button>
-            <button>inside</button>
-            <button>the modal</button>
-          </form>
+          <ComponentSelector/>
         </Modal>
       </>
     );
