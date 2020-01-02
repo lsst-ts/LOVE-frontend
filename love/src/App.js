@@ -6,7 +6,6 @@ import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
-import Layout from './components/Layout/Layout';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
