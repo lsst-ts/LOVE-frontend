@@ -40,7 +40,6 @@
   padding: 0 0.5em;
 }
 
-
 .closeButton:hover {
   background: var(--second-tertiary-background-color);
   font-weight: bold;
@@ -69,7 +68,7 @@
 
 .sideBySide {
   flex-direction: row;
-  justify-content: space-around
+  justify-content: space-around;
 }
 
 .checkpointsRegexpContainer {
@@ -135,12 +134,13 @@
   align-items: start;
 }
 
-.sidePanel > h3, .sidePanelHeaderContainer {
+.sidePanel > h3,
+.sidePanelHeaderContainer {
   margin-left: 1rem;
   margin-bottom: 0.25rem;
 }
 
-.schemaErrorIcon { 
+.schemaErrorIcon {
   width: 1em;
   min-width: 1em;
   padding-left: 0.5em;
@@ -152,28 +152,25 @@
 }
 
 .divider {
-
 }
 
 .horizontalDivider {
   cursor: ns-resize;
-  border-top: 0.5rem solid rgba(0,0,0,0);
-  border-bottom: 0.5rem solid rgba(0,0,0,0);
+  border-top: 0.5rem solid rgba(0, 0, 0, 0);
+  border-bottom: 0.5rem solid rgba(0, 0, 0, 0);
 }
 
 .verticalDivider {
   cursor: ew-resize;
-  border-left: 0.5rem solid rgba(0,0,0,0);
-  border-right: 0.5rem solid rgba(0,0,0,0);
+  border-left: 0.5rem solid rgba(0, 0, 0, 0);
+  border-right: 0.5rem solid rgba(0, 0, 0, 0);
 }
 
-
-.readOnly{
-  color: var(--secondary-font-color)
+.readOnly {
+  color: var(--secondary-font-color);
 }
 
-
-.sidePanelHeaderContainer{
+.sidePanelHeaderContainer {
   /* display: flex; */
   position: relative;
 }
@@ -183,12 +180,11 @@
   top: 0em;
   left: 7em;
   z-index: 2000;
-
 }
 
 .infoPanelBody {
   width: max-content;
-  max-width:500px;
+  max-width: 500px;
   color: var(--primary-font-color);
   font-size: 1.3em;
   padding: 0.3em;
@@ -198,12 +194,17 @@
   justify-content: start;
 }
 
-.infoPanelBody > span {
+.infoPanelBody > ul {
   margin: 0;
   text-align: start;
+  padding-left: 0.8em;
 }
-
 .infoPanelFirstLine {
   font-weight: 600;
   margin-bottom: 0.1em;
+}
+
+.errorName {
+  font-weight: 600;
+  margin-left: -0.3em;
 }
