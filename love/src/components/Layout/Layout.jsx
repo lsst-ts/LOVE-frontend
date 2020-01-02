@@ -4,6 +4,7 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
+import Button from '../GeneralPurpose/Button/Button';
 import styles from './Layout.module.css';
 
 
@@ -39,7 +40,9 @@ export default class Layout extends Component {
       <>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
         <div className={styles.topbar}>
-          blah
+          <Button>
+            +
+          </Button>
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}
