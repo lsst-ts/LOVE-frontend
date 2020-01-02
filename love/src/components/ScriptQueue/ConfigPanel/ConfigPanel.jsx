@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import Ajv from 'ajv';
-import YAML from 'yaml'
+import YAML from 'yaml';
 
 import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
@@ -46,21 +46,60 @@ export default class ConfigPanel extends Component {
       orientation: 'below',
       sizeWeight: 0.5,
       resizingStart: undefined,
+      configErrorMessage: '',
     };
     this.ajv = new Ajv();
   }
 
   onChange = (newValue) => {
-    console.log(newValue);
-    const schema = YAML.parse(this.props.configPanel.configSchema)
-    const config = YAML.parse(newValue);
-    const valid = this.ajv.validate(schema, config);
-    console.log('valid', valid, this.ajv.errors);
-    if(this.ajv.errors && this.ajv.errors[0]){
-      console.log('error', this.ajv.errors[0])
+    /** Check schema is available */
+    let schema = this.props.configPanel.configSchema;
+    if (!schema) {
+      this.setState({ value: newValue });
+      return;
     }
+    schema = YAML.parse(schema);
+
+    /** Look for parsing errors */
+    let config, errorMessage;
+    try {
+      config = YAML.parse(newValue);
+    } catch (error) {
+      errorMessage = `Error while parsing YAML string into object: \n ${error}
+      `;
+      this.setState({ configErrorMessage: errorMessage, value: newValue });
+      return;
+    }
+
+    /** Look for schema validation errors */
+    const valid = this.ajv.validate(schema, config);
+    console.log(this.ajv.errors)
+    if (!valid) {
+      this.setState({
+        value: newValue,
+        configErrorMessage: `Invalid config YAML: \n${this.ajv.errors.map(e=>{          
+           if(e.dataPath && e.keyword){
+             return `${e.dataPath} (${e.keyword}): ${e.message}\n`
+           }
+
+           if(e.dataPath && !e.keyword){
+            return `${e.dataPath}: ${e.message}\n`
+           }
+
+           if(!e.dataPath && e.keyword){
+            return `${e.keyword}: ${e.message}\n`
+           }
+
+           return `${e.message}\n`
+          })}`,
+      });
+      return;
+    }
+
+    /** Valid schema should show no message */
     this.setState({
       value: newValue,
+      configErrorMessage: ''
     });
   };
 
@@ -112,30 +151,30 @@ export default class ConfigPanel extends Component {
 
   startResizingWithMouse = (ev) => {
     this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
-    document.onmousemove = this.onMouseMove
-    document.onmouseup = this.onMouseUp
+    document.onmousemove = this.onMouseMove;
+    document.onmouseup = this.onMouseUp;
   };
 
-  onMouseMove = (ev) =>{
-    if(this.state.resizingStart){
+  onMouseMove = (ev) => {
+    if (this.state.resizingStart) {
       const currentX = ev.clientX;
       const currentY = ev.clientY;
 
-      const {orientation, resizingStart, width, height, sizeWeight} = this.state;
-      const displacement = orientation === "below" ? currentY - resizingStart.y: currentX - resizingStart.x
+      const { orientation, resizingStart, width, height, sizeWeight } = this.state;
+      const displacement = orientation === 'below' ? currentY - resizingStart.y : currentX - resizingStart.x;
       const total = orientation === 'below' ? height : width;
-      const boundary = 150/height;//150px aprox of titles and buttons
-      const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1- boundary);
+      const boundary = 150 / height; //150px aprox of titles and buttons
+      const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1 - boundary);
       this.setState({
         sizeWeight: newWeight,
-      });     
+      });
       ev.preventDefault();
     }
-  }
-  onMouseUp = () =>{
+  };
+  onMouseUp = () => {
     document.onmousemove = null;
     document.onmouseup = null;
-  }
+  };
 
   render() {
     const { orientation } = this.state;
@@ -155,7 +194,6 @@ export default class ConfigPanel extends Component {
         secondHeight: `calc(${this.state.height}px - 9em)`,
       },
     };
-
 
     const dividerClassName = {
       below: styles.horizontalDivider,
@@ -207,9 +245,7 @@ export default class ConfigPanel extends Component {
                 width={sidePanelSize[orientation].firstWidth}
                 height={sidePanelSize[orientation].firstHeight}
                 value={
-                  this.props.configPanel.configSchema === ''
-                    ? NO_SCHEMA_MESSAGE
-                    : this.props.configPanel.configSchema
+                  this.props.configPanel.configSchema === '' ? NO_SCHEMA_MESSAGE : this.props.configPanel.configSchema
                 }
                 editorProps={{ $blockScrolling: true }}
                 fontSize={18}
@@ -227,8 +263,12 @@ export default class ConfigPanel extends Component {
 
             <div className={styles.sidePanel}>
               <div className={styles.sidePanelHeaderContainer}>
-                <h3>CONFIG</h3>  
-                <span className={styles.schemaErrorIcon}><ErrorIcon title="asdasfd"/></span>
+                <h3>CONFIG</h3>
+                {this.state.configErrorMessage.length > 0 && (
+                  <span className={styles.schemaErrorIcon}>
+                    <ErrorIcon title={this.state.configErrorMessage} />
+                  </span>
+                )}
               </div>
               <AceEditor
                 mode="yaml"
