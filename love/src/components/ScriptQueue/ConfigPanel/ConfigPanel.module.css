@@ -202,3 +202,8 @@
   margin: 0;
   text-align: start;
 }
+
+.infoPanelFirstLine {
+  font-weight: 600;
+  margin-bottom: 0.1em;
+}
