@@ -1,7 +1,7 @@
 .modal {
   background-color: var(--secondary-background-color);
   border: 1px solid hsl(199, 43%, 16%);
-  border-radius: 6px;
+  border-radius: 10px;
   position: absolute;
   top: 5em;
   left: 5em;
@@ -11,6 +11,7 @@
   webkit-overflow-scrolling: touch;
   borderRadius: 4px;
   outline: none;
+  padding: 1em 0.5em 0.5em 0.5em;
 }
 
 .overlay {
