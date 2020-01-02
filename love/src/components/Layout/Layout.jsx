@@ -5,9 +5,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
-// import Modal from '../GeneralPurpose/Modal/Modal';
+import Modal from '../GeneralPurpose/Modal/Modal';
 import styles from './Layout.module.css';
-import ReactModal from 'react-modal';
 
 
 export default class Layout extends Component {
@@ -53,10 +52,8 @@ export default class Layout extends Component {
   };
 
   render() {
-     ReactModal.setAppElement('#root');
     return (
       <>
-        {/*<Modal show={this.state.show} handleClose={this.hideModal}/>*/}
         <div className={styles.topbar} onClick={this.showModal}>
           <Button> + </Button>
         </div>
@@ -65,12 +62,11 @@ export default class Layout extends Component {
         </div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
-        <ReactModal
+        <Modal
           isOpen={this.state.show}
           onRequestClose={this.hideModal}
           contentLabel="Example Modal"
         >
-
           <h2>Hello</h2>
           <button onClick={this.hideModal}>close</button>
           <div>I am a modal</div>
@@ -81,7 +77,7 @@ export default class Layout extends Component {
             <button>inside</button>
             <button>the modal</button>
           </form>
-        </ReactModal>
+        </Modal>
       </>
     );
   }
