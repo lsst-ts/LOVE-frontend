@@ -187,7 +187,7 @@
 }
 
 .infoPanelBody {
-  width: 500px;
+  width: max-content;
   color: var(--primary-font-color);
   font-size: 1.3em;
   padding: 0.3em;
