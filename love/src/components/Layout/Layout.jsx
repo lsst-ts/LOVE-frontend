@@ -40,9 +40,7 @@ export default class Layout extends Component {
       <>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
         <div className={styles.topbar}>
-          <Button>
-            +
-          </Button>
+          <Button> + </Button>
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}
