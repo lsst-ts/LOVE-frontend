@@ -9,7 +9,7 @@ export default class ErrorIcon extends Component {
   render() {
     return (
       <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" viewBox="0 0 426.667 426.667">
-        <title>{this.props.title}</title>
+        {this.props.title && <title>{this.props.title}</title>}
         <g>
         <circle cx="210" cy="210" r="180" fill="var(--second-tertiary-background-color)" />
           <path
