@@ -70,7 +70,7 @@ export default class ConfigPanel extends Component {
       config = YAML.parse(newValue);
     } catch (error) {
       this.setState({
-        configErrorTitle: 'Error while parsing YAML string',
+        configErrorTitle: 'ERROR WHILE PARSING YAML STRING',
         configErrors: [{ name: error.name, message: error.message }],
         value: newValue,
       });
@@ -98,7 +98,7 @@ export default class ConfigPanel extends Component {
 
       this.setState({
         value: newValue,
-        configErrorTitle: 'Invalid config YAML',
+        configErrorTitle: 'INVALID CONFIG YAML',
         configErrors: errors,
       });
       return;
