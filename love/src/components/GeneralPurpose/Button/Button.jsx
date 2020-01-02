@@ -26,6 +26,8 @@ export default class Button extends Component {
      *
      * *link*: Makes a button look like a link (will still have button behavior)
      *
+     * *transparent*: transparent button, suitable for panels, like close button
+     *
      */
     status: PropTypes.string,
     /** Changes the geometry of the button to make it look bigger/smaller according to these values:
@@ -73,6 +75,7 @@ export default class Button extends Component {
       warning: styles.btnWarning,
       danger: styles.btnDanger,
       link: styles.btnLink,
+      transparent: styles.btnTransparent,
     };
 
     const sizeStyleDict = {

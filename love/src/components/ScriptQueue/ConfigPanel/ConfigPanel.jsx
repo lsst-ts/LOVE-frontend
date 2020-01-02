@@ -129,7 +129,7 @@ export default class ConfigPanel extends Component {
       const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1- boundary);
       this.setState({
         sizeWeight: newWeight,
-      });     
+      });
       ev.preventDefault();
     }
   }
@@ -194,9 +194,9 @@ export default class ConfigPanel extends Component {
                   &#8229;{' '}
                 </span>
               )}
-              <span className={styles.closeButton} onClick={this.closeConfigPanel}>
-                X
-              </span>
+              <Button status='transparent' title='Close' onClick={this.closeConfigPanel}>
+                &#10005;
+              </Button>
             </div>
           </div>
           <div className={[styles.body, orientation === 'beside' ? styles.sideBySide : ''].join(' ')}>
