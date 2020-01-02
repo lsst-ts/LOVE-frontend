@@ -1,0 +1,24 @@
+.container {
+}
+
+.gallery {
+  display: grid;
+  /* grid-template-columns: auto auto auto auto auto; */
+  grid-template-columns: repeat(auto-fill, minmax(30em, 1fr));
+  grid-auto-rows: minmax(5em, auto);
+  grid-gap: 1em;
+}
+
+.component {
+  padding: 1em;
+}
+
+.component h4 {
+  margin: 0;
+}
+
+.component p {
+  color: var(--secondary-font-color);
+  margin-top: 0.5em;
+  white-space: pre-wrap;
+}

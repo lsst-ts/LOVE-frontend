@@ -23,6 +23,21 @@ export const auxtelIndex = {
 export const mainIndex = {
 };
 
+export const indexes = [
+  {
+    name: 'UI Framework',
+    index: uifIndex,
+  },
+  {
+    name: 'Auxiliary Telescope',
+    index: auxtelIndex,
+  },
+  {
+    name: 'Main Telescope',
+    index: mainIndex,
+  },
+]
+
 export default {
   ...uifIndex,
   ...auxtelIndex,
