@@ -280,13 +280,15 @@ export default class ConfigPanel extends Component {
                       </h3>
                     )}
                   </div>
-                  <InfoPanel className={styles.infoPanel}>
-                    <div className={styles.infoPanelBody}>
-                      {this.state.configErrorMessage.split('\n').map((line) => (
-                        <span key={line}>{line}</span>
-                      ))}
-                    </div>
-                  </InfoPanel>
+                  {this.state.configErrorMessage && (
+                    <InfoPanel className={styles.infoPanel}>
+                      <div className={styles.infoPanelBody}>
+                        {this.state.configErrorMessage.split('\n').map((line) => (
+                          <span key={line}>{line}</span>
+                        ))}
+                      </div>
+                    </InfoPanel>
+                  )}
                 </Hoverable>
               </div>
               <AceEditor
