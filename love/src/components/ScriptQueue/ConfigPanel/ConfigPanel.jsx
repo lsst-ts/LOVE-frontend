@@ -49,12 +49,13 @@ export default class ConfigPanel extends Component {
       orientation: 'below',
       sizeWeight: 0.5,
       resizingStart: undefined,
-      configErrorMessage: '',
+      configErrorTrace: '',
+      configErrorTitle: '',
     };
     this.ajv = new Ajv({ allErrors: true });
   }
 
-  onChange = (newValue) => {
+  validateConfig = (newValue) => {
     /** Check schema is available */
     let schema = this.props.configPanel.configSchema;
     if (!schema) {
@@ -62,22 +63,24 @@ export default class ConfigPanel extends Component {
       return;
     }
     schema = YAML.parse(schema);
+    let config;
 
     /** Look for parsing errors */
-    let config, errorMessage;
     try {
       config = YAML.parse(newValue);
     } catch (error) {
-      errorMessage = `Error while parsing YAML string into object: \n ${error}
-      `;
-      this.setState({ configErrorMessage: errorMessage, value: newValue });
+      this.setState({
+        configErrorTitle: 'Error while parsing YAML string',
+        configErrorTrace: `${error}`,
+        value: newValue,
+      });
       return;
     }
 
     /** Look for schema validation errors */
     const valid = this.ajv.validate(schema, config);
     if (!valid) {
-      const message = `Invalid config YAML: \n${this.ajv.errors
+      const message = `${this.ajv.errors
         .map((e) => {
           if (e.dataPath && e.keyword) {
             return `${e.dataPath} (${e.keyword}): ${e.message}\n`;
@@ -97,7 +100,8 @@ export default class ConfigPanel extends Component {
 
       this.setState({
         value: newValue,
-        configErrorMessage: message,
+        configErrorTitle: 'Invalid config YAML',
+        configErrorTrace: message,
       });
       return;
     }
@@ -105,7 +109,8 @@ export default class ConfigPanel extends Component {
     /** Valid schema should show no message */
     this.setState({
       value: newValue,
-      configErrorMessage: '',
+      configErrorTrace: '',
+      configErrorTitle: ''
     });
   };
 
@@ -270,20 +275,23 @@ export default class ConfigPanel extends Component {
             <div className={styles.sidePanel}>
               <div className={styles.sidePanelHeaderContainer}>
                 {' '}
-                {/* title={this.state.configErrorMessage */}
+                {/* title={this.state.configErrorTrace */}
                 <Hoverable>
                   <div style={{ display: 'flex' }}>
                     <h3>CONFIG</h3>
-                    {this.state.configErrorMessage.length > 0 && (
+                    {this.state.configErrorTrace.length > 0 && (
                       <h3 className={styles.schemaErrorIcon}>
                         <ErrorIcon svgProps={{ style: { height: '1em' } }} />
                       </h3>
                     )}
                   </div>
-                  {this.state.configErrorMessage && (
+                  {this.state.configErrorTrace && (
                     <InfoPanel className={styles.infoPanel}>
                       <div className={styles.infoPanelBody}>
-                        {this.state.configErrorMessage.split('\n').map((line) => (
+                        <div className={styles.infoPanelFirstLine}>
+                          {this.state.configErrorTitle}
+                        </div>
+                        {this.state.configErrorTrace.split('\n').map((line) => (
                           <span key={line}>{line}</span>
                         ))}
                       </div>
@@ -295,7 +303,7 @@ export default class ConfigPanel extends Component {
                 mode="yaml"
                 theme="solarized_dark"
                 name="UNIQUE_ID_OF_DIV"
-                onChange={this.onChange}
+                onChange={this.validateConfig}
                 width={sidePanelSize[orientation].secondWidth}
                 height={sidePanelSize[orientation].secondHeight}
                 value={this.state.value}
