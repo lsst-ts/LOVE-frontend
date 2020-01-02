@@ -83,7 +83,7 @@ export default class ConfigPanel extends Component {
       const message = `${this.ajv.errors
         .map((e) => {
           if (e.dataPath && e.keyword) {
-            return `${e.dataPath} (${e.keyword}): ${e.message}\n`;
+            return `${e.dataPath} ${e.keyword}: ${e.message}\n`;
           }
 
           if (e.dataPath && !e.keyword) {
