@@ -140,6 +140,15 @@
   margin-bottom: 0.25rem;
 }
 
+.schemaErrorIcon { 
+  width: 1em;
+  min-width: 1em;
+  padding-left: 0.5em;
+  text-align: center;
+  user-select: none;
+  margin-top: 1em;
+}
+
 .divider {
 
 }
@@ -159,4 +168,9 @@
 
 .readOnly{
   color: var(--secondary-font-color)
+}
+
+
+.sidePanelHeaderContainer{
+  display: flex;
 }
