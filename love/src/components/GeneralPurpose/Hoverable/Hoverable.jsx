@@ -6,6 +6,8 @@ import Float from './Float';
 /**
  * Makes a component display another when the first is hovered.
  * Receives two children: the first one is the element that triggers the display of the second
+ * The second children is optional, so the hover effect can betemporarily disabled by passing
+ * a falsy value.
  */
 
 export default class Hoverable extends Component {
@@ -69,7 +71,8 @@ export default class Hoverable extends Component {
             </Float>
           )}
         </Trigger>
-        {this.state.display && !this.props.inside && (
+        
+        {this.props.children[1] && this.state.display && !this.props.inside && (
           <Float {...this.props} hide={this.hide} position={this.state.position}>
             {this.props.children[1]}
           </Float>
