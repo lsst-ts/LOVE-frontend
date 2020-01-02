@@ -174,5 +174,30 @@
 
 
 .sidePanelHeaderContainer{
+  /* display: flex; */
+  position: relative;
+}
+
+.infoPanel {
+  position: absolute;
+  top: 0em;
+  left: 7em;
+  z-index: 2000;
+
+}
+
+.infoPanelBody {
+  width: 500px;
+  color: var(--primary-font-color);
+  font-size: 1.3em;
+  padding: 0.3em;
   display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: start;
+}
+
+.infoPanelBody > span {
+  margin: 0;
+  text-align: start;
 }

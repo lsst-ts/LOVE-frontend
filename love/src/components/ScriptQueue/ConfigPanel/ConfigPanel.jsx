@@ -11,6 +11,9 @@ import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
+import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
+import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
+
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
 export default class ConfigPanel extends Component {
@@ -265,13 +268,26 @@ export default class ConfigPanel extends Component {
             ></div>
 
             <div className={styles.sidePanel}>
-              <div className={styles.sidePanelHeaderContainer} title={this.state.configErrorMessage}>
-                <h3>CONFIG</h3>
-                {this.state.configErrorMessage.length > 0 && (
-                  <h3 className={styles.schemaErrorIcon}>
-                    <ErrorIcon svgProps={{ style: { height: '1em' } }} />
-                  </h3>
-                )}
+              <div className={styles.sidePanelHeaderContainer}>
+                {' '}
+                {/* title={this.state.configErrorMessage */}
+                <Hoverable>
+                  <div style={{ display: 'flex' }}>
+                    <h3>CONFIG</h3>
+                    {this.state.configErrorMessage.length > 0 && (
+                      <h3 className={styles.schemaErrorIcon}>
+                        <ErrorIcon svgProps={{ style: { height: '1em' } }} />
+                      </h3>
+                    )}
+                  </div>
+                  <InfoPanel className={styles.infoPanel}>
+                    <div className={styles.infoPanelBody}>
+                      {this.state.configErrorMessage.split('\n').map((line) => (
+                        <span key={line}>{line}</span>
+                      ))}
+                    </div>
+                  </InfoPanel>
+                </Hoverable>
               </div>
               <AceEditor
                 mode="yaml"
