@@ -48,7 +48,7 @@ export default class ConfigPanel extends Component {
       resizingStart: undefined,
       configErrorMessage: '',
     };
-    this.ajv = new Ajv();
+    this.ajv = new Ajv({ allErrors: true });
   }
 
   onChange = (newValue) => {
@@ -73,25 +73,28 @@ export default class ConfigPanel extends Component {
 
     /** Look for schema validation errors */
     const valid = this.ajv.validate(schema, config);
-    console.log(this.ajv.errors)
     if (!valid) {
+      const message = `Invalid config YAML: \n${this.ajv.errors
+        .map((e) => {
+          if (e.dataPath && e.keyword) {
+            return `${e.dataPath} (${e.keyword}): ${e.message}\n`;
+          }
+
+          if (e.dataPath && !e.keyword) {
+            return `${e.dataPath}: ${e.message}\n`;
+          }
+
+          if (!e.dataPath && e.keyword) {
+            return `${e.keyword}: ${e.message}\n`;
+          }
+
+          return `${e.message}\n`;
+        })
+        .join('')}`;
+
       this.setState({
         value: newValue,
-        configErrorMessage: `Invalid config YAML: \n${this.ajv.errors.map(e=>{          
-           if(e.dataPath && e.keyword){
-             return `${e.dataPath} (${e.keyword}): ${e.message}\n`
-           }
-
-           if(e.dataPath && !e.keyword){
-            return `${e.dataPath}: ${e.message}\n`
-           }
-
-           if(!e.dataPath && e.keyword){
-            return `${e.keyword}: ${e.message}\n`
-           }
-
-           return `${e.message}\n`
-          })}`,
+        configErrorMessage: message,
       });
       return;
     }
@@ -99,7 +102,7 @@ export default class ConfigPanel extends Component {
     /** Valid schema should show no message */
     this.setState({
       value: newValue,
-      configErrorMessage: ''
+      configErrorMessage: '',
     });
   };
 
