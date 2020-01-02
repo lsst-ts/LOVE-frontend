@@ -1,14 +1,31 @@
 .modal {
-  background: yellow;
+  background-color: var(--secondary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
   position: absolute;
-  top: 40px;
-  left: 40px;
-  right: 40px;
-  bottom: 40px;
-  border: 1px solid #ccc;
+  top: 5em;
+  left: 5em;
+  right: 5em;
+  bottom: 5em;
   overflow: auto;
   webkit-overflow-scrolling: touch;
   borderRadius: 4px;
   outline: none;
-  padding: 20px;
+  padding: 1em;
+  z-index: 2001;
+}
+
+.overlay {
+  background-color: var(--overlay-background-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+  -o-backdrop-filter: blur(2px);
+  -ms-backdrop-filter: blur(2px);
+  -moz-backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
 }

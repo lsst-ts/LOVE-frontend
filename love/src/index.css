@@ -28,6 +28,8 @@ body {
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
 
+  --overlay-background-color: hsla(205, 40%, 8%, 70%);
+
   --second-primary-background-color: hsl(202, 38%, 11%);
   --second-primary-background-color-dimmed: hsl(202, 38%, 11%, 0.5);
   --second-secondary-background-color: hsl(202, 36%, 13%);

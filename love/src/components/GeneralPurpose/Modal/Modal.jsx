@@ -7,7 +7,7 @@ export default function Modal(props) {
   ReactModal.setAppElement('#root');
   const { children, ...other } = props;
   return (
-    <ReactModal {...other} className={styles.modal}>
+    <ReactModal {...other} className={styles.modal} overlayClassName={styles.overlay}>
       {children}
     </ReactModal>
   );
