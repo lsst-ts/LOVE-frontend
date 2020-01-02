@@ -10,7 +10,7 @@ import 'brace/theme/solarized_dark';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
-
+import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
 export default class ConfigPanel extends Component {
@@ -226,7 +226,10 @@ export default class ConfigPanel extends Component {
             ></div>
 
             <div className={styles.sidePanel}>
-              <h3>CONFIG</h3>
+              <div className={styles.sidePanelHeaderContainer}>
+                <h3>CONFIG</h3>  
+                <span className={styles.schemaErrorIcon}><ErrorIcon title="asdasfd"/></span>
+              </div>
               <AceEditor
                 mode="yaml"
                 theme="solarized_dark"
