@@ -265,12 +265,12 @@ export default class ConfigPanel extends Component {
             ></div>
 
             <div className={styles.sidePanel}>
-              <div className={styles.sidePanelHeaderContainer} title={this.state.configErrorMessage} >
+              <div className={styles.sidePanelHeaderContainer} title={this.state.configErrorMessage}>
                 <h3>CONFIG</h3>
                 {this.state.configErrorMessage.length > 0 && (
-                  <span className={styles.schemaErrorIcon}>
-                    <ErrorIcon  />
-                  </span>
+                  <h3 className={styles.schemaErrorIcon}>
+                    <ErrorIcon svgProps={{ style: { height: '1em' } }} />
+                  </h3>
                 )}
               </div>
               <AceEditor
