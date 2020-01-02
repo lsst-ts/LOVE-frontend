@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import styles from './ComponentSelector.module.css';
 
 
-
 export default class ComponentSelector extends Component {
   static propTypes = {
     /** Children components */

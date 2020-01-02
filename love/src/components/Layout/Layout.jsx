@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
+import Modal from '../GeneralPurpose/Modal/Modal';
 import styles from './Layout.module.css';
 
 
@@ -18,6 +19,13 @@ export default class Layout extends Component {
 
   static defaultProps = {
     lastSALCommand: undefined,
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      show: false,
+    }
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
@@ -35,11 +43,20 @@ export default class Layout extends Component {
     }
   };
 
+  hideModal = () => {
+    this.setState({ show: false });
+  };
+
+  showModal = e => {
+    this.setState({ show: true });
+  };
+
   render() {
     return (
       <>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
-        <div className={styles.topbar}>
+        <Modal show={this.state.show} handleClose={this.hideModal}/>
+        <div className={styles.topbar} onClick={this.showModal}>
           <Button> + </Button>
         </div>
         <div className={styles.contentWrapper}>
