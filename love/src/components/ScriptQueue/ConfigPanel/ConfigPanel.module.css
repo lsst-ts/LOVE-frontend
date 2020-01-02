@@ -135,7 +135,7 @@
   align-items: start;
 }
 
-.sidePanel > h3 {
+.sidePanel > h3, .sidePanelHeaderContainer {
   margin-left: 1rem;
   margin-bottom: 0.25rem;
 }

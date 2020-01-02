@@ -265,11 +265,11 @@ export default class ConfigPanel extends Component {
             ></div>
 
             <div className={styles.sidePanel}>
-              <div className={styles.sidePanelHeaderContainer}>
+              <div className={styles.sidePanelHeaderContainer} title={this.state.configErrorMessage} >
                 <h3>CONFIG</h3>
                 {this.state.configErrorMessage.length > 0 && (
                   <span className={styles.schemaErrorIcon}>
-                    <ErrorIcon title={this.state.configErrorMessage} />
+                    <ErrorIcon  />
                   </span>
                 )}
               </div>
