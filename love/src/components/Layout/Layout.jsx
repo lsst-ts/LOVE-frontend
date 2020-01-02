@@ -65,7 +65,7 @@ export default class Layout extends Component {
         <Modal
           isOpen={this.state.show}
           onRequestClose={this.hideModal}
-          contentLabel="Example Modal"
+          contentLabel="Component selection modal"
         >
           <h2>Hello</h2>
           <button onClick={this.hideModal}>close</button>
