@@ -9,8 +9,22 @@ import {
   getLastSALCommand,
   getUsername,
 } from '../../redux/selectors';
-
 import ScriptQueue from './ScriptQueue';
+
+export const schema = {
+  description: `Component containing information about the scripts currently running, scripts to be run (in queue) and past scripts. 
+                Allows commands to be sent for interacting with the scripts, such as stopping, enqueueing and requeueing scripts`,
+  defaultSize: [66, 98],
+  props: {
+    salindex: {
+      type: 'number',
+      description:
+        'Salindex of the ScriptQueue',
+      isPrivate: false,
+      default: 1,
+    },
+  },
+};
 
 const ScriptQueueContainer = ({
   subscribeToStreams,

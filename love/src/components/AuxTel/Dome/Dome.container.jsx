@@ -4,6 +4,12 @@ import Dome from './Dome';
 import { getDomeState } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 
+export const schema = {
+  description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
+  defaultSize: [49, 38],
+  props: {},
+};
+
 const DomeContainer = ({
   dropoutDoorOpeningPercentage,
   mainDoorOpeningPercentage,
