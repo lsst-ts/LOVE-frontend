@@ -16,6 +16,7 @@
   text-align: left;
   font-size: var(--font-size-larger);
   padding: 0.1em 0.5em;
+  color: var(--base-font-color);
 }
 
 .topButtonsContainer {
