@@ -217,14 +217,14 @@ export default class ConfigPanel extends Component {
           width: `${this.state.width}px`,
           height: `calc(${this.state.height}px)`,
         }}
-        style={{ zIndex: 1000 }}
+        style={{ zIndex: 1000, position: 'fixed' }}
         bounds={'window'}
         enableUserSelectHack={false}
         dragHandleClassName={styles.bar}
         onResize={this.onResize}
       >
-        <div className={[styles.configPanelContainer].join(' ')}>
-          <div className={[styles.topBar, styles.bar,  'nonDraggable'].join(' ')}>
+        <div className={[styles.configPanelContainer, 'nonDraggable'].join(' ')}>
+          <div className={[styles.topBar, styles.bar].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
             <div className={styles.topButtonsContainer}>
               {orientation === 'below' ? (
