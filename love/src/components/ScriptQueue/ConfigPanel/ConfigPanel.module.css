@@ -26,7 +26,7 @@
 .closeButton {
   cursor: pointer;
   text-align: right;
-  padding: 0 0.5em;
+  padding: 0.25em;
 }
 
 .rotateButton {
