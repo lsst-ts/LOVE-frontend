@@ -109,6 +109,7 @@ export default class CustomView extends Component {
             margin={[0, 0]}
             verticalCompact={false}
             className={styles.gridLayout}
+            draggableCancel=".nonDraggable"
           >
             {elements}
           </GridLayout>

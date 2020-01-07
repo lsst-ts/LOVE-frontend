@@ -223,8 +223,8 @@ export default class ConfigPanel extends Component {
         dragHandleClassName={styles.bar}
         onResize={this.onResize}
       >
-        <div className={styles.configPanelContainer}>
-          <div className={[styles.topBar, styles.bar].join(' ')}>
+        <div className={[styles.configPanelContainer].join(' ')}>
+          <div className={[styles.topBar, styles.bar,  'nonDraggable'].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
             <div className={styles.topButtonsContainer}>
               {orientation === 'below' ? (
