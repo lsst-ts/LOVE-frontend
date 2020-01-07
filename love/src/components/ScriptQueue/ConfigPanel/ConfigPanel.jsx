@@ -218,7 +218,7 @@ export default class ConfigPanel extends Component {
           height: `calc(${this.state.height}px)`,
         }}
         style={{ zIndex: 1000 }}
-        bounds={'parent'}
+        bounds={'window'}
         enableUserSelectHack={false}
         dragHandleClassName={styles.bar}
         onResize={this.onResize}
