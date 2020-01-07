@@ -32,12 +32,12 @@
   cursor: pointer;
   text-align: center;
   vertical-align: middle;
+  padding: 0.25em;
 }
 
 .rotateButton:hover {
   background: var(--second-tertiary-background-color);
   font-weight: bold;
-  padding: 0 0.5em;
 }
 
 .closeButton:hover {

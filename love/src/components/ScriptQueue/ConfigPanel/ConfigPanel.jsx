@@ -11,6 +11,7 @@ import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
+import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 
@@ -46,7 +47,7 @@ export default class ConfigPanel extends Component {
       pauseCheckpoint: '',
       stopCheckpoint: '',
       logLevel: 20,
-      orientation: 'below',
+      orientation: 'stacked',
       sizeWeight: 0.5,
       resizingStart: undefined,
       configErrors: [],
@@ -136,7 +137,7 @@ export default class ConfigPanel extends Component {
 
   rotatePanel = () => {
     this.setState({
-      orientation: this.state.orientation === 'beside' ? 'below' : 'beside',
+      orientation: this.state.orientation === 'beside' ? 'stacked' : 'beside',
     });
   };
 
@@ -170,8 +171,8 @@ export default class ConfigPanel extends Component {
       const currentY = ev.clientY;
 
       const { orientation, resizingStart, width, height, sizeWeight } = this.state;
-      const displacement = orientation === 'below' ? currentY - resizingStart.y : currentX - resizingStart.x;
-      const total = orientation === 'below' ? height : width;
+      const displacement = orientation === 'stacked' ? currentY - resizingStart.y : currentX - resizingStart.x;
+      const total = orientation === 'stacked' ? height : width;
       const boundary = 150 / height; //150px aprox of titles and buttons
       const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1 - boundary);
       this.setState({
@@ -190,7 +191,7 @@ export default class ConfigPanel extends Component {
 
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
     const sidePanelSize = {
-      below: {
+      stacked: {
         firstWidth: `${this.state.width}px`,
         firstHeight: `calc(${this.state.height * this.state.sizeWeight}px - 6em)`,
         secondWidth: `${this.state.width}px`,
@@ -205,7 +206,7 @@ export default class ConfigPanel extends Component {
     };
 
     const dividerClassName = {
-      below: styles.horizontalDivider,
+      stacked: styles.horizontalDivider,
       beside: styles.verticalDivider,
     };
 
@@ -227,15 +228,11 @@ export default class ConfigPanel extends Component {
           <div className={[styles.topBar, styles.bar].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
             <div className={styles.topButtonsContainer}>
-              {orientation === 'below' ? (
-                <span className={styles.rotateButton} onClick={this.rotatePanel}>
-                  &#8758;
-                </span>
-              ) : (
-                <span className={styles.rotateButton} onClick={this.rotatePanel}>
-                  &#8229;{' '}
-                </span>
-              )}
+              <span className={styles.rotateButton} onClick={this.rotatePanel}>
+                <RotateIcon orientation={orientation} />
+              </span>
+
+              
               <span className={styles.closeButton} onClick={this.closeConfigPanel}>
                 X
               </span>
