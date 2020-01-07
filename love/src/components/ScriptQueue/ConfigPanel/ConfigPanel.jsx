@@ -12,6 +12,7 @@ import Button from '../../GeneralPurpose/Button/Button';
 import TextField from '../../TextField/TextField';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import RotateIcon from '../../icons/RotateIcon/RotateIcon';
+import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 
@@ -234,7 +235,7 @@ export default class ConfigPanel extends Component {
 
               
               <span className={styles.closeButton} onClick={this.closeConfigPanel}>
-                X
+                <CloseIcon/>
               </span>
             </div>
           </div>
