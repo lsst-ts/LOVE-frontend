@@ -27,11 +27,11 @@ export default class CustomViewEditor extends Component {
             "type": "component",
             "x": 8,
             "y": 3,
-            "w": 8,
-            "h": 2,
+            "w": 58,
+            "h": 44,
             "i": 1
           },
-          "content": "CSCDetail",
+          "content": "ScriptQueue",
           "config": {
             "name": "Test",
             "salindex": 1,
