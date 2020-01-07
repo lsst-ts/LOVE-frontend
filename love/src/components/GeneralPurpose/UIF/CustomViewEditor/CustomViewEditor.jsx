@@ -25,6 +25,7 @@ export default class CustomViewEditor extends Component {
         "LeftPanel": {
           "properties": {
             "type": "component",
+            "allowOverflow": true,
             "x": 8,
             "y": 3,
             "w": 58,

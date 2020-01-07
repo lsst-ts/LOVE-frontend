@@ -17,7 +17,8 @@ export default class CustomView extends Component {
           "w": <int:element width>,
           "h": <int:element height>,
           "i": <int:element index>,
-          "cols": <int:number of columns>
+          "cols": <int:number of columns>,
+          "allowOverflow": <bool: whether to allow component to overflow or not> 
         },
         "content": <ContainerContent> or ComponentContent>,
         "config": <string:element configuration>,
