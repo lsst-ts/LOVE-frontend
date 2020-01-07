@@ -4,6 +4,12 @@ import MotorTable from './MotorTable';
 import { getMountMotorsState, getMountMotorsSubscriptions } from '../../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
 
+export const schema = {
+  description: `Table containing low level information about the AT mount motors and drives`,
+  defaultSize: [53, 11],
+  props: {},
+};
+
 const MotorTableContainer = ({ ...props }) => {
   return <MotorTable {...props} />;
 };
@@ -26,7 +32,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(MotorTableContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(MotorTableContainer);

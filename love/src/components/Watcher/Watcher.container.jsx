@@ -9,6 +9,13 @@ import {
 import Watcher from './Watcher';
 import mockAlarms from './AlarmsTable/mock';
 
+export const schema = {
+  description: `Table containing alarms triggered by all CSCs, with the corresponding 
+              interactions such as searching, filtering, acknowledging and muting`,
+  defaultSize: [63, 17],
+  props: {},
+}
+
 const WatcherContainer = ({
   alarms,
   user,

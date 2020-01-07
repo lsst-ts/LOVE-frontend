@@ -4,6 +4,12 @@ import LightPath from './LightPath';
 import { getMountState, getMountSubscriptions } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 
+export const schema = {
+  description: `Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover`,
+  defaultSize: [37, 31],
+  props: {},
+};
+
 const LightPathContainer = ({ ...props }) => {
   return <LightPath {...props} />;
 };

@@ -4,6 +4,11 @@ import TelemetryLog from './TelemetryLog';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import { saveGroupSubscriptions } from '../../Utils';
 
+export const schema = {
+  description: 'Internal use',
+  defaultSize: [63, 17],
+  props: {},
+};
 const TelemetryLogContainer = ({
   streams,
   subscriptionsList,
@@ -11,7 +16,7 @@ const TelemetryLogContainer = ({
   removeSubscriptionLocally,
   subscribeToStream,
   unsubscribeToStream,
-  requestSALCommand
+  requestSALCommand,
 }) => {
   const subscribeAndSaveGroup = (groupName) => {
     subscribeToStream(groupName);
@@ -37,7 +42,7 @@ const TelemetryLogContainer = ({
 const mapStateToProps = (state, ownProps) => {
   let streams = state.ws.subscriptions.filter((s) => ownProps.subscriptionsList.includes(s.groupName));
   if (streams.length === 0) return {};
-  streams = streams.filter(s=>s.data);
+  streams = streams.filter((s) => s.data);
 
   if (streams.length === 0) return {};
   return { streams: streams };
@@ -51,15 +56,10 @@ const mapDispatchToProps = (dispatch) => {
     unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));
     },
-    requestSALCommand: (cmd) =>{
-      dispatch(requestSALCommand(cmd))
-    }
+    requestSALCommand: (cmd) => {
+      dispatch(requestSALCommand(cmd));
+    },
   };
 };
 
-export default saveGroupSubscriptions(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(TelemetryLogContainer),
-);
+export default saveGroupSubscriptions(connect(mapStateToProps, mapDispatchToProps)(TelemetryLogContainer));
