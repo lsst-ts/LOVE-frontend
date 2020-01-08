@@ -39,35 +39,6 @@ export default class CustomViewEditor extends Component {
             "onCSCClick": "() => {}",
             "_functionProps": ["onCSCClick"]
           }
-        },
-        "LeftPanel2": {
-          "properties": {
-            "type": "component",
-            "x": 66,
-            "y": 98,
-            "w": 13,
-            "h": 1,
-            "i": 2
-          },
-          "content": "LabeledStatusText",
-          "config": {
-            "label": "Azimuth state2",
-            "groupName": "event-ATMCS-0-m3State",
-            "stateToLabelMap": {
-              "0": "UNKOWN",
-              "1": "TRACK_DISABLED",
-              "2": "TRACK_ENABLED",
-              "3": "STOPPING"
-            },
-            "stateToStyleMap": {
-              "0": "unknown",
-              "1": "ok",
-              "2": "running",
-              "3": "running"
-            },
-            "accessor": "(event) => event.state.value",
-            "_functionProps": ["accessor"]
-          }
         }
       }
     }

@@ -2,8 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import { getLATISSState } from '../../../redux/selectors';
-
 import LATISS from './LATISS';
+
+export const schema = {
+  description: 'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
+  defaultSize: [61, 31],
+  props: {},
+};
 
 const LATISSContainer = ({
   subscribeToStreams,

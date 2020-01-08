@@ -4,6 +4,33 @@ import CSCDetail from './CSCDetail';
 import { requestGroupSubscription } from '../../../redux/actions/ws';
 import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
+export const schema = {
+  description: 'Displays the error code and message logs for a single CSC',
+  defaultSize: [8, 2],
+  props: {
+    name: {
+      type: 'string',
+      description: 'Name of the CSC to monitor',
+      isPrivate: false,
+      default: 'Test',
+    },
+    salindex: {
+      type: 'number',
+      description:
+        'Salindex of the CSC',
+      isPrivate: false,
+      default: 1,
+    },
+    _functionProps: {
+      type: 'array',
+      description:
+        'Array containing the props that are functions',
+      isPrivate: true,
+      default: [],
+    },
+  },
+};
+
 const CSCDetailContainer = ({
   realm,
   group,
