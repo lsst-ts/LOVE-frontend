@@ -3,6 +3,10 @@ import styles from './ViewEditor.module.css';
 import CustomView from '../CustomView';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
+import Button from '../../Button/Button';
+import Modal from '../../Modal/Modal';
+import ComponentSelector from '../ComponentSelector/ComponentSelector';
+
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -80,6 +84,7 @@ export default class ViewEditor extends Component {
   onChange = (newValue) => {
     this.setState({
       layout: newValue,
+      showModal: false,
     });
   };
 
@@ -131,14 +136,62 @@ export default class ViewEditor extends Component {
     return newElement;
   };
 
+  hideModal = () => {
+    this.setState({ showModal: false });
+  };
+
+  showModal = e => {
+    this.setState({ showModal: true });
+  };
+
+  receiveSelection = (selection) => {
+    console.log('selected: ', selection);
+    this.hideModal();
+    let parsedLayout = {};
+    try {
+      parsedLayout = JSON.parse(this.state.layout);
+    } catch (error) {
+      parsedLayout = {};
+    }
+    console.log('current layout: ', parsedLayout);
+
+    const additionalContent = {};
+    const i = 0;
+    for (const component of selection) {
+      additionalContent['newPanel-' +  i] = {
+        properties: {
+          type: 'component',
+          x: 66,
+          y: 98,
+          w: 13,
+          h: 1,
+          i: 2,
+        },
+        content: component,
+        config: {
+          name: "Test",
+          salindex: 1,
+          onCSCClick: () => {},
+          _functionProps: ["onCSCClick"]
+        }
+      };
+    }
+    console.log('additionalContent: ', additionalContent);
+    parsedLayout.content = {...parsedLayout.content, ...additionalContent};
+    console.log('new layout: ', parsedLayout);
+    this.setState({
+      parsedLayout,
+    });
+  }
+
   render() {
     return (
       <>
-      <div className={styles.container}>
-        <div>
-          <CustomView layout={this.state.parsedLayout} onLayoutChange={this.onLayoutChange}></CustomView>
+        <div className={styles.container}>
+          <div>
+            <CustomView layout={this.state.parsedLayout} onLayoutChange={this.onLayoutChange}></CustomView>
+          </div>
         </div>
-      </div>
         <Rnd
           default={{
             x: 800,
@@ -153,7 +206,12 @@ export default class ViewEditor extends Component {
           onResize={this.onResize}
         >
           <div>
-            <div className={styles.bar}>Editor</div>
+            <div className={styles.bar}>
+              View editor
+              <Button onClick={this.showModal}>
+                Add Components
+              </Button>
+            </div>
             <AceEditor
               mode="json"
               theme="solarized_dark"
@@ -164,10 +222,17 @@ export default class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-            <button onClick={this.setLayout}>Set</button>
+          <Button onClick={this.setLayout}>Save changes</Button>
           </div>
         </Rnd>
-        </>
+        <Modal
+          isOpen={this.state.showModal}
+          onRequestClose={this.hideModal}
+          contentLabel="Component selection modal"
+        >
+          <ComponentSelector selectCallback={this.receiveSelection}/>
+        </Modal>
+      </>
     );
   }
 }

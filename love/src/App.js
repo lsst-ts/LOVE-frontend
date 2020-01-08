@@ -131,7 +131,7 @@ class App extends Component {
             />
             <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
             <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
-            <PrivateRoute token={this.props.token} path="/view-editor" component={CustomViewEditor} />
+            <PrivateRoute token={this.props.token} path="/view-editor" component={ViewEditor} />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
           </Switch>
