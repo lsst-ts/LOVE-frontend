@@ -19,6 +19,7 @@
 
 .card {
   display: grid;
+  cursor: pointer;
   grid-template-rows: 1.8em 1fr;
   padding: 1em;
   border: 1px solid transparent;
