@@ -13,7 +13,7 @@
   webkit-overflow-scrolling: touch;
   borderRadius: 4px;
   outline: none;
-  padding: 1em 0.5em 0.5em 0.5em;
+  padding: 1em;
 }
 
 .overlay {
@@ -31,12 +31,9 @@
   -webkit-backdrop-filter: blur(2px);
 }
 
-.content {
-  padding: 0 1em 1em 1em;
-}
-
 .topbar {
   display: inline-flex;
   width: 100%;
   justify-content: flex-end;
+  padding-bottom: 0.5em;
 }

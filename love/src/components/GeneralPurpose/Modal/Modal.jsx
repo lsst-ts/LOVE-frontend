@@ -28,9 +28,7 @@ export default function Modal(props) {
         </Button>
 
       </div>
-      <div className={styles.content}>
-        {children}
-      </div>
+      {children}
     </ReactModal>
   );
 };

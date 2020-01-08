@@ -2,6 +2,7 @@
   /* height: 100%; */
   display: grid;
   grid-template-rows: 1fr min-content;
+  overflow: auto;
 }
 
 .content {
@@ -93,7 +94,9 @@
 }
 
 .footer {
+  display: inline-grid;
+  grid-template-columns: 1fr 15ch 15ch;
+  padding: 1em 1em 0 1em;
+  grid-gap: 1em;
   height: 2em;
-  width: 100%;
-  background: yellow;
 }
