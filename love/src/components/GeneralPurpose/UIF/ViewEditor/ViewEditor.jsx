@@ -47,7 +47,7 @@ export default class ViewEditor extends Component {
           "properties": {
             "type": "component",
             "x": 66,
-            "y": 98,
+            "y": 40,
             "w": 13,
             "h": 1,
             "i": 2
@@ -95,7 +95,6 @@ export default class ViewEditor extends Component {
     } catch (error) {
       parsedLayout = {};
     }
-    console.log(parsedLayout)
     this.setState({
       parsedLayout,
     });
@@ -145,7 +144,6 @@ export default class ViewEditor extends Component {
   };
 
   receiveSelection = (selection) => {
-    console.log('selected: ', selection);
     this.hideModal();
     let parsedLayout = {};
     try {
@@ -153,32 +151,30 @@ export default class ViewEditor extends Component {
     } catch (error) {
       parsedLayout = {};
     }
-    console.log('current layout: ', parsedLayout);
 
     const additionalContent = {};
-    const i = 0;
+    let i = Object.keys(parsedLayout.content).length + 1;
     for (const component of selection) {
       additionalContent['newPanel-' +  i] = {
         properties: {
           type: 'component',
-          x: 66,
-          y: 98,
+          x: 60,
+          y: 40,
           w: 13,
-          h: 1,
-          i: 2,
+          h: 2,
+          i: i,
         },
         content: component,
         config: {
-          name: "Test",
+          name: 'Test',
           salindex: 1,
           onCSCClick: () => {},
           _functionProps: ["onCSCClick"]
         }
       };
+      i = i + 1;
     }
-    console.log('additionalContent: ', additionalContent);
     parsedLayout.content = {...parsedLayout.content, ...additionalContent};
-    console.log('new layout: ', parsedLayout);
     this.setState({
       parsedLayout,
     });
