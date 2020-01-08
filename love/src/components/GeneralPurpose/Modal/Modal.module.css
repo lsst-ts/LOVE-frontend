@@ -1,4 +1,6 @@
 .modal {
+  display: grid;
+  grid-template-rows: min-content 1fr;
   background-color: var(--secondary-background-color);
   border: 1px solid hsl(199, 43%, 16%);
   border-radius: 10px;
