@@ -53,6 +53,10 @@ export default class Button extends Component {
      * Type for the button.
      */
     type: PropTypes.string,
+    /**
+     * Define wether or not the button is disabled.
+     */
+    disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   };
 
@@ -64,6 +68,7 @@ export default class Button extends Component {
     title: '',
     type: 'button',
     shape: 'default',
+    disabled: false,
   };
 
   render() {
@@ -88,10 +93,18 @@ export default class Button extends Component {
     const { btn } = styles;
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
-    const style = [btn, statusStyle, sizeStyle, this.props.className].join(' ');
+    const style = [
+      btn, statusStyle, sizeStyle, this.props.className, this.props.disabled? styles.disabled : null
+    ].join(' ');
 
     return (
-      <button title={this.props.title} className={style} type={this.props.type} onClick={this.props.onClick}>
+      <button
+        title={this.props.title}
+        className={style}
+        type={this.props.type}
+        onClick={this.props.onClick}
+        disabled={this.props.disabled}
+      >
         {this.props.children}{' '}
       </button>
     );

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Button from '../../Button/Button';
 import styles from './ComponentSelector.module.css';
 import {indexes} from '../ComponentIndex';
 
@@ -35,7 +36,14 @@ export default class ComponentSelector extends Component {
     }
   }
 
+  clearSelection = () => {
+    this.setState({
+      selected:  [],
+    });
+  }
+
   render() {
+    const buttonsDisabled = this.state.selected.length === 0;
     return (
       <div className={styles.container}>
         <div className={styles.content}>
@@ -74,7 +82,13 @@ export default class ComponentSelector extends Component {
           })}
         </div>
         <div className={styles.footer}>
-          
+          <span/>
+          <Button status='default' onClick={this.clearSelection} disabled={buttonsDisabled}>
+            Clear Selection
+          </Button>
+          <Button status='primary' disabled={buttonsDisabled}>
+            Insert
+          </Button>
         </div>
       </div>
     );
