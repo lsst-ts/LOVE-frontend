@@ -5,6 +5,33 @@ import { requestGroupSubscription } from '../../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
 
+export const schema = {
+  description: 'Displays the error code and message logs for a single CSC',
+  defaultSize: [24, 29],
+  props: {
+    name: {
+      type: 'string',
+      description: 'Name of the CSC to monitor',
+      isPrivate: false,
+      default: 'Test',
+    },
+    salindex: {
+      type: 'number',
+      description:
+        'Salindex of the CSC',
+      isPrivate: false,
+      default: 1,
+    },
+    _functionProps: {
+      type: 'array',
+      description:
+        'Array containing the props that are functions',
+      isPrivate: true,
+      default: [],
+    },
+  },
+};
+
 const CSCExpandedContainer = ({
   name,
   salindex,

@@ -4,6 +4,53 @@ import { getStreamData } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import LabeledStatusText from './LabeledStatusText';
 
+export const schema = {
+  description: `Internal use`,
+  defaultSize: [13, 2],
+  props: {
+    label: {
+      type: 'string',
+      description: 'Status label',
+      isPrivate: false,
+      default: 'Azimuth state',
+    },
+    groupName: {
+      type: 'string',
+      description: 'SAL stream, in the format <stream_type>-<CSC>-<salIndex>-<stream>',
+      isPrivate: false,
+      default: 'event-ATMCS-0-m3State',
+    },
+    accessor: {
+      type: 'function',
+      description: '',
+      isPrivate: false,
+      default: (event) => event.state.value,
+    },
+    stateToLabelMap: {
+      type: 'string',
+      description: 'Mapping of status number to its label',
+      isPrivate: true,
+      default: {
+        '0': 'UNKOWN',
+        '1': 'TRACK_DISABLED',
+        '2': 'TRACK_ENABLED',
+        '3': 'STOPPING',
+      },
+    },
+    stateToStyleMap: {
+      type: 'string',
+      description: 'Mapping of status number to style class',
+      isPrivate: true,
+      default: {
+        '0': 'unknown',
+        '1': 'ok',
+        '2': 'running',
+        '3': 'running',
+      },
+    },
+  },
+};
+
 const LabeledStatusTextContainer = ({
   streamState,
   groupName,
@@ -44,7 +91,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LabeledStatusTextContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LabeledStatusTextContainer);
