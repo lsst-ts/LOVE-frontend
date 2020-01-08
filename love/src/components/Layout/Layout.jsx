@@ -52,6 +52,11 @@ export default class Layout extends Component {
     this.setState({ show: true });
   };
 
+  receiveSelection = (selection) => {
+    console.log('selected: ', selection);
+    this.hideModal();
+  }
+
   render() {
     return (
       <>
@@ -68,7 +73,7 @@ export default class Layout extends Component {
           onRequestClose={this.hideModal}
           contentLabel="Component selection modal"
         >
-          <ComponentSelector/>
+          <ComponentSelector selectCallback={this.receiveSelection}/>
         </Modal>
       </>
     );
