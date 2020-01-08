@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './InfoPanel.module.css';
 
-
 /**
- * A generic information panel, meant to be user as a floating element 
+ * A generic information panel, meant to be user as a floating element
  * containing information of a hovered element.
  */
 export default class InfoPanel extends Component {
@@ -24,10 +23,14 @@ export default class InfoPanel extends Component {
     const classNames = [styles.panel, this.props.className].join(' ');
     return (
       <div className={classNames}>
-        <div className={styles.panelHeading}>
-          <h3 className={styles.panelTitle}>{this.props.title}</h3>
+        {this.props.title && (
+          <div className={styles.panelHeading}>
+            <h3 className={styles.panelTitle}>{this.props.title}</h3>
+          </div>
+        )}
+        <div className={[styles.panelBody, this.props.title ? styles.panelBodyUnderline : ''].join(' ')}>
+          {this.props.children}
         </div>
-        <div className={styles.panelBody}>{this.props.children}</div>
       </div>
     );
   }

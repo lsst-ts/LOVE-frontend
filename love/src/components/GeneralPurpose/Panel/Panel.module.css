@@ -14,6 +14,7 @@
 .fit {
     width: fit-content;
     max-height: 100vh;
+    overflow: visible;
 }
 
 .expandHeight {
