@@ -1,12 +1,16 @@
 .topbar {
+  box-sizing: border-box;
   width: 100%;
   height: var(--topbar-height);
   background-color: var(--tertiary-background-color);
   overflow: hidden;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 0 var(--content-padding);
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  padding: 0.2em var(--content-padding);
+}
+
+.hidden {
+  visibility: hidden;
 }
 
 .contentWrapper {

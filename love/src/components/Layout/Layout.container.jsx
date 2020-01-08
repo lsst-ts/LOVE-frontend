@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getLastSALCommand } from '../../redux/selectors';
+import { logout } from '../../redux/actions/auth';
 import Layout from './Layout';
 
 const LayoutContainer = ({
@@ -23,9 +24,9 @@ const mapStateToProps = (state) => {
   return { user, lastSALCommand };
 };
 
-const mapDispatchToProps = (_dispatch) => {
-  return {}
-};
+const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch(logout()),
+});
 
 export default connect(
   mapStateToProps,
