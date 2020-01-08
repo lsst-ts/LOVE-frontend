@@ -65,7 +65,7 @@ export default class CustomView extends Component {
 
   parseComponent = (component) => {
     let comp = '';
-    const LoveComp = componentIndex[component.content];
+    const LoveComp = componentIndex[component.content].component;
     const { config } = component;
     const parsedConfig = this.parseConfig(config);
     comp = <LoveComp {...parsedConfig} />;

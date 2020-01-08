@@ -1,23 +1,71 @@
 export const uifIndex = {
-    ScriptQueue: require('../../ScriptQueue/ScriptQueue.container').default,
-    CSCDetail: require('../../CSCSummary/CSCDetail/CSCDetail.container').default,
-    CSCExpanded: require('../../CSCSummary/CSCExpanded/CSCExpanded.container').default,
-    CSCGroupLog: require('../../CSCSummary/CSCGroupLog/CSCGroupLog.container').default,
-    CSCGroup: require('../../CSCSummary/CSCGroup/CSCGroup').default,
-    CSCSummary: require('../../CSCSummary/CSCSummary.container').default,
-    LabeledStatusText: require('../../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
-    TimeSeriesPlot: require('../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
-    TelemetryLog: require('../../TelemetryLog/TelemetryLog.container').default,
-    Watcher: require('../../Watcher/Watcher.container').default,
+  ScriptQueue: {
+    component: require('../../ScriptQueue/ScriptQueue.container').default,
+    schema: require('../../ScriptQueue/ScriptQueue.container').schema,
+  },
+  CSCDetail: {
+    component: require('../../CSCSummary/CSCDetail/CSCDetail.container').default,
+    schema: require('../../CSCSummary/CSCDetail/CSCDetail.container').schema,
+  },
+  CSCExpanded: {
+    component: require('../../CSCSummary/CSCExpanded/CSCExpanded.container').default,
+    schema: require('../../CSCSummary/CSCExpanded/CSCExpanded.container').schema,
+  },
+  CSCGroupLog: {
+    component: require('../../CSCSummary/CSCGroupLog/CSCGroupLog.container').default,
+    schema: require('../../CSCSummary/CSCGroupLog/CSCGroupLog.container').schema,
+  },
+  CSCGroup: {
+    component: require('../../CSCSummary/CSCGroup/CSCGroup').default,
+    schema: require('../../CSCSummary/CSCGroup/CSCGroup').schema,
+  },
+  CSCSummary: {
+    component: require('../../CSCSummary/CSCSummary.container').default,
+    schema: require('../../CSCSummary/CSCSummary.container').schema,
+  },
+  LabeledStatusText: {
+    component: require('../../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
+    schema: require('../../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').schema,
+  },
+  TimeSeriesPlot: {
+    component: require('../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
+    schema: require('../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
+  },
+  TelemetryLog: {
+    component: require('../../TelemetryLog/TelemetryLog.container').default,
+    schema: require('../../TelemetryLog/TelemetryLog.container').schema,
+  },
+  Watcher: {
+    component: require('../../Watcher/Watcher.container').default,
+    schema: require('../../Watcher/Watcher.container').schema,
+  },
 };
 
 export const auxtelIndex = {
-    MountSummaryPanel: require('../../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
-    LightPath: require('../../AuxTel/Mount/LightPath.container').default,
-    MotorTable: require('../../AuxTel/Mount/MotorTable/MotorTable.container').default,
-    Camera: require('../../AuxTel/Camera/Camera.container').default,
-    Dome: require('../../AuxTel/Dome/Dome.container').default,
-    LATISS: require('../../AuxTel/LATISS/LATISS.container').default,
+    MountSummaryPanel: {
+      component: require('../../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
+      schema: require('../../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema,
+    },
+    LightPath: {
+      component: require('../../AuxTel/Mount/LightPath.container').default,
+      schema: require('../../AuxTel/Mount/LightPath.container').schema,
+    },
+    MotorTable: {
+      component: require('../../AuxTel/Mount/MotorTable/MotorTable.container').default,
+      schema: require('../../AuxTel/Mount/MotorTable/MotorTable.container').schema,
+    },
+    Camera: {
+      component: require('../../AuxTel/Camera/Camera.container').default,
+      schema: require('../../AuxTel/Camera/Camera.container').schema,
+    },
+    Dome: {
+      component: require('../../AuxTel/Dome/Dome.container').default,
+      schema: require('../../AuxTel/Dome/Dome.container').schema,
+    },
+    LATISS: {
+      component: require('../../AuxTel/LATISS/LATISS.container').default,
+      schema: require('../../AuxTel/LATISS/LATISS.container').schema,
+    },
 };
 
 export const mainIndex = {
@@ -36,7 +84,7 @@ export const indexes = [
     name: 'Main Telescope',
     index: mainIndex,
   },
-]
+];
 
 export default {
   ...uifIndex,
