@@ -1,0 +1,21 @@
+.topbar {
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--topbar-height);
+  background-color: var(--tertiary-background-color);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  padding: 0.2em var(--content-padding);
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.contentWrapper {
+  margin: 0;
+  padding: var(--content-padding);
+  overflow: auto;
+  height: calc(100vh - 4em);
+}

@@ -233,7 +233,7 @@ export default class ConfigPanel extends Component {
                 <RotateIcon orientation={orientation} />
               </span>
 
-              
+
               <span className={styles.closeButton} onClick={this.closeConfigPanel}>
                 <CloseIcon/>
               </span>

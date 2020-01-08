@@ -6,7 +6,6 @@ import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
-import Layout from './components/Layout/Layout';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
@@ -23,7 +22,7 @@ import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
-import CustomViewEditor from './components/GeneralPurpose/UIF/CustomViewEditor/CustomViewEditor';
+import ViewEditor from './components/GeneralPurpose/UIF/ViewEditor/ViewEditor';
 import WatcherContainer from './components/Watcher/Watcher.container';
 
 class App extends Component {
@@ -52,7 +51,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LayoutContainer>
+        <LayoutContainer token={this.props.token}>
           <Switch>
             <Route path="/login" render={() => <LoginContainer />} />
             <PrivateRoute
@@ -130,7 +129,7 @@ class App extends Component {
               )}
             />
             <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
-            <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
+            <PrivateRoute token={this.props.token} path="/view-editor" component={ViewEditor} />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
           </Switch>
