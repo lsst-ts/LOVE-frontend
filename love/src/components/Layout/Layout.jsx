@@ -61,7 +61,9 @@ export default class Layout extends Component {
     return (
       <>
         <div className={styles.topbar}>
-          <Button onClick={this.showModal}> + </Button>
+          <Button onClick={this.showModal}>
+            +
+          </Button>
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}
