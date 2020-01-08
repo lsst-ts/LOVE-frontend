@@ -25,6 +25,7 @@ import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
 import CustomViewEditor from './components/GeneralPurpose/UIF/CustomViewEditor/CustomViewEditor';
 import WatcherContainer from './components/Watcher/Watcher.container';
+import GenericCamera from './components/GenericCamera/GenericCamera';
 
 class App extends Component {
   static propTypes = {
@@ -132,7 +133,10 @@ class App extends Component {
             <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
             <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
+            <PrivateRoute token={this.props.token} path="/generic-camera" render={() => <GenericCamera />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
+            
+
           </Switch>
         </LayoutContainer>
       </div>

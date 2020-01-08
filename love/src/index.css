@@ -11,6 +11,7 @@ body {
 }
 
 :root {
+    backface-visibility: hidden;
   --base-font-color: hsl(194, 16%, 79%);
   --secondary-font-color: hsl(201, 15%, 54%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3); /*Transparent*/
