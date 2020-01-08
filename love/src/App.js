@@ -52,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LayoutContainer>
+        <LayoutContainer token={this.props.token}>
           <Switch>
             <Route path="/login" render={() => <LoginContainer />} />
             <PrivateRoute

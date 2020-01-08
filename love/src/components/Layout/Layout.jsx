@@ -5,8 +5,6 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
-import Modal from '../GeneralPurpose/Modal/Modal';
-import ComponentSelector from '../GeneralPurpose/UIF/ComponentSelector/ComponentSelector';
 import styles from './Layout.module.css';
 
 
@@ -16,6 +14,10 @@ export default class Layout extends Component {
     children: PropTypes.node,
     /** Last SAL command that has been sent */
     lastSALCommand: PropTypes.object,
+    /** Function to log oput of the app */
+    logout: PropTypes.func,
+    /** Authentication token */
+    token: PropTypes.string,
   };
 
   static defaultProps = {
@@ -24,9 +26,6 @@ export default class Layout extends Component {
 
   constructor() {
     super();
-    this.state = {
-      show: false,
-    }
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
@@ -44,39 +43,18 @@ export default class Layout extends Component {
     }
   };
 
-  hideModal = () => {
-    this.setState({ show: false });
-  };
-
-  showModal = e => {
-    this.setState({ show: true });
-  };
-
-  receiveSelection = (selection) => {
-    console.log('selected: ', selection);
-    this.hideModal();
-  }
-
   render() {
     return (
       <>
-        <div className={styles.topbar}>
-          <Button onClick={this.showModal}>
-            +
-          </Button>
+        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
+          <span />
+          <Button onClick={this.props.logout}>Logout</Button>
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}
         </div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
-        <Modal
-          isOpen={this.state.show}
-          onRequestClose={this.hideModal}
-          contentLabel="Component selection modal"
-        >
-          <ComponentSelector selectCallback={this.receiveSelection}/>
-        </Modal>
       </>
     );
   }
