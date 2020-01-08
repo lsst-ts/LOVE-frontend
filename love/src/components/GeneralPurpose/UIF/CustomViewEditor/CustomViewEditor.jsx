@@ -25,13 +25,14 @@ export default class CustomViewEditor extends Component {
         "LeftPanel": {
           "properties": {
             "type": "component",
+            "allowOverflow": true,
             "x": 8,
             "y": 3,
-            "w": 13,
-            "h": 17,
+            "w": 58,
+            "h": 44,
             "i": 1
           },
-          "content": "CSCExpanded",
+          "content": "ScriptQueue",
           "config": {
             "name": "Test",
             "salindex": 1,
