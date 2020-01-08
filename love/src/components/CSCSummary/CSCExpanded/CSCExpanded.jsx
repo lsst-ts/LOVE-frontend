@@ -151,9 +151,9 @@ export default class CSCExpanded extends PureComponent {
                       className={styles.breadcrumbGroup}
                       onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
                     >
-                      {props.group}{' '}
+                      {props.group}
                     </span>
-                    <span>&#62; </span>
+                    <span>{' '}&#62; </span>
                   </>
                 }
                 <span>
