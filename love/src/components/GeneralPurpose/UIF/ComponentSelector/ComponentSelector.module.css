@@ -1,4 +1,11 @@
 .container {
+  /* height: 100%; */
+  display: grid;
+  grid-template-rows: 1fr min-content;
+}
+
+.content {
+  overflow-y: auto;
 }
 
 .gallery {
@@ -9,16 +16,84 @@
   grid-gap: 1em;
 }
 
-.component {
+.card {
+  display: grid;
+  grid-template-rows: 1.8em 1fr;
   padding: 1em;
+  border: 1px solid transparent;
+  border-radius: 7px;
 }
 
-.component h4 {
-  margin: 0;
+.card h4 {
+  margin: 0.4em 0;
 }
 
-.component p {
+.card p {
   color: var(--secondary-font-color);
   margin-top: 0.5em;
   white-space: pre-wrap;
+}
+
+.card:hover {
+  border: 1px solid var(--secondary-font-color);
+  background-color: var(--tertiary-background-color);
+}
+
+.selected {
+  background-color: var(--tertiary-background-color);
+}
+
+.cardHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.customCheckbox {
+  position: relative;
+}
+
+.customCheckbox label {
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  height: 1.5em;
+  width: 1.5em;
+  left: -0.4em;
+  top: -0.2em;
+}
+
+.customCheckbox label:after {
+  border: 2px solid #fff;
+  border-top: none;
+  border-right: none;
+  content: "";
+  height: 0.3em;
+  left: 0.3em;
+  opacity: 0;
+  position: absolute;
+  top: 0.4em;
+  transform: rotate(-45deg);
+  width: 0.8em;
+}
+
+.customCheckbox input[type="checkbox"] {
+  visibility: hidden;
+}
+
+.customCheckbox input[type="checkbox"]:checked + label {
+  background-color: var(--info-background-color);
+  border-color: var(--info-background-color);
+}
+
+.customCheckbox input[type="checkbox"]:checked + label:after {
+  opacity: 1;
+}
+
+.footer {
+  height: 2em;
+  width: 100%;
+  background: yellow;
 }
