@@ -26,11 +26,14 @@
 }
 
 .panelBody {
-    border-top-left-radius: 8px;
-    border-top: 1px solid var(--secondary-font-color);
     margin: 0px 8px;
     color: var(--secondary-font-color);
     font-weight: 400;
     font-size: 1em;
     line-height: 1.4;
+}
+
+.panelBodyUnderline {
+    border-top-left-radius: 8px;
+    border-top: 1px solid var(--secondary-font-color);
 }
