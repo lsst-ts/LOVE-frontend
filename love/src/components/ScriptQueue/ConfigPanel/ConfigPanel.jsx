@@ -196,13 +196,13 @@ export default class ConfigPanel extends Component {
         firstWidth: `${this.state.width}px`,
         firstHeight: `calc(${this.state.height * this.state.sizeWeight}px - 6em)`,
         secondWidth: `${this.state.width}px`,
-        secondHeight: `calc(${this.state.height * (1 - this.state.sizeWeight)}px - 6em)`,
+        secondHeight: `calc(${this.state.height * (1 - this.state.sizeWeight)}px - 8em)`,
       },
       beside: {
         firstWidth: `calc(${this.state.width * this.state.sizeWeight}px - 1em)`,
-        firstHeight: `calc(${this.state.height}px - 9em)`,
+        firstHeight: `calc(${this.state.height}px - 11em)`,
         secondWidth: `calc(${this.state.width * (1 - this.state.sizeWeight)}px - 1em)`,
-        secondHeight: `calc(${this.state.height}px - 9em)`,
+        secondHeight: `calc(${this.state.height}px - 11em)`,
       },
     };
 
