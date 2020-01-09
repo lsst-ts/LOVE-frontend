@@ -7,7 +7,7 @@ import CSCGroupLogContainer from '../CSCGroupLog/CSCGroupLog.container';
 
 export const schema = {
   description: 'Summary of a set of CSCs, including heartbeats and summary state',
-  defaultSize: [12, 17],
+  defaultSize: [12, 19],
   props: {
     name: {
       type: 'string',
