@@ -121,6 +121,10 @@ export default class ViewEditor extends Component {
     this.props.updateEditedView(currentLayout);
   }
 
+  save = () => {
+    console.log('save');
+  }
+
   render() {
     return (
       <>
@@ -148,6 +152,9 @@ export default class ViewEditor extends Component {
               <Button onClick={this.showModal}>
                 Add Components
               </Button>
+              <Button onClick={this.save}>
+                Save Changes
+              </Button>
             </div>
             <AceEditor
               mode="json"
@@ -159,7 +166,7 @@ export default class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-          <Button onClick={this.setLayout}>Save changes</Button>
+          <Button onClick={this.setLayout}>Apply</Button>
           </div>
         </Rnd>
         <Modal

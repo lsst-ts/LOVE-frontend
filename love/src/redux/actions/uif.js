@@ -4,9 +4,11 @@ import {
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  SAVING_EDITED_VIEW,
+  SAVED_EDITED_VIEW,
 } from './actionTypes';
+import { getEditedView } from '../selectors/uif';
 import ManagerInterface from '../../Utils';
-
 
 /**
  * Action to receive a list of workspaces
@@ -18,7 +20,6 @@ export const receiveWorkspaces = (workspaces) => {
   };
 };
 
-
 /**
  * Action to receive a list of views
  */
@@ -28,7 +29,6 @@ export const receiveViews = (views) => {
     views,
   };
 };
-
 
 /**
  * Action to receive a particular (the current) workspace
@@ -40,7 +40,6 @@ export const receiveCurrentWorkspace = (workspace) => {
   };
 };
 
-
 /**
  * Action to update the view under edition
  */
@@ -49,6 +48,23 @@ export const updateEditedView = (view) => {
     type: UPDATE_EDITED_VIEW,
     view,
   };
+};
+
+/**
+ * Action to mark the editView as in process of being saved
+ */
+export const savingEditedView = {
+  type: SAVING_EDITED_VIEW,
+};
+
+/**
+ * Action to mark the editView as saved
+ */
+export const savedEditedView = (view) => {
+  return {
+    type: SAVED_EDITED_VIEW,
+    view: view,
+  }
 };
 
 
@@ -94,7 +110,6 @@ export function requestViews() {
 }
 
 
-
 /**
  * requestWorkspace - Action to request a full workspace by its given id
  *
@@ -110,6 +125,30 @@ export function requestWorkspace(id) {
     }).then((response) => {
       return response.json().then((workspace) => {
         dispatch(receiveCurrentWorkspace(workspace));
+        return Promise.resolve();
+      });
+    }).catch((e) => console.error(e));
+  };
+}
+
+
+/**
+ * saveEditedView - Action to save the view under edition to the server
+ *
+ * @return {object}    the dispatched action
+ */
+export function saveEditedView() {
+  return async (dispatch, getState) => {
+    const editedView = getEditedView(getState());
+    dispatch(savingEditedView);
+    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify(editedView),
+    }).then((response) => {
+      return response.json().then((view) => {
+        dispatch(savedEditedView(view));
         return Promise.resolve();
       });
     }).catch((e) => console.error(e));

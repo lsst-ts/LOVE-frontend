@@ -30,7 +30,7 @@ export const getViews = (state) => {
  */
 export const getCurrentWorkspace = (state) => {
   if (state.uif === undefined) return undefined;
-  const id = state.uif.current_workspace;
+  const id = state.uif.currentWorkspace;
   return state.uif.workspaces.find(function(workspace) {
     return workspace.id === id;
   });
@@ -41,9 +41,32 @@ export const getCurrentWorkspace = (state) => {
  * Return the current state of the view under edition
  *
  * @param  {object} state  the state
- * @return {array}        the list of views
+ * @return {object}        the data of the view
  */
 export const getEditedView = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.edited_view;
+  return state.uif.editedView;
+};
+
+
+/**
+ * Return the status the view under edition
+ *
+ * @param  {object} state  the state
+ * @return {string}        the status of the view
+ */
+export const getEditedViewStatus = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.editedViewStatus;
+};
+
+/**
+ * Return the data the view under edition
+ *
+ * @param  {object} state  the state
+ * @return {string}        the data of the view
+ */
+export const getEditedViewData = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.editedViewData;
 };
