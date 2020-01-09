@@ -1,4 +1,9 @@
-import { RECEIVE_WORKSPACES, RECEIVE_CURRENT_WORKSPACE } from '../actions/actionTypes';
+import {
+  RECEIVE_WORKSPACES,
+  RECEIVE_VIEWS,
+  RECEIVE_CURRENT_WORKSPACE,
+  RECEIVE_VIEW,
+} from '../actions/actionTypes';
 
 const initialState = {
   current_view: null,
@@ -21,6 +26,12 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           workspaces: action.workspaces,
+        });
+      }
+    case RECEIVE_VIEWS:
+      {
+        return Object.assign({}, state, {
+          views: action.views,
         });
       }
     case RECEIVE_CURRENT_WORKSPACE:

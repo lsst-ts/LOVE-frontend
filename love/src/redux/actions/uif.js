@@ -1,4 +1,9 @@
-import { RECEIVE_WORKSPACES, RECEIVE_CURRENT_WORKSPACE } from './actionTypes';
+import {
+  RECEIVE_WORKSPACES,
+  RECEIVE_VIEWS,
+  RECEIVE_CURRENT_WORKSPACE,
+  RECEIVE_VIEW,
+} from './actionTypes';
 import ManagerInterface from '../../Utils';
 
 
@@ -9,6 +14,17 @@ export const receiveWorkspaces = (workspaces) => {
   return {
     type: RECEIVE_WORKSPACES,
     workspaces,
+  };
+};
+
+
+/**
+ * Action to receive a list of views
+ */
+export const receiveViews = (views) => {
+  return {
+    type: RECEIVE_VIEWS,
+    views,
   };
 };
 
@@ -38,6 +54,27 @@ export function requestWorkspaces() {
     }).then((response) => {
       return response.json().then((workspaces) => {
         dispatch(receiveWorkspaces(workspaces));
+        return Promise.resolve();
+      });
+    }).catch((e) => console.error(e));
+  };
+}
+
+
+/**
+ * requestWorkspaces - Action to request the list of views
+ *
+ * @return {object}  the dispatched action
+ */
+export function requestViews() {
+  return async (dispatch, getState) => {
+    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      return response.json().then((views) => {
+        dispatch(receiveViews(views));
         return Promise.resolve();
       });
     }).catch((e) => console.error(e));

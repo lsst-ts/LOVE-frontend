@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 import { getTokenFromStorage } from '../actions/auth';
-import { requestWorkspaces, requestWorkspace, receiveWorkspaces } from '../actions/uif';
+import { requestWorkspaces, requestWorkspace, receiveWorkspaces, requestViews } from '../actions/uif';
 import { getViews, getWorkspaces, getCurrentWorkspace } from '../selectors';
 
 let store;
@@ -91,8 +91,19 @@ describe('GIVEN the store is empty', () => {
     // Act:
     await store.dispatch(requestWorkspaces());
     // Assert:
-    const retrievedWorkspaces = getWorkspaces(store.getState());
-    expect(retrievedWorkspaces).toEqual(mockWorkspaces);
+    const retrievedData = getWorkspaces(store.getState());
+    expect(retrievedData).toEqual(mockWorkspaces);
+  });
+
+  it('WHEN the views are requested, THEN the state should contain the views', async () => {
+    // Arrange:
+    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
+    // Act:
+    await store.dispatch(requestViews());
+    // Assert:
+    const retrievedData = getViews(store.getState());
+    expect(retrievedData).toEqual(mockViews);
   });
 });
 
