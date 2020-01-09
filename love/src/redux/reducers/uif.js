@@ -3,11 +3,13 @@ import {
   RECEIVE_VIEWS,
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
+  UPDATE_EDITED_VIEW,
 } from '../actions/actionTypes';
 
 const initialState = {
   current_view: null,
   current_workspace: null,
+  edited_view: null,
   views: [],
   workspaces: [],
 };
@@ -39,6 +41,12 @@ export default function(state = initialState, action) {
         return Object.assign({}, state, {
           current_workspace: action.workspace.id,
           views: action.workspace.views,
+        });
+      }
+    case UPDATE_EDITED_VIEW:
+      {
+        return Object.assign({}, state, {
+          edited_view: action.view,
         });
       }
     default:

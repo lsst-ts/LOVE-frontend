@@ -3,6 +3,7 @@ import {
   RECEIVE_VIEWS,
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
+  UPDATE_EDITED_VIEW,
 } from './actionTypes';
 import ManagerInterface from '../../Utils';
 
@@ -36,6 +37,17 @@ export const receiveCurrentWorkspace = (workspace) => {
   return {
     type: RECEIVE_CURRENT_WORKSPACE,
     workspace,
+  };
+};
+
+
+/**
+ * Action to update the view under edition
+ */
+export const updateEditedView = (view) => {
+  return {
+    type: UPDATE_EDITED_VIEW,
+    view,
   };
 };
 
