@@ -1,18 +1,32 @@
 import React, { Component } from 'react';
-import styles from './ViewEditor.module.css';
+import PropTypes from 'prop-types';
 import CustomView from '../CustomView';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import Button from '../../Button/Button';
 import Modal from '../../Modal/Modal';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
+import styles from './ViewEditor.module.css';
 
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 export default class ViewEditor extends Component {
-  constructor() {
-    super();
+
+  static propTypes = {
+    /** Object representing the layout of the view being edited */
+    editedView: PropTypes.object,
+    /** Function to update the edited view */
+    updateEditedView: PropTypes.func,
+  };
+
+  static defaultProps = {
+    editedView: null,
+    updateEditedView: () => {},
+  };
+
+  constructor(props) {
+    super(props);
     const layout = `
     {
       "properties": {
@@ -112,6 +126,7 @@ export default class ViewEditor extends Component {
       parsedLayout: newParsedLayout,
       layout: JSON.stringify(newParsedLayout, null, 2),
     });
+    this.props.updateEditedView(newParsedLayout);
   };
 
   updateElementProperties = (element, properties) => {
