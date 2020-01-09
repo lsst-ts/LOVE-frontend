@@ -107,7 +107,12 @@ export default class ViewEditor extends Component {
     }
 
     const additionalContent = {};
-    let i = Object.keys(parsedLayout.content).length + 1;
+    let startingIndex = 0;
+    Object.keys(parsedLayout.content).forEach((compKey) => {
+      startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
+    });
+    startingIndex += 1;
+
     selection.forEach((componentDict) => {
       const { schema } = componentDict;
       const { defaultSize } = schema;
@@ -116,7 +121,7 @@ export default class ViewEditor extends Component {
       Object.keys(componentConfig).forEach((key) => {
         defaultConfig[key] = componentConfig[key].default;
       });
-      additionalContent[`newPanel-${i}`] = {
+      additionalContent[`newPanel-${startingIndex}`] = {
         properties: {
           type: 'component',
           x: 0,
@@ -124,12 +129,12 @@ export default class ViewEditor extends Component {
           w: defaultSize[0],
           h: defaultSize[1],
           allowOverflow: schema.allowOverflow,
-          i,
+          i: startingIndex,
         },
         content: componentDict.name,
         config: defaultConfig,
       };
-      i += 1;
+      startingIndex += 1;
     });
     parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
     this.setState({
@@ -137,12 +142,38 @@ export default class ViewEditor extends Component {
     });
   };
 
+  onComponentDelete = (component) => {
+    let parsedLayout = {};
+    try {
+      parsedLayout = JSON.parse(this.state.layout);
+    } catch (error) {
+      parsedLayout = {};
+    }
+    Object.keys(parsedLayout.content).forEach((compKey) => {
+      console.log(
+        'onComponentDelete',
+        parsedLayout.content[compKey].content,
+        component.content,
+        parsedLayout.content[compKey].content === component.content,
+      );
+      if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
+    });
+    this.setState({
+      parsedLayout,
+    });
+    return [];
+  };
+
   render() {
     return (
       <>
         <div className={styles.container}>
           <div>
-            <CustomView layout={this.state.parsedLayout} onLayoutChange={this.onLayoutChange}></CustomView>
+            <CustomView
+              layout={this.state.parsedLayout}
+              onLayoutChange={this.onLayoutChange}
+              onComponentDelete={this.onComponentDelete}
+            ></CustomView>
           </div>
         </div>
         <Rnd
