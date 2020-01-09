@@ -4,16 +4,10 @@ import { getUsername, getLastSALCommand } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import Layout from './Layout';
 
-const LayoutContainer = ({
-  user,
-  subscribeToStream,
-  unsubscribeToStream,
-  ...props }) => {
+const LayoutContainer = ({...props }) => {
   return (
     <Layout
       {...props}
-      subscribeToStream={subscribeToStream}
-      unsubscribeToStream={unsubscribeToStream}
     />
   );
 };

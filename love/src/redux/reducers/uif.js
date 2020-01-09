@@ -9,7 +9,19 @@ import {
 const initialState = {
   current_view: null,
   current_workspace: null,
-  edited_view: null,
+  edited_view: {
+    properties: {
+      type: 'container',
+      x: 0,
+      y: 0,
+      w: 100,
+      h: 2,
+      i: 0,
+      allowOverflow: true,
+      cols: 100
+    },
+    content: {},
+  },
   views: [],
   workspaces: [],
 };
