@@ -40,12 +40,15 @@ export default class CustomView extends Component {
     baseColWidth: PropTypes.number,
     /** Callback called when layout changes */
     onLayoutChange: PropTypes.func,
+    /** Whether the view is editable */
+    isEditable: PropTypes.bool,
   };
 
   static defaultProps = {
     layout: undefined,
     baseColWidth: 20,
     onLayoutChange: () => {},
+    isEditable: true,
   };
 
   parseConfig = (config) => {
@@ -73,7 +76,11 @@ export default class CustomView extends Component {
     return (
       <div
         key={component.properties.i.toString()}
-        className={[styles.componentWrapper, component.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
+        className={[
+          styles.componentWrapper,
+          component.properties.allowOverflow ? '' : styles.noOverflow,
+          this.props.isEditable ? styles.editable : '',
+        ].join(' ')}
       >
         {comp}
       </div>

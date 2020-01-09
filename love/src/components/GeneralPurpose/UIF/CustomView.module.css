@@ -1,5 +1,4 @@
 .container {
-  /* background: rgba(255, 0, 0, 0.8); */
 }
 
 .containerPanel {
@@ -11,10 +10,14 @@
 }
 
 .componentWrapper {
-  background: rgba(255, 0, 0, 0.3);
-  border: 1px solid white;
+  /* background: rgba(255, 0, 0, 0.3); */
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
+}
+
+.editable {
+  border: 1px dashed #bbb;
 }
 
 .noOverflow {
