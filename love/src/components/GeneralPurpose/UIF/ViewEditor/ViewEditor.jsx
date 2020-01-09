@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import styles from './ViewEditor.module.css';
-import CustomView from '../CustomView';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import Button from '../../Button/Button';
 import Modal from '../../Modal/Modal';
+import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
-
+import styles from './ViewEditor.module.css';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
+
 export default class ViewEditor extends Component {
   constructor() {
     super();
@@ -26,52 +26,6 @@ export default class ViewEditor extends Component {
         "cols": 100
       },
       "content": {
-        "LeftPanel": {
-          "properties": {
-            "type": "component",
-            "x": 8,
-            "y": 3,
-            "w": 8,
-            "h": 2,
-            "i": 1
-          },
-          "content": "CSCDetail",
-          "config": {
-            "name": "Test",
-            "salindex": 1,
-            "onCSCClick": "() => {}",
-            "_functionProps": ["onCSCClick"]
-          }
-        },
-        "LeftPanel2": {
-          "properties": {
-            "type": "component",
-            "x": 66,
-            "y": 40,
-            "w": 13,
-            "h": 1,
-            "i": 2
-          },
-          "content": "LabeledStatusText",
-          "config": {
-            "label": "Azimuth state2",
-            "groupName": "event-ATMCS-0-m3State",
-            "stateToLabelMap": {
-              "0": "UNKOWN",
-              "1": "TRACK_DISABLED",
-              "2": "TRACK_ENABLED",
-              "3": "STOPPING"
-            },
-            "stateToStyleMap": {
-              "0": "unknown",
-              "1": "ok",
-              "2": "running",
-              "3": "running"
-            },
-            "accessor": "(event) => event.state.value",
-            "_functionProps": ["accessor"]
-          }
-        }
       }
     }
     `;
@@ -139,7 +93,7 @@ export default class ViewEditor extends Component {
     this.setState({ showModal: false });
   };
 
-  showModal = e => {
+  showModal = (e) => {
     this.setState({ showModal: true });
   };
 
@@ -154,31 +108,34 @@ export default class ViewEditor extends Component {
 
     const additionalContent = {};
     let i = Object.keys(parsedLayout.content).length + 1;
-    for (const component of selection) {
-      additionalContent['newPanel-' +  i] = {
+    selection.forEach((componentDict) => {
+      const { schema } = componentDict;
+      const { defaultSize } = schema;
+      const componentConfig = schema.props;
+      const defaultConfig = {};
+      Object.keys(componentConfig).forEach((key) => {
+        defaultConfig[key] = componentConfig[key].default;
+      });
+      additionalContent[`newPanel-${i}`] = {
         properties: {
           type: 'component',
-          x: 60,
-          y: 40,
-          w: 13,
-          h: 2,
-          i: i,
+          x: 0,
+          y: 0,
+          w: defaultSize[0],
+          h: defaultSize[1],
+          allowOverflow: schema.allowOverflow,
+          i,
         },
-        content: component,
-        config: {
-          name: 'Test',
-          salindex: 1,
-          onCSCClick: () => {},
-          _functionProps: ["onCSCClick"]
-        }
+        content: componentDict.name,
+        config: defaultConfig,
       };
-      i = i + 1;
-    }
-    parsedLayout.content = {...parsedLayout.content, ...additionalContent};
+      i += 1;
+    });
+    parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
     this.setState({
       parsedLayout,
     });
-  }
+  };
 
   render() {
     return (
@@ -204,9 +161,7 @@ export default class ViewEditor extends Component {
           <div>
             <div className={styles.bar}>
               View editor
-              <Button onClick={this.showModal}>
-                Add Components
-              </Button>
+              <Button onClick={this.showModal}>Add Components</Button>
             </div>
             <AceEditor
               mode="json"
@@ -218,15 +173,11 @@ export default class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-          <Button onClick={this.setLayout}>Save changes</Button>
+            <Button onClick={this.setLayout}>Save changes</Button>
           </div>
         </Rnd>
-        <Modal
-          isOpen={this.state.showModal}
-          onRequestClose={this.hideModal}
-          contentLabel="Component selection modal"
-        >
-          <ComponentSelector selectCallback={this.receiveSelection}/>
+        <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">
+          <ComponentSelector selectCallback={this.receiveSelection} />
         </Modal>
       </>
     );

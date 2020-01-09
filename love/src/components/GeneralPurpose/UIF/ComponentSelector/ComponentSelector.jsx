@@ -56,13 +56,15 @@ export default class ComponentSelector extends Component {
                 <h3> {category} </h3>
                 <div className={styles.gallery}>
                   {Object.keys(componentsMap).map((component) => {
-                    const selected = this.state.selected.includes(component);
+                    const componentDict = componentsMap[component];
+                    componentDict.name = component;
+                    const selected = this.state.selected.includes(componentDict);
                     const checkboxId = 'checkbox-' + component;
                     return (
                       <div
                         key={component}
                         className={[styles.card, selected ? styles.selected : null].join(' ')}
-                        onClick={() => this.addOrRemoveFromSelection(component)}
+                        onClick={() => this.addOrRemoveFromSelection(componentDict)}
                       >
                         <div className={styles.cardHeader}>
                           <h4> {component} </h4>
@@ -71,7 +73,7 @@ export default class ComponentSelector extends Component {
                             <label htmlFor={checkboxId} />
                           </div>
                         </div>
-                        <p> {componentsMap[component]['schema']['description']}</p>
+                        <p> {componentDict['schema']['description']}</p>
                       </div>
                     );
                   })}
