@@ -33,7 +33,7 @@
 .card p {
   color: var(--secondary-font-color);
   margin-top: 0.5em;
-  white-space: pre-wrap;
+  white-space: wrap;
 }
 
 .card:hover {
