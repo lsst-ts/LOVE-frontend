@@ -29,17 +29,22 @@ class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
+    requestWorkspaces: PropTypes.func,
+    requestViews: PropTypes.func,
     token: PropTypes.string,
   };
 
   static defaultProps = {
     location: null,
     validateToken: () => {},
+    requestWorkspaces: () => {},
+    requestViews: () => {},
     token: null,
   };
 
   componentDidMount = () => {
     this.props.validateToken();
+    this.props.requestViews();
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
