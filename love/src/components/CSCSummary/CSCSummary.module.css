@@ -8,6 +8,7 @@
   flex-flow: wrap;
   /* padding: 1em; */
   background: var(--second-primary-background-color);
+  height: 100%;
 }
 
 /* 3 columns*/
@@ -17,6 +18,7 @@
   /* padding: 1em; */
   min-width: 20em;
   width: 100%;
+  max-height: 100%;
 }
 
 .CSCRealmContainer:last-of-type {

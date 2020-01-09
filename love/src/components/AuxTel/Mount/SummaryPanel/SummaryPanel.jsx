@@ -8,7 +8,7 @@ import {
   m3InPositionStateMap,
   m1CoverStateStateMap,
   nasmythRotatorInPositionStateMap,
-  hexpodInPositionStateMap,
+  hexapodInPositionStateMap,
   stateToStyleMount,
 } from '../../../../Config';
 import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -63,7 +63,7 @@ export default class SummaryTable extends Component {
     //ATPneumatics
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState];
     //Hexapod
-    const hexapodInPosition = hexpodInPositionStateMap[this.props.hexapodInPosition];
+    const hexapodInPosition = hexapodInPositionStateMap[this.props.hexapodInPosition];
     return (
       <SummaryPanel>
         {/* Dome */}

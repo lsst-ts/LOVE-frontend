@@ -1,0 +1,9 @@
+.icon {
+    display: inline-block;
+    stroke-miterlimit: 10;stroke-width:2px;
+    vertical-align: middle;
+}
+
+.color {
+    fill: var(--secondary-font-color);
+}

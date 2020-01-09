@@ -30,7 +30,8 @@ const initialState = {
   status: tokenStates.EMPTY,
   permissions: {
     cmd_exec: false,
-  }
+  },
+  tai_to_utc: 0,
 };
 /**
  * Modifies the state of the authentication mainly characterized by the
@@ -59,6 +60,7 @@ export default function(state = initialState, action) {
             token: action.token,
             status: tokenStates.RECEIVED,
             permissions: initialState.permissions,
+            tai_to_utc: initialState.tai_to_utc,
           });
         }
         return Object.assign({}, state, {
@@ -67,7 +69,8 @@ export default function(state = initialState, action) {
           status: tokenStates.RECEIVED,
           permissions: {
             cmd_exec: action.permissions['execute_commands'],
-          }
+          },
+          tai_to_utc: action.tai_to_utc,
         });
       }
     case REJECT_TOKEN:

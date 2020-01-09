@@ -8,10 +8,13 @@ body {
   background: var(--base-background-color);
   /* font-family: Avenir; */
   font-family: 'Avenir';
-  margin: 0 10px;
+  margin: 0;
+  overflow: hidden;
 }
 
 :root {
+  --topbar-height: 2em;
+  --content-padding: 1em;
   --base-font-color: hsl(194, 16%, 79%);
   --secondary-font-color: hsl(201, 15%, 54%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3); /*Transparent*/
@@ -24,6 +27,8 @@ body {
   --tertiary-background-color: hsl(201, 21%, 23%);
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
+
+  --overlay-background-color: hsla(205, 40%, 8%, 70%);
 
   --second-primary-background-color: hsl(202, 38%, 11%);
   --second-primary-background-color-dimmed: hsl(202, 38%, 11%, 0.5);
@@ -60,7 +65,6 @@ body {
   /* Script status */
   --script-ok-color: hsl(188, 79%, 56%);
   --script-ok-dimmed-color: hsl(188, 79%, 56%, 0.2);
-
   --box-shadow-color: rgba(0, 0, 0, 0.17);
 
   --default-background-color: #4c606a;
@@ -69,7 +73,9 @@ body {
   --default-active-font-color: #92a2ac;
   --primary-active-hover-background-color: #92a2ac;
 
-  --primary-background-color: #4c7487;
+  /* --primary-background-color: #4c7487; */
+  --primary-background-color: hsl(199, 28%, 41%);
+  --primary-shadow-color: hsl(199, 28%, 28%);
   --primary-font-color: #b2c4ce;
   --primary-active-background-color: #3b5d6e;
   --primary-active-font-color: #8d9ea7;
@@ -81,7 +87,10 @@ body {
   --success-active-font-color: #77d9b9;
   --success-active-hover-background-color: #428568;
 
-  --info-background-color: #5cbed4;
+  --info-background-color: hsl(191, 58%, 60%);
+  /* --info-background-color: #5cbed4; */
+  /* --info-shadow-color: #1e94af; */
+  --info-shadow-color: hsl(191, 58%, 40%);
   --info-font-color: #122028e6;
   --info-hover-background-color: #58b0c4;
   --info-hover-font-color: #122028e6;

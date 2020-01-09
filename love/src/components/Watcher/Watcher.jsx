@@ -1,63 +1,164 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import moment from 'moment';
+import MuteIcon from '../icons/MuteIcon/MuteIcon';
 import Panel from '../GeneralPurpose/Panel/Panel';
+import Badge from '../GeneralPurpose/Badge/Badge';
+import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
-import Alarm from './Alarm/Alarm';
-import AlarmsTableContainer from './AlarmsTable/AlarmsTable.container';
+
+const TIMEOUT = 3;
 
 export default class Watcher extends Component {
+  static propTypes = {
+    /** Name of the current user */
+    user: PropTypes.string,
+    /** Number of seconds to add to a TAI timestamp to convert it in UTC */
+    taiToUtc: PropTypes.number,
+    /** List of alarms that are displayed. See examples below */
+    alarms: PropTypes.array,
+    /** Function to dispatch an alarm acknowledgement */
+    ackAlarm: PropTypes.func,
+    /** Function to dispatch an alarm mute */
+    muteAlarm: PropTypes.func,
+    /** Function to dispatch an alarm unmute */
+    unmuteAlarm: PropTypes.func,
+    /** Function to subscribe to streams to receive the alarms */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving the alarms */
+    unsubscribeToStreams: PropTypes.func,
+    /** Whether is embedded into other or is isolated */
+    embedded: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    alarms: [],
+  };
+
+  constructor() {
+    super();
+    this.state = {
+      selectedTab: 'unmuted',
+      waiting: false,
+    };
+  }
+
+
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+  };
+
+  componentWillUnmount = () => {
+    clearTimeout(this.timer);
+    this.props.unsubscribeToStreams();
+  };
+
+  changeTab(tab) {
+    this.setState({ selectedTab: tab });
+  }
+
+  sortFunctions = {
+    default: (row) => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
+    severity: (row) => row['severity'] + (row['acknowledged'] ? '-0' : '-1'),
+    maxSeverity: (row) => row['maxSeverity'] + (row['acknowledged'] ? '-0' : '-1'),
+    name: (row) => row['name'] + (row['acknowledged'] ? '-0' : '-1'),
+    timestampSeverityOldest: (row) => row['timestampSeverityOldest'] + (row['acknowledged'] ? '-0' : '-1'),
+  };
+
+  mutedSortFunctions = {
+    ...this.sortFunctions,
+    default: this.sortFunctions['severity'],
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.waiting === false && this.state.waiting === true) {
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.setState({ waiting: false });
+      }, TIMEOUT * 1000 + 100);
+    }
+  }
+
   render() {
+    let alarmsToShow = [];
+    let mutedAlarmsCount = 0;
+    let unmutedAlarmsCount = 0;
+    let unackUnmutedAlarmsCount = 0;
+    const now = moment().unix() - this.props.taiToUtc;
+
+    for (let alarm of this.props.alarms) {
+      if (
+        alarm['severity'] <= 1 &&
+        alarm['maxSeverity'] <= 1 &&
+        alarm['acknowledged'] &&
+        now - alarm['timestampAcknowledged'] >= TIMEOUT
+      ) {
+        continue;
+      }
+
+      if (alarm['mutedBy'] === '') {
+        unmutedAlarmsCount += 1;
+        unackUnmutedAlarmsCount += alarm['acknowledged'] ? 0 : 1;
+        if (this.state.selectedTab === 'unmuted') {
+          alarmsToShow.push(alarm);
+        }
+      } else {
+        mutedAlarmsCount += 1;
+        if (this.state.selectedTab === 'muted') {
+          alarmsToShow.push(alarm);
+        }
+      }
+    }
+
     this.test = null;
-    const alarms = [
-      {
-        severity: 1,
-        maxSeverity: 3,
-        name: 'test.ConfiguredSeverities.Rule1',
-        reason: `Lorem Ipsum is simply dummy text of the printing and typesetting
-                  industry. Lorem Ipsum has been the industry's standard dummy text
-                  ever since the 1500s, when an unknown printer took a galley of type
-                  and scrambled it to make a type specimen book. It has survived not
-                  only five centuries, but also the leap into electronic typesetting,
-                  remaining essentially unchanged. It was popularised in the 1960s
-                  with the release of Letraset sheets containing Lorem Ipsum passages,
-                  and more recently with desktop publishing software like Aldus
-                  PageMaker including versions of Lorem Ipsum.`,
-        timestampSeverityNewest: new Date().getTime(),
-      },
-      {
-        severity: 2,
-        maxSeverity: 2,
-        name: 'test.ConfiguredSeverities.Rule2',
-        reason: `Lorem Ipsum is simply dummy text of the printing and typesetting
-industry. Lorem Ipsum has been the industry's standard dummy text
-ever since the 1500s, when an unknown printer took a galley of type
-and scrambled it to make a type specimen book. It has survived not
-only five centuries, but also the leap into electronic typesetting,
-remaining essentially unchanged. It was popularised in the 1960s
-with the release of Letraset sheets containing Lorem Ipsum passages,
-and more recently with desktop publishing software like Aldus
-PageMaker including versions of Lorem Ipsum.`,
-        timestampSeverityNewest: new Date().getTime(),
-      },
-    ];
+
     return (
-      <Panel title="Auxiliary Telescope" className={styles.panel}>
-        <>
-          <div className={styles.legend}>
-            Ok, acknowledged &nbsp; &nbsp;
-            <Alarm severity={1} maxSeverity={2} acknowledged />
+      <Panel title="Watcher" className={styles.panel} expandHeight={this.props.embedded}>
+        <div className={styles.tabsWrapper}>
+          <div className={styles.tabsRow}>
+            <div
+              className={[styles.tab, this.state.selectedTab === 'unmuted' ? styles.selected : ''].join(' ')}
+              onClick={() => this.changeTab('unmuted')}
+            >
+              <div className={styles.tabLabel}>
+                <div className={styles.iconWrapper}>
+                  <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
+                </div>
+                ACTIVE ALARMS ({unmutedAlarmsCount})
+              </div>
+              {unackUnmutedAlarmsCount === 0 ? null : <Badge status="info">{unackUnmutedAlarmsCount}</Badge>}
+            </div>
 
-            Warning, unacknowledged sev increase &nbsp; &nbsp;
-            <Alarm severity={2} maxSeverity={3} />
-
-            Alert, unacknowledged sev decrease &nbsp; &nbsp
-             <Alarm severity={3} maxSeverity={2} />
-
-            Critical, unacknowledged sev equal &nbsp; &nbsp;
-            <Alarm severity={4} maxSeverity={4} />
+            <div
+              className={[styles.tab, this.state.selectedTab === 'muted' ? styles.selected : ''].join(' ')}
+              onClick={() => this.changeTab('muted')}
+            >
+              <div className={styles.tabLabel}>
+                <div className={styles.iconWrapper}>
+                  <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
+                </div>
+                MUTED ALARMS ({mutedAlarmsCount})
+              </div>
+            </div>
           </div>
 
-          <AlarmsTableContainer></AlarmsTableContainer>
-        </>
+          <div className={[styles.alarmsTableWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
+            <AlarmsTable
+              user={this.props.user}
+              taiToUtc={this.props.taiToUtc}
+              alarms={alarmsToShow}
+              ackAlarm={
+                (name, severity, acknowledgedBy) => {
+                  this.setState({ waiting: true });
+                  this.props.ackAlarm(name, severity, acknowledgedBy);
+                }
+              }
+              muteAlarm={this.props.muteAlarm}
+              unmuteAlarm={this.props.unmuteAlarm}
+              sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
+            />
+          </div>
+        </div>
       </Panel>
     );
   }

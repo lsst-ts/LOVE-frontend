@@ -34,6 +34,9 @@
 
 .estimatedTimeValue {
 }
+.checkpointContainer{
+  text-align:right;
+}
 
 .elapsedTimeContainer {
   display: inline-block;
@@ -56,6 +59,9 @@
   flex-direction: column;
 }
 
+.currentScriptButtonContainer{
+  margin-bottom: 0.5rem;
+}
 .invisible {
   visibility: hidden;
 }

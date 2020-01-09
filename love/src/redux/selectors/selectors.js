@@ -4,6 +4,8 @@ export const getToken = (state) => state.auth.token;
 
 export const getUsername = (state) => state.auth.username;
 
+export const getTaiToUtc = (state) => state.auth.tai_to_utc;
+
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
 export const getTokenStatus = (state) => state.auth.status;
@@ -57,6 +59,7 @@ export const getDomeState = (state) => {
     'event-ATMCS-0-target',
     'event-ATMCS-0-allAxesInPosition',
     'event-ATMCS-0-m3State',
+    'event-ATMCS-0-positionLimits',
     'telemetry-ATPtg-1-currentTimesToLimits',
   ];
   const domeData = getStreamsData(state, domeSubscriptions);
@@ -82,6 +85,7 @@ export const getDomeState = (state) => {
     mountInPosition: domeData['event-ATMCS-0-allAxesInPosition'],
     target: domeData['event-ATMCS-0-target'],
     m3State: domeData['event-ATMCS-0-m3State'],
+    positionLimits: domeData['event-ATMCS-0-positionLimits'],
     currentTimesToLimits: domeData['currentTimesToLimits'],
   };
 };
@@ -109,6 +113,7 @@ export const getMountSubscriptions = (index) => {
     `event-ATMCS-${index}-nasmyth2LimitSwitchCCW`,
     `event-ATMCS-${index}-nasmyth2LimitSwitchCW`,
     `event-ATMCS-${index}-target`,
+    `event-ATMCS-${index}-positionLimits`,
     `telemetry-ATMCS-${index}-mountEncoders`,
   ];
 };
@@ -126,6 +131,7 @@ export const getMountState = (state, index) => {
   const nasmyth2LimitSwitchCCW = mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCCW`];
   const nasmyth2LimitSwitchCW = mountData[`event-ATMCS-${index}-nasmyth2LimitSwitchCW`];
   const target = mountData[`event-ATMCS-${index}-target`];
+  const positionLimits = mountData[`event-ATMCS-${index}-positionLimits`];
   const mountEncoders = mountData[`telemetry-ATMCS-${index}-mountEncoders`];
   return {
     //ATHexapod
@@ -175,6 +181,7 @@ export const getMountState = (state, index) => {
       ? nasmyth2LimitSwitchCW[nasmyth2LimitSwitchCW.length - 1]['active'].value
       : 'Unknown',
     target: target ? target[target.length - 1] : {},
+    positionLimits: positionLimits ? positionLimits[positionLimits.length - 1] : {},
     mountEncoders: mountEncoders ? mountEncoders : {},
   };
 };
@@ -463,13 +470,16 @@ function cleanAlarm(alarm) {
   const cleanAlarm = {};
   Object.keys(alarm).map((key) => {
     cleanAlarm[key] = alarm[key].value;
+    return 0;
   });
   return cleanAlarm;
 }
 
 export const getAllAlarms = (state) => {
   if (state.ws === undefined) return undefined;
-  return state.ws.alarms.map( (alarm) => { return cleanAlarm(alarm) });
+  return state.ws.alarms.map((alarm) => {
+    return cleanAlarm(alarm);
+  });
 };
 
 export const getLastAlarm = (state) => {

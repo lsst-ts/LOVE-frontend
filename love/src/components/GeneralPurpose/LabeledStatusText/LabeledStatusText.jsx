@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import StatusText from '../StatusText/StatusText';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './LabeledStatusText.module.css';
 
 export default class LabeledStatusText extends Component {
   static propTypes = {
-    // raftsDetailedState: PropTypes.string,
-    // imageReadinessDetailedState: PropTypes.string,
-    // calibrationDetailedState: PropTypes.string,
-    // shutterDetailedState: PropTypes.string,
-    // imageSequence: PropTypes.object,
+    accessor: PropTypes.func,
+  };
+
+  static defaultProps = {
+    accessor: (event) => event.state.value,
   };
 
   componentDidMount = () => {
@@ -28,9 +28,6 @@ export default class LabeledStatusText extends Component {
       <div className={styles.container}>
         <div>{this.props.label}: </div>
         <StatusText title={stateLabel} status={stateStyle}>{stateLabel}</StatusText>
-        {/* <div>
-          {JSON.stringify(this.props.streamState)}
-        </div> */}
       </div>
     );
   }

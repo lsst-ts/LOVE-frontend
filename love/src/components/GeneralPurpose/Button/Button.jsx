@@ -26,6 +26,8 @@ export default class Button extends Component {
      *
      * *link*: Makes a button look like a link (will still have button behavior)
      *
+     * *transparent*: transparent button, suitable for panels, like close button
+     *
      */
     status: PropTypes.string,
     /** Changes the geometry of the button to make it look bigger/smaller according to these values:
@@ -51,6 +53,10 @@ export default class Button extends Component {
      * Type for the button.
      */
     type: PropTypes.string,
+    /**
+     * Define wether or not the button is disabled.
+     */
+    disabled: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   };
 
@@ -61,6 +67,8 @@ export default class Button extends Component {
     className: '',
     title: '',
     type: 'button',
+    shape: 'default',
+    disabled: false,
   };
 
   render() {
@@ -72,6 +80,7 @@ export default class Button extends Component {
       warning: styles.btnWarning,
       danger: styles.btnDanger,
       link: styles.btnLink,
+      transparent: styles.btnTransparent,
     };
 
     const sizeStyleDict = {
@@ -84,10 +93,18 @@ export default class Button extends Component {
     const { btn } = styles;
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
-    const style = [btn, statusStyle, sizeStyle, this.props.className].join(' ');
+    const style = [
+      btn, statusStyle, sizeStyle, this.props.className, this.props.disabled? styles.disabled : null
+    ].join(' ');
 
     return (
-      <button title={this.props.title} className={style} type={this.props.type} onClick={this.props.onClick}>
+      <button
+        title={this.props.title}
+        className={style}
+        type={this.props.type}
+        onClick={this.props.onClick}
+        disabled={this.props.disabled}
+      >
         {this.props.children}{' '}
       </button>
     );

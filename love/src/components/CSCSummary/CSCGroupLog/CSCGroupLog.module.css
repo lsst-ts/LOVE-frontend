@@ -1,14 +1,20 @@
 .CSCGroupLogContainer {
   display: flex;
-  /* background: var(--second-quaternary-background-color); */
   align-items: flex-start;
   color: var(--base-font-color);
-  /* font-size: var(--font-size-small); */
   border-radius: 4px;
   text-align: left;
-  max-height: 80vh;
+  height: 100%;
   flex-direction: column;
-  /* flex-wrap: wrap; */
+}
+
+.CSCGroupContainer {
+  display: flex;
+  width: 100%;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em 0em;
+  background: var(--second-secondary-background-color);
 }
 
 .topBarContainerWrapper {
@@ -116,15 +122,16 @@
 }
 
 .timestamp {
-  align-self: flex-end;
+  align-self: flex-start;
   color: var(--secondary-font-color);
+  padding-left: 1em;
 }
 
 .messageTextContainer {
   width: calc(100% - 4.5em);
   display: flex;
   flex-direction: column;
-  padding: 0 1em;
+  padding-left: 1em;
   padding-bottom: 0.5em;
 }
 
@@ -146,7 +153,7 @@
 
 .errorCode {
   font-weight: bold;
-  width: 1em;
+  width: 1.5em;
   min-width: 1em;
   padding: 0.5em;
   font-size: var(--font-size-large);

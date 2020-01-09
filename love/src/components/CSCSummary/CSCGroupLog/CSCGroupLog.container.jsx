@@ -5,6 +5,31 @@ import { requestGroupSubscription } from '../../../redux/actions/ws';
 import { getGroupSortedErrorCodeData } from '../../../redux/selectors';
 import { removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 
+export const schema = {
+  description: 'Displays the error code logs for a set of CSCs, including error code, message, traceback and timestamp. Also includes current summary state and heartbeat for each CSC',
+  defaultSize: [24, 29],
+  props: {
+    group: {
+      type: 'string',
+      description: 'Custom name of the group',
+      isPrivate: false,
+      default: 'CSC group',
+    },
+    cscList: {
+      type: 'array',
+      description:
+        'Array of the CSCs to be included in the group, as objects with the format: {name: <component-name>, salindex: <number>}',
+      isPrivate: false,
+      default: [
+        {
+          name: 'ATMCS',
+          salindex: 0,
+        },
+      ],
+    },
+  },
+};
+
 const CSCGroupLogContainer = ({
   realm,
   group,
@@ -14,6 +39,8 @@ const CSCGroupLogContainer = ({
   clearCSCErrorCodes,
   subscribeToStream,
   errorCodeData,
+  cscList,
+  embedded,
 }) => {
   return (
     <CSCGroupLog
@@ -25,6 +52,8 @@ const CSCGroupLogContainer = ({
       clearCSCErrorCodes={clearCSCErrorCodes}
       subscribeToStream={subscribeToStream}
       errorCodeData={errorCodeData}
+      cscList={cscList}
+      embedded={embedded}
     />
   );
 };
@@ -41,13 +70,21 @@ const mapDispatchtoProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.hierarchy[ownProps.realm][ownProps.group]);
+  if (ownProps.realm && ownProps.hierarchy[ownProps.realm] && ownProps.hierarchy[ownProps.realm][ownProps.group]) {
+    const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.hierarchy[ownProps.realm][ownProps.group]);
+    return {
+      errorCodeData: errorCodeData,
+    };
+  }
+  if (ownProps.cscList) {
+    const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.cscList);
+    return {
+      errorCodeData: errorCodeData,
+    };
+  }
   return {
-    errorCodeData: errorCodeData,
+    errorCodeData: [],
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchtoProps,
-)(CSCGroupLogContainer);
+export default connect(mapStateToProps, mapDispatchtoProps)(CSCGroupLogContainer);

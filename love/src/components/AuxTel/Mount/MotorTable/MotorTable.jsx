@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from './MotorTable.module.css';
 import { Table, Thead, Tbody, Td, Tr, Th } from '../../../GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import {
@@ -8,6 +7,7 @@ import {
   motorBrakeStateMap,
   stateToStyleMotorBrake,
 } from '../../../../Config';
+import styles from './MotorTable.module.css';
 
 export default class MotorTable extends Component {
   constructor(props) {
@@ -113,14 +113,14 @@ export default class MotorTable extends Component {
     // console.log(data);
     // console.log(this.props);
     return (
-      <Table>
+      <Table className={styles.table}>
         <Thead>
-          <Tr>
+          <Tr className={styles.headerRow}>
             <Th>Motor</Th>
-            <Th>Axis Angle</Th>
-            <Th>Velocity</Th>
-            <Th>Meas. Torque</Th>
-            <Th>Dem. Torque</Th>
+            <Th>Axis Angle <span className={styles.units}>[deg]</span></Th>
+            <Th>Velocity <span className={styles.units}>[deg/s]</span></Th>
+            <Th>Meas. Torque <span className={styles.units}>[A]</span></Th>
+            <Th>Dem. Torque <span className={styles.units}>[A]</span></Th>
             <Th>Encoder</Th>
             <Th>Encoder Raw</Th>
             <Th className={styles.statusColumn}>Brake status</Th>
@@ -162,7 +162,7 @@ export default class MotorTable extends Component {
                     );
                   }
                   if (isNaN(value)) {
-                    return <Td key={col}>{value}</Td>;
+                    return <Td isNumber key={col}>{value}</Td>;
                   }
                   return (
                     <Td isNumber key={col}>

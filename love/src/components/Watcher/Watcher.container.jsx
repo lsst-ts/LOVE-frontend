@@ -1,16 +1,29 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms } from '../../../redux/selectors';
+import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
 import {
   requestGroupSubscription,
   requestGroupSubscriptionRemoval,
   requestSALCommand,
-} from '../../../redux/actions/ws';
-import AlarmsTable from './AlarmsTable';
+} from '../../redux/actions/ws';
+import Watcher from './Watcher';
+import mockAlarms from './AlarmsTable/mock';
 
-const AlarmsTableContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream, ...props }) => {
+export const schema = {
+  description: `Table containing alarms triggered by all CSCs, with the corresponding 
+              interactions such as searching, filtering, acknowledging and muting`,
+  defaultSize: [63, 17],
+  props: {},
+}
+
+const WatcherContainer = ({
+  alarms,
+  user,
+  subscribeToStream,
+  unsubscribeToStream,
+  ...props }) => {
   return (
-    <AlarmsTable
+    <Watcher
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
@@ -20,9 +33,12 @@ const AlarmsTableContainer = ({ alarms, user, subscribeToStream, unsubscribeToSt
 };
 
 const mapStateToProps = (state) => {
+  // const alarms = mockAlarms;
+  // const alarms = getAllAlarms(state).concat(mockAlarms);
   const alarms = getAllAlarms(state);
   const user = getUsername(state);
-  return { alarms, user };
+  const taiToUtc = getTaiToUtc(state);
+  return { alarms, user, taiToUtc };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -82,4 +98,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(AlarmsTableContainer);
+)(WatcherContainer);

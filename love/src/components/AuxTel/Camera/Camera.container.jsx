@@ -4,6 +4,12 @@ import Camera from './Camera';
 import { getCameraState } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 
+export const schema = {
+  description: 'Summary view of the ATCamera. Contains information about its current state and exposures table',
+  defaultSize: [49, 38],
+  props: {},
+};
+
 const CameraContainer = ({
   raftsDetailedState,
   imageReadinessDetailedState,

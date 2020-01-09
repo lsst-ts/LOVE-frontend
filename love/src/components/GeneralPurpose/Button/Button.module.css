@@ -1,9 +1,8 @@
 .btn {
-    box-shadow: none;
     border: none;
     font-weight: 400;
     text-shadow: none;
-    border-radius: 2px;
+    border-radius: 4px;
     padding-top: 2px;
     padding-bottom: 2px;
     /* boostrap inherited */
@@ -85,6 +84,8 @@
     background-image: none;
     background-color: var(--primary-background-color);
     color: var(--primary-font-color);
+    /* border: solid 1px #273b46; */
+    box-shadow: 1px 2px 4px 0px var(--primary-shadow-color);
 }
 .btnPrimary:hover, .btnPrimary:active:hover {
     background-image: none;
@@ -135,6 +136,7 @@
     background-color: var(--info-background-color);
     color: var(--info-font-color);
     font-weight: 500;
+    box-shadow: 1px 2px 4px 0px var(--info-shadow-color);
 }
 .btnInfo:hover, .btnInfo:active:hover {
     background-image: none;
@@ -221,4 +223,31 @@
 
 .btnLink, .btnLink.active, .btnLink:active, .btnLink[disabled], fieldset[disabled] .btnLink {
     background-color: transparent;
+}
+
+
+/*TRANSPARENT*/
+.btnTransparent:focus {
+    border-color: red;
+}
+.btnTransparent, .btnTransparent.disabled, .btnTransparent.disabled:hover {
+  background-image: none;
+  background-color: transparent;
+  color: var(--default-font-color);
+  border:none;
+}
+.btnTransparent:hover, .btnTransparent:active:hover {
+    background-image: none;
+    background-color: var(--primary-active-background-color);
+    color: var(--primary-active-font-colors);
+}
+.btnTransparent.active {
+    background-image: none;
+    background-color: var(--primary-active-background-color);
+    color: var(--primary-active-font-colors);
+}
+.btnTransparent.active:hover {
+    background-image: none;
+    background-color: var(--primary-active-hover-background-color);
+    color: var(--primary-active-font-color);
 }

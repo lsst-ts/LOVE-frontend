@@ -1,17 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCSummary from './CSCSummary';
-import {  CSCSummaryHierarchy } from '../../Config';
+import { CSCSummaryHierarchy } from '../../Config';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
-const CSCSummaryContainer = ({
-  subscribeToStreams,
-  unsubscribeToStreams,
-}) => {
+
+export const schema = {
+  description: 'Summary of all CSCs, including heartbeats, summary state, logs and error codes',
+  defaultSize: [57, 35],
+  props: {},
+};
+
+const CSCSummaryContainer = ({ subscribeToStreams, unsubscribeToStreams, expandHeight }) => {
   return (
     <CSCSummary
       hierarchy={CSCSummaryHierarchy}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      expandHeight={expandHeight}
     />
   );
 };
@@ -46,7 +51,4 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-export default connect(
-  null,
-  mapDispatchToProps,
-)(CSCSummaryContainer);
+export default connect(null, mapDispatchToProps)(CSCSummaryContainer);
