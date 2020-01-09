@@ -27,71 +27,8 @@ export default class ViewEditor extends Component {
 
   constructor(props) {
     super(props);
-    const layout = `
-    {
-      "properties": {
-        "type": "container",
-        "x": 0,
-        "y": 0,
-        "w": 100,
-        "h": 2,
-        "i": 0,
-        "allowOverflow": true,
-        "cols": 100
-      },
-      "content": {
-        "LeftPanel": {
-          "properties": {
-            "type": "component",
-            "x": 8,
-            "y": 3,
-            "w": 8,
-            "h": 2,
-            "i": 1
-          },
-          "content": "CSCDetail",
-          "config": {
-            "name": "Test",
-            "salindex": 1,
-            "onCSCClick": "() => {}",
-            "_functionProps": ["onCSCClick"]
-          }
-        },
-        "LeftPanel2": {
-          "properties": {
-            "type": "component",
-            "x": 66,
-            "y": 40,
-            "w": 13,
-            "h": 1,
-            "i": 2
-          },
-          "content": "LabeledStatusText",
-          "config": {
-            "label": "Azimuth state2",
-            "groupName": "event-ATMCS-0-m3State",
-            "stateToLabelMap": {
-              "0": "UNKOWN",
-              "1": "TRACK_DISABLED",
-              "2": "TRACK_ENABLED",
-              "3": "STOPPING"
-            },
-            "stateToStyleMap": {
-              "0": "unknown",
-              "1": "ok",
-              "2": "running",
-              "3": "running"
-            },
-            "accessor": "(event) => event.state.value",
-            "_functionProps": ["accessor"]
-          }
-        }
-      }
-    }
-    `;
     this.state = {
-      layout,
-      parsedLayout: JSON.parse(layout),
+      layout: JSON.stringify(this.props.editedView, null, 2),
     };
   }
 
@@ -109,24 +46,21 @@ export default class ViewEditor extends Component {
     } catch (error) {
       parsedLayout = {};
     }
-    this.setState({
-      parsedLayout,
-    });
+    this.props.updateEditedView(parsedLayout);
   };
 
   onLayoutChange = (newLayoutProperties) => {
-    let newParsedLayout = this.state.parsedLayout;
+    let newLayout = this.props.editedView;
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
       parsedProperties.allowOverflow = elementProperties.allowOverflow;
-      newParsedLayout = this.updateElementProperties(newParsedLayout, parsedProperties);
+      newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
     this.setState({
-      parsedLayout: newParsedLayout,
-      layout: JSON.stringify(newParsedLayout, null, 2),
+      layout: JSON.stringify(newLayout, null, 2),
     });
-    this.props.updateEditedView(newParsedLayout);
+    this.props.updateEditedView(newLayout);
   };
 
   updateElementProperties = (element, properties) => {
@@ -160,15 +94,9 @@ export default class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideModal();
-    let parsedLayout = {};
-    try {
-      parsedLayout = JSON.parse(this.state.layout);
-    } catch (error) {
-      parsedLayout = {};
-    }
-
+    const currentLayout = {...this.props.editedView};
     const additionalContent = {};
-    let i = Object.keys(parsedLayout.content).length + 1;
+    let i = Object.keys(currentLayout.content).length + 1;
     for (const component of selection) {
       additionalContent['newPanel-' +  i] = {
         properties: {
@@ -189,10 +117,8 @@ export default class ViewEditor extends Component {
       };
       i = i + 1;
     }
-    parsedLayout.content = {...parsedLayout.content, ...additionalContent};
-    this.setState({
-      parsedLayout,
-    });
+    currentLayout.content = {...currentLayout.content, ...additionalContent};
+    this.props.updateEditedView(currentLayout);
   }
 
   render() {
@@ -200,7 +126,7 @@ export default class ViewEditor extends Component {
       <>
         <div className={styles.container}>
           <div>
-            <CustomView layout={this.state.parsedLayout} onLayoutChange={this.onLayoutChange}></CustomView>
+            <CustomView layout={this.props.editedView} onLayoutChange={this.onLayoutChange}></CustomView>
           </div>
         </div>
         <Rnd
