@@ -2,12 +2,16 @@
   display: inline-block;
   vertical-align: top;
   fill: var(--status-disabled-color);
+  stroke: var(--status-disabled-color);
+  margin: 0.2em;
 }
 
 .okStatus {
   fill: var(--status-ok-color);
+  stroke: var(--status-ok-color);
 }
 
 .alertStatus {
   fill: var(--status-alert-color);
+  stroke: var(--status-alert-color);
 }

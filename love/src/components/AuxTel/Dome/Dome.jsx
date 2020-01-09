@@ -79,9 +79,12 @@ export default class Dome extends Component {
     const mainDoorOpeningPercentage = this.props.dropoutDoorOpeningPercentage
       ? this.props.dropoutDoorOpeningPercentage.value
       : 0;
-    const trackID = this.props.target ? this.props.target[0].trackId.value : '';
-    const m3State = this.props.m3State ? this.props.m3State[0].value : 2;
-    const currentTimesToLimits = this.props.currentTimeToLimits ? this.props.currentTimesToLimits : {};
+    const trackID = this.props.target ? this.props.target[this.props.target.length - 1].trackId.value : '';
+    const m3State = this.props.m3State ? this.props.m3State[this.props.m3State.length - 1].value : 2;
+    const currentTimesToLimits = this.props.currentTimesToLimits ? this.props.currentTimesToLimits : {};
+    const positionLimits = this.props.positionLimits
+      ? this.props.positionLimits[this.props.positionLimits.length - 1]
+      : {};
 
     const isProjected = true;
     let azDiff = Math.abs(domeAz - currentPointing.az);
@@ -136,6 +139,7 @@ export default class Dome extends Component {
             mountInPosition={mountInPosition}
             m3State={m3State}
             currentTimesToLimits={currentTimesToLimits}
+            positionLimits={positionLimits}
           />
         </div>
         <div className={styles.telemetryTable}>
@@ -177,21 +181,21 @@ export default class Dome extends Component {
                     color: {
                       scale: {
                         domain: ['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target'],
-                        range: ['hsl(201, 22%, 60%)', 'hsl(201, 22%, 60%)', 'hsl(160, 42%, 60%)', 'hsl(160, 42%, 60%)'],
+                        range: ['hsl(201, 70%, 40%)', 'hsl(201, 70%, 40%)', 'hsl(160, 70%, 40%)', 'hsl(160, 70%, 40%)'],
                       },
                     },
                   }}
                   groupNames={{
                     'Dome Azimuth': 'telemetry-ATDome-0-position',
                     'Dome Target Az': 'event-ATDome-0-azimuthCommandedState',
-                    'Mount Azimuth': 'telemetry-ATMCS-0-azElMountEncoders',
+                    'Mount Azimuth': 'telemetry-ATMCS-0-mount_AzEl_Encoders',
                     'Mount Target': 'event-ATMCS-0-target',
                   }}
                   accessors={{
                     'Dome Azimuth': (data) => data.azimuthPosition.value,
                     'Dome Target Az': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
-                    'Mount Azimuth': (data) => data.azimuthCalculatedAngle.value[0],
+                    'Mount Azimuth': (data) => data.azimuthCalculatedAngle ? data.azimuthCalculatedAngle.value[0] : 0,
                     'Mount Target': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                   }}
@@ -223,7 +227,7 @@ export default class Dome extends Component {
                     color: {
                       scale: {
                         domain: ['Mount Elevation', 'Mount Target'],
-                        range: ['hsl(201, 22%, 40%)', 'white'],
+                        range: ['hsl(201, 70%, 40%)', 'white'],
                       },
                     },
                   }}

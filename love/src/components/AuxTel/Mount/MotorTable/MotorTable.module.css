@@ -1,4 +1,16 @@
+.table {
+    height: 100%;
+}
+
 td.statusColumn {
     min-width: 8em;
     text-align: center;
+}
+
+.headerRow th {
+    text-align: center;
+}
+
+.units {
+    opacity: 0.65;
 }

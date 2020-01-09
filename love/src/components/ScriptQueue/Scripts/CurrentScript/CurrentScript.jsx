@@ -8,6 +8,8 @@ import { getStatusStyle } from '../Scripts';
 import HeartbeatIcon from '../../../icons/HeartbeatIcon/HeartbeatIcon';
 import { hasCommandPrivileges } from '../../../../Config';
 import StopIcon from '../../../icons/ScriptQueue/StopIcon/StopIcon';
+import ResumeIcon from '../../../icons/ScriptQueue/ResumeIcon/ResumeIcon';
+import ScriptDetails from '../ScriptDetails';
 
 export default class CurrentScript extends Component {
   static propTypes = {
@@ -122,6 +124,8 @@ export default class CurrentScript extends Component {
     }
     const timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
+    const isPaused = this.props.scriptState.toLowerCase() === 'paused';
+
     return (
       <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
         <div>
@@ -161,7 +165,7 @@ export default class CurrentScript extends Component {
               </div>
               <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
                 {this.props.commandExecutePermission && (
-                  <div className={scriptStyles.buttonsContainer}>
+                  <div className={[scriptStyles.buttonsContainer, styles.currentScriptButtonContainer].join(' ')}>
                     <div
                       className={scriptStyles.buttonContainer}
                       onClick={(e) => {
@@ -176,14 +180,40 @@ export default class CurrentScript extends Component {
                         <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
                       </div>
                     </div>
+                    {isPaused ? (
+                      <div
+                        className={scriptStyles.buttonContainer}
+                        onClick={(e) => {
+                          this.props.resumeScript(this.props.index);
+                          e.stopPropagation();
+                        }}
+                      >
+                        <div className={scriptStyles.commandButton}>
+                          <div>
+                            <ResumeIcon />
+                          </div>
+                          <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Resume'}</div>
+                        </div>
+                      </div>
+                    ) : null}
+
                     <div
                       className={scriptStyles.buttonContainer}
                       onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
                     >
-                      {' '}&#8943;{' '}
+                      {' '}
+                      &#8943;{' '}
                     </div>
                   </div>
                 )}
+                <div className={[styles.checkpointContainer, visibilityClass].join(' ')}>
+                  <div className={styles.estimatedTimeContainer}>
+                    <span className={styles.estimatedTimeLabel}>{isPaused ? 'Current' : 'Last'} checkpoint: </span>
+                    <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                      {this.props.last_checkpoint}
+                    </span>
+                  </div>
+                </div>
                 <div
                   className={scriptStyles.scriptStateContainer}
                   style={{ display: 'flex', justifyContent: 'flex-end' }}
@@ -191,6 +221,14 @@ export default class CurrentScript extends Component {
                   <ScriptStatus isCompact={this.props.isCompact} status={getStatusStyle(this.props.scriptState)}>
                     {this.props.scriptState}
                   </ScriptStatus>
+                  {isPaused ? (
+                    <div className={styles.checkpointContainer}>
+                      <span> at </span>
+                      <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                        {this.props.last_checkpoint}
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
                 <div
                   className={scriptStyles.scriptStateContainer}
@@ -209,14 +247,7 @@ export default class CurrentScript extends Component {
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
               <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
             </div>
-            <div className={[styles.checkpointContainer, visibilityClass].join(' ')}>
-              <div className={styles.estimatedTimeContainer}>
-                <span className={styles.estimatedTimeLabel}>Last checkpoint: </span>
-                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                  {this.props.last_checkpoint}
-                </span>
-              </div>
-            </div>
+
             <div className={[styles.timeContainer, visibilityClass].join(' ')}>
               <div className={styles.estimatedTimeContainer}>
                 <span className={styles.estimatedTimeLabel}>Estimated time: </span>
@@ -238,28 +269,7 @@ export default class CurrentScript extends Component {
               this.state.expanded && isValid ? '' : scriptStyles.hidden,
             ].join(' ')}
           >
-            {hasCommandPrivileges ? (
-              <div className={[scriptStyles.expandedSection].join(' ')}>
-                <div className={scriptStyles.expandedSubSection}>
-                  <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
-                  <div className={scriptStyles.subSectionRow}>
-                    <span className={scriptStyles.subSectionLabel}>Classname:</span>
-                    <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
-                  </div>
-                  <div className={scriptStyles.subSectionRow}>
-                    <span className={scriptStyles.subSectionLabel}>Description:</span>
-                    <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
-                  </div>
-                  <div className={scriptStyles.subSectionRow}>
-                    <span className={scriptStyles.subSectionLabel}>Remotes:</span>
-                    <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
-                  </div>
-                  {/* <div className={scriptStyles.subSectionTitle}>
-                  SCHEMA
-                </div> */}
-                </div>
-              </div>
-            ) : null}
+            {hasCommandPrivileges ? <ScriptDetails {...this.props} /> : null}
           </div>
         </div>
       </div>

@@ -4,6 +4,12 @@ import Dome from './Dome';
 import { getDomeState } from '../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 
+export const schema = {
+  description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
+  defaultSize: [49, 38],
+  props: {},
+};
+
 const DomeContainer = ({
   dropoutDoorOpeningPercentage,
   mainDoorOpeningPercentage,
@@ -20,6 +26,7 @@ const DomeContainer = ({
   target,
   mountInPosition,
   currentTimesToLimits,
+  positionLimits,
   width,
   height,
   subscribeToStream,
@@ -46,6 +53,7 @@ const DomeContainer = ({
       width={width}
       height={height}
       currentTimesToLimits={currentTimesToLimits}
+      positionLimits={positionLimits}
     />
   );
 };
@@ -75,6 +83,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscription('event-ATMCS-0-target'));
       dispatch(requestGroupSubscription('event-ATMCS-0-allAxesInPosition'));
       dispatch(requestGroupSubscription('event-ATMCS-0-m3State'));
+      dispatch(requestGroupSubscription('event-ATMCS-0-positionLimits'));
       //ATPtg
       dispatch(requestGroupSubscription('telemetry-ATPtg-1-currentTimesToLimits'));
     },
@@ -96,6 +105,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-target'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-allAxesInPosition'));
       dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-m3State'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-positionLimits'));
       //ATPtg
       dispatch(requestGroupSubscriptionRemoval('telemetry-ATPtg-1-currentTimesToLimits'));
     },

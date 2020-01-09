@@ -4,8 +4,21 @@
     background-color: var(--second-primary-background-color);
     border: 1px solid hsl(199, 43%, 16%);
     border-radius: 6px;
-    height: fit-content;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 2em minmax(1em, 1fr);
+    box-sizing: border-box;
+    overflow: auto;
+}
+
+.fit {
     width: fit-content;
+    max-height: 100vh;
+    overflow: visible;
+}
+
+.expandHeight {
+    height: 100%;
 }
 
 .panelHeading {

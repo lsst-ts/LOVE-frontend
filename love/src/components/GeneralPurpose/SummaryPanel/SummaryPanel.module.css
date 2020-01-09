@@ -69,10 +69,3 @@
   .highlight {
     color: var(--base-font-color);
   }
-  
-  @media (min-width: 1600px) {
-    .summaryTable {
-      margin-left: 2em;
-    }
-  }
-  

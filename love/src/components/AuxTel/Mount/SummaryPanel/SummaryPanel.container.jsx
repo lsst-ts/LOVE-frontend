@@ -4,6 +4,12 @@ import SummaryPanel from './SummaryPanel';
 import { getMountState, getMountSubscriptions } from '../../../../redux/selectors';
 import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
 
+export const schema = {
+  description: `Panel containing summary information about the AT, including the ATMCS, ATPneumatics and ATHexapod`,
+  defaultSize: [15, 22],
+  props: {},
+};
+
 const SummaryPanelContainer = ({ ...props }) => {
   return <SummaryPanel {...props} />;
 };

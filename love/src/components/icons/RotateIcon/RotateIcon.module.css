@@ -1,0 +1,9 @@
+.divider {
+  fill: none;
+  stroke: var(--secondary-font-color);
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+}
+.prefix__st2 {
+  fill: var(--secondary-font-color);
+}

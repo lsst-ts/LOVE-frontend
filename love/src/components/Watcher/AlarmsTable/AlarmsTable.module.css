@@ -1,120 +1,191 @@
-:root{
-    --scrollbar-width: 10px;
+table {
+    --table-scrollbar-width: 10px;
+    --table-header-background: var(--second-quaternary-background-color);
+    --table-row-background: var(--second-secondary-background-color);
+    --table-row-border: var(--second-tertiary-background-color);
+    --table-unack-row-background: var(--second-tertiary-background-color);
+    --table-unack-row-border: var(--second-secondary-background-color);
+    --table-hover-border: var(--second-senary-background-dimmed-color);
+    --ack-width: 3.5em;
+    --status-width: 12em;
+    --name-width: 30em;
+    --timestamp-width: 15em;
+    --cell-padding: 1em;
 }
 
-.telemetrySelectionTableWrapper {
-    display: grid;
-    height: 100%;
-    grid-template-rows: minmax(0, 1fr) min-content;
-    background: var(--base-background-color);
-    min-width: 1350px;
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  width: inherit;
+  height: 100%;
 }
 
-.telemetrySelectionTable {
+.controlsContainer {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  padding-right: 1.5em;
+  padding-bottom: 1em;
+  width: 100%;
+  flex: 0;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.dataTableWrapper {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  width: inherit;
+  flex: 1;
+  min-height: 0;
+}
+
+.dataTable {
     display: grid;
     grid-template-rows: min-content minmax(0, 1fr);
-    width: 100%;
+    width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width) + 10*var(--cell-padding));
+    height: inherit; /* necessary for scroll, but parent component must define height */
     table-layout: fixed;
     border-collapse: collapse;
 }
 
-.telemetrySelectionTable thead {
-    display: table;
-    table-layout:fixed;
-    width: calc(100% - var(--scrollbar-width));
-    word-wrap:break-word;
-}
-.telemetrySelectionTable tbody {
-    /* background: var(--secondary-background-color); */
-    display: block;
-    height: inherit; /* necessary for scroll */
-    width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.telemetrySelectionTable tbody tr {
-    display: table;
-    table-layout:fixed;
-    width: 100%;
-}
-.telemetrySelectionTable th, td {
-    width: auto;
+/****************** Columns styles ***************/
+.dataTable .ackButton {
+    width: var(--ack-width);
+    text-align: center;
 }
 
-.telemetrySelectionTable th {
-    border: 1px solid var(--base-background-color);
-    background: var(--tertiary-background-color);
-    padding: 0em 0.5em;
-    padding-left: 1em;
+.dataTable .status {
+    width: var(--status-width);
+    text-align: center;
+}
+
+.dataTable .maxSeverity {
+    width: var(--status-width);
+    text-align: center;
+}
+
+.dataTable .name {
+    width: var(--name-width);
     text-align: left;
 }
 
-.telemetrySelectionTable .narrowCol {
-    width: 7%;
+.dataTable .timestamp {
+    width: var(--timestamp-width);
+    text-align: left;
 }
 
-.telemetrySelectionTable .mediumCol {
-    width: 9%;
+.statusWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
-.telemetrySelectionTable .wideCol {
-    width: 12%;
+.maxSeverityWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
-.telemetrySelectionTable tr:hover.dataRow{
-    background: var(--tertiary-background-color);
+.textWrapper {
+    display: flex;
+    flex-direction: row;
 }
 
-.telemetrySelectionTable tr:hover td{
-    border-bottom: 1px solid var(--secondary-background-color);
-    border-top: 1px solid var(--secondary-background-color);
-}
-
-.telemetrySelectionTable tr:hover.expandedRow td{
-    border-bottom: 1px solid var(--secondary-background-color);
-    border-top: 1px solid transparent;
-}
-
-.telemetrySelectionTable tr:nth-child(even) {
-    background: var(--secondary-background-dimmed-color);
-}
-
-.telemetrySelectionTable tr:nth-child(odd) {
-    background: var(--secondary-background-color);
-}
-
-.dataRow {
+.expansionIconWrapper {
+    min-width: 1em;
+    height: 1em;
     cursor: pointer;
+    padding: 0.3em;
+    padding-right: 1em;
 }
 
-.telemetrySelectionTable th:first-of-type {
-    border-top-left-radius: 7px;
+/****************** General table head and body styles ***************/
+.dataTable thead {
+    display: table;
+    table-layout:fixed;
+    width: 100%;
+    word-wrap:break-word;
 }
 
-.telemetrySelectionTable th:last-of-type {
-    border-top-right-radius: 7px;
+.dataTable tbody {
+    display: block;
+    height: 100%; /* necessary for scroll */
+    overflow-x: hidden;
+}
+.dataTable tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.dataTable th, td {
+    width: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: var(--cell-padding);
+    padding-right: var(--cell-padding);
 }
 
-.telemetrySelectionTable td {
+.dataTable th {
+    border: 1px solid var(--table-row-background);
+    background: var(--table-header-background);
+    color: var(--highlighted-font-color);
+    padding-top: 0em;
+    padding-bottom: 0em;
+    text-align: left;
+}
+
+/****************** Table body cells style ***************/
+.dataTable td.cell {
+    cursor: pointer;
     color: var(--secondary-font-color);
-    padding: 0.4em 1em;
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
     word-wrap:break-word;
     max-width: 0;
     border-top: 1px solid transparent;
+    border-bottom: 1px solid var(--table-row-border);
+}
+
+/****************** Table rows style ***************/
+.dataTable tr {
+    background: var(--table-row-background);
+}
+
+/****************** Table Unack rows style ***************/
+.dataTable tr.unackRow td.cell {
+    background: var(--table-unack-row-background);
+    font-weight: bold;
+    color: var(--base-font-color);
+    border-bottom: 1px solid var(--table-unack-row-border);
+}
+
+/**** Remove bottom border from the row that has been expanded *****/
+.dataTable tr.expandedRowParent td.cell {
     border-bottom: 1px solid transparent;
-    border-left: 1px solid var(--base-background-color);
-    border-right: 1px solid var(--base-background-color);
 }
 
-.telemetrySelectionTable td.string {
-    text-align: left;
+.dataTable tr.unackExpandedRowParent td.cell {
+    border-bottom: 1px solid var(--table-unack-row-background);
 }
 
-.telemetrySelectionTable td.number {
-    text-align: right;
+/****************** Table rows hover style ***************/
+.dataTable tr:hover td.cell {
+    border-bottom: 1px solid var(--table-hover-border);
+    border-top: 1px solid var(--table-hover-border);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+    box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
 }
 
-.telemetrySelectionTable .valueCell {
+.dataTable .valueCell {
     padding: 0.4em 0.5em;
     word-wrap:break-word;
     word-wrap: normal;
@@ -122,150 +193,33 @@
     overflow: hidden;
 }
 
-.telemetrySelectionTable td input {
+.dataTable td input {
     min-width: 10px;
 }
 
-.telemetrySelectionTable tr:last-of-type td:first-of-type {
-    border-bottom-left-radius: 7px;
+.dataTable .firstColumn td {
+  background-color: var(--table-row-background);
 }
 
-.telemetrySelectionTable tr:last-of-type td:last-of-type {
-    border-bottom-right-radius: 7px;
-}
-
-.telemetrySelectionTable .healthStatusWrapper {
-    display: flex;
-    position: relative;
+/****************** Styles for the Expanded row ***************/
+.dataTable .expandedRow {
     width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0;
-}
-
-.telemetrySelectionTable .healthStatusCell.selectedHealthStatus {
-    background: var(--tertiary-background-color);
-    border-bottom: 1px solid var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable .gearIconWrapper {
-    width: 1.5em;
-    min-width: 1em;
-    cursor: pointer;
-    padding-right: 0.3em;
-}
-
-.telemetrySelectionTable .statusTextWrapper {
-    flex-grow: 1;
-    padding: 0.0em 1.5em;
-    margin-right: 2em;
-}
-
-.telemetrySelectionTable .snippetsContainer {
-    /* display: flex; */
-}
-
-.telemetrySelectionTable .snippetsList {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-}
-
-
-.telemetrySelectionTable .snippetButtonWrapper {
-    padding: 0.3em 1em;
-    padding-left:0;
-    flex-grow: 1;
-}
-
-.telemetrySelectionTable .setButton {
-    padding: 0em 2em;
-    margin: auto;
-    display:flex;
-}
-
-.telemetrySelectionTable .snippetButton {
-    width: 100%;
-    height: auto;
-    padding: 0;
-}
-
-.telemetrySelectionTable .snippetButton span {
-    padding: 0.25em 0.5em;
-    height: auto;
-}
-
-.telemetrySelectionTable .valuesList {
-    counter-reset: values-list-counter -1;
-    list-style: none;
-    -webkit-padding-start: 0;
-    position: relative;
-}
-
-
-.telemetrySelectionTable .valuesListItem::before {
-    content: counter(values-list-counter) ". ";
-    color: var(--secondary-font-dimmed-color);
-    white-space: pre-wrap;
-    font-family: monospace;
-    text-align: right;
-    position: absolute;
-    width: 4em;
-}
-
-
-.telemetrySelectionTable .valuesListItem {
-    counter-increment: values-list-counter;
-    padding: 0 0.4em;
-}
-
-.telemetrySelectionTable .valuesListItemValue {
-    position: relative;
-    padding: 0 0.4em;
-    left: 3em;
-}
-/* .telemetrySelectionTable .addedColumn {
-    width: 5%;
-} */
-
-.telemetrySelectionTable .firstColumn {
-    width: 1em;
-    background: var(--base-background-color);
-    padding: 0em 0.5em;
-    text-align: center;
-    border: 1px solid var(--base-background-color)
-}
-
-.telemetrySelectionTable .firstColumn input {
-    margin: 0;
-}
-
-.telemetrySelectionTable .expandedRow {
     text-align: left;
-    background: var(--tertiary-background-color);
+    background: var(--table-row-background);
 }
 
-.telemetrySelectionTable tr:nth-child(even).expandedRow {
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable tr:nth-child(odd).expandedRow {
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable .expandedRow .title {
-    font-weight: bold;
-    color: var(--base-font-color);
-}
-
-.telemetrySelectionTable .expandedRow td {
+.dataTable .expandedRow .expandedRowContent {
     vertical-align: top;
-    border: 1px solid transparent;
+    border-bottom: 1px solid var(--table-row-border);
     padding: 1em;
 }
 
-.telemetrySelectionTable .expandedRow textarea {
+.dataTable .unackExpandedRow .expandedRowContent{
+    background: var(--table-unack-row-background);
+    border-bottom: 1px solid var(--table-unack-row-border);
+}
+
+/* .dataTable .expandedRow textarea {
     background: var(--secondary-background-dimmed-color);
     color: var(--base-font-color);
     border: none;
@@ -276,111 +230,57 @@
     resize: none;
     border-radius: 5px;
     padding: 0.6em 0.6em;
+} */
+
+.dataTable tr:hover.expandedRow td.cell{
+    border-bottom: 1px solid var(--secondary-background-color);
+    border-top: 1px solid transparent;
 }
 
-.telemetrySelectionTable .expandedColumn {
-    display: grid;
-    grid-template-columns: minmax(30em, min-content) 1fr;
-    column-gap: 2em;
+
+/****************** Styles to make the Table corners rounded ***************/
+.dataTable th:first-of-type {
+    border-top-left-radius: 7px;
 }
 
-.telemetrySelectionTable .healthStatusCell {
-    padding: 0.4em 0.5em;
-    border-bottom: 1px solid transparent;
+.dataTable th:last-of-type {
+    border-top-right-radius: 7px;
 }
 
-.telemetrySelectionTable .healthStatusCell:hover {
-    background: var(--tertiary-background-color);
+.dataTable tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 7px;
 }
 
-.telemetrySelectionTable .healthStatusCell:hover .gearIconWrapper {
-    visibility: visible;
+.dataTable tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 7px;
 }
 
+/* .dataTable .firstColumn {
+    width: 1em;
+    background: var(--base-background-color);
+    padding: 0em 0.5em;
+    text-align: center;
+    border: 1px solid var(--base-background-color)
+} */
+
+/*************** Styles for the Table Body Scroller ***************/
 /* width */
-.telemetrySelectionTable ::-webkit-scrollbar {
-    width: var(--scrollbar-width);
+.dataTable ::-webkit-scrollbar {
+    width: var(--table-scrollbar-width);
 }
 
 /* Track */
-.telemetrySelectionTable ::-webkit-scrollbar-track {
-    background: var(--tertiary-background-color); 
+.dataTable ::-webkit-scrollbar-track {
+    background: var(--tertiary-background-color);
 }
- 
+
 /* Handle */
-.telemetrySelectionTable ::-webkit-scrollbar-thumb {
-    /* background: var(--quinary-background-color); */
+.dataTable ::-webkit-scrollbar-thumb {
     background: var(--tertiary-font-color);
     border-radius: 1.1em;
 }
 
 /* Handle on hover */
-.telemetrySelectionTable ::-webkit-scrollbar-thumb:hover {
+.dataTable ::-webkit-scrollbar-thumb:hover {
     background: var(--secondary-font-color);
-}
-
-/* for describing sections in the expandable row */
-.statusConfigTitle, .snippetsTitle{ 
-    color: var(--base-font-color);
-    margin-bottom: 0.2em;
-}
-
-.statusConfigTitle {
-    margin-top:0.8em;
-}
-
-.lineJump{
-    white-space: pre;
-}
-
-.statusList {
-    font-size:small;
-}
-
-.selectionContainer {
-    display:flex;
-    align-items:center;
-    color: var(--base-font-color);
-    text-align:left;
-    padding: 1em;
-    background: var(--base-background-color);
-}
-
-.selectionList{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    background:#cfd7d9;
-    width:100%;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    padding: 4px 6px;
-    color: #555;
-    vertical-align: middle;
-    border-radius: 4px;
-    max-width: 100%;
-    line-height: 22px;
-    cursor: text;    
-    box-sizing: border-box;
-    min-height:2em;
-    margin-left:0.5em;
-}
-
-button.selectionSetButton {
-    margin-left: 0.5em;
-    padding-left: 1em;
-    padding-right: 1em;
-    font-size: 14pt;
-    border-radius: 0.3em;
-    padding-top:0.3em;
-}
-
-.hidden {
-    visibility: hidden;
-}
-
-.checkboxCell input[type="checkbox"] {
-    cursor: pointer;
-    transform: scale(1.6);
 }
