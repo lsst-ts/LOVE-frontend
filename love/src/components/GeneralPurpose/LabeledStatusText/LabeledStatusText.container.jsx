@@ -24,7 +24,7 @@ export const schema = {
       type: 'function',
       description: '',
       isPrivate: false,
-      default: (event) => event.state.value,
+      default: '(event) => event.state.value',
     },
     stateToLabelMap: {
       type: 'string',
@@ -47,6 +47,13 @@ export const schema = {
         '2': 'running',
         '3': 'running',
       },
+    },
+    _functionProps: {
+      type: 'array',
+      description:
+        'Array containing the props that are functions',
+      isPrivate: true,
+      default: ['accessor'],
     },
   },
 };
