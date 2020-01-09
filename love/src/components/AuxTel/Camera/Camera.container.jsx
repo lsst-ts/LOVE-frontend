@@ -6,7 +6,7 @@ import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../..
 
 export const schema = {
   description: 'Summary view of the ATCamera. Contains information about its current state and exposures table',
-  defaultSize: [49, 38],
+  defaultSize: [49, 17],
   props: {},
 };
 
@@ -40,26 +40,26 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: () => {
-      dispatch(requestGroupSubscription('event-ATCamera-startIntegration'));
-      dispatch(requestGroupSubscription('event-ATCamera-startReadout'));
-      dispatch(requestGroupSubscription('event-ATCamera-endReadout'));
-      dispatch(requestGroupSubscription('event-ATCamera-endOfImageTelemetry'));
-      dispatch(requestGroupSubscription('event-ATCamera-raftsDetailedState'));
-      dispatch(requestGroupSubscription('event-ATCamera-shutterDetailedState'));
-      dispatch(requestGroupSubscription('event-ATCamera-imageReadinessDetailedState'));
-      dispatch(requestGroupSubscription('event-ATCamera-calibrationDetailedState'));
-      dispatch(requestGroupSubscription('event-ATCamera-imageReadoutParameters'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-startIntegration'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-startReadout'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-endReadout'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-endOfImageTelemetry'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-raftsDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-shutterDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-imageReadinessDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-calibrationDetailedState'));
+      dispatch(requestGroupSubscription('event-ATCamera-0-imageReadoutParameters'));
     },
     unsubscribeToStream: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startIntegration'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-startReadout'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-endReadout'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-endOfImageTelemetry'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-raftsDetailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-shutterDetailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-imageReadinessDetailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-calibrationDetailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-imageReadoutParameters'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-startIntegration'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-startReadout'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-endReadout'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-endOfImageTelemetry'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-raftsDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-shutterDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-imageReadinessDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-calibrationDetailedState'));
+      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-imageReadoutParameters'));
     },
   };
 };

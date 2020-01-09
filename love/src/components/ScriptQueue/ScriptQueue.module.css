@@ -9,7 +9,7 @@
   min-width: 1050px;
   max-width: 1900px;
   height: 100%;
-  min-height: 800px;
+  min-height: 450px;
   position: relative;
 }
 
@@ -22,6 +22,7 @@
   grid-area: body;
   display: flex;
   overflow: hidden;
+  padding-bottom: 0.5em;
 }
 
 .currentScriptTitle {
@@ -106,7 +107,7 @@
   flex-basis: 100%;
   transition: all 500ms ease-in-out;
   background: var(--second-primary-background-color);
-  height: calc(100% - 1em);
+  height: 100%;
 }
 
 .waitingScriptList {
@@ -251,6 +252,7 @@
 .externalScriptsContainer, .standardScriptsContainer {
   max-height: 100%;
   transition: max-height 0.2s;
+  padding-right: 0.5em;
 }
 
 .standardExternalContainer .availableListCollapsed {

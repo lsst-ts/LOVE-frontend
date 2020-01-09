@@ -53,7 +53,13 @@ export const schema = {
       description:
         'Object containing the mapping of every data source to a function that extracts the value to be plotted from the incoming data stream',
       isPrivate: false,
-      default: { 'Dome Azimuth': (data) => data.azimuthPosition.value },
+      default: '{ "Dome Azimuth": (data) => data.azimuthPosition.value }',
+    },
+    _functionProps: {
+      type: 'array',
+      description: 'Array containing the props that are functions',
+      isPrivate: true,
+      default: ['accessors'],
     },
   },
 };

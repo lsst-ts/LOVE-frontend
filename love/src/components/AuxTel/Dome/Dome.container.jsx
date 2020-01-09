@@ -6,7 +6,7 @@ import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../..
 
 export const schema = {
   description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
-  defaultSize: [49, 38],
+  defaultSize: [49, 43],
   props: {},
 };
 
