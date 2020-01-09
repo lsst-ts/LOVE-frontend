@@ -108,7 +108,7 @@ export default class CustomView extends Component {
             cols={container.properties.cols}
             width={this.props.baseColWidth * container.properties.w}
             margin={[0, 0]}
-            verticalCompact={false}
+            verticalCompact={true}
             className={styles.gridLayout}
             draggableCancel=".nonDraggable"
           >
