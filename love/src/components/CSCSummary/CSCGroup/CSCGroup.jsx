@@ -7,7 +7,7 @@ import CSCGroupLogContainer from '../CSCGroupLog/CSCGroupLog.container';
 
 export const schema = {
   description: 'Summary of a set of CSCs, including heartbeats and summary state',
-  defaultSize: [24, 29],
+  defaultSize: [12, 17],
   props: {
     name: {
       type: 'string',
@@ -23,6 +23,30 @@ export const schema = {
       default: [
         {
           name: 'ATMCS',
+          salindex: 0,
+        },
+        {
+          name: 'ATPtg',
+          salindex: 0,
+        },
+        {
+          name: 'ATDome',
+          salindex: 0,
+        },
+        {
+          name: 'ATDomeTrajectory',
+          salindex: 0,
+        },
+        {
+          name: 'ATAOS',
+          salindex: 0,
+        },
+        {
+          name: 'ATPneumatics',
+          salindex: 0,
+        },
+        {
+          name: 'ATHexapod',
           salindex: 0,
         },
       ],
