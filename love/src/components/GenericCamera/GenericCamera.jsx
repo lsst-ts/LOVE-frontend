@@ -21,7 +21,7 @@ export default function() {
                 count = count + 1;
                 console.log('reading', count, done);
                 // When no more data needs to be consumed, close the stream
-                if (count > 3) {
+                if (count > 2) {
                   controller.close();
                   return;
                 }
@@ -45,6 +45,8 @@ export default function() {
         fileReader.onload = (event) => {
           /**
           
+          # https://github.com/lsst-ts/ts_GenericCamera/blob/3eb5d5e104413cecb7950e2880a1154ea9846482/python/lsst/ts/GenericCamera/liveview/liveview.py#L277
+
           read_bytes = await self.reader.readline()
 
           if read_bytes.rstrip().endswith(b'[START]'):
@@ -76,16 +78,36 @@ export default function() {
                                        width, height, {}, isJPEG)
 
            */
+          const decoder = new TextDecoder('utf-8');
+          const encoder = new TextEncoder('utf-8');
 
           const arrayBuffer = event.target.result;
-          let arr = [...new Float64Array(arrayBuffer)];
           
+          let headerCandidate = new Uint8Array(arrayBuffer.slice(0,50));
+          const decoded = decoder.decode(headerCandidate);
+          const split = decoded.split('\r\n');
+          const START = split[0];
+          const widthString = split[1];
+          const heightString = split[2];
+          const isPNGString = split[3];
+          const lengthString = split[4];
+          const matrixStartPosition = decoded.search(`${lengthString}\r\n`) + `${lengthString}\r\n`.length;
+          const headerString = decoded.slice(0, matrixStartPosition);
+
+          const headerByteCount = encoder.encode(headerString).length;
+
+          const newHeader = decoder.decode(new Uint8Array(arrayBuffer.slice(0,headerByteCount)));
+          const newHeaderPlusONe = decoder.decode(new Uint8Array(arrayBuffer.slice(0,headerByteCount+1)))          
+
+          console.log('decoded', decoded)
+          console.log('newHeader', newHeader);
+          console.log('newHeaderPlusONe', newHeaderPlusONe);
           debugger;
         };
 
         fileReader.readAsArrayBuffer(blob);
 
-        URL.createObjectURL(blob);
+        return URL.createObjectURL(blob);
       })
       .then((url) => console.log(url))
       .catch((err) => console.error(err));
