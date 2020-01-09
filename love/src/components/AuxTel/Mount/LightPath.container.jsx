@@ -8,6 +8,7 @@ export const schema = {
   description: `Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover`,
   defaultSize: [37, 31],
   props: {},
+  allowOverflow: true,
 };
 
 const LightPathContainer = ({ ...props }) => {
