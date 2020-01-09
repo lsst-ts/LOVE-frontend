@@ -4,12 +4,22 @@ import {
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  SAVING_EDITED_VIEW,
+  SAVED_EDITED_VIEW,
 } from '../actions/actionTypes';
 
+export const editViewStates = {
+  EMPTY: 'EMPTY',
+  UNSAVED: 'UNSAVED',
+  SAVING: 'SAVING',
+  SAVED: 'SAVED',
+  SAVE_ERROR: 'SAVE_ERROR',
+};
+
 const initialState = {
-  current_view: null,
-  current_workspace: null,
-  edited_view: {
+  currentView: null,
+  currentWorkspace: null,
+  editedView: {
     properties: {
       type: 'container',
       x: 0,
@@ -22,6 +32,8 @@ const initialState = {
     },
     content: {},
   },
+  editedViewStatus: editViewStates.EMPTY,
+  editedViewData: {},
   views: [],
   workspaces: [],
 };
@@ -51,14 +63,28 @@ export default function(state = initialState, action) {
     case RECEIVE_CURRENT_WORKSPACE:
       {
         return Object.assign({}, state, {
-          current_workspace: action.workspace.id,
+          currentWorkspace: action.workspace.id,
           views: action.workspace.views,
         });
       }
     case UPDATE_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          edited_view: action.view,
+          editedView: action.view,
+          editedViewStatus: editViewStates.UNSAVED,
+        });
+      }
+    case SAVING_EDITED_VIEW:
+      {
+        return Object.assign({}, state, {
+          editedViewStatus: editViewStates.SAVING,
+        });
+      }
+    case SAVED_EDITED_VIEW:
+      {
+        return Object.assign({}, state, {
+          editedViewStatus: editViewStates.SAVED,
+          editedViewData: action.view,
         });
       }
     default:

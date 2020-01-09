@@ -5,8 +5,23 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 import { getTokenFromStorage } from '../actions/auth';
-import { requestWorkspaces, requestWorkspace, receiveWorkspaces, requestViews, updateEditedView } from '../actions/uif';
-import { getViews, getWorkspaces, getCurrentWorkspace, getEditedView } from '../selectors';
+import {
+  requestWorkspaces,
+  requestWorkspace,
+  receiveWorkspaces,
+  requestViews,
+  updateEditedView,
+  saveEditedView,
+} from '../actions/uif';
+import {
+  getViews,
+  getWorkspaces,
+  getCurrentWorkspace,
+  getEditedView,
+  getEditedViewStatus,
+  getEditedViewData,
+} from '../selectors';
+import { editViewStates } from '../reducers/uif';
 
 let store;
 beforeEach(() => {
@@ -148,7 +163,7 @@ describe('GIVEN the store contains the list of workspaces', () => {
   });
 });
 
-describe('Set view under edition. GIVEN the store is empty', () => {
+describe('Update view under edition. GIVEN the store is empty', () => {
   beforeEach(async () => {
     const token = '"love-token"';
     localStorage.setItem('LOVE-TOKEN', token);
@@ -160,11 +175,49 @@ describe('Set view under edition. GIVEN the store is empty', () => {
     fetchMock.reset();
   });
 
+  it('THEN the state should mark the edited view as EMPTY', async () => {
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const data = getEditedViewData(store.getState());
+    expect(status).toEqual(editViewStates.EMPTY);
+    expect(data).toEqual({});
+  });
+
   it('WHEN the edited view is updated, THEN the state should contain the view', async () => {
     // Act:
-    await store.dispatch(updateEditedView(newViewData));
+    await store.dispatch(updateEditedView(newViewData.data));
     // Assert:
+    const status = getEditedViewStatus(store.getState());
     const retrievedData = getEditedView(store.getState());
-    expect(retrievedData).toEqual(newViewData);
+    expect(status).toEqual(editViewStates.UNSAVED);
+    expect(retrievedData).toEqual(newViewData.data);
+  });
+});
+
+describe('Save a new view under edition. GIVEN the store contains a view under edition', () => {
+  beforeEach(async () => {
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
+    await store.dispatch(updateEditedView(newViewData.data));
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
+    fetchMock.reset();
+  });
+
+  it('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
+    // Arrange:
+    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    fetchMock.mock(url, newViewData, ManagerInterface.getHeaders());
+    // Act:
+    await store.dispatch(saveEditedView());
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const editedView = getEditedView(store.getState());
+    const data = getEditedViewData(store.getState());
+    expect(editedView).toEqual(newViewData.data);
+    expect(data).toEqual(newViewData);
   });
 });
