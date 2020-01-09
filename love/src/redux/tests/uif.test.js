@@ -5,8 +5,8 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 import { getTokenFromStorage } from '../actions/auth';
-import { requestWorkspaces, requestWorkspace, receiveWorkspaces, requestViews } from '../actions/uif';
-import { getViews, getWorkspaces, getCurrentWorkspace } from '../selectors';
+import { requestWorkspaces, requestWorkspace, receiveWorkspaces, requestViews, updateEditedView } from '../actions/uif';
+import { getViews, getWorkspaces, getCurrentWorkspace, getEditedView } from '../selectors';
 
 let store;
 beforeEach(() => {
@@ -15,64 +15,74 @@ beforeEach(() => {
 
 const mockWorkspaces = [
   {
-    "id": 0,
-    "creation_timestamp": "2019-11-13T21:14:03.441Z",
-    "update_timestamp": "2019-11-13T21:14:03.441Z",
-    "name": "My-workspace",
-    "views": [
+    id: 0,
+    creation_timestamp: '2019-11-13T21:14:03.441Z',
+    update_timestamp: '2019-11-13T21:14:03.441Z',
+    name: 'My-workspace',
+    views: [
       {
-        "id": 0,
-        "name": "My-view-0",
+        id: 0,
+        name: 'My-view-0',
       },
       {
-        "id": 1,
-        "name": "My-view-1",
+        id: 1,
+        name: 'My-view-1',
       },
-    ]
+    ],
   },
   {
-    "id": 1,
-    "creation_timestamp": "2019-11-13T21:14:03.441Z",
-    "update_timestamp": "2019-11-13T21:14:03.441Z",
-    "name": "My-workspace",
-    "views": [
+    id: 1,
+    creation_timestamp: '2019-11-13T21:14:03.441Z',
+    update_timestamp: '2019-11-13T21:14:03.441Z',
+    name: 'My-workspace',
+    views: [
       {
-        "id": 2,
-        "name": "My-view-2",
+        id: 2,
+        name: 'My-view-2',
       },
       {
-        "id": 3,
-        "name": "My-view-3",
+        id: 3,
+        name: 'My-view-3',
       },
-    ]
+    ],
   },
 ];
 
 const mockViews = [
   {
-    "id": 0,
-    "creation_timestamp": "2019-11-18T18:36:54.570Z",
-    "update_timestamp": "2019-11-18T18:36:54.570Z",
-    "name": "My-view-0",
-    "data": {
-      "key1": "value1",
-      "key2": "value2",
-    }
+    id: 0,
+    creation_timestamp: '2019-11-18T18:36:54.570Z',
+    update_timestamp: '2019-11-18T18:36:54.570Z',
+    name: 'My-view-0',
+    data: {
+      key1: 'value1',
+      key2: 'value2',
+    },
   },
   {
-    "id": 1,
-    "creation_timestamp": "2019-11-18T18:36:54.570Z",
-    "update_timestamp": "2019-11-18T18:36:54.570Z",
-    "name": "My-view-1",
-    "data": {
-      "key1": "value1",
-      "key2": "value2",
-    }
+    id: 1,
+    creation_timestamp: '2019-11-18T18:36:54.570Z',
+    update_timestamp: '2019-11-18T18:36:54.570Z',
+    name: 'My-view-1',
+    data: {
+      key1: 'value1',
+      key2: 'value2',
+    },
   },
-]
+];
 
-describe('GIVEN the store is empty', () => {
+const newViewData = {
+  id: 0,
+  creation_timestamp: '2019-11-18T18:36:54.570Z',
+  update_timestamp: '2019-11-18T18:36:54.570Z',
+  name: 'My-view-0',
+  data: {
+    key1: 'value1',
+    key2: 'value2',
+  },
+};
 
+describe('Get workspaces and views. GIVEN the store is empty', () => {
   beforeEach(async () => {
     const token = '"love-token"';
     localStorage.setItem('LOVE-TOKEN', token);
@@ -108,7 +118,6 @@ describe('GIVEN the store is empty', () => {
 });
 
 describe('GIVEN the store contains the list of workspaces', () => {
-
   beforeEach(async () => {
     const token = '"love-token"';
     localStorage.setItem('LOVE-TOKEN', token);
@@ -136,5 +145,26 @@ describe('GIVEN the store contains the list of workspaces', () => {
     const retrievedViews = getViews(store.getState());
     expect(retrievedViews).toEqual(mockViews);
     expect(retrievedCurrentWorkspace).toEqual(mockWorkspaces[0]);
+  });
+});
+
+describe('Set view under edition. GIVEN the store is empty', () => {
+  beforeEach(async () => {
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
+    fetchMock.reset();
+  });
+
+  it('WHEN the edited view is updated, THEN the state should contain the view', async () => {
+    // Act:
+    await store.dispatch(updateEditedView(newViewData));
+    // Assert:
+    const retrievedData = getEditedView(store.getState());
+    expect(retrievedData).toEqual(newViewData);
   });
 });
