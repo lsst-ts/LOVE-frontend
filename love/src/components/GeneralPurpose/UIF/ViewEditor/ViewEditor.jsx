@@ -18,6 +18,8 @@ export default class ViewEditor extends Component {
     editedView: PropTypes.object,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
+    /** Function to save the edited view to the server (POST or PUT) */
+    saveEditedView: PropTypes.func,
   };
 
   static defaultProps = {
@@ -144,6 +146,7 @@ export default class ViewEditor extends Component {
 
   save = () => {
     console.log('save');
+    this.props.saveEditedView();
   }
 
   render() {

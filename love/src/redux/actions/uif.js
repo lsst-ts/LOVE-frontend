@@ -5,6 +5,7 @@ import {
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
   SAVING_EDITED_VIEW,
+  SAVE_ERROR,
   SAVED_EDITED_VIEW,
 } from './actionTypes';
 import { getEditedView, getEditedViewData } from '../selectors/uif';
@@ -55,6 +56,13 @@ export const updateEditedView = (view) => {
  */
 export const savingEditedView = {
   type: SAVING_EDITED_VIEW,
+};
+
+/**
+ * Action to mark the editView as failed saving
+ */
+export const saveErrorEditedView = {
+  type: SAVE_ERROR,
 };
 
 /**
@@ -150,22 +158,37 @@ export function saveEditedView() {
         body: JSON.stringify(editedView),
       }).then((response) => {
         return response.json().then((view) => {
-          dispatch(savedEditedView(view));
+          if (response && response.status === 200) {
+            dispatch(savedEditedView(view));
+          }
+          else {
+            dispatch(saveErrorEditedView);
+          }
           return Promise.resolve();
         });
       }).catch((e) => console.error(e));
     }
     else {
-      const url = `${ManagerInterface.getUifBaseUrl()}views`;
+      const url = `${ManagerInterface.getUifBaseUrl()}views/`;
       return fetch(url, {
         method: 'POST',
         headers: ManagerInterface.getHeaders(),
         body: JSON.stringify(editedView),
       }).then((response) => {
-        return response.json().then((view) => {
-          dispatch(savedEditedView(view));
+        console.log('response1: ', response);
+        console.log('response.json(): ', response.json());
+        if (response.status === 201) {
+          return response.json();
+        } else {
+          dispatch(saveErrorEditedView);
+          return false;
+        }
+      }).then((response) => {
+        if (response) {
+          console.log('response2: ', response);
+          dispatch(savedEditedView(response));
           return Promise.resolve();
-        });
+        }
       }).catch((e) => console.error(e));
     }
   };
