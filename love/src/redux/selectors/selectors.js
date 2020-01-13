@@ -1,4 +1,4 @@
-import { flatMap } from '../Utils';
+import { flatMap } from '../../Utils';
 
 export const getToken = (state) => state.auth.token;
 
