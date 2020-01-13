@@ -21,6 +21,7 @@ const initialState = {
   currentView: null,
   currentWorkspace: null,
   editedView: {
+    name: 'my-view',
     properties: {
       type: 'container',
       x: 0,

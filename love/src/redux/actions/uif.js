@@ -150,22 +150,28 @@ export function saveEditedView() {
     const editedView = getEditedView(getState());
     dispatch(savingEditedView);
     const data = getEditedViewData(getState());
+    data.data = editedView;
+    data.name = "blah";
     if (data !== undefined && data.id !== undefined) {
-      const url = `${ManagerInterface.getUifBaseUrl()}views/${data.id}`;
+      const url = `${ManagerInterface.getUifBaseUrl()}views/${data.id}/`;
       return fetch(url, {
         method: 'PUT',
         headers: ManagerInterface.getHeaders(),
-        body: JSON.stringify(editedView),
+        body: JSON.stringify(data),
       }).then((response) => {
-        return response.json().then((view) => {
-          if (response && response.status === 200) {
-            dispatch(savedEditedView(view));
-          }
-          else {
-            dispatch(saveErrorEditedView);
-          }
+        console.log('response1: ', response);
+        if (response.status === 200) {
+          return response.json();
+        } else {
+          dispatch(saveErrorEditedView);
+          return false;
+        }
+      }).then((response) => {
+        if (response) {
+          console.log('response2: ', response);
+          dispatch(savedEditedView(response));
           return Promise.resolve();
-        });
+        }
       }).catch((e) => console.error(e));
     }
     else {
@@ -173,10 +179,9 @@ export function saveEditedView() {
       return fetch(url, {
         method: 'POST',
         headers: ManagerInterface.getHeaders(),
-        body: JSON.stringify(editedView),
+        body: JSON.stringify(data),
       }).then((response) => {
         console.log('response1: ', response);
-        console.log('response.json(): ', response.json());
         if (response.status === 201) {
           return response.json();
         } else {

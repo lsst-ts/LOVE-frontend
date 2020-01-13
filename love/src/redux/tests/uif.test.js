@@ -236,7 +236,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
 
   it('WHEN the edited view is saved again, THEN the state should update the status', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
     await store.dispatch(savedEditedView(newViewData));
     await store.dispatch(updateEditedView(newViewData2.data));
     fetchMock.put(url, newViewData2, ManagerInterface.getHeaders());
