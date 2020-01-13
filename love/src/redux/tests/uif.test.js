@@ -12,6 +12,7 @@ import {
   requestViews,
   updateEditedView,
   saveEditedView,
+  savedEditedView,
 } from '../actions/uif';
 import {
   getViews,
@@ -94,6 +95,17 @@ const newViewData = {
   data: {
     key1: 'value1',
     key2: 'value2',
+  },
+};
+
+const newViewData2 = {
+  id: 0,
+  creation_timestamp: '2019-11-18T18:36:54.570Z',
+  update_timestamp: '2019-11-18T18:36:54.570Z',
+  name: 'My-view-0',
+  data: {
+    key1: 'value1',
+    key2: 'value3',
   },
 };
 
@@ -210,14 +222,32 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
   it('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views`;
-    fetchMock.mock(url, newViewData, ManagerInterface.getHeaders());
+    fetchMock.post(url, newViewData, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(saveEditedView());
     // Assert:
     const status = getEditedViewStatus(store.getState());
     const editedView = getEditedView(store.getState());
     const data = getEditedViewData(store.getState());
+    expect(status).toEqual(editViewStates.SAVED);
     expect(editedView).toEqual(newViewData.data);
     expect(data).toEqual(newViewData);
+  });
+
+  it('WHEN the edited view is saved again, THEN the state should update the status', async () => {
+    // Arrange:
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}`;
+    await store.dispatch(savedEditedView(newViewData));
+    await store.dispatch(updateEditedView(newViewData2.data));
+    fetchMock.put(url, newViewData2, ManagerInterface.getHeaders());
+    // Act:
+    await store.dispatch(saveEditedView());
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const editedView = getEditedView(store.getState());
+    const data = getEditedViewData(store.getState());
+    expect(status).toEqual(editViewStates.SAVED);
+    expect(editedView).toEqual(newViewData2.data);
+    expect(data).toEqual(newViewData2);
   });
 });
