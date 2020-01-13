@@ -34,14 +34,14 @@ export default class ViewEditor extends Component {
     };
   }
 
-  onChange = (newValue) => {
+  onEditorChange = (newValue) => {
     this.setState({
       layout: newValue,
       showModal: false,
     });
   };
 
-  setLayout = () => {
+  applyEditorLayout = () => {
     let parsedLayout = {};
     try {
       parsedLayout = JSON.parse(this.state.layout);
@@ -61,10 +61,10 @@ export default class ViewEditor extends Component {
       newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
     const newLayoutStr = JSON.stringify(newLayout, null, 2);
+    this.setState({
+      layout: newLayoutStr,
+    });
     if (newLayoutStr !== oldLayoutStr) {
-      this.setState({
-        layout: newLayoutStr,
-      });
       this.props.updateEditedView(newLayout);
     }
   };
@@ -145,7 +145,6 @@ export default class ViewEditor extends Component {
   };
 
   save = () => {
-    console.log('save');
     this.props.saveEditedView();
   }
 
@@ -188,13 +187,13 @@ export default class ViewEditor extends Component {
               mode="json"
               theme="solarized_dark"
               name="UNIQUE_ID_OF_DIV"
-              onChange={this.onChange}
+              onChange={this.onEditorChange}
               width={'100%'}
               value={this.state.layout}
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-          <Button onClick={this.setLayout}>Apply</Button>
+          <Button onClick={this.applyEditorLayout}>Apply</Button>
           </div>
         </Rnd>
         <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">
