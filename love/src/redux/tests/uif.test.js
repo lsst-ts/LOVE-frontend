@@ -219,10 +219,10 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     fetchMock.reset();
   });
 
-  it('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
+  fit('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views`;
-    fetchMock.post(url, newViewData, ManagerInterface.getHeaders());
+    const url = `${ManagerInterface.getUifBaseUrl()}views/`;
+    fetchMock.post(url, 201, newViewData, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(saveEditedView());
     // Assert:

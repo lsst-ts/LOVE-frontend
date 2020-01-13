@@ -5,6 +5,7 @@ import {
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
   SAVING_EDITED_VIEW,
+  SAVE_ERROR,
   SAVED_EDITED_VIEW,
 } from '../actions/actionTypes';
 
@@ -78,6 +79,12 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           editedViewStatus: editViewStates.SAVING,
+        });
+      }
+    case SAVE_ERROR:
+      {
+        return Object.assign({}, state, {
+          editedViewStatus: editViewStates.SAVE_ERROR,
         });
       }
     case SAVED_EDITED_VIEW:
