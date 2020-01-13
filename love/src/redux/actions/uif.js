@@ -159,7 +159,6 @@ export function saveEditedView() {
         headers: ManagerInterface.getHeaders(),
         body: JSON.stringify(data),
       }).then((response) => {
-        console.log('response1: ', response);
         if (response.status === 200) {
           return response.json();
         } else {
@@ -168,7 +167,6 @@ export function saveEditedView() {
         }
       }).then((response) => {
         if (response) {
-          console.log('response2: ', response);
           dispatch(savedEditedView(response));
           return Promise.resolve();
         }
@@ -181,7 +179,6 @@ export function saveEditedView() {
         headers: ManagerInterface.getHeaders(),
         body: JSON.stringify(data),
       }).then((response) => {
-        console.log('response1: ', response);
         if (response.status === 201) {
           return response.json();
         } else {
@@ -190,7 +187,6 @@ export function saveEditedView() {
         }
       }).then((response) => {
         if (response) {
-          console.log('response2: ', response);
           dispatch(savedEditedView(response));
           return Promise.resolve();
         }
