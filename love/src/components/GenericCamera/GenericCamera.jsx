@@ -36,6 +36,26 @@ const bufferIncludesString = (buffer, string) => {
   return decoder.decode(buffer).includes(string);
 };
 
+const draw = (array, canvas) => {
+  var ctx = canvas.getContext('2d');
+  var canvasWidth = canvas.width;
+  var canvasHeight = canvas.height;
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+  var id = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+  console.log(id);
+  var pixels = id.data;
+
+  array.forEach((val, index) => {
+    // if (index % 50 === 0) console.log(index,val);
+    pixels[index * 4] = val;
+    pixels[index * 4 + 1] = val;
+    pixels[index * 4 + 2] = val;
+    pixels[index * 4 + 3] = 255;
+  });
+
+  ctx.putImageData(id, 0, 0);
+};
+
 /**
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
  */
@@ -89,18 +109,19 @@ export default function() {
 
             const newHeader = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength)));
             const newHeaderPlusONe = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength + 1)));
+            console.log(newHeaderPlusONe);
             resolve(headerInfo);
           };
 
           fileReader.readAsArrayBuffer(blob);
         });
-
       })
       .then((r) => {
         console.log(r);
-
+        const canvas = document.getElementById('canvas');
+        draw(new Uint8Array(r.body), canvas);
       })
       .catch((err) => console.error(err));
   }, []);
-  return <div><img id="photo"></img></div>;
+  return <canvas id="canvas" width="1024" height="1024"></canvas>;
 }
