@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import Button from '../../Button/Button';
@@ -11,27 +12,23 @@ import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
 export default class ViewEditor extends Component {
-  constructor() {
-    super();
-    const layout = `
-    {
-      "properties": {
-        "type": "container",
-        "x": 0,
-        "y": 0,
-        "w": 100,
-        "h": 2,
-        "i": 0,
-        "allowOverflow": true,
-        "cols": 100
-      },
-      "content": {
-      }
-    }
-    `;
+
+  static propTypes = {
+    /** Object representing the layout of the view being edited */
+    editedView: PropTypes.object,
+    /** Function to update the edited view */
+    updateEditedView: PropTypes.func,
+  };
+
+  static defaultProps = {
+    editedView: null,
+    updateEditedView: () => {},
+  };
+
+  constructor(props) {
+    super(props);
     this.state = {
-      layout,
-      parsedLayout: JSON.parse(layout),
+      layout: JSON.stringify(this.props.editedView, null, 2),
     };
   }
 
@@ -49,23 +46,25 @@ export default class ViewEditor extends Component {
     } catch (error) {
       parsedLayout = {};
     }
-    this.setState({
-      parsedLayout,
-    });
+    this.props.updateEditedView(parsedLayout);
   };
 
   onLayoutChange = (newLayoutProperties) => {
-    let newParsedLayout = this.state.parsedLayout;
+    const oldLayoutStr = JSON.stringify(this.props.editedView, null, 2);
+    let newLayout = {...this.props.editedView};
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
       parsedProperties.allowOverflow = elementProperties.allowOverflow;
-      newParsedLayout = this.updateElementProperties(newParsedLayout, parsedProperties);
+      newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
-    this.setState({
-      parsedLayout: newParsedLayout,
-      layout: JSON.stringify(newParsedLayout, null, 2),
-    });
+    const newLayoutStr = JSON.stringify(newLayout, null, 2);
+    if (newLayoutStr !== oldLayoutStr) {
+      this.setState({
+        layout: newLayoutStr,
+      });
+      this.props.updateEditedView(newLayout);
+    }
   };
 
   updateElementProperties = (element, properties) => {
@@ -99,13 +98,7 @@ export default class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideModal();
-    let parsedLayout = {};
-    try {
-      parsedLayout = JSON.parse(this.state.layout);
-    } catch (error) {
-      parsedLayout = {};
-    }
-
+    const parsedLayout = {...this.props.editedView};
     const additionalContent = {};
     let startingIndex = 0;
     Object.keys(parsedLayout.content).forEach((compKey) => {
@@ -137,32 +130,21 @@ export default class ViewEditor extends Component {
       startingIndex += 1;
     });
     parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
-    this.setState({
-      parsedLayout,
-    });
+    this.props.updateEditedView(parsedLayout);
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = {};
-    try {
-      parsedLayout = JSON.parse(this.state.layout);
-    } catch (error) {
-      parsedLayout = {};
-    }
+    let parsedLayout = {...this.props.editedView};
     Object.keys(parsedLayout.content).forEach((compKey) => {
-      console.log(
-        'onComponentDelete',
-        parsedLayout.content[compKey].content,
-        component.content,
-        parsedLayout.content[compKey].content === component.content,
-      );
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
-    this.setState({
-      parsedLayout,
-    });
+    this.props.updateEditedView(parsedLayout);
     return [];
   };
+
+  save = () => {
+    console.log('save');
+  }
 
   render() {
     return (
@@ -170,7 +152,7 @@ export default class ViewEditor extends Component {
         <div className={styles.container}>
           <div>
             <CustomView
-              layout={this.state.parsedLayout}
+              layout={this.props.editedView}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
             ></CustomView>
@@ -192,7 +174,12 @@ export default class ViewEditor extends Component {
           <div>
             <div className={styles.bar}>
               View editor
-              <Button onClick={this.showModal}>Add Components</Button>
+              <Button onClick={this.showModal}>
+                Add Components
+              </Button>
+              <Button onClick={this.save}>
+                Save Changes
+              </Button>
             </div>
             <AceEditor
               mode="json"
@@ -204,7 +191,7 @@ export default class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-            <Button onClick={this.setLayout}>Save changes</Button>
+          <Button onClick={this.setLayout}>Apply</Button>
           </div>
         </Rnd>
         <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">

@@ -4,6 +4,7 @@ import ws from './ws';
 import camera from './camera';
 import heartbeats from './heartbeats';
 import summaryData from './summaryData';
+import uif from './uif';
 
 export default combineReducers({
   auth,
@@ -11,4 +12,5 @@ export default combineReducers({
   camera,
   heartbeats,
   summaryData,
+  uif,
 });
