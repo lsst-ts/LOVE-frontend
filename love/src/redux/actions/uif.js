@@ -7,7 +7,7 @@ import {
   SAVING_EDITED_VIEW,
   SAVED_EDITED_VIEW,
 } from './actionTypes';
-import { getEditedView } from '../selectors/uif';
+import { getEditedView, getEditedViewData } from '../selectors/uif';
 import ManagerInterface from '../../Utils';
 
 /**
@@ -141,16 +141,32 @@ export function saveEditedView() {
   return async (dispatch, getState) => {
     const editedView = getEditedView(getState());
     dispatch(savingEditedView);
-    const url = `${ManagerInterface.getUifBaseUrl()}views`;
-    return fetch(url, {
-      method: 'POST',
-      headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify(editedView),
-    }).then((response) => {
-      return response.json().then((view) => {
-        dispatch(savedEditedView(view));
-        return Promise.resolve();
-      });
-    }).catch((e) => console.error(e));
+    const data = getEditedViewData(getState());
+    if (data !== undefined && data.id !== undefined) {
+      const url = `${ManagerInterface.getUifBaseUrl()}views/${data.id}`;
+      return fetch(url, {
+        method: 'PUT',
+        headers: ManagerInterface.getHeaders(),
+        body: JSON.stringify(editedView),
+      }).then((response) => {
+        return response.json().then((view) => {
+          dispatch(savedEditedView(view));
+          return Promise.resolve();
+        });
+      }).catch((e) => console.error(e));
+    }
+    else {
+      const url = `${ManagerInterface.getUifBaseUrl()}views`;
+      return fetch(url, {
+        method: 'POST',
+        headers: ManagerInterface.getHeaders(),
+        body: JSON.stringify(editedView),
+      }).then((response) => {
+        return response.json().then((view) => {
+          dispatch(savedEditedView(view));
+          return Promise.resolve();
+        });
+      }).catch((e) => console.error(e));
+    }
   };
 }
