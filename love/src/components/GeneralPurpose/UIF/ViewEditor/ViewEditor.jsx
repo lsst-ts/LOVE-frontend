@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
+import { toast } from 'react-toastify';
+
 import Button from '../../Button/Button';
 import Modal from '../../Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
+import { editViewStates } from '../../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -16,6 +19,8 @@ export default class ViewEditor extends Component {
   static propTypes = {
     /** Object representing the layout of the view being edited */
     editedView: PropTypes.object,
+    /** Status of the view being edited */
+    editedViewStatus: PropTypes.string,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
@@ -24,6 +29,7 @@ export default class ViewEditor extends Component {
 
   static defaultProps = {
     editedView: null,
+    editedViewData: null,
     updateEditedView: () => {},
   };
 
@@ -32,6 +38,20 @@ export default class ViewEditor extends Component {
     this.state = {
       layout: JSON.stringify(this.props.editedView, null, 2),
     };
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
+      if (this.props.editedViewStatus === editViewStates.SAVING) {
+        console.log('SAVING');
+      }
+      else if (this.props.editedViewStatus === editViewStates.SAVED) {
+        toast.success('View saved successfully')
+      }
+      else if (this.props.editedViewStatus === editViewStates.SAVE_ERROR) {
+        toast.error(`Error saving view: ${editViewStates.data}`);
+      }
+    }
   }
 
   onEditorChange = (newValue) => {

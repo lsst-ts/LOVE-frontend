@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getEditedView } from '../../../../redux/selectors';
+import { getEditedView, getEditedViewStatus } from '../../../../redux/selectors';
 import { updateEditedView, saveEditedView } from '../../../../redux/actions/uif';
 import ViewEditor from './ViewEditor';
 
@@ -14,7 +14,8 @@ const ViewEditorContainer = ({...props }) => {
 
 const mapStateToProps = (state) => {
   const editedView = getEditedView(state);
-  return { editedView };
+  const editedViewStatus = getEditedViewStatus(state);
+  return { editedView, editedViewStatus };
 };
 
 const mapDispatchToProps = (dispatch) => ({

@@ -61,8 +61,11 @@ export const savingEditedView = {
 /**
  * Action to mark the editView as failed saving
  */
-export const saveErrorEditedView = {
-  type: SAVE_ERROR,
+export const saveErrorEditedView = (response) => {
+  return {
+    type: SAVE_ERROR,
+    response: response,
+  }
 };
 
 /**
@@ -152,45 +155,32 @@ export function saveEditedView() {
     const data = getEditedViewData(getState());
     data.data = editedView;
     data.name = "blah";
+
+    let url = `${ManagerInterface.getUifBaseUrl()}views/`;
+    let method = 'POST';
+    let expectedCode = 201;
+
     if (data !== undefined && data.id !== undefined) {
-      const url = `${ManagerInterface.getUifBaseUrl()}views/${data.id}/`;
-      return fetch(url, {
-        method: 'PUT',
-        headers: ManagerInterface.getHeaders(),
-        body: JSON.stringify(data),
-      }).then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else {
-          dispatch(saveErrorEditedView);
-          return false;
-        }
-      }).then((response) => {
-        if (response) {
-          dispatch(savedEditedView(response));
-          return Promise.resolve();
-        }
-      }).catch((e) => console.error(e));
+      url = `${ManagerInterface.getUifBaseUrl()}views/${data.id}/`;
+      method = 'PUT';
+      expectedCode = 200;
     }
-    else {
-      const url = `${ManagerInterface.getUifBaseUrl()}views/`;
-      return fetch(url, {
-        method: 'POST',
-        headers: ManagerInterface.getHeaders(),
-        body: JSON.stringify(data),
-      }).then((response) => {
-        if (response.status === 201) {
-          return response.json();
-        } else {
-          dispatch(saveErrorEditedView);
-          return false;
-        }
-      }).then((response) => {
-        if (response) {
-          dispatch(savedEditedView(response));
+    return fetch(url, {
+      method: method,
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify(data),
+    }).then((response) => {
+      if (response.status === expectedCode) {
+        return response.json().then((view) => {
+          dispatch(savedEditedView(view));
           return Promise.resolve();
-        }
-      }).catch((e) => console.error(e));
-    }
+        });
+      } else {
+        return response.json().then((response) => {
+          dispatch(saveErrorEditedView(response));
+          return Promise.resolve();
+        });
+      }
+    }).catch((e) => console.error(e));
   };
 }
