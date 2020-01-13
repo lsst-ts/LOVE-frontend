@@ -5,6 +5,8 @@ import styles from './CustomView.module.css';
 import '../../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
 import Panel from '../Panel/Panel';
+import Button from '../Button/Button';
+import GearIcon from '../../icons/GearIcon/GearIcon';
 
 export default class CustomView extends Component {
   static propTypes = {
@@ -40,12 +42,18 @@ export default class CustomView extends Component {
     baseColWidth: PropTypes.number,
     /** Callback called when layout changes */
     onLayoutChange: PropTypes.func,
+    /** Whether the view is editable */
+    isEditable: PropTypes.bool,
+    /** Callback called when a component is deleted */
+    onComponentDelete: PropTypes.func,
   };
 
   static defaultProps = {
     layout: undefined,
     baseColWidth: 20,
     onLayoutChange: () => {},
+    isEditable: true,
+    onComponentDelete: () => {},
   };
 
   parseConfig = (config) => {
@@ -73,8 +81,20 @@ export default class CustomView extends Component {
     return (
       <div
         key={component.properties.i.toString()}
-        className={[styles.componentWrapper, component.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
+        className={[
+          styles.componentWrapper,
+          component.properties.allowOverflow ? '' : styles.noOverflow,
+          this.props.isEditable ? styles.editable : '',
+        ].join(' ')}
       >
+        <div className={styles.editableComponentActions}>
+          <Button onClick={this.showModal}>
+            <div className={styles.gearIconWrapper}>
+              <GearIcon active />
+            </div>
+          </Button>
+          <Button onClick={() => this.props.onComponentDelete(component)}>X</Button>
+        </div>
         {comp}
       </div>
     );
@@ -97,24 +117,25 @@ export default class CustomView extends Component {
     return (
       <div
         key={container.properties.i.toString()}
-        className={[styles.container, container.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
+        className={[
+          styles.container,
+          container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
+        ].join(' ')}
       >
-        <Panel title={`Component ${container.properties.i.toString()}`} className={styles.containerPanel}>
-          <GridLayout
-            layout={layout}
-            items={layout.length}
-            rowHeight={20}
-            onLayoutChange={this.props.onLayoutChange}
-            cols={container.properties.cols}
-            width={this.props.baseColWidth * container.properties.w}
-            margin={[0, 0]}
-            verticalCompact={false}
-            className={styles.gridLayout}
-            draggableCancel=".nonDraggable"
-          >
-            {elements}
-          </GridLayout>
-        </Panel>
+        <GridLayout
+          layout={layout}
+          items={layout.length}
+          rowHeight={20}
+          onLayoutChange={this.props.onLayoutChange}
+          cols={container.properties.cols}
+          width={this.props.baseColWidth * container.properties.w}
+          margin={[0, 0]}
+          verticalCompact={true}
+          className={styles.gridLayout}
+          draggableCancel=".nonDraggable"
+        >
+          {elements}
+        </GridLayout>
       </div>
     );
   };

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import CustomView from '../CustomView';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import Button from '../../Button/Button';
 import Modal from '../../Modal/Modal';
+import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
 
-
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
+
 export default class ViewEditor extends Component {
 
   static propTypes = {
@@ -88,38 +88,71 @@ export default class ViewEditor extends Component {
     this.setState({ showModal: false });
   };
 
-  showModal = e => {
+  showModal = (e) => {
     this.setState({ showModal: true });
   };
 
   receiveSelection = (selection) => {
     this.hideModal();
-    const currentLayout = {...this.props.editedView};
+    const parsedLayout = {...this.props.editedView};
     const additionalContent = {};
-    let i = Object.keys(currentLayout.content).length + 1;
-    for (const component of selection) {
-      additionalContent['newPanel-' +  i] = {
+    let startingIndex = 0;
+    Object.keys(parsedLayout.content).forEach((compKey) => {
+      startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
+    });
+    startingIndex += 1;
+
+    selection.forEach((componentDict) => {
+      const { schema } = componentDict;
+      const { defaultSize } = schema;
+      const componentConfig = schema.props;
+      const defaultConfig = {};
+      Object.keys(componentConfig).forEach((key) => {
+        defaultConfig[key] = componentConfig[key].default;
+      });
+      additionalContent[`newPanel-${startingIndex}`] = {
         properties: {
           type: 'component',
-          x: 60,
-          y: 40,
-          w: 13,
-          h: 2,
-          i: i,
+          x: 0,
+          y: 0,
+          w: defaultSize[0],
+          h: defaultSize[1],
+          allowOverflow: schema.allowOverflow,
+          i: startingIndex,
         },
-        content: component,
-        config: {
-          name: 'Test',
-          salindex: 1,
-          onCSCClick: () => {},
-          _functionProps: ["onCSCClick"]
-        }
+        content: componentDict.name,
+        config: defaultConfig,
       };
-      i = i + 1;
-    }
-    currentLayout.content = {...currentLayout.content, ...additionalContent};
-    this.props.updateEditedView(currentLayout);
-  }
+      startingIndex += 1;
+    });
+    parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
+    this.props.updateEditedView(parsedLayout);
+  };
+
+  onComponentDelete = (component) => {
+    // let parsedLayout = {};
+    let parsedLayout = {...this.props.editedView};
+    // try {
+    //   parsedLayout = JSON.parse(this.state.layout);
+    // } catch (error) {
+    //   parsedLayout = {};
+    // }
+    Object.keys(parsedLayout.content).forEach((compKey) => {
+      console.log(
+        'onComponentDelete',
+        parsedLayout.content[compKey].content,
+        component.content,
+        parsedLayout.content[compKey].content === component.content,
+      );
+      if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
+    });
+    this.props.updateEditedView(parsedLayout);
+    //
+    // this.setState({
+    //   parsedLayout,
+    // });
+    return [];
+  };
 
   save = () => {
     console.log('save');
@@ -130,7 +163,11 @@ export default class ViewEditor extends Component {
       <>
         <div className={styles.container}>
           <div>
-            <CustomView layout={this.props.editedView} onLayoutChange={this.onLayoutChange}></CustomView>
+            <CustomView
+              layout={this.props.editedView}
+              onLayoutChange={this.onLayoutChange}
+              onComponentDelete={this.onComponentDelete}
+            ></CustomView>
           </div>
         </div>
         <Rnd
@@ -169,12 +206,8 @@ export default class ViewEditor extends Component {
           <Button onClick={this.setLayout}>Apply</Button>
           </div>
         </Rnd>
-        <Modal
-          isOpen={this.state.showModal}
-          onRequestClose={this.hideModal}
-          contentLabel="Component selection modal"
-        >
-          <ComponentSelector selectCallback={this.receiveSelection}/>
+        <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">
+          <ComponentSelector selectCallback={this.receiveSelection} />
         </Modal>
       </>
     );

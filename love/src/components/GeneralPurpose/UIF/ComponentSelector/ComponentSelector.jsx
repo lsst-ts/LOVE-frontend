@@ -49,20 +49,22 @@ export default class ComponentSelector extends Component {
           <h2> Select Components to add to the view </h2>
 
           {indexes.map((index) => {
-            const category = index['name'];
-            const componentsMap = index['index'];
+            const category = index.name;
+            const componentsMap = index.index;
             return (
               <div key={category}>
                 <h3> {category} </h3>
                 <div className={styles.gallery}>
                   {Object.keys(componentsMap).map((component) => {
-                    const selected = this.state.selected.includes(component);
-                    const checkboxId = 'checkbox-' + component;
+                    const componentDict = componentsMap[component];
+                    componentDict.name = component;
+                    const selected = this.state.selected.includes(componentDict);
+                    const checkboxId = `checkbox-${component}`;
                     return (
                       <div
                         key={component}
                         className={[styles.card, selected ? styles.selected : null].join(' ')}
-                        onClick={() => this.addOrRemoveFromSelection(component)}
+                        onClick={() => this.addOrRemoveFromSelection(componentDict)}
                       >
                         <div className={styles.cardHeader}>
                           <h4> {component} </h4>
@@ -71,7 +73,7 @@ export default class ComponentSelector extends Component {
                             <label htmlFor={checkboxId} />
                           </div>
                         </div>
-                        <p> {componentsMap[component]['schema']['description']}</p>
+                        <p> {componentDict.schema.description}</p>
                       </div>
                     );
                   })}
@@ -82,11 +84,7 @@ export default class ComponentSelector extends Component {
         </div>
         <div className={styles.footer}>
           <span />
-          <Button
-            status="default"
-            disabled={buttonsDisabled}
-            onClick={this.clearSelection}
-          >
+          <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
             Clear Selection
           </Button>
           <Button
