@@ -50,17 +50,21 @@ export default class ViewEditor extends Component {
   };
 
   onLayoutChange = (newLayoutProperties) => {
-    let newLayout = this.props.editedView;
+    const oldLayoutStr = JSON.stringify(this.props.editedView, null, 2);
+    let newLayout = {...this.props.editedView};
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
       parsedProperties.allowOverflow = elementProperties.allowOverflow;
       newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
-    this.setState({
-      layout: JSON.stringify(newLayout, null, 2),
-    });
-    this.props.updateEditedView(newLayout);
+    const newLayoutStr = JSON.stringify(newLayout, null, 2);
+    if (newLayoutStr !== oldLayoutStr) {
+      this.setState({
+        layout: newLayoutStr,
+      });
+      this.props.updateEditedView(newLayout);
+    }
   };
 
   updateElementProperties = (element, properties) => {
@@ -130,27 +134,11 @@ export default class ViewEditor extends Component {
   };
 
   onComponentDelete = (component) => {
-    // let parsedLayout = {};
     let parsedLayout = {...this.props.editedView};
-    // try {
-    //   parsedLayout = JSON.parse(this.state.layout);
-    // } catch (error) {
-    //   parsedLayout = {};
-    // }
     Object.keys(parsedLayout.content).forEach((compKey) => {
-      console.log(
-        'onComponentDelete',
-        parsedLayout.content[compKey].content,
-        component.content,
-        parsedLayout.content[compKey].content === component.content,
-      );
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
     this.props.updateEditedView(parsedLayout);
-    //
-    // this.setState({
-    //   parsedLayout,
-    // });
     return [];
   };
 
