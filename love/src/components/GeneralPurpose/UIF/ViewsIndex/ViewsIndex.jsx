@@ -18,7 +18,15 @@ class ViewsIndex extends Component {
   }
 
   createNewView = () => {
-    this.props.history.push('/view-editor');
+    this.props.history.push('/uif/view-editor');
+  }
+
+  editView = (id) => {
+    this.props.history.push('/uif/view-editor?id=' + id);
+  }
+
+  openView = (id) => {
+    this.props.history.push('/uif/view?id=' + id);
   }
 
   render() {
@@ -32,10 +40,10 @@ class ViewsIndex extends Component {
             <li key={index} className={styles.linkListItem}>
               <span> {(index + 1) + '. '} </span>
               <span> {view.name} </span>
-              <Button>
+              <Button  onClick={() => this.openView(view.id)}>
                 Open
               </Button>
-              <Button>
+              <Button onClick={() => this.editView(view.id)}>
                 Edit
               </Button>
             </li>
