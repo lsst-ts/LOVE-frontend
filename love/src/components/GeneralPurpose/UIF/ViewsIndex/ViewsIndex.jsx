@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import Button from '../../Button/Button';
 
 import styles from './ViewsIndex.module.css';
 
 class ViewsIndex extends Component {
   static propTypes = {
+    /** React Router history object */
+    history: PropTypes.object,
     /** Current views to display */
     views: PropTypes.array,
   };
-
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
 
   createNewView = () => {
     this.props.history.push('/uif/view-editor');
@@ -30,7 +26,6 @@ class ViewsIndex extends Component {
   }
 
   render() {
-    console.log('views: ', this.props.views);
     return (
       <div className={styles.container}>
         <h1>UI Framework</h1>
