@@ -82,12 +82,22 @@ export default class ViewEditor extends Component {
       };
       return newElement;
     }
-    if (element.properties.type == 'container') {
+    if (element.properties.type === 'container') {
       Object.keys(element.content).map((key) => {
         newElement.content[key] = this.updateElementProperties(element.content[key], properties);
       });
     }
     return newElement;
+  };
+
+  updateElementConfig = (elementIndex, config) => {
+    const parsedLayout = { ...this.props.editedView };
+    Object.keys(parsedLayout.content).forEach((key) => {
+      const elem = parsedLayout.content[key];
+      if (elem.properties.i === elementIndex) elem.config = config;
+    });
+    this.props.updateEditedView(parsedLayout);
+    this.hideConfigModal();
   };
 
   hideSelectionModal = () => {
@@ -208,7 +218,11 @@ export default class ViewEditor extends Component {
             <Button onClick={this.setLayout}>Apply</Button>
           </div>
         </Rnd>
-        <Modal isOpen={this.state.showSelectionModal} onRequestClose={this.hideSelectionModal} contentLabel="Component selection modal">
+        <Modal
+          isOpen={this.state.showSelectionModal}
+          onRequestClose={this.hideSelectionModal}
+          contentLabel="Component selection modal"
+        >
           <ComponentSelector selectCallback={this.receiveSelection} />
         </Modal>
         <Modal
@@ -217,8 +231,15 @@ export default class ViewEditor extends Component {
           contentLabel="Component configuration modal"
         >
           <ConfigForm
+            componentIndex={
+              this.state.selectedComponent && this.state.selectedComponent.properties
+                ? this.state.selectedComponent.properties.i
+                : ''
+            }
             componentName={this.state.selectedComponent ? this.state.selectedComponent.content : ''}
             componentConfig={this.state.selectedComponent ? this.state.selectedComponent.config : {}}
+            onCancel={this.hideConfigModal}
+            onSaveConfig={this.updateElementConfig}
           />
         </Modal>
       </>
