@@ -2,11 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
+import { toast } from 'react-toastify';
+
 import Button from '../../Button/Button';
+import Input from '../../Input/Input';
 import Modal from '../../Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
+import { editViewStates } from '../../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -15,25 +19,73 @@ import ConfigForm from './ConfigForm';
 export default class ViewEditor extends Component {
   static propTypes = {
     /** Object representing the layout of the view being edited */
-    editedView: PropTypes.object,
+    editedViewCurrent: PropTypes.object,
+    /** Object representing the extra data of the view being edited */
+    editedViewSaved: PropTypes.object,
+    /** Status of the view being edited */
+    editedViewStatus: PropTypes.object,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
+    /** Function to save the edited view to the server (POST or PUT) */
+    saveEditedView: PropTypes.func,
   };
 
   static defaultProps = {
-    editedView: null,
+    editedViewCurrent: null,
+    editedViewSaved: null,
+    editedViewStatus: { code: editViewStates.EMPTY },
     updateEditedView: () => {},
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      layout: JSON.stringify(this.props.editedView, null, 2),
+      name: this.props.editedViewCurrent ? this.props.editedViewCurrent.name : '',
+      layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
     };
   }
 
-  onChange = (newValue) => {
+  componentDidUpdate(prevProps) {
+    if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
+      if (this.props.editedViewStatus.code === editViewStates.SAVING) {
+      } else if (this.props.editedViewStatus.code === editViewStates.SAVED) {
+        toast.success('View saved successfully');
+      } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
+        const errorStr = this.props.editedViewStatus.details
+          ? JSON.stringify(this.props.editedViewStatus.details)
+          : null;
+        toast.error(`Error saving view: ${errorStr}`);
+      }
+    }
+    if (prevProps.editedViewCurrent.name !== this.props.editedViewCurrent.name) {
+      this.setState({ name: this.props.editedViewCurrent.name });
+    }
+  }
+
+  getEditedViewLayout = () => {
+    return this.props.editedViewCurrent ? this.props.editedViewCurrent.data : {};
+  };
+
+  updateEditedViewLayout = (newLayout) => {
+    this.props.updateEditedView({
+      ...this.props.editedViewCurrent,
+      data: newLayout,
+    });
+  };
+
+  onNameInputChange = (event) => {
+    this.setState({ name: event.target.value });
+  };
+
+  onNameInputBlur = (_event) => {
+    this.props.updateEditedView({
+      ...this.props.editedViewCurrent,
+      name: this.state.name,
+    });
+  };
+
+  onEditorChange = (newValue) => {
     this.setState({
       layout: newValue,
       showSelectionModal: false,
@@ -41,19 +93,19 @@ export default class ViewEditor extends Component {
     });
   };
 
-  setLayout = () => {
+  applyEditorLayout = () => {
     let parsedLayout = {};
     try {
       parsedLayout = JSON.parse(this.state.layout);
     } catch (error) {
       parsedLayout = {};
     }
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
   };
 
   onLayoutChange = (newLayoutProperties) => {
-    const oldLayoutStr = JSON.stringify(this.props.editedView, null, 2);
-    let newLayout = { ...this.props.editedView };
+    const oldLayoutStr = JSON.stringify(this.getEditedViewLayout(), null, 2);
+    let newLayout = { ...this.getEditedViewLayout() };
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
@@ -61,11 +113,11 @@ export default class ViewEditor extends Component {
       newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
     const newLayoutStr = JSON.stringify(newLayout, null, 2);
+    this.setState({
+      layout: newLayoutStr,
+    });
     if (newLayoutStr !== oldLayoutStr) {
-      this.setState({
-        layout: newLayoutStr,
-      });
-      this.props.updateEditedView(newLayout);
+      this.updateEditedViewLayout(newLayout);
     }
   };
 
@@ -91,12 +143,12 @@ export default class ViewEditor extends Component {
   };
 
   updateElementConfig = (elementIndex, config) => {
-    const parsedLayout = { ...this.props.editedView };
+    const parsedLayout = { ...this.getEditedViewLayout() };
     Object.keys(parsedLayout.content).forEach((key) => {
       const elem = parsedLayout.content[key];
       if (elem.properties.i === elementIndex) elem.config = config;
     });
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
     this.hideConfigModal();
   };
 
@@ -118,12 +170,14 @@ export default class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideSelectionModal();
-    const parsedLayout = { ...this.props.editedView };
+    const parsedLayout = { ...this.getEditedViewLayout() };
     const additionalContent = {};
     let startingIndex = 0;
-    Object.keys(parsedLayout.content).forEach((compKey) => {
-      startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
-    });
+    if (parsedLayout) {
+      Object.keys(parsedLayout.content).forEach((compKey) => {
+        startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
+      });
+    }
     startingIndex += 1;
 
     selection.forEach((componentDict) => {
@@ -150,15 +204,15 @@ export default class ViewEditor extends Component {
       startingIndex += 1;
     });
     parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = { ...this.props.editedView };
+    const parsedLayout = { ...this.getEditedViewLayout() };
     Object.keys(parsedLayout.content).forEach((compKey) => {
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
     return [];
   };
 
@@ -170,7 +224,7 @@ export default class ViewEditor extends Component {
   };
 
   save = () => {
-    console.log('save');
+    this.props.saveEditedView();
   };
 
   render() {
@@ -179,7 +233,7 @@ export default class ViewEditor extends Component {
         <div className={styles.container}>
           <div>
             <CustomView
-              layout={this.props.editedView}
+              layout={this.getEditedViewLayout()}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
@@ -201,7 +255,13 @@ export default class ViewEditor extends Component {
         >
           <div>
             <div className={styles.bar}>
-              View editor
+              View:
+              <Input
+                className={styles.textField}
+                value={this.state.name}
+                onChange={this.onNameInputChange}
+                onBlur={this.onNameInputBlur}
+              />
               <Button onClick={this.showSelectionModal}>Add Components</Button>
               <Button onClick={this.save}>Save Changes</Button>
             </div>
@@ -209,13 +269,13 @@ export default class ViewEditor extends Component {
               mode="json"
               theme="solarized_dark"
               name="UNIQUE_ID_OF_DIV"
-              onChange={this.onChange}
+              onChange={this.onEditorChange}
               width={'100%'}
               value={this.state.layout}
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-            <Button onClick={this.setLayout}>Apply</Button>
+            <Button onClick={this.applyEditorLayout}>Apply</Button>
           </div>
         </Rnd>
         <Modal
@@ -234,7 +294,7 @@ export default class ViewEditor extends Component {
             componentIndex={
               this.state.selectedComponent && this.state.selectedComponent.properties
                 ? this.state.selectedComponent.properties.i
-                : ''
+                : 1
             }
             componentName={this.state.selectedComponent ? this.state.selectedComponent.content : ''}
             componentConfig={this.state.selectedComponent ? this.state.selectedComponent.config : {}}
