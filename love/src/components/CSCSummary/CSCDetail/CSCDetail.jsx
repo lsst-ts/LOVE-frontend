@@ -9,7 +9,7 @@ export default class CSCDetail extends Component {
     name: PropTypes.string,
     group: PropTypes.string,
     realm: PropTypes.string,
-    salindex: PropTypes.number,
+    salindex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
     heartbeatData: PropTypes.object,
