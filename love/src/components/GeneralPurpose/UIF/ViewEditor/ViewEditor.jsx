@@ -18,9 +18,9 @@ import 'brace/theme/solarized_dark';
 export default class ViewEditor extends Component {
   static propTypes = {
     /** Object representing the layout of the view being edited */
-    editedView: PropTypes.object,
+    editedViewCurrent: PropTypes.object,
     /** Object representing the extra data of the view being edited */
-    editedViewData: PropTypes.object,
+    editedViewSaved: PropTypes.object,
     /** Status of the view being edited */
     editedViewStatus: PropTypes.object,
     /** Function to update the edited view */
@@ -30,8 +30,8 @@ export default class ViewEditor extends Component {
   };
 
   static defaultProps = {
-    editedView: null,
-    editedViewData: null,
+    editedViewCurrent: null,
+    editedViewSaved: null,
     editedViewStatus: {code: editViewStates.EMPTY},
     updateEditedView: () => {},
   };
@@ -39,7 +39,7 @@ export default class ViewEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      layout: JSON.stringify(this.props.editedView, null, 2),
+      layout: JSON.stringify(this.props.editedViewCurrent, null, 2),
     };
   }
 
@@ -74,8 +74,8 @@ export default class ViewEditor extends Component {
   };
 
   onLayoutChange = (newLayoutProperties) => {
-    const oldLayoutStr = JSON.stringify(this.props.editedView, null, 2);
-    let newLayout = { ...this.props.editedView };
+    const oldLayoutStr = JSON.stringify(this.props.editedViewCurrent, null, 2);
+    let newLayout = { ...this.props.editedViewCurrent };
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
@@ -122,7 +122,7 @@ export default class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideModal();
-    const parsedLayout = { ...this.props.editedView };
+    const parsedLayout = { ...this.props.editedViewCurrent };
     const additionalContent = {};
     let startingIndex = 0;
     Object.keys(parsedLayout.content).forEach((compKey) => {
@@ -158,7 +158,7 @@ export default class ViewEditor extends Component {
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = { ...this.props.editedView };
+    let parsedLayout = { ...this.props.editedViewCurrent };
     Object.keys(parsedLayout.content).forEach((compKey) => {
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
@@ -176,7 +176,7 @@ export default class ViewEditor extends Component {
         <div className={styles.container}>
           <div>
             <CustomView
-              layout={this.props.editedView}
+              layout={this.props.editedViewCurrent}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
             ></CustomView>
@@ -201,8 +201,8 @@ export default class ViewEditor extends Component {
               <Input
                 className={styles.textField}
                 defaultValue={
-                  this.props.editedViewData && this.props.editedViewData.name
-                    ? this.props.editedViewData.name
+                  this.props.editedViewSaved && this.props.editedViewSaved.name
+                    ? this.props.editedViewSaved.name
                     : 'Untitled view'
                 }
               />

@@ -20,24 +20,27 @@ export const editViewStates = {
 const initialState = {
   currentView: null,
   currentWorkspace: null,
-  editedView: {
-    properties: {
-      type: 'container',
-      x: 0,
-      y: 0,
-      w: 100,
-      h: 2,
-      i: 0,
-      allowOverflow: true,
-      cols: 100
+  editedViewCurrent: {
+    name: 'Untitled view',
+    data: {
+      properties: {
+        type: 'container',
+        x: 0,
+        y: 0,
+        w: 100,
+        h: 2,
+        i: 0,
+        allowOverflow: true,
+        cols: 100
+      },
+      content: {},
     },
-    content: {},
   },
   editedViewStatus: {
     code: editViewStates.EMPTY,
     details: null,
   },
-  editedViewData: {},
+  editedViewSaved: {},
   views: [],
   workspaces: [],
 };
@@ -74,7 +77,7 @@ export default function(state = initialState, action) {
     case UPDATE_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedView: action.view,
+          editedViewCurrent: action.view,
           editedViewStatus: {
             code: editViewStates.UNSAVED,
             details: null,
@@ -106,7 +109,7 @@ export default function(state = initialState, action) {
             code: editViewStates.SAVED,
             details: null,
           },
-          editedViewData: action.view,
+          editedViewSaved: action.view,
         });
       }
     default:
