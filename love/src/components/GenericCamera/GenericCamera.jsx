@@ -60,7 +60,7 @@ const draw = (array, canvas) => {
   ctx.putImageData(id, 0, 0);
 };
 
-const readFrameFromStream = (reader, name) => {
+const readNextBlobFromStream = (reader, name) => {
   let streamHasStart = false;
   let streamHasEnd = false;
 
@@ -89,6 +89,7 @@ const readFrameFromStream = (reader, name) => {
 
           // If chunk includes END close the stream
           if (streamHasEnd) {
+            console.log(name, 'closing')
             controller.close();
             return;
           }
@@ -96,12 +97,29 @@ const readFrameFromStream = (reader, name) => {
         });
       }
     },
-  })
+  });
 
-
-  return new Response(stream).blob()
+  return new Response(stream).blob();
 };
 
+const readImageDataFromBlob = (blob, name) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+
+    console.log(name, 'will read file');
+
+    fileReader.onloadend = (event) => {
+      const arrayBuffer = event.target.result;
+      
+      console.log(name, 'getting header');
+      const headerInfo = getHeaderInfo(arrayBuffer);
+      console.log(name, 'got header');
+      resolve(headerInfo);
+    };
+
+    fileReader.readAsArrayBuffer(blob);
+  });
+};
 /**
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
  */
@@ -109,27 +127,14 @@ const readFrameFromStream = (reader, name) => {
 const fetchImageFromStream = (name) => {
   console.log(name, 'starting to fetch');
   return fetch('http://localhost/gencam')
-    .then((r) => {
+    .then(async (r) => {
       const reader = r.body.getReader();
-      return readFrameFromStream(reader, name);
+
+      const blob = await readNextBlobFromStream(reader, name);
+
+      return blob;
     })
-    .then((blob) => {
-      return new Promise((resolve, reject) => {
-        const fileReader = new FileReader();
-
-        console.log(name, 'will read file');
-
-        fileReader.onloadend = (event) => {
-          const arrayBuffer = event.target.result;
-          console.log(name, 'getting header');
-          const headerInfo = getHeaderInfo(arrayBuffer);
-          console.log(name, 'got header');
-          resolve(headerInfo);
-        };
-
-        fileReader.readAsArrayBuffer(blob);
-      });
-    });
+    .then((blob) => readImageDataFromBlob(blob, name));
 };
 export default function() {
   let counter = 0;
@@ -143,7 +148,6 @@ export default function() {
     // requestAnimationFrame(animate);
   };
   useEffect(() => {
-
     animate();
   }, []);
   return <canvas id="canvas" width="1024" height="1024"></canvas>;
