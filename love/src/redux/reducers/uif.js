@@ -33,7 +33,10 @@ const initialState = {
     },
     content: {},
   },
-  editedViewStatus: editViewStates.EMPTY,
+  editedViewStatus: {
+    code: editViewStates.EMPTY,
+    details: null,
+  },
   editedViewData: {},
   views: [],
   workspaces: [],
@@ -72,26 +75,37 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           editedView: action.view,
-          editedViewStatus: editViewStates.UNSAVED,
+          editedViewStatus: {
+            code: editViewStates.UNSAVED,
+            details: null,
+          },
         });
       }
     case SAVING_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewStatus: editViewStates.SAVING,
+          editedViewStatus: {
+            code: editViewStates.SAVING,
+            details: null,
+          },
         });
       }
     case SAVE_ERROR:
       {
         return Object.assign({}, state, {
-          editedViewStatus: editViewStates.SAVE_ERROR,
-          editedViewData: {...state.editedViewData, error: action.response},
+          editedViewStatus: {
+            code: editViewStates.SAVE_ERROR,
+            details: action.response,
+          },
         });
       }
     case SAVED_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewStatus: editViewStates.SAVED,
+          editedViewStatus: {
+            code: editViewStates.SAVED,
+            details: null,
+          },
           editedViewData: action.view,
         });
       }
