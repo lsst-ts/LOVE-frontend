@@ -31,7 +31,7 @@ class ViewEditor extends Component {
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
     /** Function to load one of the views to the edited view */
-    loadEditedView: PropTypes.func,
+    loadViewToEdit: PropTypes.func,
     /** Function to clear the edited view */
     clearEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
@@ -39,11 +39,11 @@ class ViewEditor extends Component {
   };
 
   static defaultProps = {
-    editedViewCurrent: null,
-    editedViewSaved: null,
+    editedViewCurrent: {},
+    editedViewSaved: {},
     editedViewStatus: { code: editViewStates.EMPTY },
     updateEditedView: () => {},
-    loadEditedView: () => {},
+    loadViewToEdit: () => {},
     clearEditedView: () => {},
     saveEditedView: () => {},
   };
@@ -58,13 +58,21 @@ class ViewEditor extends Component {
   }
 
   componentDidMount() {
-    console.log('history: ', this.props.history);
+    const id = new URLSearchParams(this.props.location.search).get('id');
+    if (id === null) this.props.clearEditedView();
+    else {
+      this.props.loadViewToEdit(parseInt(id, 10));
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
       if (this.props.editedViewStatus.code === editViewStates.SAVING) {
-      } else if (this.props.editedViewStatus.code === editViewStates.SAVED) {
+        console.log('Saving');
+      } else if (
+        (prevProps.editedViewStatus.code === editViewStates.SAVING) &
+        (this.props.editedViewStatus.code === editViewStates.SAVED)
+      ) {
         toast.success('View saved successfully');
       } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
         const errorStr = this.props.editedViewStatus.details
