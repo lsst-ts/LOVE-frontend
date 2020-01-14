@@ -39,7 +39,7 @@ export default class ViewEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      layout: JSON.stringify(this.props.editedViewCurrent, null, 2),
+      layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
     };
   }
 
@@ -56,6 +56,17 @@ export default class ViewEditor extends Component {
     }
   }
 
+  getEditedViewLayout = () => {
+    return this.props.editedViewCurrent ? this.props.editedViewCurrent.data : {};
+  }
+
+  updateEditedViewLayout = (newLayout) => {
+    this.props.updateEditedView({
+      ...this.props.editedViewCurrent,
+      data: newLayout,
+    });
+  }
+
   onEditorChange = (newValue) => {
     this.setState({
       layout: newValue,
@@ -70,12 +81,12 @@ export default class ViewEditor extends Component {
     } catch (error) {
       parsedLayout = {};
     }
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
   };
 
   onLayoutChange = (newLayoutProperties) => {
-    const oldLayoutStr = JSON.stringify(this.props.editedViewCurrent, null, 2);
-    let newLayout = { ...this.props.editedViewCurrent };
+    const oldLayoutStr = JSON.stringify(this.getEditedViewLayout(), null, 2);
+    let newLayout = { ...this.getEditedViewLayout() };
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
@@ -87,7 +98,7 @@ export default class ViewEditor extends Component {
       layout: newLayoutStr,
     });
     if (newLayoutStr !== oldLayoutStr) {
-      this.props.updateEditedView(newLayout);
+      this.updateEditedViewLayout(newLayout);
     }
   };
 
@@ -122,7 +133,7 @@ export default class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideModal();
-    const parsedLayout = { ...this.props.editedViewCurrent };
+    const parsedLayout = { ...this.getEditedViewLayout() };
     const additionalContent = {};
     let startingIndex = 0;
     Object.keys(parsedLayout.content).forEach((compKey) => {
@@ -154,15 +165,15 @@ export default class ViewEditor extends Component {
       startingIndex += 1;
     });
     parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = { ...this.props.editedViewCurrent };
+    let parsedLayout = { ...this.getEditedViewLayout() };
     Object.keys(parsedLayout.content).forEach((compKey) => {
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
-    this.props.updateEditedView(parsedLayout);
+    this.updateEditedViewLayout(parsedLayout);
     return [];
   };
 
@@ -176,7 +187,7 @@ export default class ViewEditor extends Component {
         <div className={styles.container}>
           <div>
             <CustomView
-              layout={this.props.editedViewCurrent}
+              layout={this.getEditedViewLayout()}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
             ></CustomView>
