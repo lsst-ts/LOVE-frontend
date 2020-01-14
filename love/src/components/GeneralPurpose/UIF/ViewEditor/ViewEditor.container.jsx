@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getEditedViewCurrent, getEditedViewStatus, getEditedViewSaved } from '../../../../redux/selectors';
-import { updateEditedView, saveEditedView } from '../../../../redux/actions/uif';
+import { updateEditedView, saveEditedView, clearViewToEdit, loadViewToEdit } from '../../../../redux/actions/uif';
 import ViewEditor from './ViewEditor';
 
 const ViewEditorContainer = ({...props }) => {
@@ -21,6 +21,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   updateEditedView: (view) => dispatch(updateEditedView(view)),
+  loadViewToEdit: (view) => dispatch(loadViewToEdit(view)),
+  clearViewToEdit: (view) => dispatch(clearViewToEdit(view)),
   saveEditedView: (view) => dispatch(saveEditedView(view)),
 });
 
