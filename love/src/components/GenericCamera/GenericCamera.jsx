@@ -2,16 +2,34 @@ import React, { useEffect } from 'react';
 const decoder = new TextDecoder('utf-8');
 const encoder = new TextEncoder('utf-8');
 
-
 const bufferIncludesString = (buffer, string) => {
   return decoder.decode(buffer).includes(string);
 };
 
+const bufferIndexOfString = (buffer, string) => {
+  return decoder.decode(buffer).indexOf(string);
+};
+
 const getHeaderInfo = (arrayBuffer) => {
-  let headerCandidate = new Uint8Array(arrayBuffer.slice(0, 50));
-  const footerCandidate = new Uint8Array(arrayBuffer.slice(arrayBuffer.byteLength - 100, arrayBuffer.byteLength - 1));
-  const decoded = decoder.decode(headerCandidate);
-  console.log('decoded',decoded)
+  console.log(arrayBuffer);
+
+  // find the [START] in the string-decoded array
+  const START_STRING = '[START]\r\n';
+  const decodedArray = decoder.decode(arrayBuffer);
+  const startIndex = decodedArray.indexOf(START_STRING);
+  const reEncodedFromStart = encoder.encode(decodedArray.slice(startIndex, startIndex + decodedArray.length - 1));
+  const headerCandidate = decodedArray.slice(startIndex, startIndex + 50);
+
+  console.log('startIndex', startIndex);
+
+  // const headerStartPosition = startIndex;
+  // // Get chunk header string
+  // // const headerStartPosition = decodedArray.indexOf('[START]\r\n') + '[START]\r\n'.length ;
+  // let headerCandidate = new Uint8Array(arrayBuffer.slice(headerStartPosition, headerStartPosition + 50));
+  const decoded = headerCandidate;
+  console.log('decoded\n', decoded);
+
+  // extract header data
   const split = decoded.split('\r\n');
   const START = split[0];
   const widthString = split[1];
@@ -21,11 +39,13 @@ const getHeaderInfo = (arrayBuffer) => {
   const matrixStartPosition = decoded.search(`${lengthString}\r\n`) + `${lengthString}\r\n`.length;
   const headerString = decoded.slice(0, matrixStartPosition);
 
+
   const headerByteLength = encoder.encode(headerString).length;
-  const ENDLabelPosition = decoder.decode(arrayBuffer).indexOf('[END]\r\n');
+  // const body = arrayBuffer.slice(headerByteLength, headerByteLength + 1024 * 1024);
+  const body = encoder.encode(decodedArray.slice(headerString.length)).slice(0, 1024 * 1024);
+  console.log(body);
 
-  const body = arrayBuffer.slice(headerByteLength, headerByteLength + 1024 * 1024);
-
+  // const ENDLabelPosition = decoder.decode(arrayBuffer).indexOf('[END]\r\n');
   // const { headerByteLength, length, body } = headerInfo;
 
   // const newHeader = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength)));
@@ -43,8 +63,6 @@ const getHeaderInfo = (arrayBuffer) => {
   };
 };
 
-
-
 const draw = (array, canvas) => {
   var ctx = canvas.getContext('2d');
   var canvasWidth = canvas.width;
@@ -54,7 +72,6 @@ const draw = (array, canvas) => {
   var pixels = id.data;
 
   array.forEach((val, index) => {
-    // if (index % 50 === 0) console.log(index,val);
     pixels[index * 4] = val;
     pixels[index * 4 + 1] = val;
     pixels[index * 4 + 2] = val;
@@ -65,39 +82,36 @@ const draw = (array, canvas) => {
 };
 
 const readNextBlobFromStream = (reader, name) => {
-  let streamHasStart = false;
-  let streamHasEnd = false;
 
   const stream = new ReadableStream({
     start(controller) {
+      let fullDecodedBuffer = '';
+      let gotStart = false;
       return pump();
       function pump() {
         return reader.read().then(({ done, value }) => {
           // save new label found in this chunk
-          console.log(name, 'reading');
-          if (bufferIncludesString(value, '[START]')) {
-            streamHasStart = true;
-            console.log(name, 'streamHasStart');
-          }
-          if (bufferIncludesString(value, '[END]')) {
-            streamHasEnd = true;
-            console.log(name, 'streamHasEnd');
-          }
+          // console.log(name, 'new chunk');
 
-          // Wait for a chunk with START before enqueueing
-          if (!streamHasStart) {
+          const decodedBuffer = decoder.decode(value);
+          fullDecodedBuffer = fullDecodedBuffer + decodedBuffer;
+
+          const startIndex = fullDecodedBuffer.indexOf('[START]\r\n');
+          if (startIndex === -1) {
+            controller.enqueue(value);
             return pump();
           }
-          console.log(name, 'enqueing');
-          controller.enqueue(value);
 
-          // If chunk includes END close the stream
-          if (streamHasEnd) {
-            console.log(name, 'closing');
-            controller.close();
-            return;
+          const endIndex = fullDecodedBuffer.slice(startIndex).indexOf('[END]\r\n');
+          console.log('\nendIndex', endIndex);
+          if (endIndex === -1) {
+            controller.enqueue(value);
+            return pump();
           }
-          return pump();
+          console.log('closing');
+
+          controller.enqueue(value);
+          controller.close();
         });
       }
     },
@@ -110,14 +124,15 @@ const readImageDataFromBlob = (blob, name) => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
 
-    console.log(name, 'will read file');
+    // console.log(name, 'will read file');
 
     fileReader.onloadend = (event) => {
       const arrayBuffer = event.target.result;
 
-      console.log(name, 'getting header');
+      // console.log(name, 'getting header');
       const headerInfo = getHeaderInfo(arrayBuffer);
-      console.log(name, 'got header');
+      // console.log(name, 'got header');
+      console.log(headerInfo);
       resolve(headerInfo);
     };
 
@@ -129,21 +144,21 @@ const readImageDataFromBlob = (blob, name) => {
  */
 
 const fetchImageFromStream = (callback) => {
-  console.log( 'starting to fetch');
+  // console.log( 'starting to fetch');
   return fetch('http://localhost/gencam').then(async (r) => {
     const reader = r.body.getReader();
-    let count = 0 ;
+    let count = 0;
 
-    const animate = async () =>{
-      if(count>2) return;
-      count ++;
+    const animate = async () => {
+      if (count > 5) return;
+      count++;
 
       const blob = await readNextBlobFromStream(reader, count);
 
       const imageDataFromBlob = await readImageDataFromBlob(blob, count);
       callback(imageDataFromBlob);
-      requestAnimationFrame(animate)
-    }
+      requestAnimationFrame(animate);
+    };
     animate();
   });
 };
@@ -151,7 +166,7 @@ export default function() {
   useEffect(() => {
     const canvas = document.getElementById('canvas');
 
-    fetchImageFromStream( (image) => {
+    fetchImageFromStream((image) => {
       draw(new Uint8Array(image.body), canvas);
     });
   }, []);
