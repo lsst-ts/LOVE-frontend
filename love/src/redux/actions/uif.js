@@ -4,6 +4,7 @@ import {
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  LOAD_EDITED_VIEW,
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
@@ -48,6 +49,17 @@ export const updateEditedView = (view) => {
   return {
     type: UPDATE_EDITED_VIEW,
     view,
+  };
+};
+
+/**
+ * Action to update the view under edition
+ */
+export const loadViewToEdit = (id) => {
+  // const view = getViews(id);
+  return {
+    type: LOAD_EDITED_VIEW,
+    id,
   };
 };
 
