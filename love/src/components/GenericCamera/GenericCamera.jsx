@@ -20,6 +20,11 @@ const getHeaderInfo = (arrayBuffer) => {
 
   const body = arrayBuffer.slice(headerByteLength, headerByteLength + 1024 * 1024);
 
+  // const { headerByteLength, length, body } = headerInfo;
+
+  // const newHeader = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength)));
+  // const newHeaderPlusONe = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength + 1)));
+
   return {
     headerByteLength,
     _decoded: decoded,
@@ -42,7 +47,6 @@ const draw = (array, canvas) => {
   var canvasHeight = canvas.height;
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   var id = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  console.log(id);
   var pixels = id.data;
 
   array.forEach((val, index) => {
@@ -61,13 +65,11 @@ const draw = (array, canvas) => {
  */
 export default function() {
   useEffect(() => {
-    console.log('did mount');
     fetch('http://localhost/gencam')
       .then((r) => {
-        return r.body;
-      })
-      .then((r) => {
-        const reader = r.getReader();
+        const reader = r.body.getReader();
+        let streamHasStart = false;
+        let streamHasEnd = false;
         let count = 0;
         return new ReadableStream({
           start(controller) {
@@ -75,27 +77,37 @@ export default function() {
             function pump() {
               return reader.read().then(({ done, value }) => {
                 count = count + 1;
-                // console.log('\nSTART?:', bufferIncludesString(value, 'START'))
-                // console.log('END?', bufferIncludesString(value, 'END'))
-                // When no more data needs to be consumed, close the stream
-                if (count > 3) {
-                  controller.enqueue(value);
+                console.log(streamHasStart,'\nSTART?:', bufferIncludesString(value, 'START'));
+                console.log(streamHasEnd, 'END?:', bufferIncludesString(value, 'END'));
+                console.log(value)
+                if (bufferIncludesString(value, 'START')) {
+                  streamHasStart = true;
+                  console.log('has start');
+                }
+                if (bufferIncludesString(value, 'END')) {
+                  streamHasEnd = true;
+                  console.log('has end');
+                }
+
+                /** Wait for a chunk with START before enqueueing */
+                if (!streamHasStart) {
+                  console.log('no start yet')
+                  return;
+                }
+                controller.enqueue(value);
+
+                /** If chunk includes END close the stream  */
+                if (streamHasEnd) {
                   controller.close();
                   return;
                 }
-                // Enqueue the next data chunk into our target stream
-                controller.enqueue(value);
                 return pump();
               });
             }
           },
         });
-        console.log(r.getReader());
       })
-      .then((stream) => {
-        console.log('got stream');
-        return new Response(stream);
-      })
+      .then((stream) => new Response(stream))
       .then((response) => response.blob())
       .then((blob) => {
         return new Promise((resolve, reject) => {
@@ -103,13 +115,7 @@ export default function() {
 
           fileReader.onloadend = (event) => {
             const arrayBuffer = event.target.result;
-            console.log(arrayBuffer);
             const headerInfo = getHeaderInfo(arrayBuffer);
-            const { headerByteLength, length, body } = headerInfo;
-
-            const newHeader = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength)));
-            const newHeaderPlusONe = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength + 1)));
-            console.log(newHeaderPlusONe);
             resolve(headerInfo);
           };
 
@@ -117,7 +123,7 @@ export default function() {
         });
       })
       .then((r) => {
-        console.log(r);
+        console.log('r',r);
         const canvas = document.getElementById('canvas');
         draw(new Uint8Array(r.body), canvas);
       })
