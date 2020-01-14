@@ -4,6 +4,7 @@ import {
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  CLEAR_EDITED_VIEW,
   LOAD_EDITED_VIEW,
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
@@ -18,7 +19,7 @@ export const editViewStates = {
   SAVE_ERROR: 'SAVE_ERROR',
 };
 
-const initialState = {
+export const initialState = {
   currentView: null,
   currentWorkspace: null,
   editedViewCurrent: {
@@ -95,6 +96,14 @@ export default function(state = initialState, action) {
             code: editViewStates.SAVED,
             details: null,
           },
+        });
+      }
+    case CLEAR_EDITED_VIEW:
+      {
+        return Object.assign({}, state, {
+          editedViewCurrent: initialState.editedViewCurrent,
+          editedViewSaved: initialState.editedViewSaved,
+          editedViewStatus: initialState.editedViewStatus,
         });
       }
     case SAVING_EDITED_VIEW:
