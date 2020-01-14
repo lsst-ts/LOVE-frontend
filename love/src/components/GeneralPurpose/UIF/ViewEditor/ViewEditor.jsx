@@ -30,6 +30,10 @@ class ViewEditor extends Component {
     editedViewStatus: PropTypes.object,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
+    /** Function to load one of the views to the edited view */
+    loadEditedView: PropTypes.func,
+    /** Function to clear the edited view */
+    clearEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
   };
@@ -39,6 +43,9 @@ class ViewEditor extends Component {
     editedViewSaved: null,
     editedViewStatus: { code: editViewStates.EMPTY },
     updateEditedView: () => {},
+    loadEditedView: () => {},
+    clearEditedView: () => {},
+    saveEditedView: () => {},
   };
 
   constructor(props) {
