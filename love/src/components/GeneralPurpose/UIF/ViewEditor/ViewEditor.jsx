@@ -39,6 +39,7 @@ export default class ViewEditor extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: this.props.editedViewCurrent ? this.props.editedViewCurrent.name : '',
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
     };
   }
@@ -46,13 +47,15 @@ export default class ViewEditor extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
       if (this.props.editedViewStatus.code === editViewStates.SAVING) {
-        console.log('SAVING');
       } else if (this.props.editedViewStatus.code === editViewStates.SAVED) {
         toast.success('View saved successfully');
       } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
         const errorStr = this.props.editedViewStatus.details ? JSON.stringify(this.props.editedViewStatus.details) : null;
         toast.error(`Error saving view: ${errorStr}`);
       }
+    }
+    if (prevProps.editedViewCurrent.name !== this.props.editedViewCurrent.name) {
+      this.setState({ name: this.props.editedViewCurrent.name});
     }
   }
 
@@ -64,6 +67,17 @@ export default class ViewEditor extends Component {
     this.props.updateEditedView({
       ...this.props.editedViewCurrent,
       data: newLayout,
+    });
+  }
+
+  onNameInputChange = (event) => {
+    this.setState({ name: event.target.value });
+  }
+
+  onNameInputBlur = (_event) => {
+    this.props.updateEditedView({
+      ...this.props.editedViewCurrent,
+      name: this.state.name,
     });
   }
 
@@ -211,11 +225,9 @@ export default class ViewEditor extends Component {
               View:
               <Input
                 className={styles.textField}
-                defaultValue={
-                  this.props.editedViewSaved && this.props.editedViewSaved.name
-                    ? this.props.editedViewSaved.name
-                    : 'Untitled view'
-                }
+                value={this.state.name}
+                onChange={this.onNameInputChange}
+                onBlur={this.onNameInputBlur}
               />
               <Button onClick={this.showModal}>Add Components</Button>
               <Button onClick={this.save}>Save Changes</Button>
