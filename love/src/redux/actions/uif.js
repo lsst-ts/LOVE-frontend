@@ -150,25 +150,23 @@ export function requestWorkspace(id) {
  */
 export function saveEditedView() {
   return async (dispatch, getState) => {
-    const editedView = getEditedViewCurrent(getState());
+    const current = getEditedViewCurrent(getState());
     dispatch(savingEditedView);
-    const data = getEditedViewSaved(getState());
-    data.data = editedView;
-    data.name = "blah";
-
+    const saved = getEditedViewSaved(getState());
     let url = `${ManagerInterface.getUifBaseUrl()}views/`;
     let method = 'POST';
     let expectedCode = 201;
+    let dataToSend = {...saved, name: current.name, data: current.data};
 
-    if (data !== undefined && data.id !== undefined) {
-      url = `${ManagerInterface.getUifBaseUrl()}views/${data.id}/`;
+    if (saved !== undefined && saved.id !== undefined) {
+      url = `${ManagerInterface.getUifBaseUrl()}views/${saved.id}/`;
       method = 'PUT';
       expectedCode = 200;
     }
     return fetch(url, {
       method: method,
       headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(dataToSend),
     }).then((response) => {
       if (response.status === expectedCode) {
         return response.json().then((view) => {
