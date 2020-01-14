@@ -2,10 +2,16 @@ import React, { useEffect } from 'react';
 const decoder = new TextDecoder('utf-8');
 const encoder = new TextEncoder('utf-8');
 
+
+const bufferIncludesString = (buffer, string) => {
+  return decoder.decode(buffer).includes(string);
+};
+
 const getHeaderInfo = (arrayBuffer) => {
   let headerCandidate = new Uint8Array(arrayBuffer.slice(0, 50));
   const footerCandidate = new Uint8Array(arrayBuffer.slice(arrayBuffer.byteLength - 100, arrayBuffer.byteLength - 1));
   const decoded = decoder.decode(headerCandidate);
+  console.log('decoded',decoded)
   const split = decoded.split('\r\n');
   const START = split[0];
   const widthString = split[1];
@@ -37,9 +43,7 @@ const getHeaderInfo = (arrayBuffer) => {
   };
 };
 
-const bufferIncludesString = (buffer, string) => {
-  return decoder.decode(buffer).includes(string);
-};
+
 
 const draw = (array, canvas) => {
   var ctx = canvas.getContext('2d');
@@ -82,14 +86,14 @@ const readNextBlobFromStream = (reader, name) => {
 
           // Wait for a chunk with START before enqueueing
           if (!streamHasStart) {
-            return;
+            return pump();
           }
           console.log(name, 'enqueing');
           controller.enqueue(value);
 
           // If chunk includes END close the stream
           if (streamHasEnd) {
-            console.log(name, 'closing')
+            console.log(name, 'closing');
             controller.close();
             return;
           }
@@ -110,7 +114,7 @@ const readImageDataFromBlob = (blob, name) => {
 
     fileReader.onloadend = (event) => {
       const arrayBuffer = event.target.result;
-      
+
       console.log(name, 'getting header');
       const headerInfo = getHeaderInfo(arrayBuffer);
       console.log(name, 'got header');
@@ -124,31 +128,32 @@ const readImageDataFromBlob = (blob, name) => {
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
  */
 
-const fetchImageFromStream = (name) => {
-  console.log(name, 'starting to fetch');
-  return fetch('http://localhost/gencam')
-    .then(async (r) => {
-      const reader = r.body.getReader();
+const fetchImageFromStream = (callback) => {
+  console.log( 'starting to fetch');
+  return fetch('http://localhost/gencam').then(async (r) => {
+    const reader = r.body.getReader();
+    let count = 0 ;
 
-      const blob = await readNextBlobFromStream(reader, name);
+    const animate = async () =>{
+      if(count>2) return;
+      count ++;
 
-      return blob;
-    })
-    .then((blob) => readImageDataFromBlob(blob, name));
+      const blob = await readNextBlobFromStream(reader, count);
+
+      const imageDataFromBlob = await readImageDataFromBlob(blob, count);
+      callback(imageDataFromBlob);
+      requestAnimationFrame(animate)
+    }
+    animate();
+  });
 };
 export default function() {
-  let counter = 0;
-  const animate = async () => {
-    counter += 1;
-    console.log('\n\n\n', counter, 'animate');
-    const canvas = document.getElementById('canvas');
-    const image = await fetchImageFromStream(counter);
-    draw(new Uint8Array(image.body), canvas);
-    window.animate = animate;
-    // requestAnimationFrame(animate);
-  };
   useEffect(() => {
-    animate();
+    const canvas = document.getElementById('canvas');
+
+    fetchImageFromStream( (image) => {
+      draw(new Uint8Array(image.body), canvas);
+    });
   }, []);
   return <canvas id="canvas" width="1024" height="1024"></canvas>;
 }
