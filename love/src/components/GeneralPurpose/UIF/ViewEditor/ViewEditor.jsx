@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
+import { withRouter } from 'react-router-dom';
+// import queryString from 'query-string';
 
 import Button from '../../Button/Button';
 import Input from '../../Input/Input';
@@ -16,8 +18,10 @@ import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
 
-export default class ViewEditor extends Component {
+class ViewEditor extends Component {
   static propTypes = {
+    /** React Router history object */
+    history: PropTypes.object,
     /** Object representing the layout of the view being edited */
     editedViewCurrent: PropTypes.object,
     /** Object representing the extra data of the view being edited */
@@ -44,6 +48,10 @@ export default class ViewEditor extends Component {
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
     };
+  }
+
+  componentDidMount() {
+    console.log('history: ', this.props.history);
   }
 
   componentDidUpdate(prevProps) {
@@ -307,3 +315,5 @@ export default class ViewEditor extends Component {
     );
   }
 }
+
+export default withRouter(ViewEditor);
