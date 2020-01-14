@@ -46,14 +46,17 @@ export default class CustomView extends Component {
     isEditable: PropTypes.bool,
     /** Callback called when a component is deleted */
     onComponentDelete: PropTypes.func,
+    /** Callback called when a component is configured */
+    onComponentConfig: PropTypes.func,
   };
 
   static defaultProps = {
     layout: undefined,
     baseColWidth: 20,
     onLayoutChange: () => {},
-    isEditable: true,
+    isEditable: false,
     onComponentDelete: () => {},
+    onComponentConfig: () => {},
   };
 
   parseConfig = (config) => {
@@ -88,7 +91,7 @@ export default class CustomView extends Component {
         ].join(' ')}
       >
         <div className={styles.editableComponentActions}>
-          <Button onClick={this.showModal}>
+          <Button onClick={() => this.props.onComponentConfig(component)}>
             <div className={styles.gearIconWrapper}>
               <GearIcon active />
             </div>
@@ -133,6 +136,8 @@ export default class CustomView extends Component {
           verticalCompact={true}
           className={styles.gridLayout}
           draggableCancel=".nonDraggable"
+          isDraggable={this.props.isEditable}
+          isResizable={this.props.isEditable}
         >
           {elements}
         </GridLayout>
