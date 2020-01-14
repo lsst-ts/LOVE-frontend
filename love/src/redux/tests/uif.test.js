@@ -191,7 +191,7 @@ describe('Update view under edition. GIVEN the store is empty', () => {
     // Assert:
     const status = getEditedViewStatus(store.getState());
     const data = getEditedViewData(store.getState());
-    expect(status).toEqual(editViewStates.EMPTY);
+    expect(status.code).toEqual(editViewStates.EMPTY);
     expect(data).toEqual({});
   });
 
@@ -201,7 +201,7 @@ describe('Update view under edition. GIVEN the store is empty', () => {
     // Assert:
     const status = getEditedViewStatus(store.getState());
     const retrievedData = getEditedView(store.getState());
-    expect(status).toEqual(editViewStates.UNSAVED);
+    expect(status.code).toEqual(editViewStates.UNSAVED);
     expect(retrievedData).toEqual(newViewData.data);
   });
 });
@@ -229,7 +229,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const status = getEditedViewStatus(store.getState());
     const editedView = getEditedView(store.getState());
     const data = getEditedViewData(store.getState());
-    expect(status).toEqual(editViewStates.SAVED);
+    expect(status.code).toEqual(editViewStates.SAVED);
     expect(editedView).toEqual(newViewData.data);
     expect(data).toEqual(newViewData);
   });
@@ -246,7 +246,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const status = getEditedViewStatus(store.getState());
     const editedView = getEditedView(store.getState());
     const data = getEditedViewData(store.getState());
-    expect(status).toEqual(editViewStates.SAVED);
+    expect(status.code).toEqual(editViewStates.SAVED);
     expect(editedView).toEqual(newViewData2.data);
     expect(data).toEqual(newViewData2);
   });
@@ -263,7 +263,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     // Assert:
     const status = getEditedViewStatus(store.getState());
     const data = getEditedViewData(store.getState());
-    expect(status).toEqual(editViewStates.SAVE_ERROR);
-    expect(data.error).toEqual(responseBody);
+    expect(status.code).toEqual(editViewStates.SAVE_ERROR);
+    expect(status.details).toEqual(responseBody);
   });
 });

@@ -22,7 +22,7 @@ export default class ViewEditor extends Component {
     /** Object representing the extra data of the view being edited */
     editedViewData: PropTypes.object,
     /** Status of the view being edited */
-    editedViewStatus: PropTypes.string,
+    editedViewStatus: PropTypes.object,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
@@ -32,7 +32,7 @@ export default class ViewEditor extends Component {
   static defaultProps = {
     editedView: null,
     editedViewData: null,
-    editedViewStatus: editViewStates.EMPTY,
+    editedViewStatus: {code: editViewStates.EMPTY},
     updateEditedView: () => {},
   };
 
@@ -45,12 +45,12 @@ export default class ViewEditor extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
-      if (this.props.editedViewStatus === editViewStates.SAVING) {
+      if (this.props.editedViewStatus.code === editViewStates.SAVING) {
         console.log('SAVING');
-      } else if (this.props.editedViewStatus === editViewStates.SAVED) {
+      } else if (this.props.editedViewStatus.code === editViewStates.SAVED) {
         toast.success('View saved successfully');
-      } else if (this.props.editedViewStatus === editViewStates.SAVE_ERROR) {
-        const errorStr = this.props.editedViewData ? JSON.stringify(this.props.editedViewData.error) : null;
+      } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
+        const errorStr = this.props.editedViewStatus.details ? JSON.stringify(this.props.editedViewStatus.details) : null;
         toast.error(`Error saving view: ${errorStr}`);
       }
     }
