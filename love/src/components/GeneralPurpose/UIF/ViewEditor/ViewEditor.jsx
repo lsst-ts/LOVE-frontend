@@ -10,9 +10,9 @@ import styles from './ViewEditor.module.css';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
+import ConfigForm from './ConfigForm';
 
 export default class ViewEditor extends Component {
-
   static propTypes = {
     /** Object representing the layout of the view being edited */
     editedView: PropTypes.object,
@@ -29,13 +29,15 @@ export default class ViewEditor extends Component {
     super(props);
     this.state = {
       layout: JSON.stringify(this.props.editedView, null, 2),
+      selectedComponent: {},
     };
   }
 
   onChange = (newValue) => {
     this.setState({
       layout: newValue,
-      showModal: false,
+      showSelectionModal: false,
+      showConfigModal: false,
     });
   };
 
@@ -51,7 +53,7 @@ export default class ViewEditor extends Component {
 
   onLayoutChange = (newLayoutProperties) => {
     const oldLayoutStr = JSON.stringify(this.props.editedView, null, 2);
-    let newLayout = {...this.props.editedView};
+    let newLayout = { ...this.props.editedView };
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
@@ -88,17 +90,25 @@ export default class ViewEditor extends Component {
     return newElement;
   };
 
-  hideModal = () => {
-    this.setState({ showModal: false });
+  hideSelectionModal = () => {
+    this.setState({ showSelectionModal: false });
   };
 
-  showModal = (e) => {
-    this.setState({ showModal: true });
+  showSelectionModal = (e) => {
+    this.setState({ showSelectionModal: true });
+  };
+
+  hideConfigModal = () => {
+    this.setState({ showConfigModal: false });
+  };
+
+  showConfigModal = (e) => {
+    this.setState({ showConfigModal: true });
   };
 
   receiveSelection = (selection) => {
-    this.hideModal();
-    const parsedLayout = {...this.props.editedView};
+    this.hideSelectionModal();
+    const parsedLayout = { ...this.props.editedView };
     const additionalContent = {};
     let startingIndex = 0;
     Object.keys(parsedLayout.content).forEach((compKey) => {
@@ -134,7 +144,7 @@ export default class ViewEditor extends Component {
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = {...this.props.editedView};
+    let parsedLayout = { ...this.props.editedView };
     Object.keys(parsedLayout.content).forEach((compKey) => {
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
@@ -142,9 +152,16 @@ export default class ViewEditor extends Component {
     return [];
   };
 
+  onComponentConfig = (component) => {
+    this.setState({
+      selectedComponent: component,
+      showConfigModal: true,
+    });
+  };
+
   save = () => {
     console.log('save');
-  }
+  };
 
   render() {
     return (
@@ -155,6 +172,7 @@ export default class ViewEditor extends Component {
               layout={this.props.editedView}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
+              onComponentConfig={this.onComponentConfig}
             ></CustomView>
           </div>
         </div>
@@ -174,12 +192,8 @@ export default class ViewEditor extends Component {
           <div>
             <div className={styles.bar}>
               View editor
-              <Button onClick={this.showModal}>
-                Add Components
-              </Button>
-              <Button onClick={this.save}>
-                Save Changes
-              </Button>
+              <Button onClick={this.showSelectionModal}>Add Components</Button>
+              <Button onClick={this.save}>Save Changes</Button>
             </div>
             <AceEditor
               mode="json"
@@ -191,11 +205,21 @@ export default class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-          <Button onClick={this.setLayout}>Apply</Button>
+            <Button onClick={this.setLayout}>Apply</Button>
           </div>
         </Rnd>
-        <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">
+        <Modal isOpen={this.state.showSelectionModal} onRequestClose={this.hideSelectionModal} contentLabel="Component selection modal">
           <ComponentSelector selectCallback={this.receiveSelection} />
+        </Modal>
+        <Modal
+          isOpen={this.state.showConfigModal}
+          onRequestClose={this.hideConfigModal}
+          contentLabel="Component configuration modal"
+        >
+          <ConfigForm
+            componentName={this.state.selectedComponent ? this.state.selectedComponent.content : ''}
+            componentConfig={this.state.selectedComponent ? this.state.selectedComponent.config : {}}
+          />
         </Modal>
       </>
     );
