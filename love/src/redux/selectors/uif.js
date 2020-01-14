@@ -43,9 +43,9 @@ export const getCurrentWorkspace = (state) => {
  * @param  {object} state  the state
  * @return {object}        the data of the view
  */
-export const getEditedView = (state) => {
+export const getEditedViewCurrent = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.editedView;
+  return state.uif.editedViewCurrent;
 };
 
 
@@ -66,7 +66,7 @@ export const getEditedViewStatus = (state) => {
  * @param  {object} state  the state
  * @return {string}        the data of the view
  */
-export const getEditedViewData = (state) => {
+export const getEditedViewSaved = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.editedViewData;
+  return state.uif.editedViewSaved;
 };
