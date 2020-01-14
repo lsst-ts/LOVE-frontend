@@ -54,7 +54,7 @@ export default class CustomView extends Component {
     layout: undefined,
     baseColWidth: 20,
     onLayoutChange: () => {},
-    isEditable: true,
+    isEditable: false,
     onComponentDelete: () => {},
     onComponentConfig: () => {},
   };
@@ -136,6 +136,8 @@ export default class CustomView extends Component {
           verticalCompact={true}
           className={styles.gridLayout}
           draggableCancel=".nonDraggable"
+          isDraggable={this.props.isEditable}
+          isResizable={this.props.isEditable}
         >
           {elements}
         </GridLayout>
