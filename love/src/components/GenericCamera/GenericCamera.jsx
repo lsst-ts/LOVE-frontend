@@ -70,33 +70,26 @@ export default function() {
         const reader = r.body.getReader();
         let streamHasStart = false;
         let streamHasEnd = false;
-        let count = 0;
         return new ReadableStream({
           start(controller) {
             return pump();
             function pump() {
               return reader.read().then(({ done, value }) => {
-                count = count + 1;
-                console.log(streamHasStart,'\nSTART?:', bufferIncludesString(value, 'START'));
-                console.log(streamHasEnd, 'END?:', bufferIncludesString(value, 'END'));
-                console.log(value)
-                if (bufferIncludesString(value, 'START')) {
+                // save new label found in this chunk
+                if (bufferIncludesString(value, '[START]')) {
                   streamHasStart = true;
-                  console.log('has start');
                 }
-                if (bufferIncludesString(value, 'END')) {
+                if (bufferIncludesString(value, '[END]')) {
                   streamHasEnd = true;
-                  console.log('has end');
                 }
 
-                /** Wait for a chunk with START before enqueueing */
+                // Wait for a chunk with START before enqueueing 
                 if (!streamHasStart) {
-                  console.log('no start yet')
                   return;
                 }
                 controller.enqueue(value);
 
-                /** If chunk includes END close the stream  */
+                // If chunk includes END close the stream  
                 if (streamHasEnd) {
                   controller.close();
                   return;
