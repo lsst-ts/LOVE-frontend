@@ -2,67 +2,50 @@ import React, { useEffect } from 'react';
 const decoder = new TextDecoder('utf-8');
 const encoder = new TextEncoder('utf-8');
 
-const bufferIncludesString = (buffer, string) => {
-  return decoder.decode(buffer).includes(string);
-};
-
-const bufferIndexOfString = (buffer, string) => {
-  return decoder.decode(buffer).indexOf(string);
-};
-
+/**
+ * Receives an ArrayBuffer (from the FileReader for example) and
+ * returns the image information (width,height, isJPEG, length, body)
+ * where body is the actual width \times height array
+ * @param {ArrayBuffer} arrayBuffer
+ */
 const getHeaderInfo = (arrayBuffer) => {
-  console.log(arrayBuffer);
-
   // find the [START] in the string-decoded array
   const START_STRING = '[START]\r\n';
   const decodedArray = decoder.decode(arrayBuffer);
   const startIndex = decodedArray.indexOf(START_STRING);
-  const reEncodedFromStart = encoder.encode(decodedArray.slice(startIndex, startIndex + decodedArray.length - 1));
   const headerCandidate = decodedArray.slice(startIndex, startIndex + 50);
 
-  console.log('startIndex', startIndex);
-
-  // const headerStartPosition = startIndex;
-  // // Get chunk header string
-  // // const headerStartPosition = decodedArray.indexOf('[START]\r\n') + '[START]\r\n'.length ;
-  // let headerCandidate = new Uint8Array(arrayBuffer.slice(headerStartPosition, headerStartPosition + 50));
   const decoded = headerCandidate;
-  console.log('decoded\n', decoded);
 
   // extract header data
   const split = decoded.split('\r\n');
   const START = split[0];
   const widthString = split[1];
   const heightString = split[2];
-  const isPNGString = split[3];
+  const isJPEGString = split[3];
   const lengthString = split[4];
   const matrixStartPosition = decoded.search(`${lengthString}\r\n`) + `${lengthString}\r\n`.length;
   const headerString = decoded.slice(0, matrixStartPosition);
 
-
-  const headerByteLength = encoder.encode(headerString).length;
-  // const body = arrayBuffer.slice(headerByteLength, headerByteLength + 1024 * 1024);
   const body = encoder.encode(decodedArray.slice(headerString.length)).slice(0, 1024 * 1024);
-  console.log(body);
-
-  // const ENDLabelPosition = decoder.decode(arrayBuffer).indexOf('[END]\r\n');
-  // const { headerByteLength, length, body } = headerInfo;
-
-  // const newHeader = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength)));
-  // const newHeaderPlusONe = decoder.decode(new Uint8Array(arrayBuffer.slice(0, headerByteLength + 1)));
 
   return {
-    headerByteLength,
     _decoded: decoded,
     _START: START,
     width: parseInt(widthString),
     height: parseInt(heightString),
-    isPNG: isPNGString === '1',
+    isJPEG: isJPEGString === '1',
     length: parseInt(lengthString),
     body: body,
   };
 };
 
+/**
+ * Paints gray pixels with values from array in a canvas.
+ * array length must be canvas.width \times canvas.height
+ * @param {array like} array
+ * @param {HTMLCanvasElement} canvas
+ */
 const draw = (array, canvas) => {
   var ctx = canvas.getContext('2d');
   var canvasWidth = canvas.width;
@@ -81,34 +64,43 @@ const draw = (array, canvas) => {
   ctx.putImageData(id, 0, 0);
 };
 
-const readNextBlobFromStream = (reader, name) => {
-
+/**
+ * Returns a blob containing the chunks where a whole image lives
+ * i.e., it has at least one [START]...[END] block when decoded.
+ * @param {ReadableStreamDefaultReader} reader
+ */
+const readNextBlobFromStream = (reader) => {
   const stream = new ReadableStream({
     start(controller) {
       let fullDecodedBuffer = '';
-      let gotStart = false;
       return pump();
       function pump() {
         return reader.read().then(({ done, value }) => {
-          // save new label found in this chunk
-          // console.log(name, 'new chunk');
+          // Close it if stream closes too
+          if (done) {
+            controller.close();
+            return;
+          }
 
+          // build up "buffer" string
           const decodedBuffer = decoder.decode(value);
           fullDecodedBuffer = fullDecodedBuffer + decodedBuffer;
 
+          // check for START
           const startIndex = fullDecodedBuffer.indexOf('[START]\r\n');
           if (startIndex === -1) {
             controller.enqueue(value);
             return pump();
           }
 
+          // check for END
           const endIndex = fullDecodedBuffer.slice(startIndex).indexOf('[END]\r\n');
-          console.log('\nendIndex', endIndex);
           if (endIndex === -1) {
             controller.enqueue(value);
             return pump();
           }
-          console.log('closing');
+
+          // if both START and END arrived, close
 
           controller.enqueue(value);
           controller.close();
@@ -120,37 +112,38 @@ const readNextBlobFromStream = (reader, name) => {
   return new Response(stream).blob();
 };
 
-const readImageDataFromBlob = (blob, name) => {
+/**
+ * Takes a Blob and attempts to get an image and its metadata
+ * @param {Blob} blob
+ */
+const readImageDataFromBlob = (blob) => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
-
-    // console.log(name, 'will read file');
 
     fileReader.onloadend = (event) => {
       const arrayBuffer = event.target.result;
 
-      // console.log(name, 'getting header');
       const headerInfo = getHeaderInfo(arrayBuffer);
-      // console.log(name, 'got header');
-      console.log(headerInfo);
+
       resolve(headerInfo);
     };
 
     fileReader.readAsArrayBuffer(blob);
   });
 };
-/**
- * Based on https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
- */
 
+/**
+ * Connects to the Generic Camera server with fetch and attempts
+ * to draw images in a canvas from that stream.
+ * @param {function} callback 
+ */
 const fetchImageFromStream = (callback) => {
-  // console.log( 'starting to fetch');
   return fetch('http://localhost/gencam').then(async (r) => {
     const reader = r.body.getReader();
     let count = 0;
 
     const animate = async () => {
-      if (count > 5) return;
+      // if (count > 5) return;
       count++;
 
       const blob = await readNextBlobFromStream(reader, count);
@@ -162,6 +155,11 @@ const fetchImageFromStream = (callback) => {
     animate();
   });
 };
+
+/**
+ * Draws a canvas in grayscale representing colors coming from 
+ * the Generic Camera images
+ */
 export default function() {
   useEffect(() => {
     const canvas = document.getElementById('canvas');
