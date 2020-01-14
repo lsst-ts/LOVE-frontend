@@ -4,6 +4,7 @@ import {
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  LOAD_EDITED_VIEW,
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
@@ -80,6 +81,18 @@ export default function(state = initialState, action) {
           editedViewCurrent: action.view,
           editedViewStatus: {
             code: editViewStates.UNSAVED,
+            details: null,
+          },
+        });
+      }
+    case LOAD_EDITED_VIEW:
+      {
+        const view = state.views.find(view => view.id === action.id);
+        return Object.assign({}, state, {
+          editedViewCurrent: view,
+          editedViewSaved: view,
+          editedViewStatus: {
+            code: editViewStates.SAVED,
             details: null,
           },
         });

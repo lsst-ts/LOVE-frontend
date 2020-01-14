@@ -10,9 +10,11 @@ import {
   requestWorkspace,
   receiveWorkspaces,
   requestViews,
+  receiveViews,
   updateEditedView,
   saveEditedView,
   savedEditedView,
+  loadViewToEdit,
 } from '../actions/uif';
 import {
   getViews,
@@ -284,5 +286,35 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     });
     expect(current).toEqual(newViewData2);
     expect(saved).toEqual(newViewData);
+  });
+});
+
+describe('Load view to edit. GIVEN the store contains views', () => {
+  beforeEach(async () => {
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
+    await store.dispatch(receiveViews(mockViews));
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
+    fetchMock.reset();
+  });
+
+
+  it('WHEN one of the views is loaded to edit, THEN the editedView should be updated', async () => {
+    // Act:
+    await store.dispatch(loadViewToEdit(1));
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const current = getEditedViewCurrent(store.getState());
+    const saved = getEditedViewSaved(store.getState());
+    expect(status).toEqual({
+      code: editViewStates.SAVED,
+      details: null,
+    });
+    expect(current).toEqual(mockViews[1]);
+    expect(saved).toEqual(mockViews[1]);
   });
 });
