@@ -8,7 +8,7 @@ import {
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
 } from './actionTypes';
-import { getEditedView, getEditedViewData } from '../selectors/uif';
+import { getEditedViewCurrent, getEditedViewSaved } from '../selectors/uif';
 import ManagerInterface from '../../Utils';
 
 /**
@@ -150,9 +150,9 @@ export function requestWorkspace(id) {
  */
 export function saveEditedView() {
   return async (dispatch, getState) => {
-    const editedView = getEditedView(getState());
+    const editedView = getEditedViewCurrent(getState());
     dispatch(savingEditedView);
-    const data = getEditedViewData(getState());
+    const data = getEditedViewSaved(getState());
     data.data = editedView;
     data.name = "blah";
 
