@@ -134,9 +134,9 @@ class App extends Component {
                 </Panel>
               )}
             />
-            <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
-            <PrivateRoute token={this.props.token} path="/view-editor" component={ViewEditorContainer} />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
+            <PrivateRoute token={this.props.token} path="/uif/view" component={CustomViewSample} />
+            <PrivateRoute token={this.props.token} path="/uif/view-editor" component={ViewEditorContainer} />
             <PrivateRoute token={this.props.token} path="/uif" render={() => <ViewsIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
           </Switch>
