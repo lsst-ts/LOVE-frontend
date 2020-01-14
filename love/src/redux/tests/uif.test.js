@@ -15,6 +15,7 @@ import {
   saveEditedView,
   savedEditedView,
   loadViewToEdit,
+  clearViewToEdit,
 } from '../actions/uif';
 import {
   getViews,
@@ -24,7 +25,7 @@ import {
   getEditedViewStatus,
   getEditedViewSaved,
 } from '../selectors';
-import { editViewStates } from '../reducers/uif';
+import { editViewStates, initialState } from '../reducers/uif';
 
 let store;
 beforeEach(() => {
@@ -192,12 +193,11 @@ describe('Update view under edition. GIVEN the store is empty', () => {
   it('THEN the state should mark the edited view as EMPTY', async () => {
     // Assert:
     const status = getEditedViewStatus(store.getState());
+    const current = getEditedViewCurrent(store.getState());
     const saved = getEditedViewSaved(store.getState());
-    expect(status).toEqual({
-      code: editViewStates.EMPTY,
-      details: null,
-    });
-    expect(saved).toEqual({});
+    expect(status).toEqual(initialState.editedViewStatus);
+    expect(current).toEqual(initialState.editedViewCurrent);
+    expect(saved).toEqual(initialState.editedViewSaved);
   });
 
   it('WHEN the edited view is updated, THEN the state should contain the view', async () => {
@@ -302,7 +302,6 @@ describe('Load view to edit. GIVEN the store contains views', () => {
     fetchMock.reset();
   });
 
-
   it('WHEN one of the views is loaded to edit, THEN the editedView should be updated', async () => {
     // Act:
     await store.dispatch(loadViewToEdit(1));
@@ -316,5 +315,19 @@ describe('Load view to edit. GIVEN the store contains views', () => {
     });
     expect(current).toEqual(mockViews[1]);
     expect(saved).toEqual(mockViews[1]);
+  });
+
+  it('GIVEN one of the views is loaded to edit, WHEN we clear it, THEN the editedView should be cleared', async () => {
+    // Arrange:
+    await store.dispatch(loadViewToEdit(1));
+    // Act:
+    await store.dispatch(clearViewToEdit);
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const current = getEditedViewCurrent(store.getState());
+    const saved = getEditedViewSaved(store.getState());
+    expect(status).toEqual(initialState.editedViewStatus);
+    expect(current).toEqual(initialState.editedViewCurrent);
+    expect(saved).toEqual(initialState.editedViewSaved);
   });
 });
