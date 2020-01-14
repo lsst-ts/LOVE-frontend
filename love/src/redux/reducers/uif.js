@@ -44,7 +44,7 @@ const initialState = {
 /**
  * export default - Modifies the state of the UI Framework
  *
- * @param  {object} state = initialState the current UI Frmaework state
+ * @param  {object} state = initialState the current UI Framework state
  * @param  {object} action               the action that is being applied to the state
  * @return {object}                      the modified state
  */
@@ -86,6 +86,7 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           editedViewStatus: editViewStates.SAVE_ERROR,
+          editedViewData: {...state.editedViewData, error: action.response},
         });
       }
     case SAVED_EDITED_VIEW:
