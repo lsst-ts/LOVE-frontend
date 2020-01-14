@@ -250,4 +250,20 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     expect(editedView).toEqual(newViewData2.data);
     expect(data).toEqual(newViewData2);
   });
+
+  it('WHEN the edited view cannot be saved again, THEN the state should save the error but keep the current data', async () => {
+    // Arrange:
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
+    await store.dispatch(savedEditedView(newViewData));
+    await store.dispatch(updateEditedView(newViewData2.data));
+    const responseBody = {name: 'field is required'};
+    fetchMock.put(url, {status: 400, body: responseBody}, ManagerInterface.getHeaders());
+    // Act:
+    await store.dispatch(saveEditedView());
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const data = getEditedViewData(store.getState());
+    expect(status).toEqual(editViewStates.SAVE_ERROR);
+    expect(data.error).toEqual(responseBody);
+  });
 });
