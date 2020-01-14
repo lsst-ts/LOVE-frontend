@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
+import ViewsIndexContainer from './components/GeneralPurpose/UIF/ViewsIndex/ViewsIndex.container';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
@@ -136,6 +137,7 @@ class App extends Component {
             <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
             <PrivateRoute token={this.props.token} path="/view-editor" component={ViewEditorContainer} />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
+            <PrivateRoute token={this.props.token} path="/uif" render={() => <ViewsIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
           </Switch>
         </LayoutContainer>
