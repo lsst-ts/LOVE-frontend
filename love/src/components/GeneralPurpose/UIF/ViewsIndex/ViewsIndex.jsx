@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Button from '../../Button/Button';
 
 import styles from './ViewsIndex.module.css';
 
-export default class ViewsIndex extends Component {
+class ViewsIndex extends Component {
   static propTypes = {
     /** Current views to display */
     views: PropTypes.array,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
+
+  createNewView = () => {
+    this.props.history.push('/view-editor');
+  }
 
   render() {
     console.log('views: ', this.props.views);
@@ -31,7 +41,11 @@ export default class ViewsIndex extends Component {
             </li>
           )) }
         </ol>
+        <Button onClick={this.createNewView}>
+          New View
+        </Button>
       </div>
     );
   }
 }
+export default withRouter(ViewsIndex);
