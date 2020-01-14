@@ -5,6 +5,7 @@ import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
 
 import Button from '../../Button/Button';
+import Input from '../../Input/Input';
 import Modal from '../../Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
@@ -15,7 +16,6 @@ import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
 export default class ViewEditor extends Component {
-
   static propTypes = {
     /** Object representing the layout of the view being edited */
     editedView: PropTypes.object,
@@ -47,11 +47,9 @@ export default class ViewEditor extends Component {
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
       if (this.props.editedViewStatus === editViewStates.SAVING) {
         console.log('SAVING');
-      }
-      else if (this.props.editedViewStatus === editViewStates.SAVED) {
-        toast.success('View saved successfully')
-      }
-      else if (this.props.editedViewStatus === editViewStates.SAVE_ERROR) {
+      } else if (this.props.editedViewStatus === editViewStates.SAVED) {
+        toast.success('View saved successfully');
+      } else if (this.props.editedViewStatus === editViewStates.SAVE_ERROR) {
         const errorStr = this.props.editedViewData ? JSON.stringify(this.props.editedViewData.error) : null;
         toast.error(`Error saving view: ${errorStr}`);
       }
@@ -77,7 +75,7 @@ export default class ViewEditor extends Component {
 
   onLayoutChange = (newLayoutProperties) => {
     const oldLayoutStr = JSON.stringify(this.props.editedView, null, 2);
-    let newLayout = {...this.props.editedView};
+    let newLayout = { ...this.props.editedView };
     newLayoutProperties.forEach((elementProperties) => {
       const parsedProperties = { ...elementProperties };
       parsedProperties.i = parseInt(elementProperties.i, 10);
@@ -124,7 +122,7 @@ export default class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideModal();
-    const parsedLayout = {...this.props.editedView};
+    const parsedLayout = { ...this.props.editedView };
     const additionalContent = {};
     let startingIndex = 0;
     Object.keys(parsedLayout.content).forEach((compKey) => {
@@ -160,7 +158,7 @@ export default class ViewEditor extends Component {
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = {...this.props.editedView};
+    let parsedLayout = { ...this.props.editedView };
     Object.keys(parsedLayout.content).forEach((compKey) => {
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
@@ -170,7 +168,7 @@ export default class ViewEditor extends Component {
 
   save = () => {
     this.props.saveEditedView();
-  }
+  };
 
   render() {
     return (
@@ -199,13 +197,17 @@ export default class ViewEditor extends Component {
         >
           <div>
             <div className={styles.bar}>
-              View editor
-              <Button onClick={this.showModal}>
-                Add Components
-              </Button>
-              <Button onClick={this.save}>
-                Save Changes
-              </Button>
+              View:
+              <Input
+                className={styles.textField}
+                defaultValue={
+                  this.props.editedViewData && this.props.editedViewData.name
+                    ? this.props.editedViewData.name
+                    : 'Untitled view'
+                }
+              />
+              <Button onClick={this.showModal}>Add Components</Button>
+              <Button onClick={this.save}>Save Changes</Button>
             </div>
             <AceEditor
               mode="json"
@@ -217,7 +219,7 @@ export default class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-          <Button onClick={this.applyEditorLayout}>Apply</Button>
+            <Button onClick={this.applyEditorLayout}>Apply</Button>
           </div>
         </Rnd>
         <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">
