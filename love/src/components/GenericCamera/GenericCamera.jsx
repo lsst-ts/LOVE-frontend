@@ -63,60 +63,63 @@ const draw = (array, canvas) => {
 /**
  * Based on https://developer.mozilla.org/en-US/docs/Web/API/Streams_API/Using_readable_streams
  */
+
+const fetchImageFromStream = () =>
+  fetch('http://localhost/gencam')
+    .then((r) => {
+      const reader = r.body.getReader();
+      let streamHasStart = false;
+      let streamHasEnd = false;
+      return new ReadableStream({
+        start(controller) {
+          return pump();
+          function pump() {
+            return reader.read().then(({ done, value }) => {
+              // save new label found in this chunk
+              if (bufferIncludesString(value, '[START]')) {
+                streamHasStart = true;
+              }
+              if (bufferIncludesString(value, '[END]')) {
+                streamHasEnd = true;
+              }
+
+              // Wait for a chunk with START before enqueueing
+              if (!streamHasStart) {
+                return;
+              }
+              controller.enqueue(value);
+
+              // If chunk includes END close the stream
+              if (streamHasEnd) {
+                controller.close();
+                return;
+              }
+              return pump();
+            });
+          }
+        },
+      });
+    })
+    .then((stream) => new Response(stream))
+    .then((response) => response.blob())
+    .then((blob) => {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+
+        fileReader.onloadend = (event) => {
+          const arrayBuffer = event.target.result;
+          const headerInfo = getHeaderInfo(arrayBuffer);
+          resolve(headerInfo);
+        };
+
+        fileReader.readAsArrayBuffer(blob);
+      });
+    });
 export default function() {
   useEffect(() => {
-    fetch('http://localhost/gencam')
+    fetchImageFromStream()
       .then((r) => {
-        const reader = r.body.getReader();
-        let streamHasStart = false;
-        let streamHasEnd = false;
-        return new ReadableStream({
-          start(controller) {
-            return pump();
-            function pump() {
-              return reader.read().then(({ done, value }) => {
-                // save new label found in this chunk
-                if (bufferIncludesString(value, '[START]')) {
-                  streamHasStart = true;
-                }
-                if (bufferIncludesString(value, '[END]')) {
-                  streamHasEnd = true;
-                }
-
-                // Wait for a chunk with START before enqueueing 
-                if (!streamHasStart) {
-                  return;
-                }
-                controller.enqueue(value);
-
-                // If chunk includes END close the stream  
-                if (streamHasEnd) {
-                  controller.close();
-                  return;
-                }
-                return pump();
-              });
-            }
-          },
-        });
-      })
-      .then((stream) => new Response(stream))
-      .then((response) => response.blob())
-      .then((blob) => {
-        return new Promise((resolve, reject) => {
-          const fileReader = new FileReader();
-
-          fileReader.onloadend = (event) => {
-            const arrayBuffer = event.target.result;
-            const headerInfo = getHeaderInfo(arrayBuffer);
-            resolve(headerInfo);
-          };
-
-          fileReader.readAsArrayBuffer(blob);
-        });
-      })
-      .then((r) => {
-        console.log('r',r);
+        console.log('r', r);
         const canvas = document.getElementById('canvas');
         draw(new Uint8Array(r.body), canvas);
       })
