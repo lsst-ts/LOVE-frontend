@@ -14,6 +14,7 @@ import { editViewStates } from '../../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
+import ConfigForm from './ConfigForm';
 
 export default class ViewEditor extends Component {
   static propTypes = {
@@ -32,7 +33,7 @@ export default class ViewEditor extends Component {
   static defaultProps = {
     editedViewCurrent: null,
     editedViewSaved: null,
-    editedViewStatus: {code: editViewStates.EMPTY},
+    editedViewStatus: { code: editViewStates.EMPTY },
     updateEditedView: () => {},
   };
 
@@ -41,6 +42,7 @@ export default class ViewEditor extends Component {
     this.state = {
       name: this.props.editedViewCurrent ? this.props.editedViewCurrent.name : '',
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
+      selectedComponent: {},
     };
   }
 
@@ -50,41 +52,44 @@ export default class ViewEditor extends Component {
       } else if (this.props.editedViewStatus.code === editViewStates.SAVED) {
         toast.success('View saved successfully');
       } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
-        const errorStr = this.props.editedViewStatus.details ? JSON.stringify(this.props.editedViewStatus.details) : null;
+        const errorStr = this.props.editedViewStatus.details
+          ? JSON.stringify(this.props.editedViewStatus.details)
+          : null;
         toast.error(`Error saving view: ${errorStr}`);
       }
     }
     if (prevProps.editedViewCurrent.name !== this.props.editedViewCurrent.name) {
-      this.setState({ name: this.props.editedViewCurrent.name});
+      this.setState({ name: this.props.editedViewCurrent.name });
     }
   }
 
   getEditedViewLayout = () => {
     return this.props.editedViewCurrent ? this.props.editedViewCurrent.data : {};
-  }
+  };
 
   updateEditedViewLayout = (newLayout) => {
     this.props.updateEditedView({
       ...this.props.editedViewCurrent,
       data: newLayout,
     });
-  }
+  };
 
   onNameInputChange = (event) => {
     this.setState({ name: event.target.value });
-  }
+  };
 
   onNameInputBlur = (_event) => {
     this.props.updateEditedView({
       ...this.props.editedViewCurrent,
       name: this.state.name,
     });
-  }
+  };
 
   onEditorChange = (newValue) => {
     this.setState({
       layout: newValue,
-      showModal: false,
+      showSelectionModal: false,
+      showConfigModal: false,
     });
   };
 
@@ -129,7 +134,7 @@ export default class ViewEditor extends Component {
       };
       return newElement;
     }
-    if (element.properties.type == 'container') {
+    if (element.properties.type === 'container') {
       Object.keys(element.content).map((key) => {
         newElement.content[key] = this.updateElementProperties(element.content[key], properties);
       });
@@ -137,22 +142,42 @@ export default class ViewEditor extends Component {
     return newElement;
   };
 
-  hideModal = () => {
-    this.setState({ showModal: false });
+  updateElementConfig = (elementIndex, config) => {
+    const parsedLayout = { ...this.getEditedViewLayout() };
+    Object.keys(parsedLayout.content).forEach((key) => {
+      const elem = parsedLayout.content[key];
+      if (elem.properties.i === elementIndex) elem.config = config;
+    });
+    this.updateEditedViewLayout(parsedLayout);
+    this.hideConfigModal();
   };
 
-  showModal = (e) => {
-    this.setState({ showModal: true });
+  hideSelectionModal = () => {
+    this.setState({ showSelectionModal: false });
+  };
+
+  showSelectionModal = (e) => {
+    this.setState({ showSelectionModal: true });
+  };
+
+  hideConfigModal = () => {
+    this.setState({ showConfigModal: false });
+  };
+
+  showConfigModal = (e) => {
+    this.setState({ showConfigModal: true });
   };
 
   receiveSelection = (selection) => {
-    this.hideModal();
+    this.hideSelectionModal();
     const parsedLayout = { ...this.getEditedViewLayout() };
     const additionalContent = {};
     let startingIndex = 0;
-    Object.keys(parsedLayout.content).forEach((compKey) => {
-      startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
-    });
+    if (parsedLayout) {
+      Object.keys(parsedLayout.content).forEach((compKey) => {
+        startingIndex = Math.max(parsedLayout.content[compKey].properties.i, startingIndex);
+      });
+    }
     startingIndex += 1;
 
     selection.forEach((componentDict) => {
@@ -183,12 +208,19 @@ export default class ViewEditor extends Component {
   };
 
   onComponentDelete = (component) => {
-    let parsedLayout = { ...this.getEditedViewLayout() };
+    const parsedLayout = { ...this.getEditedViewLayout() };
     Object.keys(parsedLayout.content).forEach((compKey) => {
       if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
     });
     this.updateEditedViewLayout(parsedLayout);
     return [];
+  };
+
+  onComponentConfig = (component) => {
+    this.setState({
+      selectedComponent: component,
+      showConfigModal: true,
+    });
   };
 
   save = () => {
@@ -204,6 +236,8 @@ export default class ViewEditor extends Component {
               layout={this.getEditedViewLayout()}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
+              onComponentConfig={this.onComponentConfig}
+              isEditable={true}
             ></CustomView>
           </div>
         </div>
@@ -229,7 +263,7 @@ export default class ViewEditor extends Component {
                 onChange={this.onNameInputChange}
                 onBlur={this.onNameInputBlur}
               />
-              <Button onClick={this.showModal}>Add Components</Button>
+              <Button onClick={this.showSelectionModal}>Add Components</Button>
               <Button onClick={this.save}>Save Changes</Button>
             </div>
             <AceEditor
@@ -245,8 +279,29 @@ export default class ViewEditor extends Component {
             <Button onClick={this.applyEditorLayout}>Apply</Button>
           </div>
         </Rnd>
-        <Modal isOpen={this.state.showModal} onRequestClose={this.hideModal} contentLabel="Component selection modal">
+        <Modal
+          isOpen={this.state.showSelectionModal}
+          onRequestClose={this.hideSelectionModal}
+          contentLabel="Component selection modal"
+        >
           <ComponentSelector selectCallback={this.receiveSelection} />
+        </Modal>
+        <Modal
+          isOpen={this.state.showConfigModal}
+          onRequestClose={this.hideConfigModal}
+          contentLabel="Component configuration modal"
+        >
+          <ConfigForm
+            componentIndex={
+              this.state.selectedComponent && this.state.selectedComponent.properties
+                ? this.state.selectedComponent.properties.i
+                : 1
+            }
+            componentName={this.state.selectedComponent ? this.state.selectedComponent.content : ''}
+            componentConfig={this.state.selectedComponent ? this.state.selectedComponent.config : {}}
+            onCancel={this.hideConfigModal}
+            onSaveConfig={this.updateElementConfig}
+          />
         </Modal>
       </>
     );
