@@ -237,6 +237,7 @@ export default class ViewEditor extends Component {
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
+              isEditable={true}
             ></CustomView>
           </div>
         </div>
