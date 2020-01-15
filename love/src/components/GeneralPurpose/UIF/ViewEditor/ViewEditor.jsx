@@ -12,7 +12,7 @@ import Modal from '../../Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
-import { editViewStates } from '../../../../redux/reducers/uif';
+import { editViewStates, viewsStates } from '../../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -28,6 +28,8 @@ class ViewEditor extends Component {
     editedViewSaved: PropTypes.object,
     /** Status of the view being edited */
     editedViewStatus: PropTypes.object,
+    /** Status of the views request */
+    viewsStatus: PropTypes.string,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
     /** Function to load one of the views to the edited view */
@@ -42,6 +44,7 @@ class ViewEditor extends Component {
     editedViewCurrent: {},
     editedViewSaved: {},
     editedViewStatus: { code: editViewStates.EMPTY },
+    viewsStatus: viewsStates.EMPTY,
     updateEditedView: () => {},
     loadViewToEdit: () => {},
     clearEditedView: () => {},
@@ -59,10 +62,10 @@ class ViewEditor extends Component {
   }
 
   componentDidMount() {
-    const id = new URLSearchParams(this.props.location.search).get('id');
+    const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     if (id === null) this.props.clearEditedView();
     else {
-      this.props.loadViewToEdit(parseInt(id, 10));
+      this.props.loadViewToEdit(id);
       this.setState({
         id,
       });
@@ -87,6 +90,12 @@ class ViewEditor extends Component {
     }
     if (prevProps.editedViewCurrent.name !== this.props.editedViewCurrent.name) {
       this.setState({ name: this.props.editedViewCurrent.name });
+    }
+    if (
+      prevProps.viewsStatus === viewsStates.LOADING &&
+      this.props.viewsStatus === viewsStates.LOADED
+    ) {
+      this.props.loadViewToEdit(this.state.id);
     }
   }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getView } from '../../../redux/selectors';
+import { getView, getViewsStatus } from '../../../redux/selectors';
 import CustomView from './CustomView';
 
 const ViewEditorContainer = ({...props }) => {
@@ -13,7 +13,8 @@ const ViewEditorContainer = ({...props }) => {
 
 const mapStateToProps = (state) => {
   const getCurrentView = (id) => getView(state, id);
-  return { getCurrentView };
+  const viewsStatus = getViewsStatus(state);
+  return { getCurrentView, viewsStatus };
 };
 
 const mapDispatchToProps = () => ({});
