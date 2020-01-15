@@ -20,8 +20,8 @@ import ConfigForm from './ConfigForm';
 
 class ViewEditor extends Component {
   static propTypes = {
-    /** React Router history object */
-    history: PropTypes.object,
+    /** React Router location object */
+    location: PropTypes.object,
     /** Object representing the layout of the view being edited */
     editedViewCurrent: PropTypes.object,
     /** Object representing the extra data of the view being edited */
@@ -70,7 +70,7 @@ class ViewEditor extends Component {
       if (this.props.editedViewStatus.code === editViewStates.SAVING) {
         console.log('Saving');
       } else if (
-        (prevProps.editedViewStatus.code === editViewStates.SAVING) &
+        (prevProps.editedViewStatus.code === editViewStates.SAVING) &&
         (this.props.editedViewStatus.code === editViewStates.SAVED)
       ) {
         toast.success('View saved successfully');
