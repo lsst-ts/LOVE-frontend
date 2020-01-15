@@ -10,19 +10,24 @@ import {
   requestWorkspace,
   receiveWorkspaces,
   requestViews,
+  receiveViews,
   updateEditedView,
   saveEditedView,
   savedEditedView,
+  loadViewToEdit,
+  clearViewToEdit,
 } from '../actions/uif';
 import {
   getViews,
+  getView,
+  getViewsStatus,
   getWorkspaces,
   getCurrentWorkspace,
   getEditedViewCurrent,
   getEditedViewStatus,
   getEditedViewSaved,
 } from '../selectors';
-import { editViewStates } from '../reducers/uif';
+import { editViewStates, viewsStates, initialState } from '../reducers/uif';
 
 let store;
 beforeEach(() => {
@@ -136,11 +141,15 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views`;
     fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
+    let viewsStatus = getViewsStatus(store.getState());
+    expect(viewsStatus).toEqual(viewsStates.EMPTY);
     // Act:
     await store.dispatch(requestViews());
     // Assert:
-    const retrievedData = getViews(store.getState());
-    expect(retrievedData).toEqual(mockViews);
+    const views = getViews(store.getState());
+    viewsStatus = getViewsStatus(store.getState());
+    expect(views).toEqual(mockViews);
+    expect(viewsStatus).toEqual(viewsStates.LOADED);
   });
 });
 
@@ -190,12 +199,11 @@ describe('Update view under edition. GIVEN the store is empty', () => {
   it('THEN the state should mark the edited view as EMPTY', async () => {
     // Assert:
     const status = getEditedViewStatus(store.getState());
+    const current = getEditedViewCurrent(store.getState());
     const saved = getEditedViewSaved(store.getState());
-    expect(status).toEqual({
-      code: editViewStates.EMPTY,
-      details: null,
-    });
-    expect(saved).toEqual({});
+    expect(status).toEqual(initialState.editedViewStatus);
+    expect(current).toEqual(initialState.editedViewCurrent);
+    expect(saved).toEqual(initialState.editedViewSaved);
   });
 
   it('WHEN the edited view is updated, THEN the state should contain the view', async () => {
@@ -211,6 +219,7 @@ describe('Update view under edition. GIVEN the store is empty', () => {
     });
     expect(current).toEqual(newViewData);
     expect(saved).toEqual({});
+    expect(current).not.toBe(newViewData);
   });
 });
 
@@ -219,6 +228,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const token = '"love-token"';
     localStorage.setItem('LOVE-TOKEN', token);
     await store.dispatch(getTokenFromStorage(token));
+    await store.dispatch(receiveViews(mockViews));
     await store.dispatch(updateEditedView(newViewData));
   });
 
@@ -243,6 +253,12 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     });
     expect(current).toEqual(newViewData);
     expect(saved).toEqual(newViewData);
+    expect(current).not.toBe(newViewData);
+    expect(saved).not.toBe(newViewData);
+    expect(current.data).not.toBe(newViewData.data);
+    expect(saved.data).not.toBe(newViewData.data);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
   });
 
   it('WHEN the edited view is saved again, THEN the state should update the status', async () => {
@@ -257,12 +273,22 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const status = getEditedViewStatus(store.getState());
     const current = getEditedViewCurrent(store.getState());
     const saved = getEditedViewSaved(store.getState());
+    const view = getView(store.getState(), newViewData.id);
     expect(status).toEqual({
       code: editViewStates.SAVED,
       details: null,
     });
     expect(current).toEqual(newViewData2);
     expect(saved).toEqual(newViewData2);
+    expect(view).toEqual(newViewData2);
+    expect(current).not.toBe(newViewData2);
+    expect(saved).not.toBe(newViewData2);
+    expect(view).not.toBe(newViewData2);
+    expect(current.data).not.toBe(newViewData2.data);
+    expect(saved.data).not.toBe(newViewData2.data);
+    expect(view.data).not.toBe(newViewData2.data);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
   });
 
   it('WHEN the edited view cannot be saved again, THEN the state should save the error but keep the current data', async () => {
@@ -284,5 +310,64 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     });
     expect(current).toEqual(newViewData2);
     expect(saved).toEqual(newViewData);
+    expect(current).not.toBe(newViewData2);
+    expect(saved).not.toBe(newViewData);
+    expect(current.data).not.toBe(newViewData2.data);
+    expect(saved.data).not.toBe(newViewData.data);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
+  });
+});
+
+describe('Load view to edit. GIVEN the store contains views', () => {
+  beforeEach(async () => {
+    const token = '"love-token"';
+    localStorage.setItem('LOVE-TOKEN', token);
+    await store.dispatch(getTokenFromStorage(token));
+    await store.dispatch(receiveViews(mockViews));
+  });
+
+  afterEach(() => {
+    localStorage.removeItem('LOVE-TOKEN');
+    fetchMock.reset();
+  });
+
+  it('WHEN one of the views is loaded to edit, THEN the editedView should be updated', async () => {
+    // Act:
+    await store.dispatch(loadViewToEdit(1));
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const current = getEditedViewCurrent(store.getState());
+    const saved = getEditedViewSaved(store.getState());
+    expect(status).toEqual({
+      code: editViewStates.SAVED,
+      details: null,
+    });
+    expect(current).toEqual(mockViews[1]);
+    expect(saved).toEqual(mockViews[1]);
+    expect(current).not.toBe(mockViews[1]);
+    expect(current.data).not.toBe(mockViews[1].data);
+    expect(saved).not.toBe(mockViews[1]);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
+    expect(saved.data).not.toBe(mockViews[1].data);
+  });
+
+  it('GIVEN one of the views is loaded to edit, WHEN we clear it, THEN the editedView should be cleared', async () => {
+    // Arrange:
+    await store.dispatch(loadViewToEdit(1));
+    // Act:
+    await store.dispatch(clearViewToEdit);
+    // Assert:
+    const status = getEditedViewStatus(store.getState());
+    const current = getEditedViewCurrent(store.getState());
+    const saved = getEditedViewSaved(store.getState());
+    expect(status).toEqual(initialState.editedViewStatus);
+    expect(current).toEqual(initialState.editedViewCurrent);
+    expect(saved).toEqual(initialState.editedViewSaved);
+    expect(status).not.toBe(initialState.editedViewStatus);
+    expect(current).not.toBe(initialState.editedViewCurrent);
+    expect(current.data).not.toBe(initialState.editedViewCurrent.data);
+    expect(saved).not.toBe(initialState.editedViewSaved);
   });
 });

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
+import { withRouter } from 'react-router-dom';
+// import queryString from 'query-string';
 
 import Button from '../../Button/Button';
 import Input from '../../Input/Input';
@@ -10,31 +12,43 @@ import Modal from '../../Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
-import { editViewStates } from '../../../../redux/reducers/uif';
+import { editViewStates, viewsStates } from '../../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
 
-export default class ViewEditor extends Component {
+class ViewEditor extends Component {
   static propTypes = {
+    /** React Router location object */
+    location: PropTypes.object,
     /** Object representing the layout of the view being edited */
     editedViewCurrent: PropTypes.object,
     /** Object representing the extra data of the view being edited */
     editedViewSaved: PropTypes.object,
     /** Status of the view being edited */
     editedViewStatus: PropTypes.object,
+    /** Status of the views request */
+    viewsStatus: PropTypes.string,
     /** Function to update the edited view */
     updateEditedView: PropTypes.func,
+    /** Function to load one of the views to the edited view */
+    loadViewToEdit: PropTypes.func,
+    /** Function to clear the edited view */
+    clearEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
   };
 
   static defaultProps = {
-    editedViewCurrent: null,
-    editedViewSaved: null,
+    editedViewCurrent: {},
+    editedViewSaved: {},
     editedViewStatus: { code: editViewStates.EMPTY },
+    viewsStatus: viewsStates.EMPTY,
     updateEditedView: () => {},
+    loadViewToEdit: () => {},
+    clearEditedView: () => {},
+    saveEditedView: () => {},
   };
 
   constructor(props) {
@@ -43,13 +57,29 @@ export default class ViewEditor extends Component {
       name: this.props.editedViewCurrent ? this.props.editedViewCurrent.name : '',
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
+      id: null,
     };
+  }
+
+  componentDidMount() {
+    const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+    if (id === null) this.props.clearEditedView();
+    else {
+      this.props.loadViewToEdit(id);
+      this.setState({
+        id,
+      });
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
       if (this.props.editedViewStatus.code === editViewStates.SAVING) {
-      } else if (this.props.editedViewStatus.code === editViewStates.SAVED) {
+        console.log('Saving');
+      } else if (
+        prevProps.editedViewStatus.code === editViewStates.SAVING &&
+        this.props.editedViewStatus.code === editViewStates.SAVED
+      ) {
         toast.success('View saved successfully');
       } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
         const errorStr = this.props.editedViewStatus.details
@@ -60,6 +90,12 @@ export default class ViewEditor extends Component {
     }
     if (prevProps.editedViewCurrent.name !== this.props.editedViewCurrent.name) {
       this.setState({ name: this.props.editedViewCurrent.name });
+    }
+    if (
+      prevProps.viewsStatus === viewsStates.LOADING &&
+      this.props.viewsStatus === viewsStates.LOADED
+    ) {
+      this.props.loadViewToEdit(this.state.id);
     }
   }
 
@@ -307,3 +343,5 @@ export default class ViewEditor extends Component {
     );
   }
 }
+
+export default withRouter(ViewEditor);

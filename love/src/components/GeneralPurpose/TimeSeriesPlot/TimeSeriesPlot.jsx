@@ -114,8 +114,7 @@ export default class TimeSeriesPlot extends Component {
       this.props.dataSources !== prevProps.dataSources ||
       this.props.groupNames !== prevProps.groupNames ||
       this.props.layers !== prevProps.layers ||
-      this.props.encoding !== prevProps.encoding ||
-      this.props.accessors !== prevProps.accessors
+      this.props.encoding !== prevProps.encoding
     ) {
       this.reloadPlot();
     }
