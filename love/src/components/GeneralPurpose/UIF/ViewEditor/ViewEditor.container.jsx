@@ -23,7 +23,7 @@ const mapDispatchToProps = (dispatch) => ({
   updateEditedView: (view) => dispatch(updateEditedView(view)),
   loadViewToEdit: (view) => dispatch(loadViewToEdit(view)),
   clearViewToEdit: () => dispatch(clearViewToEdit),
-  saveEditedView: (view) => dispatch(saveEditedView(view)),
+  saveEditedView: () => dispatch(saveEditedView()),
 });
 
 export default connect(
