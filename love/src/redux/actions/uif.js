@@ -1,5 +1,6 @@
 import {
   RECEIVE_WORKSPACES,
+  LOADING_VIEWS,
   RECEIVE_VIEWS,
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
@@ -21,6 +22,13 @@ export const receiveWorkspaces = (workspaces) => {
     type: RECEIVE_WORKSPACES,
     workspaces,
   };
+};
+
+/**
+* Action to mark the views as in process of being loaded
+ */
+export const loadingViews = {
+  type: LOADING_VIEWS,
 };
 
 /**
@@ -127,6 +135,7 @@ export function requestWorkspaces() {
  */
 export function requestViews() {
   return async (dispatch, getState) => {
+    dispatch(loadingViews);
     const url = `${ManagerInterface.getUifBaseUrl()}views`;
     return fetch(url, {
       method: 'GET',

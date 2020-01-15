@@ -20,13 +20,14 @@ import {
 import {
   getViews,
   getView,
+  getViewsStatus,
   getWorkspaces,
   getCurrentWorkspace,
   getEditedViewCurrent,
   getEditedViewStatus,
   getEditedViewSaved,
 } from '../selectors';
-import { editViewStates, initialState } from '../reducers/uif';
+import { editViewStates, viewsStates, initialState } from '../reducers/uif';
 
 let store;
 beforeEach(() => {
@@ -140,11 +141,15 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views`;
     fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
+    let viewsStatus = getViewsStatus(store.getState());
+    expect(viewsStatus).toEqual(viewsStates.EMPTY);
     // Act:
     await store.dispatch(requestViews());
     // Assert:
-    const retrievedData = getViews(store.getState());
-    expect(retrievedData).toEqual(mockViews);
+    const views = getViews(store.getState());
+    viewsStatus = getViewsStatus(store.getState());
+    expect(views).toEqual(mockViews);
+    expect(viewsStatus).toEqual(viewsStates.LOADED);
   });
 });
 

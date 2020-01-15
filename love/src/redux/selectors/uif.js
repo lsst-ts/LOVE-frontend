@@ -24,6 +24,18 @@ export const getViews = (state) => {
 
 
 /**
+ * Return the status of views from the state
+ *
+ * @param  {object} state  the state
+ * @return {array}        the list of views
+ */
+export const getViewsStatus = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.viewsStatus;
+};
+
+
+/**
  * Return the list of views from the state
  *
  * @param  {object} state  the state

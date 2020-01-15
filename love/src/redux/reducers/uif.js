@@ -1,6 +1,7 @@
 import rfdc from 'rfdc';
 import {
   RECEIVE_WORKSPACES,
+  LOADING_VIEWS,
   RECEIVE_VIEWS,
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
@@ -18,6 +19,13 @@ export const editViewStates = {
   SAVING: 'SAVING',
   SAVED: 'SAVED',
   SAVE_ERROR: 'SAVE_ERROR',
+};
+
+export const viewsStates = {
+  EMPTY: 'EMPTY',
+  LOADING: 'LOADING',
+  LOADED: 'LOADED',
+  ERROR: 'ERROR',
 };
 
 export const initialState = {
@@ -45,6 +53,7 @@ export const initialState = {
   },
   editedViewSaved: {},
   views: [],
+  viewsStatus: viewsStates.EMPTY,
   workspaces: [],
 };
 
@@ -68,6 +77,13 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           views: action.views,
+          viewsStatus: viewsStates.LOADED,
+        });
+      }
+    case LOADING_VIEWS:
+      {
+        return Object.assign({}, state, {
+          viewsStatus: viewsStates.LOADING,
         });
       }
     case RECEIVE_CURRENT_WORKSPACE:
