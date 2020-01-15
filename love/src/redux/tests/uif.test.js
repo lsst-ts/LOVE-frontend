@@ -213,6 +213,7 @@ describe('Update view under edition. GIVEN the store is empty', () => {
     });
     expect(current).toEqual(newViewData);
     expect(saved).toEqual({});
+    expect(current).not.toBe(newViewData);
   });
 });
 
@@ -245,6 +246,10 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     });
     expect(current).toEqual(newViewData);
     expect(saved).toEqual(newViewData);
+    expect(current).not.toBe(newViewData);
+    expect(saved).not.toBe(newViewData);
+    expect(current.data).not.toBe(newViewData.data);
+    expect(saved.data).not.toBe(newViewData.data);
   });
 
   it('WHEN the edited view is saved again, THEN the state should update the status', async () => {
@@ -265,6 +270,10 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     });
     expect(current).toEqual(newViewData2);
     expect(saved).toEqual(newViewData2);
+    expect(current).not.toBe(newViewData2);
+    expect(saved).not.toBe(newViewData2);
+    expect(current.data).not.toBe(newViewData2.data);
+    expect(saved.data).not.toBe(newViewData2.data);
   });
 
   it('WHEN the edited view cannot be saved again, THEN the state should save the error but keep the current data', async () => {
@@ -286,6 +295,10 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     });
     expect(current).toEqual(newViewData2);
     expect(saved).toEqual(newViewData);
+    expect(current).not.toBe(newViewData2);
+    expect(saved).not.toBe(newViewData);
+    expect(current.data).not.toBe(newViewData2.data);
+    expect(saved.data).not.toBe(newViewData.data);
   });
 });
 
@@ -315,6 +328,10 @@ describe('Load view to edit. GIVEN the store contains views', () => {
     });
     expect(current).toEqual(mockViews[1]);
     expect(saved).toEqual(mockViews[1]);
+    expect(current).not.toBe(mockViews[1]);
+    expect(current.data).not.toBe(mockViews[1].data);
+    expect(saved).not.toBe(mockViews[1]);
+    expect(saved.data).not.toBe(mockViews[1].data);
   });
 
   it('GIVEN one of the views is loaded to edit, WHEN we clear it, THEN the editedView should be cleared', async () => {
@@ -329,5 +346,9 @@ describe('Load view to edit. GIVEN the store contains views', () => {
     expect(status).toEqual(initialState.editedViewStatus);
     expect(current).toEqual(initialState.editedViewCurrent);
     expect(saved).toEqual(initialState.editedViewSaved);
+    expect(status).not.toBe(initialState.editedViewStatus);
+    expect(current).not.toBe(initialState.editedViewCurrent);
+    expect(current.data).not.toBe(initialState.editedViewCurrent.data);
+    expect(saved).not.toBe(initialState.editedViewSaved);
   });
 });
