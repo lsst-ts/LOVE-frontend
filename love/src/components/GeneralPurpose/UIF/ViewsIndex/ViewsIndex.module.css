@@ -1,0 +1,29 @@
+.container {
+    color: var(--secondary-font-color);
+    text-align: left;
+}
+
+.linkList {
+    font-size: 1.3em;
+    list-style-position: inside;
+    display: grid;
+    grid-gap: 0.5em;
+    grid-template-columns: min-content 30ch min-content min-content;
+}
+
+.linkListItem {
+    display: contents;
+}
+
+.linkListSubItem {
+    padding-top: 0.25em;
+}
+
+a {
+    color: var(--secondary-font-color);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--secondary-font-dimmed-color);
+}

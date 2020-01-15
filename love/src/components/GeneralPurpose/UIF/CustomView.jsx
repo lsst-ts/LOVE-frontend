@@ -7,6 +7,8 @@ import componentIndex from './ComponentIndex';
 import Panel from '../Panel/Panel';
 import Button from '../Button/Button';
 import GearIcon from '../../icons/GearIcon/GearIcon';
+import { viewsStates } from '../../../redux/reducers/uif';
+
 
 export default class CustomView extends Component {
   static propTypes = {
@@ -20,7 +22,7 @@ export default class CustomView extends Component {
           "h": <int:element height>,
           "i": <int:element index>,
           "cols": <int:number of columns>,
-          "allowOverflow": <bool: whether to allow component to overflow or not> 
+          "allowOverflow": <bool: whether to allow component to overflow or not>
         },
         "content": <ContainerContent> or ComponentContent>,
         "config": <string:element configuration>,
@@ -48,6 +50,12 @@ export default class CustomView extends Component {
     onComponentDelete: PropTypes.func,
     /** Callback called when a component is configured */
     onComponentConfig: PropTypes.func,
+    /** Function to load the current view from redux */
+    getCurrentView: PropTypes.func,
+    /** Location object from router */
+    location: PropTypes.object,
+    /** Status of the views request */
+    viewsStatus: PropTypes.string,
   };
 
   static defaultProps = {
@@ -57,7 +65,42 @@ export default class CustomView extends Component {
     isEditable: false,
     onComponentDelete: () => {},
     onComponentConfig: () => {},
+    getCurrentView: () => {},
+    viewsStatus: viewsStates.EMPTY,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadedView: {},
+      id: null,
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.location) {
+      const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+      if (id !== null) {
+        const loadedView = this.props.getCurrentView(id);
+        this.setState({
+          loadedView: loadedView || {},
+          id,
+        });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.viewsStatus === viewsStates.LOADING &&
+      this.props.viewsStatus === viewsStates.LOADED
+    ) {
+      const loadedView = this.props.getCurrentView(this.state.id);
+      this.setState({
+        loadedView: loadedView || {},
+      });
+    }
+  }
 
   parseConfig = (config) => {
     const newConfig = { ...config };
@@ -146,7 +189,8 @@ export default class CustomView extends Component {
   };
 
   render() {
-    const parsedTree = this.parseElement(this.props.layout, 0);
+    const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
+    const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;
   }
 }

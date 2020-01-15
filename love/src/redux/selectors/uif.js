@@ -22,6 +22,31 @@ export const getViews = (state) => {
   return state.uif.views;
 };
 
+
+/**
+ * Return the status of views from the state
+ *
+ * @param  {object} state  the state
+ * @return {array}        the list of views
+ */
+export const getViewsStatus = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.viewsStatus;
+};
+
+
+/**
+ * Return the list of views from the state
+ *
+ * @param  {object} state  the state
+ * @return {array}        the list of views
+ */
+export const getView = (state, id) => {
+  const views = getViews(state);
+  if (views === undefined) return undefined;
+  return views.find(view => view.id === id);
+};
+
 /**
  * Return the current workspace from the state
  *

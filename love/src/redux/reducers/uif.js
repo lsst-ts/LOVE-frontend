@@ -1,9 +1,13 @@
+import rfdc from 'rfdc';
 import {
   RECEIVE_WORKSPACES,
+  LOADING_VIEWS,
   RECEIVE_VIEWS,
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  CLEAR_EDITED_VIEW,
+  LOAD_EDITED_VIEW,
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
@@ -17,7 +21,14 @@ export const editViewStates = {
   SAVE_ERROR: 'SAVE_ERROR',
 };
 
-const initialState = {
+export const viewsStates = {
+  EMPTY: 'EMPTY',
+  LOADING: 'LOADING',
+  LOADED: 'LOADED',
+  ERROR: 'ERROR',
+};
+
+export const initialState = {
   currentView: null,
   currentWorkspace: null,
   editedViewCurrent: {
@@ -42,6 +53,7 @@ const initialState = {
   },
   editedViewSaved: {},
   views: [],
+  viewsStatus: viewsStates.EMPTY,
   workspaces: [],
 };
 
@@ -65,6 +77,13 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           views: action.views,
+          viewsStatus: viewsStates.LOADED,
+        });
+      }
+    case LOADING_VIEWS:
+      {
+        return Object.assign({}, state, {
+          viewsStatus: viewsStates.LOADING,
         });
       }
     case RECEIVE_CURRENT_WORKSPACE:
@@ -77,11 +96,31 @@ export default function(state = initialState, action) {
     case UPDATE_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewCurrent: action.view,
+          editedViewCurrent: rfdc()(action.view),
           editedViewStatus: {
             code: editViewStates.UNSAVED,
             details: null,
           },
+        });
+      }
+    case LOAD_EDITED_VIEW:
+      {
+        const view = state.views.find(view => view.id === action.id);
+        return Object.assign({}, state, {
+          editedViewCurrent: rfdc()(view),
+          editedViewSaved: rfdc()(view),
+          editedViewStatus: {
+            code: editViewStates.SAVED,
+            details: null,
+          },
+        });
+      }
+    case CLEAR_EDITED_VIEW:
+      {
+        return Object.assign({}, state, {
+          editedViewCurrent: rfdc()(initialState.editedViewCurrent),
+          editedViewSaved: rfdc()(initialState.editedViewSaved),
+          editedViewStatus: rfdc()(initialState.editedViewStatus),
         });
       }
     case SAVING_EDITED_VIEW:
@@ -104,12 +143,18 @@ export default function(state = initialState, action) {
       }
     case SAVED_EDITED_VIEW:
       {
+        const newView = rfdc()(action.view);
+        const index = state.views.findIndex(view => view.id === newView.id);
+        if (index !== -1) {
+          state.views[index] = newView;
+        }
         return Object.assign({}, state, {
           editedViewStatus: {
             code: editViewStates.SAVED,
             details: null,
           },
-          editedViewSaved: action.view,
+          editedViewSaved: newView,
+          views: [...state.views],
         });
       }
     default:

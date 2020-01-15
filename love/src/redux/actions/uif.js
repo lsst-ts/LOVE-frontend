@@ -1,9 +1,12 @@
 import {
   RECEIVE_WORKSPACES,
+  LOADING_VIEWS,
   RECEIVE_VIEWS,
   RECEIVE_CURRENT_WORKSPACE,
   RECEIVE_VIEW,
   UPDATE_EDITED_VIEW,
+  LOAD_EDITED_VIEW,
+  CLEAR_EDITED_VIEW,
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
@@ -19,6 +22,13 @@ export const receiveWorkspaces = (workspaces) => {
     type: RECEIVE_WORKSPACES,
     workspaces,
   };
+};
+
+/**
+* Action to mark the views as in process of being loaded
+ */
+export const loadingViews = {
+  type: LOADING_VIEWS,
 };
 
 /**
@@ -48,6 +58,24 @@ export const updateEditedView = (view) => {
   return {
     type: UPDATE_EDITED_VIEW,
     view,
+  };
+};
+
+/**
+ * Action to update the view under edition
+ */
+export const clearViewToEdit = {
+  type: CLEAR_EDITED_VIEW,
+};
+
+/**
+ * Action to update the view under edition
+ */
+export const loadViewToEdit = (id) => {
+  // const view = getViews(id);
+  return {
+    type: LOAD_EDITED_VIEW,
+    id,
   };
 };
 
@@ -107,6 +135,7 @@ export function requestWorkspaces() {
  */
 export function requestViews() {
   return async (dispatch, getState) => {
+    dispatch(loadingViews);
     const url = `${ManagerInterface.getUifBaseUrl()}views`;
     return fetch(url, {
       method: 'GET',
