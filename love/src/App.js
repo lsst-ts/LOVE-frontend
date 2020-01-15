@@ -22,9 +22,9 @@ import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountV
 import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
-import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
 import ViewEditorContainer from './components/GeneralPurpose/UIF/ViewEditor/ViewEditor.container';
 import WatcherContainer from './components/Watcher/Watcher.container';
+import CustomViewContainer from './components/GeneralPurpose/UIF/CustomView.container';
 
 class App extends Component {
   static propTypes = {
@@ -135,7 +135,7 @@ class App extends Component {
               )}
             />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
-            <PrivateRoute token={this.props.token} path="/uif/view" component={CustomViewSample} />
+            <PrivateRoute token={this.props.token} path="/uif/view" component={CustomViewContainer} />
             <PrivateRoute token={this.props.token} path="/uif/view-editor" component={ViewEditorContainer} />
             <PrivateRoute token={this.props.token} path="/uif" render={() => <ViewsIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
