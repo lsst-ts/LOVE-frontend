@@ -10,33 +10,22 @@ const encoder = new TextEncoder('utf-8');
  */
 const getHeaderInfo = (arrayBuffer) => {
   // find the [START] in the string-decoded array
-  const START_STRING = '[START]\r\n';
   const decodedArray = decoder.decode(arrayBuffer);
-  const startIndex = decodedArray.indexOf(START_STRING);
-  const headerCandidate = decodedArray.slice(startIndex, startIndex + 50);
+  const sections = decodedArray.split('[END]\r\n').filter((s) => s.startsWith('[START]'));
+  const exposure = sections[0];
+  const remainder = sections.slice(1).join('');
 
-  const decoded = headerCandidate;
-
-  // extract header data
-  const split = decoded.split('\r\n');
-  const START = split[0];
-  const widthString = split[1];
-  const heightString = split[2];
-  const isJPEGString = split[3];
-  const lengthString = split[4];
-  const matrixStartPosition = decoded.search(`${lengthString}\r\n`) + `${lengthString}\r\n`.length;
-  const headerString = decoded.slice(0, matrixStartPosition);
-
-  const body = encoder.encode(decodedArray.slice(headerString.length)).slice(0, 1024 * 1024);
+  const [START, widthString, heightString, isJPEGString, lengthString, buffer] = exposure.split('\r\n');
 
   return {
-    _decoded: decoded,
+    exposure: exposure,
+    remainder: remainder,
     _START: START,
     width: parseInt(widthString),
     height: parseInt(heightString),
     isJPEG: isJPEGString === '1',
     length: parseInt(lengthString),
-    body: body,
+    body: encoder.encode(buffer),
   };
 };
 
@@ -124,6 +113,7 @@ const readImageDataFromBlob = (blob) => {
       const arrayBuffer = event.target.result;
 
       const headerInfo = getHeaderInfo(arrayBuffer);
+      console.log('headerInfo.body', headerInfo.body);
 
       resolve(headerInfo);
     };
@@ -135,7 +125,7 @@ const readImageDataFromBlob = (blob) => {
 /**
  * Connects to the Generic Camera server with fetch and attempts
  * to draw images in a canvas from that stream.
- * @param {function} callback 
+ * @param {function} callback
  */
 const fetchImageFromStream = (callback) => {
   return fetch('http://localhost/gencam').then(async (r) => {
@@ -157,7 +147,7 @@ const fetchImageFromStream = (callback) => {
 };
 
 /**
- * Draws a canvas in grayscale representing colors coming from 
+ * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
 export default function() {
