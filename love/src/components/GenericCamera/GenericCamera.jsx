@@ -58,10 +58,13 @@ const draw = (array, canvas) => {
  * i.e., it has at least one [START]...[END] block when decoded.
  * @param {ReadableStreamDefaultReader} reader
  */
-const readNextBlobFromStream = (reader) => {
+const readNextBlobFromStream = (reader, remainder) => {
   const stream = new ReadableStream({
     start(controller) {
-      let fullDecodedBuffer = '';
+      // first load the remainder from previous chunk
+      let fullDecodedBuffer = remainder;
+      controller.enqueue(encoder.encode(remainder));
+
       return pump();
       function pump() {
         return reader.read().then(({ done, value }) => {
@@ -113,7 +116,6 @@ const readImageDataFromBlob = (blob) => {
       const arrayBuffer = event.target.result;
 
       const headerInfo = getHeaderInfo(arrayBuffer);
-      console.log('headerInfo.body', headerInfo.body);
 
       resolve(headerInfo);
     };
@@ -132,13 +134,16 @@ const fetchImageFromStream = (callback) => {
     const reader = r.body.getReader();
     let count = 0;
 
+    let remainder = '';
+
     const animate = async () => {
       // if (count > 5) return;
       count++;
 
-      const blob = await readNextBlobFromStream(reader, count);
+      const blob = await readNextBlobFromStream(reader, remainder);
 
       const imageDataFromBlob = await readImageDataFromBlob(blob, count);
+      remainder = imageDataFromBlob.remainder;
       callback(imageDataFromBlob);
       requestAnimationFrame(animate);
     };
