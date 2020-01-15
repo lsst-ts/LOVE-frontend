@@ -127,12 +127,18 @@ export default function(state = initialState, action) {
       }
     case SAVED_EDITED_VIEW:
       {
+        const newView = rfdc()(action.view);
+        const index = state.views.findIndex(view => view.id === newView.id);
+        if (index !== -1) {
+          state.views[index] = newView;
+        }
         return Object.assign({}, state, {
           editedViewStatus: {
             code: editViewStates.SAVED,
             details: null,
           },
-          editedViewSaved: rfdc()(action.view),
+          editedViewSaved: newView,
+          views: [...state.views],
         });
       }
     default:

@@ -19,6 +19,7 @@ import {
 } from '../actions/uif';
 import {
   getViews,
+  getView,
   getWorkspaces,
   getCurrentWorkspace,
   getEditedViewCurrent,
@@ -222,6 +223,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const token = '"love-token"';
     localStorage.setItem('LOVE-TOKEN', token);
     await store.dispatch(getTokenFromStorage(token));
+    await store.dispatch(receiveViews(mockViews));
     await store.dispatch(updateEditedView(newViewData));
   });
 
@@ -250,6 +252,8 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     expect(saved).not.toBe(newViewData);
     expect(current.data).not.toBe(newViewData.data);
     expect(saved.data).not.toBe(newViewData.data);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
   });
 
   it('WHEN the edited view is saved again, THEN the state should update the status', async () => {
@@ -264,16 +268,22 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const status = getEditedViewStatus(store.getState());
     const current = getEditedViewCurrent(store.getState());
     const saved = getEditedViewSaved(store.getState());
+    const view = getView(store.getState(), newViewData.id);
     expect(status).toEqual({
       code: editViewStates.SAVED,
       details: null,
     });
     expect(current).toEqual(newViewData2);
     expect(saved).toEqual(newViewData2);
+    expect(view).toEqual(newViewData2);
     expect(current).not.toBe(newViewData2);
     expect(saved).not.toBe(newViewData2);
+    expect(view).not.toBe(newViewData2);
     expect(current.data).not.toBe(newViewData2.data);
     expect(saved.data).not.toBe(newViewData2.data);
+    expect(view.data).not.toBe(newViewData2.data);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
   });
 
   it('WHEN the edited view cannot be saved again, THEN the state should save the error but keep the current data', async () => {
@@ -299,6 +309,8 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     expect(saved).not.toBe(newViewData);
     expect(current.data).not.toBe(newViewData2.data);
     expect(saved.data).not.toBe(newViewData.data);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
   });
 });
 
@@ -331,6 +343,8 @@ describe('Load view to edit. GIVEN the store contains views', () => {
     expect(current).not.toBe(mockViews[1]);
     expect(current.data).not.toBe(mockViews[1].data);
     expect(saved).not.toBe(mockViews[1]);
+    expect(saved).not.toBe(current);
+    expect(saved.data).not.toBe(current.data);
     expect(saved.data).not.toBe(mockViews[1].data);
   });
 
