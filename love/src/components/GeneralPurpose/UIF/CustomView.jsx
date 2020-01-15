@@ -48,6 +48,10 @@ export default class CustomView extends Component {
     onComponentDelete: PropTypes.func,
     /** Callback called when a component is configured */
     onComponentConfig: PropTypes.func,
+    /** Function to load the current view from redux */
+    getCurrentView: PropTypes.func,
+    /** Location object from router */
+    location: PropTypes.object,
   };
 
   static defaultProps = {
@@ -57,7 +61,27 @@ export default class CustomView extends Component {
     isEditable: false,
     onComponentDelete: () => {},
     onComponentConfig: () => {},
+    getCurrentView: () => {},
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadedView: {},
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.location) {
+      const id = new URLSearchParams(this.props.location.search).get('id');
+      if (id !== null) {
+        const loadedView = this.props.getCurrentView(parseInt(id, 10));
+        this.setState({
+          loadedView: loadedView || {},
+        });
+      }
+    }
+  }
 
   parseConfig = (config) => {
     const newConfig = { ...config };
@@ -146,7 +170,8 @@ export default class CustomView extends Component {
   };
 
   render() {
-    const parsedTree = this.parseElement(this.props.layout, 0);
+    const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
+    const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;
   }
 }
