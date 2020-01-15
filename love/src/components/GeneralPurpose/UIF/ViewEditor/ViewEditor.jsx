@@ -54,6 +54,7 @@ class ViewEditor extends Component {
       name: this.props.editedViewCurrent ? this.props.editedViewCurrent.name : '',
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
+      id: null,
     };
   }
 
@@ -62,6 +63,9 @@ class ViewEditor extends Component {
     if (id === null) this.props.clearEditedView();
     else {
       this.props.loadViewToEdit(parseInt(id, 10));
+      this.setState({
+        id,
+      });
     }
   }
 
@@ -70,8 +74,8 @@ class ViewEditor extends Component {
       if (this.props.editedViewStatus.code === editViewStates.SAVING) {
         console.log('Saving');
       } else if (
-        (prevProps.editedViewStatus.code === editViewStates.SAVING) &&
-        (this.props.editedViewStatus.code === editViewStates.SAVED)
+        prevProps.editedViewStatus.code === editViewStates.SAVING &&
+        this.props.editedViewStatus.code === editViewStates.SAVED
       ) {
         toast.success('View saved successfully');
       } else if (this.props.editedViewStatus.code === editViewStates.SAVE_ERROR) {
