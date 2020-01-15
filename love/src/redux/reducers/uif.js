@@ -79,7 +79,7 @@ export default function(state = initialState, action) {
     case UPDATE_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewCurrent: action.view,
+          editedViewCurrent: JSON.parse(JSON.stringify(action.view)),
           editedViewStatus: {
             code: editViewStates.UNSAVED,
             details: null,
@@ -88,10 +88,10 @@ export default function(state = initialState, action) {
       }
     case LOAD_EDITED_VIEW:
       {
-        const view = state.views.find(view => view.id === action.id);
+        const viewStr = JSON.stringify(state.views.find(view => view.id === action.id));
         return Object.assign({}, state, {
-          editedViewCurrent: view,
-          editedViewSaved: view,
+          editedViewCurrent: JSON.parse(viewStr),
+          editedViewSaved: JSON.parse(viewStr),
           editedViewStatus: {
             code: editViewStates.SAVED,
             details: null,
@@ -101,9 +101,9 @@ export default function(state = initialState, action) {
     case CLEAR_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewCurrent: initialState.editedViewCurrent,
-          editedViewSaved: initialState.editedViewSaved,
-          editedViewStatus: initialState.editedViewStatus,
+          editedViewCurrent: JSON.parse(JSON.stringify(initialState.editedViewCurrent)),
+          editedViewSaved: JSON.parse(JSON.stringify(initialState.editedViewSaved)),
+          editedViewStatus: JSON.parse(JSON.stringify(initialState.editedViewStatus)),
         });
       }
     case SAVING_EDITED_VIEW:
@@ -131,7 +131,7 @@ export default function(state = initialState, action) {
             code: editViewStates.SAVED,
             details: null,
           },
-          editedViewSaved: action.view,
+          editedViewSaved: JSON.parse(JSON.stringify(action.view)),
         });
       }
     default:
