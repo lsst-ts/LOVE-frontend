@@ -1,3 +1,4 @@
+import rfdc from 'rfdc';
 import {
   RECEIVE_WORKSPACES,
   RECEIVE_VIEWS,
@@ -79,7 +80,7 @@ export default function(state = initialState, action) {
     case UPDATE_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewCurrent: JSON.parse(JSON.stringify(action.view)),
+          editedViewCurrent: rfdc()(action.view),
           editedViewStatus: {
             code: editViewStates.UNSAVED,
             details: null,
@@ -88,10 +89,10 @@ export default function(state = initialState, action) {
       }
     case LOAD_EDITED_VIEW:
       {
-        const viewStr = JSON.stringify(state.views.find(view => view.id === action.id));
+        const view = state.views.find(view => view.id === action.id);
         return Object.assign({}, state, {
-          editedViewCurrent: JSON.parse(viewStr),
-          editedViewSaved: JSON.parse(viewStr),
+          editedViewCurrent: rfdc()(view),
+          editedViewSaved: rfdc()(view),
           editedViewStatus: {
             code: editViewStates.SAVED,
             details: null,
@@ -101,9 +102,9 @@ export default function(state = initialState, action) {
     case CLEAR_EDITED_VIEW:
       {
         return Object.assign({}, state, {
-          editedViewCurrent: JSON.parse(JSON.stringify(initialState.editedViewCurrent)),
-          editedViewSaved: JSON.parse(JSON.stringify(initialState.editedViewSaved)),
-          editedViewStatus: JSON.parse(JSON.stringify(initialState.editedViewStatus)),
+          editedViewCurrent: rfdc()(initialState.editedViewCurrent),
+          editedViewSaved: rfdc()(initialState.editedViewSaved),
+          editedViewStatus: rfdc()(initialState.editedViewStatus),
         });
       }
     case SAVING_EDITED_VIEW:
@@ -131,7 +132,7 @@ export default function(state = initialState, action) {
             code: editViewStates.SAVED,
             details: null,
           },
-          editedViewSaved: JSON.parse(JSON.stringify(action.view)),
+          editedViewSaved: rfdc()(action.view),
         });
       }
     default:
