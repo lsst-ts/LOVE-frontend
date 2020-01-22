@@ -18,4 +18,5 @@
   padding: var(--content-padding);
   overflow: auto;
   height: calc(100vh - 4em);
+  will-change: transform;
 }

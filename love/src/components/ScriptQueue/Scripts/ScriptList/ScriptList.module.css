@@ -6,6 +6,7 @@
   overflow-y: scroll;
   overflow-x: hidden;
   border-radius: 5px;
+  will-change: transform;
 }
 
 .scriptListContainer {
