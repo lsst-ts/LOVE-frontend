@@ -102,6 +102,11 @@ export default class ScriptQueue extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
+    if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
+      this.props.availableScriptList.sort((a, b) => {
+        return a.path.localeCompare(b.path, 'en', { sensitivity: 'base' });
+      });
+    }
     if (this.props.heartbeats !== prevProps.heartbeats) {
       this.setState({
         indexedHeartbeats: this.props.heartbeats.reduce((map, heartbeat) => {
@@ -498,6 +503,7 @@ export default class ScriptQueue extends Component {
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
+
     return (
       <Panel title={`Script Queue   | SalIndex = ${this.props.salindex}`} fit={this.props.fit}>
         <div
@@ -619,7 +625,7 @@ export default class ScriptQueue extends Component {
                       >
                         {this.props.availableScriptList.map((script) => {
                           if (script.type && script.type.toLowerCase() !== 'standard') return null;
-                          if (script.path.indexOf(this.state.availableScriptsFilter) < 0) return null;
+                          if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) return null;
                           return this.renderAvailableScript(script);
                         })}
                       </div>
@@ -641,7 +647,7 @@ export default class ScriptQueue extends Component {
                       >
                         {this.props.availableScriptList.map((script) => {
                           if (script.type && script.type.toLowerCase() !== 'external') return null;
-                          if (script.path.indexOf(this.state.availableScriptsFilter) < 0) return null;
+                          if (!script.path.toLowerCase().includes(this.state.availableScriptsFilter.toLowerCase())) return null;
                           return this.renderAvailableScript(script);
                         })}
                       </div>
