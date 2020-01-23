@@ -6,7 +6,7 @@
  */
 export const getWorkspaces = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.workspaces;
+  return state.uif.present.workspaces;
 };
 
 /**
@@ -17,7 +17,7 @@ export const getWorkspaces = (state) => {
  */
 export const getViews = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.views;
+  return state.uif.present.views;
 };
 
 /**
@@ -28,7 +28,7 @@ export const getViews = (state) => {
  */
 export const getViewsStatus = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.viewsStatus;
+  return state.uif.present.viewsStatus;
 };
 
 /**
@@ -52,7 +52,7 @@ export const getView = (state, id) => {
 export const getCurrentWorkspace = (state) => {
   if (state.uif === undefined) return undefined;
   const id = state.uif.currentWorkspace;
-  return state.uif.workspaces.find((workspace) => {
+  return state.uif.present.workspaces.find((workspace) => {
     return workspace.id === id;
   });
 };
@@ -65,7 +65,7 @@ export const getCurrentWorkspace = (state) => {
  */
 export const getEditedViewCurrent = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.editedViewCurrent;
+  return state.uif.present.editedViewCurrent;
 };
 
 /**
@@ -76,7 +76,7 @@ export const getEditedViewCurrent = (state) => {
  */
 export const getEditedViewStatus = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.editedViewStatus;
+  return state.uif.present.editedViewStatus;
 };
 
 /**
@@ -87,5 +87,5 @@ export const getEditedViewStatus = (state) => {
  */
 export const getEditedViewSaved = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.editedViewSaved;
+  return state.uif.present.editedViewSaved;
 };
