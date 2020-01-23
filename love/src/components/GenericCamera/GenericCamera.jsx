@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 const decoder = new TextDecoder('utf-8');
 const encoder = new TextEncoder('utf-8');
 
@@ -152,17 +152,20 @@ const fetchImageFromStream = (callback, signal) => {
  * the Generic Camera images
  */
 export default function() {
+  const canvasRef = useRef(null);
   useEffect(() => {
     const canvas = document.getElementById('canvas');
     const controller = new AbortController();
     const signal = controller.signal;
     fetchImageFromStream((image) => {
-      draw(new Uint8Array(image.body), canvas);
+      if(canvasRef.current ){
+        draw(new Uint8Array(image.body), canvasRef.current);
+      }
     }, signal);
 
     return () => {
       controller.abort();
     };
   }, []);
-  return <canvas id="canvas" width="1024" height="1024"></canvas>;
+  return <canvas ref={canvasRef} id="canvas" width="1024" height="1024"></canvas>;
 }
