@@ -154,11 +154,12 @@ const fetchImageFromStream = (callback, signal) => {
 export default function() {
   const canvasRef = useRef(null);
   useEffect(() => {
-    const canvas = document.getElementById('canvas');
     const controller = new AbortController();
     const signal = controller.signal;
     fetchImageFromStream((image) => {
-      if(canvasRef.current ){
+      if (canvasRef.current) {
+        canvasRef.current.width = image.width;
+        canvasRef.current.height = image.height;
         draw(new Uint8Array(image.body), canvasRef.current);
       }
     }, signal);
@@ -167,5 +168,5 @@ export default function() {
       controller.abort();
     };
   }, []);
-  return <canvas ref={canvasRef} id="canvas" width="1024" height="1024"></canvas>;
+  return <canvas ref={canvasRef}></canvas>;
 }
