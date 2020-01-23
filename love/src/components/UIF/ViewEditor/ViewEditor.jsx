@@ -6,13 +6,13 @@ import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 // import queryString from 'query-string';
 
-import Button from '../../Button/Button';
-import Input from '../../Input/Input';
-import Modal from '../../Modal/Modal';
+import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
+import Modal from '../../GeneralPurpose/Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
-import { editViewStates, viewsStates } from '../../../../redux/reducers/uif';
+import { editViewStates, viewsStates } from '../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
