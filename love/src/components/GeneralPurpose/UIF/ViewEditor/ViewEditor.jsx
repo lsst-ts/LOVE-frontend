@@ -174,7 +174,7 @@ class ViewEditor extends Component {
       return newElement;
     }
     if (element.properties.type === 'container') {
-      Object.keys(element.content).map((key) => {
+      Object.keys(element.content).forEach((key) => {
         newElement.content[key] = this.updateElementProperties(element.content[key], properties);
       });
     }

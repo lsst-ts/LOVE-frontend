@@ -190,7 +190,6 @@ export default class LightPath extends Component {
 
   drawM3 = (props) => {
     const m3State = props.m3State;
-    const m3InPosition = props.m3InPosition;
     const portSelected = props.m3PortSelected;
 
     const m3StateText = m3RotatorStateMap[m3State];
@@ -253,7 +252,7 @@ export default class LightPath extends Component {
   };
 
   drawM2 = (props) => {
-    const hexapodInPosition = props.hexapodInPosition;
+    const hexapodInPosition = { props };
     const hexapodInPositionText = hexapodInPositionStateMap[hexapodInPosition];
     const hexapodClass = styles[stateToStyleLightpath[hexapodInPositionText]];
     return (

@@ -10,10 +10,6 @@ import {
 import styles from './MotorTable.module.css';
 
 export default class MotorTable extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount = () => {
     this.props.subscribeToStream();
   };
@@ -45,7 +41,9 @@ export default class MotorTable extends Component {
       az1: {
         name: 'Az1',
         angle: mountEncoders.azimuthCalculatedAngle ? mountEncoders.azimuthCalculatedAngle.value[0] : '-',
-        velocity: measuredMotorVelocity.azimuthMotor1Velocity ? measuredMotorVelocity.azimuthMotor1Velocity.value[0] : '-',
+        velocity: measuredMotorVelocity.azimuthMotor1Velocity
+          ? measuredMotorVelocity.azimuthMotor1Velocity.value[0]
+          : '-',
         measuredTorque: measuredTorque.azimuthMotor1Torque ? measuredTorque.azimuthMotor1Torque.value[0] : '-',
         torqueDemand: torqueDemand.azimuthMotor1Torque ? torqueDemand.azimuthMotor1Torque.value[0] : '-',
         motorEncoder: mountMotorEncoders.azimuth1Encoder ? mountMotorEncoders.azimuth1Encoder.value[0] : '-',
@@ -56,7 +54,9 @@ export default class MotorTable extends Component {
       az2: {
         name: 'Az2',
         angle: mountEncoders.azimuthCalculatedAngle ? mountEncoders.azimuthCalculatedAngle.value[0] : '-',
-        velocity: measuredMotorVelocity.azimuthMotor2Velocity ? measuredMotorVelocity.azimuthMotor2Velocity.value[0] : '-',
+        velocity: measuredMotorVelocity.azimuthMotor2Velocity
+          ? measuredMotorVelocity.azimuthMotor2Velocity.value[0]
+          : '-',
         measuredTorque: measuredTorque.azimuthMotor2Torque ? measuredTorque.azimuthMotor2Torque.value[0] : '-',
         torqueDemand: torqueDemand.azimuthMotor2Torque ? torqueDemand.azimuthMotor2Torque.value[0] : '-',
         motorEncoder: mountMotorEncoders.azimuth2Encoder ? mountMotorEncoders.azimuth2Encoder.value[0] : '-',
@@ -67,7 +67,9 @@ export default class MotorTable extends Component {
       el: {
         name: 'El',
         angle: mountEncoders.elevationCalculatedAngle ? mountEncoders.elevationCalculatedAngle.value[0] : '-',
-        velocity: measuredMotorVelocity.azimuthMotor2Velocity ? measuredMotorVelocity.azimuthMotor2Velocity.value[0] : '-',
+        velocity: measuredMotorVelocity.azimuthMotor2Velocity
+          ? measuredMotorVelocity.azimuthMotor2Velocity.value[0]
+          : '-',
         measuredTorque: measuredTorque.elevationMotorTorque ? measuredTorque.elevationMotorTorque.value[0] : '-',
         torqueDemand: torqueDemand.elevationMotorTorque ? torqueDemand.elevationMotorTorque.value[0] : '-',
         motorEncoder: mountMotorEncoders.elevationEncoder ? mountMotorEncoders.elevationEncoder.value[0] : '-',
@@ -78,7 +80,9 @@ export default class MotorTable extends Component {
       nas1: {
         name: 'Nas1',
         angle: mountEncoders.nasmyth1CalculatedAngle ? mountEncoders.nasmyth1CalculatedAngle.value[0] : '-',
-        velocity: measuredMotorVelocity.nasmyth1MotorVelocity ? measuredMotorVelocity.nasmyth1MotorVelocity.value[0] : '-',
+        velocity: measuredMotorVelocity.nasmyth1MotorVelocity
+          ? measuredMotorVelocity.nasmyth1MotorVelocity.value[0]
+          : '-',
         measuredTorque: measuredTorque.nasmyth1MotorTorque ? measuredTorque.nasmyth1MotorTorque.value[0] : '-',
         torqueDemand: torqueDemand.nasmyth1MotorTorque ? torqueDemand.nasmyth1MotorTorque.value[0] : '-',
         motorEncoder: mountMotorEncoders.nasmyth1Encoder ? mountMotorEncoders.nasmyth1Encoder.value[0] : '-',
@@ -89,7 +93,9 @@ export default class MotorTable extends Component {
       nas2: {
         name: 'Nas2',
         angle: mountEncoders.nasmyth2CalculatedAngle ? mountEncoders.nasmyth2CalculatedAngle.value[0] : '-',
-        velocity: measuredMotorVelocity.nasmyth2MotorVelocity ? measuredMotorVelocity.nasmyth2MotorVelocity.value[0] : '-',
+        velocity: measuredMotorVelocity.nasmyth2MotorVelocity
+          ? measuredMotorVelocity.nasmyth2MotorVelocity.value[0]
+          : '-',
         measuredTorque: measuredTorque.nasmyth2MotorTorque ? measuredTorque.nasmyth2MotorTorque.value[0] : '-',
         torqueDemand: torqueDemand.nasmyth2MotorTorque ? torqueDemand.nasmyth2MotorTorque.value[0] : '-',
         motorEncoder: mountMotorEncoders.nasmyth2Encoder ? mountMotorEncoders.nasmyth2Encoder.value[0] : '-',
@@ -117,10 +123,18 @@ export default class MotorTable extends Component {
         <Thead>
           <Tr className={styles.headerRow}>
             <Th>Motor</Th>
-            <Th>Axis Angle <span className={styles.units}>[deg]</span></Th>
-            <Th>Velocity <span className={styles.units}>[deg/s]</span></Th>
-            <Th>Meas. Torque <span className={styles.units}>[A]</span></Th>
-            <Th>Dem. Torque <span className={styles.units}>[A]</span></Th>
+            <Th>
+              Axis Angle <span className={styles.units}>[deg]</span>
+            </Th>
+            <Th>
+              Velocity <span className={styles.units}>[deg/s]</span>
+            </Th>
+            <Th>
+              Meas. Torque <span className={styles.units}>[A]</span>
+            </Th>
+            <Th>
+              Dem. Torque <span className={styles.units}>[A]</span>
+            </Th>
             <Th>Encoder</Th>
             <Th>Encoder Raw</Th>
             <Th className={styles.statusColumn}>Brake status</Th>
@@ -162,7 +176,11 @@ export default class MotorTable extends Component {
                     );
                   }
                   if (isNaN(value)) {
-                    return <Td isNumber key={col}>{value}</Td>;
+                    return (
+                      <Td isNumber key={col}>
+                        {value}
+                      </Td>
+                    );
                   }
                   return (
                     <Td isNumber key={col}>

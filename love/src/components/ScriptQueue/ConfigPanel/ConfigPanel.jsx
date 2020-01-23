@@ -171,7 +171,7 @@ export default class ConfigPanel extends Component {
       const currentX = ev.clientX;
       const currentY = ev.clientY;
 
-      const { orientation, resizingStart, width, height, sizeWeight } = this.state;
+      const { orientation, resizingStart, width, height } = this.state;
       const displacement = orientation === 'stacked' ? currentY - resizingStart.y : currentX - resizingStart.x;
       const total = orientation === 'stacked' ? height : width;
       const boundary = 150 / height; //150px aprox of titles and buttons
