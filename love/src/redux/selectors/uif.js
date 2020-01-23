@@ -89,3 +89,14 @@ export const getEditedViewSaved = (state) => {
   if (state.uif === undefined) return undefined;
   return state.uif.present.editedViewSaved;
 };
+
+/**
+ * Return the LOVE mode (VIEW or EDIT)
+ *
+ * @param  {object} state  the state
+ * @return {string}        the mode of the LOVE
+ */
+export const getMode = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.mode;
+};
