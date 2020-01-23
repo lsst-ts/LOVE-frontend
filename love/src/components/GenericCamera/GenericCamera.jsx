@@ -129,14 +129,13 @@ const readImageDataFromBlob = (blob) => {
  * to draw images in a canvas from that stream.
  * @param {function} callback
  */
-const fetchImageFromStream = (callback) => {
-  return fetch('http://localhost/gencam').then(async (r) => {
+const fetchImageFromStream = (callback, signal) => {
+  return fetch('http://localhost/gencam', { signal }).then(async (r) => {
     const reader = r.body.getReader();
 
     let remainder = '';
 
     const animate = async () => {
-
       const blob = await readNextBlobFromStream(reader, remainder);
 
       const imageDataFromBlob = await readImageDataFromBlob(blob);
@@ -155,11 +154,15 @@ const fetchImageFromStream = (callback) => {
 export default function() {
   useEffect(() => {
     const canvas = document.getElementById('canvas');
-
-    let fetchPromise = fetchImageFromStream((image) => {
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetchImageFromStream((image) => {
       draw(new Uint8Array(image.body), canvas);
-    });
+    }, signal);
+
+    return () => {
+      controller.abort();
+    };
   }, []);
   return <canvas id="canvas" width="1024" height="1024"></canvas>;
-
 }
