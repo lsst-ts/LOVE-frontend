@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import GridLayout from 'react-grid-layout';
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
-import '../../AuxTel/Mount/MotorTable/MotorTable.container';
+import '../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
-import Button from '../Button/Button';
-import GearIcon from '../../icons/GearIcon/GearIcon';
-import { viewsStates } from '../../../redux/reducers/uif';
+import Button from '../GeneralPurpose/Button/Button';
+import GearIcon from '../icons/GearIcon/GearIcon';
+import { viewsStates } from '../../redux/reducers/uif';
 
 
 export default class CustomView extends Component {

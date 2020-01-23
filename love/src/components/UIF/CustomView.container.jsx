@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getView, getViewsStatus } from '../../../redux/selectors';
+import { getView, getViewsStatus } from '../../redux/selectors';
 import CustomView from './CustomView';
 
 const ViewEditorContainer = ({...props }) => {
