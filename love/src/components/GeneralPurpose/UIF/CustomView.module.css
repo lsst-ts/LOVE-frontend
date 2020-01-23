@@ -1,5 +1,4 @@
 .container {
-  background: rgba(255, 0, 0, 0.8);
 }
 
 .containerPanel {
@@ -11,15 +10,25 @@
 }
 
 .componentWrapper {
-  background: rgba(255, 0, 0, 0.3);
-  border: 1px solid white;
+  /* background: rgba(255, 0, 0, 0.3); */
   display: flex;
   justify-content: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.editable {
+  border: 1px dashed #bbb;
 }
 
 .noOverflow {
   overflow: hidden;
 }
+
+.allowOverflow {
+  z-index: 2;
+}
+
 .componentWrapper :global(.react-resizable-handle) {
   position: absolute;
   width: 20px;
@@ -39,4 +48,32 @@
   height: 5px;
   border-right: 2px solid rgba(255, 255, 255, 0.4);
   border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.editableComponentActions {
+  display: none;
+}
+
+.editable .editableComponentActions {
+  position: absolute;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 0.2em;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.3em;
+  border: 1px dashed #bbb;
+  box-sizing: border-box;
+  background: var(--second-secondary-background-color);
+  z-index: 10;
+}
+
+.gearIconWrapper {
+  width: 1.2em;
+  cursor: pointer;
+  margin: auto;
+}
+
+.gearIconWrapper svg {
+  vertical-align: text-top;
 }

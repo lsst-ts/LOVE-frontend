@@ -123,7 +123,7 @@ export default class Login extends Component {
                   name="username"
                   autoFocus=""
                   required=""
-                  id="id-username"
+                  id="id_username"
                   onChange={this.handleInputChange}
                   value={this.state.username}
                 />

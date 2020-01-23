@@ -9,6 +9,7 @@
     "array-callback-return": "off",
     "object-curly-newline": "off",
     "no-bitwise": "off",
+    "no-eval": "off",
     "no-underscore-dangle": "off"
   },
   "plugins": ["only-warn"],

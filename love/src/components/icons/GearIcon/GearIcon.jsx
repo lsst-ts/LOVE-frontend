@@ -6,7 +6,7 @@ export default class GearIcon extends Component {
     const status = this.props.active ? styles.active : styles.inactive;
     return (
       <svg className={styles.gearIcon} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
-        <title>Go back to configuration</title>
+        <title>Configuration</title>
         <defs />
         <g id="Layer_1" data-name="Layer 1">
           <path
