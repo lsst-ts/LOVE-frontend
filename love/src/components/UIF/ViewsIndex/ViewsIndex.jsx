@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Button from '../../Button/Button';
+import Button from '../../GeneralPurpose/Button/Button';
 
 import styles from './ViewsIndex.module.css';
 
