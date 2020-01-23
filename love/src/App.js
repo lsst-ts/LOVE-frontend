@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
+import ViewsIndexContainer from './components/GeneralPurpose/UIF/ViewsIndex/ViewsIndex.container';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
-import Layout from './components/Layout/Layout';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
@@ -22,26 +22,31 @@ import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountV
 import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
-import CustomViewSample from './components/GeneralPurpose/UIF/CustomViewSample';
-import CustomViewEditor from './components/GeneralPurpose/UIF/CustomViewEditor/CustomViewEditor';
+import ViewEditorContainer from './components/GeneralPurpose/UIF/ViewEditor/ViewEditor.container';
 import WatcherContainer from './components/Watcher/Watcher.container';
 import GenericCamera from './components/GenericCamera/GenericCamera';
+import CustomViewContainer from './components/GeneralPurpose/UIF/CustomView.container';
 
 class App extends Component {
   static propTypes = {
     location: PropTypes.object,
     validateToken: PropTypes.func,
+    requestWorkspaces: PropTypes.func,
+    requestViews: PropTypes.func,
     token: PropTypes.string,
   };
 
   static defaultProps = {
     location: null,
     validateToken: () => {},
+    requestWorkspaces: () => {},
+    requestViews: () => {},
     token: null,
   };
 
   componentDidMount = () => {
     this.props.validateToken();
+    this.props.requestViews();
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
@@ -53,7 +58,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <LayoutContainer>
+        <LayoutContainer token={this.props.token}>
           <Switch>
             <Route path="/login" render={() => <LoginContainer />} />
             <PrivateRoute
@@ -130,10 +135,11 @@ class App extends Component {
                 </Panel>
               )}
             />
-            <PrivateRoute token={this.props.token} path="/custom-view" component={CustomViewSample} />
-            <PrivateRoute token={this.props.token} path="/custom-view-editor" component={CustomViewEditor} />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
             <PrivateRoute token={this.props.token} path="/generic-camera" render={() => <GenericCamera />} />
+            <PrivateRoute token={this.props.token} path="/uif/view" component={CustomViewContainer} />
+            <PrivateRoute token={this.props.token} path="/uif/view-editor" component={ViewEditorContainer} />
+            <PrivateRoute token={this.props.token} path="/uif" render={() => <ViewsIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
             
 

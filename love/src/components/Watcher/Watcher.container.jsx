@@ -7,7 +7,6 @@ import {
   requestSALCommand,
 } from '../../redux/actions/ws';
 import Watcher from './Watcher';
-import mockAlarms from './AlarmsTable/mock';
 
 export const schema = {
   description: `Table containing alarms triggered by all CSCs, with the corresponding 

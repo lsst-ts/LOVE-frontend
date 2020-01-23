@@ -4,7 +4,10 @@ import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
-import Panel from '../Panel/Panel';
+import Button from '../Button/Button';
+import GearIcon from '../../icons/GearIcon/GearIcon';
+import { viewsStates } from '../../../redux/reducers/uif';
+
 
 export default class CustomView extends Component {
   static propTypes = {
@@ -18,7 +21,7 @@ export default class CustomView extends Component {
           "h": <int:element height>,
           "i": <int:element index>,
           "cols": <int:number of columns>,
-          "allowOverflow": <bool: whether to allow component to overflow or not> 
+          "allowOverflow": <bool: whether to allow component to overflow or not>
         },
         "content": <ContainerContent> or ComponentContent>,
         "config": <string:element configuration>,
@@ -40,13 +43,63 @@ export default class CustomView extends Component {
     baseColWidth: PropTypes.number,
     /** Callback called when layout changes */
     onLayoutChange: PropTypes.func,
+    /** Whether the view is editable */
+    isEditable: PropTypes.bool,
+    /** Callback called when a component is deleted */
+    onComponentDelete: PropTypes.func,
+    /** Callback called when a component is configured */
+    onComponentConfig: PropTypes.func,
+    /** Function to load the current view from redux */
+    getCurrentView: PropTypes.func,
+    /** Location object from router */
+    location: PropTypes.object,
+    /** Status of the views request */
+    viewsStatus: PropTypes.string,
   };
 
   static defaultProps = {
     layout: undefined,
     baseColWidth: 20,
     onLayoutChange: () => {},
+    isEditable: false,
+    onComponentDelete: () => {},
+    onComponentConfig: () => {},
+    getCurrentView: () => {},
+    viewsStatus: viewsStates.EMPTY,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      loadedView: {},
+      id: null,
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.location) {
+      const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+      if (id !== null) {
+        const loadedView = this.props.getCurrentView(id);
+        this.setState({
+          loadedView: loadedView || {},
+          id,
+        });
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.viewsStatus === viewsStates.LOADING &&
+      this.props.viewsStatus === viewsStates.LOADED
+    ) {
+      const loadedView = this.props.getCurrentView(this.state.id);
+      this.setState({
+        loadedView: loadedView || {},
+      });
+    }
+  }
 
   parseConfig = (config) => {
     const newConfig = { ...config };
@@ -73,8 +126,20 @@ export default class CustomView extends Component {
     return (
       <div
         key={component.properties.i.toString()}
-        className={[styles.componentWrapper, component.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
+        className={[
+          styles.componentWrapper,
+          component.properties.allowOverflow ? '' : styles.noOverflow,
+          this.props.isEditable ? styles.editable : '',
+        ].join(' ')}
       >
+        <div className={styles.editableComponentActions}>
+          <Button onClick={() => this.props.onComponentConfig(component)}>
+            <div className={styles.gearIconWrapper}>
+              <GearIcon active />
+            </div>
+          </Button>
+          <Button onClick={() => this.props.onComponentDelete(component)}>X</Button>
+        </div>
         {comp}
       </div>
     );
@@ -97,30 +162,34 @@ export default class CustomView extends Component {
     return (
       <div
         key={container.properties.i.toString()}
-        className={[styles.container, container.properties.allowOverflow ? '' : styles.noOverflow].join(' ')}
+        className={[
+          styles.container,
+          container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
+        ].join(' ')}
       >
-        <Panel title={`Component ${container.properties.i.toString()}`} className={styles.containerPanel}>
-          <GridLayout
-            layout={layout}
-            items={layout.length}
-            rowHeight={20}
-            onLayoutChange={this.props.onLayoutChange}
-            cols={container.properties.cols}
-            width={this.props.baseColWidth * container.properties.w}
-            margin={[0, 0]}
-            verticalCompact={false}
-            className={styles.gridLayout}
-            draggableCancel=".nonDraggable"
-          >
-            {elements}
-          </GridLayout>
-        </Panel>
+        <GridLayout
+          layout={layout}
+          items={layout.length}
+          rowHeight={20}
+          onLayoutChange={this.props.onLayoutChange}
+          cols={container.properties.cols}
+          width={this.props.baseColWidth * container.properties.w}
+          margin={[0, 0]}
+          verticalCompact={true}
+          className={styles.gridLayout}
+          draggableCancel=".nonDraggable"
+          isDraggable={this.props.isEditable}
+          isResizable={this.props.isEditable}
+        >
+          {elements}
+        </GridLayout>
       </div>
     );
   };
 
   render() {
-    const parsedTree = this.parseElement(this.props.layout, 0);
+    const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
+    const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;
   }
 }

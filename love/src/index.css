@@ -7,11 +7,14 @@ body {
   background: var(--base-background-color);
   /* font-family: Arial; */
   font-family: 'Arial';
-  margin: 0 10px;
+  margin: 0;
+  overflow: hidden;
 }
 
 :root {
     backface-visibility: hidden;
+  --topbar-height: 2em;
+  --content-padding: 1em;
   --base-font-color: hsl(194, 16%, 79%);
   --secondary-font-color: hsl(201, 15%, 54%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3); /*Transparent*/
@@ -24,6 +27,8 @@ body {
   --tertiary-background-color: hsl(201, 21%, 23%);
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
+
+  --overlay-background-color: hsla(205, 40%, 8%, 70%);
 
   --second-primary-background-color: hsl(202, 38%, 11%);
   --second-primary-background-color-dimmed: hsl(202, 38%, 11%, 0.5);

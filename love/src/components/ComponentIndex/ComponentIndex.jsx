@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import styles from './ComponentIndex.module.css';
-import Button from '../GeneralPurpose/Button/Button';
 
 export default class ComponentIndex extends Component {
   static propTypes = {
+    /** Function to log oput of the app */
     logout: PropTypes.func,
   };
 
@@ -59,17 +59,8 @@ export default class ComponentIndex extends Component {
           <li className={styles.linkListItem}>
             <span>UI Framework</span>
             <ul className={styles.linkListItem}>
-              <Link to="/custom-view">Custom view</Link>
+              <Link to="/uif">UI Framework</Link>
             </ul>
-            <ul className={styles.linkListItem}>
-              <Link to="/custom-view-editor">View editor</Link>
-            </ul>
-          </li>
-          <li className={styles.linkListItem}>
-            <Link to="/login">Login</Link>
-          </li>
-          <li className={styles.linkListItem}>
-            <Button onClick={this.props.logout}>Logout</Button>
           </li>
         </ol>
       </div>

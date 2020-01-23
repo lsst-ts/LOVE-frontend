@@ -10,6 +10,7 @@ import {
   MARK_ERROR_REMOVE_TOKEN,
   GET_TOKEN_FROM_LOCALSTORAGE,
 } from './actionTypes';
+import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
 
@@ -139,6 +140,7 @@ export function fetchToken(username, password) {
           const permissions = response.permissions;
           if (token !== undefined && token !== null) {
             dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
+            dispatch(requestViews());
             return;
           }
         }
@@ -213,13 +215,12 @@ export function validateToken() {
       }
 
       return response.json().then((resp) => {
-        const detail = resp.detail;
         let username = '';
-        if (resp.user) {
-          username = resp.user.username;
+        const user = { resp };
+        if (user) {
+          username = { user };
         }
-        const permissions = resp.permissions;
-        const tai_to_utc = resp.tai_to_utc;
+        const { permissions, tai_to_utc } = { resp };
         dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
         return Promise.resolve();
       });
