@@ -24,10 +24,6 @@ export default class Layout extends Component {
     lastSALCommand: undefined,
   };
 
-  constructor() {
-    super();
-  };
-
   componentDidUpdate = (prevProps, _prevState) => {
     /* Check command ack for toast*/
     if (

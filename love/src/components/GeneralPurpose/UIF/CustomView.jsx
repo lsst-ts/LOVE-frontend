@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
-import Panel from '../Panel/Panel';
 import Button from '../Button/Button';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { viewsStates } from '../../../redux/reducers/uif';

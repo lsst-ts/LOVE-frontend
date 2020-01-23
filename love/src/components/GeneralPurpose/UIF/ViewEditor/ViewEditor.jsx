@@ -63,8 +63,12 @@ class ViewEditor extends Component {
 
   componentDidMount() {
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-    if (id === null) this.props.clearEditedView();
-    else {
+    if (id === null) {
+      this.props.clearEditedView();
+      this.setState({
+        layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
+      });
+    } else {
       this.props.loadViewToEdit(id);
       this.setState({
         id,
@@ -73,6 +77,11 @@ class ViewEditor extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    if (this.props.editedViewCurrent !== prevProps.editedViewCurrent) {
+      this.setState({
+        layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
+      });
+    }
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
       if (this.props.editedViewStatus.code === editViewStates.SAVING) {
         console.log('Saving');
@@ -88,13 +97,7 @@ class ViewEditor extends Component {
         toast.error(`Error saving view: ${errorStr}`);
       }
     }
-    if (prevProps.editedViewCurrent.name !== this.props.editedViewCurrent.name) {
-      this.setState({ name: this.props.editedViewCurrent.name });
-    }
-    if (
-      prevProps.viewsStatus === viewsStates.LOADING &&
-      this.props.viewsStatus === viewsStates.LOADED
-    ) {
+    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
       this.props.loadViewToEdit(this.state.id);
     }
   }
@@ -114,10 +117,10 @@ class ViewEditor extends Component {
     this.setState({ name: event.target.value });
   };
 
-  onNameInputBlur = (_event) => {
+  onNameInputBlur = (event) => {
     this.props.updateEditedView({
       ...this.props.editedViewCurrent,
-      name: this.state.name,
+      name: event.target.value,
     });
   };
 
@@ -171,7 +174,7 @@ class ViewEditor extends Component {
       return newElement;
     }
     if (element.properties.type === 'container') {
-      Object.keys(element.content).map((key) => {
+      Object.keys(element.content).forEach((key) => {
         newElement.content[key] = this.updateElementProperties(element.content[key], properties);
       });
     }
@@ -295,8 +298,7 @@ class ViewEditor extends Component {
               View:
               <Input
                 className={styles.textField}
-                value={this.state.name}
-                onChange={this.onNameInputChange}
+                defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
                 onBlur={this.onNameInputBlur}
               />
               <Button onClick={this.showSelectionModal}>Add Components</Button>
