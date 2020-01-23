@@ -6,6 +6,7 @@ import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import styles from './Layout.module.css';
+import ViewEditorToolbarContainer from '../UIF/ViewEditorToolbar/ViewEditorToolbar.container';
 
 
 export default class Layout extends Component {
@@ -18,6 +19,8 @@ export default class Layout extends Component {
     logout: PropTypes.func,
     /** Authentication token */
     token: PropTypes.string,
+    /** Mode of the LOVE (EDIT or VIEW) */
+    mode: PropTypes.string,
   };
 
   static defaultProps = {
@@ -44,7 +47,10 @@ export default class Layout extends Component {
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
           <span />
-          <Button onClick={this.props.logout}>Logout</Button>
+          <ViewEditorToolbarContainer />
+          <div className={styles.rightTopBar}>
+            <Button onClick={this.props.logout}>Logout</Button>
+          </div>
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}

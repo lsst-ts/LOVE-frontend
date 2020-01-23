@@ -1,12 +1,16 @@
 .topbar {
   box-sizing: border-box;
   width: 100%;
-  height: var(--topbar-height);
+  height: fit-content;
   background-color: var(--tertiary-background-color);
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr min-content;
-  padding: 0.2em var(--content-padding);
+  grid-template-columns: 1fr 1fr 1fr;
+  padding: 0.5em var(--content-padding);
+}
+
+.rightTopBar {
+  text-align: right;
 }
 
 .hidden {
