@@ -131,26 +131,20 @@ const readImageDataFromBlob = (blob) => {
  */
 const fetchImageFromStream = (callback) => {
   return fetch('http://localhost/gencam').then(async (r) => {
-    debugger;
     const reader = r.body.getReader();
-    let count = 0;
 
     let remainder = '';
 
     const animate = async () => {
-      // if (count > 5) return;
-      count++;
 
       const blob = await readNextBlobFromStream(reader, remainder);
 
-      const imageDataFromBlob = await readImageDataFromBlob(blob, count);
+      const imageDataFromBlob = await readImageDataFromBlob(blob);
       remainder = imageDataFromBlob.remainder;
       callback(imageDataFromBlob);
       requestAnimationFrame(animate);
     };
     animate();
-  }).catch(e => {
-    debugger;
   });
 };
 
