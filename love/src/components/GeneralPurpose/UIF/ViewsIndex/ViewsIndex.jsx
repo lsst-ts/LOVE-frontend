@@ -15,15 +15,15 @@ class ViewsIndex extends Component {
 
   createNewView = () => {
     this.props.history.push('/uif/view-editor');
-  }
+  };
 
   editView = (id) => {
     this.props.history.push('/uif/view-editor?id=' + id);
-  }
+  };
 
   openView = (id) => {
     this.props.history.push('/uif/view?id=' + id);
-  }
+  };
 
   render() {
     return (
@@ -31,22 +31,17 @@ class ViewsIndex extends Component {
         <h1>UI Framework</h1>
         <h2>Available Views</h2>
         <ol className={styles.linkList}>
-          { this.props.views.map((view, index) => (
-            <li key={index} className={styles.linkListItem}>
-              <span> {(index + 1) + '. '} </span>
-              <span> {view.name} </span>
-              <Button  onClick={() => this.openView(view.id)}>
-                Open
-              </Button>
-              <Button onClick={() => this.editView(view.id)}>
-                Edit
-              </Button>
-            </li>
-          )) }
+          {this.props.views.length > 0 &&
+            this.props.views.map((view, index) => (
+              <li key={index} className={styles.linkListItem}>
+                <span> {index + 1 + '. '} </span>
+                <span> {view.name} </span>
+                <Button onClick={() => this.openView(view.id)}>Open</Button>
+                <Button onClick={() => this.editView(view.id)}>Edit</Button>
+              </li>
+            ))}
         </ol>
-        <Button onClick={this.createNewView}>
-          New View
-        </Button>
+        <Button onClick={this.createNewView}>New View</Button>
       </div>
     );
   }
