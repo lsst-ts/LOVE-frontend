@@ -12,7 +12,7 @@ import Modal from '../../GeneralPurpose/Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
-import { editViewStates, viewsStates } from '../../../redux/reducers/uif';
+import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -38,6 +38,8 @@ class ViewEditor extends Component {
     clearEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
+    /** Function to change the mode between VIEW and EDIT */
+    changeMode: PropTypes.func,
   };
 
   static defaultProps = {
@@ -62,6 +64,7 @@ class ViewEditor extends Component {
   }
 
   componentDidMount() {
+    this.props.changeMode(modes.EDIT);
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     if (id === null) {
       this.props.clearEditedView();
@@ -74,6 +77,10 @@ class ViewEditor extends Component {
         id,
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.changeMode(modes.VIEW);
   }
 
   componentDidUpdate(prevProps) {
