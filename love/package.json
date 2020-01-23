@@ -24,6 +24,7 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
+    "redux-undo": "^1.0.0",
     "rfdc": "^1.1.4",
     "vega": "^5.4.0",
     "vega-embed": "^4.2.0",
