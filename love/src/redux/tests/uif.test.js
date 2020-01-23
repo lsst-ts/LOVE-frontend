@@ -16,6 +16,7 @@ import {
   savedEditedView,
   loadViewToEdit,
   clearViewToEdit,
+  changeMode,
 } from '../actions/uif';
 import {
   getViews,
@@ -26,8 +27,9 @@ import {
   getEditedViewCurrent,
   getEditedViewStatus,
   getEditedViewSaved,
+  getMode,
 } from '../selectors';
-import { editViewStates, viewsStates, initialState } from '../reducers/uif';
+import { editViewStates, viewsStates, initialState, modes } from '../reducers/uif';
 
 let store;
 beforeEach(() => {
@@ -369,5 +371,27 @@ describe('Load view to edit. GIVEN the store contains views', () => {
     expect(current).not.toBe(initialState.editedViewCurrent);
     expect(current.data).not.toBe(initialState.editedViewCurrent.data);
     expect(saved).not.toBe(initialState.editedViewSaved);
+  });
+});
+
+describe('Change mode', () => {
+
+  it('GIVEN LOVE is in VIEW mode, WHEN it changes to EDIT, THEN the mode is EDIT', async () => {
+    // Arrange:
+    expect(getMode(store.getState())).toEqual(modes.VIEW);
+    // Act:
+    await store.dispatch(changeMode(modes.EDIT));
+    // Assert:
+    expect(getMode(store.getState())).toEqual(modes.EDIT);
+  });
+
+  it('GIVEN LOVE is in EDIT mode, WHEN it changes to VIEW, THEN the mode is VIEW', async () => {
+    // Arrange:
+    await store.dispatch(changeMode(modes.EDIT));
+    expect(getMode(store.getState())).toEqual(modes.EDIT);
+    // Act:
+    await store.dispatch(changeMode(modes.VIEW));
+    // Assert:
+    expect(getMode(store.getState())).toEqual(modes.VIEW);
   });
 });
