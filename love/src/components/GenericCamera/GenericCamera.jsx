@@ -131,6 +131,7 @@ const readImageDataFromBlob = (blob) => {
  */
 const fetchImageFromStream = (callback) => {
   return fetch('http://localhost/gencam').then(async (r) => {
+    debugger;
     const reader = r.body.getReader();
     let count = 0;
 
@@ -148,6 +149,8 @@ const fetchImageFromStream = (callback) => {
       requestAnimationFrame(animate);
     };
     animate();
+  }).catch(e => {
+    debugger;
   });
 };
 
@@ -159,9 +162,10 @@ export default function() {
   useEffect(() => {
     const canvas = document.getElementById('canvas');
 
-    fetchImageFromStream((image) => {
+    let fetchPromise = fetchImageFromStream((image) => {
       draw(new Uint8Array(image.body), canvas);
     });
   }, []);
   return <canvas id="canvas" width="1024" height="1024"></canvas>;
+
 }
