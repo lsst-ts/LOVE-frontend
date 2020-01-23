@@ -1,6 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import * as CameraUtils from './CameraUtils';
 
+export const schema = {
+  description: 'Renders the exposures streamed by the GenericCamera live view server into an HTML5 canvas',
+  defaultSize: [10, 10],
+  props: {}
+};
 /**
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
