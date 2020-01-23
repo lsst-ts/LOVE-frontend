@@ -10,6 +10,7 @@ import {
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
+  CHANGE_MODE,
 } from '../actions/actionTypes';
 
 export const editViewStates = {
@@ -18,6 +19,11 @@ export const editViewStates = {
   SAVING: 'SAVING',
   SAVED: 'SAVED',
   SAVE_ERROR: 'SAVE_ERROR',
+};
+
+export const modes = {
+  VIEW: 'VIEW',
+  EDIT: 'EDIT',
 };
 
 export const viewsStates = {
@@ -51,6 +57,7 @@ export const initialState = {
     details: null,
   },
   editedViewSaved: {},
+  mode: modes.VIEW,
   views: [],
   viewsStatus: viewsStates.EMPTY,
   workspaces: [],
@@ -149,6 +156,11 @@ export default function(state = initialState, action) {
         },
         editedViewSaved: newView,
         views: newViews,
+      });
+    }
+    case CHANGE_MODE: {
+      return Object.assign({}, state, {
+        mode: action.mode === modes.EDIT ? modes.EDIT : modes.VIEW,
       });
     }
     default:

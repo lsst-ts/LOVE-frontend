@@ -9,9 +9,20 @@ import {
   SAVING_EDITED_VIEW,
   SAVE_ERROR,
   SAVED_EDITED_VIEW,
+  CHANGE_MODE,
 } from './actionTypes';
 import { getEditedViewCurrent, getEditedViewSaved } from '../selectors/uif';
 import ManagerInterface from '../../Utils';
+
+/**
+ * Action to receive a list of workspaces
+ */
+export const changeMode = (mode) => {
+  return {
+    type: CHANGE_MODE,
+    mode,
+  };
+};
 
 /**
  * Action to receive a list of workspaces
