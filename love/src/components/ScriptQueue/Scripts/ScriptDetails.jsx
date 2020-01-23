@@ -51,7 +51,6 @@ export default ({ classname, description, remotes, pause_checkpoints, stop_check
     },
   ];
 
-  const { label, defaultDisplayed, defaultValue, value } = fields[0];
   return (
     <div className={[scriptStyles.expandedSection].join(' ')}>
       <div className={scriptStyles.expandedSubSection}>
