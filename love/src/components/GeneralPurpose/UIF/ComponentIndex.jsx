@@ -66,6 +66,10 @@ export const auxtelIndex = {
       component: require('../../AuxTel/LATISS/LATISS.container').default,
       schema: require('../../AuxTel/LATISS/LATISS.container').schema,
     },
+    GenericCamera: {
+      component: require('../../GenericCamera/GenericCamera').default,
+      schema: require('../../GenericCamera/GenericCamera').schema,
+    }
 };
 
 export const mainIndex = {
