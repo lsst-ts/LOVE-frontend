@@ -38,6 +38,24 @@
   color: var(--base-font-color);
 }
 
-.toolbar {
+.toolbarWrapper {
   display: inline-block;
+  margin: auto;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: min-content repeat(5, min-content);
+  /* grid-gap: 0.2em; */
+}
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.icon {
+  height: 1.4em;
 }
