@@ -61,6 +61,8 @@ class ViewEditor extends Component {
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
       id: null,
+      editorVisible: false,
+      editorChanged: false,
     };
     this.toolbar = document.createElement('div');
   }
@@ -139,6 +141,7 @@ class ViewEditor extends Component {
   onEditorChange = (newValue) => {
     this.setState({
       layout: newValue,
+      editorChanged: true,
       showSelectionModal: false,
       showConfigModal: false,
     });
@@ -152,6 +155,7 @@ class ViewEditor extends Component {
       parsedLayout = {};
     }
     this.updateEditedViewLayout(parsedLayout);
+    this.setState({ editorChanged: false });
   };
 
   onLayoutChange = (newLayoutProperties) => {
@@ -219,6 +223,14 @@ class ViewEditor extends Component {
     this.setState({ showConfigModal: true });
   };
 
+  showEditor = (e) => {
+    this.setState({ editorVisible: true });
+  };
+
+  hideEditor = (e) => {
+    this.setState({ editorVisible: false });
+  };
+
   receiveSelection = (selection) => {
     this.hideSelectionModal();
     const parsedLayout = { ...this.getEditedViewLayout() };
@@ -281,7 +293,6 @@ class ViewEditor extends Component {
   renderToolbar() {
     const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
-    const undeTooltip = 'Undo';
     return (
       <div className={styles.toolbar}>
         <Input
@@ -301,7 +312,7 @@ class ViewEditor extends Component {
         <Button title='Redo' onClick={() => {}} disabled={false}>
           re
         </Button>
-        <Button title='Debug' onClick={() => {}} disabled={false}>
+        <Button title='Debug' onClick={this.showEditor} disabled={this.state.editorVisible}>
           de
         </Button>
       </div>
@@ -322,38 +333,48 @@ class ViewEditor extends Component {
             ></CustomView>
           </div>
         </div>
-        <Rnd
-          default={{
-            x: 800,
-            y: 50,
-            width: 500,
-            height: 200,
-          }}
-          style={{ zIndex: 1000 }}
-          bounds={'parent'}
-          enableUserSelectHack={false}
-          dragHandleClassName={styles.bar}
-          onResize={this.onResize}
-        >
-          <div className={styles.rnd}>
-            <div className={styles.rndBar}>
-              <span className={styles.hidden}/>
-              <Button onClick={this.applyEditorLayout}>Apply</Button>
-              <Button onClick={() => {}} title='Close'>&#10005;</Button>
+
+        { this.state.editorVisible ? (
+          <Rnd
+            default={{
+              x: 800,
+              y: 50,
+              width: 500,
+              height: 200,
+            }}
+            style={{ zIndex: 1000 }}
+            bounds={'parent'}
+            enableUserSelectHack={false}
+            dragHandleClassName={styles.bar}
+            onResize={this.onResize}
+          >
+            <div className={styles.rnd}>
+              <div className={styles.rndBar}>
+                <span className={styles.hidden}/>
+                <Button
+                  title={this.state.editorChanged ? 'Apply changes in editor to the layout' : 'No changes to apply'}
+                  onClick={this.applyEditorLayout}
+                  disabled={!this.state.editorChanged}
+                >
+                  Apply
+                </Button>
+                <Button onClick={this.hideEditor} title='Close'>&#10005;</Button>
+              </div>
+              <AceEditor
+                mode="json"
+                className={styles.rndEditor}
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                onChange={this.onEditorChange}
+                width={'100%'}
+                value={this.state.layout}
+                editorProps={{ $blockScrolling: true }}
+                fontSize={18}
+              />
             </div>
-            <AceEditor
-              mode="json"
-              className={styles.rndEditor}
-              theme="solarized_dark"
-              name="UNIQUE_ID_OF_DIV"
-              onChange={this.onEditorChange}
-              width={'100%'}
-              value={this.state.layout}
-              editorProps={{ $blockScrolling: true }}
-              fontSize={18}
-            />
-          </div>
-        </Rnd>
+          </Rnd>
+        ) : null}
+
         <Modal
           isOpen={this.state.showSelectionModal}
           onRequestClose={this.hideSelectionModal}
