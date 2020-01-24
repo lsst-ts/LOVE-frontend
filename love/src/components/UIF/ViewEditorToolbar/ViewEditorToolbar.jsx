@@ -35,14 +35,12 @@ class ViewEditorToolbar extends Component {
     const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
     return (
       <div className={styles.container}>
-        <div>
-          <Button onClick={this.props.addComponents}>
-             Add Components
-         </Button>
-          <Button onClick={this.props.save} disabled={isSaved}>
-            Save Changes
-          </Button>
-        </div>
+        <Button onClick={this.props.addComponents}>
+           Add Components
+       </Button>
+        <Button onClick={this.props.save} disabled={isSaved}>
+          Save Changes
+        </Button>
       </div>
     );
   }
