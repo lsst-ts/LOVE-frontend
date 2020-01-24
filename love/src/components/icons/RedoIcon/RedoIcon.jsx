@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './RedoIcon.module.css';
 
 function RedoIcon(props) {
-  console.log('save')
   return (
     <svg viewBox="0 0 27.8 27.8" {...props}>
       <path

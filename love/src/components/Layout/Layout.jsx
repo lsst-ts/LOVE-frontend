@@ -5,6 +5,8 @@ import 'react-toastify/dist/ReactToastify.min.css';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
+import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
+import GearIcon from '../icons/GearIcon/GearIcon';
 import styles from './Layout.module.css';
 
 
@@ -47,11 +49,29 @@ export default class Layout extends Component {
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
           <div className={styles.leftTopbar}/>
 
-          <div id='customTopbar'/>
+          <div className={styles.middleTopbar} id='customTopbar'/>
 
           <div className={styles.rightTopbar}>
+            <Button
+              className={styles.iconBtn}
+              title='View notifications'
+              onClick={() => {}}
+              disabled={false}
+              status='transparent'
+            >
+              <NotificationIcon className={styles.icon}/>
+            </Button>
+            <Button
+              className={styles.iconBtn}
+              title='More'
+              onClick={() => {}}
+              status='transparent'
+            >
+              <GearIcon className={styles.icon}/>
+            </Button>
             <Button onClick={this.props.logout}>Logout</Button>
           </div>
+
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}

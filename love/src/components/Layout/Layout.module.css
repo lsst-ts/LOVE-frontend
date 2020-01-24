@@ -2,19 +2,24 @@
   box-sizing: border-box;
   width: 100%;
   height: fit-content;
-  background-color: var(--tertiary-background-color);
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 0.5em var(--content-padding);
+  grid-template-columns: 40ch 1fr 20ch;
 }
 
 .leftTopbar {
+  padding: 0.5em var(--content-padding);
+  background-color: var(--tertiary-background-color);
   text-align: left;
 }
 
 .rightTopbar {
+  padding: 0.5em var(--content-padding);
+  background-color: var(--tertiary-background-color);
   text-align: right;
+}
+.middleTopbar {
+  padding: 0.5em var(--content-padding);
 }
 
 .hidden {
@@ -27,4 +32,15 @@
   overflow: auto;
   height: calc(100vh - 4em);
   will-change: transform;
+}
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.icon {
+  height: 1.4em;
 }
