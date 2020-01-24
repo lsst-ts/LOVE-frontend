@@ -4,7 +4,7 @@ import styles from './AddIcon.module.css';
 function AddIcon(props) {
   console.log('save')
   return (
-    <svg viewBox="0 0 27.8 27.8" {...props}>
+    <svg viewBox="-1 -1 30 30" {...props}>
       <path
         className={styles.path}
         d="M13.9,0c-2.3,0-4.6,0.6-6.7,1.7C7,1.8,6.9,2.2,7,2.4c0.1,0.3,0.5,0.4,0.7,0.2c1.9-1,4-1.6,6.1-1.6
