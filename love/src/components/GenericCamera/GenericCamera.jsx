@@ -22,11 +22,14 @@ export default function() {
     const controller = new AbortController();
     const signal = controller.signal;
     CameraUtils.fetchImageFromStream((image) => {
+      console.log(image);
       if (canvasRef.current) {
-        CameraUtils.draw(new Uint8Array(image.body), canvasRef.current);
-
         setImageWidth(image.width);
         setImageHeight(image.height);
+        canvasRef.current.width = image.width;
+        canvasRef.current.height = image.height;
+        CameraUtils.draw(image.body, canvasRef.current);
+
       }
     }, signal);
 
