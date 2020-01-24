@@ -10,6 +10,7 @@ import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif'
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
+import SaveIcon from '../../icons/SaveIcon/SaveIcon';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
@@ -294,27 +295,58 @@ class ViewEditor extends Component {
     const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
     return (
+      <div className={styles.toolbarWrapper}>
       <div className={styles.toolbar}>
         <Input
           className={styles.textField}
           defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
           onBlur={this.onNameInputBlur}
         />
-        <Button title='Add components' onClick={this.showSelectionModal}>
+        <Button
+          className={styles.iconBtn}
+          title='Add components'
+          onClick={this.showSelectionModal}
+          status='transparent'
+        >
           +
         </Button>
-        <Button title={saveButtonTooltip} onClick={this.save} disabled={isSaved}>
-          s
+        <Button
+          className={styles.iconBtn}
+          title={saveButtonTooltip}
+          onClick={this.save}
+          disabled={isSaved}
+          status='transparent'
+        >
+          <SaveIcon className={styles.icon}/>
         </Button>
-        <Button title='Undo' onClick={() => {}} disabled={false}>
+        <Button
+          className={styles.iconBtn}
+          title='Undo'
+          onClick={() => {}}
+          disabled={false}
+          status='transparent'
+        >
           un
         </Button>
-        <Button title='Redo' onClick={() => {}} disabled={false}>
+        <Button
+          className={styles.iconBtn}
+          title='Redo'
+          onClick={() => {}}
+          disabled={false}
+          status='transparent'
+        >
           re
         </Button>
-        <Button title='Debug' onClick={this.showEditor} disabled={this.state.editorVisible}>
+        <Button
+          className={styles.iconBtn}
+          title='Debug'
+          onClick={this.showEditor}
+          disabled={this.state.editorVisible}
+          status='transparent'
+        >
           de
         </Button>
+      </div>
       </div>
     );
   }
@@ -358,7 +390,9 @@ class ViewEditor extends Component {
                 >
                   Apply
                 </Button>
-                <Button onClick={this.hideEditor} title='Close'>&#10005;</Button>
+                <Button onClick={this.hideEditor} title='Close' status='transparent'>
+                  &#10005;
+                </Button>
               </div>
               <AceEditor
                 mode="json"
