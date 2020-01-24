@@ -1,7 +1,6 @@
 const decoder = new TextDecoder('utf-8');
 const encoder = new TextEncoder('utf-8');
 
-
 /**
  * Receives an ArrayBuffer (from the FileReader for example) and
  * returns the image information (width,height, isJPEG, length, body)
@@ -10,14 +9,20 @@ const encoder = new TextEncoder('utf-8');
  */
 export const getHeaderInfo = (arrayBuffer) => {
   // find the [START] in the string-decoded array
+  // debugger;
+
   const decodedArray = decoder.decode(arrayBuffer);
   const sections = decodedArray.split('[END]\r\n').filter((s) => s.startsWith('[START]'));
   const exposure = sections[0];
-  const remainder = sections.slice(1).join('');
+  // const remainder = sections.slice(1).join('');
 
-  const [START, widthString, heightString, isJPEGString, lengthString, buffer] = exposure.split('\r\n');
-
+  const [START, widthString, heightString, isJPEGString, lengthString, ...buffer] = exposure.split('\r\n');
+  // const encodedBuffer =  encoder.encode(buffer.join(''));
+  // const encodedBuffer =  encoder.encode(buffer);
+  const encodedBuffer = new Uint8Array(arrayBuffer.slice(33, 33 + 1024 * 1024));
+  const remainder = new Uint8Array(arrayBuffer.slice(33 + 1024 * 1024 + 7));
   return {
+    decodedArray: decodedArray,
     exposure: exposure,
     remainder: remainder,
     _START: START,
@@ -25,7 +30,7 @@ export const getHeaderInfo = (arrayBuffer) => {
     height: parseInt(heightString),
     isJPEG: isJPEGString === '1',
     length: parseInt(lengthString),
-    body: encoder.encode(buffer),
+    body: encodedBuffer,
   };
 };
 
@@ -37,20 +42,26 @@ export const getHeaderInfo = (arrayBuffer) => {
  */
 export const draw = (array, canvas) => {
   var ctx = canvas.getContext('2d');
+
   var canvasWidth = canvas.width;
   var canvasHeight = canvas.height;
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  var id = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-  var pixels = id.data;
+  ctx.fillStyle = 'white';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // const data = new Uint8ClampedArray([...array].flatMap(v => [v,v,v, 255]));
+  // const imageData = new ImageData(data, 1024, 1024);
+  var imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+  var pixels = imageData.data;
 
   array.forEach((val, index) => {
     pixels[index * 4] = val;
     pixels[index * 4 + 1] = val;
     pixels[index * 4 + 2] = val;
-    pixels[index * 4 + 3] = 255;
+    pixels[index * 4 + 3] = val;
   });
 
-  ctx.putImageData(id, 0, 0);
+  ctx.putImageData(imageData, 0, 0);
 };
 
 /**
@@ -62,8 +73,8 @@ export const readNextBlobFromStream = (reader, remainder) => {
   const stream = new ReadableStream({
     start(controller) {
       // first load the remainder from previous chunk
-      let fullDecodedBuffer = remainder;
-      controller.enqueue(encoder.encode(remainder));
+      let fullDecodedBuffer = decoder.decode(remainder);
+      controller.enqueue(remainder);
 
       return pump();
       function pump() {
@@ -133,12 +144,13 @@ export const fetchImageFromStream = (callback, signal) => {
   return fetch('http://localhost/gencam', { signal }).then(async (r) => {
     const reader = r.body.getReader();
 
-    let remainder = '';
+    let remainder = new Uint8Array([]);
 
     const animate = async () => {
       const blob = await readNextBlobFromStream(reader, remainder);
 
       const imageDataFromBlob = await readImageDataFromBlob(blob);
+      // debugger;
       remainder = imageDataFromBlob.remainder;
       callback(imageDataFromBlob);
       requestAnimationFrame(animate);
