@@ -280,13 +280,29 @@ class ViewEditor extends Component {
 
   renderToolbar() {
     const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
+    const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
+    const undeTooltip = 'Undo';
     return (
       <div className={styles.toolbar}>
-        <Button onClick={this.showSelectionModal}>
-          Add Components
+        <Input
+          className={styles.textField}
+          defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
+          onBlur={this.onNameInputBlur}
+        />
+        <Button title='Add components' onClick={this.showSelectionModal}>
+          +
         </Button>
-        <Button onClick={this.save} disabled={isSaved}>
-          Save Changes
+        <Button title={saveButtonTooltip} onClick={this.save} disabled={isSaved}>
+          s
+        </Button>
+        <Button title='Undo' onClick={() => {}} disabled={false}>
+          un
+        </Button>
+        <Button title='Redo' onClick={() => {}} disabled={false}>
+          re
+        </Button>
+        <Button title='Debug' onClick={() => {}} disabled={false}>
+          de
         </Button>
       </div>
     );
@@ -319,19 +335,15 @@ class ViewEditor extends Component {
           dragHandleClassName={styles.bar}
           onResize={this.onResize}
         >
-          <div>
-            <div className={styles.bar}>
-              View:
-              <Input
-                className={styles.textField}
-                defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-                onBlur={this.onNameInputBlur}
-              />
-              <Button onClick={this.showSelectionModal}>Add Components</Button>
-              <Button onClick={this.save}>Save Changes</Button>
+          <div className={styles.rnd}>
+            <div className={styles.rndBar}>
+              <span className={styles.hidden}/>
+              <Button onClick={this.applyEditorLayout}>Apply</Button>
+              <Button onClick={() => {}} title='Close'>&#10005;</Button>
             </div>
             <AceEditor
               mode="json"
+              className={styles.rndEditor}
               theme="solarized_dark"
               name="UNIQUE_ID_OF_DIV"
               onChange={this.onEditorChange}
@@ -340,7 +352,6 @@ class ViewEditor extends Component {
               editorProps={{ $blockScrolling: true }}
               fontSize={18}
             />
-            <Button onClick={this.applyEditorLayout}>Apply</Button>
           </div>
         </Rnd>
         <Modal
