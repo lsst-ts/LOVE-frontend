@@ -2,7 +2,7 @@
   box-sizing: border-box;
   width: 100%;
   height: fit-content;
-  overflow: hidden;
+  overflow: visible;
   display: grid;
   grid-template-columns: 40ch 1fr 20ch;
 }
@@ -14,10 +14,25 @@
 }
 
 .rightTopbar {
+  position: relative;
   padding: 0.5em var(--content-padding);
   background-color: var(--tertiary-background-color);
   text-align: right;
 }
+
+.settingsDropdown {
+  background-color: var(--tertiary-background-color);
+  text-align: left;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: min-content;
+  position: absolute;
+  width: 20ch;
+  height: fit-content;
+  top: 3.3em;
+  right: 1em;
+}
+
 .middleTopbar {
   padding: 0.5em var(--content-padding);
 }
