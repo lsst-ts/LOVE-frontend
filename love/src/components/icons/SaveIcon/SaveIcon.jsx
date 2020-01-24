@@ -4,7 +4,7 @@ import styles from './SaveIcon.module.css';
 function SaveIcon(props) {
   console.log('save')
   return (
-    <svg viewBox="0 0 27 27.7" x="0px" y="0px" {...props}>
+    <svg viewBox="0 0 27 28" x="0px" y="0px" {...props}>
       <path
         className={styles.path}
         d="M21.5,1.2c0.1,0,0.3,0.1,0.4,0.2l3.8,3.8c0.1,0.1,0.2,0.2,0.2,0.4v14.4c0,0.3,0.3,0.6,0.6,0.6l0,0
