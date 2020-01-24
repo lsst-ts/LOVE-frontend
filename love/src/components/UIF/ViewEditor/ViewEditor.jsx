@@ -6,14 +6,12 @@ import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 // import queryString from 'query-string';
-
 import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
-import ViewEditorToolbarContainer from '../ViewEditorToolbar/ViewEditorToolbar.container';
 import styles from './ViewEditor.module.css';
 
 import 'brace/mode/json';
@@ -281,8 +279,16 @@ class ViewEditor extends Component {
   };
 
   renderToolbar() {
+    const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
     return (
-      <ViewEditorToolbarContainer />
+      <div className={styles.toolbar}>
+        <Button onClick={this.showSelectionModal}>
+          Add Components
+        </Button>
+        <Button onClick={this.save} disabled={isSaved}>
+          Save Changes
+        </Button>
+      </div>
     );
   }
 
