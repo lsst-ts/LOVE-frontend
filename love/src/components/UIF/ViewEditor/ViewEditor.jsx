@@ -10,10 +10,14 @@ import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif'
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
-import SaveIcon from '../../icons/SaveIcon/SaveIcon';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
+import SaveIcon from '../../icons/SaveIcon/SaveIcon';
+import AddIcon from '../../icons/AddIcon/AddIcon';
+import UndoIcon from '../../icons/UndoIcon/UndoIcon';
+import RedoIcon from '../../icons/RedoIcon/RedoIcon';
+import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -308,7 +312,7 @@ class ViewEditor extends Component {
           onClick={this.showSelectionModal}
           status='transparent'
         >
-          +
+          <AddIcon className={styles.icon}/>
         </Button>
         <Button
           className={styles.iconBtn}
@@ -326,7 +330,7 @@ class ViewEditor extends Component {
           disabled={false}
           status='transparent'
         >
-          un
+          <UndoIcon className={styles.icon}/>
         </Button>
         <Button
           className={styles.iconBtn}
@@ -335,7 +339,7 @@ class ViewEditor extends Component {
           disabled={false}
           status='transparent'
         >
-          re
+          <RedoIcon className={styles.icon}/>
         </Button>
         <Button
           className={styles.iconBtn}
@@ -344,7 +348,7 @@ class ViewEditor extends Component {
           disabled={this.state.editorVisible}
           status='transparent'
         >
-          de
+          <DebugIcon className={styles.icon}/>
         </Button>
       </div>
       </div>
