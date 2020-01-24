@@ -28,6 +28,13 @@ export default class Layout extends Component {
     lastSALCommand: undefined,
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      settingsVisible: false,
+    };
+  }
+
   componentDidUpdate = (prevProps, _prevState) => {
     /* Check command ack for toast*/
     if (
@@ -42,6 +49,10 @@ export default class Layout extends Component {
       }
     }
   };
+
+  toggleSettings = () => {
+    this.setState({ settingsVisible: !this.state.settingsVisible });
+  }
 
   render() {
     return (
@@ -64,12 +75,18 @@ export default class Layout extends Component {
             <Button
               className={styles.iconBtn}
               title='More'
-              onClick={() => {}}
+              onClick={this.toggleSettings}
               status='transparent'
             >
               <GearIcon className={styles.icon}/>
             </Button>
-            <Button onClick={this.props.logout}>Logout</Button>
+            {
+              this.state.settingsVisible && (
+                <div className={styles.settingsDropdown}>
+                  <Button onClick={this.props.logout} status='transparent'>Logout</Button>
+                </div>
+              )
+            }
           </div>
 
         </div>
