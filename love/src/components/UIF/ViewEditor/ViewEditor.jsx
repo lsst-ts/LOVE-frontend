@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
@@ -6,13 +7,14 @@ import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 // import queryString from 'query-string';
 
+import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
+import ViewEditorToolbarContainer from '../ViewEditorToolbar/ViewEditorToolbar.container';
 import styles from './ViewEditor.module.css';
-import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -53,6 +55,7 @@ class ViewEditor extends Component {
     saveEditedView: () => {},
   };
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -61,9 +64,12 @@ class ViewEditor extends Component {
       selectedComponent: {},
       id: null,
     };
+    this.toolbar = document.createElement('div');
   }
 
   componentDidMount() {
+    this.topbarRoot = document.getElementById('customTopbar');
+    this.topbarRoot.appendChild(this.toolbar);
     this.props.changeMode(modes.EDIT);
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     if (id === null) {
@@ -80,6 +86,7 @@ class ViewEditor extends Component {
   }
 
   componentWillUnmount() {
+    this.topbarRoot.removeChild(this.toolbar);
     this.props.changeMode(modes.VIEW);
   }
 
@@ -273,6 +280,12 @@ class ViewEditor extends Component {
     this.props.saveEditedView();
   };
 
+  renderToolbar() {
+    return (
+      <ViewEditorToolbarContainer />
+    );
+  }
+
   render() {
     return (
       <>
@@ -348,6 +361,9 @@ class ViewEditor extends Component {
             onSaveConfig={this.updateElementConfig}
           />
         </Modal>
+        {
+          ReactDOM.createPortal(this.renderToolbar(), this.toolbar)
+        }
       </>
     );
   }

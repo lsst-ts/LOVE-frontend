@@ -9,7 +9,11 @@
   padding: 0.5em var(--content-padding);
 }
 
-.rightTopBar {
+.leftTopbar {
+  text-align: left;
+}
+
+.rightTopbar {
   text-align: right;
 }
 
