@@ -71,6 +71,14 @@ export default class Layout extends Component {
     this.setState({ settingsVisible: !this.state.settingsVisible });
   };
 
+  createNewView = () => {
+    this.props.history.push('/uif/view-editor');
+  };
+
+  editView = (id) => {
+    this.props.history.push('/uif/view-editor?id=' + id);
+  };
+
   render() {
     return (
       <>
@@ -95,20 +103,22 @@ export default class Layout extends Component {
                 <GearIcon className={styles.icon} />
                 {this.state.settingsVisible && (
                   <div className={styles.settingsDropdown}>
-                    <div className={styles.menuButton} title="Edit view" onClick={() => {}}>
+                    <div
+                      className={this.state.id ? styles.menuElement : styles.disabledElement}
+                      title="Edit view"
+                      onClick={() => {}}
+                    >
                       Edit view
                     </div>
                     <div
-                      className={styles.menuButton}
+                      className={styles.menuElement}
                       title="New view"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                      }}
+                      onClick={this.createNewView}
                     >
                       Create new View
                     </div>
                     <span className={styles.divider} />
-                    <div className={styles.menuButton} title="Logout" onClick={this.props.logout}>
+                    <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
                       Logout
                     </div>
                   </div>
