@@ -20,9 +20,12 @@ export default function() {
 
   const canvasRef = useRef(null);
   useEffect(() => {
-    /** Start the stream once and update image size on every receive */
+    /** Start the stream once and update image size on every receive
+     *  Retry if connection fails
+     */
     const controller = new AbortController();
     const signal = controller.signal;
+    let retryTimeout;
     const fetchAndRetry = () => {
       CameraUtils.fetchImageFromStream((image) => {
         if (canvasRef.current) {
@@ -33,6 +36,7 @@ export default function() {
           CameraUtils.draw(image.body, canvasRef.current);
         }
       }, signal).catch((error) => {
+        if(retryTimeout !== undefined) clearTimeout(retryTimeout);
         setError(error);
         setTimeout(()=>{
           console.log('try')
@@ -46,6 +50,7 @@ export default function() {
 
     return () => {
       controller.abort();
+      clearTimeout(retryTimeout);
     };
   }, []);
 
