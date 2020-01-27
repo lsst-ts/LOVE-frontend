@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as CameraUtils from './CameraUtils';
+import styles from './GenericCamera.module.css';
 
 export const schema = {
   description: 'Renders the exposures streamed by the GenericCamera live view server into an HTML5 canvas',
@@ -38,8 +39,7 @@ export default function() {
       }, signal).catch((error) => {
         if(retryTimeout !== undefined) clearTimeout(retryTimeout);
         setError(error);
-        setTimeout(()=>{
-          console.log('try')
+        retryTimeout = setTimeout(()=>{
           setRetryCount(c=>c+1);
           fetchAndRetry();
         }, 3000);
@@ -57,6 +57,7 @@ export default function() {
   useEffect(() => {
     /** Listen to size changes of the canvas parent element*/
     if (!canvasRef.current) return;
+    if(error !== undefined) return;
     const observer = new ResizeObserver((entries) => {
       const container = entries[0];
       setContainerWidth(container.contentRect.width);
@@ -68,10 +69,11 @@ export default function() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [error]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
+    if(error !== undefined) return;
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
@@ -92,14 +94,14 @@ export default function() {
      * but this might be less readable
      */
     //
-  }, [imageWidth, imageHeight, containerWidth, containerHeight]);
+  }, [imageWidth, imageHeight, containerWidth, containerHeight, error]);
 
   if (error) {
     return (
-      <>
+      <div className={styles.errorContainer}>
         <p>{`ERROR: ${error.message}`}</p>
-        <p>Retrying {`(${retryCount})` } {new Array(retryCount % 3 ).fill('. ')} </p>
-      </>
+        <span>Retrying {`(${retryCount})` }  </span>
+      </div>
     );
   }
   return <canvas ref={canvasRef}></canvas>;
