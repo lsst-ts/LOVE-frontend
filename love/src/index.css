@@ -12,6 +12,7 @@ body {
 }
 
 :root {
+    backface-visibility: hidden;
   --topbar-height: 2em;
   --content-padding: 1em;
   --base-font-color: hsl(194, 16%, 79%);
