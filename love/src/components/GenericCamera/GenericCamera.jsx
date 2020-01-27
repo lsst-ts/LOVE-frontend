@@ -3,15 +3,22 @@ import * as CameraUtils from './CameraUtils';
 import styles from './GenericCamera.module.css';
 
 export const schema = {
-  description: 'Renders the exposures streamed by the GenericCamera live view server into an HTML5 canvas',
+  description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
   defaultSize: [10, 10],
-  props: {},
+  props: {
+    serverURL: {
+      type: 'string',
+      description: 'URL of the live view server',
+      isPrivate: false,
+      default: 'http://localhost/gencam',
+    },
+  },
 };
 /**
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
-export default function() {
+export default function({ serverURL = 'http://localhost/gencam' }) {
   const [imageWidth, setImageWidth] = useState(1024);
   const [imageHeight, setImageHeight] = useState(1024);
   const [containerWidth, setContainerWidth] = useState(1);
@@ -28,19 +35,23 @@ export default function() {
     const signal = controller.signal;
     let retryTimeout;
     const fetchAndRetry = () => {
-      CameraUtils.fetchImageFromStream((image) => {
-        if (canvasRef.current) {
-          setImageWidth(image.width);
-          setImageHeight(image.height);
-          canvasRef.current.width = image.width;
-          canvasRef.current.height = image.height;
-          CameraUtils.draw(image.body, canvasRef.current);
-        }
-      }, signal).catch((error) => {
-        if(retryTimeout !== undefined) clearTimeout(retryTimeout);
+      CameraUtils.fetchImageFromStream(
+        serverURL,
+        (image) => {
+          if (canvasRef.current) {
+            setImageWidth(image.width);
+            setImageHeight(image.height);
+            canvasRef.current.width = image.width;
+            canvasRef.current.height = image.height;
+            CameraUtils.draw(image.body, canvasRef.current);
+          }
+        },
+        signal,
+      ).catch((error) => {
+        if (retryTimeout !== undefined) clearTimeout(retryTimeout);
         setError(error);
-        retryTimeout = setTimeout(()=>{
-          setRetryCount(c=>c+1);
+        retryTimeout = setTimeout(() => {
+          setRetryCount((c) => c + 1);
           fetchAndRetry();
         }, 3000);
       });
@@ -52,12 +63,12 @@ export default function() {
       controller.abort();
       clearTimeout(retryTimeout);
     };
-  }, []);
+  }, [serverURL]);
 
   useEffect(() => {
     /** Listen to size changes of the canvas parent element*/
     if (!canvasRef.current) return;
-    if(error !== undefined) return;
+    if (error !== undefined) return;
     const observer = new ResizeObserver((entries) => {
       const container = entries[0];
       setContainerWidth(container.contentRect.width);
@@ -73,7 +84,7 @@ export default function() {
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
-    if(error !== undefined) return;
+    if (error !== undefined) return;
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
@@ -100,7 +111,7 @@ export default function() {
     return (
       <div className={styles.errorContainer}>
         <p>{`ERROR: ${error.message}`}</p>
-        <span>Retrying {`(${retryCount})` }  </span>
+        <span>Retrying {`(${retryCount})`} </span>
       </div>
     );
   }
