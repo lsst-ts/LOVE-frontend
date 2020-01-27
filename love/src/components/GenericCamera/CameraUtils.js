@@ -140,8 +140,8 @@ export const readImageDataFromBlob = (blob) => {
  * to draw images in a canvas from that stream.
  * @param {function} callback
  */
-export const fetchImageFromStream = (callback, signal) => {
-  return fetch('http://localhost/gencam', { signal }).then(async (r) => {
+export const fetchImageFromStream = (url, callback, signal) => {
+  return fetch(url, { signal }).then(async (r) => {
     if (!r.ok) {
       const message = `(${r.status}) While fetching from http://localhost/gencam`;
       throw new Error(message);
