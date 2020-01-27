@@ -39,6 +39,10 @@ export const uifIndex = {
     component: require('../Watcher/Watcher.container').default,
     schema: require('../Watcher/Watcher.container').schema,
   },
+  GenericCamera: {
+    component: require('../GenericCamera/GenericCamera').default,
+    schema: require('../GenericCamera/GenericCamera').schema,
+  }
 };
 
 export const auxtelIndex = {

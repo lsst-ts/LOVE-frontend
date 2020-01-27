@@ -18,6 +18,7 @@ import AddIcon from '../../icons/AddIcon/AddIcon';
 import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
+import rfdc from 'rfdc';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -43,8 +44,16 @@ class ViewEditor extends Component {
     clearEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
+    /** Function to undo the latest layout modification */
+    undo: PropTypes.func,
+    /** Function to redo the latest layout modification */
+    redo: PropTypes.func,
     /** Function to change the mode between VIEW and EDIT */
     changeMode: PropTypes.func,
+    /** Number of undo actions available */
+    undoActionsAvailable: PropTypes.number,
+    /** Number of redo actions available */
+    redoActionsAvailable: PropTypes.number,
   };
 
   static defaultProps = {
@@ -185,7 +194,7 @@ class ViewEditor extends Component {
     const newElement = { ...element };
     if (element.properties.i === properties.i) {
       newElement.properties = {
-        ...element.properties,
+        ...newElement.properties,
         x: properties.x,
         y: properties.y,
         w: properties.w,
@@ -195,8 +204,9 @@ class ViewEditor extends Component {
       return newElement;
     }
     if (element.properties.type === 'container') {
+      newElement.content = { ...element.content };
       Object.keys(element.content).forEach((key) => {
-        newElement.content[key] = this.updateElementProperties(element.content[key], properties);
+        newElement.content[key] = this.updateElementProperties(newElement.content[key], properties);
       });
     }
     return newElement;
@@ -204,9 +214,11 @@ class ViewEditor extends Component {
 
   updateElementConfig = (elementIndex, config) => {
     const parsedLayout = { ...this.getEditedViewLayout() };
+    parsedLayout.content = { ...parsedLayout.content };
     Object.keys(parsedLayout.content).forEach((key) => {
-      const elem = parsedLayout.content[key];
+      const elem = {...parsedLayout.content[key]};
       if (elem.properties.i === elementIndex) elem.config = config;
+      parsedLayout.content[key] = elem;
     });
     this.updateEditedViewLayout(parsedLayout);
     this.hideConfigModal();
@@ -277,8 +289,9 @@ class ViewEditor extends Component {
 
   onComponentDelete = (component) => {
     const parsedLayout = { ...this.getEditedViewLayout() };
+    parsedLayout.content = { ...parsedLayout.content };
     Object.keys(parsedLayout.content).forEach((compKey) => {
-      if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
+      if (parsedLayout.content[compKey].properties.i === component.properties.i) delete parsedLayout.content[compKey];
     });
     this.updateEditedViewLayout(parsedLayout);
     return [];
@@ -308,14 +321,6 @@ class ViewEditor extends Component {
         />
         <Button
           className={styles.iconBtn}
-          title='Add components'
-          onClick={this.showSelectionModal}
-          status='transparent'
-        >
-          <AddIcon className={styles.icon}/>
-        </Button>
-        <Button
-          className={styles.iconBtn}
           title={saveButtonTooltip}
           onClick={this.save}
           disabled={isSaved}
@@ -325,9 +330,18 @@ class ViewEditor extends Component {
         </Button>
         <Button
           className={styles.iconBtn}
+          title='Add components'
+          onClick={this.showSelectionModal}
+          status='transparent'
+        >
+          <AddIcon className={styles.icon}/>
+        </Button>
+        
+        <Button
+          className={styles.iconBtn}
           title='Undo'
-          onClick={() => {}}
-          disabled={false}
+          onClick={this.props.undo}
+          disabled={this.props.undoActionsAvailable === 0}
           status='transparent'
         >
           <UndoIcon className={styles.icon}/>
@@ -335,8 +349,8 @@ class ViewEditor extends Component {
         <Button
           className={styles.iconBtn}
           title='Redo'
-          onClick={() => {}}
-          disabled={false}
+          onClick={this.props.redo}
+          disabled={this.props.redoActionsAvailable === 0}
           status='transparent'
         >
           <RedoIcon className={styles.icon}/>
