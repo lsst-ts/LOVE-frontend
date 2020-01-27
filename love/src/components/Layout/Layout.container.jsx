@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getLastSALCommand, getMode, getView, getViewsStatus } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
+import { clearViewToEdit } from '../../redux/actions/uif';
 import Layout from './Layout';
 
 const LayoutContainer = ({...props }) => {
@@ -23,6 +24,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(logout()),
+  clearViewToEdit: () => dispatch(clearViewToEdit),
 });
 
 export default connect(

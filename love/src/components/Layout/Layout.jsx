@@ -25,6 +25,8 @@ class Layout extends Component {
     logout: PropTypes.func,
     /** Function to retrieve a view */
     getCurrentView: PropTypes.func,
+    /** Function to clear the view to edit (when navigating to create new view) */
+    clearViewToEdit: PropTypes.func,
     /** Authentication token */
     token: PropTypes.string,
     /** Mode of the LOVE (EDIT or VIEW) */
@@ -60,9 +62,9 @@ class Layout extends Component {
       prevProps.viewsStatus === viewsStates.LOADING &&
       this.props.viewsStatus === viewsStates.LOADED
     ) {
-      const loadedView = this.props.getCurrentView(this.state.id);
+      const view = this.props.getCurrentView(this.state.id);
       this.setState({
-        loadedView: loadedView || {},
+        title: view ? view.name : null,
       });
     }
 
@@ -103,6 +105,7 @@ class Layout extends Component {
   };
 
   createNewView = () => {
+    this.props.clearViewToEdit();
     this.props.history.push('/uif/view-editor');
   };
 
@@ -118,7 +121,7 @@ class Layout extends Component {
           <div className={styles.leftNotchContainer}>
             <div className={styles.leftTopbar}>
               <LogoIcon className={styles.logo}/>
-              <span className={styles.divider}> | </span>
+              <span className={styles.divider}> {this.state.title ? '|' : ''} </span>
               <span className={styles.text}> {this.state.title} </span>
             </div>
             <NotchCurve className={styles.notchCurve}/>
