@@ -8,7 +8,6 @@ import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import { viewsStates } from '../../redux/reducers/uif';
 
-
 export default class CustomView extends Component {
   static propTypes = {
     /** Layout object describing the view, composed of recursively nested Elements, with the following format:
@@ -73,6 +72,7 @@ export default class CustomView extends Component {
     this.state = {
       loadedView: {},
       id: null,
+      compactType: 'vertical',
     };
   }
 
@@ -90,10 +90,7 @@ export default class CustomView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (
-      prevProps.viewsStatus === viewsStates.LOADING &&
-      this.props.viewsStatus === viewsStates.LOADED
-    ) {
+    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
       const loadedView = this.props.getCurrentView(this.state.id);
       this.setState({
         loadedView: loadedView || {},
@@ -145,6 +142,14 @@ export default class CustomView extends Component {
     );
   };
 
+  onResizeStop = (layout) => {
+    this.props.onLayoutChange(layout);
+  }
+
+  onDragStop = (layout) => {
+    this.props.onLayoutChange(layout);
+  }
+
   parseContainer = (container) => {
     const elements = Object.values(container.content).map((x) => {
       return this.parseElement(x);
@@ -171,11 +176,12 @@ export default class CustomView extends Component {
           layout={layout}
           items={layout.length}
           rowHeight={20}
-          onLayoutChange={this.props.onLayoutChange}
+          onResizeStop={this.onResizeStop}
+          onDragStop={this.onDragStop}
           cols={container.properties.cols}
           width={this.props.baseColWidth * container.properties.w}
           margin={[0, 0]}
-          verticalCompact={true}
+          compactType={this.state.compactType}
           className={styles.gridLayout}
           draggableCancel=".nonDraggable"
           isDraggable={this.props.isEditable}
