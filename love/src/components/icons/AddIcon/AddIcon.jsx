@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './AddIcon.module.css';
 
 function AddIcon(props) {
-  console.log('save')
   return (
     <svg viewBox="-1 -1 30 30" {...props}>
       <path

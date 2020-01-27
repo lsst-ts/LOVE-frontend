@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './SaveIcon.module.css';
 
 function SaveIcon(props) {
-  console.log('save')
   return (
     <svg viewBox="0 0 27 28" x="0px" y="0px" {...props}>
       <path
