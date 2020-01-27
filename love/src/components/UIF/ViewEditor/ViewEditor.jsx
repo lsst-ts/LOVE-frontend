@@ -38,6 +38,10 @@ class ViewEditor extends Component {
     clearEditedView: PropTypes.func,
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
+    /** Function to undo the latest layout modification */
+    undo: PropTypes.func,
+    /** Function to redo the latest layout modification */
+    redo: PropTypes.func,
   };
 
   static defaultProps = {
@@ -164,7 +168,7 @@ class ViewEditor extends Component {
     const newElement = { ...element };
     if (element.properties.i === properties.i) {
       newElement.properties = {
-        ...element.properties,
+        ...newElement.properties,
         x: properties.x,
         y: properties.y,
         w: properties.w,
@@ -174,8 +178,9 @@ class ViewEditor extends Component {
       return newElement;
     }
     if (element.properties.type === 'container') {
+      newElement.content = { ...element.content };
       Object.keys(element.content).forEach((key) => {
-        newElement.content[key] = this.updateElementProperties(element.content[key], properties);
+        newElement.content[key] = this.updateElementProperties(newElement.content[key], properties);
       });
     }
     return newElement;
@@ -248,8 +253,9 @@ class ViewEditor extends Component {
 
   onComponentDelete = (component) => {
     const parsedLayout = { ...this.getEditedViewLayout() };
+    parsedLayout.content = { ...parsedLayout.content };
     Object.keys(parsedLayout.content).forEach((compKey) => {
-      if (parsedLayout.content[compKey].content === component.content) delete parsedLayout.content[compKey];
+      if (parsedLayout.content[compKey].properties.i === component.properties.i) delete parsedLayout.content[compKey];
     });
     this.updateEditedViewLayout(parsedLayout);
     return [];
@@ -303,6 +309,8 @@ class ViewEditor extends Component {
               />
               <Button onClick={this.showSelectionModal}>Add Components</Button>
               <Button onClick={this.save}>Save Changes</Button>
+              <Button onClick={this.props.undo}>Undo</Button>
+              <Button onClick={this.props.redo}>Redo</Button>
             </div>
             <AceEditor
               mode="json"

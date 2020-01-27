@@ -14,5 +14,8 @@ export default combineReducers({
   camera,
   heartbeats,
   summaryData,
-  uif: undoable(uif, { filter: includeAction(UPDATE_EDITED_VIEW) }),
+  uif: undoable(uif, {
+    limit: 10,
+    filter: includeAction(UPDATE_EDITED_VIEW),
+  }),
 });
