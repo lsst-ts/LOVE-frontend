@@ -10,7 +10,7 @@ import Button from '../GeneralPurpose/Button/Button';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
-import LeftCurve from './LeftCurve/LeftCurve';
+import NotchCurve from './NotchCurve/NotchCurve';
 import styles from './Layout.module.css';
 
 class Layout extends Component {
@@ -119,14 +119,15 @@ class Layout extends Component {
             <div className={styles.leftTopbar}>
               <LogoIcon className={styles.logo}/>
               <span className={styles.divider}> | </span>
+              <span className={styles.text}> View name </span>
             </div>
-            <LeftCurve className={styles.leftCurve}/>
+            <NotchCurve className={styles.notchCurve}/>
           </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
-            {/*<LeftCurve className={styles.rightCurve}/>*/}
+            <NotchCurve className={styles.notchCurve} flip/>
 
             <div className={styles.rightTopbar}>
               <Button
