@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 // import queryString from 'query-string';
-
+import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import styles from './ViewEditor.module.css';
-import { editViewStates, viewsStates } from '../../../redux/reducers/uif';
+import SaveIcon from '../../icons/SaveIcon/SaveIcon';
+import AddIcon from '../../icons/AddIcon/AddIcon';
+import UndoIcon from '../../icons/UndoIcon/UndoIcon';
+import RedoIcon from '../../icons/RedoIcon/RedoIcon';
+import DebugIcon from '../../icons/DebugIcon/DebugIcon';
+import rfdc from 'rfdc';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -42,6 +48,12 @@ class ViewEditor extends Component {
     undo: PropTypes.func,
     /** Function to redo the latest layout modification */
     redo: PropTypes.func,
+    /** Function to change the mode between VIEW and EDIT */
+    changeMode: PropTypes.func,
+    /** Number of undo actions available */
+    undoActionsAvailable: PropTypes.number,
+    /** Number of redo actions available */
+    redoActionsAvailable: PropTypes.number,
   };
 
   static defaultProps = {
@@ -55,6 +67,7 @@ class ViewEditor extends Component {
     saveEditedView: () => {},
   };
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -62,10 +75,16 @@ class ViewEditor extends Component {
       layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       selectedComponent: {},
       id: null,
+      editorVisible: false,
+      editorChanged: false,
     };
+    this.toolbar = document.createElement('div');
   }
 
   componentDidMount() {
+    this.topbarRoot = document.getElementById('customTopbar');
+    this.topbarRoot.appendChild(this.toolbar);
+    this.props.changeMode(modes.EDIT);
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     if (id === null) {
       this.props.clearEditedView();
@@ -78,6 +97,11 @@ class ViewEditor extends Component {
         id,
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.topbarRoot.removeChild(this.toolbar);
+    this.props.changeMode(modes.VIEW);
   }
 
   componentDidUpdate(prevProps) {
@@ -131,6 +155,7 @@ class ViewEditor extends Component {
   onEditorChange = (newValue) => {
     this.setState({
       layout: newValue,
+      editorChanged: true,
       showSelectionModal: false,
       showConfigModal: false,
     });
@@ -144,6 +169,7 @@ class ViewEditor extends Component {
       parsedLayout = {};
     }
     this.updateEditedViewLayout(parsedLayout);
+    this.setState({ editorChanged: false });
   };
 
   onLayoutChange = (newLayoutProperties) => {
@@ -188,9 +214,11 @@ class ViewEditor extends Component {
 
   updateElementConfig = (elementIndex, config) => {
     const parsedLayout = { ...this.getEditedViewLayout() };
+    parsedLayout.content = { ...parsedLayout.content };
     Object.keys(parsedLayout.content).forEach((key) => {
-      const elem = parsedLayout.content[key];
+      const elem = {...parsedLayout.content[key]};
       if (elem.properties.i === elementIndex) elem.config = config;
+      parsedLayout.content[key] = elem;
     });
     this.updateEditedViewLayout(parsedLayout);
     this.hideConfigModal();
@@ -210,6 +238,14 @@ class ViewEditor extends Component {
 
   showConfigModal = (e) => {
     this.setState({ showConfigModal: true });
+  };
+
+  showEditor = (e) => {
+    this.setState({ editorVisible: true });
+  };
+
+  hideEditor = (e) => {
+    this.setState({ editorVisible: false });
   };
 
   receiveSelection = (selection) => {
@@ -272,6 +308,67 @@ class ViewEditor extends Component {
     this.props.saveEditedView();
   };
 
+  renderToolbar() {
+    const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
+    const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
+    return (
+      <div className={styles.toolbarWrapper}>
+      <div className={styles.toolbar}>
+        <Input
+          className={styles.textField}
+          defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
+          onBlur={this.onNameInputBlur}
+        />
+        <Button
+          className={styles.iconBtn}
+          title={saveButtonTooltip}
+          onClick={this.save}
+          disabled={isSaved}
+          status='transparent'
+        >
+          <SaveIcon className={styles.icon}/>
+        </Button>
+        <Button
+          className={styles.iconBtn}
+          title='Add components'
+          onClick={this.showSelectionModal}
+          status='transparent'
+        >
+          <AddIcon className={styles.icon}/>
+        </Button>
+        
+        <Button
+          className={styles.iconBtn}
+          title='Undo'
+          onClick={this.props.undo}
+          disabled={this.props.undoActionsAvailable === 0}
+          status='transparent'
+        >
+          <UndoIcon className={styles.icon}/>
+        </Button>
+        <Button
+          className={styles.iconBtn}
+          title='Redo'
+          onClick={this.props.redo}
+          disabled={this.props.redoActionsAvailable === 0}
+          status='transparent'
+        >
+          <RedoIcon className={styles.icon}/>
+        </Button>
+        <Button
+          className={styles.iconBtn}
+          title='Debug'
+          onClick={this.showEditor}
+          disabled={this.state.editorVisible}
+          status='transparent'
+        >
+          <DebugIcon className={styles.icon}/>
+        </Button>
+      </div>
+      </div>
+    );
+  }
+
   render() {
     return (
       <>
@@ -286,45 +383,50 @@ class ViewEditor extends Component {
             ></CustomView>
           </div>
         </div>
-        <Rnd
-          default={{
-            x: 800,
-            y: 50,
-            width: 500,
-            height: 200,
-          }}
-          style={{ zIndex: 1000 }}
-          bounds={'parent'}
-          enableUserSelectHack={false}
-          dragHandleClassName={styles.bar}
-          onResize={this.onResize}
-        >
-          <div>
-            <div className={styles.bar}>
-              View:
-              <Input
-                className={styles.textField}
-                defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-                onBlur={this.onNameInputBlur}
+
+        { this.state.editorVisible ? (
+          <Rnd
+            default={{
+              x: 800,
+              y: 50,
+              width: 500,
+              height: 200,
+            }}
+            style={{ zIndex: 1000 }}
+            bounds={'parent'}
+            enableUserSelectHack={false}
+            dragHandleClassName={styles.bar}
+            onResize={this.onResize}
+          >
+            <div className={styles.rnd}>
+              <div className={styles.rndBar}>
+                <span className={styles.hidden}/>
+                <Button
+                  title={this.state.editorChanged ? 'Apply changes in editor to the layout' : 'No changes to apply'}
+                  onClick={this.applyEditorLayout}
+                  disabled={!this.state.editorChanged}
+                >
+                  Apply
+                </Button>
+                <Button onClick={this.hideEditor} title='Close' status='transparent'>
+                  &#10005;
+                </Button>
+              </div>
+              <AceEditor
+                mode="json"
+                className={styles.rndEditor}
+                theme="solarized_dark"
+                name="UNIQUE_ID_OF_DIV"
+                onChange={this.onEditorChange}
+                width={'100%'}
+                value={this.state.layout}
+                editorProps={{ $blockScrolling: true }}
+                fontSize={18}
               />
-              <Button onClick={this.showSelectionModal}>Add Components</Button>
-              <Button onClick={this.save}>Save Changes</Button>
-              <Button onClick={this.props.undo}>Undo</Button>
-              <Button onClick={this.props.redo}>Redo</Button>
             </div>
-            <AceEditor
-              mode="json"
-              theme="solarized_dark"
-              name="UNIQUE_ID_OF_DIV"
-              onChange={this.onEditorChange}
-              width={'100%'}
-              value={this.state.layout}
-              editorProps={{ $blockScrolling: true }}
-              fontSize={18}
-            />
-            <Button onClick={this.applyEditorLayout}>Apply</Button>
-          </div>
-        </Rnd>
+          </Rnd>
+        ) : null}
+
         <Modal
           isOpen={this.state.showSelectionModal}
           onRequestClose={this.hideSelectionModal}
@@ -349,6 +451,9 @@ class ViewEditor extends Component {
             onSaveConfig={this.updateElementConfig}
           />
         </Modal>
+        {
+          ReactDOM.createPortal(this.renderToolbar(), this.toolbar)
+        }
       </>
     );
   }
