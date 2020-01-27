@@ -18,6 +18,8 @@ export default class Layout extends Component {
     logout: PropTypes.func,
     /** Authentication token */
     token: PropTypes.string,
+    /** Mode of the LOVE (EDIT or VIEW) */
+    mode: PropTypes.string,
   };
 
   static defaultProps = {
@@ -43,8 +45,13 @@ export default class Layout extends Component {
     return (
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
-          <span />
-          <Button onClick={this.props.logout}>Logout</Button>
+          <div className={styles.leftTopbar}/>
+
+          <div id='customTopbar'/>
+
+          <div className={styles.rightTopbar}>
+            <Button onClick={this.props.logout}>Logout</Button>
+          </div>
         </div>
         <div className={styles.contentWrapper}>
           {this.props.children}

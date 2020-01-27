@@ -135,7 +135,7 @@ export default class CustomView extends Component {
               <GearIcon active />
             </div>
           </Button>
-          <Button onClick={() => this.props.onComponentDelete(component)}>X</Button>
+          <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
         </div>
         {comp}
       </div>
