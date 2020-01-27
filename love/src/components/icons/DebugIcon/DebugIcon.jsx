@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './DebugIcon.module.css';
 
 function DebugIcon(props) {
-  console.log('save')
   return (
     <svg viewBox="0 0 28.9 26.8" {...props}>
       <path
