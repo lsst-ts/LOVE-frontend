@@ -9,6 +9,8 @@ import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
+import LogoIcon from '../icons/LogoIcon/LogoIcon';
+import LeftCurve from './LeftCurve/LeftCurve';
 import styles from './Layout.module.css';
 
 class Layout extends Component {
@@ -112,50 +114,63 @@ class Layout extends Component {
     return (
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
-          <div className={styles.leftTopbar} />
+
+          <div className={styles.leftNotchContainer}>
+            <div className={styles.leftTopbar}>
+              <LogoIcon className={styles.logo}/>
+              <span className={styles.divider}> | </span>
+            </div>
+            <LeftCurve className={styles.leftCurve}/>
+          </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />
 
-          <div className={styles.rightTopbar}>
-            <Button
-              className={styles.iconBtn}
-              title="View notifications"
-              onClick={() => {}}
-              disabled={false}
-              status="transparent"
-            >
-              <NotificationIcon className={styles.icon} />
-            </Button>
+          <div className={styles.rightNotchContainer}>
+            {/*<LeftCurve className={styles.rightCurve}/>*/}
 
-            <span className={styles.refNode} ref={(node) => (this.node = node)}>
-              <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
-                <GearIcon className={styles.icon} />
-                {this.state.settingsVisible && (
-                  <div className={styles.settingsDropdown}>
-                    <div
-                      className={this.state.id ? styles.menuElement : styles.disabledElement}
-                      title="Edit view"
-                      onClick={() => {this.editView(this.state.id)}}
-                    >
-                      Edit view
-                    </div>
-                    <div
-                      className={styles.menuElement}
-                      title="New view"
-                      onClick={this.createNewView}
-                    >
-                      Create new View
-                    </div>
-                    <span className={styles.divider} />
-                    <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                      Logout
-                    </div>
-                  </div>
-                )}
+            <div className={styles.rightTopbar}>
+              <Button
+                className={styles.iconBtn}
+                title="View notifications"
+                onClick={() => {}}
+                disabled={false}
+                status="transparent"
+              >
+                <NotificationIcon className={styles.icon} />
               </Button>
-            </span>
+
+              <span className={styles.refNode} ref={(node) => (this.node = node)}>
+
+                <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
+                  <GearIcon className={styles.icon} />
+                  {this.state.settingsVisible && (
+                    <div className={styles.settingsDropdown}>
+                      <div
+                        className={this.state.id ? styles.menuElement : styles.disabledElement}
+                        title="Edit view"
+                        onClick={() => {this.editView(this.state.id)}}
+                      >
+                        Edit view
+                      </div>
+                      <div
+                        className={styles.menuElement}
+                        title="New view"
+                        onClick={this.createNewView}
+                      >
+                        Create new View
+                      </div>
+                      <span className={styles.divider} />
+                      <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
+                        Logout
+                      </div>
+                    </div>
+                  )}
+                </Button>
+              </span>
+            </div>
           </div>
         </div>
+
         <div className={styles.contentWrapper}>{this.props.children}</div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
