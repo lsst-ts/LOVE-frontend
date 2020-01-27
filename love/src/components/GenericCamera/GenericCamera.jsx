@@ -15,23 +15,34 @@ export default function() {
   const [imageHeight, setImageHeight] = useState(1024);
   const [containerWidth, setContainerWidth] = useState(1);
   const [containerHeight, setContainerHeight] = useState(1);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
 
   const canvasRef = useRef(null);
   useEffect(() => {
     /** Start the stream once and update image size on every receive */
     const controller = new AbortController();
     const signal = controller.signal;
-    CameraUtils.fetchImageFromStream((image) => {
-      console.log(image);
-      if (canvasRef.current) {
-        setImageWidth(image.width);
-        setImageHeight(image.height);
-        canvasRef.current.width = image.width;
-        canvasRef.current.height = image.height;
-        CameraUtils.draw(image.body, canvasRef.current);
+    const fetchAndRetry = () => {
+      CameraUtils.fetchImageFromStream((image) => {
+        if (canvasRef.current) {
+          setImageWidth(image.width);
+          setImageHeight(image.height);
+          canvasRef.current.width = image.width;
+          canvasRef.current.height = image.height;
+          CameraUtils.draw(image.body, canvasRef.current);
+        }
+      }, signal).catch((error) => {
+        setError(error);
+        setTimeout(()=>{
+          console.log('try')
+          setRetryCount(c=>c+1);
+          fetchAndRetry();
+        }, 3000);
+      });
+    };
 
-      }
-    }, signal);
+    fetchAndRetry();
 
     return () => {
       controller.abort();
@@ -49,9 +60,9 @@ export default function() {
 
     observer.observe(canvasRef.current.parentNode);
 
-    return ()=>{
+    return () => {
       observer.disconnect();
-    }
+    };
   }, []);
 
   useEffect(() => {
@@ -78,5 +89,13 @@ export default function() {
     //
   }, [imageWidth, imageHeight, containerWidth, containerHeight]);
 
+  if (error) {
+    return (
+      <>
+        <p>{`ERROR: ${error.message}`}</p>
+        <p>Retrying {`(${retryCount})` } {new Array(retryCount % 3 ).fill('. ')} </p>
+      </>
+    );
+  }
   return <canvas ref={canvasRef}></canvas>;
 }

@@ -142,6 +142,10 @@ export const readImageDataFromBlob = (blob) => {
  */
 export const fetchImageFromStream = (callback, signal) => {
   return fetch('http://localhost/gencam', { signal }).then(async (r) => {
+    if (!r.ok) {
+      const message = `(${r.status}) While fetching from http://localhost/gencam`;
+      throw new Error(message);
+    }
     const reader = r.body.getReader();
 
     let remainder = new Uint8Array([]);
