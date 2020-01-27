@@ -38,6 +38,8 @@ export default function({ serverURL = 'http://localhost/gencam' }) {
       CameraUtils.fetchImageFromStream(
         serverURL,
         (image) => {
+          setError(null);
+          setRetryCount(0);
           if (canvasRef.current) {
             setImageWidth(image.width);
             setImageHeight(image.height);
@@ -107,7 +109,7 @@ export default function({ serverURL = 'http://localhost/gencam' }) {
     //
   }, [imageWidth, imageHeight, containerWidth, containerHeight, error]);
 
-  if (error) {
+  if (error !== null) {
     return (
       <div className={styles.errorContainer}>
         <p>{`ERROR: ${error.message}`}</p>
