@@ -98,5 +98,27 @@ export const getEditedViewSaved = (state) => {
  */
 export const getMode = (state) => {
   if (state.uif === undefined) return undefined;
-  return state.uif.mode;
+  return state.uif.present.mode;
+};
+
+/**
+ * Return the number of undo actions available
+ *
+ * @param  {object} state  the state
+ * @return {string}        the number of undo actions
+ */
+export const getUndoActionsAvailable = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.past ? state.uif.past.length : 0;
+};
+
+/**
+ * Return the number of redo actions available
+ *
+ * @param  {object} state  the state
+ * @return {string}        the number of redo actions
+ */
+export const getRedoActionsAvailable = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.future ? state.uif.future.length : 0;
 };
