@@ -1,0 +1,61 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.rnd {
+  border-radius: 7px;
+  border: solid 1px var(--base-font-color);
+}
+
+.rndBar {
+  display: flex;
+  justify-content: space-between;
+  background: var(--second-secondary-background-color);
+  cursor: grab;
+  user-select: none;
+  text-align: left;
+  font-size: var(--font-size-larger);
+  padding: 0.1em 0.5em;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.rndEditor {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.rndBar .hidden {
+  visibility: hidden;
+  width: 24px;
+}
+
+.textField {
+  width: 20ch;
+  background-color: transparent;
+  border: 1px solid var(--secondary-font-color);
+  color: var(--base-font-color);
+}
+
+.toolbarWrapper {
+  display: inline-block;
+  margin: auto;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: min-content repeat(5, min-content);
+  /* grid-gap: 0.2em; */
+}
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.icon {
+  height: 1.4em;
+}

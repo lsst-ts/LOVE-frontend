@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import styles from './ConfigForm.module.css';
-import Button from '../../Button/Button';
+import Button from '../../GeneralPurpose/Button/Button';
 import { indexes } from '../ComponentIndex';
 
 import 'brace/mode/javascript';

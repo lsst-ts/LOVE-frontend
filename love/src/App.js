@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
-import ViewsIndexContainer from './components/GeneralPurpose/UIF/ViewsIndex/ViewsIndex.container';
+import ViewsIndexContainer from './components/UIF/ViewsIndex/ViewsIndex.container';
 import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
@@ -22,10 +22,10 @@ import DomeAndMountView from './components/AuxTel/DomeAndMountView/DomeAndMountV
 import LightPath from './components/AuxTel/Mount/LightPath.container';
 import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
-import ViewEditorContainer from './components/GeneralPurpose/UIF/ViewEditor/ViewEditor.container';
+import ViewEditorContainer from './components/UIF/ViewEditor/ViewEditor.container';
 import WatcherContainer from './components/Watcher/Watcher.container';
 import GenericCamera from './components/GenericCamera/GenericCamera';
-import CustomViewContainer from './components/GeneralPurpose/UIF/CustomView.container';
+import CustomViewContainer from './components/UIF/CustomView.container';
 
 class App extends Component {
   static propTypes = {
