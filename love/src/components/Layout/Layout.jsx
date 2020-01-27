@@ -53,7 +53,7 @@ class Layout extends Component {
       this.setState({ id, title: view ? view.name : null });
     }
     else if (!id && this.state.id) {
-      this.setState({ id: null, name: null });
+      this.setState({ id: null, title: null });
     }
 
     if (
@@ -119,7 +119,7 @@ class Layout extends Component {
             <div className={styles.leftTopbar}>
               <LogoIcon className={styles.logo}/>
               <span className={styles.divider}> | </span>
-              <span className={styles.text}> View name </span>
+              <span className={styles.text}> {this.state.title} </span>
             </div>
             <NotchCurve className={styles.notchCurve}/>
           </div>
@@ -127,7 +127,7 @@ class Layout extends Component {
           <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
-            <NotchCurve className={styles.notchCurve} flip/>
+            <NotchCurve className={styles.notchCurve} flip='true'/>
 
             <div className={styles.rightTopbar}>
               <Button
