@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './UndoIcon.module.css';
 
 function UndoIcon(props) {
-  console.log('save')
   return (
     <svg viewBox="0 0 27 25.1" {...props}>
       <path
