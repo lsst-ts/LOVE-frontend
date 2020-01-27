@@ -84,5 +84,8 @@
 
 .settingsDropdown .divider {
   border-top: 1px solid var(--secondary-font-dimmed-color);
-  /* margin-top: 0.1em; */
+}
+
+.settingsDropdown .refNode {
+  display: contents;
 }
