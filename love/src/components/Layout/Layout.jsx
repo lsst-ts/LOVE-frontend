@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import { viewsStates } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
@@ -9,18 +11,24 @@ import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import styles from './Layout.module.css';
 
-export default class Layout extends Component {
+class Layout extends Component {
   static propTypes = {
+    /** React Router location object */
+    location: PropTypes.object,
     /** Children components */
     children: PropTypes.node,
     /** Last SAL command that has been sent */
     lastSALCommand: PropTypes.object,
     /** Function to log oput of the app */
     logout: PropTypes.func,
+    /** Function to retrieve a view */
+    getCurrentView: PropTypes.func,
     /** Authentication token */
     token: PropTypes.string,
     /** Mode of the LOVE (EDIT or VIEW) */
     mode: PropTypes.string,
+    /** Status of the views request */
+    viewsStatus: PropTypes.string,
   };
 
   static defaultProps = {
@@ -31,10 +39,31 @@ export default class Layout extends Component {
     super(props);
     this.state = {
       settingsVisible: false,
+      id: null,
+      title: null,
     };
   }
 
   componentDidUpdate = (prevProps, _prevState) => {
+    const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+    if (id && id !== this.state.id) {
+      const view = this.props.getCurrentView(id);
+      this.setState({ id, title: view ? view.name : null });
+    }
+    else if (!id && this.state.id) {
+      this.setState({ id: null, name: null });
+    }
+
+    if (
+      prevProps.viewsStatus === viewsStates.LOADING &&
+      this.props.viewsStatus === viewsStates.LOADED
+    ) {
+      const loadedView = this.props.getCurrentView(this.state.id);
+      this.setState({
+        loadedView: loadedView || {},
+      });
+    }
+
     /* Check command ack for toast*/
     if (
       prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED &&
@@ -106,7 +135,7 @@ export default class Layout extends Component {
                     <div
                       className={this.state.id ? styles.menuElement : styles.disabledElement}
                       title="Edit view"
-                      onClick={() => {}}
+                      onClick={() => {this.editView(this.state.id)}}
                     >
                       Edit view
                     </div>
@@ -134,3 +163,5 @@ export default class Layout extends Component {
     );
   }
 }
+
+export default withRouter(Layout);
