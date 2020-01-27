@@ -68,7 +68,7 @@ export default function({ serverURL = 'http://localhost/gencam' }) {
   useEffect(() => {
     /** Listen to size changes of the canvas parent element*/
     if (!canvasRef.current) return;
-    if (error !== undefined) return;
+    if (error !== null) return;
     const observer = new ResizeObserver((entries) => {
       const container = entries[0];
       setContainerWidth(container.contentRect.width);
@@ -80,11 +80,11 @@ export default function({ serverURL = 'http://localhost/gencam' }) {
     return () => {
       observer.disconnect();
     };
-  }, [error]);
+  }, [error, canvasRef.current]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
-    if (error !== undefined) return;
+    if (error !== null) return;
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
