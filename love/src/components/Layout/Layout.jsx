@@ -9,7 +9,6 @@ import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import styles from './Layout.module.css';
 
-
 export default class Layout extends Component {
   static propTypes = {
     /** Children components */
@@ -50,52 +49,75 @@ export default class Layout extends Component {
     }
   };
 
+  componentWillMount = () => {
+    document.addEventListener('mousedown', this.handleClick, false);
+  };
+
+  componentWillUnmount = () => {
+    document.removeEventListener('mousedown', this.handleClick, false);
+  };
+
+  handleClick = (event) => {
+    if (this.node && !this.node.contains(event.target)) {
+      this.closeMenu();
+    }
+  };
+
+  closeMenu = () => {
+    this.setState({ settingsVisible: false });
+  };
+
   toggleSettings = () => {
     this.setState({ settingsVisible: !this.state.settingsVisible });
-  }
+  };
 
   render() {
     return (
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
-          <div className={styles.leftTopbar}/>
+          <div className={styles.leftTopbar} />
 
-          <div className={styles.middleTopbar} id='customTopbar'/>
+          <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightTopbar}>
             <Button
               className={styles.iconBtn}
-              title='View notifications'
+              title="View notifications"
               onClick={() => {}}
               disabled={false}
-              status='transparent'
+              status="transparent"
             >
-              <NotificationIcon className={styles.icon}/>
+              <NotificationIcon className={styles.icon} />
             </Button>
-            <Button
-              className={styles.iconBtn}
-              title='More'
-              onClick={this.toggleSettings}
-              status='transparent'
-            >
-              <GearIcon className={styles.icon}/>
-            </Button>
-            {
-              this.state.settingsVisible && (
-                <div className={styles.settingsDropdown}>
-                  <div className={styles.menuButton} onClick={this.props.logout}> Edit view </div>
-                  <div className={styles.menuButton} onClick={this.props.logout}> Create new View </div>
-                  <span className={styles.divider}/>
-                  <div className={styles.menuButton} onClick={this.props.logout}> Logout </div>
-                </div>
-              )
-            }
-          </div>
 
+            <span className={styles.refNode} ref={(node) => (this.node = node)}>
+              <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
+                <GearIcon className={styles.icon} />
+                {this.state.settingsVisible && (
+                  <div className={styles.settingsDropdown}>
+                    <div className={styles.menuButton} title="Edit view" onClick={() => {}}>
+                      Edit view
+                    </div>
+                    <div
+                      className={styles.menuButton}
+                      title="New view"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                      }}
+                    >
+                      Create new View
+                    </div>
+                    <span className={styles.divider} />
+                    <div className={styles.menuButton} title="Logout" onClick={this.props.logout}>
+                      Logout
+                    </div>
+                  </div>
+                )}
+              </Button>
+            </span>
+          </div>
         </div>
-        <div className={styles.contentWrapper}>
-          {this.props.children}
-        </div>
+        <div className={styles.contentWrapper}>{this.props.children}</div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
