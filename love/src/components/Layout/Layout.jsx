@@ -83,7 +83,10 @@ export default class Layout extends Component {
             {
               this.state.settingsVisible && (
                 <div className={styles.settingsDropdown}>
-                  <Button onClick={this.props.logout} status='transparent'>Logout</Button>
+                  <div className={styles.menuButton} onClick={this.props.logout}> Edit view </div>
+                  <div className={styles.menuButton} onClick={this.props.logout}> Create new View </div>
+                  <span className={styles.divider}/>
+                  <div className={styles.menuButton} onClick={this.props.logout}> Logout </div>
                 </div>
               )
             }
