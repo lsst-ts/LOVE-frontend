@@ -4,23 +4,20 @@
   height: 3em;
   overflow: visible;
   display: grid;
-  grid-template-columns: 40ch 1fr 20ch;
+  grid-template-columns: 55ch 1fr 20ch;
 }
 
 .leftNotchContainer {
-  display: grid;
-  grid-template-columns: min-content min-content;
-}
-
-.rightNotchContainer {
+  display: inline-flex;
+  justify-content: flex-start;
 }
 
 .leftTopbar {
-  padding: 0.5em 2em;
+  padding: 0.5em 1em;
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(2, min-content);
+  grid-template-columns: repeat(2, min-content) max-content;
   grid-gap: 1em;
   align-items: center;
 }
@@ -34,21 +31,24 @@
   font-size: 1.6em;
 }
 
-.leftCurve {
+.notchCurve {
   height: 3em;
   fill: var(--tertiary-background-color);
 }
 
-.rightCurve {
-  height: 3em;
-  fill: var(--tertiary-background-color);
+.rightNotchContainer {
+  display: inline-flex;
+  justify-content: flex-end;
 }
 
 .rightTopbar {
+  margin-left: -1px;
   position: relative;
   padding: 0.5em var(--content-padding);
   background-color: var(--tertiary-background-color);
   text-align: right;
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
 }
 
 .middleTopbar {
