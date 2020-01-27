@@ -1,20 +1,58 @@
 .topbar {
   box-sizing: border-box;
   width: 100%;
-  height: fit-content;
-  background-color: var(--tertiary-background-color);
-  overflow: hidden;
+  height: 3em;
+  overflow: visible;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  padding: 0.5em var(--content-padding);
+  grid-template-columns: min-content 1fr 20ch;
+}
+
+.leftNotchContainer {
+  display: inline-flex;
+  justify-content: flex-start;
 }
 
 .leftTopbar {
+  padding: 0.5em 1em;
+  background-color: var(--tertiary-background-color);
   text-align: left;
+  display: grid;
+  grid-template-columns: repeat(2, min-content) max-content;
+  grid-gap: 1em;
+  align-items: center;
+}
+
+.leftTopbar .logo {
+  height: 1.6em;
+  fill: var(--base-font-color);
+}
+
+.leftTopbar .divider {
+  font-size: 1.6em;
+}
+
+.notchCurve {
+  height: 3em;
+  fill: var(--tertiary-background-color);
+}
+
+.rightNotchContainer {
+  display: inline-flex;
+  justify-content: flex-end;
 }
 
 .rightTopbar {
+  margin-left: -1px;
+  position: relative;
+  padding: 0.5em var(--content-padding);
+  background-color: var(--tertiary-background-color);
   text-align: right;
+  display: grid;
+  grid-template-columns: repeat(2, min-content);
+}
+
+.middleTopbar {
+  padding: 0.5em var(--content-padding);
 }
 
 .hidden {
@@ -27,4 +65,65 @@
   overflow: auto;
   height: calc(100vh - 4em);
   will-change: transform;
+}
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.icon {
+  height: 1.4em;
+}
+
+
+.settingsDropdown {
+  background-color: var(--tertiary-background-color);
+  border-radius: 4px;
+  text-align: left;
+  z-index: 2;
+  display: grid;
+  grid-template-rows: repeat(auto-fill, min-content);
+  position: absolute;
+  width: 20ch;
+  height: fit-content;
+  top: 3.2em;
+  right: 1em;
+}
+
+.settingsDropdown .menuElement {
+  text-align: left;
+  cursor: pointer;
+  padding: 0.5em 1em;
+}
+
+.settingsDropdown .menuElement:hover {
+  background-color: var(--second-quaternary-background-color);
+}
+
+.settingsDropdown .menuElement:first-child:hover {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.settingsDropdown .menuElement:last-child:hover {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.settingsDropdown .disabledElement {
+  text-align: left;
+  cursor: not-allowed;
+  padding: 0.5em 1em;
+  color: var(--secondary-font-dimmed-color);
+}
+
+.settingsDropdown .divider {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.settingsDropdown .refNode {
+  display: contents;
 }
