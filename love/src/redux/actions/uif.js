@@ -35,7 +35,7 @@ export const receiveWorkspaces = (workspaces) => {
 };
 
 /**
-* Action to mark the views as in process of being loaded
+ * Action to mark the views as in process of being loaded
  */
 export const loadingViews = {
   type: LOADING_VIEWS,
@@ -103,7 +103,7 @@ export const saveErrorEditedView = (response) => {
   return {
     type: SAVE_ERROR,
     response: response,
-  }
+  };
 };
 
 /**
@@ -113,9 +113,8 @@ export const savedEditedView = (view) => {
   return {
     type: SAVED_EDITED_VIEW,
     view: view,
-  }
+  };
 };
-
 
 /**
  * requestWorkspaces - Action to request the list of workspaces
@@ -128,15 +127,16 @@ export function requestWorkspaces() {
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
-    }).then((response) => {
-      return response.json().then((workspaces) => {
-        dispatch(receiveWorkspaces(workspaces));
-        return Promise.resolve();
-      });
-    }).catch((e) => console.error(e));
+    })
+      .then((response) => {
+        return response.json().then((workspaces) => {
+          dispatch(receiveWorkspaces(workspaces));
+          return Promise.resolve();
+        });
+      })
+      .catch((e) => console.error(e));
   };
 }
-
 
 /**
  * requestWorkspaces - Action to request the list of views
@@ -150,15 +150,16 @@ export function requestViews() {
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
-    }).then((response) => {
-      return response.json().then((views) => {
-        dispatch(receiveViews(views));
-        return Promise.resolve();
-      });
-    }).catch((e) => console.error(e));
+    })
+      .then((response) => {
+        return response.json().then((views) => {
+          dispatch(receiveViews(views));
+          return Promise.resolve();
+        });
+      })
+      .catch((e) => console.error(e));
   };
 }
-
 
 /**
  * requestWorkspace - Action to request a full workspace by its given id
@@ -172,15 +173,16 @@ export function requestWorkspace(id) {
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
-    }).then((response) => {
-      return response.json().then((workspace) => {
-        dispatch(receiveCurrentWorkspace(workspace));
-        return Promise.resolve();
-      });
-    }).catch((e) => console.error(e));
+    })
+      .then((response) => {
+        return response.json().then((workspace) => {
+          dispatch(receiveCurrentWorkspace(workspace));
+          return Promise.resolve();
+        });
+      })
+      .catch((e) => console.error(e));
   };
 }
-
 
 /**
  * saveEditedView - Action to save the view under edition to the server
@@ -195,7 +197,7 @@ export function saveEditedView() {
     let url = `${ManagerInterface.getUifBaseUrl()}views/`;
     let method = 'POST';
     let expectedCode = 201;
-    let dataToSend = {...saved, name: current.name, data: current.data};
+    const dataToSend = { ...saved, name: current.name, data: current.data };
 
     if (saved !== undefined && saved.id !== undefined) {
       url = `${ManagerInterface.getUifBaseUrl()}views/${saved.id}/`;
@@ -203,21 +205,47 @@ export function saveEditedView() {
       expectedCode = 200;
     }
     return fetch(url, {
-      method: method,
+      method,
       headers: ManagerInterface.getHeaders(),
       body: JSON.stringify(dataToSend),
-    }).then((response) => {
-      if (response.status === expectedCode) {
-        return response.json().then((view) => {
-          dispatch(savedEditedView(view));
+    })
+      .then((response) => {
+        if (response.status === expectedCode) {
+          return response.json().then((view) => {
+            dispatch(savedEditedView(view));
+            return Promise.resolve();
+          });
+        }
+        return response.json().then((json) => {
+          dispatch(saveErrorEditedView(json));
           return Promise.resolve();
         });
-      } else {
-        return response.json().then((response) => {
-          dispatch(saveErrorEditedView(response));
-          return Promise.resolve();
-        });
-      }
-    }).catch((e) => console.error(e));
+      })
+      .catch((e) => console.error(e));
+  };
+}
+
+/**
+ * deleteView - Action to save the view under edition to the server
+ *
+ * @param  {number} id the id of the View to delete
+ * @return {object}    the dispatched action
+ */
+export function deleteView(id) {
+  return async (dispatch, getState) => {
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}/`;
+    const expectedCode = 204;
+    return fetch(url, {
+      method: 'DELETE',
+      headers: ManagerInterface.getHeaders(),
+    })
+      .then((response) => {
+        if (response.status === expectedCode) {
+          dispatch(requestViews());
+          return Promise.resolve(true);
+        }
+        return Promise.resolve(false);
+      })
+      .catch((e) => console.error(e));
   };
 }
