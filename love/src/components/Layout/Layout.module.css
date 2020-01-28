@@ -10,6 +10,7 @@
 .leftNotchContainer {
   display: inline-flex;
   justify-content: flex-start;
+  cursor: pointer;
 }
 
 .leftTopbar {
