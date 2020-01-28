@@ -7,6 +7,7 @@ import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import { viewsStates } from '../../redux/reducers/uif';
+import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 
 export default class CustomView extends Component {
   static propTypes = {
@@ -137,18 +138,18 @@ export default class CustomView extends Component {
           </Button>
           <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
         </div>
-        {comp}
+        <ErrorBoundary>{comp}</ErrorBoundary>
       </div>
     );
   };
 
   onResizeStop = (layout) => {
     this.props.onLayoutChange(layout);
-  }
+  };
 
   onDragStop = (layout) => {
     this.props.onLayoutChange(layout);
-  }
+  };
 
   parseContainer = (container) => {
     const elements = Object.values(container.content).map((x) => {
