@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
@@ -11,6 +12,8 @@ class ViewsIndex extends Component {
     history: PropTypes.object,
     /** Current views to display */
     views: PropTypes.array,
+    /** Current views to display */
+    deleteView: PropTypes.func,
   };
 
   createNewView = () => {
@@ -23,6 +26,16 @@ class ViewsIndex extends Component {
 
   openView = (id) => {
     this.props.history.push('/uif/view?id=' + id);
+  };
+
+  deleteView = (id) => {
+    this.props.deleteView(id).then((success) => {
+      if (success) {
+        toast.success('View deleted successfully');
+      } else {
+        toast.error('View deletion failed');
+      }
+    });
   };
 
   render() {
@@ -38,6 +51,7 @@ class ViewsIndex extends Component {
                 <span> {view.name} </span>
                 <Button onClick={() => this.openView(view.id)}>Open</Button>
                 <Button onClick={() => this.editView(view.id)}>Edit</Button>
+                <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
               </li>
             ))}
         </ol>
