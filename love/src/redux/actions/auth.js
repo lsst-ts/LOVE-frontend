@@ -220,7 +220,7 @@ export function validateToken() {
         if (user) {
           username = { user };
         }
-        const { permissions, tai_to_utc } = { resp };
+        const { permissions, tai_to_utc } = resp;
         dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
         return Promise.resolve();
       });
