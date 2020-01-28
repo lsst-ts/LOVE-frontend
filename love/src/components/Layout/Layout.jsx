@@ -118,7 +118,7 @@ class Layout extends Component {
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
 
-          <div className={styles.leftNotchContainer}>
+          <div className={styles.leftNotchContainer} onClick={() => this.props.history.push('/') }>
             <div className={styles.leftTopbar}>
               <LogoIcon className={styles.logo}/>
               <span className={styles.divider}> {this.state.title ? '|' : ''} </span>
