@@ -42,6 +42,10 @@ export const uifIndex = {
   GenericCamera: {
     component: require('../GenericCamera/GenericCamera').default,
     schema: require('../GenericCamera/GenericCamera').schema,
+  },
+  ObservingLogInput: {
+    component: require('../ObservingLog/ObservingLogInput.container').default,
+    schema: require('../ObservingLog/ObservingLogInput.container').schema,
   }
 };
 
