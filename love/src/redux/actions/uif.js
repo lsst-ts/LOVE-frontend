@@ -1,7 +1,9 @@
 import {
   RECEIVE_WORKSPACES,
+  RECEIVE_WORKSPACES_ERROR,
   LOADING_VIEWS,
   RECEIVE_VIEWS,
+  RECEIVE_VIEWS_ERROR,
   RECEIVE_CURRENT_WORKSPACE,
   UPDATE_EDITED_VIEW,
   LOAD_EDITED_VIEW,
@@ -35,6 +37,16 @@ export const receiveWorkspaces = (workspaces) => {
 };
 
 /**
+ * Action to receive views error
+ */
+export const receiveWorkspacesError = (error) => {
+  return {
+    type: RECEIVE_VIEWS_ERROR,
+    error,
+  };
+};
+
+/**
  * Action to mark the views as in process of being loaded
  */
 export const loadingViews = {
@@ -48,6 +60,16 @@ export const receiveViews = (views) => {
   return {
     type: RECEIVE_VIEWS,
     views,
+  };
+};
+
+/**
+ * Action to receive views error
+ */
+export const receiveViewsError = (error) => {
+  return {
+    type: RECEIVE_VIEWS_ERROR,
+    error,
   };
 };
 
@@ -129,8 +151,14 @@ export function requestWorkspaces() {
       headers: ManagerInterface.getHeaders(),
     })
       .then((response) => {
-        return response.json().then((workspaces) => {
-          dispatch(receiveWorkspaces(workspaces));
+        if (response.status === 200) {
+          return response.json().then((workspaces) => {
+            dispatch(receiveWorkspaces(workspaces));
+            return Promise.resolve();
+          });
+        }
+        return response.json().then((error) => {
+          dispatch(receiveWorkspacesError(error));
           return Promise.resolve();
         });
       })
@@ -152,8 +180,14 @@ export function requestViews() {
       headers: ManagerInterface.getHeaders(),
     })
       .then((response) => {
-        return response.json().then((views) => {
-          dispatch(receiveViews(views));
+        if (response.status === 200) {
+          return response.json().then((views) => {
+            dispatch(receiveViews(views));
+            return Promise.resolve();
+          });
+        }
+        return response.json().then((json) => {
+          dispatch(receiveViewsError(json));
           return Promise.resolve();
         });
       })
