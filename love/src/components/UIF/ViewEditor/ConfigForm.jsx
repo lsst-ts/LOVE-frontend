@@ -21,6 +21,14 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
     setConfig(newConfig);
   };
 
+  const customSaveConfig = () => {
+    const newConfig = { ...config };
+    Object.keys(newConfig).forEach((key) => {
+      if (componentProps[key].type === 'number') newConfig[key] = Number(newConfig[key]);
+    });
+    onSaveConfig(componentIndex, newConfig);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -88,7 +96,7 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
         <Button status="default" onClick={onCancel}>
           Cancel
         </Button>
-        <Button status="primary" onClick={() => onSaveConfig(componentIndex, config)}>
+        <Button status="primary" onClick={() => customSaveConfig(componentIndex, config)}>
           Save
         </Button>
       </div>
