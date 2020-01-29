@@ -39,7 +39,7 @@ export const getViewsStatus = (state) => {
  */
 export const getView = (state, id) => {
   const views = getViews(state);
-  if (views === undefined) return undefined;
+  if (views === undefined || views.length === 0) return undefined;
   return views.find((view) => view.id === id);
 };
 
@@ -51,7 +51,7 @@ export const getView = (state, id) => {
  */
 export const getCurrentWorkspace = (state) => {
   if (state.uif === undefined) return undefined;
-  const id = state.uif.currentWorkspace;
+  const id = state.uif.present.currentWorkspace;
   return state.uif.present.workspaces.find((workspace) => {
     return workspace.id === id;
   });
