@@ -1,0 +1,20 @@
+.container {
+  display: grid;
+  height: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: min-content minmax(0, 1fr);
+  overflow: hidden;
+  text-align: left;
+  font-size: var(--font-size-large);
+  color: var(--base-font-color);
+  padding: 0 0.2em;
+}
+
+.label {
+  /* font-size: var(--font-size-large); */
+  font-weight: bold;
+  color: var(--base-font-color);
+  text-transform: uppercase;
+  text-align: left;
+  padding-right: 0.5em;
+}
