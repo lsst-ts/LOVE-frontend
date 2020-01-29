@@ -46,6 +46,10 @@ export const uifIndex = {
   ObservingLogInput: {
     component: require('../ObservingLog/ObservingLogInput.container').default,
     schema: require('../ObservingLog/ObservingLogInput.container').schema,
+  },
+  ObservingLogMessages: {
+    component: require('../ObservingLog/ObservingLogMessages.container').default,
+    schema: require('../ObservingLog/ObservingLogMessages.container').schema,
   }
 };
 
