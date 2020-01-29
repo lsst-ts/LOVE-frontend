@@ -18,7 +18,7 @@ const initialState = {
     cmd: '',
     params: {},
     component: '',
-    salindex: 0
+    salindex: 0,
   },
 };
 /**
@@ -106,7 +106,6 @@ export default function(state = initialState, action) {
           component: action.component,
           salindex: action.salindex,
           cmd_id: action.cmd_id,
-
         },
       };
     }
@@ -128,15 +127,17 @@ export default function(state = initialState, action) {
         actionAlarms = [actionAlarms];
       }
       let newAlarms = Array.from(state.alarms);
-
-      for (const actionAlarm of actionAlarms) {
-        const alarmIndex = newAlarms.findIndex((stateAlarm) => { return stateAlarm.name.value === actionAlarm.name.value});
+      actionAlarms.forEach((actionAlarm) => {
+        if (actionAlarm === undefined) return;
+        const alarmIndex = newAlarms.findIndex((stateAlarm) => {
+          return stateAlarm.name.value === actionAlarm.name.value;
+        });
         if (alarmIndex === -1) {
           newAlarms.push(actionAlarm);
         } else {
           newAlarms[alarmIndex] = actionAlarm;
         }
-      }
+      });
 
       return {
         ...state,
