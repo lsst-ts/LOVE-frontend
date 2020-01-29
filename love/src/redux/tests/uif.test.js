@@ -116,6 +116,10 @@ const newViewData2 = {
   },
 };
 
+const errorResponse = {
+  detail: "Authentication credentials were not provided."
+};
+
 describe('Get workspaces and views. GIVEN the store is empty', () => {
   beforeEach(async () => {
     const token = '"love-token"';
