@@ -36,7 +36,7 @@ export const CSCSummaryHierarchy = {
   },
   Observatory: {
     Queue: [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ScriptQueue', salindex: 2 }],
-    Environment: [{ name: 'DIMM', salindex: 0 }, { name: 'Environment', salindex: 0 }],
+    Environment: [{ name: 'DIMM', salindex: 1 }, { name: 'DIMM', salindex: 2 }, { name: 'Environment', salindex: 1 }],
   },
 };
 
