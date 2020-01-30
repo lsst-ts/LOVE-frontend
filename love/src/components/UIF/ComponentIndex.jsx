@@ -16,8 +16,8 @@ export const uifIndex = {
     schema: require('../CSCSummary/CSCGroupLog/CSCGroupLog.container').schema,
   },
   CSCGroup: {
-    component: require('../CSCSummary/CSCGroup/CSCGroup').default,
-    schema: require('../CSCSummary/CSCGroup/CSCGroup').schema,
+    component: require('../CSCSummary/CSCGroup/CSCGroup.container').default,
+    schema: require('../CSCSummary/CSCGroup/CSCGroup.container').schema,
   },
   CSCSummary: {
     component: require('../CSCSummary/CSCSummary.container').default,
@@ -42,6 +42,14 @@ export const uifIndex = {
   GenericCamera: {
     component: require('../GenericCamera/GenericCamera').default,
     schema: require('../GenericCamera/GenericCamera').schema,
+  },
+  ObservingLogInput: {
+    component: require('../ObservingLog/ObservingLogInput.container').default,
+    schema: require('../ObservingLog/ObservingLogInput.container').schema,
+  },
+  ObservingLogMessages: {
+    component: require('../ObservingLog/ObservingLogMessages.container').default,
+    schema: require('../ObservingLog/ObservingLogMessages.container').schema,
   }
 };
 
