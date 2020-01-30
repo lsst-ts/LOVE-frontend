@@ -5,7 +5,6 @@ import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import CSCExpandedContainer from '../CSCExpanded/CSCExpanded.container';
 import CSCGroupLogContainer from '../CSCGroupLog/CSCGroupLog.container';
 
-
 export default class CSCGroup extends Component {
   static propTypes = {
     name: PropTypes.string,
@@ -22,9 +21,18 @@ export default class CSCGroup extends Component {
     realm: '',
     cscs: [],
     onCSCClick: () => 0,
+    subscribeToStreams: () => 0,
     selectedCSCs: [],
     hierarchy: {},
     embedded: false,
+  };
+
+  componentDidMount = () => {
+    if (this.props.cscs !== undefined) {
+      this.props.cscs.forEach((csc) => {
+        this.props.subscribeToStreams(csc.name, csc.salindex);
+      });
+    }
   };
 
   renderExpandedView = (selectedCSC) => {
