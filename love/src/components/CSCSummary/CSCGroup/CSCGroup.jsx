@@ -5,55 +5,6 @@ import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import CSCExpandedContainer from '../CSCExpanded/CSCExpanded.container';
 import CSCGroupLogContainer from '../CSCGroupLog/CSCGroupLog.container';
 
-export const schema = {
-  description: 'Summary of a set of CSCs, including heartbeats and summary state',
-  defaultSize: [12, 19],
-  props: {
-    name: {
-      type: 'string',
-      description: 'Custom name of the group',
-      isPrivate: false,
-      default: 'CSC group',
-    },
-    cscs: {
-      type: 'array',
-      description:
-        'Array of the CSCs to be included in the group, as objects with the format: {name: <component-name>, salindex: <number>}',
-      isPrivate: false,
-      default: [
-        {
-          name: 'ATMCS',
-          salindex: 0,
-        },
-        {
-          name: 'ATPtg',
-          salindex: 0,
-        },
-        {
-          name: 'ATDome',
-          salindex: 0,
-        },
-        {
-          name: 'ATDomeTrajectory',
-          salindex: 0,
-        },
-        {
-          name: 'ATAOS',
-          salindex: 0,
-        },
-        {
-          name: 'ATPneumatics',
-          salindex: 0,
-        },
-        {
-          name: 'ATHexapod',
-          salindex: 0,
-        },
-      ],
-    },
-  },
-};
-
 export default class CSCGroup extends Component {
   static propTypes = {
     name: PropTypes.string,
@@ -70,9 +21,18 @@ export default class CSCGroup extends Component {
     realm: '',
     cscs: [],
     onCSCClick: () => 0,
+    subscribeToStreams: () => 0,
     selectedCSCs: [],
     hierarchy: {},
     embedded: false,
+  };
+
+  componentDidMount = () => {
+    if (this.props.cscs !== undefined) {
+      this.props.cscs.forEach((csc) => {
+        this.props.subscribeToStreams(csc.name, csc.salindex);
+      });
+    }
   };
 
   renderExpandedView = (selectedCSC) => {
