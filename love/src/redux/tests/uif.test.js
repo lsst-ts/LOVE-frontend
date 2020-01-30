@@ -155,6 +155,73 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
   });
 });
 
+describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
+
+  afterEach(() => {
+    fetchMock.reset();
+  });
+
+  it('WHEN the workspaces request fails due to unauthentication, THEN the state workspaces should be empty', async () => {
+    // Arrange:
+    const responseBody = { detail: "Authentication credentials were not provided."};
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name`;
+    fetchMock.mock(url, {status: 401, body: responseBody}, ManagerInterface.getHeaders());
+    // Act:
+    await store.dispatch(requestWorkspaces());
+    // Assert:
+    const retrievedData = getWorkspaces(store.getState());
+    const viewsStatus = getViewsStatus(store.getState());
+    expect(retrievedData).toEqual([]);
+    expect(viewsStatus).toEqual(viewsStates.ERROR);
+  });
+
+  it('WHEN the views request fails due to unauthentication, THEN the state views should be empty', async () => {
+    // Arrange:
+    const responseBody = { detail: "Authentication credentials were not provided."};
+    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    fetchMock.mock(url, {status: 401, body: responseBody}, ManagerInterface.getHeaders());
+    let viewsStatus = getViewsStatus(store.getState());
+    expect(viewsStatus).toEqual(viewsStates.EMPTY);
+    // Act:
+    await store.dispatch(requestViews());
+    // Assert:
+    const views = getViews(store.getState());
+    viewsStatus = getViewsStatus(store.getState());
+    expect(views).toEqual([]);
+    expect(viewsStatus).toEqual(viewsStates.ERROR);
+  });
+
+  it('WHEN the workspaces request fails due to permissions, THEN the state workspaces should be empty', async () => {
+    // Arrange:
+    const responseBody = { detail: "Unautorized."};
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name`;
+    fetchMock.mock(url, {status: 403, body: responseBody}, ManagerInterface.getHeaders());
+    // Act:
+    await store.dispatch(requestWorkspaces());
+    // Assert:
+    const retrievedData = getWorkspaces(store.getState());
+    const viewsStatus = getViewsStatus(store.getState());
+    expect(retrievedData).toEqual([]);
+    expect(viewsStatus).toEqual(viewsStates.ERROR);
+  });
+
+  it('WHEN the views request fails due to permissions, THEN the state views should be empty', async () => {
+    // Arrange:
+    const responseBody = { detail: "Unautorized."};
+    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    fetchMock.mock(url, {status: 403, body: responseBody}, ManagerInterface.getHeaders());
+    let viewsStatus = getViewsStatus(store.getState());
+    expect(viewsStatus).toEqual(viewsStates.EMPTY);
+    // Act:
+    await store.dispatch(requestViews());
+    // Assert:
+    const views = getViews(store.getState());
+    viewsStatus = getViewsStatus(store.getState());
+    expect(views).toEqual([]);
+    expect(viewsStatus).toEqual(viewsStates.ERROR);
+  });
+});
+
 describe('GIVEN the store contains the list of workspaces', () => {
   beforeEach(async () => {
     const token = '"love-token"';

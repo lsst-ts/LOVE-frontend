@@ -1,8 +1,10 @@
 import rfdc from 'rfdc';
 import {
   RECEIVE_WORKSPACES,
+  RECEIVE_WORKSPACES_ERROR,
   LOADING_VIEWS,
   RECEIVE_VIEWS,
+  RECEIVE_VIEWS_ERROR,
   RECEIVE_CURRENT_WORKSPACE,
   UPDATE_EDITED_VIEW,
   CLEAR_EDITED_VIEW,
@@ -77,10 +79,20 @@ export default function(state = initialState, action) {
         workspaces: action.workspaces,
       });
     }
+    case RECEIVE_WORKSPACES_ERROR: {
+      return Object.assign({}, state, {
+        viewsStatus: viewsStates.ERROR,
+      });
+    }
     case RECEIVE_VIEWS: {
       return Object.assign({}, state, {
         views: action.views,
         viewsStatus: viewsStates.LOADED,
+      });
+    }
+    case RECEIVE_VIEWS_ERROR: {
+      return Object.assign({}, state, {
+        viewsStatus: viewsStates.ERROR,
       });
     }
     case LOADING_VIEWS: {
