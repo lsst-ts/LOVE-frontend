@@ -16,8 +16,8 @@ export const uifIndex = {
     schema: require('../CSCSummary/CSCGroupLog/CSCGroupLog.container').schema,
   },
   CSCGroup: {
-    component: require('../CSCSummary/CSCGroup/CSCGroup').default,
-    schema: require('../CSCSummary/CSCGroup/CSCGroup').schema,
+    component: require('../CSCSummary/CSCGroup/CSCGroup.container').default,
+    schema: require('../CSCSummary/CSCGroup/CSCGroup.container').schema,
   },
   CSCSummary: {
     component: require('../CSCSummary/CSCSummary.container').default,
