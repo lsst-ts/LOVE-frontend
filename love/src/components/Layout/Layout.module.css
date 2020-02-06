@@ -20,17 +20,18 @@
   text-align: left;
   display: grid;
   grid-template-columns: repeat(2, min-content) max-content;
-  grid-gap: 1em;
+  grid-gap: 0.5em;
   align-items: center;
 }
 
 .leftTopbar .logo {
   height: 1.6em;
+  margin-right: 0.5em;
   fill: var(--base-font-color);
 }
 
 .leftTopbar .text {
-  font-size: 1.4em;
+  font-size: 1.2em;
   padding-top: 0.2em;
   height: fit-content;
   vertical-align: middle;
