@@ -97,7 +97,7 @@ export default class ConfigPanel extends Component {
         }
         if (!r.error) return;
 
-        /** Look yaml syntax errors */
+        /** Handle yaml syntax errors */
         if (r.error) {
           if (r.title === 'ERROR WHILE PARSING YAML STRING') {
             const message = `${r.error.problem}\n ${YAML.stringify({
@@ -116,41 +116,21 @@ export default class ConfigPanel extends Component {
               ],
             });
           }
+
+          /** Handle validation errors */
+          if (r.title === 'INVALID CONFIG YAML') {
+            const message = `schema_path: ${r.error.schema_path.join('.')}\n config path: ${r.error.path}`;
+            this.setState({
+              configErrorTitle: r.title,
+              configErrors: [
+                {
+                  name: `.${r.error.path} `,
+                  message: r.error.message,
+                },
+              ],
+            });
+          }
         }
-        // try {
-        //   config = YAML.parse(newValue);
-        // } catch (error) {
-        //   a = error;
-        //   console.log(error);
-        // }
-        // true;
-
-        /** Look for schema validation errors */
-        // const valid = this.ajv.validate(schema, config);
-        // if (!valid) {
-        //   const errors = this.ajv.errors.map((e) => {
-        //     if (e.dataPath && e.keyword) {
-        //       return { name: `${e.dataPath} ${e.keyword}`, message: e.message };
-        //     }
-
-        //     if (e.dataPath && !e.keyword) {
-        //       return { name: `${e.dataPath}`, message: e.message };
-        //     }
-
-        //     if (!e.dataPath && e.keyword) {
-        //       return { name: e.keyword, message: e.message };
-        //     }
-
-        //     return { name: '', message: `${e.message}\n` };
-        //   });
-
-        //   this.setState({
-        //     value: newValue,
-        //     configErrorTitle: 'INVALID CONFIG YAML',
-        //     configErrors: errors,
-        //   });
-        //   return;
-        // }
       });
   };
 
