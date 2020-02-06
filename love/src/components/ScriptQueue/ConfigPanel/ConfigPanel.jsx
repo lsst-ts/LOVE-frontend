@@ -19,8 +19,8 @@ import ManagerInterface from '../../../Utils';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
-const requestConfigValidation = (config, schema) =>
-  fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
+const requestConfigValidation = (config, schema) => {
+  return fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
     method: 'POST',
     headers: ManagerInterface.getHeaders(),
     body: JSON.stringify({
@@ -28,12 +28,14 @@ const requestConfigValidation = (config, schema) =>
       config,
     }),
   });
+};
 
+const EMPTY = 'EMPTY';
+const VALIDATING = 'VALIDATING';
 const VALID = 'VALID';
 const ERROR = 'ERROR';
-const VALIDATING = 'VALIDATING';
-const EMPTY = 'EMPTY';
 const SERVER_ERROR = 'SERVER_ERROR';
+const NEED_REVALIDATION = 'NEED_REVALIDATION';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -75,17 +77,22 @@ export default class ConfigPanel extends Component {
     };
   }
 
-  validateConfig = (newValue) => {
+  validateConfig = (newValue, noRevalidation) => {
     this.setState({ value: newValue });
-    /** Do nothing if schema is not available */
+    /** Do nothing if schema is not available
+     * stay in EMPTY state
+     */
     let schema = this.props.configPanel.configSchema;
     if (!schema) {
       this.setState({ validationStatus: EMPTY });
       return;
     }
 
-    /** Do nothing if still validating */
-    if (this.state.validationStatus === VALIDATING) {
+    /** Do nothing if still validating and comes from keypress-event (!noRevalidation) */
+    if (this.state.validationStatus === VALIDATING && !noRevalidation) {
+      this.setState({
+        validationStatus: NEED_REVALIDATION,
+      });
       return;
     }
 
@@ -93,6 +100,12 @@ export default class ConfigPanel extends Component {
     this.setState({ validationStatus: VALIDATING });
     requestConfigValidation(newValue, this.props.configPanel.configSchema)
       .then((r) => {
+        /** Go to VALIDATING again and perform new request in componentDidUpdate */
+        if (this.state.validationStatus === NEED_REVALIDATION) {
+          this.setState({ validationStatus: VALIDATING });
+        }
+
+        /** Server error */
         if (!r.ok) {
           this.setState({ validationStatus: SERVER_ERROR });
           return;
@@ -100,7 +113,7 @@ export default class ConfigPanel extends Component {
         return r.json();
       })
       .then((r) => {
-        /** Handle response not ok */
+        /** Handle SERVER_ERROR*/
         if (!r) return;
 
         /** Valid schema should show no message */
@@ -152,6 +165,16 @@ export default class ConfigPanel extends Component {
           }
         }
       });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.validationStatus !== prevState.validationStatus) {
+      const { validationStatus } = this.state;
+
+      if (validationStatus === VALIDATING && prevState.validationStatus === NEED_REVALIDATION) {
+        this.validateConfig(this.state.value, true);
+      }
+    }
   };
 
   onCheckpointChange = (name) => (event) => {
@@ -386,7 +409,7 @@ export default class ConfigPanel extends Component {
                 title="Enqueue script"
                 size="large"
                 onClick={this.onLaunch}
-                disabled={[ERROR, VALIDATING].includes(this.state.validationStatus)}
+                disabled={[ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus)}
               >
                 Add
               </Button>
