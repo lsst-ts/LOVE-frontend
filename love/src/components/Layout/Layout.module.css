@@ -11,10 +11,11 @@
   display: inline-flex;
   justify-content: flex-start;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .leftTopbar {
-  padding: 0.5em 1em;
+  padding: 0.5em 0 0.5em var(--content-padding);
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
@@ -26,6 +27,13 @@
 .leftTopbar .logo {
   height: 1.6em;
   fill: var(--base-font-color);
+}
+
+.leftTopbar .text {
+  font-size: 1.4em;
+  padding-top: 0.2em;
+  height: fit-content;
+  vertical-align: middle;
 }
 
 .leftTopbar .divider {
@@ -45,7 +53,7 @@
 .rightTopbar {
   margin-left: -1px;
   position: relative;
-  padding: 0.5em var(--content-padding);
+  padding: 0.5em var(--content-padding) 0.5em 0;
   background-color: var(--tertiary-background-color);
   text-align: right;
   display: grid;
