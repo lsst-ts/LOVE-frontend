@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Camera.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
+import Panel from '../../GeneralPurpose/Panel/Panel';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
@@ -65,7 +66,8 @@ export default class Camera extends Component {
 
   render() {
     return (
-      <div className={styles.cameraContainer}>
+                <Panel title="Auxiliary Telescope Camera" className={'smallPanel'} fit>
+                <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Rafts state:</span>
@@ -188,6 +190,7 @@ export default class Camera extends Component {
           </div>
         </div>
       </div>
+      </Panel>
     );
   }
 }
