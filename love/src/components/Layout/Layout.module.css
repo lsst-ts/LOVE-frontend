@@ -12,10 +12,12 @@
   justify-content: flex-start;
   cursor: pointer;
   box-sizing: border-box;
+  transition: all 0.5s ease-in-out;
 }
 
 .leftTopbar {
   padding: 0.5em 0 0.5em var(--content-padding);
+  position: relative;
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
@@ -28,6 +30,10 @@
   height: 1.6em;
   margin-right: 0.5em;
   fill: var(--base-font-color);
+}
+
+.collapsedLogo {
+  margin-left: -5.4em;
 }
 
 .leftTopbar .text {

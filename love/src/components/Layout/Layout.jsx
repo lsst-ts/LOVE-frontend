@@ -42,6 +42,7 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      collapsedLogo: false,
       settingsVisible: false,
       id: null,
       title: null,
@@ -53,15 +54,11 @@ class Layout extends Component {
     if (id && id !== this.state.id) {
       const view = this.props.getCurrentView(id);
       this.setState({ id, title: view ? view.name : null });
-    }
-    else if (!id && this.state.id) {
+    } else if (!id && this.state.id) {
       this.setState({ id: null, title: null });
     }
 
-    if (
-      prevProps.viewsStatus === viewsStates.LOADING &&
-      this.props.viewsStatus === viewsStates.LOADED
-    ) {
+    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
       const view = this.props.getCurrentView(this.state.id);
       this.setState({
         title: view ? view.name : null,
@@ -113,24 +110,30 @@ class Layout extends Component {
     this.props.history.push('/uif/view-editor?id=' + id);
   };
 
+  toggleCollapsedLogo = () => {
+    this.setState({ collapsedLogo: !this.state.collapsedLogo });
+  };
+
   render() {
     return (
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
-
-          <div className={styles.leftNotchContainer} onClick={() => this.props.history.push('/') }>
+          <div
+            className={[styles.leftNotchContainer, this.state.collapsedLogo ? styles.collapsedLogo : null].join(' ')}
+            onClick={this.toggleCollapsedLogo}
+          >
             <div className={styles.leftTopbar}>
-              <LogoIcon className={styles.logo}/>
-              <span className={styles.divider}> {this.state.title ? '|' : ''} </span>
+              <LogoIcon className={styles.logo} />
+              <span className={styles.divider}> {this.state.title ? '' : ''} </span>
               <span className={styles.text}> {this.state.title} </span>
             </div>
-            <NotchCurve className={styles.notchCurve}/>
+            <NotchCurve className={styles.notchCurve} />
           </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
-            <NotchCurve className={styles.notchCurve} flip='true'/>
+            <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
               <Button
@@ -144,7 +147,6 @@ class Layout extends Component {
               </Button>
 
               <span className={styles.refNode} ref={(node) => (this.node = node)}>
-
                 <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
                   <GearIcon className={styles.icon} />
                   {this.state.settingsVisible && (
@@ -152,15 +154,13 @@ class Layout extends Component {
                       <div
                         className={this.state.id ? styles.menuElement : styles.disabledElement}
                         title="Edit view"
-                        onClick={() => {this.editView(this.state.id)}}
+                        onClick={() => {
+                          this.editView(this.state.id);
+                        }}
                       >
                         Edit view
                       </div>
-                      <div
-                        className={styles.menuElement}
-                        title="New view"
-                        onClick={this.createNewView}
-                      >
+                      <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
                         Create new View
                       </div>
                       <span className={styles.divider} />
