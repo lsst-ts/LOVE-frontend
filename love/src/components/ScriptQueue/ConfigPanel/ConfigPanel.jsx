@@ -29,6 +29,12 @@ const requestConfigValidation = (config, schema) =>
     }),
   });
 
+const VALID = 'VALID';
+const ERROR = 'ERROR';
+const VALIDATING = 'VALIDATING';
+const EMPTY = 'EMPTY';
+const SERVER_ERROR = 'SERVER_ERROR';
+
 export default class ConfigPanel extends Component {
   static propTypes = {
     launchScript: PropTypes.func,
@@ -65,20 +71,26 @@ export default class ConfigPanel extends Component {
       resizingStart: undefined,
       configErrors: [],
       configErrorTitle: '',
+      validationStatus: EMPTY,
     };
-    this.ajv = new Ajv({ allErrors: true });
   }
 
   validateConfig = (newValue) => {
     this.setState({ value: newValue });
     /** Do nothing if schema is not available */
     let schema = this.props.configPanel.configSchema;
-    if (!schema) return;
+    if (!schema) {
+      this.setState({ validationStatus: EMPTY });
+      return;
+    }
 
     /** Request validation otherwise */
     requestConfigValidation(newValue, this.props.configPanel.configSchema)
       .then((r) => {
-        if (!r.ok) return;
+        if (!r.ok) {
+          this.setState({ validationStatus: SERVER_ERROR });
+          return;
+        }
         return r.json();
       })
       .then((r) => {
@@ -87,8 +99,8 @@ export default class ConfigPanel extends Component {
 
         /** Valid schema should show no message */
         if (r.output) {
-          console.log(YAML.stringify(r.output));
           this.setState({
+            validationStatus: VALID,
             autoFilledValue: YAML.stringify(r.output),
             configErrors: [],
             configErrorTitle: '',
@@ -107,6 +119,7 @@ export default class ConfigPanel extends Component {
               index: r.error.problem_mark.index,
             })} `;
             this.setState({
+              validationStatus: ERROR,
               configErrorTitle: r.title,
               configErrors: [
                 {
@@ -121,6 +134,7 @@ export default class ConfigPanel extends Component {
           if (r.title === 'INVALID CONFIG YAML') {
             const message = `schema_path: ${r.error.schema_path.join('.')}\n config path: ${r.error.path}`;
             this.setState({
+              validationStatus: ERROR,
               configErrorTitle: r.title,
               configErrors: [
                 {
@@ -362,7 +376,12 @@ export default class ConfigPanel extends Component {
               </select>
             </div>
             <div className={styles.addBtnContainer}>
-              <Button title="Enqueue script" size="large" onClick={this.onLaunch}>
+              <Button
+                title="Enqueue script"
+                size="large"
+                onClick={this.onLaunch}
+                disabled={[ERROR, VALIDATING].includes(this.state.validationStatus)}
+              >
                 Add
               </Button>
             </div>
