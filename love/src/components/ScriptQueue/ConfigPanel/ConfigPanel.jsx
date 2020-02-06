@@ -82,6 +82,9 @@ export default class ConfigPanel extends Component {
         return r.json();
       })
       .then((r) => {
+        /** Handle response not ok */
+        if (!r) return;
+
         /** Valid schema should show no message */
         if (r.output) {
           console.log(YAML.stringify(r.output));
