@@ -15,8 +15,19 @@ import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
+import ManagerInterface from '../../../Utils';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
+
+const requestConfigValidation = (config, schema) =>
+  fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
+    method: 'POST',
+    headers: ManagerInterface.getHeaders(),
+    body: JSON.stringify({
+      schema,
+      config,
+    }),
+  });
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -42,6 +53,7 @@ export default class ConfigPanel extends Component {
 # fail_run: false
 # fail_cleanup: false
 `,
+      autoFilledValue: '',
       width: 500,
       height: 500,
       loading: false,
@@ -58,60 +70,85 @@ export default class ConfigPanel extends Component {
   }
 
   validateConfig = (newValue) => {
-    /** Check schema is available */
+    this.setState({ value: newValue });
+    /** Do nothing if schema is not available */
     let schema = this.props.configPanel.configSchema;
-    if (!schema) {
-      this.setState({ value: newValue });
-      return;
-    }
-    schema = YAML.parse(schema);
-    let config;
+    if (!schema) return;
 
-    /** Look for parsing errors */
-    try {
-      config = YAML.parse(newValue);
-    } catch (error) {
-      this.setState({
-        configErrorTitle: 'ERROR WHILE PARSING YAML STRING',
-        configErrors: [{ name: error.name, message: error.message }],
-        value: newValue,
-      });
-      return;
-    }
-
-    /** Look for schema validation errors */
-    const valid = this.ajv.validate(schema, config);
-    if (!valid) {
-      const errors = this.ajv.errors.map((e) => {
-        if (e.dataPath && e.keyword) {
-          return { name: `${e.dataPath} ${e.keyword}`, message: e.message };
+    /** Request validation otherwise */
+    requestConfigValidation(newValue, this.props.configPanel.configSchema)
+      .then((r) => {
+        if (!r.ok) return;
+        return r.json();
+      })
+      .then((r) => {
+        /** Valid schema should show no message */
+        if (r.output) {
+          console.log(YAML.stringify(r.output));
+          this.setState({
+            autoFilledValue: YAML.stringify(r.output),
+            configErrors: [],
+            configErrorTitle: '',
+          });
+          return;
         }
+        if (!r.error) return;
 
-        if (e.dataPath && !e.keyword) {
-          return { name: `${e.dataPath}`, message: e.message };
+        /** Look yaml syntax errors */
+        if (r.error) {
+          if (r.title === 'ERROR WHILE PARSING YAML STRING') {
+            const message = `${r.error.problem}\n ${YAML.stringify({
+              line: r.error.problem_mark.line,
+              column: r.error.problem_mark.column,
+              pointer: r.error.problem_mark.pointer,
+              index: r.error.problem_mark.index,
+            })} `;
+            this.setState({
+              configErrorTitle: r.title,
+              configErrors: [
+                {
+                  name: r.error.problem_mark.name,
+                  message,
+                },
+              ],
+            });
+          }
         }
+        // try {
+        //   config = YAML.parse(newValue);
+        // } catch (error) {
+        //   a = error;
+        //   console.log(error);
+        // }
+        // true;
 
-        if (!e.dataPath && e.keyword) {
-          return { name: e.keyword, message: e.message };
-        }
+        /** Look for schema validation errors */
+        // const valid = this.ajv.validate(schema, config);
+        // if (!valid) {
+        //   const errors = this.ajv.errors.map((e) => {
+        //     if (e.dataPath && e.keyword) {
+        //       return { name: `${e.dataPath} ${e.keyword}`, message: e.message };
+        //     }
 
-        return { name: '', message: `${e.message}\n` };
+        //     if (e.dataPath && !e.keyword) {
+        //       return { name: `${e.dataPath}`, message: e.message };
+        //     }
+
+        //     if (!e.dataPath && e.keyword) {
+        //       return { name: e.keyword, message: e.message };
+        //     }
+
+        //     return { name: '', message: `${e.message}\n` };
+        //   });
+
+        //   this.setState({
+        //     value: newValue,
+        //     configErrorTitle: 'INVALID CONFIG YAML',
+        //     configErrors: errors,
+        //   });
+        //   return;
+        // }
       });
-
-      this.setState({
-        value: newValue,
-        configErrorTitle: 'INVALID CONFIG YAML',
-        configErrors: errors,
-      });
-      return;
-    }
-
-    /** Valid schema should show no message */
-    this.setState({
-      value: newValue,
-      configErrors: [],
-      configErrorTitle: '',
-    });
   };
 
   onCheckpointChange = (name) => (event) => {
@@ -233,9 +270,8 @@ export default class ConfigPanel extends Component {
                 <RotateIcon orientation={orientation} />
               </span>
 
-
               <span className={styles.closeButton} onClick={this.closeConfigPanel}>
-                <CloseIcon/>
+                <CloseIcon />
               </span>
             </div>
           </div>
