@@ -84,7 +84,13 @@ export default class ConfigPanel extends Component {
       return;
     }
 
-    /** Request validation otherwise */
+    /** Do nothing if still validating */
+    if (this.state.validationStatus === VALIDATING) {
+      return;
+    }
+
+    /** Request validation otherwise, and set state VALIDATING */
+    this.setState({ validationStatus: VALIDATING });
     requestConfigValidation(newValue, this.props.configPanel.configSchema)
       .then((r) => {
         if (!r.ok) {
