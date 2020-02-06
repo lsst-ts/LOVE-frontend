@@ -318,6 +318,7 @@ class ViewEditor extends Component {
           className={styles.textField}
           defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
           onBlur={this.onNameInputBlur}
+          key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
         />
         <Button
           className={styles.iconBtn}
