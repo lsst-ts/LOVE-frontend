@@ -1,29 +1,57 @@
 .container {
-    color: var(--secondary-font-color);
-    text-align: left;
+  color: var(--secondary-font-color);
+  text-align: left;
 }
 
 .linkList {
-    font-size: 1.3em;
-    list-style-position: inside;
-    display: grid;
-    grid-gap: 0.5em;
-    grid-template-columns: min-content 30ch min-content min-content min-content;
+  list-style-position: inside;
+  display: grid;
+  grid-gap: 0.5em;
+  grid-template-columns: min-content 30ch min-content min-content min-content;
+}
+
+.buttons {
+  /* display: contents; */
+  display: inline-grid;
+  grid-template-columns: min-content min-content min-content;
+  grid-column-gap: 0.5em;
+  justify-content: end;
 }
 
 .linkListItem {
-    display: contents;
+  font-size: 1.3em;
 }
 
-.linkListSubItem {
-    padding-top: 0.25em;
+.viewIndex {
+  padding-left: 2em;
+  padding-right: 0.5em;
+  text-align: right;
 }
 
-a {
-    color: var(--secondary-font-color);
-    text-decoration: none;
+.availableViewsWrapper {
+  display: inline-block;
 }
 
-a:hover {
-    color: var(--secondary-font-dimmed-color);
+.availableViewsBar {
+  display: grid;
+  grid-template-columns: max-content max-content max-content;
+  grid-row-gap: 0.5em;
+  align-items: center;
+  justify-content: start;
+}
+
+.availableViewsTitle {
+  grid-column: span 2;
+  margin: 0.5em 0;
+}
+
+.newViewButtonWrapper {
+  margin-top: 0.5em;
+  padding-top: 0.5em;
+  border-top: 1px solid var(--secondary-font-color);
+  text-align: right;
+}
+
+.viewName {
+  color: var(--primary-font-color);
 }

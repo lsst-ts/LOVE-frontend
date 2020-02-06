@@ -42,20 +42,32 @@ class ViewsIndex extends Component {
     return (
       <div className={styles.container}>
         <h1>UI Framework</h1>
-        <h2>Available Views</h2>
-        <ol className={styles.linkList}>
-          {this.props.views.length > 0 &&
-            this.props.views.map((view, index) => (
-              <li key={index} className={styles.linkListItem}>
-                <span> {index + 1 + '. '} </span>
-                <span> {view.name} </span>
-                <Button onClick={() => this.openView(view.id)}>Open</Button>
-                <Button onClick={() => this.editView(view.id)}>Edit</Button>
-                <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
-              </li>
-            ))}
-        </ol>
-        <Button onClick={this.createNewView}>New View</Button>
+        <div className={styles.availableViewsWrapper}>
+          <div className={styles.availableViewsBar}>
+            <h2 className={styles.availableViewsTitle}>Available Views</h2>
+            <div>
+              <input />
+              <Button>Filter</Button>
+            </div>
+            {/* <ol className={styles.linkList}> */}
+            {this.props.views.length > 0 &&
+              this.props.views.map((view, index) => (
+                <React.Fragment key={index + '1'}>
+                    <span className={[styles.linkListItem, styles.viewIndex].join(' ')}> {index + 1 + '. '} </span>
+                    <span className={[styles.linkListItem, styles.viewName].join(' ')}> {view.name} </span>
+                  <div className={[styles.linkListItem, styles.buttons].join(' ')}>
+                    <Button onClick={() => this.openView(view.id)}>Open</Button>
+                    <Button onClick={() => this.editView(view.id)}>Edit</Button>
+                    <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
+                  </div>
+                </React.Fragment>
+              ))}
+            {/* </ol> */}
+          </div>
+          <div className={styles.newViewButtonWrapper}>
+            <Button onClick={this.createNewView}>New View</Button>
+          </div>
+        </div>
       </div>
     );
   }
