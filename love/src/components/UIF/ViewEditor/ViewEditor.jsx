@@ -18,7 +18,6 @@ import AddIcon from '../../icons/AddIcon/AddIcon';
 import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
-import rfdc from 'rfdc';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -337,7 +336,7 @@ class ViewEditor extends Component {
         >
           <AddIcon className={styles.icon}/>
         </Button>
-        
+
         <Button
           className={styles.iconBtn}
           title='Undo'
