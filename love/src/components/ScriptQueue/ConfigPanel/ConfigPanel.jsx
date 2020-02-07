@@ -15,8 +15,27 @@ import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
+import ManagerInterface from '../../../Utils';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
+
+const requestConfigValidation = (config, schema) => {
+  return fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
+    method: 'POST',
+    headers: ManagerInterface.getHeaders(),
+    body: JSON.stringify({
+      schema,
+      config,
+    }),
+  });
+};
+
+const EMPTY = 'EMPTY';
+const VALIDATING = 'VALIDATING';
+const VALID = 'VALID';
+const ERROR = 'ERROR';
+const SERVER_ERROR = 'SERVER_ERROR';
+const NEED_REVALIDATION = 'NEED_REVALIDATION';
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -42,6 +61,7 @@ export default class ConfigPanel extends Component {
 # fail_run: false
 # fail_cleanup: false
 `,
+      autoFilledValue: '',
       width: 500,
       height: 500,
       loading: false,
@@ -53,65 +73,108 @@ export default class ConfigPanel extends Component {
       resizingStart: undefined,
       configErrors: [],
       configErrorTitle: '',
+      validationStatus: EMPTY,
     };
-    this.ajv = new Ajv({ allErrors: true });
   }
 
-  validateConfig = (newValue) => {
-    /** Check schema is available */
+  validateConfig = (newValue, noRevalidation) => {
+    this.setState({ value: newValue });
+    /** Do nothing if schema is not available
+     * stay in EMPTY state
+     */
     let schema = this.props.configPanel.configSchema;
     if (!schema) {
-      this.setState({ value: newValue });
+      this.setState({ validationStatus: EMPTY });
       return;
     }
-    schema = YAML.parse(schema);
-    let config;
 
-    /** Look for parsing errors */
-    try {
-      config = YAML.parse(newValue);
-    } catch (error) {
+    /** Do nothing if still validating and comes from keypress-event (!noRevalidation) */
+    if (this.state.validationStatus === VALIDATING && !noRevalidation) {
       this.setState({
-        configErrorTitle: 'ERROR WHILE PARSING YAML STRING',
-        configErrors: [{ name: error.name, message: error.message }],
-        value: newValue,
+        validationStatus: NEED_REVALIDATION,
       });
       return;
     }
 
-    /** Look for schema validation errors */
-    const valid = this.ajv.validate(schema, config);
-    if (!valid) {
-      const errors = this.ajv.errors.map((e) => {
-        if (e.dataPath && e.keyword) {
-          return { name: `${e.dataPath} ${e.keyword}`, message: e.message };
+    /** Request validation otherwise, and set state VALIDATING */
+    this.setState({ validationStatus: VALIDATING });
+    requestConfigValidation(newValue, this.props.configPanel.configSchema)
+      .then((r) => {
+        /** Go to VALIDATING again and perform new request in componentDidUpdate */
+        if (this.state.validationStatus === NEED_REVALIDATION) {
+          this.setState({ validationStatus: VALIDATING });
         }
 
-        if (e.dataPath && !e.keyword) {
-          return { name: `${e.dataPath}`, message: e.message };
+        /** Server error */
+        if (!r.ok) {
+          this.setState({ validationStatus: SERVER_ERROR });
+          return;
         }
+        return r.json();
+      })
+      .then((r) => {
+        /** Handle SERVER_ERROR*/
+        if (!r) return;
 
-        if (!e.dataPath && e.keyword) {
-          return { name: e.keyword, message: e.message };
+        /** Valid schema should show no message */
+        if (r.output) {
+          this.setState({
+            validationStatus: VALID,
+            autoFilledValue: YAML.stringify(r.output),
+            configErrors: [],
+            configErrorTitle: '',
+          });
+          return;
         }
+        if (!r.error) return;
 
-        return { name: '', message: `${e.message}\n` };
+        /** Handle yaml syntax errors */
+        if (r.error) {
+          if (r.title === 'ERROR WHILE PARSING YAML STRING') {
+            const message = `${r.error.problem}\n ${YAML.stringify({
+              line: r.error.problem_mark.line,
+              column: r.error.problem_mark.column,
+              pointer: r.error.problem_mark.pointer,
+              index: r.error.problem_mark.index,
+            })} `;
+            this.setState({
+              validationStatus: ERROR,
+              configErrorTitle: r.title,
+              configErrors: [
+                {
+                  name: r.error.problem_mark.name,
+                  message,
+                },
+              ],
+            });
+          }
+
+          /** Handle validation errors */
+          if (r.title === 'INVALID CONFIG YAML') {
+            const message = `schema_path: ${r.error.schema_path.join('.')}\n config path: ${r.error.path}`;
+            this.setState({
+              validationStatus: ERROR,
+              configErrorTitle: r.title,
+              configErrors: [
+                {
+                  name: `.${r.error.path} `,
+                  message: r.error.message,
+                },
+              ],
+            });
+          }
+        }
       });
+  };
 
-      this.setState({
-        value: newValue,
-        configErrorTitle: 'INVALID CONFIG YAML',
-        configErrors: errors,
-      });
-      return;
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.validationStatus !== prevState.validationStatus) {
+      const { validationStatus } = this.state;
+
+      if (validationStatus === VALIDATING && prevState.validationStatus === NEED_REVALIDATION) {
+        this.validateConfig(this.state.value, true);
+      }
     }
-
-    /** Valid schema should show no message */
-    this.setState({
-      value: newValue,
-      configErrors: [],
-      configErrorTitle: '',
-    });
   };
 
   onCheckpointChange = (name) => (event) => {
@@ -233,9 +296,8 @@ export default class ConfigPanel extends Component {
                 <RotateIcon orientation={orientation} />
               </span>
 
-
               <span className={styles.closeButton} onClick={this.closeConfigPanel}>
-                <CloseIcon/>
+                <CloseIcon />
               </span>
             </div>
           </div>
@@ -343,7 +405,12 @@ export default class ConfigPanel extends Component {
               </select>
             </div>
             <div className={styles.addBtnContainer}>
-              <Button title="Enqueue script" size="large" onClick={this.onLaunch}>
+              <Button
+                title="Enqueue script"
+                size="large"
+                onClick={this.onLaunch}
+                disabled={[ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus)}
+              >
                 Add
               </Button>
             </div>
