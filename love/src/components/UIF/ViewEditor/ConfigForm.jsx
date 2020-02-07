@@ -49,6 +49,7 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
               let mode = 'json';
               let options = {};
               if (componentProps._functionProps && componentProps._functionProps.default.includes(key)) {
+                /* eslint no-eval: 0 */
                 value = eval(`(${value})`);
                 mode = 'javascript';
                 options = { useWorker: false };
