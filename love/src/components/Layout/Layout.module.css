@@ -94,6 +94,20 @@
   height: 1.4em;
 }
 
+.sidebar {
+  position: absolute;
+  display: block;
+  height: 100%;
+  z-index: 1000;
+  width: 200px;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--sidebar-background-color);
+}
+
+.hidden {
+  margin-left: -200px;
+}
+
 
 .settingsDropdown {
   background-color: var(--tertiary-background-color);
