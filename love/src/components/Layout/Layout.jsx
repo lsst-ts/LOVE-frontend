@@ -49,6 +49,7 @@ class Layout extends Component {
       innerWidth: 0,
       collapsedLogo: false,
       viewOnNotch: true,
+      sidebarVisible: false,
       settingsVisible: false,
       id: null,
       title: null,
@@ -137,13 +138,17 @@ class Layout extends Component {
     this.setState({ collapsedLogo: !this.state.collapsedLogo });
   };
 
+  toggleSidebar = () => {
+    this.setState({ sidebarVisible: !this.state.sidebarVisible });
+  };
+
   render() {
     return (
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
           <div
             className={[styles.leftNotchContainer, this.state.collapsedLogo ? styles.collapsedLogo : null].join(' ')}
-            onClick={this.toggleCollapsedLogo}
+            onClick={this.toggleSidebar}
           >
             <div className={styles.leftTopbar}>
               <LogoIcon className={styles.logo} />
@@ -201,7 +206,12 @@ class Layout extends Component {
           </div>
         </div>
 
-        <div className={styles.contentWrapper}>{this.props.children}</div>
+        <div className={[styles.sidebar, !this.state.sidebarVisible ? styles.hidden : null].join(' ')}>
+          asdlkhklh
+        </div>
+        <div className={styles.contentWrapper}>
+          {this.props.children}
+        </div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
