@@ -34,7 +34,7 @@
 
 .availableViewsBar {
   display: grid;
-  grid-template-columns: max-content max-content max-content;
+  grid-template-columns: minmax(5em, max-content) minmax(13em, max-content) max-content;
   grid-row-gap: 0.5em;
   align-items: center;
   justify-content: start;
@@ -54,4 +54,12 @@
 
 .viewName {
   color: var(--primary-font-color);
+}
+
+.availableViewsBar .input {
+  width: auto;
+}
+
+.filterLabel {
+  padding-right: 0.5em;
 }
