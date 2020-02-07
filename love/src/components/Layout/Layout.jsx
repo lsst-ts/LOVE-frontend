@@ -149,9 +149,8 @@ class Layout extends Component {
               <LogoIcon className={styles.logo} />
               <span className={styles.divider}> {this.state.title ? '' : ''} </span>
               <span className={styles.text}>
-                {/*{this.state.title}*/}
+                {this.state.viewOnNotch ? this.state.title : ''}
                 {/*{this.state.innerWidth + ' '}*/}
-                {this.state.viewOnNotch ? 'mmmmmmmmmmmmmmmmmmmm' : ''}
               </span>
             </div>
             <NotchCurve className={styles.notchCurve} />
