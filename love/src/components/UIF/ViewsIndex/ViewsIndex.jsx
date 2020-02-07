@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
 
 import styles from './ViewsIndex.module.css';
+import Input from '../../GeneralPurpose/Input/Input';
 
 class ViewsIndex extends Component {
   static propTypes = {
@@ -15,6 +16,13 @@ class ViewsIndex extends Component {
     /** Current views to display */
     deleteView: PropTypes.func,
   };
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      filter: '',
+    };
+  }
 
   createNewView = () => {
     this.props.history.push('/uif/view-editor');
@@ -38,6 +46,13 @@ class ViewsIndex extends Component {
     });
   };
 
+  changeFilter = (e) => {
+    const newValue = e.target.value;
+    this.setState({
+      filter: newValue,
+    });
+  };
+
   render() {
     return (
       <div className={styles.container}>
@@ -46,23 +61,24 @@ class ViewsIndex extends Component {
           <div className={styles.availableViewsBar}>
             <h2 className={styles.availableViewsTitle}>Available Views</h2>
             <div>
-              <input />
-              <Button>Filter</Button>
+              <span className={styles.filterLabel}>Filter:</span>
+              <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
             </div>
-            {/* <ol className={styles.linkList}> */}
             {this.props.views.length > 0 &&
-              this.props.views.map((view, index) => (
-                <React.Fragment key={index + '1'}>
-                    <span className={[styles.linkListItem, styles.viewIndex].join(' ')}> {index + 1 + '. '} </span>
-                    <span className={[styles.linkListItem, styles.viewName].join(' ')}> {view.name} </span>
-                  <div className={[styles.linkListItem, styles.buttons].join(' ')}>
-                    <Button onClick={() => this.openView(view.id)}>Open</Button>
-                    <Button onClick={() => this.editView(view.id)}>Edit</Button>
-                    <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
-                  </div>
-                </React.Fragment>
-              ))}
-            {/* </ol> */}
+              this.props.views.map(
+                (view, index) =>
+                  (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
+                    <React.Fragment key={index}>
+                      <span className={[styles.linkListItem, styles.viewIndex].join(' ')}> {`${index + 1}. `} </span>
+                      <span className={[styles.linkListItem, styles.viewName].join(' ')}> {view.name} </span>
+                      <div className={[styles.linkListItem, styles.buttons].join(' ')}>
+                        <Button onClick={() => this.openView(view.id)}>Open</Button>
+                        <Button onClick={() => this.editView(view.id)}>Edit</Button>
+                        <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
+                      </div>
+                    </React.Fragment>
+                  ),
+              )}
           </div>
           <div className={styles.newViewButtonWrapper}>
             <Button onClick={this.createNewView}>New View</Button>
