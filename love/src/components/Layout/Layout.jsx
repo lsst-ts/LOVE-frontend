@@ -13,6 +13,10 @@ import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import styles from './Layout.module.css';
 
+const BREAK_1 = 710;
+const BREAK_2 = 630;
+const BREAK_3 = 350;
+
 class Layout extends Component {
   static propTypes = {
     /** React Router location object */
@@ -42,7 +46,9 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      innerWidth: 0,
       collapsedLogo: false,
+      viewOnNotch: true,
       settingsVisible: false,
       id: null,
       title: null,
@@ -80,17 +86,30 @@ class Layout extends Component {
   };
 
   componentWillMount = () => {
+    this.handleResize();
     document.addEventListener('mousedown', this.handleClick, false);
+    window.addEventListener('resize', this.handleResize);
   };
 
   componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClick, false);
+    window.removeEventListener('resize', this.handleResize);
   };
 
   handleClick = (event) => {
     if (this.node && !this.node.contains(event.target)) {
       this.closeMenu();
     }
+  };
+
+  handleResize = () => {
+    const innerWidth = window.innerWidth;
+    console.log('innerWidth: ', innerWidth);
+    this.setState({
+      innerWidth: innerWidth,
+      collapsedLogo: BREAK_2 < innerWidth && innerWidth <= BREAK_1 || innerWidth <= BREAK_3,
+      viewOnNotch: BREAK_2 < innerWidth,
+    });
   };
 
   closeMenu = () => {
@@ -125,7 +144,11 @@ class Layout extends Component {
             <div className={styles.leftTopbar}>
               <LogoIcon className={styles.logo} />
               <span className={styles.divider}> {this.state.title ? '' : ''} </span>
-              <span className={styles.text}> {this.state.title} </span>
+              <span className={styles.text}>
+                {/*{this.state.title}*/}
+                {/*{this.state.innerWidth + ' '}*/}
+                {this.state.viewOnNotch ? 'mmmmmmmmmmmmmmmmmmmmmmmmm' : ''}
+              </span>
             </div>
             <NotchCurve className={styles.notchCurve} />
           </div>
