@@ -67,7 +67,6 @@ class ViewEditor extends Component {
     saveEditedView: () => {},
   };
 
-
   constructor(props) {
     super(props);
     this.state = {
@@ -92,7 +91,7 @@ class ViewEditor extends Component {
         layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       });
     } else {
-      this.props.loadViewToEdit(id);
+      if (this.props.loadViewToEdit(id) === undefined) this.props.requestViewToEdit(id);
       this.setState({
         id,
       });
@@ -216,7 +215,7 @@ class ViewEditor extends Component {
     const parsedLayout = { ...this.getEditedViewLayout() };
     parsedLayout.content = { ...parsedLayout.content };
     Object.keys(parsedLayout.content).forEach((key) => {
-      const elem = {...parsedLayout.content[key]};
+      const elem = { ...parsedLayout.content[key] };
       if (elem.properties.i === elementIndex) elem.config = config;
       parsedLayout.content[key] = elem;
     });
@@ -313,59 +312,59 @@ class ViewEditor extends Component {
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
     return (
       <div className={styles.toolbarWrapper}>
-      <div className={styles.toolbar}>
-        <Input
-          className={styles.textField}
-          defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-          onBlur={this.onNameInputBlur}
-          key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-        />
-        <Button
-          className={styles.iconBtn}
-          title={saveButtonTooltip}
-          onClick={this.save}
-          disabled={isSaved}
-          status='transparent'
-        >
-          <SaveIcon className={styles.icon}/>
-        </Button>
-        <Button
-          className={styles.iconBtn}
-          title='Add components'
-          onClick={this.showSelectionModal}
-          status='transparent'
-        >
-          <AddIcon className={styles.icon}/>
-        </Button>
-        
-        <Button
-          className={styles.iconBtn}
-          title='Undo'
-          onClick={this.props.undo}
-          disabled={this.props.undoActionsAvailable === 0}
-          status='transparent'
-        >
-          <UndoIcon className={styles.icon}/>
-        </Button>
-        <Button
-          className={styles.iconBtn}
-          title='Redo'
-          onClick={this.props.redo}
-          disabled={this.props.redoActionsAvailable === 0}
-          status='transparent'
-        >
-          <RedoIcon className={styles.icon}/>
-        </Button>
-        <Button
-          className={styles.iconBtn}
-          title='Debug'
-          onClick={this.showEditor}
-          disabled={this.state.editorVisible}
-          status='transparent'
-        >
-          <DebugIcon className={styles.icon}/>
-        </Button>
-      </div>
+        <div className={styles.toolbar}>
+          <Input
+            className={styles.textField}
+            defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
+            onBlur={this.onNameInputBlur}
+            key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
+          />
+          <Button
+            className={styles.iconBtn}
+            title={saveButtonTooltip}
+            onClick={this.save}
+            disabled={isSaved}
+            status="transparent"
+          >
+            <SaveIcon className={styles.icon} />
+          </Button>
+          <Button
+            className={styles.iconBtn}
+            title="Add components"
+            onClick={this.showSelectionModal}
+            status="transparent"
+          >
+            <AddIcon className={styles.icon} />
+          </Button>
+
+          <Button
+            className={styles.iconBtn}
+            title="Undo"
+            onClick={this.props.undo}
+            disabled={this.props.undoActionsAvailable === 0}
+            status="transparent"
+          >
+            <UndoIcon className={styles.icon} />
+          </Button>
+          <Button
+            className={styles.iconBtn}
+            title="Redo"
+            onClick={this.props.redo}
+            disabled={this.props.redoActionsAvailable === 0}
+            status="transparent"
+          >
+            <RedoIcon className={styles.icon} />
+          </Button>
+          <Button
+            className={styles.iconBtn}
+            title="Debug"
+            onClick={this.showEditor}
+            disabled={this.state.editorVisible}
+            status="transparent"
+          >
+            <DebugIcon className={styles.icon} />
+          </Button>
+        </div>
       </div>
     );
   }
@@ -385,7 +384,7 @@ class ViewEditor extends Component {
           </div>
         </div>
 
-        { this.state.editorVisible ? (
+        {this.state.editorVisible ? (
           <Rnd
             default={{
               x: 800,
@@ -401,7 +400,7 @@ class ViewEditor extends Component {
           >
             <div className={styles.rnd}>
               <div className={styles.rndBar}>
-                <span className={styles.hidden}/>
+                <span className={styles.hidden} />
                 <Button
                   title={this.state.editorChanged ? 'Apply changes in editor to the layout' : 'No changes to apply'}
                   onClick={this.applyEditorLayout}
@@ -409,7 +408,7 @@ class ViewEditor extends Component {
                 >
                   Apply
                 </Button>
-                <Button onClick={this.hideEditor} title='Close' status='transparent'>
+                <Button onClick={this.hideEditor} title="Close" status="transparent">
                   &#10005;
                 </Button>
               </div>
@@ -452,9 +451,7 @@ class ViewEditor extends Component {
             onSaveConfig={this.updateElementConfig}
           />
         </Modal>
-        {
-          ReactDOM.createPortal(this.renderToolbar(), this.toolbar)
-        }
+        {ReactDOM.createPortal(this.renderToolbar(), this.toolbar)}
       </>
     );
   }

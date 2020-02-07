@@ -3,6 +3,7 @@ import {
   RECEIVE_WORKSPACES_ERROR,
   LOADING_VIEWS,
   RECEIVE_VIEWS,
+  RECEIVE_VIEW,
   RECEIVE_VIEWS_ERROR,
   RECEIVE_CURRENT_WORKSPACE,
   UPDATE_EDITED_VIEW,
@@ -64,6 +65,16 @@ export const receiveViews = (views) => {
 };
 
 /**
+ * Action to receive a single view
+ */
+export const receiveView = (view) => {
+  return {
+    type: RECEIVE_VIEW,
+    view,
+  };
+};
+
+/**
  * Action to receive views error
  */
 export const receiveViewsError = (error) => {
@@ -103,11 +114,11 @@ export const clearViewToEdit = {
 /**
  * Action to update the view under edition
  */
-export const loadViewToEdit = (id) => {
+export const loadViewToEdit = (view) => {
   // const view = getViews(id);
   return {
     type: LOAD_EDITED_VIEW,
-    id,
+    id: view.id,
   };
 };
 
@@ -167,14 +178,14 @@ export function requestWorkspaces() {
 }
 
 /**
- * requestWorkspaces - Action to request the list of views
+ * requestViews - Action to request the list of views
  *
  * @return {object}  the dispatched action
  */
 export function requestViews() {
   return async (dispatch, getState) => {
     dispatch(loadingViews);
-    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -183,6 +194,66 @@ export function requestViews() {
         if (response.status === 200) {
           return response.json().then((views) => {
             dispatch(receiveViews(views));
+            return Promise.resolve();
+          });
+        }
+        return response.json().then((json) => {
+          dispatch(receiveViewsError(json));
+          return Promise.resolve();
+        });
+      })
+      .catch((e) => console.error(e));
+  };
+}
+
+
+/**
+ * requestView - Action to request a single view
+ *
+ * @return {object}  the dispatched action
+ */
+export function requestView(id) {
+  return async (dispatch, getState) => {
+    dispatch(loadingViews);
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json().then((view) => {
+            dispatch(receiveView(view));
+            return Promise.resolve();
+          });
+        }
+        return response.json().then((json) => {
+          dispatch(receiveViewsError(json));
+          return Promise.resolve();
+        });
+      })
+      .catch((e) => console.error(e));
+  };
+}
+
+/**
+ * requestView - Action to request a single view
+ *
+ * @return {object}  the dispatched action
+ */
+export function requestViewToEdit(id) {
+  return async (dispatch, getState) => {
+    dispatch(loadingViews);
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json().then((view) => {
+            dispatch(receiveView({...view}));
+            dispatch(loadViewToEdit({...view}));
             return Promise.resolve();
           });
         }
@@ -246,6 +317,7 @@ export function saveEditedView() {
       .then((response) => {
         if (response.status === expectedCode) {
           return response.json().then((view) => {
+            dispatch(receiveView(view));
             dispatch(savedEditedView(view));
             return Promise.resolve();
           });
