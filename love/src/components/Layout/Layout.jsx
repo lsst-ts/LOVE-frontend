@@ -15,7 +15,7 @@ import styles from './Layout.module.css';
 
 const BREAK_1 = 710;
 const BREAK_2 = 630;
-const BREAK_3 = 350;
+const BREAK_3 = 375;
 
 class Layout extends Component {
   static propTypes = {
@@ -103,6 +103,10 @@ class Layout extends Component {
   };
 
   handleResize = () => {
+    this.setState({
+      collapsedLogo: true,
+      viewOnNotch: false,
+    });
     const innerWidth = window.innerWidth;
     console.log('innerWidth: ', innerWidth);
     this.setState({
@@ -147,7 +151,7 @@ class Layout extends Component {
               <span className={styles.text}>
                 {/*{this.state.title}*/}
                 {/*{this.state.innerWidth + ' '}*/}
-                {this.state.viewOnNotch ? 'mmmmmmmmmmmmmmmmmmmmmmmmm' : ''}
+                {this.state.viewOnNotch ? 'mmmmmmmmmmmmmmmmmmmm' : ''}
               </span>
             </div>
             <NotchCurve className={styles.notchCurve} />
