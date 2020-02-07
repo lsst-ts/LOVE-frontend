@@ -4,6 +4,7 @@ import {
   RECEIVE_WORKSPACES_ERROR,
   LOADING_VIEWS,
   RECEIVE_VIEWS,
+  RECEIVE_VIEW,
   RECEIVE_VIEWS_ERROR,
   RECEIVE_CURRENT_WORKSPACE,
   UPDATE_EDITED_VIEW,
@@ -61,6 +62,7 @@ export const initialState = {
   editedViewSaved: {},
   mode: modes.VIEW,
   views: [],
+  cachedViews: [],
   viewsStatus: viewsStates.EMPTY,
   workspaces: [],
 };
@@ -90,6 +92,15 @@ export default function(state = initialState, action) {
         viewsStatus: viewsStates.LOADED,
       });
     }
+    case RECEIVE_VIEW: {
+      const cachedViews = state.cachedViews ? [...state.cachedViews] : [];
+      const oldViewIndex = cachedViews ? cachedViews.findIndex((view) => view.id === action.view.id) : undefined;
+      if (oldViewIndex > -1) cachedViews.splice(oldViewIndex, 1);
+      return Object.assign({}, state, {
+        cachedViews: [...cachedViews, action.view],
+        viewsStatus: viewsStates.LOADED,
+      });
+    }
     case RECEIVE_VIEWS_ERROR: {
       return Object.assign({}, state, {
         viewsStatus: viewsStates.ERROR,
@@ -116,7 +127,7 @@ export default function(state = initialState, action) {
       });
     }
     case LOAD_EDITED_VIEW: {
-      let view = state.views.find((v) => v.id === action.id);
+      let view = state.cachedViews.find((v) => v.id === action.id);
       if (view === undefined) {
         view = rfdc()(initialState.editedViewCurrent);
       }

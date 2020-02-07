@@ -58,6 +58,7 @@ const ScriptQueueContainer = ({
       salindex={salindex}
       fit={fit}
       embedded={embedded}
+      running={queueState.running}
     />
   );
 };

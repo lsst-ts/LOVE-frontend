@@ -21,6 +21,17 @@ export const getViews = (state) => {
 };
 
 /**
+ * Return the list of cached full views from the state
+ *
+ * @param  {object} state  the state
+ * @return {array}        the list of views
+ */
+export const getCachedViews = (state) => {
+  if (state.uif === undefined) return undefined;
+  return state.uif.present.cachedViews;
+};
+
+/**
  * Return the status of views from the state
  *
  * @param  {object} state  the state
@@ -38,9 +49,14 @@ export const getViewsStatus = (state) => {
  * @return {array}        the list of views
  */
 export const getView = (state, id) => {
-  const views = getViews(state);
-  if (views === undefined || views.length === 0) return undefined;
-  return views.find((view) => view.id === id);
+  const views = getCachedViews(state);
+  // if (views === undefined || views.length === 0) return undefined;
+  // return views.find((view) => view.id === id);
+  if (views !== undefined) {
+    const foundView = views.find((view) => view.id === id);
+    return foundView;
+  }
+  return undefined;
 };
 
 /**

@@ -541,7 +541,6 @@ export default class ScriptQueue extends Component {
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
-
     return (
       <Panel title={`Script Queue   | SalIndex = ${this.props.salindex}`} fit={this.props.fit}>
         <div
@@ -708,7 +707,7 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
-                {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
+                {!this.props.running && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
                       <span>Resume</span>
@@ -718,7 +717,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </>
                 )}
-                {this.props.state === 'Running' && this.props.commandExecutePermission && (
+                {this.props.running && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
                       <span>Pause</span>
