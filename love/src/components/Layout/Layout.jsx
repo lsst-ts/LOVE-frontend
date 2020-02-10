@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates } from '../../redux/reducers/uif';
@@ -207,8 +207,14 @@ class Layout extends Component {
         </div>
 
         <div className={[styles.sidebar, !this.state.sidebarVisible ? styles.hidden : null].join(' ')}>
-          asdlkhklh
+          <p>
+            <Link className={styles.link} to="/">Home</Link>
+          </p>
+          <p>
+            <Link className={styles.link} to="/uif">Views Index</Link>
+          </p>
         </div>
+
         <div className={styles.contentWrapper}>
           {this.props.children}
         </div>
