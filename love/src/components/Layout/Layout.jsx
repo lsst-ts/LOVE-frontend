@@ -17,6 +17,10 @@ import styles from './Layout.module.css';
 const BREAK_1 = 710;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
+const urls = {
+  '/': 'HOME',
+  '/uif': 'VIEWS INDEX',
+}
 
 class Layout extends Component {
   static propTypes = {
@@ -68,12 +72,20 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
-    const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-    if (id && id !== this.state.id) {
-      const view = this.props.getCurrentView(id);
-      this.setState({ id, title: view ? view.name : null });
-    } else if (!id && this.state.id) {
-      this.setState({ id: null, title: null });
+    const pathname = this.props.location.pathname;
+    if (urls[pathname] && this.state.title !== urls[pathname]) {
+      this.setState({
+        id: null,
+        title: urls[pathname],
+      });
+    } else {
+      const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+      if (id && id !== this.state.id) {
+        const view = this.props.getCurrentView(id);
+        this.setState({ id, title: view ? view.name : null });
+      } else if (!id && this.state.id) {
+        this.setState({ id: null, title: null });
+      }
     }
 
     if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
@@ -148,7 +160,7 @@ class Layout extends Component {
   render() {
     return (
       <>
-        <div className={[styles.topbar, this.props.token ? null : styles.logoHidden].join(' ')}>
+        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
           <div
             className={[
               styles.leftNotchContainer,
@@ -160,7 +172,7 @@ class Layout extends Component {
             <div className={styles.leftTopbar}>
               <MenuIcon className={styles.logo} />
               <LogoIcon className={styles.logo} />
-              <span className={styles.divider}> {this.state.title ? '' : ''} </span>
+              <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
               <span className={styles.text}>
                 {this.state.viewOnNotch ? this.state.title : ''}
               </span>
