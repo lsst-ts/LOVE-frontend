@@ -3,6 +3,24 @@
   text-align: left;
 }
 
+.filterWrapper {
+  width: 100%;
+  padding-bottom: 2em;
+  border-bottom: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.filter {
+  display: grid;
+  grid-template-columns: min-content auto;
+  grid-gap: 1em;
+  max-width: 50ch;
+}
+
+.filterLabel {
+  /* padding-right: 0.5em; */
+  font-size: 1.2em;
+}
+
 .linkList {
   list-style-position: inside;
   display: grid;
@@ -30,6 +48,8 @@
 
 .availableViewsWrapper {
   display: inline-block;
+  margin-top: 2em;
+  padding-top: 1em;
 }
 
 .availableViewsBar {
@@ -58,8 +78,4 @@
 
 .availableViewsBar .input {
   width: auto;
-}
-
-.filterLabel {
-  padding-right: 0.5em;
 }

@@ -56,14 +56,15 @@ class ViewsIndex extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <h1>UI Framework</h1>
+        <div className={styles.filterWrapper}>
+          <h1>Available Views</h1>
+          <div className={styles.filter}>
+            <div className={styles.filterLabel}>Filter:</div>
+            <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
+          </div>
+        </div>
         <div className={styles.availableViewsWrapper}>
           <div className={styles.availableViewsBar}>
-            <h2 className={styles.availableViewsTitle}>Available Views</h2>
-            <div>
-              <span className={styles.filterLabel}>Filter:</span>
-              <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
-            </div>
             {this.props.views.length > 0 &&
               this.props.views.map(
                 (view, index) =>
