@@ -140,7 +140,7 @@
   color: var(--base-font-color);
 }
 
-.hidden {
+.sidebarHidden {
   margin-left: -200px;
 }
 
@@ -157,6 +157,15 @@
   height: fit-content;
   top: 3.2em;
   right: 1em;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s ease-in-out;
+  visibility: hidden;
+}
+
+
+.settingsVisible {
+  opacity: 1;
+  visibility: visible;
 }
 
 .settingsDropdown .menuElement {

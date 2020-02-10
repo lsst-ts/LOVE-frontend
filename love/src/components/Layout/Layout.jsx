@@ -148,7 +148,7 @@ class Layout extends Component {
   render() {
     return (
       <>
-        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
+        <div className={[styles.topbar, this.props.token ? null : styles.logoHidden].join(' ')}>
           <div
             className={[
               styles.leftNotchContainer,
@@ -187,28 +187,29 @@ class Layout extends Component {
               <span className={styles.refNode} ref={(node) => (this.dropdown = node)}>
                 <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
                   <GearIcon className={styles.icon} />
-                  {this.state.settingsVisible && (
-                    <div className={styles.settingsDropdown}>
-                      <div
-                        className={this.state.id ? styles.menuElement : styles.disabledElement}
-                        title="Edit view"
-                        onClick={() => {
-                          if (this.state.id) {
-                            this.editView(this.state.id);
-                          }
-                        }}
-                      >
-                        Edit view
-                      </div>
-                      <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
-                        Create new View
-                      </div>
-                      <span className={styles.divider} />
-                      <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                        Logout
-                      </div>
+                  <div className={[
+                    styles.settingsDropdown,
+                    this.state.settingsVisible ? styles.settingsVisible : ''
+                  ].join(' ')}>
+                    <div
+                      className={this.state.id ? styles.menuElement : styles.disabledElement}
+                      title="Edit view"
+                      onClick={() => {
+                        if (this.state.id) {
+                          this.editView(this.state.id);
+                        }
+                      }}
+                    >
+                      Edit view
                     </div>
-                  )}
+                    <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
+                      Create new View
+                    </div>
+                    <span className={styles.divider} />
+                    <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
+                      Logout
+                    </div>
+                  </div>
                 </Button>
               </span>
             </div>
@@ -217,7 +218,7 @@ class Layout extends Component {
 
         <div
           ref={(node) => (this.sidebar = node)}
-          className={[styles.sidebar, !this.state.sidebarVisible ? styles.hidden : null].join(' ')}
+          className={[styles.sidebar, !this.state.sidebarVisible ? styles.sidebarHidden : null].join(' ')}
         >
           <div className={styles.viewName}>
             {!this.state.viewOnNotch ? this.state.title : ' '}
