@@ -56,6 +56,17 @@ class Layout extends Component {
     };
   }
 
+  componentWillMount = () => {
+    this.handleResize();
+    document.addEventListener('mousedown', this.handleClick, false);
+    window.addEventListener('resize', this.handleResize);
+  };
+
+  componentWillUnmount = () => {
+    document.removeEventListener('mousedown', this.handleClick, false);
+    window.removeEventListener('resize', this.handleResize);
+  };
+
   componentDidUpdate = (prevProps, _prevState) => {
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     if (id && id !== this.state.id) {
@@ -86,20 +97,13 @@ class Layout extends Component {
     }
   };
 
-  componentWillMount = () => {
-    this.handleResize();
-    document.addEventListener('mousedown', this.handleClick, false);
-    window.addEventListener('resize', this.handleResize);
-  };
-
-  componentWillUnmount = () => {
-    document.removeEventListener('mousedown', this.handleClick, false);
-    window.removeEventListener('resize', this.handleResize);
-  };
-
   handleClick = (event) => {
-    if (this.node && !this.node.contains(event.target)) {
-      this.closeMenu();
+    if (this.dropdown && !this.dropdown.contains(event.target)) {
+      this.setState({ settingsVisible: false });
+    }
+    if (this.sidebar && !this.sidebar.contains(event.target) &&
+        this.leftNotch && !this.leftNotch.contains(event.target)) {
+      this.setState({ sidebarVisible: false });
     }
   };
 
@@ -109,15 +113,10 @@ class Layout extends Component {
       viewOnNotch: false,
     });
     const innerWidth = window.innerWidth;
-    console.log('innerWidth: ', innerWidth);
     this.setState({
       collapsedLogo: BREAK_2 < innerWidth && innerWidth <= BREAK_1 || innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
     });
-  };
-
-  closeMenu = () => {
-    this.setState({ settingsVisible: false });
   };
 
   toggleSettings = () => {
@@ -132,6 +131,11 @@ class Layout extends Component {
   editView = (id) => {
     this.props.history.push('/uif/view-editor?id=' + id);
   };
+
+  navigateTo = (url) => {
+    this.setState({ sidebarVisible: false });
+    this.props.history.push(url);
+  }
 
   toggleCollapsedLogo = () => {
     this.setState({ collapsedLogo: !this.state.collapsedLogo });
@@ -150,6 +154,7 @@ class Layout extends Component {
               styles.leftNotchContainer,
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
+            ref={(node) => (this.leftNotch = node)}
             onClick={this.toggleSidebar}
           >
             <div className={styles.leftTopbar}>
@@ -179,7 +184,7 @@ class Layout extends Component {
                 <NotificationIcon className={styles.icon} />
               </Button>
 
-              <span className={styles.refNode} ref={(node) => (this.node = node)}>
+              <span className={styles.refNode} ref={(node) => (this.dropdown = node)}>
                 <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
                   <GearIcon className={styles.icon} />
                   {this.state.settingsVisible && (
@@ -188,7 +193,9 @@ class Layout extends Component {
                         className={this.state.id ? styles.menuElement : styles.disabledElement}
                         title="Edit view"
                         onClick={() => {
-                          this.editView(this.state.id);
+                          if (this.state.id) {
+                            this.editView(this.state.id);
+                          }
                         }}
                       >
                         Edit view
@@ -208,16 +215,19 @@ class Layout extends Component {
           </div>
         </div>
 
-        <div className={[styles.sidebar, !this.state.sidebarVisible ? styles.hidden : null].join(' ')}>
+        <div
+          ref={(node) => (this.sidebar = node)}
+          className={[styles.sidebar, !this.state.sidebarVisible ? styles.hidden : null].join(' ')}
+        >
           <div className={styles.viewName}>
             {!this.state.viewOnNotch ? this.state.title : ' '}
           </div>
           <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
-            <p>
-              <Link className={styles.link} to="/">Home</Link>
+            <p onClick={() => this.navigateTo("/")}>
+              Home
             </p>
-            <p>
-              <Link className={styles.link} to="/uif">Views Index</Link>
+            <p onClick={() => this.navigateTo("/uif")}>
+              Views Index
             </p>
           </div>
         </div>
