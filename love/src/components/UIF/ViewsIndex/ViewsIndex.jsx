@@ -67,7 +67,10 @@ class ViewsIndex extends Component {
         <div className={styles.availableViewsWrapper}>
 
           <div title="Create a New View" className={styles.view} onClick={this.createNewView}>
-            <span className={styles.name}> CREATE NEW VIEW </span>
+            <div className={[styles.preview, styles.new].join(' ')}>
+              <div className={styles.plus}> + </div>
+            </div>
+            <div className={styles.name}> CREATE NEW VIEW </div>
           </div>
 
           {this.props.views.length > 0 &&
@@ -80,7 +83,8 @@ class ViewsIndex extends Component {
                     className={styles.view}
                     onClick={() => this.openView(view.id)}
                   >
-                    <span className={styles.name}> {view.name} </span>
+                    <div className={styles.preview}> </div>
+                    <div className={styles.name}> {view.name} </div>
                     <div className={styles.buttons}>
                       <Button
                         className={styles.iconButton}
