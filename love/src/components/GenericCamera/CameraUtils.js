@@ -156,7 +156,7 @@ export const readImageDataFromBlob = (blob, imageErrorCallback) => {
 export const fetchImageFromStream = (url, callback, signal, imageErrorCallback) => {
   return fetch(url, { signal }).then(async (r) => {
     if (!r.ok) {
-      const message = `(${r.status}) While fetching from http://localhost/gencam`;
+      const message = `(${r.status}) While fetching from ${url}`;
       throw new Error(message);
     }
     const reader = r.body.getReader();
