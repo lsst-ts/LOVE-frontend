@@ -57,7 +57,6 @@ class ViewsIndex extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.filterWrapper}>
-          <h1>Available Views</h1>
           <div className={styles.filter}>
             <div className={styles.filterLabel}>Filter:</div>
             <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />

@@ -18,8 +18,8 @@ const BREAK_1 = 710;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
-  '/': 'HOME',
-  '/uif': 'VIEWS INDEX',
+  // '/': 'HOME',
+  '/uif': 'AVAILABLE VIEWS',
 }
 
 class Layout extends Component {
