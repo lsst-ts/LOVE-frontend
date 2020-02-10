@@ -3,63 +3,85 @@
   text-align: left;
 }
 
-.linkList {
-  list-style-position: inside;
+.filterWrapper {
+  width: 100%;
+  padding: 1em 0;
+  border-bottom: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.filter {
   display: grid;
-  grid-gap: 0.5em;
-  grid-template-columns: min-content 30ch min-content min-content min-content;
-}
-
-.buttons {
-  /* display: contents; */
-  display: inline-grid;
-  grid-template-columns: min-content min-content min-content;
-  grid-column-gap: 0.5em;
-  justify-content: end;
-}
-
-.linkListItem {
-  font-size: 1.3em;
-}
-
-.viewIndex {
-  padding-left: 2em;
-  padding-right: 0.5em;
-  text-align: right;
-}
-
-.availableViewsWrapper {
-  display: inline-block;
-}
-
-.availableViewsBar {
-  display: grid;
-  grid-template-columns: minmax(5em, max-content) minmax(13em, max-content) max-content;
-  grid-row-gap: 0.5em;
-  align-items: center;
-  justify-content: start;
-}
-
-.availableViewsTitle {
-  grid-column: span 2;
-  margin: 0.5em 0;
-}
-
-.newViewButtonWrapper {
-  margin-top: 0.5em;
-  padding-top: 0.5em;
-  border-top: 1px solid var(--secondary-font-color);
-  text-align: right;
-}
-
-.viewName {
-  color: var(--primary-font-color);
-}
-
-.availableViewsBar .input {
-  width: auto;
+  grid-template-columns: min-content auto;
+  grid-gap: 1em;
+  max-width: 50ch;
 }
 
 .filterLabel {
-  padding-right: 0.5em;
+  font-size: 1.2em;
+}
+
+
+.availableViewsWrapper {
+  margin-top: 2em;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25ch, 1fr));
+  grid-auto-rows: minmax(5em, auto);
+  grid-gap: 1em;
+}
+
+.view {
+  display: grid;
+  cursor: pointer;
+  grid-template-rows: 8em min-content min-content;
+  grid-gap: 0.5em;
+  padding: 0.5em;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--base-font-color);
+  background-color: var(--second-secondary-background-color);
+}
+
+.view .name {
+  text-align: center;
+}
+
+.view .preview {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px dashed var(--secondary-font-color);
+}
+
+.view .new {
+  border: 1px dashed var(--secondary-font-color);
+  text-align: center;
+}
+
+.view .new .plus {
+  display: flex;
+  font-size: 5em;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.view .buttons {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  grid-gap: 0.5em;
+  justify-content: center;
+}
+
+.iconButton {
+  border-radius: 100%;
+  height: 2em;
+  width: 2em;
+  padding: 0.1em 0 0 0;
+}
+
+.icon {
+  height: 1em;
+  width: 1em;
+  fill: var(--base-font-color);
 }
