@@ -10,6 +10,7 @@ import Button from '../GeneralPurpose/Button/Button';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
+import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import styles from './Layout.module.css';
 
@@ -152,6 +153,7 @@ class Layout extends Component {
             onClick={this.toggleSidebar}
           >
             <div className={styles.leftTopbar}>
+              <MenuIcon className={styles.logo} />
               <LogoIcon className={styles.logo} />
               <span className={styles.divider}> {this.state.title ? '' : ''} </span>
               <span className={styles.text}>

@@ -16,24 +16,24 @@
 }
 
 .leftTopbar {
-  padding: 0.5em 0 0.5em var(--content-padding);
+  padding: 0.5em 0 0.5em 0.5em;
   position: relative;
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(2, min-content) max-content;
+  grid-template-columns: repeat(3, min-content) max-content;
   grid-gap: 0.5em;
   align-items: center;
 }
 
 .leftTopbar .logo {
-  height: 1.6em;
-  margin-right: 0.5em;
+  height: 1.4em;
+  /* margin-right: 0.5em; */
   fill: var(--base-font-color);
 }
 
 .collapsedLogo {
-  margin-left: -5.4em;
+  margin-left: -6.3em;
 }
 
 .leftTopbar .text {
