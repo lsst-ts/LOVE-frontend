@@ -3,9 +3,11 @@ import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
+import EditIcon from '../../icons/EditIcon/EditIcon';
+import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 
 import styles from './ViewsIndex.module.css';
-import Input from '../../GeneralPurpose/Input/Input';
 
 class ViewsIndex extends Component {
   static propTypes = {
@@ -64,7 +66,7 @@ class ViewsIndex extends Component {
         </div>
         <div className={styles.availableViewsWrapper}>
 
-          <div className={styles.view} onClick={this.createNewView}>
+          <div title="Create a New View" className={styles.view} onClick={this.createNewView}>
             <span className={styles.name}> CREATE NEW VIEW </span>
           </div>
 
@@ -73,15 +75,19 @@ class ViewsIndex extends Component {
               (view, index) =>
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
                   <div
+                    title="Open"
                     key={index}
                     className={styles.view}
                     onClick={() => this.openView(view.id)}
                   >
                     <span className={styles.name}> {view.name} </span>
                     <div className={styles.buttons}>
-                      <Button onClick={(event) => {event.stopPropagation(); this.openView(view.id)}}>Open</Button>
-                      <Button onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}>Edit</Button>
-                      <Button onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}>Delete</Button>
+                      <Button title="Edit" onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}>
+                        <EditIcon className={styles.icon}/>
+                      </Button>
+                      <Button title="Delete" onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}>
+                        <DeleteIcon className={styles.icon}/>
+                      </Button>
                     </div>
                   </div>
                 ),

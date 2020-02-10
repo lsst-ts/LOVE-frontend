@@ -24,8 +24,7 @@
 .availableViewsWrapper {
   margin-top: 2em;
   display: grid;
-  /* grid-template-columns: auto auto auto auto auto; */
-  grid-template-columns: repeat(auto-fill, minmax(30ch, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(28ch, 1fr));
   grid-auto-rows: minmax(5em, auto);
   grid-gap: 1em;
 }
@@ -46,62 +45,14 @@
 }
 
 .view .buttons {
-  flex-flow: row;
-  justify-content: space-around;
-}
-
-
-
-.linkList {
-  list-style-position: inside;
   display: grid;
+  grid-template-columns: min-content min-content;
   grid-gap: 0.5em;
-  grid-template-columns: min-content 30ch min-content min-content min-content;
+  justify-content: center;
 }
 
-.buttons {
-  /* display: contents; */
-  display: inline-grid;
-  grid-template-columns: min-content min-content min-content;
-  grid-column-gap: 0.5em;
-  justify-content: end;
-}
-
-.linkListItem {
-  font-size: 1.3em;
-}
-
-.viewIndex {
-  padding-left: 2em;
-  padding-right: 0.5em;
-  text-align: right;
-}
-
-
-.availableViewsBar {
-  display: grid;
-  grid-template-columns: minmax(5em, max-content) minmax(13em, max-content) max-content;
-  grid-row-gap: 0.5em;
-  align-items: center;
-  justify-content: start;
-}
-
-.availableViewsTitle {
-  grid-column: span 2;
-  margin: 0.5em 0;
-}
-
-.newViewButtonWrapper {
-  margin-top: 0.5em;
-  padding-top: 0.5em;
-  border-top: 1px solid var(--secondary-font-color);
-  text-align: right;
-}
-
-.viewName {
-  color: var(--primary-font-color);
-}
-
-.availableViewsBar .input {
-  width: auto;
+.icon {
+  height: 1em;
+  width: 1em;
+  fill: var(--base-font-color);
 }
