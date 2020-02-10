@@ -10,7 +10,7 @@ export const schema = {
       type: 'string',
       description: 'URL of the live view server',
       isPrivate: false,
-      default: 'http://localhost/gencam',
+      default: 'http://dev.love.inria.cl/gencam',
     },
   },
 };
@@ -19,7 +19,7 @@ export const schema = {
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
-export default function({ serverURL = 'http://localhost/gencam' }) {
+export default function({ serverURL = 'http://dev.love.inria.cl/gencam' }) {
   const [imageWidth, setImageWidth] = useState(1024);
   const [imageHeight, setImageHeight] = useState(1024);
   const [containerWidth, setContainerWidth] = useState(1);
