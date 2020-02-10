@@ -63,26 +63,29 @@ class ViewsIndex extends Component {
           </div>
         </div>
         <div className={styles.availableViewsWrapper}>
-          <div className={styles.availableViewsBar}>
-            {this.props.views.length > 0 &&
-              this.props.views.map(
-                (view, index) =>
-                  (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
-                    <React.Fragment key={index}>
-                      <span className={[styles.linkListItem, styles.viewIndex].join(' ')}> {`${index + 1}. `} </span>
-                      <span className={[styles.linkListItem, styles.viewName].join(' ')}> {view.name} </span>
-                      <div className={[styles.linkListItem, styles.buttons].join(' ')}>
-                        <Button onClick={() => this.openView(view.id)}>Open</Button>
-                        <Button onClick={() => this.editView(view.id)}>Edit</Button>
-                        <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
-                      </div>
-                    </React.Fragment>
-                  ),
-              )}
+
+          <div className={styles.view} onClick={this.createNewView}>
+            <span className={styles.name}> CREATE NEW VIEW </span>
           </div>
-          <div className={styles.newViewButtonWrapper}>
-            <Button onClick={this.createNewView}>New View</Button>
-          </div>
+
+          {this.props.views.length > 0 &&
+            this.props.views.map(
+              (view, index) =>
+                (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
+                  <div
+                    key={index}
+                    className={styles.view}
+                    onClick={() => this.openView(view.id)}
+                  >
+                    <span className={styles.name}> {view.name} </span>
+                    <div className={styles.buttons}>
+                      <Button onClick={(event) => {event.stopPropagation(); this.openView(view.id)}}>Open</Button>
+                      <Button onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}>Edit</Button>
+                      <Button onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}>Delete</Button>
+                    </div>
+                  </div>
+                ),
+            )}
         </div>
       </div>
     );
