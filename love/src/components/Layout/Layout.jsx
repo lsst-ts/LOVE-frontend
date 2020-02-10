@@ -46,7 +46,6 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      innerWidth: 0,
       collapsedLogo: false,
       viewOnNotch: true,
       sidebarVisible: false,
@@ -111,7 +110,6 @@ class Layout extends Component {
     const innerWidth = window.innerWidth;
     console.log('innerWidth: ', innerWidth);
     this.setState({
-      innerWidth: innerWidth,
       collapsedLogo: BREAK_2 < innerWidth && innerWidth <= BREAK_1 || innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
     });
@@ -147,7 +145,10 @@ class Layout extends Component {
       <>
         <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
           <div
-            className={[styles.leftNotchContainer, this.state.collapsedLogo ? styles.collapsedLogo : null].join(' ')}
+            className={[
+              styles.leftNotchContainer,
+              this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
+            ].join(' ')}
             onClick={this.toggleSidebar}
           >
             <div className={styles.leftTopbar}>
@@ -155,7 +156,6 @@ class Layout extends Component {
               <span className={styles.divider}> {this.state.title ? '' : ''} </span>
               <span className={styles.text}>
                 {this.state.viewOnNotch ? this.state.title : ''}
-                {/*{this.state.innerWidth + ' '}*/}
               </span>
             </div>
             <NotchCurve className={styles.notchCurve} />
