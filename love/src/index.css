@@ -40,7 +40,7 @@ body {
   --second-senary-background-color: hsl(201, 40%, 81%);
   --second-senary-background-dimmed-color: hsl(201, 40%, 81%, 0.3);
   --second-base-font-color: hsl(240, 4%, 90%, 0.7);
-  --sidebar-background-color: hsla(202, 36%, 13%, 80%);
+  --sidebar-background-color: hsla(202, 36%, 13%, 90%);
 
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
