@@ -91,7 +91,7 @@ class ViewEditor extends Component {
         layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       });
     } else {
-      if (this.props.loadViewToEdit(id) === undefined) this.props.requestViewToEdit(id);
+      if (this.props.loadViewToEdit(id) === undefined && !isNaN(id)) this.props.requestViewToEdit(id);
       this.setState({
         id,
       });
@@ -223,7 +223,7 @@ class ViewEditor extends Component {
     this.hideConfigModal();
     this.setState({
       customViewKey: Math.random(),
-    })
+    });
   };
 
   hideSelectionModal = () => {

@@ -80,7 +80,7 @@ class Layout extends Component {
       });
     } else {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-      if (id && id !== this.state.id) {
+      if (id && id !== this.state.id && !isNaN(id)) {
         const view = this.props.getCurrentView(id);
         this.setState({ id, title: view ? view.name : null });
       } else if (!id && this.state.id) {
