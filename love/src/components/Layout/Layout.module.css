@@ -102,25 +102,41 @@
   width: 25ch;
   box-sizing: border-box;
   text-align: left;
-  padding: 2em 0;
   transition: all 0.5s ease-in-out;
   background-color: var(--sidebar-background-color);
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-  font-size: 1em;
 }
 
-.sidebar p {
+.sidebar .viewName {
+  text-align: center;
+  padding: 1em 1em 0.5em 1em;
+  line-height: 1.2em;
+  height: 1.2em;
+}
+
+.sidebar .menu {
+  padding: 1em 0;
+  margin: 0;
+}
+
+.sidebar .showName {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.sidebar .menu p {
   margin: 0;
   padding: 0.5em 1em;
 }
 
-.sidebar p:hover {
+.sidebar .menu p:hover {
   cursor: pointer;
   background-color: var(--second-quaternary-background-color);
 }
 
-.sidebar .link{
+.sidebar .menu .link{
   color: var(--base-font-color);
 }
 

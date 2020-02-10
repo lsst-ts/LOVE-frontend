@@ -207,12 +207,17 @@ class Layout extends Component {
         </div>
 
         <div className={[styles.sidebar, !this.state.sidebarVisible ? styles.hidden : null].join(' ')}>
-          <p>
-            <Link className={styles.link} to="/">Home</Link>
-          </p>
-          <p>
-            <Link className={styles.link} to="/uif">Views Index</Link>
-          </p>
+          <div className={styles.viewName}>
+            {!this.state.viewOnNotch ? this.state.title : ' '}
+          </div>
+          <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
+            <p>
+              <Link className={styles.link} to="/">Home</Link>
+            </p>
+            <p>
+              <Link className={styles.link} to="/uif">Views Index</Link>
+            </p>
+          </div>
         </div>
 
         <div className={styles.contentWrapper}>
