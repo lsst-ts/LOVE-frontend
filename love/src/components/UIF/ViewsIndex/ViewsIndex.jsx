@@ -82,10 +82,18 @@ class ViewsIndex extends Component {
                   >
                     <span className={styles.name}> {view.name} </span>
                     <div className={styles.buttons}>
-                      <Button title="Edit" onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}>
+                      <Button
+                        className={styles.iconButton}
+                        title="Edit"
+                        onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}
+                      >
                         <EditIcon className={styles.icon}/>
                       </Button>
-                      <Button title="Delete" onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}>
+                      <Button
+                        className={styles.iconButton}
+                        title="Delete"
+                        onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}
+                      >
                         <DeleteIcon className={styles.icon}/>
                       </Button>
                     </div>
