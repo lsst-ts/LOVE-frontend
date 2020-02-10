@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates } from '../../redux/reducers/uif';
@@ -126,7 +126,7 @@ class Layout extends Component {
     });
     const innerWidth = window.innerWidth;
     this.setState({
-      collapsedLogo: BREAK_2 < innerWidth && innerWidth <= BREAK_1 || innerWidth <= BREAK_3,
+      collapsedLogo: (BREAK_2 < innerWidth && innerWidth <= BREAK_1) || innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
     });
   };
