@@ -10,7 +10,9 @@ import {
   requestWorkspace,
   receiveWorkspaces,
   requestViews,
+  requestViewToEdit,
   receiveViews,
+  receiveView,
   updateEditedView,
   saveEditedView,
   savedEditedView,
@@ -71,7 +73,7 @@ const mockWorkspaces = [
   },
 ];
 
-const mockViews = [
+const detailedMockViews = [
   {
     id: 0,
     creation_timestamp: '2019-11-18T18:36:54.570Z',
@@ -91,6 +93,17 @@ const mockViews = [
       key1: 'value1',
       key2: 'value2',
     },
+  },
+];
+
+const mockViews = [
+  {
+    id: 0,
+    name: 'My-view-0',
+  },
+  {
+    id: 1,
+    name: 'My-view-1',
   },
 ];
 
@@ -141,7 +154,7 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the views are requested, THEN the state should contain the views', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
     fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
@@ -178,7 +191,7 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
   it('WHEN the views request fails due to unauthentication, THEN the state views should be empty', async () => {
     // Arrange:
     const responseBody = { detail: "Authentication credentials were not provided."};
-    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
     fetchMock.mock(url, {status: 401, body: responseBody}, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
@@ -208,7 +221,7 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
   it('WHEN the views request fails due to permissions, THEN the state views should be empty', async () => {
     // Arrange:
     const responseBody = { detail: "Unautorized."};
-    const url = `${ManagerInterface.getUifBaseUrl()}views`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
     fetchMock.mock(url, {status: 403, body: responseBody}, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
@@ -309,7 +322,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
   it('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views/`;
-    fetchMock.post(url, {status: 201, body: newViewData} , ManagerInterface.getHeaders());
+    fetchMock.post(url, {status: 201, body: newViewData}, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(saveEditedView());
     // Assert:
@@ -403,7 +416,10 @@ describe('Load view to edit. GIVEN the store contains views', () => {
 
   it('WHEN one of the views is loaded to edit, THEN the editedView should be updated', async () => {
     // Act:
-    await store.dispatch(loadViewToEdit(1));
+    const url = `${ManagerInterface.getUifBaseUrl()}views/1`;
+    fetchMock.mock(url, {...detailedMockViews[1]}, ManagerInterface.getHeaders());
+    await store.dispatch(requestViewToEdit(1));
+    await store.dispatch(receiveView(detailedMockViews[1]));
     // Assert:
     const status = getEditedViewStatus(store.getState());
     const current = getEditedViewCurrent(store.getState());
@@ -412,14 +428,14 @@ describe('Load view to edit. GIVEN the store contains views', () => {
       code: editViewStates.SAVED,
       details: null,
     });
-    expect(current).toEqual(mockViews[1]);
-    expect(saved).toEqual(mockViews[1]);
-    expect(current).not.toBe(mockViews[1]);
-    expect(current.data).not.toBe(mockViews[1].data);
-    expect(saved).not.toBe(mockViews[1]);
+    expect(current).toEqual(detailedMockViews[1]);
+    expect(saved).toEqual(detailedMockViews[1]);
+    expect(current).not.toBe(detailedMockViews[1]);
+    expect(current.data).not.toBe(detailedMockViews[1].data);
+    expect(saved).not.toBe(detailedMockViews[1]);
     expect(saved).not.toBe(current);
     expect(saved.data).not.toBe(current.data);
-    expect(saved.data).not.toBe(mockViews[1].data);
+    expect(saved.data).not.toBe(detailedMockViews[1].data);
   });
 
   it('GIVEN one of the views is loaded to edit, WHEN we clear it, THEN the editedView should be cleared', async () => {

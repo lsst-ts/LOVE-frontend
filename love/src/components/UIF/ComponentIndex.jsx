@@ -50,38 +50,45 @@ export const uifIndex = {
   ObservingLogMessages: {
     component: require('../ObservingLog/ObservingLogMessages.container').default,
     schema: require('../ObservingLog/ObservingLogMessages.container').schema,
+  },
+  HealthStatusSummary: {
+    component: require('../HealthStatusSummary/HealthStatusSummary.container').default,
+    schema: require('../HealthStatusSummary/HealthStatusSummary.container').schema,
+  },
+  InteractiveTimeSeries: {
+    component: require('../TimeSeries/TimeSeries.container').default,
+    schema: require('../TimeSeries/TimeSeries.container').schema,
   }
 };
 
 export const auxtelIndex = {
-    MountSummaryPanel: {
-      component: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
-      schema: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema,
-    },
-    LightPath: {
-      component: require('../AuxTel/Mount/LightPath.container').default,
-      schema: require('../AuxTel/Mount/LightPath.container').schema,
-    },
-    MotorTable: {
-      component: require('../AuxTel/Mount/MotorTable/MotorTable.container').default,
-      schema: require('../AuxTel/Mount/MotorTable/MotorTable.container').schema,
-    },
-    Camera: {
-      component: require('../AuxTel/Camera/Camera.container').default,
-      schema: require('../AuxTel/Camera/Camera.container').schema,
-    },
-    Dome: {
-      component: require('../AuxTel/Dome/Dome.container').default,
-      schema: require('../AuxTel/Dome/Dome.container').schema,
-    },
-    LATISS: {
-      component: require('../AuxTel/LATISS/LATISS.container').default,
-      schema: require('../AuxTel/LATISS/LATISS.container').schema,
-    },
+  MountSummaryPanel: {
+    component: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
+    schema: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema,
+  },
+  LightPath: {
+    component: require('../AuxTel/Mount/LightPath.container').default,
+    schema: require('../AuxTel/Mount/LightPath.container').schema,
+  },
+  MotorTable: {
+    component: require('../AuxTel/Mount/MotorTable/MotorTable.container').default,
+    schema: require('../AuxTel/Mount/MotorTable/MotorTable.container').schema,
+  },
+  Camera: {
+    component: require('../AuxTel/Camera/Camera.container').default,
+    schema: require('../AuxTel/Camera/Camera.container').schema,
+  },
+  Dome: {
+    component: require('../AuxTel/Dome/Dome.container').default,
+    schema: require('../AuxTel/Dome/Dome.container').schema,
+  },
+  LATISS: {
+    component: require('../AuxTel/LATISS/LATISS.container').default,
+    schema: require('../AuxTel/LATISS/LATISS.container').schema,
+  },
 };
 
-export const mainIndex = {
-};
+export const mainIndex = {};
 
 export const indexes = [
   {

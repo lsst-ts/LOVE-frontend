@@ -81,10 +81,12 @@ export default class CustomView extends Component {
     if (this.props.location) {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
       if (id !== null) {
-        const loadedView = this.props.getCurrentView(id);
-        this.setState({
-          loadedView: loadedView || {},
-          id,
+        this.props.requestView(id).then(() => {
+          const loadedView = this.props.getCurrentView(id);
+          this.setState({
+            loadedView: loadedView || {},
+            id,
+          });
         });
       }
     }
