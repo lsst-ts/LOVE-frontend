@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates } from '../../redux/reducers/uif';
@@ -10,8 +10,13 @@ import Button from '../GeneralPurpose/Button/Button';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
+import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import styles from './Layout.module.css';
+
+const BREAK_1 = 710;
+const BREAK_2 = 630;
+const BREAK_3 = 375;
 
 class Layout extends Component {
   static propTypes = {
@@ -42,26 +47,36 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      collapsedLogo: false,
+      viewOnNotch: true,
+      sidebarVisible: false,
       settingsVisible: false,
       id: null,
       title: null,
     };
   }
 
+  componentWillMount = () => {
+    this.handleResize();
+    document.addEventListener('mousedown', this.handleClick, false);
+    window.addEventListener('resize', this.handleResize);
+  };
+
+  componentWillUnmount = () => {
+    document.removeEventListener('mousedown', this.handleClick, false);
+    window.removeEventListener('resize', this.handleResize);
+  };
+
   componentDidUpdate = (prevProps, _prevState) => {
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
     if (id && id !== this.state.id) {
       const view = this.props.getCurrentView(id);
       this.setState({ id, title: view ? view.name : null });
-    }
-    else if (!id && this.state.id) {
+    } else if (!id && this.state.id) {
       this.setState({ id: null, title: null });
     }
 
-    if (
-      prevProps.viewsStatus === viewsStates.LOADING &&
-      this.props.viewsStatus === viewsStates.LOADED
-    ) {
+    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
       const view = this.props.getCurrentView(this.state.id);
       this.setState({
         title: view ? view.name : null,
@@ -82,22 +97,26 @@ class Layout extends Component {
     }
   };
 
-  componentWillMount = () => {
-    document.addEventListener('mousedown', this.handleClick, false);
-  };
-
-  componentWillUnmount = () => {
-    document.removeEventListener('mousedown', this.handleClick, false);
-  };
-
   handleClick = (event) => {
-    if (this.node && !this.node.contains(event.target)) {
-      this.closeMenu();
+    if (this.dropdown && !this.dropdown.contains(event.target)) {
+      this.setState({ settingsVisible: false });
+    }
+    if (this.sidebar && !this.sidebar.contains(event.target) &&
+        this.leftNotch && !this.leftNotch.contains(event.target)) {
+      this.setState({ sidebarVisible: false });
     }
   };
 
-  closeMenu = () => {
-    this.setState({ settingsVisible: false });
+  handleResize = () => {
+    this.setState({
+      collapsedLogo: true,
+      viewOnNotch: false,
+    });
+    const innerWidth = window.innerWidth;
+    this.setState({
+      collapsedLogo: BREAK_2 < innerWidth && innerWidth <= BREAK_1 || innerWidth <= BREAK_3,
+      viewOnNotch: BREAK_2 < innerWidth,
+    });
   };
 
   toggleSettings = () => {
@@ -113,24 +132,46 @@ class Layout extends Component {
     this.props.history.push('/uif/view-editor?id=' + id);
   };
 
+  navigateTo = (url) => {
+    this.setState({ sidebarVisible: false });
+    this.props.history.push(url);
+  }
+
+  toggleCollapsedLogo = () => {
+    this.setState({ collapsedLogo: !this.state.collapsedLogo });
+  };
+
+  toggleSidebar = () => {
+    this.setState({ sidebarVisible: !this.state.sidebarVisible });
+  };
+
   render() {
     return (
       <>
-        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
-
-          <div className={styles.leftNotchContainer} onClick={() => this.props.history.push('/') }>
+        <div className={[styles.topbar, this.props.token ? null : styles.logoHidden].join(' ')}>
+          <div
+            className={[
+              styles.leftNotchContainer,
+              this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
+            ].join(' ')}
+            ref={(node) => (this.leftNotch = node)}
+            onClick={this.toggleSidebar}
+          >
             <div className={styles.leftTopbar}>
-              <LogoIcon className={styles.logo}/>
-              <span className={styles.divider}> {this.state.title ? '|' : ''} </span>
-              <span className={styles.text}> {this.state.title} </span>
+              <MenuIcon className={styles.logo} />
+              <LogoIcon className={styles.logo} />
+              <span className={styles.divider}> {this.state.title ? '' : ''} </span>
+              <span className={styles.text}>
+                {this.state.viewOnNotch ? this.state.title : ''}
+              </span>
             </div>
-            <NotchCurve className={styles.notchCurve}/>
+            <NotchCurve className={styles.notchCurve} />
           </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
-            <NotchCurve className={styles.notchCurve} flip='true'/>
+            <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
               <Button
@@ -143,39 +184,58 @@ class Layout extends Component {
                 <NotificationIcon className={styles.icon} />
               </Button>
 
-              <span className={styles.refNode} ref={(node) => (this.node = node)}>
-
+              <span className={styles.refNode} ref={(node) => (this.dropdown = node)}>
                 <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
                   <GearIcon className={styles.icon} />
-                  {this.state.settingsVisible && (
-                    <div className={styles.settingsDropdown}>
-                      <div
-                        className={this.state.id ? styles.menuElement : styles.disabledElement}
-                        title="Edit view"
-                        onClick={() => {this.editView(this.state.id)}}
-                      >
-                        Edit view
-                      </div>
-                      <div
-                        className={styles.menuElement}
-                        title="New view"
-                        onClick={this.createNewView}
-                      >
-                        Create new View
-                      </div>
-                      <span className={styles.divider} />
-                      <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                        Logout
-                      </div>
+                  <div className={[
+                    styles.settingsDropdown,
+                    this.state.settingsVisible ? styles.settingsVisible : ''
+                  ].join(' ')}>
+                    <div
+                      className={this.state.id ? styles.menuElement : styles.disabledElement}
+                      title="Edit view"
+                      onClick={() => {
+                        if (this.state.id) {
+                          this.editView(this.state.id);
+                        }
+                      }}
+                    >
+                      Edit view
                     </div>
-                  )}
+                    <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
+                      Create new View
+                    </div>
+                    <span className={styles.divider} />
+                    <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
+                      Logout
+                    </div>
+                  </div>
                 </Button>
               </span>
             </div>
           </div>
         </div>
 
-        <div className={styles.contentWrapper}>{this.props.children}</div>
+        <div
+          ref={(node) => (this.sidebar = node)}
+          className={[styles.sidebar, !this.state.sidebarVisible ? styles.sidebarHidden : null].join(' ')}
+        >
+          <div className={styles.viewName}>
+            {!this.state.viewOnNotch ? this.state.title : ' '}
+          </div>
+          <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
+            <p onClick={() => this.navigateTo("/")}>
+              Home
+            </p>
+            <p onClick={() => this.navigateTo("/uif")}>
+              Views Index
+            </p>
+          </div>
+        </div>
+
+        <div className={styles.contentWrapper}>
+          {this.props.children}
+        </div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>

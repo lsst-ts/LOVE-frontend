@@ -11,21 +11,36 @@
   display: inline-flex;
   justify-content: flex-start;
   cursor: pointer;
+  box-sizing: border-box;
+  transition: all 0.5s ease-in-out;
 }
 
 .leftTopbar {
-  padding: 0.5em 1em;
+  padding: 0.5em 0 0.5em 0.5em;
+  position: relative;
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(2, min-content) max-content;
-  grid-gap: 1em;
+  grid-template-columns: repeat(3, min-content) max-content;
+  grid-gap: 0.5em;
   align-items: center;
 }
 
 .leftTopbar .logo {
-  height: 1.6em;
+  height: 1.4em;
+  /* margin-right: 0.5em; */
   fill: var(--base-font-color);
+}
+
+.collapsedLogo {
+  margin-left: -6.3em;
+}
+
+.leftTopbar .text {
+  font-size: 1.2em;
+  padding-top: 0.2em;
+  height: fit-content;
+  vertical-align: middle;
 }
 
 .leftTopbar .divider {
@@ -45,7 +60,7 @@
 .rightTopbar {
   margin-left: -1px;
   position: relative;
-  padding: 0.5em var(--content-padding);
+  padding: 0.5em var(--content-padding) 0.5em 0;
   background-color: var(--tertiary-background-color);
   text-align: right;
   display: grid;
@@ -79,6 +94,56 @@
   height: 1.4em;
 }
 
+.sidebar {
+  position: absolute;
+  display: block;
+  height: 100%;
+  z-index: 1000;
+  width: 25ch;
+  box-sizing: border-box;
+  text-align: left;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--sidebar-background-color);
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.sidebar .viewName {
+  text-align: center;
+  padding: 1em 1em 0.5em 1em;
+  line-height: 1.2em;
+  height: 1.2em;
+}
+
+.sidebar .menu {
+  padding: 1em 0;
+  margin: 0;
+}
+
+.sidebar .showName {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.sidebar .menu p {
+  margin: 0;
+  padding: 0.5em 1em;
+}
+
+.sidebar .menu p:hover {
+  cursor: pointer;
+  background-color: var(--second-quaternary-background-color);
+}
+
+.sidebar .menu .link{
+  color: var(--base-font-color);
+}
+
+.sidebarHidden {
+  margin-left: -200px;
+}
+
 
 .settingsDropdown {
   background-color: var(--tertiary-background-color);
@@ -92,6 +157,15 @@
   height: fit-content;
   top: 3.2em;
   right: 1em;
+  opacity: 0;
+  transition: visibility 0.2s, opacity 0.2s ease-in-out;
+  visibility: hidden;
+}
+
+
+.settingsVisible {
+  opacity: 1;
+  visibility: visible;
 }
 
 .settingsDropdown .menuElement {
