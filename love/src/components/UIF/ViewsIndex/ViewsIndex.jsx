@@ -3,9 +3,11 @@ import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
+import EditIcon from '../../icons/EditIcon/EditIcon';
+import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 
 import styles from './ViewsIndex.module.css';
-import Input from '../../GeneralPurpose/Input/Input';
 
 class ViewsIndex extends Component {
   static propTypes = {
@@ -56,33 +58,52 @@ class ViewsIndex extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <h1>UI Framework</h1>
+        <div className={styles.filterWrapper}>
+          <div className={styles.filter}>
+            <div className={styles.filterLabel}>Filter:</div>
+            <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
+          </div>
+        </div>
         <div className={styles.availableViewsWrapper}>
-          <div className={styles.availableViewsBar}>
-            <h2 className={styles.availableViewsTitle}>Available Views</h2>
-            <div>
-              <span className={styles.filterLabel}>Filter:</span>
-              <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
+
+          <div title="Create a New View" className={styles.view} onClick={this.createNewView}>
+            <div className={[styles.preview, styles.new].join(' ')}>
+              <div className={styles.plus}> + </div>
             </div>
-            {this.props.views.length > 0 &&
-              this.props.views.map(
-                (view, index) =>
-                  (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
-                    <React.Fragment key={index}>
-                      <span className={[styles.linkListItem, styles.viewIndex].join(' ')}> {`${index + 1}. `} </span>
-                      <span className={[styles.linkListItem, styles.viewName].join(' ')}> {view.name} </span>
-                      <div className={[styles.linkListItem, styles.buttons].join(' ')}>
-                        <Button onClick={() => this.openView(view.id)}>Open</Button>
-                        <Button onClick={() => this.editView(view.id)}>Edit</Button>
-                        <Button onClick={() => this.deleteView(view.id)}>Delete</Button>
-                      </div>
-                    </React.Fragment>
-                  ),
-              )}
+            <div className={styles.name}> CREATE NEW VIEW </div>
           </div>
-          <div className={styles.newViewButtonWrapper}>
-            <Button onClick={this.createNewView}>New View</Button>
-          </div>
+
+          {this.props.views.length > 0 &&
+            this.props.views.map(
+              (view, index) =>
+                (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
+                  <div
+                    title="Open"
+                    key={index}
+                    className={styles.view}
+                    onClick={() => this.openView(view.id)}
+                  >
+                    <div className={styles.preview}> </div>
+                    <div className={styles.name}> {view.name} </div>
+                    <div className={styles.buttons}>
+                      <Button
+                        className={styles.iconButton}
+                        title="Edit"
+                        onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}
+                      >
+                        <EditIcon className={styles.icon}/>
+                      </Button>
+                      <Button
+                        className={styles.iconButton}
+                        title="Delete"
+                        onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}
+                      >
+                        <DeleteIcon className={styles.icon}/>
+                      </Button>
+                    </div>
+                  </div>
+                ),
+            )}
         </div>
       </div>
     );

@@ -27,13 +27,12 @@
 }
 
 .leftTopbar .logo {
-  height: 1.4em;
-  /* margin-right: 0.5em; */
+  height: 1.3em;
   fill: var(--base-font-color);
 }
 
 .collapsedLogo {
-  margin-left: -6.3em;
+  margin-left: -5.9em;
 }
 
 .leftTopbar .text {
