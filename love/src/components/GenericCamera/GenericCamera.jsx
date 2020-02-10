@@ -14,6 +14,7 @@ export const schema = {
     },
   },
 };
+
 /**
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
@@ -27,13 +28,30 @@ export default function({ serverURL = 'http://localhost/gencam' }) {
   const [retryCount, setRetryCount] = useState(0);
 
   const canvasRef = useRef(null);
+
   useEffect(() => {
     /** Start the stream once and update image size on every receive
      *  Retry if connection fails
      */
+
+    let retryTimeout;
+
+    const retryFetch = (error) => {
+      if (retryTimeout !== undefined) clearTimeout(retryTimeout);
+      setError(error);
+      retryTimeout = setTimeout(() => {
+        setRetryCount((c) => c + 1);
+        fetchAndRetry();
+      }, 3000);
+    };
+
+    const imageErrorCallback = (error) => {
+      console.log(error);
+      retryFetch(error);
+    };
+
     const controller = new AbortController();
     const signal = controller.signal;
-    let retryTimeout;
     const fetchAndRetry = () => {
       CameraUtils.fetchImageFromStream(
         serverURL,
@@ -49,14 +67,8 @@ export default function({ serverURL = 'http://localhost/gencam' }) {
           }
         },
         signal,
-      ).catch((error) => {
-        if (retryTimeout !== undefined) clearTimeout(retryTimeout);
-        setError(error);
-        retryTimeout = setTimeout(() => {
-          setRetryCount((c) => c + 1);
-          fetchAndRetry();
-        }, 3000);
-      });
+        imageErrorCallback,
+      ).catch(retryFetch);
     };
 
     fetchAndRetry();
