@@ -144,6 +144,44 @@ export default class ScriptQueue extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
+    // const url = `${ManagerInterface.getApiBaseUrl()}validate-config-schema/`
+
+    // fetch(url,{
+    //   method: 'POST',
+    //   headers: ManagerInterface.getHeaders(),
+    //   body: JSON.stringify({
+    //     schema: `
+    //     $id: https://github.com/lsst-ts/ts_salobj/TestScript.yaml
+    //     $schema: http://json-schema.org/draft-07/schema#
+    //     additionalProperties: false
+    //     description: Configuration for TestScript
+    //     properties:
+    //       fail_cleanup:
+    //         default: false
+    //         description: If true then raise an exception in the "cleanup" method.
+    //         type: boolean
+    //       fail_run:
+    //         default: false
+    //         description: If true then raise an exception in the "run" method afer the "start"
+    //           checkpoint but before waiting.
+    //         type: boolean
+    //       wait_time:
+    //         default: 0
+    //         description: Time to wait, in seconds
+    //         minimum: 0
+    //         type: number
+    //     required:
+    //     - wait_time
+    //     - fail_run
+    //     - fail_cleanup
+    //     title: TestScript v1
+    //     type: object        
+    //       `,
+    //     config: 'wait_time: 10'
+    //   })
+    // }).then(r=>r.json()).then(r=>{
+    //   debugger;
+    // })
   };
 
   componentWillUnmount = () => {
@@ -503,7 +541,6 @@ export default class ScriptQueue extends Component {
     ];
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
-
     return (
       <Panel title={`Script Queue   | SalIndex = ${this.props.salindex}`} fit={this.props.fit}>
         <div
@@ -670,7 +707,7 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
-                {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
+                {!this.props.running && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
                       <span>Resume</span>
@@ -680,7 +717,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </>
                 )}
-                {this.props.state === 'Running' && this.props.commandExecutePermission && (
+                {this.props.running && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
                       <span>Pause</span>

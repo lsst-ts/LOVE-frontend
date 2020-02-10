@@ -4,7 +4,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import './App.css';
 import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
 import ViewsIndexContainer from './components/UIF/ViewsIndex/ViewsIndex.container';
-import HealthStatusSummary from './components/HealthStatusSummary/HealthStatusSummary';
+import HealthStatusSummaryContainer from './components/HealthStatusSummary/HealthStatusSummary.container';
 import DataManagementFlow from './components/DataManagementFlow/DataManagementFlow';
 import LayoutContainer from './components/Layout/Layout.container';
 import LoginContainer from './components/Login/Login.container';
@@ -64,7 +64,7 @@ class App extends Component {
             <PrivateRoute
               token={this.props.token}
               path="/health-status-summary"
-              render={() => <HealthStatusSummary> </HealthStatusSummary>}
+              render={() => <HealthStatusSummaryContainer/>}
             />
             <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
             <PrivateRoute
@@ -101,9 +101,7 @@ class App extends Component {
               token={this.props.token}
               path="/aux-tel-camera"
               render={() => (
-                <Panel title="Auxiliary Telescope Camera" className={'smallPanel'} fit>
                   <CameraContainer />
-                </Panel>
               )}
             />
             <PrivateRoute token={this.props.token} path="/latiss" component={LATISSContainer} />

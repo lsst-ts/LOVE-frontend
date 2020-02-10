@@ -9,7 +9,7 @@ import {
   getUndoActionsAvailable,
   getRedoActionsAvailable,
 } from '../../../redux/selectors';
-import { updateEditedView, saveEditedView, clearViewToEdit, loadViewToEdit, changeMode } from '../../../redux/actions/uif';
+import { updateEditedView, saveEditedView, clearViewToEdit, loadViewToEdit, requestViewToEdit, changeMode } from '../../../redux/actions/uif';
 import ViewEditor from './ViewEditor';
 
 const ViewEditorContainer = ({ ...props }) => {
@@ -38,6 +38,9 @@ const mapDispatchToProps = (dispatch) => ({
   loadViewToEdit: (view) => {
     dispatch(loadViewToEdit(view));
     dispatch(ActionCreators.clearHistory());
+  },
+  requestViewToEdit: (view) => {
+    dispatch(requestViewToEdit(view));
   },
   clearViewToEdit: () => dispatch(clearViewToEdit),
   saveEditedView: () => dispatch(saveEditedView()),

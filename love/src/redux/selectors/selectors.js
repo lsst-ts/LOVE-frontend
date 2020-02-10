@@ -338,7 +338,7 @@ export const getKey = (dict, key, def) => {
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
   return {
-    state: getKey(scriptQueueData, 'state', undefined),
+    running: getKey(scriptQueueData, 'running', undefined),
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     current: getKey(scriptQueueData, 'current', 'None'),

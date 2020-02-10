@@ -12,7 +12,7 @@ export const CSCSummaryHierarchy = {
       { name: 'ATAOS', salindex: 0 },
       { name: 'ATPneumatics', salindex: 0 },
       { name: 'ATHexapod', salindex: 0 },
-      {name:'GenericCamera', salindex: 0}
+      {name:'GenericCamera', salindex: 1}
     ],
     ATCalSys: [
       { name: 'ATMonochromator', salindex: 0 },
