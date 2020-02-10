@@ -13,6 +13,12 @@ export const getHeaderInfo = (arrayBuffer) => {
 
   const decodedArray = decoder.decode(arrayBuffer);
   const sections = decodedArray.split('[END]\r\n').filter((s) => s.startsWith('[START]'));
+  if (sections.length === 0) {
+    throw Error(`
+    Server response does not contain an image block. 
+    Could not find [END] and [START]. 
+    Is the URL right? Got: ${decodedArray}`);
+  }
   const exposure = sections[0];
   // const remainder = sections.slice(1).join('');
 
@@ -75,13 +81,15 @@ export const readNextBlobFromStream = (reader, remainder) => {
       // first load the remainder from previous chunk
       let fullDecodedBuffer = decoder.decode(remainder);
       controller.enqueue(remainder);
-
       return pump();
       function pump() {
         return reader.read().then(({ done, value }) => {
           // Close it if stream closes too
           if (done) {
             controller.close();
+            if (!fullDecodedBuffer.includes('[START]') || !fullDecodedBuffer.includes('[END]')) {
+              return fullDecodedBuffer;
+            }
             return;
           }
 
@@ -119,16 +127,21 @@ export const readNextBlobFromStream = (reader, remainder) => {
  * Takes a Blob and attempts to get an image and its metadata
  * @param {Blob} blob
  */
-export const readImageDataFromBlob = (blob) => {
+export const readImageDataFromBlob = (blob, imageErrorCallback) => {
   return new Promise((resolve, reject) => {
     const fileReader = new FileReader();
-
+    fileReader.onerror = (...e) => imageErrorCallback(e);
     fileReader.onloadend = (event) => {
-      const arrayBuffer = event.target.result;
+      try{
+        const arrayBuffer = event.target.result;
 
-      const headerInfo = getHeaderInfo(arrayBuffer);
+        const headerInfo = getHeaderInfo(arrayBuffer);
 
-      resolve(headerInfo);
+        resolve(headerInfo);
+      }
+      catch(error) {
+        imageErrorCallback(error)
+      }
     };
 
     fileReader.readAsArrayBuffer(blob);
@@ -140,7 +153,7 @@ export const readImageDataFromBlob = (blob) => {
  * to draw images in a canvas from that stream.
  * @param {function} callback
  */
-export const fetchImageFromStream = (url, callback, signal) => {
+export const fetchImageFromStream = (url, callback, signal, imageErrorCallback) => {
   return fetch(url, { signal }).then(async (r) => {
     if (!r.ok) {
       const message = `(${r.status}) While fetching from http://localhost/gencam`;
@@ -152,9 +165,7 @@ export const fetchImageFromStream = (url, callback, signal) => {
 
     const animate = async () => {
       const blob = await readNextBlobFromStream(reader, remainder);
-
-      const imageDataFromBlob = await readImageDataFromBlob(blob);
-      // debugger;
+      const imageDataFromBlob = await readImageDataFromBlob(blob, imageErrorCallback);
       remainder = imageDataFromBlob.remainder;
       callback(imageDataFromBlob);
       requestAnimationFrame(animate);
