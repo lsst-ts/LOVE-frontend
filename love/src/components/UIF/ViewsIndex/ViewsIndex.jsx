@@ -82,7 +82,8 @@ class ViewsIndex extends Component {
                       <span className={styles.imageFallback}>{view.name.replace(/[a-z\s]/g, '').substring(0, 6)}</span>
                       <img
                         src={`${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}`}
-                        onError={(ev) => (ev.target.style.display = 'none')}
+                        onLoad={(ev) => (ev.target.style.display = 'block')}
+                        style={{ display: 'none' }}
                       />
                     </div>
                     <div className={styles.name}> {view.name} </div>

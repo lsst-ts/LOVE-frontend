@@ -27,7 +27,7 @@
   margin-top: 2em;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(35ch, 1fr));
-  grid-auto-rows: minmax(15em, auto);
+  grid-auto-rows: minmax(5em, auto);
   grid-gap: 1em;
 }
 
