@@ -54,6 +54,7 @@
 }
 
 .messageText {
+  max-width: 50vw;
   padding-bottom: 0.5em;
 }
 
