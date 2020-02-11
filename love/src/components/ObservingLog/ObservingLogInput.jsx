@@ -13,6 +13,8 @@ export default class ObservingLogInput extends Component {
     unsubscribeToStreams: PropTypes.func,
     /** Username of logged user */
     username: PropTypes.string,
+    /** Function to run when the "save" button is clicked */
+    sendMessage: PropTypes.func,
   };
 
   static defaultProps = {
@@ -21,7 +23,9 @@ export default class ObservingLogInput extends Component {
 
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      message : ''
+    };
   }
 
   componentDidMount = () => {
@@ -33,7 +37,6 @@ export default class ObservingLogInput extends Component {
   };
 
   render() {
-    console.log(this.props.username);
     return (
       <Panel title="Observing Log" className={styles.panel}>
         <div className={styles.container}>
@@ -43,9 +46,9 @@ export default class ObservingLogInput extends Component {
           </div>
           <div>
             <span className={styles.label}>Message:</span>
-            <TextArea callback={() => {}}></TextArea>
+            <TextArea callback={(content) => this.setState({message: content})}></TextArea>
           </div>
-          <Button>Save</Button>
+          <Button onClick={(e)=>this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
         </div>
       </Panel>
     );
