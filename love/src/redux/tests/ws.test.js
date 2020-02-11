@@ -2,7 +2,12 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
+import {
+  requestSALCommand,
+  openWebsocketConnection,
+  requestGroupSubscription,
+  sendLOVECscObservingLogs,
+} from '../actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import { SALCommandStatus } from '../actions/ws';
 import {
@@ -79,7 +84,7 @@ it('Should send a command to the server and save it on the state properly', asyn
     params: {},
     component: 'ATDome',
     cmd_id: '10-cmd_closeShutter',
-    salindex: 2
+    salindex: 2,
   };
   const realDate = Date;
   global.Date.now = () => 10;
@@ -102,6 +107,28 @@ it('Should send a command to the server and save it on the state properly', asyn
     ...commandObject,
   });
   global.Date = realDate;
+});
+
+it('Should send observationLogs to the LOVE-csc and the server should receive it properly', async () => {
+  const user = 'an user';
+  const message = 'a message';
+  await store.dispatch(sendLOVECscObservingLogs(user, message));
+
+  await expect(server).toReceiveMessage({
+    category: 'love_csc',
+    data: [
+      {
+        csc: 'love',
+        salindex: 0,
+        data: {
+          observingLog: {
+            user: 'an user',
+            message: 'a message',
+          },
+        },
+      },
+    ],
+  });
 });
 
 const compareSalIndex = (a, b) => {
@@ -390,7 +417,10 @@ it('It should extract the summary and log messages properly from the state with 
     ],
   });
 
-  const cscsList = [['ATDome', 1], ['ScriptQueue', 1]];
+  const cscsList = [
+    ['ATDome', 1],
+    ['ScriptQueue', 1],
+  ];
 
   const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 

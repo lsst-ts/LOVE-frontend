@@ -285,6 +285,33 @@ export const requestSALCommand = (data) => {
 
 export const sendLOVECscObservingLogs = (user, message) => {
   return (dispatch, getState) => {
-    console.log(user, message);
+    if (!wsPromise) {
+      dispatch(openWebsocketConnection());
+      setTimeout(() => dispatch(sendLOVECscObservingLogs(user, message)), 500);
+      return;
+    }
+
+    wsPromise.then(() => {
+      const state = getState();
+      if (state.ws.connectionState !== connectionStates.OPEN) {
+        console.warn(`Can not send observingLogs, websocket connection status is: ${state.ws.connectionState}`);
+      }
+
+      const logsObject = {
+        csc: 'love',
+        salindex: 0,
+        data: {
+          observingLog: {
+            user: user,
+            message: message,
+          },
+        },
+      };
+
+      socket.json({
+        category: 'love_csc',
+        data: [logsObject],
+      });
+    });
   };
 };
