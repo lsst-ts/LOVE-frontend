@@ -81,14 +81,15 @@ export const openWebsocketConnection = () => {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
-              } else if(stream.startIntegration ||
+              } else if (
+                stream.startIntegration ||
                 stream.raftsDetailedState ||
                 stream.shutterDetailedState ||
                 stream.imageReadinessDetailedState ||
-                stream.calibrationDetailedState) {
-                  dispatch(receiveCameraStateData(stream));
+                stream.calibrationDetailedState
+              ) {
+                dispatch(receiveCameraStateData(stream));
               }
-
             }
             if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
@@ -279,5 +280,11 @@ export const requestSALCommand = (data) => {
     });
 
     return commandID;
-  }
-}
+  };
+};
+
+export const sendLOVECscObservingLogs = (user, message) => {
+  return (dispatch, getState) => {
+    console.log(user, message);
+  };
+};
