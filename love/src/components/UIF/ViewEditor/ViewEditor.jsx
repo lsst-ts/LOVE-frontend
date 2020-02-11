@@ -75,6 +75,7 @@ class ViewEditor extends Component {
       id: null,
       editorVisible: false,
       editorChanged: false,
+      customViewKey: Math.random(), // To force component reload on config change
     };
     this.toolbar = document.createElement('div');
   }
@@ -90,7 +91,7 @@ class ViewEditor extends Component {
         layout: JSON.stringify(this.getEditedViewLayout(), null, 2),
       });
     } else {
-      if (this.props.loadViewToEdit(id) === undefined) this.props.requestViewToEdit(id);
+      if (this.props.loadViewToEdit(id) === undefined && !isNaN(id)) this.props.requestViewToEdit(id);
       this.setState({
         id,
       });
@@ -220,6 +221,9 @@ class ViewEditor extends Component {
     });
     this.updateEditedViewLayout(parsedLayout);
     this.hideConfigModal();
+    this.setState({
+      customViewKey: Math.random(),
+    });
   };
 
   hideSelectionModal = () => {
@@ -374,6 +378,7 @@ class ViewEditor extends Component {
         <div className={styles.container}>
           <div>
             <CustomView
+              key={this.state.customViewKey}
               layout={this.getEditedViewLayout()}
               onLayoutChange={this.onLayoutChange}
               onComponentDelete={this.onComponentDelete}

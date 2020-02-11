@@ -110,14 +110,6 @@ export default class TimeSeriesPlot extends Component {
       }
       return 0;
     });
-    if (
-      this.props.dataSources !== prevProps.dataSources ||
-      this.props.groupNames !== prevProps.groupNames ||
-      this.props.layers !== prevProps.layers ||
-      this.props.encoding !== prevProps.encoding
-    ) {
-      this.reloadPlot();
-    }
   };
 
   getCSSColorByVariableName = (varName) => getComputedStyle(this.vegaContainer.current).getPropertyValue(varName);

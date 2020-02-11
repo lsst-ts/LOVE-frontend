@@ -80,7 +80,7 @@ export default class CustomView extends Component {
   componentDidMount() {
     if (this.props.location) {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-      if (id !== null) {
+      if (id !== null && !isNaN(id)) {
         this.props.requestView(id).then(() => {
           const loadedView = this.props.getCurrentView(id);
           this.setState({
