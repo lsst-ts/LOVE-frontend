@@ -12,7 +12,9 @@ import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
+import html2canvas from 'html2canvas';
 import styles from './ViewEditor.module.css';
+import customViewStyles from '../CustomView.module.css';
 import SaveIcon from '../../icons/SaveIcon/SaveIcon';
 import AddIcon from '../../icons/AddIcon/AddIcon';
 import UndoIcon from '../../icons/UndoIcon/UndoIcon';
@@ -78,6 +80,7 @@ class ViewEditor extends Component {
       customViewKey: Math.random(), // To force component reload on config change
     };
     this.toolbar = document.createElement('div');
+    this.customViewRef = React.createRef();
   }
 
   componentDidMount() {
@@ -307,7 +310,9 @@ class ViewEditor extends Component {
   };
 
   save = () => {
-    this.props.saveEditedView();
+    this.takeScreenshot((thumbnail) => {
+      this.props.saveEditedView(thumbnail);
+    });
   };
 
   renderToolbar() {
@@ -372,11 +377,48 @@ class ViewEditor extends Component {
     );
   }
 
+  takeScreenshot = (callback) => {
+    html2canvas(this.customViewRef.current, {
+      allowTaint: true,
+      foreignObjectRendering: true,
+      backgroundColor: null,
+      y: 0,
+      x: 0,
+      windowWidth: window.innerWidth,
+      windowHeight: window.innerHeight,
+      ignoreElements: (el) => {
+        return typeof el.className === 'string' && el.className.includes(customViewStyles.editableComponentActions);
+      },
+    }).then((canvas) => {
+      if (canvas.width === 0 || canvas.height === 0) return callback(null);
+      const thumbnail = document.createElement('canvas');
+      const ctx = thumbnail.getContext('2d');
+      const octx = canvas.getContext('2d');
+      octx.filter = 'blur(2px)';
+      octx.drawImage(canvas, 0, 0);
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const size = 1500;
+      if (w >= h) {
+        thumbnail.width = size;
+        thumbnail.height = (size * h) / w;
+      } else {
+        thumbnail.height = size;
+        thumbnail.width = (size * w) / h;
+      }
+      ctx.drawImage(canvas, 0, 0, thumbnail.width, thumbnail.height);
+      thumbnail.style = 'position: absolute; top: 0; left: 0;';
+      canvas.style = 'position: absolute; top: 0; left: 0;';
+      document.body.appendChild(thumbnail);
+      callback(thumbnail.toDataURL('image/png'));
+    });
+  };
+
   render() {
     return (
       <>
         <div className={styles.container}>
-          <div>
+          <div ref={this.customViewRef}>
             <CustomView
               key={this.state.customViewKey}
               layout={this.getEditedViewLayout()}

@@ -96,6 +96,10 @@ export default class ManagerInterface {
     this.connectionIsOpen = false;
   }
 
+  static getMediaBaseUrl() {
+    return `http://${window.location.host}/manager`;
+  }
+
   static getApiBaseUrl() {
     return `http://${window.location.host}/manager/api/`;
   }
