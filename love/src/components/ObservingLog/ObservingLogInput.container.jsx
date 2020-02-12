@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { requestGroupSubscription, requestGroupSubscriptionRemoval, sendLOVECscObservingLogs } from '../../redux/actions/ws';
 import { getUsername } from '../../redux/selectors';
 import ObservingLogInput from './ObservingLogInput';
 
@@ -28,9 +28,8 @@ const mapDispatchToProps = (dispatch) => {
     unsubscribeToStreams: () => {
       dispatch(requestGroupSubscriptionRemoval('event-LOVE-0-observingLog'));
     },
-    sendMessage: (message) => {
-      //   return dispatch(requestSALCommand({ ...cmd, component: 'ObservingLogInput', salindex: ownProps.salindex }));
-      return;
+    sendMessage: (user, message) => {
+        return dispatch(sendLOVECscObservingLogs(user, message))
     },
   };
 };
