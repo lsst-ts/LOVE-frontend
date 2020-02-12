@@ -2,9 +2,13 @@ import React from 'react';
 import styles from './Palette.module.css';
 
 function Palette(props) {
-  const style = {
-    color: 'var(--secondary-font-color)',
-  };
+  const fontSizes = [
+    '--font-size-smaller',
+    '--font-size-small',
+    '--font-size-medium',
+    '--font-size-large',
+    '--font-size-larger',
+  ];
 
   const fontColors = [
     '--base-font-color',
@@ -36,14 +40,21 @@ function Palette(props) {
   ];
   return (
     <div className={styles.container}>
-      {/*<div className={styles.headers}>
-        <h1> h1 HEADER </h1>
-        <h2> h2 HEADER </h2>
-        <h4> h4 HEADER </h4>
-        <h5> h5 HEADER </h5>
-        <h6> h6 HEADER </h6>
-        Normal text
-      </div>*/}
+      <div className={styles.texts}>
+        <div>
+          <h1> h1 HEADER </h1>
+          <h2> h2 HEADER </h2>
+          <h4> h4 HEADER </h4>
+          <h5> h5 HEADER </h5>
+          <h6> h6 HEADER </h6>
+          Normal text
+        </div>
+        <div>
+          {fontSizes.map( fontSize => (
+            <div style={{fontSize: `var(${fontSize})`}}> {fontSize} </div>
+          ))}
+        </div>
+      </div>
 
       <h1> REGULAR BACKGROUNDS AND FOREGROUNDS </h1>
       {fontColors.map(fontColor => (
