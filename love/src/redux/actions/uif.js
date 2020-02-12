@@ -293,7 +293,7 @@ export function requestWorkspace(id) {
  *
  * @return {object}    the dispatched action
  */
-export function saveEditedView() {
+export function saveEditedView(thumbnail) {
   return async (dispatch, getState) => {
     const current = getEditedViewCurrent(getState());
     dispatch(savingEditedView);
@@ -301,7 +301,7 @@ export function saveEditedView() {
     let url = `${ManagerInterface.getUifBaseUrl()}views/`;
     let method = 'POST';
     let expectedCode = 201;
-    const dataToSend = { ...saved, name: current.name, data: current.data };
+    const dataToSend = { ...saved, name: current.name, data: current.data, thumbnail };
 
     if (saved !== undefined && saved.id !== undefined) {
       url = `${ManagerInterface.getUifBaseUrl()}views/${saved.id}/`;

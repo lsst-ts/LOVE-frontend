@@ -26,7 +26,7 @@
 .availableViewsWrapper {
   margin-top: 2em;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25ch, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(35ch, 1fr));
   grid-auto-rows: minmax(5em, auto);
   grid-gap: 1em;
 }
@@ -34,13 +34,15 @@
 .view {
   display: grid;
   cursor: pointer;
-  grid-template-rows: 8em min-content min-content;
+  grid-template-rows: 11em min-content min-content;
   grid-gap: 0.5em;
   padding: 0.5em;
   border: 1px solid transparent;
   border-radius: 7px;
   color: var(--base-font-color);
   background-color: var(--second-secondary-background-color);
+  position: relative;
+  padding-bottom: 0;
 }
 
 .view .name {
@@ -52,6 +54,16 @@
   width: 100%;
   box-sizing: border-box;
   border: 1px dashed var(--secondary-font-color);
+  position: relative;
+}
+
+.view .preview img {
+  max-height: 100%;
+  max-width: 100%;
+  background-color: var(--second-secondary-background-color);
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .view .new {
@@ -69,10 +81,18 @@
 }
 
 .view .buttons {
-  display: grid;
   grid-template-columns: min-content min-content;
   grid-gap: 0.5em;
   justify-content: center;
+
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  display: none;
+}
+
+.view:hover .buttons {
+  display: grid;
 }
 
 .iconButton {
@@ -80,10 +100,27 @@
   height: 2em;
   width: 2em;
   padding: 0.1em 0 0 0;
+  border: 1px solid var(--secondary-font-color);
 }
 
 .icon {
   height: 1em;
   width: 1em;
   fill: var(--base-font-color);
+}
+
+.imageFallback {
+  position: absolute;
+  border-radius: 10em;
+  border: 1px solid var(--secondary-font-color);
+  top: 50%;
+  left: 50%;
+  height: 3.5em;
+  width: 3.5em;
+  transform: translate(-50%, -50%);
+  line-height: 3.5em;
+  text-align: center;
+  font-size: 1.3em;
+  background-color: var(--second-secondary-background-color);
+  font-weight: bold;
 }
