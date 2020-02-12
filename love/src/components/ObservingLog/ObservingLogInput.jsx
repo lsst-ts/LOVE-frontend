@@ -24,7 +24,7 @@ export default class ObservingLogInput extends Component {
   constructor() {
     super();
     this.state = {
-      message : ''
+      message: '',
     };
   }
 
@@ -36,6 +36,9 @@ export default class ObservingLogInput extends Component {
     this.props.unsubscribeToStreams();
   };
 
+  onTextChange = (content) => {
+    this.setState({ message: content });
+  };
   render() {
     return (
       <Panel title="Observing Log" className={styles.panel}>
@@ -46,9 +49,9 @@ export default class ObservingLogInput extends Component {
           </div>
           <div>
             <span className={styles.label}>Message:</span>
-            <TextArea callback={(content) => this.setState({message: content})}></TextArea>
+            <TextArea callback={this.onTextChange}></TextArea>
           </div>
-          <Button onClick={(e)=>this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
+          <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
         </div>
       </Panel>
     );
