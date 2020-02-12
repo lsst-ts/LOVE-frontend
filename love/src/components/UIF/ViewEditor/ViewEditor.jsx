@@ -407,9 +407,9 @@ class ViewEditor extends Component {
         thumbnail.width = (size * w) / h;
       }
       ctx.drawImage(canvas, 0, 0, thumbnail.width, thumbnail.height);
-      thumbnail.style = 'position: absolute; top: 0; left: 0;';
-      canvas.style = 'position: absolute; top: 0; left: 0;';
-      document.body.appendChild(thumbnail);
+      // thumbnail.style = 'position: absolute; top: 0; left: 0;';
+      // canvas.style = 'position: absolute; top: 0; left: 0;';
+      // document.body.appendChild(thumbnail);
       callback(thumbnail.toDataURL('image/png'));
     });
   };
