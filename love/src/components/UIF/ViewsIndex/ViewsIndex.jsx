@@ -74,17 +74,25 @@ class ViewsIndex extends Component {
           </div>
 
           {this.props.views.length > 0 &&
-            this.props.views.map(
-              (view, index) =>
+            this.props.views.map((view, index) => {
+              let viewName = view.name.replace(/[a-z\s]/g, '').substring(0, 6);
+              let imgURL = view.thumbnail ? `${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}` : '';
+              if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
+              return (
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
                   <div title="Open" key={index} className={styles.view} onClick={() => this.openView(view.id)}>
                     <div className={styles.preview}>
-                      <span className={styles.imageFallback}>{view.name.replace(/[a-z\s]/g, '').substring(0, 6)}</span>
-                      <img
-                        src={`${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}`}
-                        onLoad={(ev) => (ev.target.style.display = 'block')}
-                        style={{ display: 'none' }}
-                      />
+                      <div className={styles.viewOverlay}>
+                        <img
+                          src={imgURL}
+                          onLoad={(ev) => {
+                            ev.target.parentNode.className += ` ${styles.hasThumbnail}`;
+                            ev.target.style.display = 'block';
+                          }}
+                          style={{ display: 'none' }}
+                        />
+                      </div>
+                      <span className={styles.imageFallback}>{viewName}</span>
                     </div>
                     <div className={styles.name}> {view.name} </div>
                     <div className={styles.buttons}>
@@ -110,8 +118,9 @@ class ViewsIndex extends Component {
                       </Button>
                     </div>
                   </div>
-                ),
-            )}
+                )
+              );
+            })}
         </div>
       </div>
     );
