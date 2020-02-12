@@ -12,6 +12,7 @@ import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } 
 import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat } from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
+import { receiveObservingLog } from './observingLogs';
 
 export const connectionStates = {
   OPENING: 'OPENING',
@@ -81,14 +82,15 @@ export const openWebsocketConnection = () => {
                 dispatch(receiveImageSequenceData(stream));
               } else if (stream.imageReadoutParameters) {
                 dispatch(receiveReadoutData(stream));
-              } else if(stream.startIntegration ||
+              } else if (
+                stream.startIntegration ||
                 stream.raftsDetailedState ||
                 stream.shutterDetailedState ||
                 stream.imageReadinessDetailedState ||
-                stream.calibrationDetailedState) {
-                  dispatch(receiveCameraStateData(stream));
+                stream.calibrationDetailedState
+              ) {
+                dispatch(receiveCameraStateData(stream));
               }
-
             }
             if (data.data[0].csc === 'ScriptHeartbeats') {
               if (
@@ -127,6 +129,10 @@ export const openWebsocketConnection = () => {
 
           if (data.category === 'ack') {
             dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, data.data[0].data.stream.result));
+          }
+
+          if (data.data[0].data.observingLog) {
+            dispatch(receiveObservingLog(data.data[0].data.observingLog));
           }
 
           data.data.forEach((stream) => {
@@ -279,5 +285,38 @@ export const requestSALCommand = (data) => {
     });
 
     return commandID;
-  }
-}
+  };
+};
+
+export const sendLOVECscObservingLogs = (user, message) => {
+  return (dispatch, getState) => {
+    if (!wsPromise) {
+      dispatch(openWebsocketConnection());
+      setTimeout(() => dispatch(sendLOVECscObservingLogs(user, message)), 500);
+      return;
+    }
+
+    wsPromise.then(() => {
+      const state = getState();
+      if (state.ws.connectionState !== connectionStates.OPEN) {
+        console.warn(`Can not send observingLogs, websocket connection status is: ${state.ws.connectionState}`);
+      }
+
+      const logsObject = {
+        csc: 'love',
+        salindex: 0,
+        data: {
+          observingLog: {
+            user: user,
+            message: message,
+          },
+        },
+      };
+
+      socket.json({
+        category: 'love_csc',
+        data: [logsObject],
+      });
+    });
+  };
+};

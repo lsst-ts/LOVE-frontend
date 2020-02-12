@@ -6,7 +6,7 @@ export default function TextArea({ callback }) {
 
   const onChange = (e) => {
     setContent(e.target.value);
-    callback(content);
+    callback(e.target.value);
   };
   return <textarea className={styles.textarea} onChange={onChange} value={content}></textarea>;
 }
