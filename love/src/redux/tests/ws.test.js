@@ -2,7 +2,12 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { requestSALCommand, openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
+import {
+  requestSALCommand,
+  openWebsocketConnection,
+  requestGroupSubscription,
+  sendLOVECscObservingLogs,
+} from '../actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import { SALCommandStatus } from '../actions/ws';
 import {
@@ -16,6 +21,7 @@ import {
   getGroupSortedErrorCodeData,
   getAllTelemetries,
   getAllEvents,
+  getObservingLogs,
 } from '../selectors';
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
@@ -79,7 +85,7 @@ it('Should send a command to the server and save it on the state properly', asyn
     params: {},
     component: 'ATDome',
     cmd_id: '10-cmd_closeShutter',
-    salindex: 2
+    salindex: 2,
   };
   const realDate = Date;
   global.Date.now = () => 10;
@@ -102,6 +108,28 @@ it('Should send a command to the server and save it on the state properly', asyn
     ...commandObject,
   });
   global.Date = realDate;
+});
+
+it('Should send an observingLog to the LOVE-Controller and the server should receive it properly', async () => {
+  const user = 'an user';
+  const message = 'a message';
+  await store.dispatch(sendLOVECscObservingLogs(user, message));
+
+  await expect(server).toReceiveMessage({
+    category: 'love_csc',
+    data: [
+      {
+        csc: 'love',
+        salindex: 0,
+        data: {
+          observingLog: {
+            user: 'an user',
+            message: 'a message',
+          },
+        },
+      },
+    ],
+  });
 });
 
 const compareSalIndex = (a, b) => {
@@ -390,7 +418,10 @@ it('It should extract the summary and log messages properly from the state with 
     ],
   });
 
-  const cscsList = [['ATDome', 1], ['ScriptQueue', 1]];
+  const cscsList = [
+    ['ATDome', 1],
+    ['ScriptQueue', 1],
+  ];
 
   const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 
@@ -690,4 +721,49 @@ it('Should save all events when subscribed to all', async () => {
   };
   const result = getAllEvents(store.getState());
   expect(result).toEqual(expected);
+});
+
+it.only('Should get incoming observing log messages from the state', async () => {
+  await server.connected;
+  await store.dispatch(requestGroupSubscription('event-LOVE-0-observingLog'));
+
+  const logsSent = new Array(3).fill({}).map((_v, index) => {
+    return {
+      private_revCode: { value: '720ed493', dataType: 'String' },
+      private_sndStamp: { value: 1581458706.6005795 + index * 1000, dataType: 'Float' },
+      private_rcvStamp: { value: 1581458706.6026254 + index * 1000, dataType: 'Float' },
+      private_seqNum: { value: 5, dataType: 'Int' },
+      private_origin: { value: 69, dataType: 'Int' },
+      private_host: { value: -1407385585, dataType: 'Int' },
+      message: { value: `a message ${index}`, dataType: 'String' },
+      user: { value: `an user ${index}`, dataType: 'String' },
+      priority: { value: 0, dataType: 'Int' },
+    };
+  });
+
+  logsSent.forEach(async (log) => {
+    await server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'LOVE',
+          salindex: 0,
+          data: {
+            observingLog: [log],
+          },
+        },
+      ],
+      subscription: 'event-LOVE-0-observingLog',
+    });
+  });
+
+  const logsReceived = getObservingLogs(store.getState());
+
+  logsSent.forEach((logSent, index) => {
+    const logReceived = logsReceived[index];
+    expect(logReceived.message.value).toEqual(logSent.message.value);
+    expect(logReceived.user.value).toEqual(logSent.user.value);
+    expect(logReceived.private_sndStamp.value).toEqual(logSent.private_sndStamp.value);
+    expect(logReceived.private_rcvStamp.value).toEqual(logSent.private_rcvStamp.value);
+  });
 });
