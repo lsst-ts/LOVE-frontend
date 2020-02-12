@@ -5,6 +5,7 @@ import ws from './ws';
 import camera from './camera';
 import heartbeats from './heartbeats';
 import summaryData from './summaryData';
+import observingLogs from './observingLogs';
 import uif from './uif';
 import { UPDATE_EDITED_VIEW } from '../actions/actionTypes';
 
@@ -18,4 +19,5 @@ export default combineReducers({
     limit: 10,
     filter: includeAction(UPDATE_EDITED_VIEW),
   }),
+  observingLogs,
 });
