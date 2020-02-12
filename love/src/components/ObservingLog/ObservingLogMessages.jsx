@@ -39,11 +39,11 @@ export default class ObservingLogInput extends Component {
               <div key={Math.random()} className={styles.logMessageWrapper}>
                 <div className={styles.logMessage}>
                   <div className={styles.topSection}>
-                    <span>{msg.user}</span>
-                    <span>{new Date().toLocaleString()}</span>
+                    <span>{msg.user.value}</span>
+                    <span>{new Date(msg.private_rcvStamp.value*1000).toLocaleString()}</span>
                   </div>
                   <div className={styles.messageSection}>
-                    <span>{msg.message}</span>
+                    <span>{msg.message.value}</span>
                   </div>
                 </div>
               </div>
