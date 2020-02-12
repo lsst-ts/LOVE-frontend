@@ -40,11 +40,32 @@ function Palette(props) {
     '--sidebar-background-color',
   ];
 
-  const primary = {
-    'background-color': 'var(--primary-background-color)',
-    'color': 'var(--primary-font-color)',
-    'box-shadow': '1px 2px 4px 0px var(--primary-shadow-color)',
-  }
+  const statusColors = [
+    '--status-ok-color',
+    '--status-ok-dimmed-color',
+    '--status-ok-dimmed-color-2',
+    '--status-ok-dimmed-color-3',
+    '--status-warning-color',
+    '--status-warning-dimmed-color',
+    '--status-warning-dimmed-color-2',
+    '--status-warning-dimmed-color-3',
+    '--status-alert-color',
+    '--status-alert-dimmed-color',
+    '--status-alert-dimmed-color-2',
+    '--status-alert-dimmed-color-3',
+    '--status-disabled-color',
+    '--status-disabled-dimmed-color',
+    '--status-disabled-dimmed-color-2',
+    '--status-running-color',
+    '--status-running-dimmed-color',
+    '--status-running-dimmed-color-2',
+    '--status-running-dimmed-color-3',
+  ];
+
+  const scriptColors = [
+    '--script-ok-color',
+    '--script-ok-dimmed-color',
+  ];
 
   const statuses = [
     'default',
@@ -60,7 +81,7 @@ function Palette(props) {
     'default',
     'small',
     'extra-small',
-  ]
+  ];
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -127,6 +148,33 @@ function Palette(props) {
         </>
       ))}
 
+      <h1> Status colors </h1>
+      <div className={styles.grid}>
+        {statusColors.map(color => {
+          const style = {
+            backgroundColor: `var(${color})`,
+          }
+          return (
+            <div style={style}>
+              <p> {color} </p>
+            </div>
+          )
+        })}
+      </div>
+
+      <h1> Script colors </h1>
+      <div className={styles.grid}>
+        {scriptColors.map(color => {
+          const style = {
+            backgroundColor: `var(${color})`,
+          }
+          return (
+            <div style={style}>
+              <p> {color} </p>
+            </div>
+          );
+        })}
+      </div>
 
     </div>
   );
