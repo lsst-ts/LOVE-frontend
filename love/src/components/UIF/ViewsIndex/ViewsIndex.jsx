@@ -6,6 +6,7 @@ import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
+import ManagerInterface from '../../../Utils';
 
 import styles from './ViewsIndex.module.css';
 
@@ -65,7 +66,6 @@ class ViewsIndex extends Component {
           </div>
         </div>
         <div className={styles.availableViewsWrapper}>
-
           <div title="Create a New View" className={styles.view} onClick={this.createNewView}>
             <div className={[styles.preview, styles.new].join(' ')}>
               <div className={styles.plus}> + </div>
@@ -77,28 +77,36 @@ class ViewsIndex extends Component {
             this.props.views.map(
               (view, index) =>
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
-                  <div
-                    title="Open"
-                    key={index}
-                    className={styles.view}
-                    onClick={() => this.openView(view.id)}
-                  >
-                    <div className={styles.preview}> </div>
+                  <div title="Open" key={index} className={styles.view} onClick={() => this.openView(view.id)}>
+                    <div className={styles.preview}>
+                      <span className={styles.imageFallback}>{view.name.replace(/[a-z\s]/g, '').substring(0, 6)}</span>
+                      <img
+                        src={`${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}`}
+                        onLoad={(ev) => (ev.target.style.display = 'block')}
+                        style={{ display: 'none' }}
+                      />
+                    </div>
                     <div className={styles.name}> {view.name} </div>
                     <div className={styles.buttons}>
                       <Button
                         className={styles.iconButton}
                         title="Edit"
-                        onClick={(event) => {event.stopPropagation(); this.editView(view.id)}}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          this.editView(view.id);
+                        }}
                       >
-                        <EditIcon className={styles.icon}/>
+                        <EditIcon className={styles.icon} />
                       </Button>
                       <Button
                         className={styles.iconButton}
                         title="Delete"
-                        onClick={(event) => {event.stopPropagation(); this.deleteView(view.id)}}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          this.deleteView(view.id);
+                        }}
                       >
-                        <DeleteIcon className={styles.icon}/>
+                        <DeleteIcon className={styles.icon} />
                       </Button>
                     </div>
                   </div>
