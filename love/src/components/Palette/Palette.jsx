@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from '../GeneralPurpose/Button/Button';
 import styles from './Palette.module.css';
 
 function Palette(props) {
@@ -38,10 +39,33 @@ function Palette(props) {
     '--second-senary-background-dimmed-color',
     '--sidebar-background-color',
   ];
+
+  const primary = {
+    'background-color': 'var(--primary-background-color)',
+    'color': 'var(--primary-font-color)',
+    'box-shadow': '1px 2px 4px 0px var(--primary-shadow-color)',
+  }
+
+  const statuses = [
+    'default',
+    'primary',
+    'info',
+    'success',
+    'warning',
+    'danger',
+    'link',
+  ];
+  const sizes = [
+    'large',
+    'default',
+    'small',
+    'extra-small',
+  ]
   return (
     <div className={styles.container}>
-      <div className={styles.texts}>
+      <div className={styles.topSection}>
         <div>
+          <h1> Headers </h1>
           <h1> h1 HEADER </h1>
           <h2> h2 HEADER </h2>
           <h4> h4 HEADER </h4>
@@ -50,13 +74,39 @@ function Palette(props) {
           Normal text
         </div>
         <div>
+          <h1> Font Sizes </h1>
+
           {fontSizes.map( fontSize => (
             <div style={{fontSize: `var(${fontSize})`}}> {fontSize} </div>
           ))}
         </div>
+
+        <div>
+          <h1> Buttons </h1>
+          <div className={styles.buttons}>
+            <span> Enabled: </span>
+            {statuses.map(status => (
+              <Button status={status}> {status} </Button>
+            ))}
+
+            <span> Disabled: </span>
+            {statuses.map(status => (
+              <Button status={status} disabled> {status} </Button>
+            ))}
+
+            {sizes.map(size => (
+              <>
+              <span> {size}: </span>
+                {statuses.map(status => (
+                  <Button status={status} size={size}> {status} </Button>
+                ))}
+              </>
+            ))}
+          </div>
+        </div>
       </div>
 
-      <h1> REGULAR BACKGROUNDS AND FOREGROUNDS </h1>
+      <h1> Regular Backgrounds and Foregrounds </h1>
       {fontColors.map(fontColor => (
         <>
           <h2> Font color: {fontColor} </h2>
@@ -76,6 +126,8 @@ function Palette(props) {
           </div>
         </>
       ))}
+
+
     </div>
   );
 }
