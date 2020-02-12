@@ -486,3 +486,7 @@ export const getLastAlarm = (state) => {
   if (state.ws === undefined) return undefined;
   return cleanAlarm(getStreamData(state, 'event-Watcher-0-alarm'));
 };
+
+export const getObservingLogs = (state)=>{
+  return state.observingLogs.logMessages;
+}
