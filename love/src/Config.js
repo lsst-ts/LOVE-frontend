@@ -160,10 +160,11 @@ export const m3PortSelectedStateMap = {
 };
 
 export const m3InPositionStateMap = {
-  0: 'NOT READY',
-  1: 'IN POSITION',
+  1: 'NOT READY',
+  2: 'IN POSITION',
   false: 'NOT READY',
   true: 'IN POSITION',
+  0: 'UNKNOWN',
 };
 
 //ATPneumatics
@@ -176,20 +177,22 @@ export const m1CoverStateStateMap = {
 };
 
 export const m1CoverLimitSwitchesStateMap = {
-  0: 'UNKNOWN',
   1: 'OPEN',
   2: 'CLOSED',
+  0: 'UNKNOWN',
 };
 
 export const m1VentsLimitSwitchesStateMap = {
-  0: 'NOT READY',
-  1: 'IN POSITION',
+  1: 'NOT READY',
+  2: 'IN POSITION',
+  0: 'UNKNOWN',
 };
 
 //ATHexapod
 export const hexapodInPositionStateMap = {
-  0: 'NOT READY',
-  1: 'IN POSITION',
+  1: 'NOT READY',
+  2: 'IN POSITION',
+  0: 'UNKNOWN',
 };
 
 // LATISS
@@ -202,8 +205,9 @@ export const movingElementStateMap = {
 };
 
 export const nasmythRotatorInPositionStateMap = {
-  0: 'NOT READY',
-  1: 'IN POSITION',
+  1: 'NOT READY',
+  2: 'IN POSITION',
+  0: 'UNKNOWN',
 };
 
 export const raftsStateMap = {
