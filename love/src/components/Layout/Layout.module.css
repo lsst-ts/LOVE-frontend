@@ -105,6 +105,8 @@
   background-color: var(--sidebar-background-color);
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
+  transform: translate(0, 0);
+  will-change: transform;
 }
 
 .sidebar .viewName {
@@ -140,7 +142,7 @@
 }
 
 .sidebarHidden {
-  margin-left: -200px;
+  transform: translate(-200px, 0);
 }
 
 
