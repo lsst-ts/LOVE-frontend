@@ -69,6 +69,12 @@ export default class TimeSeriesPlot extends Component {
     dateStart: -Infinity,
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    return nextProps.dataSources.some((dataSource) => {
+      return this.props.streamStates[dataSource].timestamp !== nextProps.streamStates[dataSource].timestamp;
+    });
+  };
+
   componentDidUpdate = (prevProps) => {
     const dateInterval = this.props.dateInterval;
 
@@ -142,6 +148,7 @@ export default class TimeSeriesPlot extends Component {
             fill: this.getCSSColorByVariableName('--second-secondary-background-color'),
             stroke: 'none',
             strokeWidth: 0,
+            renderer: 'canvas',
           },
         },
       },
@@ -245,6 +252,7 @@ export default class TimeSeriesPlot extends Component {
 
   render() {
     if (this.vegaEmbedResult) {
+      console.log('render', this.props.dataSources[0]);
       // const changeSet = vega.changeset();
       // this.vegaEmbedResult.view.change('telemetries', changeSet).run();
 
