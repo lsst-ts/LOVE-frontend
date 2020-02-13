@@ -17,6 +17,7 @@ body {
   --topbar-height: 2em;
   --content-padding: 1em;
   --base-font-color: hsl(194, 16%, 79%);
+  --second-base-font-color: hsl(240, 4%, 90%, 0.7);
   --secondary-font-color: hsl(201, 15%, 54%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3); /*Transparent*/
   --tertiary-font-color: hsl(201, 15%, 54%);
@@ -40,7 +41,6 @@ body {
   --second-quinary-background-color: hsl(201, 22%, 40%);
   --second-senary-background-color: hsl(201, 40%, 81%);
   --second-senary-background-dimmed-color: hsl(201, 40%, 81%, 0.3);
-  --second-base-font-color: hsl(240, 4%, 90%, 0.7);
   --sidebar-background-color: hsla(202, 36%, 13%, 90%);
 
   /* Status */
