@@ -29,7 +29,7 @@ export default class SummaryTable extends Component {
   };
 
   static defaultProps = {};
-  
+
   componentDidMount = () => {
     this.props.subscribeToStream();
   };
@@ -55,15 +55,15 @@ export default class SummaryTable extends Component {
     // `event-ATMCS-${index}-nasmyth2RotatorInPosition`,
 
     //ATMCS
-    const m3State = m3RotatorStateMap[this.props.m3State];
-    const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected];
+    const m3State = m3RotatorStateMap[this.props.m3State] || m3RotatorStateMap[0];
+    const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected] || m3PortSelectedStateMap[0];
     const m3InPosition = m3InPositionStateMap[this.props.m3InPosition ? 1 : 0];
     const nasmyth1RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth1RotatorInPosition];
     const nasmyth2RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth2RotatorInPosition];
     //ATPneumatics
-    const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState];
+    const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState] || m1CoverStateStateMap[0];
     //Hexapod
-    const hexapodInPosition = hexapodInPositionStateMap[this.props.hexapodInPosition];
+    const hexapodInPosition = hexapodInPositionStateMap[this.props.hexapodInPosition ? 1 : 0];
     return (
       <SummaryPanel>
         {/* Dome */}
