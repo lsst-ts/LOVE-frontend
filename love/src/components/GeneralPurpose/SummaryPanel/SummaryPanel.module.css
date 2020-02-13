@@ -69,3 +69,8 @@
   .highlight {
     color: var(--base-font-color);
   }
+
+  .arrayValue {
+    display: grid;
+    grid-template-rows: auto;
+  }
