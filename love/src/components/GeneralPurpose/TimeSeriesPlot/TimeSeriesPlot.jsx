@@ -96,7 +96,9 @@ export default class TimeSeriesPlot extends Component {
       if (prevProps.timestamp !== timestamp) {
         if (this.data[dataSource] === undefined) this.data[dataSource] = [];
         this.data[dataSource].push(vegaData);
-
+        if (this.data[dataSource].length > 200) {
+          this.data[dataSource].splice(0, 1);
+        }
         shouldUpdatePlot = true;
       }
 
