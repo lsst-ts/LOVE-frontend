@@ -22,13 +22,15 @@ export default class CurrentTargetValue extends Component {
     const isChanging = this.props.currentValue !== this.props.targetValue;
     return (
       <span className={styles.statusTextWrapper}>
-        <span className={styles.telemetryValue}>{this.props.currentValue}º</span>
+        <span className={styles.telemetryValue}>{this.props.currentValue.toFixed ? this.props.targetValue.toFixed(3) : this.props.targetValue}º</span>
         {isChanging ? (
           <>
             <span className={styles.arrow}>
               <RightArrowIcon />
             </span>
-            <span className={styles.telemetryValue}>{this.props.targetValue}º</span>
+            <span className={styles.telemetryValue}>
+              {this.props.targetValue.toFixed ? this.props.targetValue.toFixed(3) : this.props.targetValue}º
+            </span>
           </>
         ) : null}
       </span>

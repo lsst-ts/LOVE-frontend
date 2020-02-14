@@ -252,7 +252,6 @@ export default class TimeSeriesPlot extends Component {
 
   render() {
     if (this.vegaEmbedResult) {
-      console.log('render', this.props.dataSources[0]);
       // const changeSet = vega.changeset();
       // this.vegaEmbedResult.view.change('telemetries', changeSet).run();
 
