@@ -59,7 +59,6 @@ class ViewsIndex extends Component {
   };
 
   showButtons = (id) => {
-    console.log('mouseover, id:', id);
     this.setState({ hoveredView: id });
   }
 
