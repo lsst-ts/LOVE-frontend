@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
-import Modal from '../../GeneralPurpose/Modal/Modal';
-import ConfirmationDialog from '../../GeneralPurpose/ConfirmationDialog/ConfirmationDialog';
+import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 import ManagerInterface from '../../../Utils';
@@ -141,20 +140,14 @@ class ViewsIndex extends Component {
                 ),
             )}
         </div>
-        <Modal
+        <ConfirmationModal
           isOpen={this.state.viewToDelete !== null}
-          onRequestClose={() => this.changeViewToDelete(null)}
-          contentLabel="Confirmation Dialog"
-          modalClassName={styles.confirmationDialogModal}
-        >
-          <ConfirmationDialog
-            message={`Are you sure you want to delete the view ${
-              this.state.viewToDelete ? this.state.viewToDelete.name : null
-            }?`}
-            confirmCallback={() => this.deleteView(this.state.viewToDelete.id)}
-            cancelCallback={() => this.changeViewToDelete(null)}
-          />
-        </Modal>
+          message={`Are you sure you want to delete the view ${
+            this.state.viewToDelete ? this.state.viewToDelete.name : null
+          }?`}
+          confirmCallback={() => this.deleteView(this.state.viewToDelete.id)}
+          cancelCallback={() => this.changeViewToDelete(null)}
+        />
       </div>
     );
   }

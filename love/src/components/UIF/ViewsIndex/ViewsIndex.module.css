@@ -132,10 +132,3 @@
   background-color: var(--second-secondary-background-color);
   font-weight: bold;
 }
-
-.confirmationDialogModal {
-  top: 20%;
-  left: 33%;
-  right: 33%;
-  bottom: 46%;
-}

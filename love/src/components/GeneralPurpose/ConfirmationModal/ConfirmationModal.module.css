@@ -16,3 +16,10 @@
   grid-gap: 1em;
   height: 2em;
 }
+
+.modal {
+  top: 20%;
+  left: 33%;
+  right: 33%;
+  bottom: 46%;
+}
