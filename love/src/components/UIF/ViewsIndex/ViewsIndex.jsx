@@ -7,6 +7,7 @@ import Input from '../../GeneralPurpose/Input/Input';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 import ManagerInterface from '../../../Utils';
+import ViewIndexCard from './ViewIndexCard/ViewIndexCard';
 
 import styles from './ViewsIndex.module.css';
 
@@ -16,7 +17,7 @@ class ViewsIndex extends Component {
     history: PropTypes.object,
     /** Current views to display */
     views: PropTypes.array,
-    /** Current views to display */
+    /** Function to delete a view */
     deleteView: PropTypes.func,
   };
 
@@ -24,6 +25,7 @@ class ViewsIndex extends Component {
     super(props);
     this.state = {
       filter: '',
+      hoveredView: null,
     };
   }
 
@@ -56,6 +58,15 @@ class ViewsIndex extends Component {
     });
   };
 
+  showButtons = (id) => {
+    console.log('mouseover, id:', id);
+    this.setState({ hoveredView: id });
+  }
+
+  hideButtons = () => {
+    this.setState({ hoveredView: null });
+  }
+
   render() {
     return (
       <div className={styles.container}>
@@ -77,7 +88,16 @@ class ViewsIndex extends Component {
             this.props.views.map(
               (view, index) =>
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
-                  <div title="Open" key={index} className={styles.view} onClick={() => this.openView(view.id)}>
+                  <div
+                    title="Open"
+                    key={index}
+                    className={styles.view}
+                    onClick={() => this.openView(view.id)}
+                    onMouseEnter={this.showButtons.bind(this, view.id)}
+                    onTouchStart={this.showButtons.bind(this, view.id)}
+                    onTouchMove={this.showButtons.bind(this, view.id)}
+                    onMouseLeave={this.hideButtons.bind(this)}
+                  >
                     <div className={styles.preview}>
                       <span className={styles.imageFallback}>{view.name.replace(/[a-z\s]/g, '').substring(0, 6)}</span>
                       <img
@@ -87,7 +107,7 @@ class ViewsIndex extends Component {
                       />
                     </div>
                     <div className={styles.name}> {view.name} </div>
-                    <div className={styles.buttons}>
+                    <div className={[styles.buttons, this.state.hoveredView === view.id ? styles.visible : null].join(' ')}>
                       <Button
                         className={styles.iconButton}
                         title="Edit"
