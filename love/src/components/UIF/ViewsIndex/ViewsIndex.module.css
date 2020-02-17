@@ -55,6 +55,10 @@
   box-sizing: border-box;
   border: 1px dashed var(--secondary-font-color);
   position: relative;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
 }
 
 .view .preview img {
@@ -78,6 +82,10 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;          /* Likely future */
 }
 
 .view .buttons {
@@ -91,8 +99,8 @@
   display: none;
 }
 
-.view:hover .buttons {
-  display: grid;
+.visible {
+  display: grid !important;
 }
 
 .iconButton {
