@@ -26,6 +26,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
   const [containerHeight, setContainerHeight] = useState(1);
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const canvasRef = useRef(null);
 
@@ -39,6 +40,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
     const retryFetch = (error) => {
       if (retryTimeout !== undefined) clearTimeout(retryTimeout);
       setError(error);
+      setInitialLoading(false);
       retryTimeout = setTimeout(() => {
         setRetryCount((c) => c + 1);
         fetchAndRetry();
@@ -57,6 +59,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
         serverURL,
         (image) => {
           setError(null);
+          setInitialLoading(false);
           setRetryCount(0);
           if (canvasRef.current) {
             setImageWidth(image.width);
@@ -99,6 +102,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
     if (error !== null) return;
+    if (initialLoading) return;
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
@@ -129,5 +133,14 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
       </div>
     );
   }
+
+  if (initialLoading ) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>Fetching stream from {serverURL}, please wait.</p>
+      </div>
+    );
+  }
+
   return <canvas ref={canvasRef}></canvas>;
 }
