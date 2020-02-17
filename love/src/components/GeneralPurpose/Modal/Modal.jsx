@@ -13,15 +13,17 @@ Modal.propTypes = {
   isOpen: PropTypes.bool,
   /** Function to call when modal closing is requested */
   onRequestClose: PropTypes.func,
+  /** Additional className to apply to the modal */
+  modalClassName: PropTypes.string,
 };
 
 
 export default function Modal(props) {
   ReactModal.setAppElement('#root');
-  const { children, ...other } = props;
+  const { children, modalClassName, ...other } = props;
 
   return (
-    <ReactModal {...other} className={styles.modal} overlayClassName={styles.overlay}>
+    <ReactModal {...other} className={[styles.modal, modalClassName].join(' ')} overlayClassName={styles.overlay}>
       <div className={styles.topbar}>
         <Button title='Close' status='transparent' onClick={props.onRequestClose}>
           &#10005;
