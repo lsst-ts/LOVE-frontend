@@ -6,12 +6,16 @@ const initialState = {
 export default function(state = initialState, action) {
   switch (action.type) {
     case RECEIVE_OBSERVING_LOG: {
-        return {
-            logMessages: [...state.logMessages, ...action.data]
-        };
+      const repeated = state.logMessages.some((log) =>
+        action.data.some((newLog) => log.private_revCode.value === newLog.private_revCode.value),
+      );
+      if (repeated) return state;
+      return {
+        logMessages: [...state.logMessages, ...action.data],
+      };
     }
     default: {
-        return state;
+      return state;
     }
   }
 }
