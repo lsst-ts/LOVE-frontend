@@ -64,6 +64,12 @@ class ViewsIndex extends Component {
     });
   };
 
+  onKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      this.setState({ filter: '' });
+    }
+  }
+
   showButtons = (id) => {
     this.setState({ hoveredView: id });
   };
@@ -78,7 +84,12 @@ class ViewsIndex extends Component {
         <div className={styles.filterWrapper}>
           <div className={styles.filter}>
             <div className={styles.filterLabel}>Filter:</div>
-            <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
+            <Input
+              className={styles.input}
+              value={this.state.filter}
+              onChange={this.changeFilter}
+              onKeyDown={this.onKeyDown}
+            />
           </div>
         </div>
         <div className={styles.availableViewsWrapper}>
