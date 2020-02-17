@@ -4,10 +4,11 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
+import Modal from '../../GeneralPurpose/Modal/Modal';
+import ConfirmationDialog from '../../GeneralPurpose/ConfirmationDialog/ConfirmationDialog';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 import ManagerInterface from '../../../Utils';
-import ViewIndexCard from './ViewIndexCard/ViewIndexCard';
 
 import styles from './ViewsIndex.module.css';
 
@@ -26,6 +27,7 @@ class ViewsIndex extends Component {
     this.state = {
       filter: '',
       hoveredView: null,
+      viewToDelete: null,
     };
   }
 
@@ -41,7 +43,12 @@ class ViewsIndex extends Component {
     this.props.history.push('/uif/view?id=' + id);
   };
 
+  changeViewToDelete = (view) => {
+    this.setState({ viewToDelete: view });
+  };
+
   deleteView = (id) => {
+    this.changeViewToDelete(null);
     this.props.deleteView(id).then((success) => {
       if (success) {
         toast.success('View deleted successfully');
@@ -60,11 +67,11 @@ class ViewsIndex extends Component {
 
   showButtons = (id) => {
     this.setState({ hoveredView: id });
-  }
+  };
 
   hideButtons = () => {
     this.setState({ hoveredView: null });
-  }
+  };
 
   render() {
     return (
@@ -106,7 +113,9 @@ class ViewsIndex extends Component {
                       />
                     </div>
                     <div className={styles.name}> {view.name} </div>
-                    <div className={[styles.buttons, this.state.hoveredView === view.id ? styles.visible : null].join(' ')}>
+                    <div
+                      className={[styles.buttons, this.state.hoveredView === view.id ? styles.visible : null].join(' ')}
+                    >
                       <Button
                         className={styles.iconButton}
                         title="Edit"
@@ -122,7 +131,7 @@ class ViewsIndex extends Component {
                         title="Delete"
                         onClick={(event) => {
                           event.stopPropagation();
-                          this.deleteView(view.id);
+                          this.changeViewToDelete(view);
                         }}
                       >
                         <DeleteIcon className={styles.icon} />
@@ -132,6 +141,20 @@ class ViewsIndex extends Component {
                 ),
             )}
         </div>
+        <Modal
+          isOpen={this.state.viewToDelete !== null}
+          onRequestClose={() => this.changeViewToDelete(null)}
+          contentLabel="Confirmation Dialog"
+          modalClassName={styles.confirmationDialogModal}
+        >
+          <ConfirmationDialog
+            message={`Are you sure you want to delete the view ${
+              this.state.viewToDelete ? this.state.viewToDelete.name : null
+            }?`}
+            confirmCallback={() => this.deleteView(this.state.viewToDelete.id)}
+            cancelCallback={() => this.changeViewToDelete(null)}
+          />
+        </Modal>
       </div>
     );
   }
