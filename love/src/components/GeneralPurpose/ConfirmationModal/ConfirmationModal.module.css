@@ -1,0 +1,25 @@
+.container {
+  display: grid;
+  grid-template-rows: 1fr min-content;
+  overflow: auto;
+}
+
+.content {
+  overflow-y: auto;
+  text-align: center;
+}
+
+.footer {
+  display: inline-grid;
+  grid-template-columns: 1fr 15ch 15ch;
+  padding: 1em 1em 0 1em;
+  grid-gap: 1em;
+  height: 2em;
+}
+
+.modal {
+  top: 20%;
+  left: 33%;
+  right: 33%;
+  bottom: 46%;
+}
