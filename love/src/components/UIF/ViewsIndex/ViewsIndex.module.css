@@ -16,6 +16,25 @@
   max-width: 50ch;
 }
 
+.input {
+  background-color: transparent;
+  color: var(--base-font-color);
+  border: 1px solid var(--secondary-font-color);
+}
+
+.input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--secondary-font-color);;
+  opacity: 1; /* Firefox */
+}
+
+.input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: var(--secondary-font-color);;
+}
+
+.input::-ms-input-placeholder { /* Microsoft Edge */
+  color: var(--secondary-font-color);;
+}
+
 .filterLabel {
   font-size: 1.2em;
   display: flex;

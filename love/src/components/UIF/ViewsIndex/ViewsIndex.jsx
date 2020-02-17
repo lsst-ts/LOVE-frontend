@@ -89,6 +89,7 @@ class ViewsIndex extends Component {
               value={this.state.filter}
               onChange={this.changeFilter}
               onKeyDown={this.onKeyDown}
+              placeholder="Type here to filter results"
             />
           </div>
         </div>
@@ -120,6 +121,7 @@ class ViewsIndex extends Component {
                         src={`${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}`}
                         onLoad={(ev) => (ev.target.style.display = 'block')}
                         style={{ display: 'none' }}
+                        alt={`${view ? view.name : "View"} preview`}
                       />
                     </div>
                     <div className={styles.name}> {view.name} </div>
