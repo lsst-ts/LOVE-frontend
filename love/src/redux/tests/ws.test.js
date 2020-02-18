@@ -729,7 +729,7 @@ it.only('Should get incoming observing log messages from the state', async () =>
 
   const logsSent = new Array(3).fill({}).map((_v, index) => {
     return {
-      private_revCode: { value: '720ed493', dataType: 'String' },
+      private_revCode: { value: `720ed49${index}`, dataType: 'String' },
       private_sndStamp: { value: 1581458706.6005795 + index * 1000, dataType: 'Float' },
       private_rcvStamp: { value: 1581458706.6026254 + index * 1000, dataType: 'Float' },
       private_seqNum: { value: 5, dataType: 'Int' },
@@ -757,13 +757,21 @@ it.only('Should get incoming observing log messages from the state', async () =>
     });
   });
 
-  const logsReceived = getObservingLogs(store.getState());
-
-  logsSent.forEach((logSent, index) => {
-    const logReceived = logsReceived[index];
-    expect(logReceived.message.value).toEqual(logSent.message.value);
-    expect(logReceived.user.value).toEqual(logSent.user.value);
-    expect(logReceived.private_sndStamp.value).toEqual(logSent.private_sndStamp.value);
-    expect(logReceived.private_rcvStamp.value).toEqual(logSent.private_rcvStamp.value);
+  // no repeated logs are allowed
+  await server.send({
+    category: 'event',
+    data: [
+      {
+        csc: 'LOVE',
+        salindex: 0,
+        data: {
+          observingLog: [logsSent[0]],
+        },
+      },
+    ],
+    subscription: 'event-LOVE-0-observingLog',
   });
+
+  const logsReceived = getObservingLogs(store.getState());
+  expect(logsReceived).toEqual(logsSent);
 });

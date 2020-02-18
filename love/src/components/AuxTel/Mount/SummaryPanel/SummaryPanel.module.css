@@ -1,0 +1,12 @@
+.listValueItem {
+  padding: 0.2em 0;
+}
+
+.listValueItem .secondaryValue {
+  color: var(--secondary-font-color);
+}
+
+.multirowLabel {
+  display: block;
+  white-space: nowrap;
+}
