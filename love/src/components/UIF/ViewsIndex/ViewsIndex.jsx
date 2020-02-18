@@ -84,6 +84,7 @@ class ViewsIndex extends Component {
                         src={`${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}`}
                         onLoad={(ev) => (ev.target.style.display = 'block')}
                         style={{ display: 'none' }}
+                        alt="View thumbnail"
                       />
                     </div>
                     <div className={styles.name}> {view.name} </div>
