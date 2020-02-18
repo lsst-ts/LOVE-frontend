@@ -49,21 +49,21 @@
 .notchCurve {
   height: 3em;
   fill: var(--tertiary-background-color);
+  vertical-align:top;
 }
 
 .rightNotchContainer {
-  display: inline-flex;
-  justify-content: flex-end;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .rightTopbar {
-  margin-left: -1px;
   position: relative;
   padding: 0.5em var(--content-padding) 0.5em 0;
   background-color: var(--tertiary-background-color);
   text-align: right;
   display: grid;
-  grid-template-columns: repeat(2, min-content);
+  grid-template-columns: repeat(3, min-content);
 }
 
 .middleTopbar {
@@ -202,4 +202,8 @@
 
 .settingsDropdown .refNode {
   display: contents;
+}
+
+.heartbeatIconWrapper {
+  width: 2em;
 }
