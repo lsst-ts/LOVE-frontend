@@ -97,7 +97,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
     return () => {
       observer.disconnect();
     };
-  }, [error, canvasRef.current]);
+  }, [error]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
