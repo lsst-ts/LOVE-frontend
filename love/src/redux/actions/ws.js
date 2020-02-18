@@ -75,6 +75,9 @@ export const openWebsocketConnection = () => {
             dispatch(receiveGroupConfirmationMessage(data.data));
             return;
           }
+          if (data.category === 'heartbeat') {
+            console.log(data);
+          }
           if (data.category === 'event') {
             const stream = data.data[0].data;
             if (data.data[0].csc === 'ATCamera') {
