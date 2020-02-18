@@ -387,6 +387,16 @@ export const getCSCHeartbeat = (state, csc, salindex) => {
   return state.heartbeats.cscs.find((heartbeat) => heartbeat.csc === csc && heartbeat.salindex === salindex);
 };
 
+
+/**
+ * Selects the latest manager heartbeat
+ * @param {object} state
+ */
+export const getLastManagerHeartbeat = (state) => {
+  if (state.heartbeats === undefined) return undefined;
+  return state.heartbeats.lastManagerHeartbeat;
+};
+
 /**
  * Reshape the output of getStreamsData into a dictionary indexed by "csc-salindex" for all "csc-salindex" pairs
  * for which a subscription to a given category and stream exists in the state.
