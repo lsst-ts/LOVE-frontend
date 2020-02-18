@@ -15,6 +15,7 @@ import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import styles from './SummaryPanel.module.css';
 
 export default class SummaryTable extends Component {
   static propTypes = {
@@ -64,6 +65,13 @@ export default class SummaryTable extends Component {
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState] || m1CoverStateStateMap[0];
     //Hexapod
     const hexapodInPosition = hexapodInPositionStateMap[this.props.hexapodInPosition ? 1 : 0];
+    const offset = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
+      return this.props.correctionOffsets[k] ? this.props.correctionOffsets[k].value : ' - ';
+    });
+    const hexapodPosAndOffset = Array.isArray(this.props.hexapodReportedPosition.value)
+      ? this.props.hexapodReportedPosition.value.map((pos, i) => [pos, offset[i]])
+      : this.props.hexapodReportedPosition;
+
     return (
       <SummaryPanel>
         {/* Dome */}
@@ -112,8 +120,26 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[hexapodInPosition]}>{hexapodInPosition}</StatusText>
         </Value>
-        <Label>Position value</Label>
-        <Value>{this.props.hexapodReportedPosition}</Value>
+        <Label>
+          <>
+            <span className={styles.multirowLabel}>Position value</span>
+            <span>(ATAOS offset)</span>
+          </>
+        </Label>
+        <Value>
+          <>
+            {Array.isArray(hexapodPosAndOffset)
+              ? hexapodPosAndOffset.map((val) => {
+                  return (
+                    <div key={val} className={styles.listValueItem}>
+                      <span>{val[0].toFixed ? val[0].toFixed(4) : val[0]}</span>
+                      <span className={styles.secondaryValue}> ({val[1]})</span>
+                    </div>
+                  );
+                })
+              : hexapodPosAndOffset}
+          </>
+        </Value>
       </SummaryPanel>
     );
   }
