@@ -1,5 +1,4 @@
 const decoder = new TextDecoder('utf-8');
-const encoder = new TextEncoder('utf-8');
 
 /**
  * Receives an ArrayBuffer (from the FileReader for example) and
@@ -22,7 +21,7 @@ export const getHeaderInfo = (arrayBuffer) => {
   const exposure = sections[0];
   // const remainder = sections.slice(1).join('');
 
-  const [START, widthString, heightString, isJPEGString, lengthString, ...buffer] = exposure.split('\r\n');
+  const [START, widthString, heightString, isJPEGString, lengthString] = exposure.split('\r\n');
   // const encodedBuffer =  encoder.encode(buffer.join(''));
   // const encodedBuffer =  encoder.encode(buffer);
   const encodedBuffer = new Uint8Array(arrayBuffer.slice(33, 33 + 1024 * 1024));

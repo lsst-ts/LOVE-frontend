@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
-import Ajv from 'ajv';
 import YAML from 'yaml';
 
 import 'brace/mode/yaml';
@@ -151,7 +150,6 @@ export default class ConfigPanel extends Component {
 
           /** Handle validation errors */
           if (r.title === 'INVALID CONFIG YAML') {
-            const message = `schema_path: ${r.error.schema_path.join('.')}\n config path: ${r.error.path}`;
             this.setState({
               validationStatus: ERROR,
               configErrorTitle: r.title,

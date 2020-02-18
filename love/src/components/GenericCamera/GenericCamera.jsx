@@ -94,7 +94,7 @@ export default function GenericCamera({ serverURL = 'http://dev.love.inria.cl/ge
     return () => {
       observer.disconnect();
     };
-  }, [error, canvasRef.current]);
+  }, [error]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
