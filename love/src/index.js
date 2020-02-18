@@ -5,11 +5,12 @@ import './index.css';
 import AppContainer from './App.container';
 import * as serviceWorker from './serviceWorker';
 import { doGetTokenFromStorage } from './redux/actions/auth';
-
+import { requestGroupSubscription } from './redux/actions/ws';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
 store.dispatch(doGetTokenFromStorage());
+store.dispatch(requestGroupSubscription('heartbeat-manager-0-stream'));
 
 ReactDOM.render(
   <Provider store={store}>
