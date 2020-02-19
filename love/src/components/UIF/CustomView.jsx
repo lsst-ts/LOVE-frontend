@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GridLayout from 'react-grid-layout';
+import GridLayout, { Responsive, WidthProvider } from 'react-grid-layout';
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../AuxTel/Mount/MotorTable/MotorTable.container';
@@ -9,7 +9,9 @@ import GearIcon from '../icons/GearIcon/GearIcon';
 import { viewsStates } from '../../redux/reducers/uif';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 
-export default class CustomView extends Component {
+const ResponsiveGridLayout = WidthProvider(Responsive);
+
+class CustomView extends Component {
   static propTypes = {
     /** Layout object describing the view, composed of recursively nested Elements, with the following format:
       <Element>: {
@@ -175,13 +177,14 @@ export default class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        <GridLayout
-          layout={layout}
+        <ResponsiveGridLayout
+          layouts={{lg: layout}}
+          breakpoints={{lg: 1200}}
           items={layout.length}
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
-          cols={container.properties.cols}
+          cols={{lg: container.properties.cols}}
           width={this.props.baseColWidth * container.properties.w}
           margin={[0, 0]}
           compactType={this.state.compactType}
@@ -191,7 +194,7 @@ export default class CustomView extends Component {
           isResizable={this.props.isEditable}
         >
           {elements}
-        </GridLayout>
+        </ResponsiveGridLayout>
       </div>
     );
   };
@@ -202,3 +205,5 @@ export default class CustomView extends Component {
     return <>{parsedTree}</>;
   }
 }
+
+export default CustomView;
