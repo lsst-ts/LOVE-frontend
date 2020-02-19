@@ -121,7 +121,9 @@ class Layout extends Component {
   checkHeartbeat = () => {
     const lastManagetHeartbeat = this.props.getLastManagerHeartbeat();
     const heartbeatStatus =
-      this.state.lastHeartbeat && lastManagetHeartbeat && this.state.lastHeartbeat.data.timestamp !== lastManagetHeartbeat.data.timestamp
+      this.state.lastHeartbeat &&
+      lastManagetHeartbeat &&
+      this.state.lastHeartbeat.data.timestamp !== lastManagetHeartbeat.data.timestamp
         ? 'ok'
         : 'alert';
     this.setState({
@@ -209,9 +211,11 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
-              <div className={[styles.heartbeatIconWrapper].join(' ')}>
-                <HeartbeatIcon status={this.state.heartbeatStatus} title={'Manager heartbeat'} />
-              </div>
+              {this.state.heartbeatStatus !== 'ok' && (
+                <div className={styles.heartbeatIconWrapper}>
+                  <HeartbeatIcon status={this.state.heartbeatStatus} title={'Manager heartbeat'} />
+                </div>
+              )}
               <Button
                 className={styles.iconBtn}
                 title="View notifications"
