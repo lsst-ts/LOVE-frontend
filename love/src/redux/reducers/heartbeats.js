@@ -30,7 +30,7 @@ export default function(state = initialState, action) {
       if (!found) {
         newHeartbeats.push(action.data);
       }
-      return { cscs: state.cscs, scripts: newHeartbeats };
+      return { ...state, cscs: state.cscs, scripts: newHeartbeats };
     }
     case REMOVE_SCRIPTS_HEARTBEATS: {
       const currentHeartbeats = state.scripts;
