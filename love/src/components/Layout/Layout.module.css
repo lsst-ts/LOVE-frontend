@@ -4,7 +4,7 @@
   height: 3em;
   overflow: visible;
   display: grid;
-  grid-template-columns: min-content 1fr 20ch;
+  grid-template-columns: min-content 1fr min-content;
 }
 
 .leftNotchContainer {
@@ -54,7 +54,7 @@
 
 .rightNotchContainer {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: min-content 1fr;
 }
 
 .rightTopbar {
@@ -63,7 +63,8 @@
   background-color: var(--tertiary-background-color);
   text-align: right;
   display: grid;
-  grid-template-columns: repeat(3, min-content);
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
 }
 
 .middleTopbar {

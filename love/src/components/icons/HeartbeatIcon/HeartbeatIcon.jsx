@@ -10,7 +10,7 @@ export default class HeartbeatIcon extends Component {
   };
 
   static defaultProps = {
-    status: 'ok',
+    status: undefined,
     title: 'Script heartbeat',
   };
 
