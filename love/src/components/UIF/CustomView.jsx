@@ -179,12 +179,12 @@ class CustomView extends Component {
       >
         <ResponsiveGridLayout
           layouts={{lg: layout}}
-          breakpoints={{lg: 1200}}
+          breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480}}
           items={layout.length}
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
-          cols={{lg: container.properties.cols}}
+          cols={{lg: container.properties.cols, md: Math.round(container.properties.cols * 0.7), sm: Math.round(container.properties.cols * 0.5), xs: 1}}
           width={this.props.baseColWidth * container.properties.w}
           margin={[0, 0]}
           compactType={this.state.compactType}
