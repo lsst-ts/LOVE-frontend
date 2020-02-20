@@ -16,12 +16,33 @@
   max-width: 50ch;
 }
 
+.input {
+  background-color: transparent;
+  color: var(--base-font-color);
+  border: 1px solid var(--secondary-font-color);
+}
+
+.input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--secondary-font-color);
+  opacity: 1; /* Firefox */
+}
+
+.input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: var(--secondary-font-color);
+}
+
+.input::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: var(--secondary-font-color);
+}
+
 .filterLabel {
   font-size: 1.2em;
   display: flex;
   align-items: center;
 }
-
 
 .availableViewsWrapper {
   margin-top: 2em;
@@ -57,6 +78,10 @@
   border: 1px dashed var(--secondary-font-color);
   position: relative;
   padding: 0.2em;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
 }
 
 .view .preview img {
@@ -77,6 +102,10 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
 }
 
 .view .buttons {
@@ -88,7 +117,12 @@
   top: 1em;
   right: 1em;
   opacity: 0;
-  transition: opacity 0.15s  ease-out;
+  transition: opacity 0.1s ease-out;
+}
+
+.visible {
+  /* display: grid !important; */
+  opacity: 1 !important;
 }
 
 .iconButton {
@@ -119,17 +153,16 @@
   font-size: 1.3em;
   background-color: var(--second-secondary-background-color);
   font-weight: bold;
-  transition: opacity 0.15s  ease-out;
+  transition: opacity 0.1s ease-out;
 }
-
 
 .viewOverlay {
   width: 100%;
   height: 100%;
   background-color: var(--second-secondary-background-color);
-  background: rgba(0,0,0,0);
+  background: rgba(0, 0, 0, 0);
   filter: blur(2px);
-  transition: filter 0.15s ease-out;
+  transition: filter 0.1s ease-out;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -143,6 +176,14 @@
   filter: none;
 }
 
-.view:hover .hasThumbnail + .imageFallback {
+.view[hasThumbnail='true']:hover + .imageFallback {
   opacity: 0;
+}
+
+div[hasThumbnail='true'] + .fallbackHover {
+  opacity: 0;
+}
+
+div[hasThumbnail='true'].viewHover {
+  filter: none;
 }

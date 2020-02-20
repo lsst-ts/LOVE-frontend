@@ -115,6 +115,8 @@ export const getMountSubscriptions = (index) => {
     `event-ATMCS-${index}-target`,
     `event-ATMCS-${index}-positionLimits`,
     `telemetry-ATMCS-${index}-mountEncoders`,
+    //ATAOS
+    `event-ATAOS-${index}-correctionOffsets`,
   ];
 };
 
@@ -133,25 +135,25 @@ export const getMountState = (state, index) => {
   const target = mountData[`event-ATMCS-${index}-target`];
   const positionLimits = mountData[`event-ATMCS-${index}-positionLimits`];
   const mountEncoders = mountData[`telemetry-ATMCS-${index}-mountEncoders`];
+  const hexapodInPosition = mountData[`event-ATHexapod-${index}-inPosition`];
+  const m1CoverState = mountData[`event-ATPneumatics-${index}-m1CoverState`];
+  const hexapodReadyForCommand = mountData[`event-ATPneumatics-${index}-readyForCommand`];
+  const m1VentsLimitSwitches = mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`];
+  const m1CoverLimitSwitches = mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`];
+  const correctionOffsets = mountData[`event-ATAOS-${index}-correctionOffsets`];
   return {
     //ATHexapod
-    hexapodInPosition: mountData[`event-ATHexapod-${index}-inPosition`]
-      ? mountData[`event-ATHexapod-${index}-inPosition`]['inPosition']
-      : 0,
-    hexapodReadyForCommand: mountData[`event-ATHexapod-${index}-readyForCommand`]
-      ? mountData[`event-ATHexapod-${index}-readyForCommand`]['ready']
+    hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1]['inPosition'].value : 0,
+    hexapodReadyForCommand: hexapodReadyForCommand
+      ? hexapodReadyForCommand[hexapodReadyForCommand.length - 1]['ready']
       : 0,
     hexapodReportedPosition: mountData[`telemetry-ATHexapod-${index}-positionStatus`]
       ? mountData[`telemetry-ATHexapod-${index}-positionStatus`]['reportedPosition']
       : 'Unknown',
     //ATPneumatics
-    m1CoverState: mountData[`event-ATPneumatics-${index}-m1CoverState`]
-      ? mountData[`event-ATPneumatics-${index}-m1CoverState`]
-      : 0,
-    m1CoverLimitSwitches: mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`]
-      ? mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`]
-      : {},
-    m1VentsLimitSwitches: mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`],
+    m1CoverState: m1CoverState ? m1CoverState[m1CoverState.length - 1]['state'].value : 0,
+    m1CoverLimitSwitches: m1CoverLimitSwitches ? m1CoverLimitSwitches[m1CoverLimitSwitches.length - 1] : {},
+    m1VentsLimitSwitches: m1VentsLimitSwitches ? m1VentsLimitSwitches[m1VentsLimitSwitches.length - 1] : {},
     loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`]
       ? mountData[`telemetry-ATPneumatics-${index}-loadCell`]['cellLoad']
       : 'Unknown',
@@ -183,6 +185,8 @@ export const getMountState = (state, index) => {
     target: target ? target[target.length - 1] : {},
     positionLimits: positionLimits ? positionLimits[positionLimits.length - 1] : {},
     mountEncoders: mountEncoders ? mountEncoders : {},
+    //ATAOS
+    correctionOffsets: correctionOffsets ? correctionOffsets[correctionOffsets.length - 1] : {x:{value: 1.1234} ,y:{value: 2.1234} ,z:{value: 3.1234} ,u:{value: 4.1234} ,v:{value: 5.1234} ,w:{value: 6.1234} },
   };
 };
 
@@ -383,6 +387,16 @@ export const getCSCHeartbeat = (state, csc, salindex) => {
   return state.heartbeats.cscs.find((heartbeat) => heartbeat.csc === csc && heartbeat.salindex === salindex);
 };
 
+
+/**
+ * Selects the latest manager heartbeat
+ * @param {object} state
+ */
+export const getLastManagerHeartbeat = (state) => {
+  if (state.heartbeats === undefined) return undefined;
+  return state.heartbeats.lastManagerHeartbeat;
+};
+
 /**
  * Reshape the output of getStreamsData into a dictionary indexed by "csc-salindex" for all "csc-salindex" pairs
  * for which a subscription to a given category and stream exists in the state.
@@ -487,6 +501,6 @@ export const getLastAlarm = (state) => {
   return cleanAlarm(getStreamData(state, 'event-Watcher-0-alarm'));
 };
 
-export const getObservingLogs = (state)=>{
+export const getObservingLogs = (state) => {
   return state.observingLogs.logMessages;
-}
+};

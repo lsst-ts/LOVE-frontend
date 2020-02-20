@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
+import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import EditIcon from '../../icons/EditIcon/EditIcon';
 import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
 import ManagerInterface from '../../../Utils';
@@ -16,7 +17,7 @@ class ViewsIndex extends Component {
     history: PropTypes.object,
     /** Current views to display */
     views: PropTypes.array,
-    /** Current views to display */
+    /** Function to delete a view */
     deleteView: PropTypes.func,
   };
 
@@ -24,6 +25,8 @@ class ViewsIndex extends Component {
     super(props);
     this.state = {
       filter: '',
+      hoveredView: null,
+      viewToDelete: null,
     };
   }
 
@@ -39,7 +42,12 @@ class ViewsIndex extends Component {
     this.props.history.push('/uif/view?id=' + id);
   };
 
+  changeViewToDelete = (view) => {
+    this.setState({ viewToDelete: view });
+  };
+
   deleteView = (id) => {
+    this.changeViewToDelete(null);
     this.props.deleteView(id).then((success) => {
       if (success) {
         toast.success('View deleted successfully');
@@ -56,13 +64,33 @@ class ViewsIndex extends Component {
     });
   };
 
+  onKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      this.setState({ filter: '' });
+    }
+  };
+
+  showButtons = (id) => {
+    this.setState({ hoveredView: id });
+  };
+
+  hideButtons = () => {
+    this.setState({ hoveredView: null });
+  };
+
   render() {
     return (
       <div className={styles.container}>
         <div className={styles.filterWrapper}>
           <div className={styles.filter}>
             <div className={styles.filterLabel}>Filter:</div>
-            <Input className={styles.input} value={this.state.filter} onChange={this.changeFilter} />
+            <Input
+              className={styles.input}
+              value={this.state.filter}
+              onChange={this.changeFilter}
+              onKeyDown={this.onKeyDown}
+              placeholder="Type here to filter results"
+            />
           </div>
         </div>
         <div className={styles.availableViewsWrapper}>
@@ -80,22 +108,40 @@ class ViewsIndex extends Component {
               if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
               return (
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
-                  <div title="Open" key={index} className={styles.view} onClick={() => this.openView(view.id)}>
+                  <div
+                    title="Open"
+                    key={index}
+                    className={styles.view}
+                    onClick={() => this.openView(view.id)}
+                    onMouseEnter={this.showButtons.bind(this, view.id)}
+                    onTouchStart={this.showButtons.bind(this, view.id)}
+                    onTouchMove={this.showButtons.bind(this, view.id)}
+                    onMouseLeave={this.hideButtons.bind(this)}
+                  >
                     <div className={styles.preview}>
-                      <div className={styles.viewOverlay}>
+                      <div className={[styles.viewOverlay, this.state.hoveredView === view.id ? styles.viewHover : ''].join(' ')}>
                         <img
                           src={imgURL}
                           onLoad={(ev) => {
-                            ev.target.parentNode.className += ` ${styles.hasThumbnail}`;
+                            ev.target.parentNode.setAttribute('hasThumbnail', true);
                             ev.target.style.display = 'block';
                           }}
                           style={{ display: 'none' }}
                         />
                       </div>
-                      <span className={styles.imageFallback}>{viewName}</span>
+                      <span
+                        className={[
+                          styles.imageFallback,
+                          this.state.hoveredView === view.id ? styles.fallbackHover : '',
+                        ].join(' ')}
+                      >
+                        {view.name.replace(/[a-z\s]/g, '').substring(0, 6)}
+                      </span>
                     </div>
                     <div className={styles.name}> {view.name} </div>
-                    <div className={styles.buttons}>
+                    <div
+                      className={[styles.buttons, this.state.hoveredView === view.id ? styles.visible : null].join(' ')}
+                    >
                       <Button
                         className={styles.iconButton}
                         title="Edit"
@@ -111,7 +157,7 @@ class ViewsIndex extends Component {
                         title="Delete"
                         onClick={(event) => {
                           event.stopPropagation();
-                          this.deleteView(view.id);
+                          this.changeViewToDelete(view);
                         }}
                       >
                         <DeleteIcon className={styles.icon} />
@@ -122,6 +168,14 @@ class ViewsIndex extends Component {
               );
             })}
         </div>
+        <ConfirmationModal
+          isOpen={this.state.viewToDelete !== null}
+          message={`Are you sure you want to delete the view ${
+            this.state.viewToDelete ? this.state.viewToDelete.name : null
+          }?`}
+          confirmCallback={() => this.deleteView(this.state.viewToDelete.id)}
+          cancelCallback={() => this.changeViewToDelete(null)}
+        />
       </div>
     );
   }
