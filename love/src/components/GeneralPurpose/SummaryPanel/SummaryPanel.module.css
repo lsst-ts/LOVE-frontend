@@ -4,8 +4,8 @@
     grid-auto-rows: max-content;
     grid-row-gap: 0.2em;
     padding: 0 2em;
-    max-width: 25em;
-    min-width: 22em;
+    max-width: 27em;
+    min-width: 24em;
     justify-content: center;
     align-items: center;
     align-content: center;
@@ -46,6 +46,7 @@
     padding: 0.2em 2em;
     color: var(--base-font-color);
     padding-right: 0em;
+    
   }
   
   .summaryTable .row {
@@ -68,4 +69,9 @@
   
   .highlight {
     color: var(--base-font-color);
+  }
+
+  .arrayValue {
+    display: grid;
+    grid-template-rows: auto;
   }

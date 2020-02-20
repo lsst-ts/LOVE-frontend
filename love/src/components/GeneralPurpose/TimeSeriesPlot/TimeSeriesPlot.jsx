@@ -69,6 +69,12 @@ export default class TimeSeriesPlot extends Component {
     dateStart: -Infinity,
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    return nextProps.dataSources.some((dataSource) => {
+      return this.props.streamStates[dataSource].timestamp !== nextProps.streamStates[dataSource].timestamp;
+    });
+  };
+
   componentDidUpdate = (prevProps) => {
     const dateInterval = this.props.dateInterval;
 
@@ -90,7 +96,9 @@ export default class TimeSeriesPlot extends Component {
       if (prevProps.timestamp !== timestamp) {
         if (this.data[dataSource] === undefined) this.data[dataSource] = [];
         this.data[dataSource].push(vegaData);
-
+        if (this.data[dataSource].length > 200) {
+          this.data[dataSource].splice(0, 1);
+        }
         shouldUpdatePlot = true;
       }
 
@@ -142,6 +150,7 @@ export default class TimeSeriesPlot extends Component {
             fill: this.getCSSColorByVariableName('--second-secondary-background-color'),
             stroke: 'none',
             strokeWidth: 0,
+            renderer: 'canvas',
           },
         },
       },

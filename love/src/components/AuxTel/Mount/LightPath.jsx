@@ -95,7 +95,7 @@ export default class LightPath extends Component {
   drawM1Cover = (props) => {
     const m1CoverState = props.m1CoverState;
     //ATPneumatics
-    const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState];
+    const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState] || m1CoverStateStateMap[0];
     const m1CoverLimitSwitches = props.m1CoverLimitSwitches;
     const getLimitSwitchStatus = (number) => {
       if (!m1CoverLimitSwitches[`cover${number}ClosedActive`] && m1CoverLimitSwitches[`cover${number}OpenActive`])
@@ -192,9 +192,9 @@ export default class LightPath extends Component {
     const m3State = props.m3State;
     const portSelected = props.m3PortSelected;
 
-    const m3StateText = m3RotatorStateMap[m3State];
-    const m3PortSelectedText = m3PortSelectedStateMap[portSelected];
-    const m3InPositionText = m3InPositionStateMap[this.props.m3InPosition ? 1 : 0];
+    const m3StateText = m3RotatorStateMap[m3State] || m3RotatorStateMap[0];
+    const m3PortSelectedText = m3PortSelectedStateMap[portSelected] || m3PortSelectedStateMap[0];
+    const m3InPositionText = m3InPositionStateMap[this.props.m3InPosition ? 1 : 0] || m3InPositionStateMap[0];
 
     const m3StateValue = m3RotatorStateMap[m3State];
     const status = stateToStyleMount[m3StateValue];
@@ -253,7 +253,7 @@ export default class LightPath extends Component {
 
   drawM2 = (props) => {
     const hexapodInPosition = { props };
-    const hexapodInPositionText = hexapodInPositionStateMap[hexapodInPosition];
+    const hexapodInPositionText = hexapodInPositionStateMap[hexapodInPosition] || hexapodInPositionStateMap[0];
     const hexapodClass = styles[stateToStyleLightpath[hexapodInPositionText]];
     return (
       <Hoverable>
@@ -290,7 +290,7 @@ export default class LightPath extends Component {
   drawPort1 = (props) => {
     const m3PortSelected = props.m3PortSelected;
     const nasmyth1RotatorInPosition = props.nasmyth1RotatorInPosition;
-    const nasmyth1RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth1RotatorInPosition];
+    const nasmyth1RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth1RotatorInPosition] || nasmythRotatorInPositionStateMap[0];
     let nasmyth1Class = styles[stateToStyleLightpath[nasmyth1RotatorInPositionText]];
     if (m3PortSelected !== 1) nasmyth1Class = styles.disabled;
     const mountEncoders = props.mountEncoders;
@@ -374,7 +374,7 @@ export default class LightPath extends Component {
   drawPort2 = (props) => {
     const m3PortSelected = props.m3PortSelected;
     const nasmyth2RotatorInPosition = props.nasmyth2RotatorInPosition;
-    const nasmyth2RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth2RotatorInPosition];
+    const nasmyth2RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth2RotatorInPosition] || nasmythRotatorInPositionStateMap[0];
     let nasmyth2Class = styles[stateToStyleLightpath[nasmyth2RotatorInPositionText]];
     if (m3PortSelected !== 2) nasmyth2Class = styles.disabled;
     const mountEncoders = props.mountEncoders;
