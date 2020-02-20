@@ -108,13 +108,14 @@ export default class CSCDetail extends Component {
     }
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
-    const stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
+    let stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
+    if (heartbeatStatus === 'unknown') stateClass = CSCDetail.states[0].class;
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
-        <div className={[styles.summaryStateSection, stateClass].join(' ')}>
+        <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
