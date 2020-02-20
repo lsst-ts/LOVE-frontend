@@ -5,7 +5,7 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { getNotificationMessage } from '../../Utils';
+import { getNotificationMessage, relativeTime } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
@@ -133,6 +133,14 @@ class Layout extends Component {
     });
   };
 
+  getHeartbeatTitle = (heartbeat) => {
+    if (heartbeat === undefined || heartbeat.data === undefined || heartbeat.data.timestamp === undefined) {
+      return 'LOVE manager heartbeat never seen';
+    }
+    const timeStatement = relativeTime(heartbeat.data.timestamp, 0);
+    return `LOVE manager heartbeat not seen since ${timeStatement}`;
+  };
+
   handleClick = (event) => {
     if (this.dropdown && !this.dropdown.contains(event.target)) {
       this.setState({ settingsVisible: false });
@@ -214,7 +222,10 @@ class Layout extends Component {
             <div className={styles.rightTopbar}>
               {this.state.heartbeatStatus !== 'ok' && (
                 <div className={styles.heartbeatIconWrapper}>
-                  <HeartbeatIcon status={this.state.heartbeatStatus} title={'Manager heartbeat'} />
+                  <HeartbeatIcon
+                    status={this.state.heartbeatStatus}
+                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                  />
                 </div>
               )}
               <Button
