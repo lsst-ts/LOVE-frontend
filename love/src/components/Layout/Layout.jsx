@@ -5,12 +5,13 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { getNotificationMessage } from '../../Utils';
+import { getNotificationMessage, relativeTime } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
+import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import styles from './Layout.module.css';
 
@@ -20,7 +21,7 @@ const BREAK_3 = 375;
 const urls = {
   // '/': 'HOME',
   '/uif': 'AVAILABLE VIEWS',
-}
+};
 
 class Layout extends Component {
   static propTypes = {
@@ -57,6 +58,8 @@ class Layout extends Component {
       settingsVisible: false,
       id: null,
       title: null,
+      heartbeatTimer: undefined,
+      lastHeartbeat: undefined,
     };
   }
 
@@ -66,9 +69,16 @@ class Layout extends Component {
     window.addEventListener('resize', this.handleResize);
   };
 
+  componentDidMount = () => {
+    this.heartbeatInterval = setInterval(() => {
+      this.checkHeartbeat();
+    }, 3000);
+  };
+
   componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClick, false);
     window.removeEventListener('resize', this.handleResize);
+    window.clearInterval(this.heartbeatInterval);
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
@@ -109,12 +119,38 @@ class Layout extends Component {
     }
   };
 
+  checkHeartbeat = () => {
+    const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
+    const heartbeatStatus =
+      this.state.lastHeartbeat &&
+      lastManagerHeartbeat &&
+      this.state.lastHeartbeat.data.timestamp !== lastManagerHeartbeat.data.timestamp
+        ? 'ok'
+        : 'alert';
+    this.setState({
+      lastHeartbeat: lastManagerHeartbeat,
+      heartbeatStatus,
+    });
+  };
+
+  getHeartbeatTitle = (heartbeat) => {
+    if (heartbeat === undefined || heartbeat.data === undefined || heartbeat.data.timestamp === undefined) {
+      return 'LOVE manager heartbeat never seen';
+    }
+    const timeStatement = relativeTime(heartbeat.data.timestamp, 0);
+    return `LOVE manager heartbeat not seen since ${timeStatement}`;
+  };
+
   handleClick = (event) => {
     if (this.dropdown && !this.dropdown.contains(event.target)) {
       this.setState({ settingsVisible: false });
     }
-    if (this.sidebar && !this.sidebar.contains(event.target) &&
-        this.leftNotch && !this.leftNotch.contains(event.target)) {
+    if (
+      this.sidebar &&
+      !this.sidebar.contains(event.target) &&
+      this.leftNotch &&
+      !this.leftNotch.contains(event.target)
+    ) {
       this.setState({ sidebarVisible: false });
     }
   };
@@ -147,7 +183,7 @@ class Layout extends Component {
   navigateTo = (url) => {
     this.setState({ sidebarVisible: false });
     this.props.history.push(url);
-  }
+  };
 
   toggleCollapsedLogo = () => {
     this.setState({ collapsedLogo: !this.state.collapsedLogo });
@@ -173,9 +209,7 @@ class Layout extends Component {
               <MenuIcon className={styles.logo} />
               <LogoIcon className={styles.logo} />
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
-              <span className={styles.text}>
-                {this.state.viewOnNotch ? this.state.title : ''}
-              </span>
+              <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
             </div>
             <NotchCurve className={styles.notchCurve} />
           </div>
@@ -186,6 +220,14 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
+              {this.state.heartbeatStatus !== 'ok' && (
+                <div className={styles.heartbeatIconWrapper}>
+                  <HeartbeatIcon
+                    status={this.state.heartbeatStatus}
+                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                  />
+                </div>
+              )}
               <Button
                 className={styles.iconBtn}
                 title="View notifications"
@@ -199,10 +241,11 @@ class Layout extends Component {
               <span className={styles.refNode} ref={(node) => (this.dropdown = node)}>
                 <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
                   <GearIcon className={styles.icon} />
-                  <div className={[
-                    styles.settingsDropdown,
-                    this.state.settingsVisible ? styles.settingsVisible : ''
-                  ].join(' ')}>
+                  <div
+                    className={[styles.settingsDropdown, this.state.settingsVisible ? styles.settingsVisible : ''].join(
+                      ' ',
+                    )}
+                  >
                     <div
                       className={this.state.id ? styles.menuElement : styles.disabledElement}
                       title="Edit view"
@@ -232,22 +275,14 @@ class Layout extends Component {
           ref={(node) => (this.sidebar = node)}
           className={[styles.sidebar, !this.state.sidebarVisible ? styles.sidebarHidden : null].join(' ')}
         >
-          <div className={styles.viewName}>
-            {!this.state.viewOnNotch ? this.state.title : ' '}
-          </div>
+          <div className={styles.viewName}>{!this.state.viewOnNotch ? this.state.title : ' '}</div>
           <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
-            <p onClick={() => this.navigateTo("/")}>
-              Home
-            </p>
-            <p onClick={() => this.navigateTo("/uif")}>
-              Views Index
-            </p>
+            <p onClick={() => this.navigateTo('/')}>Home</p>
+            <p onClick={() => this.navigateTo('/uif')}>Views Index</p>
           </div>
         </div>
 
-        <div className={styles.contentWrapper}>
-          {this.props.children}
-        </div>
+        <div className={styles.contentWrapper}>{this.props.children}</div>
 
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
