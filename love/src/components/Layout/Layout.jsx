@@ -120,15 +120,15 @@ class Layout extends Component {
   };
 
   checkHeartbeat = () => {
-    const lastManagetHeartbeat = this.props.getLastManagerHeartbeat();
+    const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
     const heartbeatStatus =
       this.state.lastHeartbeat &&
-      lastManagetHeartbeat &&
-      this.state.lastHeartbeat.data.timestamp !== lastManagetHeartbeat.data.timestamp
+      lastManagerHeartbeat &&
+      this.state.lastHeartbeat.data.timestamp !== lastManagerHeartbeat.data.timestamp
         ? 'ok'
         : 'alert';
     this.setState({
-      lastHeartbeat: lastManagetHeartbeat,
+      lastHeartbeat: lastManagerHeartbeat,
       heartbeatStatus,
     });
   };
