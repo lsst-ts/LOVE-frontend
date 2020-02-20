@@ -70,7 +70,7 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
-    setInterval(() => {
+    this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
     }, 3000);
   };
@@ -78,6 +78,7 @@ class Layout extends Component {
   componentWillUnmount = () => {
     document.removeEventListener('mousedown', this.handleClick, false);
     window.removeEventListener('resize', this.handleResize);
+    window.clearInterval(this.heartbeatInterval);
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
