@@ -58,19 +58,16 @@ export default class LATISS extends Component {
     return (
       <div className={styles.wheelSelector}>
         <span />
-        <span className={[styles.selectionBoxLabel, selected === 0 ? styles.selected : ''].join(' ')}>0</span>
         <span className={[styles.selectionBoxLabel, selected === 1 ? styles.selected : ''].join(' ')}>1</span>
         <span className={[styles.selectionBoxLabel, selected === 2 ? styles.selected : ''].join(' ')}>2</span>
         <span className={[styles.selectionBoxLabel, selected === 3 ? styles.selected : ''].join(' ')}>3</span>
+        <span className={[styles.selectionBoxLabel, selected === 4 ? styles.selected : ''].join(' ')}>4</span>
         <span className={styles.selectionBoxTitle}>{title}</span>
-        <div className={[styles.selectionBox, selected === 0 ? styles.selected : ''].join(' ')} />
         <div className={[styles.selectionBox, selected === 1 ? styles.selected : ''].join(' ')} />
         <div className={[styles.selectionBox, selected === 2 ? styles.selected : ''].join(' ')} />
         <div className={[styles.selectionBox, selected === 3 ? styles.selected : ''].join(' ')} />
+        <div className={[styles.selectionBox, selected === 4 ? styles.selected : ''].join(' ')} />
         <span />
-        <span className={[styles.filterName, selected === 0 ? styles.selected : ''].join(' ')}>
-          {selected === 0 ? filterName : ''}
-        </span>
         <span className={[styles.filterName, selected === 1 ? styles.selected : ''].join(' ')}>
           {selected === 1 ? filterName : ''}
         </span>
@@ -79,6 +76,9 @@ export default class LATISS extends Component {
         </span>
         <span className={[styles.filterName, selected === 3 ? styles.selected : ''].join(' ')}>
           {selected === 3 ? filterName : ''}
+        </span>
+        <span className={[styles.filterName, selected === 4 ? styles.selected : ''].join(' ')}>
+          {selected === 4 ? filterName : ''}
         </span>
       </div>
     );
@@ -186,7 +186,7 @@ export default class LATISS extends Component {
   render() {
     const slope = 0.08;
     const linearStagePosition = this.linearStageValueToPosition(this.props.reportedLinearStagePosition);
-
+    
     const filterWheelState = movingElementStateMap[this.props.fwState];
     const gratingWheelState = movingElementStateMap[this.props.gwState];
     const linearStageState = movingElementStateMap[this.props.lsState];
