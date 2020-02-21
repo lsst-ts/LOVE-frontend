@@ -20,6 +20,7 @@ import AddIcon from '../../icons/AddIcon/AddIcon';
 import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
+import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -253,6 +254,13 @@ class ViewEditor extends Component {
     this.setState({ editorVisible: false });
   };
 
+  exitEditMode = (e) => {
+    const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+
+    this.props.history.push(`/uif/view?id=${id}`)
+
+  }
+
   receiveSelection = (selection) => {
     this.hideSelectionModal();
     const parsedLayout = { ...this.getEditedViewLayout() };
@@ -371,6 +379,17 @@ class ViewEditor extends Component {
             status="transparent"
           >
             <DebugIcon className={styles.icon} />
+          </Button>
+          <span className={styles.divider}/>
+
+          <Button
+            className={styles.iconBtn}
+            title="Exit edit mode"
+            onClick={this.exitEditMode}
+            disabled={this.state.editorVisible}
+            status="transparent"
+          >
+            <ExitModeIcon className={styles.icon} />
           </Button>
         </div>
       </div>
