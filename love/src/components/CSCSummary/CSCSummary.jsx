@@ -44,23 +44,23 @@ export default class CSCSummary extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  toggleCSCExpansion = (realm, group, csc, salindex) => {
-    const newSelectedCSCs = [...this.state.selectedCSCs];
+  // toggleCSCExpansion = (realm, group, csc, salindex) => {
+  //   const newSelectedCSCs = [...this.state.selectedCSCs];
 
-    for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
-      const currentCSC = this.state.selectedCSCs[i];
-      if (realm === currentCSC.realm && group === currentCSC.group) {
-        newSelectedCSCs.splice(i, 1);
-        if (csc === currentCSC.csc && salindex === currentCSC.salindex) {
-          this.setState({ selectedCSCs: newSelectedCSCs });
-          return;
-        }
-      }
-    }
-    this.setState({
-      selectedCSCs: [...newSelectedCSCs, { realm, group, csc, salindex }],
-    });
-  };
+  //   for (let i = 0; i < this.state.selectedCSCs.length; i += 1) {
+  //     const currentCSC = this.state.selectedCSCs[i];
+  //     if (realm === currentCSC.realm && group === currentCSC.group) {
+  //       newSelectedCSCs.splice(i, 1);
+  //       if (csc === currentCSC.csc && salindex === currentCSC.salindex) {
+  //         this.setState({ selectedCSCs: newSelectedCSCs });
+  //         return;
+  //       }
+  //     }
+  //   }
+  //   this.setState({
+  //     selectedCSCs: [...newSelectedCSCs, { realm, group, csc, salindex }],
+  //   });
+  // };
 
   render() {
     return (
@@ -72,8 +72,6 @@ export default class CSCSummary extends Component {
                 <CSCRealm
                   name={realm}
                   groups={this.props.hierarchy[realm]}
-                  onCSCClick={this.toggleCSCExpansion}
-                  selectedCSCs={this.state.selectedCSCs}
                   hierarchy={this.props.hierarchy}
                 />
               </div>
