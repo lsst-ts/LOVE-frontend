@@ -17,7 +17,7 @@ export default class ConfirmationModal extends Component {
     /** Function to call when the action is confirmed */
     confirmCallback: PropTypes.func,
     /** Function to call when the action is canceled */
-    canceledCallback: PropTypes.func,
+    cancelCallback: PropTypes.func,
   };
 
   static defaultProps = {
