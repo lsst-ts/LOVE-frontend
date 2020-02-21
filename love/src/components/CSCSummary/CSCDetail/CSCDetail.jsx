@@ -88,6 +88,9 @@ export default class CSCDetail extends Component {
       if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
+    if (props.hasHeartbeat === false) {
+      heartbeatStatus = 'ok';
+    }
 
     let timeDiffText = 'Unknown';
 
@@ -122,8 +125,8 @@ export default class CSCDetail extends Component {
           </span>
         </div>
         <div className={[styles.heartbeatSection, stateClass].join(' ')}>
-          <div className={[styles.heartbeatIconWrapper, heartbeatStatus === 'ok' ? styles.hidden : ''].join(' ')}>
-            <HeartbeatIcon status={heartbeatStatus === 'alert' ? 'unknown' : heartbeatStatus} title={title} />
+          <div className={[styles.heartbeatIconWrapper, heartbeatStatus === 'ok' && props.hasHeartbeat !== false ? styles.hidden : ''].join(' ')}>
+            <HeartbeatIcon status={heartbeatStatus === 'alert' || props.hasHeartbeat === false ? 'unknown' : heartbeatStatus} title={title} />
           </div>
         </div>
         <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
