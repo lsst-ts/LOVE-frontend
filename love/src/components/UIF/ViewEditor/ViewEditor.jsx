@@ -441,7 +441,7 @@ class ViewEditor extends Component {
   render() {
     return (
       <>
-        <Prompt when={!this.viewIsSaved()} message="There are unsaved changes. Are you sure you want to leave?" />
+        <Prompt when={!this.viewIsSaved()} message="There are unsaved changes that will be lost. Are you sure you want to leave?" />
         <div className={styles.container}>
           <div ref={this.customViewRef}>
             <CustomView
