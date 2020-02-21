@@ -7,7 +7,7 @@ export const severityToStatus = {
   0: 'unkown',
   1: 'ok',
   2: 'warning',
-  3: 'alert',
+  3: 'serious',
   4: 'critical',
 };
 
