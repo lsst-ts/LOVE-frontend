@@ -45,7 +45,7 @@
 
 .toolbar {
   display: grid;
-  grid-template-columns: min-content repeat(5, min-content);
+  grid-template-columns: min-content repeat(7, min-content);
   /* grid-gap: 0.2em; */
 }
 
@@ -58,4 +58,13 @@
 
 .icon {
   height: 1.4em;
+}
+
+.divider {
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  width: 1px;
+  height: 80%;
+  background: var(--secondary-font-color);
+  align-self: center;
 }
