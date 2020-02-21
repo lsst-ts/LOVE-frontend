@@ -138,7 +138,7 @@ export default class CSCExpanded extends PureComponent {
             <div className={styles.topBarContainer}>
               <div className={styles.breadcrumContainer}>
                 {
-                  this.props.realm && this.props.group && <>
+                  this.props.group && <>
                     <div
                       className={styles.backArrowIconWrapper}
                       onClick={() =>
