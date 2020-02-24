@@ -43,7 +43,6 @@ export default class Watcher extends Component {
     };
   }
 
-
   componentDidMount = () => {
     this.props.subscribeToStreams();
   };
@@ -86,14 +85,13 @@ export default class Watcher extends Component {
     let unackUnmutedAlarmsCount = 0;
     const now = moment().unix() - this.props.taiToUtc;
 
-    for (let alarm of this.props.alarms) {
+    this.props.alarms.forEach((alarm) => {
       if (
         alarm['severity'] <= 1 &&
         alarm['maxSeverity'] <= 1 &&
-        alarm['acknowledged'] &&
         now - alarm['timestampAcknowledged'] >= TIMEOUT
       ) {
-        continue;
+        return;
       }
 
       if (alarm['mutedBy'] === '') {
@@ -108,7 +106,7 @@ export default class Watcher extends Component {
           alarmsToShow.push(alarm);
         }
       }
-    }
+    });
 
     this.test = null;
 
@@ -147,12 +145,10 @@ export default class Watcher extends Component {
               user={this.props.user}
               taiToUtc={this.props.taiToUtc}
               alarms={alarmsToShow}
-              ackAlarm={
-                (name, severity, acknowledgedBy) => {
-                  this.setState({ waiting: true });
-                  this.props.ackAlarm(name, severity, acknowledgedBy);
-                }
-              }
+              ackAlarm={(name, severity, acknowledgedBy) => {
+                this.setState({ waiting: true });
+                this.props.ackAlarm(name, severity, acknowledgedBy);
+              }}
               muteAlarm={this.props.muteAlarm}
               unmuteAlarm={this.props.unmuteAlarm}
               sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
