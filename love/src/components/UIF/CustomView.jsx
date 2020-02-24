@@ -169,6 +169,13 @@ class CustomView extends Component {
         allowOverflow: x.properties.allowOverflow,
       };
     });
+    const cols = typeof(container.properties.cols) === 'object' ? container.properties.cols :
+      {
+        lg: container.properties.cols,
+        md: container.properties.cols,
+        sm: Math.round(container.properties.cols * 0.5),
+        xs: 1
+      };
     return (
       <div
         key={container.properties.i.toString()}
@@ -184,7 +191,7 @@ class CustomView extends Component {
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
-          cols={{lg: container.properties.cols, md: Math.round(container.properties.cols * 0.7), sm: Math.round(container.properties.cols * 0.5), xs: 1}}
+          cols={cols}
           width={this.props.baseColWidth * container.properties.w}
           margin={[0, 0]}
           compactType={this.state.compactType}
