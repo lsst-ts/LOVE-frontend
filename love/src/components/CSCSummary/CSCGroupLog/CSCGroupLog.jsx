@@ -9,10 +9,8 @@ export default class CSCGroupLog extends Component {
   static propTypes = {
     name: PropTypes.string,
     group: PropTypes.string,
-    realm: PropTypes.string,
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
-    hierarchy: PropTypes.object,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
     subscribeToStream: PropTypes.func,
@@ -23,10 +21,8 @@ export default class CSCGroupLog extends Component {
   static defaultProps = {
     name: '',
     group: '',
-    realm: '',
     data: {},
     onCSCClick: () => 0,
-    hierarchy: {},
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
     errorCodeData: [],
@@ -34,27 +30,15 @@ export default class CSCGroupLog extends Component {
   };
 
   componentDidMount = () => {
-    if (this.props.hierarchy[this.props.realm]) {
-      this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
-        this.props.subscribeToStream(name, salindex);
-      });
-    } else if (this.props.cscList) {
       this.props.cscList.forEach(({ name, salindex }) => {
         this.props.subscribeToStream(name, salindex);
       });
-    }
   };
 
   clearGroupErrorCodes = () => {
-    if (this.props.hierarchy[this.props.realm]) {
-      this.props.hierarchy[this.props.realm][this.props.group].forEach(({ name, salindex }) => {
-        this.props.clearCSCErrorCodes(name, salindex);
-      });
-    } else if (this.props.cscList) {
       this.props.cscList.forEach(({ name, salindex }) => {
         this.props.clearCSCErrorCodes(name, salindex);
       });
-    }
   };
 
   render() {
@@ -68,7 +52,7 @@ export default class CSCGroupLog extends Component {
                 {this.props.embedded && (
                   <div
                     className={styles.backArrowIconWrapper}
-                    onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
+                    onClick={() => this.props.onCSCClick({  group: this.props.group })}
                   >
                     <BackArrowIcon />
                   </div>
@@ -98,7 +82,6 @@ export default class CSCGroupLog extends Component {
                     <div className={styles.messageTextContainer}>
                       <div className={styles.messageTopSection}>
                         <CSCDetailContainer
-                          realm={this.props.realm}
                           group={this.props.group}
                           name={msg.csc}
                           salindex={msg.salindex}
