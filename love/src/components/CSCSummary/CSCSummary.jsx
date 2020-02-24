@@ -10,23 +10,6 @@ export default class CSCSummary extends Component {
     expandHeight: PropTypes.bool,
   };
 
-  static defaultProps = {
-    hierarchy: {
-      'Aux Telescope': {
-        'CSC Group 1': [
-          { name: 'ScriptQueue', salindex: 1 },
-          { name: 'ATDome', salindex: 1 },
-        ],
-      },
-      'Main Telescope': {
-        'CSC Group 1': [{ name: 'CSC4', salindex: 0 }],
-        'CSC Group 2': [],
-      },
-      Observatory: {
-        'CSC Group 1': [],
-      },
-    },
-  };
   render() {
     return (
       <Panel title="CSC Summary" className={styles.panel} expandHeight={this.props.expandHeight}>
