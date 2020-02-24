@@ -22,17 +22,20 @@
   border: 1px solid var(--secondary-font-color);
 }
 
-.input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: var(--secondary-font-color);;
+.input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: var(--secondary-font-color);
   opacity: 1; /* Firefox */
 }
 
-.input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: var(--secondary-font-color);;
+.input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: var(--secondary-font-color);
 }
 
-.input::-ms-input-placeholder { /* Microsoft Edge */
-  color: var(--secondary-font-color);;
+.input::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: var(--secondary-font-color);
 }
 
 .filterLabel {
@@ -40,7 +43,6 @@
   display: flex;
   align-items: center;
 }
-
 
 .availableViewsWrapper {
   margin-top: 2em;
@@ -66,6 +68,7 @@
 
 .view .name {
   text-align: center;
+  font-size: 1.2em;
 }
 
 .view .preview {
@@ -74,19 +77,17 @@
   box-sizing: border-box;
   border: 1px dashed var(--secondary-font-color);
   position: relative;
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */
+  padding: 0.2em;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
 }
 
 .view .preview img {
   max-height: 100%;
   max-width: 100%;
   background-color: var(--second-secondary-background-color);
-  position: absolute;
-  top: 0;
-  left: 0;
 }
 
 .view .new {
@@ -101,25 +102,27 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  user-select: none;          /* Likely future */
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
 }
 
 .view .buttons {
+  display: grid;
   grid-template-columns: min-content min-content;
   grid-gap: 0.5em;
   justify-content: center;
-
   position: absolute;
   top: 1em;
   right: 1em;
-  display: none;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
 }
 
 .visible {
-  display: grid !important;
+  /* display: grid !important; */
+  opacity: 1 !important;
 }
 
 .iconButton {
@@ -150,4 +153,37 @@
   font-size: 1.3em;
   background-color: var(--second-secondary-background-color);
   font-weight: bold;
+  transition: opacity 0.1s ease-out;
+}
+
+.viewOverlay {
+  width: 100%;
+  height: 100%;
+  background-color: var(--second-secondary-background-color);
+  background: rgba(0, 0, 0, 0);
+  filter: blur(2px);
+  transition: filter 0.1s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view:hover .buttons {
+  opacity: 1;
+}
+
+.view:hover .viewOverlay {
+  filter: none;
+}
+
+.view[hasThumbnail='true']:hover + .imageFallback {
+  opacity: 0;
+}
+
+div[hasThumbnail='true'] + .fallbackHover {
+  opacity: 0;
+}
+
+div[hasThumbnail='true'].viewHover {
+  filter: none;
 }

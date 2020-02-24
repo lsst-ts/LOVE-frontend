@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Prompt } from 'react-router-dom';
 // import queryString from 'query-string';
 import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 import Button from '../../GeneralPurpose/Button/Button';
@@ -20,6 +20,7 @@ import AddIcon from '../../icons/AddIcon/AddIcon';
 import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
+import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -253,6 +254,12 @@ class ViewEditor extends Component {
     this.setState({ editorVisible: false });
   };
 
+  exitEditMode = (e) => {
+    const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+
+    this.props.history.push(`/uif/view?id=${id}`);
+  };
+
   receiveSelection = (selection) => {
     this.hideSelectionModal();
     const parsedLayout = { ...this.getEditedViewLayout() };
@@ -315,65 +322,82 @@ class ViewEditor extends Component {
     });
   };
 
+  viewIsSaved = () => {
+    return this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
+  };
   renderToolbar() {
-    const isSaved = this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
+    const isSaved = this.viewIsSaved();
+
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
     return (
-      <div className={styles.toolbarWrapper}>
-        <div className={styles.toolbar}>
-          <Input
-            className={styles.textField}
-            defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-            onBlur={this.onNameInputBlur}
-            key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-          />
-          <Button
-            className={styles.iconBtn}
-            title={saveButtonTooltip}
-            onClick={this.save}
-            disabled={isSaved}
-            status="transparent"
-          >
-            <SaveIcon className={styles.icon} />
-          </Button>
-          <Button
-            className={styles.iconBtn}
-            title="Add components"
-            onClick={this.showSelectionModal}
-            status="transparent"
-          >
-            <AddIcon className={styles.icon} />
-          </Button>
+      <>
+        <div className={styles.toolbarWrapper}>
+          <div className={styles.toolbar}>
+            <Input
+              className={styles.textField}
+              defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
+              onBlur={this.onNameInputBlur}
+              key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
+            />
+            <Button
+              className={styles.iconBtn}
+              title={saveButtonTooltip}
+              onClick={this.save}
+              disabled={isSaved}
+              status="transparent"
+            >
+              <SaveIcon className={styles.icon} />
+            </Button>
+            <Button
+              className={styles.iconBtn}
+              title="Add components"
+              onClick={this.showSelectionModal}
+              status="transparent"
+            >
+              <AddIcon className={styles.icon} />
+            </Button>
 
-          <Button
-            className={styles.iconBtn}
-            title="Undo"
-            onClick={this.props.undo}
-            disabled={this.props.undoActionsAvailable === 0}
-            status="transparent"
-          >
-            <UndoIcon className={styles.icon} />
-          </Button>
-          <Button
-            className={styles.iconBtn}
-            title="Redo"
-            onClick={this.props.redo}
-            disabled={this.props.redoActionsAvailable === 0}
-            status="transparent"
-          >
-            <RedoIcon className={styles.icon} />
-          </Button>
-          <Button
-            className={styles.iconBtn}
-            title="Debug"
-            onClick={this.showEditor}
-            disabled={this.state.editorVisible}
-            status="transparent"
-          >
-            <DebugIcon className={styles.icon} />
-          </Button>
+            <Button
+              className={styles.iconBtn}
+              title="Undo"
+              onClick={this.props.undo}
+              disabled={this.props.undoActionsAvailable === 0}
+              status="transparent"
+            >
+              <UndoIcon className={styles.icon} />
+            </Button>
+            <Button
+              className={styles.iconBtn}
+              title="Redo"
+              onClick={this.props.redo}
+              disabled={this.props.redoActionsAvailable === 0}
+              status="transparent"
+            >
+              <RedoIcon className={styles.icon} />
+            </Button>
+            <Button
+              className={styles.iconBtn}
+              title="Debug"
+              onClick={this.showEditor}
+              disabled={this.state.editorVisible}
+              status="transparent"
+            >
+              <DebugIcon className={styles.icon} />
+            </Button>
+            <span className={styles.divider} />
+
+            <Button
+              className={styles.iconBtn}
+              title="Exit edit mode"
+              onClick={this.exitEditMode}
+              disabled={this.state.editorVisible}
+              status="transparent"
+            >
+              <ExitModeIcon className={styles.icon} />
+            </Button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -417,6 +441,7 @@ class ViewEditor extends Component {
   render() {
     return (
       <>
+        <Prompt when={!this.viewIsSaved()} message="There are unsaved changes that will be lost. Are you sure you want to leave?" />
         <div className={styles.container}>
           <div ref={this.customViewRef}>
             <CustomView

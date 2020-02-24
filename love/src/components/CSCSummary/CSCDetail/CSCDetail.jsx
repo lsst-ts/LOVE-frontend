@@ -83,9 +83,9 @@ export default class CSCDetail extends Component {
     let timeDiff = -1;
     if (this.props.heartbeatData) {
       nLost = this.props.heartbeatData.lost;
-      if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
+      if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
 
@@ -99,7 +99,7 @@ export default class CSCDetail extends Component {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let title = `$${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
+    let title = `${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
 
     if (timeDiff === -2) {
       title += `${timeDiffText}`;
@@ -108,13 +108,15 @@ export default class CSCDetail extends Component {
     }
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
-    const stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
+    let stateClass = heartbeatStatus === 'alert' ? styles.alert : summaryState.class;
+    if (heartbeatStatus === 'unknown') stateClass = CSCDetail.states[0].class;
+    if (summaryState.name === 'UNKNOWN') stateClass = CSCDetail.states[0].class;
     return (
       <div
         onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
-        <div className={[styles.summaryStateSection, stateClass].join(' ')}>
+        <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
           <span className={styles.summaryState} title={summaryState.userReadable}>
             {summaryState.char}
           </span>
