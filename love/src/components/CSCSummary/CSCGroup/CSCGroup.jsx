@@ -36,7 +36,7 @@ export default class CSCGroup extends Component {
   };
 
   renderExpandedView = (selectedCSC) => {
-    const groupView = selectedCSC.csc == 'all';
+    const groupView = selectedCSC.csc === 'all';
 
     return groupView ? (
       <CSCGroupLogContainer

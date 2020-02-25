@@ -121,6 +121,7 @@ class ViewsIndex extends Component {
                     <div className={styles.preview}>
                       <div className={[styles.viewOverlay, this.state.hoveredView === view.id ? styles.viewHover : ''].join(' ')}>
                         <img
+                          alt='View preview'
                           src={imgURL}
                           onLoad={(ev) => {
                             ev.target.parentNode.setAttribute('hasThumbnail', true);
