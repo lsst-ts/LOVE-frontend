@@ -554,7 +554,7 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
           path: 'subdir/script6',
         },
       ],
-      state: 'Running',
+      // state: 'Running',
       finished_scripts: [
         {
           index: 100000,

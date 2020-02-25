@@ -723,7 +723,7 @@ it('Should save all events when subscribed to all', async () => {
   expect(result).toEqual(expected);
 });
 
-it.only('Should get incoming observing log messages from the state', async () => {
+it('Should get incoming observing log messages from the state', async () => {
   await server.connected;
   await store.dispatch(requestGroupSubscription('event-LOVE-0-observingLog'));
 
