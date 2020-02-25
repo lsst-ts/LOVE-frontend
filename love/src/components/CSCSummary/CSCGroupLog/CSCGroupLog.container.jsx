@@ -6,7 +6,8 @@ import { getGroupSortedErrorCodeData } from '../../../redux/selectors';
 import { removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 
 export const schema = {
-  description: 'Displays the error code logs for a set of CSCs, including error code, message, traceback and timestamp. Also includes current summary state and heartbeat for each CSC',
+  description:
+    'Displays the error code logs for a set of CSCs, including error code, message, traceback and timestamp. Also includes current summary state and heartbeat for each CSC',
   defaultSize: [24, 29],
   props: {
     group: {
@@ -31,11 +32,9 @@ export const schema = {
 };
 
 const CSCGroupLogContainer = ({
-  realm,
   group,
   name,
   onCSCClick,
-  hierarchy,
   clearCSCErrorCodes,
   subscribeToStream,
   errorCodeData,
@@ -44,11 +43,9 @@ const CSCGroupLogContainer = ({
 }) => {
   return (
     <CSCGroupLog
-      realm={realm}
       group={group}
       name={name}
       onCSCClick={onCSCClick}
-      hierarchy={hierarchy}
       clearCSCErrorCodes={clearCSCErrorCodes}
       subscribeToStream={subscribeToStream}
       errorCodeData={errorCodeData}
@@ -70,20 +67,9 @@ const mapDispatchtoProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  if (ownProps.realm && ownProps.hierarchy[ownProps.realm] && ownProps.hierarchy[ownProps.realm][ownProps.group]) {
-    const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.hierarchy[ownProps.realm][ownProps.group]);
-    return {
-      errorCodeData: errorCodeData,
-    };
-  }
-  if (ownProps.cscList) {
-    const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.cscList);
-    return {
-      errorCodeData: errorCodeData,
-    };
-  }
+  const errorCodeData = getGroupSortedErrorCodeData(state, ownProps.cscList);
   return {
-    errorCodeData: [],
+    errorCodeData: errorCodeData,
   };
 };
 
