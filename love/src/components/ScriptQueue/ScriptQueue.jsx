@@ -175,7 +175,7 @@ export default class ScriptQueue extends Component {
     //     - fail_run
     //     - fail_cleanup
     //     title: TestScript v1
-    //     type: object        
+    //     type: object
     //       `,
     //     config: 'wait_time: 10'
     //   })
@@ -707,7 +707,7 @@ export default class ScriptQueue extends Component {
                     {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                   </span>
                 </div>
-                {!this.props.running && this.props.commandExecutePermission && (
+                {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
                       <span>Resume</span>
@@ -717,7 +717,7 @@ export default class ScriptQueue extends Component {
                     </div>
                   </>
                 )}
-                {this.props.running && this.props.commandExecutePermission && (
+                {this.props.state === 'Running' && this.props.commandExecutePermission && (
                   <>
                     <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
                       <span>Pause</span>
