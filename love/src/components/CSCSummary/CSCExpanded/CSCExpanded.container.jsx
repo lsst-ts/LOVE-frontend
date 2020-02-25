@@ -36,7 +36,6 @@ const CSCExpandedContainer = ({
   name,
   salindex,
   group,
-  realm,
   onCSCClick,
   clearCSCErrorCodes,
   clearCSCLogMessages,
@@ -51,7 +50,6 @@ const CSCExpandedContainer = ({
       name={name}
       salindex={salindex}
       group={group}
-      realm={realm}
       onCSCClick={onCSCClick}
       clearCSCErrorCodes={clearCSCErrorCodes}
       errorCodeData={errorCodeData}

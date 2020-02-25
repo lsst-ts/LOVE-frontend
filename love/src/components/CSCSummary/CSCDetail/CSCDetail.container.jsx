@@ -32,7 +32,6 @@ export const schema = {
 };
 
 const CSCDetailContainer = ({
-  realm,
   group,
   name,
   salindex,
@@ -44,7 +43,6 @@ const CSCDetailContainer = ({
 }) => {
   return (
     <CSCDetail
-      realm={realm}
       group={group}
       name={name}
       salindex={salindex}
