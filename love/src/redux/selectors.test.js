@@ -555,6 +555,7 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
         },
       ],
       // state: 'Running',
+      running: true,
       finished_scripts: [
         {
           index: 100000,
@@ -646,7 +647,7 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
   // Act
   const streamData = getScriptQueueState(store.getState(), 1);
   const expectedData = {
-    state: scriptQueueStateStream.stream.state,
+    state: scriptQueueStateStream.stream.running ? 'Running' : 'Stopped',
     availableScriptList: scriptQueueStateStream.stream.available_scripts,
     waitingScriptList: scriptQueueStateStream.stream.waiting_scripts,
     current: scriptQueueStateStream.stream.current,
