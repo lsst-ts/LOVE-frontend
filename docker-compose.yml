@@ -2,18 +2,20 @@ version: "3.7"
 
 services:
 
-  frontend:
-    container_name: frontend
+  mount:
+    container_name: frontend_mount_tests
     build:
       context: .
       dockerfile: Dockerfile-dev
-    image: love-frontend-image-mount
+    image: love-frontend-tests-mount
     volumes:
       - .:/usr/src/love
       - /usr/src/love/love/node_modules
-    command: ""
-    ports:
-      - "3000:3000"
-      - "3001:3001"
-    stdin_open: true
-    tty: true
+    command: ["sh", "/usr/src/love/run_tests.sh"]
+  build:
+    container_name: frontend_build_tests
+    build:
+      context: .
+      dockerfile: Dockerfile-test
+    image: love-frontend-tests-build
+    command: ["sh", "/usr/src/love/run_tests.sh"]
