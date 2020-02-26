@@ -74,7 +74,6 @@ it('Should extract the stream correctly with a selector', async () => {
 
   // Assert
   expect(JSON.stringify(streamData)).toEqual(JSON.stringify(streams.airPressure));
-  expect(1).toEqual(2);
 });
 
 it('Should extract streams correctly with a selector', async () => {
