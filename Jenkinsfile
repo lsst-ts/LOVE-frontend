@@ -57,7 +57,6 @@ pipeline {
       when {
         anyOf {
           branch "develop"
-          branch "check_test_failure_behavior"
         }
       }
       steps {
