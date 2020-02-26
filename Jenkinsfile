@@ -69,5 +69,16 @@ pipeline {
         build(job: '../LOVE-integration-tools/master', wait: false)
       }
     }
+
+    stage("Run tests") {
+      when {
+        branch "test_in_pipeline"
+      }
+      steps {
+        script {
+          sh "docker-compose run build"
+        }
+      }
+    }
   }
 }
