@@ -55,6 +55,7 @@ const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
  */
 export const openWebsocketConnection = () => {
   const token = ManagerInterface.getToken();
+  console.log('token: ', token);
 
   const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
 
