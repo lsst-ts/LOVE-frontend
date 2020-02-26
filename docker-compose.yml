@@ -18,4 +18,3 @@ services:
       context: .
       dockerfile: Dockerfile-test
     image: love-frontend-tests-build
-    command: ["sh", "/usr/src/love/run_tests.sh"]

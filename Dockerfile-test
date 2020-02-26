@@ -9,3 +9,5 @@ RUN yarn install
 
 COPY love .
 COPY run_tests.sh .
+
+CMD ["sh", "/usr/src/love/run_tests.sh"]

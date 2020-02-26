@@ -76,7 +76,8 @@ pipeline {
       }
       steps {
         script {
-          sh "ls /usr/local/bin"
+          sh "docker image build -f Dockerfile-test -t love-frontend-test  ."
+          sh "docker run love-frontend-test"
         }
       }
     }
