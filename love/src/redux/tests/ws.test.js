@@ -3,15 +3,12 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import {
-  requestSALCommand,
   openWebsocketConnection,
   requestGroupSubscription,
   sendLOVECscObservingLogs,
 } from '../actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
-import { SALCommandStatus } from '../actions/ws';
 import {
-  getLastSALCommand,
   getCSCLogMessages,
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
