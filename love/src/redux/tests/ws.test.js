@@ -37,37 +37,6 @@ afterEach(() => {
   server.close();
 });
 
-it('Should send a command to the server and save it on the state properly', async () => {
-  const commandObject = {
-    cmd: 'cmd_closeShutter',
-    params: {},
-    component: 'ATDome',
-    cmd_id: '10-cmd_closeShutter',
-    salindex: 2,
-  };
-  const realDate = Date;
-  global.Date.now = () => 10;
-
-  await store.dispatch(requestSALCommand(commandObject));
-
-  await expect(server).toReceiveMessage({
-    category: 'cmd',
-    data: [
-      {
-        csc: 'ATDome',
-        data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {} } },
-        salindex: 2,
-      },
-    ],
-  });
-
-  expect(getLastSALCommand(store.getState())).toEqual({
-    status: SALCommandStatus.REQUESTED,
-    ...commandObject,
-  });
-  global.Date = realDate;
-});
-
 it('Should send an observingLog to the LOVE-Controller and the server should receive it properly', async () => {
   const user = 'an user';
   const message = 'a message';
@@ -370,38 +339,6 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
     expect(msg.csc).toEqual(sortedMessages[index].csc);
     expect(msg.salindex).toEqual(sortedMessages[index].salindex);
   });
-});
-
-it('Should properly interpret an ack message', async () => {
-  const commandObject = {
-    cmd: 'cmd_closeShutter',
-    params: {},
-    component: 'ATDome',
-    cmd_id: '10-cmd_closeShutter',
-  };
-  const realDate = Date;
-  global.Date.now = () => 10;
-
-  await store.dispatch(requestSALCommand(commandObject));
-  await server.nextMessage;
-
-  server.send({
-    category: 'ack',
-    data: [
-      {
-        csc: 'ATDome',
-        data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {}, result: 'Done' } },
-        salindex: 1,
-      },
-    ],
-  });
-
-  await expect(getLastSALCommand(store.getState())).toEqual({
-    status: SALCommandStatus.ACK,
-    result: 'Done',
-    ...commandObject,
-  });
-  global.Date = realDate;
 });
 
 it('Should save all telemetries when subscribed to all', async () => {
