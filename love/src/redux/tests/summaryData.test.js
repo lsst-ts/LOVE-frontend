@@ -5,7 +5,6 @@ import thunkMiddleware from 'redux-thunk';
 import {
   openWebsocketConnection,
   requestGroupSubscription,
-  sendLOVECscObservingLogs,
 } from '../actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import {
@@ -13,9 +12,6 @@ import {
   getCSCErrorCodeData,
   getAllStreamsAsDictionary,
   getGroupSortedErrorCodeData,
-  getAllTelemetries,
-  getAllEvents,
-  getObservingLogs,
 } from '../selectors';
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
@@ -32,28 +28,6 @@ beforeEach(async () => {
 
 afterEach(() => {
   server.close();
-});
-
-it('Should send an observingLog to the LOVE-Controller and the server should receive it properly', async () => {
-  const user = 'an user';
-  const message = 'a message';
-  await store.dispatch(sendLOVECscObservingLogs(user, message));
-
-  await expect(server).toReceiveMessage({
-    category: 'love_csc',
-    data: [
-      {
-        csc: 'love',
-        salindex: 0,
-        data: {
-          observingLog: {
-            user: 'an user',
-            message: 'a message',
-          },
-        },
-      },
-    ],
-  });
 });
 
 it('It should extract the summary and log messages properly from the state with the generic reshape selector', async () => {
@@ -336,117 +310,4 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
     expect(msg.csc).toEqual(sortedMessages[index].csc);
     expect(msg.salindex).toEqual(sortedMessages[index].salindex);
   });
-});
-
-it('Should save all telemetries when subscribed to all', async () => {
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
-  let msg = {
-    category: 'telemetry',
-    data: [
-      {
-        csc: 'ATDome',
-        salindex: 1,
-        data: {
-          param1: 1234,
-        },
-      },
-    ],
-  };
-  server.send(msg);
-  msg.data[0].csc = 'ATMCS';
-  server.send(msg);
-  const expected = {
-    'ATDome-1': {
-      param1: 1234,
-    },
-    'ATMCS-1': {
-      param1: 1234,
-    },
-  };
-  const result = getAllTelemetries(store.getState());
-  expect(result).toEqual(expected);
-});
-
-it('Should save all events when subscribed to all', async () => {
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-all-all-all'));
-  let msg = {
-    category: 'event',
-    data: [
-      {
-        csc: 'ATDome',
-        salindex: 1,
-        data: {
-          param1: 1234,
-        },
-      },
-    ],
-  };
-  server.send(msg);
-  msg.data[0].csc = 'ATMCS';
-  server.send(msg);
-  const expected = {
-    'ATDome-1': {
-      param1: 1234,
-    },
-    'ATMCS-1': {
-      param1: 1234,
-    },
-  };
-  const result = getAllEvents(store.getState());
-  expect(result).toEqual(expected);
-});
-
-it('Should get incoming observing log messages from the state', async () => {
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-LOVE-0-observingLog'));
-
-  const logsSent = new Array(3).fill({}).map((_v, index) => {
-    return {
-      private_revCode: { value: `720ed49${index}`, dataType: 'String' },
-      private_sndStamp: { value: 1581458706.6005795 + index * 1000, dataType: 'Float' },
-      private_rcvStamp: { value: 1581458706.6026254 + index * 1000, dataType: 'Float' },
-      private_seqNum: { value: 5, dataType: 'Int' },
-      private_origin: { value: 69, dataType: 'Int' },
-      private_host: { value: -1407385585, dataType: 'Int' },
-      message: { value: `a message ${index}`, dataType: 'String' },
-      user: { value: `an user ${index}`, dataType: 'String' },
-      priority: { value: 0, dataType: 'Int' },
-    };
-  });
-
-  logsSent.forEach(async (log) => {
-    await server.send({
-      category: 'event',
-      data: [
-        {
-          csc: 'LOVE',
-          salindex: 0,
-          data: {
-            observingLog: [log],
-          },
-        },
-      ],
-      subscription: 'event-LOVE-0-observingLog',
-    });
-  });
-
-  // no repeated logs are allowed
-  await server.send({
-    category: 'event',
-    data: [
-      {
-        csc: 'LOVE',
-        salindex: 0,
-        data: {
-          observingLog: [logsSent[0]],
-        },
-      },
-    ],
-    subscription: 'event-LOVE-0-observingLog',
-  });
-
-  const logsReceived = getObservingLogs(store.getState());
-  expect(logsReceived).toEqual(logsSent);
 });
