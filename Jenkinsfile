@@ -76,7 +76,7 @@ pipeline {
       }
       steps {
         script {
-          sh "docker-compose run build"
+          sh "ls /usr/local/bin"
         }
       }
     }
