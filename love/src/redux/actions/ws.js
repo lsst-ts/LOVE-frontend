@@ -55,7 +55,7 @@ const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
  */
 export const openWebsocketConnection = () => {
   const token = ManagerInterface.getToken();
-  console.log('token: ', token);
+  console.log('Opening ws connection, token: ', token);
 
   const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
 
@@ -172,7 +172,9 @@ export const removeGroupSubscription = (groupName) => ({
 
 export const requestGroupSubscription = (groupName) => {
   return (dispatch, getState) => {
+    console.log('wsPromise: ', !wsPromise, wsPromise);
     if (!wsPromise) {
+      console.log('wsPromise not exists')
       dispatch(openWebsocketConnection());
       setTimeout(() => dispatch(requestGroupSubscription(groupName)), 1000);
       return;
@@ -183,6 +185,7 @@ export const requestGroupSubscription = (groupName) => {
       const state = getState();
       if (state.ws.connectionState !== connectionStates.OPEN) {
         console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
+        return;
       }
       socket.json({
         option: 'subscribe',
