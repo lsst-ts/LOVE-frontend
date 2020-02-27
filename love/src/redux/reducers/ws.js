@@ -12,6 +12,7 @@ import { connectionStates, SALCommandStatus } from '../actions/ws';
 const initialState = {
   alarms: [],
   connectionState: connectionStates.CLOSED,
+  socket: null, // Reference to the websocket client object
   subscriptions: [],
   lastSALCommand: {
     status: SALCommandStatus.EMPTY,

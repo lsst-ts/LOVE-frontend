@@ -13,12 +13,14 @@ import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, r
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveObservingLog } from './observingLogs';
+import { getConnectionStatus } from '../selectors';
 
 export const connectionStates = {
   OPENING: 'OPENING',
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
   ERROR: 'ERROR',
+  REJECTED: 'REJECTED',
 };
 
 export const SALCommandStatus = {
@@ -26,7 +28,7 @@ export const SALCommandStatus = {
   ACK: 'ACK',
 };
 
-let socket, wsPromise;
+// let socket, wsPromise;
 
 const changeWebsocketConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
@@ -62,8 +64,8 @@ export const openWebsocketConnection = () => {
   return (dispatch, getState) => {
     changeWebsocketConnectionState(connectionStates.OPENING);
 
-    wsPromise = new Promise((resolve) => {
-      socket = sockette(connectionPath, {
+    const wsPromise = new Promise((resolve) => {
+      const socket = sockette(connectionPath, {
         onopen: () => {
           dispatch(changeWebsocketConnectionState(connectionStates.OPEN));
           resolve();
@@ -172,16 +174,25 @@ export const removeGroupSubscription = (groupName) => ({
 
 export const requestGroupSubscription = (groupName) => {
   return (dispatch, getState) => {
-    console.log('wsPromise: ', !wsPromise, wsPromise);
-    if (!wsPromise) {
-      console.log('wsPromise not exists')
-      dispatch(openWebsocketConnection());
-      setTimeout(() => dispatch(requestGroupSubscription(groupName)), 1000);
-      return;
-    }
+    const connected = new Promise(async(resolve) => {
+      let connectionStatus;
+      do {
+        connectionStatus = getConnectionStatus(getState());
+        if (connectionStatus === connectionStates.OPEN) {
+          resolve();
+          return;
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      } while (connectionStatus !== connectionStates.REJECTED);
+    });
+    // if (!connected) {
+    //   dispatch(openWebsocketConnection());
+    //   setTimeout(() => dispatch(requestGroupSubscription(groupName)), 1000);
+    //   return;
+    // }
 
     const [category, csc, salindex, stream] = groupName.split('-');
-    wsPromise.then(() => {
+    connected.then(() => {
       const state = getState();
       if (state.ws.connectionState !== connectionStates.OPEN) {
         console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
