@@ -75,7 +75,7 @@ function doMarkErrorToken() {
   };
 }
 
-function doReceiveToken(username, token, permissions, tai_to_utc) {
+export function doReceiveToken(username, token, permissions, tai_to_utc) {
   return (dispatch) => {
     dispatch(receiveToken(username, token, permissions, tai_to_utc));
     localStorage.setItem('LOVE-TOKEN', token);

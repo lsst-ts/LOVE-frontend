@@ -13,12 +13,14 @@ import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, r
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveObservingLog } from './observingLogs';
-import { getConnectionStatus } from '../selectors';
+import { getConnectionStatus, getTokenStatus, getToken } from '../selectors';
+import { tokenStates } from '../reducers/auth';
 
 export const connectionStates = {
   OPENING: 'OPENING',
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
+  RETRYING: 'RETRYING',
   ERROR: 'ERROR',
   REJECTED: 'REJECTED',
 };
@@ -29,8 +31,9 @@ export const SALCommandStatus = {
 };
 
 // let socket, wsPromise;
+let socket;
 
-const changeWebsocketConnectionState = (connectionState) => ({
+const changeConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
 });
@@ -50,24 +53,50 @@ const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   };
 };
 
+const nonConnectableTokenStates = [
+  tokenStates.EMPTY,
+  tokenStates.REJECTED,
+  tokenStates.EXPIRED,
+  tokenStates.REMOVED_REMOTELY,
+  tokenStates.REMOVE_REQUESTED,
+  tokenStates.REMOVE_ERROR,
+]
+
 /**
  * Opens a new websocket connection assuming:
  * - authentication with backend went ok
  * - it does not matter if it was or was not connected before
  */
 export const openWebsocketConnection = () => {
-  const token = ManagerInterface.getToken();
-  console.log('Opening ws connection, token: ', token);
-
-  const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
 
   return (dispatch, getState) => {
-    changeWebsocketConnectionState(connectionStates.OPENING);
+    const tokenStatus = getTokenStatus(getState());
+
+    if (nonConnectableTokenStates.includes(tokenStatus)) {
+      const connectionStatus = getConnectionStatus(getState());
+      if (connectionStatus !== connectionStates.CLOSED) {
+        dispatch(changeConnectionState(connectionStates.CLOSED));
+      }
+      return;
+    }
+    dispatch(changeConnectionState(connectionStates.OPENING));
+    const token = getToken(getState());
+    const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
+    console.log('Opening ws connection, token: ', token);
 
     const wsPromise = new Promise((resolve) => {
-      const socket = sockette(connectionPath, {
+      socket = sockette(connectionPath, {
         onopen: () => {
-          dispatch(changeWebsocketConnectionState(connectionStates.OPEN));
+          dispatch(changeConnectionState(connectionStates.OPEN));
+          resolve();
+        },
+        onclose: (event) => {
+          const status = event.code === 4000 || event.code === 1000 ?
+            connectionStates.CLOSED : connectionStates.RETRYING;
+          dispatch(changeConnectionState(status));
+        },
+        onerror: () => {
+          dispatch(changeConnectionState(connectionStates.RETRYING));
           resolve();
         },
         onmessage: (msg) => {
@@ -149,13 +178,6 @@ export const openWebsocketConnection = () => {
               }),
             );
           });
-        },
-        onclose: () => {
-          dispatch(changeWebsocketConnectionState(connectionStates.CLOSED));
-        },
-        onerror: () => {
-          dispatch(changeWebsocketConnectionState(connectionStates.ERROR));
-          resolve();
         },
       });
     });
