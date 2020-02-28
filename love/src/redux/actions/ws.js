@@ -94,6 +94,7 @@ export const openWebsocketConnection = () => {
           const status = event.code === 4000 || event.code === 1000 ?
             connectionStates.CLOSED : connectionStates.RETRYING;
           dispatch(changeConnectionState(status));
+          resolve();
         },
         onerror: () => {
           dispatch(changeConnectionState(connectionStates.RETRYING));
