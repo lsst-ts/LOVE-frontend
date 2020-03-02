@@ -1,13 +1,10 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
-import logger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk';
-import { openWebsocketConnection, connectionStates, requestGroupSubscription } from '../actions/ws';
-import { emptyToken, doReceiveToken } from '../actions/auth';
+import { openWebsocketConnection, connectionStates, closeWebsocketConnection } from '../actions/ws';
+import { doReceiveToken } from '../actions/auth';
 import {
-  getAllTelemetries,
-  getAllEvents,
   getToken,
   getConnectionStatus,
 } from '../selectors';
@@ -142,5 +139,30 @@ describe('Given a correct token is RECEIVED and the connection is OPEN, ', () =>
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
     expect(disconnected).toBe(true);
     await server.closed;
+  });
+});
+
+describe('Given a connection is OPEN, ', () => {
+  beforeEach(async () => {
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
+    await store.dispatch(openWebsocketConnection());
+    await server.connected;
+  });
+
+  it('When a CLOSE CONNECTION is dispacthed, then connection goes to CLOSED, and the connection is closed',
+  async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', _socket => { disconnected = true });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    await store.dispatch(closeWebsocketConnection());
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    await server.closed;
+    expect(disconnected).toBe(true);
   });
 });
