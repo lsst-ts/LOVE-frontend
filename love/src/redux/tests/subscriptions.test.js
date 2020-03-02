@@ -3,12 +3,15 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import logger from 'redux-logger'
 import thunkMiddleware from 'redux-thunk';
-import { openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
-import { emptyToken } from '../actions/auth';
+import { openWebsocketConnection, addGroupSubscription, updateSubscriptions, subscriptionsStates, groupStates, connectionStates } from '../actions/ws';
+import { emptyToken, doReceiveToken } from '../actions/auth';
 import {
   getAllTelemetries,
   getAllEvents,
   getToken,
+  getSubscriptionsStatus,
+  getSubscriptions,
+  getConnectionStatus,
 } from '../selectors';
 
 let store, server;
@@ -34,117 +37,116 @@ let store, server;
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-  // prevent fetch call for token
-  localStorage.setItem('LOVE-TOKEN', 'love-token');
 });
 
 afterEach(() => {
-  console.log('closing')
   WS.clean();
 });
 
-describe('Test subscription to Telemetries and Events', () => {
+describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () => {
+  it('When a SUBSCRIPTION is DISPATCHED, then it is added to the list of subscriptions as PENDING', async () => {
+    expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.EMPTY);
+    // ACT
+    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+
+    // ASSERT
+    const subscriptionsStatus = getSubscriptionsStatus(store.getState());
+    const subscriptions = getSubscriptions(store.getState());
+    expect(subscriptionsStatus).toEqual(subscriptionsStates.PENDING);
+    expect(subscriptions).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.PENDING,
+      }
+    ]);
+  });
+});
+
+describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', () => {
+
   beforeEach(async () => {
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
     await store.dispatch(openWebsocketConnection());
+    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+    await store.dispatch(addGroupSubscription('event-all-all-all'));
     await server.connected;
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+    expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.PENDING);
   });
 
-  it('Should save all telemetries when subscribed to all', async () => {
-    console.log('start 1');
+  it('When the SUBSCRIPTIONS are UPDATED, then the subscriptions state changes to REQUESTING', async () => {
     // ACT
-    await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
-    let msg = {
-      category: 'telemetry',
-      data: [
-        {
-          csc: 'ATDome',
-          salindex: 1,
-          data: {
-            param1: 1234,
-          },
-        },
-      ],
-    };
-    server.send(msg);
-    msg.data[0].csc = 'ATMCS';
-    server.send(msg);
-    // ASSERT
-    const expected = {
-      'ATDome-1': {
-        param1: 1234,
-      },
-      'ATMCS-1': {
-        param1: 1234,
-      },
-    };
-    const result = getAllTelemetries(store.getState());
-    expect(result).toEqual(expected);
-    console.log('end 1');
+    await store.dispatch(updateSubscriptions());
 
-  });
-
-  it('Should save all events when subscribed to all', async () => {
-    // ACT
-    console.log('start 2');
-    await store.dispatch(requestGroupSubscription('event-all-all-all'));
-    let msg = {
-      category: 'event',
-      data: [
-        {
-          csc: 'ATDome',
-          salindex: 1,
-          data: {
-            param1: 1234,
-          },
-        },
-      ],
-    };
-    server.send(msg);
-    msg.data[0].csc = 'ATMCS';
-    server.send(msg);
     // ASSERT
-    const expected = {
-      'ATDome-1': {
-        param1: 1234,
+    expect( getSubscriptionsStatus(store.getState()) ).toEqual(subscriptionsStates.REQUESTING);
+    expect( getSubscriptions(store.getState()) ).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.PENDING,
       },
-      'ATMCS-1': {
-        param1: 1234,
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.PENDING,
       },
-    };
-    const result = getAllEvents(store.getState());
-    expect(result).toEqual(expected);
-    console.log('end 2');
+    ]);
   });
 });
 
-describe('Test websocket connection', () => {
-  beforeEach(async () => {
-    // prevent fetch call for token
-    // localStorage.removeItem('LOVE-TOKEN')
-  });
-
-  it('GIVEN there is no token, WHEN a subscription is attempted, THEN the connection is not established', async () => {
-    // Arrange
-    console.log('start 3');
-    // await server.closed
-    // let server2 = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-
-    // await store.dispatch(emptyToken);
-    console.log('token in redux: ', getToken(store.getState()));
-    let connectionAttempted = false;
-    server.on('connection', socket => {
-      console.log('server connecting, socket: ', socket)
-      connectionAttempted = true;
-    });
-    server.on('close', socket => {
-      console.log('server closing connection, socket: ', socket)
-      connectionAttempted = true;
-    });
-    // Act
-    await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
-    // Assert
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    expect(connectionAttempted).toBeFalsy();
-    console.log('emd 3');
-  });
-});
+//   it('Should save all events when subscribed to all', async () => {
+//     // ACT
+//     console.log('start 2');
+//     await store.dispatch(requestGroupSubscription('event-all-all-all'));
+//     let msg = {
+//       category: 'event',
+//       data: [
+//         {
+//           csc: 'ATDome',
+//           salindex: 1,
+//           data: {
+//             param1: 1234,
+//           },
+//         },
+//       ],
+//     };
+//     server.send(msg);
+//     msg.data[0].csc = 'ATMCS';
+//     server.send(msg);
+//     // ASSERT
+//     const subscriptionsStatus = getSubscriptionsStatus(store.getState());
+//     const subscriptions = getSubscriptions(store.getState());
+//     expect(subscriptionsStatus).toEqual(subscriptionsStates.NEED_SUBSCRIPTION);
+//     expect(subscriptions).toEqual(['event-all-all-all']);
+//   });
+// });
+//
+// describe('Test websocket connection', () => {
+//   beforeEach(async () => {
+//     // prevent fetch call for token
+//     // localStorage.removeItem('LOVE-TOKEN')
+//   });
+//
+//   it('GIVEN there is no token, WHEN a subscription is attempted, THEN the connection is not established', async () => {
+//     // Arrange
+//     console.log('start 3');
+//     // await server.closed
+//     // let server2 = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
+//
+//     // await store.dispatch(emptyToken);
+//     console.log('token in redux: ', getToken(store.getState()));
+//     let connectionAttempted = false;
+//     server.on('connection', socket => {
+//       console.log('server connecting, socket: ', socket)
+//       connectionAttempted = true;
+//     });
+//     server.on('close', socket => {
+//       console.log('server closing connection, socket: ', socket)
+//       connectionAttempted = true;
+//     });
+//     // Act
+//     await store.dispatch(requestGroupSubscription('telemetry-all-all-all'));
+//     // Assert
+//     await new Promise(resolve => setTimeout(resolve, 2000));
+//     expect(connectionAttempted).toBeFalsy();
+//     console.log('emd 3');
+//   });

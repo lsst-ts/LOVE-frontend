@@ -3,15 +3,17 @@ import {
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
+  CHANGE_SUBS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
   RECEIVE_ALARMS,
 } from '../actions/actionTypes';
-import { connectionStates, SALCommandStatus } from '../actions/ws';
+import { connectionStates, subscriptionsStates, groupStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
   alarms: [],
   connectionState: connectionStates.CLOSED,
+  subscriptionsState: subscriptionsStates.EMPTY,
   socket: null, // Reference to the websocket client object
   subscriptions: [],
   lastSALCommand: {
@@ -30,6 +32,9 @@ export default function(state = initialState, action) {
     case CHANGE_WS_STATE: {
       return { ...state, connectionState: action.connectionState };
     }
+    case CHANGE_SUBS_STATE: {
+      return { ...state, subscriptionsState: action.subscriptionsState };
+    }
     case ADD_GROUP_SUBSCRIPTION: {
       const matchingGroup = state.subscriptions.filter((subscription) => subscription.groupName === action.groupName);
       if (matchingGroup.length > 0) {
@@ -40,9 +45,14 @@ export default function(state = initialState, action) {
         ...state.subscriptions,
         {
           groupName: action.groupName,
+          status: groupStates.PENDING,
         },
       ];
-      return { ...state, subscriptions };
+      return {
+        ...state,
+        subscriptions,
+        subscriptionsState: subscriptionsStates.PENDING,
+      };
     }
     case RECEIVE_GROUP_CONFIRMATION_MESSAGE: {
       const subscriptions = state.subscriptions.map((subscription) => {
@@ -56,7 +66,11 @@ export default function(state = initialState, action) {
         return subscription;
       });
 
-      return { ...state, subscriptions };
+      return {
+        ...state,
+        subscriptions,
+        subscriptionsState: subscriptionsStates.PENDING,
+      };
     }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
