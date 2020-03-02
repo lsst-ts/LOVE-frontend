@@ -185,6 +185,17 @@ export const openWebsocketConnection = () => {
   };
 };
 
+/**
+ * Closes the websocket connection
+ */
+export const closeWebsocketConnection = () => {
+
+  return (dispatch, getState) => {
+    socket.close();
+    dispatch(changeConnectionState(connectionStates.CLOSED));
+  }
+};
+
 export const addGroupSubscription = (groupName) => ({
   type: ADD_GROUP_SUBSCRIPTION,
   groupName,
