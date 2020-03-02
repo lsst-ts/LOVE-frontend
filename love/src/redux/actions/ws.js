@@ -4,6 +4,7 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
+  CHANGE_SUBS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
 } from '../actions/actionTypes';
@@ -13,7 +14,7 @@ import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, r
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveObservingLog } from './observingLogs';
-import { getConnectionStatus, getTokenStatus, getToken } from '../selectors';
+import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscriptionsStatus } from '../selectors';
 import { tokenStates } from '../reducers/auth';
 
 export const connectionStates = {
@@ -25,6 +26,20 @@ export const connectionStates = {
   REJECTED: 'REJECTED',
 };
 
+export const subscriptionsStates = {
+  EMPTY: 'EMPTY',
+  PENDING: 'PENDING',
+  REQUESTING: 'REQUESTING',
+  SUBSCRIBED: 'RETRYING',
+};
+
+export const groupStates = {
+  PENDING: 'PENDING',
+  REQUESTING: 'REQUESTING',
+  SUBSCRIBED: 'SUBSCRIBED',
+  UNSUBSCRIBING: 'UNSUBSCRIBING',
+}
+
 export const SALCommandStatus = {
   REQUESTED: 'REQUESTED',
   ACK: 'ACK',
@@ -35,6 +50,11 @@ let socket;
 const changeConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
+});
+
+const changeSubscriptionsState = (subscriptionsState) => ({
+  type: CHANGE_SUBS_STATE,
+  subscriptionsState,
 });
 
 const receiveGroupConfirmationMessage = (data) => ({
@@ -242,6 +262,29 @@ export const requestGroupSubscription = (groupName) => {
       });
       dispatch(addGroupSubscription(groupName));
     });
+  };
+};
+
+export const updateSubscriptions = (groupName) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const connectionStatus = getConnectionStatus(state);
+    if (connectionStatus !== connectionStates.OPEN) {
+      return;
+    }
+
+    const subscriptions = getSubscriptions(state);
+    subscriptions.forEach( subscription => {
+      const [category, csc, salindex, stream] = subscription.groupName.split('-');
+      socket.json({
+        option: 'subscribe',
+        category,
+        csc,
+        salindex,
+        stream,
+      });
+    });
+    dispatch(changeSubscriptionsState(subscriptionsStates.REQUESTING));
   };
 };
 
