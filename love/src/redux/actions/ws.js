@@ -30,7 +30,6 @@ export const SALCommandStatus = {
   ACK: 'ACK',
 };
 
-// let socket, wsPromise;
 let socket;
 
 const changeConnectionState = (connectionState) => ({
@@ -79,10 +78,15 @@ export const openWebsocketConnection = () => {
       }
       return;
     }
-    dispatch(changeConnectionState(connectionStates.OPENING));
+    const connectionStatus = getConnectionStatus(getState());
+
+    if (connectionStatus === connectionStates.OPEN || connectionStatus === connectionStates.OPENING) {
+      return;
+    }
     const token = getToken(getState());
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
     console.log('Opening ws connection, token: ', token);
+    dispatch(changeConnectionState(connectionStates.OPENING));
 
     const wsPromise = new Promise((resolve) => {
       socket = sockette(connectionPath, {
@@ -191,8 +195,10 @@ export const openWebsocketConnection = () => {
 export const closeWebsocketConnection = () => {
 
   return (dispatch, getState) => {
-    socket.close();
-    dispatch(changeConnectionState(connectionStates.CLOSED));
+    if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
+      socket.close();
+      dispatch(changeConnectionState(connectionStates.CLOSED));
+    }
   }
 };
 

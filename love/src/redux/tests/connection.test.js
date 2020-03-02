@@ -3,7 +3,7 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { openWebsocketConnection, connectionStates, closeWebsocketConnection } from '../actions/ws';
-import { doReceiveToken } from '../actions/auth';
+import { doReceiveToken, emptyToken } from '../actions/auth';
 import {
   getToken,
   getConnectionStatus,
@@ -13,6 +13,7 @@ let store, server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+  await store.dispatch(emptyToken);
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
 });
 
@@ -33,6 +34,26 @@ describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
 
     // ACT
     await store.dispatch(openWebsocketConnection());
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).not.toEqual(connectionStates.OPENING);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    expect(connectionAttempted).toBeFalsy();
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+  });
+
+  it('When a CLOSE CONNECTION IS DISPACHED, then tnothing happens',
+  async () => {
+    // ARRANGE
+    let connectionAttempted = false;
+    server.on('connection', _socket => {
+      connectionAttempted = true;
+    });
+    // Assert connection is closed before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+
+    // ACT
+    await store.dispatch(closeWebsocketConnection());
 
     // ASSERT
     expect(getConnectionStatus(store.getState())).not.toEqual(connectionStates.OPENING);
@@ -164,5 +185,21 @@ describe('Given a connection is OPEN, ', () => {
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
     await server.closed;
     expect(disconnected).toBe(true);
+  });
+
+  it('When an OPEN CONNECTION is dispacthed, then NOTHING HAPPENS',
+  async () => {
+    // ARRANGE
+    let reconnected = false;
+    server.on('connection', _socket => { reconnected = true });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    await store.dispatch(openWebsocketConnection());
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+    expect(reconnected).toBe(false);
   });
 });
