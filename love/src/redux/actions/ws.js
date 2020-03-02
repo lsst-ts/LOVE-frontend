@@ -265,7 +265,30 @@ export const requestGroupSubscription = (groupName) => {
   };
 };
 
-export const updateSubscriptions = (groupName) => {
+export const requestSubscriptions = () => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const connectionStatus = getConnectionStatus(state);
+    if (connectionStatus !== connectionStates.OPEN) {
+      return;
+    }
+
+    const subscriptions = getSubscriptions(state);
+    subscriptions.forEach( subscription => {
+      const [category, csc, salindex, stream] = subscription.groupName.split('-');
+      socket.json({
+        option: 'subscribe',
+        category,
+        csc,
+        salindex,
+        stream,
+      });
+    });
+    dispatch(changeSubscriptionsState(subscriptionsStates.REQUESTING));
+  };
+};
+
+export const confirmSubscription = () => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);
