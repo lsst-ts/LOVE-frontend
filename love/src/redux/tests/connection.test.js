@@ -97,7 +97,7 @@ describe('Given a correct token is RECEIVED and the connection is CLOSED, ', () 
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
   });
 
-  it('When a CONNECTION IS DISPACHED but the server sends an ERROR, then connection goes to OPENING and then RETYING',
+  it('When a CONNECTION IS DISPACHED but the server sends an ERROR, then connection goes to OPENING and then RETRYING',
   async () => {
     // ARRANGE
     server.on('connection', socket => {
@@ -109,11 +109,38 @@ describe('Given a correct token is RECEIVED and the connection is CLOSED, ', () 
     // Assert connection is opening after dispatching connection
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
     await server.connected;
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
 
     // ACT
     await server.closed;
 
     // ASSERT
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
+  });
+});
+
+describe('Given a correct token is RECEIVED and the connection is OPEN, ', () => {
+  beforeEach(async () => {
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
+  });
+
+  it('When the server closes the connection with a 1000 code, then connection goes to CLOSED',
+  async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', _socket => { disconnected = true });
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    await store.dispatch(openWebsocketConnection());
+    await server.connected;
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    server.close({ code: 1000 });
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    expect(disconnected).toBe(true);
+    await server.closed;
   });
 });
