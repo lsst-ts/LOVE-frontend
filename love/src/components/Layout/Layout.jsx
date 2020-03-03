@@ -204,10 +204,19 @@ class Layout extends Component {
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
-            onClick={this.toggleSidebar}
+            // onClick={this.toggleSidebar}
           >
             <div className={styles.leftTopbar}>
-              <MenuIcon className={styles.logo} />
+              <Button
+                className={styles.iconBtn}
+                title="Show menu"
+                onClick={this.toggleSidebar}
+                disabled={false}
+                status="transparent"
+              >
+                <MenuIcon className={styles.logo} />
+              </Button>
+
               <LogoIcon className={styles.logo} />
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
               {this.state.title && this.state.viewOnNotch && <GoBackIcon className={styles.logo} />}
@@ -285,7 +294,7 @@ class Layout extends Component {
         </div>
 
         <div className={styles.contentWrapper}>{this.props.children}</div>
-        
+
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
     );
