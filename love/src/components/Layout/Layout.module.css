@@ -213,4 +213,6 @@
   transform: translateX( 0.8em);
   margin-right: -1.1em;
   display: none;
+  padding-right: 0.3em;
+  padding-left: 0.3em;
 }
