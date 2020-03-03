@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { doReceiveToken, emptyToken } from '../actions/auth';
+import { doReceiveToken, emptyToken, doExpireToken, doRejectToken, doRequestRemoveToken } from '../actions/auth';
 import {
   connectionStates,
   groupStates,
@@ -157,7 +157,7 @@ describe('Given a connection is OPEN, ', () => {
     await server.connected;
   });
 
-  it('When a CLOSE CONNECTION is dispacthed, then connection goes to CLOSED, and the connection is closed',
+  it('When a CLOSE CONNECTION is dispatched, then connection goes to CLOSED, and the connection is closed',
   async () => {
     // ARRANGE
     let disconnected = false;
@@ -174,7 +174,58 @@ describe('Given a connection is OPEN, ', () => {
     expect(disconnected).toBe(true);
   });
 
-  it('When an OPEN CONNECTION is dispacthed, then NOTHING HAPPENS',
+  it('When a EXPIRE TOKEN is dispatched, then connection goes to CLOSED, and the connection is closed',
+  async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', _socket => { disconnected = true });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    await store.dispatch(doExpireToken());
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    await server.closed;
+    expect(disconnected).toBe(true);
+  });
+
+  it('When a REJECT TOKEN is dispatched, then connection goes to CLOSED, and the connection is closed',
+  async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', _socket => { disconnected = true });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    await store.dispatch(doRejectToken());
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    await server.closed;
+    expect(disconnected).toBe(true);
+  });
+
+  it('When a REQUEST REMOVE TOKEN is dispatched, then NOTHING HAPPENS',
+  async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', _socket => { disconnected = true });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    await store.dispatch(doRequestRemoveToken());
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    await server.closed;
+    expect(disconnected).toBe(true);
+  });
+
+  it('When an OPEN CONNECTION is dispatched, then NOTHING HAPPENS',
   async () => {
     // ARRANGE
     let reconnected = false;
