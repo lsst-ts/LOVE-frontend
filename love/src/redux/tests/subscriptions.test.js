@@ -7,7 +7,7 @@ import {
   openWebsocketConnection,
   addGroupSubscription,
   requestSubscriptions,
-  confirmSubscriptions,
+  receiveGroupConfirmationMessage,
   subscriptionsStates,
   groupStates,
   connectionStates,
@@ -80,41 +80,84 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
     expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.PENDING);
   });
 
-  it('When the SUBSCRIPTIONS are REQUESTED, then the subscriptions state changes to REQUESTING', async () => {
-    // ACT
+  it('When the SUBSCRIPTIONS are REQUESTED, then the subscriptions state change to REQUESTING, ' +
+  'and when the server confirms each subscription, that subscription is updated',
+  async () => {
+    // ACT 1
     await store.dispatch(requestSubscriptions());
 
-    // ASSERT
-    expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.REQUESTING);
+    // ASSERT 1
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
-        status: groupStates.PENDING,
+        status: groupStates.REQUESTING,
       },
       {
         groupName: 'event-all-all-all',
-        status: groupStates.PENDING,
+        status: groupStates.REQUESTING,
       },
     ]);
-  });
 
-  it('When the SUBSCRIPTIONS update is confirmed, then the subscriptions change to SUBSCRIBED', async () => {
-    // ACT
-    await store.dispatch(confirmSubscription(groupName));
+    // ACT 2
+    server.send({
+      data: "Successfully subscribed to telemetry-all-all-all"
+    });
 
-    // ASSERT
-    expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.REQUESTING);
+    // ASSERT 2
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
-        status: groupStates.PENDING,
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
       },
       {
         groupName: 'event-all-all-all',
-        status: groupStates.PENDING,
+        status: groupStates.REQUESTING,
+      },
+    ]);
+
+    // ACT 3
+    server.send({
+      data: "Successfully subscribed to event-all-all-all"
+    });
+
+    // ASSERT 3
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
       },
     ]);
   });
+  //
+  // it('When the SUBSCRIPTIONS update is confirmed, then the subscriptions change to SUBSCRIBED', async () => {
+  //   // ARRANGE
+  //   await store.dispatch(requestSubscriptions());
+  //   server.on('message', socket => {
+  //     socket.send()
+  //   });
+  //   // ACT
+  //   await store.dispatch(receiveGroupConfirmationMessage(groupName));
+  //
+  //   // ASSERT
+  //   expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.REQUESTING);
+  //   expect(getSubscriptions(store.getState())).toEqual([
+  //     {
+  //       groupName: 'telemetry-all-all-all',
+  //       status: groupStates.PENDING,
+  //     },
+  //     {
+  //       groupName: 'event-all-all-all',
+  //       status: groupStates.PENDING,
+  //     },
+  //   ]);
+  // });
 });
 
 //   it('Should save all events when subscribed to all', async () => {
