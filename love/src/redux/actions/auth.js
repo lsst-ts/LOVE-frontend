@@ -13,6 +13,7 @@ import {
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
+import { openWebsocketConnection } from './ws';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
@@ -78,6 +79,7 @@ function doMarkErrorToken() {
 export function doReceiveToken(username, token, permissions, tai_to_utc) {
   return (dispatch) => {
     dispatch(receiveToken(username, token, permissions, tai_to_utc));
+    dispatch(openWebsocketConnection());
     localStorage.setItem('LOVE-TOKEN', token);
   };
 }
