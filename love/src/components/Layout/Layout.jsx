@@ -240,7 +240,7 @@ class Layout extends Component {
                 title="Go home"
               />
 
-              {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> '|' </span>}
+              {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> | </span>}
               {this.state.title && this.state.viewOnNotch && (
                 <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back" />
               )}
