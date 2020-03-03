@@ -22,6 +22,7 @@ let store, server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+  await store.dispatch(emptyToken);
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
 });
 

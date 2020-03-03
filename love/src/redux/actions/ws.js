@@ -51,22 +51,12 @@ export const SALCommandStatus = {
 
 let socket;
 
-const changeConnectionState = (connectionState) => ({
+const _changeConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
 });
 
-const receiveGroupConfirmationMessage = (data) => ({
-  type: RECEIVE_GROUP_CONFIRMATION_MESSAGE,
-  data,
-});
-
-const receiveGroupRemovalConfirmationMessage = (data) => ({
-  type: RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
-  data,
-});
-
-const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
+const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
     category: category,
@@ -76,7 +66,7 @@ const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   };
 };
 
-const resetSubscriptions = (subscriptions) => {
+const _resetSubscriptions = (subscriptions) => {
   return {
     type: RESET_SUBSCRIPTIONS,
     subscriptions: subscriptions ? subscriptions.map( sub => ({
@@ -100,7 +90,7 @@ export const openWebsocketConnection = () => {
     if (nonConnectableTokenStates.includes(tokenStatus)) {
       const connectionStatus = getConnectionStatus(getState());
       if (connectionStatus !== connectionStates.CLOSED) {
-        dispatch(changeConnectionState(connectionStates.CLOSED));
+        dispatch(_changeConnectionState(connectionStates.CLOSED));
       }
       return;
     }
@@ -112,24 +102,24 @@ export const openWebsocketConnection = () => {
     const token = getToken(getState());
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
     console.log('Opening ws connection, token: ', token);
-    dispatch(changeConnectionState(connectionStates.OPENING));
+    dispatch(_changeConnectionState(connectionStates.OPENING));
 
     socket = sockette(connectionPath, {
       onopen: () => {
-        dispatch(changeConnectionState(connectionStates.OPEN));
-        dispatch(requestSubscriptions());
+        dispatch(_changeConnectionState(connectionStates.OPEN));
+        dispatch(_requestSubscriptions());
       },
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
-          dispatch(changeConnectionState(connectionStates.CLOSED));
+          dispatch(_changeConnectionState(connectionStates.CLOSED));
         } else {
-          dispatch(changeConnectionState(connectionStates.RETRYING));
-          dispatch(resetSubscriptions(getSubscriptions(getState())));
+          dispatch(_changeConnectionState(connectionStates.RETRYING));
+          dispatch(_resetSubscriptions(getSubscriptions(getState())));
         }
       },
       onerror: () => {
-        dispatch(changeConnectionState(connectionStates.RETRYING));
-        dispatch(resetSubscriptions(getSubscriptions(getState())));
+        dispatch(_changeConnectionState(connectionStates.RETRYING));
+        dispatch(_resetSubscriptions(getSubscriptions(getState())));
       },
       onmessage: (msg) => {
         if (!msg.data) return;
@@ -137,9 +127,15 @@ export const openWebsocketConnection = () => {
         const data = JSON.parse(msg.data);
         if (!data.category) {
           if (data.data.includes('unsubscribed')) {
-            dispatch(receiveGroupRemovalConfirmationMessage(data.data));
+            dispatch({
+              type: RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
+              data: data.data,
+            });
           } else {
-            dispatch(receiveGroupConfirmationMessage(data.data));
+            dispatch({
+              type: RECEIVE_GROUP_CONFIRMATION_MESSAGE,
+              data: data.data,
+            });
           }
           return;
         }
@@ -208,7 +204,7 @@ export const openWebsocketConnection = () => {
 
         data.data.forEach((stream) => {
           dispatch(
-            receiveGroupSubscriptionData({
+            _receiveGroupSubscriptionData({
               category: data.category,
               ...stream,
             }),
@@ -228,18 +224,18 @@ export const closeWebsocketConnection = () => {
     dispatch({ type: RESET_SUBSCRIPTIONS, subscriptions: [] });
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
-      dispatch(changeConnectionState(connectionStates.CLOSED));
+      dispatch(_changeConnectionState(connectionStates.CLOSED));
     }
   }
 };
 
 export const addGroupSubscription = (groupName) => {
-  return (dispatch, getState) => {
+  return (dispatch, _getState) => {
     dispatch({
       type: ADD_GROUP_SUBSCRIPTION,
       groupName,
     });
-    dispatch(requestSubscriptions());
+    dispatch(_requestSubscriptions());
   };
 };
 //
@@ -281,7 +277,7 @@ export const addGroupSubscription = (groupName) => {
 //   };
 // };
 
-const requestSubscriptions = () => {
+const _requestSubscriptions = () => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);
