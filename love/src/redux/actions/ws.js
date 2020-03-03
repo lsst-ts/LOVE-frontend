@@ -217,10 +217,15 @@ export const closeWebsocketConnection = () => {
   }
 };
 
-export const addGroupSubscription = (groupName) => ({
-  type: ADD_GROUP_SUBSCRIPTION,
-  groupName,
-});
+export const addGroupSubscription = (groupName) => {
+  return (dispatch, getState) => {
+    dispatch({
+      type: ADD_GROUP_SUBSCRIPTION,
+      groupName,
+    });
+    dispatch(requestSubscriptions());
+  };
+};
 //
 // export const removeGroupSubscription = (groupName) => ({
 //   type: REMOVE_GROUP_SUBSCRIPTION,
@@ -260,7 +265,7 @@ export const addGroupSubscription = (groupName) => ({
 //   };
 // };
 
-export const requestSubscriptions = () => {
+const requestSubscriptions = () => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);
@@ -269,6 +274,7 @@ export const requestSubscriptions = () => {
     }
     const subscriptions = getSubscriptions(state);
     subscriptions.forEach( subscription => {
+      if (subscription.status !== groupStates.PENDING) return;
       const [category, csc, salindex, stream] = subscription.groupName.split('-');
       socket.json({
         option: 'subscribe',
