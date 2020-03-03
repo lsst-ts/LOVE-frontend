@@ -13,6 +13,7 @@ import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
+import GoBackIcon from '../icons/GoBackIcon/GoBackIcon';
 import styles from './Layout.module.css';
 
 const BREAK_1 = 710;
@@ -209,6 +210,7 @@ class Layout extends Component {
               <MenuIcon className={styles.logo} />
               <LogoIcon className={styles.logo} />
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
+              {this.state.title && this.state.viewOnNotch && <GoBackIcon className={styles.logo} />}
               <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
             </div>
             <NotchCurve className={styles.notchCurve} />
@@ -283,7 +285,7 @@ class Layout extends Component {
         </div>
 
         <div className={styles.contentWrapper}>{this.props.children}</div>
-
+        
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
     );
