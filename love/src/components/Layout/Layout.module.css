@@ -10,7 +10,6 @@
 .leftNotchContainer {
   display: inline-flex;
   justify-content: flex-start;
-  cursor: pointer;
   box-sizing: border-box;
   transition: all 0.5s ease-in-out;
 }
@@ -29,6 +28,8 @@
 .leftTopbar .logo {
   height: 1.3em;
   fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
 }
 
 .collapsedLogo {
