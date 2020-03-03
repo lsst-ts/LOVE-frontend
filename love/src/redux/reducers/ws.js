@@ -5,6 +5,7 @@ import {
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
+  CLEAR_SUBSCRIPTIONS,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
@@ -111,6 +112,12 @@ export default function(state = initialState, action) {
       return {
         ...state,
         subscriptions,
+      };
+    }
+    case CLEAR_SUBSCRIPTIONS: {
+      return {
+        ...state,
+        subscriptions: initialState.subscriptions,
       };
     }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
