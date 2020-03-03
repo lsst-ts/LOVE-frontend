@@ -13,6 +13,8 @@ import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
+import GoBackIcon from '../icons/GoBackIcon/GoBackIcon';
+import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
 const BREAK_1 = 710;
@@ -60,6 +62,7 @@ class Layout extends Component {
       title: null,
       heartbeatTimer: undefined,
       lastHeartbeat: undefined,
+      hovered: false, // true if leftTopbar is being hovered
     };
   }
 
@@ -193,6 +196,17 @@ class Layout extends Component {
     this.setState({ sidebarVisible: !this.state.sidebarVisible });
   };
 
+  goHome = () => {
+    this.props.history.push('/');
+  };
+
+  goBack = () => {
+    this.props.history.goBack();
+  };
+
+  setHovered = (value) => {
+    this.setState({ hovered: value });
+  };
   render() {
     return (
       <>
@@ -203,15 +217,55 @@ class Layout extends Component {
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
-            onClick={this.toggleSidebar}
+            // onClick={this.toggleSidebar}
+            onMouseOver={() => this.setHovered(true)}
+            onMouseOut={() => this.setHovered(false)}
           >
             <div className={styles.leftTopbar}>
-              <MenuIcon className={styles.logo} />
-              <LogoIcon className={styles.logo} />
+              <Button
+                className={styles.iconBtn}
+                title="Edit view"
+                onClick={this.toggleSidebar}
+                disabled={false}
+                status="transparent"
+              >
+                <MenuIcon className={styles.logo} />
+              </Button>
+
+              <LogoIcon className={styles.logo} onClick={this.goHome} title="Go home" />
+
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
-              <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
+              {this.state.title && this.state.viewOnNotch && (
+                <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back" />
+              )}
+              {this.state.viewOnNotch && (
+                <span className={styles.text}>
+                  {
+                    <>
+                      <span className={styles.textContent}> {this.state.title}</span>
+
+                      {!this.props.location.pathname.includes('editor') && (
+                        <Button
+                          className={[styles.editButton].join(' ')}
+                          title="Show menu"
+                          onClick={() => {
+                            if (this.state.id) {
+                              this.editView(this.state.id);
+                            }
+                          }}
+                          disabled={false}
+                          status="transparent"
+                          style={{ display: this.state.hovered ? 'inline' : 'none' }}
+                        >
+                          <EditIcon className={styles.logo} />
+                        </Button>
+                      )}
+                    </>
+                  }
+                </span>
+              )}
             </div>
-            <NotchCurve className={styles.notchCurve} />
+            <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />

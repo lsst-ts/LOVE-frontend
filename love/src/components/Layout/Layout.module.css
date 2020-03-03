@@ -10,7 +10,6 @@
 .leftNotchContainer {
   display: inline-flex;
   justify-content: flex-start;
-  cursor: pointer;
   box-sizing: border-box;
   transition: all 0.5s ease-in-out;
 }
@@ -21,7 +20,7 @@
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(3, min-content) max-content;
+  grid-template-columns: repeat(4, min-content) max-content min-content;
   grid-gap: 0.5em;
   align-items: center;
 }
@@ -29,6 +28,8 @@
 .leftTopbar .logo {
   height: 1.3em;
   fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
 }
 
 .collapsedLogo {
@@ -40,6 +41,7 @@
   padding-top: 0.2em;
   height: fit-content;
   vertical-align: middle;
+  text-decoration: underline;
 }
 
 .leftTopbar .divider {
@@ -49,7 +51,7 @@
 .notchCurve {
   height: 3em;
   fill: var(--tertiary-background-color);
-  vertical-align:top;
+  vertical-align: top;
 }
 
 .rightNotchContainer {
@@ -138,14 +140,13 @@
   background-color: var(--second-quaternary-background-color);
 }
 
-.sidebar .menu .link{
+.sidebar .menu .link {
   color: var(--base-font-color);
 }
 
 .sidebarHidden {
   transform: translate(-200px, 0);
 }
-
 
 .settingsDropdown {
   background-color: var(--tertiary-background-color);
@@ -163,7 +164,6 @@
   transition: visibility 0.2s, opacity 0.2s ease-in-out;
   visibility: hidden;
 }
-
 
 .settingsVisible {
   opacity: 1;
@@ -207,4 +207,12 @@
 
 .heartbeatIconWrapper {
   width: 2em;
+}
+
+.editButton {
+  transform: translateX( 0.8em);
+  margin-right: -1.1em;
+  display: none;
+  padding-right: 0.3em;
+  padding-left: 0.3em;
 }
