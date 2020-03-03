@@ -57,7 +57,6 @@ pipeline {
       when {
         anyOf {
           branch "develop"
-          branch "top-left-bar-fixes"
         }
       }
       steps {
