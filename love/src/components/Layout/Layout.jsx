@@ -250,7 +250,7 @@ class Layout extends Component {
                     <>
                       <span className={styles.textContent}> {this.state.title}</span>
 
-                      {this.props.location.pathname.includes('uif/view') && (
+                      {this.props.location.pathname === '/uif/view' && (
                         <Button
                           className={[styles.editButton].join(' ')}
                           title="Edit view"
