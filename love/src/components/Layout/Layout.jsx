@@ -62,6 +62,7 @@ class Layout extends Component {
       title: null,
       heartbeatTimer: undefined,
       lastHeartbeat: undefined,
+      hovered: false, // true if leftTopbar is being hovered
     };
   }
 
@@ -203,6 +204,9 @@ class Layout extends Component {
     this.props.history.goBack();
   };
 
+  setHovered = (value) => {
+    this.setState({ hovered: value });
+  };
   render() {
     return (
       <>
@@ -214,8 +218,13 @@ class Layout extends Component {
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
             // onClick={this.toggleSidebar}
+            onMouseOver={() => this.setHovered(true)}
+            onMouseOut={() => this.setHovered(false)}
           >
-            <div className={styles.leftTopbar}>
+            <div
+              className={styles.leftTopbar}
+
+            >
               <Button
                 className={styles.iconBtn}
                 title="Show menu"
@@ -238,7 +247,10 @@ class Layout extends Component {
                     <>
                       <span className={styles.textContent}> {this.state.title}</span>
 
-                      <EditIcon className={[styles.logo, styles.editButton].join(' ')} />
+                      <EditIcon
+                        className={[styles.logo, styles.editButton].join(' ')}
+                        style={{ display: this.state.hovered ? 'inline' : 'none' }}
+                      />
                     </>
                   }
                 </span>
