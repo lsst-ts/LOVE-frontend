@@ -6,6 +6,7 @@ import {
   getMode,
   getView,
   getViewsStatus,
+  getViews,
   getLastManagerHeartbeat,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
@@ -23,7 +24,16 @@ const mapStateToProps = (state) => {
   const getCurrentView = (id) => getView(state, id);
   const getManagerHeartbeat = () => getLastManagerHeartbeat(state);
   const viewsStatus = getViewsStatus(state);
-  return { user, lastSALCommand, mode, getCurrentView, viewsStatus, getLastManagerHeartbeat: getManagerHeartbeat };
+  const views = getViews(state);
+  return {
+    user,
+    lastSALCommand,
+    mode,
+    getCurrentView,
+    viewsStatus,
+    getLastManagerHeartbeat: getManagerHeartbeat,
+    views,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
