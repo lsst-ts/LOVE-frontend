@@ -221,13 +221,10 @@ class Layout extends Component {
             onMouseOver={() => this.setHovered(true)}
             onMouseOut={() => this.setHovered(false)}
           >
-            <div
-              className={styles.leftTopbar}
-
-            >
+            <div className={styles.leftTopbar}>
               <Button
                 className={styles.iconBtn}
-                title="Show menu"
+                title="Edit view"
                 onClick={this.toggleSidebar}
                 disabled={false}
                 status="transparent"
@@ -247,10 +244,22 @@ class Layout extends Component {
                     <>
                       <span className={styles.textContent}> {this.state.title}</span>
 
-                      <EditIcon
-                        className={[styles.logo, styles.editButton].join(' ')}
-                        style={{ display: this.state.hovered ? 'inline' : 'none' }}
-                      />
+                      {!this.props.location.pathname.includes('editor') && (
+                        <Button
+                          className={[styles.editButton].join(' ')}
+                          title="Show menu"
+                          onClick={() => {
+                            if (this.state.id) {
+                              this.editView(this.state.id);
+                            }
+                          }}
+                          disabled={false}
+                          status="transparent"
+                          style={{ display: this.state.hovered ? 'inline' : 'none' }}
+                        >
+                          <EditIcon className={styles.logo} />
+                        </Button>
+                      )}
                     </>
                   }
                 </span>
