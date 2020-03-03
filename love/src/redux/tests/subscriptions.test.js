@@ -121,12 +121,14 @@ describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ',
 });
 
 describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () => {
+  let webSocket = null;
+
   beforeEach(async () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await store.dispatch(openWebsocketConnection());
     await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
     await store.dispatch(addGroupSubscription('event-all-all-all'));
-    await server.connected;
+    webSocket = await server.connected;
     await expect(server).toReceiveMessage({
       option: 'subscribe',
       category: 'telemetry',
@@ -265,6 +267,33 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     await store.dispatch(closeWebsocketConnection());
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
     expect(getSubscriptions(store.getState())).toEqual([]);
+  });
+
+  it('When the CONNECTION is RETRYING, then the subscriptions are PENDING',
+  async () => {
+    // Connection get disconnected by error
+    // webSocket.close({ wasClean: false, code: 1003, reason: "NOPE" });
+    // server.error({ code: 1003 });
+    server.close();
+    server.on('connection', socket => {
+      socket.close({ wasClean: false, code: 1003, reason: "NOPE" });
+    });
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    await store.dispatch(openWebsocketConnection());
+    await server.connected;
+    // expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+    await server.closed;
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.PENDING,
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.PENDING,
+      },
+    ]);
   });
 });
 
