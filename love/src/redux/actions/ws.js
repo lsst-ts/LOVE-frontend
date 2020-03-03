@@ -2,6 +2,7 @@ import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
+  REQUEST_SUBSCRIPTIONS,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   CHANGE_SUBS_STATE,
@@ -284,7 +285,10 @@ export const requestSubscriptions = () => {
         stream,
       });
     });
-    dispatch(changeSubscriptionsState(subscriptionsStates.REQUESTING));
+    dispatch({
+      type: REQUEST_SUBSCRIPTIONS,
+      subscriptions,
+    });
   };
 };
 

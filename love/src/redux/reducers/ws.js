@@ -2,6 +2,7 @@ import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
+  REQUEST_SUBSCRIPTIONS,
   CHANGE_WS_STATE,
   CHANGE_SUBS_STATE,
   UPDATE_LAST_SAL_COMMAND,
@@ -24,6 +25,17 @@ const initialState = {
     salindex: 0,
   },
 };
+
+const readConfirmationMessage = (msg) => {
+  let [rest, csc, salindex, stream] = msg.split('-');
+  const aux = rest.split(' ');
+  const category = aux[aux.length -1];
+  if (stream === undefined) {
+    stream = salindex;
+    sindex = undefined;
+  }
+  return [category, csc, salindex, stream];
+}
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
  */
@@ -54,13 +66,24 @@ export default function(state = initialState, action) {
         subscriptionsState: subscriptionsStates.PENDING,
       };
     }
+    case REQUEST_SUBSCRIPTIONS: {
+      const subscriptions = action.subscriptions.map(subscription => ({
+        ...subscription,
+        status: groupStates.REQUESTING,
+      }));
+      return {
+        ...state,
+        subscriptions,
+        subscriptionsState: subscriptionsStates.REQUESTING,
+      };
+    }
     case RECEIVE_GROUP_CONFIRMATION_MESSAGE: {
       const subscriptions = state.subscriptions.map((subscription) => {
-        const [, csc, stream] = subscription.groupName.split('-');
-        if (action.data.includes(csc) && action.data.includes(stream)) {
+        if (action.data.includes(subscription.groupName)) {
           return {
             ...subscription,
             confirmationMessage: action.data,
+            status: groupStates.SUBSCRIBED,
           };
         }
         return subscription;
