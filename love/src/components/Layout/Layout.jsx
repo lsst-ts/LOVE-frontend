@@ -14,6 +14,7 @@ import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import GoBackIcon from '../icons/GoBackIcon/GoBackIcon';
+import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
 const BREAK_1 = 710;
@@ -229,11 +230,21 @@ class Layout extends Component {
 
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
               {this.state.title && this.state.viewOnNotch && (
-                <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back"/>
+                <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back" />
               )}
-              <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
+              {this.state.viewOnNotch && (
+                <span className={styles.text}>
+                  {
+                    <>
+                      <span className={styles.textContent}> {this.state.title}</span>
+
+                      <EditIcon className={[styles.logo, styles.editButton].join(' ')} />
+                    </>
+                  }
+                </span>
+              )}
             </div>
-            <NotchCurve className={styles.notchCurve} />
+            <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />
