@@ -221,7 +221,9 @@ class Layout extends Component {
             onMouseOver={() => this.setHovered(true)}
             onMouseOut={() => this.setHovered(false)}
           >
-            <div className={styles.leftTopbar}>
+            <div
+              className={[styles.leftTopbar, this.state.collapsedLogo ? styles.leftTopBarNoEditButton : ''].join(' ')}
+            >
               <Button
                 className={styles.iconBtn}
                 title="Edit view"
@@ -232,9 +234,13 @@ class Layout extends Component {
                 <MenuIcon className={styles.logo} />
               </Button>
 
-              <LogoIcon className={styles.logo} onClick={this.goHome} title="Go home" />
+              <LogoIcon
+                className={styles.logo}
+                onClick={this.state.collapsedLogo ? this.toggleSidebar : this.goHome}
+                title="Go home"
+              />
 
-              <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
+              {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> '|' </span>}
               {this.state.title && this.state.viewOnNotch && (
                 <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back" />
               )}
@@ -244,10 +250,10 @@ class Layout extends Component {
                     <>
                       <span className={styles.textContent}> {this.state.title}</span>
 
-                      {!this.props.location.pathname.includes('editor') && (
+                      {this.props.location.pathname.includes('uif/view') && (
                         <Button
                           className={[styles.editButton].join(' ')}
-                          title="Show menu"
+                          title="Edit view"
                           onClick={() => {
                             if (this.state.id) {
                               this.editView(this.state.id);
@@ -255,7 +261,7 @@ class Layout extends Component {
                           }}
                           disabled={false}
                           status="transparent"
-                          style={{ display: this.state.hovered ? 'inline' : 'none' }}
+                          style={{ visibility: this.state.hovered ? 'visible' : 'hidden' }}
                         >
                           <EditIcon className={styles.logo} />
                         </Button>
