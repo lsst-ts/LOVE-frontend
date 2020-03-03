@@ -138,9 +138,9 @@ class App extends Component {
             <PrivateRoute token={this.props.token} path="/generic-camera" render={() => <GenericCamera />} />
             <PrivateRoute token={this.props.token} path="/uif/view" component={CustomViewContainer} />
             <PrivateRoute token={this.props.token} path="/uif/view-editor" component={ViewEditorContainer} />
-            <PrivateRoute token={this.props.token} path="/uif" render={() => <ViewsIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/palette" render={() => <Palette />} />
-            <PrivateRoute token={this.props.token} path="/" render={() => <ComponentIndexContainer />} />
+            <PrivateRoute token={this.props.token} path="/legacy-index" render={() => <ComponentIndexContainer />} />
+            <PrivateRoute token={this.props.token} path="/" render={() => <ViewsIndexContainer />} />
 
 
           </Switch>
