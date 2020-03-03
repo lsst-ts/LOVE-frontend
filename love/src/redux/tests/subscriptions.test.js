@@ -1,14 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
-import logger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import {
   openWebsocketConnection,
   addGroupSubscription,
   requestSubscriptions,
-  receiveGroupConfirmationMessage,
-  subscriptionsStates,
   groupStates,
   connectionStates,
 } from '../actions/ws';
@@ -16,30 +13,11 @@ import { emptyToken, doReceiveToken } from '../actions/auth';
 import {
   getAllTelemetries,
   getAllEvents,
-  getToken,
-  getSubscriptionsStatus,
   getSubscriptions,
   getConnectionStatus,
 } from '../selectors';
 
 let store, server;
-
-// const promiseTimeout = function(ms, promise){
-//   // Create a promise that rejects in <ms> milliseconds
-//   let timeout = new Promise((resolve, reject) => {
-//     let id = setTimeout(() => {
-//       clearTimeout(id);
-//       reject('Timed out in '+ ms + 'ms.')
-//       promise.reject()
-//     }, ms)
-//   })
-//
-//   // Returns a race between our timeout and the passed in promise
-//   return Promise.race([
-//     promise,
-//     timeout
-//   ])
-// };
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
@@ -52,14 +30,12 @@ afterEach(() => {
 
 describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () => {
   it('When a SUBSCRIPTION is DISPATCHED, then it is added to the list of subscriptions as PENDING', async () => {
-    expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.EMPTY);
+    expect(getSubscriptions(store.getState())).toEqual([]);
     // ACT
     await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
 
     // ASSERT
-    const subscriptionsStatus = getSubscriptionsStatus(store.getState());
     const subscriptions = getSubscriptions(store.getState());
-    expect(subscriptionsStatus).toEqual(subscriptionsStates.PENDING);
     expect(subscriptions).toEqual([
       {
         groupName: 'telemetry-all-all-all',
@@ -77,7 +53,6 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
     await store.dispatch(addGroupSubscription('event-all-all-all'));
     await server.connected;
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
-    expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.PENDING);
   });
 
   it('When the SUBSCRIPTIONS are REQUESTED, then the subscriptions state change to REQUESTING, ' +
@@ -135,29 +110,6 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
       },
     ]);
   });
-  //
-  // it('When the SUBSCRIPTIONS update is confirmed, then the subscriptions change to SUBSCRIBED', async () => {
-  //   // ARRANGE
-  //   await store.dispatch(requestSubscriptions());
-  //   server.on('message', socket => {
-  //     socket.send()
-  //   });
-  //   // ACT
-  //   await store.dispatch(receiveGroupConfirmationMessage(groupName));
-  //
-  //   // ASSERT
-  //   expect(getSubscriptionsStatus(store.getState())).toEqual(subscriptionsStates.REQUESTING);
-  //   expect(getSubscriptions(store.getState())).toEqual([
-  //     {
-  //       groupName: 'telemetry-all-all-all',
-  //       status: groupStates.PENDING,
-  //     },
-  //     {
-  //       groupName: 'event-all-all-all',
-  //       status: groupStates.PENDING,
-  //     },
-  //   ]);
-  // });
 });
 
 //   it('Should save all events when subscribed to all', async () => {

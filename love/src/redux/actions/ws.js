@@ -5,7 +5,6 @@ import {
   REQUEST_SUBSCRIPTIONS,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
-  CHANGE_SUBS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
 } from '../actions/actionTypes';
@@ -15,7 +14,7 @@ import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, r
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveObservingLog } from './observingLogs';
-import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscriptionsStatus } from '../selectors';
+import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions } from '../selectors';
 import { tokenStates } from '../reducers/auth';
 
 export const connectionStates = {
@@ -27,19 +26,21 @@ export const connectionStates = {
   REJECTED: 'REJECTED',
 };
 
-export const subscriptionsStates = {
-  EMPTY: 'EMPTY',
-  PENDING: 'PENDING',
-  REQUESTING: 'REQUESTING',
-  SUBSCRIBED: 'RETRYING',
-};
-
 export const groupStates = {
   PENDING: 'PENDING',
   REQUESTING: 'REQUESTING',
   SUBSCRIBED: 'SUBSCRIBED',
   UNSUBSCRIBING: 'UNSUBSCRIBING',
 }
+
+const nonConnectableTokenStates = [
+  tokenStates.EMPTY,
+  tokenStates.REJECTED,
+  tokenStates.EXPIRED,
+  tokenStates.REMOVED_REMOTELY,
+  tokenStates.REMOVE_REQUESTED,
+  tokenStates.REMOVE_ERROR,
+];
 
 export const SALCommandStatus = {
   REQUESTED: 'REQUESTED',
@@ -51,11 +52,6 @@ let socket;
 const changeConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
-});
-
-const changeSubscriptionsState = (subscriptionsState) => ({
-  type: CHANGE_SUBS_STATE,
-  subscriptionsState,
 });
 
 const receiveGroupConfirmationMessage = (data) => ({
@@ -72,15 +68,6 @@ const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
     data: data,
   };
 };
-
-const nonConnectableTokenStates = [
-  tokenStates.EMPTY,
-  tokenStates.REJECTED,
-  tokenStates.EXPIRED,
-  tokenStates.REMOVED_REMOTELY,
-  tokenStates.REMOVE_REQUESTED,
-  tokenStates.REMOVE_ERROR,
-]
 
 /**
  * Opens a new websocket connection assuming:
@@ -228,43 +215,38 @@ export const removeGroupSubscription = (groupName) => ({
   groupName,
 });
 
-export const requestGroupSubscription = (groupName) => {
-  return (dispatch, getState) => {
-    const connected = new Promise(async(resolve) => {
-      let connectionStatus;
-      do {
-        connectionStatus = getConnectionStatus(getState());
-        if (connectionStatus === connectionStates.OPEN) {
-          resolve();
-          return;
-        }
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } while (connectionStatus !== connectionStates.REJECTED);
-    });
-    // if (!connected) {
-    //   dispatch(openWebsocketConnection());
-    //   setTimeout(() => dispatch(requestGroupSubscription(groupName)), 1000);
-    //   return;
-    // }
-
-    const [category, csc, salindex, stream] = groupName.split('-');
-    connected.then(() => {
-      const state = getState();
-      if (state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
-        return;
-      }
-      socket.json({
-        option: 'subscribe',
-        category,
-        csc,
-        salindex,
-        stream,
-      });
-      dispatch(addGroupSubscription(groupName));
-    });
-  };
-};
+// export const requestGroupSubscription = (groupName) => {
+//   return (dispatch, getState) => {
+//     const connected = new Promise(async(resolve) => {
+//       let connectionStatus;
+//       do {
+//         connectionStatus = getConnectionStatus(getState());
+//         if (connectionStatus === connectionStates.OPEN) {
+//           resolve();
+//           return;
+//         }
+//         await new Promise(resolve => setTimeout(resolve, 1000));
+//       } while (connectionStatus !== connectionStates.REJECTED);
+//     });
+//
+//     const [category, csc, salindex, stream] = groupName.split('-');
+//     connected.then(() => {
+//       const state = getState();
+//       if (state.ws.connectionState !== connectionStates.OPEN) {
+//         console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
+//         return;
+//       }
+//       socket.json({
+//         option: 'subscribe',
+//         category,
+//         csc,
+//         salindex,
+//         stream,
+//       });
+//       dispatch(addGroupSubscription(groupName));
+//     });
+//   };
+// };
 
 export const requestSubscriptions = () => {
   return (dispatch, getState) => {
@@ -273,7 +255,6 @@ export const requestSubscriptions = () => {
     if (connectionStatus !== connectionStates.OPEN) {
       return;
     }
-
     const subscriptions = getSubscriptions(state);
     subscriptions.forEach( subscription => {
       const [category, csc, salindex, stream] = subscription.groupName.split('-');
@@ -289,29 +270,6 @@ export const requestSubscriptions = () => {
       type: REQUEST_SUBSCRIPTIONS,
       subscriptions,
     });
-  };
-};
-
-export const confirmSubscription = () => {
-  return (dispatch, getState) => {
-    const state = getState();
-    const connectionStatus = getConnectionStatus(state);
-    if (connectionStatus !== connectionStates.OPEN) {
-      return;
-    }
-
-    const subscriptions = getSubscriptions(state);
-    subscriptions.forEach( subscription => {
-      const [category, csc, salindex, stream] = subscription.groupName.split('-');
-      socket.json({
-        option: 'subscribe',
-        category,
-        csc,
-        salindex,
-        stream,
-      });
-    });
-    dispatch(changeSubscriptionsState(subscriptionsStates.REQUESTING));
   };
 };
 
