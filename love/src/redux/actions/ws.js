@@ -3,6 +3,8 @@ import {
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
   REQUEST_SUBSCRIPTIONS,
+  REQUEST_GROUP_UNSUBSCRIPTION,
+  RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
@@ -56,6 +58,11 @@ const changeConnectionState = (connectionState) => ({
 
 const receiveGroupConfirmationMessage = (data) => ({
   type: RECEIVE_GROUP_CONFIRMATION_MESSAGE,
+  data,
+});
+
+const receiveGroupRemovalConfirmationMessage = (data) => ({
+  type: RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
   data,
 });
 
@@ -113,7 +120,11 @@ export const openWebsocketConnection = () => {
 
         const data = JSON.parse(msg.data);
         if (!data.category) {
-          dispatch(receiveGroupConfirmationMessage(data.data));
+          if (data.data.includes('unsubscribed')) {
+            dispatch(receiveGroupRemovalConfirmationMessage(data.data));
+          } else {
+            dispatch(receiveGroupConfirmationMessage(data.data));
+          }
           return;
         }
         if (data.category === 'heartbeat') {
@@ -275,27 +286,23 @@ export const requestSubscriptions = () => {
 
 export const requestGroupSubscriptionRemoval = (groupName) => {
   return (dispatch, getState) => {
-    if (!wsPromise) {
-      dispatch(openWebsocketConnection());
-      setTimeout(() => dispatch(requestGroupSubscriptionRemoval(groupName)), 1000);
+    const state = getState();
+    const connectionStatus = getConnectionStatus(state);
+    if (connectionStatus !== connectionStates.OPEN) {
       return;
     }
 
     const [category, csc, salindex, stream] = groupName.split('-');
-
-    wsPromise.then(() => {
-      const state = getState();
-      if (state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
-      }
-
-      socket.json({
-        option: 'unsubscribe',
-        category,
-        csc,
-        salindex: salindex,
-        stream,
-      });
+    socket.json({
+      option: 'unsubscribe',
+      category,
+      csc,
+      salindex: salindex,
+      stream,
+    });
+    dispatch({
+      type: REQUEST_GROUP_UNSUBSCRIPTION,
+      groupName,
     });
   };
 };

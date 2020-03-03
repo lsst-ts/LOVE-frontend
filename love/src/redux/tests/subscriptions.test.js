@@ -3,11 +3,12 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import {
+  connectionStates,
+  groupStates,
   openWebsocketConnection,
   addGroupSubscription,
   requestSubscriptions,
-  groupStates,
-  connectionStates,
+  requestGroupSubscriptionRemoval,
 } from '../actions/ws';
 import { emptyToken, doReceiveToken } from '../actions/auth';
 import {
@@ -58,10 +59,8 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
   it('When the SUBSCRIPTIONS are REQUESTED, then the subscriptions state change to REQUESTING, ' +
   'and when the server confirms each subscription, that subscription is updated',
   async () => {
-    // ACT 1
+    // Request Subscriptions
     await store.dispatch(requestSubscriptions());
-
-    // ASSERT 1
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
@@ -73,12 +72,10 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
       },
     ]);
 
-    // ACT 2
+    // Server confirms group 1
     server.send({
       data: "Successfully subscribed to telemetry-all-all-all"
     });
-
-    // ASSERT 2
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
@@ -91,12 +88,10 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
       },
     ]);
 
-    // ACT 3
+    // Server confirms group 2
     server.send({
       data: "Successfully subscribed to event-all-all-all"
     });
-
-    // ASSERT 3
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
@@ -109,6 +104,67 @@ describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', (
         confirmationMessage: "Successfully subscribed to event-all-all-all",
       },
     ]);
+  });
+});
+
+describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () => {
+  beforeEach(async () => {
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+    await store.dispatch(openWebsocketConnection());
+    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+    await store.dispatch(addGroupSubscription('event-all-all-all'));
+    await server.connected;
+    server.send({
+      data: "Successfully subscribed to telemetry-all-all-all"
+    });
+    server.send({
+      data: "Successfully subscribed to event-all-all-all"
+    });
+  });
+
+  it('When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING, ' +
+  'and when the server confirms each unsubscription, that subscription is removed',
+  async () => {
+    // Request remove group 1
+    await store.dispatch(requestGroupSubscriptionRemoval('telemetry-all-all-all'));
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.UNSUBSCRIBING,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+    ]);
+    // Server removes group 1
+    server.send({
+      data: "Successfully unsubscribed from telemetry-all-all-all"
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+    ]);
+
+    // Request remove 2
+    await store.dispatch(requestGroupSubscriptionRemoval('event-all-all-all'));
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.UNSUBSCRIBING,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+    ]);
+    // Server removes 2
+    server.send({
+      data: "Successfully unsubscribed from event-all-all-all"
+    });
+    expect(getSubscriptions(store.getState())).toEqual([]);
   });
 });
 
