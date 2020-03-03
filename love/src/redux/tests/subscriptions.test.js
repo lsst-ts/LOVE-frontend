@@ -46,59 +46,34 @@ describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () 
   });
 });
 
-describe('Given the CONNECTION is CLOSED and the tere are PENDING SUBSCRIPTIONS, ', () => {
+describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ', () => {
   beforeEach(async () => {
     await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
     await store.dispatch(addGroupSubscription('event-all-all-all'));
-    expect(getSubscriptions(store.getState())).toEqual([
-      {
-        groupName: 'telemetry-all-all-all',
-        status: groupStates.PENDING,
-      },
-      {
-        groupName: 'event-all-all-all',
-        status: groupStates.PENDING,
-      },
-    ]);
   });
 
-  it('When the CONNECTION is OPEN, then the subscriptions state change to REQUESTING', async () => {
-    // ACT
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
-    await store.dispatch(openWebsocketConnection());
-    await server.connected;
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
-
-    // ASSERT
-    const subscriptions = getSubscriptions(store.getState());
-    expect(subscriptions).toEqual([
-      {
-        groupName: 'telemetry-all-all-all',
-        status: groupStates.REQUESTING,
-      },
-      {
-        groupName: 'event-all-all-all',
-        status: groupStates.REQUESTING,
-      },
-    ]);
-  });
-});
-
-describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', () => {
-  beforeEach(async () => {
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
-    await store.dispatch(openWebsocketConnection());
-    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
-    await store.dispatch(addGroupSubscription('event-all-all-all'));
-    await server.connected;
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
-  });
-
-  it('When the SUBSCRIPTIONS are REQUESTED, then the subscriptions state change to REQUESTING, ' +
+  it('When the CONNECTION is OPEN, then the subscriptions state change to REQUESTING, ' +
   'and when the server confirms each subscription, that subscription is updated',
   async () => {
-    // Request Subscriptions
-    await store.dispatch(requestSubscriptions());
+    // Open connection
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+    await store.dispatch(openWebsocketConnection());
+    await server.connected;
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'telemetry',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'event',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
@@ -152,6 +127,20 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
     await store.dispatch(addGroupSubscription('event-all-all-all'));
     await server.connected;
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'telemetry',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'event',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
     server.send({
       data: "Successfully subscribed to telemetry-all-all-all"
     });
@@ -160,11 +149,69 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     });
   });
 
+  it('When a new GROUP IS ADDED, then the subscriptions state change to PENDING and then REQUESTING, ' +
+  'and when the server confirms each unsubscription, that subscription is removed',
+  async () => {
+    // Add new group
+    await store.dispatch(addGroupSubscription('cmd-all-all-all'));
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'cmd',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+      {
+        groupName: 'cmd-all-all-all',
+        status: groupStates.REQUESTING,
+      },
+    ]);
+    // Server subscribes new group
+    server.send({
+      data: "Successfully subscribed to cmd-all-all-all"
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+      {
+        groupName: 'cmd-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to cmd-all-all-all",
+      },
+    ]);
+  });
+
   it('When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING, ' +
   'and when the server confirms each unsubscription, that subscription is removed',
   async () => {
     // Request remove group 1
     await store.dispatch(requestGroupSubscriptionRemoval('telemetry-all-all-all'));
+    await expect(server).toReceiveMessage({
+      option: 'unsubscribe',
+      category: 'telemetry',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
@@ -191,6 +238,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
 
     // Request remove 2
     await store.dispatch(requestGroupSubscriptionRemoval('event-all-all-all'));
+    await expect(server).toReceiveMessage({
+      option: 'unsubscribe',
+      category: 'event',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'event-all-all-all',
