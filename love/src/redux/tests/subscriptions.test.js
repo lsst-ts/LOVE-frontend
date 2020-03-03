@@ -6,8 +6,8 @@ import {
   connectionStates,
   groupStates,
   openWebsocketConnection,
+  closeWebsocketConnection,
   addGroupSubscription,
-  requestSubscriptions,
   requestGroupSubscriptionRemoval,
 } from '../actions/ws';
 import { emptyToken, doReceiveToken } from '../actions/auth';
@@ -256,6 +256,14 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     server.send({
       data: "Successfully unsubscribed from event-all-all-all"
     });
+    expect(getSubscriptions(store.getState())).toEqual([]);
+  });
+
+  it('When the CONNECTION is CLOSED, then the subscriptions are EMPTY',
+  async () => {
+    // Close connection
+    await store.dispatch(closeWebsocketConnection());
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
     expect(getSubscriptions(store.getState())).toEqual([]);
   });
 });

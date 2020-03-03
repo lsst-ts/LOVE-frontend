@@ -5,6 +5,7 @@ import {
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
+  CLEAR_SUBSCRIPTIONS,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
@@ -210,6 +211,7 @@ export const openWebsocketConnection = () => {
 export const closeWebsocketConnection = () => {
 
   return (dispatch, getState) => {
+    dispatch({ type: CLEAR_SUBSCRIPTIONS });
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
       dispatch(changeConnectionState(connectionStates.CLOSED));
