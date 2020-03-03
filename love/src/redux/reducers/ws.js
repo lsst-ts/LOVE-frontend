@@ -3,6 +3,8 @@ import {
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
   REQUEST_SUBSCRIPTIONS,
+  REQUEST_GROUP_UNSUBSCRIPTION,
+  RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
@@ -23,7 +25,7 @@ const initialState = {
     salindex: 0,
   },
 };
-// 
+//
 // const readConfirmationMessage = (msg) => {
 //   let [rest, csc, salindex, stream] = msg.split('-');
 //   const aux = rest.split(' ');
@@ -82,6 +84,30 @@ export default function(state = initialState, action) {
         return subscription;
       });
 
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE: {
+      const subscriptions = state.subscriptions.filter((subscription) => {
+        return !action.data.includes(subscription.groupName)
+      });
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case REQUEST_GROUP_UNSUBSCRIPTION: {
+      const subscriptions = state.subscriptions.map((subscription) => {
+        if (action.groupName === subscription.groupName) {
+          return {
+            ...subscription,
+            status: groupStates.UNSUBSCRIBING,
+          };
+        }
+        return subscription;
+      });
       return {
         ...state,
         subscriptions,
