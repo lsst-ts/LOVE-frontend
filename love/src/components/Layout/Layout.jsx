@@ -229,7 +229,7 @@ class Layout extends Component {
 
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
               {this.state.title && this.state.viewOnNotch && (
-                <GoBackIcon className={styles.logo} onClick={this.goBack} />
+                <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back"/>
               )}
               <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
             </div>
