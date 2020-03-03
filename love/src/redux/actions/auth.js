@@ -13,7 +13,7 @@ import {
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
-import { openWebsocketConnection } from './ws';
+import { openWebsocketConnection, closeWebsocketConnection } from './ws';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
@@ -62,9 +62,10 @@ export function doGetTokenFromStorage() {
   };
 }
 
-function doExpireToken() {
+export function doExpireToken() {
   return (dispatch) => {
     dispatch(expireToken);
+    dispatch(closeWebsocketConnection());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -84,16 +85,18 @@ export function doReceiveToken(username, token, permissions, tai_to_utc) {
   };
 }
 
-function doRejectToken() {
+export function doRejectToken() {
   return (dispatch) => {
     dispatch(rejectToken);
+    dispatch(closeWebsocketConnection());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
 
-function doRequestRemoveToken() {
+export function doRequestRemoveToken() {
   return (dispatch) => {
     dispatch(requestRemoveToken);
+    dispatch(closeWebsocketConnection());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
