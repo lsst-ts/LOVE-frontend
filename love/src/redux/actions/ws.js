@@ -106,6 +106,7 @@ export const openWebsocketConnection = () => {
     socket = sockette(connectionPath, {
       onopen: () => {
         dispatch(changeConnectionState(connectionStates.OPEN));
+        dispatch(requestSubscriptions());
       },
       onclose: (event) => {
         const status = event.code === 4000 || event.code === 1000 ?
@@ -220,7 +221,7 @@ export const addGroupSubscription = (groupName) => ({
   type: ADD_GROUP_SUBSCRIPTION,
   groupName,
 });
-// 
+//
 // export const removeGroupSubscription = (groupName) => ({
 //   type: REMOVE_GROUP_SUBSCRIPTION,
 //   groupName,

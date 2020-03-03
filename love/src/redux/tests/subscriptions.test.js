@@ -46,6 +46,44 @@ describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () 
   });
 });
 
+describe('Given the CONNECTION is CLOSED and the tere are PENDING SUBSCRIPTIONS, ', () => {
+  beforeEach(async () => {
+    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+    await store.dispatch(addGroupSubscription('event-all-all-all'));
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.PENDING,
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.PENDING,
+      },
+    ]);
+  });
+
+  it('When the CONNECTION is OPEN, then the subscriptions state change to REQUESTING', async () => {
+    // ACT
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+    await store.dispatch(openWebsocketConnection());
+    await server.connected;
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ASSERT
+    const subscriptions = getSubscriptions(store.getState());
+    expect(subscriptions).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.REQUESTING,
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.REQUESTING,
+      },
+    ]);
+  });
+});
+
 describe('Given the CONNECTION is OPEN and there are PENDING SUBSCRIPTIONS, ', () => {
   beforeEach(async () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
