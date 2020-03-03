@@ -194,9 +194,13 @@ class Layout extends Component {
     this.setState({ sidebarVisible: !this.state.sidebarVisible });
   };
 
-  goHome = () =>{
-    this.props.history.push('/')
-  }
+  goHome = () => {
+    this.props.history.push('/');
+  };
+
+  goBack = () => {
+    this.props.history.goBack();
+  };
 
   render() {
     return (
@@ -221,11 +225,12 @@ class Layout extends Component {
                 <MenuIcon className={styles.logo} />
               </Button>
 
-              <LogoIcon className={styles.logo} onClick={this.goHome} title="Go home"/>
-
+              <LogoIcon className={styles.logo} onClick={this.goHome} title="Go home" />
 
               <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
-              {this.state.title && this.state.viewOnNotch && <GoBackIcon className={styles.logo} />}
+              {this.state.title && this.state.viewOnNotch && (
+                <GoBackIcon className={styles.logo} onClick={this.goBack} />
+              )}
               <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
             </div>
             <NotchCurve className={styles.notchCurve} />
