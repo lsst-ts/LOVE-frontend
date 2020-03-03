@@ -220,11 +220,11 @@ export const addGroupSubscription = (groupName) => ({
   type: ADD_GROUP_SUBSCRIPTION,
   groupName,
 });
-
-export const removeGroupSubscription = (groupName) => ({
-  type: REMOVE_GROUP_SUBSCRIPTION,
-  groupName,
-});
+// 
+// export const removeGroupSubscription = (groupName) => ({
+//   type: REMOVE_GROUP_SUBSCRIPTION,
+//   groupName,
+// });
 
 // export const requestGroupSubscription = (groupName) => {
 //   return (dispatch, getState) => {
