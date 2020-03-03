@@ -21,7 +21,7 @@
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(3, min-content) max-content;
+  grid-template-columns: repeat(4, min-content) max-content;
   grid-gap: 0.5em;
   align-items: center;
 }
