@@ -4,7 +4,7 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
-  RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
+  RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
   RESET_SUBSCRIPTIONS,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
@@ -19,6 +19,9 @@ import { receiveObservingLog } from './observingLogs';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions } from '../selectors';
 import { tokenStates } from '../reducers/auth';
 
+/**
+ * Set of possible connection status values
+ */
 export const connectionStates = {
   OPENING: 'OPENING',
   OPEN: 'OPEN',
@@ -28,13 +31,19 @@ export const connectionStates = {
   REJECTED: 'REJECTED',
 };
 
+/**
+ * Set of possible group status values
+ */
 export const groupStates = {
   PENDING: 'PENDING',
   REQUESTING: 'REQUESTING',
   SUBSCRIBED: 'SUBSCRIBED',
   UNSUBSCRIBING: 'UNSUBSCRIBING',
-}
+};
 
+/**
+ * Set of Token statuses that are non capable of establishing a websocket connection
+ */
 const nonConnectableTokenStates = [
   tokenStates.EMPTY,
   tokenStates.REJECTED,
@@ -44,6 +53,9 @@ const nonConnectableTokenStates = [
   tokenStates.REMOVE_ERROR,
 ];
 
+/**
+ * Set of possible SALCommandStatus values
+ */
 export const SALCommandStatus = {
   REQUESTED: 'REQUESTED',
   ACK: 'ACK',
@@ -51,11 +63,33 @@ export const SALCommandStatus = {
 
 let socket;
 
+/**
+ * Change to connectionState to the given value
+ */
 const _changeConnectionState = (connectionState) => ({
   type: CHANGE_WS_STATE,
   connectionState,
 });
 
+/**
+ * Receive subscription confirmaiton message
+ */
+const _receiveSubscriptionConfirmation = (data) => ({
+  type: RECEIVE_GROUP_CONFIRMATION_MESSAGE,
+  data,
+});
+
+/**
+ * Receive unsubscription confirmaiton message
+ */
+const _receiveUnsubscriptionConfirmation = (data) => ({
+  type: RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
+  data,
+});
+
+/**
+ * Receive data from a subscribed group
+ */
 const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
@@ -66,6 +100,9 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   };
 };
 
+/**
+ * Reset all the given subscriptions (status PENDING and noo confirmationMessage)
+ */
 const _resetSubscriptions = (subscriptions) => {
   return {
     type: RESET_SUBSCRIPTIONS,
@@ -101,7 +138,6 @@ export const openWebsocketConnection = () => {
     }
     const token = getToken(getState());
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-    console.log('Opening ws connection, token: ', token);
     dispatch(_changeConnectionState(connectionStates.OPENING));
 
     socket = sockette(connectionPath, {
@@ -127,15 +163,9 @@ export const openWebsocketConnection = () => {
         const data = JSON.parse(msg.data);
         if (!data.category) {
           if (data.data.includes('unsubscribed')) {
-            dispatch({
-              type: RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
-              data: data.data,
-            });
+            dispatch(_receiveUnsubscriptionConfirmation(data.data));
           } else {
-            dispatch({
-              type: RECEIVE_GROUP_CONFIRMATION_MESSAGE,
-              data: data.data,
-            });
+            dispatch(_receiveSubscriptionConfirmation(data.data));
           }
           return;
         }
@@ -219,7 +249,6 @@ export const openWebsocketConnection = () => {
  * Closes the websocket connection
  */
 export const closeWebsocketConnection = () => {
-
   return (dispatch, getState) => {
     dispatch({ type: RESET_SUBSCRIPTIONS, subscriptions: [] });
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
@@ -229,6 +258,9 @@ export const closeWebsocketConnection = () => {
   }
 };
 
+/**
+ * Add a group to the list of subscriptions, groups are added in PENDING state
+ */
 export const addGroupSubscription = (groupName) => {
   return (dispatch, _getState) => {
     dispatch({
@@ -277,6 +309,9 @@ export const addGroupSubscription = (groupName) => {
 //   };
 // };
 
+/**
+ * Request subscription for all PENDING subscriptions
+ */
 const _requestSubscriptions = () => {
   return (dispatch, getState) => {
     const state = getState();
@@ -303,6 +338,9 @@ const _requestSubscriptions = () => {
   };
 };
 
+/**
+ * Request the unsubscription of a given group
+ */
 export const requestGroupSubscriptionRemoval = (groupName) => {
   return (dispatch, getState) => {
     const state = getState();

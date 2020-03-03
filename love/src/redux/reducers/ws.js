@@ -4,7 +4,7 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
-  RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
+  RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
   RESET_SUBSCRIPTIONS,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
@@ -90,7 +90,7 @@ export default function(state = initialState, action) {
         subscriptions,
       };
     }
-    case RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE: {
+    case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
       const subscriptions = state.subscriptions.filter((subscription) => {
         return !action.data.includes(subscription.groupName)
       });
