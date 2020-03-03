@@ -25,6 +25,10 @@
   align-items: center;
 }
 
+.leftTopBarNoEditButton {
+  grid-template-columns: repeat(2, min-content) max-content;
+}
+
 .leftTopbar .logo {
   height: 1.3em;
   fill: var(--base-font-color);
@@ -33,7 +37,7 @@
 }
 
 .collapsedLogo {
-  margin-left: -5.9em;
+  margin-left: -6.6em;
 }
 
 .leftTopbar .text {
@@ -215,4 +219,6 @@
   display: none;
   padding-right: 0.3em;
   padding-left: 0.3em;
+  display: inline;
+  visibility: 'hidden';
 }
