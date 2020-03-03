@@ -5,7 +5,7 @@ import {
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_REMOVAL_CONFIRMATION_MESSAGE,
-  CLEAR_SUBSCRIPTIONS,
+  RESET_SUBSCRIPTIONS,
   REMOVE_GROUP_SUBSCRIPTION,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
@@ -77,6 +77,17 @@ const receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   };
 };
 
+const resetSubscriptions = (subscriptions) => {
+  return {
+    type: RESET_SUBSCRIPTIONS,
+    subscriptions: subscriptions ? subscriptions.map( sub => ({
+      ...sub,
+      status: groupStates.PENDING,
+      confirmationMessage: undefined,
+    })) : [],
+  }
+}
+
 /**
  * Opens a new websocket connection assuming:
  * - authentication with backend went ok
@@ -110,12 +121,16 @@ export const openWebsocketConnection = () => {
         dispatch(requestSubscriptions());
       },
       onclose: (event) => {
-        const status = event.code === 4000 || event.code === 1000 ?
-          connectionStates.CLOSED : connectionStates.RETRYING;
-        dispatch(changeConnectionState(status));
+        if (event.code === 4000 || event.code === 1000) {
+          dispatch(changeConnectionState(connectionStates.CLOSED));
+        } else {
+          dispatch(changeConnectionState(connectionStates.RETRYING));
+          dispatch(resetSubscriptions(getSubscriptions(getState())));
+        }
       },
       onerror: () => {
         dispatch(changeConnectionState(connectionStates.RETRYING));
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onmessage: (msg) => {
         if (!msg.data) return;
@@ -211,7 +226,7 @@ export const openWebsocketConnection = () => {
 export const closeWebsocketConnection = () => {
 
   return (dispatch, getState) => {
-    dispatch({ type: CLEAR_SUBSCRIPTIONS });
+    dispatch({ type: RESET_SUBSCRIPTIONS, subscriptions: [] });
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
       dispatch(changeConnectionState(connectionStates.CLOSED));
