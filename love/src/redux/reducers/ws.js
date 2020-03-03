@@ -4,17 +4,15 @@ import {
   ADD_GROUP_SUBSCRIPTION,
   REQUEST_SUBSCRIPTIONS,
   CHANGE_WS_STATE,
-  CHANGE_SUBS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
   RECEIVE_ALARMS,
 } from '../actions/actionTypes';
-import { connectionStates, subscriptionsStates, groupStates, SALCommandStatus } from '../actions/ws';
+import { connectionStates, groupStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
   alarms: [],
   connectionState: connectionStates.CLOSED,
-  subscriptionsState: subscriptionsStates.EMPTY,
   socket: null, // Reference to the websocket client object
   subscriptions: [],
   lastSALCommand: {
@@ -25,17 +23,17 @@ const initialState = {
     salindex: 0,
   },
 };
-
-const readConfirmationMessage = (msg) => {
-  let [rest, csc, salindex, stream] = msg.split('-');
-  const aux = rest.split(' ');
-  const category = aux[aux.length -1];
-  if (stream === undefined) {
-    stream = salindex;
-    sindex = undefined;
-  }
-  return [category, csc, salindex, stream];
-}
+// 
+// const readConfirmationMessage = (msg) => {
+//   let [rest, csc, salindex, stream] = msg.split('-');
+//   const aux = rest.split(' ');
+//   const category = aux[aux.length -1];
+//   if (stream === undefined) {
+//     stream = salindex;
+//     sindex = undefined;
+//   }
+//   return [category, csc, salindex, stream];
+// }
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
  */
@@ -43,9 +41,6 @@ export default function(state = initialState, action) {
   switch (action.type) {
     case CHANGE_WS_STATE: {
       return { ...state, connectionState: action.connectionState };
-    }
-    case CHANGE_SUBS_STATE: {
-      return { ...state, subscriptionsState: action.subscriptionsState };
     }
     case ADD_GROUP_SUBSCRIPTION: {
       const matchingGroup = state.subscriptions.filter((subscription) => subscription.groupName === action.groupName);
@@ -63,7 +58,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         subscriptions,
-        subscriptionsState: subscriptionsStates.PENDING,
       };
     }
     case REQUEST_SUBSCRIPTIONS: {
@@ -74,7 +68,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         subscriptions,
-        subscriptionsState: subscriptionsStates.REQUESTING,
       };
     }
     case RECEIVE_GROUP_CONFIRMATION_MESSAGE: {
@@ -92,7 +85,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         subscriptions,
-        subscriptionsState: subscriptionsStates.PENDING,
       };
     }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
