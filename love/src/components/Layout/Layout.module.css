@@ -20,13 +20,13 @@
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(4, min-content) max-content min-content;
+  grid-template-columns: repeat(3, min-content) max-content min-content;
   grid-gap: 0.5em;
   align-items: center;
 }
 
 .leftTopBarNoEditButton {
-  grid-template-columns: repeat(2, min-content) max-content;
+  grid-template-columns: min-content max-content;
 }
 
 .leftTopbar .logo {
@@ -45,7 +45,6 @@
   padding-top: 0.2em;
   height: fit-content;
   vertical-align: middle;
-  text-decoration: underline;
 }
 
 .leftTopbar .divider {
