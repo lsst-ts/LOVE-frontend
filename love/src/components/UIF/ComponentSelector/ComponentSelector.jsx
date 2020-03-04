@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../../GeneralPurpose/Button/Button';
 import styles from './ComponentSelector.module.css';
 import { indexes } from '../ComponentIndex';
+import TextField from '../../TextField/TextField';
 
 export default class ComponentSelector extends Component {
   static propTypes = {
@@ -42,12 +43,21 @@ export default class ComponentSelector extends Component {
     });
   };
 
+  changeFilter = (event) =>{
+    this.setState({
+      filter: event.target.value
+    })
+  }
   render() {
     const buttonsDisabled = this.state.selected.length === 0;
     return (
       <div className={styles.container}>
         <div className={styles.content}>
           <h2> Select Components to add to the view </h2>
+          <div className={styles.filterContainer}>
+            <span className={styles.filterLabel}>Filter: </span>
+            <TextField value={this.state.filter} onChange={this.changeFilter}/>
+          </div>
 
           {indexes.map((index) => {
             const category = index.name;
