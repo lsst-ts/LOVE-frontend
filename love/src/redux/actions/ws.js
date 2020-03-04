@@ -389,79 +389,64 @@ export const requestSALCommand = (data) => {
    */
   const commandID = `${Date.now()}-${data.cmd}`;
   return (dispatch, getState) => {
-    if (!wsPromise) {
-      dispatch(openWebsocketConnection());
-      setTimeout(() => dispatch(requestSALCommand(data)), 500);
-      return;
+    const state = getState();
+    const connectionStatus = getConnectionStatus(state);
+    if (connectionStatus !== connectionStates.OPEN) {
+      return false;
     }
 
-    wsPromise.then(() => {
-      const state = getState();
-      if (state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(`Can not send commands, websocket connection status is: ${state.ws.connectionState}`);
-      }
-
-      const commandObject = {
-        csc: data.component,
-        salindex: data.salindex,
-        data: {
-          stream: {
-            cmd: data.cmd,
-            params: data.params,
-            cmd_id: commandID,
-          },
+    const commandObject = {
+      csc: data.component,
+      salindex: data.salindex,
+      data: {
+        stream: {
+          cmd: data.cmd,
+          params: data.params,
+          cmd_id: commandID,
         },
-      };
+      },
+    };
 
-      socket.json({
-        category: 'cmd',
-        data: [commandObject],
-      });
-
-      const commandStatus = {
-        cmd: data.cmd,
-        params: data.params,
-        component: data.component,
-        salindex: data.salindex,
-        cmd_id: commandID,
-      };
-
-      dispatch(updateLastSALCommand(commandStatus, SALCommandStatus.REQUESTED));
+    socket.json({
+      category: 'cmd',
+      data: [commandObject],
     });
 
+    const commandStatus = {
+      cmd: data.cmd,
+      params: data.params,
+      component: data.component,
+      salindex: data.salindex,
+      cmd_id: commandID,
+    };
+
+    dispatch(updateLastSALCommand(commandStatus, SALCommandStatus.REQUESTED));
     return commandID;
   };
 };
 
 export const sendLOVECscObservingLogs = (user, message) => {
   return (dispatch, getState) => {
-    if (!wsPromise) {
-      dispatch(openWebsocketConnection());
-      setTimeout(() => dispatch(sendLOVECscObservingLogs(user, message)), 500);
-      return;
+    const state = getState();
+    const connectionStatus = getConnectionStatus(state);
+    if (connectionStatus !== connectionStates.OPEN) {
+      return false;
     }
 
-    wsPromise.then(() => {
-      const state = getState();
-      if (state.ws.connectionState !== connectionStates.OPEN) {
-        console.warn(`Can not send observingLogs, websocket connection status is: ${state.ws.connectionState}`);
-      }
-
-      const logsObject = {
-        csc: 'love',
-        salindex: 0,
-        data: {
-          observingLog: {
-            user: user,
-            message: message,
-          },
+    const logsObject = {
+      csc: 'love',
+      salindex: 0,
+      data: {
+        observingLog: {
+          user: user,
+          message: message,
         },
-      };
+      },
+    };
 
-      socket.json({
-        category: 'love_csc',
-        data: [logsObject],
-      });
+    socket.json({
+      category: 'love_csc',
+      data: [logsObject],
     });
   };
 };
