@@ -5,6 +5,7 @@ function LogoIcon(props) {
   const style = [styles, props.className].join(' ');
   return (
     <svg viewBox="0 0 101.2 26.8" {...props}>
+      <title>{props.title}</title>
       <path className={style.path} d="M3.7,1.3v21.1h16.2v3.5H0V1.3H3.7z"/>
       <path className={style.path} d="M24.7,13.4c0-3.3,1.2-6.2,3.7-8.6c2.4-2.4,5.4-3.6,8.8-3.6c3.4,0,6.3,1.2,8.7,3.6c2.4,2.4,3.7,5.3,3.7,8.7
         c0,3.4-1.2,6.3-3.7,8.7c-2.5,2.4-5.4,3.6-8.9,3.6c-3.1,0-5.8-1.1-8.3-3.2C26,20.3,24.7,17.2,24.7,13.4z M28.3,13.5
