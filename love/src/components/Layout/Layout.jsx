@@ -13,7 +13,6 @@ import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
-import GoBackIcon from '../icons/GoBackIcon/GoBackIcon';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
@@ -211,9 +210,7 @@ class Layout extends Component {
     this.props.history.push('/');
   };
 
-  goBack = () => {
-    this.props.history.goBack();
-  };
+
 
   setHovered = (value) => {
     this.setState({ hovered: value });
@@ -252,9 +249,6 @@ class Layout extends Component {
               />
 
               {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> | </span>}
-              {this.state.title && this.state.viewOnNotch && (
-                <GoBackIcon className={styles.logo} onClick={this.goBack} title="Go back" />
-              )}
               {this.state.viewOnNotch && (
                 <span className={styles.text}>
                   {
