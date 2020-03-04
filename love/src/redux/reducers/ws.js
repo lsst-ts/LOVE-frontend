@@ -26,17 +26,6 @@ const initialState = {
     salindex: 0,
   },
 };
-//
-// const readConfirmationMessage = (msg) => {
-//   let [rest, csc, salindex, stream] = msg.split('-');
-//   const aux = rest.split(' ');
-//   const category = aux[aux.length -1];
-//   if (stream === undefined) {
-//     stream = salindex;
-//     sindex = undefined;
-//   }
-//   return [category, csc, salindex, stream];
-// }
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
  */
