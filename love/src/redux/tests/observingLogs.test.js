@@ -3,22 +3,19 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import {
-  openWebsocketConnection,
-  requestGroupSubscription,
+  addGroupSubscription,
   sendLOVECscObservingLogs,
 } from '../actions/ws';
-import {
-  getObservingLogs,
-} from '../selectors';
+import { doReceiveToken } from '../actions/auth';
+import { getObservingLogs } from '../selectors';
 
 let store, server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  // prevent fetch call for token
-  localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-  await store.dispatch(openWebsocketConnection());
+  await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+  await server.connected;
 });
 
 afterEach(() => {
@@ -48,8 +45,7 @@ it('Should send an observingLog to the LOVE-Controller and the server should rec
 });
 
 it('Should get incoming observing log messages from the state', async () => {
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-LOVE-0-observingLog'));
+  await store.dispatch(addGroupSubscription('event-LOVE-0-observingLog'));
 
   const logsSent = new Array(3).fill({}).map((_v, index) => {
     return {

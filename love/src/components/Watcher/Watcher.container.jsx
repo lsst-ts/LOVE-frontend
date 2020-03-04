@@ -2,14 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
 import {
-  requestGroupSubscription,
+  addGroupSubscription,
   requestGroupSubscriptionRemoval,
   requestSALCommand,
 } from '../../redux/actions/ws';
 import Watcher from './Watcher';
 
 export const schema = {
-  description: `Table containing alarms triggered by all CSCs, with the corresponding 
+  description: `Table containing alarms triggered by all CSCs, with the corresponding
               interactions such as searching, filtering, acknowledging and muting`,
   defaultSize: [63, 17],
   props: {},
@@ -44,7 +44,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: () => {
       //Alarms
-      dispatch(requestGroupSubscription('event-Watcher-0-alarm'));
+      dispatch(addGroupSubscription('event-Watcher-0-alarm'));
     },
     unsubscribeToStreams: () => {
       //Alarms

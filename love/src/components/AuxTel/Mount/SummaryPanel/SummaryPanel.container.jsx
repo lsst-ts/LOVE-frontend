@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SummaryPanel from './SummaryPanel';
 import { getMountState, getMountSubscriptions } from '../../../../redux/selectors';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
 
 export const schema = {
   description: `Panel containing summary information about the AT, including the ATMCS, ATPneumatics and ATHexapod`,
@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => {
   const mountSubscriptions = getMountSubscriptions(index);
   return {
     subscribeToStream: () => {
-      mountSubscriptions.forEach((stream) => dispatch(requestGroupSubscription(stream)));
+      mountSubscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStream: () => {
       mountSubscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));

@@ -44,6 +44,10 @@ class Layout extends Component {
     mode: PropTypes.string,
     /** Status of the views request */
     viewsStatus: PropTypes.string,
+    /** Function to subscribe to streams to receive the alarms */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving the alarms */
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
@@ -72,6 +76,7 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
+    this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
     }, 3000);
@@ -81,9 +86,15 @@ class Layout extends Component {
     document.removeEventListener('mousedown', this.handleClick, false);
     window.removeEventListener('resize', this.handleResize);
     window.clearInterval(this.heartbeatInterval);
+    this.props.unsubscribeToStreams();
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
+    if (this.props.token === null && prevProps.token !== null) {
+      this.props.unsubscribeToStreams();
+    } else if (this.props.token !== null && prevProps.token === null) {
+      this.props.subscribeToStreams();
+    }
     const pathname = this.props.location.pathname;
     if (urls[pathname] && this.state.title !== urls[pathname]) {
       this.setState({

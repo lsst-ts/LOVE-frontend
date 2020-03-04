@@ -1,7 +1,7 @@
 ![frontend details](./details.svg 'Logo Title Text 1')
 
 ## Redux: Global state management
-[Redux](https://redux.js.org/) is a state container library that facilitates building more predictable apps by centralizing both the state and its changes. In LOVE, a Redux `store` is used to save all the data that comes from the LOVE-manager, enabling having a unique websockets connection per client, avoiding unnecessary data redundancy, while also giving a robust characterization to the authentication process. 
+[Redux](https://redux.js.org/) is a state container library that facilitates building more predictable apps by centralizing both the state and its changes. In LOVE, a Redux `store` is used to save all the data that comes from the LOVE-manager, enabling having a unique websockets connection per client, avoiding unnecessary data redundancy, while also giving a robust characterization to the authentication process.
 
 The state is described by a dictionary (Javascript object). Changes to this state are performed by `reducers` in response to `actions` `dispatched` by React `Components` . What does it mean? Simply put, `reducers` are functions that take the current state of the `app` (e.g., `ATDome` is in FAULT state) and return the new `sate` given the information contained in an `action` (e.g. update `ATDome` to FAULT state); a `dispatch` is a function call that enables a React component to connect to the state and send `actions`. This is thoroughly described in the [official documentation](https://redux.js.org/basics/basic-tutorial).
 
@@ -19,7 +19,7 @@ The structure of LOVE-frontend state is as follows:
 }
 ```
 
-Each of its branches (topmost keys) are handled by a separate reducer through the `combineReducers` utility of Redux. Each of the 
+Each of its branches (topmost keys) are handled by a separate reducer through the `combineReducers` utility of Redux.
 
 ## Container and presentational components
 
@@ -107,7 +107,7 @@ This data is colected after being added to the `ws.subscriptions` state because 
 };
 ```
 
-* `scripts`: A list with heartbeat info of each script in the ScriptQueue. Read from the `event-ScriptHeartbeats-{salindex}-stream`, with `salindex` refers to the ScriptQueue component where those scripts were loaded. 
+* `scripts`: A list with heartbeat info of each script in the ScriptQueue. Read from the `event-ScriptHeartbeats-{salindex}-stream`, with `salindex` refers to the ScriptQueue component where those scripts were loaded.
 * `cscs`: A list with heartbeat info of every CSC. Read from the `event-Heartbeats-0-stream` group.
 
 This data is colected after being added to the `ws.subscriptions` state because the information comes in separate groups and otherwise only the latest CSC info would be available.
@@ -124,4 +124,40 @@ This data is colected after being added to the `ws.subscriptions` state because 
 * `logMessageData`: A list with all messages received from the `logMessage` event of each CSC since the frontend started.
 * `errorCodeData`: A list with all messages received from the `errorCode` event of each CSC since the frontend started.
 
-This data is colected after being added to the `ws.subscriptions` state so the history of the `logMessage`  and `errorCode` events is available to components such as the `CSCSummary`. 
+This data is colected after being added to the `ws.subscriptions` state so the history of the `logMessage`  and `errorCode` events is available to components such as the `CSCSummary`.
+
+
+## Token, websocket connection and groups subscriptions
+The token, websocket and subscriptions handling is summarized in the following graphs:
+
+![redux state machine graph](./redux_ws_connection.svg 'Logo Title Text 1')
+
+
+### Token handling
+- Token starts with status EMPTY
+- When the application initiates, it tries to read the token from the local storage (status is READ_FROM_LOCAL_STORAGE)
+- If there is a token it is validated (status REQUESTING)
+- If there is no token it remains in EMPTY
+- Once the user logs in, the status is REQUESTING
+- Once the response is ok (200), the status changes to RECEIVED and the websockets connection is opened
+- If the response fails it goes to either ERROR, REJECTED or EXPIRED, depending on response codes. In any case the websocket connection is closed
+- When a user logs out, then the status is REMOVE_REQUESTED
+- When the response arrives and it was deleted (204) the status is REMOVED_REMOTELY, otherwise REMOVE_ERROR
+
+### Websocket connection handling
+- Connection status starts as CLOSED
+- When token is received/validated we dispatch an `openWebsocketConnection` action
+- When connection is opened, then the connection status is OPENING, and when ready it is OPEN
+- On most errors or close, the connection status is RETRYING
+- When connection is gracefully closed, then the status is CLOSED
+
+### Subscriptions are decoupled from connection
+- Each subscription has a status: PENDING, REQUESTING, SUBSCRIBED or UNSUBSCRIBING
+- Components add subscriptions dispatching `addGroupSubnscription` action (status PENDING)
+- If connection is opened, then the subscriptions are requested automatically (status REQUESTING)
+- Also when the connection is opened, then all PENDING subscriptions are requested
+- When confirmation is received, then they change to status SUBSCRIBED
+- When unsubscribing, then they change to UNSUBSCRIBING
+- When confirmation of unsubscription arrive, then the subscription is deleted
+- When connection is closed (gracefully, connection status is CLOSED), then all subscriptions are deleted (the manager will forget those subscriptions anyway)
+- When connection is closed (by error, connection status is RETRYING), then all subscriptions are PENDING. This way, when we open the connection again, we will be able to re-subscribe

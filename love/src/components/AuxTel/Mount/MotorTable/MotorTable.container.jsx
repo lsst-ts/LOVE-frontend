@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MotorTable from './MotorTable';
 import { getMountMotorsState, getMountMotorsSubscriptions } from '../../../../redux/selectors';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
 
 export const schema = {
   description: `Table containing low level information about the AT mount motors and drives`,
@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => {
   const mountMotorSubscriptions = getMountMotorsSubscriptions(index);
   return {
     subscribeToStream: () => {
-      mountMotorSubscriptions.forEach((stream) => dispatch(requestGroupSubscription(stream)));
+      mountMotorSubscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStream: () => {
       mountMotorSubscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));

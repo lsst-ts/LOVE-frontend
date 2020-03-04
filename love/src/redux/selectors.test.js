@@ -10,16 +10,18 @@ import {
 import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import WS from 'jest-websocket-mock';
-import { openWebsocketConnection, requestGroupSubscription } from './actions/ws';
+import { doReceiveToken } from './actions/auth';
+import { openWebsocketConnection, addGroupSubscription } from './actions/ws';
 import thunkMiddleware from 'redux-thunk';
 import { cameraStates, imageStates } from '../Constants';
-import logger from 'redux-logger';
 
 let store, server;
-beforeEach(() => {
+beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
+  await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+  await server.connected;
 });
 
 afterEach(() => {
@@ -55,11 +57,8 @@ it('Should extract the stream correctly with a selector', async () => {
   const stream = 'airPressure';
   const groupName = [category, csc, salindex, stream].join('-');
 
-  store.dispatch(openWebsocketConnection());
-
   // Act
-  await server.connected;
-  await store.dispatch(requestGroupSubscription(groupName));
+  await store.dispatch(addGroupSubscription(groupName));
   server.send({
     category,
     data: [
@@ -133,10 +132,8 @@ it('Should extract streams correctly with a selector', async () => {
   const groupNames = ['telemetry-Environment-1-airPressure', 'telemetry-Environment-1-temperature'];
 
   // Act
-  store.dispatch(openWebsocketConnection());
-  await server.connected;
-  await store.dispatch(requestGroupSubscription(groupNames[0]));
-  await store.dispatch(requestGroupSubscription(groupNames[1]));
+  await store.dispatch(addGroupSubscription(groupNames[0]));
+  await store.dispatch(addGroupSubscription(groupNames[1]));
   server.send({
     category: 'telemetry',
     data: [
@@ -178,9 +175,7 @@ it('Should extract the timestamped stream correctly with a selector', async () =
   const groupName = 'telemetry-Environment-1-airPressure';
   const timestamp = new Date();
   // Act
-  store.dispatch(openWebsocketConnection());
-  await server.connected;
-  await store.dispatch(requestGroupSubscription(groupName));
+  await store.dispatch(addGroupSubscription(groupName));
   server.send({
     category: 'telemetry',
     data: [
@@ -297,9 +292,7 @@ describe('Test image sequence data passes correctly to component', () => {
       const groupName = `event-ATCamera-1-${stagePair[0]}`;
 
       // Act
-      store.dispatch(openWebsocketConnection());
-      await server.connected;
-      await store.dispatch(requestGroupSubscription(groupName));
+      await store.dispatch(addGroupSubscription(groupName));
       server.send({
         category: 'event',
         data: [
@@ -342,9 +335,7 @@ describe('Test camera component status data passes correctly to component', () =
         [componentPair[0]]: stateData,
       };
       // Act
-      store.dispatch(openWebsocketConnection());
-      await server.connected;
-      await store.dispatch(requestGroupSubscription(groupName));
+      await store.dispatch(addGroupSubscription(groupName));
 
       server.send({
         category: 'event',
@@ -457,10 +448,8 @@ it('Append readout parameters to image', async () => {
     ],
   };
 
-  store.dispatch(openWebsocketConnection());
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-ATCamera-1-startIntegration'));
-  await store.dispatch(requestGroupSubscription('event-ATCamera-1-imageReadoutParameters'));
+  await store.dispatch(addGroupSubscription('event-ATCamera-1-startIntegration'));
+  await store.dispatch(addGroupSubscription('event-ATCamera-1-imageReadoutParameters'));
 
   server.send({
     category: 'event',
@@ -631,9 +620,7 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
     },
   };
 
-  store.dispatch(openWebsocketConnection());
-  await store.dispatch(requestGroupSubscription('event-ScriptQueueState-1-stream'));
-  await server.connected;
+  await store.dispatch(addGroupSubscription('event-ScriptQueueState-1-stream'));
   server.send({
     category: 'event',
     data: [
@@ -703,11 +690,9 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
     ],
   };
   const groupName = 'event-ScriptQueue-1-summaryState';
-  store.dispatch(openWebsocketConnection());
 
   // Act
-  await server.connected;
-  await store.dispatch(requestGroupSubscription(groupName));
+  await store.dispatch(addGroupSubscription(groupName));
 
   server.send({
     category: 'event',
@@ -764,7 +749,6 @@ it('Should extract the Mount motors values correctly with a selector', async () 
     'telemetry-ATMCS-0-measuredMotorVelocity',
     'telemetry-ATMCS-0-mountEncoders',
   ];
-  store.dispatch(openWebsocketConnection());
 
   const expected = {
     azimuthBrake1: 'Unknown',
@@ -858,10 +842,9 @@ it('Should extract the Mount motors values correctly with a selector', async () 
     ],
   };
   // Act
-  await server.connected;
-  await store.dispatch(requestGroupSubscription(groupNames[0]));
-  await store.dispatch(requestGroupSubscription(groupNames[1]));
-  await store.dispatch(requestGroupSubscription(groupNames[2]));
+  await store.dispatch(addGroupSubscription(groupNames[0]));
+  await store.dispatch(addGroupSubscription(groupNames[1]));
+  await store.dispatch(addGroupSubscription(groupNames[2]));
   server.send({
     category: 'telemetry',
     data: [
@@ -874,7 +857,6 @@ it('Should extract the Mount motors values correctly with a selector', async () 
   });
 
   const mountMotorsStateValue = getMountMotorsState(store.getState(), 0);
-  console.log(mountMotorsStateValue);
   // Assert
   expect(mountMotorsStateValue).toEqual(expected);
 });

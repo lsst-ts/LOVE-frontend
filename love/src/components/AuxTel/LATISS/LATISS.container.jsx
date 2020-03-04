@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import { getLATISSState } from '../../../redux/selectors';
 import LATISS from './LATISS';
 
@@ -61,15 +61,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: () => {
-      dispatch(requestGroupSubscription('event-ATSpectrograph-0-reportedFilterPosition'));
-      dispatch(requestGroupSubscription('event-ATSpectrograph-0-reportedDisperserPosition'));
-      dispatch(requestGroupSubscription('event-ATSpectrograph-0-reportedLinearStagePosition'));
-      dispatch(requestGroupSubscription('event-ATSpectrograph-0-lsState'));
-      dispatch(requestGroupSubscription('event-ATSpectrograph-0-fwState'));
-      dispatch(requestGroupSubscription('event-ATSpectrograph-0-gwState'));
+      dispatch(addGroupSubscription('event-ATSpectrograph-0-reportedFilterPosition'));
+      dispatch(addGroupSubscription('event-ATSpectrograph-0-reportedDisperserPosition'));
+      dispatch(addGroupSubscription('event-ATSpectrograph-0-reportedLinearStagePosition'));
+      dispatch(addGroupSubscription('event-ATSpectrograph-0-lsState'));
+      dispatch(addGroupSubscription('event-ATSpectrograph-0-fwState'));
+      dispatch(addGroupSubscription('event-ATSpectrograph-0-gwState'));
       // Camera
-      dispatch(requestGroupSubscription('event-ATCamera-0-shutterDetailedState'));
-      dispatch(requestGroupSubscription('event-ATCamera-0-raftsDetailedState'));
+      dispatch(addGroupSubscription('event-ATCamera-0-shutterDetailedState'));
+      dispatch(addGroupSubscription('event-ATCamera-0-raftsDetailedState'));
     },
     unsubscribeToStreams: () => {
       dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-reportedFilterPosition'));
