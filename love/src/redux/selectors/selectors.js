@@ -10,6 +10,12 @@ export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
 export const getTokenStatus = (state) => state.auth.status;
 
+export const getConnectionStatus = (state) => state.ws.connectionState;
+
+export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
+
+export const getSubscriptions = (state) => state.ws.subscriptions;
+
 export const getStreamsData = (state, groupNames) => {
   if (state.ws === undefined) return undefined;
 

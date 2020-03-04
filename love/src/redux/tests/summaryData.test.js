@@ -2,10 +2,8 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import {
-  openWebsocketConnection,
-  requestGroupSubscription,
-} from '../actions/ws';
+import { addGroupSubscription } from '../actions/ws';
+import { doReceiveToken } from '../actions/auth';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
 import {
   getCSCLogMessages,
@@ -20,10 +18,9 @@ let store, server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  // prevent fetch call for token
-  localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-  await store.dispatch(openWebsocketConnection());
+  await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+  await server.connected;
 });
 
 afterEach(() => {
@@ -55,10 +52,9 @@ it('It should extract the summary and log messages properly from the state with 
     priority: { value: 0, dataType: 'Int' },
   };
 
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-ATDome-1-summaryState'));
-  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
-  await store.dispatch(requestGroupSubscription('event-ScriptQueue-1-summaryState'));
+  await store.dispatch(addGroupSubscription('event-ATDome-1-summaryState'));
+  await store.dispatch(addGroupSubscription('event-ATDome-1-logMessage'));
+  await store.dispatch(addGroupSubscription('event-ScriptQueue-1-summaryState'));
 
   server.send({
     category: 'event',
@@ -126,8 +122,7 @@ it('It should extract the summary and log messages properly from the state with 
 });
 
 it('It should extract all received logMessages from the state for a given CSC', async () => {
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+  await store.dispatch(addGroupSubscription('event-ATDome-1-logMessage'));
 
   let messages = [];
 
@@ -154,8 +149,7 @@ it('It should extract all received logMessages from the state for a given CSC', 
 
 it('Should delete all logMessages of a CSC with an action ', async () => {
   // Arrange
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-ATDome-1-logMessage'));
+  await store.dispatch(addGroupSubscription('event-ATDome-1-logMessage'));
 
   let messages = [];
 
@@ -187,9 +181,7 @@ it('Should delete all logMessages of a CSC with an action ', async () => {
 });
 
 it('It should extract all errorCode event data  from the state for a given CSC', async () => {
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
-
+  await store.dispatch(addGroupSubscription('event-Test-1-errorCode'));
   let messages = [];
 
   expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual(messages);
@@ -215,9 +207,7 @@ it('It should extract all errorCode event data  from the state for a given CSC',
 
 it('It should delete errorCode event data  from the state for a given CSC', async () => {
   // Arrange
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
-
+  await store.dispatch(addGroupSubscription('event-Test-1-errorCode'));
   let messages = [];
 
   expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual(messages);
@@ -249,9 +239,8 @@ it('It should delete errorCode event data  from the state for a given CSC', asyn
 
 it('Should extract a sorted list of a subset of errorCode event data ', async () => {
   // Arrange
-  await server.connected;
-  await store.dispatch(requestGroupSubscription('event-Test-1-errorCode'));
-  await store.dispatch(requestGroupSubscription('event-Test-2-errorCode'));
+  await store.dispatch(addGroupSubscription('event-Test-1-errorCode'));
+  await store.dispatch(addGroupSubscription('event-Test-2-errorCode'));
 
   expect(getCSCErrorCodeData(store.getState(), 'Test', 1)).toEqual([]);
   server.send({

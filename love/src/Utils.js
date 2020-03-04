@@ -45,13 +45,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     ws.onclose = (e) => {
       // eslint-disable-next-line
-      e.code === 1e3 || e.code === 1005 || $.reconnect(e);
+      // console.log('******** \nonclose, e: ', e);
+      // e.code === 1e3 || e.code === 1005 || $.reconnect(e);
       (opts.onclose || noop)(e);
     };
 
     ws.onerror = (e) => {
       // eslint-disable-next-line
-      e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
+      // e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
+      (opts.onerror || noop)(e);
     };
   };
 
@@ -128,11 +130,7 @@ export default class ManagerInterface {
   }
 
   static getToken() {
-    const token = localStorage.getItem('LOVE-TOKEN');
-    if (token === null) {
-      return null;
-    }
-    return token;
+    return localStorage.getItem('LOVE-TOKEN');
   }
 
   static removeToken() {

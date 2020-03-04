@@ -13,6 +13,7 @@ import {
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
+import { openWebsocketConnection, closeWebsocketConnection } from './ws';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
@@ -61,9 +62,10 @@ export function doGetTokenFromStorage() {
   };
 }
 
-function doExpireToken() {
+export function doExpireToken() {
   return (dispatch) => {
     dispatch(expireToken);
+    dispatch(closeWebsocketConnection());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
@@ -75,23 +77,26 @@ function doMarkErrorToken() {
   };
 }
 
-function doReceiveToken(username, token, permissions, tai_to_utc) {
+export function doReceiveToken(username, token, permissions, tai_to_utc) {
   return (dispatch) => {
     dispatch(receiveToken(username, token, permissions, tai_to_utc));
+    dispatch(openWebsocketConnection());
     localStorage.setItem('LOVE-TOKEN', token);
   };
 }
 
-function doRejectToken() {
+export function doRejectToken() {
   return (dispatch) => {
     dispatch(rejectToken);
+    dispatch(closeWebsocketConnection());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
 
-function doRequestRemoveToken() {
+export function doRequestRemoveToken() {
   return (dispatch) => {
     dispatch(requestRemoveToken);
+    dispatch(closeWebsocketConnection());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }

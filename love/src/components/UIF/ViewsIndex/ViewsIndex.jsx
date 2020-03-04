@@ -108,6 +108,7 @@ class ViewsIndex extends Component {
               return (
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
                   <ViewLauncher
+                    key={view.id}
                     imgUrl={imgURL}
                     view={view}
                     index={index}
