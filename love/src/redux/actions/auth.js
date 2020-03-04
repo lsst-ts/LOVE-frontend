@@ -115,7 +115,6 @@ function doRemoveRemoteToken() {
  * @param {string} password
  */
 export function fetchToken(username, password) {
-  console.log('fetiching token');
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
     dispatch(requestToken(username, password));
