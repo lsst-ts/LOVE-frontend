@@ -1,0 +1,14 @@
+/* .goBackIcon {
+    display: inline-block;
+    max-height:100%;
+    stroke-miterlimit:10;stroke-width:2px;
+    vertical-align: middle;
+} */
+
+.active {
+  fill: var(--secondary-font-color);
+}
+
+.svg {
+  height: 1em;
+}
