@@ -33,7 +33,7 @@ const getUserConfirmation = (message, callback) => {
     <ConfirmationModal
       isOpen={true}
       message={message}
-      confirmText="Accept"
+      confirmText="Confirm"
       cancelText="Cancel"
       confirmCallback={() => closeModal(true)}
       cancelCallback={() => closeModal(false)}

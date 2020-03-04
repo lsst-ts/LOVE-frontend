@@ -42,20 +42,21 @@ export default class ConfirmationModal extends Component {
       >
         <div className={styles.container}>
           <div className={styles.content}>
-            <h2> {this.props.message} </h2>
+            <p> {this.props.message} </p>
 
           </div>
           <div className={styles.footer}>
-            <span />
             <Button
               status="default"
               onClick={this.props.cancelCallback}
+              className={styles.button}
             >
               {this.props.cancelText}
             </Button>
             <Button
               status="primary"
               onClick={this.props.confirmCallback}
+              className={styles.button}
             >
               {this.props.confirmText}
             </Button>
