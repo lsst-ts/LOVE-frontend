@@ -2,23 +2,17 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import {
-  requestSALCommand,
-  openWebsocketConnection,
-} from '../actions/ws';
-import { SALCommandStatus } from '../actions/ws';
-import {
-  getLastSALCommand,
-} from '../selectors';
+import { requestSALCommand, SALCommandStatus } from '../actions/ws';
+import { doReceiveToken } from '../actions/auth';
+import { getLastSALCommand } from '../selectors';
 
 let store, server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  // prevent fetch call for token
-  localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-  await store.dispatch(openWebsocketConnection());
+  await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+  await server.connected;
 });
 
 afterEach(() => {

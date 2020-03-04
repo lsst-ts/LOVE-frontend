@@ -2,9 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import {
-  addGroupSubscription,
-} from '../actions/ws';
+import { addGroupSubscription } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import {
   getAllTelemetries,

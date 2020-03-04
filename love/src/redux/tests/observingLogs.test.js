@@ -7,9 +7,8 @@ import {
   requestGroupSubscription,
   sendLOVECscObservingLogs,
 } from '../actions/ws';
-import {
-  getObservingLogs,
-} from '../selectors';
+import { doReceiveToken } from '../actions/auth';
+import { getObservingLogs } from '../selectors';
 
 let store, server;
 
