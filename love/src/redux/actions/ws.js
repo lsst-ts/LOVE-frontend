@@ -270,44 +270,6 @@ export const addGroupSubscription = (groupName) => {
     dispatch(_requestSubscriptions());
   };
 };
-//
-// export const removeGroupSubscription = (groupName) => ({
-//   type: REMOVE_GROUP_SUBSCRIPTION,
-//   groupName,
-// });
-
-// export const requestGroupSubscription = (groupName) => {
-//   return (dispatch, getState) => {
-//     const connected = new Promise(async(resolve) => {
-//       let connectionStatus;
-//       do {
-//         connectionStatus = getConnectionStatus(getState());
-//         if (connectionStatus === connectionStates.OPEN) {
-//           resolve();
-//           return;
-//         }
-//         await new Promise(resolve => setTimeout(resolve, 1000));
-//       } while (connectionStatus !== connectionStates.REJECTED);
-//     });
-//
-//     const [category, csc, salindex, stream] = groupName.split('-');
-//     connected.then(() => {
-//       const state = getState();
-//       if (state.ws.connectionState !== connectionStates.OPEN) {
-//         console.warn(`Can not subscribe to ${groupName}, websocket connection status is: ${state.ws.connectionState}`);
-//         return;
-//       }
-//       socket.json({
-//         option: 'subscribe',
-//         category,
-//         csc,
-//         salindex,
-//         stream,
-//       });
-//       dispatch(addGroupSubscription(groupName));
-//     });
-//   };
-// };
 
 /**
  * Request subscription for all PENDING subscriptions
