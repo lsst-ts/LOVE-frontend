@@ -27,8 +27,6 @@ export const connectionStates = {
   OPEN: 'OPEN',
   CLOSED: 'CLOSED',
   RETRYING: 'RETRYING',
-  ERROR: 'ERROR',
-  REJECTED: 'REJECTED',
 };
 
 /**
