@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getTimestampedStreamData } from '../../../redux/selectors';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import TimeSeriesPlot from './TimeSeriesPlot';
 
 export const schema = {
@@ -97,7 +97,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: (groupName) => {
-      dispatch(requestGroupSubscription(groupName));
+      dispatch(addGroupSubscription(groupName));
     },
     unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));

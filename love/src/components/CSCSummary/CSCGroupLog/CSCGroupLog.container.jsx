@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCGroupLog from './CSCGroupLog';
-import { requestGroupSubscription } from '../../../redux/actions/ws';
+import { addGroupSubscription } from '../../../redux/actions/ws';
 import { getGroupSortedErrorCodeData } from '../../../redux/selectors';
 import { removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 
@@ -58,7 +58,7 @@ const CSCGroupLogContainer = ({
 const mapDispatchtoProps = (dispatch) => {
   return {
     subscribeToStream: (cscName, index) => {
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-errorCode`));
     },
     clearCSCErrorCodes: (csc, salindex) => {
       dispatch(removeCSCErrorCodeData(csc, salindex));
