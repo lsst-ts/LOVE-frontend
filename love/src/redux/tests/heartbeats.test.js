@@ -2,13 +2,10 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import {
-  openWebsocketConnection,
-  requestGroupSubscription,
-} from '../actions/ws';
+import { addGroupSubscription } from '../actions/ws';
+import { doReceiveToken } from '../actions/auth';
 import { getLastManagerHeartbeat, getScriptHeartbeats, getCSCHeartbeats, getCSCHeartbeat } from '../selectors';
 import * as mockData from './mock';
-
 
 let store, server;
 
@@ -42,18 +39,13 @@ afterEach(() => {
 // Arrange:
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  // prevent fetch call for token
-  localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-  await store.dispatch(openWebsocketConnection());
+  await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+  await server.connected;
 });
 
 describe('GIVEN are not subscribed to the manager heartbeat', () => {
   // Arrange:
-  beforeEach(async () => {
-    await server.connected;
-  });
-
   describe('WHEN we query for the last heartbeat received', () => {
     it('THEN we get undefined ', async () => {
       // Arrange:
@@ -67,8 +59,7 @@ describe('GIVEN are not subscribed to the manager heartbeat', () => {
 describe('GIVEN we are subscribed to the manager heartbeat', () => {
   // Arrange:
   beforeEach(async () => {
-    await store.dispatch(requestGroupSubscription('heartbeat-manager-0-stream'));
-    await server.connected;
+    await store.dispatch(addGroupSubscription('heartbeat-manager-0-stream'));
   });
 
   describe('WHEN we receive a heartbeat', () => {
