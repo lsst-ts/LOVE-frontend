@@ -64,6 +64,18 @@ const mapDispatchToProps = (dispatch) => {
         }),
       );
     },
+    unackAlarm: (name) => {
+      return dispatch(
+        requestSALCommand({
+          cmd: 'cmd_unacknowledge',
+          component: 'Watcher',
+          salindex: 0,
+          params: {
+            name
+          },
+        }),
+      );
+    },
     muteAlarm: (name, severity, duration, mutedBy) => {
       return dispatch(
         requestSALCommand({
