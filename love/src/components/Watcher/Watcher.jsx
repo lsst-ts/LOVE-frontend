@@ -19,6 +19,8 @@ export default class Watcher extends Component {
     alarms: PropTypes.array,
     /** Function to dispatch an alarm acknowledgement */
     ackAlarm: PropTypes.func,
+    /** Function to dispatch an alarm unacknowledgement */
+    unackAlarm: PropTypes.func,
     /** Function to dispatch an alarm mute */
     muteAlarm: PropTypes.func,
     /** Function to dispatch an alarm unmute */
@@ -149,6 +151,7 @@ export default class Watcher extends Component {
                 this.setState({ waiting: true });
                 this.props.ackAlarm(name, severity, acknowledgedBy);
               }}
+              unackAlarm={this.props.unackAlarm}
               muteAlarm={this.props.muteAlarm}
               unmuteAlarm={this.props.unmuteAlarm}
               sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
