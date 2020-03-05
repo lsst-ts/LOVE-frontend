@@ -7,7 +7,7 @@ import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
 
-const TIMEOUT = 3;
+const TIMEOUT = 10;
 
 export default class Watcher extends Component {
   static propTypes = {
