@@ -25,6 +25,8 @@ export default class AlarmsTable extends PureComponent {
     alarms: PropTypes.array,
     /** Function to dispatch an alarm acknowledgement */
     ackAlarm: PropTypes.func,
+    /** Function to dispatch an alarm unacknowledgement */
+    unackAlarm: PropTypes.func,
     /** Function to dispatch an alarm mute */
     muteAlarm: PropTypes.func,
     /** Function to dispatch an alarm unmute */
@@ -278,7 +280,23 @@ export default class AlarmsTable extends PureComponent {
                         onClick={() => this.clickGearIcon(key)}
                       >
                         <td title={reasonStr} className={[styles.firstColumn, styles.ackButton].join(' ')}>
-                          {row.acknowledged ? null : (
+                          {row.acknowledged ? (
+                            <>
+                              <div className={styles.statusWrapper}>
+                                <Button
+                                  title="Unacknowledge this alarm"
+                                  status="default"
+                                  disabled={!row.acknowledged}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    this.props.unackAlarm(row.name);
+                                  }}
+                                >
+                                  Unack
+                                </Button>
+                              </div>
+                            </>
+                          ) : (
                             <>
                               <div className={styles.statusWrapper}>
                                 <Button
