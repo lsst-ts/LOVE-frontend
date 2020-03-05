@@ -435,6 +435,7 @@ export const secsToIsoStr = (secs) => {
 
 const watcherSuccessfulCmds = {
   'cmd_acknowledge': 'acknowledged',
+  'cmd_unacknowledge': 'unacknowledged',
   'cmd_mute': 'muted',
   'cmd_unmute': 'unmuted',
 };
