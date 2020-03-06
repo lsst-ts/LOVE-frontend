@@ -215,6 +215,7 @@ class Layout extends Component {
   setHovered = (value) => {
     this.setState({ hovered: value });
   };
+
   render() {
     return (
       <>
@@ -225,7 +226,6 @@ class Layout extends Component {
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
-            // onClick={this.toggleSidebar}
             onMouseOver={() => this.setHovered(true)}
             onMouseOut={() => this.setHovered(false)}
           >
@@ -234,12 +234,12 @@ class Layout extends Component {
             >
               <Button
                 className={styles.iconBtn}
-                title="Edit view"
+                title="Toggle menu"
                 onClick={this.toggleSidebar}
                 disabled={false}
                 status="transparent"
               >
-                <MenuIcon className={styles.logo} />
+                <MenuIcon className={styles.menuIcon} />
               </Button>
 
               <LogoIcon
@@ -250,30 +250,26 @@ class Layout extends Component {
 
               {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> | </span>}
               {this.state.viewOnNotch && (
-                <span className={styles.text}>
-                  {
-                    <>
-                      <span className={styles.textContent}> {this.state.title}</span>
+                <>
+                  <span className={styles.text}> {this.state.title}</span>
 
-                      {this.props.location.pathname === '/uif/view' && (
-                        <Button
-                          className={[styles.editButton].join(' ')}
-                          title="Edit view"
-                          onClick={() => {
-                            if (this.state.id) {
-                              this.editView(this.state.id);
-                            }
-                          }}
-                          disabled={false}
-                          status="transparent"
-                          style={{ visibility: this.state.hovered ? 'visible' : 'hidden' }}
-                        >
-                          <EditIcon className={styles.logo} />
-                        </Button>
-                      )}
-                    </>
-                  }
-                </span>
+                  {this.props.location.pathname === '/uif/view' && (
+                    <Button
+                      className={[styles.editButton].join(' ')}
+                      title="Edit view"
+                      onClick={() => {
+                        if (this.state.id) {
+                          this.editView(this.state.id);
+                        }
+                      }}
+                      disabled={false}
+                      status="transparent"
+                      style={{ visibility: this.state.hovered ? 'visible' : 'hidden' }}
+                    >
+                      <EditIcon className={styles.editIcon} />
+                    </Button>
+                  )}
+                </>
               )}
             </div>
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>

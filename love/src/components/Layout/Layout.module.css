@@ -36,19 +36,42 @@
   cursor: pointer;
 }
 
+.leftTopbar .menuIcon {
+  height: 1.2em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
+}
+
 .collapsedLogo {
   margin-left: -6.6em;
 }
 
-.leftTopbar .text {
-  font-size: 1.2em;
-  padding-top: 0.2em;
-  height: fit-content;
-  vertical-align: middle;
+.leftTopbar .divider {
+  font-size: 1.3em;
 }
 
-.leftTopbar .divider {
-  font-size: 1.6em;
+.leftTopbar .text {
+  font-size: 1.2em;
+  line-height: 1.5em;
+  align-self: end;
+}
+
+.editButton {
+  /* transform: translateX( 0); */
+  margin-right: -1.1em;
+  display: none;
+  padding-right: 0.1em;
+  padding-left: 0.1em;
+  display: inline;
+  visibility: 'hidden';
+}
+
+.editIcon {
+  height: 1.1em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
 }
 
 .notchCurve {
@@ -210,14 +233,4 @@
 
 .heartbeatIconWrapper {
   width: 2em;
-}
-
-.editButton {
-  transform: translateX( 0.8em);
-  margin-right: -1.1em;
-  display: none;
-  padding-right: 0.3em;
-  padding-left: 0.3em;
-  display: inline;
-  visibility: 'hidden';
 }
