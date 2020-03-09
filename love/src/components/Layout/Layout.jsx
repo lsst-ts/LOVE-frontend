@@ -278,12 +278,13 @@ class Layout extends Component {
           <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
-            <NotchCurve className={styles.notchCurve} flip="true" />
+            <NotchCurve className={styles.notchCurve} flip />
 
             <div className={styles.rightTopbar}>
-              {this.state.heartbeatStatus !== 'ok' && (
+              {(true || this.state.heartbeatStatus !== 'ok') && (
                 <div className={styles.heartbeatIconWrapper}>
                   <HeartbeatIcon
+                    className={styles.icon}
                     status={this.state.heartbeatStatus}
                     title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                   />
