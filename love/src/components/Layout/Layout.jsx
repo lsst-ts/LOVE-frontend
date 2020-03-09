@@ -283,7 +283,7 @@ class Layout extends Component {
           <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
-            <NotchCurve className={styles.notchCurve} flip />
+            <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
               <Button
