@@ -115,3 +115,10 @@
 .vignettingDistanceContainer .value {
   color: var(--base-font-color);
 }
+
+.innerDome {
+  fill: var(--second-tertiary-background-color);
+  fill-opacity: 0.2;
+  stroke: var(--second-primary-background-color);
+  stroke-width: 2;
+}

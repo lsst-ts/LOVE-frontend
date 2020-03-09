@@ -82,10 +82,7 @@ export default class DomeShutter extends Component {
         >
           {/* Dome */}
           <path
-            fill="#fff"
-            fillOpacity="0.1"
-            stroke="#152228"
-            strokeWidth="2"
+            className={styles.innerDome}
             d={`
               M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
