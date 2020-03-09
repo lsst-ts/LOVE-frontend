@@ -92,6 +92,7 @@ export default class CSCGroup extends Component {
                   group={this.props.name}
                   name={csc.name}
                   salindex={csc.salindex}
+                  hasHeartbeat={csc.hasHeartbeat}
                   onCSCClick={this.onCSCClick}
                   embedded={true}
                   shouldSubscribe={true}
