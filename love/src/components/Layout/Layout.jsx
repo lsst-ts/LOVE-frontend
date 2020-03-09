@@ -282,19 +282,23 @@ class Layout extends Component {
 
             <div className={styles.rightTopbar}>
               {(true || this.state.heartbeatStatus !== 'ok') && (
-                <div className={styles.heartbeatIconWrapper}>
+                <Button
+                  className={styles.iconBtn}
+                  title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                  onClick={() => {}}
+                  status="transparent"
+                >
                   <HeartbeatIcon
                     className={styles.icon}
                     status={this.state.heartbeatStatus}
                     title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                   />
-                </div>
+                </Button>
               )}
               <Button
                 className={styles.iconBtn}
                 title="View notifications"
                 onClick={() => {}}
-                disabled={false}
                 status="transparent"
               >
                 <NotificationIcon className={styles.icon} />
