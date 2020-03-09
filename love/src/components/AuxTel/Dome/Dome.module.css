@@ -52,10 +52,16 @@
   transition: transform 1.5s linear;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  fill-opacity: 0.1;
+  fill-opacity: 0.3;
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
 }
 
 .svgOverlay .targetPointing {
+  fill: none;
+  stroke-dasharray: '4';
+  stroke-opacity: '0.3';
+  stroke: 'white';
 }
 
 .svgOverlay rect {
@@ -103,7 +109,7 @@
   position: absolute;
   left: 50%;
   bottom: 2%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
 }
 
 .vignettingDistanceContainer .value {
