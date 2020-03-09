@@ -18,7 +18,8 @@
 }
 
 .editable {
-  border: 1px dashed #bbb;
+  border: 1px dashed var(--second-quinary-background-color);  
+  box-shadow: 1px 5px 2px var(--box-shadow-color);
 }
 
 .noOverflow {
@@ -42,10 +43,10 @@
 .container :global(.react-resizable-handle)::after {
   content: '';
   position: absolute;
-  right: 3px;
-  bottom: 3px;
-  width: 5px;
-  height: 5px;
+  right: 7px;
+  bottom: 7px;
+  width: 6px;
+  height: 6px;
   border-right: 2px solid rgba(255, 255, 255, 0.4);
   border-bottom: 2px solid rgba(255, 255, 255, 0.4);
 }

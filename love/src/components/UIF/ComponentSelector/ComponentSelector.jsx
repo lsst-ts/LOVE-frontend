@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../../GeneralPurpose/Button/Button';
 import styles from './ComponentSelector.module.css';
 import { indexes } from '../ComponentIndex';
+import TextField from '../../TextField/TextField';
 
 export default class ComponentSelector extends Component {
   static propTypes = {
@@ -20,6 +21,7 @@ export default class ComponentSelector extends Component {
     super();
     this.state = {
       selected: [],
+      filter: '',
     };
   }
 
@@ -41,12 +43,21 @@ export default class ComponentSelector extends Component {
     });
   };
 
+  changeFilter = (event) =>{
+    this.setState({
+      filter: event.target.value
+    })
+  }
   render() {
     const buttonsDisabled = this.state.selected.length === 0;
     return (
       <div className={styles.container}>
         <div className={styles.content}>
           <h2> Select Components to add to the view </h2>
+          <div className={styles.filterContainer}>
+            <span className={styles.filterLabel}>Filter: </span>
+            <TextField value={this.state.filter} onChange={this.changeFilter}/>
+          </div>
 
           {indexes.map((index) => {
             const category = index.name;
@@ -60,21 +71,26 @@ export default class ComponentSelector extends Component {
                     componentDict.name = component;
                     const selected = this.state.selected.includes(componentDict);
                     const checkboxId = `checkbox-${component}`;
+                    console.log(this.state.filter);
+                    const filter =
+                      this.state.filter === '' || new RegExp(this.state.filter, 'i').test(componentDict.name);
                     return (
-                      <div
-                        key={component}
-                        className={[styles.card, selected ? styles.selected : null].join(' ')}
-                        onClick={() => this.addOrRemoveFromSelection(componentDict)}
-                      >
-                        <div className={styles.cardHeader}>
-                          <h4> {component} </h4>
-                          <div className={styles.customCheckbox} id={checkboxId}>
-                            <input type="checkbox" readOnly className={styles.checkbox} checked={selected} />
-                            <label htmlFor={checkboxId} />
+                      filter && (
+                        <div
+                          key={component}
+                          className={[styles.card, selected ? styles.selected : null].join(' ')}
+                          onClick={() => this.addOrRemoveFromSelection(componentDict)}
+                        >
+                          <div className={styles.cardHeader}>
+                            <h4> {component} </h4>
+                            <div className={styles.customCheckbox} id={checkboxId}>
+                              <input type="checkbox" readOnly className={styles.checkbox} checked={selected} />
+                              <label htmlFor={checkboxId} />
+                            </div>
                           </div>
+                          <p> {componentDict.schema.description}</p>
                         </div>
-                        <p> {componentDict.schema.description}</p>
-                      </div>
+                      )
                     );
                   })}
                 </div>

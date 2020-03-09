@@ -10,16 +10,20 @@
 }
 
 .footer {
-  display: inline-grid;
-  grid-template-columns: 1fr 15ch 15ch;
+  display: flex;
+  justify-content: flex-end;
   padding: 1em 1em 0 1em;
-  grid-gap: 1em;
   height: 2em;
 }
 
 .modal {
-  top: 20%;
   left: 33%;
-  right: 33%;
-  bottom: 46%;
+  top: 20%;
+  width: 30em;
+  height: 10em;
+}
+
+.button {
+  min-width: 20ch;
+  margin-right: 1em;
 }

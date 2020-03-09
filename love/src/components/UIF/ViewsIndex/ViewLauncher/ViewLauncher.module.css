@@ -1,0 +1,133 @@
+.view {
+  display: grid;
+  cursor: pointer;
+  grid-template-rows: 11em min-content min-content;
+  grid-gap: 0.5em;
+  padding: 0.5em;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  color: var(--base-font-color);
+  background-color: var(--second-secondary-background-color);
+  position: relative;
+  padding-bottom: 0;
+}
+
+.view .name {
+  text-align: center;
+  font-size: 1.2em;
+}
+
+.view .preview {
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  border-radius: 0.25rem;
+  position: relative;
+  padding: 0.2em;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
+}
+
+.view .preview img {
+  max-height: 100%;
+  max-width: 100%;
+  background-color: var(--second-secondary-background-color);
+}
+
+.view .new {
+  text-align: center;
+}
+
+.view .new .plus {
+  display: flex;
+  font-size: 5em;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  -webkit-user-select: none; /* Chrome all / Safari all */
+  -moz-user-select: none; /* Firefox all */
+  -ms-user-select: none; /* IE 10+ */
+  user-select: none; /* Likely future */
+}
+
+.view .buttons {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  grid-gap: 0.5em;
+  justify-content: center;
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  opacity: 0;
+  transition: opacity 0.1s ease-out;
+}
+
+.viewOverlay {
+  width: 100%;
+  height: 100%;
+  background-color: var(--second-secondary-background-color);
+  background: rgba(0, 0, 0, 0);
+  filter: blur(2px);
+  transition: filter 0.1s ease-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.view:hover .buttons {
+  opacity: 1;
+}
+
+.view:hover .viewOverlay {
+  filter: none;
+}
+
+.imageFallback {
+  position: absolute;
+  border-radius: 10em;
+  top: 50%;
+  left: 50%;
+  height: 3.5em;
+  width: 3.5em;
+  transform: translate(-50%, -50%);
+  line-height: 3.5em;
+  text-align: center;
+  font-size: 1.3em;
+  background-color: var(--secondary-font-dimmed-color);
+  font-weight: bold;
+  transition: opacity 0.1s ease-out;
+}
+
+.view[hasThumbnail='true']:hover + .imageFallback {
+  opacity: 0;
+}
+
+div[hasThumbnail='true'] + .fallbackHover {
+  opacity: 0;
+}
+
+div[hasThumbnail='true'].viewHover {
+  filter: none;
+}
+
+.visible {
+  /* display: grid !important; */
+  opacity: 1 !important;
+}
+
+.iconButton {
+  border-radius: 100%;
+  height: 2em;
+  width: 2em;
+  padding: 0.1em 0 0 0;
+}
+
+.icon {
+  height: 1em;
+  width: 1em;
+  fill: var(--base-font-color);
+}

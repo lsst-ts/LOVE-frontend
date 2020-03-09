@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCDetail from './CSCDetail';
-import { requestGroupSubscription } from '../../../redux/actions/ws';
+import { addGroupSubscription } from '../../../redux/actions/ws';
 import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
 export const schema = {
@@ -39,7 +39,6 @@ export const schema = {
 };
 
 const CSCDetailContainer = ({
-  realm,
   group,
   name,
   salindex,
@@ -52,7 +51,6 @@ const CSCDetailContainer = ({
 }) => {
   return (
     <CSCDetail
-      realm={realm}
       group={group}
       name={name}
       salindex={salindex}
@@ -69,10 +67,10 @@ const CSCDetailContainer = ({
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (cscName, index) => {
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-summaryState`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-logMessage`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-summaryState`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-logMessage`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-errorCode`));
     },
   };
 };

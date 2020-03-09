@@ -8,7 +8,6 @@ export default class CSCDetail extends Component {
   static propTypes = {
     name: PropTypes.string,
     group: PropTypes.string,
-    realm: PropTypes.string,
     salindex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
@@ -23,7 +22,6 @@ export default class CSCDetail extends Component {
   static defaultProps = {
     name: '',
     group: '',
-    realm: '',
     data: {},
     onCSCClick: () => 0,
     heartbeatData: null,
@@ -116,7 +114,9 @@ export default class CSCDetail extends Component {
     if (summaryState.name === 'UNKNOWN') stateClass = CSCDetail.states[0].class;
     return (
       <div
-        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
+        onClick={() =>
+          this.props.onCSCClick({group: props.group, csc: props.name, salindex: props.salindex })
+        }
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
         <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>

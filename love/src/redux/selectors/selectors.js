@@ -10,6 +10,12 @@ export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
 export const getTokenStatus = (state) => state.auth.status;
 
+export const getConnectionStatus = (state) => state.ws.connectionState;
+
+export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
+
+export const getSubscriptions = (state) => state.ws.subscriptions;
+
 export const getStreamsData = (state, groupNames) => {
   if (state.ws === undefined) return undefined;
 
@@ -341,8 +347,9 @@ export const getKey = (dict, key, def) => {
 
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
+  const running_state = getKey(scriptQueueData, 'running', undefined);
   return {
-    running: getKey(scriptQueueData, 'running', undefined),
+    state: running_state === undefined ? 'Unknown' : running_state ? 'Running' : 'Stopped',
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     current: getKey(scriptQueueData, 'current', 'None'),
