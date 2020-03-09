@@ -54,7 +54,7 @@ export default class DomePointing extends Component {
 
         <circle
           className={styles.targetPointing}
-          r={32}
+          r={16}
           strokeWidth={2}
           cx={zenithPixels.x}
           cy={zenithPixels.y}
@@ -65,7 +65,7 @@ export default class DomePointing extends Component {
         />
         <circle
           className={styles.currentPointing}
-          r={32}
+          r={16}
           strokeWidth={2}
           cx={zenithPixels.x}
           cy={zenithPixels.y}
