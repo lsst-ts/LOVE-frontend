@@ -73,3 +73,9 @@
   font-size: var(--font-size-larger);
   padding-bottom: 0;
 }
+
+.heartbeatIcon {
+  display: inline-block;
+  margin: 0.2em;
+  vertical-align: top;
+}

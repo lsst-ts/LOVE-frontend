@@ -21,3 +21,9 @@
 
 .estimatedTimeValue {
 }
+
+.heartbeatIcon {
+  display: inline-block;
+  margin: 0.2em;
+  vertical-align: top;
+}
