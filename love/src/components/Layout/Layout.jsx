@@ -147,6 +147,9 @@ class Layout extends Component {
   };
 
   getHeartbeatTitle = (heartbeat) => {
+    if (this.state.heartbeatStatus === 'ok') {
+      return 'LOVE manager heartbeat is being received as expected';
+    }
     if (heartbeat === undefined || heartbeat.data === undefined || heartbeat.data.timestamp === undefined) {
       return 'LOVE manager heartbeat never seen';
     }
@@ -219,15 +222,17 @@ class Layout extends Component {
   render() {
     return (
       <>
-        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
+        <div
+          className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
+          onMouseOver={() => this.setHovered(true)}
+          onMouseOut={() => this.setHovered(false)}
+        >
           <div
             className={[
               styles.leftNotchContainer,
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
-            onMouseOver={() => this.setHovered(true)}
-            onMouseOut={() => this.setHovered(false)}
           >
             <div
               className={[styles.leftTopbar, this.state.collapsedLogo ? styles.leftTopBarNoEditButton : ''].join(' ')}
@@ -281,20 +286,21 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip />
 
             <div className={styles.rightTopbar}>
-              {(true || this.state.heartbeatStatus !== 'ok') && (
-                <Button
-                  className={styles.iconBtn}
+              <Button
+                className={[
+                  styles.iconBtn,
+                  this.state.heartbeatStatus !== 'ok' || this.state.hovered ? null : styles.hidden
+                ].join(' ')}
+                title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                onClick={() => {}}
+                status="transparent"
+              >
+                <HeartbeatIcon
+                  className={styles.icon}
+                  status={this.state.heartbeatStatus}
                   title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
-                  onClick={() => {}}
-                  status="transparent"
-                >
-                  <HeartbeatIcon
-                    className={styles.icon}
-                    status={this.state.heartbeatStatus}
-                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
-                  />
-                </Button>
-              )}
+                />
+              </Button>
               <Button
                 className={styles.iconBtn}
                 title="View notifications"
