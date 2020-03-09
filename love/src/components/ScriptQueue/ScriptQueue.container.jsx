@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import {
   getScriptQueueState,
   getScriptHeartbeats,
@@ -12,7 +12,7 @@ import {
 import ScriptQueue from './ScriptQueue';
 
 export const schema = {
-  description: `Component containing information about the scripts currently running, scripts to be run (in queue) and past scripts. 
+  description: `Component containing information about the scripts currently running, scripts to be run (in queue) and past scripts.
                 Allows commands to be sent for interacting with the scripts, such as stopping, enqueueing and requeueing scripts`,
   defaultSize: [66, 38],
   props: {
@@ -83,9 +83,9 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
-      dispatch(requestGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
-      dispatch(requestGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
-      dispatch(requestGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
+      dispatch(addGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
+      dispatch(addGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
+      dispatch(addGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
     },
     unsubscribeToStreams: () => {
       dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueueState-${ownProps.salindex}-stream`));

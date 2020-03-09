@@ -123,7 +123,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
      * but this might be less readable
      */
     //
-  }, [imageWidth, imageHeight, containerWidth, containerHeight, error]);
+  }, [imageWidth, imageHeight, containerWidth, containerHeight, error, initialLoading]);
 
   if (error !== null) {
     return (
