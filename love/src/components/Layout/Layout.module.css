@@ -57,14 +57,16 @@
   align-self: end;
 }
 
-.editButton {
-  /* transform: translateX( 0); */
-  margin-right: -1.1em;
-  display: none;
-  padding-right: 0.1em;
-  padding-left: 0.1em;
+.iconBtn {
   display: inline;
-  visibility: 'hidden';
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.editButton {
+  margin-right: -1.3em;
 }
 
 .editIcon {
@@ -111,11 +113,8 @@
   will-change: transform;
 }
 
-.iconBtn {
-  margin: auto;
-  padding: 0.3em;
-  height: 2em;
-  width: 2em;
+.heartbeatButton {
+  margin-left: -1.4em;
 }
 
 .icon {
@@ -232,8 +231,4 @@
 
 .settingsDropdown .refNode {
   display: contents;
-}
-
-.heartbeatIconWrapper {
-  width: 2em;
 }

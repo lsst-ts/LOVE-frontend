@@ -260,7 +260,7 @@ class Layout extends Component {
 
                   {this.props.location.pathname === '/uif/view' && (
                     <Button
-                      className={[styles.editButton].join(' ')}
+                      className={[styles.iconBtn, styles.editButton].join(' ')}
                       title="Edit view"
                       onClick={() => {
                         if (this.state.id) {
@@ -289,8 +289,9 @@ class Layout extends Component {
               <Button
                 className={[
                   styles.iconBtn,
-                  this.state.heartbeatStatus !== 'ok' || this.state.hovered ? null : styles.hidden
+                  styles.heartbeatButton,
                 ].join(' ')}
+                style={{visibility: this.state.heartbeatStatus !== 'ok' || this.state.hovered ? 'visible' : 'hidden'}}
                 title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 onClick={() => {}}
                 status="transparent"
