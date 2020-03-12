@@ -166,7 +166,7 @@ export default class CSCExpanded extends PureComponent {
                   </span>
                 </div>
                 <div className={styles.heartbeatIconWrapper}>
-                  <HeartbeatIcon status={heartbeatStatus} title={heartbeatTitle} />
+                  <HeartbeatIcon className={styles.heartbeatIcon} status={heartbeatStatus} title={heartbeatTitle} />
                 </div>
               </div>
             </div>

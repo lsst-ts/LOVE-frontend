@@ -1,9 +1,6 @@
 .heartbeatIcon {
-  display: inline-block;
-  vertical-align: top;
   fill: var(--status-disabled-color);
   stroke: var(--status-disabled-color);
-  margin: 0.2em;
 }
 
 .okStatus {
