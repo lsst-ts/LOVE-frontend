@@ -9,6 +9,16 @@ import { relativeTime } from '../../../Utils';
 import styles from './AlarmsTable.module.css';
 
 /**
+ * Auxiliary function to define wether an alarm is acknowledged or not
+ */
+const acknowledged = (alarm) => alarm.acknowledged || (alarm.severity === 1 && alarm.maxSeverity === 1);
+
+/**
+ * Auxiliary function to define wether an alarm can be unacknowledged or not
+ */
+const canUnack = (alarm) => alarm.acknowledged && alarm.severity !== 1;
+
+/**
  * Configurable table displaying an arbitrary subset
  * of telemetries provided in the component props. It has an optional selection column
  * to be used as a telemetry selection feature. along with the filtering and sorting methods.
@@ -270,9 +280,9 @@ export default class AlarmsTable extends PureComponent {
                     <React.Fragment key={key}>
                       <tr
                         className={[
-                          !row.acknowledged ? styles.unackRow : '',
+                          !acknowledged(row) ? styles.unackRow : '',
                           isExpanded
-                            ? row.acknowledged
+                            ? acknowledged(row)
                               ? styles.expandedRowParent
                               : styles.unackExpandedRowParent
                             : '',
@@ -280,39 +290,33 @@ export default class AlarmsTable extends PureComponent {
                         onClick={() => this.clickGearIcon(key)}
                       >
                         <td title={reasonStr} className={[styles.firstColumn, styles.ackButton].join(' ')}>
-                          {row.acknowledged ? (
-                            <>
-                              <div className={styles.statusWrapper}>
-                                <Button
-                                  title="Unacknowledge this alarm"
-                                  status="default"
-                                  disabled={!row.acknowledged}
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    this.props.unackAlarm(row.name);
-                                  }}
-                                >
-                                  Unack
-                                </Button>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div className={styles.statusWrapper}>
-                                <Button
-                                  title="Acknowledge this alarm"
-                                  status="info"
-                                  disabled={row.acknowledged}
-                                  onClick={(event) => {
-                                    event.stopPropagation();
-                                    this.props.ackAlarm(row.name, row.maxSeverity, user);
-                                  }}
-                                >
-                                  ACK
-                                </Button>
-                              </div>
-                            </>
-                          )}
+                          { !acknowledged(row) ? (
+                            <div className={styles.statusWrapper}>
+                              <Button
+                                title="Acknowledge this alarm"
+                                status="info"
+                                onClick={(event) => {
+                                  event.stopPropagation();
+                                  this.props.ackAlarm(row.name, row.maxSeverity, user);
+                                }}
+                              >
+                                ACK
+                              </Button>
+                            </div>
+                        ) : canUnack(row) && (
+                          <div className={styles.statusWrapper}>
+                            <Button
+                              title="Unacknowledge this alarm"
+                              status="default"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                this.props.unackAlarm(row.name);
+                              }}
+                            >
+                              Unack
+                            </Button>
+                          </div>
+                        )}
                         </td>
                         <td title={reasonStr} className={[styles.cell, styles.status].join(' ')}>
                           <div className={styles.statusWrapper}>
@@ -322,7 +326,7 @@ export default class AlarmsTable extends PureComponent {
                             <Alarm
                               severity={row.severity}
                               maxSeverity={row.maxSeverity}
-                              acknowledged={row.acknowledged}
+                              acknowledged={acknowledged(row)}
                               muted={row.mutedSeverity <= row.severity}
                               ackAlarm={(event) => {
                                 event.stopPropagation();
@@ -351,7 +355,7 @@ export default class AlarmsTable extends PureComponent {
                         <tr
                           onClick={this.closeFilterDialogs}
                           key={`${key}-expanded`}
-                          className={[styles.expandedRow, !row.acknowledged ? styles.unackExpandedRow : ''].join(' ')}
+                          className={[styles.expandedRow, !acknowledged(row) ? styles.unackExpandedRow : ''].join(' ')}
                         >
                           <td colSpan={1} className={styles.ackButton}></td>
                           <td colSpan={4} className={styles.expandedRowContent}>

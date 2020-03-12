@@ -4,7 +4,7 @@ import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import Button from '../../GeneralPurpose/Button/Button';
 
 export const severityToStatus = {
-  0: 'unkown',
+  0: 'unknown',
   1: 'ok',
   2: 'warning',
   3: 'serious',
