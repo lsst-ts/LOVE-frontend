@@ -102,7 +102,6 @@ class ViewsIndex extends Component {
 
           {this.props.views.length > 0 &&
             this.props.views.map((view, index) => {
-              console.log(view)
               let viewName = view.name.replace(/[a-z\s]/g, '').substring(0, 6);
               let imgURL = view.thumbnail ? `${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}` : '';
               if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
