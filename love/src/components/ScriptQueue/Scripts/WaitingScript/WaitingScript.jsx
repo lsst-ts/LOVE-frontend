@@ -106,8 +106,8 @@ export default class WaitingScript extends PureComponent {
     }
     const timeDiffText =
       this.props.heartbeatData.lastHeartbeatTimestamp <= 0 || timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
-    
-    
+
+
       return (
       <div className={scriptStyles.scriptContainer}>
         <div>
@@ -116,6 +116,7 @@ export default class WaitingScript extends PureComponent {
               <div className={scriptStyles.scriptInfoContainer}>
                 <div className={scriptStyles.heartBeatContainer}>
                   <HeartbeatIcon
+                    className={styles.heartbeatIcon}
                     status={heartbeatStatus}
                     title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
                   />

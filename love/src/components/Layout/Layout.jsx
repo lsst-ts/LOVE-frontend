@@ -147,6 +147,9 @@ class Layout extends Component {
   };
 
   getHeartbeatTitle = (heartbeat) => {
+    if (this.state.heartbeatStatus === 'ok') {
+      return 'LOVE manager heartbeat is being received as expected';
+    }
     if (heartbeat === undefined || heartbeat.data === undefined || heartbeat.data.timestamp === undefined) {
       return 'LOVE manager heartbeat never seen';
     }
@@ -215,31 +218,33 @@ class Layout extends Component {
   setHovered = (value) => {
     this.setState({ hovered: value });
   };
+
   render() {
     return (
       <>
-        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
+        <div
+          className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
+          onMouseOver={() => this.setHovered(true)}
+          onMouseOut={() => this.setHovered(false)}
+        >
           <div
             className={[
               styles.leftNotchContainer,
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
-            // onClick={this.toggleSidebar}
-            onMouseOver={() => this.setHovered(true)}
-            onMouseOut={() => this.setHovered(false)}
           >
             <div
               className={[styles.leftTopbar, this.state.collapsedLogo ? styles.leftTopBarNoEditButton : ''].join(' ')}
             >
               <Button
                 className={styles.iconBtn}
-                title="Edit view"
+                title="Toggle menu"
                 onClick={this.toggleSidebar}
                 disabled={false}
                 status="transparent"
               >
-                <MenuIcon className={styles.logo} />
+                <MenuIcon className={styles.menuIcon} />
               </Button>
 
               <LogoIcon
@@ -250,30 +255,26 @@ class Layout extends Component {
 
               {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> | </span>}
               {this.state.viewOnNotch && (
-                <span className={styles.text}>
-                  {
-                    <>
-                      <span className={styles.textContent}> {this.state.title}</span>
+                <>
+                  <span className={styles.text}> {this.state.title}</span>
 
-                      {this.props.location.pathname === '/uif/view' && (
-                        <Button
-                          className={[styles.editButton].join(' ')}
-                          title="Edit view"
-                          onClick={() => {
-                            if (this.state.id) {
-                              this.editView(this.state.id);
-                            }
-                          }}
-                          disabled={false}
-                          status="transparent"
-                          style={{ visibility: this.state.hovered ? 'visible' : 'hidden' }}
-                        >
-                          <EditIcon className={styles.logo} />
-                        </Button>
-                      )}
-                    </>
-                  }
-                </span>
+                  {this.props.location.pathname === '/uif/view' && (
+                    <Button
+                      className={[styles.iconBtn, styles.editButton].join(' ')}
+                      title="Edit view"
+                      onClick={() => {
+                        if (this.state.id) {
+                          this.editView(this.state.id);
+                        }
+                      }}
+                      disabled={false}
+                      status="transparent"
+                      style={{ visibility: this.state.hovered ? 'visible' : 'hidden' }}
+                    >
+                      <EditIcon className={styles.editIcon} />
+                    </Button>
+                  )}
+                </>
               )}
             </div>
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
@@ -285,19 +286,26 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
-              {this.state.heartbeatStatus !== 'ok' && (
-                <div className={styles.heartbeatIconWrapper}>
-                  <HeartbeatIcon
-                    status={this.state.heartbeatStatus}
-                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
-                  />
-                </div>
-              )}
+              <Button
+                className={[
+                  styles.iconBtn,
+                  styles.heartbeatButton,
+                ].join(' ')}
+                style={{visibility: this.state.heartbeatStatus !== 'ok' || this.state.hovered ? 'visible' : 'hidden'}}
+                title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                onClick={() => {}}
+                status="transparent"
+              >
+                <HeartbeatIcon
+                  className={styles.icon}
+                  status={this.state.heartbeatStatus}
+                  title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                />
+              </Button>
               <Button
                 className={styles.iconBtn}
                 title="View notifications"
                 onClick={() => {}}
-                disabled={false}
                 status="transparent"
               >
                 <NotificationIcon className={styles.icon} />

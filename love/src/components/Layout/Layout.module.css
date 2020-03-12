@@ -36,19 +36,44 @@
   cursor: pointer;
 }
 
+.leftTopbar .menuIcon {
+  height: 1.2em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
+}
+
 .collapsedLogo {
   margin-left: -6.6em;
 }
 
-.leftTopbar .text {
-  font-size: 1.2em;
-  padding-top: 0.2em;
-  height: fit-content;
-  vertical-align: middle;
+.leftTopbar .divider {
+  font-size: 1.3em;
 }
 
-.leftTopbar .divider {
-  font-size: 1.6em;
+.leftTopbar .text {
+  font-size: 1.2em;
+  line-height: 1.5em;
+  align-self: end;
+}
+
+.iconBtn {
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.editButton {
+  margin-right: -1.3em;
+}
+
+.editIcon {
+  height: 1.1em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
 }
 
 .notchCurve {
@@ -88,15 +113,15 @@
   will-change: transform;
 }
 
-.iconBtn {
-  margin: auto;
-  padding: 0.3em;
-  height: 2em;
-  width: 2em;
+.heartbeatButton {
+  margin-left: -1.4em;
 }
 
 .icon {
+  max-height: unset;
+  max-width: 100%;
   height: 1.4em;
+  vertical-align: middle;
 }
 
 .sidebar {
@@ -206,18 +231,4 @@
 
 .settingsDropdown .refNode {
   display: contents;
-}
-
-.heartbeatIconWrapper {
-  width: 2em;
-}
-
-.editButton {
-  transform: translateX( 0.8em);
-  margin-right: -1.1em;
-  display: none;
-  padding-right: 0.3em;
-  padding-left: 0.3em;
-  display: inline;
-  visibility: 'hidden';
 }

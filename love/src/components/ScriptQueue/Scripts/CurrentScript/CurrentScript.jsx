@@ -135,6 +135,7 @@ export default class CurrentScript extends Component {
                 <div className={[scriptStyles.scriptInfoContainer, visibilityClass].join(' ')}>
                   <div className={scriptStyles.heartBeatContainer}>
                     <HeartbeatIcon
+                      className={styles.heartbeatIcon}
                       status={heartbeatStatus}
                       title={`Lost: ${lost} heartbeats \nLast seen: ${timeDiffText}`}
                     />
