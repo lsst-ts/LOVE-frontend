@@ -21,6 +21,13 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
+    hasHeartbeat: {
+      type: 'boolean',
+      description:
+        'Whether the CSC produces heartbeat',
+      isPrivate: false,
+      default: true,
+    },
     _functionProps: {
       type: 'array',
       description:
@@ -35,6 +42,7 @@ const CSCDetailContainer = ({
   group,
   name,
   salindex,
+  hasHeartbeat,
   summaryStateData,
   onCSCClick,
   subscribeToStreams,
@@ -46,6 +54,7 @@ const CSCDetailContainer = ({
       group={group}
       name={name}
       salindex={salindex}
+      hasHeartbeat={hasHeartbeat}
       summaryStateData={summaryStateData}
       onCSCClick={onCSCClick}
       subscribeToStreams={subscribeToStreams}

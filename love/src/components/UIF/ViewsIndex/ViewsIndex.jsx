@@ -102,6 +102,7 @@ class ViewsIndex extends Component {
 
           {this.props.views.length > 0 &&
             this.props.views.map((view, index) => {
+              console.log(view)
               let viewName = view.name.replace(/[a-z\s]/g, '').substring(0, 6);
               let imgURL = view.thumbnail ? `${ManagerInterface.getMediaBaseUrl()}${view.thumbnail}` : '';
               if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
@@ -109,7 +110,7 @@ class ViewsIndex extends Component {
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
                   <ViewLauncher
                     key={view.id}
-                    imgUrl={imgURL}
+                    imgURL={imgURL}
                     view={view}
                     index={index}
                     showButtons={this.showButtons.bind(this, view.id)}
