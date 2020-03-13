@@ -57,11 +57,12 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.1.1",
+    "@testing-library/react": "^10.0.1",
     "cypress": "^4.1.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-only-warn": "^1.0.1",
     "fetch-mock": "^9.1.2",
-    "jest-dom": "^4.0.0",
     "jest-fetch-mock": "^3.0.3",
     "jest-websocket-mock": "^2.0.2",
     "mock-socket": "^9.0.3",
