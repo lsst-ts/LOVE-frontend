@@ -19,9 +19,17 @@ import {
 let store, server;
 
 beforeEach(async () => {
+  // ARRANGE
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   await store.dispatch(emptyToken);
-  server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
+  server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+  server.on('connection', socket => {
+    const [, token] = socket.url.split('?token=');
+    if (token !== 'love-token') {
+      socket.close();
+    }
+  });
+  expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
 });
 
 afterEach(() => {
@@ -32,81 +40,46 @@ afterEach(() => {
 describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
   it('When a CONNECTION IS DISPACHED, then the connection remains CLOSED and the Server DID NOT CONNECT',
   async () => {
-    // ARRANGE
-    let connectionAttempted = false;
-    server.on('connection', _socket => {
-      connectionAttempted = true;
-    });
-    // Assert connection is closed before
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-
     // ACT
     await store.dispatch(openWebsocketConnection());
 
     // ASSERT
     expect(getConnectionStatus(store.getState())).not.toEqual(connectionStates.OPENING);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    expect(connectionAttempted).toBeFalsy();
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
   });
 
   it('When a CLOSE CONNECTION IS DISPACHED, then nothing happens',
   async () => {
-    // ARRANGE
-    let connectionAttempted = false;
-    server.on('connection', _socket => {
-      connectionAttempted = true;
-    });
-    // Assert connection is closed before
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-
     // ACT
     await store.dispatch(closeWebsocketConnection());
 
     // ASSERT
     expect(getConnectionStatus(store.getState())).not.toEqual(connectionStates.OPENING);
     await new Promise(resolve => setTimeout(resolve, 1000));
-    expect(connectionAttempted).toBeFalsy();
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
   });
 
   it('When a correct token is RECEIVED, then the CONNECTION IS OPENING then OPEN',
   async () => {
-    // ARRANGE
-    let connectionStablished = false;
-    server.on('connection', _socket => {
-      connectionStablished = true;
-    });
-    // Assert connection is closed before
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-
     // ACT
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
 
     // ASSERT
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
-    await server.connected;
+    const connected = await server.connected;
+    expect(connected.readyState).toEqual(WebSocket.OPEN);
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
-    expect(connectionStablished).toBeTruthy();
   });
 
   it('When an incorrect token is RECEIVED, then the connection is OPENING and then CLOSED and Server DID NOT CONNECT',
   async () => {
-    // ARRANGE
-    let connectionStablished = false;
-    server.on('connection', _socket => {
-      connectionStablished = true;
-    });
-    // Assert connection is closed before
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-
     // ACT
     await store.dispatch(doReceiveToken('username', 'love-wrong-token', {}, 0 ));
 
     // ASSERT
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    expect(connectionStablished).toBeFalsy();
+    await server.closed;
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
   });
 
@@ -116,8 +89,6 @@ describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
     server.on('connection', socket => {
       socket.close({ wasClean: false, code: 1003, reason: "NOPE" });
     });
-    // Assert connection is closed before
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
     await server.connected;
@@ -485,19 +456,9 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
 
   it('When the CONNECTION is RETRYING, then the subscriptions are PENDING',
   async () => {
-    // Connection get disconnected by error
-    // webSocket.close({ wasClean: false, code: 1003, reason: "NOPE" });
-    // server.error({ code: 1003 });
-    server.close();
-    server.on('connection', socket => {
-      socket.close({ wasClean: false, code: 1003, reason: "NOPE" });
-    });
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-    await store.dispatch(openWebsocketConnection());
-    await server.connected;
-    // expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+    server.close({ code: 1003 });
     await server.closed;
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
