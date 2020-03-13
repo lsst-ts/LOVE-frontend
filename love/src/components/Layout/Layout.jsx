@@ -69,7 +69,7 @@ class Layout extends Component {
     };
   }
 
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     this.handleResize();
     document.addEventListener('mousedown', this.handleClick, false);
     window.addEventListener('resize', this.handleResize);
