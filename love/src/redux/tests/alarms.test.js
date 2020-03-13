@@ -141,9 +141,13 @@ describe('GIVEN we have no alarms in the state', () => {
   // Arrange:
   beforeEach(async () => {
     store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
-    // prevent fetch call for token
-    localStorage.setItem('LOVE-TOKEN', 'love-token');
-    server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
+    server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+    server.on('connection', socket => {
+      const [, token] = socket.url.split('?token=');
+      if (token !== 'love-token') {
+        socket.close();
+      }
+    });
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await server.connected;
     await store.dispatch(addGroupSubscription('event-Watcher-0-alarm'));
@@ -207,9 +211,13 @@ describe('GIVEN we have some alarms in the state', () => {
   // Arrange:
   beforeEach(async () => {
     store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
-    // prevent fetch call for token
-    localStorage.setItem('LOVE-TOKEN', 'love-token');
-    server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
+    server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+    server.on('connection', socket => {
+      const [, token] = socket.url.split('?token=');
+      if (token !== 'love-token') {
+        socket.close();
+      }
+    });
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await server.connected;
     await store.dispatch(addGroupSubscription('event-Watcher-0-alarm'));
