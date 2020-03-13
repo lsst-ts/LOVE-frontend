@@ -114,8 +114,7 @@ export default class Vega extends Component {
           view: {
             width: 600,
           },
-
-
+          background: 'null',
         },
       }, dataSpec);
 
