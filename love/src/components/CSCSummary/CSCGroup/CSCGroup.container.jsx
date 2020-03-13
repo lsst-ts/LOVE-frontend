@@ -57,7 +57,7 @@ export const schema = {
 
 const CSCGroupContainer = ({
     subscribeToStreams,
-    ...props,
+    ...props
 }) => {
   return (
     <CSCGroup

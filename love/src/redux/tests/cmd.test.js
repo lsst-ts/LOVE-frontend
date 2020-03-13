@@ -10,7 +10,13 @@ let store, server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
-  server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
+  server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+  server.on('connection', socket => {
+    const [, token] = socket.url.split('?token=');
+    if (token !== 'love-token') {
+      socket.close();
+    }
+  });
   await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
   await server.connected;
 });

@@ -69,7 +69,7 @@ class Layout extends Component {
     };
   }
 
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     this.handleResize();
     document.addEventListener('mousedown', this.handleClick, false);
     window.addEventListener('resize', this.handleResize);
@@ -291,7 +291,10 @@ class Layout extends Component {
                   styles.iconBtn,
                   styles.heartbeatButton,
                 ].join(' ')}
-                style={{visibility: this.state.heartbeatStatus !== 'ok' || this.state.hovered ? 'visible' : 'hidden'}}
+                style={{
+                  visibility: this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered) ?
+                  'visible' : 'hidden'
+                }}
                 title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 onClick={() => {}}
                 status="transparent"
