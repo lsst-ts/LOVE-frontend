@@ -58,7 +58,7 @@ export default class DomeShutter extends Component {
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
         <defs>
           <mask x="0" y="0" width="596" height="596" id="domeMask">
-            <circle cx={x0} cy={y0} r={r} fill="#fff" stroke="#fff" strokeWidth="2" />
+            <circle cx={x0} cy={y0} r={r} fill="#fff" stroke="#" strokeWidth="2" />
           </mask>
         </defs>
         {/* Dome target*/}

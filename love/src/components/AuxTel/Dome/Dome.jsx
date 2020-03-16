@@ -5,6 +5,7 @@ import styles from './Dome.module.css';
 import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
+import MountTopView from './MountTopView';
 import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
@@ -102,6 +103,7 @@ export default class Dome extends Component {
             </div>
 
             <DomeTopView width={width} height={height} />
+            <MountTopView currentPointing={currentPointing} />
             <DomeShutter
               width={width}
               height={height}
@@ -195,7 +197,7 @@ export default class Dome extends Component {
                     'Dome Azimuth': (data) => data.azimuthPosition.value,
                     'Dome Target Az': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
-                    'Mount Azimuth': (data) => data.azimuthCalculatedAngle ? data.azimuthCalculatedAngle.value[0] : 0,
+                    'Mount Azimuth': (data) => (data.azimuthCalculatedAngle ? data.azimuthCalculatedAngle.value[0] : 0),
                     'Mount Target': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                   }}
