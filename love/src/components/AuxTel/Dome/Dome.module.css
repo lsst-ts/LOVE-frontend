@@ -118,7 +118,12 @@
 
 .innerDome {
   fill: var(--second-tertiary-background-color);
-  fill-opacity: 0.2;
+  fill-opacity: 0.6;
   stroke: var(--second-primary-background-color);
   stroke-width: 2;
+}
+
+.mountTop {
+  stroke: var(--default-active-background-color);
+  fill: var(--second-quaternary-background-dimmed-color);
 }
