@@ -184,7 +184,7 @@ export default class LATISS extends Component {
   };
 
   render() {
-    const slope = 0.08;
+    const slope = 0.1105;
     const linearStagePosition = this.linearStageValueToPosition(this.props.reportedLinearStagePosition);
     
     const filterWheelState = movingElementStateMap[this.props.fwState];
