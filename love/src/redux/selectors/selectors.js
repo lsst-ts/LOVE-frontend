@@ -149,7 +149,7 @@ export const getMountState = (state, index) => {
   const correctionOffsets = mountData[`event-ATAOS-${index}-correctionOffsets`];
   return {
     //ATHexapod
-    hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1]['inPosition'].value : 0,
+    hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1]['inPosition'].value : 2,
     hexapodReadyForCommand: hexapodReadyForCommand
       ? hexapodReadyForCommand[hexapodReadyForCommand.length - 1]['ready']
       : 0,
