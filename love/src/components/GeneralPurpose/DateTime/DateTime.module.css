@@ -1,0 +1,9 @@
+.date {
+  width: 20ch;
+  box-sizing: border-box;
+  background: var(--base-font-color);
+  border: none;
+  border-radius: 3px;
+  padding: 0.3em 0.3em 0.15em 0.15em;
+  text-indent: 0.25em;
+}
