@@ -6,6 +6,7 @@ import TextField from '../TextField/TextField';
 import DateSelection from '../TimeSeries/TimeSeriesControls/DateSelection/DateSelection';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
+import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
 import moment from 'moment';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
@@ -87,6 +88,8 @@ export default class ObservingLogInput extends Component {
                     </div>
                   </>
                 )}
+
+                {this.state.timeFilterMode === TIME_FILTER_LIVE && <TimeWindow enabledOptions={['10s', '1m', '1d']} />}
               </div>
 
               <div className={styles.filters}>
