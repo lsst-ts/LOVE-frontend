@@ -4,7 +4,7 @@ import {
   getUsername,
   getLastSALCommand,
   getMode,
-  getView,
+  getViewSummary,
   getViewsStatus,
   getViews,
   getLastManagerHeartbeat,
@@ -22,7 +22,7 @@ const mapStateToProps = (state) => {
   const user = getUsername(state);
   const lastSALCommand = getLastSALCommand(state);
   const mode = getMode(state);
-  const getCurrentView = (id) => getView(state, id);
+  const getCurrentView = (id) => getViewSummary(state, id);
   const getManagerHeartbeat = () => getLastManagerHeartbeat(state);
   const viewsStatus = getViewsStatus(state);
   const views = getViews(state);

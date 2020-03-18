@@ -59,6 +59,22 @@ export const getView = (state, id) => {
   return undefined;
 };
 
+
+/**
+ * Return the matching view summary
+ *
+ * @param  {object} state  the state
+ * @return {array}        the list of views
+ */
+export const getViewSummary = (state, id) => {
+  const views = getViews(state);
+  if (views !== undefined) {
+    const foundView = views.find((view) => view.id === id);
+    return foundView;
+  }
+  return undefined;
+};
+
 /**
  * Return the current workspace from the state
  *
