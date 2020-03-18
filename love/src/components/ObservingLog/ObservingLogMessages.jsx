@@ -44,21 +44,28 @@ export default class ObservingLogInput extends Component {
       <Panel title="Observing Log" className={styles.panel}>
         <div className={styles.container}>
           <div className={styles.filterContainer}>
-            <TextField type="text" value={this.state.filter} onChange={this.changeFilter}/>
+            <TextField type="text" value={this.state.filter} onChange={this.changeFilter} />
           </div>
           {this.props.logMessages.map((msg) => {
+            const filter =
+              this.state.filter === '' ||
+              new RegExp(this.state.filter, 'i').test(msg.message.value) ||
+              new RegExp(this.state.filter, 'i').test(msg.user.value);
+              
             return (
-              <div key={Math.random()} className={styles.logMessageWrapper}>
-                <div className={styles.logMessage}>
-                  <div className={styles.topSection}>
-                    <span>{msg.user.value}</span>
-                    <span>{new Date(msg.private_rcvStamp.value * 1000).toLocaleString()}</span>
-                  </div>
-                  <div className={styles.messageSection}>
-                    <span>{msg.message.value}</span>
+              filter && (
+                <div key={Math.random()} className={styles.logMessageWrapper}>
+                  <div className={styles.logMessage}>
+                    <div className={styles.topSection}>
+                      <span>{msg.user.value}</span>
+                      <span>{new Date(msg.private_rcvStamp.value * 1000).toLocaleString()}</span>
+                    </div>
+                    <div className={styles.messageSection}>
+                      <span>{msg.message.value}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )
             );
           })}
         </div>
