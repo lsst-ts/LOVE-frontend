@@ -1,0 +1,31 @@
+.time-window-selection-span {
+    font-weight: bold;
+    width: 70px;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+
+.time-window-selection-input:checked + span {
+    border-bottom: 6px solid #fff;
+    padding-bottom: 0px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.time-window-selection-span {
+    padding-bottom: 2px;
+    border-bottom: 2px solid #96a3b3;
+    cursor: pointer;
+}
+
+input.time-window-selection-input {    
+    display: none;
+}
+
+.time-window-selection-label {
+    height: 40px;
+    cursor: pointer;
+    margin-bottom: 0px;
+    border-radius: 5px;
+}
