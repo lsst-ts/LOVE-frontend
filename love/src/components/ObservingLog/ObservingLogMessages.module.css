@@ -25,15 +25,30 @@
   color: var(--secondary-font-color);
 }
 
-.filterContainer {
-  display: flex;
-  flex-direction:row;
-  width: 25ch;
-  align-items: flex-end;
+.header {
   margin-bottom: 1em;
-  margin-top: 1em;
 }
 
-.filterLabel{
+.filterTitle {
+  margin-bottom: 0px;
+}
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+}
+.filter {
+  display: flex;
+  flex-direction: row;
+  width: 25ch;
+  align-items: flex-end;
+}
+
+.filterLabel {
   margin-right: 1rem;
 }

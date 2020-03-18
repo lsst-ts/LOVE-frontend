@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './ObservingLogMessages.module.css';
 import TextField from '../TextField/TextField';
+import DateSelection from '../TimeSeries/TimeSeriesControls/DateSelection/DateSelection';
+import moment from 'moment';
 
 export default class ObservingLogInput extends Component {
   static propTypes = {
@@ -43,16 +45,28 @@ export default class ObservingLogInput extends Component {
     return (
       <Panel title="Observing Log" className={styles.panel}>
         <div className={styles.container}>
-          <div className={styles.filterContainer}>
-            <span className={styles.filterLabel}>Filter: </span>
-            <TextField type="text" value={this.state.filter} onChange={this.changeFilter} />
+          <div className={styles.header}>
+            <div className={styles.filterContainer}>
+              <h2 className={styles.filterTitle}>Filters</h2>
+
+              <div className={styles.filters}>
+                <div className={styles.filter}>
+                  <span className={styles.filterLabel}>Message: </span>
+                  <TextField type="text" value={this.state.filter} onChange={this.changeFilter} />
+                </div>
+
+                <div className={styles.filter}>
+                  <DateSelection />
+                </div>
+              </div>
+            </div>
           </div>
           {this.props.logMessages.map((msg) => {
             const filter =
               this.state.filter === '' ||
               new RegExp(this.state.filter, 'i').test(msg.message.value) ||
               new RegExp(this.state.filter, 'i').test(msg.user.value);
-              
+
             return (
               filter && (
                 <div key={Math.random()} className={styles.logMessageWrapper}>
