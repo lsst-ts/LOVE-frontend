@@ -44,6 +44,7 @@ export default class ObservingLogInput extends Component {
       <Panel title="Observing Log" className={styles.panel}>
         <div className={styles.container}>
           <div className={styles.filterContainer}>
+            <span className={styles.filterLabel}>Filter: </span>
             <TextField type="text" value={this.state.filter} onChange={this.changeFilter} />
           </div>
           {this.props.logMessages.map((msg) => {

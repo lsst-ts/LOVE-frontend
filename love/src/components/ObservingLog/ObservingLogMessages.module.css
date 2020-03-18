@@ -4,10 +4,12 @@
   text-align: left;
   font-size: var(--font-size-large);
   color: var(--base-font-color);
+  display: flex;
+  flex-direction: column;
 }
 
 .logMessageWrapper {
-  padding: 0.5em;
+  padding-bottom: 0.5em;
 }
 
 .logMessage {
@@ -21,4 +23,17 @@
   justify-content: space-between;
   width: 100%;
   color: var(--secondary-font-color);
+}
+
+.filterContainer {
+  display: flex;
+  flex-direction:row;
+  width: 25ch;
+  align-items: flex-end;
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+
+.filterLabel{
+  margin-right: 1rem;
 }
