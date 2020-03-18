@@ -5,6 +5,7 @@ import styles from './ObservingLogMessages.module.css';
 import TextField from '../TextField/TextField';
 import DateSelection from '../TimeSeries/TimeSeriesControls/DateSelection/DateSelection';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
+import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import moment from 'moment';
 
 export default class ObservingLogInput extends Component {
@@ -52,6 +53,7 @@ export default class ObservingLogInput extends Component {
 
               <div className={styles.filters}>
                 <span className={styles.filterLabel}>Time: </span>
+                <Toggle/>
                 <div className={styles.filter}>
                   <span className={styles.filterLabel}> from </span>
                   <DateTime viewMode='time' inputProps={{ placeholder: 'Initial date' }} />
