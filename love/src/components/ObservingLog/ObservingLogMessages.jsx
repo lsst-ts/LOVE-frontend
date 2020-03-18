@@ -8,6 +8,9 @@ import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import moment from 'moment';
 
+const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
+const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
+
 export default class ObservingLogInput extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive the alarms */
@@ -26,6 +29,10 @@ export default class ObservingLogInput extends Component {
     super();
     this.state = {
       filter: '',
+      timeFilterMode: TIME_FILTER_LIVE,
+      timeFilterDateStart: null,
+      timeFilterDateEnd: null,
+      timeFilterWindowSize: Infinity,
     };
   }
 
@@ -43,6 +50,20 @@ export default class ObservingLogInput extends Component {
     });
   };
 
+  setLiveMode = (flag) => {
+    console.log(flag);
+    if (flag) {
+      this.setState({
+        timeFilterMode: TIME_FILTER_LIVE,
+      });
+      return;
+    }
+
+    this.setState({
+      timeFilterMode: TIME_FILTER_QUERY,
+    });
+  };
+
   render() {
     return (
       <Panel title="Observing Log" className={styles.panel}>
@@ -53,15 +74,19 @@ export default class ObservingLogInput extends Component {
 
               <div className={styles.filters}>
                 <span className={styles.filterLabel}>Time: </span>
-                <Toggle/>
-                <div className={styles.filter}>
-                  <span className={styles.filterLabel}> from </span>
-                  <DateTime viewMode='time' inputProps={{ placeholder: 'Initial date' }} />
-                </div>
-                <div className={styles.filter}>
-                  <span className={styles.filterLabel}> to </span>
-                  <DateTime viewMode='time' inputProps={{ placeholder: 'Final date' }} />
-                </div>
+                <Toggle isLive={this.state.timeFilterMode === TIME_FILTER_LIVE} setLiveMode={this.setLiveMode} />
+                {this.state.timeFilterMode === TIME_FILTER_QUERY && (
+                  <>
+                    <div className={styles.filter}>
+                      <span className={styles.filterLabel}> from </span>
+                      <DateTime viewMode="time" inputProps={{ placeholder: 'Initial date' }} />
+                    </div>
+                    <div className={styles.filter}>
+                      <span className={styles.filterLabel}> to </span>
+                      <DateTime viewMode="time" inputProps={{ placeholder: 'Final date' }} />
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className={styles.filters}>

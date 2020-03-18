@@ -1,8 +1,7 @@
 import React from 'react';
 import styles from './Toggle.module.css';
-const Toggle = () => {
-  const [isLive, setLiveMode] = React.useState(false);
-  const   handleChangeChk = () => {
+const Toggle = ({ isLive, setLiveMode }) => {
+  const handleChangeChk = () => {
     setLiveMode(!isLive);
   };
   return (
@@ -25,6 +24,11 @@ const Toggle = () => {
       </span>
     </div>
   );
+};
+
+Toggle.defaultProps = {
+  isLive: false,
+  setLiveMode: () => null,
 };
 
 export default Toggle;
