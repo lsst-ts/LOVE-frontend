@@ -6,7 +6,6 @@ import '../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
-import { viewsStates } from '../../redux/reducers/uif';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 
 export default class CustomView extends Component {
@@ -53,8 +52,6 @@ export default class CustomView extends Component {
     getCurrentView: PropTypes.func,
     /** Location object from router */
     location: PropTypes.object,
-    /** Status of the views request */
-    viewsStatus: PropTypes.string,
   };
 
   static defaultProps = {
@@ -65,7 +62,6 @@ export default class CustomView extends Component {
     onComponentDelete: () => {},
     onComponentConfig: () => {},
     getCurrentView: () => {},
-    viewsStatus: viewsStates.EMPTY,
   };
 
   constructor(props) {
@@ -89,15 +85,6 @@ export default class CustomView extends Component {
           });
         });
       }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
-      const loadedView = this.props.getCurrentView(this.state.id);
-      this.setState({
-        loadedView: loadedView || {},
-      });
     }
   }
 
