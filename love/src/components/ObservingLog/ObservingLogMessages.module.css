@@ -41,14 +41,17 @@
 .filters {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .filter {
   display: flex;
   flex-direction: row;
   width: 25ch;
-  align-items: flex-end;
+  align-items: end;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
 }
 
 .filterLabel {
-  margin-right: 1rem;
+  margin-right: 0.3rem;
 }

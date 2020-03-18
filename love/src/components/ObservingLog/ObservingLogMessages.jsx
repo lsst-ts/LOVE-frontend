@@ -4,6 +4,7 @@ import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './ObservingLogMessages.module.css';
 import TextField from '../TextField/TextField';
 import DateSelection from '../TimeSeries/TimeSeriesControls/DateSelection/DateSelection';
+import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import moment from 'moment';
 
 export default class ObservingLogInput extends Component {
@@ -47,16 +48,24 @@ export default class ObservingLogInput extends Component {
         <div className={styles.container}>
           <div className={styles.header}>
             <div className={styles.filterContainer}>
-              <h2 className={styles.filterTitle}>Filters</h2>
+              <h3 className={styles.filterTitle}>Filters</h3>
+
+              <div className={styles.filters}>
+                <span className={styles.filterLabel}>Time: </span>
+                <div className={styles.filter}>
+                  <span className={styles.filterLabel}> from </span>
+                  <DateTime viewMode='time' inputProps={{ placeholder: 'Initial date' }} />
+                </div>
+                <div className={styles.filter}>
+                  <span className={styles.filterLabel}> to </span>
+                  <DateTime viewMode='time' inputProps={{ placeholder: 'Final date' }} />
+                </div>
+              </div>
 
               <div className={styles.filters}>
                 <div className={styles.filter}>
                   <span className={styles.filterLabel}>Message: </span>
                   <TextField type="text" value={this.state.filter} onChange={this.changeFilter} />
-                </div>
-
-                <div className={styles.filter}>
-                  <DateSelection />
                 </div>
               </div>
             </div>
