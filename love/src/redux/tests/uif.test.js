@@ -23,6 +23,7 @@ import {
 import {
   getViews,
   getView,
+  getViewSummary,
   getViewsStatus,
   getWorkspaces,
   getCurrentWorkspace,
@@ -164,6 +165,21 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
     const views = getViews(store.getState());
     viewsStatus = getViewsStatus(store.getState());
     expect(views).toEqual(mockViews);
+    expect(viewsStatus).toEqual(viewsStates.LOADED);
+  });
+
+  it('WHEN the views are requested, THEN a view name should be obtainable', async () => {
+    // Arrange:
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
+    fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
+    let viewsStatus = getViewsStatus(store.getState());
+    expect(viewsStatus).toEqual(viewsStates.EMPTY);
+    // Act:
+    await store.dispatch(requestViews());
+    // Assert:
+    const viewSummary = getViewSummary(store.getState(), 1);
+    viewsStatus = getViewsStatus(store.getState());
+    expect(viewSummary).toEqual(mockViews[1]);
     expect(viewsStatus).toEqual(viewsStates.LOADED);
   });
 });
