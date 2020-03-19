@@ -72,6 +72,26 @@ export default class ObservingLogInput extends Component {
   };
 
   render() {
+    const filteredMessages = this.props.logMessages.filter((msg) => {
+      const now = new Date();
+      const messageDate = new Date(msg.private_rcvStamp.value * 1000);
+
+      const contentFilter =
+        this.state.contentFilter === '' || new RegExp(this.state.contentFilter, 'i').test(msg.message.value);
+      const userFilter = this.state.userFilter === '' || new RegExp(this.state.userFilter, 'i').test();
+
+      const liveModeFilter =
+        this.state.timeFilterMode === TIME_FILTER_LIVE &&
+        (now - messageDate) / 1000.0 < this.state.timeFilterWindowSize;
+      const queryModeFilter =
+        this.state.timeFilterMode === TIME_FILTER_QUERY &&
+        now - this.state.timeFilterDateStart > 0 &&
+        this.state.timeFilterDateEnd > 0;
+      const timeFilter = liveModeFilter || queryModeFilter;
+
+      return contentFilter && userFilter && timeFilter;
+    });
+
     return (
       <Panel title="Observing Log: Messages" className={styles.panel}>
         <div className={styles.container}>
@@ -116,21 +136,11 @@ export default class ObservingLogInput extends Component {
 
           <h3 className={styles.filterTitle}>Messages</h3>
 
-          {this.props.logMessages.map((msg) => {
-            const now = new Date();
-            const messageDate = new Date(msg.private_rcvStamp.value * 1000);
+          {filteredMessages.length > 0 &&
+            filteredMessages.map((msg) => {
+              const messageDate = new Date(msg.private_rcvStamp.value * 1000);
 
-            const contentFilter = this.state.contentFilter === '' ||  new RegExp(this.state.contentFilter, 'i').test(msg.message.value);
-            const userFilter = this.state.userFilter === '' || new RegExp(this.state.userFilter, 'i').test();
-            
-            const liveModeFilter = this.state.timeFilterMode === TIME_FILTER_LIVE && (now- messageDate)/1000.0 < this.state.timeFilterWindowSize;
-            const queryModeFilter = this.state.timeFilterMode === TIME_FILTER_QUERY && ( now - this.state.timeFilterDateStart > 0) && (this.state.timeFilterDateEnd > 0);
-            const timeFilter = liveModeFilter || queryModeFilter;
-
-            const filter = contentFilter && userFilter && timeFilter;
-
-            return (
-              filter && (
+              return (
                 <div key={Math.random()} className={styles.logMessageWrapper}>
                   <div className={styles.logMessage}>
                     <div className={styles.topSection}>
@@ -142,16 +152,11 @@ export default class ObservingLogInput extends Component {
                     </div>
                   </div>
                 </div>
-              )
-            );
-          })}
+              );
+            })}
+          {filteredMessages.length === 0 && <span> No message meets all the filtering criteria.</span>}
         </div>
       </Panel>
     );
   }
 }
-
-
-// if (!filter) {
-//   return <span> There are no messages for the selected filters.</span>;
-// }
