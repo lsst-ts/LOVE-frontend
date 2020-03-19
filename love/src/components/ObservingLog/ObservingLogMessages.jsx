@@ -70,12 +70,22 @@ export default class ObservingLogInput extends Component {
     if (flag) {
       this.setState({
         timeFilterMode: TIME_FILTER_LIVE,
+        timeFilterDateStart: isFinite(this.state.timeFilterWindow)
+          ? new Date(now - this.state.timeFilterWindow * 1000)
+          : new Date(0),
+        timeFilterDateEnd: now,
       });
       return;
     }
 
     this.setState({
       timeFilterMode: TIME_FILTER_QUERY,
+      timeFilterDateStart:
+        !this.state.timeFilterDateStart && isFinite(this.state.timeFilterWindow)
+          ? new Date(now - this.state.timeFilterWindow * 1000)
+          : this.state.timeFilterDateStart,
+      timeFilterDateEnd:
+        !this.state.timeFilterDateEnd && isFinite(this.state.timeFilterWindow) ? now : this.state.timeFilterDateEnd,
     });
   };
 
