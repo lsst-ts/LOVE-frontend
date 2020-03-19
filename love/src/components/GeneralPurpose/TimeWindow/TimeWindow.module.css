@@ -1,13 +1,13 @@
 .time-window-selection-span {
     font-weight: bold;
-    width: 70px;
+    width: 5em;
     display: inline-block;
     text-align: center;
     cursor: pointer;
 }
 
 .time-window-selection-input:checked + span {
-    border-bottom: 6px solid #fff;
+    border-bottom: 0.4em solid #fff;
     padding-bottom: 0px;
     color: #fff;
     cursor: pointer;
@@ -28,4 +28,5 @@ input.time-window-selection-input {
     cursor: pointer;
     margin-bottom: 0px;
     border-radius: 5px;
+    font-size: small;
 }

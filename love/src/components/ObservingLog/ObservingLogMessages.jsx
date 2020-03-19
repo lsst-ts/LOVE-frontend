@@ -29,7 +29,8 @@ export default class ObservingLogInput extends Component {
   constructor() {
     super();
     this.state = {
-      filter: '',
+      contentFilter: '',
+      userFilter: '',
       timeFilterMode: TIME_FILTER_LIVE,
       timeFilterDateStart: null,
       timeFilterDateEnd: null,
@@ -45,14 +46,19 @@ export default class ObservingLogInput extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  changeFilter = (event) => {
+  changeContentFilter = (event) => {
     this.setState({
-      filter: event.target.value,
+      contentFilter: event.target.value,
+    });
+  };
+
+  changeUserFilter = (event) => {
+    this.setState({
+      userFilter: event.target.value,
     });
   };
 
   setLiveMode = (flag) => {
-    console.log(flag);
     if (flag) {
       this.setState({
         timeFilterMode: TIME_FILTER_LIVE,
@@ -74,37 +80,47 @@ export default class ObservingLogInput extends Component {
               <h3 className={styles.filterTitle}>Filters</h3>
 
               <div className={styles.filters}>
-                <span className={styles.filterLabel}>Time: </span>
-                <Toggle isLive={this.state.timeFilterMode === TIME_FILTER_LIVE} setLiveMode={this.setLiveMode} />
+                <div className={styles.filter}>
+                  <span className={styles.filterLabel}>Mode: </span>
+                  <Toggle isLive={this.state.timeFilterMode === TIME_FILTER_LIVE} setLiveMode={this.setLiveMode} />
+                </div>
                 {this.state.timeFilterMode === TIME_FILTER_QUERY && (
-                  <>
-                    <div className={styles.filter}>
-                      <span className={styles.filterLabel}> from </span>
-                      <DateTime viewMode="time" inputProps={{ placeholder: 'Initial date' }} />
-                    </div>
-                    <div className={styles.filter}>
-                      <span className={styles.filterLabel}> to </span>
-                      <DateTime viewMode="time" inputProps={{ placeholder: 'Final date' }} />
-                    </div>
-                  </>
+                  <div className={styles.horizontalFilter}>
+                    <DateTime viewMode="time" inputProps={{ placeholder: 'Initial date' }} />
+                    <span className={styles.to}>to</span>
+                    <DateTime viewMode="time" inputProps={{ placeholder: 'Final date' }} />
+                  </div>
                 )}
 
-                {this.state.timeFilterMode === TIME_FILTER_LIVE && <TimeWindow enabledOptions={['10s', '1m', '1d']} />}
+                {this.state.timeFilterMode === TIME_FILTER_LIVE && (
+                  <div className={styles.filter}>
+                    <span className={styles.filterLabel}>Time window: </span>
+                    <TimeWindow enabledOptions={['10s', '1m', '1d']} />{' '}
+                  </div>
+                )}
               </div>
 
               <div className={styles.filters}>
                 <div className={styles.filter}>
-                  <span className={styles.filterLabel}>Message: </span>
-                  <TextField type="text" value={this.state.filter} onChange={this.changeFilter} />
+                  <span className={styles.filterLabel}>By content: </span>
+                  <TextField type="text" value={this.state.contentFilter} onChange={this.changeContentFilter} />
+                </div>
+
+                <div className={styles.filter}>
+                  <span className={styles.filterLabel}>By user: </span>
+                  <TextField type="text" value={this.state.userFilter} onChange={this.changeUserFilter} />
                 </div>
               </div>
             </div>
           </div>
+
+          <h3 className={styles.filterTitle}>Messages</h3>
+
           {this.props.logMessages.map((msg) => {
             const filter =
-              this.state.filter === '' ||
-              new RegExp(this.state.filter, 'i').test(msg.message.value) ||
-              new RegExp(this.state.filter, 'i').test(msg.user.value);
+              this.state.contentFilter === '' ||
+              new RegExp(this.state.contentFilter, 'i').test(msg.message.value) ||
+              new RegExp(this.state.contentFilter, 'i').test(msg.user.value);
 
             return (
               filter && (
