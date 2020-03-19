@@ -11,6 +11,14 @@ import moment from 'moment';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
 const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
+const timeWindowOptions = {
+  '1min': 60,
+  '1h': 60 * 60,
+  '6h': 6 * 60 * 60,
+  '1d': 24 * 60 * 60,
+  '1m': 30 * 24 * 60 * 60,
+  All: Infinity,
+};
 
 export default class ObservingLogInput extends Component {
   static propTypes = {
@@ -34,7 +42,7 @@ export default class ObservingLogInput extends Component {
       timeFilterMode: TIME_FILTER_LIVE,
       timeFilterDateStart: null,
       timeFilterDateEnd: null,
-      timeFilterWindowSize: Infinity,
+      timeFilterWindow: Infinity,
     };
   }
 
@@ -71,24 +79,25 @@ export default class ObservingLogInput extends Component {
     });
   };
 
+  setTimeWindow = (value) => {
+    const now = new Date();
+
+    this.setState({
+      timeFilterWindow: value,
+      timeFilterDateStart: isFinite(value) ? new Date(now - value * 1000) : new Date(0),
+      timeFilterDateEnd: now,
+    });
+  };
+
   render() {
     const filteredMessages = this.props.logMessages.filter((msg) => {
-      const now = new Date();
       const messageDate = new Date(msg.private_rcvStamp.value * 1000);
 
       const contentFilter =
         this.state.contentFilter === '' || new RegExp(this.state.contentFilter, 'i').test(msg.message.value);
       const userFilter = this.state.userFilter === '' || new RegExp(this.state.userFilter, 'i').test();
 
-      const liveModeFilter =
-        this.state.timeFilterMode === TIME_FILTER_LIVE &&
-        (now - messageDate) / 1000.0 < this.state.timeFilterWindowSize;
-      const queryModeFilter =
-        this.state.timeFilterMode === TIME_FILTER_QUERY &&
-        now - this.state.timeFilterDateStart > 0 &&
-        this.state.timeFilterDateEnd > 0;
-      const timeFilter = liveModeFilter || queryModeFilter;
-
+      const timeFilter = messageDate > this.state.timeFilterDateStart && messageDate < this.state.timeFilterDateEnd;
       return contentFilter && userFilter && timeFilter;
     });
 
@@ -115,7 +124,11 @@ export default class ObservingLogInput extends Component {
                 {this.state.timeFilterMode === TIME_FILTER_LIVE && (
                   <div className={styles.filter}>
                     <span className={styles.filterLabel}>Time window: </span>
-                    <TimeWindow enabledOptions={['10s', '1m', '1d']} />{' '}
+                    <TimeWindow
+                      options={timeWindowOptions}
+                      timeWindow={this.state.timeFilterWindow}
+                      setTimeWindow={this.setTimeWindow}
+                    />
                   </div>
                 )}
               </div>
