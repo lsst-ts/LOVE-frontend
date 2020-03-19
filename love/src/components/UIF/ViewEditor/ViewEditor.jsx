@@ -128,9 +128,6 @@ class ViewEditor extends Component {
         toast.error(`Error saving view: ${errorStr}`);
       }
     }
-    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
-      this.props.loadViewToEdit(this.state.id);
-    }
   }
 
   getEditedViewLayout = () => {
