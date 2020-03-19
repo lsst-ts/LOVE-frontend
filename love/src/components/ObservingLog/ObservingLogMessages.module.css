@@ -9,13 +9,13 @@
 }
 
 .logMessageWrapper {
-  padding-bottom: 0.5em;
+  padding-bottom: 0.5rem;
 }
 
 .logMessage {
   border-radius: 5px;
   border: 1px solid var(--secondary-font-color);
-  padding: 0.5em;
+  padding: 0.5rem;
 }
 
 .topSection {
@@ -42,17 +42,33 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  margin-bottom: 1em;
+  /* margin-bottom: 1em; */
 }
 .filter {
   display: flex;
-  flex-direction: row;
-  width: 25ch;
+  flex-direction: column;
+  align-items: center;
   align-items: end;
-  margin-right: 0.5em;
-  margin-bottom: 0.5em;
+  margin-right: 2rem;
+  margin-bottom: 0.5rem;
 }
+
+.horizontalFilter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-items: end;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-end
+}
+
 
 .filterLabel {
   margin-right: 0.3rem;
+}
+
+.to {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
