@@ -41,7 +41,7 @@ export default class ObservingLogInput extends Component {
   };
   render() {
     return (
-      <Panel title="Observing Log" className={styles.panel}>
+      <Panel title="Observing Log: Input" className={styles.panel}>
         <div className={styles.container}>
           <div>
             <span className={styles.label}>User:</span>
