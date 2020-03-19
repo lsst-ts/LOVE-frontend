@@ -6,24 +6,24 @@ import CSCExpandedContainer from '../CSCExpanded/CSCExpanded.container';
 import CSCGroupLogContainer from '../CSCGroupLog/CSCGroupLog.container';
 
 export default class CSCGroup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedCSC: undefined,
+    };
+  }
   static propTypes = {
     name: PropTypes.string,
-    realm: PropTypes.string,
     cscs: PropTypes.array,
     onCSCClick: PropTypes.func,
-    selectedCSCs: PropTypes.array,
-    hierarchy: PropTypes.object,
     embedded: PropTypes.bool,
   };
 
   static defaultProps = {
     name: '',
-    realm: '',
     cscs: [],
-    onCSCClick: () => 0,
     subscribeToStreams: () => 0,
-    selectedCSCs: [],
-    hierarchy: {},
+    selectedCSC: undefined,
     embedded: false,
   };
 
@@ -40,37 +40,47 @@ export default class CSCGroup extends Component {
 
     return groupView ? (
       <CSCGroupLogContainer
-        realm={selectedCSC.realm}
         group={selectedCSC.group}
         name={selectedCSC.csc}
-        onCSCClick={this.props.onCSCClick}
-        hierarchy={this.props.hierarchy}
+        onCSCClick={this.onCSCClick}
+        cscList={this.props.cscs}
         embedded={true}
       />
     ) : (
       <CSCExpandedContainer
-        realm={selectedCSC.realm}
         group={selectedCSC.group}
         name={selectedCSC.csc}
         salindex={selectedCSC.salindex}
-        onCSCClick={this.props.onCSCClick}
+        onCSCClick={this.onCSCClick}
       />
     );
   };
 
-  render() {
-    let selectedCSC = this.props.selectedCSCs.filter((data) => {
-      return data.realm === this.props.realm && data.group === this.props.name;
+  onCSCClick = ({ group, csc, salindex }) => {
+    if (!csc) {
+      this.setState({
+        selectedCSC: undefined,
+      });
+      return;
+    }
+
+    this.setState({
+      selectedCSC: {
+        group,
+        csc,
+        salindex,
+      },
     });
-    const expanded = selectedCSC.length > 0;
-    [selectedCSC] = selectedCSC;
-    return expanded ? (
+  };
+  render() {
+    let { selectedCSC } = this.state;
+    return selectedCSC ? (
       this.renderExpandedView(selectedCSC)
     ) : (
       <div className={styles.CSCGroupContainer}>
         <div
           className={styles.CSCGroupTitle}
-          onClick={() => this.props.onCSCClick(this.props.realm, this.props.name, 'all')}
+          onClick={() => this.onCSCClick({  group: this.props.name, csc: 'all' })}
         >
           {this.props.name}
         </div>
@@ -79,11 +89,11 @@ export default class CSCGroup extends Component {
             return (
               <div key={csc.name + csc.salindex} className={styles.CSCDetailContainer}>
                 <CSCDetailContainer
-                  realm={this.props.realm}
                   group={this.props.name}
                   name={csc.name}
                   salindex={csc.salindex}
-                  onCSCClick={this.props.onCSCClick}
+                  hasHeartbeat={csc.hasHeartbeat}
+                  onCSCClick={this.onCSCClick}
                   embedded={true}
                   shouldSubscribe={true}
                 />

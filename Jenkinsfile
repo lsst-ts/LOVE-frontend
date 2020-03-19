@@ -53,6 +53,20 @@ pipeline {
       }
     }
 
+    stage("Run tests") {
+      when {
+        anyOf {
+          branch "develop"
+        }
+      }
+      steps {
+        script {
+          sh "docker image build -f Dockerfile-test -t love-frontend-test  ."
+          sh "docker run love-frontend-test"
+        }
+      }
+    }
+
     stage("Trigger develop deployment") {
       when {
         branch "develop"
@@ -69,5 +83,7 @@ pipeline {
         build(job: '../LOVE-integration-tools/master', wait: false)
       }
     }
+
+
   }
 }

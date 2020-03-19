@@ -10,7 +10,6 @@
 .leftNotchContainer {
   display: inline-flex;
   justify-content: flex-start;
-  cursor: pointer;
   box-sizing: border-box;
   transition: all 0.5s ease-in-out;
 }
@@ -21,35 +20,66 @@
   background-color: var(--tertiary-background-color);
   text-align: left;
   display: grid;
-  grid-template-columns: repeat(3, min-content) max-content;
+  grid-template-columns: repeat(3, min-content) max-content min-content;
   grid-gap: 0.5em;
   align-items: center;
+}
+
+.leftTopBarNoEditButton {
+  grid-template-columns: min-content max-content;
 }
 
 .leftTopbar .logo {
   height: 1.3em;
   fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
+}
+
+.leftTopbar .menuIcon {
+  height: 1.2em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
 }
 
 .collapsedLogo {
-  margin-left: -5.9em;
+  margin-left: -6.6em;
+}
+
+.leftTopbar .divider {
+  font-size: 1.3em;
 }
 
 .leftTopbar .text {
   font-size: 1.2em;
-  padding-top: 0.2em;
-  height: fit-content;
-  vertical-align: middle;
+  line-height: 1.5em;
+  align-self: end;
 }
 
-.leftTopbar .divider {
-  font-size: 1.6em;
+.iconBtn {
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.editButton {
+  margin-right: -1.3em;
+}
+
+.editIcon {
+  height: 1.1em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
 }
 
 .notchCurve {
   height: 3em;
   fill: var(--tertiary-background-color);
-  vertical-align:top;
+  vertical-align: top;
 }
 
 .rightNotchContainer {
@@ -83,15 +113,15 @@
   will-change: transform;
 }
 
-.iconBtn {
-  margin: auto;
-  padding: 0.3em;
-  height: 2em;
-  width: 2em;
+.heartbeatButton {
+  margin-left: -1.4em;
 }
 
 .icon {
+  max-height: unset;
+  max-width: 100%;
   height: 1.4em;
+  vertical-align: middle;
 }
 
 .sidebar {
@@ -138,14 +168,13 @@
   background-color: var(--second-quaternary-background-color);
 }
 
-.sidebar .menu .link{
+.sidebar .menu .link {
   color: var(--base-font-color);
 }
 
 .sidebarHidden {
   transform: translate(-200px, 0);
 }
-
 
 .settingsDropdown {
   background-color: var(--tertiary-background-color);
@@ -163,7 +192,6 @@
   transition: visibility 0.2s, opacity 0.2s ease-in-out;
   visibility: hidden;
 }
-
 
 .settingsVisible {
   opacity: 1;
@@ -203,8 +231,4 @@
 
 .settingsDropdown .refNode {
   display: contents;
-}
-
-.heartbeatIconWrapper {
-  width: 2em;
 }

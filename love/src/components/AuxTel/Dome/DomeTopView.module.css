@@ -41,13 +41,13 @@
 }
 
 .background {
-  fill: #132631;
+  fill: var(--second-secondary-background-color);
 }
 .background,
 .foreground {
-  stroke: #152228;
+  stroke: var(--second-primary-background-color);
   stroke-miterlimit: 10;
 }
 .foreground {
-  fill: #18313d;
+  fill: var(--second-quaternary-background-dimmed-color);;
 }

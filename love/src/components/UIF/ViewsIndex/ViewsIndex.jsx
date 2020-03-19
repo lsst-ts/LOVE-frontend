@@ -2,14 +2,13 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
-import EditIcon from '../../icons/EditIcon/EditIcon';
-import DeleteIcon from '../../icons/DeleteIcon/DeleteIcon';
+import ViewLauncher from './ViewLauncher/ViewLauncher';
 import ManagerInterface from '../../../Utils';
 
 import styles from './ViewsIndex.module.css';
+import viewLauncherStyles from './ViewLauncher/ViewLauncher.module.css';
 
 class ViewsIndex extends Component {
   static propTypes = {
@@ -94,11 +93,11 @@ class ViewsIndex extends Component {
           </div>
         </div>
         <div className={styles.availableViewsWrapper}>
-          <div title="Create a New View" className={styles.view} onClick={this.createNewView}>
-            <div className={[styles.preview, styles.new].join(' ')}>
-              <div className={styles.plus}> + </div>
+          <div title="Create a New View" className={viewLauncherStyles.view} onClick={this.createNewView}>
+            <div className={[viewLauncherStyles.preview, viewLauncherStyles.new].join(' ')}>
+              <div className={viewLauncherStyles.plus}> + </div>
             </div>
-            <div className={styles.name}> CREATE NEW VIEW </div>
+            <div className={viewLauncherStyles.name}> CREATE NEW VIEW </div>
           </div>
 
           {this.props.views.length > 0 &&
@@ -108,62 +107,18 @@ class ViewsIndex extends Component {
               if (viewName === '') viewName = view.name.substring(0, 3).toUpperCase();
               return (
                 (this.state.filter === '' || new RegExp(this.state.filter, 'i').test(view.name)) && (
-                  <div
-                    title="Open"
-                    key={index}
-                    className={styles.view}
-                    onClick={() => this.openView(view.id)}
-                    onMouseEnter={this.showButtons.bind(this, view.id)}
-                    onTouchStart={this.showButtons.bind(this, view.id)}
-                    onTouchMove={this.showButtons.bind(this, view.id)}
-                    onMouseLeave={this.hideButtons.bind(this)}
-                  >
-                    <div className={styles.preview}>
-                      <div className={[styles.viewOverlay, this.state.hoveredView === view.id ? styles.viewHover : ''].join(' ')}>
-                        <img
-                          src={imgURL}
-                          onLoad={(ev) => {
-                            ev.target.parentNode.setAttribute('hasThumbnail', true);
-                            ev.target.style.display = 'block';
-                          }}
-                          style={{ display: 'none' }}
-                        />
-                      </div>
-                      <span
-                        className={[
-                          styles.imageFallback,
-                          this.state.hoveredView === view.id ? styles.fallbackHover : '',
-                        ].join(' ')}
-                      >
-                        {view.name.replace(/[a-z\s]/g, '').substring(0, 6)}
-                      </span>
-                    </div>
-                    <div className={styles.name}> {view.name} </div>
-                    <div
-                      className={[styles.buttons, this.state.hoveredView === view.id ? styles.visible : null].join(' ')}
-                    >
-                      <Button
-                        className={styles.iconButton}
-                        title="Edit"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          this.editView(view.id);
-                        }}
-                      >
-                        <EditIcon className={styles.icon} />
-                      </Button>
-                      <Button
-                        className={styles.iconButton}
-                        title="Delete"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          this.changeViewToDelete(view);
-                        }}
-                      >
-                        <DeleteIcon className={styles.icon} />
-                      </Button>
-                    </div>
-                  </div>
+                  <ViewLauncher
+                    key={view.id}
+                    imgURL={imgURL}
+                    view={view}
+                    index={index}
+                    showButtons={this.showButtons.bind(this, view.id)}
+                    hideButtons={this.hideButtons.bind(this)}
+                    hovered={this.state.hoveredView === view.id}
+                    editView={this.editView}
+                    changeViewToDelete={this.changeViewToDelete}
+                    openView={this.openView}
+                  />
                 )
               );
             })}

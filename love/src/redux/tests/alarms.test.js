@@ -2,7 +2,8 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { openWebsocketConnection, requestGroupSubscription } from '../actions/ws';
+import { addGroupSubscription } from '../actions/ws';
+import { doReceiveToken } from '../actions/auth';
 import { receiveAlarms } from '../actions/alarms';
 import {
   getStreamData,
@@ -140,12 +141,16 @@ describe('GIVEN we have no alarms in the state', () => {
   // Arrange:
   beforeEach(async () => {
     store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
-    // prevent fetch call for token
-    localStorage.setItem('LOVE-TOKEN', 'love-token');
-    server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-    await store.dispatch(openWebsocketConnection());
-    await store.dispatch(requestGroupSubscription('event-Watcher-0-alarm'));
+    server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+    server.on('connection', socket => {
+      const [, token] = socket.url.split('?token=');
+      if (token !== 'love-token') {
+        socket.close();
+      }
+    });
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await server.connected;
+    await store.dispatch(addGroupSubscription('event-Watcher-0-alarm'));
   });
 
   describe('WHEN we receive alarm events', () => {
@@ -206,12 +211,16 @@ describe('GIVEN we have some alarms in the state', () => {
   // Arrange:
   beforeEach(async () => {
     store = createStore(rootReducer, initialState, applyMiddleware(thunkMiddleware));
-    // prevent fetch call for token
-    localStorage.setItem('LOVE-TOKEN', 'love-token');
-    server = new WS('ws://localhost/manager/ws/subscription?token=love-token', { jsonProtocol: true });
-    await store.dispatch(openWebsocketConnection());
-    await store.dispatch(requestGroupSubscription('event-Watcher-0-alarm'));
+    server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+    server.on('connection', socket => {
+      const [, token] = socket.url.split('?token=');
+      if (token !== 'love-token') {
+        socket.close();
+      }
+    });
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
     await server.connected;
+    await store.dispatch(addGroupSubscription('event-Watcher-0-alarm'));
   });
 
   describe('WHEN we receive alarm events', () => {

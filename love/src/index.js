@@ -6,12 +6,10 @@ import AppContainer from './App.container';
 import ConfirmationModal from './components/GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import * as serviceWorker from './serviceWorker';
 import { doGetTokenFromStorage } from './redux/actions/auth';
-import { requestGroupSubscription } from './redux/actions/ws';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
 store.dispatch(doGetTokenFromStorage());
-store.dispatch(requestGroupSubscription('heartbeat-manager-0-stream'));
 
 /**
  * Replaces the behavior of window.confirm(message) whenever
@@ -35,7 +33,7 @@ const getUserConfirmation = (message, callback) => {
     <ConfirmationModal
       isOpen={true}
       message={message}
-      confirmText="Accept"
+      confirmText="Confirm"
       cancelText="Cancel"
       confirmCallback={() => closeModal(true)}
       cancelCallback={() => closeModal(false)}
