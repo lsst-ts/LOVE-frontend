@@ -50,7 +50,7 @@ export default class ObservingLogInput extends Component {
       contentFilter: '',
       userFilter: '',
       timeFilterMode: TIME_FILTER_LIVE,
-      timeFilterDateStart: new Date(0),
+      timeFilterDateStart: new Date(new Date() - 24 * 60 * 60 * 1000),
       timeFilterDateEnd: new Date(),
       timeFilterWindow: Infinity,
     };
@@ -90,34 +90,35 @@ export default class ObservingLogInput extends Component {
   };
 
   changeTimeMode = (isLiveMode) => {
+    // cleanup first, to avoid duplicates
+    if (this.liveModeInterval) {
+      clearInterval(this.liveModeInterval);
+    }
     const now = new Date();
+
     if (isLiveMode) {
+      // start live mode
       this.setLiveMode();
       this.liveModeInterval = setInterval(this.setLiveMode, 1000);
       return;
     }
 
-    if (this.liveModeInterval) {
-      clearInterval(this.liveModeInterval);
-    }
-
+    // start query mode
     this.setState({
       timeFilterMode: TIME_FILTER_QUERY,
     });
 
-    if (!this.state.timeFilterDateStart) {
+    if (!isFinite(this.state.timeFilterWindow)) {
       // default startDate to timewindow if finite, or 1 day ago if infinite
       this.setState({
-        timeFilterDateStart: isFinite(this.state.timeFilterWindow)
-          ? new Date(now - this.state.timeFilterWindow * 1000)
-          : new Date(now - 24 * 60 * 60 * 1000),
+        timeFilterDateStart: new Date(now - 24 * 60 * 60 * 1000),
       });
     }
 
-    if (!this.state.timeFilterDateEnd) {
+    if (!isFinite(this.state.timeFilterWindow)) {
       // default endDate to now
       this.setState({
-        timeFilterDateEnd: now,
+        timeFilterDateEnd: new Date(now + 24 * 60 * 60 * 1000),
       });
     }
   };
@@ -132,6 +133,14 @@ export default class ObservingLogInput extends Component {
     });
   };
 
+  changeDateStart = (value) => {
+    console.log('changeDateStart', value.toDate());
+  };
+
+  changeDateEnd = (value) => {
+    console.log('changeDateEnd', value.toDate());
+  };
+
   componentWillUnmount = () => {
     if (this.liveModeInterval) {
       clearInterval(this.liveModeInterval);
@@ -144,6 +153,7 @@ export default class ObservingLogInput extends Component {
       this.liveModeInterval = setInterval(this.setLiveMode, 1000);
     }
   };
+  liveModeInterval;
   render() {
     const filteredMessages = this.props.logMessages.filter((msg) => {
       const messageDate = new Date(msg.private_rcvStamp.value * 1000 + this.props.taiToUtc);
@@ -173,12 +183,14 @@ export default class ObservingLogInput extends Component {
                       viewMode="time"
                       inputProps={{ placeholder: 'Initial date' }}
                       value={this.state.timeFilterDateStart}
+                      onChange={this.changeDateStart}
                     />
                     <span className={styles.to}>to</span>
                     <DateTime
                       viewMode="time"
                       inputProps={{ placeholder: 'Final date' }}
                       value={this.state.timeFilterDateEnd}
+                      onChange={this.changeDateEnd}
                     />
                   </div>
                 )}
