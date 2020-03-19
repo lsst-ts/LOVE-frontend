@@ -190,3 +190,8 @@
   background: var(--status-warning-color);
   color: var(--second-tertiary-background-color);
 }
+
+.heartbeatIcon {
+  display: inline-block;
+  margin: 0.2em;
+}

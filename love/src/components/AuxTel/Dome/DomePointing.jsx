@@ -54,14 +54,10 @@ export default class DomePointing extends Component {
 
         <circle
           className={styles.targetPointing}
-          r={32}
+          r={16}
           strokeWidth={2}
           cx={zenithPixels.x}
           cy={zenithPixels.y}
-          fill="none"
-          strokeDasharray="4"
-          strokeOpacity="0.3"
-          stroke="white"
           style={{
             transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el-90}deg)`,
             transformOrigin: `50% 50% ${280}px`,
@@ -69,12 +65,10 @@ export default class DomePointing extends Component {
         />
         <circle
           className={styles.currentPointing}
-          r={32}
-          stroke="white"
+          r={16}
           strokeWidth={2}
           cx={zenithPixels.x}
           cy={zenithPixels.y}
-          fill="red"
           style={{
             transform: `rotateZ(${az}deg) rotateX(${el-90}deg)`,
             transformOrigin: `50% 50% ${280}px`,

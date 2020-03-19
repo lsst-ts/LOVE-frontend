@@ -8,7 +8,6 @@ export default class CSCDetail extends Component {
   static propTypes = {
     name: PropTypes.string,
     group: PropTypes.string,
-    realm: PropTypes.string,
     salindex: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     data: PropTypes.object,
     onCSCClick: PropTypes.func,
@@ -23,7 +22,6 @@ export default class CSCDetail extends Component {
   static defaultProps = {
     name: '',
     group: '',
-    realm: '',
     data: {},
     onCSCClick: () => 0,
     heartbeatData: null,
@@ -88,6 +86,9 @@ export default class CSCDetail extends Component {
       if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
+    if (props.hasHeartbeat === false) {
+      heartbeatStatus = 'ok';
+    }
 
     let timeDiffText = 'Unknown';
 
@@ -113,7 +114,9 @@ export default class CSCDetail extends Component {
     if (summaryState.name === 'UNKNOWN') stateClass = CSCDetail.states[0].class;
     return (
       <div
-        onClick={() => this.props.onCSCClick(props.realm, props.group, props.name, props.salindex)}
+        onClick={() =>
+          this.props.onCSCClick({group: props.group, csc: props.name, salindex: props.salindex })
+        }
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
         <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
@@ -122,8 +125,8 @@ export default class CSCDetail extends Component {
           </span>
         </div>
         <div className={[styles.heartbeatSection, stateClass].join(' ')}>
-          <div className={[styles.heartbeatIconWrapper, heartbeatStatus === 'ok' ? styles.hidden : ''].join(' ')}>
-            <HeartbeatIcon status={heartbeatStatus === 'alert' ? 'unknown' : heartbeatStatus} title={title} />
+          <div className={[styles.heartbeatIconWrapper, heartbeatStatus === 'ok' && props.hasHeartbeat !== false ? styles.hidden : ''].join(' ')}>
+            <HeartbeatIcon status={heartbeatStatus === 'alert' || props.hasHeartbeat === false ? 'unknown' : heartbeatStatus} title={title} />
           </div>
         </div>
         <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>

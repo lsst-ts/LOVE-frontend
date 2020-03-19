@@ -101,3 +101,14 @@
   grid-gap: 1em;
   height: 2em;
 }
+
+.filterContainer {
+  display: flex;
+  flex-direction:row;
+  width: 30ch;
+  align-items: flex-end;
+}
+
+.filterLabel {
+  margin-right: 1em;
+}

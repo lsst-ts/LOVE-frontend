@@ -152,6 +152,7 @@ export default class TimeSeriesPlot extends Component {
             strokeWidth: 0,
             renderer: 'canvas',
           },
+          background: 'null',
         },
       },
       dataSpec,

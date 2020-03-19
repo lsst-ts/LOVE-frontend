@@ -13,6 +13,7 @@ import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
+import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
 const BREAK_1 = 710;
@@ -43,6 +44,10 @@ class Layout extends Component {
     mode: PropTypes.string,
     /** Status of the views request */
     viewsStatus: PropTypes.string,
+    /** Function to subscribe to streams to receive the alarms */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving the alarms */
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
@@ -60,16 +65,18 @@ class Layout extends Component {
       title: null,
       heartbeatTimer: undefined,
       lastHeartbeat: undefined,
+      hovered: false, // true if leftTopbar is being hovered
     };
   }
 
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     this.handleResize();
     document.addEventListener('mousedown', this.handleClick, false);
     window.addEventListener('resize', this.handleResize);
   };
 
   componentDidMount = () => {
+    this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
     }, 3000);
@@ -79,9 +86,15 @@ class Layout extends Component {
     document.removeEventListener('mousedown', this.handleClick, false);
     window.removeEventListener('resize', this.handleResize);
     window.clearInterval(this.heartbeatInterval);
+    this.props.unsubscribeToStreams();
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
+    if (this.props.token === null && prevProps.token !== null) {
+      this.props.unsubscribeToStreams();
+    } else if (this.props.token !== null && prevProps.token === null) {
+      this.props.subscribeToStreams();
+    }
     const pathname = this.props.location.pathname;
     if (urls[pathname] && this.state.title !== urls[pathname]) {
       this.setState({
@@ -134,6 +147,9 @@ class Layout extends Component {
   };
 
   getHeartbeatTitle = (heartbeat) => {
+    if (this.state.heartbeatStatus === 'ok') {
+      return 'LOVE manager heartbeat is being received as expected';
+    }
     if (heartbeat === undefined || heartbeat.data === undefined || heartbeat.data.timestamp === undefined) {
       return 'LOVE manager heartbeat never seen';
     }
@@ -193,25 +209,75 @@ class Layout extends Component {
     this.setState({ sidebarVisible: !this.state.sidebarVisible });
   };
 
+  goHome = () => {
+    this.props.history.push('/');
+  };
+
+
+
+  setHovered = (value) => {
+    this.setState({ hovered: value });
+  };
+
   render() {
     return (
       <>
-        <div className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}>
+        <div
+          className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
+          onMouseOver={() => this.setHovered(true)}
+          onMouseOut={() => this.setHovered(false)}
+        >
           <div
             className={[
               styles.leftNotchContainer,
               this.state.collapsedLogo && !this.state.sidebarVisible ? styles.collapsedLogo : null,
             ].join(' ')}
             ref={(node) => (this.leftNotch = node)}
-            onClick={this.toggleSidebar}
           >
-            <div className={styles.leftTopbar}>
-              <MenuIcon className={styles.logo} />
-              <LogoIcon className={styles.logo} />
-              <span className={styles.divider}> {this.state.title && this.state.viewOnNotch ? '|' : ''} </span>
-              <span className={styles.text}>{this.state.viewOnNotch ? this.state.title : ''}</span>
+            <div
+              className={[styles.leftTopbar, this.state.collapsedLogo ? styles.leftTopBarNoEditButton : ''].join(' ')}
+            >
+              <Button
+                className={styles.iconBtn}
+                title="Toggle menu"
+                onClick={this.toggleSidebar}
+                disabled={false}
+                status="transparent"
+              >
+                <MenuIcon className={styles.menuIcon} />
+              </Button>
+
+              <LogoIcon
+                className={styles.logo}
+                onClick={this.state.collapsedLogo ? this.toggleSidebar : this.goHome}
+                title="Go home"
+              />
+
+              {this.state.title && this.state.viewOnNotch && <span className={styles.divider}> | </span>}
+              {this.state.viewOnNotch && (
+                <>
+                  <span className={styles.text}> {this.state.title}</span>
+
+                  {this.props.location.pathname === '/uif/view' && (
+                    <Button
+                      className={[styles.iconBtn, styles.editButton].join(' ')}
+                      title="Edit view"
+                      onClick={() => {
+                        if (this.state.id) {
+                          this.editView(this.state.id);
+                        }
+                      }}
+                      disabled={false}
+                      status="transparent"
+                      style={{ visibility: this.state.hovered ? 'visible' : 'hidden' }}
+                    >
+                      <EditIcon className={styles.editIcon} />
+                    </Button>
+                  )}
+                </>
+              )}
             </div>
-            <NotchCurve className={styles.notchCurve} />
+            <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
           <div className={styles.middleTopbar} id="customTopbar" />
@@ -220,19 +286,29 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
-              {this.state.heartbeatStatus !== 'ok' && (
-                <div className={styles.heartbeatIconWrapper}>
-                  <HeartbeatIcon
-                    status={this.state.heartbeatStatus}
-                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
-                  />
-                </div>
-              )}
+              <Button
+                className={[
+                  styles.iconBtn,
+                  styles.heartbeatButton,
+                ].join(' ')}
+                style={{
+                  visibility: this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered) ?
+                  'visible' : 'hidden'
+                }}
+                title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                onClick={() => {}}
+                status="transparent"
+              >
+                <HeartbeatIcon
+                  className={styles.icon}
+                  status={this.state.heartbeatStatus}
+                  title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                />
+              </Button>
               <Button
                 className={styles.iconBtn}
                 title="View notifications"
                 onClick={() => {}}
-                disabled={false}
                 status="transparent"
               >
                 <NotificationIcon className={styles.icon} />

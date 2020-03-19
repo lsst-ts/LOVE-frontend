@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCGroup from './CSCGroup';
-import { requestGroupSubscription } from '../../../redux/actions/ws';
+import { addGroupSubscription } from '../../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
 
@@ -53,11 +53,11 @@ export const schema = {
       },
     },
   };
-  
+
 
 const CSCGroupContainer = ({
     subscribeToStreams,
-    ...props,
+    ...props
 }) => {
   return (
     <CSCGroup
@@ -70,11 +70,11 @@ const CSCGroupContainer = ({
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (cscName, index) => {
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-summaryState`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-logMessage`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
+      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-summaryState`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-logMessage`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
