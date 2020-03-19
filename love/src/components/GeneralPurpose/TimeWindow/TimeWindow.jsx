@@ -18,7 +18,6 @@ const TimeWindow = ({
   enabledOptions = [],
 }) => {
   const handleChange = (changeEvent) => {
-    console.log(changeEvent.target.value);
     let tw = changeEvent.target.value !== 'Infinity' ? parseInt(changeEvent.target.value, 10) : Infinity;
     setTimeWindow(tw);
   };
