@@ -73,7 +73,7 @@ export default class ObservingLogInput extends Component {
 
   render() {
     return (
-      <Panel title="Observing Log" className={styles.panel}>
+      <Panel title="Observing Log: Messages" className={styles.panel}>
         <div className={styles.container}>
           <div className={styles.header}>
             <div className={styles.filterContainer}>
@@ -107,7 +107,7 @@ export default class ObservingLogInput extends Component {
                 </div>
 
                 <div className={styles.filter}>
-                  <span className={styles.filterLabel}>By user: </span>
+                  <span className={styles.filterLabel}>By user name: </span>
                   <TextField type="text" value={this.state.userFilter} onChange={this.changeUserFilter} />
                 </div>
               </div>
