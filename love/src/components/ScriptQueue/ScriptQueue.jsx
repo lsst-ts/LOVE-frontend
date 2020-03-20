@@ -185,7 +185,7 @@ export default class ScriptQueue extends Component {
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStreams();
+    // this.props.unsubscribeToStreams();
   };
 
   displayAvailableScripts = () => {
@@ -542,7 +542,7 @@ export default class ScriptQueue extends Component {
 
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
     return (
-      <Panel title={`Script Queue   | SalIndex = ${this.props.salindex}`} fit={this.props.fit}>
+      // <Panel title={`Script Queue   | SalIndex = ${this.props.salindex}`} fit={this.props.fit}>
         <div
           onClick={(e) => {
             this.setState({ isContextMenuOpen: false });
@@ -837,7 +837,7 @@ export default class ScriptQueue extends Component {
             </div>
           </div>
         </div>
-      </Panel>
+      // </Panel>
     );
   }
 }

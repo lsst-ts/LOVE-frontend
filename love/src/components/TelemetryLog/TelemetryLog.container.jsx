@@ -7,7 +7,26 @@ import { saveGroupSubscriptions } from '../../Utils';
 export const schema = {
   description: 'Internal use',
   defaultSize: [63, 17],
-  props: {},
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Telemetry log',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
 };
 const TelemetryLogContainer = ({
   streams,

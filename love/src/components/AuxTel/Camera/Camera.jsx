@@ -66,8 +66,7 @@ export default class Camera extends Component {
 
   render() {
     return (
-                <Panel title="Auxiliary Telescope Camera" className={'smallPanel'} fit>
-                <div className={styles.cameraContainer}>
+      <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Rafts state:</span>
@@ -130,9 +129,7 @@ export default class Camera extends Component {
                               displayPercentage={false}
                               isNarrow={true}
                               backgroundClass={styles.backgroundLoadingBarClass}
-                              animationDuration={
-                                this.state.timers[imageKey] !== undefined ? image.exposureTime : 0
-                              }
+                              animationDuration={this.state.timers[imageKey] !== undefined ? image.exposureTime : 0}
                               title={`Exposed ${roundedCurrentExposureTime} out of ${roundedExposureTime} seconds`}
                             />
                             <span
@@ -190,7 +187,6 @@ export default class Camera extends Component {
           </div>
         </div>
       </div>
-      </Panel>
     );
   }
 }

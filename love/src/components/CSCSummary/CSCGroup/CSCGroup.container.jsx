@@ -9,6 +9,24 @@ export const schema = {
     description: 'Summary of a set of CSCs, including heartbeats and summary state',
     defaultSize: [12, 19],
     props: {
+      titleBar: {
+        type: 'boolean',
+        description: 'Whether to display the title bar',
+        isPrivate: false,
+        default: false,
+      },
+      title: {
+        type: 'string',
+        description: 'Name diplayed in the title bar (if visible)',
+        isPrivate: false,
+        default: 'CSC group',
+      },
+      margin: {
+        type: 'boolean',
+        description: 'Whether to display component with a margin',
+        isPrivate: false,
+        default: true,
+      },
       name: {
         type: 'string',
         description: 'Custom name of the group',

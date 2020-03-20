@@ -7,7 +7,26 @@ import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../
 export const schema = {
   description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
   defaultSize: [49, 43],
-  props: {},
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Dome',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
 };
 
 const DomeContainer = ({
@@ -112,7 +131,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DomeContainer);

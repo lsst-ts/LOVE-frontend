@@ -16,10 +16,27 @@ export const schema = {
                 Allows commands to be sent for interacting with the scripts, such as stopping, enqueueing and requeueing scripts`,
   defaultSize: [66, 38],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: true,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Script queue',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
     salindex: {
       type: 'number',
-      description:
-        'Salindex of the ScriptQueue',
+      description: 'Salindex of the ScriptQueue',
       isPrivate: false,
       default: 1,
     },
@@ -83,6 +100,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
+      console.log('componentDidMount');
       dispatch(addGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
       dispatch(addGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
       dispatch(addGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
@@ -93,17 +111,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch(requestGroupSubscriptionRemoval(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
     },
     requestSALCommand: (cmd) => {
-      if(cmd.csc === 'Script'){
+      if (cmd.csc === 'Script') {
         return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
       }
       return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }));
     },
   };
 };
-const connectedContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ScriptQueueContainer);
+const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(ScriptQueueContainer);
 
 connectedContainer.defaultProps = {
   salindex: 1,

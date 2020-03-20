@@ -7,7 +7,26 @@ import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../
 export const schema = {
   description: `Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover`,
   defaultSize: [20, 34],
-  props: {},
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'AT Lightpath',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
   allowOverflow: true,
 };
 
@@ -33,7 +52,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LightPathContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LightPathContainer);
