@@ -318,7 +318,7 @@ export function saveEditedView(thumbnail) {
           return response.json().then((view) => {
             dispatch(receiveView(view));
             dispatch(savedEditedView(view));
-            return Promise.resolve();
+            return Promise.resolve(view);
           });
         }
         return response.json().then((json) => {
