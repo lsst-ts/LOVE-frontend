@@ -39,9 +39,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(loadViewToEdit(view));
     dispatch(ActionCreators.clearHistory());
   },
-  requestViewToEdit: (view) => {
-    dispatch(requestViewToEdit(view));
-  },
+  requestViewToEdit: (view) => dispatch(requestViewToEdit(view)),
   clearViewToEdit: () => dispatch(clearViewToEdit),
   saveEditedView: (thumbnail) => dispatch(saveEditedView(thumbnail)),
   undo: () => dispatch(ActionCreators.undo()),

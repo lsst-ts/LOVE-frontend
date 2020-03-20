@@ -1,26 +1,36 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
-import {
-  addGroupSubscription,
-  requestGroupSubscriptionRemoval,
-  requestSALCommand,
-} from '../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import Watcher from './Watcher';
 
 export const schema = {
   description: `Table containing alarms triggered by all CSCs, with the corresponding
               interactions such as searching, filtering, acknowledging and muting`,
   defaultSize: [63, 17],
-  props: {},
-}
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: true,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Watcher',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
+};
 
-const WatcherContainer = ({
-  alarms,
-  user,
-  subscribeToStream,
-  unsubscribeToStream,
-  ...props }) => {
+const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream, ...props }) => {
   return (
     <Watcher
       {...props}
@@ -71,7 +81,7 @@ const mapDispatchToProps = (dispatch) => {
           component: 'Watcher',
           salindex: 0,
           params: {
-            name
+            name,
           },
         }),
       );
@@ -106,7 +116,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(WatcherContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(WatcherContainer);
