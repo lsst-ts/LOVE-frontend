@@ -10,6 +10,7 @@ import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif'
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
 import Modal from '../../GeneralPurpose/Modal/Modal';
+import Loader from '../../GeneralPurpose/Loader/Loader';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import html2canvas from 'html2canvas';
@@ -322,6 +323,7 @@ class ViewEditor extends Component {
   viewIsSaved = () => {
     return this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
   };
+
   renderToolbar() {
     const isSaved = this.viewIsSaved();
 
@@ -438,7 +440,11 @@ class ViewEditor extends Component {
   render() {
     return (
       <>
-        <Prompt when={!this.viewIsSaved()} message="There are unsaved changes that will be lost. Are you sure you want to leave?" />
+        <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
+        <Prompt
+          when={!this.viewIsSaved()}
+          message="There are unsaved changes that will be lost. Are you sure you want to leave?"
+        />
         <div className={styles.container}>
           <div ref={this.customViewRef}>
             <CustomView
