@@ -32,25 +32,23 @@ export default class ObservingLogInput extends Component {
 
   render() {
     return (
-      <Panel title="Observing Log" className={styles.panel}>
-        <div className={styles.container}>
-          {this.props.logMessages.map((msg) => {
-            return (
-              <div key={Math.random()} className={styles.logMessageWrapper}>
-                <div className={styles.logMessage}>
-                  <div className={styles.topSection}>
-                    <span>{msg.user.value}</span>
-                    <span>{new Date(msg.private_rcvStamp.value*1000).toLocaleString()}</span>
-                  </div>
-                  <div className={styles.messageSection}>
-                    <span>{msg.message.value}</span>
-                  </div>
+      <div className={styles.container}>
+        {this.props.logMessages.map((msg) => {
+          return (
+            <div key={Math.random()} className={styles.logMessageWrapper}>
+              <div className={styles.logMessage}>
+                <div className={styles.topSection}>
+                  <span>{msg.user.value}</span>
+                  <span>{new Date(msg.private_rcvStamp.value * 1000).toLocaleString()}</span>
+                </div>
+                <div className={styles.messageSection}>
+                  <span>{msg.message.value}</span>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </Panel>
+            </div>
+          );
+        })}
+      </div>
     );
   }
 }
