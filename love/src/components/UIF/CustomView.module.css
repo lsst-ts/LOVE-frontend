@@ -78,3 +78,8 @@
 .gearIconWrapper svg {
   vertical-align: text-top;
 }
+
+.marginComponentPanel {
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
