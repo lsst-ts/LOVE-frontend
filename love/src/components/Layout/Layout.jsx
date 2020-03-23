@@ -322,21 +322,6 @@ class Layout extends Component {
                       ' ',
                     )}
                   >
-                    <div
-                      className={this.state.id ? styles.menuElement : styles.disabledElement}
-                      title="Edit view"
-                      onClick={() => {
-                        if (this.state.id) {
-                          this.editView(this.state.id);
-                        }
-                      }}
-                    >
-                      Edit view
-                    </div>
-                    <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
-                      Create new View
-                    </div>
-                    <span className={styles.divider} />
                     <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
                       Logout
                     </div>
@@ -355,6 +340,25 @@ class Layout extends Component {
           <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
             <p onClick={() => this.navigateTo('/')}>Home</p>
             <p onClick={() => this.navigateTo('/uif')}>Views Index</p>
+          </div>
+          <div className={styles.sidebarButtons}>
+            <Button
+              className={[styles.button, this.state.id ? null : styles.hidden].join(' ')}
+              title="Edit view"
+              onClick={() => {
+                if (this.state.id) {
+                  this.editView(this.state.id);
+                }
+              }}
+            >
+              <span className={styles.label}> Edit this view </span>
+              <EditIcon className={styles.editIcon}/>
+            </Button>
+
+            <Button className={styles.button} title="New view" onClick={this.createNewView}>
+              <span className={styles.label}> Create new view </span>
+              <span className={styles.plusIcon}> + </span>
+            </Button>
           </div>
         </div>
 
