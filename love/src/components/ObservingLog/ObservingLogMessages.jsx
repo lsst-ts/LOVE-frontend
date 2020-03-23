@@ -169,88 +169,86 @@ export default class ObservingLogInput extends Component {
     });
 
     return (
-      <Panel title="Observing Log: Messages" className={styles.panel}>
-        <div className={styles.container}>
-          <div className={styles.header}>
-            <div className={styles.filterContainer}>
-              <h3 className={styles.filterTitle}>Filters</h3>
+      <div className={styles.container}>
+        <div className={styles.header}>
+          <div className={styles.filterContainer}>
+            <h3 className={styles.filterTitle}>Filters</h3>
 
-              <div className={styles.filters}>
-                <div className={styles.filter}>
-                  <span className={styles.filterLabel}>Mode: </span>
-                  <Toggle isLive={this.state.timeFilterMode === TIME_FILTER_LIVE} setLiveMode={this.changeTimeMode} />
+            <div className={styles.filters}>
+              <div className={styles.filter}>
+                <span className={styles.filterLabel}>Mode: </span>
+                <Toggle isLive={this.state.timeFilterMode === TIME_FILTER_LIVE} setLiveMode={this.changeTimeMode} />
+              </div>
+              {this.state.timeFilterMode === TIME_FILTER_QUERY && (
+                <div className={styles.horizontalFilter}>
+                  <DateTime
+                    viewMode="time"
+                    inputProps={{ placeholder: 'Initial date' }}
+                    value={this.state.timeFilterDateStart}
+                    onChange={this.changeDateStart}
+                    dateFormat="YYYY/MM/DD"
+                    timeFormat="HH:mm:ss"
+                  />
+                  <span className={styles.to}>to</span>
+                  <DateTime
+                    viewMode="time"
+                    inputProps={{ placeholder: 'Final date' }}
+                    value={this.state.timeFilterDateEnd}
+                    onChange={this.changeDateEnd}
+                    dateFormat="YYYY/MM/DD"
+                    timeFormat="HH:mm:ss"
+                  />
                 </div>
-                {this.state.timeFilterMode === TIME_FILTER_QUERY && (
-                  <div className={styles.horizontalFilter}>
-                    <DateTime
-                      viewMode="time"
-                      inputProps={{ placeholder: 'Initial date' }}
-                      value={this.state.timeFilterDateStart}
-                      onChange={this.changeDateStart}
-                      dateFormat="YYYY/MM/DD"
-                      timeFormat="HH:mm:ss"
-                    />
-                    <span className={styles.to}>to</span>
-                    <DateTime
-                      viewMode="time"
-                      inputProps={{ placeholder: 'Final date' }}
-                      value={this.state.timeFilterDateEnd}
-                      onChange={this.changeDateEnd}
-                      dateFormat="YYYY/MM/DD"
-                      timeFormat="HH:mm:ss"
-                    />
-                  </div>
-                )}
+              )}
 
-                {this.state.timeFilterMode === TIME_FILTER_LIVE && (
-                  <div className={styles.filter}>
-                    <span className={styles.filterLabel}>Time window: </span>
-                    <TimeWindow
-                      options={timeWindowOptions}
-                      timeWindow={this.state.timeFilterWindow}
-                      setTimeWindow={this.setTimeWindow}
-                    />
-                  </div>
-                )}
+              {this.state.timeFilterMode === TIME_FILTER_LIVE && (
+                <div className={styles.filter}>
+                  <span className={styles.filterLabel}>Time window: </span>
+                  <TimeWindow
+                    options={timeWindowOptions}
+                    timeWindow={this.state.timeFilterWindow}
+                    setTimeWindow={this.setTimeWindow}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className={styles.filters}>
+              <div className={styles.filter}>
+                <span className={styles.filterLabel}>By content: </span>
+                <TextField type="text" value={this.state.contentFilter} onChange={this.changeContentFilter} />
               </div>
 
-              <div className={styles.filters}>
-                <div className={styles.filter}>
-                  <span className={styles.filterLabel}>By content: </span>
-                  <TextField type="text" value={this.state.contentFilter} onChange={this.changeContentFilter} />
-                </div>
-
-                <div className={styles.filter}>
-                  <span className={styles.filterLabel}>By user name: </span>
-                  <TextField type="text" value={this.state.userFilter} onChange={this.changeUserFilter} />
-                </div>
+              <div className={styles.filter}>
+                <span className={styles.filterLabel}>By user name: </span>
+                <TextField type="text" value={this.state.userFilter} onChange={this.changeUserFilter} />
               </div>
             </div>
           </div>
+        </div>
 
-          <h3 className={styles.filterTitle}>Messages</h3>
+        <h3 className={styles.filterTitle}>Messages</h3>
 
-          {filteredMessages.length > 0 &&
-            filteredMessages.map((msg) => {
-              const messageDate = new Date(msg.private_rcvStamp.value * 1000);
+        {filteredMessages.length > 0 &&
+          filteredMessages.map((msg) => {
+            const messageDate = new Date(msg.private_rcvStamp.value * 1000);
 
-              return (
-                <div key={Math.random()} className={styles.logMessageWrapper}>
-                  <div className={styles.logMessage}>
-                    <div className={styles.topSection}>
-                      <span>{msg.user.value}</span>
-                      <span>{messageDate.toLocaleString()}</span>
-                    </div>
-                    <div className={styles.messageSection}>
-                      <span>{msg.message.value}</span>
-                    </div>
+            return (
+              <div key={Math.random()} className={styles.logMessageWrapper}>
+                <div className={styles.logMessage}>
+                  <div className={styles.topSection}>
+                    <span>{msg.user.value}</span>
+                    <span>{messageDate.toLocaleString()}</span>
+                  </div>
+                  <div className={styles.messageSection}>
+                    <span>{msg.message.value}</span>
                   </div>
                 </div>
-              );
-            })}
-          {filteredMessages.length === 0 && <span> No message meets all the filtering criteria.</span>}
-        </div>
-      </Panel>
+              </div>
+            );
+          })}
+        {filteredMessages.length === 0 && <span> No message meets all the filtering criteria.</span>}
+      </div>
     );
   }
 }

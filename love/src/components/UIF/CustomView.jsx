@@ -6,8 +6,8 @@ import '../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
-import { viewsStates } from '../../redux/reducers/uif';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
+import Panel from '../GeneralPurpose/Panel/Panel';
 
 export default class CustomView extends Component {
   static propTypes = {
@@ -53,8 +53,6 @@ export default class CustomView extends Component {
     getCurrentView: PropTypes.func,
     /** Location object from router */
     location: PropTypes.object,
-    /** Status of the views request */
-    viewsStatus: PropTypes.string,
   };
 
   static defaultProps = {
@@ -65,7 +63,6 @@ export default class CustomView extends Component {
     onComponentDelete: () => {},
     onComponentConfig: () => {},
     getCurrentView: () => {},
-    viewsStatus: viewsStates.EMPTY,
   };
 
   constructor(props) {
@@ -89,15 +86,6 @@ export default class CustomView extends Component {
           });
         });
       }
-    }
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.viewsStatus === viewsStates.LOADING && this.props.viewsStatus === viewsStates.LOADED) {
-      const loadedView = this.props.getCurrentView(this.state.id);
-      this.setState({
-        loadedView: loadedView || {},
-      });
     }
   }
 
@@ -128,6 +116,7 @@ export default class CustomView extends Component {
         key={component.properties.i.toString()}
         className={[
           styles.componentWrapper,
+          parsedConfig.margin ? styles.marginComponentPanel : '',
           component.properties.allowOverflow ? '' : styles.noOverflow,
           this.props.isEditable ? styles.editable : '',
         ].join(' ')}
@@ -140,7 +129,13 @@ export default class CustomView extends Component {
           </Button>
           <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
         </div>
-        <ErrorBoundary>{comp}</ErrorBoundary>
+        {parsedConfig.titleBar ? (
+          <Panel title={parsedConfig.title} fit={false}>
+            <ErrorBoundary>{comp}</ErrorBoundary>
+          </Panel>
+        ) : (
+          <ErrorBoundary>{comp}</ErrorBoundary>
+        )}
       </div>
     );
   };
