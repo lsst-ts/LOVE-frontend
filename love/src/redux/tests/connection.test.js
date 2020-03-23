@@ -446,6 +446,63 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     expect(getSubscriptions(store.getState())).toEqual([]);
   });
 
+  it.only('When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING, ' +
+  'and when SUBSCRIPTION is REQUESTED AGAIN before the  server confirms each unsubscription, ' +
+  'the subscription changes to PENDING, its is REQUESTED AGAIN to the server and it is NOT REMOVED',
+  async () => {
+    // Request remove group 1
+    await store.dispatch(requestGroupSubscriptionRemoval('telemetry-all-all-all'));
+    await expect(server).toReceiveMessage({
+      option: 'unsubscribe',
+      category: 'telemetry',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.UNSUBSCRIBING,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+    ]);
+    // Request subscribe to group 1 again
+    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.PENDING,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+    ]);
+    // Server removes group 1
+    server.send({
+      data: "Successfully unsubscribed from telemetry-all-all-all"
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.PENDING,
+        confirmationMessage: "Successfully subscribed to telemetry-all-all-all",
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        confirmationMessage: "Successfully subscribed to event-all-all-all",
+      },
+    ]);
+  });
+
   it('When the CONNECTION is CLOSED, then the subscriptions are EMPTY',
   async () => {
     // Close connection
