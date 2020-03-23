@@ -134,11 +134,15 @@ export default class ObservingLogInput extends Component {
   };
 
   changeDateStart = (value) => {
-    console.log('changeDateStart', value.toDate());
+    this.setState({
+      timeFilterDateStart: value.toDate(),
+    });
   };
 
   changeDateEnd = (value) => {
-    console.log('changeDateEnd', value.toDate());
+    this.setState({
+      timeFilterDateEnd: value.toDate(),
+    });
   };
 
   componentWillUnmount = () => {
@@ -153,10 +157,9 @@ export default class ObservingLogInput extends Component {
       this.liveModeInterval = setInterval(this.setLiveMode, 1000);
     }
   };
-  liveModeInterval;
   render() {
     const filteredMessages = this.props.logMessages.filter((msg) => {
-      const messageDate = new Date(msg.private_rcvStamp.value * 1000 + this.props.taiToUtc);
+      const messageDate = new Date((msg.private_rcvStamp.value + this.props.taiToUtc) * 1000);
       const contentFilter =
         this.state.contentFilter === '' || new RegExp(this.state.contentFilter, 'i').test(msg.message.value);
       const userFilter = this.state.userFilter === '' || new RegExp(msg.user.value, 'i').test();
@@ -184,6 +187,8 @@ export default class ObservingLogInput extends Component {
                       inputProps={{ placeholder: 'Initial date' }}
                       value={this.state.timeFilterDateStart}
                       onChange={this.changeDateStart}
+                      dateFormat="YYYY/MM/DD"
+                      timeFormat="HH:mm:ss"
                     />
                     <span className={styles.to}>to</span>
                     <DateTime
@@ -191,6 +196,8 @@ export default class ObservingLogInput extends Component {
                       inputProps={{ placeholder: 'Final date' }}
                       value={this.state.timeFilterDateEnd}
                       onChange={this.changeDateEnd}
+                      dateFormat="YYYY/MM/DD"
+                      timeFormat="HH:mm:ss"
                     />
                   </div>
                 )}
