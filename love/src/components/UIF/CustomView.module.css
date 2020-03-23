@@ -40,7 +40,7 @@
   z-index: 10;
 }
 
-.container :global(.react-resizable-handle)::after {
+.editableContainer :global(.react-resizable-handle)::after {
   content: '';
   position: absolute;
   right: 7px;
