@@ -22,11 +22,11 @@ import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
+import Select from '../../GeneralPurpose/Select/Select';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
-
 class ViewEditor extends Component {
   static propTypes = {
     /** React Router location object */
@@ -340,7 +340,11 @@ class ViewEditor extends Component {
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-            />
+              />
+            <Select>
+              <option>asdasd</option>
+              <option>asdasd</option>
+            </Select>
             <Button
               className={styles.iconBtn}
               title={saveButtonTooltip}
