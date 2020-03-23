@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
-import { getObservingLogs } from '../../redux/selectors';
+import { getObservingLogs, getTaiToUtc } from '../../redux/selectors';
 import ObservingLogMessages from './ObservingLogMessages';
 
 export const schema = {
@@ -29,11 +29,12 @@ export const schema = {
   },
 };
 
-const ObservingLogMessagesContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const ObservingLogMessagesContainer = ({ subscribeToStreams, unsubscribeToStreams, taiToUtc, ...props }) => {
   return (
     <ObservingLogMessages
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
+      taiToUtc={taiToUtc}
       {...props}
     />
   );
@@ -42,6 +43,7 @@ const ObservingLogMessagesContainer = ({ subscribeToStreams, unsubscribeToStream
 const mapStateToProps = (state) => {
   return {
     logMessages: getObservingLogs(state),
+    taiToUtc: getTaiToUtc(state),
   };
 };
 
