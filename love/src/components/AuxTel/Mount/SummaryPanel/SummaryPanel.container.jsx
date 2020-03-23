@@ -7,7 +7,26 @@ import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../
 export const schema = {
   description: `Panel containing summary information about the AT, including the ATMCS, ATPneumatics and ATHexapod`,
   defaultSize: [15, 22],
-  props: {},
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'AT summary',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
 };
 
 const SummaryPanelContainer = ({ ...props }) => {
@@ -32,7 +51,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SummaryPanelContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryPanelContainer);

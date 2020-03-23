@@ -7,6 +7,7 @@ import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
+import Panel from '../GeneralPurpose/Panel/Panel';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -117,6 +118,7 @@ class CustomView extends Component {
         key={component.properties.i.toString()}
         className={[
           styles.componentWrapper,
+          parsedConfig.margin ? styles.marginComponentPanel : '',
           component.properties.allowOverflow ? '' : styles.noOverflow,
           this.props.isEditable ? styles.editable : '',
         ].join(' ')}
@@ -129,7 +131,13 @@ class CustomView extends Component {
           </Button>
           <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
         </div>
-        <ErrorBoundary>{comp}</ErrorBoundary>
+        {parsedConfig.titleBar ? (
+          <Panel title={parsedConfig.title} fit={false}>
+            <ErrorBoundary>{comp}</ErrorBoundary>
+          </Panel>
+        ) : (
+          <ErrorBoundary>{comp}</ErrorBoundary>
+        )}
       </div>
     );
   };
@@ -168,6 +176,7 @@ class CustomView extends Component {
         key={container.properties.i.toString()}
         className={[
           styles.container,
+          this.props.isEditable ? styles.editableContainer : '',
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >

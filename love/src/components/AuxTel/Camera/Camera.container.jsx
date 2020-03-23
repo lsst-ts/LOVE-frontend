@@ -7,7 +7,26 @@ import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../
 export const schema = {
   description: 'Summary view of the ATCamera. Contains information about its current state and exposures table',
   defaultSize: [49, 17],
-  props: {},
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: true,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Camera',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
 };
 
 const CameraContainer = ({
@@ -64,7 +83,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CameraContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CameraContainer);
