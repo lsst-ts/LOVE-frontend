@@ -41,19 +41,17 @@ export default class ObservingLogInput extends Component {
   };
   render() {
     return (
-      <Panel title="Observing Log: Input" className={styles.panel}>
-        <div className={styles.container}>
-          <div>
-            <span className={styles.label}>User:</span>
-            <span>{this.props.username}</span>
-          </div>
-          <div>
-            <span className={styles.label}>Message:</span>
-            <TextArea callback={this.onTextChange}></TextArea>
-          </div>
-          <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
+      <div className={styles.container}>
+        <div>
+          <span className={styles.label}>User:</span>
+          <span>{this.props.username}</span>
         </div>
-      </Panel>
+        <div>
+          <span className={styles.label}>Message:</span>
+          <TextArea callback={this.onTextChange}></TextArea>
+        </div>
+        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
+      </div>
     );
   }
 }

@@ -78,6 +78,17 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
                 />
               );
             }
+            if (['boolean'].includes(componentProps[key].type)) {
+              configElementInput = (
+                <input
+                  type={'checkbox'}
+                  defaultChecked={componentConfig[key]}
+                  onChange={(event) => {
+                    updateConfig(key, event.target.checked);
+                  }}
+                />
+              );
+            }
             return (
               !componentProps[key].isPrivate && (
                 <div key={key} className={styles.configElementWrapper}>

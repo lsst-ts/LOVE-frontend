@@ -186,7 +186,7 @@ export default class LATISS extends Component {
   render() {
     const slope = 0.08;
     const linearStagePosition = this.linearStageValueToPosition(this.props.reportedLinearStagePosition);
-    
+
     const filterWheelState = movingElementStateMap[this.props.fwState];
     const gratingWheelState = movingElementStateMap[this.props.gwState];
     const linearStageState = movingElementStateMap[this.props.lsState];
@@ -202,71 +202,65 @@ export default class LATISS extends Component {
     const isShutterBlocking = shutterState === 'CLOSED' || shutterState === 'OPENING';
 
     return (
-      <Panel title="LATISS" className={styles.panel} fit>
-        <div className={styles.latissContainer}>
-          <span className={styles.sectionTitle}>FILTER</span>
-          <span className={styles.sectionTitle}>GRATING</span>
-          <span className={styles.sectionTitle}>SHUTTER</span>
-          <span className={styles.sectionTitle}>CCD</span>
-          <div className={styles.statusTextWrapper}>
-            <span>WHEEL STATE</span>{' '}
-            <StatusText status={stateToStyleLATISS[filterWheelState]}>{filterWheelState}</StatusText>
-          </div>
-          <div className={styles.statusTextWrapper}>
-            <span>WHEEL STATE</span>{' '}
-            <StatusText status={stateToStyleLATISS[gratingWheelState]}>{gratingWheelState}</StatusText>
-          </div>
-          <div className={styles.statusTextWrapper}>
-            <span>SHUTTER STATE</span> <StatusText status={stateToStyleLATISS[shutterState]}>{shutterState}</StatusText>
-          </div>
-          <div className={styles.statusTextWrapper}>
-            <span>CCD STATE</span> <StatusText status={stateToStyleLATISS[ccdState]}>{ccdState}</StatusText>
-          </div>
-          {this.wheelSelector('FILTER POSITION', this.props.reportedFilterPosition, this.props.reportedFilterName)}
-          {this.wheelSelector(
-            'GRATING POSITION',
-            this.props.reportedDisperserPosition,
-            this.props.reportedDisperserName,
-          )}
-          <div />
-          <div />
-          {/** SVGS */}
-          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
-            <g transform={`rotate(${LATISS.FILTER_ANGLE} 50 50)`}>
-              {this.drawLightPathElement(50, styles.movingElement, isFilterMoving)}
-            </g>
-            {this.drawLightPath(slope, 1, true, isFilterBlocking ? 50 : 100, LATISS.FILTER_ANGLE_RAD)}
-          </svg>
-          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
-            {this.drawLightPathElement(
-              linearStagePosition - 5,
-              styles.movingElement,
-              isLinearStageMoving || isGratingMoving,
-            )}
-            {this.drawLightPath(slope, 2, !isFilterBlocking, isGratingBlocking ? linearStagePosition - 5 : 100)}
-            {this.drawLinearStage(
-              Math.round(this.props.reportedLinearStagePosition),
-              linearStagePosition,
-              isLinearStageMoving,
-            )}
-          </svg>
-          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
-            {this.drawShutter(50, styles.shutter, shutterState)}
-            {this.drawLightPath(slope, 3, !(isFilterBlocking || isGratingBlocking), isShutterBlocking ? 50 : 100)}
-          </svg>
-          <svg className={styles.lightpathElement} viewBox="0 0 100 120">
-            {this.drawLightPathElement(50, styles.ccd, isLinearStageMoving)}
-            {this.drawLightPath(slope, 4, !(isFilterBlocking || isGratingBlocking || isShutterBlocking), 50)}
-          </svg>
-          <div />
-          <div className={styles.statusTextWrapper}>
-            <span>LINEAR STAGE STATE</span>{' '}
-            <StatusText status={stateToStyleLATISS[linearStageState]}>{linearStageState}</StatusText>
-          </div>
-          <div />
-          <div />
+      <div className={styles.latissContainer}>
+        <span className={styles.sectionTitle}>FILTER</span>
+        <span className={styles.sectionTitle}>GRATING</span>
+        <span className={styles.sectionTitle}>SHUTTER</span>
+        <span className={styles.sectionTitle}>CCD</span>
+        <div className={styles.statusTextWrapper}>
+          <span>WHEEL STATE</span>{' '}
+          <StatusText status={stateToStyleLATISS[filterWheelState]}>{filterWheelState}</StatusText>
         </div>
-      </Panel>
+        <div className={styles.statusTextWrapper}>
+          <span>WHEEL STATE</span>{' '}
+          <StatusText status={stateToStyleLATISS[gratingWheelState]}>{gratingWheelState}</StatusText>
+        </div>
+        <div className={styles.statusTextWrapper}>
+          <span>SHUTTER STATE</span> <StatusText status={stateToStyleLATISS[shutterState]}>{shutterState}</StatusText>
+        </div>
+        <div className={styles.statusTextWrapper}>
+          <span>CCD STATE</span> <StatusText status={stateToStyleLATISS[ccdState]}>{ccdState}</StatusText>
+        </div>
+        {this.wheelSelector('FILTER POSITION', this.props.reportedFilterPosition, this.props.reportedFilterName)}
+        {this.wheelSelector('GRATING POSITION', this.props.reportedDisperserPosition, this.props.reportedDisperserName)}
+        <div />
+        <div />
+        {/** SVGS */}
+        <svg className={styles.lightpathElement} viewBox="0 0 100 120">
+          <g transform={`rotate(${LATISS.FILTER_ANGLE} 50 50)`}>
+            {this.drawLightPathElement(50, styles.movingElement, isFilterMoving)}
+          </g>
+          {this.drawLightPath(slope, 1, true, isFilterBlocking ? 50 : 100, LATISS.FILTER_ANGLE_RAD)}
+        </svg>
+        <svg className={styles.lightpathElement} viewBox="0 0 100 120">
+          {this.drawLightPathElement(
+            linearStagePosition - 5,
+            styles.movingElement,
+            isLinearStageMoving || isGratingMoving,
+          )}
+          {this.drawLightPath(slope, 2, !isFilterBlocking, isGratingBlocking ? linearStagePosition - 5 : 100)}
+          {this.drawLinearStage(
+            Math.round(this.props.reportedLinearStagePosition),
+            linearStagePosition,
+            isLinearStageMoving,
+          )}
+        </svg>
+        <svg className={styles.lightpathElement} viewBox="0 0 100 120">
+          {this.drawShutter(50, styles.shutter, shutterState)}
+          {this.drawLightPath(slope, 3, !(isFilterBlocking || isGratingBlocking), isShutterBlocking ? 50 : 100)}
+        </svg>
+        <svg className={styles.lightpathElement} viewBox="0 0 100 120">
+          {this.drawLightPathElement(50, styles.ccd, isLinearStageMoving)}
+          {this.drawLightPath(slope, 4, !(isFilterBlocking || isGratingBlocking || isShutterBlocking), 50)}
+        </svg>
+        <div />
+        <div className={styles.statusTextWrapper}>
+          <span>LINEAR STAGE STATE</span>{' '}
+          <StatusText status={stateToStyleLATISS[linearStageState]}>{linearStageState}</StatusText>
+        </div>
+        <div />
+        <div />
+      </div>
     );
   }
 }
