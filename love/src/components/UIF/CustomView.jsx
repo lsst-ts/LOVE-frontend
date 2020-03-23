@@ -167,6 +167,7 @@ export default class CustomView extends Component {
         key={container.properties.i.toString()}
         className={[
           styles.container,
+          this.props.isEditable ? styles.editableContainer : '',
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
