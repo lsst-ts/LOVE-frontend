@@ -40,7 +40,7 @@
   z-index: 10;
 }
 
-.container :global(.react-resizable-handle)::after {
+.editableContainer :global(.react-resizable-handle)::after {
   content: '';
   position: absolute;
   right: 7px;
@@ -77,4 +77,9 @@
 
 .gearIconWrapper svg {
   vertical-align: text-top;
+}
+
+.marginComponentPanel {
+  padding-right: 1em;
+  padding-bottom: 1em;
 }

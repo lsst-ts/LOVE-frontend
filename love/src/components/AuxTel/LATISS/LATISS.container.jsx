@@ -5,9 +5,29 @@ import { getLATISSState } from '../../../redux/selectors';
 import LATISS from './LATISS';
 
 export const schema = {
-  description: 'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
+  description:
+    'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
   defaultSize: [61, 31],
-  props: {},
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: true,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'LATISS',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
 };
 
 const LATISSContainer = ({
@@ -84,7 +104,4 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LATISSContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LATISSContainer);

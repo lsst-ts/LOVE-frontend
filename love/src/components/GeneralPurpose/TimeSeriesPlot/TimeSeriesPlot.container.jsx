@@ -8,6 +8,24 @@ export const schema = {
   description: 'Time series plot for any data stream coming from SAL',
   defaultSize: [31, 8],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Time series plot',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
     dataSources: {
       type: 'array',
       description: 'Array containing the name of the data sources for the plot',
