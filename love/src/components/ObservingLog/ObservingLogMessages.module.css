@@ -4,16 +4,19 @@
   text-align: left;
   font-size: var(--font-size-large);
   color: var(--base-font-color);
+  display: flex;
+  flex-direction: column;
 }
 
 .logMessageWrapper {
-  padding: 0.5em;
+  padding-bottom: 0.5rem;
+  padding-right:1em;
 }
 
 .logMessage {
   border-radius: 5px;
   border: 1px solid var(--secondary-font-color);
-  padding: 0.5em;
+  padding: 0.5rem;
 }
 
 .topSection {
@@ -21,4 +24,52 @@
   justify-content: space-between;
   width: 100%;
   color: var(--secondary-font-color);
+}
+
+.header {
+  margin-bottom: 1em;
+}
+
+.filterTitle {
+  margin-bottom: 0px;
+}
+.filterContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* margin-bottom: 1em; */
+}
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: end;
+  margin-right: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.horizontalFilter {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-items: end;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-end
+}
+
+
+.filterLabel {
+  margin-right: 0.3rem;
+}
+
+.to {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
 }
