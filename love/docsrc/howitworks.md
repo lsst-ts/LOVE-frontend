@@ -21,10 +21,13 @@ The structure of LOVE-frontend state is as follows:
 
 Each of its branches (topmost keys) are handled by a separate reducer through the `combineReducers` utility of Redux.
 
+---
+
 ## Container and presentational components
 
 Apart from the global state stored in Redux, each component handles its own state with specific information for its own elements. This leads to the distinction of `Container` components and `Presentational` components. Container components are meant to wrap Presentational components to abstract them from all the logic of reading the global state. Containers can read the Redux state through the usage of `selectors`, which are functions (located at `src/redux/selectors`) that receive a copy of the state object and return some data for which they are designed. Selectors are meant to be reused across components so if the state tree were to change, changing the selector should be sufficient to recover the functionality of all related components. Changes to the state are made by `dispatching` `actions`. This is wrapped in the Container component with callbacks tha are passed to Presentational components. The Presentational components use this and other input `props`, and possibly internal state variables to render the component to the users on their screens.
 
+---
 
 ## State tree
 
@@ -126,6 +129,7 @@ This data is colected after being added to the `ws.subscriptions` state because 
 
 This data is colected after being added to the `ws.subscriptions` state so the history of the `logMessage`  and `errorCode` events is available to components such as the `CSCSummary`.
 
+---
 
 ## Token, websocket connection and groups subscriptions
 The token, websocket and subscriptions handling is summarized in the following graphs:
@@ -161,3 +165,46 @@ The token, websocket and subscriptions handling is summarized in the following g
 - When confirmation of unsubscription arrive, then the subscription is deleted
 - When connection is closed (gracefully, connection status is CLOSED), then all subscriptions are deleted (the manager will forget those subscriptions anyway)
 - When connection is closed (by error, connection status is RETRYING), then all subscriptions are PENDING. This way, when we open the connection again, we will be able to re-subscribe
+
+---
+
+## ScriptQueue scripts schema validation
+Validation is performed in the LOVE-manager (instead of the frontend) asynchronously and should respond to config changes by the user.
+
+The behavior can be represented by this (pseudo) state machine diagram:
+
+![redux script validation](./redux_script_validation.svg 'Logo Title Text 1')
+
+
+* `EMPTY`
+  - Is the initial state, assuming there is no schema yet and no text has been written
+  - Writing will keep the machine in this state
+  - Can sends scripts with any config regardless of config
+  - Once the schema arrives it transitions to `WITH_SCHEMA`
+* `WITH_SCHEMA`
+  - Writing (`keypress` event) witll transition to `VALIDATING` and send a request to the server to validate the current text.
+* `VALIDATING`
+  - Can't send scripts
+  - On `keypress` moves to `NEED_REVALIDATION` (notice that no server response has been received yet).
+  - If there is a server response:
+     - If response is not 200, goes to `SERVER_ERROR`
+     - If `response.json().error` exists it goes to `ERROR`
+     - if `response.json().output` exists it goes to ` VALID`
+* `NEEDS_REVALIDATION`
+  - This states catches `keypress` events so only one request is sent at a time and, once received, new changes are validated too.
+  - Can't send scripts here neither
+  - On `keypress` it stays on `NEEDS_REVALIDATION`
+
+* `SERVER_ERROR`
+  - An error message is shown
+  - Can send scripts because the script can be valid or invalid, now is the user's responsibility.
+  - On `keypress` goes back to validating
+
+* `ERROR`
+  - Can't send scripts
+  - Error message is shown
+  - On `keypress` goes back to validating
+
+* `VALID`
+  - Can send scripts
+  - On `keypress` goes back to validating
