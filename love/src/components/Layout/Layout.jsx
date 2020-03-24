@@ -16,7 +16,7 @@ import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
-const BREAK_1 = 710;
+const BREAK_1 = 768;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
@@ -59,6 +59,7 @@ class Layout extends Component {
     this.state = {
       collapsedLogo: false,
       viewOnNotch: true,
+      toolbarOverflow: false,
       sidebarVisible: false,
       settingsVisible: false,
       id: null,
@@ -90,6 +91,10 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
+    this.toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
+    this.customTopbar = document.getElementById('customTopbar');
+    this.toolbarParent.appendChild(this.customTopbar);
+
     if (this.props.token === null && prevProps.token !== null) {
       this.props.unsubscribeToStreams();
     } else if (this.props.token !== null && prevProps.token === null) {
@@ -175,11 +180,13 @@ class Layout extends Component {
     this.setState({
       collapsedLogo: true,
       viewOnNotch: false,
+      toolbarOverflow: true,
     });
     const innerWidth = window.innerWidth;
     this.setState({
-      collapsedLogo: (BREAK_2 < innerWidth && innerWidth <= BREAK_1) || innerWidth <= BREAK_3,
+      collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
+      toolbarOverflow: innerWidth < BREAK_1,
     });
   };
 
@@ -222,6 +229,9 @@ class Layout extends Component {
   render() {
     return (
       <>
+        <div className={styles.hidden}>
+          <div id='customTopbar'/>
+        </div>
         <div
           className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
           onMouseOver={() => this.setHovered(true)}
@@ -280,7 +290,7 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="customTopbar" />
+          <div className={styles.middleTopbar} id="middleTopbar"/>
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
@@ -322,21 +332,6 @@ class Layout extends Component {
                       ' ',
                     )}
                   >
-                    <div
-                      className={this.state.id ? styles.menuElement : styles.disabledElement}
-                      title="Edit view"
-                      onClick={() => {
-                        if (this.state.id) {
-                          this.editView(this.state.id);
-                        }
-                      }}
-                    >
-                      Edit view
-                    </div>
-                    <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
-                      Create new View
-                    </div>
-                    <span className={styles.divider} />
                     <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
                       Logout
                     </div>
@@ -347,6 +342,8 @@ class Layout extends Component {
           </div>
         </div>
 
+        <div className={styles.overflownToolbar} id="overflownToolbar"/>
+
         <div
           ref={(node) => (this.sidebar = node)}
           className={[styles.sidebar, !this.state.sidebarVisible ? styles.sidebarHidden : null].join(' ')}
@@ -355,6 +352,25 @@ class Layout extends Component {
           <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
             <p onClick={() => this.navigateTo('/')}>Home</p>
             <p onClick={() => this.navigateTo('/uif')}>Views Index</p>
+          </div>
+          <div className={styles.sidebarButtons}>
+            <Button
+              className={[styles.button, this.state.id ? null : styles.hidden].join(' ')}
+              title="Edit view"
+              onClick={() => {
+                if (this.state.id) {
+                  this.editView(this.state.id);
+                }
+              }}
+            >
+              <span className={styles.label}> Edit this view </span>
+              <EditIcon className={styles.editIcon}/>
+            </Button>
+
+            <Button className={styles.button} title="New view" onClick={this.createNewView}>
+              <span className={styles.label}> Create new view </span>
+              <span className={styles.plusIcon}> + </span>
+            </Button>
           </div>
         </div>
 

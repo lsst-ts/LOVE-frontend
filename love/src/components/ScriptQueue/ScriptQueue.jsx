@@ -6,7 +6,6 @@ import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
-import Panel from '../GeneralPurpose/Panel/Panel';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import Loader from '../GeneralPurpose/Loader/Loader';
 import ManagerInterface from '../../Utils';
