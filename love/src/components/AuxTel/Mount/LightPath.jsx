@@ -522,7 +522,7 @@ export default class LightPath extends Component {
     const lowerPort = 208;
     const higherPort = 204;
 
-    if ((portSelected !== 1 && portSelected !== 2)) return null;
+    if (portSelected !== 1 && portSelected !== 2) return null;
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
@@ -539,15 +539,16 @@ export default class LightPath extends Component {
 
   render() {
     const isM1CoverOpen = this.props.m1CoverState === 2;
-
+    const showLightPath = this.props.lightPath;
+    console.log(this.props)
 
     return (
       <div className={styles.container}>
         <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve">
           {/* Background */}
           {this.drawBackground()}
-          {this.drawLightPath1(this.props)}
-          {isM1CoverOpen && this.drawLightPath2(this.props)}
+          {showLightPath && this.drawLightPath1(this.props)}
+          {showLightPath && isM1CoverOpen && this.drawLightPath2(this.props)}
           {/* Port 2 */}
           {this.drawPort2(this.props)}
           {/* M1 cover */}
@@ -559,8 +560,8 @@ export default class LightPath extends Component {
             className={styles.st1}
             d="M100.7 275.4h4.3v-9h32.7v72l1 2h-18l-17-.1 1.3-1.9V301h-4.3zM133.5 390.4v-21.9l3.2-.1-1.3-6H108l-1.3 5.8h3.3v22.2z"
           />
-          {isM1CoverOpen && this.drawLightPath3(this.props)}
-          {isM1CoverOpen && this.drawLightPath4(this.props)}
+          {showLightPath && isM1CoverOpen && this.drawLightPath3(this.props)}
+          {showLightPath && isM1CoverOpen && this.drawLightPath4(this.props)}
           {/* M3 */}
           {this.drawM3(this.props)}
           {/* M2 */}
