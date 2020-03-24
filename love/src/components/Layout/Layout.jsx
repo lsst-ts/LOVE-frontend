@@ -163,7 +163,6 @@ class Layout extends Component {
   };
 
   handleClick = (event) => {
-    console.log('this.state.settingsVisible: ', this.state.settingsVisible)
     if (this.dropdown && !this.dropdown.contains(event.target)) {
       this.setState({ settingsVisible: false });
     }
