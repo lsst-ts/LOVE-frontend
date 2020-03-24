@@ -12,6 +12,17 @@ import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
+
+export const MOBILE = 'Mobile';
+export const DESKTOP = 'Desktop';
+export const TABLET = 'Tablet';
+
+
+const deviceToSize = {
+  [MOBILE]: 480,
+  [TABLET]: 768,
+  [DESKTOP]: 1200,
+};
 class CustomView extends Component {
   static propTypes = {
     /** Layout object describing the view, composed of recursively nested Elements, with the following format:
@@ -56,6 +67,13 @@ class CustomView extends Component {
     getCurrentView: PropTypes.func,
     /** Location object from router */
     location: PropTypes.object,
+    /** Object specifying the device size.
+     * It defaults to "DESKTOP" size. Sizes are mapped as:
+     * MOBILE:
+     * TABLET
+     * DESKTOP
+     *  */
+    device: PropTypes.string,
   };
 
   static defaultProps = {
@@ -174,6 +192,7 @@ class CustomView extends Component {
             sm: Math.round(container.properties.cols * 0.5),
             xs: 1,
           };
+
     return (
       <div
         key={container.properties.i.toString()}
@@ -184,7 +203,12 @@ class CustomView extends Component {
         ].join(' ')}
       >
         {this.props.isEditable && (
-          <div className={styles.deviceOutline}>
+          <div
+            className={styles.deviceOutline}
+            style={{
+              width: `${deviceToSize[this.props.device]}px`,
+            }}
+          >
             <DashedBox />
           </div>
         )}
@@ -212,6 +236,7 @@ class CustomView extends Component {
   };
 
   render() {
+    console.log(this.props.device);
     const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
     const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;
