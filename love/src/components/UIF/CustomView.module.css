@@ -63,7 +63,7 @@
   top: 0.2em;
   right: 0.2em;
   padding: 0.3em;
-  border: 1px dashed #bbb;
+  border: 1px dashed var(--highlighted-font-color);
   box-sizing: border-box;
   background: var(--second-secondary-background-color);
   z-index: 10;
@@ -82,4 +82,10 @@
 .marginComponentPanel {
   padding-right: 1em;
   padding-bottom: 1em;
+}
+
+.deviceOutline{
+  position: absolute;
+  width: 500px;
+  height: 500px;
 }

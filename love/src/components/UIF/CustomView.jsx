@@ -8,6 +8,7 @@ import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
+import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
@@ -164,13 +165,15 @@ class CustomView extends Component {
         allowOverflow: x.properties.allowOverflow,
       };
     });
-    const cols = typeof(container.properties.cols) === 'object' ? container.properties.cols :
-      {
-        lg: container.properties.cols,
-        md: container.properties.cols,
-        sm: Math.round(container.properties.cols * 0.5),
-        xs: 1
-      };
+    const cols =
+      typeof container.properties.cols === 'object'
+        ? container.properties.cols
+        : {
+            lg: container.properties.cols,
+            md: container.properties.cols,
+            sm: Math.round(container.properties.cols * 0.5),
+            xs: 1,
+          };
     return (
       <div
         key={container.properties.i.toString()}
@@ -180,9 +183,13 @@ class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
+        <div className={styles.deviceOutline}>
+          <DashedBox />
+        </div>
+
         <ResponsiveGridLayout
-          layouts={{lg: layout}}
-          breakpoints={{lg: 1200, md: 996, sm: 768, xs: 480}}
+          layouts={{ lg: layout }}
+          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
           items={layout.length}
           rowHeight={20}
           onResizeStop={this.onResizeStop}
