@@ -346,7 +346,7 @@ class Layout extends Component {
           </div>
         </div>
 
-        <div className={styles.middleTopbar} id="overflownToolbar"/>
+        <div className={styles.overflownToolbar} id="overflownToolbar"/>
 
         <div
           ref={(node) => (this.sidebar = node)}

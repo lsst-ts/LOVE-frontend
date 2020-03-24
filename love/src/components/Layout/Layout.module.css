@@ -99,7 +99,9 @@
 
 .middleTopbar {
   padding: 0.5em var(--content-padding);
-  background: red;
+}
+
+.overflownToolbar {
 }
 
 .hidden {
@@ -206,7 +208,7 @@
   background-color: var(--tertiary-background-color);
   border-radius: 4px;
   text-align: left;
-  z-index: 2;
+  z-index: 20000;
   display: grid;
   grid-template-rows: repeat(auto-fill, min-content);
   position: absolute;
