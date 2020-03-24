@@ -27,6 +27,13 @@ import Select from '../../GeneralPurpose/Select/Select';
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
+
+const MOBILE = 'Mobile';
+const DESKTOP = 'Desktop';
+const TABLET = 'Tablet';
+
+const deviceOptions = [MOBILE, TABLET, DESKTOP].map((v) => ({ value: v, label: v }));
+
 class ViewEditor extends Component {
   static propTypes = {
     /** React Router location object */
@@ -45,6 +52,7 @@ class ViewEditor extends Component {
     loadViewToEdit: PropTypes.func,
     /** Function to clear the edited view */
     clearEditedView: PropTypes.func,
+
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
     /** Function to undo the latest layout modification */
@@ -79,11 +87,12 @@ class ViewEditor extends Component {
       id: null,
       editorVisible: false,
       editorChanged: false,
-      customViewKey: Math.random(), // To force component reload on config change
+      customViewKey: Math.random(), // To force component reload on config change,
+      device: deviceOptions[2],
     };
     this.toolbar = document.createElement('div');
     this.toolbar.className = styles.toolbarContainer;
-    
+
     this.customViewRef = React.createRef();
   }
 
@@ -329,6 +338,9 @@ class ViewEditor extends Component {
     return this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
   };
 
+  onDeviceChange = (device) => {
+    this.setState({ device });
+  };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
 
@@ -342,8 +354,14 @@ class ViewEditor extends Component {
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
-              />
-            <Select className={[styles.deviceSelect, styles.element].join(' ')}/>
+            />
+            <Select
+              small
+              option={this.state.device}
+              options={deviceOptions}
+              onChange={this.onDeviceChange}
+              className={[styles.deviceSelect, styles.element].join(' ')}
+            />
             <Button
               className={[styles.iconBtn, styles.element].join(' ')}
               title={saveButtonTooltip}
@@ -444,6 +462,7 @@ class ViewEditor extends Component {
   };
 
   render() {
+    console.log('asdfasf', this.state.device);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
