@@ -163,6 +163,7 @@ class Layout extends Component {
   };
 
   handleClick = (event) => {
+    console.log('this.state.settingsVisible: ', this.state.settingsVisible)
     if (this.dropdown && !this.dropdown.contains(event.target)) {
       this.setState({ settingsVisible: false });
     }
@@ -183,10 +184,6 @@ class Layout extends Component {
       toolbarOverflow: true,
     });
     const innerWidth = window.innerWidth;
-    // this.setState({
-    //   collapsedLogo: (BREAK_2 < innerWidth && innerWidth <= BREAK_1) || innerWidth <= BREAK_3,
-    //   viewOnNotch: BREAK_2 < innerWidth,
-    // });
     this.setState({
       collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
