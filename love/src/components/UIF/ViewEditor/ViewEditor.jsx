@@ -23,14 +23,11 @@ import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 import Select from '../../GeneralPurpose/Select/Select';
+import { MOBILE, TABLET, DESKTOP } from '../CustomView';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
-
-const MOBILE = 'Mobile';
-const DESKTOP = 'Desktop';
-const TABLET = 'Tablet';
 
 const deviceOptions = [MOBILE, TABLET, DESKTOP].map((v) => ({ value: v, label: v }));
 
@@ -462,7 +459,6 @@ class ViewEditor extends Component {
   };
 
   render() {
-    console.log('asdfasf', this.state.device);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
@@ -479,6 +475,7 @@ class ViewEditor extends Component {
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
               isEditable={true}
+              device={this.state.device.value}
             ></CustomView>
           </div>
         </div>
