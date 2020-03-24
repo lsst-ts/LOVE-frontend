@@ -183,9 +183,11 @@ class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        <div className={styles.deviceOutline}>
-          <DashedBox />
-        </div>
+        {this.props.isEditable && (
+          <div className={styles.deviceOutline}>
+            <DashedBox />
+          </div>
+        )}
 
         <ResponsiveGridLayout
           layouts={{ lg: layout }}
