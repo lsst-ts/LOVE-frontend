@@ -33,9 +33,9 @@
 
 .textField {
   width: 20ch;
-  background-color: transparent;
-  border: 1px solid var(--secondary-font-color);
+  background-color: var(--second-tertiary-background-color);
   color: var(--base-font-color);
+  font-style: italic;
 }
 
 .toolbarWrapper {
