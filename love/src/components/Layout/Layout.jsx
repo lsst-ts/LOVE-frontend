@@ -77,6 +77,7 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
+    this.moveCustomTopbar();
     this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
@@ -90,10 +91,10 @@ class Layout extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  componentDidUpdate = (prevProps, _prevState) => {
-    this.toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
-    this.customTopbar = document.getElementById('customTopbar');
-    this.toolbarParent.appendChild(this.customTopbar);
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
+      this.moveCustomTopbar();
+    }
 
     if (this.props.token === null && prevProps.token !== null) {
       this.props.unsubscribeToStreams();
@@ -136,6 +137,12 @@ class Layout extends Component {
       }
     }
   };
+
+  moveCustomTopbar = () => {
+    const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
+    const customTopbar = document.getElementById('customTopbar');
+    toolbarParent.appendChild(customTopbar);
+  }
 
   checkHeartbeat = () => {
     const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
