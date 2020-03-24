@@ -9,19 +9,29 @@ const TABLET = 'Tablet';
 
 const options = [MOBILE, DESKTOP, TABLET].map((v) => ({ value: v, label: v }));
 
-const Select = ({ children }) => {
+const Select = (props) => {
   const [option, setOption] = React.useState(options[0]);
-  const alarm = {};
+
+  const {
+    className: propsClassName,
+    controlClassName: propsControlClassName,
+    menuClassName: propsMenuClassName,
+    arrowClassName: propsArrowClassName,
+    small,
+    ...otherProps
+  } = props;
+
   return (
     <Dropdown
-      className={styles.dropDownClassName}
-      controlClassName={styles.dropDownControlClassName}
-      menuClassName={styles.dropDownMenuClassName}
-      arrowClassName={styles.arrowClassName}
+      className={[styles.dropDownClassName, propsClassName].join(' ')}
+      controlClassName={[styles.dropDownControlClassName, , small ? styles.small : '', propsControlClassName].join(' ')}
+      menuClassName={[styles.dropDownMenuClassName, propsMenuClassName].join(' ')}
+      arrowClassName={[styles.arrowClassName, propsArrowClassName].join(' ')}
       options={options}
-      onChange={(option) => console.log(option)}
+      onChange={(option) => setOption(option)}
       value={option}
       placeholder="Select an option"
+      {...otherProps}
     />
   );
 };

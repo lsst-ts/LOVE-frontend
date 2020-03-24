@@ -8,8 +8,15 @@
 .dropDownControlClassName {
   background-color: var(--second-secondary-background-color);
   border-color: inherit;
-  color: red;
   color: var(--base-font-color);
+  text-align: left;
+}
+
+.small {
+  padding-left: 0.4em;
+  padding-right: 0.3em;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
 }
 
 .dropDownMenuClassName {
