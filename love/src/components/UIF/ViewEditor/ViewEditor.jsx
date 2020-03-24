@@ -82,6 +82,8 @@ class ViewEditor extends Component {
       customViewKey: Math.random(), // To force component reload on config change
     };
     this.toolbar = document.createElement('div');
+    this.toolbar.className = styles.toolbarContainer;
+    
     this.customViewRef = React.createRef();
   }
 
