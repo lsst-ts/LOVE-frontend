@@ -290,7 +290,8 @@ export default class LightPath extends Component {
   drawPort1 = (props) => {
     const m3PortSelected = props.m3PortSelected;
     const nasmyth1RotatorInPosition = props.nasmyth1RotatorInPosition;
-    const nasmyth1RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth1RotatorInPosition] || nasmythRotatorInPositionStateMap[0];
+    const nasmyth1RotatorInPositionText =
+      nasmythRotatorInPositionStateMap[nasmyth1RotatorInPosition] || nasmythRotatorInPositionStateMap[0];
     let nasmyth1Class = styles[stateToStyleLightpath[nasmyth1RotatorInPositionText]];
     if (m3PortSelected !== 1) nasmyth1Class = styles.disabled;
     const mountEncoders = props.mountEncoders;
@@ -374,7 +375,8 @@ export default class LightPath extends Component {
   drawPort2 = (props) => {
     const m3PortSelected = props.m3PortSelected;
     const nasmyth2RotatorInPosition = props.nasmyth2RotatorInPosition;
-    const nasmyth2RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth2RotatorInPosition] || nasmythRotatorInPositionStateMap[0];
+    const nasmyth2RotatorInPositionText =
+      nasmythRotatorInPositionStateMap[nasmyth2RotatorInPosition] || nasmythRotatorInPositionStateMap[0];
     let nasmyth2Class = styles[stateToStyleLightpath[nasmyth2RotatorInPositionText]];
     if (m3PortSelected !== 2) nasmyth2Class = styles.disabled;
     const mountEncoders = props.mountEncoders;
@@ -455,12 +457,97 @@ export default class LightPath extends Component {
     );
   };
 
+  drawLightPath1 = (props) => {
+    const m1Position = 230;
+    const m1CoverPosition = 187;
+
+    const isM1CoverOpen = props.m1CoverState === 2;
+    return (
+      <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
+        <path
+          className={styles.lightpath}
+          d={`M 0 0 
+            L 0 ${isM1CoverOpen ? m1Position : m1CoverPosition}
+            L 100 ${isM1CoverOpen ? m1Position : m1CoverPosition}
+            L 100 0
+            L 0 0`}
+        ></path>
+      </svg>
+    );
+  };
+
+  drawLightPath2 = (props) => {
+    const m1Position = 230;
+    const m1CoverPosition = 187;
+    const isM1CoverOpen = true;
+    return (
+      <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
+        <path
+          className={styles.lightpath}
+          d={`M 40 24 
+            L 0 220
+            L 0 230
+            L 100 230
+            L 100 220
+            L 60 24
+            L 40 24`}
+        ></path>
+      </svg>
+    );
+  };
+
+  drawLightPath3 = (props) => {
+    const portSelected = props.m3PortSelected;
+    const lowerHeight = 210;
+    const higherHeight = 200;
+
+    return (
+      <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
+        <path
+          className={styles.lightpath}
+          d={`M 40 24 
+            L 45 ${portSelected === 2 ? higherHeight : lowerHeight}
+            L 55 ${portSelected === 1 ? higherHeight : lowerHeight}
+            L 60 24
+            L 40 24`}
+        ></path>
+      </svg>
+    );
+  };
+
+  drawLightPath4 = (props) => {
+    const portSelected = props.m3PortSelected;
+    const lowerHeight = 210;
+    const higherHeight = 200;
+    const lowerPort = 208;
+    const higherPort = 204;
+
+    if ((portSelected !== 1 && portSelected !== 2)) return null;
+    return (
+      <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
+        <path
+          className={styles.lightpath}
+          d={`M 45 ${portSelected === 2 ? higherHeight : lowerHeight}
+            L 55 ${portSelected === 1 ? higherHeight : lowerHeight}
+            L ${portSelected === 1 ? -11 : 111} ${portSelected === 1 ? higherPort : lowerPort}
+            L ${portSelected === 1 ? -11 : 111} ${portSelected === 2 ? higherPort : lowerPort}
+            L 45 ${portSelected === 2 ? higherHeight : lowerHeight}`}
+        ></path>
+      </svg>
+    );
+  };
+
   render() {
+    const isM1CoverOpen = this.props.m1CoverState === 2;
+
+
     return (
       <div className={styles.container}>
         <svg x={0} y={0} viewBox="0 0 244 416" xmlSpace="preserve">
           {/* Background */}
           {this.drawBackground()}
+          {this.drawLightPath1(this.props)}
+          {isM1CoverOpen && this.drawLightPath2(this.props)}
           {/* Port 2 */}
           {this.drawPort2(this.props)}
           {/* M1 cover */}
@@ -472,6 +559,8 @@ export default class LightPath extends Component {
             className={styles.st1}
             d="M100.7 275.4h4.3v-9h32.7v72l1 2h-18l-17-.1 1.3-1.9V301h-4.3zM133.5 390.4v-21.9l3.2-.1-1.3-6H108l-1.3 5.8h3.3v22.2z"
           />
+          {isM1CoverOpen && this.drawLightPath3(this.props)}
+          {isM1CoverOpen && this.drawLightPath4(this.props)}
           {/* M3 */}
           {this.drawM3(this.props)}
           {/* M2 */}
