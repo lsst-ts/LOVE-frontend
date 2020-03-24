@@ -177,8 +177,12 @@ class Layout extends Component {
       viewOnNotch: false,
     });
     const innerWidth = window.innerWidth;
+    // this.setState({
+    //   collapsedLogo: (BREAK_2 < innerWidth && innerWidth <= BREAK_1) || innerWidth <= BREAK_3,
+    //   viewOnNotch: BREAK_2 < innerWidth,
+    // });
     this.setState({
-      collapsedLogo: (BREAK_2 < innerWidth && innerWidth <= BREAK_1) || innerWidth <= BREAK_3,
+      collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
     });
   };
