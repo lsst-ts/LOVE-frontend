@@ -39,8 +39,9 @@
 }
 
 .toolbarWrapper {
-  display: inline-block;
-  margin: auto;
+  padding: 0.5em var(--content-padding);
+  background-color: var(--second-secondary-background-color);
+  width: fit-content;
 }
 
 .toolbar {
@@ -48,6 +49,10 @@
   grid-template-columns: min-content repeat(8, min-content); */
   display: flex;
   /* grid-gap: 0.2em; */
+}
+.toolbarContainer {
+  display: flex;
+  justify-content: center;
 }
 
 .iconBtn {
