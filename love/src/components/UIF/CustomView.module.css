@@ -18,7 +18,7 @@
 }
 
 .editable {
-  border: 1px dashed var(--second-quinary-background-color);  
+  border: 1px dashed var(--second-quinary-background-color);
   box-shadow: 1px 5px 2px var(--box-shadow-color);
 }
 
@@ -84,7 +84,14 @@
   padding-bottom: 1em;
 }
 
-.deviceOutline{
+.deviceOutline {
   position: absolute;
   height: 97%;
+}
+
+.outsideDeviceArea {
+  position: absolute;
+  top: 33%;
+  transform: translateX(-50%);
+  color: var(--tertiary-font-color);
 }

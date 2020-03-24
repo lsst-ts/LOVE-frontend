@@ -12,11 +12,9 @@ import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-
 export const MOBILE = 'Mobile';
 export const DESKTOP = 'Desktop';
 export const TABLET = 'Tablet';
-
 
 const deviceToSize = {
   [MOBILE]: 480,
@@ -203,14 +201,25 @@ class CustomView extends Component {
         ].join(' ')}
       >
         {this.props.isEditable && (
-          <div
-            className={styles.deviceOutline}
-            style={{
-              width: `${deviceToSize[this.props.device]}px`,
-            }}
-          >
-            <DashedBox />
-          </div>
+          <>
+            <div
+              className={styles.deviceOutline}
+              style={{
+                width: `${deviceToSize[this.props.device]}px`,
+              }}
+            >
+              <DashedBox />
+            </div>
+
+            <div
+              className={styles.outsideDeviceArea}
+              style={{
+                left: `${0.5 * (window.innerWidth + deviceToSize[this.props.device])}px`,
+              }}
+            >
+              Content on this area may not be visible to some users
+            </div>
+          </>
         )}
 
         <ResponsiveGridLayout
