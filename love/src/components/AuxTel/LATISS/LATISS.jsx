@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Panel from '../../GeneralPurpose/Panel/Panel';
 import styles from './LATISS.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import { stateToStyleLATISS, movingElementStateMap, raftsStateMap, shutterStateMap } from '../../../Config';
@@ -28,10 +27,10 @@ export default class LATISS extends Component {
       <>
         <polygon
           points={`
-          0,${100 - index * slope * 100} 
+          0,${100 - index * slope * 100}
           ${xLimitBot},${100 - index * slope * 100 - slope * xLimitBot}
-          ${xLimitTop},${index * slope * 100 + slope * xLimitTop} 
-          0,${index * slope * 100} 
+          ${xLimitTop},${index * slope * 100 + slope * xLimitTop}
+          0,${index * slope * 100}
           `}
           fill="white"
           fillOpacity="0.02"

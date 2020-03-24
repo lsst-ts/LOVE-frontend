@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import styles from './Camera.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import Panel from '../../GeneralPurpose/Panel/Panel';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';

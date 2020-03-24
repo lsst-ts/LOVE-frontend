@@ -44,7 +44,7 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
               />
             );
             if (['array', 'object', 'function'].includes(componentProps[key].type)) {
-              const stringValue = JSON.stringify(config[key], null, 2);
+              const stringValue = config[key] ? JSON.stringify(config[key], null, 2) : '';
               let value = stringValue;
               let mode = 'json';
               let options = {};
