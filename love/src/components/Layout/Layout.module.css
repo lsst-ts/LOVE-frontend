@@ -99,6 +99,7 @@
 
 .middleTopbar {
   padding: 0.5em var(--content-padding);
+  background: red;
 }
 
 .hidden {
