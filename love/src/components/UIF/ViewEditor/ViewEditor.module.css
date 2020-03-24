@@ -74,3 +74,11 @@
   background: var(--secondary-font-color);
   align-self: center;
 }
+
+.deviceSelect {
+  width: 15ch;
+}
+
+.element {
+  margin-right: 0.15rem;
+}

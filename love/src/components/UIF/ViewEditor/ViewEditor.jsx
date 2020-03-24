@@ -338,14 +338,14 @@ class ViewEditor extends Component {
         <div className={styles.toolbarWrapper}>
           <div className={styles.toolbar}>
             <Input
-              className={styles.textField}
+              className={[styles.textField, styles.element].join(' ')}
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               />
-            <Select/>
+            <Select className={[styles.deviceSelect, styles.element].join(' ')}/>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title={saveButtonTooltip}
               onClick={this.save}
               disabled={isSaved}
@@ -354,7 +354,7 @@ class ViewEditor extends Component {
               <SaveIcon className={styles.icon} />
             </Button>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Add components"
               onClick={this.showSelectionModal}
               status="transparent"
@@ -363,7 +363,7 @@ class ViewEditor extends Component {
             </Button>
 
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Undo"
               onClick={this.props.undo}
               disabled={this.props.undoActionsAvailable === 0}
@@ -372,7 +372,7 @@ class ViewEditor extends Component {
               <UndoIcon className={styles.icon} />
             </Button>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Redo"
               onClick={this.props.redo}
               disabled={this.props.redoActionsAvailable === 0}
@@ -381,7 +381,7 @@ class ViewEditor extends Component {
               <RedoIcon className={styles.icon} />
             </Button>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Debug"
               onClick={this.showEditor}
               disabled={this.state.editorVisible}
@@ -392,7 +392,7 @@ class ViewEditor extends Component {
             <span className={styles.divider} />
 
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn].join(' ')}
               title="Exit edit mode"
               onClick={this.exitEditMode}
               disabled={this.state.editorVisible}
