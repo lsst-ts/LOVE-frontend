@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './ObservingLogInput.module.css';
 import TextArea from '../GeneralPurpose/TextArea/TextArea';
 import Button from '../GeneralPurpose/Button/Button';

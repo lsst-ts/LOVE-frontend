@@ -25,7 +25,7 @@ const TimeWindow = ({
     <div className={styles['time-window']}>
       {Object.keys(options).map((key, index) => {
         return (
-          (enabledOptions.length === 0 || key == 'Max' || enabledOptions.includes(key)) && (
+          (enabledOptions.length === 0 || key === 'Max' || enabledOptions.includes(key)) && (
             <label key={key} className={styles['time-window-selection-label']} htmlFor={key}>
               <input
                 className={styles['time-window-selection-input']}

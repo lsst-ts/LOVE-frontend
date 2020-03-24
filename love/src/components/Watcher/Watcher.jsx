@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
-import Panel from '../GeneralPurpose/Panel/Panel';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';

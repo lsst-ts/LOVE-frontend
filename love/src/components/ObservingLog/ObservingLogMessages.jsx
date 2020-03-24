@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './ObservingLogMessages.module.css';
 import TextField from '../TextField/TextField';
-import DateSelection from '../TimeSeries/TimeSeriesControls/DateSelection/DateSelection';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
-import moment from 'moment';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
 const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
