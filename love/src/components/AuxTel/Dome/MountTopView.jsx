@@ -9,7 +9,6 @@ export default class MountTopView extends Component {
   };
 
   render() {
-    const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
 
     return (
