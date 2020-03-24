@@ -343,10 +343,7 @@ class ViewEditor extends Component {
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               />
-            <Select>
-              <option>asdasd</option>
-              <option>asdasd</option>
-            </Select>
+            <Select/>
             <Button
               className={styles.iconBtn}
               title={saveButtonTooltip}
