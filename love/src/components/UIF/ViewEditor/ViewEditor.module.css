@@ -48,6 +48,7 @@
   /* display: grid;
   grid-template-columns: min-content repeat(8, min-content); */
   display: flex;
+  flex-wrap: wrap;
   /* grid-gap: 0.2em; */
 }
 .toolbarContainer {
