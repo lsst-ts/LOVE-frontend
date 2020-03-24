@@ -16,7 +16,7 @@ import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
-const BREAK_1 = 768;
+const BREAK_1 = 710;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
@@ -59,7 +59,6 @@ class Layout extends Component {
     this.state = {
       collapsedLogo: false,
       viewOnNotch: true,
-      toolbarOverflow: false,
       sidebarVisible: false,
       settingsVisible: false,
       id: null,
@@ -91,10 +90,6 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
-    this.toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
-    this.customTopbar = document.getElementById('customTopbar');
-    this.toolbarParent.appendChild(this.customTopbar);
-
     if (this.props.token === null && prevProps.token !== null) {
       this.props.unsubscribeToStreams();
     } else if (this.props.token !== null && prevProps.token === null) {
@@ -180,13 +175,11 @@ class Layout extends Component {
     this.setState({
       collapsedLogo: true,
       viewOnNotch: false,
-      toolbarOverflow: true,
     });
     const innerWidth = window.innerWidth;
     this.setState({
       collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
-      toolbarOverflow: innerWidth < BREAK_1,
     });
   };
 
@@ -229,9 +222,6 @@ class Layout extends Component {
   render() {
     return (
       <>
-        <div className={styles.hidden}>
-          <div id='customTopbar'/>
-        </div>
         <div
           className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
           onMouseOver={() => this.setHovered(true)}
@@ -290,7 +280,7 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="middleTopbar"/>
+          <div className={styles.middleTopbar} id="customTopbar" />
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
@@ -341,8 +331,6 @@ class Layout extends Component {
             </div>
           </div>
         </div>
-
-        <div className={styles.overflownToolbar} id="overflownToolbar"/>
 
         <div
           ref={(node) => (this.sidebar = node)}
