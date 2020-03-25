@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Modal from '../ResponsiveModal/Modal';
+import Modal from '../Modal/Modal';
 import Button from '../Button/Button';
 import styles from './ConfirmationModal.module.css';
 
