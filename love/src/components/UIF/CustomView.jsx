@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GridLayout, { Responsive, WidthProvider } from 'react-grid-layout';
+import { Responsive, WidthProvider } from 'react-grid-layout'; // GridLayout
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../AuxTel/Mount/MotorTable/MotorTable.container';
@@ -246,7 +246,6 @@ class CustomView extends Component {
   };
 
   render() {
-    console.log(this.props.device);
     const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
     const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;

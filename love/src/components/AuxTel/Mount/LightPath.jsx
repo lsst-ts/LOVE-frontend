@@ -477,9 +477,9 @@ export default class LightPath extends Component {
   };
 
   drawLightPath2 = (props) => {
-    const m1Position = 230;
-    const m1CoverPosition = 187;
-    const isM1CoverOpen = true;
+    // const m1Position = 230;
+    // const m1CoverPosition = 187;
+    // const isM1CoverOpen = true;
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path

@@ -36,7 +36,7 @@
 .filterContainer {
   display: flex;
   flex-direction: column;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .filters {
@@ -49,7 +49,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  align-items: end;
+  align-items: flex-start;
   margin-right: 2rem;
   margin-bottom: 0.5rem;
 }
@@ -58,7 +58,7 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  align-items: end;
+  align-items: flex-end;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
   align-items: flex-end
