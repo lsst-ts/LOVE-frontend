@@ -1,4 +1,5 @@
 .modal {
+  box-sizing: border-box;
   display: grid;
   grid-template-rows: min-content 1fr;
   background-color: var(--secondary-background-color);
@@ -8,12 +9,14 @@
   overflow: hidden;
   webkit-overflow-scrolling: touch;
   outline: none;
-  height: 30%;
+  max-height: 95%;
+  width: fit-content;
+  max-width: 92%;
   top: 50%;
-  left: 55%;
+  left: 50%;
   right: auto;
-  margin-right: -45%;
-  transform: translate(-55%, -50%);
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 }
 
 .overlay {
