@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Modal from '../Modal/Modal';
+import Modal from '../ResponsiveModal/Modal';
 import Button from '../Button/Button';
 import styles from './ConfirmationModal.module.css';
 
@@ -39,28 +39,27 @@ export default class ConfirmationModal extends Component {
         onRequestClose={this.props.cancelCallback}
         contentLabel="Confirmation Dialog"
         modalClassName={styles.modal}
+        footerChildren={(
+          <>
+          <Button
+            status="default"
+            onClick={this.props.cancelCallback}
+            className={styles.button}
+          >
+            {this.props.cancelText}
+          </Button>
+          <Button
+            status="primary"
+            onClick={this.props.confirmCallback}
+            className={styles.button}
+          >
+            {this.props.confirmText}
+          </Button>
+          </>
+        )}
       >
-        <div className={styles.container}>
-          <div className={styles.content}>
-            <p> {this.props.message} </p>
-
-          </div>
-          <div className={styles.footer}>
-            <Button
-              status="default"
-              onClick={this.props.cancelCallback}
-              className={styles.button}
-            >
-              {this.props.cancelText}
-            </Button>
-            <Button
-              status="primary"
-              onClick={this.props.confirmCallback}
-              className={styles.button}
-            >
-              {this.props.confirmText}
-            </Button>
-          </div>
+        <div className={styles.content}>
+          <p> {this.props.message} </p>
         </div>
     </Modal>
     );
