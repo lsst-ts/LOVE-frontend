@@ -5,15 +5,24 @@
   border: 1px solid hsl(199, 43%, 16%);
   border-radius: 10px;
   position: absolute;
-  top: 5em;
-  left: 5em;
-  right: 5em;
-  bottom: 5em;
   overflow: auto;
   webkit-overflow-scrolling: touch;
   borderRadius: 4px;
   outline: none;
   padding: 1em;
+  top: 1em;
+  left: 1em;
+  right: 1em;
+  bottom: 1em;
+}
+
+@media screen and (min-width: 800px) {
+  .modal {
+    top: 2em;
+    left: 2em;
+    right: 2em;
+    bottom: 2em;
+  }
 }
 
 .overlay {
