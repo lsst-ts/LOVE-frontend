@@ -200,7 +200,7 @@ class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        {this.props.isEditable && (
+        {this.props.isEditable && window.innerWidth >= deviceToSize[this.props.device] && (
           <>
             <div
               className={styles.deviceOutline}
@@ -214,8 +214,8 @@ class CustomView extends Component {
             <div
               className={styles.outsideDeviceArea}
               style={{
-                left: `${0.5 * (window.innerWidth + deviceToSize[this.props.device])}px`,
-                maxWidth: `${window.innerWidth - deviceToSize[this.props.device]}px`
+                left: `${deviceToSize[this.props.device] + 0.5 * (window.innerWidth - deviceToSize[this.props.device])}px`,
+                maxWidth: `${(window.innerWidth - deviceToSize[this.props.device])}px`
               }}
             >
               Content on this area may not be visible to some users on the selected device.
