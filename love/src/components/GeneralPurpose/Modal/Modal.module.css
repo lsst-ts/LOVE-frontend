@@ -9,7 +9,7 @@
   webkit-overflow-scrolling: touch;
   borderRadius: 4px;
   outline: none;
-  padding: 1em;
+  /* padding: 1em; */
   top: 1em;
   left: 1em;
   right: 1em;
@@ -44,5 +44,6 @@
   display: inline-flex;
   width: 100%;
   justify-content: flex-end;
-  padding-bottom: 0.5em;
+  padding: 0.5em 0.5em 0 0.5em;
+  box-sizing: border-box;
 }

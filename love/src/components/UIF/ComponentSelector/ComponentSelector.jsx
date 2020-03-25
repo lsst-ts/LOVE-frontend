@@ -53,7 +53,7 @@ export default class ComponentSelector extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.content}>
-          <h2> Select Components to add to the view </h2>
+          <h2> Select Components </h2>
           <div className={styles.filterContainer}>
             <span className={styles.filterLabel}>Filter: </span>
             <TextField value={this.state.filter} onChange={this.changeFilter}/>

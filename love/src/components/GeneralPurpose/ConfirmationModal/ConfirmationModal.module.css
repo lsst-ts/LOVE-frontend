@@ -1,19 +1,21 @@
 .container {
+  box-sizing: border-box;
   display: grid;
   grid-template-rows: 1fr min-content;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 .content {
   overflow-y: auto;
   text-align: center;
+  padding: 1em;
 }
 
 .footer {
   display: flex;
   justify-content: flex-end;
-  padding: 1em 1em 0 1em;
   height: 2em;
+  padding: 1em;
 }
 
 .modal {
