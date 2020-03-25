@@ -16,7 +16,7 @@ import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
-const BREAK_1 = 710;
+const BREAK_1 = 768;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
@@ -59,6 +59,7 @@ class Layout extends Component {
     this.state = {
       collapsedLogo: false,
       viewOnNotch: true,
+      toolbarOverflow: false,
       sidebarVisible: false,
       settingsVisible: false,
       id: null,
@@ -76,6 +77,7 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
+    this.moveCustomTopbar();
     this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
@@ -89,7 +91,10 @@ class Layout extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  componentDidUpdate = (prevProps, _prevState) => {
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
+      this.moveCustomTopbar();
+    }
     if (this.props.token === null && prevProps.token !== null) {
       this.props.unsubscribeToStreams();
     } else if (this.props.token !== null && prevProps.token === null) {
@@ -131,7 +136,11 @@ class Layout extends Component {
       }
     }
   };
-
+  moveCustomTopbar = () => {
+    const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
+    const customTopbar = document.getElementById('customTopbar');
+    toolbarParent.appendChild(customTopbar);
+  };
   checkHeartbeat = () => {
     const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
     const heartbeatStatus =
@@ -175,11 +184,13 @@ class Layout extends Component {
     this.setState({
       collapsedLogo: true,
       viewOnNotch: false,
+      toolbarOverflow: true,
     });
     const innerWidth = window.innerWidth;
     this.setState({
       collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
+      toolbarOverflow: innerWidth < BREAK_1,
     });
   };
 
@@ -213,8 +224,6 @@ class Layout extends Component {
     this.props.history.push('/');
   };
 
-
-
   setHovered = (value) => {
     this.setState({ hovered: value });
   };
@@ -222,6 +231,9 @@ class Layout extends Component {
   render() {
     return (
       <>
+        <div className={styles.hidden}>
+          <div id="customTopbar" />
+        </div>
         <div
           className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
           onMouseOver={() => this.setHovered(true)}
@@ -280,20 +292,19 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="customTopbar" />
+          <div className={styles.middleTopbar} id="middleTopbar" />
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
               <Button
-                className={[
-                  styles.iconBtn,
-                  styles.heartbeatButton,
-                ].join(' ')}
+                className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
                 style={{
-                  visibility: this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered) ?
-                  'visible' : 'hidden'
+                  visibility:
+                    this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered)
+                      ? 'visible'
+                      : 'hidden',
                 }}
                 title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 onClick={() => {}}
@@ -305,12 +316,7 @@ class Layout extends Component {
                   title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 />
               </Button>
-              <Button
-                className={styles.iconBtn}
-                title="View notifications"
-                onClick={() => {}}
-                status="transparent"
-              >
+              <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
                 <NotificationIcon className={styles.icon} />
               </Button>
 
@@ -331,6 +337,7 @@ class Layout extends Component {
             </div>
           </div>
         </div>
+        <div className={styles.overflownToolbar} id="overflownToolbar" />
 
         <div
           ref={(node) => (this.sidebar = node)}
@@ -352,7 +359,7 @@ class Layout extends Component {
               }}
             >
               <span className={styles.label}> Edit this view </span>
-              <EditIcon className={styles.editIcon}/>
+              <EditIcon className={styles.editIcon} />
             </Button>
 
             <Button className={styles.button} title="New view" onClick={this.createNewView}>
