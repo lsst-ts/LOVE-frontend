@@ -434,16 +434,16 @@ export const secsToIsoStr = (secs) => {
 };
 
 const watcherSuccessfulCmds = {
-  'cmd_acknowledge': 'acknowledged',
-  'cmd_unacknowledge': 'unacknowledged',
-  'cmd_mute': 'muted',
-  'cmd_unmute': 'unmuted',
+  cmd_acknowledge: 'acknowledged',
+  cmd_unacknowledge: 'unacknowledged',
+  cmd_mute: 'muted',
+  cmd_unmute: 'unmuted',
 };
 
 const watcherErrorCmds = {
-  'cmd_acknowledge': 'acknowledging',
-  'cmd_mute': 'muting',
-  'cmd_unmute': 'unmuting',
+  cmd_acknowledge: 'acknowledging',
+  cmd_mute: 'muting',
+  cmd_unmute: 'unmuting',
 };
 
 export const getNotificationMessage = (salCommand) => {
@@ -469,4 +469,22 @@ export const getNotificationMessage = (salCommand) => {
 
 export const cscText = (csc, salindex) => {
   return csc + (salindex === 0 ? '' : `.${salindex}`);
+};
+
+/**
+ * Converts a timestamp into  YYYY/MM/DD, and HH:MM:SS
+ * @param {date-able} timestamp, if float it must be in miliseconds
+ */
+export const timestampToFormat = (timestamp) => {
+  const date = new Date(timestamp);
+
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  const day = `${date.getDate()}`.padStart(2, 0);
+
+  const hours = `${date.getHours()}`.padStart(2, 0);
+  const minutes = `${date.getMinutes()}`.padStart(2, 0);
+  const seconds = `${date.getSeconds()}`.padStart(2, 0);
+
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 };
