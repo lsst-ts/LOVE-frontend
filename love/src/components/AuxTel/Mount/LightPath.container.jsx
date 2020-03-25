@@ -26,6 +26,12 @@ export const schema = {
       isPrivate: false,
       default: true,
     },
+    lightPath: {
+      type: 'boolean',
+      description: 'Whether to display a representation of the light coming into the telescope',
+      isPrivate: false,
+      default: true,
+    },
   },
   allowOverflow: true,
 };
