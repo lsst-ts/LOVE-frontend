@@ -215,9 +215,10 @@ class CustomView extends Component {
               className={styles.outsideDeviceArea}
               style={{
                 left: `${0.5 * (window.innerWidth + deviceToSize[this.props.device])}px`,
+                maxWidth: `${window.innerWidth - deviceToSize[this.props.device]}px`
               }}
             >
-              Content on this area may not be visible to some users
+              Content on this area may not be visible to some users on the selected device.
             </div>
           </>
         )}
