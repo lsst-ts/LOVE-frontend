@@ -99,7 +99,7 @@ export default class ComponentSelector extends Component {
           })}
         </div>
         <div className={styles.footer}>
-          <span />
+          {/*<span />*/}
           <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
             Clear Selection
           </Button>

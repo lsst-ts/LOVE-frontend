@@ -2,7 +2,7 @@
   /* height: 100%; */
   display: grid;
   grid-template-rows: 1fr min-content;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .content {
@@ -96,9 +96,10 @@
 
 .footer {
   display: inline-grid;
-  grid-template-columns: 1fr 15ch 15ch;
-  padding: 1em 1em 0 1em;
-  grid-gap: 1em;
+  grid-template-columns: minmax(14ch, 15ch) minmax(10ch, 15ch);
+  grid-gap: 5%;
+  justify-content: center;
+  padding-top: 1em;
   height: 2em;
 }
 
