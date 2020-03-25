@@ -504,13 +504,12 @@ class ViewEditor extends Component {
           </Rnd>
         ) : null}
 
-        <Modal
+        <ComponentSelector
           isOpen={this.state.showSelectionModal}
           onRequestClose={this.hideSelectionModal}
           contentLabel="Component selection modal"
-        >
-          <ComponentSelector selectCallback={this.receiveSelection} />
-        </Modal>
+          selectCallback={this.receiveSelection}
+        />
         <Modal
           isOpen={this.state.showConfigModal}
           onRequestClose={this.hideConfigModal}
