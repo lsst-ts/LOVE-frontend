@@ -5,6 +5,7 @@ import TextField from '../TextField/TextField';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
+import { TAITimestampToFormat } from '../../Utils';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
 const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
@@ -50,9 +51,15 @@ export default class ObservingLogInput extends Component {
       timeFilterDateStart: new Date(new Date() - 24 * 60 * 60 * 1000),
       timeFilterDateEnd: new Date(),
       timeFilterWindow: Infinity,
+      containerWidth: null,
+      containerHeight: null,
     };
 
     this.liveModeInterval = null;
+
+    this.containerRef = React.createRef();
+
+    this.resizeObserver = null;
   }
 
   componentDidMount = () => {
@@ -61,6 +68,8 @@ export default class ObservingLogInput extends Component {
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams();
+
+    this.observer.disconnect();
   };
 
   changeContentFilter = (event) => {
@@ -153,6 +162,17 @@ export default class ObservingLogInput extends Component {
       this.setLiveMode(this.state.timeWindow);
       this.liveModeInterval = setInterval(this.setLiveMode, 1000);
     }
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const container = entries[0];
+      console.log(container.contentRect);
+      this.setState({
+        containerWidth: container.contentRect.width,
+        containerHeight: container.contentRect.height,
+      });
+    });
+
+    this.resizeObserver.observe(this.containerRef.current);
   };
   render() {
     const filteredMessages = this.props.logMessages.filter((msg) => {
@@ -166,7 +186,7 @@ export default class ObservingLogInput extends Component {
     });
 
     return (
-      <div className={styles.container}>
+      <div ref={this.containerRef} className={styles.container}>
         <div className={styles.header}>
           <div className={styles.filterContainer}>
             <h3 className={styles.filterTitle}>Filters</h3>
@@ -228,14 +248,14 @@ export default class ObservingLogInput extends Component {
 
         {filteredMessages.length > 0 &&
           filteredMessages.map((msg) => {
-            const messageDate = new Date(msg.private_rcvStamp.value * 1000);
+            const messageDate = TAITimestampToFormat(new Date(msg.private_rcvStamp.value * 1000));
 
             return (
               <div key={Math.random()} className={styles.logMessageWrapper}>
                 <div className={styles.logMessage}>
                   <div className={styles.topSection}>
                     <span>{msg.user.value}</span>
-                    <span>{messageDate.toLocaleString()}</span>
+                    <span className={this.state.containerWidth < 400 ? styles.tinyMessageDate : ''}>{messageDate}</span>
                   </div>
                   <div className={styles.messageSection}>
                     <span>{msg.message.value}</span>
