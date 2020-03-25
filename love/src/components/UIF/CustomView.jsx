@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Responsive, WidthProvider } from 'react-grid-layout'; // GridLayout
+import { Responsive as ResponsiveGridLayout, WidthProvider } from 'react-grid-layout'; // GridLayout
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../AuxTel/Mount/MotorTable/MotorTable.container';
@@ -10,7 +10,7 @@ import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
-const ResponsiveGridLayout = WidthProvider(Responsive);
+const WithProvidedResponsiveGridLayout = WidthProvider(Responsive);
 
 export const deviceToSize = {
   '4K': 2560,
