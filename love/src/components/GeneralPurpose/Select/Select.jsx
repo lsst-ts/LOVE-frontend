@@ -16,7 +16,7 @@ const Select = ({ options = [], small = false, onChange = () => {}, option = und
   return (
     <Dropdown
       className={[styles.dropDownClassName, propsClassName].join(' ')}
-      controlClassName={[styles.dropDownControlClassName, , small ? styles.small : '', propsControlClassName].join(' ')}
+      controlClassName={[styles.dropDownControlClassName, small ? styles.small : '', propsControlClassName].join(' ')}
       menuClassName={[styles.dropDownMenuClassName, propsMenuClassName].join(' ')}
       arrowClassName={[styles.arrowClassName, propsArrowClassName].join(' ')}
       options={options}
