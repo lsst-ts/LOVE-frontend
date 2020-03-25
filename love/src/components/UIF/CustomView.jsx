@@ -12,15 +12,16 @@ import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-export const MOBILE = 'Mobile';
-export const DESKTOP = 'Desktop';
-export const TABLET = 'Tablet';
-
-const deviceToSize = {
-  [MOBILE]: 480,
-  [TABLET]: 768,
-  [DESKTOP]: 1200,
+export const deviceToSize = {
+  '4K': 2560,
+  'Laptop L': 1440,
+  Laptop: 1024,
+  Tablet: 768,
+  'Mobile L': 425,
+  'Mobile M': 375,
+  'Mobile S': 320,
 };
+
 class CustomView extends Component {
   static propTypes = {
     /** Layout object describing the view, composed of recursively nested Elements, with the following format:
@@ -200,7 +201,7 @@ class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        {this.props.isEditable && window.innerWidth >= deviceToSize[this.props.device] && (
+        {this.props.isEditable && (
           <>
             <div
               className={styles.deviceOutline}
@@ -214,8 +215,8 @@ class CustomView extends Component {
             <div
               className={styles.outsideDeviceArea}
               style={{
-                left: `${deviceToSize[this.props.device] + 0.5 * (window.innerWidth - deviceToSize[this.props.device])}px`,
-                maxWidth: `${(window.innerWidth - deviceToSize[this.props.device])}px`
+                left: `${deviceToSize[this.props.device] + Math.max(0.5 * (window.innerWidth - deviceToSize[this.props.device]), 100)}px`,
+                maxWidth: `${Math.max(window.innerWidth - deviceToSize[this.props.device], 100)}px`,
               }}
             >
               Content on this area may not be visible to some users on the selected device.
