@@ -345,7 +345,6 @@ class ViewEditor extends Component {
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
-
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
     return (
       <>
@@ -480,7 +479,7 @@ class ViewEditor extends Component {
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
               isEditable={true}
-              device={this.state.device.label}
+              deviceWidth={this.state.device.value}
             ></CustomView>
           </div>
         </div>
