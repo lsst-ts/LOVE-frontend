@@ -95,6 +95,7 @@ class Layout extends Component {
     if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
       this.moveCustomTopbar();
     }
+
     if (this.props.token === null && prevProps.token !== null) {
       this.props.unsubscribeToStreams();
     } else if (this.props.token !== null && prevProps.token === null) {
@@ -136,11 +137,13 @@ class Layout extends Component {
       }
     }
   };
+
   moveCustomTopbar = () => {
     const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
     const customTopbar = document.getElementById('customTopbar');
     toolbarParent.appendChild(customTopbar);
   };
+  
   checkHeartbeat = () => {
     const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
     const heartbeatStatus =
