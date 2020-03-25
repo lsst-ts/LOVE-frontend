@@ -1,0 +1,55 @@
+.modal {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  background-color: var(--secondary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 10px;
+  position: absolute;
+  overflow: hidden;
+  webkit-overflow-scrolling: touch;
+  outline: none;
+  height: 30%;
+  top: 50%;
+  left: 55%;
+  right: auto;
+  margin-right: -45%;
+  transform: translate(-55%, -50%);
+}
+
+.overlay {
+  background-color: var(--overlay-background-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+  -o-backdrop-filter: blur(2px);
+  -ms-backdrop-filter: blur(2px);
+  -moz-backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.topbar {
+  display: inline-flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 0.5em 0.5em 0 0.5em;
+  box-sizing: border-box;
+}
+
+.content {
+  overflow-x: hidden;
+  overflow-y: overlay;
+  padding: 1em;
+}
+
+.footer {
+  display: inline-grid;
+  grid-template-columns: minmax(14ch, 15ch) minmax(14ch, 15ch);
+  grid-gap: 5%;
+  justify-content: center;
+  padding: 1em 0;
+  height: 2em;
+}
