@@ -472,11 +472,11 @@ export const cscText = (csc, salindex) => {
 };
 
 /**
- * Converts a timestamp into  YYYY/MM/DD, and HH:MM:SS
+ * Converts a TAI timestamp into  "YYYY/MM/DD HH:MM:SS  TAI" formatted string
  * @param {date-able} timestamp, if float it must be in miliseconds
  */
-export const timestampToFormat = (timestamp) => {
-  const date = new Date(timestamp);
+export const TAITimestampToFormat = (taiTimestamp) => {
+  const date = new Date(taiTimestamp);
 
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, 0);
@@ -486,5 +486,5 @@ export const timestampToFormat = (timestamp) => {
   const minutes = `${date.getMinutes()}`.padStart(2, 0);
   const seconds = `${date.getSeconds()}`.padStart(2, 0);
 
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds} TAI`;
 };
