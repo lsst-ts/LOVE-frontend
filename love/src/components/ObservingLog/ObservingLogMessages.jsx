@@ -5,6 +5,7 @@ import TextField from '../TextField/TextField';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
+import { timestampToFormat } from '../../Utils';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
 const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
@@ -228,14 +229,14 @@ export default class ObservingLogInput extends Component {
 
         {filteredMessages.length > 0 &&
           filteredMessages.map((msg) => {
-            const messageDate = new Date(msg.private_rcvStamp.value * 1000);
+            const messageDate = timestampToFormat(new Date(msg.private_rcvStamp.value * 1000));
 
             return (
               <div key={Math.random()} className={styles.logMessageWrapper}>
                 <div className={styles.logMessage}>
                   <div className={styles.topSection}>
                     <span>{msg.user.value}</span>
-                    <span>{messageDate.toLocaleString()}</span>
+                    <span>{messageDate}</span>
                   </div>
                   <div className={styles.messageSection}>
                     <span>{msg.message.value}</span>
