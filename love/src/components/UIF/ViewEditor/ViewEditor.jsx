@@ -23,13 +23,18 @@ import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 import Select from '../../GeneralPurpose/Select/Select';
-import { MOBILE, TABLET, DESKTOP } from '../CustomView';
+import { deviceToSize } from '../CustomView';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
 
-const deviceOptions = [MOBILE, TABLET, DESKTOP].map((v) => ({ value: v, label: v }));
+const deviceOptions = [
+  { label: 'None', value: null },
+  ...Object.entries(deviceToSize).map(([key, value]) => {
+    return { label: key, value: value };
+  }),
+];
 
 class ViewEditor extends Component {
   static propTypes = {
@@ -475,7 +480,7 @@ class ViewEditor extends Component {
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
               isEditable={true}
-              device={this.state.device.value}
+              device={this.state.device.label}
             ></CustomView>
           </div>
         </div>
