@@ -10,7 +10,7 @@
 
 .logMessageWrapper {
   padding-bottom: 0.5rem;
-  padding-right:1em;
+  padding-right: 1em;
 }
 
 .logMessage {
@@ -61,9 +61,8 @@
   align-items: end;
   margin-right: 0.5rem;
   margin-bottom: 0.5rem;
-  align-items: flex-end
+  align-items: flex-end;
 }
-
 
 .filterLabel {
   margin-right: 0.3rem;
@@ -72,4 +71,8 @@
 .to {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
+}
+
+.tinyMessageDate {
+  font-size: 80%;
 }
