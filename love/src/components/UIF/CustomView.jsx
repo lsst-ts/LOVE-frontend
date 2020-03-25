@@ -83,6 +83,7 @@ class CustomView extends Component {
     onComponentDelete: () => {},
     onComponentConfig: () => {},
     getCurrentView: () => {},
+    deviceWidth: window.innerWidth
   };
 
   constructor(props) {
@@ -206,7 +207,7 @@ class CustomView extends Component {
             <div
               className={styles.deviceOutline}
               style={{
-                width: `${deviceToSize[this.props.device]}px`,
+                width: `${this.props.deviceWidth}px`,
               }}
             >
               <DashedBox />
@@ -215,8 +216,8 @@ class CustomView extends Component {
             <div
               className={styles.outsideDeviceArea}
               style={{
-                left: `${deviceToSize[this.props.device] + Math.max(0.5 * (window.innerWidth - deviceToSize[this.props.device]), 100)}px`,
-                maxWidth: `${Math.max(window.innerWidth - deviceToSize[this.props.device], 100)}px`,
+                left: `${this.props.deviceWidth + Math.max(0.5 * (window.innerWidth - this.props.deviceWidth), 100)}px`,
+                maxWidth: `${Math.max(window.innerWidth - this.props.deviceWidth, 100)}px`,
               }}
             >
               Content on this area may not be visible to some users on the selected device.
@@ -232,7 +233,7 @@ class CustomView extends Component {
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
           cols={cols}
-          width={this.props.baseColWidth * container.properties.w}
+          width={this.props.baseColWidth * container.properties.w * this.props.deviceWidth / window.innerWidth}
           margin={[0, 0]}
           compactType={this.state.compactType}
           className={styles.gridLayout}
