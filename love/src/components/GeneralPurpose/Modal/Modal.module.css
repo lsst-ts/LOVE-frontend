@@ -5,24 +5,15 @@
   border: 1px solid hsl(199, 43%, 16%);
   border-radius: 10px;
   position: absolute;
-  overflow: auto;
+  overflow: hidden;
   webkit-overflow-scrolling: touch;
-  borderRadius: 4px;
   outline: none;
-  /* padding: 1em; */
-  top: 1em;
-  left: 1em;
-  right: 1em;
-  bottom: 1em;
-}
-
-@media screen and (min-width: 800px) {
-  .modal {
-    top: 2em;
-    left: 2em;
-    right: 2em;
-    bottom: 2em;
-  }
+  height: 30%;
+  top: 50%;
+  left: 55%;
+  right: auto;
+  margin-right: -45%;
+  transform: translate(-55%, -50%);
 }
 
 .overlay {
@@ -46,4 +37,19 @@
   justify-content: flex-end;
   padding: 0.5em 0.5em 0 0.5em;
   box-sizing: border-box;
+}
+
+.content {
+  overflow-x: hidden;
+  overflow-y: overlay;
+  padding: 1em;
+}
+
+.footer {
+  display: inline-grid;
+  grid-template-columns: minmax(14ch, 15ch) minmax(14ch, 15ch);
+  grid-gap: 5%;
+  justify-content: center;
+  padding: 1em 0;
+  height: 2em;
 }

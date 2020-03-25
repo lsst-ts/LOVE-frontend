@@ -7,6 +7,8 @@ import styles from './Modal.module.css';
 Modal.propTypes = {
   /** Children components */
   children: PropTypes.node,
+  /** Footer components */
+  footerChildren: PropTypes.node,
   /* String indicating how the content container should be announced to screenreaders */
   contentLabel: PropTypes.string,
   /** Boolean to define wether or not the modal is open */
@@ -20,7 +22,7 @@ Modal.propTypes = {
 
 export default function Modal(props) {
   ReactModal.setAppElement('#root');
-  const { children, modalClassName, ...other } = props;
+  const { children, modalClassName, footerChildren, ...other } = props;
 
   return (
     <ReactModal {...other} className={[styles.modal, modalClassName].join(' ')} overlayClassName={styles.overlay}>
@@ -28,9 +30,15 @@ export default function Modal(props) {
         <Button title='Close' status='transparent' onClick={props.onRequestClose}>
           &#10005;
         </Button>
-
       </div>
-      {children}
+
+      <div className={styles.content}>
+        {children}
+      </div>
+
+      <div className={styles.footer}>
+        {footerChildren}
+      </div>
     </ReactModal>
   );
 };
