@@ -1,22 +1,28 @@
 .modal {
-  box-sizing: border-box;
   display: grid;
   grid-template-rows: min-content 1fr;
   background-color: var(--secondary-background-color);
   border: 1px solid hsl(199, 43%, 16%);
   border-radius: 10px;
   position: absolute;
-  overflow: hidden;
+  overflow: auto;
   webkit-overflow-scrolling: touch;
+  borderRadius: 4px;
   outline: none;
-  max-height: 95%;
-  width: fit-content;
-  max-width: 92%;
-  top: 50%;
-  left: 50%;
-  right: auto;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
+  /* padding: 1em; */
+  top: 1em;
+  left: 1em;
+  right: 1em;
+  bottom: 1em;
+}
+
+@media screen and (min-width: 800px) {
+  .modal {
+    top: 2em;
+    left: 2em;
+    right: 2em;
+    bottom: 2em;
+  }
 }
 
 .overlay {
@@ -40,23 +46,4 @@
   justify-content: flex-end;
   padding: 0.5em 0.5em 0 0.5em;
   box-sizing: border-box;
-}
-
-.content {
-  overflow-x: hidden;
-  overflow-y: overlay;
-  padding: 1em;
-}
-
-.content h2 {
-  margin-top: 0;
-}
-
-.footer {
-  display: inline-grid;
-  grid-template-columns: minmax(14ch, 15ch) minmax(14ch, 15ch);
-  grid-gap: 5%;
-  justify-content: center;
-  padding: 1em 0;
-  height: 2em;
 }
