@@ -48,6 +48,10 @@
   padding: 1em;
 }
 
+.content h2 {
+  margin-top: 0;
+}
+
 .footer {
   display: inline-grid;
   grid-template-columns: minmax(14ch, 15ch) minmax(14ch, 15ch);
