@@ -100,7 +100,6 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
-      console.log('componentDidMount');
       dispatch(addGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
       dispatch(addGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
       dispatch(addGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
