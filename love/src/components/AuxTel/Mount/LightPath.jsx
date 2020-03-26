@@ -64,7 +64,7 @@ export default class LightPath extends Component {
         <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={307} width={140} height={15}>
           <path
             className={styles.highlighted}
-            d="M 0 0 
+            d="M 0 0
                  L 0 10
                  L 100 10
                  L 100 0
@@ -466,7 +466,7 @@ export default class LightPath extends Component {
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
           className={styles.lightpath}
-          d={`M 0 0 
+          d={`M 0 0
             L 0 ${isM1CoverOpen ? m1Position : m1CoverPosition}
             L 100 ${isM1CoverOpen ? m1Position : m1CoverPosition}
             L 100 0
@@ -477,14 +477,14 @@ export default class LightPath extends Component {
   };
 
   drawLightPath2 = (props) => {
-    const m1Position = 230;
-    const m1CoverPosition = 187;
-    const isM1CoverOpen = true;
+    // const m1Position = 230;
+    // const m1CoverPosition = 187;
+    // const isM1CoverOpen = true;
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
           className={styles.lightpath}
-          d={`M 40 24 
+          d={`M 40 24
             L 0 220
             L 0 230
             L 100 230
@@ -505,7 +505,7 @@ export default class LightPath extends Component {
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
           className={styles.lightpath}
-          d={`M 40 24 
+          d={`M 40 24
             L 45 ${portSelected === 2 ? higherHeight : lowerHeight}
             L 55 ${portSelected === 1 ? higherHeight : lowerHeight}
             L 60 24
