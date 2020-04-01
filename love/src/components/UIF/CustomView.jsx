@@ -202,7 +202,8 @@ class CustomView extends Component {
       return key;
     }, Object.keys(DEVICE_TO_SIZE)[0]);
 
-    const deviceWidth = this.props.deviceWidth ?? window.innerWidth - 1;
+    const deviceWidth =
+      !this.props.deviceWidth || !isFinite(this.props.deviceWidth) ? window.innerWidth - 1 : this.props.deviceWidth;
 
     return (
       <div
@@ -213,7 +214,7 @@ class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        {this.props.isEditable && this.props.deviceWidth && (
+        {this.props.isEditable && isFinite(this.props.deviceWidth) && (
           <>
             <div
               className={styles.deviceOutline}
@@ -243,7 +244,7 @@ class CustomView extends Component {
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
-          cols={DEVICE_TO_COLS}
+          cols={cols}
           width={deviceWidth + 1}
           margin={[0, 0]}
           compactType={this.state.compactType}
