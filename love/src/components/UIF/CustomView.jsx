@@ -12,7 +12,7 @@ import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
 const WithProvidedResponsiveGridLayout = WidthProvider(ResponsiveGridLayout);
 
-export const deviceToSize = {
+export const DEVICE_TO_SIZE = {
   '4K': 2560,
   'Laptop L': 1440,
   Laptop: 1024,
@@ -20,6 +20,16 @@ export const deviceToSize = {
   'Mobile L': 425,
   'Mobile M': 375,
   'Mobile S': 320,
+};
+
+const DEVICE_TO_COLS = {
+  '4K': 100,
+  'Laptop L': 100,
+  Laptop: 100,
+  Tablet: 100,
+  'Mobile L': 2,
+  'Mobile M': 2,
+  'Mobile S': 2,
 };
 
 class CustomView extends Component {
@@ -83,7 +93,7 @@ class CustomView extends Component {
     onComponentDelete: () => {},
     onComponentConfig: () => {},
     getCurrentView: () => {},
-    deviceWidth: window.innerWidth,
+    deviceWidth: undefined,
   };
 
   constructor(props) {
@@ -183,14 +193,16 @@ class CustomView extends Component {
         allowOverflow: x.properties.allowOverflow,
       };
     });
-    console.log('container.properties', container.properties);
-    const cols =
-      typeof container.properties.cols === 'object'
-        ? container.properties.cols
-        : Object.entries(deviceToSize).reduce((prevDict, [key, value]) => {
-            prevDict[key] = container.properties.cols;
-            return prevDict;
-          }, {});
+    const cols = typeof container.properties.cols === 'object' ? container.properties.cols : DEVICE_TO_COLS;
+
+    const maxWidthKey = Object.entries(DEVICE_TO_SIZE).reduce((argMaxKey, [key, width]) => {
+      if (DEVICE_TO_SIZE[argMaxKey] >= width) {
+        return argMaxKey;
+      }
+      return key;
+    }, Object.keys(DEVICE_TO_SIZE)[0]);
+
+    const deviceWidth = this.props.deviceWidth ?? window.innerWidth - 1;
 
     return (
       <div
@@ -201,12 +213,12 @@ class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        {this.props.isEditable && (
+        {this.props.isEditable && this.props.deviceWidth && (
           <>
             <div
               className={styles.deviceOutline}
               style={{
-                width: `${this.props.deviceWidth}px`,
+                width: `${deviceWidth}px`,
               }}
             >
               <DashedBox />
@@ -215,8 +227,8 @@ class CustomView extends Component {
             <div
               className={styles.outsideDeviceArea}
               style={{
-                left: `${this.props.deviceWidth + Math.max(0.5 * (window.innerWidth - this.props.deviceWidth), 100)}px`,
-                maxWidth: `${Math.max(window.innerWidth - this.props.deviceWidth, 100)}px`,
+                left: `${deviceWidth + Math.max(0.5 * (window.innerWidth - deviceWidth), 100)}px`,
+                maxWidth: `${Math.max(window.innerWidth - deviceWidth, 100)}px`,
               }}
             >
               Content on this area may not be visible to some users on the selected device.
@@ -225,14 +237,14 @@ class CustomView extends Component {
         )}
 
         <ResponsiveGridLayout
-          layouts={{ [Object.keys(deviceToSize)[Object.keys(deviceToSize).length - 1]]: layout }}
-          breakpoints={deviceToSize}
+          layouts={{ [maxWidthKey]: layout }}
+          breakpoints={DEVICE_TO_SIZE}
           items={layout.length}
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
-          cols={cols}
-          width={(this.props.baseColWidth * container.properties.w * this.props.deviceWidth) / window.innerWidth}
+          cols={DEVICE_TO_COLS}
+          width={deviceWidth + 1}
           margin={[0, 0]}
           compactType={this.state.compactType}
           className={styles.gridLayout}

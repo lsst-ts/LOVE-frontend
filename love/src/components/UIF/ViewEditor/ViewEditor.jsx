@@ -23,15 +23,15 @@ import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 import Select from '../../GeneralPurpose/Select/Select';
-import { deviceToSize } from '../CustomView';
+import { DEVICE_TO_SIZE } from '../CustomView';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
 
 const deviceOptions = [
-  { label: 'None', value: null },
-  ...Object.entries(deviceToSize).map(([key, value]) => {
+  { label: 'Device size', value: undefined },
+  ...Object.entries(DEVICE_TO_SIZE).map(([key, value]) => {
     return { label: key, value: value };
   }),
 ];
@@ -90,7 +90,7 @@ class ViewEditor extends Component {
       editorVisible: false,
       editorChanged: false,
       customViewKey: Math.random(), // To force component reload on config change,
-      device: deviceOptions[2],
+      device: deviceOptions[0],
     };
     this.toolbar = document.createElement('div');
     this.toolbar.className = styles.toolbarContainer;
