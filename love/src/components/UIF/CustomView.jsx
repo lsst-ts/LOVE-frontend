@@ -206,6 +206,7 @@ class CustomView extends Component {
     const deviceWidth =
       !this.props.deviceWidth || !isFinite(this.props.deviceWidth) ? window.innerWidth - 1 : this.props.deviceWidth;
 
+    
     return (
       <div
         key={container.properties.i.toString()}

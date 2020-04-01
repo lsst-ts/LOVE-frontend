@@ -353,12 +353,13 @@ class ViewEditor extends Component {
     const needsConfirmation = currentCols !== nextCols;
     if (needsConfirmation) {
       this.setState({ deviceToBeConfirmed: device });
+    } else {
+      this.setState({ device });
     }
-    console.log('needsConfirmation', needsConfirmation);
   };
 
-  confirmDeviceChange = (confirmation) => {
-    if (confirmation) {
+  confirmDeviceChange = (confirmed) => {
+    if (confirmed) {
       this.setState({
         deviceToBeConfirmed: null,
         device: this.state.deviceToBeConfirmed,
@@ -490,26 +491,27 @@ class ViewEditor extends Component {
   };
 
   makeConfirmationMessage = () => {
-    if(!this.state.deviceToBeConfirmed?.value || !this.state.device?.value){
+    if (!this.state.deviceToBeConfirmed?.value || !this.state.device?.value) {
       return '';
     }
 
-    if(this.state.deviceToBeConfirmed.value < this.state.device.value){
+    if (this.state.deviceToBeConfirmed.value < this.state.device.value) {
       return [
         `The canvas space will be limited to a mobile device dimensions.`,
         ` Going back to larger devices will require manual adjustments.`,
-        ` Do you want to continue?`
-      ].map(c=><span>{c}</span>)
+        ` Do you want to continue?`,
+      ].map((c) => <span>{c}</span>);
     }
 
     return [
       `The canvas space will be limited to a larger device dimensions.`,
       ` Going back to mobile devices will require manual adjustments.`,
-      ` Do you want to continue?`
-    ].map(c=><span>{c}</span>)
+      ` Do you want to continue?`,
+    ].map((c) => <span>{c}</span>);
   };
 
   render() {
+    console.log(this.state.device);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
