@@ -30,7 +30,7 @@ import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
 
 const deviceOptions = [
-  { label: 'Device size', value: undefined },
+  { label: 'Device size', value: Infinity },
   ...Object.entries(DEVICE_TO_SIZE).map(([key, value]) => {
     return { label: key, value: value };
   }),
