@@ -10,7 +10,7 @@ import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
-const WithProvidedResponsiveGridLayout = WidthProvider(Responsive);
+const WithProvidedResponsiveGridLayout = WidthProvider(ResponsiveGridLayout);
 
 export const deviceToSize = {
   '4K': 2560,
@@ -83,7 +83,7 @@ class CustomView extends Component {
     onComponentDelete: () => {},
     onComponentConfig: () => {},
     getCurrentView: () => {},
-    deviceWidth: window.innerWidth
+    deviceWidth: window.innerWidth,
   };
 
   constructor(props) {
@@ -183,15 +183,14 @@ class CustomView extends Component {
         allowOverflow: x.properties.allowOverflow,
       };
     });
+    console.log('container.properties', container.properties);
     const cols =
       typeof container.properties.cols === 'object'
         ? container.properties.cols
-        : {
-            lg: container.properties.cols,
-            md: container.properties.cols,
-            sm: Math.round(container.properties.cols * 0.5),
-            xs: 1,
-          };
+        : Object.entries(deviceToSize).reduce((prevDict, [key, value]) => {
+            prevDict[key] = container.properties.cols;
+            return prevDict;
+          }, {});
 
     return (
       <div
@@ -226,14 +225,14 @@ class CustomView extends Component {
         )}
 
         <ResponsiveGridLayout
-          layouts={{ lg: layout }}
-          breakpoints={{ lg: 1200, md: 996, sm: 768, xs: 480 }}
+          layouts={{ [Object.keys(deviceToSize)[Object.keys(deviceToSize).length - 1]]: layout }}
+          breakpoints={deviceToSize}
           items={layout.length}
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
           cols={cols}
-          width={this.props.baseColWidth * container.properties.w * this.props.deviceWidth / window.innerWidth}
+          width={(this.props.baseColWidth * container.properties.w * this.props.deviceWidth) / window.innerWidth}
           margin={[0, 0]}
           compactType={this.state.compactType}
           className={styles.gridLayout}
