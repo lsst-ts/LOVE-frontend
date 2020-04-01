@@ -22,7 +22,8 @@ export const DEVICE_TO_SIZE = {
   'Mobile S': 320,
 };
 
-const DEVICE_TO_COLS = {
+export const DEVICE_TO_COLS = {
+  Infinity: 100,
   '4K': 100,
   'Laptop L': 100,
   Laptop: 100,

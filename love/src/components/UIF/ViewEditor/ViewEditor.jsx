@@ -23,7 +23,9 @@ import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 import Select from '../../GeneralPurpose/Select/Select';
-import { DEVICE_TO_SIZE } from '../CustomView';
+import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
+
+import { DEVICE_TO_SIZE, DEVICE_TO_COLS } from '../CustomView';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
@@ -91,6 +93,7 @@ class ViewEditor extends Component {
       editorChanged: false,
       customViewKey: Math.random(), // To force component reload on config change,
       device: deviceOptions[0],
+      deviceToBeConfirmed: null,
     };
     this.toolbar = document.createElement('div');
     this.toolbar.className = styles.toolbarContainer;
@@ -341,7 +344,31 @@ class ViewEditor extends Component {
   };
 
   onDeviceChange = (device) => {
-    this.setState({ device });
+    const currentCols = isFinite(this.state.device.value)
+      ? DEVICE_TO_COLS[this.state.device.label]
+      : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
+    const nextCols = isFinite(device.value)
+      ? DEVICE_TO_COLS[device.label]
+      : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
+    const needsConfirmation = currentCols !== nextCols;
+    if (needsConfirmation) {
+      this.setState({ deviceToBeConfirmed: device });
+    }
+    console.log('needsConfirmation', needsConfirmation);
+  };
+
+  confirmDeviceChange = (confirmation) => {
+    if (confirmation) {
+      this.setState({
+        deviceToBeConfirmed: null,
+        device: this.state.deviceToBeConfirmed,
+      });
+      return;
+    }
+
+    this.setState({
+      deviceToBeConfirmed: null,
+    });
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
@@ -462,6 +489,26 @@ class ViewEditor extends Component {
     });
   };
 
+  makeConfirmationMessage = () => {
+    if(!this.state.deviceToBeConfirmed?.value || !this.state.device?.value){
+      return '';
+    }
+
+    if(this.state.deviceToBeConfirmed.value < this.state.device.value){
+      return [
+        `The canvas space will be limited to a mobile device dimensions.`,
+        ` Going back to larger devices will require manual adjustments.`,
+        ` Do you want to continue?`
+      ].map(c=><span>{c}</span>)
+    }
+
+    return [
+      `The canvas space will be limited to a larger device dimensions.`,
+      ` Going back to mobile devices will require manual adjustments.`,
+      ` Do you want to continue?`
+    ].map(c=><span>{c}</span>)
+  };
+
   render() {
     return (
       <>
@@ -552,6 +599,12 @@ class ViewEditor extends Component {
           />
         </Modal>
         {ReactDOM.createPortal(this.renderToolbar(), this.toolbar)}
+        <ConfirmationModal
+          isOpen={!!this.state.deviceToBeConfirmed}
+          message={this.makeConfirmationMessage()}
+          confirmCallback={() => this.confirmDeviceChange(true)}
+          cancelCallback={() => this.confirmDeviceChange(false)}
+        />
       </>
     );
   }
