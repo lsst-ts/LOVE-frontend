@@ -511,7 +511,6 @@ class ViewEditor extends Component {
   };
 
   render() {
-    console.log(this.state.device);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
