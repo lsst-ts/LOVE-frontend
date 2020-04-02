@@ -5,6 +5,7 @@ import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import styles from './LogMessageDisplay.module.css';
+import { formatTimestamp } from '../../../Utils';
 
 function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
   const [messageFilters, setMessageFilters] = useState({
@@ -60,7 +61,7 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
                   <div className={styles.messageIcon}>{icon}</div>
                   <div className={styles.messageTextContainer}>
                     <div className={styles.timestamp} title="private_rcvStamp">
-                      {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                      {formatTimestamp(msg.private_rcvStamp.value * 1000)}
                     </div>
                     <div className={styles.messageText}>{msg.message.value}</div>
                     <div className={styles.messageTraceback}>{msg.traceback.value}</div>
