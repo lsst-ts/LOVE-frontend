@@ -5,7 +5,7 @@ import TextField from '../TextField/TextField';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
-import { TAITimestampToFormat } from '../../Utils';
+import { formatTimestamp } from '../../Utils';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
 const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
@@ -248,7 +248,7 @@ export default class ObservingLogInput extends Component {
 
         {filteredMessages.length > 0 &&
           filteredMessages.map((msg) => {
-            const messageDate = TAITimestampToFormat(new Date(msg.private_rcvStamp.value * 1000));
+            const messageDate = formatTimestamp(msg.private_rcvStamp.value * 1000);
 
             return (
               <div key={Math.random()} className={styles.logMessageWrapper}>
