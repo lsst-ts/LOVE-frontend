@@ -130,9 +130,11 @@ export default class CustomView extends Component {
           <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
         </div>
         {parsedConfig.titleBar ? (
-          <Panel title={parsedConfig.title} fit={false}>
-            <ErrorBoundary>{comp}</ErrorBoundary>
-          </Panel>
+          <ErrorBoundary>
+            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode}>
+              {comp}
+            </Panel>
+          </ErrorBoundary>
         ) : (
           <ErrorBoundary>{comp}</ErrorBoundary>
         )}
