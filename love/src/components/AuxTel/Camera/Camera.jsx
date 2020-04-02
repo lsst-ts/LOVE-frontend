@@ -121,7 +121,7 @@ export default class Camera extends Component {
                     return (
                       <React.Fragment key={imageKey}>
                         <tr>
-                          <td className={styles.string}>{formatTimestamp(image.timeStamp)}</td>
+                          <td className={styles.string}>{formatTimestamp(image.timeStamp * 1000)}</td>
                           <td className={styles.string}>{imageName}</td>
                           <td className={[styles.narrowCol].join(' ')}>
                             <LoadingBar
