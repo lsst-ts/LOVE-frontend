@@ -6,9 +6,9 @@ const Value = ({ children, raw = false }) => {
   if (raw && Array.isArray(children)) {
     return (
       <span className={styles.arrayValue}>
-        {children.map((c) => {
+        {children.map((c, i) => {
           return (
-            <span key={c} className={styles.value}>
+            <span key={i} className={styles.value}>
               {c}
             </span>
           );

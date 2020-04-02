@@ -1,4 +1,11 @@
 .container {
-    overflow: auto;
-    will-change: transform;
+  overflow: auto;
+  will-change: transform;
+}
+
+.subscriptionTable {
+  grid-template-columns: max-content min-content;
+  max-width: initial;
+  justify-content: flex-start;
+  padding: 1em;
 }
