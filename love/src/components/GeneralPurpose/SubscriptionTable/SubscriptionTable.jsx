@@ -3,9 +3,13 @@ import SummaryPanel from '../SummaryPanel/SummaryPanel';
 import Label from '../SummaryPanel/Label';
 import Value from '../SummaryPanel/Value';
 import Title from '../SummaryPanel/Title';
-import styles from './SubscriptionTable.module.css'
+import styles from './SubscriptionTable.module.css';
 
 export default class SubscriptionTable extends Component {
+  static defaultProps = {
+    accessors: {},
+  };
+
   componentDidMount = () => {
     this.props.subscribeToStreams(this.props.subscriptions);
   };
@@ -41,7 +45,7 @@ export default class SubscriptionTable extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <SummaryPanel>
+        <SummaryPanel className={styles.subscriptionTable}>
           {this.props.subscriptions.map((group) => {
             const streamData = this.props.getStreamData(group);
             let dict = {};
@@ -53,7 +57,7 @@ export default class SubscriptionTable extends Component {
             }
             return (
               <React.Fragment key={group}>
-                <Title wide>{group.split('-').splice(3)}</Title>
+                <Title wide>{`${group.split('-')[1]}-${group.split('-')[2]} (${group.split('-')[0]})`}</Title>
                 {Object.keys(dict).map((key) => {
                   return (
                     <React.Fragment key={key}>
