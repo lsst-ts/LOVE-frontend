@@ -1,6 +1,7 @@
 .container {
   overflow: auto;
   will-change: transform;
+  height: 100%;
 }
 
 .subscriptionTable {
@@ -8,4 +9,29 @@
   max-width: initial;
   justify-content: flex-start;
   padding: 1em;
+}
+
+.card {
+    display: flex;
+    justify-content: space-between;
+    max-height: 18em;
+    overflow-y: auto;
+}
+
+.streamLabel {
+    padding-right: 1em;
+}
+
+.streamValue {
+    text-align: right;
+    color: var(--base-font-color);
+}
+
+.topicType {
+    color: var(--secondary-font-color);
+}
+
+.subTitle {
+    display: flex;
+    justify-content: space-between;
 }
