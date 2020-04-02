@@ -33,6 +33,10 @@ export const DEVICE_TO_COLS = {
   'Mobile S': 2,
 };
 
+const MOBILE_REFERENCE_COLS_THRESHOLD = 2;
+const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find((label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD);
+const MOBILE_REFERENCE_WIDTH = DEVICE_TO_SIZE[MOBILE_REFERENCE_LABEL];
+
 class CustomView extends Component {
   static propTypes = {
     /** Layout object describing the view, composed of recursively nested Elements, with the following format:
@@ -180,21 +184,64 @@ class CustomView extends Component {
     this.props.onLayoutChange(layout);
   };
 
+  getDeviceWidth = () => {
+    debugger;
+    return !this.props.deviceWidth || !isFinite(this.props.deviceWidth)
+      ? window.innerWidth - 1
+      : this.props.deviceWidth;
+  };
+
+  getColsDict = (container) => {
+    return typeof container.properties.cols === 'object' ? container.properties.cols : DEVICE_TO_COLS;
+  };
+
+  getDeviceLabel = (width) => {
+    const entry = Object.entries(DEVICE_TO_SIZE).find(([key, deviceOptionWidth]) => {
+      if (deviceOptionWidth <= width) {
+        return true;
+      }
+      return false;
+    });
+    return entry[0];
+  };
+
   parseContainer = (container) => {
     const elements = Object.values(container.content).map((x) => {
       return this.parseElement(x);
     });
+
+    const deviceWidth = this.getDeviceWidth();
+    const deviceLabel = this.getDeviceLabel(deviceWidth);
+    const deviceCols = DEVICE_TO_COLS[deviceLabel];
+
+    // IMPORTANT NOTICE
+    // goal: to use same pixel space in larger devices as in a mobile device layout
+    // in mobile device it uses  width1 = x.properties.w * mobileDeviceWidth / mobileDeviceColumns
+    // in desktop device it uses width2 = x.properties.w * desktopDeviceWidth / desktopDeviceColumns
+    // need C such that width2 = C * width1
+    // C = mobileDeviceWidth / mobileDeviceColumns * ( desktopDeviceColumns / desktopDeviceWidth )
+    // C = mobileDeviceWidth / desktopDeviceWidth * desktopDeviceColumns / mobileDeviceColumns
+
+    // this is only if the container was set with cols < THRESHOLD
+    // otherwise x.properties.w must be used
+
+    let colsScalingFactor = 1;
+    if( container.properties.cols <= MOBILE_REFERENCE_COLS_THRESHOLD){
+      colsScalingFactor = MOBILE_REFERENCE_WIDTH / deviceWidth * deviceCols / container.properties.cols;
+    }
+
     const layout = Object.values(container.content).map((x) => {
       return {
         x: x.properties.x,
         y: x.properties.y,
-        w: x.properties.w,
+        w: colsScalingFactor * x.properties.w,
         h: x.properties.h,
         i: x.properties.i.toString(),
         allowOverflow: x.properties.allowOverflow,
       };
     });
-    const cols = typeof container.properties.cols === 'object' ? container.properties.cols : DEVICE_TO_COLS;
+
+    const cols = this.getColsDict(container);
 
     const maxWidthKey = Object.entries(DEVICE_TO_SIZE).reduce((argMaxKey, [key, width]) => {
       if (DEVICE_TO_SIZE[argMaxKey] >= width) {
@@ -203,10 +250,6 @@ class CustomView extends Component {
       return key;
     }, Object.keys(DEVICE_TO_SIZE)[0]);
 
-    const deviceWidth =
-      !this.props.deviceWidth || !isFinite(this.props.deviceWidth) ? window.innerWidth - 1 : this.props.deviceWidth;
-
-    
     return (
       <div
         key={container.properties.i.toString()}
