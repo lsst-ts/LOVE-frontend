@@ -61,7 +61,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
               <div className={styles.dataCell}> {mutedBy} </div>
 
               <div className={styles.title}> Will unmute at: </div>
-              <TimestampDisplay taiToUtc={taiToUtc} time={willUnmuteTime} defValue="Never" />
+              <TimestampDisplay taiToUtc={taiToUtc} secs={willUnmuteTime} defValue="Never" />
 
               <div className={styles.title}> Muted severity: </div>
               <div className={styles.dataCell}> {mutedSeverity} </div>
@@ -126,30 +126,30 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           <div className={styles.dataCell}> {acknowledgedBy} </div>
 
           <div className={styles.title}> {ackTimeTitle} </div>
-          <TimestampDisplay taiToUtc={taiToUtc} time={ackTime} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} secs={ackTime} defValue="Never" />
 
           <div className={styles.title}> Will auto-ack at: </div>
-          <TimestampDisplay taiToUtc={taiToUtc} time={willAutoAckTime} defValue="Already acknowledged" />
+          <TimestampDisplay taiToUtc={taiToUtc} secs={willAutoAckTime} defValue="Already acknowledged" />
 
           <div>&nbsp;</div> <div>&nbsp;</div>
           <div className={styles.title}> {escalatedToTitle} </div>
           <div className={styles.dataCell}> {escalatedTo} </div>
 
           <div className={styles.title}> {escalatedTimeTitle} </div>
-          <TimestampDisplay taiToUtc={taiToUtc} time={escalatedTime} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} secs={escalatedTime} defValue="Never" />
         </div>
       </div>
 
       <div className={styles.panel3}>
         <div className={styles.dataTable}>
           <div className={styles.title}> Severity update: </div>
-          <TimestampDisplay taiToUtc={taiToUtc} time={sevUpdate} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} secs={sevUpdate} defValue="Never" />
 
           <div className={styles.title}> Max sev. update: </div>
-          <TimestampDisplay taiToUtc={taiToUtc} time={maxSevUpdate} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} secs={maxSevUpdate} defValue="Never" />
 
           <div className={styles.title}> Last update: </div>
-          <TimestampDisplay taiToUtc={taiToUtc} time={lastUpdate} defValue="Never" />
+          <TimestampDisplay taiToUtc={taiToUtc} secs={lastUpdate} defValue="Never" />
         </div>
       </div>
 

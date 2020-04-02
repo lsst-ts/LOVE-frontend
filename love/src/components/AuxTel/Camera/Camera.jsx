@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './Camera.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
-import PropTypes from 'prop-types';
+import { formatTimestamp } from '../../../Utils';
+
 
 export default class Camera extends Component {
   static propTypes = {
@@ -120,7 +121,7 @@ export default class Camera extends Component {
                     return (
                       <React.Fragment key={imageKey}>
                         <tr>
-                          <td className={styles.string}>{image.timeStamp}</td>
+                          <td className={styles.string}>{formatTimestamp(image.timeStamp * 1000)}</td>
                           <td className={styles.string}>{imageName}</td>
                           <td className={[styles.narrowCol].join(' ')}>
                             <LoadingBar
