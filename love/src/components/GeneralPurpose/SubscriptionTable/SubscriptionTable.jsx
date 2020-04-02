@@ -2,16 +2,35 @@ import React, { Component } from 'react';
 import SummaryPanel from '../SummaryPanel/SummaryPanel';
 import Label from '../SummaryPanel/Label';
 import Value from '../SummaryPanel/Value';
-import Title from '../SummaryPanel/Title';
+// import Title from '../SummaryPanel/Title';
+import { CardList, Card, Title, SubTitle } from '../CardList/CardList';
 import styles from './SubscriptionTable.module.css';
 
 export default class SubscriptionTable extends Component {
   static defaultProps = {
     accessors: {},
+    subscriptions: [],
   };
+
+  constructor(props) {
+    super(props);
+    const subscriptionsDict = {};
+    props.subscriptions.forEach((group) => {
+      const [type, csc, index, topic] = group.split('-');
+      const cscKey = `${csc}-${index}`;
+      const topicKey = `${type}-${topic}`;
+      if (subscriptionsDict[cscKey] === undefined) subscriptionsDict[cscKey] = [topicKey];
+      else subscriptionsDict[cscKey] = [...subscriptionsDict[cscKey], topicKey];
+    });
+    this.state = {
+      subscriptionsDict,
+    };
+  }
 
   componentDidMount = () => {
     this.props.subscribeToStreams(this.props.subscriptions);
+    
+    
   };
 
   componentWillUnmount = () => {
@@ -45,7 +64,51 @@ export default class SubscriptionTable extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <SummaryPanel className={styles.subscriptionTable}>
+        <CardList>
+          {Object.keys(this.state.subscriptionsDict).map((cscKey) => {
+            return (
+              <>
+                <Title key={cscKey}>{cscKey}</Title>
+                {this.state.subscriptionsDict[cscKey].map((topicKey) => {
+                  const [type, topic] = topicKey.split('-');
+                  const groupKey = [type, cscKey, topic].join('-');
+                  const streamData = this.props.getStreamData(groupKey);
+                  const accessor = this.getAccessor(groupKey);
+                  const dict = accessor(streamData);
+                  const dictKeys = Object.keys(dict);
+                  return (
+                    <>
+                      <SubTitle key={topicKey} className={styles.subTitle}>
+                        <span>{topic}</span>
+                        <span className={styles.topicType}>{type}</span>
+                      </SubTitle>
+                      {dictKeys.length > 0 ? (
+                        dictKeys.map((key) => {
+                          return (
+                            <>
+                              <Card key={key} className={styles.card}>
+                                <span className={styles.streamLabel}>{key}</span>
+                                <span className={styles.streamValue}>
+                                  <Value raw={true}>{dict[key]}</Value>
+                                </span>
+                              </Card>
+                            </>
+                          );
+                        })
+                      ) : (
+                        <Card>
+                          <div>No value</div>
+                        </Card>
+                      )}
+                    </>
+                  );
+                })}
+              </>
+            );
+          })}
+        </CardList>
+
+        {/* <SummaryPanel className={styles.subscriptionTable}>
           {this.props.subscriptions.map((group) => {
             const streamData = this.props.getStreamData(group);
             let dict = {};
@@ -69,7 +132,7 @@ export default class SubscriptionTable extends Component {
               </React.Fragment>
             );
           })}
-        </SummaryPanel>
+        </SummaryPanel> */}
       </div>
     );
   }

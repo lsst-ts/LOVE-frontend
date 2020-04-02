@@ -202,33 +202,7 @@ export default class LATISS extends Component {
     const isShutterBlocking = shutterState === 'CLOSED' || shutterState === 'OPENING';
 
     if (this.props.isRaw) {
-      const subs = [
-        `event-ATHexapod-0-inPosition`,
-        `event-ATHexapod-0-readyForCommand`,
-        `telemetry-ATHexapod-0-positionStatus`,
-        //ATPneumatics
-        `event-ATPneumatics-0-m1CoverState`,
-        `event-ATPneumatics-0-m1CoverLimitSwitches`,
-        `event-ATPneumatics-0-m1VentsLimitSwitches`,
-        `telemetry-ATPneumatics-0-loadCell`,
-        `telemetry-ATPneumatics-0-m1AirPressure`,
-        //ATMCS
-        `event-ATMCS-0-m3InPosition`,
-        `event-ATMCS-0-m3State`,
-        `event-ATMCS-0-m3PortSelected`,
-        `event-ATMCS-0-nasmyth1RotatorInPosition`,
-        `event-ATMCS-0-nasmyth2RotatorInPosition`,
-        `event-ATMCS-0-nasmyth1LimitSwitchCCW`,
-        `event-ATMCS-0-nasmyth1LimitSwitchCW`,
-        `event-ATMCS-0-nasmyth2LimitSwitchCCW`,
-        `event-ATMCS-0-nasmyth2LimitSwitchCW`,
-        `event-ATMCS-0-target`,
-        `event-ATMCS-0-positionLimits`,
-        `telemetry-ATMCS-0-mountEncoders`,
-        //ATAOS
-        `event-ATAOS-0-correctionOffsets`,
-      ];
-      return <SubscriptionTableContainer subscriptions={subs}></SubscriptionTableContainer>;
+      return <SubscriptionTableContainer subscriptions={this.props.subscriptions}></SubscriptionTableContainer>;
     }
     return (
       <div className={styles.latissContainer}>
