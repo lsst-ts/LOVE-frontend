@@ -4,6 +4,8 @@ import styles from './CSCGroupLog.module.css';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import Button from '../../GeneralPurpose/Button/Button';
+import { formatTimestamp } from '../../../Utils';
+
 
 export default class CSCGroupLog extends Component {
   static propTypes = {
@@ -90,7 +92,7 @@ export default class CSCGroupLog extends Component {
                           embedded={true}
                         />
                         <div className={styles.timestamp} title="private_rcvStamp">
-                          {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                          {formatTimestamp(msg.private_rcvStamp.value * 1000)}
                         </div>
                       </div>
                       <div className={styles.messageText}>{msg.errorReport.value}</div>
