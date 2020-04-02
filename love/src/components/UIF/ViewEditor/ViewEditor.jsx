@@ -198,6 +198,13 @@ class ViewEditor extends Component {
       parsedProperties.allowOverflow = elementProperties.allowOverflow;
       newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
+
+    newLayout.properties.cols = Object.keys(DEVICE_TO_COLS).includes(this.state.device.label)
+      ? DEVICE_TO_COLS[this.state.device.label]
+      : Object.keys(DEVICE_TO_COLS).reduce((lastMax, key) => {
+          return Math.max(lastMax, DEVICE_TO_COLS[key]);
+        }, 0);
+    
     const newLayoutStr = JSON.stringify(newLayout, null, 2);
     this.setState({
       layout: newLayoutStr,
@@ -276,6 +283,7 @@ class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideSelectionModal();
+
     const parsedLayout = { ...this.getEditedViewLayout() };
     const additionalContent = {};
     let startingIndex = 0;
@@ -500,14 +508,14 @@ class ViewEditor extends Component {
         `The canvas space will be limited to a mobile device dimensions.`,
         ` Going back to larger devices will require manual adjustments.`,
         ` Do you want to continue?`,
-      ].map((c) => <span>{c}</span>);
+      ].map((c, index) => <span key={index}>{c}</span>);
     }
 
     return [
       `The canvas space will be limited to a larger device dimensions.`,
       ` Going back to mobile devices will require manual adjustments.`,
       ` Do you want to continue?`,
-    ].map((c) => <span>{c}</span>);
+    ].map((c, index) => <span key={index}>{c}</span>);
   };
 
   render() {
