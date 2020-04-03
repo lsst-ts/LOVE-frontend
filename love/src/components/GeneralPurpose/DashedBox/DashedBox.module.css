@@ -1,0 +1,28 @@
+.dashed-vector {
+  position: relative;
+  height: 100px;
+  width: 300px;
+}
+
+
+.svg {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+}
+.path {
+  fill: none;
+  stroke: var(--second-tertiary-background-color);
+  stroke-width: 2;
+  stroke-dasharray: 10, 10;
+}
+
+
+.span {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  padding: 10px;
+}
