@@ -3,6 +3,9 @@ import styles from './SummaryPanel.module.css';
 
 const Value = ({ children, raw = false }) => {
   let child = children;
+  if (raw && typeof children === 'boolean') {
+    return <span className={styles.value}>{JSON.stringify(children)}</span>;
+  }
   if (raw && Array.isArray(children)) {
     return (
       <span className={styles.arrayValue}>
