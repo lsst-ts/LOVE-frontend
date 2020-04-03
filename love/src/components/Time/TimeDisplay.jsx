@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import DigitalClock from '../GeneralPurpose/DigitalClock/DigitalClock';
 import styles from './TimeDisplay.module.css';
+import * as dayjs from 'dayjs'
 
 
 TimeDisplay.propTypes = {
@@ -10,9 +11,10 @@ TimeDisplay.propTypes = {
 }
 
 export default function TimeDisplay (taiToUtc) {
+  const localTime = dayjs();
   return (
     <div className={styles.container}> 
-      Blahh
+      <DigitalClock timestamp={localTime}/>
     </div>
   );
 }
