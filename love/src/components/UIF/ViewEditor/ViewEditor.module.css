@@ -83,3 +83,7 @@
 .element {
   margin-right: 0.15rem;
 }
+
+.confirmationMessage {
+  display: block;
+}

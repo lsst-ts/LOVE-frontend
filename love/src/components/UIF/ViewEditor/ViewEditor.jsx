@@ -411,7 +411,6 @@ class ViewEditor extends Component {
     this.setState({
       responsiveLayoutState: COLS_DECREASED,
     });
-
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
@@ -533,7 +532,10 @@ class ViewEditor extends Component {
   };
 
   makeConfirmationMessage = () => {
-    return [` Do you want to continue?`].map((c, index) => <span key={index}>{c}</span>);
+    return [
+      `Changes will update the layout to the currently displayed configuration`,
+      `Do you want to proceed?`,
+    ].map((c, index) => <span className={styles.confirmationMessage}key={index}>{c}</span>);
   };
 
   render() {
