@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import moment from 'moment';
+import * as dayjs from 'dayjs';
+var relativetime = require('dayjs/plugin/relativeTime');
+var utc = require('dayjs/plugin/utc');
+dayjs.extend(relativetime);
+dayjs.extend(utc);
+
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -466,17 +471,8 @@ export const cscText = (csc, salindex) => {
  * @param {string} location, optional location to append to the timestamp, TAI by default
  */
 export const formatTimestamp = (timestamp, location = 'TAI') => {
-  const date = new Date(timestamp);
-
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const day = `${date.getDate()}`.padStart(2, 0);
-
-  const hours = `${date.getHours()}`.padStart(2, 0);
-  const minutes = `${date.getMinutes()}`.padStart(2, 0);
-  const seconds = `${date.getSeconds()}`.padStart(2, 0);
-
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${location}`;
+  const t = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
+  return `${t.utc().format('YYYY/MM/DD HH:mm:ss')} ${location}`;
 };
 
 /**
@@ -485,17 +481,18 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
  * @param {string} location, optional location to append to the timestamp, empty by default
  */
 export const isoTimestamp = (timestamp, location = null) => {
-  return [moment(timestamp).toISOString(), location ? location : null].join(' ');
+  const t = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
+  return [t.toISOString(), location ? location : null].join(' ');
 };
 
 /**
  * Converts seconds to a human readable difference like 'a few seconds ago'
- * @param {number} secs, number of seconds
+ * @param {date-able} timestamp, if float it must be in miliseconds
  * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
  */
-export const relativeTime = (secs, taiToUtc) => {
-  const newSecs = secs + taiToUtc;
-  const mom = moment.unix(newSecs).utc();
-  const delta = mom.fromNow();
+export const relativeTime = (timestamp, taiToUtc) => {
+  const t_tai = timestamp instanceof dayjs ? timestamp : dayjs(timestamp); 
+  const t_utc = t_tai.add(taiToUtc, 'second').utc();
+  const delta = t_utc.fromNow();
   return delta;
 };

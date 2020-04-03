@@ -1,8 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './DigitalClock.module.css';
-import { formatTime } from '../../../Utils';
-import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs';
 
 /**
  * Component that displays time and optionally the date below
