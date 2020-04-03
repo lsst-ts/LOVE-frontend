@@ -58,7 +58,11 @@ export const uifIndex = {
   InteractiveTimeSeries: {
     component: require('../TimeSeries/TimeSeries.container').default,
     schema: require('../TimeSeries/TimeSeries.container').schema,
-  }
+  },
+  SubscriptionTable: {
+    component: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').default,
+    schema: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').schema,
+  },
 };
 
 export const auxtelIndex = {
