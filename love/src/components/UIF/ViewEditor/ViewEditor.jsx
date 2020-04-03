@@ -222,6 +222,21 @@ class ViewEditor extends Component {
     }
   };
 
+  confirmLayoutChange = (newLayoutProperties) => {
+    console.log('confirmLayoutChange this.state.responsiveLayoutState', this.state.responsiveLayoutState);
+    if (this.state.responsiveLayoutState === COLS_DECREASED) {
+      this.setState({
+        responsiveLayoutState: EDIT_NEEDS_CONFIRMATION,
+      });
+      return;
+    }
+
+    this.setState({
+      responsiveLayoutState: COLS_NOT_CHANGED,
+    });
+    this.onLayoutChange(newLayoutProperties);
+  };
+
   updateElementProperties = (element, properties) => {
     const newElement = { ...element };
     if (element.properties.i === properties.i) {
@@ -368,7 +383,12 @@ class ViewEditor extends Component {
       : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
 
     this.setState({
-      device: device
+      device: device,
+    });
+
+    this.setState({
+      responsiveLayoutState:
+        nextCols < currentCols ? COLS_DECREASED : nextCols > currentCols ? COLS_INCREASED : COLS_NOT_CHANGED,
     });
     // const needsConfirmation = currentCols !== nextCols;
     // if (needsConfirmation) {
@@ -379,19 +399,18 @@ class ViewEditor extends Component {
   };
 
   confirmDeviceChange = (confirmed) => {
-    if (confirmed) {
-      this.setState({
-        deviceToBeConfirmed: null,
-        device: this.state.deviceToBeConfirmed,
-        responsiveLayoutState: COLS_NOT_CHANGED,
-      });
-      return;
-    }
-
-    this.setState({
-      deviceToBeConfirmed: null,
-      responsiveLayoutState: COLS_NOT_CHANGED,
-    });
+    // if (confirmed) {
+    //   this.setState({
+    //     deviceToBeConfirmed: null,
+    //     device: this.state.deviceToBeConfirmed,
+    //     responsiveLayoutState: COLS_NOT_CHANGED,
+    //   });
+    //   return;
+    // }
+    // this.setState({
+    //   deviceToBeConfirmed: null,
+    //   responsiveLayoutState: COLS_NOT_CHANGED,
+    // });
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
@@ -513,26 +532,11 @@ class ViewEditor extends Component {
   };
 
   makeConfirmationMessage = () => {
-    if (!this.state.deviceToBeConfirmed?.value || !this.state.device?.value) {
-      return '';
-    }
-
-    if (this.state.deviceToBeConfirmed.value < this.state.device.value) {
-      return [
-        `The canvas space will be limited to a mobile device dimensions.`,
-        ` Going back to larger devices will require manual adjustments.`,
-        ` Do you want to continue?`,
-      ].map((c, index) => <span key={index}>{c}</span>);
-    }
-
-    return [
-      `The canvas space will be limited to a larger device dimensions.`,
-      ` Going back to mobile devices will require manual adjustments.`,
-      ` Do you want to continue?`,
-    ].map((c, index) => <span key={index}>{c}</span>);
+    return [` Do you want to continue?`].map((c, index) => <span key={index}>{c}</span>);
   };
 
   render() {
+    console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
@@ -545,7 +549,8 @@ class ViewEditor extends Component {
             <CustomView
               key={this.state.customViewKey}
               layout={this.getEditedViewLayout()}
-              onLayoutChange={this.onLayoutChange}
+              // onLayoutChange={this.onLayoutChange}
+              onLayoutChange={this.confirmLayoutChange}
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
               isEditable={true}
