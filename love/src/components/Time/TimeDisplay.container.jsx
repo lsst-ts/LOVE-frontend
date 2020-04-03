@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { getTaiToUtc } from '../../redux/selectors';
 import TimeDisplay from './TimeDisplay';
 
 export const schema = {

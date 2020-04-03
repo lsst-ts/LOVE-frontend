@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import DigitalClock from '../GeneralPurpose/DigitalClock/DigitalClock';
 import styles from './TimeDisplay.module.css';
-import * as dayjs from 'dayjs'
+import * as dayjs from 'dayjs';
 
 
 TimeDisplay.propTypes = {
