@@ -27,14 +27,6 @@ export const uifIndex = {
     component: require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
     schema: require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').schema,
   },
-  TimeSeriesPlot: {
-    component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
-    schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
-  },
-  TelemetryLog: {
-    component: require('../TelemetryLog/TelemetryLog.container').default,
-    schema: require('../TelemetryLog/TelemetryLog.container').schema,
-  },
   Watcher: {
     component: require('../Watcher/Watcher.container').default,
     schema: require('../Watcher/Watcher.container').schema,
@@ -55,9 +47,21 @@ export const uifIndex = {
     component: require('../HealthStatusSummary/HealthStatusSummary.container').default,
     schema: require('../HealthStatusSummary/HealthStatusSummary.container').schema,
   },
+  TimeDisplay: {
+    component: require('../Time/TimeDisplay.container').default,
+    schema: require('../Time/TimeDisplay.container').schema,
+  },
   InteractiveTimeSeries: {
     component: require('../TimeSeries/TimeSeries.container').default,
     schema: require('../TimeSeries/TimeSeries.container').schema,
+  },
+  TimeSeriesPlot: {
+    component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
+    schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
+  },
+  TelemetryLog: {
+    component: require('../TelemetryLog/TelemetryLog.container').default,
+    schema: require('../TelemetryLog/TelemetryLog.container').schema,
   }
 };
 
