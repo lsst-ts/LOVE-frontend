@@ -9,7 +9,6 @@ import { withRouter, Prompt } from 'react-router-dom';
 import { editViewStates, viewsStates, modes } from '../../../redux/reducers/uif';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
-import Modal from '../../GeneralPurpose/Modal/Modal';
 import Loader from '../../GeneralPurpose/Loader/Loader';
 import CustomView from '../CustomView';
 import ComponentSelector from '../ComponentSelector/ComponentSelector';
@@ -605,30 +604,24 @@ class ViewEditor extends Component {
           </Rnd>
         ) : null}
 
-        <Modal
+        <ComponentSelector
           isOpen={this.state.showSelectionModal}
           onRequestClose={this.hideSelectionModal}
           contentLabel="Component selection modal"
-        >
-          <ComponentSelector selectCallback={this.receiveSelection} />
-        </Modal>
-        <Modal
+          selectCallback={this.receiveSelection}
+        />
+        <ConfigForm
           isOpen={this.state.showConfigModal}
-          onRequestClose={this.hideConfigModal}
-          contentLabel="Component configuration modal"
-        >
-          <ConfigForm
-            componentIndex={
-              this.state.selectedComponent && this.state.selectedComponent.properties
-                ? this.state.selectedComponent.properties.i
-                : 1
-            }
-            componentName={this.state.selectedComponent ? this.state.selectedComponent.content : ''}
-            componentConfig={this.state.selectedComponent ? this.state.selectedComponent.config : {}}
-            onCancel={this.hideConfigModal}
-            onSaveConfig={this.updateElementConfig}
-          />
-        </Modal>
+          componentIndex={
+            this.state.selectedComponent && this.state.selectedComponent.properties
+              ? this.state.selectedComponent.properties.i
+              : 1
+          }
+          componentName={this.state.selectedComponent ? this.state.selectedComponent.content : ''}
+          componentConfig={this.state.selectedComponent ? this.state.selectedComponent.config : {}}
+          onCancel={this.hideConfigModal}
+          onSaveConfig={this.updateElementConfig}
+        />
         {ReactDOM.createPortal(this.renderToolbar(), this.toolbar)}
         <ConfirmationModal
           // isOpen={!!this.state.deviceToBeConfirmed}

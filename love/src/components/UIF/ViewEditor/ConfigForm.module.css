@@ -1,39 +1,22 @@
-.container {
-  /* height: 100%; */
-  display: grid;
-  grid-template-rows: 1fr min-content;
-  overflow: auto;
-}
-
-.content {
-  overflow-y: auto;
-}
-
 .configElementWrapper {
-    padding: 0.5em 1em;
+  padding: 0.5em 1em;
 }
 
 .configElement {
-    padding: 0.5em 1em;
-    border-left: 2px solid var(--default-background-color);
+  padding: 0.5em 1em;
+  border-left: 2px solid var(--default-background-color);
 }
 
 .configElementTitle {
-    color: var(--base-font-color);
+  color: var(--base-font-color);
 }
 
 .configElementDescription {
-    color: var(--secondary-font-color);
+  color: var(--secondary-font-color);
 }
 
-.container input, .container textarea {
-  background: var(--base-font-color);
-}
-
-.footer {
-  display: inline-grid;
-  grid-template-columns: 1fr 15ch 15ch;
-  padding: 1em 1em 0 1em;
-  grid-gap: 1em;
-  height: 2em;
+.content input, .content textarea {
+  color: var(--base-font-color);
+  background: transparent;
+  border: 1px solid var(--secondary-font-dimmed-color);
 }
