@@ -53,7 +53,6 @@ export default class Panel extends Component {
       return React.cloneElement(child, {
         index,
         isRaw: this.state.isRaw,
-        test: 'dasdsasa'
       });
     });
     return (
@@ -63,7 +62,7 @@ export default class Panel extends Component {
           <div className={styles.panelButtonWrapper}>
             {this.props.hasRawMode && (
               <Button onClick={() => this.toggleRaw()} className={styles.panelButton} size={'small'}>
-                <span>{this.state.isRaw ? 'Raw' : 'Reg'}</span>
+                <span>{this.state.isRaw ? '<' : 'i'}</span>
               </Button>
             )}
           </div>
