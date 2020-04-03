@@ -100,7 +100,7 @@ class ViewEditor extends Component {
       editorChanged: false,
       customViewKey: Math.random(), // To force component reload on config change,
       device: deviceOptions[0],
-      deviceToBeConfirmed: null,
+      // deviceToBeConfirmed: null
       responsiveLayoutState: COLS_NOT_CHANGED,
     };
     this.toolbar = document.createElement('div');
@@ -366,12 +366,16 @@ class ViewEditor extends Component {
     const nextCols = isFinite(device.value)
       ? DEVICE_TO_COLS[device.label]
       : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
-    const needsConfirmation = currentCols !== nextCols;
-    if (needsConfirmation) {
-      this.setState({ deviceToBeConfirmed: device, responsiveLayoutState: EDIT_NEEDS_CONFIRMATION});
-    } else {
-      this.setState({ device });
-    }
+
+    this.setState({
+      device: device
+    });
+    // const needsConfirmation = currentCols !== nextCols;
+    // if (needsConfirmation) {
+    //   this.setState({ deviceToBeConfirmed: device, responsiveLayoutState: EDIT_NEEDS_CONFIRMATION});
+    // } else {
+    //   this.setState({ device });
+    // }
   };
 
   confirmDeviceChange = (confirmed) => {
