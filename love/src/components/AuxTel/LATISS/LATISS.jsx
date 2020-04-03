@@ -201,9 +201,6 @@ export default class LATISS extends Component {
     const isGratingBlocking = gratingWheelState !== 'STATIONARY';
     const isShutterBlocking = shutterState === 'CLOSED' || shutterState === 'OPENING';
 
-    if (this.props.isRaw) {
-      return <SubscriptionTableContainer subscriptions={this.props.subscriptions}></SubscriptionTableContainer>;
-    }
     return (
       <div className={styles.latissContainer}>
         <span className={styles.sectionTitle}>FILTER</span>
