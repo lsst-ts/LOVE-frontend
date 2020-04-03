@@ -1,0 +1,18 @@
+.container {
+  display: inline-block;
+  height: fit-content;
+  width: fit-content;
+  border: 1px solid red;
+}
+
+.time {
+  color: var(--base-font-color);
+  font-size: 1.5em;
+  letter-spacing: 0.02em;
+  line-height: 1em;
+}
+
+.date {
+  color: var(--base-font-color);
+  font-size: 0.9em;
+}

@@ -4,7 +4,6 @@ import Hoverable from '../Hoverable/Hoverable';
 import { relativeTime, formatTimestamp, isoTimestamp } from '../../../Utils';
 import styles from './TimestampDisplay.module.css';
 
-
 /**
  * Component that displays a time in relative time, as a timestamp with hover,
  * and allows you to copy the value as ISO string format to the clipboard onclick
