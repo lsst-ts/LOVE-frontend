@@ -17,4 +17,8 @@ export const SubTitle = ({ className, children }) => {
   return <div className={[styles.subTitle, className].join(' ')}>{children}</div>;
 };
 
+export const Separator = ({ className, children }) => {
+  return <div className={[styles.separator, className].join(' ')}></div>;
+};
+
 export default CardList;
