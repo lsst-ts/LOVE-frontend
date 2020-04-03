@@ -1,6 +1,6 @@
 .cardList {
   display: grid;
-  grid-template-columns: max-content;
+  grid-template-columns: minmax(0, max-content);
   grid-auto-rows: max-content;
   grid-row-gap: 0.2em;
   padding: 0 2em;
@@ -39,6 +39,7 @@
   margin: 0.1em 0em;
   border-radius: 6px;
   margin-left: 0.5em;
+  will-change: transform;
 }
 
 .highlight {
@@ -48,4 +49,8 @@
 .arrayValue {
   display: grid;
   grid-template-rows: auto;
+}
+
+.separator {
+  border-bottom: 1px solid var(--secondary-font-color);
 }
