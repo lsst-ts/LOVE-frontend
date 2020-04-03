@@ -231,7 +231,7 @@ class CustomView extends Component {
 
     const layout = Object.values(container.content).map((x) => {
       return {
-        x: x.properties.x,
+        x: colsScalingFactor * x.properties.x,
         y: x.properties.y,
         w: colsScalingFactor * x.properties.w,
         h: x.properties.h,
