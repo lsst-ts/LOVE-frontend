@@ -2,6 +2,7 @@
   display: flex;
   flex-flow: row wrap;
   height: fit-content;
+  justify-content: center;
 }
 
 .group {
@@ -11,6 +12,7 @@
 }
 
 .clockWrapper {
+  padding: 0.5em;
   border: 1px solid red;
 }
 
