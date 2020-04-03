@@ -38,6 +38,13 @@ const deviceOptions = [
   }),
 ];
 
+/** RESPONSIVE LAYOUT STATES */
+
+const COLS_NOT_CHANGED = 'COLS_NOT_CHANGED';
+const COLS_DECREASED = 'COLS_DECREASED';
+const EDIT_NEEDS_CONFIRMATION = 'EDIT_NEEDS_CONFIRMATION';
+const COLS_INCREASED = 'COLS_INCREASED';
+
 class ViewEditor extends Component {
   static propTypes = {
     /** React Router location object */
@@ -94,6 +101,7 @@ class ViewEditor extends Component {
       customViewKey: Math.random(), // To force component reload on config change,
       device: deviceOptions[0],
       deviceToBeConfirmed: null,
+      responsiveLayoutState: COLS_NOT_CHANGED,
     };
     this.toolbar = document.createElement('div');
     this.toolbar.className = styles.toolbarContainer;
@@ -204,7 +212,7 @@ class ViewEditor extends Component {
       : Object.keys(DEVICE_TO_COLS).reduce((lastMax, key) => {
           return Math.max(lastMax, DEVICE_TO_COLS[key]);
         }, 0);
-    
+
     const newLayoutStr = JSON.stringify(newLayout, null, 2);
     this.setState({
       layout: newLayoutStr,
@@ -360,7 +368,7 @@ class ViewEditor extends Component {
       : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
     const needsConfirmation = currentCols !== nextCols;
     if (needsConfirmation) {
-      this.setState({ deviceToBeConfirmed: device });
+      this.setState({ deviceToBeConfirmed: device, responsiveLayoutState: EDIT_NEEDS_CONFIRMATION});
     } else {
       this.setState({ device });
     }
@@ -371,12 +379,14 @@ class ViewEditor extends Component {
       this.setState({
         deviceToBeConfirmed: null,
         device: this.state.deviceToBeConfirmed,
+        responsiveLayoutState: COLS_NOT_CHANGED,
       });
       return;
     }
 
     this.setState({
       deviceToBeConfirmed: null,
+      responsiveLayoutState: COLS_NOT_CHANGED,
     });
   };
   renderToolbar() {
@@ -609,7 +619,8 @@ class ViewEditor extends Component {
         </Modal>
         {ReactDOM.createPortal(this.renderToolbar(), this.toolbar)}
         <ConfirmationModal
-          isOpen={!!this.state.deviceToBeConfirmed}
+          // isOpen={!!this.state.deviceToBeConfirmed}
+          isOpen={this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION}
           message={this.makeConfirmationMessage()}
           confirmCallback={() => this.confirmDeviceChange(true)}
           cancelCallback={() => this.confirmDeviceChange(false)}
