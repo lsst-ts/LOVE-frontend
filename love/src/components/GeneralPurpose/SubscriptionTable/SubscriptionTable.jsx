@@ -3,7 +3,8 @@ import SummaryPanel from '../SummaryPanel/SummaryPanel';
 import Label from '../SummaryPanel/Label';
 import Value from '../SummaryPanel/Value';
 // import Title from '../SummaryPanel/Title';
-import { CardList, Card, Title, SubTitle } from '../CardList/CardList';
+import { CardList, Card, Title, SubTitle, Separator } from '../CardList/CardList';
+import TextField from '../../TextField/TextField';
 import styles from './SubscriptionTable.module.css';
 
 export default class SubscriptionTable extends Component {
@@ -24,17 +25,29 @@ export default class SubscriptionTable extends Component {
     });
     this.state = {
       subscriptionsDict,
+      itemFilter: '',
+      topicFilter: '',
     };
   }
 
   componentDidMount = () => {
     this.props.subscribeToStreams(this.props.subscriptions);
-    
-    
   };
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams(this.props.subscriptions);
+  };
+
+  changeTopicFilter = (event) => {
+    this.setState({
+      topicFilter: event.target.value,
+    });
+  };
+
+  changeItemFilter = (event) => {
+    this.setState({
+      itemFilter: event.target.value,
+    });
   };
 
   getAccessor = (group) => {
@@ -65,11 +78,28 @@ export default class SubscriptionTable extends Component {
     return (
       <div className={styles.container}>
         <CardList>
+          <Title>Filters</Title>
+          <div className={styles.filters}>
+            <div className={styles.filter}>
+              <span className={styles.filterLabel}>By topic: </span>
+              <TextField type="text" value={this.state.topicFilter} onChange={this.changeTopicFilter} />
+            </div>
+
+            <div className={styles.filter}>
+              <span className={styles.filterLabel}>By item: </span>
+              <TextField type="text" value={this.state.itemFilter} onChange={this.changeItemFilter} />
+            </div>
+          </div>
+          <Separator />
           {Object.keys(this.state.subscriptionsDict).map((cscKey) => {
             return (
               <>
                 <Title key={cscKey}>{cscKey}</Title>
                 {this.state.subscriptionsDict[cscKey].map((topicKey) => {
+                  const topicFilter =
+                    this.state.topicFilter === '' || new RegExp(this.state.topicFilter, 'i').test(topicKey);
+                  if (!topicFilter) return null;
+
                   const [type, topic] = topicKey.split('-');
                   const groupKey = [type, cscKey, topic].join('-');
                   const streamData = this.props.getStreamData(groupKey);
@@ -84,6 +114,9 @@ export default class SubscriptionTable extends Component {
                       </SubTitle>
                       {dictKeys.length > 0 ? (
                         dictKeys.map((key) => {
+                          const itemFilter =
+                            this.state.itemFilter === '' || new RegExp(this.state.itemFilter, 'i').test(key);
+                          if (!itemFilter) return null;
                           return (
                             <>
                               <Card key={key} className={styles.card}>
