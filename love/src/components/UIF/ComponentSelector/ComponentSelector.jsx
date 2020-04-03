@@ -4,11 +4,13 @@ import Button from '../../GeneralPurpose/Button/Button';
 import styles from './ComponentSelector.module.css';
 import { indexes } from '../ComponentIndex';
 import TextField from '../../TextField/TextField';
+import Modal from '../../GeneralPurpose/Modal/Modal';
+
 
 export default class ComponentSelector extends Component {
   static propTypes = {
-    /** Children components */
-    children: PropTypes.node,
+    isOpen: PropTypes.bool,
+    onRequestClose: PropTypes.func,
     /** Function to call when the "insert" button is clicked */
     selectCallback: PropTypes.func,
   };
@@ -51,9 +53,27 @@ export default class ComponentSelector extends Component {
   render() {
     const buttonsDisabled = this.state.selected.length === 0;
     return (
-      <div className={styles.container}>
+      <Modal
+        isOpen={this.props.isOpen}
+        onRequestClose={this.props.onRequestClose}
+        contentLabel="Component selection modal"
+        footerChildren={(
+          <>
+            <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
+              Clear Selection
+            </Button>
+            <Button
+              status="primary"
+              disabled={buttonsDisabled}
+              onClick={() => this.props.selectCallback(this.state.selected)}
+            >
+              Insert
+            </Button>
+          </>
+        )}
+      >
         <div className={styles.content}>
-          <h2> Select Components to add to the view </h2>
+          <h2> Select Components </h2>
           <div className={styles.filterContainer}>
             <span className={styles.filterLabel}>Filter: </span>
             <TextField value={this.state.filter} onChange={this.changeFilter}/>
@@ -71,7 +91,6 @@ export default class ComponentSelector extends Component {
                     componentDict.name = component;
                     const selected = this.state.selected.includes(componentDict);
                     const checkboxId = `checkbox-${component}`;
-                    console.log(this.state.filter);
                     const filter =
                       this.state.filter === '' || new RegExp(this.state.filter, 'i').test(componentDict.name);
                     return (
@@ -98,20 +117,7 @@ export default class ComponentSelector extends Component {
             );
           })}
         </div>
-        <div className={styles.footer}>
-          <span />
-          <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
-            Clear Selection
-          </Button>
-          <Button
-            status="primary"
-            disabled={buttonsDisabled}
-            onClick={() => this.props.selectCallback(this.state.selected)}
-          >
-            Insert
-          </Button>
-        </div>
-      </div>
+      </Modal>
     );
   }
 }

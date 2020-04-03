@@ -1,0 +1,56 @@
+.cardList {
+  display: grid;
+  grid-template-columns: minmax(0, max-content);
+  grid-auto-rows: max-content;
+  grid-row-gap: 0.2em;
+  padding: 0 2em;
+  padding-bottom: 1em;
+  justify-content: start;
+  align-items: center;
+  align-content: center;
+  background: var(--second-quaternary-background-dimmed-color);
+  border-radius: 5px;
+  will-change: transform;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.title {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--base-font-color);
+  padding-top: 1em;
+}
+
+.subTitle {
+  font-size: var(--font-size-medium);
+  color: var(--base-font-color);
+}
+
+.subTitle > span:first-child {
+  padding-right: 1em;
+}
+
+.card {
+  font-size: var(--font-size-small);
+  background: var(--second-primary-background-color);
+  padding: 1em;
+  margin: 0.1em 0em;
+  border-radius: 6px;
+  margin-left: 0.5em;
+  will-change: transform;
+}
+
+.highlight {
+  color: var(--base-font-color);
+}
+
+.arrayValue {
+  display: grid;
+  grid-template-rows: auto;
+}
+
+.separator {
+  border-bottom: 1px solid var(--secondary-font-color);
+}

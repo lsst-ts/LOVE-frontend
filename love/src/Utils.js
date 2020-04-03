@@ -422,17 +422,6 @@ export const saveGroupSubscriptions = (Component) => {
 
 export const flatMap = (a, cb) => [].concat(...a.map(cb));
 
-export const relativeTime = (secs, taiToUtc) => {
-  const newSecs = secs + taiToUtc;
-  const mom = moment.unix(newSecs).utc();
-  const delta = mom.fromNow();
-  return delta;
-};
-
-export const secsToIsoStr = (secs) => {
-  return moment(secs * 1000).toISOString();
-};
-
 const watcherSuccessfulCmds = {
   cmd_acknowledge: 'acknowledged',
   cmd_unacknowledge: 'unacknowledged',
@@ -472,11 +461,12 @@ export const cscText = (csc, salindex) => {
 };
 
 /**
- * Converts a TAI timestamp into  "YYYY/MM/DD HH:MM:SS  TAI" formatted string
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
  * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {string} location, optional location to append to the timestamp, TAI by default
  */
-export const TAITimestampToFormat = (taiTimestamp) => {
-  const date = new Date(taiTimestamp);
+export const formatTimestamp = (timestamp, location = 'TAI') => {
+  const date = new Date(timestamp);
 
   const year = date.getFullYear();
   const month = `${date.getMonth() + 1}`.padStart(2, 0);
@@ -486,5 +476,26 @@ export const TAITimestampToFormat = (taiTimestamp) => {
   const minutes = `${date.getMinutes()}`.padStart(2, 0);
   const seconds = `${date.getSeconds()}`.padStart(2, 0);
 
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds} TAI`;
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${location}`;
+};
+
+/**
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {string} location, optional location to append to the timestamp, empty by default
+ */
+export const isoTimestamp = (timestamp, location = null) => {
+  return [moment(timestamp).toISOString(), location ? location : null].join(' ');
+};
+
+/**
+ * Converts seconds to a human readable difference like 'a few seconds ago'
+ * @param {number} secs, number of seconds
+ * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
+ */
+export const relativeTime = (secs, taiToUtc) => {
+  const newSecs = secs + taiToUtc;
+  const mom = moment.unix(newSecs).utc();
+  const delta = mom.fromNow();
+  return delta;
 };

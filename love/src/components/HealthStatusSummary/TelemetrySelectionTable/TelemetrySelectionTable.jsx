@@ -7,7 +7,7 @@ import Button from '../../GeneralPurpose/Button/Button';
 import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
-import { getFakeUnits } from '../../../Utils';
+import { getFakeUnits, formatTimestamp } from '../../../Utils';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -105,7 +105,13 @@ export default class TelemetrySelectionTable extends PureComponent {
     const filters = {
       component: { type: 'regexp', value: new RegExp('(?:)') },
       stream: { type: 'regexp', value: new RegExp('(?:)') },
-      timestamp: { type: 'regexp', value: new RegExp('(?:)') },
+      timestamp: {
+        type: 'regexp',
+        value: new RegExp('(?:)'),
+        function: (value) => {
+          return formatTimestamp(value);
+        },
+      },
       name: { type: 'regexp', value: new RegExp('(?:)') },
       param_name: { type: 'regexp', value: new RegExp('(?:)') },
       data_type: { type: 'regexp', value: new RegExp('(?:)') },
@@ -201,10 +207,11 @@ export default class TelemetrySelectionTable extends PureComponent {
     const values = Object.keys(row).map((rowKey) => {
       const key = [row.component, row.stream, row.param_name].join('-');
       if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'regexp') {
-        const regexpFilterResult = this.state.filters[rowKey].value.test(row[rowKey]);
+        const func = this.state.filters[rowKey].function ? this.state.filters[rowKey].function : (value) => value;
+        const regexpFilterResult = this.state.filters[rowKey].value.test(func(row[rowKey]));
         let checkedFilterResult = true;
         if (this.state.checkedFilter && this.state.checkedFilter[rowKey]) {
-          checkedFilterResult = this.state.checkedFilter[rowKey].test(row[rowKey]);
+          checkedFilterResult = this.state.checkedFilter[rowKey].test(func(row[rowKey]));
         }
         return regexpFilterResult && checkedFilterResult;
       }
@@ -561,7 +568,7 @@ export default class TelemetrySelectionTable extends PureComponent {
                         <td className={styles.string}>{row.stream}</td>
                       )}
                       {this.props.columnsToDisplay.includes('timestamp') && (
-                        <td className={styles.string}>{row.timestamp}</td>
+                        <td className={styles.string}>{formatTimestamp(row.timestamp)}</td>
                       )}
                       {this.props.columnsToDisplay.includes('name') && <td className={styles.string}>{row.name}</td>}
                       {this.props.columnsToDisplay.includes('param_name') && (
