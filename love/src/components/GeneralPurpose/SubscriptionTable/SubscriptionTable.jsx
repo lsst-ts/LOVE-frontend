@@ -116,7 +116,8 @@ export default class SubscriptionTable extends Component {
                         dictKeys.map((key) => {
                           const itemFilter =
                             this.state.itemFilter === '' || new RegExp(this.state.itemFilter, 'i').test(key);
-                          if (!itemFilter) return null;
+                          const emptyField = this.state.itemFilter !== '' && dict[key] === '';
+                          if (!itemFilter || emptyField) return null;
                           return (
                             <>
                               <Card key={key} className={styles.card}>
@@ -129,7 +130,7 @@ export default class SubscriptionTable extends Component {
                           );
                         })
                       ) : (
-                        <Card>
+                        this.state.itemFilter === '' && <Card>
                           <div>No value</div>
                         </Card>
                       )}
