@@ -10,11 +10,37 @@ TimeDisplay.propTypes = {
   taiToUtc: PropTypes.number,
 }
 
-export default function TimeDisplay (taiToUtc) {
+export default function TimeDisplay ({taiToUtc}) {
   const localTime = dayjs();
   return (
-    <div className={styles.container}> 
-      <DigitalClock timestamp={localTime}/>
+    <div className={styles.container}>
+      <div className={styles.group}>
+        <DigitalClockWrapper timestamp={localTime} title='Local Time'/>
+        <DigitalClockWrapper timestamp={localTime} title='Sidereal Time'/>
+      </div>
+      <div className={styles.group}>
+        <div className={styles.column}>
+          <DigitalClockWrapper timestamp={localTime} title='La Serena'/>
+          <DigitalClockWrapper timestamp={localTime} title='Arizona'/>
+          <DigitalClockWrapper timestamp={localTime} title='Illinois'/>
+        </div>
+        <div className={styles.column}>
+          <DigitalClockWrapper timestamp={localTime} title='Universal Time (UTC)'/>
+          <DigitalClockWrapper timestamp={localTime} title='International Atomic Time (TAI)'/>
+          <DigitalClockWrapper timestamp={localTime} title='Modified JD:'/>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DigitalClockWrapper ({timestamp, title}) {
+  return (
+    <div className={styles.clockWrapper}>
+      <div className={styles.title}>
+        {title}
+      </div>
+      <DigitalClock timestamp={timestamp}/>
     </div>
   );
 }
