@@ -15,32 +15,37 @@ export default function TimeDisplay ({taiToUtc}) {
   return (
     <div className={styles.container}>
       <div className={styles.group}>
-        <DigitalClockWrapper timestamp={localTime} title='Local Time'/>
-        <DigitalClockWrapper timestamp={localTime} title='Sidereal Time'/>
+        <ClockWrapper timestamp={localTime} title='Local Time' showAnalog/>
+        <ClockWrapper timestamp={localTime} title='Sidereal Time' showAnalog/>
       </div>
       <div className={styles.group}>
         <div className={styles.column}>
-          <DigitalClockWrapper timestamp={localTime} title='La Serena'/>
-          <DigitalClockWrapper timestamp={localTime} title='Arizona'/>
-          <DigitalClockWrapper timestamp={localTime} title='Illinois'/>
+          <ClockWrapper timestamp={localTime} title='La Serena'/>
+          <ClockWrapper timestamp={localTime} title='Arizona'/>
+          <ClockWrapper timestamp={localTime} title='Illinois'/>
         </div>
         <div className={styles.column}>
-          <DigitalClockWrapper timestamp={localTime} title='Universal Time (UTC)'/>
-          <DigitalClockWrapper timestamp={localTime} title='International Atomic Time (TAI)'/>
-          <DigitalClockWrapper timestamp={localTime} title='Modified JD:'/>
+          <ClockWrapper timestamp={localTime} title='Universal Time (UTC)'/>
+          <ClockWrapper timestamp={localTime} title='International Atomic Time (TAI)'/>
+          <ClockWrapper timestamp={localTime} title='Modified JD:'/>
         </div>
       </div>
     </div>
   );
 }
 
-function DigitalClockWrapper ({timestamp, title}) {
+function ClockWrapper ({timestamp, title, showAnalog}) {
   return (
     <div className={styles.clockWrapper}>
       <div className={styles.title}>
         {title}
       </div>
       <DigitalClock timestamp={timestamp}/>
+      { showAnalog && (
+        <div className={styles.analog}>
+          Analog clock goes here
+        </div>
+      )}
     </div>
   );
 }
