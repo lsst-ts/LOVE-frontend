@@ -224,6 +224,7 @@ class ViewEditor extends Component {
 
   confirmLayoutChange = (newLayoutProperties) => {
     console.log('confirmLayoutChange this.state.responsiveLayoutState', this.state.responsiveLayoutState);
+    this.onLayoutChange(newLayoutProperties);
     if (this.state.responsiveLayoutState === COLS_DECREASED) {
       this.setState({
         responsiveLayoutState: EDIT_NEEDS_CONFIRMATION,
@@ -399,18 +400,18 @@ class ViewEditor extends Component {
   };
 
   confirmDeviceChange = (confirmed) => {
-    // if (confirmed) {
-    //   this.setState({
-    //     deviceToBeConfirmed: null,
-    //     device: this.state.deviceToBeConfirmed,
-    //     responsiveLayoutState: COLS_NOT_CHANGED,
-    //   });
-    //   return;
-    // }
-    // this.setState({
-    //   deviceToBeConfirmed: null,
-    //   responsiveLayoutState: COLS_NOT_CHANGED,
-    // });
+    if (confirmed) {
+      this.setState({
+        responsiveLayoutState: COLS_NOT_CHANGED,
+      });
+      return;
+    }
+
+    this.props.undo();
+    this.setState({
+      responsiveLayoutState: COLS_DECREASED,
+    });
+
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
