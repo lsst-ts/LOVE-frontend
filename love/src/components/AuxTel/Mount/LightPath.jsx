@@ -540,7 +540,6 @@ export default class LightPath extends Component {
   render() {
     const isM1CoverOpen = this.props.m1CoverState === 2;
     const showLightPath = this.props.lightPath;
-    console.log(this.props)
 
     return (
       <div className={styles.container}>
