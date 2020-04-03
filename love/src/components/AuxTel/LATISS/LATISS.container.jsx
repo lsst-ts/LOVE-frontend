@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import { getLATISSState } from '../../../redux/selectors';
 import LATISS from './LATISS';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
   description:
@@ -51,6 +52,9 @@ const LATISSContainer = ({
   raftsDetailedState,
   ...props
 }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <LATISS
       subscribeToStreams={subscribeToStreams}
