@@ -22,3 +22,7 @@
   font-size: 0.9em;
   padding-bottom: 0.1em;
 }
+
+.analog {
+  min-width: 12em;
+}

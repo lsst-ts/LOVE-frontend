@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import AnalogClock from '../GeneralPurpose/AnalogClock/AnalogClock';
 import DigitalClock from '../GeneralPurpose/DigitalClock/DigitalClock';
 import styles from './TimeDisplay.module.css';
 import * as dayjs from 'dayjs';
@@ -43,7 +44,7 @@ function ClockWrapper ({timestamp, title, showAnalog}) {
       <DigitalClock timestamp={timestamp}/>
       { showAnalog && (
         <div className={styles.analog}>
-          Analog clock goes here
+          <AnalogClock timestamp={timestamp}/>
         </div>
       )}
     </div>

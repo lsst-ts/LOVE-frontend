@@ -1,0 +1,63 @@
+.container {
+  display: inline-block;
+  height: fit-content;
+  width: fit-content;
+}
+
+.st0 {
+  fill: #132633;
+}
+
+.st1 {
+  opacity: 0.6;
+}
+
+.st2 {
+  fill: none;
+  stroke: #798f9b;
+  stroke-width: 7;
+  stroke-miterlimit: 10;
+  stroke-dasharray: 1.9842, 16.8661;
+}
+
+.st3 {
+  fill: none;
+}
+
+.st4 {
+  fill: #e6e5e7;
+}
+
+.st5 {
+  font-family: 'Avenir-Medium';
+}
+
+.st6 {
+  font-size: 14px;
+}
+
+.st7 {
+  opacity: 0.9766;
+  fill: none;
+  stroke: #798f9b;
+  stroke-miterlimit: 10;
+  enable-background: new;
+}
+
+.st8 {
+  fill: none;
+  stroke: #798f9b;
+  stroke-width: 6;
+  stroke-miterlimit: 10;
+}
+
+.st9 {
+  fill: none;
+  stroke: #798f9b;
+  stroke-width: 4;
+  stroke-miterlimit: 10;
+}
+
+.st10 {
+  fill: #798f9b;
+}
