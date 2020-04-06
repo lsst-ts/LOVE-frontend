@@ -4,8 +4,31 @@
   width: fit-content;
 }
 
-.st0 {
+.background {
   fill: #132633;
+}
+
+.center {
+  fill: #798f9b;
+  stroke: #798f9b;
+}
+
+.markers {
+  transform: translate(20px, 20px);
+  stroke-width: 0.2;
+  fill: none;
+  stroke: #798f9b;
+}
+
+.heavyMarker {
+  stroke-width: 0.5;
+  stroke: #e6e5e7;
+}
+
+.number {
+  font-size: 4px;
+  stroke: #e6e5e7;
+  fill: #e6e5e7;
 }
 
 .st1 {
@@ -36,26 +59,16 @@
   font-size: 14px;
 }
 
-.st7 {
-  opacity: 0.9766;
-  fill: none;
-  stroke: #798f9b;
-  stroke-miterlimit: 10;
-  enable-background: new;
+.hour {
+  stroke-width: 1.2;
 }
 
-.st8 {
-  fill: none;
-  stroke: #798f9b;
-  stroke-width: 6;
-  stroke-miterlimit: 10;
+.minute {
+  stroke-width: 0.5;
 }
 
-.st9 {
-  fill: none;
-  stroke: #798f9b;
-  stroke-width: 4;
-  stroke-miterlimit: 10;
+.second {
+
 }
 
 .st10 {
