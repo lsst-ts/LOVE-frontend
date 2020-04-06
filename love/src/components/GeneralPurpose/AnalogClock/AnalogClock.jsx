@@ -40,7 +40,7 @@ const renderMarkers = () => {
 export default function AnalogClock ({ timestamp }) {
   const t = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
   const markers = renderMarkers();
-  const hour = timestamp.hour();
+  const hour = timestamp.hour() % 12;
   const minute = timestamp.minute();
   const second = timestamp.second();
   return (
@@ -50,7 +50,7 @@ export default function AnalogClock ({ timestamp }) {
 
       <g className={styles.markers}>
         { markers }
-        <line x1="0" y1="0" x2="11" y2="0"   className={styles.hour}    transform={`rotate(${6 * hour - 90}, 0, 0)`}/>
+        <line x1="0" y1="0" x2="11" y2="0"   className={styles.hour}   transform={`rotate(${30 * hour - 90}, 0, 0)`}/>
         <line x1="0" y1="0" x2="14" y2="0"  className={styles.minute}  transform={`rotate(${6 * minute - 90}, 0, 0)`}/>
         <line x1="-3" y1="0" x2="15" y2="0" className={styles.seconds} transform={`rotate(${6 * second - 90}, 0, 0)`}/>
       </g>
