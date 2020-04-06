@@ -43,6 +43,8 @@ const COLS_NOT_CHANGED = 'COLS_NOT_CHANGED';
 const COLS_DECREASED = 'COLS_DECREASED';
 const EDIT_NEEDS_CONFIRMATION = 'EDIT_NEEDS_CONFIRMATION';
 const COLS_INCREASED = 'COLS_INCREASED';
+const EDIT_CANCELED = 'EDIT_CANCELED';
+const UNDO_NEEDS_CONFIRMATION = 'UNDO_NEEDS_CONFIRMATION';
 
 class ViewEditor extends Component {
   static propTypes = {
@@ -224,7 +226,7 @@ class ViewEditor extends Component {
   confirmLayoutChange = (newLayoutProperties) => {
     console.log('confirmLayoutChange this.state.responsiveLayoutState', this.state.responsiveLayoutState);
     this.onLayoutChange(newLayoutProperties);
-    if (this.state.responsiveLayoutState === COLS_DECREASED) {
+    if (this.state.responsiveLayoutState === COLS_DECREASED || this.state.responsiveLayoutState === EDIT_CANCELED) {
       this.setState({
         responsiveLayoutState: EDIT_NEEDS_CONFIRMATION,
       });
@@ -400,20 +402,38 @@ class ViewEditor extends Component {
 
   confirmDeviceChange = (confirmed) => {
     if (confirmed) {
+      if (this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION) {
+        this.props.undo();
+      }
       this.setState({
         responsiveLayoutState: COLS_NOT_CHANGED,
       });
       return;
     }
 
-    this.props.undo();
+    if (this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION) {
+      this.props.undo();
+    }
+    
     this.setState({
-      responsiveLayoutState: COLS_DECREASED,
+      responsiveLayoutState: EDIT_CANCELED,
     });
+  };
+
+  undo = () => {
+    if (this.state.responsiveLayoutState === EDIT_CANCELED || this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION) {
+      this.setState({
+        responsiveLayoutState: UNDO_NEEDS_CONFIRMATION,
+      });
+      return;
+    }
+
+    this.props.undo();
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
+    console.log('responsiveLayoutState', this.state.responsiveLayoutState)
     return (
       <>
         <div className={styles.toolbarWrapper}>
@@ -452,7 +472,7 @@ class ViewEditor extends Component {
             <Button
               className={[styles.iconBtn, styles.element].join(' ')}
               title="Undo"
-              onClick={this.props.undo}
+              onClick={this.undo}
               disabled={this.props.undoActionsAvailable === 0}
               status="transparent"
             >
@@ -462,7 +482,7 @@ class ViewEditor extends Component {
               className={[styles.iconBtn, styles.element].join(' ')}
               title="Redo"
               onClick={this.props.redo}
-              disabled={this.props.redoActionsAvailable === 0}
+              disabled={this.props.redoActionsAvailable === 0 || this.state.responsiveLayoutState === EDIT_CANCELED}
               status="transparent"
             >
               <RedoIcon className={styles.icon} />
@@ -531,14 +551,17 @@ class ViewEditor extends Component {
   };
 
   makeConfirmationMessage = () => {
-    return [
-      `Changes will update the layout to the currently displayed configuration`,
-      `Do you want to proceed?`,
-    ].map((c, index) => <span className={styles.confirmationMessage}key={index}>{c}</span>);
+    return [`Changes will update the layout to the currently displayed configuration`, `Do you want to proceed?`].map(
+      (c, index) => (
+        <span className={styles.confirmationMessage} key={index}>
+          {c}
+        </span>
+      ),
+    );
   };
 
   render() {
-    console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
+    // console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
@@ -625,7 +648,10 @@ class ViewEditor extends Component {
         {ReactDOM.createPortal(this.renderToolbar(), this.toolbar)}
         <ConfirmationModal
           // isOpen={!!this.state.deviceToBeConfirmed}
-          isOpen={this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION}
+          isOpen={
+            this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION ||
+            this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION
+          }
           message={this.makeConfirmationMessage()}
           confirmCallback={() => this.confirmDeviceChange(true)}
           cancelCallback={() => this.confirmDeviceChange(false)}
