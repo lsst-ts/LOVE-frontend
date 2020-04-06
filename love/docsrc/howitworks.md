@@ -134,7 +134,7 @@ This data is colected after being added to the `ws.subscriptions` state so the h
 ## Token, websocket connection and groups subscriptions
 The token, websocket and subscriptions handling is summarized in the following graphs:
 
-![redux state machine graph](./redux_ws_connection.svg 'Logo Title Text 1')
+![redux state machine graph](./redux-ws-connection.svg 'Redux state machine graph')
 
 
 ### Token handling
@@ -173,7 +173,7 @@ Validation is performed in the LOVE-manager (instead of the frontend) asynchrono
 
 The behavior can be represented by this (pseudo) state machine diagram:
 
-![redux script validation](./redux_script_validation.svg 'Logo Title Text 1')
+![redux script validation](./redux-script-validation.svg 'Script validation state machine')
 
 
 * `EMPTY`
