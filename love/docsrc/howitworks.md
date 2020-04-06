@@ -208,3 +208,11 @@ The behavior can be represented by this (pseudo) state machine diagram:
 * `VALID`
   - Can send scripts
   - On `keypress` goes back to validating
+
+## ViewEditor responsive layout simulator
+
+The `ViewEditor` located at `love/src/components/UIF/ViewEditor/ViewEditor.jsx` enables a user to edit the size and position of a `View`. On top of these features, in order to support the user to be aware of how other users will see its currently created view on different devices, a responsive layout simulator was implemented. This simulator enables the user to select a device size (such as `Laptop`, `4K`, `Mobile S`, among others) and see how the components are re-organized accordingly on screen.
+
+The behavior of this responsive layout with respect to other features is described with the following finite state machine. Such  features as editing components (resizing and moving them), undoing changes and changing the selected device size are included as events  and some but not all of the states involve particular side-effects.
+
+![State machine of the responsive layout simulator](./responsive-grid-state-machine.svg 'State machine of the responsive layout simulator')
