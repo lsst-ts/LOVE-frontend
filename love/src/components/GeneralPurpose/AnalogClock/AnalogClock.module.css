@@ -1,3 +1,10 @@
+.clock {
+  --background: #132633;
+  --marker: #798f9b;
+  --strong-marker: #e6e5e7;
+}
+
+
 .container {
   display: inline-block;
   height: fit-content;
@@ -5,30 +12,31 @@
 }
 
 .background {
-  fill: #132633;
+  /* fill: #132633; */
+  fill: var(--background);
 }
 
 .center {
-  fill: #798f9b;
-  stroke: #798f9b;
+  fill: var(--marker);
+  stroke: var(--marker);
 }
 
 .marks {
   transform: translate(20px, 20px);
   stroke-width: 0.2;
   fill: none;
-  stroke: #798f9b;
+  stroke: var(--marker);
 }
 
-.heavyMarker {
+.strongMarker {
   stroke-width: 0.5;
-  stroke: #e6e5e7;
+  stroke: var(--strong-marker);
 }
 
 .number {
   font-size: 4px;
-  stroke: #e6e5e7;
-  fill: #e6e5e7;
+  stroke: var(--strong-marker);
+  fill: var(--strong-marker);
 }
 
 .hour {
