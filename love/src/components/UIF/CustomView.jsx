@@ -278,7 +278,8 @@ class CustomView extends Component {
                 maxWidth: `${Math.max(window.innerWidth - deviceWidth, 100)}px`,
               }}
             >
-              Content on this area may not be visible to some users on the selected device.
+              This area will be invisible to the user on the selected device. 
+              Please change the device size on the top bar before dragging components here.
             </div>
           </>
         )}
