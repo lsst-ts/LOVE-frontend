@@ -28,7 +28,7 @@ const renderMarkers = () => {
         x1={19 - (i % 5 ? shortLength : longLength)}
         y1="0" x2="19" y2="0"
         transform={`rotate(${deltaAngle * i}, 0, 0)`}
-        className={i % 5 ? null : styles.heavyMarker}/>
+        className={i % 5 ? null : styles.strongMarker}/>
     );
   }
   markers.push(<text key="hour-0" className={styles.number} transform={`translate(-2, -13.5)`}> 12 </text>);
@@ -45,7 +45,7 @@ export default function AnalogClock ({ timestamp }) {
   const minute = timestamp.minute() + (second / 60);
   const hour = (timestamp.hour() % 12) + (minute / 60);
   return (
-    <svg viewBox="0 0 40 40">
+    <svg viewBox="0 0 40 40" className={styles.clock}>
       <circle className={styles.background} cx="20" cy="20" r="19" />
       <circle className={styles.center} cx="20" cy="20" r="0.7"/>
 
