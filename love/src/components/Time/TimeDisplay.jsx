@@ -40,10 +40,10 @@ export default class TimeDisplay extends React.Component {
 
   render () {
     const localTime = this.state.timestamp;
-    const utcTime = this.state.timestamp.toUTC();
-    const serenaTime = this.state.timestamp.setZone('America/Santiago');
-    const arizonaTime = this.state.timestamp.setZone('America/Phoenix');
-    const illinoisTime = this.state.timestamp.setZone('America/Chicago');
+    const utcTime = this.state.timestamp.toUTC().setLocale('en-GB');
+    const serenaTime = this.state.timestamp.setZone('America/Santiago').setLocale('en-GB');
+    const arizonaTime = this.state.timestamp.setZone('America/Phoenix').setLocale('en-GB');
+    const illinoisTime = this.state.timestamp.setZone('America/Chicago').setLocale('en-GB');
     const taiTime = utcTime.minus({ 'seconds': this.props.taiToUtc });
     return (
       <div className={styles.container}>
@@ -58,8 +58,8 @@ export default class TimeDisplay extends React.Component {
             <ClockWrapper timestamp={illinoisTime} title='Illinois'/>
           </div>
           <div className={styles.column}>
-            <ClockWrapper timestamp={utcTime} title='Universal Time (UTC)'/>
-            <ClockWrapper timestamp={taiTime} title='International Atomic Time (TAI)'/>
+            <ClockWrapper timestamp={utcTime} title='Universal Time'/>
+            <ClockWrapper timestamp={taiTime} title='International Atomic Time (TAI)' hideOffset/>
             <ClockWrapper timestamp={illinoisTime} title='Modified JD:'/>
           </div>
         </div>
@@ -68,11 +68,11 @@ export default class TimeDisplay extends React.Component {
   }
 }
 
-function ClockWrapper ({timestamp, title, showAnalog}) {
+function ClockWrapper ({timestamp, title, showAnalog, hideOffset}) {
   return (
     <div className={styles.clockWrapper}>
       <div className={styles.title}>
-        {title}
+        { hideOffset ? title : `${title} (${timestamp.offsetNameShort})` }
       </div>
       <DigitalClock timestamp={timestamp}/>
       { showAnalog && (
