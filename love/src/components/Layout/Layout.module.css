@@ -100,7 +100,9 @@
 }
 
 .middleTopbar {
-  padding: 0.5em var(--content-padding);
+  /* padding: 0.5em var(--content-padding); */
+  /* background-color: var(--second-secondary-background-color);
+  width: fit-content; */
 }
 
 .overflownToolbar {
@@ -114,7 +116,7 @@
   margin: 0;
   padding: var(--content-padding);
   overflow: auto;
-  height: calc(100vh - 4em);
+  height: calc(100vh - 5em);
   will-change: transform;
 }
 
