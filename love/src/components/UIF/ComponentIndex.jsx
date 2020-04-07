@@ -47,6 +47,10 @@ export const uifIndex = {
     component: require('../HealthStatusSummary/HealthStatusSummary.container').default,
     schema: require('../HealthStatusSummary/HealthStatusSummary.container').schema,
   },
+  Clock: {
+    component: require('../Time/Clock/Clock.container').default,
+    schema: require('../Time/Clock/Clock.container').schema,
+  },
   TimeDisplay: {
     component: require('../Time/TimeDisplay.container').default,
     schema: require('../Time/TimeDisplay.container').schema,
