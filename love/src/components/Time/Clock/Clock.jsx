@@ -50,11 +50,15 @@ export default class ClockContainer extends React.Component {
     /** The timezone to display the timestamps. Null or empty if current should be used 'UTC' for UTC. Null by default.
      * The format for this string must be: <Continent (camelcase)>-<City (camelcase)>.
      * For example:
+     * - For UTC use UTC
+     * - For TAI use TAI
      * - For 'La Serena' use 'America/Santiago' (yes America, not Chile)
      * - For 'Arizona' use 'America/Phoenix'
      * - For 'Illinois' use 'America/Chicago'
      */
     timezone: PropTypes.string,
+    /** Number of seconds to add to a TAI timestamp to convert it in UTC. Only applied if timezone is TAI */
+    taiToUtc: PropTypes.number,
   }
 
   static defaultProps = {
@@ -65,6 +69,7 @@ export default class ClockContainer extends React.Component {
     hideOffset: false,
     locale: 'en-GB',
     timezone: null,
+    taiToUtc: 0,
   }
 
   constructor(props) {
@@ -99,18 +104,22 @@ export default class ClockContainer extends React.Component {
       timestamp = timestamp.setLocale(this.props.locale);
     }
     if (this.props.timezone) {
-      timestamp = timestamp.setZone(this.props.timezone);
+      if (this.props.timezone === 'TAI') {
+        timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.taiToUtc })
+      }
+      else {
+        timestamp = timestamp.setZone(this.props.timezone);
+      }
     }
     const name = this.props.name;
     const hideAnalog = this.props.hideAnalog;
     const hideDate = this.props.hideDate;
-    const hideOffset = this.props.hideOffset;
-    const t = parseTimestamp(timestamp);
+    const offset = this.props.hideOffset ? false : (this.props.timezone === 'TAI' ? 'TAI' : timestamp.offsetNameShort);
     return (
       <div className={styles.container}>
-        { (name || !hideOffset) && (
+        { (name || offset) && (
           <div className={styles.name}>
-            { hideOffset ? name : `${name} (${timestamp.offsetNameShort})` }
+            { offset ? `${name} (${offset})` : name }
           </div>
         )}
         <DigitalClock timestamp={timestamp} hideDate={hideDate}/>
