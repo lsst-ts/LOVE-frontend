@@ -66,7 +66,8 @@ export const schema = {
         Null or empty if current should be used. 'UTC' for UTC. Null by default.
         The format for this string must be: <Continent>/<City> (use camelcase and underscores (_) instead of spaces).
         For example:
-        - For UTC use UTC.
+        - For UTC use UTC
+        - For TAI use TAI
         - For La Serena use America/Santiago (yes America, not Chile)
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago
