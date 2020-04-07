@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './EventLog.module.css';
 import BackArrowIcon from '../icons/BackArrowIcon/BackArrowIcon';
@@ -11,7 +11,7 @@ import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
 import { CardList, Card, Title, SubTitle, Separator } from '../GeneralPurpose/CardList/CardList';
 import TextField from '../TextField/TextField';
 
-export default class EventLog extends Component {
+export default class EventLog extends PureComponent {
   static propTypes = {
     name: PropTypes.string,
     group: PropTypes.string,
@@ -53,11 +53,11 @@ export default class EventLog extends Component {
       cscRegExp: getStringRegExp(''),
       messageFilters,
       typeFilters,
+      eventData: [],
     };
   }
 
   componentDidMount = () => {
-    console.log(this.props);
     this.props.subscribeToStreams(this.props.cscList);
   };
 
@@ -88,6 +88,22 @@ export default class EventLog extends Component {
     this.setState({
       typeFilters: { ...filters },
     });
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (
+      this.state.eventData?.length === 0 ||
+      JSON.stringify(this.props.logMessageData) !== JSON.stringify(prevProps.logMessageData) ||
+      JSON.stringify(this.props.errorCodeData) !== JSON.stringify(prevProps.errorCodeData)
+    ) {
+      const eventData = [...this.props.logMessageData, ...this.props.errorCodeData];
+      eventData.sort((a, b) => (a?.private_rcvStamp?.value > b?.private_rcvStamp?.value ? -1 : 1));
+      if (eventData.length !== 0) {
+        this.setState({
+          eventData,
+        });
+      }
+    }
   };
 
   renderErrorMessage = (msg, index) => {
@@ -214,11 +230,10 @@ export default class EventLog extends Component {
           </div>
           <Separator className={styles.separator} />
 
-          {this.props.errorCodeData.map((msg, index) => {
-            return this.state.typeFilters.error.value && this.renderErrorMessage(msg, index);
-          })}
-          {this.props.logMessageData.map((msg, index) => {
-            return this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
+          {this.state.eventData.map((msg, index) => {
+            return msg.errorCode !== undefined
+              ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
+              : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
           })}
         </CardList>
       </div>
