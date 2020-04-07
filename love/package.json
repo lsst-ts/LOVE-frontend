@@ -5,7 +5,6 @@
   "dependencies": {
     "ajv": "^6.10.2",
     "brace": "^0.11.1",
-    "dayjs": "^1.8.23",
     "file-saver": "^2.0.1",
     "html2canvas": "^1.0.0-rc.5",
     "luxon": "^1.23.0",
