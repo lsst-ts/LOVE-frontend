@@ -62,7 +62,11 @@ export const uifIndex = {
   TelemetryLog: {
     component: require('../TelemetryLog/TelemetryLog.container').default,
     schema: require('../TelemetryLog/TelemetryLog.container').schema,
-  }
+  },
+  SubscriptionTable: {
+    component: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').default,
+    schema: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').schema,
+  },
 };
 
 export const auxtelIndex = {

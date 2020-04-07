@@ -21,10 +21,30 @@ import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
+import Select from '../../GeneralPurpose/Select/Select';
+import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
+
+import { DEVICE_TO_SIZE, DEVICE_TO_COLS } from '../CustomView';
 
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
+
+const deviceOptions = [
+  { label: 'Device size', value: Infinity },
+  ...Object.entries(DEVICE_TO_SIZE).map(([key, value]) => {
+    return { label: key, value: value };
+  }),
+];
+
+/** RESPONSIVE LAYOUT STATES */
+
+const COLS_NOT_CHANGED = 'COLS_NOT_CHANGED';
+const COLS_DECREASED = 'COLS_DECREASED';
+const EDIT_NEEDS_CONFIRMATION = 'EDIT_NEEDS_CONFIRMATION';
+const COLS_INCREASED = 'COLS_INCREASED';
+const EDIT_CANCELED = 'EDIT_CANCELED';
+const UNDO_NEEDS_CONFIRMATION = 'UNDO_NEEDS_CONFIRMATION';
 
 class ViewEditor extends Component {
   static propTypes = {
@@ -44,6 +64,7 @@ class ViewEditor extends Component {
     loadViewToEdit: PropTypes.func,
     /** Function to clear the edited view */
     clearEditedView: PropTypes.func,
+
     /** Function to save the edited view to the server (POST or PUT) */
     saveEditedView: PropTypes.func,
     /** Function to undo the latest layout modification */
@@ -78,9 +99,14 @@ class ViewEditor extends Component {
       id: null,
       editorVisible: false,
       editorChanged: false,
-      customViewKey: Math.random(), // To force component reload on config change
+      customViewKey: Math.random(), // To force component reload on config change,
+      device: deviceOptions[0],
+      // deviceToBeConfirmed: null
+      responsiveLayoutState: COLS_NOT_CHANGED,
     };
     this.toolbar = document.createElement('div');
+    this.toolbar.className = styles.toolbarContainer;
+
     this.customViewRef = React.createRef();
   }
 
@@ -181,6 +207,13 @@ class ViewEditor extends Component {
       parsedProperties.allowOverflow = elementProperties.allowOverflow;
       newLayout = this.updateElementProperties(newLayout, parsedProperties);
     });
+
+    newLayout.properties.cols = Object.keys(DEVICE_TO_COLS).includes(this.state.device.label)
+      ? DEVICE_TO_COLS[this.state.device.label]
+      : Object.keys(DEVICE_TO_COLS).reduce((lastMax, key) => {
+          return Math.max(lastMax, DEVICE_TO_COLS[key]);
+        }, 0);
+
     const newLayoutStr = JSON.stringify(newLayout, null, 2);
     this.setState({
       layout: newLayoutStr,
@@ -188,6 +221,22 @@ class ViewEditor extends Component {
     if (newLayoutStr !== oldLayoutStr) {
       this.updateEditedViewLayout(newLayout);
     }
+  };
+
+  confirmLayoutChange = (newLayoutProperties) => {
+    console.log('confirmLayoutChange this.state.responsiveLayoutState', this.state.responsiveLayoutState);
+    this.onLayoutChange(newLayoutProperties);
+    if (this.state.responsiveLayoutState === COLS_DECREASED || this.state.responsiveLayoutState === EDIT_CANCELED) {
+      this.setState({
+        responsiveLayoutState: EDIT_NEEDS_CONFIRMATION,
+      });
+      return;
+    }
+
+    this.setState({
+      responsiveLayoutState: COLS_NOT_CHANGED,
+    });
+    this.onLayoutChange(newLayoutProperties);
   };
 
   updateElementProperties = (element, properties) => {
@@ -259,6 +308,7 @@ class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideSelectionModal();
+
     const parsedLayout = { ...this.getEditedViewLayout() };
     const additionalContent = {};
     let startingIndex = 0;
@@ -326,22 +376,83 @@ class ViewEditor extends Component {
     return this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
   };
 
+  onDeviceChange = (device) => {
+    const currentCols = isFinite(this.state.device.value)
+      ? DEVICE_TO_COLS[this.state.device.label]
+      : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
+    const nextCols = isFinite(device.value)
+      ? DEVICE_TO_COLS[device.label]
+      : DEVICE_TO_COLS[Object.keys(DEVICE_TO_COLS)[0]];
+
+    this.setState({
+      device: device,
+    });
+
+    this.setState({
+      responsiveLayoutState:
+        nextCols < currentCols ? COLS_DECREASED : nextCols > currentCols ? COLS_INCREASED : COLS_NOT_CHANGED,
+    });
+    // const needsConfirmation = currentCols !== nextCols;
+    // if (needsConfirmation) {
+    //   this.setState({ deviceToBeConfirmed: device, responsiveLayoutState: EDIT_NEEDS_CONFIRMATION});
+    // } else {
+    //   this.setState({ device });
+    // }
+  };
+
+  confirmDeviceChange = (confirmed) => {
+    if (confirmed) {
+      if (this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION) {
+        this.props.undo();
+      }
+      this.setState({
+        responsiveLayoutState: COLS_NOT_CHANGED,
+      });
+      return;
+    }
+
+    if (this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION) {
+      this.props.undo();
+    }
+    
+    this.setState({
+      responsiveLayoutState: EDIT_CANCELED,
+    });
+  };
+
+  undo = () => {
+    if (this.state.responsiveLayoutState === EDIT_CANCELED || this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION) {
+      this.setState({
+        responsiveLayoutState: UNDO_NEEDS_CONFIRMATION,
+      });
+      return;
+    }
+
+    this.props.undo();
+  };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
-
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
+    console.log('responsiveLayoutState', this.state.responsiveLayoutState)
     return (
       <>
         <div className={styles.toolbarWrapper}>
           <div className={styles.toolbar}>
             <Input
-              className={styles.textField}
+              className={[styles.textField, styles.element].join(' ')}
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
             />
+            <Select
+              small
+              option={this.state.device}
+              options={deviceOptions}
+              onChange={this.onDeviceChange}
+              className={[styles.deviceSelect, styles.element].join(' ')}
+            />
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title={saveButtonTooltip}
               onClick={this.save}
               disabled={isSaved}
@@ -350,7 +461,7 @@ class ViewEditor extends Component {
               <SaveIcon className={styles.icon} />
             </Button>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Add components"
               onClick={this.showSelectionModal}
               status="transparent"
@@ -359,25 +470,25 @@ class ViewEditor extends Component {
             </Button>
 
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Undo"
-              onClick={this.props.undo}
+              onClick={this.undo}
               disabled={this.props.undoActionsAvailable === 0}
               status="transparent"
             >
               <UndoIcon className={styles.icon} />
             </Button>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Redo"
               onClick={this.props.redo}
-              disabled={this.props.redoActionsAvailable === 0}
+              disabled={this.props.redoActionsAvailable === 0 || this.state.responsiveLayoutState === EDIT_CANCELED}
               status="transparent"
             >
               <RedoIcon className={styles.icon} />
             </Button>
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn, styles.element].join(' ')}
               title="Debug"
               onClick={this.showEditor}
               disabled={this.state.editorVisible}
@@ -388,7 +499,7 @@ class ViewEditor extends Component {
             <span className={styles.divider} />
 
             <Button
-              className={styles.iconBtn}
+              className={[styles.iconBtn].join(' ')}
               title="Exit edit mode"
               onClick={this.exitEditMode}
               disabled={this.state.editorVisible}
@@ -439,7 +550,18 @@ class ViewEditor extends Component {
     });
   };
 
+  makeConfirmationMessage = () => {
+    return [`Changes will update the layout to the currently displayed configuration`, `Do you want to proceed?`].map(
+      (c, index) => (
+        <span className={styles.confirmationMessage} key={index}>
+          {c}
+        </span>
+      ),
+    );
+  };
+
   render() {
+    // console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
@@ -452,10 +574,12 @@ class ViewEditor extends Component {
             <CustomView
               key={this.state.customViewKey}
               layout={this.getEditedViewLayout()}
-              onLayoutChange={this.onLayoutChange}
+              // onLayoutChange={this.onLayoutChange}
+              onLayoutChange={this.confirmLayoutChange}
               onComponentDelete={this.onComponentDelete}
               onComponentConfig={this.onComponentConfig}
               isEditable={true}
+              deviceWidth={this.state.device.value}
             ></CustomView>
           </div>
         </div>
@@ -522,6 +646,16 @@ class ViewEditor extends Component {
           onSaveConfig={this.updateElementConfig}
         />
         {ReactDOM.createPortal(this.renderToolbar(), this.toolbar)}
+        <ConfirmationModal
+          // isOpen={!!this.state.deviceToBeConfirmed}
+          isOpen={
+            this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION ||
+            this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION
+          }
+          message={this.makeConfirmationMessage()}
+          confirmCallback={() => this.confirmDeviceChange(true)}
+          cancelCallback={() => this.confirmDeviceChange(false)}
+        />
       </>
     );
   }

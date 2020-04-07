@@ -142,8 +142,8 @@ class Layout extends Component {
     const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
     const customTopbar = document.getElementById('customTopbar');
     toolbarParent.appendChild(customTopbar);
-  }
-
+  };
+  
   checkHeartbeat = () => {
     const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
     const heartbeatStatus =
@@ -227,8 +227,6 @@ class Layout extends Component {
     this.props.history.push('/');
   };
 
-
-
   setHovered = (value) => {
     this.setState({ hovered: value });
   };
@@ -237,7 +235,7 @@ class Layout extends Component {
     return (
       <>
         <div className={styles.hidden}>
-          <div id='customTopbar'/>
+          <div id="customTopbar" />
         </div>
         <div
           className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
@@ -297,20 +295,19 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="middleTopbar"/>
+          <div className={styles.middleTopbar} id="middleTopbar" />
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
               <Button
-                className={[
-                  styles.iconBtn,
-                  styles.heartbeatButton,
-                ].join(' ')}
+                className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
                 style={{
-                  visibility: this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered) ?
-                  'visible' : 'hidden'
+                  visibility:
+                    this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered)
+                      ? 'visible'
+                      : 'hidden',
                 }}
                 title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 onClick={() => {}}
@@ -322,12 +319,7 @@ class Layout extends Component {
                   title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 />
               </Button>
-              <Button
-                className={styles.iconBtn}
-                title="View notifications"
-                onClick={() => {}}
-                status="transparent"
-              >
+              <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
                 <NotificationIcon className={styles.icon} />
               </Button>
 
@@ -348,8 +340,7 @@ class Layout extends Component {
             </div>
           </div>
         </div>
-
-        <div className={styles.overflownToolbar} id="overflownToolbar"/>
+        <div className={styles.overflownToolbar} id="overflownToolbar" />
 
         <div
           ref={(node) => (this.sidebar = node)}
@@ -371,7 +362,7 @@ class Layout extends Component {
               }}
             >
               <span className={styles.label}> Edit this view </span>
-              <EditIcon className={styles.editIcon}/>
+              <EditIcon className={styles.editIcon} />
             </Button>
 
             <Button className={styles.button} title="New view" onClick={this.createNewView}>

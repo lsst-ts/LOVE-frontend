@@ -33,20 +33,27 @@
 
 .textField {
   width: 20ch;
-  background-color: transparent;
-  border: 1px solid var(--secondary-font-color);
+  background-color: var(--second-tertiary-background-color);
   color: var(--base-font-color);
+  font-style: italic;
 }
 
 .toolbarWrapper {
-  display: inline-block;
-  margin: auto;
+  padding: 0.5em var(--content-padding);
+  background-color: var(--second-secondary-background-color);
+  width: fit-content;
 }
 
 .toolbar {
-  display: grid;
-  grid-template-columns: min-content repeat(7, min-content);
+  /* display: grid;
+  grid-template-columns: min-content repeat(8, min-content); */
+  display: flex;
+  flex-wrap: wrap;
   /* grid-gap: 0.2em; */
+}
+.toolbarContainer {
+  display: flex;
+  justify-content: center;
 }
 
 .iconBtn {
@@ -67,4 +74,16 @@
   height: 80%;
   background: var(--secondary-font-color);
   align-self: center;
+}
+
+.deviceSelect {
+  width: 15ch;
+}
+
+.element {
+  margin-right: 0.15rem;
+}
+
+.confirmationMessage {
+  display: block;
 }
