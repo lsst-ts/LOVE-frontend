@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './DigitalClock.module.css';
 import * as dayjs from 'dayjs';
 import { DateTime } from 'luxon';
+import { parseTimestamp } from '../../../Utils';
 
 
 /**
@@ -21,15 +22,14 @@ DigitalClock.defaultProps = {
 }
 
 export default function DigitalClock ({ timestamp, showDate }) {
-  const t = timestamp instanceof DateTime ? timestamp :
-    timestamp instanceof Date ? DateTime.fromJSDate(timestamp) : DateTime.fromMillis(timestamp);
+  const t = parseTimestamp(timestamp);
   return (
     <div className={styles.container}> 
       <div className={styles.time}> 
         { t.toFormat('HH:mm:ss') }
       </div>
      { showDate && (<div className={styles.date}> 
-        { t.toFormat('ddd, MMM DD YYYY') }
+        { t.toFormat('EEE, MMM dd yyyy') }
       </div>)}
     </div>
   );
