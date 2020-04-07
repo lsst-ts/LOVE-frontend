@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './AnalogClock.module.css';
-import * as dayjs from 'dayjs';
 import { DateTime } from 'luxon';
 
 /**
