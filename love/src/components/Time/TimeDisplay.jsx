@@ -4,6 +4,7 @@ import AnalogClock from '../GeneralPurpose/AnalogClock/AnalogClock';
 import DigitalClock from '../GeneralPurpose/DigitalClock/DigitalClock';
 import styles from './TimeDisplay.module.css';
 import * as dayjs from 'dayjs';
+import { DateTime } from "luxon"; 
 
 
 export default class TimeDisplay extends React.Component {
@@ -16,7 +17,7 @@ export default class TimeDisplay extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      timestamp: dayjs(),
+      timestamp: DateTime.local(),
     };
   }
 
@@ -33,17 +34,17 @@ export default class TimeDisplay extends React.Component {
 
   tick() {
     this.setState({
-      timestamp: dayjs(),
+      timestamp: DateTime.local(),
     });
   }
 
   render () {
     const localTime = this.state.timestamp;
-    const utcTime = this.state.timestamp.utc();
-    const serenaTime = this.state.timestamp.utcOffset(-4);
-    const arizonaTime = this.state.timestamp.utcOffset(-7);
-    const illinoisTime = this.state.timestamp.utcOffset(-6);
-    const taiTime = utcTime.subtract(this.props.taiToUtc, 'seconds');
+    const utcTime = this.state.timestamp.toUTC();
+    const serenaTime = this.state.timestamp.setZone('America/Santiago');
+    const arizonaTime = this.state.timestamp.setZone('America/Phoenix');
+    const illinoisTime = this.state.timestamp.setZone('America/Chicago');
+    const taiTime = utcTime.minus({ 'seconds': this.props.taiToUtc });
     return (
       <div className={styles.container}>
         <div className={styles.group}>
