@@ -1,0 +1,14 @@
+.container {
+  padding: 0.5em;
+}
+
+.title {
+  font-weight: bolder;
+  color: var(--base-font-color);
+  font-size: 0.9em;
+  padding-bottom: 0.1em;
+}
+
+.analog {
+  min-width: 12em;
+}

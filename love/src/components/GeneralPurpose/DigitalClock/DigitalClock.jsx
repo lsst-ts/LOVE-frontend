@@ -11,23 +11,23 @@ import { parseTimestamp } from '../../../Utils';
 DigitalClock.propTypes = {
   /** Date-able object or float, if float it must be in milliseconds */
   timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-  /** Flag to display or not the date, true by default */
-  showDate: PropTypes.bool,
+  /** Flag to hide or not the date, false by default */
+  hideDate: PropTypes.bool,
 }
 
 DigitalClock.defaultProps = {
   timestamp: DateTime.local(),
-  showDate: true,
+  hideDate: false,
 }
 
-export default function DigitalClock ({ timestamp, showDate }) {
+export default function DigitalClock ({ timestamp, hideDate }) {
   const t = parseTimestamp(timestamp);
   return (
     <div className={styles.container}> 
       <div className={styles.time}> 
         { t.toFormat('HH:mm:ss') }
       </div>
-     { showDate && (<div className={styles.date}> 
+     { !hideDate && (<div className={styles.date}> 
         { t.toFormat('EEE, MMM dd yyyy') }
       </div>)}
     </div>

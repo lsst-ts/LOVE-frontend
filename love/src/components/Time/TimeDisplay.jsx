@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AnalogClock from '../GeneralPurpose/AnalogClock/AnalogClock';
-import DigitalClock from '../GeneralPurpose/DigitalClock/DigitalClock';
+import Clock from './Clock/Clock';
 import styles from './TimeDisplay.module.css';
 import { DateTime } from "luxon"; 
 
@@ -47,38 +46,22 @@ export default class TimeDisplay extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.group}>
-          <ClockWrapper timestamp={localTime} title='Local Time' showAnalog/>
-          <ClockWrapper timestamp={localTime} title='Sidereal Time' showAnalog hideOffset/>
+          <Clock timestamp={localTime} title='Local Time'/>
+          <Clock timestamp={localTime} title='Sidereal Time' hideOffset/>
         </div>
         <div className={styles.group}>
           <div className={styles.column}>
-            <ClockWrapper timestamp={serenaTime} title='La Serena'/>
-            <ClockWrapper timestamp={arizonaTime} title='Arizona'/>
-            <ClockWrapper timestamp={illinoisTime} title='Illinois'/>
+            <Clock timestamp={serenaTime} title='La Serena' hideAnalog/>
+            <Clock timestamp={arizonaTime} title='Arizona' hideAnalog/>
+            <Clock timestamp={illinoisTime} title='Illinois' hideAnalog/>
           </div>
           <div className={styles.column}>
-            <ClockWrapper timestamp={utcTime} title='Universal Time'/>
-            <ClockWrapper timestamp={taiTime} title='International Atomic Time (TAI)' hideOffset/>
-            <ClockWrapper timestamp={illinoisTime} title='Modified JD' hideOffset/>
+            <Clock timestamp={utcTime} title='Universal Time' hideAnalog/>
+            <Clock timestamp={taiTime} title='International Atomic Time (TAI)' hideOffset hideAnalog/>
+            <Clock timestamp={illinoisTime} title='Modified JD' hideOffset hideAnalog/>
           </div>
         </div>
       </div>
     );
   }
-}
-
-function ClockWrapper ({timestamp, title, showAnalog, hideOffset}) {
-  return (
-    <div className={styles.clockWrapper}>
-      <div className={styles.title}>
-        { hideOffset ? title : `${title} (${timestamp.offsetNameShort})` }
-      </div>
-      <DigitalClock timestamp={timestamp}/>
-      { showAnalog && (
-        <div className={styles.analog}>
-          <AnalogClock timestamp={timestamp}/>
-        </div>
-      )}
-    </div>
-  );
 }
