@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
 import { DateTime } from 'luxon';
-import * as dayjs from 'dayjs';
-var relativetime = require('dayjs/plugin/relativeTime');
-var utc = require('dayjs/plugin/utc');
-dayjs.extend(relativetime);
-dayjs.extend(utc);
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -478,8 +473,8 @@ export const parseTimestamp = (timestamp) => {
  * @param {string} location, optional location to append to the timestamp, TAI by default
  */
 export const formatTimestamp = (timestamp, location = 'TAI') => {
-  const t = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
-  return `${t.utc().format('YYYY/MM/DD HH:mm:ss')} ${location}`;
+  const t = parseTimestamp(timestamp);
+  return `${t.toUTC().toFormat('yyyy/MM/dd HH:mm:ss')} ${location}`;
 };
 
 /**
@@ -488,8 +483,8 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
  * @param {string} location, optional location to append to the timestamp, empty by default
  */
 export const isoTimestamp = (timestamp, location = null) => {
-  const t = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
-  return [t.toISOString(), location ? location : null].join(' ');
+  const t = parseTimestamp(timestamp);
+  return [t.toUTC().toISO(), location ? location : null].join(' ');
 };
 
 /**
@@ -498,8 +493,8 @@ export const isoTimestamp = (timestamp, location = null) => {
  * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
  */
 export const relativeTime = (timestamp, taiToUtc) => {
-  const t_tai = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
-  const t_utc = t_tai.add(taiToUtc, 'second').utc();
-  const delta = t_utc.fromNow();
+  const t_tai = parseTimestamp(timestamp);
+  const t_utc = t_tai.plus({ second: taiToUtc }).toUTC();
+  const delta = t_utc.toRelative();
   return delta;
 };

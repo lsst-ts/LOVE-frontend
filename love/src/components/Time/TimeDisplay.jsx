@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import AnalogClock from '../GeneralPurpose/AnalogClock/AnalogClock';
 import DigitalClock from '../GeneralPurpose/DigitalClock/DigitalClock';
 import styles from './TimeDisplay.module.css';
-import * as dayjs from 'dayjs';
 import { DateTime } from "luxon"; 
 
 
@@ -49,7 +48,7 @@ export default class TimeDisplay extends React.Component {
       <div className={styles.container}>
         <div className={styles.group}>
           <ClockWrapper timestamp={localTime} title='Local Time' showAnalog/>
-          <ClockWrapper timestamp={localTime} title='Sidereal Time' showAnalog/>
+          <ClockWrapper timestamp={localTime} title='Sidereal Time' showAnalog hideOffset/>
         </div>
         <div className={styles.group}>
           <div className={styles.column}>
@@ -60,7 +59,7 @@ export default class TimeDisplay extends React.Component {
           <div className={styles.column}>
             <ClockWrapper timestamp={utcTime} title='Universal Time'/>
             <ClockWrapper timestamp={taiTime} title='International Atomic Time (TAI)' hideOffset/>
-            <ClockWrapper timestamp={illinoisTime} title='Modified JD:'/>
+            <ClockWrapper timestamp={illinoisTime} title='Modified JD' hideOffset/>
           </div>
         </div>
       </div>
