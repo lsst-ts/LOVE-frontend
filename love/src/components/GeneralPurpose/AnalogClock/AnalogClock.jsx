@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './AnalogClock.module.css';
 import { DateTime } from 'luxon';
+import { parseTimestamp } from '../../../Utils';
+
 
 /**
  * Component that displays time and optionally the date below
@@ -39,11 +41,11 @@ const renderMarkers = () => {
 }
 
 export default function AnalogClock ({ timestamp }) {
-  const t = timestamp instanceof DateTime ? timestamp : DateTime.local(timestamp);
+  const t = parseTimestamp(timestamp);
   const markers = renderMarkers();
-  const second = timestamp.second;
-  const minute = timestamp.minute + (second / 60);
-  const hour = (timestamp.hour % 12) + (minute / 60);
+  const second = t.second;
+  const minute = t.minute + (second / 60);
+  const hour = (t.hour % 12) + (minute / 60);
   return (
     <svg viewBox="0 0 40 40" className={styles.clock}>
       <circle className={styles.background} cx="20" cy="20" r="19" />

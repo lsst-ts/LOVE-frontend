@@ -42,12 +42,14 @@ export default class ClockContainer extends React.Component {
     hideAnalog: PropTypes.bool,
     /** Flag to hide or not the date, false by default */
     hideDate: PropTypes.bool,
-    /** Flag to hide or not the UTC offset besides the name, false by default */
+    /** Flag to hide or not the UTC offset displayed beside the name, false by default */
     hideOffset: PropTypes.bool,
-    /** String that defines the "locale" used to display the UTC Offset. en_GB by default (so it is displayed as GMT always).
+    /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
     /** The timezone to display the timestamps. Null or empty if current should be used 'UTC' for UTC. Null by default.
+     * The format for this string must be: <Continent (camelcase)>-<City (camelcase)>.
+     * For example:
      * - For 'La Serena' use 'America/Santiago' (yes America, not Chile)
      * - For 'Arizona' use 'America/Phoenix'
      * - For 'Illinois' use 'America/Chicago'
@@ -106,7 +108,7 @@ export default class ClockContainer extends React.Component {
     const t = parseTimestamp(timestamp);
     return (
       <div className={styles.container}>
-        { name && (
+        { (name || !hideOffset) && (
           <div className={styles.name}>
             { hideOffset ? name : `${name} (${timestamp.offsetNameShort})` }
           </div>

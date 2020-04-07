@@ -38,11 +38,7 @@ export default class TimeDisplay extends React.Component {
 
   render () {
     const localTime = this.state.timestamp;
-    const utcTime = this.state.timestamp.setZone('UTC');
-    const serenaTime = this.state.timestamp.setZone('America/Santiago');
-    const arizonaTime = this.state.timestamp.setZone('America/Phoenix');
-    const illinoisTime = this.state.timestamp.setZone('America/Chicago');
-    const taiTime = utcTime.minus({ 'seconds': this.props.taiToUtc });
+    const taiTime = this.state.timestamp.setZone('UTC').minus({ 'seconds': this.props.taiToUtc });
     return (
       <div className={styles.container}>
         <div className={styles.group}>
