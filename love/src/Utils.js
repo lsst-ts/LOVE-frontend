@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import { DateTime } from 'luxon';
 import * as dayjs from 'dayjs';
 var relativetime = require('dayjs/plugin/relativeTime');
 var utc = require('dayjs/plugin/utc');
 dayjs.extend(relativetime);
 dayjs.extend(utc);
-
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -465,6 +465,13 @@ export const cscText = (csc, salindex) => {
   return csc + (salindex === 0 ? '' : `.${salindex}`);
 };
 
+export const parseTimestamp = (timestamp) => {
+  if (timestamp instanceof DateTime) return timestamp;
+  if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
+  if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
+  else return null;
+};
+
 /**
  * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
  * @param {date-able} timestamp, if float it must be in miliseconds
@@ -491,7 +498,7 @@ export const isoTimestamp = (timestamp, location = null) => {
  * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
  */
 export const relativeTime = (timestamp, taiToUtc) => {
-  const t_tai = timestamp instanceof dayjs ? timestamp : dayjs(timestamp); 
+  const t_tai = timestamp instanceof dayjs ? timestamp : dayjs(timestamp);
   const t_utc = t_tai.add(taiToUtc, 'second').utc();
   const delta = t_utc.fromNow();
   return delta;
