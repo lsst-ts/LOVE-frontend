@@ -47,12 +47,6 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
-    _functionProps: {
-      type: 'array',
-      description: 'Array containing the props that are functions',
-      isPrivate: true,
-      default: [],
-    },
   },
 };
 
@@ -121,15 +115,12 @@ const mapStateToProps = (state, ownProps) => {
       });
     });
   });
-  console.log(cscList);
   const errorCodeData = getGroupSortedErrorCodeData(state, cscList);
   const logMessageData = getGroupSortedLogMessageData(state, cscList);
-  console.log(logMessageData);
-
   return {
     cscList,
     errorCodeData,
-    logMessageData
+    logMessageData,
   };
 };
 
