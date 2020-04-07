@@ -5,7 +5,7 @@ import TextField from '../TextField/TextField';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
-import { formatTimestamp } from '../../Utils';
+import { formatTimestamp, getStringRegExp } from '../../Utils';
 
 const TIME_FILTER_LIVE = 'TIME_FILTER_LIVE';
 const TIME_FILTER_QUERY = 'TIME_FILTER_QUERY';
@@ -75,12 +75,14 @@ export default class ObservingLogInput extends Component {
   changeContentFilter = (event) => {
     this.setState({
       contentFilter: event.target.value,
+      contentRegExp: getStringRegExp(event.target.value),
     });
   };
 
   changeUserFilter = (event) => {
     this.setState({
       userFilter: event.target.value,
+      userRegExp: getStringRegExp(event.target.value),
     });
   };
 
@@ -174,12 +176,13 @@ export default class ObservingLogInput extends Component {
 
     this.resizeObserver.observe(this.containerRef.current);
   };
+
   render() {
     const filteredMessages = this.props.logMessages.filter((msg) => {
       const messageDate = new Date((msg.private_rcvStamp.value + this.props.taiToUtc) * 1000);
       const contentFilter =
-        this.state.contentFilter === '' || new RegExp(this.state.contentFilter, 'i').test(msg.message.value);
-      const userFilter = this.state.userFilter === '' || new RegExp(msg.user.value, 'i').test();
+        this.state.contentFilter === '' || this.state.contentRegExp.test(msg.message.value);
+      const userFilter = this.state.userFilter === '' || this.state.userRegExp.test();
       const timeFilter = messageDate > this.state.timeFilterDateStart && messageDate < this.state.timeFilterDateEnd;
       const filter = contentFilter && userFilter && timeFilter;
       return filter;
