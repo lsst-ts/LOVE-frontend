@@ -4,7 +4,7 @@ import styles from './EventLog.module.css';
 import BackArrowIcon from '../icons/BackArrowIcon/BackArrowIcon';
 import CSCDetailContainer from '../CSCSummary/CSCDetail/CSCDetail.container';
 import Button from '../GeneralPurpose/Button/Button';
-import { formatTimestamp } from '../../Utils';
+import { formatTimestamp, getStringRegExp } from '../../Utils';
 import InfoIcon from '../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
@@ -37,6 +37,23 @@ export default class EventLog extends Component {
 
   constructor(props) {
     super(props);
+
+    const messageFilters = {
+      10: { value: true, name: 'Debug' },
+      20: { value: true, name: 'Info' },
+      30: { value: true, name: 'Warning' },
+      40: { value: true, name: 'Error' },
+    };
+    const typeFilters = {
+      error: { value: true, name: 'Error code' },
+      log: { value: true, name: 'Log message' },
+    };
+    this.state = {
+      cscFilter: '',
+      cscRegExp: getStringRegExp(''),
+      messageFilters,
+      typeFilters,
+    };
   }
 
   componentDidMount = () => {
@@ -50,77 +67,98 @@ export default class EventLog extends Component {
     //   });
   };
 
+  changeCSCFilter = (event) => {
+    this.setState({
+      cscFilter: event.target.value,
+      cscRegExp: getStringRegExp(event.target.value),
+    });
+  };
+
+  updateMessageFilters = (key, value) => {
+    const filters = this.state.messageFilters;
+    filters[key].value = value;
+    this.setState({
+      messageFilters: { ...filters },
+    });
+  };
+
+  updateTypeFilters = (key, value) => {
+    const filters = this.state.typeFilters;
+    filters[key].value = value;
+    this.setState({
+      typeFilters: { ...filters },
+    });
+  };
+
   renderErrorMessage = (msg, index) => {
+    const cscKey = `${msg.csc}.${msg.salindex}`;
+    const filterResult = this.state.cscFilter === '' || this.state.cscRegExp.test(cscKey);
     return (
-      <Card key={`${msg.private_rcvStamp.value}-${index}`} className={styles.card}>
-        <div className={styles.messageTextContainer}>
-          <div className={styles.messageTopSection}>
-            <div className={styles.cardTitleContainer}>
-              <span className={styles.highlight}>{`${msg.csc}.${msg.salindex}`}</span>
-              <span className={styles.cardTitleContainer}>
-                <span>{' - '} Error code </span>
-                <span className={styles.highlight}> {msg.errorCode.value}</span>
-              </span>
+      filterResult && (
+        <Card key={`${msg.private_rcvStamp.value}-${index}`} className={styles.card}>
+          <div className={styles.messageTextContainer}>
+            <div className={styles.messageTopSection}>
+              <div className={styles.cardTitleContainer}>
+                <span className={styles.highlight}>{cscKey}</span>
+                <span className={styles.cardTitleContainer}>
+                  <span>{' - '} Error code </span>
+                  <span className={styles.highlight}> {msg.errorCode.value}</span>
+                </span>
+              </div>
+
+              <div className={styles.timestamp} title="private_rcvStamp">
+                {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+              </div>
             </div>
 
-            <div className={styles.timestamp} title="private_rcvStamp">
-              {formatTimestamp(msg.private_rcvStamp.value * 1000)}
-            </div>
+            <Separator className={styles.innerSeparator} />
+            <div className={styles.messageText}>{msg.errorReport.value}</div>
+            <div className={styles.messageTraceback}>{msg.traceback.value}</div>
           </div>
-
-          <Separator className={styles.innerSeparator} />
-          <div className={styles.messageText}>{msg.errorReport.value}</div>
-          <div className={styles.messageTraceback}>{msg.traceback.value}</div>
-        </div>
-      </Card>
+        </Card>
+      )
     );
   };
 
   renderLogMessage = (msg, index) => {
-    // const filter = messageFilters[msg.level.value];
-    // if (filter && !filter.value) return null;
+    const cscKey = `${msg.csc}.${msg.salindex}`;
+    const filterResult = this.state.cscFilter === '' || this.state.cscRegExp.test(cscKey);
     let icon = <span title="Debug">d</span>;
-    if (msg.level.value === 20) icon = <InfoIcon title="Info" />;
-    if (msg.level.value === 30) icon = <WarningIcon title="Warning" />;
-    if (msg.level.value === 40) icon = <ErrorIcon title="Error" />;
-    return (
-      <Card key={`${msg.private_rcvStamp.value}-${msg.level.value}-${index}`} className={styles.card}>
-        <div className={styles.messageTextContainer}>
-          <div className={styles.messageTopSection}>
-            <div className={styles.cardTitleContainer}>
-              <span className={styles.highlight}>{`${msg.csc}.${msg.salindex}`}</span>
-              <span className={styles.cardTitleContainer}>
-                <span>{' - '}</span>
-                <span className={styles.iconWrapper}>{icon}</span>
-                <span> {icon.props.title} log message</span>
-              </span>
-            </div>
+    const { value } = msg?.level;
+    if (value === 20) icon = <InfoIcon title="Info" />;
+    if (value === 30) icon = <WarningIcon title="Warning" />;
+    if (value === 40) icon = <ErrorIcon title="Error" />;
 
-            <div className={styles.timestamp} title="private_rcvStamp">
-              {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+    return (
+      filterResult &&
+      this.state.messageFilters[value].value && (
+        <Card key={`${msg.private_rcvStamp.value}-${msg.level.value}-${index}`} className={styles.card}>
+          <div className={styles.messageTextContainer}>
+            <div className={styles.messageTopSection}>
+              <div className={styles.cardTitleContainer}>
+                <span className={styles.highlight}>{cscKey}</span>
+                <span className={styles.cardTitleContainer}>
+                  <span>{' - '}</span>
+                  <span className={styles.iconWrapper}>{icon}</span>
+                  <span> {icon.props.title} log message</span>
+                </span>
+              </div>
+
+              <div className={styles.timestamp} title="private_rcvStamp">
+                {formatTimestamp(msg.private_rcvStamp.value * 1000)}
+              </div>
             </div>
+            <Separator className={styles.innerSeparator} />
+            <div className={styles.messageText}>{msg.message.value}</div>
+            <div className={styles.messageTraceback}>{msg.traceback.value}</div>
           </div>
-          <Separator className={styles.innerSeparator} />
-          <div className={styles.messageText}>{msg.message.value}</div>
-          <div className={styles.messageTraceback}>{msg.traceback.value}</div>
-        </div>
-      </Card>
+        </Card>
+      )
     );
   };
 
   render() {
     const { props } = this;
-    const messageFilters = {
-      10: { value: true, name: 'Debug' },
-      20: { value: true, name: 'Info' },
-      30: { value: true, name: 'Warning' },
-      40: { value: true, name: 'Error' },
-    };
-    const typeFilters = {
-      'error': { value: true, name: 'Error code' },
-      'log': { value: true, name: 'Log message' },
-    };
-
 
     return (
       <div className={styles.CSCGroupLogContainer}>
@@ -129,23 +167,23 @@ export default class EventLog extends Component {
           <div className={styles.filters}>
             <div className={styles.filter}>
               <span className={styles.filterLabel}>By CSC: </span>
-              <TextField type="text" value={''} onChange={this.changeTopicFilter} />
+              <TextField type="text" value={this.state.cscFilter} onChange={this.changeCSCFilter} />
             </div>
 
             <div className={styles.filter}>
               <span className={styles.filterLabel}>By type: </span>
               <div className={styles.filtersContainer}>
-                {Object.keys(typeFilters).map((key) => {
+                {Object.keys(this.state.typeFilters).map((key) => {
                   return (
                     <div key={key}>
                       <label>
                         <input
-                          // onChange={(event) => updateFilter(key, event.target.checked)}
+                          onChange={(event) => this.updateTypeFilters(key, event.target.checked)}
                           type="checkbox"
                           alt={`select ${key}`}
-                          checked={typeFilters[key].value}
+                          checked={this.state.typeFilters[key].value}
                         />
-                        <span>{typeFilters[key].name}</span>
+                        <span>{this.state.typeFilters[key].name}</span>
                       </label>
                     </div>
                   );
@@ -156,17 +194,17 @@ export default class EventLog extends Component {
             <div className={styles.filter}>
               <span className={styles.filterLabel}>By log level: </span>
               <div className={styles.filtersContainer}>
-                {Object.keys(messageFilters).map((key) => {
+                {Object.keys(this.state.messageFilters).map((key) => {
                   return (
                     <div key={key}>
                       <label>
                         <input
-                          // onChange={(event) => updateFilter(key, event.target.checked)}
+                          onChange={(event) => this.updateMessageFilters(key, event.target.checked)}
                           type="checkbox"
                           alt={`select ${key}`}
-                          checked={messageFilters[key].value}
+                          checked={this.state.messageFilters[key].value}
                         />
-                        <span>{messageFilters[key].name}</span>
+                        <span>{this.state.messageFilters[key].name}</span>
                       </label>
                     </div>
                   );
@@ -177,10 +215,10 @@ export default class EventLog extends Component {
           <Separator className={styles.separator} />
 
           {this.props.errorCodeData.map((msg, index) => {
-            return this.renderErrorMessage(msg, index);
+            return this.state.typeFilters.error.value && this.renderErrorMessage(msg, index);
           })}
           {this.props.logMessageData.map((msg, index) => {
-            return this.renderLogMessage(msg, index);
+            return this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
           })}
         </CardList>
       </div>
