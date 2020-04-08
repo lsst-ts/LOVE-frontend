@@ -1,5 +1,11 @@
 .container {
   padding: 0.5em;
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  flex: 1 1 auto;
+  /* height: 100%; */
+  justify-content: space-between;
 }
 
 .name {
