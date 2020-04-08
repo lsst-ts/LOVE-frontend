@@ -15,5 +15,5 @@
 .verticalGroup {
   display: flex;
   flex-flow: column;
-  justify-content: center;
+  justify-content: flex-start;
 }
