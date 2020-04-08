@@ -28,6 +28,14 @@ it('Should send a command to the server, save it on the state properly ', async 
   var serverResponse = new Response(JSON.stringify({ 'ack': 'ack message' }), { 'status': 200 })
   const realDate = Date;
   global.Date.now = () => 10;
+  const commandObject = {
+    cmd: 'cmd_closeShutter',
+    params: {},
+    csc: 'ATDome',
+    salindex: 2,
+  };
+  const cmd_id = '10-cmd_closeShutter';
+
 
   fetchMock.mock(
     url,
@@ -35,21 +43,14 @@ it('Should send a command to the server, save it on the state properly ', async 
       expect(getLastSALCommand(store.getState())).toEqual({
         status: SALCommandStatus.REQUESTED,
         ...commandObject,
+        cmd_id
       });
       return serverResponse;
     }
   );
 
-  const commandObject = {
-    cmd: 'cmd_closeShutter',
-    params: {},
-    component: 'ATDome',
-    cmd_id: '10-cmd_closeShutter',
-    salindex: 2,
-  };
-
   // Act
-  await store.dispatch(requestSALCommand(commandObject));
+  await store.dispatch(requestSALCommand({ ...commandObject, cmd_id }));
 
   // Assert request was sent
   expect(fetchMock.called(url)).toBe(true);
@@ -58,11 +59,12 @@ it('Should send a command to the server, save it on the state properly ', async 
   expect(JSON.parse(lastCall.body)).toEqual(commandObject);
   global.Date = realDate;
 
-  // Assert it is in ACK state
+  // Assert it is n ACK state
   await expect(getLastSALCommand(store.getState())).toEqual({
     status: SALCommandStatus.ACK,
     result: 'ack message',
     ...commandObject,
+    cmd_id
   });
 
 
