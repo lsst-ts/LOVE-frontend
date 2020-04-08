@@ -111,9 +111,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     requestSALCommand: (cmd) => {
       if (cmd.csc === 'Script') {
-        return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
+        return dispatch(requestSALCommand({ ...cmd, csc: 'Script', salindex: 0 }));
       }
-      return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }));
+      return dispatch(requestSALCommand({ ...cmd, csc: 'ScriptQueue', salindex: ownProps.salindex }));
     },
   };
 };

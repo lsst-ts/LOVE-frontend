@@ -64,7 +64,7 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_acknowledge',
-          component: 'Watcher',
+          csc: 'Watcher',
           salindex: 0,
           params: {
             name,
@@ -78,7 +78,7 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_unacknowledge',
-          component: 'Watcher',
+          csc: 'Watcher',
           salindex: 0,
           params: {
             name,
@@ -90,7 +90,7 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_mute',
-          component: 'Watcher',
+          csc: 'Watcher',
           salindex: 0,
           params: {
             name,
@@ -105,7 +105,7 @@ const mapDispatchToProps = (dispatch) => {
       return dispatch(
         requestSALCommand({
           cmd: 'cmd_unmute',
-          component: 'Watcher',
+          csc: 'Watcher',
           salindex: 0,
           params: {
             name,
