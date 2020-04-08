@@ -64,14 +64,18 @@ export const schema = {
       description:
         `Timezone string used to configure which UTC offset to use.
         Null or empty if current should be used. 'UTC' for UTC. Null by default.
-        The format for this string must be: <Continent>/<City> (use camelcase and underscores (_) instead of spaces).
+
+        The format for the timezone string can be a fixed string (for UTC or TAI); a fixed-offset string (e.g. UTC+5);
+        or a location string in the format <Continent>/<City> (use camelcase with underscores instead of spaces, like America/New_York).
         For example:
         - For UTC use UTC
         - For TAI use TAI
+        - For a fixed offset (e.g. GMT+5) use <UTC
         - For La Serena use America/Santiago (yes America, not Chile)
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago
-        Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones`,
+        Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones
+        See the default value as an example`,
       isPrivate: false,
       default: null,
     },
