@@ -71,7 +71,7 @@ export const schema = {
           {
             name: 'Sidereal Time',
             hideAnalog: false,
-            hideDate: false,
+            hideDate: true,
             hideOffset: false,
             timezone: null,
           },
@@ -120,7 +120,7 @@ export const schema = {
               hideAnalog: true,
               hideDate: false,
               hideOffset: false,
-              timezone: 'TAI',
+              timezone: 'MJD',
             },
           ]
         ]

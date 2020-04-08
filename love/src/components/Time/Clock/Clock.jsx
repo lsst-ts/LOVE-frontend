@@ -100,6 +100,8 @@ export default class ClockContainer extends React.Component {
 
   render() {
     let timestamp = (this.props.timestamp ? this.props.timestamp : this.state.timestamp);
+    let hideAnalog = this.props.hideAnalog;
+    let mjd = false;
     if (this.props.locale) {
       timestamp = timestamp.setLocale(this.props.locale);
     }
@@ -107,13 +109,16 @@ export default class ClockContainer extends React.Component {
       if (this.props.timezone === 'TAI') {
         timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.taiToUtc })
       }
+      else if(this.props.timezone === 'MJD') {
+        hideAnalog = true;
+        mjd = true;
+      }
       else {
         timestamp = timestamp.setZone(this.props.timezone);
       }
     }
     const name = this.props.name;
-    const hideAnalog = this.props.hideAnalog;
-    const offset = this.props.hideOffset ? false : (this.props.timezone === 'TAI' ? 'TAI' : timestamp.offsetNameShort);
+    const offset = this.props.hideOffset || mjd ? false : (this.props.timezone === 'TAI' ? 'TAI' : timestamp.offsetNameShort);
     return (
       <div className={styles.container}>
         <div className={styles.topRow}>
@@ -122,7 +127,13 @@ export default class ClockContainer extends React.Component {
               { offset ? `${name} (${offset})` : name }
             </div>
           )}
-          <DigitalClock timestamp={timestamp} hideDate={this.props.hideDate}/>
+          {mjd ? (
+            <div className={styles.mjd}>
+              {timestamp.toMillis()}
+            </div>
+          ) : (
+            <DigitalClock timestamp={timestamp} hideDate={this.props.hideDate}/>
+          )}
         </div>
         { !hideAnalog && (
           <div className={styles.analog}>
