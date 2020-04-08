@@ -8,7 +8,15 @@ export default class TimeDisplay extends React.Component {
   static propTypes = {
     /** Number of seconds to add to a TAI timestamp to convert it in UTC */
     taiToUtc: PropTypes.number,
+    /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
+    * Null or empty to use the browser locale */
+    locale: PropTypes.string,
   };
+
+  static defaultProps = {
+    locale: 'en-GB',
+    taiToUtc: 0,
+  }
 
   constructor(props) {
     super(props);
@@ -36,25 +44,26 @@ export default class TimeDisplay extends React.Component {
     return (
       <div className={styles.container}>
         <div className={styles.group}>
-          <Clock timestamp={localTime} name="Local Time" />
-          <Clock timestamp={localTime} name="Sidereal Time" hideOffset timezone="America/Phoenix" />
+          <Clock timestamp={localTime} locale={this.props.locale} name="Local Time" />
+          <Clock timestamp={localTime} locale={this.props.locale} name="Sidereal Time" hideOffset timezone="America/Phoenix" />
         </div>
         <div className={styles.group}>
           <div className={styles.column}>
-            <Clock timestamp={localTime} name="La Serena" hideAnalog timezone="America/Santiago" />
-            <Clock timestamp={localTime} name="Arizona" hideAnalog timezone="America/Phoenix" />
-            <Clock timestamp={localTime} name="Illinois" hideAnalog timezone="America/Chicago" />
+            <Clock timestamp={localTime} locale={this.props.locale} name="La Serena" hideAnalog timezone="America/Santiago" />
+            <Clock timestamp={localTime} locale={this.props.locale} name="Arizona" hideAnalog timezone="America/Phoenix" />
+            <Clock timestamp={localTime} locale={this.props.locale} name="Illinois" hideAnalog timezone="America/Chicago" />
           </div>
           <div className={styles.column}>
-            <Clock timestamp={localTime} name="Universal Time" hideAnalog timezone="UTC" />
+            <Clock timestamp={localTime} locale={this.props.locale} name="Universal Time" hideAnalog timezone="UTC" />
             <Clock
               timestamp={localTime}
+              locale={this.props.locale}
               name="International Atomic Time"
               hideAnalog
               timezone="TAI"
               taiToUtc={this.props.taiToUtc}
             />
-            <Clock timestamp={localTime} name="Modified JD" hideOffset hideAnalog />
+            <Clock timestamp={localTime} locale={this.props.locale} name="Modified JD" hideOffset hideAnalog />
           </div>
         </div>
       </div>
