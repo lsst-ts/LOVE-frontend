@@ -32,21 +32,22 @@ export const schema = {
         'en-GB' by default (so it is displayed as GMT always). Null or empty to use the browser locale.
         The format for this string must be: <language (2 lowercase chars)>-<COUNTRY (2 uppercase chars)>`,
       isPrivate: false,
-      default: 'en-US',
+      default: 'en-GB',
     },
     clocks: {
       type: 'array',
       description:
         `Layout of clocks in Json form.
         It is a list of horizontalGroups, each of which list of vertically-aligned elements.
-        Each clock has 3 properties:
-        - name: (string) name of the clock, to be displayed above it.
-        - hideAnalog: (boolean = false) flag to hide the analog clock.
-        - hideDate: (boolean = false) flag to hide the date.
-        - hideOffset: (boolean = false) flag to hide the UTC offset, displayed at the right of the name
-        - timezone: timezone string used to configure which UTC offset to use.
-          Null or empty if current should be used. 'UTC' for UTC. Null by default.
-          The format for this string must be: <Continent>/<City> (use camelcase and underscores (_) instead of spaces).
+        Each clock has the following properties:
+
+        1. name: (string) name of the clock, to be displayed above it.
+        2. hideAnalog: (boolean = false) flag to hide the analog clock.
+        3. hideDate: (boolean = false) flag to hide the date.
+        4. hideOffset: (boolean = false) flag to hide the UTC offset, displayed at the right of the name
+        5. timezone: timezone string used to configure which UTC offset to use. Null or empty if current should be used. 'UTC' for UTC. Null by default.
+
+          The format for the timezone string must be: <Continent>/<City> (use camelcase and underscores (_) instead of spaces).
           For example:
           - For UTC use UTC
           - For TAI use TAI
@@ -56,7 +57,72 @@ export const schema = {
           Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones
           See the default value as an example`,
       isPrivate: false,
-      default: [],
+      default: [
+        [
+          {
+            name: 'Local Time',
+            hideAnalog: false,
+            hideDate: false,
+            hideOffset: false,
+            timezone: null,
+          },
+          {
+            name: 'Sidereal Time',
+            hideAnalog: false,
+            hideDate: false,
+            hideOffset: false,
+            timezone: null,
+          },
+        ],
+        [
+          [
+            {
+              name: 'La Serena',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'America/Santiago',
+            },
+            {
+              name: 'Arizona',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'America/Phoenix',
+            },
+            {
+              name: 'Illinois',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'America/Chicago',
+            },
+          ],
+          [
+            {
+              name: 'Universal Time',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'UTC',
+            },
+            {
+              name: 'International Atomic Time',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'TAI',
+            },
+            {
+              name: 'Modified Julian Date',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'TAI',
+            },
+          ]
+        ]
+      ],
     },
   },
 };
