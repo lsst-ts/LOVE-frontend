@@ -45,29 +45,20 @@ export default class TimeDisplay extends React.Component {
     const localTime = this.state.timestamp;
     return (
       <div className={styles.container}>
-        <div className={styles.horizontalGroup}>
-          <Clock timestamp={localTime} locale={this.props.locale} name="Local Time" />
-          <Clock timestamp={localTime} locale={this.props.locale} name="Sidereal Time" hideOffset timezone="America/Phoenix" />
-        </div>
-        <div className={styles.horizontalGroup}>
-          <div className={styles.verticalGroup}>
-            <Clock timestamp={localTime} locale={this.props.locale} name="La Serena" hideAnalog timezone="America/Santiago" />
-            <Clock timestamp={localTime} locale={this.props.locale} name="Arizona" hideAnalog timezone="America/Phoenix" />
-            <Clock timestamp={localTime} locale={this.props.locale} name="Illinois" hideAnalog timezone="America/Chicago" />
+        {this.props.clocks.map( (horizontalGroup, index) => (
+          <div key={index} className={styles.horizontalGroup}>
+            {horizontalGroup.map( (element, index) => {
+              const verticalGroup = element instanceof Array ? element : [element];
+              return (
+                <div key={index} className={styles.verticalGroup}>
+                  {verticalGroup.map( (element, index) => (
+                    <Clock key={index} {...element} />
+                  ))}
+                </div>
+              )
+            })}
           </div>
-          <div className={styles.verticalGroup}>
-            <Clock timestamp={localTime} locale={this.props.locale} name="Universal Time" hideAnalog timezone="UTC" />
-            <Clock
-              timestamp={localTime}
-              locale={this.props.locale}
-              name="International Atomic Time"
-              hideAnalog
-              timezone="TAI"
-              taiToUtc={this.props.taiToUtc}
-            />
-            <Clock timestamp={localTime} locale={this.props.locale} name="Modified JD" hideOffset hideAnalog />
-          </div>
-        </div>
+        ))}
       </div>
     );
   }
