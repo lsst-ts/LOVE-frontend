@@ -5,6 +5,7 @@ import Value from '../SummaryPanel/Value';
 // import Title from '../SummaryPanel/Title';
 import { CardList, Card, Title, SubTitle, Separator } from '../CardList/CardList';
 import TextField from '../../TextField/TextField';
+import { getStringRegExp } from '../../../Utils';
 import styles from './SubscriptionTable.module.css';
 
 export default class SubscriptionTable extends Component {
@@ -41,12 +42,14 @@ export default class SubscriptionTable extends Component {
   changeTopicFilter = (event) => {
     this.setState({
       topicFilter: event.target.value,
+      topicRegExp: getStringRegExp(event.target.value),
     });
   };
 
   changeItemFilter = (event) => {
     this.setState({
       itemFilter: event.target.value,
+      itemRegExp: getStringRegExp(event.target.value),
     });
   };
 
@@ -97,7 +100,7 @@ export default class SubscriptionTable extends Component {
                 <Title key={cscKey}>{cscKey}</Title>
                 {this.state.subscriptionsDict[cscKey].map((topicKey) => {
                   const topicFilter =
-                    this.state.topicFilter === '' || new RegExp(this.state.topicFilter, 'i').test(topicKey);
+                    this.state.topicFilter === '' || this.state.topicRegExp.test(topicKey);
                   if (!topicFilter) return null;
 
                   const [type, topic] = topicKey.split('-');
@@ -115,7 +118,7 @@ export default class SubscriptionTable extends Component {
                       {dictKeys.length > 0 ? (
                         dictKeys.map((key) => {
                           const itemFilter =
-                            this.state.itemFilter === '' || new RegExp(this.state.itemFilter, 'i').test(key);
+                            this.state.itemFilter === '' || this.state.topicRegExp.test(key);
                           const emptyField = this.state.itemFilter !== '' && dict[key] === '';
                           if (!itemFilter || emptyField) return null;
                           return (

@@ -16,6 +16,7 @@
   justify-content: space-between;
   max-height: 18em;
   overflow-y: auto;
+  margin-left: 0.5em;
 }
 
 .streamLabel {
