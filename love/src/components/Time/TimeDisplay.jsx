@@ -52,7 +52,7 @@ export default class TimeDisplay extends React.Component {
               return (
                 <div key={index} className={styles.verticalGroup}>
                   {verticalGroup.map( (element, index) => (
-                    <Clock key={index} {...element} />
+                    <Clock key={index} {...element} timestamp={localTime} />
                   ))}
                 </div>
               )
