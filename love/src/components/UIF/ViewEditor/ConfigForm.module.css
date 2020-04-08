@@ -13,6 +13,7 @@
 
 .configElementDescription {
   color: var(--secondary-font-color);
+  white-space: pre-line;
 }
 
 .content input, .content textarea {
