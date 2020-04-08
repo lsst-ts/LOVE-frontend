@@ -352,19 +352,18 @@ export const requestSALCommand = (data) => {
     const commandStatus = {
       cmd: data.cmd,
       params: data.params,
-      component: data.component,
+      csc: data.csc ?? data.component, // this is for backwards compatibility
       salindex: data.salindex,
-      cmd_id: commandID
+
     };
-    dispatch(updateLastSALCommand(commandStatus, SALCommandStatus.REQUESTED));
+    dispatch(updateLastSALCommand({ ...commandStatus, cmd_id: commandID }, SALCommandStatus.REQUESTED));
 
     return fetch(url, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({ ...commandStatus }),
       headers: ManagerInterface.getHeaders()
     }).then(r => r.json()).then(r => {
       dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, r['ack']));
-      console.log(r)
     })
   }
 
