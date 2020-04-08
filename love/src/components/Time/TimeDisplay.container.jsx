@@ -25,6 +25,15 @@ export const schema = {
       isPrivate: false,
       default: true,
     },
+    locale: {
+      type: 'string',
+      description:
+        `Locale string used to configure how to display the UTC Offset.
+        'en-GB' by default (so it is displayed as GMT always). Null or empty to use the browser locale.
+        The format for this string must be: <language (2 lowercase chars)>-<COUNTRY (2 uppercase chars)>`,
+      isPrivate: false,
+      default: 'en-GB',
+    },
   },
 };
 
