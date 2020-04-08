@@ -27,9 +27,11 @@ export default function DigitalClock ({ timestamp, hideDate }) {
       <div className={styles.time}> 
         { t.toFormat('HH:mm:ss') }
       </div>
-     { !hideDate && (<div className={styles.date}> 
-        { t.toFormat('EEE, MMM dd yyyy') }
-      </div>)}
+     { !hideDate && (
+        <div className={styles.date}> 
+          { t.toFormat('EEE, MMM dd yyyy') }
+        </div>
+      )}
     </div>
   );
 }

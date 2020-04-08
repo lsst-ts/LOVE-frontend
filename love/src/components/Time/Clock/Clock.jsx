@@ -113,16 +113,17 @@ export default class ClockContainer extends React.Component {
     }
     const name = this.props.name;
     const hideAnalog = this.props.hideAnalog;
-    const hideDate = this.props.hideDate;
     const offset = this.props.hideOffset ? false : (this.props.timezone === 'TAI' ? 'TAI' : timestamp.offsetNameShort);
     return (
       <div className={styles.container}>
-        { (name || offset) && (
-          <div className={styles.name}>
-            { offset ? `${name} (${offset})` : name }
-          </div>
-        )}
-        <DigitalClock timestamp={timestamp} hideDate={hideDate}/>
+        <div className={styles.topRow}>
+          { (name || offset) && (
+            <div className={styles.name}>
+              { offset ? `${name} (${offset})` : name }
+            </div>
+          )}
+          <DigitalClock timestamp={timestamp} hideDate={this.props.hideDate}/>
+        </div>
         { !hideAnalog && (
           <div className={styles.analog}>
             <AnalogClock timestamp={timestamp}/>
