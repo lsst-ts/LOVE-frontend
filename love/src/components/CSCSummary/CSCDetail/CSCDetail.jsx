@@ -36,7 +36,7 @@ export default class CSCDetail extends Component {
       name: 'UNKNOWN',
       userReadable: 'Unknown',
       char: 'U',
-      class: styles.disabled,
+      class: styles.unknown,
     },
     1: {
       name: 'DISABLED',
@@ -60,7 +60,7 @@ export default class CSCDetail extends Component {
       name: 'OFFLINE',
       userReadable: 'Offline',
       char: 'O',
-      class: styles.disabled,
+      class: styles.offline,
     },
     5: {
       name: 'STANDBY',

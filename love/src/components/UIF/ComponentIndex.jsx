@@ -71,6 +71,10 @@ export const uifIndex = {
     component: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').default,
     schema: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').schema,
   },
+  EventLog: {
+    component: require('../EventLog/EventLog.container').default,
+    schema: require('../EventLog/EventLog.container').schema,
+  },
 };
 
 export const auxtelIndex = {

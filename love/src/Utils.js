@@ -498,3 +498,11 @@ export const relativeTime = (timestamp, taiToUtc) => {
   const delta = t_utc.toRelative();
   return delta;
 };
+
+export const getStringRegExp = (str) => {
+  try {
+    return new RegExp(str, 'i');
+  } catch (e) {
+    return new RegExp('');
+  }
+};

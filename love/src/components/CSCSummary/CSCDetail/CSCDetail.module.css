@@ -1,4 +1,4 @@
-.CSCDetailContainer{
+.CSCDetailContainer {
   display: flex;
   background: var(--second-quaternary-background-color);
   align-items: center;
@@ -19,9 +19,9 @@
 }
 
 .summaryStateSection {
-  align-self:stretch;
-  display:flex;
-  align-items:center;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
   font-weight: bold;
   font-size: var(--font-size-large);
   border-top-left-radius: 4px;
@@ -31,9 +31,9 @@
 
 .heartbeatSection {
   padding-left: 0.3em;
-  align-self:stretch;
-  display:flex;
-  align-items:center;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
 }
 
 .nameSection {
@@ -59,7 +59,7 @@
   width: 1.6em;
 }
 
-.heartbeatIconWrapper > svg{
+.heartbeatIconWrapper > svg {
   vertical-align: top;
   display: inline-block;
   margin: 0.2em;
@@ -79,16 +79,26 @@
   background: var(--status-ok-dimmed-color-2); */
 }
 
-.disabled {
-  background: var(--status-disabled-dimmed-color-2);
-  color: var(--second-quinary-background-color);
-}
-
 .warning {
   /* background: var(--status-warning-color); */
   /* color: var(--second-tertiary-background-color); */
   color: var(--status-warning-color);
   background: var(--status-warning-dimmed-color-2);
+}
+
+.unknown {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--second-quinary-background-color);
+}
+
+.offline {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--secondary-font-color);
+}
+
+.disabled {
+  background: var(--primary-background-color);
+  color: var(--base-font-color);
 }
 
 .hidden {
