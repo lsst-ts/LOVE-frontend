@@ -358,11 +358,14 @@ export const requestSALCommand = (data) => {
     };
     dispatch(updateLastSALCommand(commandStatus, SALCommandStatus.REQUESTED));
 
-    return fetch(url, { 
+    return fetch(url, {
       method: 'POST',
-      body: JSON.stringify(data), 
+      body: JSON.stringify(data),
       headers: ManagerInterface.getHeaders()
-    }).then(r => r.json()).then(r => console.log(r))
+    }).then(r => r.json()).then(r => {
+      dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, r['ack']));
+      console.log(r)
+    })
   }
 
 }
