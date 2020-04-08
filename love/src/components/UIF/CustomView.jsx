@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import GridLayout from 'react-grid-layout';
+import { Responsive as ResponsiveGridLayout, WidthProvider } from 'react-grid-layout'; // GridLayout
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../AuxTel/Mount/MotorTable/MotorTable.container';
@@ -8,8 +8,36 @@ import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
+import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
 
-export default class CustomView extends Component {
+const WithProvidedResponsiveGridLayout = WidthProvider(ResponsiveGridLayout);
+
+export const DEVICE_TO_SIZE = {
+  '4K': 2560,
+  'Laptop L': 1440,
+  Laptop: 1024,
+  Tablet: 768,
+  'Mobile L': 425,
+  'Mobile M': 375,
+  'Mobile S': 320,
+};
+
+export const DEVICE_TO_COLS = {
+  Infinity: 100,
+  '4K': 100,
+  'Laptop L': 100,
+  Laptop: 100,
+  Tablet: 100,
+  'Mobile L': 2,
+  'Mobile M': 2,
+  'Mobile S': 2,
+};
+
+const MOBILE_REFERENCE_COLS_THRESHOLD = 2;
+const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find((label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD);
+const MOBILE_REFERENCE_WIDTH = DEVICE_TO_SIZE[MOBILE_REFERENCE_LABEL];
+
+class CustomView extends Component {
   static propTypes = {
     /** Layout object describing the view, composed of recursively nested Elements, with the following format:
       <Element>: {
@@ -53,6 +81,13 @@ export default class CustomView extends Component {
     getCurrentView: PropTypes.func,
     /** Location object from router */
     location: PropTypes.object,
+    /** Object specifying the device size.
+     * It defaults to "DESKTOP" size. Sizes are mapped as:
+     * MOBILE:
+     * TABLET
+     * DESKTOP
+     *  */
+    device: PropTypes.string,
   };
 
   static defaultProps = {
@@ -63,6 +98,7 @@ export default class CustomView extends Component {
     onComponentDelete: () => {},
     onComponentConfig: () => {},
     getCurrentView: () => {},
+    deviceWidth: undefined,
   };
 
   constructor(props) {
@@ -150,20 +186,71 @@ export default class CustomView extends Component {
     this.props.onLayoutChange(layout);
   };
 
+  getDeviceWidth = () => {
+    return !this.props.deviceWidth || !isFinite(this.props.deviceWidth)
+      ? window.innerWidth - 1
+      : this.props.deviceWidth;
+  };
+
+  getColsDict = (container) => {
+    return typeof container.properties.cols === 'object' ? container.properties.cols : DEVICE_TO_COLS;
+  };
+
+  getDeviceLabel = (width) => {
+    const entry = Object.entries(DEVICE_TO_SIZE).find(([key, deviceOptionWidth]) => {
+      if (deviceOptionWidth <= width) {
+        return true;
+      }
+      return false;
+    });
+    return entry[0];
+  };
+
   parseContainer = (container) => {
     const elements = Object.values(container.content).map((x) => {
       return this.parseElement(x);
     });
+
+    const deviceWidth = this.getDeviceWidth();
+    const deviceLabel = this.getDeviceLabel(deviceWidth);
+    const deviceCols = DEVICE_TO_COLS[deviceLabel];
+
+    // IMPORTANT NOTICE
+    // goal: to use same pixel space in larger devices as in a mobile device layout
+    // in mobile device it uses  width1 = x.properties.w * mobileDeviceWidth / mobileDeviceColumns
+    // in desktop device it uses width2 = x.properties.w * desktopDeviceWidth / desktopDeviceColumns
+    // need C such that width2 = C * width1
+    // C = mobileDeviceWidth / mobileDeviceColumns * ( desktopDeviceColumns / desktopDeviceWidth )
+    // C = mobileDeviceWidth / desktopDeviceWidth * desktopDeviceColumns / mobileDeviceColumns
+
+    // this is only if the container was set with cols < THRESHOLD
+    // otherwise x.properties.w must be used
+
+    let colsScalingFactor = 1;
+    if( container.properties.cols <= MOBILE_REFERENCE_COLS_THRESHOLD){
+      colsScalingFactor = MOBILE_REFERENCE_WIDTH / deviceWidth * deviceCols / container.properties.cols;
+    }
+
     const layout = Object.values(container.content).map((x) => {
       return {
-        x: x.properties.x,
+        x: colsScalingFactor * x.properties.x,
         y: x.properties.y,
-        w: x.properties.w,
+        w: colsScalingFactor * x.properties.w,
         h: x.properties.h,
         i: x.properties.i.toString(),
         allowOverflow: x.properties.allowOverflow,
       };
     });
+
+    const cols = this.getColsDict(container);
+
+    const maxWidthKey = Object.entries(DEVICE_TO_SIZE).reduce((argMaxKey, [key, width]) => {
+      if (DEVICE_TO_SIZE[argMaxKey] >= width) {
+        return argMaxKey;
+      }
+      return key;
+    }, Object.keys(DEVICE_TO_SIZE)[0]);
+
     return (
       <div
         key={container.properties.i.toString()}
@@ -173,14 +260,39 @@ export default class CustomView extends Component {
           container.properties.allowOverflow ? styles.allowOverflow : styles.noOverflow,
         ].join(' ')}
       >
-        <GridLayout
-          layout={layout}
+        {this.props.isEditable && isFinite(this.props.deviceWidth) && (
+          <>
+            <div
+              className={styles.deviceOutline}
+              style={{
+                width: `${deviceWidth}px`,
+              }}
+            >
+              <DashedBox />
+            </div>
+
+            <div
+              className={styles.outsideDeviceArea}
+              style={{
+                left: `${deviceWidth + Math.max(0.5 * (window.innerWidth - deviceWidth), 100)}px`,
+                maxWidth: `${Math.max(window.innerWidth - deviceWidth, 100)}px`,
+              }}
+            >
+              This area will be invisible to the user on the selected device. 
+              Please change the device size on the top bar before dragging components here.
+            </div>
+          </>
+        )}
+
+        <ResponsiveGridLayout
+          layouts={{ [maxWidthKey]: layout }}
+          breakpoints={DEVICE_TO_SIZE}
           items={layout.length}
           rowHeight={20}
           onResizeStop={this.onResizeStop}
           onDragStop={this.onDragStop}
-          cols={container.properties.cols}
-          width={this.props.baseColWidth * container.properties.w}
+          cols={cols}
+          width={deviceWidth + 1}
           margin={[0, 0]}
           compactType={this.state.compactType}
           className={styles.gridLayout}
@@ -189,7 +301,7 @@ export default class CustomView extends Component {
           isResizable={this.props.isEditable}
         >
           {elements}
-        </GridLayout>
+        </ResponsiveGridLayout>
       </div>
     );
   };
@@ -200,3 +312,5 @@ export default class CustomView extends Component {
     return <>{parsedTree}</>;
   }
 }
+
+export default CustomView;

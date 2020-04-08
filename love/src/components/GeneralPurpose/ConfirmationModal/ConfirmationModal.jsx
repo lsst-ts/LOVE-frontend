@@ -9,7 +9,7 @@ export default class ConfirmationModal extends Component {
     /** Boolean to define wether or not the modal is open */
     isOpen: PropTypes.bool,
     /** Confirmation message */
-    message: PropTypes.string,
+    message: PropTypes.node,
     /** Confirmation button text */
     confirmText: PropTypes.string,
     /** Coancelation button text */
