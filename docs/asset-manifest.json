@@ -1,15 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.25874eb3.chunk.css",
-    "main.js": "/build/main.7d68979a.js",
-    "runtime~main.js": "/build/bundle.bcec71db.js",
-    "build/2.346127f9.js": "/build/2.346127f9.js",
+    "main.css": "/static/css/main.e5c9c033.chunk.css",
+    "main.js": "/build/main.c088927e.js",
+    "runtime-main.js": "/build/bundle.9880a37c.js",
+    "static/css/2.ee241de9.chunk.css": "/static/css/2.ee241de9.chunk.css",
+    "build/2.eb5807d7.js": "/build/2.eb5807d7.js",
     "Frontend_overview.svg": "/Frontend_overview.svg",
+    "build/2.eb5807d7.js.LICENSE.txt": "/build/2.eb5807d7.js.LICENSE.txt",
     "details.svg": "/details.svg",
     "index.html": "/index.html",
-    "precache-manifest.58ac1c8bc09639a9c2e1e40fad8d5f89.js": "/precache-manifest.58ac1c8bc09639a9c2e1e40fad8d5f89.js",
+    "precache-manifest.3e6552f61e4457fcd860ab4f8017a1a1.js": "/precache-manifest.3e6552f61e4457fcd860ab4f8017a1a1.js",
+    "redux-script-validation.svg": "/redux-script-validation.svg",
+    "redux-ws-connection.svg": "/redux-ws-connection.svg",
+    "responsive-grid-state-machine.svg": "/responsive-grid-state-machine.svg",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.25874eb3.chunk.css.map": "/static/css/main.25874eb3.chunk.css.map",
+    "static/css/2.ee241de9.chunk.css.map": "/static/css/2.ee241de9.chunk.css.map",
+    "static/css/main.e5c9c033.chunk.css.map": "/static/css/main.e5c9c033.chunk.css.map",
     "static/media/index.css": "/static/media/AvenirLTStd-Light.0b78ec9d.otf"
-  }
+  },
+  "entrypoints": [
+    "build/bundle.9880a37c.js",
+    "static/css/2.ee241de9.chunk.css",
+    "build/2.eb5807d7.js",
+    "static/css/main.e5c9c033.chunk.css",
+    "build/main.c088927e.js"
+  ]
 }
