@@ -21,7 +21,7 @@ afterEach(() => {
 });
 
 
-it('Should send a command to the server and save it on the state properly', async () => {
+it('Should send a command to the server, save it on the state properly ', async () => {
 
   // Arrange 
   const url = `${ManagerInterface.getApiBaseUrl()}cmd/`;
@@ -32,8 +32,6 @@ it('Should send a command to the server and save it on the state properly', asyn
   fetchMock.mock(
     url,
     (url1, opts) => {
-      // Assert the status is REQUESTED while the server processes it 
-      console.log('hola', url1, opts)
       expect(getLastSALCommand(store.getState())).toEqual({
         status: SALCommandStatus.REQUESTED,
         ...commandObject,
@@ -58,44 +56,14 @@ it('Should send a command to the server and save it on the state properly', asyn
   const [, lastCall] = fetchMock.lastCall(url);
   expect(lastCall.method).toEqual('POST');
   expect(JSON.parse(lastCall.body)).toEqual(commandObject);
+  global.Date = realDate;
 
-  expect(getLastSALCommand(store.getState())).toEqual({
-    status: SALCommandStatus.REQUESTED,
+  // Assert it is in ACK state
+  await expect(getLastSALCommand(store.getState())).toEqual({
+    status: SALCommandStatus.ACK,
+    result: 'ack message',
     ...commandObject,
   });
-  global.Date = realDate;
 
 
 });
-
-// it('Should properly interpret an ack message', async () => {
-//   const commandObject = {
-//     cmd: 'cmd_closeShutter',
-//     params: {},
-//     component: 'ATDome',
-//     cmd_id: '10-cmd_closeShutter',
-//   };
-//   const realDate = Date;
-//   global.Date.now = () => 10;
-
-//   await store.dispatch(requestSALCommand(commandObject));
-//   await server.nextMessage;
-
-//   server.send({
-//     category: 'ack',
-//     data: [
-//       {
-//         csc: 'ATDome',
-//         data: { stream: { cmd: 'cmd_closeShutter', cmd_id: '10-cmd_closeShutter', params: {}, result: 'Done' } },
-//         salindex: 1,
-//       },
-//     ],
-//   });
-
-//   await expect(getLastSALCommand(store.getState())).toEqual({
-//     status: SALCommandStatus.ACK,
-//     result: 'Done',
-//     ...commandObject,
-//   });
-//   global.Date = realDate;
-// });
