@@ -457,9 +457,9 @@ export const getNotificationMessage = (salCommand) => {
   }
 
   if (result === 'Done') {
-    return [`Command '${cmd}' ran successfully`, result];
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} ran successfully`, result];
   } else {
-    return [`Command '${cmd}' returned ${result}`, result];
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
   }
 };
 
