@@ -499,3 +499,11 @@ export const relativeTime = (secs, taiToUtc) => {
   const delta = mom.fromNow();
   return delta;
 };
+
+export const getStringRegExp = (str) => {
+  try {
+    return new RegExp(str, 'i');
+  } catch (e) {
+    return new RegExp('');
+  }
+};
