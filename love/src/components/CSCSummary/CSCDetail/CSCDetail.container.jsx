@@ -24,7 +24,7 @@ export const schema = {
       type: 'boolean',
       description: 'Whether to display component with a margin',
       isPrivate: false,
-      default: true,
+      default: false,
     },
     name: {
       type: 'string',
@@ -45,6 +45,12 @@ export const schema = {
         'Whether the CSC produces heartbeat',
       isPrivate: false,
       default: true,
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
     _functionProps: {
       type: 'array',
