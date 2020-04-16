@@ -133,7 +133,7 @@ export default class SubscriptionTable extends Component {
                           );
                         })
                       ) : (
-                        this.state.itemFilter === '' && <Card>
+                        this.state.itemFilter === '' && <Card className={styles.card}>
                           <div>No value</div>
                         </Card>
                       )}
