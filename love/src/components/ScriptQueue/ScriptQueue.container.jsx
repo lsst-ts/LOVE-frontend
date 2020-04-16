@@ -9,6 +9,7 @@ import {
   getLastSALCommand,
   getUsername,
 } from '../../redux/selectors';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
 
 export const schema = {
@@ -16,23 +17,11 @@ export const schema = {
                 Allows commands to be sent for interacting with the scripts, such as stopping, enqueueing and requeueing scripts`,
   defaultSize: [66, 38],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: true,
-    },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Script queue',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
     },
     salindex: {
       type: 'number',
@@ -56,7 +45,12 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
+  ...props
 }) => {
+  if (props.isRaw) {
+    console.log(props.subscriptions)
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <ScriptQueue
       subscribeToStreams={subscribeToStreams}
@@ -98,16 +92,18 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [
+    `event-ScriptQueueState-${ownProps.salindex}-stream`,
+    `event-ScriptQueue-${ownProps.salindex}-summaryState`,
+    `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
+  ]
   return {
+    subscriptions,
     subscribeToStreams: () => {
-      dispatch(addGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
-      dispatch(addGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
-      dispatch(addGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueueState-${ownProps.salindex}-stream`));
-      dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
-      dispatch(requestGroupSubscriptionRemoval(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
     requestSALCommand: (cmd) => {
       if (cmd.csc === 'Script') {
