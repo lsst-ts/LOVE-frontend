@@ -222,9 +222,6 @@ export const openWebsocketConnection = () => {
           }
         }
 
-        if (data.category === 'ack') {
-          dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, data.data[0].data.stream.result));
-        }
 
         if (data.data[0].data.observingLog) {
           dispatch(receiveObservingLog(data.data[0].data.observingLog));
