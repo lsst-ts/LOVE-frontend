@@ -48,7 +48,6 @@ const ScriptQueueContainer = ({
   ...props
 }) => {
   if (props.isRaw) {
-    console.log(props.subscriptions)
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (

@@ -6,6 +6,7 @@ import {
   sendLOVECscObservingLogs,
 } from '../../redux/actions/ws';
 import { getUsername } from '../../redux/selectors';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ObservingLogInput from './ObservingLogInput';
 
 export const schema = {
@@ -34,6 +35,9 @@ export const schema = {
 };
 
 const ObservingLogInputContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <ObservingLogInput subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
   );
@@ -46,12 +50,16 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const subscriptions = [
+    'event-LOVE-0-observingLog',
+  ];
   return {
+    subscriptions,
     subscribeToStreams: () => {
-      dispatch(addGroupSubscription('event-LOVE-0-observingLog'));
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-LOVE-0-observingLog'));
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
     sendMessage: (user, message) => {
       return dispatch(sendLOVECscObservingLogs(user, message));
