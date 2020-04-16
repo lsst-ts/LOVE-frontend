@@ -4,15 +4,15 @@
   grid-auto-rows: max-content;
   grid-row-gap: 0.2em;
   padding: 0 2em;
-  padding-bottom: 1em;
   justify-content: start;
   align-items: center;
-  align-content: center;
+  align-content: flex-start;
   background: var(--second-quaternary-background-dimmed-color);
   border-radius: 5px;
   will-change: transform;
   overflow-y: auto;
   text-align: left;
+  min-height: 100%;
 }
 
 .title {
