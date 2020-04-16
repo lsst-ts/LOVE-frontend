@@ -25,7 +25,8 @@ it('Should send a command to the server, save it on the state properly ', async 
 
   // Arrange 
   const url = `${ManagerInterface.getApiBaseUrl()}cmd/`;
-  var serverResponse = new Response(JSON.stringify({ 'ack': 'ack message' }), { 'status': 200 })
+  const expectedStatusCode = 123; 
+  const serverResponse = new Response(JSON.stringify({ 'ack': 'ack message' }), { 'status': expectedStatusCode })
   const realDate = Date;
   global.Date.now = () => 10;
   const commandObject = {
@@ -42,6 +43,7 @@ it('Should send a command to the server, save it on the state properly ', async 
     (url1, opts) => {
       expect(getLastSALCommand(store.getState())).toEqual({
         status: SALCommandStatus.REQUESTED,
+        statusCode: null,
         ...commandObject,
         cmd_id
       });
@@ -62,6 +64,7 @@ it('Should send a command to the server, save it on the state properly ', async 
   // Assert it is n ACK state
   await expect(getLastSALCommand(store.getState())).toEqual({
     status: SALCommandStatus.ACK,
+    statusCode: expectedStatusCode,
     result: 'ack message',
     ...commandObject,
     cmd_id
