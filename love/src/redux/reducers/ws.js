@@ -156,7 +156,7 @@ export default function(state = initialState, action) {
           status: action.status,
           cmd: action.cmd,
           params: action.params,
-          component: action.component,
+          csc: action.csc,
           salindex: action.salindex,
           cmd_id: action.cmd_id,
         },
