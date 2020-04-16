@@ -327,7 +327,7 @@ export default class ScriptQueue extends Component {
         stopCheckpoint,
         logLevel,
       },
-      csc: 'ScriptQueue',
+      component: 'ScriptQueue',
     });
     this.closeConfigPanel();
   };
