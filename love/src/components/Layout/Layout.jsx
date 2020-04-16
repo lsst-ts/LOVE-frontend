@@ -141,8 +141,8 @@ class Layout extends Component {
       if (result === 'Done') {
         toast.success(message);
       } else {
-        if (this.props.lastSALCommand.statusCode < 200 || this.props.lastSALCommand.statusCode >= 300) {
-          toast.warn(message);
+        if (this.props.lastSALCommand.statusCode >= 300) {
+          toast.error(`${this.props.lastSALCommand.statusCode}: ${message}`);
         } else {
           toast.info(message);
         }
