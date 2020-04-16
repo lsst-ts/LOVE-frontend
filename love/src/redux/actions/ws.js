@@ -321,18 +321,20 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
   };
 };
 
-export const updateLastSALCommand = (cmd, status) => {
+export const updateLastSALCommand = (cmd, status, statusCode) => {
   return {
     type: UPDATE_LAST_SAL_COMMAND,
     status,
+    statusCode,
     ...cmd,
   };
 };
 
-export const updateLastSALCommandStatus = (status, result) => {
+export const updateLastSALCommandStatus = (status, statusCode, result) => {
   return {
     type: UPDATE_LAST_SAL_COMMAND_STATUS,
     status,
+    statusCode,
     result,
   };
 };
@@ -353,14 +355,24 @@ export const requestSALCommand = (data) => {
       salindex: data.salindex,
 
     };
-    dispatch(updateLastSALCommand({ ...commandStatus, cmd_id: commandID }, SALCommandStatus.REQUESTED));
+    dispatch(updateLastSALCommand(
+      {
+        ...commandStatus,
+        statusCode: null, cmd_id: commandID
+      },
+      SALCommandStatus.REQUESTED, null));
 
     return fetch(url, {
       method: 'POST',
       body: JSON.stringify({ ...commandStatus }),
       headers: ManagerInterface.getHeaders()
-    }).then(r => r.json()).then(r => {
-      dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, r['ack']));
+    }).then(r => {
+      return r.json().then(data => ({
+        statusCode: r.status,
+        data
+      }))
+    }).then(({statusCode, data}) => {
+      dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
     })
   }
 
