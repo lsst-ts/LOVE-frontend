@@ -20,12 +20,6 @@ export const schema = {
       isPrivate: false,
       default: 'Status',
     },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
-    },
     label: {
       type: 'string',
       description: 'Status label',
@@ -72,6 +66,12 @@ export const schema = {
         'Array containing the props that are functions',
       isPrivate: true,
       default: ['accessor'],
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: true,
     },
   },
 };
