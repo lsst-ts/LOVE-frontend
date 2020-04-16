@@ -477,6 +477,34 @@ export const getGroupSortedErrorCodeData = (state, group) => {
   return sorted;
 };
 
+
+/**
+ * Returns a sorted list of log messages data for a CSC group
+ * @param {object} state Redux state
+ * @param {array} group Group of CSCs as in the hierarchy [{name: 'Test', salindex:1}, {name: 'Test', salindex: 2}]
+ */
+export const getGroupSortedLogMessageData = (state, group) => {
+  const filtered = state.summaryData.logMessageData.filter((cscData) => {
+    const searchIndex = group.findIndex((csc) => cscData.csc === csc.name && cscData.salindex === csc.salindex);
+    return searchIndex > -1;
+  });
+  const flatMapped = flatMap(filtered, (cscData) => {
+    return cscData.messages.map((data) => {
+      return {
+        csc: cscData.csc,
+        salindex: cscData.salindex,
+        ...data,
+      };
+    });
+  });
+
+  const sorted = flatMapped.sort((msg1, msg2) => {
+    return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
+  });
+
+  return sorted;
+};
+
 export const getAllTelemetries = (state) => {
   if (state.ws === undefined) return undefined;
   return getStreamData(state, 'telemetry-all-all-all');

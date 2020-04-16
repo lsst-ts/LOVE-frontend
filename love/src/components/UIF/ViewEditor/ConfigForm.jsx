@@ -67,7 +67,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
               />
             );
             if (['array', 'object', 'function'].includes(componentProps[key].type)) {
-              const stringValue = config[key] ? JSON.stringify(config[key], null, 2) : '';
+              const stringValue = config?.[key] ? JSON.stringify(config[key], null, 2) : '\'\'';
               let value = stringValue;
               let mode = 'json';
               let options = {};
