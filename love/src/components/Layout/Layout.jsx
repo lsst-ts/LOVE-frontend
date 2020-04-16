@@ -126,6 +126,14 @@ class Layout extends Component {
 
     /* Check command ack for toast*/
     if (
+      this.props.lastSALCommand.status === SALCommandStatus.REQUESTED &&
+      this.props.lastSALCommand.status !== prevProps.lastSALCommand.status
+    ) {
+      const [message] = getNotificationMessage(this.props.lastSALCommand);
+      toast.info(message);
+    }
+
+    if (
       prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED &&
       this.props.lastSALCommand.status === SALCommandStatus.ACK
     ) {
@@ -133,7 +141,11 @@ class Layout extends Component {
       if (result === 'Done') {
         toast.success(message);
       } else {
-        toast.info(message);
+        if (this.props.lastSALCommand.statusCode < 200 || this.props.lastSALCommand.statusCode >= 300) {
+          toast.warn(message);
+        } else {
+          toast.info(message);
+        }
       }
     }
   };
@@ -143,7 +155,7 @@ class Layout extends Component {
     const customTopbar = document.getElementById('customTopbar');
     toolbarParent.appendChild(customTopbar);
   };
-  
+
   checkHeartbeat = () => {
     const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
     const heartbeatStatus =
