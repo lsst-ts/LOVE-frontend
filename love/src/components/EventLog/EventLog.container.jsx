@@ -17,23 +17,11 @@ export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
   defaultSize: [24, 29],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: false,
-    },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'CSC expanded',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
+      default: 'Event log',
     },
     name: {
       type: 'string',
@@ -46,6 +34,12 @@ export const schema = {
       description: 'Salindex of the CSC',
       isPrivate: false,
       default: 1,
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: true,
     },
   },
 };
