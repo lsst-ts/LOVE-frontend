@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import styles from './ConfigForm.module.css';
+import Modal from '../../GeneralPurpose/Modal/Modal';
 import Button from '../../GeneralPurpose/Button/Button';
 import { indexes } from '../ComponentIndex';
 
@@ -9,11 +10,15 @@ import 'brace/mode/javascript';
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
-function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
+function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
   const schema = componentDict ? componentDict.schema : {};
   const componentProps = schema ? schema.props : {};
   const [config, setConfig] = useState(componentConfig);
+
+  useEffect(() => {
+    setConfig(componentConfig);
+  }, [componentConfig]);
 
   const updateConfig = (key, value) => {
     const newConfig = { ...config };
@@ -29,8 +34,26 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
     onSaveConfig(componentIndex, newConfig);
   };
 
+  if (!isOpen) {
+    return null;
+  }
+
   return (
-    <div className={styles.container}>
+    <Modal
+      isOpen={isOpen}
+      onRequestClose={onCancel}
+      contentLabel="Component configuration modal"
+      footerChildren={(
+        <>
+          <Button status="default" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button status="primary" onClick={() => customSaveConfig(componentIndex, config)}>
+            Save
+          </Button>
+        </>
+      )}
+    >
       <div className={styles.content}>
         <h2> {`${componentName} configuration`} </h2>
         <div>
@@ -44,7 +67,7 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
               />
             );
             if (['array', 'object', 'function'].includes(componentProps[key].type)) {
-              const stringValue = JSON.stringify(config[key], null, 2);
+              const stringValue = config?.[key] ? JSON.stringify(config[key], null, 2) : '\'\'';
               let value = stringValue;
               let mode = 'json';
               let options = {};
@@ -78,6 +101,17 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
                 />
               );
             }
+            if (['boolean'].includes(componentProps[key].type)) {
+              configElementInput = (
+                <input
+                  type={'checkbox'}
+                  defaultChecked={componentConfig[key]}
+                  onChange={(event) => {
+                    updateConfig(key, event.target.checked);
+                  }}
+                />
+              );
+            }
             return (
               !componentProps[key].isPrivate && (
                 <div key={key} className={styles.configElementWrapper}>
@@ -92,16 +126,7 @@ function ConfigForm({ componentIndex, componentName, componentConfig, onCancel, 
           })}
         </div>
       </div>
-      <div className={styles.footer}>
-        <span />
-        <Button status="default" onClick={onCancel}>
-          Cancel
-        </Button>
-        <Button status="primary" onClick={() => customSaveConfig(componentIndex, config)}>
-          Save
-        </Button>
-      </div>
-    </div>
+    </Modal>
   );
 }
 

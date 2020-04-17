@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import moment from 'moment';
+import { SALCommandStatus } from './redux/actions/ws.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -24,7 +25,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
 
-  function noop() {}
+  function noop() { }
   const opts = optsPar || {};
 
   let ws;
@@ -422,34 +423,29 @@ export const saveGroupSubscriptions = (Component) => {
 
 export const flatMap = (a, cb) => [].concat(...a.map(cb));
 
-export const relativeTime = (secs, taiToUtc) => {
-  const newSecs = secs + taiToUtc;
-  const mom = moment.unix(newSecs).utc();
-  const delta = mom.fromNow();
-  return delta;
-};
-
-export const secsToIsoStr = (secs) => {
-  return moment(secs * 1000).toISOString();
-};
-
 const watcherSuccessfulCmds = {
-  'cmd_acknowledge': 'acknowledged',
-  'cmd_unacknowledge': 'unacknowledged',
-  'cmd_mute': 'muted',
-  'cmd_unmute': 'unmuted',
+  cmd_acknowledge: 'acknowledged',
+  cmd_unacknowledge: 'unacknowledged',
+  cmd_mute: 'muted',
+  cmd_unmute: 'unmuted',
 };
 
 const watcherErrorCmds = {
-  'cmd_acknowledge': 'acknowledging',
-  'cmd_mute': 'muting',
-  'cmd_unmute': 'unmuting',
+  cmd_acknowledge: 'acknowledging',
+  cmd_mute: 'muting',
+  cmd_unmute: 'unmuting',
 };
 
 export const getNotificationMessage = (salCommand) => {
   const cmd = salCommand.cmd;
   const result = salCommand.result;
-  const component = salCommand.component;
+  const component = salCommand.component ?? salCommand.csc;
+
+
+  if (salCommand.status === SALCommandStatus.REQUESTED) {
+    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`,]
+  }
+
 
   if (component === 'Watcher') {
     const alarm = salCommand.params.name;
@@ -461,12 +457,60 @@ export const getNotificationMessage = (salCommand) => {
   }
 
   if (result === 'Done') {
-    return [`Command '${cmd}' ran successfully`, result];
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} ran successfully`, result];
   } else {
-    return [`Command '${cmd}' returned ${result}`, result];
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
   }
 };
 
 export const cscText = (csc, salindex) => {
   return csc + (salindex === 0 ? '' : `.${salindex}`);
+};
+
+/**
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {string} location, optional location to append to the timestamp, TAI by default
+ */
+export const formatTimestamp = (timestamp, location = 'TAI') => {
+  const date = new Date(timestamp);
+
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  const day = `${date.getDate()}`.padStart(2, 0);
+
+  const hours = `${date.getHours()}`.padStart(2, 0);
+  const minutes = `${date.getMinutes()}`.padStart(2, 0);
+  const seconds = `${date.getSeconds()}`.padStart(2, 0);
+
+  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${location}`;
+};
+
+/**
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {string} location, optional location to append to the timestamp, empty by default
+ */
+export const isoTimestamp = (timestamp, location = null) => {
+  return [moment(timestamp).toISOString(), location ? location : null].join(' ');
+};
+
+/**
+ * Converts seconds to a human readable difference like 'a few seconds ago'
+ * @param {number} secs, number of seconds
+ * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
+ */
+export const relativeTime = (secs, taiToUtc) => {
+  const newSecs = secs + taiToUtc;
+  const mom = moment.unix(newSecs).utc();
+  const delta = mom.fromNow();
+  return delta;
+};
+
+export const getStringRegExp = (str) => {
+  try {
+    return new RegExp(str, 'i');
+  } catch (e) {
+    return new RegExp('');
+  }
 };

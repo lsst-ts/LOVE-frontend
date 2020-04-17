@@ -64,3 +64,11 @@
 .rotatorPanel {
   grid-template-columns: minmax(8em, 0.5fr) minmax(10em, 0.5fr);
 }
+
+.lightpath {
+  fill: #bcd8e2;
+  stroke: #ffffff;
+  stroke-width: 0.1;
+  fill-opacity: 0.15;
+  transition: transform 1.5s linear;
+}

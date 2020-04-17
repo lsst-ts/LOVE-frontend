@@ -16,7 +16,7 @@ import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 
-const BREAK_1 = 710;
+const BREAK_1 = 768;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
@@ -59,6 +59,7 @@ class Layout extends Component {
     this.state = {
       collapsedLogo: false,
       viewOnNotch: true,
+      toolbarOverflow: false,
       sidebarVisible: false,
       settingsVisible: false,
       id: null,
@@ -67,6 +68,8 @@ class Layout extends Component {
       lastHeartbeat: undefined,
       hovered: false, // true if leftTopbar is being hovered
     };
+    
+    this.requestToastID = null;
   }
 
   UNSAFE_componentWillMount = () => {
@@ -76,6 +79,7 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
+    this.moveCustomTopbar();
     this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
@@ -89,7 +93,11 @@ class Layout extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  componentDidUpdate = (prevProps, _prevState) => {
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
+      this.moveCustomTopbar();
+    }
+
     if (this.props.token === null && prevProps.token !== null) {
       this.props.unsubscribeToStreams();
     } else if (this.props.token !== null && prevProps.token === null) {
@@ -120,16 +128,38 @@ class Layout extends Component {
 
     /* Check command ack for toast*/
     if (
+      this.props.lastSALCommand.status === SALCommandStatus.REQUESTED &&
+      this.props.lastSALCommand.status !== prevProps.lastSALCommand.status
+    ) {
+      const [message] = getNotificationMessage(this.props.lastSALCommand);
+      this.requestToastID = toast.info(message);
+    }
+
+    if (
       prevProps.lastSALCommand.status === SALCommandStatus.REQUESTED &&
       this.props.lastSALCommand.status === SALCommandStatus.ACK
     ) {
       const [message, result] = getNotificationMessage(this.props.lastSALCommand);
+      if (this.requestToastID) {
+        toast.dismiss(this.requestToastID);
+      }
+
       if (result === 'Done') {
         toast.success(message);
       } else {
-        toast.info(message);
+        if (this.props.lastSALCommand.statusCode >= 300) {
+          toast.error(`${this.props.lastSALCommand.statusCode}: ${message}`);
+        } else {
+          toast.info(message);
+        }
       }
     }
+  };
+
+  moveCustomTopbar = () => {
+    const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
+    const customTopbar = document.getElementById('customTopbar');
+    toolbarParent.appendChild(customTopbar);
   };
 
   checkHeartbeat = () => {
@@ -175,11 +205,13 @@ class Layout extends Component {
     this.setState({
       collapsedLogo: true,
       viewOnNotch: false,
+      toolbarOverflow: true,
     });
     const innerWidth = window.innerWidth;
     this.setState({
-      collapsedLogo: (BREAK_2 < innerWidth && innerWidth <= BREAK_1) || innerWidth <= BREAK_3,
+      collapsedLogo: innerWidth <= BREAK_3,
       viewOnNotch: BREAK_2 < innerWidth,
+      toolbarOverflow: innerWidth < BREAK_1,
     });
   };
 
@@ -213,8 +245,6 @@ class Layout extends Component {
     this.props.history.push('/');
   };
 
-
-
   setHovered = (value) => {
     this.setState({ hovered: value });
   };
@@ -222,6 +252,9 @@ class Layout extends Component {
   render() {
     return (
       <>
+        <div className={styles.hidden}>
+          <div id="customTopbar" />
+        </div>
         <div
           className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
           onMouseOver={() => this.setHovered(true)}
@@ -280,20 +313,19 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="customTopbar" />
+          <div className={styles.middleTopbar} id="middleTopbar" />
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
               <Button
-                className={[
-                  styles.iconBtn,
-                  styles.heartbeatButton,
-                ].join(' ')}
+                className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
                 style={{
-                  visibility: this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered) ?
-                  'visible' : 'hidden'
+                  visibility:
+                    this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered)
+                      ? 'visible'
+                      : 'hidden',
                 }}
                 title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 onClick={() => {}}
@@ -305,12 +337,7 @@ class Layout extends Component {
                   title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
                 />
               </Button>
-              <Button
-                className={styles.iconBtn}
-                title="View notifications"
-                onClick={() => {}}
-                status="transparent"
-              >
+              <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
                 <NotificationIcon className={styles.icon} />
               </Button>
 
@@ -322,21 +349,6 @@ class Layout extends Component {
                       ' ',
                     )}
                   >
-                    <div
-                      className={this.state.id ? styles.menuElement : styles.disabledElement}
-                      title="Edit view"
-                      onClick={() => {
-                        if (this.state.id) {
-                          this.editView(this.state.id);
-                        }
-                      }}
-                    >
-                      Edit view
-                    </div>
-                    <div className={styles.menuElement} title="New view" onClick={this.createNewView}>
-                      Create new View
-                    </div>
-                    <span className={styles.divider} />
                     <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
                       Logout
                     </div>
@@ -346,6 +358,7 @@ class Layout extends Component {
             </div>
           </div>
         </div>
+        <div className={styles.overflownToolbar} id="overflownToolbar" />
 
         <div
           ref={(node) => (this.sidebar = node)}
@@ -355,6 +368,25 @@ class Layout extends Component {
           <div className={[styles.menu, !this.state.viewOnNotch ? styles.showName : null].join(' ')}>
             <p onClick={() => this.navigateTo('/')}>Home</p>
             <p onClick={() => this.navigateTo('/uif')}>Views Index</p>
+          </div>
+          <div className={styles.sidebarButtons}>
+            <Button
+              className={[styles.button, this.state.id ? null : styles.hidden].join(' ')}
+              title="Edit view"
+              onClick={() => {
+                if (this.state.id) {
+                  this.editView(this.state.id);
+                }
+              }}
+            >
+              <span className={styles.label}> Edit this view </span>
+              <EditIcon className={styles.editIcon} />
+            </Button>
+
+            <Button className={styles.button} title="New view" onClick={this.createNewView}>
+              <span className={styles.label}> Create new view </span>
+              <span className={styles.plusIcon}> + </span>
+            </Button>
           </div>
         </div>
 

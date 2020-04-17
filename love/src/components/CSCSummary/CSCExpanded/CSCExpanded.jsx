@@ -5,7 +5,7 @@ import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
-import { cscText } from '../../../Utils';
+import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
@@ -193,7 +193,7 @@ export default class CSCExpanded extends PureComponent {
                     </div>
                     <div className={styles.messageTextContainer}>
                       <div className={styles.timestamp} title="private_rcvStamp">
-                        {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                        {formatTimestamp(msg.private_rcvStamp.value * 1000)}
                       </div>
                       <div className={styles.messageText}>{msg.errorReport.value}</div>
                       <div className={styles.messageTraceback}>{msg.traceback.value}</div>

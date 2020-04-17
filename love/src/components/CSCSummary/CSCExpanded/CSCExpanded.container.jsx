@@ -9,6 +9,18 @@ export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
   defaultSize: [24, 29],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'CSC expanded',
+    },
     name: {
       type: 'string',
       description: 'Name of the CSC to monitor',
@@ -28,6 +40,12 @@ export const schema = {
         'Array containing the props that are functions',
       isPrivate: true,
       default: [],
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
   },
 };

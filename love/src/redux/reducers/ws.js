@@ -20,9 +20,10 @@ const initialState = {
   subscriptions: [],
   lastSALCommand: {
     status: SALCommandStatus.EMPTY,
+    statusCode: null,
     cmd: '',
     params: {},
-    component: '',
+    csc: '',
     salindex: 0,
   },
 };
@@ -55,7 +56,8 @@ export default function(state = initialState, action) {
     case REQUEST_SUBSCRIPTIONS: {
       const subscriptions = action.subscriptions.map(subscription => ({
         ...subscription,
-        status: subscription.status === groupStates.PENDING ? groupStates.REQUESTING : subscription.status,
+        status: subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING ?
+          groupStates.REQUESTING : subscription.status,
       }));
       return {
         ...state,
@@ -81,7 +83,7 @@ export default function(state = initialState, action) {
     }
     case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
       const subscriptions = state.subscriptions.filter((subscription) => {
-        return !action.data.includes(subscription.groupName)
+        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName)
       });
       return {
         ...state,
@@ -153,9 +155,10 @@ export default function(state = initialState, action) {
         ...state,
         lastSALCommand: {
           status: action.status,
+          statusCode: action.statusCode,
           cmd: action.cmd,
           params: action.params,
-          component: action.component,
+          csc: action.csc,
           salindex: action.salindex,
           cmd_id: action.cmd_id,
         },
@@ -168,6 +171,7 @@ export default function(state = initialState, action) {
         lastSALCommand: {
           ...state.lastSALCommand,
           status: action.status,
+          statusCode: action.statusCode,
           result: action.result,
         },
       };

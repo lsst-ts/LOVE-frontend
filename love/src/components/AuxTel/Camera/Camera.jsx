@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import styles from './Camera.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import Panel from '../../GeneralPurpose/Panel/Panel';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import { getCameraStatusStyle } from '../../../Config';
 import LoadingBar from '../../GeneralPurpose/LoadingBar/LoadingBar';
 import { stateToStyleCamera } from '../../../Config';
-import PropTypes from 'prop-types';
+import { formatTimestamp } from '../../../Utils';
+
 
 export default class Camera extends Component {
   static propTypes = {
@@ -28,11 +28,11 @@ export default class Camera extends Component {
 
   componentDidMount = () => {
     this.startTimer('Image A', 3);
-    this.props.subscribeToStream();
+    this.props.subscribeToStreams();
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStream();
+    this.props.unsubscribeToStreams();
   };
 
   startTimer = (imageName, maxIterations) => {
@@ -66,8 +66,7 @@ export default class Camera extends Component {
 
   render() {
     return (
-                <Panel title="Auxiliary Telescope Camera" className={'smallPanel'} fit>
-                <div className={styles.cameraContainer}>
+      <div className={styles.cameraContainer}>
         <div className={styles.statesContainer}>
           <div className={styles.stateContainer}>
             <span className={styles.statusTextLabel}>Rafts state:</span>
@@ -122,7 +121,7 @@ export default class Camera extends Component {
                     return (
                       <React.Fragment key={imageKey}>
                         <tr>
-                          <td className={styles.string}>{image.timeStamp}</td>
+                          <td className={styles.string}>{formatTimestamp(image.timeStamp * 1000)}</td>
                           <td className={styles.string}>{imageName}</td>
                           <td className={[styles.narrowCol].join(' ')}>
                             <LoadingBar
@@ -130,9 +129,7 @@ export default class Camera extends Component {
                               displayPercentage={false}
                               isNarrow={true}
                               backgroundClass={styles.backgroundLoadingBarClass}
-                              animationDuration={
-                                this.state.timers[imageKey] !== undefined ? image.exposureTime : 0
-                              }
+                              animationDuration={this.state.timers[imageKey] !== undefined ? image.exposureTime : 0}
                               title={`Exposed ${roundedCurrentExposureTime} out of ${roundedExposureTime} seconds`}
                             />
                             <span
@@ -190,7 +187,6 @@ export default class Camera extends Component {
           </div>
         </div>
       </div>
-      </Panel>
     );
   }
 }

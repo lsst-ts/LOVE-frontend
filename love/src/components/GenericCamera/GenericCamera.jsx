@@ -6,11 +6,35 @@ export const schema = {
   description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
   defaultSize: [10, 10],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Generic camera',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
     serverURL: {
       type: 'string',
       description: 'URL of the live view server',
       isPrivate: false,
       default: '/gencam',
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
   },
 };

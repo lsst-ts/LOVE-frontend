@@ -27,6 +27,7 @@ export default class CSCRealm extends Component {
                 name={group}
                 cscs={this.props.groups[group]}
                 embedded={true}
+                subscribeToStreamCallback={this.props.subscribeToStreamCallback}
               />
             </div>
           );
