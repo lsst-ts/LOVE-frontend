@@ -7,31 +7,13 @@ import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/S
 
 export const schema = {
   description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
-  defaultSize: [49, 43],
+  defaultSize: [51, 45],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: false,
-    },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Dome',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
-    },
-    hasRawMode: {
-      type: 'boolean',
-      description: 'Whether the component has a raw mode version',
-      isPrivate: true,
-      default: true,
     },
   },
 };
