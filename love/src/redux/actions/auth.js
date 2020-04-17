@@ -11,11 +11,11 @@ import {
   GET_TOKEN_FROM_LOCALSTORAGE,
 } from './actionTypes';
 import { requestViews } from './uif';
-import ManagerInterface, { utcNowTimestamp } from '../../Utils';
+import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
 import { receiveServerTime } from './time';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 var utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
@@ -123,7 +123,7 @@ export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
     dispatch(requestToken(username, password));
-    const request_time = dayjs().valueOf();
+    const request_time = dayjs().utc().valueOf();
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),

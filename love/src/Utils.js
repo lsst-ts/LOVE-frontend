@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 var relativetime = require('dayjs/plugin/relativeTime');
 var utc = require('dayjs/plugin/utc');
 dayjs.extend(relativetime);
