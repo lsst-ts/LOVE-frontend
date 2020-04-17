@@ -1,9 +1,15 @@
 import {
   RECEIVE_TIME_DATA
 } from '../actions/actionTypes';
-import { getRedoActionsAvailable } from '../selectors';
+import { utcNowTimestamp } from '../../Utils'
+import * as dayjs from 'dayjs';
+var utc = require('dayjs/plugin/utc');
+dayjs.extend(utc);
+
 
 const initialState = {
+  request_time: 0,
+  receive_time: 0,
   server_time: {
     utc: 0,
     tai: 0,
@@ -22,6 +28,8 @@ export default function(state = initialState, action) {
     case RECEIVE_TIME_DATA:
       {
         return Object.assign({}, state, {
+          request_time: action.request_time,
+          receive_time: dayjs().valueOf(),
           server_time: {
             utc: action.time_data.utc,
             tai: action.time_data.tai,
