@@ -1,8 +1,7 @@
 import {
   RECEIVE_TIME_DATA
 } from '../actions/actionTypes';
-import { utcNowTimestamp } from '../../Utils'
-import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 var utc = require('dayjs/plugin/utc');
 dayjs.extend(utc);
 
@@ -29,7 +28,7 @@ export default function(state = initialState, action) {
       {
         return Object.assign({}, state, {
           request_time: action.request_time,
-          receive_time: dayjs().valueOf(),
+          receive_time: dayjs().utc().valueOf(),
           server_time: {
             utc: action.time_data.utc,
             tai: action.time_data.tai,
