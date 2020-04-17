@@ -123,7 +123,7 @@ export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
     dispatch(requestToken(username, password));
-    const request_time = dayjs().utc().valueOf();
+    const request_time = dayjs().utc().valueOf() / 1000;
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
@@ -206,7 +206,7 @@ export function validateToken() {
     }
 
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-    const request_time = dayjs().valueOf();
+    const request_time = dayjs().valueOf() / 1000;
     return fetch(url, {
       method: 'GET',
       headers: new Headers({
