@@ -141,10 +141,10 @@ export function fetchToken(username, password) {
           if (response.user) {
             username = response.user.username;
           }
-          const tai_to_utc = response.tai_to_utc;
+          const time_data = response.time_data;
           const permissions = response.permissions;
           if (token !== undefined && token !== null) {
-            dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
+            dispatch(doReceiveToken(username, token, permissions, time_data.tai_to_utc));
             dispatch(requestViews());
             return;
           }
@@ -225,8 +225,8 @@ export function validateToken() {
         if (user) {
           ({ username } = user);
         }
-        const { permissions, tai_to_utc } = resp;
-        dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
+        const { permissions, time_data } = resp;
+        dispatch(doReceiveToken(username, token, permissions, time_data.tai_to_utc));
         return Promise.resolve();
       });
     });
