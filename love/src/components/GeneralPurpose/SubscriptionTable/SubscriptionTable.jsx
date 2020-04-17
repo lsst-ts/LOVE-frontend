@@ -96,8 +96,8 @@ export default class SubscriptionTable extends Component {
           <Separator />
           {Object.keys(this.state.subscriptionsDict).map((cscKey) => {
             return (
-              <>
-                <Title key={cscKey}>{cscKey}</Title>
+              <React.Fragment key={cscKey}>
+                <Title>{cscKey}</Title>
                 {this.state.subscriptionsDict[cscKey].map((topicKey) => {
                   const topicFilter =
                     this.state.topicFilter === '' || this.state.topicRegExp.test(topicKey);
@@ -110,8 +110,8 @@ export default class SubscriptionTable extends Component {
                   const dict = accessor(streamData);
                   const dictKeys = Object.keys(dict);
                   return (
-                    <>
-                      <SubTitle key={topicKey} className={styles.subTitle}>
+                    <React.Fragment key={topicKey}>
+                      <SubTitle className={styles.subTitle}>
                         <span>{topic}</span>
                         <span className={styles.topicType}>{type}</span>
                       </SubTitle>
@@ -122,25 +122,23 @@ export default class SubscriptionTable extends Component {
                           const emptyField = this.state.itemFilter !== '' && dict[key] === '';
                           if (!itemFilter || emptyField) return null;
                           return (
-                            <>
-                              <Card key={key} className={styles.card}>
-                                <span className={styles.streamLabel}>{key}</span>
-                                <span className={styles.streamValue}>
-                                  <Value raw={true}>{dict[key]}</Value>
-                                </span>
-                              </Card>
-                            </>
+                            <Card key={key} className={styles.card}>
+                              <span className={styles.streamLabel}>{key}</span>
+                              <span className={styles.streamValue}>
+                                <Value raw={true}>{dict[key]}</Value>
+                              </span>
+                            </Card>
                           );
                         })
                       ) : (
-                        this.state.itemFilter === '' && <Card>
+                        this.state.itemFilter === '' && <Card className={styles.card}>
                           <div>No value</div>
                         </Card>
                       )}
-                    </>
+                    </React.Fragment>
                   );
                 })}
-              </>
+              </React.Fragment>
             );
           })}
         </CardList>
