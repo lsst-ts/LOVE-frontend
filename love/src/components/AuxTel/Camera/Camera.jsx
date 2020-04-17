@@ -28,11 +28,11 @@ export default class Camera extends Component {
 
   componentDidMount = () => {
     this.startTimer('Image A', 3);
-    this.props.subscribeToStream();
+    this.props.subscribeToStreams();
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStream();
+    this.props.unsubscribeToStreams();
   };
 
   startTimer = (imageName, maxIterations) => {
