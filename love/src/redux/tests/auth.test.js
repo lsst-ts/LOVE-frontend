@@ -38,7 +38,14 @@ describe('GIVEN the token does not exist in localStorage', () => {
         permissions: {
           execute_commands: true
         },
-        tai_to_utc: -37,
+        time_data: {
+          utc: 1587156181.842506,
+          tai: 1587156218.842506,
+          mjd: 58956.86321576974,
+          sidereal_summit: 5.762640319739233,
+          sidereal_greenwich: 10.479268119739233,
+          tai_to_utc: -37,
+        }
       },
       new Headers({
         Accept: 'application/json',
@@ -109,7 +116,14 @@ describe('GIVEN the token exists in localStorage', () => {
         permissions: {
           execute_commands: true
         },
-        tai_to_utc: -37,
+        time_data: {
+          utc: 1587156181.842506,
+          tai: 1587156218.842506,
+          mjd: 58956.86321576974,
+          sidereal_summit: 5.762640319739233,
+          sidereal_greenwich: 10.479268119739233,
+          tai_to_utc: -37,
+        }
       },
       ManagerInterface.getHeaders(),
     );
