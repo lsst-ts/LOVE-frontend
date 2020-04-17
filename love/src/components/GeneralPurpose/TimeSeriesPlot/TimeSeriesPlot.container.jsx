@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getTimestampedStreamData } from '../../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import SubscriptionTableContainer from '../SubscriptionTable/SubscriptionTable.container';
 import TimeSeriesPlot from './TimeSeriesPlot';
 
 export const schema = {
@@ -89,7 +90,17 @@ const TimeSeriesPlotContainer = ({
   unsubscribeToStream,
   ...props
 }) => {
-  return (
+  // props.dataSources.forEach((dataSource) => {
+  //   const groupName = props.groupNames[dataSource];
+  //   console.log(groupName)
+  // });
+
+
+  if (props.isRaw) {
+    const subscriptions = Object.values(props.groupNames || {});
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
+    return (
     <TimeSeriesPlot
       streamStates={streamStates}
       groupName={groupName}
