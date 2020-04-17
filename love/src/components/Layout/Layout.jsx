@@ -68,6 +68,8 @@ class Layout extends Component {
       lastHeartbeat: undefined,
       hovered: false, // true if leftTopbar is being hovered
     };
+    
+    this.requestToastID = null;
   }
 
   UNSAFE_componentWillMount = () => {
@@ -130,7 +132,7 @@ class Layout extends Component {
       this.props.lastSALCommand.status !== prevProps.lastSALCommand.status
     ) {
       const [message] = getNotificationMessage(this.props.lastSALCommand);
-      toast.info(message);
+      this.requestToastID = toast.info(message);
     }
 
     if (
@@ -138,6 +140,10 @@ class Layout extends Component {
       this.props.lastSALCommand.status === SALCommandStatus.ACK
     ) {
       const [message, result] = getNotificationMessage(this.props.lastSALCommand);
+      if (this.requestToastID) {
+        toast.dismiss(this.requestToastID);
+      }
+
       if (result === 'Done') {
         toast.success(message);
       } else {
