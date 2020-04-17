@@ -95,7 +95,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueueState-${ownProps.salindex}-stream`,
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
-  ]
+  ];
   return {
     subscriptions,
     subscribeToStreams: () => {
