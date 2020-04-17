@@ -8,6 +8,9 @@ import ManagerInterface from '../../Utils';
 import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
 import { getToken, getUsername, getTokenStatus, getPermCmdExec, getTaiToUtc, getServerTime } from '../selectors';
+import * as dayjs from 'dayjs';
+var utc = require('dayjs/plugin/utc');
+dayjs.extend(utc);
 
 let store;
 beforeEach(() => {
@@ -64,6 +67,8 @@ describe('GIVEN the token does not exist in localStorage', () => {
     expect(getUsername(newState)).toEqual('my-user');
     expect(getTaiToUtc(newState)).toEqual(mockServerTime.tai_to_utc);
     expect(getServerTime(newState)).toEqual(mockServerTime);
+    expect(getServerTimeRequest(newState)).toBreGreaterThan(0);
+    expect(getServerTimeReceive(newState)).toBreGreaterThan(0);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
     expect(getPermCmdExec(newState)).toEqual(true);
     expect(storedToken).toEqual(newToken);
@@ -132,6 +137,8 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(storedToken).toEqual(initialToken);
     expect(getTaiToUtc(store.getState())).toEqual(mockServerTime.tai_to_utc);
     expect(getServerTime(store.getState())).toEqual(mockServerTime);
+    expect(getServerTimeRequest(newState)).toBreGreaterThan(0);
+    expect(getServerTimeReceive(newState)).toBreGreaterThan(0);
     expect(getUsername(store.getState())).toEqual('my-user');
     expect(getPermCmdExec(store.getState())).toEqual(true);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);

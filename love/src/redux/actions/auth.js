@@ -11,10 +11,13 @@ import {
   GET_TOKEN_FROM_LOCALSTORAGE,
 } from './actionTypes';
 import { requestViews } from './uif';
-import ManagerInterface from '../../Utils';
+import ManagerInterface, { utcNowTimestamp } from '../../Utils';
 import { getToken } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
 import { receiveServerTime } from './time';
+import * as dayjs from 'dayjs';
+var utc = require('dayjs/plugin/utc');
+dayjs.extend(utc);
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
@@ -78,10 +81,10 @@ function doMarkErrorToken() {
   };
 }
 
-export function doReceiveToken(username, token, permissions, time_data) {
+export function doReceiveToken(username, token, permissions, time_data, request_time) {
   return (dispatch) => {
     dispatch(receiveToken(username, token, permissions));
-    dispatch(receiveServerTime(time_data));
+    dispatch(receiveServerTime(time_data, request_time));
     dispatch(openWebsocketConnection());
     localStorage.setItem('LOVE-TOKEN', token);
   };
@@ -120,6 +123,7 @@ export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
     dispatch(requestToken(username, password));
+    const request_time = dayjs().valueOf();
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
@@ -146,7 +150,7 @@ export function fetchToken(username, password) {
           const time_data = response.time_data;
           const permissions = response.permissions;
           if (token !== undefined && token !== null) {
-            dispatch(doReceiveToken(username, token, permissions, time_data));
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
             dispatch(requestViews());
             return;
           }
@@ -202,6 +206,7 @@ export function validateToken() {
     }
 
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    const request_time = dayjs().valueOf();
     return fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -228,7 +233,7 @@ export function validateToken() {
           ({ username } = user);
         }
         const { permissions, time_data } = resp;
-        dispatch(doReceiveToken(username, token, permissions, time_data));
+        dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
         return Promise.resolve();
       });
     });
