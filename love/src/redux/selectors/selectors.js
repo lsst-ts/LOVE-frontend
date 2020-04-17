@@ -4,7 +4,9 @@ export const getToken = (state) => state.auth.token;
 
 export const getUsername = (state) => state.auth.username;
 
-export const getTaiToUtc = (state) => state.auth.tai_to_utc;
+export const getTaiToUtc = (state) => state.time.server_time.tai_to_utc;
+
+export const getServerTime = (state) => ({...state.time.server_time});
 
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
