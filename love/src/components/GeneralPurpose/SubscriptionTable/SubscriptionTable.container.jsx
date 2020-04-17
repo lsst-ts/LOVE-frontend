@@ -6,25 +6,13 @@ import SubscriptionTable from './SubscriptionTable';
 
 export const schema = {
   description: `Table displaying raw subscription data`,
-  defaultSize: [13, 2],
+  defaultSize: [25, 30],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: false,
-    },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Subscription table',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
     },
     label: {
       type: 'string',
@@ -52,10 +40,22 @@ export const schema = {
       isPrivate: true,
       default: ['accessors'],
     },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
+    },
   },
 };
 
-const SubscriptionTableContainer = ({ subscriptions, getStreamData, subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const SubscriptionTableContainer = ({
+  subscriptions,
+  getStreamData,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  ...props
+}) => {
   return (
     <SubscriptionTable
       subscriptions={subscriptions}

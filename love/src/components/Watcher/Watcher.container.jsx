@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
 
 export const schema = {
@@ -31,6 +32,9 @@ export const schema = {
 };
 
 const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream, ...props }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <Watcher
       {...props}
@@ -51,14 +55,16 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const subscriptions = ['event-Watcher-0-alarm']
   return {
+    subscriptions,
     subscribeToStreams: () => {
       //Alarms
-      dispatch(addGroupSubscription('event-Watcher-0-alarm'));
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
       //Alarms
-      dispatch(requestGroupSubscriptionRemoval('event-Watcher-0-alarm'));
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
       return dispatch(

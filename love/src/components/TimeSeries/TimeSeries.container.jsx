@@ -18,11 +18,11 @@ export const schema = {
       isPrivate: false,
       default: 'Time series',
     },
-    margin: {
+    hasRawMode: {
       type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
   },
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 import { getObservingLogs, getTaiToUtc } from '../../redux/selectors';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ObservingLogMessages from './ObservingLogMessages';
 
 export const schema = {
@@ -30,6 +31,9 @@ export const schema = {
 };
 
 const ObservingLogMessagesContainer = ({ subscribeToStreams, unsubscribeToStreams, taiToUtc, ...props }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <ObservingLogMessages
       subscribeToStreams={subscribeToStreams}
@@ -48,12 +52,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const subscriptions = ['event-LOVE-0-observingLog'];
   return {
+    subscriptions,
     subscribeToStreams: () => {
-      dispatch(addGroupSubscription('event-LOVE-0-observingLog'));
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-LOVE-0-observingLog'));
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
     sendMessage: (message) => {
       //   return dispatch(requestSALCommand({ ...cmd, component: 'ObservingLogMessages', salindex: ownProps.salindex }));
