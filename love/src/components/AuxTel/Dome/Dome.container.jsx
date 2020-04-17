@@ -3,11 +3,19 @@ import { connect } from 'react-redux';
 import Dome from './Dome';
 import { getDomeState } from '../../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
   description: 'Summary view of the ATDome. Contains general information about the dome and mount state',
-  defaultSize: [49, 43],
-  props: {},
+  defaultSize: [51, 45],
+  props: {
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Dome',
+    },
+  },
 };
 
 const DomeContainer = ({
@@ -31,7 +39,11 @@ const DomeContainer = ({
   height,
   subscribeToStream,
   unsubscribeToStream,
+  ...props
 }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <Dome
       dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
@@ -64,55 +76,34 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const subscriptions = [
+    'telemetry-ATDome-0-dropoutDoorOpeningPercentage',
+    'telemetry-ATDome-0-mainDoorOpeningPercentage',
+    'telemetry-ATDome-0-azimuthPosition',
+    'event-ATDome-0-azimuthState',
+    'event-ATDome-0-azimuthCommandedState',
+    'event-ATDome-0-dropoutDoorState',
+    'event-ATDome-0-mainDoorState',
+    'event-ATDome-0-allAxesInPosition',
+    'telemetry-ATMCS-0-mount_AzEl_Encoders',
+    'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
+    'event-ATMCS-0-detailedState',
+    'event-ATMCS-0-atMountState',
+    'event-ATMCS-0-target',
+    'event-ATMCS-0-allAxesInPosition',
+    'event-ATMCS-0-m3State',
+    'event-ATMCS-0-positionLimits',
+    'telemetry-ATPtg-1-currentTimesToLimits',
+  ];
   return {
+    subscriptions,
     subscribeToStream: () => {
-      //Dome
-      dispatch(addGroupSubscription('telemetry-ATDome-0-dropoutDoorOpeningPercentage'));
-      dispatch(addGroupSubscription('telemetry-ATDome-0-mainDoorOpeningPercentage'));
-      dispatch(addGroupSubscription('telemetry-ATDome-0-azimuthPosition'));
-      dispatch(addGroupSubscription('event-ATDome-0-azimuthState'));
-      dispatch(addGroupSubscription('event-ATDome-0-azimuthCommandedState'));
-      dispatch(addGroupSubscription('event-ATDome-0-dropoutDoorState'));
-      dispatch(addGroupSubscription('event-ATDome-0-mainDoorState'));
-      dispatch(addGroupSubscription('event-ATDome-0-allAxesInPosition'));
-      //ATMCS
-      dispatch(addGroupSubscription('telemetry-ATMCS-0-mount_AzEl_Encoders'));
-      dispatch(addGroupSubscription('telemetry-ATMCS-0-mount_Nasmyth_Encoders'));
-      dispatch(addGroupSubscription('event-ATMCS-0-detailedState'));
-      dispatch(addGroupSubscription('event-ATMCS-0-atMountState'));
-      dispatch(addGroupSubscription('event-ATMCS-0-target'));
-      dispatch(addGroupSubscription('event-ATMCS-0-allAxesInPosition'));
-      dispatch(addGroupSubscription('event-ATMCS-0-m3State'));
-      dispatch(addGroupSubscription('event-ATMCS-0-positionLimits'));
-      //ATPtg
-      dispatch(addGroupSubscription('telemetry-ATPtg-1-currentTimesToLimits'));
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStream: () => {
-      //Dome
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-0-dropoutDoorOpeningPercentage'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-0-mainDoorOpeningPercentage'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATDome-0-azimuthPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-azimuthState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-azimuthCommandedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-dropoutDoorState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-mainDoorState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATDome-0-allAxesInPosition'));
-      //ATMCS
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-0-mount_AzEl_Encoders'));
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATMCS-0-mount_Nasmyth_Encoders'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-detailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-atMountState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-target'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-allAxesInPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-m3State'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATMCS-0-positionLimits'));
-      //ATPtg
-      dispatch(requestGroupSubscriptionRemoval('telemetry-ATPtg-1-currentTimesToLimits'));
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(DomeContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(DomeContainer);

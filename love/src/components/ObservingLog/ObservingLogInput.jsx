@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Panel from '../GeneralPurpose/Panel/Panel';
 import styles from './ObservingLogInput.module.css';
 import TextArea from '../GeneralPurpose/TextArea/TextArea';
 import Button from '../GeneralPurpose/Button/Button';
@@ -41,19 +40,17 @@ export default class ObservingLogInput extends Component {
   };
   render() {
     return (
-      <Panel title="Observing Log" className={styles.panel}>
-        <div className={styles.container}>
-          <div>
-            <span className={styles.label}>User:</span>
-            <span>{this.props.username}</span>
-          </div>
-          <div>
-            <span className={styles.label}>Message:</span>
-            <TextArea callback={this.onTextChange}></TextArea>
-          </div>
-          <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
+      <div className={styles.container}>
+        <div>
+          <span className={styles.label}>User:</span>
+          <span>{this.props.username}</span>
         </div>
-      </Panel>
+        <div>
+          <span className={styles.label}>Message:</span>
+          <TextArea callback={this.onTextChange}></TextArea>
+        </div>
+        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
+      </div>
     );
   }
 }

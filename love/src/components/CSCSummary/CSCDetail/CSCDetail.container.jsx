@@ -8,6 +8,24 @@ export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
   defaultSize: [8, 2],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'CSC details',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: false,
+    },
     name: {
       type: 'string',
       description: 'Name of the CSC to monitor',
@@ -27,6 +45,12 @@ export const schema = {
         'Whether the CSC produces heartbeat',
       isPrivate: false,
       default: true,
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
     _functionProps: {
       type: 'array',

@@ -9,6 +9,7 @@ import {
   getLastSALCommand,
   getUsername,
 } from '../../redux/selectors';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
 
 export const schema = {
@@ -16,10 +17,15 @@ export const schema = {
                 Allows commands to be sent for interacting with the scripts, such as stopping, enqueueing and requeueing scripts`,
   defaultSize: [66, 38],
   props: {
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Script queue',
+    },
     salindex: {
       type: 'number',
-      description:
-        'Salindex of the ScriptQueue',
+      description: 'Salindex of the ScriptQueue',
       isPrivate: false,
       default: 1,
     },
@@ -39,7 +45,11 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
+  ...props
 }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <ScriptQueue
       subscribeToStreams={subscribeToStreams}
@@ -81,29 +91,28 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [
+    `event-ScriptQueueState-${ownProps.salindex}-stream`,
+    `event-ScriptQueue-${ownProps.salindex}-summaryState`,
+    `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
+  ];
   return {
+    subscriptions,
     subscribeToStreams: () => {
-      dispatch(addGroupSubscription(`event-ScriptQueueState-${ownProps.salindex}-stream`));
-      dispatch(addGroupSubscription(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
-      dispatch(addGroupSubscription(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueueState-${ownProps.salindex}-stream`));
-      dispatch(requestGroupSubscriptionRemoval(`event-ScriptQueue-${ownProps.salindex}-summaryState`));
-      dispatch(requestGroupSubscriptionRemoval(`event-ScriptHeartbeats-${ownProps.salindex}-stream`));
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
     requestSALCommand: (cmd) => {
-      if(cmd.csc === 'Script'){
+      if (cmd.csc === 'Script') {
         return dispatch(requestSALCommand({ ...cmd, component: 'Script', salindex: 0 }));
       }
       return dispatch(requestSALCommand({ ...cmd, component: 'ScriptQueue', salindex: ownProps.salindex }));
     },
   };
 };
-const connectedContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ScriptQueueContainer);
+const connectedContainer = connect(mapStateToProps, mapDispatchToProps)(ScriptQueueContainer);
 
 connectedContainer.defaultProps = {
   salindex: 1,

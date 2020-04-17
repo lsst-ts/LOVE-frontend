@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
-import Panel from '../GeneralPurpose/Panel/Panel';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
 import styles from './Watcher.module.css';
@@ -88,11 +87,7 @@ export default class Watcher extends Component {
     const now = moment().unix() - this.props.taiToUtc;
 
     this.props.alarms.forEach((alarm) => {
-      if (
-        alarm['severity'] <= 1 &&
-        alarm['maxSeverity'] <= 1 &&
-        now - alarm['timestampAcknowledged'] >= TIMEOUT
-      ) {
+      if (alarm['severity'] <= 1 && alarm['maxSeverity'] <= 1 && now - alarm['timestampAcknowledged'] >= TIMEOUT) {
         return;
       }
 
@@ -113,52 +108,50 @@ export default class Watcher extends Component {
     this.test = null;
 
     return (
-      <Panel title="Watcher" className={styles.panel} expandHeight={this.props.embedded}>
-        <div className={styles.tabsWrapper}>
-          <div className={styles.tabsRow}>
-            <div
-              className={[styles.tab, this.state.selectedTab === 'unmuted' ? styles.selected : ''].join(' ')}
-              onClick={() => this.changeTab('unmuted')}
-            >
-              <div className={styles.tabLabel}>
-                <div className={styles.iconWrapper}>
-                  <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
-                </div>
-                ACTIVE ALARMS ({unmutedAlarmsCount})
+      <div className={styles.tabsWrapper}>
+        <div className={styles.tabsRow}>
+          <div
+            className={[styles.tab, this.state.selectedTab === 'unmuted' ? styles.selected : ''].join(' ')}
+            onClick={() => this.changeTab('unmuted')}
+          >
+            <div className={styles.tabLabel}>
+              <div className={styles.iconWrapper}>
+                <MuteIcon unmuted style={this.state.selectedTab === 'unmuted' ? styles.selectedIcon : ''} />
               </div>
-              {unackUnmutedAlarmsCount === 0 ? null : <Badge status="info">{unackUnmutedAlarmsCount}</Badge>}
+              ACTIVE ALARMS ({unmutedAlarmsCount})
             </div>
-
-            <div
-              className={[styles.tab, this.state.selectedTab === 'muted' ? styles.selected : ''].join(' ')}
-              onClick={() => this.changeTab('muted')}
-            >
-              <div className={styles.tabLabel}>
-                <div className={styles.iconWrapper}>
-                  <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
-                </div>
-                MUTED ALARMS ({mutedAlarmsCount})
-              </div>
-            </div>
+            {unackUnmutedAlarmsCount === 0 ? null : <Badge status="info">{unackUnmutedAlarmsCount}</Badge>}
           </div>
 
-          <div className={[styles.alarmsTableWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
-            <AlarmsTable
-              user={this.props.user}
-              taiToUtc={this.props.taiToUtc}
-              alarms={alarmsToShow}
-              ackAlarm={(name, severity, acknowledgedBy) => {
-                this.setState({ waiting: true });
-                this.props.ackAlarm(name, severity, acknowledgedBy);
-              }}
-              unackAlarm={this.props.unackAlarm}
-              muteAlarm={this.props.muteAlarm}
-              unmuteAlarm={this.props.unmuteAlarm}
-              sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
-            />
+          <div
+            className={[styles.tab, this.state.selectedTab === 'muted' ? styles.selected : ''].join(' ')}
+            onClick={() => this.changeTab('muted')}
+          >
+            <div className={styles.tabLabel}>
+              <div className={styles.iconWrapper}>
+                <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
+              </div>
+              MUTED ALARMS ({mutedAlarmsCount})
+            </div>
           </div>
         </div>
-      </Panel>
+
+        <div className={[styles.alarmsTableWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
+          <AlarmsTable
+            user={this.props.user}
+            taiToUtc={this.props.taiToUtc}
+            alarms={alarmsToShow}
+            ackAlarm={(name, severity, acknowledgedBy) => {
+              this.setState({ waiting: true });
+              this.props.ackAlarm(name, severity, acknowledgedBy);
+            }}
+            unackAlarm={this.props.unackAlarm}
+            muteAlarm={this.props.muteAlarm}
+            unmuteAlarm={this.props.unmuteAlarm}
+            sortFunctions={this.state.selectedTab === 'unmuted' ? this.sortFunctions : this.mutedSortFunctions}
+          />
+        </div>
+      </div>
     );
   }
 }

@@ -8,6 +8,18 @@ export const schema = {
   description: `Internal use`,
   defaultSize: [13, 2],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Status',
+    },
     label: {
       type: 'string',
       description: 'Status label',
@@ -54,6 +66,12 @@ export const schema = {
         'Array containing the props that are functions',
       isPrivate: true,
       default: ['accessor'],
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: true,
     },
   },
 };

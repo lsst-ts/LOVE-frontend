@@ -2,12 +2,31 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getTimestampedStreamData } from '../../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import SubscriptionTableContainer from '../SubscriptionTable/SubscriptionTable.container';
 import TimeSeriesPlot from './TimeSeriesPlot';
 
 export const schema = {
   description: 'Time series plot for any data stream coming from SAL',
   defaultSize: [31, 8],
   props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Time series plot',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
     dataSources: {
       type: 'array',
       description: 'Array containing the name of the data sources for the plot',
@@ -71,7 +90,17 @@ const TimeSeriesPlotContainer = ({
   unsubscribeToStream,
   ...props
 }) => {
-  return (
+  // props.dataSources.forEach((dataSource) => {
+  //   const groupName = props.groupNames[dataSource];
+  //   console.log(groupName)
+  // });
+
+
+  if (props.isRaw) {
+    const subscriptions = Object.values(props.groupNames || {});
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
+    return (
     <TimeSeriesPlot
       streamStates={streamStates}
       groupName={groupName}

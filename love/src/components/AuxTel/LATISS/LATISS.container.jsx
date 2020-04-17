@@ -3,11 +3,20 @@ import { connect } from 'react-redux';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import { getLATISSState } from '../../../redux/selectors';
 import LATISS from './LATISS';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
+  description:
+    'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
   defaultSize: [61, 31],
-  props: {},
+  props: {
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'LATISS',
+    },
+  },
 };
 
 const LATISSContainer = ({
@@ -23,7 +32,11 @@ const LATISSContainer = ({
   gwState,
   shutterDetailedState,
   raftsDetailedState,
+  ...props
 }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <LATISS
       subscribeToStreams={subscribeToStreams}
@@ -38,6 +51,7 @@ const LATISSContainer = ({
       gwState={gwState}
       shutterDetailedState={shutterDetailedState}
       raftsDetailedState={raftsDetailedState}
+      {...props}
     />
   );
 };
@@ -59,32 +73,25 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
+  const subscriptions = [
+    'event-ATSpectrograph-0-reportedFilterPosition',
+    'event-ATSpectrograph-0-reportedDisperserPosition',
+    'event-ATSpectrograph-0-reportedLinearStagePosition',
+    'event-ATSpectrograph-0-lsState',
+    'event-ATSpectrograph-0-fwState',
+    'event-ATSpectrograph-0-gwState',
+    // Camera
+    'event-ATCamera-0-shutterDetailedState',
+    'event-ATCamera-0-raftsDetailedState',
+  ];
   return {
+    subscriptions,
     subscribeToStreams: () => {
-      dispatch(addGroupSubscription('event-ATSpectrograph-0-reportedFilterPosition'));
-      dispatch(addGroupSubscription('event-ATSpectrograph-0-reportedDisperserPosition'));
-      dispatch(addGroupSubscription('event-ATSpectrograph-0-reportedLinearStagePosition'));
-      dispatch(addGroupSubscription('event-ATSpectrograph-0-lsState'));
-      dispatch(addGroupSubscription('event-ATSpectrograph-0-fwState'));
-      dispatch(addGroupSubscription('event-ATSpectrograph-0-gwState'));
-      // Camera
-      dispatch(addGroupSubscription('event-ATCamera-0-shutterDetailedState'));
-      dispatch(addGroupSubscription('event-ATCamera-0-raftsDetailedState'));
+      subscriptions.forEach((s) => dispatch(addGroupSubscription(s)));
     },
     unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-reportedFilterPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-reportedDisperserPosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-reportedLinearStagePosition'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-lsState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-fwState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATSpectrograph-0-gwState'));
-      // Camera
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-shutterDetailedState'));
-      dispatch(requestGroupSubscriptionRemoval('event-ATCamera-0-raftsDetailedState'));
+      subscriptions.forEach((s) => dispatch(requestGroupSubscriptionRemoval(s)));
     },
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LATISSContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LATISSContainer);

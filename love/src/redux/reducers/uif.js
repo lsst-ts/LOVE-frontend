@@ -98,7 +98,6 @@ export default function(state = initialState, action) {
       if (oldViewIndex > -1) cachedViews.splice(oldViewIndex, 1);
       return Object.assign({}, state, {
         cachedViews: [...cachedViews, action.view],
-        viewsStatus: viewsStates.LOADED,
       });
     }
     case RECEIVE_VIEWS_ERROR: {
