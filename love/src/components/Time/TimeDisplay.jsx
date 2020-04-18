@@ -6,8 +6,6 @@ import { DateTime } from 'luxon';
 
 export default class TimeDisplay extends React.Component {
   static propTypes = {
-    /** Number of seconds to add to a TAI timestamp to convert it in UTC */
-    taiToUtc: PropTypes.number,
     /** Time Data from the server */
     timeData: PropTypes.object,
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
@@ -33,6 +31,10 @@ export default class TimeDisplay extends React.Component {
     this.timerID = setInterval(() => this.tick(), 1000);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
   componentDidUpdate(prevProps) {
     if (prevProps.timeData !== this.props.timeData) {
       const local = (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
@@ -41,10 +43,6 @@ export default class TimeDisplay extends React.Component {
         timestamp: DateTime.local().plus({seconds: dif}),
       });
     }
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
   }
 
   tick() {
@@ -64,7 +62,7 @@ export default class TimeDisplay extends React.Component {
               return (
                 <div key={index} className={styles.verticalGroup}>
                   {verticalGroup.map( (element, index) => (
-                    <Clock key={index} {...element} timestamp={localTime} />
+                    <Clock key={index} {...element} timestamp={localTime} timeData={this.props.timeData}/>
                   ))}
                 </div>
               )
