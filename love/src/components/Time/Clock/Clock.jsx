@@ -31,7 +31,7 @@ import { parseTimestamp } from '../../../Utils';
 //   hideOffset: false,
 // }
 
-export default class ClockContainer extends React.Component {
+export default class Clock extends React.Component {
 
   static propTypes = {
     /** Optional name to display above the clock */
@@ -63,7 +63,7 @@ export default class ClockContainer extends React.Component {
 
   static defaultProps = {
     name: null,
-    timestamp: DateTime.local(),
+    timestamp: null,
     hideDate: false,
     hideAnalog: false,
     hideOffset: false,
@@ -80,6 +80,7 @@ export default class ClockContainer extends React.Component {
   }
 
   componentDidMount() {
+    console.log('this.props: ', this.props)
     if (this.props.timestamp) return;
     this.timerID = setInterval(
       () => this.tick(),
