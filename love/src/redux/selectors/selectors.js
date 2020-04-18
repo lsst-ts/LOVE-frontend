@@ -12,6 +12,12 @@ export const getServerTimeReceive = (state) => state.time.receive_time;
 
 export const getServerTime = (state) => ({...state.time.server_time});
 
+export const getTimeData = (state) => ({
+  receive_time: state.time.receive_time,
+  request_time: state.time.request_time,
+  server_time: state.time.server_time,
+});
+
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
 export const getTokenStatus = (state) => state.auth.status;
