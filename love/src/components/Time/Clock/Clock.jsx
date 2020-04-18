@@ -57,8 +57,8 @@ export default class Clock extends React.Component {
      * - For 'Illinois' use 'America/Chicago'
      */
     timezone: PropTypes.string,
-    /** Number of seconds to add to a TAI timestamp to convert it in UTC. Only applied if timezone is TAI */
-    taiToUtc: PropTypes.number,
+    /** Time Data from the server */
+    timeData: PropTypes.object,
   }
 
   static defaultProps = {
@@ -69,7 +69,18 @@ export default class Clock extends React.Component {
     hideOffset: false,
     locale: 'en-GB',
     timezone: null,
-    taiToUtc: 0,
+    timeData: {
+      request_time: 0,
+      receive_time: 0,
+      server_time: {
+        utc: 0,
+        tai: 0,
+        mjd: 0,
+        sidereal_summit: 0,
+        sidereal_greenwhich: 0,
+        tai_to_utc: 0,
+      }
+    }
   }
 
   constructor(props) {
@@ -80,7 +91,6 @@ export default class Clock extends React.Component {
   }
 
   componentDidMount() {
-    console.log('this.props: ', this.props)
     if (this.props.timestamp) return;
     this.timerID = setInterval(
       () => this.tick(),
@@ -93,9 +103,19 @@ export default class Clock extends React.Component {
     clearInterval(this.timerID);
   }
 
+  componentDidUpdate(prevProps) {
+    if (!this.props.timestamp && prevProps.timeData !== this.props.timeData) {
+      const local = (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
+      const dif = this.props.timeData.server_time.utc - local;
+      this.setState({
+        timestamp: DateTime.local().plus({seconds: dif}),
+      });
+    }
+  }
+
   tick() {
     this.setState({
-      timestamp: DateTime.local(),
+      timestamp: this.state.timestamp.plus({seconds: 1}),
     });
   }
 
@@ -108,7 +128,7 @@ export default class Clock extends React.Component {
     }
     if (this.props.timezone) {
       if (this.props.timezone === 'TAI') {
-        timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.taiToUtc })
+        timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.timeData.server_time.tai_to_utc })
       }
       else if(this.props.timezone === 'MJD') {
         hideAnalog = true;
