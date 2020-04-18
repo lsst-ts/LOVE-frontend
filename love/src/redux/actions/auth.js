@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import {
   REQUEST_TOKEN,
   RECEIVE_TOKEN,
@@ -14,15 +15,15 @@ import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
+import { receiveServerTime } from './time';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
-export const receiveToken = (username, token, permissions, tai_to_utc) => ({
+export const receiveToken = (username, token, permissions) => ({
   type: RECEIVE_TOKEN,
   username,
   token,
   permissions,
-  tai_to_utc,
 });
 
 export const getTokenFromStorage = (token) => ({ type: GET_TOKEN_FROM_LOCALSTORAGE, token });
@@ -55,6 +56,7 @@ export const markErrorRemoveToken = {
   type: MARK_ERROR_REMOVE_TOKEN,
 };
 
+
 export function doGetTokenFromStorage() {
   return (dispatch) => {
     const token = localStorage.getItem('LOVE-TOKEN');
@@ -77,9 +79,10 @@ function doMarkErrorToken() {
   };
 }
 
-export function doReceiveToken(username, token, permissions, tai_to_utc) {
+export function doReceiveToken(username, token, permissions, time_data, request_time) {
   return (dispatch) => {
-    dispatch(receiveToken(username, token, permissions, tai_to_utc));
+    dispatch(receiveToken(username, token, permissions));
+    dispatch(receiveServerTime(time_data, request_time));
     dispatch(openWebsocketConnection());
     localStorage.setItem('LOVE-TOKEN', token);
   };
@@ -118,6 +121,7 @@ export function fetchToken(username, password) {
   const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
   return (dispatch, getState) => {
     dispatch(requestToken(username, password));
+    const request_time = DateTime.utc().toMillis() / 1000;
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getHeaders(),
@@ -141,10 +145,10 @@ export function fetchToken(username, password) {
           if (response.user) {
             username = response.user.username;
           }
-          const tai_to_utc = response.tai_to_utc;
+          const time_data = response.time_data;
           const permissions = response.permissions;
           if (token !== undefined && token !== null) {
-            dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
             dispatch(requestViews());
             return;
           }
@@ -200,6 +204,7 @@ export function validateToken() {
     }
 
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    const request_time =  DateTime.utc().toMillis() / 1000;
     return fetch(url, {
       method: 'GET',
       headers: new Headers({
@@ -225,8 +230,8 @@ export function validateToken() {
         if (user) {
           ({ username } = user);
         }
-        const { permissions, tai_to_utc } = resp;
-        dispatch(doReceiveToken(username, token, permissions, tai_to_utc));
+        const { permissions, time_data } = resp;
+        dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
         return Promise.resolve();
       });
     });

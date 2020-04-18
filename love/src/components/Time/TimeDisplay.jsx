@@ -8,6 +8,8 @@ export default class TimeDisplay extends React.Component {
   static propTypes = {
     /** Number of seconds to add to a TAI timestamp to convert it in UTC */
     taiToUtc: PropTypes.number,
+    /** Time Data from the server */
+    timeData: PropTypes.object,
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
     * Null or empty to use the browser locale */
     locale: PropTypes.string,
@@ -31,13 +33,23 @@ export default class TimeDisplay extends React.Component {
     this.timerID = setInterval(() => this.tick(), 1000);
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.timeData !== this.props.timeData) {
+      const local = (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
+      const dif = this.props.timeData.server_time.utc - local;
+      this.setState({
+        timestamp: DateTime.local().plus({seconds: dif}),
+      });
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
   tick() {
     this.setState({
-      timestamp: DateTime.local(),
+      timestamp: this.state.timestamp.plus({seconds: 1}),
     });
   }
 
