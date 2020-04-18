@@ -469,7 +469,7 @@ export const parseTimestamp = (timestamp) => {
 
 /**
  * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
- * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {date-able} timestamp, if float it must be in milliseconds
  * @param {string} location, optional location to append to the timestamp, TAI by default
  */
 export const formatTimestamp = (timestamp, location = 'TAI') => {
@@ -479,7 +479,7 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
 
 /**
  * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
- * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {date-able} timestamp, if float it must be in milliseconds
  * @param {string} location, optional location to append to the timestamp, empty by default
  */
 export const isoTimestamp = (timestamp, location = null) => {
@@ -489,7 +489,7 @@ export const isoTimestamp = (timestamp, location = null) => {
 
 /**
  * Converts seconds to a human readable difference like 'a few seconds ago'
- * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {date-able} timestamp, if float it must be in milliseconds
  * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
  */
 export const relativeTime = (timestamp, taiToUtc) => {
