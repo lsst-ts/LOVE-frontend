@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getTaiToUtc } from '../../../redux/selectors';
+import { getTimeData } from '../../../redux/selectors';
 import Clock from './Clock';
 import { DateTime } from 'luxon';
 
@@ -82,36 +82,17 @@ export const schema = {
   },
 };
 
-class ClockContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      timestamp: DateTime.local(),
-    };
-  }
-
-  componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    this.setState({
-      timestamp: DateTime.local(),
-    });
-  }
-
-  render() {
-    return <Clock {...this.props} timestamp={this.state.timestamp} />;
-  }
-}
+const ClockContainer = ({ ...props }) => {
+  return (
+    <Clock
+      {...props}
+    />
+  );
+};
 
 const mapStateToProps = (state) => {
-  const taiToUtc = getTaiToUtc(state);
-  return { taiToUtc };
+  const timeData = getTimeData(state);
+  return { timeData };
 };
 
 const mapDispatchToProps = (dispatch) => {
