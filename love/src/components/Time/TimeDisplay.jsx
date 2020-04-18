@@ -9,8 +9,8 @@ import * as dayjs from 'dayjs';
 export default class TimeDisplay extends React.Component {
 
   static propTypes = {
-    /** Number of seconds to add to a TAI timestamp to convert it in UTC */
-    taiToUtc: PropTypes.number,
+    /** Time Data from the server */
+    timeData: PropTypes.object,
   }
 
   constructor(props) {
@@ -27,13 +27,23 @@ export default class TimeDisplay extends React.Component {
     );
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.timeData !== this.props.timeData) {
+      const local = (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
+      const dif = this.props.timeData.server_time.utc - local;
+      this.setState({
+        timestamp: dayjs().add(dif, 'seconds'),
+      });
+    }
+  }
+
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
   tick() {
     this.setState({
-      timestamp: dayjs(),
+      timestamp: this.state.timestamp.add(1, 'seconds'),
     });
   }
 
@@ -43,7 +53,7 @@ export default class TimeDisplay extends React.Component {
     const serenaTime = this.state.timestamp.utcOffset(-4);
     const arizonaTime = this.state.timestamp.utcOffset(-7);
     const illinoisTime = this.state.timestamp.utcOffset(-6);
-    const taiTime = utcTime.subtract(this.props.taiToUtc, 'seconds');
+    const taiTime = utcTime.subtract(this.props.timeData.server_time.tai_to_utc, 'seconds');
     return (
       <div className={styles.container}>
         <div className={styles.group}>
