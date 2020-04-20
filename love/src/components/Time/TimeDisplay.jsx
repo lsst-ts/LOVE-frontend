@@ -37,7 +37,8 @@ export default class TimeDisplay extends React.Component {
     this.state = {
       local: DateTime.local(),
       mjd: 0,
-      sidereal: 0,
+      sidereal_greenwich: 0,
+      sidereal_summit: 0,
     };
   }
 
@@ -50,14 +51,12 @@ export default class TimeDisplay extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('props: ', this.props)
-    console.log('prevPorps: ', prevProps)
-    if (prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc || this.state.sidereal === 0) {
-      console.log('DIFFF')
+    if (prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc || this.state.sidereal_greenwich === 0) {
       const diffSecs = this.props.timeData.server_time.utc - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
       this.setState({
         local: DateTime.local().plus({seconds: diffSecs}),
-        sidereal: DateTime.fromSeconds(this.props.timeData.server_time.sidereal_greenwich * 3600 + diffSecs * siderealSecond),
+        sidereal_greenwich: DateTime.fromSeconds(this.props.timeData.server_time.sidereal_greenwich * 3600 + diffSecs * siderealSecond),
+        sidereal_summit: DateTime.fromSeconds(this.props.timeData.server_time.sidereal_summit * 3600 + diffSecs * siderealSecond),
       });
     }
   }
@@ -65,12 +64,12 @@ export default class TimeDisplay extends React.Component {
   tick() {
     this.setState({
       local: this.state.local.plus({seconds: 1}),
-      sidereal: this.state.sidereal ? this.state.sidereal.plus({milliseconds: siderealSecond * 1000}) : 0,
+      sidereal_greenwich: this.state.sidereal_greenwich ? this.state.sidereal_greenwich.plus({milliseconds: siderealSecond * 1000}) : 0,
+      sidereal_summit: this.state.sidereal_summit ? this.state.sidereal_summit.plus({milliseconds: siderealSecond * 1000}) : 0,
     });
   }
 
   render() {
-    const localTime = this.state.local;
     return (
       <div className={styles.container}>
         {this.props.clocks.map( (horizontalGroup, index) => (
@@ -80,15 +79,15 @@ export default class TimeDisplay extends React.Component {
               return (
                 <div key={index} className={styles.verticalGroup}>
                   {verticalGroup.map( (element, index) => {
-                    if (element.timezone === 'sidereal') {
-                      // console.log('props:', this.props)
-                      // console.log('state:', this.state)
-                      return (
-                        <Clock key={index} {...element} timezone={"UTC"} timestamp={this.state.sidereal} timeData={this.props.timeData}/>
-                      )
+                    let timestamp = this.state.local;
+                    if (element.timezone === 'sidereal-greenwich') {
+                      timestamp = this.state.sidereal_greenwich;
+                    }
+                    else if(element.timezone === 'sidereal-summit') {
+                      timestamp = this.state.sidereal_summit;
                     }
                     return (
-                      <Clock key={index} {...element} timestamp={localTime} timeData={this.props.timeData}/>
+                      <Clock key={index} {...element} timestamp={timestamp} timeData={this.props.timeData}/>
                     )
                   })}
                 </div>
