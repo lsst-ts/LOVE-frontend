@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import MuteIcon from '../icons/MuteIcon/MuteIcon';
 import Badge from '../GeneralPurpose/Badge/Badge';
 import AlarmsTable from './AlarmsTable/AlarmsTable';
@@ -84,7 +84,7 @@ export default class Watcher extends Component {
     let mutedAlarmsCount = 0;
     let unmutedAlarmsCount = 0;
     let unackUnmutedAlarmsCount = 0;
-    const now = moment().unix() - this.props.taiToUtc;
+    const now = DateTime.local().toSeconds() - this.props.taiToUtc;
 
     this.props.alarms.forEach((alarm) => {
       if (alarm['severity'] <= 1 && alarm['maxSeverity'] <= 1 && now - alarm['timestampAcknowledged'] >= TIMEOUT) {
