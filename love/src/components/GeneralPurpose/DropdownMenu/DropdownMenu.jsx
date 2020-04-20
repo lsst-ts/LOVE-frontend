@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import Button from '../Button/Button';
-import GearIcon from '../../icons/GearIcon/GearIcon';
-import styles from './DropdownButton.module.css';
+import styles from './DropdownMenu.module.css';
 
-export default class DropdownButton extends PureComponent {
+export default class DropdownMenu extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
