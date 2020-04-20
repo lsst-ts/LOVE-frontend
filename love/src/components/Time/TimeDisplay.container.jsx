@@ -75,7 +75,7 @@ export const schema = {
             hideAnalog: false,
             hideDate: true,
             hideOffset: false,
-            timezone: null,
+            timezone: 'sidereal-summit',
           },
         ],
         [
