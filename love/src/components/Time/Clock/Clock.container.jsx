@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getTimeData } from '../../../redux/selectors';
 import Clock from './Clock';
-import { DateTime } from 'luxon';
 
 export const schema = {
   description: `Component displaying the clocks with relevant times, such as UTC, TAI, summit time, etc`,
@@ -70,6 +69,8 @@ export const schema = {
         For example:
         - For UTC use UTC
         - For TAI use TAI
+        - For Greenwich Sidereal Time use sidereal-greenwich
+        - For Summit Sidereal Time use sidereal-summit
         - For a fixed offset (e.g. GMT+5) use <UTC
         - For La Serena use America/Santiago (yes America, not Chile)
         - For Arizona use America/Phoenix

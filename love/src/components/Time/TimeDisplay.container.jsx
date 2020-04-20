@@ -52,6 +52,8 @@ export const schema = {
         For example:
         - For UTC use UTC
         - For TAI use TAI
+        - For Greenwich Sidereal Time use sidereal-greenwich
+        - For Summit Sidereal Time use sidereal-summit
         - For a fixed offset (e.g. GMT+5) use <UTC
         - For La Serena use America/Santiago (yes America, not Chile)
         - For Arizona use America/Phoenix
