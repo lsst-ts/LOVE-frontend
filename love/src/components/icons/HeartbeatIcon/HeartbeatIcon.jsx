@@ -34,7 +34,7 @@ export default class HeartbeatIcon extends Component {
       </svg>
     ) : (
       <svg
-        className={[styles.heartbeatIcon, statusStyle].join(' ')}
+        className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')}
         viewBox="0 0 63.74 61.19"
       >
         <title>{title}</title>
