@@ -4,7 +4,19 @@ export const getToken = (state) => state.auth.token;
 
 export const getUsername = (state) => state.auth.username;
 
-export const getTaiToUtc = (state) => state.auth.tai_to_utc;
+export const getTaiToUtc = (state) => state.time.server_time.tai_to_utc;
+
+export const getServerTimeRequest = (state) => state.time.request_time;
+
+export const getServerTimeReceive = (state) => state.time.receive_time;
+
+export const getServerTime = (state) => ({...state.time.server_time});
+
+export const getTimeData = (state) => ({
+  receive_time: state.time.receive_time,
+  request_time: state.time.request_time,
+  server_time: state.time.server_time,
+});
 
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
