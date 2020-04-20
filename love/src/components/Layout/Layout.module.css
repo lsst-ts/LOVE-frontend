@@ -248,3 +248,29 @@
   display: contents;
   position: relative;
 }
+
+.heartbeatsMenu {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  padding: 0.5em;
+}
+
+.heartbeatMenuElement {
+  display: grid;
+  grid-template-columns: 1em max-content;
+  grid-gap: 0.5em;
+  padding: 0.25em 0.5em;
+}
+
+.heartbeatMenuElement span {
+  line-height: 1.5em;
+}
+
+.statusMenuElement {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 0.5em;
+  padding: 0.5em 0.5em;
+  padding-left: 2em;
+}

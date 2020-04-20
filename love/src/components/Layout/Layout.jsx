@@ -16,6 +16,7 @@ import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
+import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 
 const BREAK_1 = 768;
 const BREAK_2 = 630;
@@ -312,24 +313,91 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
-              <Button
-                className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
-                style={{
-                  visibility:
-                    this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered)
-                      ? 'visible'
-                      : 'hidden',
-                }}
-                title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
-                onClick={() => {}}
-                status="transparent"
-              >
-                <HeartbeatIcon
-                  className={styles.icon}
-                  status={this.state.heartbeatStatus}
+              <DropdownMenu className={styles.settingsDropdown}>
+                <Button
+                  className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
+                  style={{
+                    visibility:
+                      this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered)
+                        ? 'visible'
+                        : 'hidden',
+                  }}
                   title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
-                />
-              </Button>
+                  onClick={() => {}}
+                  status="transparent"
+                >
+                  <HeartbeatIcon
+                    className={styles.icon}
+                    status={this.state.heartbeatStatus}
+                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                  />
+                </Button>
+                <div className={styles.heartbeatsMenu} title="Heartbeats menu">
+                  <div className={styles.heartbeatMenuElement} title="LOVE manager menu">
+                    <HeartbeatIcon
+                      className={styles.icon}
+                      status={'ok'}
+                      title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                    />
+                    <span>LOVE manager</span>
+                  </div>
+                  <div className={styles.heartbeatMenuElement} title="LOVE producer menu">
+                    <HeartbeatIcon
+                      className={styles.icon}
+                      status={'alert'}
+                      title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                    />
+                    <span>LOVE producer</span>
+                  </div>
+                  <div className={styles.heartbeatMenuElement} title="LOVE commander menu">
+                    <HeartbeatIcon
+                      className={styles.icon}
+                      status={this.state.heartbeatStatus}
+                      title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                    />
+                    <span>LOVE commander</span>
+                  </div>
+                  <div className={styles.divider}></div>
+                  <div className={styles.statusMenuElement} title="LOVE commander menu">
+                    <LabeledStatusTextContainer
+                      label={'SAL status'}
+                      groupName={'event-ATMCS-0-m3State'}
+                      stateToLabelMap={{
+                        0: 'UNKNOWN',
+                        1: 'ENABLED',
+                        2: 'UPDATING',
+                        3: 'UPDATING',
+                      }}
+                      stateToStyleMap={{
+                        0: 'unknown',
+                        1: 'ok',
+                        2: 'running',
+                        3: 'running',
+                      }}
+                    />
+                  </div>
+                  <div className={styles.divider}></div>
+                  <div className={styles.statusMenuElement} title="LOVE commander menu">
+                  <LabeledStatusTextContainer
+                      label={'EFD status'}
+                      groupName={'event-ATMCS-0-m3State'}
+                      stateToLabelMap={{
+                        0: 'UNKNOWN',
+                        1: 'RUNNING',
+                        2: 'UNRESPONSIVE',
+                        3: 'RUNNING',
+                      }}
+                      stateToStyleMap={{
+                        0: 'unknown',
+                        1: 'ok',
+                        2: 'alert',
+                        3: 'ok',
+                      }}
+                    />
+                  </div>
+                </div>
+              </DropdownMenu>
+
               <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
                 <NotificationIcon className={styles.icon} />
               </Button>
