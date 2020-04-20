@@ -4,7 +4,7 @@ import styles from './Clock.module.css';
 import AnalogClock from '../../GeneralPurpose/AnalogClock/AnalogClock';
 import DigitalClock from '../../GeneralPurpose/DigitalClock/DigitalClock';
 import { DateTime } from 'luxon';
-import { parseTimestamp } from '../../../Utils';
+import { parseTimestamp, siderealSecond } from '../../../Utils';
 
 
 /**
@@ -87,6 +87,7 @@ export default class Clock extends React.Component {
     super(props);
     this.state = {
       timestamp: DateTime.local(),
+      neverSynced: true,
     };
   }
 
@@ -104,42 +105,62 @@ export default class Clock extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.timestamp && prevProps.timeData !== this.props.timeData) {
-      const local = (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
-      const dif = this.props.timeData.server_time.utc - local;
-      this.setState({
-        timestamp: DateTime.local().plus({seconds: dif}),
-      });
+    if (!this.props.timestamp && prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc || this.state.neverSynced) {
+      const diffSecs = this.props.timeData.server_time.utc - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
+      let timestamp = 0;
+      if (this.props.timezone === 'sidereal-summit') {
+        timestamp = DateTime.fromSeconds(this.props.timeData.server_time.sidereal_summit * 3600 + diffSecs * siderealSecond);
+      } else if (this.props.timezone === 'sidereal-greenwich') {
+        timestamp = DateTime.fromSeconds(this.props.timeData.server_time.sidereal_greenwich * 3600 + diffSecs * siderealSecond);
+      } else {
+        timestamp = DateTime.local().plus({seconds: diffSecs});
+      }
+      const update = this.state.neverSynced ? { neverSynced: false, timestamp } : { timestamp };
+      this.setState(update);
     }
   }
 
   tick() {
-    this.setState({
-      timestamp: this.state.timestamp.plus({seconds: 1}),
-    });
+    let timestamp = 0;
+    if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
+      timestamp = this.state.timestamp.plus({milliseconds: siderealSecond * 1000});
+    } else {
+      timestamp = this.state.timestamp.plus({seconds: 1})
+    }
+    this.setState({ timestamp });
   }
 
   render() {
     let timestamp = (this.props.timestamp ? this.props.timestamp : this.state.timestamp);
     let hideAnalog = this.props.hideAnalog;
     let mjd = false;
+    let offset = timestamp.offsetNameShort;
+    let hideDate = this.props.hideDate;
     if (this.props.locale) {
       timestamp = timestamp.setLocale(this.props.locale);
     }
     if (this.props.timezone) {
       if (this.props.timezone === 'TAI') {
-        timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.timeData.server_time.tai_to_utc })
+        timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.timeData.server_time.tai_to_utc });
+        offset = 'TAI';
       }
       else if(this.props.timezone === 'MJD') {
         hideAnalog = true;
         mjd = true;
+        offset = 'MJD';
+        hideDate = true;
+      }
+      else if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
+        timestamp = timestamp.setZone('UTC');
+        offset = this.props.timezone === 'sidereal-greenwich' ? 'GAST' : 'Summit-AST';
+        hideDate = true;
       }
       else {
         timestamp = timestamp.setZone(this.props.timezone);
       }
     }
     const name = this.props.name;
-    const offset = this.props.hideOffset || mjd ? false : (this.props.timezone === 'TAI' ? 'TAI' : timestamp.offsetNameShort);
+    offset = this.props.hideOffset || offset;
     return (
       <div className={styles.container}>
         <div className={styles.topRow}>
@@ -153,7 +174,7 @@ export default class Clock extends React.Component {
               {timestamp.toMillis()}
             </div>
           ) : (
-            <DigitalClock timestamp={timestamp} hideDate={this.props.hideDate}/>
+            <DigitalClock timestamp={timestamp} hideDate={hideDate}/>
           )}
         </div>
         { !hideAnalog && (
