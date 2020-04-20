@@ -1,0 +1,68 @@
+.settingsDropdown {
+  background-color: var(--tertiary-background-color);
+  border-radius: 4px;
+  text-align: left;
+  z-index: 20000;
+  display: grid;
+  grid-template-rows: repeat(auto-fill, min-content);
+  position: absolute;
+  /* width: 20ch; */
+  width: 10ch;
+  height: fit-content;
+  top: 2.7em;
+  right: 0;
+  opacity: 0;
+  transition: visibility 0.1s, opacity 0.1s ease-in-out;
+  visibility: hidden;
+}
+
+.isOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settingsDropdown .menuElement {
+  text-align: left;
+  cursor: pointer;
+  padding: 0.5em 1em;
+}
+
+.settingsDropdown .menuElement:hover {
+  background-color: var(--second-quaternary-background-color);
+}
+
+.settingsDropdown .menuElement:first-child:hover {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.settingsDropdown .menuElement:last-child:hover {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.settingsDropdown .disabledElement {
+  text-align: left;
+  cursor: not-allowed;
+  padding: 0.5em 1em;
+  color: var(--secondary-font-dimmed-color);
+}
+
+.settingsDropdown .divider {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.refNode {
+  /* display: contents; */
+  position: relative;
+  max-height: 2em;
+}
+
+
+.iconBtn {
+    display: inline;
+    border-radius: 50%;
+    padding: 0.3em;
+    height: 2em;
+    width: 2em;
+  }
