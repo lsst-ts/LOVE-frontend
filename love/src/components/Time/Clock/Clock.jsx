@@ -86,8 +86,7 @@ export default class Clock extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      timestamp: DateTime.local(),
-      neverSynced: true,
+      timestamp: 0,
     };
   }
 
@@ -105,25 +104,30 @@ export default class Clock extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (!this.props.timestamp && prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc || this.state.neverSynced) {
+    if (!this.props.timestamp && prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc || !this.state.timestamp) {
       const diffSecs = this.props.timeData.server_time.utc - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
       let timestamp = 0;
       if (this.props.timezone === 'sidereal-summit') {
         timestamp = DateTime.fromSeconds(this.props.timeData.server_time.sidereal_summit * 3600 + diffSecs * siderealSecond);
       } else if (this.props.timezone === 'sidereal-greenwich') {
         timestamp = DateTime.fromSeconds(this.props.timeData.server_time.sidereal_greenwich * 3600 + diffSecs * siderealSecond);
+      } else if (this.props.timezone === 'MJD') {
+        timestamp = this.props.timeData.server_time.mjd + diffSecs / (3600*24) ;
       } else {
         timestamp = DateTime.local().plus({seconds: diffSecs});
       }
-      const update = this.state.neverSynced ? { neverSynced: false, timestamp } : { timestamp };
-      this.setState(update);
+      this.setState({timestamp});
     }
   }
 
   tick() {
+    if (!this.state.timestamp) return;
     let timestamp = 0;
     if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
       timestamp = this.state.timestamp.plus({milliseconds: siderealSecond * 1000});
+    }
+    else if (this.props.timezone === 'MJD') {
+      timestamp = this.state.timestamp + 1 / (3600*24);
     } else {
       timestamp = this.state.timestamp.plus({seconds: 1})
     }
@@ -136,27 +140,29 @@ export default class Clock extends React.Component {
     let mjd = false;
     let offset = timestamp.offsetNameShort;
     let hideDate = this.props.hideDate;
-    if (this.props.locale) {
-      timestamp = timestamp.setLocale(this.props.locale);
-    }
-    if (this.props.timezone) {
-      if (this.props.timezone === 'TAI') {
-        timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.timeData.server_time.tai_to_utc });
-        offset = 'TAI';
+    if (timestamp) {
+      if (this.props.timezone) {
+        if (this.props.timezone === 'TAI') {
+          timestamp = timestamp.setZone('UTC').minus({ 'seconds': this.props.timeData.server_time.tai_to_utc });
+          offset = 'TAI';
+        }
+        else if(this.props.timezone === 'MJD') {
+          hideAnalog = true;
+          mjd = true;
+          offset = 'MJD';
+          hideDate = true;
+        }
+        else if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
+          timestamp = timestamp.setZone('UTC');
+          offset = this.props.timezone === 'sidereal-greenwich' ? 'GAST' : 'Summit-AST';
+          hideDate = true;
+        }
+        else {
+          timestamp = timestamp.setZone(this.props.timezone);
+        }
       }
-      else if(this.props.timezone === 'MJD') {
-        hideAnalog = true;
-        mjd = true;
-        offset = 'MJD';
-        hideDate = true;
-      }
-      else if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
-        timestamp = timestamp.setZone('UTC');
-        offset = this.props.timezone === 'sidereal-greenwich' ? 'GAST' : 'Summit-AST';
-        hideDate = true;
-      }
-      else {
-        timestamp = timestamp.setZone(this.props.timezone);
+      if (!mjd && this.props.locale) {
+        timestamp = timestamp.setLocale(this.props.locale);
       }
     }
     const name = this.props.name;
@@ -171,7 +177,7 @@ export default class Clock extends React.Component {
           )}
           {mjd ? (
             <div className={styles.mjd}>
-              {timestamp.toMillis()}
+              {timestamp}
             </div>
           ) : (
             <DigitalClock timestamp={timestamp} hideDate={hideDate}/>
