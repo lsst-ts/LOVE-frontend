@@ -120,7 +120,7 @@
   will-change: transform;
 }
 
-.heartbeatButton {
+.rightTopbar > :first-child {
   margin-left: -1.4em;
 }
 
@@ -206,24 +206,6 @@
 
 .sidebarHidden {
   transform: translate(-200px, 0);
-}
-
-.settingsDropdown {
-  background-color: var(--tertiary-background-color);
-  border-radius: 4px;
-  text-align: left;
-  z-index: 20000;
-  display: grid;
-  grid-template-rows: repeat(auto-fill, min-content);
-  position: absolute;
-  /* width: 20ch; */
-  width: 10ch;
-  height: fit-content;
-  top: 3.2em;
-  right: 1em;
-  opacity: 0;
-  transition: visibility 0.2s, opacity 0.2s ease-in-out;
-  visibility: hidden;
 }
 
 .settingsVisible {

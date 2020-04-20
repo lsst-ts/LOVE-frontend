@@ -7,6 +7,7 @@ import { viewsStates } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
+import DropdownMenu from '../GeneralPurpose/DropdownMenu/DropdownMenu';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
@@ -61,14 +62,13 @@ class Layout extends Component {
       viewOnNotch: true,
       toolbarOverflow: false,
       sidebarVisible: false,
-      settingsVisible: false,
       id: null,
       title: null,
       heartbeatTimer: undefined,
       lastHeartbeat: undefined,
       hovered: false, // true if leftTopbar is being hovered
     };
-    
+
     this.requestToastID = null;
   }
 
@@ -188,9 +188,6 @@ class Layout extends Component {
   };
 
   handleClick = (event) => {
-    if (this.dropdown && !this.dropdown.contains(event.target)) {
-      this.setState({ settingsVisible: false });
-    }
     if (
       this.sidebar &&
       !this.sidebar.contains(event.target) &&
@@ -213,10 +210,6 @@ class Layout extends Component {
       viewOnNotch: BREAK_2 < innerWidth,
       toolbarOverflow: innerWidth < BREAK_1,
     });
-  };
-
-  toggleSettings = () => {
-    this.setState({ settingsVisible: !this.state.settingsVisible });
   };
 
   createNewView = () => {
@@ -341,20 +334,14 @@ class Layout extends Component {
                 <NotificationIcon className={styles.icon} />
               </Button>
 
-              <span className={styles.refNode} ref={(node) => (this.dropdown = node)}>
-                <Button className={styles.iconBtn} title="Settings" onClick={this.toggleSettings} status="transparent">
+              <DropdownMenu className={styles.settingsDropdown}>
+                <Button className={styles.iconBtn} title="Settings" status="transparent">
                   <GearIcon className={styles.icon} />
-                  <div
-                    className={[styles.settingsDropdown, this.state.settingsVisible ? styles.settingsVisible : ''].join(
-                      ' ',
-                    )}
-                  >
-                    <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                      Logout
-                    </div>
-                  </div>
                 </Button>
-              </span>
+                <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
+                  Logout
+                </div>
+              </DropdownMenu>
             </div>
           </div>
         </div>
