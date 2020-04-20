@@ -43,7 +43,7 @@ export const schema = {
       description: 'Mapping of status number to its label',
       isPrivate: true,
       default: {
-        '0': 'UNKOWN',
+        '0': 'UNKNOWN',
         '1': 'TRACK_DISABLED',
         '2': 'TRACK_ENABLED',
         '3': 'STOPPING',
@@ -85,6 +85,7 @@ const LabeledStatusTextContainer = ({
   accessor,
   stateToLabelMap,
   stateToStyleMap,
+  ...props
 }) => {
   return (
     <LabeledStatusText
@@ -96,6 +97,7 @@ const LabeledStatusTextContainer = ({
       stateToStyleMap={stateToStyleMap}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
+      {...props}
     />
   );
 };

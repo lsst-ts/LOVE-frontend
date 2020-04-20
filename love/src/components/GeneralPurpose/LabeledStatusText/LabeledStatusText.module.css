@@ -5,3 +5,10 @@
   grid-column-gap: 1em;
   align-items: center;
 }
+
+.stacked {
+  grid-template-columns: max-content;
+  grid-template-rows: 1fr 1fr;
+  grid-row-gap: 0;
+  grid-column-gap: 0;
+}
