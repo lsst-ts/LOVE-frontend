@@ -57,6 +57,7 @@ export default class TimeDisplay extends React.Component {
         local: DateTime.local().plus({seconds: diffSecs}),
         sidereal_greenwich: DateTime.fromSeconds(this.props.timeData.server_time.sidereal_greenwich * 3600 + diffSecs * siderealSecond),
         sidereal_summit: DateTime.fromSeconds(this.props.timeData.server_time.sidereal_summit * 3600 + diffSecs * siderealSecond),
+        mjd: this.props.timeData.server_time.mjd + diffSecs / (3600*24),
       });
     }
   }
@@ -66,6 +67,7 @@ export default class TimeDisplay extends React.Component {
       local: this.state.local.plus({seconds: 1}),
       sidereal_greenwich: this.state.sidereal_greenwich ? this.state.sidereal_greenwich.plus({milliseconds: siderealSecond * 1000}) : 0,
       sidereal_summit: this.state.sidereal_summit ? this.state.sidereal_summit.plus({milliseconds: siderealSecond * 1000}) : 0,
+      mjd: this.state.mjd + 1 / (3600*24),
     });
   }
 
@@ -85,6 +87,9 @@ export default class TimeDisplay extends React.Component {
                     }
                     else if(element.timezone === 'sidereal-summit') {
                       timestamp = this.state.sidereal_summit;
+                    }
+                    else if(element.timezone === 'MJD') {
+                      timestamp = this.state.mjd;
                     }
                     return (
                       <Clock key={index} {...element} timestamp={timestamp} timeData={this.props.timeData}/>
