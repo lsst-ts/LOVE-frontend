@@ -10,29 +10,11 @@ export const schema = {
     'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
   defaultSize: [61, 31],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: true,
-    },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'LATISS',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
-    },
-    hasRawMode: {
-      type: 'boolean',
-      description: 'Whether the component has a raw mode version',
-      isPrivate: true,
-      default: true,
     },
   },
 };

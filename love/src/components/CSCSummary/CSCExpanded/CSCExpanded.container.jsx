@@ -21,12 +21,6 @@ export const schema = {
       isPrivate: false,
       default: 'CSC expanded',
     },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
-    },
     name: {
       type: 'string',
       description: 'Name of the CSC to monitor',
@@ -46,6 +40,12 @@ export const schema = {
         'Array containing the props that are functions',
       isPrivate: true,
       default: [],
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
     },
   },
 };

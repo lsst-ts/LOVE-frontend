@@ -104,7 +104,7 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 const _resetSubscriptions = (subscriptions) => {
   return {
     type: RESET_SUBSCRIPTIONS,
-    subscriptions: subscriptions ? subscriptions.map( sub => ({
+    subscriptions: subscriptions ? subscriptions.map(sub => ({
       ...sub,
       status: groupStates.PENDING,
       confirmationMessage: undefined,
@@ -222,9 +222,6 @@ export const openWebsocketConnection = () => {
           }
         }
 
-        if (data.category === 'ack') {
-          dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, data.data[0].data.stream.result));
-        }
 
         if (data.data[0].data.observingLog) {
           dispatch(receiveObservingLog(data.data[0].data.observingLog));
@@ -280,7 +277,7 @@ const _requestSubscriptions = () => {
       return;
     }
     const subscriptions = getSubscriptions(state);
-    subscriptions.forEach( subscription => {
+    subscriptions.forEach(subscription => {
       if (subscription.status !== groupStates.PENDING && subscription.status !== groupStates.UNSUBSCRIBING) return;
       const [category, csc, salindex, stream] = subscription.groupName.split('-');
       socket.json({
@@ -324,29 +321,65 @@ export const requestGroupSubscriptionRemoval = (groupName) => {
   };
 };
 
-export const updateLastSALCommand = (cmd, status) => {
+export const updateLastSALCommand = (cmd, status, statusCode) => {
   return {
     type: UPDATE_LAST_SAL_COMMAND,
     status,
+    statusCode,
     ...cmd,
   };
 };
 
-export const updateLastSALCommandStatus = (status, result) => {
+export const updateLastSALCommandStatus = (status, statusCode, result) => {
   return {
     type: UPDATE_LAST_SAL_COMMAND_STATUS,
     status,
+    statusCode,
     result,
   };
 };
 
+/**
+ * Requests the LOVE-producer to send a command to the SAL (salobj)
+ * via an HTTP request through the LOVE-manager.
+ *
+ */
 export const requestSALCommand = (data) => {
-  /**
-   * Requests the LOVE-producer to send a command to the SAL (salobj)
-   * via a websocket message through the LOVE-manager.
-   *
-   * Tries to open a websocket connection if it does not exist and retries after 0.5s.
-   */
+  return (dispatch, getState) => {
+    const url = `${ManagerInterface.getApiBaseUrl()}cmd/`;
+    const commandID = `${Date.now()}-${data.cmd}`;
+    const commandStatus = {
+      cmd: data.cmd,
+      params: data.params,
+      csc: data.csc ?? data.component, // this is for backwards compatibility
+      salindex: data.salindex,
+
+    };
+    dispatch(updateLastSALCommand(
+      {
+        ...commandStatus,
+        statusCode: null, cmd_id: commandID
+      },
+      SALCommandStatus.REQUESTED, null));
+
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({ ...commandStatus }),
+      headers: ManagerInterface.getHeaders()
+    }).then(r => {
+      return r.json().then(data => ({
+        statusCode: r.status,
+        data
+      }))
+    }).then(({statusCode, data}) => {
+      dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
+    })
+  }
+
+}
+
+export const _requestSALCommand = (data) => {
+
   const commandID = `${Date.now()}-${data.cmd}`;
   return (dispatch, getState) => {
     const state = getState();

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DateTime } from 'luxon';
+import { SALCommandStatus } from './redux/actions/ws.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -24,7 +25,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
 
-  function noop() {}
+  function noop() { }
   const opts = optsPar || {};
 
   let ws;
@@ -438,7 +439,13 @@ const watcherErrorCmds = {
 export const getNotificationMessage = (salCommand) => {
   const cmd = salCommand.cmd;
   const result = salCommand.result;
-  const component = salCommand.component;
+  const component = salCommand.component ?? salCommand.csc;
+
+
+  if (salCommand.status === SALCommandStatus.REQUESTED) {
+    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`,]
+  }
+
 
   if (component === 'Watcher') {
     const alarm = salCommand.params.name;
@@ -450,9 +457,9 @@ export const getNotificationMessage = (salCommand) => {
   }
 
   if (result === 'Done') {
-    return [`Command '${cmd}' ran successfully`, result];
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} ran successfully`, result];
   } else {
-    return [`Command '${cmd}' returned ${result}`, result];
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
   }
 };
 

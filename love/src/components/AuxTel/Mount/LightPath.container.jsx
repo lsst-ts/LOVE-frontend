@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LightPath from './LightPath';
 import { getMountState, getMountSubscriptions } from '../../../redux/selectors';
@@ -6,37 +7,19 @@ import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: `Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover`,
-  defaultSize: [20, 34],
+  description: 'Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover',
+  defaultSize: [22, 34],
   props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: true,
-    },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'AT Lightpath',
     },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
-    },
     lightPath: {
       type: 'boolean',
       description: 'Whether to display a representation of the light coming into the telescope',
       isPrivate: false,
-      default: true,
-    },
-    hasRawMode: {
-      type: 'boolean',
-      description: 'Whether the component has a raw mode version',
-      isPrivate: true,
       default: true,
     },
   },
@@ -67,6 +50,13 @@ const mapDispatchToProps = (dispatch) => {
       mountSubscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
     },
   };
+};
+
+LightPathContainer.propTypes = {
+  /** Wheter the component is in raw mode */
+  isRaw: PropTypes.bool,
+  /** List of the component's subscriptions */
+  subscriptions: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LightPathContainer);

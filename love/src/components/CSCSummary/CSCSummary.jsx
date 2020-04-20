@@ -15,7 +15,12 @@ export default class CSCSummary extends Component {
         {Object.keys(this.props.hierarchy).map((realm) => {
           return (
             <div key={realm} className={styles.CSCRealmContainer}>
-              <CSCRealm name={realm} groups={this.props.hierarchy[realm]} hierarchy={this.props.hierarchy} />
+              <CSCRealm
+                name={realm}
+                groups={this.props.hierarchy[realm]}
+                hierarchy={this.props.hierarchy}
+                subscribeToStreamCallback={this.props.subscribeToStreamCallback}
+              />
             </div>
           );
         })}
