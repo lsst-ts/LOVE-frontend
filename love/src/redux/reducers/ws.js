@@ -20,9 +20,10 @@ const initialState = {
   subscriptions: [],
   lastSALCommand: {
     status: SALCommandStatus.EMPTY,
+    statusCode: null,
     cmd: '',
     params: {},
-    component: '',
+    csc: '',
     salindex: 0,
   },
 };
@@ -154,9 +155,10 @@ export default function(state = initialState, action) {
         ...state,
         lastSALCommand: {
           status: action.status,
+          statusCode: action.statusCode,
           cmd: action.cmd,
           params: action.params,
-          component: action.component,
+          csc: action.csc,
           salindex: action.salindex,
           cmd_id: action.cmd_id,
         },
@@ -169,6 +171,7 @@ export default function(state = initialState, action) {
         lastSALCommand: {
           ...state.lastSALCommand,
           status: action.status,
+          statusCode: action.statusCode,
           result: action.result,
         },
       };
