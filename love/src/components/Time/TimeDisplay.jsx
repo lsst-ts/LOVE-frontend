@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import Clock from './Clock/Clock';
 import styles from './TimeDisplay.module.css';
 import { DateTime } from 'luxon';
+import { siderealSecond } from '../../Utils';
+
 
 export default class TimeDisplay extends React.Component {
   static propTypes = {
@@ -18,12 +20,24 @@ export default class TimeDisplay extends React.Component {
     locale: 'en-GB',
     taiToUtc: 0,
     clocks: [],
+    timeData: {
+      server_time: {
+        utc: 0,
+        tai: 0,
+        mjd: 0,
+        sidereal_summit: 0,
+        sidereal_greenwich: 0,
+        tai_to_utc: 0,
+      }
+    }
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      timestamp: DateTime.local(),
+      local: DateTime.local(),
+      mjd: 0,
+      sidereal: 0,
     };
   }
 
@@ -36,23 +50,27 @@ export default class TimeDisplay extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.timeData !== this.props.timeData) {
-      const local = (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
-      const dif = this.props.timeData.server_time.utc - local;
+    console.log('props: ', this.props)
+    console.log('prevPorps: ', prevProps)
+    if (prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc || this.state.sidereal === 0) {
+      console.log('DIFFF')
+      const diffSecs = this.props.timeData.server_time.utc - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
       this.setState({
-        timestamp: DateTime.local().plus({seconds: dif}),
+        local: DateTime.local().plus({seconds: diffSecs}),
+        sidereal: DateTime.fromSeconds(this.props.timeData.server_time.sidereal_greenwich * 3600 + diffSecs * siderealSecond),
       });
     }
   }
 
   tick() {
     this.setState({
-      timestamp: this.state.timestamp.plus({seconds: 1}),
+      local: this.state.local.plus({seconds: 1}),
+      sidereal: this.state.sidereal ? this.state.sidereal.plus({milliseconds: siderealSecond * 1000}) : 0,
     });
   }
 
   render() {
-    const localTime = this.state.timestamp;
+    const localTime = this.state.local;
     return (
       <div className={styles.container}>
         {this.props.clocks.map( (horizontalGroup, index) => (
@@ -61,9 +79,18 @@ export default class TimeDisplay extends React.Component {
               const verticalGroup = element instanceof Array ? element : [element];
               return (
                 <div key={index} className={styles.verticalGroup}>
-                  {verticalGroup.map( (element, index) => (
-                    <Clock key={index} {...element} timestamp={localTime} timeData={this.props.timeData}/>
-                  ))}
+                  {verticalGroup.map( (element, index) => {
+                    if (element.timezone === 'sidereal') {
+                      // console.log('props:', this.props)
+                      // console.log('state:', this.state)
+                      return (
+                        <Clock key={index} {...element} timezone={"UTC"} timestamp={this.state.sidereal} timeData={this.props.timeData}/>
+                      )
+                    }
+                    return (
+                      <Clock key={index} {...element} timestamp={localTime} timeData={this.props.timeData}/>
+                    )
+                  })}
                 </div>
               )
             })}

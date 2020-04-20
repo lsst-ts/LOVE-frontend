@@ -506,3 +506,5 @@ export const getStringRegExp = (str) => {
     return new RegExp('');
   }
 };
+
+export const siderealSecond = 1.00273788;
