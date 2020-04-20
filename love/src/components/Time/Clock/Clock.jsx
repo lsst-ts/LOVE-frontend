@@ -177,7 +177,7 @@ export default class Clock extends React.Component {
           )}
           {mjd ? (
             <div className={styles.mjd}>
-              {timestamp}
+              {timestamp.toFixed(5)}
             </div>
           ) : (
             <DigitalClock timestamp={timestamp} hideDate={hideDate}/>
