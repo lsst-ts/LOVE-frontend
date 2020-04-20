@@ -4,7 +4,7 @@ import styles from './Clock.module.css';
 import AnalogClock from '../../GeneralPurpose/AnalogClock/AnalogClock';
 import DigitalClock from '../../GeneralPurpose/DigitalClock/DigitalClock';
 import { DateTime } from 'luxon';
-import { parseTimestamp, siderealSecond } from '../../../Utils';
+import { siderealSecond } from '../../../Utils';
 
 /**
  * Component that displays time, date and an analog clock, with options to display only some of those elements.
@@ -167,7 +167,7 @@ export default class Clock extends React.Component {
       }
     }
     const name = this.props.name;
-    offset = this.props.hideOffset || offset;
+    offset = this.props.hideOffset ? false : offset;
     return (
       <div className={styles.container}>
         <div className={styles.topRow}>
