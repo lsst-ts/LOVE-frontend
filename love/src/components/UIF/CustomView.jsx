@@ -197,13 +197,24 @@ class CustomView extends Component {
   };
 
   getDeviceLabel = (width) => {
+    const minDevice = Object.entries(DEVICE_TO_SIZE).reduce((previousMinKey, [key, width])=> {
+      if(previousMinKey===''){
+        return key;
+      }
+
+      if(width < DEVICE_TO_SIZE[previousMinKey]){
+        return key;        
+      }
+      return previousMinKey;
+    }, '');
+
     const entry = Object.entries(DEVICE_TO_SIZE).find(([key, deviceOptionWidth]) => {
       if (deviceOptionWidth <= width) {
         return true;
       }
       return false;
     });
-    return entry[0];
+    return entry?.[0] ?? minDevice;
   };
 
   parseContainer = (container) => {
