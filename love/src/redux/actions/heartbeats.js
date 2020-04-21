@@ -2,7 +2,7 @@ import {
   UPDATE_SCRIPT_HEARTBEAT,
   REMOVE_SCRIPTS_HEARTBEATS,
   UPDATE_CSC_HEARTBEATS,
-  RECEIVE_MANAGER_HEARTBEAT,
+  RECEIVE_HEARTBEAT_INFO,
 } from './actionTypes';
 
 /**
@@ -36,9 +36,9 @@ export const receiveCSCHeartbeat = (heartbeat) => {
   };
 };
 
-export const receiveManagerHeartbeat = (heartbeat) => {
+export const receiveHeartbeatInfo = (heartbeat) => {
   return {
-    type: RECEIVE_MANAGER_HEARTBEAT,
+    type: RECEIVE_HEARTBEAT_INFO,
     data: {
       heartbeat,
     },
