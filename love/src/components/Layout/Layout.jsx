@@ -17,6 +17,7 @@ import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
+import { HEARTBEAT_COMPONENTS } from '../../Config';
 
 const BREAK_1 = 768;
 const BREAK_2 = 630;
@@ -66,7 +67,8 @@ class Layout extends Component {
       id: null,
       title: null,
       heartbeatTimer: undefined,
-      lastHeartbeat: undefined,
+      heartbeatStatus: {},
+      heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
     };
 
@@ -164,28 +166,40 @@ class Layout extends Component {
   };
 
   checkHeartbeat = () => {
-    const lastManagerHeartbeat = this.props.getLastManagerHeartbeat();
-    const heartbeatStatus =
-      this.state.lastHeartbeat &&
-      lastManagerHeartbeat &&
-      this.state.lastHeartbeat.data.timestamp !== lastManagerHeartbeat.data.timestamp
-        ? 'ok'
-        : 'alert';
+    const heartbeatInfo = {};
+    const heartbeatStatus = {};
+    Object.keys(HEARTBEAT_COMPONENTS).forEach((key) => {
+      const heartbeatSource = HEARTBEAT_COMPONENTS[key];
+      const componentHeartbeat = this.props.getLastComponentHeartbeat(heartbeatSource);
+      const lastComponentHeartbeat = this.state.heartbeatInfo[heartbeatSource];
+      const componentHeartbeatStatus =
+        lastComponentHeartbeat &&
+        componentHeartbeat &&
+        lastComponentHeartbeat.data.timestamp !== componentHeartbeat.data.timestamp
+          ? 'ok'
+          : 'alert';
+
+      heartbeatInfo[heartbeatSource] = componentHeartbeat;
+      heartbeatStatus[heartbeatSource] = lastComponentHeartbeat !== undefined ? componentHeartbeatStatus : undefined;
+    });
     this.setState({
-      lastHeartbeat: lastManagerHeartbeat,
+      heartbeatInfo,
       heartbeatStatus,
     });
   };
 
-  getHeartbeatTitle = (heartbeat) => {
-    if (this.state.heartbeatStatus === 'ok') {
-      return 'LOVE manager heartbeat is being received as expected';
+  getHeartbeatTitle = (component) => {
+    if (component === '') return '';
+    const heartbeatSource = HEARTBEAT_COMPONENTS[component];
+    const heartbeat = this.state.heartbeatInfo[heartbeatSource];
+    if (this.state.heartbeatStatus[component] === 'ok') {
+      return `LOVE ${component} heartbeat is being received as expected`;
     }
     if (heartbeat === undefined || heartbeat.data === undefined || heartbeat.data.timestamp === undefined) {
-      return 'LOVE manager heartbeat never seen';
+      return `LOVE ${component} heartbeat never seen`;
     }
     const timeStatement = relativeTime(heartbeat.data.timestamp, 0);
-    return `LOVE manager heartbeat not seen since ${timeStatement}`;
+    return `LOVE ${component} heartbeat not seen since ${timeStatement}`;
   };
 
   handleClick = (event) => {
@@ -244,6 +258,25 @@ class Layout extends Component {
   };
 
   render() {
+    const producerHeartbeatStatus = [
+      HEARTBEAT_COMPONENTS.EVENTS,
+      HEARTBEAT_COMPONENTS.TELEMETRIES,
+      HEARTBEAT_COMPONENTS.HEARTBEATS,
+      HEARTBEAT_COMPONENTS.LOVE,
+      HEARTBEAT_COMPONENTS.SCRIPTQUEUE,
+    ]
+      .map((source) => this.state.heartbeatStatus[source])
+      .includes('alert')
+      ? 'alert'
+      : 'ok';
+
+    const overallHeartbeatStatus = [
+      producerHeartbeatStatus,
+      this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
+      this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
+    ].includes('alert')
+      ? 'alert'
+      : 'ok';
     return (
       <>
         <div className={styles.hidden}>
@@ -318,47 +351,108 @@ class Layout extends Component {
                   className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
                   style={{
                     visibility:
-                      this.props.token && (this.state.heartbeatStatus !== 'ok' || this.state.hovered)
+                      this.props.token && (overallHeartbeatStatus !== 'ok' || this.state.hovered)
                         ? 'visible'
                         : 'hidden',
                   }}
-                  title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                  title={this.getHeartbeatTitle('')}
                   onClick={() => {}}
                   status="transparent"
                 >
                   <HeartbeatIcon
                     className={styles.icon}
-                    status={this.state.heartbeatStatus}
-                    title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                    status={overallHeartbeatStatus}
+                    title={this.getHeartbeatTitle('')}
                   />
                 </Button>
                 <div className={styles.heartbeatsMenu} title="Heartbeats menu">
-                  <div className={styles.heartbeatMenuElement} title="LOVE manager menu">
+                  <div
+                    className={styles.heartbeatMenuElement}
+                    title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
+                  >
                     <HeartbeatIcon
                       className={styles.icon}
-                      status={'ok'}
-                      title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
                     />
                     <span>LOVE manager</span>
                   </div>
-                  <div className={styles.heartbeatMenuElement} title="LOVE producer menu">
+                  <div className={styles.heartbeatMenuElement}>
                     <HeartbeatIcon
                       className={styles.icon}
-                      status={'alert'}
-                      title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                      status={producerHeartbeatStatus}
+                      title={this.getHeartbeatTitle('')}
                     />
-                    <span>LOVE producer</span>
+                    <span title={this.getHeartbeatTitle('')}>LOVE producer</span>
+                    <HeartbeatIcon
+                      className={styles.miniIcon}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
+                    />
+                    <span
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
+                      className={styles.heartbeatSubElement}
+                    >
+                      {HEARTBEAT_COMPONENTS.EVENTS}
+                    </span>
+                    <HeartbeatIcon
+                      className={styles.miniIcon}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
+                    />
+                    <span
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
+                      className={styles.heartbeatSubElement}
+                    >
+                      {HEARTBEAT_COMPONENTS.TELEMETRIES}
+                    </span>
+                    <HeartbeatIcon
+                      className={styles.miniIcon}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
+                    />
+                    <span
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
+                      className={styles.heartbeatSubElement}
+                    >
+                      {HEARTBEAT_COMPONENTS.HEARTBEATS}
+                    </span>
+                    <HeartbeatIcon
+                      className={styles.miniIcon}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
+                    />
+                    <span
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
+                      className={styles.heartbeatSubElement}
+                    >
+                      {HEARTBEAT_COMPONENTS.LOVE}
+                    </span>
+                    <HeartbeatIcon
+                      className={styles.miniIcon}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
+                    />
+                    <span
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
+                      className={styles.heartbeatSubElement}
+                    >
+                      {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
+                    </span>
                   </div>
-                  <div className={styles.heartbeatMenuElement} title="LOVE commander menu">
+                  <div
+                    className={styles.heartbeatMenuElement}
+                    title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
+                  >
                     <HeartbeatIcon
                       className={styles.icon}
-                      status={this.state.heartbeatStatus}
-                      title={this.getHeartbeatTitle(this.state.lastHeartbeat)}
+                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER]}
+                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
                     />
                     <span>LOVE commander</span>
                   </div>
                   <div className={styles.divider}></div>
-                  <div className={styles.statusMenuElement} title="LOVE commander menu">
+                  <div className={styles.statusMenuElement} title="SAL status">
                     <LabeledStatusTextContainer
                       label={'SAL status'}
                       groupName={'event-ATMCS-0-m3State'}
@@ -377,8 +471,8 @@ class Layout extends Component {
                     />
                   </div>
                   <div className={styles.divider}></div>
-                  <div className={styles.statusMenuElement} title="LOVE commander menu">
-                  <LabeledStatusTextContainer
+                  <div className={styles.statusMenuElement} title="EFD status">
+                    <LabeledStatusTextContainer
                       label={'EFD status'}
                       groupName={'event-ATMCS-0-m3State'}
                       stateToLabelMap={{
