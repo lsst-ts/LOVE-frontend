@@ -98,44 +98,25 @@ export default class Clock extends React.Component {
     clearInterval(this.timerID);
   }
 
-  componentDidUpdate(prevProps) {
-    if (
-      (!this.props.timestamp && prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc) ||
-      !this.state.timestamp
-    ) {
-      const error = (this.props.timeData.receive_time - this.props.timeData.request_time) / 2;
-      const fixedServer = this.props.timeData.server_time.utc + error;
-      let timestamp = 0;
-      if (this.props.timezone === 'sidereal-summit') {
-        timestamp = DateTime.fromSeconds(
-          this.props.timeData.server_time.sidereal_summit * 3600 + error * siderealSecond,
-        );
-      } else if (this.props.timezone === 'sidereal-greenwich') {
-        timestamp = DateTime.fromSeconds(
-          this.props.timeData.server_time.sidereal_greenwich * 3600 + error * siderealSecond,
-        );
-      } else if (this.props.timezone === 'MJD') {
-        timestamp = this.props.timeData.server_time.mjd + error / (3600 * 24);
-      } else {
-        timestamp = DateTime.fromSeconds(fixedServer);
-      }
-      if (timestamp !== this.state.timestamp) {
-        this.setState({ timestamp });
-      }
-    }
-  }
-
   tick() {
-    if (!this.state.timestamp) return;
+    const diffLocalUtc = DateTime.utc().toSeconds() - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
     let timestamp = 0;
-    if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
-      timestamp = this.state.timestamp.plus({ milliseconds: siderealSecond * 1000 });
+    if (this.props.timezone === 'sidereal-summit') {
+      timestamp = DateTime.fromSeconds(
+        this.props.timeData.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc
+      );
+    } else if (this.props.timezone === 'sidereal-greenwich') {
+      timestamp = DateTime.fromSeconds(
+        this.props.timeData.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc
+      );
     } else if (this.props.timezone === 'MJD') {
-      timestamp = this.state.timestamp + 1 / (3600 * 24);
+      timestamp = this.props.timeData.server_time.mjd + diffLocalUtc / (3600 * 24);
     } else {
-      timestamp = this.state.timestamp.plus({ seconds: 1 });
+      timestamp = DateTime.fromSeconds(this.props.timeData.server_time.utc + diffLocalUtc);
     }
-    this.setState({ timestamp });
+    if (timestamp !== this.state.timestamp) {
+      this.setState({ timestamp });
+    }
   }
 
   render() {

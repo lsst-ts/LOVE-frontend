@@ -49,36 +49,17 @@ export default class TimeDisplay extends React.Component {
     clearInterval(this.timerID);
   }
 
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.timeData.server_time.utc !== this.props.timeData.server_time.utc ||
-      this.state.sidereal_greenwich === 0
-    ) {
-      const error = (this.props.timeData.receive_time - this.props.timeData.request_time) / 2;
-      const fixedServer = this.props.timeData.server_time.utc + error;
-      this.setState({
-        local: DateTime.fromSeconds(fixedServer),
-        sidereal_greenwich: DateTime.fromSeconds(
-          this.props.timeData.server_time.sidereal_greenwich * 3600 + error * siderealSecond,
-        ),
-        sidereal_summit: DateTime.fromSeconds(
-          this.props.timeData.server_time.sidereal_summit * 3600 + error * siderealSecond,
-        ),
-        mjd: this.props.timeData.server_time.mjd + error / (3600 * 24),
-      });
-    }
-  }
-
   tick() {
+    const diffLocalUtc = DateTime.utc().toSeconds() - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
     this.setState({
-      local: this.state.local.plus({ seconds: 1 }),
-      sidereal_greenwich: this.state.sidereal_greenwich
-        ? this.state.sidereal_greenwich.plus({ milliseconds: siderealSecond * 1000 })
-        : 0,
-      sidereal_summit: this.state.sidereal_summit
-        ? this.state.sidereal_summit.plus({ milliseconds: siderealSecond * 1000 })
-        : 0,
-      mjd: this.state.mjd + 1 / (3600 * 24),
+      local: DateTime.fromSeconds(this.props.timeData.server_time.utc + diffLocalUtc),
+      sidereal_greenwich: DateTime.fromSeconds(
+        this.props.timeData.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc
+      ),
+      sidereal_summit: DateTime.fromSeconds(
+        this.props.timeData.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc
+      ),
+      mjd: this.props.timeData.server_time.mjd + diffLocalUtc / (3600 * 24),
     });
   }
 

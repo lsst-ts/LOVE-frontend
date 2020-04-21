@@ -14,7 +14,7 @@ import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
-import Clock from '../Time/Clock/Clock'
+import Clock from '../Time/Clock/Clock';
 import styles from './Layout.module.css';
 
 const BREAK_1 = 865;
@@ -69,7 +69,7 @@ class Layout extends Component {
       lastHeartbeat: undefined,
       hovered: false, // true if leftTopbar is being hovered
     };
-    
+
     this.requestToastID = null;
   }
 
@@ -315,9 +315,14 @@ class Layout extends Component {
           </div>
 
           <div className={styles.middleTopbar}>
-            <div id="middleTopbar"/>
-            <div className={[styles.clock, this.props.mode === modes.EDIT ? styles.hidden : ''].join(' ')}>
-              <Clock timeData={this.props.timeData} hideAnalog hideOffset={true}/>
+            <div id="middleTopbar" />
+            <div
+              className={[
+                styles.clock,
+                this.props.mode === modes.EDIT && !this.state.toolbarOverflow ? styles.hidden : '',
+              ].join(' ')}
+            >
+              <Clock timeData={this.props.timeData} hideAnalog hideOffset={true} />
             </div>
           </div>
 
