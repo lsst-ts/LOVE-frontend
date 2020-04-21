@@ -6,6 +6,7 @@ module.exports = {
   require: [path.join(__dirname, 'src/index.css')],
   assetsDir: 'docsrc/assets',
   pagePerSection: true,
+  tocMode: 'collapse',
   sections: [
     {
       name: 'Overview',
@@ -17,16 +18,33 @@ module.exports = {
       href: 'https://github.com/lsst-ts/LOVE-frontend/blob/develop/README.md',
     },
     {
+      name: 'Contributing',
+      external: true,
+      href: 'https://github.com/lsst-ts/LOVE-frontend/blob/develop/CONTRIBUTING.md',
+    },
+    {
       name: 'How it works',
       content: 'docsrc/howitworks.md',
     },
     {
-      name: 'UI Components',
-      content: 'docsrc/ui.md',
-      components: ['src/components/GeneralPurpose/**/*.jsx'],
-      exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
-      usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
-    },
+      name: "API",
+      sections: [
+        {
+          name: 'Container Components',
+          content: 'docsrc/ui.md',
+          components: ['src/components/**/*.container.jsx'],
+          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+        },
+        {
+          name: 'UI Components',
+          content: 'docsrc/ui.md',
+          components: ['src/components/GeneralPurpose/**/*.jsx'],
+          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+        }
+      ]
+    }
   ],
   styleguideDir: '../docs',
   propsParser(filePath, source, resolver, handlers) {

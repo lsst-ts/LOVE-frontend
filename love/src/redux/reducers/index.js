@@ -6,6 +6,7 @@ import camera from './camera';
 import heartbeats from './heartbeats';
 import summaryData from './summaryData';
 import observingLogs from './observingLogs';
+import time from './time';
 import uif from './uif';
 import { UPDATE_EDITED_VIEW } from '../actions/actionTypes';
 
@@ -20,4 +21,5 @@ export default combineReducers({
     filter: includeAction(UPDATE_EDITED_VIEW),
   }),
   observingLogs,
+  time,
 });

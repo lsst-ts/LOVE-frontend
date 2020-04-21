@@ -24,6 +24,7 @@ export default class ObservingLogInput extends Component {
     super();
     this.state = {
       message: '',
+      keysDown: [],
     };
   }
 
@@ -36,8 +37,42 @@ export default class ObservingLogInput extends Component {
   };
 
   onTextChange = (content) => {
-    this.setState({ message: content });
+    this.setState({
+      message: content,
+    });
   };
+
+  onKeyDown = (event) => {
+    const keyDown = event.key;
+
+    if (this.state.keysDown.includes(keyDown)) {
+      return;
+    }
+
+    this.setState((state) => ({
+      ...state,
+      keysDown: [...new Set([...state.keysDown, keyDown])],
+    }));
+  };
+
+  onKeyUp = (event) => {
+    const keyDown = event.key;
+
+    this.setState((state) => ({
+      ...state,
+      keysDown: state.keysDown.filter((key) => key !== keyDown),
+    }));
+  };
+
+  componentDidUpdate = (prevState) => {
+    if (prevState.keysDown !== this.state.keysDown) {
+      const keyCombinationPressed = ['Control', 'Shift', 'Enter'].every((key) => this.state.keysDown.includes(key));
+      if(keyCombinationPressed){
+        this.props.sendMessage(this.props.username, this.state.message);
+      }
+    }
+  };
+
   render() {
     return (
       <div className={styles.container}>
@@ -47,9 +82,9 @@ export default class ObservingLogInput extends Component {
         </div>
         <div>
           <span className={styles.label}>Message:</span>
-          <TextArea callback={this.onTextChange}></TextArea>
+          <TextArea callback={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp}></TextArea>
         </div>
-        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save</Button>
+        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save (Ctrl+Shift+Enter)</Button>
       </div>
     );
   }

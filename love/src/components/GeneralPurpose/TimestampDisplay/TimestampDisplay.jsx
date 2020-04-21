@@ -4,14 +4,13 @@ import Hoverable from '../Hoverable/Hoverable';
 import { relativeTime, formatTimestamp, isoTimestamp } from '../../../Utils';
 import styles from './TimestampDisplay.module.css';
 
-
 /**
  * Component that displays a time in relative time, as a timestamp with hover,
  * and allows you to copy the value as ISO string format to the clipboard onclick
  */
 TimestampDisplay.propTypes = {
-  /** Value to display in seconds */
-  secs: PropTypes.number,
+  /** Date-able object or float, if float it must be in milliseconds */
+  timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   /** Diferrence between TAI and UTC timestamps in seconds */
   taiToUtc: PropTypes.number,
   /** Optional className */
@@ -20,12 +19,11 @@ TimestampDisplay.propTypes = {
   defValue: PropTypes.string,
 };
 
-export default function TimestampDisplay({ secs, taiToUtc, className, defValue='' }) {
+export default function TimestampDisplay({ timestamp, taiToUtc, className, defValue='' }) {
   const [copied, setCopied] = useState(false);
-  const ms = secs * 1000;
-  const hoverValue = formatTimestamp(ms);
-  const copyValue = isoTimestamp(ms);
-  const displayValue = secs ? relativeTime(secs, taiToUtc) : defValue;
+  const hoverValue = formatTimestamp(timestamp);
+  const copyValue = isoTimestamp(timestamp);
+  const displayValue = timestamp ? relativeTime(timestamp, taiToUtc) : defValue;
 
   const onClick = () => {
     navigator.clipboard.writeText(copyValue);
