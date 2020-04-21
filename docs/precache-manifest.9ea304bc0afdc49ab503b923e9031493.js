@@ -4,27 +4,27 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "Frontend_overview.svg"
   },
   {
-    "revision": "eb5807d721f4e137c67f",
-    "url": "build/2.eb5807d7.js"
+    "revision": "f48525ee19473056dbb9",
+    "url": "build/2.f48525ee.js"
   },
   {
-    "revision": "122b5eb820f4eae591ec1d0dcfa833ab",
-    "url": "build/2.eb5807d7.js.LICENSE.txt"
+    "revision": "d48274c60eb4e51c3e46d1d3be176614",
+    "url": "build/2.f48525ee.js.LICENSE.txt"
   },
   {
-    "revision": "9880a37c106c32c3e013",
-    "url": "build/bundle.9880a37c.js"
+    "revision": "e2439c581227ea176cdb",
+    "url": "build/bundle.e2439c58.js"
   },
   {
-    "revision": "c088927ebe910286fa28",
-    "url": "build/main.c088927e.js"
+    "revision": "98f1ed5e8becc1b40f5c",
+    "url": "build/main.98f1ed5e.js"
   },
   {
     "revision": "846619c15bc6e252f7b73a147601a1a1",
     "url": "details.svg"
   },
   {
-    "revision": "d332eea99d563d857d09140a561890cb",
+    "revision": "9611da1b7e819990cfa6229f992af295",
     "url": "index.html"
   },
   {
@@ -40,12 +40,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "responsive-grid-state-machine.svg"
   },
   {
-    "revision": "eb5807d721f4e137c67f",
+    "revision": "f48525ee19473056dbb9",
     "url": "static/css/2.ee241de9.chunk.css"
   },
   {
-    "revision": "c088927ebe910286fa28",
-    "url": "static/css/main.e5c9c033.chunk.css"
+    "revision": "98f1ed5e8becc1b40f5c",
+    "url": "static/css/main.f1a0019b.chunk.css"
   },
   {
     "revision": "0b78ec9d509f67bfe3f8458c9d285df0",
