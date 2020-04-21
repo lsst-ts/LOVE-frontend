@@ -7,6 +7,7 @@ import {
 } from './actionTypes';
 import { getAllTime } from '../selectors';
 import { siderealSecond } from '../../Utils';
+import { clockStatuses } from '../reducers/time';
 
 
 
@@ -19,7 +20,6 @@ export function receiveServerTime(time_data, request_time) {
 }
 
 export function tick() {
-  console.log('tick')
   return (dispatch, getState) => {
     const time = getAllTime(getState());
     const diffLocalUtc = DateTime.utc().toSeconds() - (time.receive_time + time.request_time) / 2;
@@ -27,6 +27,7 @@ export function tick() {
       type: CLOCK_TICK,
       clock: {
         utc: DateTime.fromSeconds(time.server_time.utc + diffLocalUtc),
+        tai: DateTime.fromSeconds(time.server_time.tai + diffLocalUtc),
         mjd: time.server_time.mjd + diffLocalUtc / (3600 * 24),
         sidereal_summit: DateTime.fromSeconds(
           time.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc
