@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { viewsStates } from '../../redux/reducers/uif';
+import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
@@ -316,7 +316,7 @@ class Layout extends Component {
 
           <div className={styles.middleTopbar}>
             <div id="middleTopbar"/>
-            <div className={styles.clock}>
+            <div className={[styles.clock, this.props.mode === modes.EDIT ? styles.hidden : ''].join(' ')}>
               <Clock timeData={this.props.timeData} hideAnalog hideOffset={true}/>
             </div>
           </div>
