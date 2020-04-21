@@ -13,7 +13,24 @@ Container components implement the communication with Redux to obtain the availa
 
 The documentation is done with `styleguide`. Its source code is located under `love/docsrc` and compiled to `docs/` according to the configuration file located at `love/styleguide.config.js`.
 
-Here are some useful guides to edit the configuration:
+1. To edit the docs in a local server run 
+
+```
+docker-compose exec frontend 
+# inside frontend container
+yarn guide:start
+```
+and go to the pointed address.
+
+2. To create a production build in the `docs/` folder run
+
+```
+docker-compose exec frontend
+# inside frontend container
+yarn guide:build
+```
+
+3. Some useful guides to edit the configuration:
 
 * General configuration
     * [Create a new section](https://react-styleguidist.js.org/docs/components.html#sections):
