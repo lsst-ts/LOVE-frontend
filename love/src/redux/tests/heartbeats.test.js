@@ -94,7 +94,7 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
     it('THEN we store it the state ', async () => {
       // Arrange:
       await server.send(heartbeatsInfo[2]);
-      const lastProducerHeartbeat = getLastComponentHeartbeat(store.getState(), 'producer');
+      const lastProducerHeartbeat = getLastComponentHeartbeat(store.getState(), HEARTBEAT_COMPONENTS.EVENTS);
       // Assert:
       expect(lastProducerHeartbeat).toEqual(heartbeatsInfo[2].data[0]);
     });
