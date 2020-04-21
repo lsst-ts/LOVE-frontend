@@ -1,0 +1,26 @@
+.container {
+  padding: 0.5em;
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  flex: 1 1 auto;
+  /* height: 100%; */
+  justify-content: space-between;
+}
+
+.name {
+  font-weight: bolder;
+  color: var(--base-font-color);
+  font-size: 0.9em;
+  padding-bottom: 0.1em;
+}
+
+.analog {
+  min-width: 12em;
+}
+
+.mjd {
+  color: var(--base-font-color);
+  font-size: 1.4em;
+  height: 2.1em;
+}

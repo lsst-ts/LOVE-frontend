@@ -14,9 +14,10 @@ import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
+import Clock from '../Time/Clock/Clock'
 import styles from './Layout.module.css';
 
-const BREAK_1 = 768;
+const BREAK_1 = 865;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
@@ -313,7 +314,12 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="middleTopbar" />
+          <div className={styles.middleTopbar}>
+            <div id="middleTopbar"/>
+            <div className={styles.clock}>
+              <Clock timeData={this.props.timeData} hideAnalog hideOffset={true}/>
+            </div>
+          </div>
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />
