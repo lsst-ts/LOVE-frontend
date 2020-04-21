@@ -6,6 +6,7 @@ module.exports = {
   require: [path.join(__dirname, 'src/index.css')],
   assetsDir: 'docsrc/assets',
   pagePerSection: true,
+  tocMode: 'collapse',
   sections: [
     {
       name: 'Overview',
