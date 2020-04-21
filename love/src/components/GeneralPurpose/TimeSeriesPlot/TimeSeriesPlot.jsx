@@ -181,8 +181,9 @@ export default class TimeSeriesPlot extends Component {
             type: 'temporal',
             title: 'date',
             axis: {
-              format: '%X',
+              format: '%H:%M:%S',
               labelOverlap: 'parity',
+              labelSeparation: 10
             },
             ...encoding.x,
           },
