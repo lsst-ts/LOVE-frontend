@@ -57,3 +57,6 @@ export const CHANGE_MODE = 'CHANGE_MODE';
 export const RECEIVE_OBSERVING_LOG = 'RECEIVE_OBSERVING_LOG';
 
 export const RECEIVE_TIME_DATA = 'RECEIVE_TIME_DATA';
+export const CLOCK_START = 'CLOCK_START';
+export const CLOCK_STOP = 'CLOCK_STOP';
+export const CLOCK_TICK = 'CLOCK_TICK';
