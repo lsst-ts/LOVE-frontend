@@ -14,6 +14,8 @@ export const getServerTime = (state) => ({...state.time.server_time});
 
 export const getAllTime = (state) => ({...state.time});
 
+export const getClock = (state) => ({...state.time.clock});
+
 export const getTimeData = (state) => ({
   receive_time: state.time.receive_time,
   request_time: state.time.request_time,

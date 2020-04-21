@@ -12,6 +12,8 @@ export default class TimeDisplay extends React.Component {
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
+    /** Current time clocks */
+    clock: PropTypes.object,
     clocks: PropTypes.array,
   };
 
@@ -29,6 +31,13 @@ export default class TimeDisplay extends React.Component {
         tai_to_utc: 0,
       },
     },
+    clock: {
+      utc: 0,
+      tai: 0,
+      mjd: 0,
+      sidereal_summit: 0,
+      sidereal_greenwich: 0,
+    }
   };
 
   constructor(props) {
@@ -64,6 +73,7 @@ export default class TimeDisplay extends React.Component {
   }
 
   render() {
+    console.log('clock: ', this.props.clock);
     return (
       <div className={styles.container}>
         {this.props.clocks.map((horizontalGroup, index) => (
