@@ -7,8 +7,6 @@ import {
 } from './actionTypes';
 import { getAllTime } from '../selectors';
 import { siderealSecond } from '../../Utils';
-import { clockStatuses } from '../reducers/time';
-
 
 
 export function receiveServerTime(time_data, request_time) {
