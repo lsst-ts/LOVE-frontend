@@ -4,12 +4,18 @@ import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { addGroupSubscription } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
-import { getLastManagerHeartbeat, getScriptHeartbeats, getCSCHeartbeats, getCSCHeartbeat } from '../selectors';
+import {
+  getLastManagerHeartbeat,
+  getLastComponentHeartbeat,
+  getScriptHeartbeats,
+  getCSCHeartbeats,
+  getCSCHeartbeat,
+} from '../selectors';
 import * as mockData from './mock';
 
 let store, server;
 
-const managerHeartbeats = [
+const heartbeatsInfo = [
   {
     category: 'heartbeat',
     data: [{ csc: 'manager', salindex: 0, data: { timestamp: 1582141499.626869 } }],
@@ -18,6 +24,11 @@ const managerHeartbeats = [
   {
     category: 'heartbeat',
     data: [{ csc: 'manager', salindex: 0, data: { timestamp: 1692141499.626869 } }],
+    subscription: 'heartbeat',
+  },
+  {
+    category: 'heartbeat',
+    data: [{ csc: 'producer', salindex: 0, data: { timestamp: 1992141499.626869 } }],
     subscription: 'heartbeat',
   },
 ];
@@ -40,7 +51,7 @@ afterEach(() => {
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
-  server.on('connection', socket => {
+  server.on('connection', (socket) => {
     const [, token] = socket.url.split('?token=');
     if (token !== 'love-token') {
       socket.close();
@@ -68,36 +79,46 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
     await store.dispatch(addGroupSubscription('heartbeat-manager-0-stream'));
   });
 
-  describe('WHEN we receive a heartbeat', () => {
+  describe('WHEN we receive a manager heartbeat', () => {
     it('THEN we store it the state ', async () => {
       // Arrange:
-      await server.send(managerHeartbeats[0]);
+      await server.send(heartbeatsInfo[0]);
       const lastManagerHeartbeat = getLastManagerHeartbeat(store.getState());
       // Assert:
-      expect(lastManagerHeartbeat).toEqual(managerHeartbeats[0].data[0]);
+      expect(lastManagerHeartbeat).toEqual(heartbeatsInfo[0].data[0]);
     });
   });
 
-  describe('WHEN we receive 2 heartbeats', () => {
+  describe('WHEN we receive a producer heartbeat', () => {
+    it('THEN we store it the state ', async () => {
+      // Arrange:
+      await server.send(heartbeatsInfo[2]);
+      const lastProducerHeartbeat = getLastComponentHeartbeat(store.getState(), 'producer');
+      // Assert:
+      expect(lastProducerHeartbeat).toEqual(heartbeatsInfo[2].data[0]);
+    });
+  });
+
+  describe('WHEN we receive 2 manager heartbeats', () => {
     it('THEN we store the last one ', async () => {
       // Arrange:
-      await server.send(managerHeartbeats[0]);
-      await server.send(managerHeartbeats[1]);
+      await server.send(heartbeatsInfo[0]);
+      await server.send(heartbeatsInfo[1]);
       const lastManagerHeartbeat = getLastManagerHeartbeat(store.getState());
       // Assert:
-      expect(lastManagerHeartbeat).toEqual(managerHeartbeats[1].data[0]);
+      expect(lastManagerHeartbeat).toEqual(heartbeatsInfo[1].data[0]);
     });
   });
 
   describe('WHEN we lose server connection', () => {
-    it('THEN we dont receive new heartbeats ', async () => {
+    it('THEN we dont receive new manager heartbeats ', async () => {
       // Arrange:
-      await server.send(managerHeartbeats[0]);
+      await server.send(heartbeatsInfo[0]);
       server.close();
-      await server.send(managerHeartbeats[1]);
+      await server.send(heartbeatsInfo[1]);
       const lastManagerHeartbeat = getLastManagerHeartbeat(store.getState());
       // Assert:
-      expect(lastManagerHeartbeat).toEqual(managerHeartbeats[0].data[0]);
+      expect(lastManagerHeartbeat).toEqual(heartbeatsInfo[0].data[0]);
     });
   });
 });

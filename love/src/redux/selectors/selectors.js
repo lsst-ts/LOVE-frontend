@@ -401,7 +401,16 @@ export const getCSCHeartbeat = (state, csc, salindex) => {
  */
 export const getLastManagerHeartbeat = (state) => {
   if (state.heartbeats === undefined) return undefined;
-  return state.heartbeats.lastManagerHeartbeat;
+  return state.heartbeats?.lastHeartbeatInfo?.manager;
+};
+
+/**
+ * Selects the latest component heartbeat
+ * @param {object} state
+ */
+export const getLastComponentHeartbeat = (state, component) => {
+  if (state.heartbeats === undefined) return undefined;
+  return state.heartbeats?.lastHeartbeatInfo?.[component];
 };
 
 /**
