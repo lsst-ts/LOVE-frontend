@@ -34,7 +34,7 @@ export const schema = {
       isPrivate: false,
       default: 'en-GB',
     },
-    clocks: {
+    clocks_layout: {
       type: 'array',
       description:
         `Layout of clocks in JSON format.
