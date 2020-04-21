@@ -265,3 +265,13 @@ export const stateToStyleMotorBrake = {
   DISENGAGED: 'running',
   ENGAGED: 'ok',
 };
+
+export const HEARTBEAT_COMPONENTS = {
+  MANAGER: 'Manager',
+  EVENTS: 'Events',
+  TELEMETRIES: 'Telemetries',
+  HEARTBEATS: 'CSCHeartbeats',
+  LOVE: 'LOVE CSC',
+  SCRIPTQUEUE: 'ScriptQueue-0',
+  COMMANDER: 'Commander',
+}

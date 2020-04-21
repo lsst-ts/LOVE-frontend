@@ -2,18 +2,18 @@ import {
   UPDATE_SCRIPT_HEARTBEAT,
   REMOVE_SCRIPTS_HEARTBEATS,
   UPDATE_CSC_HEARTBEATS,
-  RECEIVE_MANAGER_HEARTBEAT,
+  RECEIVE_HEARTBEAT_INFO,
 } from '../actions/actionTypes';
 
 const initialState = {
   scripts: [],
   cscs: [],
-  lastManagerHeartbeat: undefined,
+  lastHeartbeatInfo: undefined,
 };
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
  */
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case UPDATE_SCRIPT_HEARTBEAT: {
       const salindex = action.data.salindex;
@@ -64,10 +64,16 @@ export default function(state = initialState, action) {
         cscs: newHeartbeats,
       };
     }
-    case RECEIVE_MANAGER_HEARTBEAT: {
+    case RECEIVE_HEARTBEAT_INFO: {
+      const heartbeatDict = {};
+      action.data.heartbeat.forEach((heartbeat) => {
+        const name = heartbeat?.csc;
+        if (name === undefined) return;
+        heartbeatDict[name] = heartbeat;
+      });
       return {
         ...state,
-        lastManagerHeartbeat: action.data.heartbeat,
+        lastHeartbeatInfo: heartbeatDict,
       };
     }
     default:

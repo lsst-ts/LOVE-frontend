@@ -21,13 +21,13 @@ export default class LabeledStatusText extends Component {
   };
 
   render() {
-    const stateValue = this.props.streamState ? this.props.accessor(this.props.streamState[this.props.streamState.length - 1]): undefined;
+    const stateValue = this.props.streamState ? this.props.accessor(this.props.streamState[this.props.streamState.length - 1]): 0;
     const stateLabel = this.props.stateToLabelMap[stateValue];
     const stateStyle = this.props.stateToStyleMap[stateValue];
     return (
-      <div className={styles.container}>
-        <div>{this.props.label}: </div>
-        <StatusText title={stateLabel} status={stateStyle}>{stateLabel}</StatusText>
+      <div className={[styles.container, this.props.stacked ? styles.stacked : ''].join(' ')}>
+        <div>{this.props.label}</div>
+        <StatusText title={stateLabel} status={stateStyle || 'invalid'}>{stateLabel || 'unknown'}</StatusText>
       </div>
     );
   }
