@@ -22,13 +22,13 @@ export default class HeartbeatIcon extends Component {
     return this.props.status === 'ok' ? (
       <svg
         className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')}
-        viewBox="0 0 61.87 53.57"
+        viewBox="0 0 63.74 61.19"
       >
         <title>{title}</title>
         <g id="Icons">
           <path
             d="M48.83,7.53a16.63,16.63,0,0,0-18,7.54A16.66,16.66,0,1,0,5.74,36.33l7.3,7.3,7,7L29.35,60a2.16,2.16,0,0,0,3,0L56,36.33a16.65,16.65,0,0,0,2-23.09,21.48,21.48,0,0,0-4.14-3.61A31.48,31.48,0,0,0,48.83,7.53Z"
-            transform="translate(0.11 -6.99)"
+            transform="translate(0.11 -0.99)"
           />
         </g>
       </svg>
