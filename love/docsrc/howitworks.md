@@ -263,7 +263,7 @@ The LOVE-frontend `Clock` and `TimeDisplay` components show server time rather t
 ### Server time saved in Redux
 In order to do this, server time is obtained everytime the authentication token is requested or validated (e.g. in each browser navigation or refresh) in the LOVE-manager. The information is then stored in the Redux store as follows:
 
-```json
+```js
 timeData: {
   request_time: <local UTC time in seconds when the request was made>,
   receive_time: <local UTC time in seconds when the response arrived>,
