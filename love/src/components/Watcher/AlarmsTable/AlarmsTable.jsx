@@ -5,7 +5,7 @@ import RowExpansionIcon from '../../icons/RowExpansionIcon/RowExpansionIcon';
 import Alarm, { severityToStatus } from '../Alarm/Alarm';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import DetailsPanel from './DetailsPanel/DetailsPanel';
-import { relativeTime } from '../../../Utils';
+import { formatTimestamp, relativeTime } from '../../../Utils';
 import styles from './AlarmsTable.module.css';
 
 /**
@@ -78,7 +78,7 @@ export default class AlarmsTable extends PureComponent {
           type: 'regexp',
           value: new RegExp('(?:)'),
           function: (value) => {
-            return relativeTime(value, taiToUtc);
+            return relativeTime(value * 1000, taiToUtc);
           },
         },
       },
@@ -276,6 +276,7 @@ export default class AlarmsTable extends PureComponent {
                   const key = row.name;
                   const isExpanded = this.state.expandedRows[key];
                   const reasonStr = 'Reason: ' + row.reason;
+                  const timestamp = row.timestampSeverityOldest * 1000;
                   return (
                     <React.Fragment key={key}>
                       <tr
@@ -345,10 +346,10 @@ export default class AlarmsTable extends PureComponent {
                           <div className={styles.textWrapper}> {row.name} </div>
                         </td>
                         <td
-                          title={new Date(row.timestampSeverityOldest * 1000).toString()}
+                          title={formatTimestamp(timestamp)}
                           className={[styles.cell, styles.timestamp].join(' ')}
                         >
-                          <div className={styles.textWrapper}>{relativeTime(row.timestampSeverityOldest, taiToUtc)}</div>
+                          <div className={styles.textWrapper}>{relativeTime(timestamp, taiToUtc)}</div>
                         </td>
                       </tr>
                       {isExpanded ? (

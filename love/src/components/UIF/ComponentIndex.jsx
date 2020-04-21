@@ -168,6 +168,14 @@ export const uifIndex = {
       }
     },
   },
+  Clock: {
+    component: require('../Time/Clock/Clock.container').default,
+    schema: require('../Time/Clock/Clock.container').schema,
+  },
+  TimeDisplay: {
+    component: require('../Time/TimeDisplay.container').default,
+    schema: require('../Time/TimeDisplay.container').schema,
+  },
   InteractiveTimeSeries: {
     component: require('../TimeSeries/TimeSeries.container').default,
     schema: {
@@ -177,6 +185,14 @@ export const uifIndex = {
         ...require('../TimeSeries/TimeSeries.container').schema.props,
       }
     },
+  },
+  TimeSeriesPlot: {
+    component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
+    schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
+  },
+  TelemetryLog: {
+    component: require('../TelemetryLog/TelemetryLog.container').default,
+    schema: require('../TelemetryLog/TelemetryLog.container').schema,
   },
   SubscriptionTable: {
     component: require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').default,
