@@ -100,12 +100,10 @@
 }
 
 .middleTopbar {
-  /* padding: 0.5em var(--content-padding); */
-  /* background-color: var(--second-secondary-background-color);
-  width: fit-content; */
 }
 
-.overflownToolbar {
+.clock {
+  font-size: 0.9em;
 }
 
 .hidden {

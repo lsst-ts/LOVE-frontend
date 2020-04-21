@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-flow: row wrap;
+  height: fit-content;
+  justify-content: center;
+}
+
+.horizontalGroup {
+  display: flex;
+  flex-flow: row wrap;
+  height: fit-content;
+  justify-content: center;
+}
+
+.verticalGroup {
+  display: flex;
+  flex-flow: column;
+  flex: 1 1 auto;
+  justify-content: flex-start;
+}

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import { viewsStates } from '../../redux/reducers/uif';
+import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
@@ -15,11 +15,12 @@ import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
+import Clock from '../Time/Clock/Clock';
 import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 
-const BREAK_1 = 768;
+const BREAK_1 = 865;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
 const urls = {
@@ -340,7 +341,17 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve}>asd</NotchCurve>
           </div>
 
-          <div className={styles.middleTopbar} id="middleTopbar" />
+          <div className={styles.middleTopbar}>
+            <div id="middleTopbar" />
+            <div
+              className={[
+                styles.clock,
+                this.props.mode === modes.EDIT && !this.state.toolbarOverflow ? styles.hidden : '',
+              ].join(' ')}
+            >
+              <Clock timeData={this.props.timeData} hideAnalog hideOffset={true} />
+            </div>
+          </div>
 
           <div className={styles.rightNotchContainer}>
             <NotchCurve className={styles.notchCurve} flip="true" />

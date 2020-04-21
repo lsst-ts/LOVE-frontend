@@ -256,3 +256,84 @@ The most important issue that motivates the complexity of this representation is
   - Components rendered on this state will be rescaled in width and horizontal position if two conditions are met: 1) the number of columns of the original device is smaller than a given threshold; 2) the number of the current device is greater than a given threshold. This threshold is defined [here](https://github.com/lsst-ts/LOVE-frontend/blob/47626fc8ac5ef5d71e7e49a32991d59fdd3746a5/love/src/components/UIF/CustomView.jsx#L36) and this behavior handled in the same `CustomView`.
   - This behavior is also dependant on the `container` to have the proper number of `.cols`.
   - Editing  moves the state to `COLS_NOT_CHANGED`.
+
+## Server Time sync and calculation
+The LOVE-frontend `Clock` and `TimeDisplay` components show server time rather than client time. This is in order to ensure no particular time settings on the client side will change the displayed time.
+
+### Server time saved in Redux
+In order to do this, server time is obtained everytime the authentication token is requested or validated (e.g. in each browser navigation or refresh) in the LOVE-manager. The information is then stored in the Redux store as follows:
+
+```js
+timeData: {
+  request_time: <local UTC time in seconds when the request was made>,
+  receive_time: <local UTC time in seconds when the response arrived>,
+  server_time: {
+    utc: <utc time in seconds>,
+    tai: <tai time in seconds>,
+    mjd: <modified julian date in days>,
+    sidereal_summit: <Local (summit) Apparent Sidereal Time in hourangles>,
+    sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST)  in hourangles>,
+    tai_to_utc: <difference in seconds between TAI and UTC>
+  }
+}
+```
+
+### Syncing calculations
+The `Clock` and `TimeDisplay` components obtain the server time data from Redux update the clock every second. The calculation is as follows.
+
+First the definitions:
+| Time              | Name                                    |
+|-------------------|-----------------------------------------|
+| `t_server`        | current UTC server time in seconds      |
+| `t_local`         | current UTC local time in seconds       |
+| `t_server_0`      | last UTC server time saved in seconds   |
+| `t_local_0`       | last UTC local time saved in seconds    |
+| `t_mjd`           | current Modified Julian Date in days    |
+| `t_mjd_0`         | last Modified Julian Date saved in days |
+| `t_sidereal`      | current Sidereal Time in hourangles     |
+| `t_sidereal_0`    | last Sidereal Time saved in hourangles  |
+
+```py
+# Server values
+t_local_0  = (timeData.receive_time + timeData.request_time) / 2
+t_server_0 = timeData.server_time.utc
+
+# Calculated current values
+t_server   = t_server_0   + (t_local - t_local_0)
+t_mjd      = t_mjd_0      + (t_local - t_local_0) / (3600 * 24)
+t_sidereal = t_sidereal_0 + (t_local - t_local_0) * 1.00273788 / 3600
+```
+
+### Calculation rationale
+We assume there will always be a lag between request and response, and the server time is calculated between request and response time. Hence, assuming server and local time are in sync we have:
+```
+timeData.receive_time < timeData.server_time.utc < timeData.request_time
+```
+
+We assume the server_time was calculated at the midpoint between request and receive times, so we assume:
+```
+t_local_0  = (timeData.receive_time + timeData.request_time) / 2
+```
+
+Now, if we consider that server and local times could be shifted by a constant offset `C`, we have that for every server time `t_server` its corresponding local time `t_local` should be:
+```
+t_server = t_local + C
+```
+
+Hence, if we consider any 2 points in time (`t_local`, `t_server`) and (`t_local_0`, `t_server_0`):
+```
+t_server - t_server_0 = (t_local + C) - (t_local_0 + C) = t_local - t_local_0
+t_server = t_server_0 + t_local - t_local_0
+```
+
+Similarly, if the server time is in a different scale (.e.g sidereal time), and we know we can transform local time scale (e.g. UTC) time to server time scale with a function `f` (plus the constant offset `C`), we have:
+```
+t_server - t_server_0 = (f(t_local) + C) - (f(t_local_0) + C) = f(t_local) - f(t_local_0)
+t_server = t_server_0 + f(t_local) - f(t_local_0)
+```
+
+Now if `f` is a linear function, like in Sidereal Time and MJD cases:
+```
+t_server = t_server_0 + f(t_local) - f(t_local_0) = t_server_0 + f(t_local - t_local_0)
+t_server = t_server_0 + f(t_local - t_local_0)
+```

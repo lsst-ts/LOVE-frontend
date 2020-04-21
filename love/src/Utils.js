@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import { SALCommandStatus } from './redux/actions/ws.js';
 
 /* Backwards compatibility of Array.flat */
@@ -467,43 +467,42 @@ export const cscText = (csc, salindex) => {
   return csc + (salindex === 0 ? '' : `.${salindex}`);
 };
 
-/**
- * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
- * @param {date-able} timestamp, if float it must be in miliseconds
- * @param {string} location, optional location to append to the timestamp, TAI by default
- */
-export const formatTimestamp = (timestamp, location = 'TAI') => {
-  const date = new Date(timestamp);
-
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2, 0);
-  const day = `${date.getDate()}`.padStart(2, 0);
-
-  const hours = `${date.getHours()}`.padStart(2, 0);
-  const minutes = `${date.getMinutes()}`.padStart(2, 0);
-  const seconds = `${date.getSeconds()}`.padStart(2, 0);
-
-  return `${year}/${month}/${day} ${hours}:${minutes}:${seconds} ${location}`;
+export const parseTimestamp = (timestamp) => {
+  if (timestamp instanceof DateTime) return timestamp;
+  if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
+  if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
+  else return null;
 };
 
 /**
  * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
- * @param {date-able} timestamp, if float it must be in miliseconds
+ * @param {date-able} timestamp, if float it must be in milliseconds
+ * @param {string} location, optional location to append to the timestamp, TAI by default
+ */
+export const formatTimestamp = (timestamp, location = 'TAI') => {
+  const t = parseTimestamp(timestamp);
+  return `${t.toUTC().toFormat('yyyy/MM/dd HH:mm:ss')} ${location}`;
+};
+
+/**
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * @param {date-able} timestamp, if float it must be in milliseconds
  * @param {string} location, optional location to append to the timestamp, empty by default
  */
 export const isoTimestamp = (timestamp, location = null) => {
-  return [moment(timestamp).toISOString(), location ? location : null].join(' ');
+  const t = parseTimestamp(timestamp);
+  return [t.toUTC().toISO(), location ? location : null].join(' ');
 };
 
 /**
  * Converts seconds to a human readable difference like 'a few seconds ago'
- * @param {number} secs, number of seconds
+ * @param {date-able} timestamp, if float it must be in milliseconds
  * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
  */
-export const relativeTime = (secs, taiToUtc) => {
-  const newSecs = secs + taiToUtc;
-  const mom = moment.unix(newSecs).utc();
-  const delta = mom.fromNow();
+export const relativeTime = (timestamp, taiToUtc) => {
+  const t_tai = parseTimestamp(timestamp);
+  const t_utc = t_tai.plus({ second: taiToUtc }).toUTC();
+  const delta = t_utc.toRelative();
   return delta;
 };
 
@@ -514,3 +513,5 @@ export const getStringRegExp = (str) => {
     return new RegExp('');
   }
 };
+
+export const siderealSecond = 1.00273788;
