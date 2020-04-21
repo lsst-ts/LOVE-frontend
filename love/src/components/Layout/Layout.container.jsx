@@ -8,6 +8,7 @@ import {
   getViewsStatus,
   getViews,
   getLastManagerHeartbeat,
+  getLastComponentHeartbeat,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
@@ -24,6 +25,7 @@ const mapStateToProps = (state) => {
   const mode = getMode(state);
   const getCurrentView = (id) => getViewSummary(state, id);
   const getManagerHeartbeat = () => getLastManagerHeartbeat(state);
+  const getComponentHeartbeat = (component) => getLastComponentHeartbeat(state, component);
   const viewsStatus = getViewsStatus(state);
   const views = getViews(state);
   return {
@@ -33,6 +35,7 @@ const mapStateToProps = (state) => {
     getCurrentView,
     viewsStatus,
     getLastManagerHeartbeat: getManagerHeartbeat,
+    getLastComponentHeartbeat: getComponentHeartbeat,
     views,
   };
 };

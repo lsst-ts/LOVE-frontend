@@ -254,17 +254,18 @@
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   padding: 0.5em;
+  user-select: none;
 }
 
 .heartbeatMenuElement {
   display: grid;
-  grid-template-columns: 1em max-content;
-  grid-gap: 0.5em;
+  grid-template-columns: 1.2em max-content;
+  grid-gap: 0 0.5em;
   padding: 0.25em 0.5em;
 }
 
 .heartbeatMenuElement span {
-  line-height: 1.5em;
+  line-height: 1.7em;
 }
 
 .statusMenuElement {
@@ -273,4 +274,17 @@
   grid-gap: 0.5em;
   padding: 0.5em 0.5em;
   padding-left: 2em;
+}
+
+.miniIcon {
+  max-height: unset;
+  max-width: 60%;
+  height: 1.1em;
+  vertical-align: middle;
+  justify-self: end;
+}
+
+.heartbeatMenuElement .heartbeatSubElement {
+  color: var(--secondary-font-color);
+  line-height: 1.3em;
 }

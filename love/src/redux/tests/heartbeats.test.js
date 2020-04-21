@@ -12,6 +12,7 @@ import {
   getCSCHeartbeat,
 } from '../selectors';
 import * as mockData from './mock';
+import { HEARTBEAT_COMPONENTS } from '../../Config';
 
 let store, server;
 
@@ -28,7 +29,7 @@ const heartbeatsInfo = [
   },
   {
     category: 'heartbeat',
-    data: [{ csc: 'producer', salindex: 0, data: { timestamp: 1992141499.626869 } }],
+    data: [{ csc: HEARTBEAT_COMPONENTS.EVENTS, salindex: 0, data: { timestamp: 1992141499.626869 } }],
     subscription: 'heartbeat',
   },
 ];
