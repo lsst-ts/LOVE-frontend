@@ -12,7 +12,7 @@ import {
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
-import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, receiveManagerHeartbeat } from './heartbeats';
+import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, receiveHeartbeatInfo } from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveObservingLog } from './observingLogs';
@@ -168,7 +168,7 @@ export const openWebsocketConnection = () => {
           return;
         }
         if (data.category === 'heartbeat') {
-          dispatch(receiveManagerHeartbeat(data.data[0]));
+          dispatch(receiveHeartbeatInfo(data.data));
         }
         if (data.category === 'event') {
           const stream = data.data[0].data;
