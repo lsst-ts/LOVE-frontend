@@ -1,9 +1,9 @@
 .domeContainer {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   position: relative;
   width: 100%;
+  overflow: auto;
 }
 
 .skymapGridContainer {
@@ -11,11 +11,13 @@
   align-self: center;
   flex-wrap: wrap;
   position: relative;
-  width: fit-content;
+  width: 70%;
 }
 
 .skymapGridContainer svg {
   vertical-align: top;
+  margin: auto;
+  height: auto;
 }
 
 .skymapContainer h2 {
@@ -27,16 +29,18 @@
 
 .topRow {
   display: grid;
-  grid-template-columns: 1fr;
   justify-items: center;
   row-gap: 2em;
   padding: 1em 0;
+  min-width: 900px;
+  grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
 }
 
 .svgOverlay {
   position: absolute;
   left: 50%;
   top: 50%;
+  width: 75%;
   transform: translate(-50%, -50%);
 }
 
@@ -48,10 +52,16 @@
   transition: transform 1.5s linear;
   backface-visibility: hidden;
   transform-style: preserve-3d;
-  fill-opacity: 0.1;
+  fill-opacity: 0.3;
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
 }
 
 .svgOverlay .targetPointing {
+  fill: none;
+  stroke-dasharray: '4';
+  stroke-opacity: '0.3';
+  stroke: 'white';
 }
 
 .svgOverlay rect {
@@ -61,9 +71,12 @@
 .telemetryTable {
   display: grid;
   padding-top: 1em;
-  grid-template-columns: minmax(350px, 1fr);
   grid-row-gap: 0.5em;
   width: 100%;
+  min-width: 900px;
+  overflow: hidden;
+  grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+  grid-template-rows: max-content 1fr;
 }
 
 .telemetryTable h2 {
@@ -96,28 +109,21 @@
   position: absolute;
   left: 50%;
   bottom: 2%;
-  transform: translate(-50%,0);
+  transform: translate(-50%, 0);
 }
 
 .vignettingDistanceContainer .value {
   color: var(--base-font-color);
 }
 
-@media (min-width: 1600px) {
-  .telemetryTable {
-    display: grid;
-    padding-top: 1em;
-    grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
-    grid-template-rows: max-content 1fr;
-    grid-row-gap: 0.5em;
-    width: 100%;
-  }
+.innerDome {
+  fill: var(--second-tertiary-background-color);
+  fill-opacity: 0.6;
+  stroke: var(--second-primary-background-color);
+  stroke-width: 2;
+}
 
-  .topRow {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    row-gap: 2em;
-    padding: 1em 0;
-  }
+.mountTop {
+  stroke: var(--default-active-background-color);
+  fill: var(--second-quaternary-background-dimmed-color);
 }

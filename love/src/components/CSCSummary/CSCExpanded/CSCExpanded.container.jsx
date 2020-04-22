@@ -1,15 +1,59 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCExpanded from './CSCExpanded';
-import { requestGroupSubscription } from '../../../redux/actions/ws';
+import { addGroupSubscription } from '../../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
+
+export const schema = {
+  description: 'Displays the error code and message logs for a single CSC',
+  defaultSize: [24, 29],
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'CSC expanded',
+    },
+    name: {
+      type: 'string',
+      description: 'Name of the CSC to monitor',
+      isPrivate: false,
+      default: 'Test',
+    },
+    salindex: {
+      type: 'number',
+      description:
+        'Salindex of the CSC',
+      isPrivate: false,
+      default: 1,
+    },
+    _functionProps: {
+      type: 'array',
+      description:
+        'Array containing the props that are functions',
+      isPrivate: true,
+      default: [],
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
+    },
+  },
+};
 
 const CSCExpandedContainer = ({
   name,
   salindex,
   group,
-  realm,
   onCSCClick,
   clearCSCErrorCodes,
   clearCSCLogMessages,
@@ -24,7 +68,6 @@ const CSCExpandedContainer = ({
       name={name}
       salindex={salindex}
       group={group}
-      realm={realm}
       onCSCClick={onCSCClick}
       clearCSCErrorCodes={clearCSCErrorCodes}
       errorCodeData={errorCodeData}
@@ -40,11 +83,11 @@ const CSCExpandedContainer = ({
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (cscName, index) => {
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-summaryState`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-logMessage`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
+      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-summaryState`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-logMessage`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));

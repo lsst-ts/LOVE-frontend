@@ -7,7 +7,7 @@ import Skymap from './Skymap/Skymap';
 export default class AuxTel extends Component {
   render() {
     return (
-      <Panel title="Auxiliary Telescope" className={styles.panel}>
+      <Panel title="Auxiliary Telescope" className={styles.panel} fit>
         <>
           <div className={styles.CSCSummaryContainer}>
             <Summary />

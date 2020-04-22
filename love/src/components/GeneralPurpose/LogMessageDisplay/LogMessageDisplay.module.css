@@ -1,0 +1,76 @@
+.log {
+  background: var(--second-tertiary-background-color);
+  border-radius: 5px;
+  overflow-y: scroll;
+}
+
+.logContainerTopBar {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 0.5em;
+}
+
+.logContainer {
+  width: calc(100% - 2em);
+  height: 100%;
+  padding: 1em;
+  flex-grow: 1;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 12em;
+}
+
+.filtersContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.filtersContainer input[type='checkbox'] {
+  transform: scale(1.3);
+  vertical-align: middle;
+  padding: 1em;
+}
+
+.filtersContainer span {
+  display: inline-block;
+  padding: 0.5em 0.5em;
+}
+
+.messageTextContainer {
+  width: calc(100% - 5em);
+  display: flex;
+  flex-direction: column;
+  padding: 0 1em;
+  padding-bottom: 0.5em;
+}
+
+.messageIcon {
+  width: 1em;
+  min-width: 1em;
+  padding: 0.5em;
+  text-align: center;
+  user-select: none;
+}
+
+.messageText {
+  max-width: 50vw;
+  padding-bottom: 0.5em;
+}
+
+.logMessage {
+  display: flex;
+  /* align-items: center; */
+  border-bottom: solid var(--second-quaternary-background-color) 1px;
+  word-wrap: break-word;
+}
+
+.logMessage:last-child {
+  border-bottom: none;
+}
+
+.timestamp {
+  align-self: flex-end;
+  padding: 0.5em 0;
+  color: var(--secondary-font-color);
+}

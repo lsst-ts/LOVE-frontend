@@ -1,0 +1,286 @@
+table {
+    --table-scrollbar-width: 10px;
+    --table-header-background: var(--second-quaternary-background-color);
+    --table-row-background: var(--second-secondary-background-color);
+    --table-row-border: var(--second-tertiary-background-color);
+    --table-unack-row-background: var(--second-tertiary-background-color);
+    --table-unack-row-border: var(--second-secondary-background-color);
+    --table-hover-border: var(--second-senary-background-dimmed-color);
+    --ack-width: 4em;
+    --status-width: 12em;
+    --name-width: 30em;
+    --timestamp-width: 15em;
+    --cell-padding: 1em;
+}
+
+.wrapper {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-end;
+  width: inherit;
+  height: 100%;
+}
+
+.controlsContainer {
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  padding-right: 1.5em;
+  padding-bottom: 1em;
+  width: 100%;
+  flex: 0;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.dataTableWrapper {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  width: inherit;
+  flex: 1;
+  min-height: 0;
+}
+
+.dataTable {
+    display: grid;
+    grid-template-rows: min-content minmax(0, 1fr);
+    width: calc(var(--ack-width) + 2*var(--status-width) + var(--name-width) + var(--timestamp-width) + 10*var(--cell-padding));
+    height: inherit; /* necessary for scroll, but parent component must define height */
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+/****************** Columns styles ***************/
+.dataTable .ackButton {
+    width: var(--ack-width);
+    text-align: center;
+}
+
+.dataTable .status {
+    width: var(--status-width);
+    text-align: center;
+}
+
+.dataTable .maxSeverity {
+    width: var(--status-width);
+    text-align: center;
+}
+
+.dataTable .name {
+    width: var(--name-width);
+    text-align: left;
+}
+
+.dataTable .timestamp {
+    width: var(--timestamp-width);
+    text-align: left;
+}
+
+.statusWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.maxSeverityWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.textWrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.expansionIconWrapper {
+    min-width: 1em;
+    height: 1em;
+    cursor: pointer;
+    padding: 0.3em;
+    padding-right: 1em;
+}
+
+/****************** General table head and body styles ***************/
+.dataTable thead {
+    display: table;
+    table-layout:fixed;
+    width: 100%;
+    word-wrap:break-word;
+}
+
+.dataTable tbody {
+    display: block;
+    height: 100%; /* necessary for scroll */
+    overflow-x: hidden;
+}
+.dataTable tbody tr {
+    display: table;
+    table-layout: fixed;
+    width: 100%;
+}
+.dataTable th, td {
+    width: auto;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: var(--cell-padding);
+    padding-right: var(--cell-padding);
+}
+
+.dataTable th {
+    border: 1px solid var(--table-row-background);
+    background: var(--table-header-background);
+    color: var(--highlighted-font-color);
+    padding-top: 0em;
+    padding-bottom: 0em;
+    text-align: left;
+}
+
+/****************** Table body cells style ***************/
+.dataTable td.cell {
+    cursor: pointer;
+    color: var(--secondary-font-color);
+    padding-top: 0.4em;
+    padding-bottom: 0.4em;
+    word-wrap:break-word;
+    max-width: 0;
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid var(--table-row-border);
+}
+
+/****************** Table rows style ***************/
+.dataTable tr {
+    background: var(--table-row-background);
+}
+
+/****************** Table Unack rows style ***************/
+.dataTable tr.unackRow td.cell {
+    background: var(--table-unack-row-background);
+    font-weight: bold;
+    color: var(--base-font-color);
+    border-bottom: 1px solid var(--table-unack-row-border);
+}
+
+/**** Remove bottom border from the row that has been expanded *****/
+.dataTable tr.expandedRowParent td.cell {
+    border-bottom: 1px solid transparent;
+}
+
+.dataTable tr.unackExpandedRowParent td.cell {
+    border-bottom: 1px solid var(--table-unack-row-background);
+}
+
+/****************** Table rows hover style ***************/
+.dataTable tr:hover td.cell {
+    border-bottom: 1px solid var(--table-hover-border);
+    border-top: 1px solid var(--table-hover-border);
+    -moz-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+    -webkit-box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+    box-shadow: inset 0px 8px 8px -8px var(--table-hover-border),
+      inset 0px -8px 8px -8px var(--table-hover-border);
+}
+
+.dataTable .valueCell {
+    padding: 0.4em 0.5em;
+    word-wrap:break-word;
+    word-wrap: normal;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.dataTable td input {
+    min-width: 10px;
+}
+
+.dataTable .firstColumn td {
+  background-color: var(--table-row-background);
+}
+
+/****************** Styles for the Expanded row ***************/
+.dataTable .expandedRow {
+    width: 100%;
+    text-align: left;
+    background: var(--table-row-background);
+}
+
+.dataTable .expandedRow .expandedRowContent {
+    vertical-align: top;
+    border-bottom: 1px solid var(--table-row-border);
+    padding: 1em;
+}
+
+.dataTable .unackExpandedRow .expandedRowContent{
+    background: var(--table-unack-row-background);
+    border-bottom: 1px solid var(--table-unack-row-border);
+}
+
+/* .dataTable .expandedRow textarea {
+    background: var(--secondary-background-dimmed-color);
+    color: var(--base-font-color);
+    border: none;
+    width: calc(100% - 3em);
+    margin-left: 2em;
+    height: 13em;
+    font-size: 1em;
+    resize: none;
+    border-radius: 5px;
+    padding: 0.6em 0.6em;
+} */
+
+.dataTable tr:hover.expandedRow td.cell{
+    border-bottom: 1px solid var(--secondary-background-color);
+    border-top: 1px solid transparent;
+}
+
+
+/****************** Styles to make the Table corners rounded ***************/
+.dataTable th:first-of-type {
+    border-top-left-radius: 7px;
+}
+
+.dataTable th:last-of-type {
+    border-top-right-radius: 7px;
+}
+
+.dataTable tr:last-of-type td:first-of-type {
+    border-bottom-left-radius: 7px;
+}
+
+.dataTable tr:last-of-type td:last-of-type {
+    border-bottom-right-radius: 7px;
+}
+
+/* .dataTable .firstColumn {
+    width: 1em;
+    background: var(--base-background-color);
+    padding: 0em 0.5em;
+    text-align: center;
+    border: 1px solid var(--base-background-color)
+} */
+
+/*************** Styles for the Table Body Scroller ***************/
+/* width */
+.dataTable ::-webkit-scrollbar {
+    width: var(--table-scrollbar-width);
+}
+
+/* Track */
+.dataTable ::-webkit-scrollbar-track {
+    background: var(--tertiary-background-color);
+}
+
+/* Handle */
+.dataTable ::-webkit-scrollbar-thumb {
+    background: var(--tertiary-font-color);
+    border-radius: 1.1em;
+}
+
+/* Handle on hover */
+.dataTable ::-webkit-scrollbar-thumb:hover {
+    background: var(--secondary-font-color);
+}

@@ -1,9 +1,87 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getTimestampedStreamData } from '../../../redux/selectors';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import SubscriptionTableContainer from '../SubscriptionTable/SubscriptionTable.container';
 import TimeSeriesPlot from './TimeSeriesPlot';
 
+export const schema = {
+  description: 'Time series plot for any data stream coming from SAL',
+  defaultSize: [31, 8],
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Time series plot',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+    dataSources: {
+      type: 'array',
+      description: 'Array containing the name of the data sources for the plot',
+      isPrivate: false,
+      default: ['Dome Azimuth'],
+    },
+    groupNames: {
+      type: 'object',
+      description:
+        'Object containing the mapping of every data source to the SAL stream, in the format <stream_type>-<CSC>-<salIndex>-<stream>',
+      isPrivate: false,
+      default: {
+        'Dome Azimuth': 'telemetry-ATDome-0-position',
+      },
+    },
+    layers: {
+      type: 'object',
+      description: 'Object containing the mapping of every data source to an object with the layer data',
+      isPrivate: false,
+      default: {
+        'Dome Azimuth': {
+          mark: {
+            interpolate: 'linear',
+          },
+        },
+      },
+    },
+    encoding: {
+      type: 'object',
+      description: 'Object containing the mapping of every data source to an object with the encoding data',
+      isPrivate: false,
+      default: {
+        color: {
+          scale: {
+            domain: ['Dome Azimuth'],
+            range: ['hsl(201, 70%, 40%)'],
+          },
+        },
+      },
+    },
+    accessors: {
+      type: 'object',
+      description:
+        'Object containing the mapping of every data source to a function that extracts the value to be plotted from the incoming data stream',
+      isPrivate: false,
+      default: '{ "Dome Azimuth": (data) => data.azimuthPosition.value }',
+    },
+    _functionProps: {
+      type: 'array',
+      description: 'Array containing the props that are functions',
+      isPrivate: true,
+      default: ['accessors'],
+    },
+  },
+};
 const TimeSeriesPlotContainer = ({
   streamStates,
   groupName,
@@ -12,7 +90,17 @@ const TimeSeriesPlotContainer = ({
   unsubscribeToStream,
   ...props
 }) => {
-  return (
+  // props.dataSources.forEach((dataSource) => {
+  //   const groupName = props.groupNames[dataSource];
+  //   console.log(groupName)
+  // });
+
+
+  if (props.isRaw) {
+    const subscriptions = Object.values(props.groupNames || {});
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
+    return (
     <TimeSeriesPlot
       streamStates={streamStates}
       groupName={groupName}
@@ -38,7 +126,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: (groupName) => {
-      dispatch(requestGroupSubscription(groupName));
+      dispatch(addGroupSubscription(groupName));
     },
     unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));
@@ -46,7 +134,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TimeSeriesPlotContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(TimeSeriesPlotContainer);

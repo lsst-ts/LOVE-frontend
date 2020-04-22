@@ -1,0 +1,23 @@
+.configElementWrapper {
+  padding: 0.5em 1em;
+}
+
+.configElement {
+  padding: 0.5em 1em;
+  border-left: 2px solid var(--default-background-color);
+}
+
+.configElementTitle {
+  color: var(--base-font-color);
+}
+
+.configElementDescription {
+  color: var(--secondary-font-color);
+  white-space: pre-line;
+}
+
+.content input, .content textarea {
+  color: var(--base-font-color);
+  background: transparent;
+  border: 1px solid var(--secondary-font-dimmed-color);
+}

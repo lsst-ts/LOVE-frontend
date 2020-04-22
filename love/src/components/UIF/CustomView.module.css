@@ -1,0 +1,97 @@
+.container {
+}
+
+.containerPanel {
+  width: 100%;
+}
+
+.gridLayout {
+  position: relative;
+}
+
+.componentWrapper {
+  /* background: rgba(255, 0, 0, 0.3); */
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.editable {
+  border: 1px dashed var(--second-quinary-background-color);
+  box-shadow: 1px 5px 2px var(--box-shadow-color);
+}
+
+.noOverflow {
+  overflow: hidden;
+}
+
+.allowOverflow {
+  z-index: 2;
+}
+
+.componentWrapper :global(.react-resizable-handle) {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  cursor: se-resize;
+  z-index: 10;
+}
+
+.editableContainer :global(.react-resizable-handle)::after {
+  content: '';
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.4);
+}
+
+.editableComponentActions {
+  display: none;
+}
+
+.editable .editableComponentActions {
+  position: absolute;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 0.2em;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.3em;
+  border: 1px dashed var(--highlighted-font-color);
+  box-sizing: border-box;
+  background: var(--second-secondary-background-color);
+  z-index: 10;
+}
+
+.gearIconWrapper {
+  width: 1.2em;
+  cursor: pointer;
+  margin: auto;
+}
+
+.gearIconWrapper svg {
+  vertical-align: text-top;
+}
+
+.marginComponentPanel {
+  padding-right: 1em;
+  padding-bottom: 1em;
+}
+
+.deviceOutline {
+  position: absolute;
+  height: 97%;
+}
+
+.outsideDeviceArea {
+  position: absolute;
+  top: 33%;
+  transform: translateX(-50%);
+  color: var(--tertiary-font-color);
+}

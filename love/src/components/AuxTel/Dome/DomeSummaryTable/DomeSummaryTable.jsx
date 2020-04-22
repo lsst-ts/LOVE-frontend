@@ -11,6 +11,12 @@ import {
   stateToStyleDomeAndMount,
 } from '../../../../Config';
 import Limits from '../../../GeneralPurpose/Limits/Limits';
+import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from '../../../GeneralPurpose/SummaryPanel/Row';
+import Label from '../../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import {stateToStyleDome, stateToStyleMount} from '../../../../Config'
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -47,18 +53,7 @@ export default class DomeSummaryTable extends Component {
     const mountInPositionValue = this.props.mountInPosition ? this.props.mountInPosition[0].inPosition.value : 0;
     const mountTrackingStateValue = mountTrackingStateMap[this.props.mountTrackingState];
     const m3State = this.props.m3State;
-    const mountRotator =
-      m3State === 1
-        ? {
-            name: '(1)',
-            current: this.props.currentPointing.nasmyth1,
-            target: this.props.targetPointing.nasmyth1,
-          }
-        : {
-            name: '(2)',
-            current: this.props.currentPointing.nasmyth2,
-            target: this.props.targetPointing.nasmyth2,
-          };
+    const { positionLimits } = this.props;
     const timesToLimit = this.props.currentTimesToLimits;
     const timeToAzLimit = timesToLimit.timeToAzlim ? timesToLimit.timeToAzlim.value : 0;
     const timeToRotLimit = timesToLimit.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
@@ -66,45 +61,80 @@ export default class DomeSummaryTable extends Component {
     const timeToBlindSpot = timesToLimit.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
     const closestLimit = timeToBlindSpot > timeToUnobservable && timeToBlindSpot > 0 ? 'blind spot' : 'unobservable';
     const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
-
+    // L1 (software) position limits, in order elevation, azimuth, Nasmyth 1, Nasmyth 2 and M3.
+    const { maximum, minimum } = positionLimits;
+    let [maxEl, maxAz, maxNas1, maxNas2, maxM3] = maximum ? maximum.value : [];
+    let [minEl, minAz, minNas1, minNas2, minM3] = minimum ? minimum.value : [];
+    [maxEl, maxAz, maxNas1, maxNas2, maxM3] = [
+      maxEl ? maxEl : 90,
+      maxAz ? maxAz : 270,
+      maxNas1 ? maxNas1 : 165,
+      maxNas2 ? maxNas2 : 165,
+      maxM3 ? maxM3 : 180,
+    ];
+    [minEl, minAz, minNas1, minNas2, minM3] = [
+      minEl ? minEl : 5,
+      minAz ? minAz : -270,
+      minNas1 ? minNas1 : -165,
+      minNas2 ? minNas2 : -165,
+      minM3 ? minM3 : 0,
+    ];
+    const mountRotator =
+      m3State === 1
+        ? {
+            name: '(1)',
+            current: this.props.currentPointing.nasmyth1,
+            target: this.props.targetPointing.nasmyth1,
+            minRot: minNas1,
+            maxRot: maxNas1,
+          }
+        : {
+            name: '(2)',
+            current: this.props.currentPointing.nasmyth2,
+            target: this.props.targetPointing.nasmyth2,
+            minRot: minNas2,
+            maxRot: maxNas2,
+          };
+    const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION'
+    const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     return (
-      <div className={styles.summaryTable}>
-        <span className={styles.title}>Track ID</span>
-        <span className={styles.value}>{this.props.trackID}</span>
+      <SummaryPanel className={styles.summaryTable}>
+        <Title>Track ID</Title>
+        <Value>{this.props.trackID}</Value>
         {/* Dome */}
-        <span className={styles.title}>Dome</span>
-        <span className={styles.value}>
+        <Title>Dome</Title>
+        <Value>
           <StatusText
             title={domeInPositionValue ? 'true' : 'false'}
-            status={domeInPositionValue ? 'ok' : 'warning'}
+            status={stateToStyleDome[domeInPositionLabel]}
             small
           >
-            {domeInPositionValue ? 'In Position' : 'Not in Position'}
+            {domeInPositionLabel}
           </StatusText>
-        </span>
+        </Value>
 
-        <span className={styles.label}>Azimuth</span>
-        <span className={styles.value}>
+        <Label>Azimuth</Label>
+        <Value>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} small>
             {azimuthStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Dropout door</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Dropout door</Label>
+        <Value>
           <StatusText title={dropoutDoorStateValue} status={stateToStyleDomeAndMount[dropoutDoorStateValue]} small>
             {dropoutDoorStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Main door</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Main door</Label>
+        <Value>
           <StatusText title={mainDoorStateValue} status={stateToStyleDomeAndMount[mainDoorStateValue]} small>
             {mainDoorStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Az</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Az</Label>
+        <Value>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
-        </span>
+        </Value>
         {/* <span className={[styles.subRow, styles.wide].join(' ')} title={`Time to limit: ${2} min`}>
           <span>
             <Limits
@@ -112,7 +142,7 @@ export default class DomeSummaryTable extends Component {
               upperLimit={360}
               currentValue={domeAz.current}
               targetValue={domeAz.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -122,42 +152,41 @@ export default class DomeSummaryTable extends Component {
           </span>
         </span> */}
         {/* Mount */}
-        <span className={styles.title}>Mount</span>
-        <span className={styles.value}>
+        <Title>Mount</Title>
+        <Value>
           <StatusText
             title={mountInPositionValue ? 'true' : 'false'}
-            status={mountInPositionValue ? 'ok' : 'warning'}
+            status={stateToStyleMount[mountInPositionLabel]}
             small
           >
-            {mountInPositionValue ? 'In Position' : 'Not in Position'}
+            {mountInPositionLabel}
           </StatusText>
-        </span>
-        <span className={styles.label}>Tracking</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Tracking</Label>
+        <Value>
           <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]} small>
             {mountTrackingStateValue}
           </StatusText>
-        </span>
-        <span className={styles.label}>Az</span>
-        <span className={styles.value}>
+        </Value>
+        <Label>Az</Label>
+        <Value>
           <CurrentTargetValue
             currentValue={mountAz.current.toFixed(2)}
             targetValue={mountAz.target.toFixed(2)}
             isChanging={true}
           />
-        </span>
+        </Value>
 
-        <span
-          className={[styles.subRow, styles.wide].join(' ')}
-          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [-270º, 270º]`}
+        <Row
+          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
         >
           <span>
             <Limits
-              lowerLimit={-270}
-              upperLimit={270}
+              lowerLimit={minAz}
+              upperLimit={maxAz}
               currentValue={mountAz.current}
               targetValue={mountAz.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -165,28 +194,26 @@ export default class DomeSummaryTable extends Component {
             <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToAzLimit)} min</span>
           </span>
-        </span>
-
-        <span className={styles.label}>El</span>
-        <span className={styles.value}>
+        </Row>
+        <Label>El</Label>
+        <Value>
           <CurrentTargetValue
             currentValue={mountEl.current.toFixed(2)}
             targetValue={mountEl.target.toFixed(2)}
             isChanging={true}
           />
-        </span>
+        </Value>
 
-        <span
-          className={[styles.subRow, styles.wide].join(' ')}
-          title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [15º, 90º]`}
+        <Row
+          title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
         >
           <span>
             <Limits
-              lowerLimit={15}
-              upperLimit={90}
+              lowerLimit={minEl}
+              upperLimit={maxEl}
               currentValue={mountEl.current}
               targetValue={mountEl.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -194,29 +221,27 @@ export default class DomeSummaryTable extends Component {
             <span>{`Time to ${closestLimit}: `}</span>
             <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
           </span>
-        </span>
-
-        <span className={styles.label}>
+        </Row>
+        <Label>
           Nasmyth <span className={styles.highlight}>{mountRotator.name}</span>
-        </span>
-        <span className={styles.value}>
+        </Label>
+        <Value>
           <CurrentTargetValue
             currentValue={mountRotator.current.toFixed(2)}
             targetValue={mountRotator.target.toFixed(2)}
             isChanging={true}
           />
-        </span>
-        <span
-          className={[styles.subRow, styles.wide].join(' ')}
-          title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [-175º, 175º]`}
+        </Value>
+        <Row
+          title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [${mountRotator.minRot}º, ${mountRotator.maxRot}º]`}
         >
           <span>
             <Limits
-              lowerLimit={-175}
-              upperLimit={175}
+              lowerLimit={mountRotator.minRot}
+              upperLimit={mountRotator.maxRot}
               currentValue={mountRotator.current}
               targetValue={mountRotator.target}
-              height={20}
+              height={30}
               displayLabels={false}
             />
           </span>
@@ -224,8 +249,8 @@ export default class DomeSummaryTable extends Component {
             <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToRotLimit)} min</span>
           </span>
-        </span>
-      </div>
+        </Row>
+      </SummaryPanel>
     );
   }
 }

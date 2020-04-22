@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
 import styles from './Login.module.css';
 import { tokenStates } from '../../redux/reducers/auth';
+import TextField from '../TextField/TextField';
 
 export default class Login extends Component {
   static propTypes = {
@@ -73,9 +74,7 @@ export default class Login extends Component {
             <form onSubmit={this.handleSubmit}>
               {this.props.tokenStatus === tokenStates.REQUESTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.requesting}>
-                    Logging in, please wait
-                  </p>
+                  <p className={styles.requesting}>Logging in, please wait</p>
                 </div>
               ) : null}
               {this.props.tokenStatus === tokenStates.REJECTED ? (
@@ -107,24 +106,20 @@ export default class Login extends Component {
               ) : null}
               {this.props.tokenStatus === tokenStates.REMOVE_REQUESTED ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.requesting}>
-                    Logging out, please wait
-                  </p>
+                  <p className={styles.requesting}>Logging out, please wait</p>
                 </div>
               ) : null}
               {this.props.tokenStatus === tokenStates.REMOVED_REMOTELY ? (
                 <div className={styles.incorrectCredentialsDiv}>
-                  <p className={styles.requesting}>
-                    Logout successful
-                  </p>
+                  <p className={styles.requesting}>Logout successful</p>
                 </div>
               ) : null}
               <p className={styles.formEntry}>
                 <label htmlFor="id_username" className={styles.label}>
                   Username
                 </label>
-                <input
-                  type="text"
+
+                <TextField
                   name="username"
                   autoFocus=""
                   required=""
@@ -137,7 +132,7 @@ export default class Login extends Component {
                 <label htmlFor="id_password" className={styles.label}>
                   Password
                 </label>
-                <input
+                <TextField
                   type="password"
                   name="password"
                   required=""

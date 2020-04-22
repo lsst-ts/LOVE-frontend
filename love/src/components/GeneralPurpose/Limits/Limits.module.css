@@ -5,6 +5,25 @@
   stroke: var(--second-quaternary-background-color);
 }
 
+.warningBar {
+  stroke: var(--status-warning-dimmed-color-2);
+}
+
+.activeWarning {
+  animation: warning 0.5s infinite;
+  animation-direction: alternate;
+  transition: stroke ease-in-out;
+}
+
+@keyframes warning {
+  from {
+    stroke: var(--status-warning-dimmed-color-2);
+  }
+  to {
+    stroke: var(--status-warning-dimmed-color);
+  }
+}
+
 .currentValue {
   fill: white;
   transition: x 0.5s ease;

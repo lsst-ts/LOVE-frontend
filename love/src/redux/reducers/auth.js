@@ -30,7 +30,7 @@ const initialState = {
   status: tokenStates.EMPTY,
   permissions: {
     cmd_exec: false,
-  }
+  },
 };
 /**
  * Modifies the state of the authentication mainly characterized by the
@@ -67,7 +67,7 @@ export default function(state = initialState, action) {
           status: tokenStates.RECEIVED,
           permissions: {
             cmd_exec: action.permissions['execute_commands'],
-          }
+          },
         });
       }
     case REJECT_TOKEN:

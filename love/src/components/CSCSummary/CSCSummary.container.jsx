@@ -1,52 +1,64 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
 import CSCSummary from './CSCSummary';
-import {  CSCSummaryHierarchy } from '../../Config';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { CSCSummaryHierarchy } from '../../Config';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+
+export const schema = {
+  description: 'Summary of all CSCs, including heartbeats, summary state, logs and error codes',
+  defaultSize: [57, 35],
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: true,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'CSC summary',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+    hierarchy: {
+      type: 'object',
+      description: 'Hierarchy on which to display CSC summaries',
+      isPrivate: false,
+      default: CSCSummaryHierarchy,
+    },
+  },
+};
+
 const CSCSummaryContainer = ({
-  subscribeToStreams,
-  unsubscribeToStreams,
+  hierarchy = CSCSummaryHierarchy,
+  expandHeight,
+  subscribeToStreamsWithCallback,
+  ...props
 }) => {
+  const [subscriptions, setSubscriptions] = useState([]);
+  const subscribeToStreamCallback = (cscName, index) => {
+    const groups = [
+      `event-${cscName}-${index}-summaryState`,
+      `event-${cscName}-${index}-logMessage`,
+      `event-${cscName}-${index}-errorCode`,
+    ];
+    setSubscriptions((prevSubscriptions) => [...prevSubscriptions, ...groups]);
+  };
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <CSCSummary
-      hierarchy={CSCSummaryHierarchy}
-      subscribeToStreams={subscribeToStreams}
-      unsubscribeToStreams={unsubscribeToStreams}
+      hierarchy={hierarchy}
+      expandHeight={expandHeight}
+      subscribeToStreamCallback={subscribeToStreamCallback}
     />
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    subscribeToStreams: () => {
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
-      Object.keys(CSCSummaryHierarchy).forEach((realm) => {
-        const groupsDict = CSCSummaryHierarchy[realm];
-        Object.keys(groupsDict).forEach((group) => {
-          groupsDict[group].forEach((csc) => {
-            dispatch(requestGroupSubscription(`event-${csc.name}-${csc.salindex}-summaryState`));
-            dispatch(requestGroupSubscription(`event-${csc.name}-${csc.salindex}-logMessage`));
-            dispatch(requestGroupSubscription(`event-${csc.name}-${csc.salindex}-errorCode`));
-          });
-        });
-      });
-    },
-    unsubscribeToStreams: () => {
-      dispatch(requestGroupSubscriptionRemoval('event-Heartbeat-0-stream'));
-      Object.keys(CSCSummaryHierarchy).forEach((realm) => {
-        const groupsDict = CSCSummaryHierarchy[realm];
-        Object.keys(groupsDict).forEach((group) => {
-          groupsDict[group].forEach((csc) => {
-            dispatch(requestGroupSubscriptionRemoval(`event-${csc.name}-${csc.salindex}-summaryState`));
-            dispatch(requestGroupSubscriptionRemoval(`event-${csc.name}-${csc.salindex}-logMessage`));
-            dispatch(requestGroupSubscriptionRemoval(`event-${csc.name}-${csc.salindex}-errorCode`));
-          });
-        });
-      });
-    },
-  };
-};
-export default connect(
-  null,
-  mapDispatchToProps,
-)(CSCSummaryContainer);
+export default CSCSummaryContainer;

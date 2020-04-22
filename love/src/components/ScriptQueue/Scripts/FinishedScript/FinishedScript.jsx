@@ -5,6 +5,7 @@ import scriptStyles from '../Scripts.module.css';
 import ScriptStatus from '../../ScriptStatus/ScriptStatus';
 import { getStatusStyle } from '../Scripts';
 import RequeueIcon from '../../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import ScriptDetails from '../ScriptDetails';
 
 export default class FinishedScript extends PureComponent {
   static propTypes = {
@@ -133,23 +134,7 @@ export default class FinishedScript extends PureComponent {
           <div
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
           >
-            <div className={[scriptStyles.expandedSection].join(' ')}>
-              <div className={scriptStyles.expandedSubSection}>
-                <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Classname:</span>
-                  <span className={scriptStyles.subSectionValue}> {this.props.classname} </span>
-                </div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Description:</span>
-                  <span className={scriptStyles.subSectionValue}> {this.props.description} </span>
-                </div>
-                <div className={scriptStyles.subSectionRow}>
-                  <span className={scriptStyles.subSectionLabel}>Remotes:</span>
-                  <span className={scriptStyles.subSectionValue}> {this.props.remotes} </span>
-                </div>
-              </div>
-            </div>
+              <ScriptDetails {...this.props}/>                          
           </div>
         </div>
         {this.props.commandExecutePermission && (

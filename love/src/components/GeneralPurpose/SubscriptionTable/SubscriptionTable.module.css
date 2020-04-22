@@ -1,0 +1,57 @@
+.container {
+  overflow: auto;
+  will-change: transform;
+  height: 100%;
+}
+
+.subscriptionTable {
+  grid-template-columns: max-content min-content;
+  max-width: initial;
+  justify-content: flex-start;
+  padding: 1em;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  max-height: 18em;
+  overflow-y: auto;
+  margin-left: 0.5em;
+}
+
+.streamLabel {
+  padding-right: 1em;
+}
+
+.streamValue {
+  text-align: right;
+  color: var(--base-font-color);
+}
+
+.topicType {
+  color: var(--secondary-font-color);
+}
+
+.subTitle {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /* margin-bottom: 1em; */
+}
+.filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-items: end;
+  margin-right: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.filterLabel {
+  margin-right: 0.3rem;
+}

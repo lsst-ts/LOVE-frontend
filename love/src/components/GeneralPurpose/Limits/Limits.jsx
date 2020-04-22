@@ -19,23 +19,43 @@ export default class Limits extends Component {
     targetValue: 60,
     displayLabels: true,
     height: 15,
+    limitWarning: 5,
   };
 
   render() {
-    const { lowerLimit, upperLimit } = this.props;
+    const { lowerLimit, upperLimit, limitWarning } = this.props;
     const { currentValue, targetValue } = this.props;
     const height = this.props.height;
     const barHeight = height / 7;
     const xMargin = 5;
     const currentValueX = xMargin + ((100 - 2 * xMargin) * (currentValue - lowerLimit)) / (upperLimit - lowerLimit);
     const targetValueX = xMargin + ((100 - 2 * xMargin) * (targetValue - lowerLimit)) / (upperLimit - lowerLimit);
-    const yOffset = height/3;
+    const yOffset = height / 3;
+    const limitWarningPixels = (limitWarning / (upperLimit - lowerLimit)) * 100;
+    const isInWarningZone = currentValue > upperLimit || currentValue < lowerLimit;
+
     return (
       <div className={styles.container}>
         <svg version="1.1" x="0px" y="0px" viewBox={`0 0 100 ${height}`} className={styles.container}>
           <line
             className={styles.backgroundBar}
             x1={xMargin}
+            y1={height / 2 + yOffset}
+            x2={100 - xMargin}
+            y2={height / 2 + yOffset}
+            strokeWidth={barHeight}
+          />
+          <line
+            className={[styles.warningBar, isInWarningZone ? styles.activeWarning : ''].join(' ')}
+            x1={xMargin}
+            y1={height / 2 + yOffset}
+            x2={xMargin + limitWarningPixels}
+            y2={height / 2 + yOffset}
+            strokeWidth={barHeight}
+          />
+          <line
+            className={[styles.warningBar, isInWarningZone ? styles.activeWarning : ''].join(' ')}
+            x1={-limitWarningPixels + 100 - xMargin}
             y1={height / 2 + yOffset}
             x2={100 - xMargin}
             y2={height / 2 + yOffset}

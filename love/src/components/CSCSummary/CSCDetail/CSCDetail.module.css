@@ -1,4 +1,4 @@
-.CSCDetailContainer{
+.CSCDetailContainer {
   display: flex;
   background: var(--second-quaternary-background-color);
   align-items: center;
@@ -6,39 +6,47 @@
   align-content: center;
   color: var(--base-font-color);
   font-weight: bold;
-  font-size: var(--font-size-small);
+  font-size: 100%;
   border-radius: 4px;
-  width: 13.5em;
   cursor: pointer;
+  width: 100%;
+  max-height: 100%;
+  user-select: none;
 }
 
-.leftSection {
-  align-self:stretch;
-  display:flex;
-  align-items:center;
+.minWidth {
+  width: 13.75em;
+}
+
+.summaryStateSection {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
   font-weight: bold;
   font-size: var(--font-size-large);
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
+  border-right: 1px solid black;
 }
 
-.middleSection {
+.heartbeatSection {
+  padding-left: 0.3em;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+}
+
+.nameSection {
   padding: 0.35em 0.5em;
   align-items: center;
   text-align: left;
-  border-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
   flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-.rightSection {
-  padding-right: 0.3em;
-  align-self:stretch;
-  display:flex;
-  align-items:center;
-  border-radius: 4px;
+  display: flex;
 }
 
 .summaryState {
@@ -51,26 +59,48 @@
   width: 1.6em;
 }
 
-.heartbeatIconWrapper > svg{
+.heartbeatIconWrapper > svg {
   vertical-align: top;
+  display: inline-block;
+  margin: 0.2em;
 }
 
 .alert {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
+  /* color: var(--status-alert-color);
+  background: var(--status-alert-dimmed-color-2); */
 }
 
 .ok {
   background: var(--status-ok-color);
   color: var(--second-tertiary-background-color);
+  /* color: var(--status-ok-color);
+  background: var(--status-ok-dimmed-color-2); */
 }
 
-.disabled {
+.warning {
+  /* background: var(--status-warning-color); */
+  /* color: var(--second-tertiary-background-color); */
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-2);
+}
+
+.unknown {
   background: var(--status-disabled-dimmed-color-2);
   color: var(--second-quinary-background-color);
 }
 
-.warning {
-  background: var(--status-warning-color);
-  color: var(--second-tertiary-background-color);
+.offline {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--secondary-font-color);
+}
+
+.disabled {
+  background: var(--primary-background-color);
+  color: var(--base-font-color);
+}
+
+.hidden {
+  display: none;
 }

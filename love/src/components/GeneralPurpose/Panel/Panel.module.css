@@ -1,36 +1,68 @@
 /*--------- PANEL ---------*/
 /*DEFAULT*/
 .panel {
-    background-color: var(--second-primary-background-color);
-    border: 1px solid hsl(199, 43%, 16%);
-    border-radius: 6px;
-    height: fit-content;
-    width: fit-content;
+  background-color: var(--second-primary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 2em minmax(1em, 1fr);
+  box-sizing: border-box;
+  overflow: auto;
+}
+
+.fit {
+  width: fit-content;
+  max-height: 100vh;
+  overflow: visible;
+}
+
+.expandHeight {
+  height: 100%;
 }
 
 .panelHeading {
-    color: var(--secondary-font-color);
-    font-weight: 300;
-    border-bottom: none;
-    border-radius: 6px;
-    padding: 10px 15px;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-content: space-around;
+  color: var(--secondary-font-color);
+  font-weight: 300;
+  border-bottom: none;
+  border-radius: 6px;
 }
 
 .panelTitle {
-    text-transform: uppercase;
-    text-align: left;
-    font-size: 16px;
-    margin: 0;
-    line-height: 1.1;
+  text-transform: uppercase;
+  text-align: left;
+  font-size: 16px;
+  margin: 0;
+  line-height: 1.1;
+  display: inline-block;
+  padding-top: 10px;
+  padding-left: 15px;
 }
 
 .panelBody {
-    border-top-left-radius: 8px;
-    border-top: 1px solid var(--secondary-font-color);
-    padding: 10px 15px 10px 15px;
-    margin: 0px 8px;
-    color: var(--secondary-font-color);
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 1.4;
+  border-top-left-radius: 8px;
+  border-top: 1px solid var(--secondary-font-color);
+  padding: 10px 15px 10px 15px;
+  margin: 0px 8px;
+  color: var(--secondary-font-color);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.panelButtonWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 0.5em;
+}
+
+.panelButton {
+  color: var(--default-font-color);
+  background-color: var(--second-primary-background-color);
+  border: 1px solid var(--default-background-color);
+  line-height: 1;
 }
