@@ -15,7 +15,7 @@ import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
-import { receiveServerTime } from './time';
+import { receiveServerTime, clockStart } from './time';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
@@ -84,6 +84,7 @@ export function doReceiveToken(username, token, permissions, time_data, request_
     dispatch(receiveToken(username, token, permissions));
     dispatch(receiveServerTime(time_data, request_time));
     dispatch(openWebsocketConnection());
+    dispatch(clockStart());
     localStorage.setItem('LOVE-TOKEN', token);
   };
 }

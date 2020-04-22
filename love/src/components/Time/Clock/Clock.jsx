@@ -3,39 +3,11 @@ import PropTypes from 'prop-types';
 import styles from './Clock.module.css';
 import AnalogClock from '../../GeneralPurpose/AnalogClock/AnalogClock';
 import DigitalClock from '../../GeneralPurpose/DigitalClock/DigitalClock';
-import { DateTime } from 'luxon';
-import { siderealSecond } from '../../../Utils';
-
-/**
- * Component that displays time, date and an analog clock, with options to display only some of those elements.
- */
-// Clock.propTypes = {
-//   /** Optional name to display above the clock */
-//   name: PropTypes.string,
-//   /** Date-able object or float, if float it must be in milliseconds */
-//   timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
-//   /** Flag to hide or not the analog clock, false by default */
-//   hideAnalog: PropTypes.bool,
-//   /** Flag to hide or not the date, false by default */
-//   hideDate: PropTypes.bool,
-//   /** Flag to hide or not the UTC offset besides the name, false by default */
-//   hideOffset: PropTypes.bool,
-// }
-
-// Clock.defaultProps = {
-//   name: null,
-//   timestamp: DateTime.local(),
-//   hideDate: false,
-//   hideAnalog: false,
-//   hideOffset: false,
-// }
 
 export default class Clock extends React.Component {
   static propTypes = {
     /** Optional name to display above the clock */
     name: PropTypes.string,
-    /** Date-able object or float, if float it must be in milliseconds. If null, an internal clock will be defined by the component*/
-    timestamp: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     /** Flag to hide or not the analog clock, false by default */
     hideAnalog: PropTypes.bool,
     /** Flag to hide or not the date, false by default */
@@ -45,9 +17,10 @@ export default class Clock extends React.Component {
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
-    /** The timezone to display the timestamps. Null or empty if current should be used 'UTC' for UTC. Null by default.
+    /** The timezone to display the timestamps. 'local' if current should be used. 'local' by default.
      * The format for this string must be: <Continent (camelcase)>-<City (camelcase)>.
      * For example:
+     * - For local time use local
      * - For UTC use UTC
      * - For TAI use TAI
      * - For 'La Serena' use 'America/Santiago' (yes America, not Chile)
@@ -55,93 +28,76 @@ export default class Clock extends React.Component {
      * - For 'Illinois' use 'America/Chicago'
      */
     timezone: PropTypes.string,
-    /** Time Data from the server */
-    timeData: PropTypes.object,
+    /** 
+     * Current time clocks from the server in the following format:
+     *  {
+          utc: <utc time in seconds>,
+          tai: <tai time in seconds>,
+          mjd: <modified julian date in days>,
+          sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
+          sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
+        }
+    */
+    clock: PropTypes.shape({
+      utc: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+      tai: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+      mjd: PropTypes.number,
+      sidereal_summit: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+      sidereal_greenwich: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    }),
   };
 
   static defaultProps = {
     name: null,
-    timestamp: null,
     hideDate: false,
     hideAnalog: false,
     hideOffset: false,
     locale: 'en-GB',
     timezone: null,
-    timeData: {
-      request_time: 0,
-      receive_time: 0,
-      server_time: {
-        utc: 0,
-        tai: 0,
-        mjd: 0,
-        sidereal_summit: 0,
-        sidereal_greenwhich: 0,
-        tai_to_utc: 0,
-      },
-    },
+    clock: {
+      utc: 0,
+      tai: 0,
+      mjd: 0,
+      sidereal_summit: 0,
+      sidereal_greenwich: 0,
+    }
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      timestamp: 0,
-    };
-  }
-
-  componentDidMount() {
-    if (this.props.timestamp) return;
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    if (this.props.timestamp) return;
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    const diffLocalUtc = DateTime.utc().toSeconds() - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
-    let timestamp = 0;
-    if (this.props.timezone === 'sidereal-summit') {
-      timestamp = DateTime.fromSeconds(
-        this.props.timeData.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc
-      );
-    } else if (this.props.timezone === 'sidereal-greenwich') {
-      timestamp = DateTime.fromSeconds(
-        this.props.timeData.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc
-      );
-    } else if (this.props.timezone === 'MJD') {
-      timestamp = this.props.timeData.server_time.mjd + diffLocalUtc / (3600 * 24);
-    } else {
-      timestamp = DateTime.fromSeconds(this.props.timeData.server_time.utc + diffLocalUtc);
-    }
-    if (timestamp !== this.state.timestamp) {
-      this.setState({ timestamp });
-    }
-  }
-
   render() {
-    let timestamp = this.props.timestamp ? this.props.timestamp : this.state.timestamp;
     let hideAnalog = this.props.hideAnalog;
-    let mjd = false;
-    let offset = timestamp.offsetNameShort;
     let hideDate = this.props.hideDate;
-    if (timestamp) {
-      if (this.props.timezone) {
-        if (this.props.timezone === 'TAI') {
-          timestamp = timestamp.setZone('UTC').minus({ seconds: this.props.timeData.server_time.tai_to_utc });
-          offset = 'TAI';
-        } else if (this.props.timezone === 'MJD') {
-          hideAnalog = true;
-          mjd = true;
-          offset = 'MJD';
-          hideDate = true;
-        } else if (this.props.timezone === 'sidereal-summit' || this.props.timezone === 'sidereal-greenwich') {
-          timestamp = timestamp.setZone('UTC');
-          offset = this.props.timezone === 'sidereal-greenwich' ? 'GAST' : 'Summit-AST';
-          hideDate = true;
-        } else {
-          timestamp = timestamp.setZone(this.props.timezone);
-        }
+    let mjd = false;
+    let offset = null;
+    let timestamp = 0;
+    if (this.props.clock.utc !== 0) {
+      if (this.props.timezone === 'UTC') {
+        timestamp = this.props.clock.utc;
+        offset = 'UTC';
+      }
+      else if (this.props.timezone === 'TAI') {
+        timestamp = this.props.clock.tai;
+        offset = 'TAI';
+      }
+      else if (this.props.timezone === 'MJD') {
+        timestamp = this.props.clock.mjd;
+        hideAnalog = true;
+        mjd = true;
+        offset = 'MJD';
+        hideDate = true;
+      }
+      else if (this.props.timezone === 'sidereal-summit') {
+        timestamp = this.props.clock.sidereal_summit;
+        offset = 'Summit-AST';
+        hideDate = true;
+      }
+      else if (this.props.timezone === 'sidereal-greenwich') {
+        timestamp = this.props.clock.sidereal_greenwich;
+        offset = 'GAST';
+        hideDate = true;
+      }
+      else {
+        timestamp = this.props.clock.utc.setZone(this.props.timezone);
+        offset = timestamp.offsetNameShort;
       }
       if (!mjd && this.props.locale) {
         timestamp = timestamp.setLocale(this.props.locale);
