@@ -38,11 +38,11 @@ export default class Clock extends React.Component {
         }
     */
     clock: PropTypes.shape({
-      utc: PropTypes.object,
-      tai: PropTypes.object,
+      utc: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+      tai: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       mjd: PropTypes.number,
-      sidereal_summit: PropTypes.object,
-      sidereal_greenwich: PropTypes.object,
+      sidereal_summit: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+      sidereal_greenwich: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     }),
   };
 
