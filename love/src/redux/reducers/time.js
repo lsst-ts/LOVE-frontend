@@ -1,6 +1,15 @@
 import {
-  RECEIVE_TIME_DATA
+  RECEIVE_TIME_DATA,
+  CLOCK_START,
+  CLOCK_STOP,
+  CLOCK_TICK,
 } from '../actions/actionTypes';
+
+
+export const clockStatuses = {
+  STARTED: 'STARTED',
+  STOPPED: 'STOPPED',
+}
 
 
 const initialState = {
@@ -13,6 +22,14 @@ const initialState = {
     sidereal_summit: 0,
     sidereal_greenwich: 0,
     tai_to_utc: 0,
+  },
+  clock_status: clockStatuses.STOPPED,
+  clock: {
+    utc: 0,
+    tai: 0,
+    mjd: 0,
+    sidereal_summit: 0,
+    sidereal_greenwich: 0,
   }
 };
 /**
@@ -34,6 +51,30 @@ export default function(state = initialState, action) {
             sidereal_greenwich: action.time_data.sidereal_greenwich,
             tai_to_utc: action.time_data.tai_to_utc,
           },
+        });
+      }
+    case CLOCK_START:
+      {
+        return Object.assign({}, state, {
+          clock_status: clockStatuses.STARTED,
+        });
+      }
+    case CLOCK_STOP:
+      {
+        return Object.assign({}, state, {
+          clock_status: clockStatuses.STOPPED,
+        });
+      }
+    case CLOCK_TICK:
+      {
+        return Object.assign({}, state, {
+          clock: {
+            utc: action.clock.utc,
+            tai: action.clock.tai,
+            mjd: action.clock.mjd,
+            sidereal_summit: action.clock.sidereal_summit,
+            sidereal_greenwich: action.clock.sidereal_greenwich,
+          }
         });
       }
     default:

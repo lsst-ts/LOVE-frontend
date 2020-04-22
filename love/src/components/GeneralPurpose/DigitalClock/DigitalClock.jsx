@@ -21,15 +21,15 @@ DigitalClock.defaultProps = {
 }
 
 export default function DigitalClock ({ timestamp, hideDate }) {
-  const t = parseTimestamp(timestamp);
+  const t = timestamp === 0 ? 0 : parseTimestamp(timestamp);
   return (
     <div className={styles.container}> 
       <div className={styles.time}> 
-        { t.toFormat('HH:mm:ss') }
+        { t ? t.toFormat('HH:mm:ss') : '--:--:--' }
       </div>
      { !hideDate && (
         <div className={styles.date}> 
-          { t.toFormat('EEE, MMM dd yyyy') }
+          {t ? t.toFormat('EEE, MMM dd yyyy') : '---' }
         </div>
       )}
     </div>
