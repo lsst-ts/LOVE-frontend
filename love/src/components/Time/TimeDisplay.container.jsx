@@ -45,11 +45,12 @@ export const schema = {
         2. hideAnalog: (boolean = false) flag to hide the analog clock.
         3. hideDate: (boolean = false) flag to hide the date.
         4. hideOffset: (boolean = false) flag to hide the UTC offset, displayed at the right of the name
-        5. timezone: timezone string used to configure which UTC offset to use. Null or empty if current should be used. Null by default.
+        5. timezone: timezone string used to configure which UTC offset to use. 'local' if current should be used. 'local' by default.
 
         The format for the timezone string can be a fixed string (for UTC or TAI); a fixed-offset string (e.g. UTC+5);
         or a location string in the format <Continent>/<City> (use camelcase with underscores instead of spaces, like America/New_York)
         For example:
+        - For local time use local
         - For UTC use UTC
         - For TAI use TAI
         - For Greenwich Sidereal Time use sidereal-greenwich
@@ -68,7 +69,7 @@ export const schema = {
             hideAnalog: false,
             hideDate: false,
             hideOffset: false,
-            timezone: null,
+            timezone: 'local',
           },
           {
             name: 'Sidereal Time',
