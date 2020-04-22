@@ -44,7 +44,6 @@ export default class TimeDisplay extends React.Component {
 
   static defaultProps = {
     locale: 'en-GB',
-    taiToUtc: 0,
     clocks_layout: [],
     timeData: {
       server_time: {
@@ -65,40 +64,7 @@ export default class TimeDisplay extends React.Component {
     }
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      local: DateTime.local(),
-      mjd: 0,
-      sidereal_greenwich: 0,
-      sidereal_summit: 0,
-    };
-  }
-
-  componentDidMount() {
-    this.timerID = setInterval(() => this.tick(), 1000);
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    const diffLocalUtc = DateTime.utc().toSeconds() - (this.props.timeData.receive_time + this.props.timeData.request_time) / 2;
-    this.setState({
-      local: DateTime.fromSeconds(this.props.timeData.server_time.utc + diffLocalUtc),
-      sidereal_greenwich: DateTime.fromSeconds(
-        this.props.timeData.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc
-      ),
-      sidereal_summit: DateTime.fromSeconds(
-        this.props.timeData.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc
-      ),
-      mjd: this.props.timeData.server_time.mjd + diffLocalUtc / (3600 * 24),
-    });
-  }
-
   render() {
-    console.log('clock: ', this.props.clock);
     return (
       <div className={styles.container}>
         {this.props.clocks_layout.map((horizontalGroup, index) => (
@@ -108,13 +74,13 @@ export default class TimeDisplay extends React.Component {
               return (
                 <div key={index} className={styles.verticalGroup}>
                   {verticalGroup.map((element, index) => {
-                    let timestamp = this.state.local;
+                    let timestamp = this.props.clock.utc;
                     if (element.timezone === 'sidereal-greenwich') {
-                      timestamp = this.state.sidereal_greenwich;
+                      timestamp = this.props.clock.sidereal_greenwich;
                     } else if (element.timezone === 'sidereal-summit') {
-                      timestamp = this.state.sidereal_summit;
+                      timestamp = this.props.clock.sidereal_summit;
                     } else if (element.timezone === 'MJD') {
-                      timestamp = this.state.mjd;
+                      timestamp = this.props.clock.mjd;
                     }
                     return <Clock key={index} {...element} timestamp={timestamp} timeData={this.props.timeData} />;
                   })}
