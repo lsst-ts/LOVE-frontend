@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getTimeData } from '../../../redux/selectors';
+import { getClock } from '../../../redux/selectors';
 import Clock from './Clock';
 
 export const schema = {
@@ -92,8 +92,8 @@ const ClockContainer = ({ ...props }) => {
 };
 
 const mapStateToProps = (state) => {
-  const timeData = getTimeData(state);
-  return { timeData };
+  const clock = getClock(state);
+  return { clock };
 };
 
 const mapDispatchToProps = (dispatch) => {
