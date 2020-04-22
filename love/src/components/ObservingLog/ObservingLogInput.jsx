@@ -66,8 +66,9 @@ export default class ObservingLogInput extends Component {
 
   componentDidUpdate = (prevState) => {
     if (prevState.keysDown !== this.state.keysDown) {
-      const keyCombinationPressed = ['Control', 'Shift', 'Enter'].every((key) => this.state.keysDown.includes(key));
-      if(keyCombinationPressed){
+      const keyCombination1Pressed = ['Control', 'Enter'].every((key) => this.state.keysDown.includes(key));
+      const keyCombination2Pressed = ['Shift', 'Enter'].every((key) => this.state.keysDown.includes(key));
+      if(keyCombination1Pressed || keyCombination2Pressed){
         this.props.sendMessage(this.props.username, this.state.message);
       }
     }
@@ -84,7 +85,7 @@ export default class ObservingLogInput extends Component {
           <span className={styles.label}>Message:</span>
           <TextArea callback={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp}></TextArea>
         </div>
-        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save (Ctrl+Shift+Enter)</Button>
+        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save (Ctrl+Enter or Shift+Enter)</Button>
       </div>
     );
   }
