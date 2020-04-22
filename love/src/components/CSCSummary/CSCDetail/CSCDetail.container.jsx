@@ -1,40 +1,100 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCDetail from './CSCDetail';
-import { requestGroupSubscription } from '../../../redux/actions/ws';
+import { addGroupSubscription } from '../../../redux/actions/ws';
 import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
+export const schema = {
+  description: 'Displays the error code and message logs for a single CSC',
+  defaultSize: [8, 2],
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'CSC details',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: false,
+    },
+    name: {
+      type: 'string',
+      description: 'Name of the CSC to monitor',
+      isPrivate: false,
+      default: 'Test',
+    },
+    salindex: {
+      type: 'number',
+      description:
+        'Salindex of the CSC',
+      isPrivate: false,
+      default: 1,
+    },
+    hasHeartbeat: {
+      type: 'boolean',
+      description:
+        'Whether the CSC produces heartbeat',
+      isPrivate: false,
+      default: true,
+    },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
+    },
+    _functionProps: {
+      type: 'array',
+      description:
+        'Array containing the props that are functions',
+      isPrivate: true,
+      default: [],
+    },
+  },
+};
+
 const CSCDetailContainer = ({
-  realm,
   group,
   name,
   salindex,
+  hasHeartbeat,
   summaryStateData,
   onCSCClick,
   subscribeToStreams,
   heartbeatData,
+  embedded,
 }) => {
   return (
     <CSCDetail
-      realm={realm}
       group={group}
       name={name}
       salindex={salindex}
+      hasHeartbeat={hasHeartbeat}
       summaryStateData={summaryStateData}
       onCSCClick={onCSCClick}
       subscribeToStreams={subscribeToStreams}
       heartbeatData={heartbeatData}
-    />
+      embedded={embedded}
+  />
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (cscName, index) => {
-      dispatch(requestGroupSubscription('event-Heartbeat-0-stream'));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-summaryState`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-logMessage`));
-      dispatch(requestGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-summaryState`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-logMessage`));
+      dispatch(addGroupSubscription(`event-${cscName}-${index}-errorCode`));
     },
   };
 };

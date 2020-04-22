@@ -2,21 +2,29 @@ import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
   ADD_GROUP_SUBSCRIPTION,
+  REQUEST_SUBSCRIPTIONS,
+  REQUEST_GROUP_UNSUBSCRIPTION,
+  RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
+  RESET_SUBSCRIPTIONS,
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
+  RECEIVE_ALARMS,
 } from '../actions/actionTypes';
-import { connectionStates, SALCommandStatus } from '../actions/ws';
+import { connectionStates, groupStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
+  alarms: [],
   connectionState: connectionStates.CLOSED,
+  socket: null, // Reference to the websocket client object
   subscriptions: [],
   lastSALCommand: {
     status: SALCommandStatus.EMPTY,
+    statusCode: null,
     cmd: '',
     params: {},
-    component: '',
-    salindex: 0
+    csc: '',
+    salindex: 0,
   },
 };
 /**
@@ -37,23 +45,71 @@ export default function(state = initialState, action) {
         ...state.subscriptions,
         {
           groupName: action.groupName,
+          status: groupStates.PENDING,
         },
       ];
-      return { ...state, subscriptions };
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case REQUEST_SUBSCRIPTIONS: {
+      const subscriptions = action.subscriptions.map(subscription => ({
+        ...subscription,
+        status: subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING ?
+          groupStates.REQUESTING : subscription.status,
+      }));
+      return {
+        ...state,
+        subscriptions,
+      };
     }
     case RECEIVE_GROUP_CONFIRMATION_MESSAGE: {
       const subscriptions = state.subscriptions.map((subscription) => {
-        const [, csc, stream] = subscription.groupName.split('-');
-        if (action.data.includes(csc) && action.data.includes(stream)) {
+        if (action.data.includes(subscription.groupName)) {
           return {
             ...subscription,
             confirmationMessage: action.data,
+            status: groupStates.SUBSCRIBED,
           };
         }
         return subscription;
       });
 
-      return { ...state, subscriptions };
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
+      const subscriptions = state.subscriptions.filter((subscription) => {
+        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName)
+      });
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case REQUEST_GROUP_UNSUBSCRIPTION: {
+      const subscriptions = state.subscriptions.map((subscription) => {
+        if (action.groupName === subscription.groupName) {
+          return {
+            ...subscription,
+            status: groupStates.UNSUBSCRIBING,
+          };
+        }
+        return subscription;
+      });
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case RESET_SUBSCRIPTIONS: {
+      return {
+        ...state,
+        subscriptions: action.subscriptions,
+      };
     }
     case RECEIVE_GROUP_SUBSCRIPTION_DATA: {
       const subscriptions = state.subscriptions.map((subscription) => {
@@ -99,12 +155,12 @@ export default function(state = initialState, action) {
         ...state,
         lastSALCommand: {
           status: action.status,
+          statusCode: action.statusCode,
           cmd: action.cmd,
           params: action.params,
-          component: action.component,
+          csc: action.csc,
           salindex: action.salindex,
           cmd_id: action.cmd_id,
-
         },
       };
     }
@@ -115,8 +171,33 @@ export default function(state = initialState, action) {
         lastSALCommand: {
           ...state.lastSALCommand,
           status: action.status,
+          statusCode: action.statusCode,
           result: action.result,
         },
+      };
+    }
+
+    case RECEIVE_ALARMS: {
+      let actionAlarms = action.alarms;
+      if (!Array.isArray(action.alarms)) {
+        actionAlarms = [actionAlarms];
+      }
+      let newAlarms = Array.from(state.alarms);
+      actionAlarms.forEach((actionAlarm) => {
+        if (actionAlarm === undefined) return;
+        const alarmIndex = newAlarms.findIndex((stateAlarm) => {
+          return stateAlarm.name.value === actionAlarm.name.value;
+        });
+        if (alarmIndex === -1) {
+          newAlarms.push(actionAlarm);
+        } else {
+          newAlarms[alarmIndex] = actionAlarm;
+        }
+      });
+
+      return {
+        ...state,
+        alarms: newAlarms,
       };
     }
 

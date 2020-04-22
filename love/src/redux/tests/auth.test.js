@@ -7,12 +7,30 @@ import ManagerInterface from '../../Utils';
 
 import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
 import { tokenStates } from '../reducers/auth';
-import { getToken, getUsername, getTokenStatus, getPermCmdExec } from '../selectors';
+import {
+  getToken,
+  getUsername,
+  getTokenStatus,
+  getPermCmdExec,
+  getTaiToUtc,
+  getServerTime,
+  getServerTimeRequest,
+  getServerTimeReceive,
+} from '../selectors';
 
 let store;
 beforeEach(() => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 });
+
+const mockServerTime = {
+  utc: 1587156181.842506,
+  tai: 1587156218.842506,
+  mjd: 58956.86321576974,
+  sidereal_summit: 5.762640319739233,
+  sidereal_greenwich: 10.479268119739233,
+  tai_to_utc: -37,
+};
 
 describe('GIVEN the token does not exist in localStorage', () => {
   beforeEach(() => {
@@ -32,12 +50,13 @@ describe('GIVEN the token does not exist in localStorage', () => {
       url,
       {
         token: newToken,
-        user_data: {
+        user: {
           username: 'my-user',
         },
         permissions: {
-          execute_commands: true
-        }
+          execute_commands: true,
+        },
+        time_data: mockServerTime,
       },
       new Headers({
         Accept: 'application/json',
@@ -52,6 +71,10 @@ describe('GIVEN the token does not exist in localStorage', () => {
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(getToken(newState)).toEqual(newToken);
     expect(getUsername(newState)).toEqual('my-user');
+    expect(getTaiToUtc(newState)).toEqual(mockServerTime.tai_to_utc);
+    expect(getServerTime(newState)).toEqual(mockServerTime);
+    expect(getServerTimeRequest(newState)).toBeGreaterThan(0);
+    expect(getServerTimeReceive(newState)).toBeGreaterThan(0);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
     expect(getPermCmdExec(newState)).toEqual(true);
     expect(storedToken).toEqual(newToken);
@@ -61,12 +84,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
     // Arrange:
     const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
     const newToken = 'new-token';
-    fetchMock.mock(
-      url,
-      {
-        status: 400,
-      }
-    );
+    fetchMock.mock(url, {
+      status: 400,
+    });
     // Act:
     await store.dispatch(fetchToken('asdf', 'asdf'));
     // Assert:
@@ -101,12 +121,13 @@ describe('GIVEN the token exists in localStorage', () => {
       url,
       {
         detail: 'Token is valid',
-        user_data: {
+        user: {
           username: 'my-user',
         },
         permissions: {
-          execute_commands: true
-        }
+          execute_commands: true,
+        },
+        time_data: mockServerTime,
       },
       ManagerInterface.getHeaders(),
     );
@@ -117,6 +138,10 @@ describe('GIVEN the token exists in localStorage', () => {
     const storedToken = localStorage.getItem('LOVE-TOKEN');
     expect(newToken).toEqual(initialToken);
     expect(storedToken).toEqual(initialToken);
+    expect(getTaiToUtc(store.getState())).toEqual(mockServerTime.tai_to_utc);
+    expect(getServerTime(store.getState())).toEqual(mockServerTime);
+    expect(getServerTimeRequest(store.getState())).toBeGreaterThan(0);
+    expect(getServerTimeReceive(store.getState())).toBeGreaterThan(0);
     expect(getUsername(store.getState())).toEqual('my-user');
     expect(getPermCmdExec(store.getState())).toEqual(true);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);

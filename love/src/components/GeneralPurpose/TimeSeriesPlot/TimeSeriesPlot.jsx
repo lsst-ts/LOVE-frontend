@@ -69,6 +69,12 @@ export default class TimeSeriesPlot extends Component {
     dateStart: -Infinity,
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    return nextProps.dataSources.some((dataSource) => {
+      return this.props.streamStates[dataSource].timestamp !== nextProps.streamStates[dataSource].timestamp;
+    });
+  };
+
   componentDidUpdate = (prevProps) => {
     const dateInterval = this.props.dateInterval;
 
@@ -77,7 +83,7 @@ export default class TimeSeriesPlot extends Component {
       const data = this.props.streamStates[dataSource].data;
       const timestamp = this.props.streamStates[dataSource].timestamp;
       const dataLabel = dataSource;
-      
+
       let shouldUpdatePlot = false;
       const value = data ? accessor(data) : undefined;
 
@@ -90,7 +96,9 @@ export default class TimeSeriesPlot extends Component {
       if (prevProps.timestamp !== timestamp) {
         if (this.data[dataSource] === undefined) this.data[dataSource] = [];
         this.data[dataSource].push(vegaData);
-
+        if (this.data[dataSource].length > 200) {
+          this.data[dataSource].splice(0, 1);
+        }
         shouldUpdatePlot = true;
       }
 
@@ -142,7 +150,9 @@ export default class TimeSeriesPlot extends Component {
             fill: this.getCSSColorByVariableName('--second-secondary-background-color'),
             stroke: 'none',
             strokeWidth: 0,
+            renderer: 'canvas',
           },
+          background: 'null',
         },
       },
       dataSpec,
@@ -210,7 +220,7 @@ export default class TimeSeriesPlot extends Component {
     return 'quantitative';
   };
 
-  componentDidMount = () => {
+  reloadPlot = () => {
     this.remountPlot(
       this.changeSpec(
         [
@@ -224,6 +234,10 @@ export default class TimeSeriesPlot extends Component {
         this.props.dataLabel,
       ),
     );
+  };
+
+  componentDidMount = () => {
+    this.reloadPlot();
     this.props.dataSources.map((dataSource) => {
       const groupName = this.props.groupNames[dataSource];
       this.props.subscribeToStream(groupName);

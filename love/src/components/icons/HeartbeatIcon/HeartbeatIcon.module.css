@@ -1,13 +1,14 @@
 .heartbeatIcon {
-  display: inline-block;
-  vertical-align: top;
   fill: var(--status-disabled-color);
+  stroke: var(--status-disabled-color);
 }
 
 .okStatus {
   fill: var(--status-ok-color);
+  stroke: var(--status-ok-color);
 }
 
 .alertStatus {
   fill: var(--status-alert-color);
+  stroke: var(--status-alert-color);
 }

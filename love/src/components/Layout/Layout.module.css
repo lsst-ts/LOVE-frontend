@@ -1,0 +1,288 @@
+.topbar {
+  box-sizing: border-box;
+  width: 100%;
+  height: 3em;
+  overflow: visible;
+  display: grid;
+  grid-template-columns: min-content 1fr min-content;
+}
+
+.leftNotchContainer {
+  display: inline-flex;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  transition: all 0.5s ease-in-out;
+  height: inherit;
+}
+
+.leftTopbar {
+  padding: 0.5em 0 0.5em 0.5em;
+  position: relative;
+  background-color: var(--tertiary-background-color);
+  text-align: left;
+  display: grid;
+  grid-template-columns: repeat(3, min-content) max-content min-content;
+  grid-gap: 0.5em;
+  align-items: center;
+}
+
+.leftTopBarNoEditButton {
+  grid-template-columns: min-content max-content;
+}
+
+.leftTopbar .logo {
+  height: 1.3em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
+}
+
+.leftTopbar .menuIcon {
+  height: 1.2em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
+}
+
+.collapsedLogo {
+  margin-left: -6.6em;
+}
+
+.leftTopbar .divider {
+  font-size: 1.3em;
+}
+
+.leftTopbar .text {
+  font-size: 1.2em;
+  line-height: 1.5em;
+  align-self: end;
+}
+
+.iconBtn {
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.editButton {
+  margin-right: -1.3em;
+}
+
+.editIcon {
+  height: 1.1em;
+  fill: var(--base-font-color);
+  vertical-align: sub;
+  cursor: pointer;
+}
+
+.notchCurve {
+  height: 3em;
+  fill: var(--tertiary-background-color);
+  vertical-align: top;
+}
+
+.rightNotchContainer {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  height: inherit;
+}
+
+.rightTopbar {
+  position: relative;
+  padding: 0.5em var(--content-padding) 0.5em 0;
+  background-color: var(--tertiary-background-color);
+  text-align: right;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: min-content;
+}
+
+.middleTopbar {
+}
+
+.clock {
+  font-size: 0.9em;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.contentWrapper {
+  margin: 0;
+  padding: var(--content-padding);
+  overflow: auto;
+  height: calc(100vh - 5em);
+  will-change: transform;
+}
+
+.rightTopbar > :first-child {
+  margin-left: -1.4em;
+}
+
+.icon {
+  max-height: unset;
+  max-width: 100%;
+  height: 1.4em;
+  vertical-align: middle;
+}
+
+.sidebar {
+  position: absolute;
+  display: flex;
+  flex-flow: column;
+  height: calc(100vh - 3em);
+  z-index: 1000;
+  width: 25ch;
+  box-sizing: border-box;
+  text-align: left;
+  transition: all 0.5s ease-in-out;
+  background-color: var(--sidebar-background-color);
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+  transform: translate(0, 0);
+  will-change: transform;
+}
+
+.sidebar .viewName {
+  text-align: center;
+  padding: 1em 1em 0.5em 1em;
+  line-height: 1.2em;
+  height: 1.2em;
+}
+
+.sidebar .menu {
+  padding: 1em 0;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.sidebar .showName {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.sidebar .menu p {
+  margin: 0;
+  padding: 0.5em 1em;
+}
+
+.sidebar .menu p:hover {
+  cursor: pointer;
+  background-color: var(--second-quaternary-background-color);
+}
+
+.sidebar .menu .link {
+  color: var(--base-font-color);
+}
+
+.sidebar .sidebarButtons {
+  padding: 1em;
+  display: grid;
+  grid-auto-columns: min-content;
+  grid-gap: 0.5em;
+  justify-content: center;
+}
+
+.sidebar .sidebarButtons .button {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  height: 2em;
+}
+
+.sidebar .sidebarButtons .label {
+  margin-right: 0.5em;
+}
+
+.sidebar .sidebarButtons .plusIcon {
+  font-size: 1.4em;
+  line-height: 0;
+}
+
+.sidebarHidden {
+  transform: translate(-200px, 0);
+}
+
+.settingsVisible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.settingsDropdown .menuElement {
+  text-align: left;
+  cursor: pointer;
+  padding: 0.5em 1em;
+}
+
+.settingsDropdown .menuElement:hover {
+  background-color: var(--second-quaternary-background-color);
+}
+
+.settingsDropdown .menuElement:first-child:hover {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+.settingsDropdown .menuElement:last-child:hover {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+.settingsDropdown .disabledElement {
+  text-align: left;
+  cursor: not-allowed;
+  padding: 0.5em 1em;
+  color: var(--secondary-font-dimmed-color);
+}
+
+.settingsDropdown .divider {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.settingsDropdown .refNode {
+  display: contents;
+  position: relative;
+}
+
+.heartbeatsMenu {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  padding: 0.5em;
+  user-select: none;
+}
+
+.heartbeatMenuElement {
+  display: grid;
+  grid-template-columns: 1.2em max-content;
+  grid-gap: 0 0.5em;
+  padding: 0.25em 0.5em;
+}
+
+.heartbeatMenuElement span {
+  line-height: 1.7em;
+}
+
+.statusMenuElement {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 0.5em;
+  padding: 0.5em 0.5em;
+  padding-left: 2em;
+}
+
+.miniIcon {
+  max-height: unset;
+  max-width: 60%;
+  height: 1.1em;
+  vertical-align: middle;
+  justify-self: end;
+}
+
+.heartbeatMenuElement .heartbeatSubElement {
+  color: var(--secondary-font-color);
+  line-height: 1.3em;
+}

@@ -1,4 +1,4 @@
-FROM node:10.16-alpine as builder
+FROM node:12.16.1-alpine as builder
 
 WORKDIR /usr/src/love
 
@@ -14,4 +14,5 @@ RUN yarn build
 # copy compiled files to smaller image
 FROM alpine:3.8
 COPY --from=builder /usr/src/love/build /usr/src/love
+COPY --from=builder /usr/src/love/build /usr/src/love-build
 VOLUME /usr/src/love

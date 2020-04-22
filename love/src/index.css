@@ -7,11 +7,15 @@ body {
   background: var(--base-background-color);
   /* font-family: Arial; */
   font-family: 'Arial';
-  margin: 0 10px;
+  margin: 0;
 }
 
 :root {
+    backface-visibility: hidden;
+  --topbar-height: 2em;
+  --content-padding: 1em;
   --base-font-color: hsl(194, 16%, 79%);
+  --second-base-font-color: hsl(240, 4%, 90%, 0.7);
   --secondary-font-color: hsl(201, 15%, 54%);
   --secondary-font-dimmed-color: hsl(197, 13%, 59%, 0.3); /*Transparent*/
   --tertiary-font-color: hsl(201, 15%, 54%);
@@ -24,16 +28,18 @@ body {
   --quaternary-background-color: hsl(202, 32%, 28%);
   --quinary-background-color: hsl(196, 16%, 28%);
 
+  --overlay-background-color: hsla(205, 40%, 8%, 70%);
+
   --second-primary-background-color: hsl(202, 38%, 11%);
   --second-primary-background-color-dimmed: hsl(202, 38%, 11%, 0.5);
   --second-secondary-background-color: hsl(202, 36%, 13%);
   --second-tertiary-background-color: hsl(201, 26%, 23%);
   --second-quaternary-background-color: hsl(201, 24%, 30%);
-  --second-quaternary-background-dimmed-color: hsla(202, 32%, 28%, 0.3);
+  --second-quaternary-background-dimmed-color: hsl(201, 36%, 16%);
   --second-quinary-background-color: hsl(201, 22%, 40%);
   --second-senary-background-color: hsl(201, 40%, 81%);
   --second-senary-background-dimmed-color: hsl(201, 40%, 81%, 0.3);
-  --second-base-font-color: hsl(240, 4%, 90%, 0.7);
+  --sidebar-background-color: hsla(202, 36%, 13%, 90%);
 
   /* Status */
   --status-ok-color: hsl(161, 100%, 32%);
@@ -53,12 +59,12 @@ body {
   --status-disabled-dimmed-color-2: hsl(202, 20%, 20%);
   --status-running-color: hsl(188, 79%, 56%);
   --status-running-dimmed-color: hsl(188, 79%, 56%, 0.2);
+  --status-running-dimmed-color-2: hsl(191, 52%, 20%);
   --status-running-dimmed-color-3: hsl(191, 52%, 20%);
 
   /* Script status */
   --script-ok-color: hsl(188, 79%, 56%);
   --script-ok-dimmed-color: hsl(188, 79%, 56%, 0.2);
-
   --box-shadow-color: rgba(0, 0, 0, 0.17);
 
   --default-background-color: #4c606a;
@@ -67,7 +73,9 @@ body {
   --default-active-font-color: #92a2ac;
   --primary-active-hover-background-color: #92a2ac;
 
-  --primary-background-color: #4c7487;
+  /* --primary-background-color: #4c7487; */
+  --primary-background-color: hsl(199, 28%, 41%);
+  --primary-shadow-color: hsl(199, 28%, 28%);
   --primary-font-color: #b2c4ce;
   --primary-active-background-color: #3b5d6e;
   --primary-active-font-color: #8d9ea7;
@@ -79,12 +87,15 @@ body {
   --success-active-font-color: #77d9b9;
   --success-active-hover-background-color: #428568;
 
-  --info-background-color: #5cbed4;
-  --info-font-color: #c8fbff;
+  --info-background-color: hsl(191, 58%, 60%);
+  /* --info-background-color: #5cbed4; */
+  /* --info-shadow-color: #1e94af; */
+  --info-shadow-color: hsl(191, 58%, 40%);
+  --info-font-color: #122028e6;
   --info-hover-background-color: #58b0c4;
-  --info-hover-font-color: #97dde9;
+  --info-hover-font-color: #122028e6;
   --info-active-background-color: #58b0c4;
-  --info-active-font-color: #bbe3e6;
+  --info-active-font-color: #122028e6;
   --info-active-hover-background-color: #45a1b5;
   --info-active-hover-border-color: #3e707b;
 

@@ -1,0 +1,12 @@
+.textarea {
+    width: calc(100% - 1.0em);
+    height: calc(100% - 3em);
+    resize: none;
+
+    background: var(--secondary-background-dimmed-color);
+    color: var(--base-font-color);
+    font-size: 1em;
+    padding: 0.5em;
+    border-radius: 5px;
+    border: 1px solid var(--secondary-font-color);
+}

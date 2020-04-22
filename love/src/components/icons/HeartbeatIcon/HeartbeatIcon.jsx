@@ -10,7 +10,7 @@ export default class HeartbeatIcon extends Component {
   };
 
   static defaultProps = {
-    status: 'ok',
+    status: undefined,
     title: 'Script heartbeat',
   };
 
@@ -19,29 +19,34 @@ export default class HeartbeatIcon extends Component {
     if (this.props.status === 'ok') statusStyle = styles.okStatus;
     if (this.props.status === 'alert') statusStyle = styles.alertStatus;
     const title = this.props.title;
-    return (
+    return this.props.status === 'ok' ? (
       <svg
-        className={[styles.heartbeatIcon, statusStyle].join(' ')}
-        xmlns="http://www.w3.org/2000/svg"
-        version="1.0"
-        viewBox="0 0 320 320"
+        className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')}
+        viewBox="0 0 63.74 61.19"
       >
         <title>{title}</title>
-        <g
-          id="full-svg-transform"
-          transform="translate(5 5) scale(16.315737061391534) translate(-539.0999145507812 -246.44995880126953)"
-        >
+        <g id="Icons">
           <path
-            d="M557.3,257.8h-5.7c-0.3,0-0.6-0.2-0.7-0.5l-1.7-4.4l-2.7,8.8c-0.1,0.3-0.4,0.5-0.7,0.5 
-          c-0.3,0-0.6-0.2-0.7-0.4l-1.8-4h-3.5c-0.4,0-0.7-0.3-0.7-0.7c0-0.4,0.3-0.7,0.7-0.7h4c0.3,0,0.6,0.2,0.7,0.4l1.2,2.7l2.8-9 
-          c0.1-0.3,0.4-0.5,0.7-0.5c0,0,0,0,0,0c0.3,0,0.6,0.2,0.7,0.5l2.3,5.9h5.2c0.4,0,0.7,0.3,0.7,0.7 
-          C558,257.5,557.7,257.8,557.3,257.8z"
+            d="M48.83,7.53a16.63,16.63,0,0,0-18,7.54A16.66,16.66,0,1,0,5.74,36.33l7.3,7.3,7,7L29.35,60a2.16,2.16,0,0,0,3,0L56,36.33a16.65,16.65,0,0,0,2-23.09,21.48,21.48,0,0,0-4.14-3.61A31.48,31.48,0,0,0,48.83,7.53Z"
+            transform="translate(0.11 -0.99)"
+          />
+        </g>
+      </svg>
+    ) : (
+      <svg
+        className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')}
+        viewBox="0 0 63.74 61.19"
+      >
+        <title>{title}</title>
+        <line x1="4.55" y1="59.19" x2="61.74" y2="2" />
+        <g id="Icons">
+          <path
+            d="M21.3,51.6l9.31,9.31a2.15,2.15,0,0,0,3,0L57.28,37.29a16.65,16.65,0,0,0,2-23.09Z"
+            transform="translate(-1.26 -0.96)"
           />
           <path
-            d="M555.5,254c-0.1,0-0.1,0-0.2-0.1c-0.2-0.2-0.4-0.3-0.6-0.5l0,0c-0.5-0.4-0.9-0.8-1.2-1.1 
-          c-0.3-0.4-0.5-0.8-0.5-1.2c0-0.4,0.1-0.8,0.4-1c0.3-0.3,0.6-0.4,1-0.4c0.3,0,0.5,0.1,0.8,0.3c0.1,0.1,0.2,0.2,0.3,0.3 
-          c0.1-0.1,0.2-0.2,0.3-0.3c0.2-0.2,0.5-0.3,0.8-0.3c0.4,0,0.7,0.2,1,0.4c0.2,0.3,0.4,0.6,0.4,1c0,0.4-0.2,0.8-0.5,1.2 
-          c-0.3,0.4-0.7,0.7-1.2,1.1c-0.2,0.1-0.4,0.3-0.6,0.5C555.6,254,555.6,254,555.5,254z"
+            d="M50.09,8.49a16.64,16.64,0,0,0-18,7.54A16.66,16.66,0,1,0,7,37.29l7.3,7.3Z"
+            transform="translate(-1.26 -0.96)"
           />
         </g>
       </svg>

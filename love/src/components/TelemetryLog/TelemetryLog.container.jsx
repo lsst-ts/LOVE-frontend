@@ -1,9 +1,33 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
-import { requestGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import { saveGroupSubscriptions } from '../../Utils';
 
+export const schema = {
+  description: 'Internal use',
+  defaultSize: [63, 17],
+  props: {
+    titleBar: {
+      type: 'boolean',
+      description: 'Whether to display the title bar',
+      isPrivate: false,
+      default: false,
+    },
+    title: {
+      type: 'string',
+      description: 'Name diplayed in the title bar (if visible)',
+      isPrivate: false,
+      default: 'Telemetry log',
+    },
+    margin: {
+      type: 'boolean',
+      description: 'Whether to display component with a margin',
+      isPrivate: false,
+      default: true,
+    },
+  },
+};
 const TelemetryLogContainer = ({
   streams,
   subscriptionsList,
@@ -11,7 +35,7 @@ const TelemetryLogContainer = ({
   removeSubscriptionLocally,
   subscribeToStream,
   unsubscribeToStream,
-  requestSALCommand
+  requestSALCommand,
 }) => {
   const subscribeAndSaveGroup = (groupName) => {
     subscribeToStream(groupName);
@@ -37,7 +61,7 @@ const TelemetryLogContainer = ({
 const mapStateToProps = (state, ownProps) => {
   let streams = state.ws.subscriptions.filter((s) => ownProps.subscriptionsList.includes(s.groupName));
   if (streams.length === 0) return {};
-  streams = streams.filter(s=>s.data);
+  streams = streams.filter((s) => s.data);
 
   if (streams.length === 0) return {};
   return { streams: streams };
@@ -46,20 +70,15 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: (groupName) => {
-      dispatch(requestGroupSubscription(groupName));
+      dispatch(addGroupSubscription(groupName));
     },
     unsubscribeToStream: (groupName) => {
       dispatch(requestGroupSubscriptionRemoval(groupName));
     },
-    requestSALCommand: (cmd) =>{
-      dispatch(requestSALCommand(cmd))
-    }
+    requestSALCommand: (cmd) => {
+      dispatch(requestSALCommand(cmd));
+    },
   };
 };
 
-export default saveGroupSubscriptions(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  )(TelemetryLogContainer),
-);
+export default saveGroupSubscriptions(connect(mapStateToProps, mapDispatchToProps)(TelemetryLogContainer));

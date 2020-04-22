@@ -1,0 +1,89 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.rnd {
+  border-radius: 7px;
+  border: solid 1px var(--base-font-color);
+}
+
+.rndBar {
+  display: flex;
+  justify-content: space-between;
+  background: var(--second-secondary-background-color);
+  cursor: grab;
+  user-select: none;
+  text-align: left;
+  font-size: var(--font-size-larger);
+  padding: 0.1em 0.5em;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.rndEditor {
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+}
+
+.rndBar .hidden {
+  visibility: hidden;
+  width: 24px;
+}
+
+.textField {
+  width: 20ch;
+  background-color: var(--second-tertiary-background-color);
+  color: var(--base-font-color);
+  font-style: italic;
+}
+
+.toolbarWrapper {
+  padding: 0.5em var(--content-padding);
+  background-color: var(--second-secondary-background-color);
+  width: fit-content;
+}
+
+.toolbar {
+  /* display: grid;
+  grid-template-columns: min-content repeat(8, min-content); */
+  display: flex;
+  flex-wrap: wrap;
+  /* grid-gap: 0.2em; */
+}
+.toolbarContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.iconBtn {
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
+
+.icon {
+  height: 1.4em;
+}
+
+.divider {
+  margin-left: 0.1rem;
+  margin-right: 0.1rem;
+  width: 1px;
+  height: 80%;
+  background: var(--secondary-font-color);
+  align-self: center;
+}
+
+.deviceSelect {
+  width: 15ch;
+}
+
+.element {
+  margin-right: 0.15rem;
+}
+
+.confirmationMessage {
+  display: block;
+}

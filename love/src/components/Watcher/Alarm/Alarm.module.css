@@ -1,0 +1,31 @@
+.alarmContainer {
+  display: grid;
+  grid-template-columns: 8em;
+  grid-column-gap: 0.5em;
+  justify-content: center;
+  width: fit-content;
+}
+
+.statusOnly {
+  grid-template-columns: 8em;
+}
+
+.leftAckButton {
+  grid-template-columns: 4em 8em;
+}
+
+.rightAckButton {
+  grid-template-columns: 8em 4em;
+}
+
+.newLabel {
+  background-color: var(--info-background-color);
+  color: var(--info-font-color);
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.42857143;
+  font-weight: 400;
+  font-size: 14px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}

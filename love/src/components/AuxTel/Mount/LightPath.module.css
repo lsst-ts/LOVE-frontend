@@ -1,0 +1,74 @@
+.container {
+  width: 25em;
+  z-index: 1;
+}
+
+.container svg{
+  overflow: visible;
+}
+
+.st1,
+.st2 {
+  fill: hsl(201, 40%, 16%);
+  stroke: hsl(197, 34%, 23%);
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+}
+
+.st2 {
+  fill: none;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.highlighted {
+  fill: #bcd8e2;
+  stroke: #ffffff;
+  fill-opacity: 0.45;
+  transition: transform 1.5s linear;
+}
+
+.disabled {
+  stroke: hsl(197, 34%, 23%);
+  fill: #bcd8e2;
+  fill-opacity: 0.45;
+}
+
+.running {
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
+}
+
+.ok {
+  fill: var(--status-ok-color);
+  stroke: var(--status-ok-color);
+}
+
+.warning {
+  fill: var(--status-warning-color);
+  stroke: var(--status-warning-color);
+}
+
+.summaryPanel {
+  margin-left: 0;
+  background: none;
+  grid-template-columns: minmax(7em, 0.5fr) minmax(10em, 0.5fr);
+  min-width: 0;
+}
+
+.m1Panel {
+  grid-template-columns: minmax(7.5em, 0.5fr) minmax(10em, 0.5fr);
+}
+
+.rotatorPanel {
+  grid-template-columns: minmax(8em, 0.5fr) minmax(10em, 0.5fr);
+}
+
+.lightpath {
+  fill: #bcd8e2;
+  stroke: #ffffff;
+  stroke-width: 0.1;
+  fill-opacity: 0.15;
+  transition: transform 1.5s linear;
+}

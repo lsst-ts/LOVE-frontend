@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import moment from 'moment';
 import TelemetrySelectionTableContainer from '../HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.container';
 import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
-import Vega from '../Vega/Vega';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import { hasFakeData } from '../../Config';
 import styles from './TimeSeries.module.css';

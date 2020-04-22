@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { DateTime } from 'luxon';
+import { SALCommandStatus } from './redux/actions/ws.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -23,7 +25,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
 
-  function noop() {}
+  function noop() { }
   const opts = optsPar || {};
 
   let ws;
@@ -44,13 +46,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     ws.onclose = (e) => {
       // eslint-disable-next-line
-      e.code === 1e3 || e.code === 1005 || $.reconnect(e);
+      // console.log('******** \nonclose, e: ', e);
+      // e.code === 1e3 || e.code === 1005 || $.reconnect(e);
       (opts.onclose || noop)(e);
     };
 
     ws.onerror = (e) => {
       // eslint-disable-next-line
-      e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
+      // e && e.code === 'ECONNREFUSED' ? $.reconnect(e) : (opts.onerror || noop)(e);
+      (opts.onerror || noop)(e);
     };
   };
 
@@ -95,8 +99,16 @@ export default class ManagerInterface {
     this.connectionIsOpen = false;
   }
 
+  static getMediaBaseUrl() {
+    return `http://${window.location.host}/manager`;
+  }
+
   static getApiBaseUrl() {
     return `http://${window.location.host}/manager/api/`;
+  }
+
+  static getUifBaseUrl() {
+    return `http://${window.location.host}/manager/ui_framework/`;
   }
 
   static getWebsocketsUrl() {
@@ -119,11 +131,7 @@ export default class ManagerInterface {
   }
 
   static getToken() {
-    const token = localStorage.getItem('LOVE-TOKEN');
-    if (token === null) {
-      return null;
-    }
-    return token;
+    return localStorage.getItem('LOVE-TOKEN');
   }
 
   static removeToken() {
@@ -414,3 +422,96 @@ export const saveGroupSubscriptions = (Component) => {
 };
 
 export const flatMap = (a, cb) => [].concat(...a.map(cb));
+
+const watcherSuccessfulCmds = {
+  cmd_acknowledge: 'acknowledged',
+  cmd_unacknowledge: 'unacknowledged',
+  cmd_mute: 'muted',
+  cmd_unmute: 'unmuted',
+};
+
+const watcherErrorCmds = {
+  cmd_acknowledge: 'acknowledging',
+  cmd_mute: 'muting',
+  cmd_unmute: 'unmuting',
+};
+
+export const getNotificationMessage = (salCommand) => {
+  const cmd = salCommand.cmd;
+  const result = salCommand.result;
+  const component = salCommand.component ?? salCommand.csc;
+
+
+  if (salCommand.status === SALCommandStatus.REQUESTED) {
+    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`,]
+  }
+
+
+  if (component === 'Watcher') {
+    const alarm = salCommand.params.name;
+    if (result === 'Done') {
+      return [`Alarm '${alarm}' ${watcherSuccessfulCmds[cmd]} successfully`, result];
+    } else {
+      return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
+    }
+  }
+
+  if (result === 'Done') {
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} ran successfully`, result];
+  } else {
+    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
+  }
+};
+
+export const cscText = (csc, salindex) => {
+  return csc + (salindex === 0 ? '' : `.${salindex}`);
+};
+
+export const parseTimestamp = (timestamp) => {
+  if (timestamp instanceof DateTime) return timestamp;
+  if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
+  if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
+  else return null;
+};
+
+/**
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * @param {date-able} timestamp, if float it must be in milliseconds
+ * @param {string} location, optional location to append to the timestamp, TAI by default
+ */
+export const formatTimestamp = (timestamp, location = 'TAI') => {
+  const t = parseTimestamp(timestamp);
+  return `${t.toUTC().toFormat('yyyy/MM/dd HH:mm:ss')} ${location}`;
+};
+
+/**
+ * Converts a timestamp into  "YYYY/MM/DD HH:MM:SS  <location>" formatted string
+ * @param {date-able} timestamp, if float it must be in milliseconds
+ * @param {string} location, optional location to append to the timestamp, empty by default
+ */
+export const isoTimestamp = (timestamp, location = null) => {
+  const t = parseTimestamp(timestamp);
+  return [t.toUTC().toISO(), location ? location : null].join(' ');
+};
+
+/**
+ * Converts seconds to a human readable difference like 'a few seconds ago'
+ * @param {date-able} timestamp, if float it must be in milliseconds
+ * @param {number} taiToUtc, difference in seconds between TAI and UTC timestamps
+ */
+export const relativeTime = (timestamp, taiToUtc) => {
+  const t_tai = parseTimestamp(timestamp);
+  const t_utc = t_tai.plus({ second: taiToUtc }).toUTC();
+  const delta = t_utc.toRelative();
+  return delta;
+};
+
+export const getStringRegExp = (str) => {
+  try {
+    return new RegExp(str, 'i');
+  } catch (e) {
+    return new RegExp('');
+  }
+};
+
+export const siderealSecond = 1.00273788;

@@ -1,0 +1,7 @@
+.tooltip {
+  margin-top: 1em;
+  background-color: var(--base-background-color);
+  color: var(--base-font-color);
+  padding: 0.5em;
+  border-radius: 7px;
+}

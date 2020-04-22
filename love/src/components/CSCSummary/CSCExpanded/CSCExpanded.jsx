@@ -3,17 +3,15 @@ import PropTypes from 'prop-types';
 import styles from './CSCExpanded.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
-import InfoIcon from '../../icons/InfoIcon/InfoIcon';
-import WarningIcon from '../../icons/WarningIcon/WarningIcon';
-import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import Button from '../../GeneralPurpose/Button/Button';
+import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
   static propTypes = {
     name: PropTypes.string,
     salindex: PropTypes.number,
     group: PropTypes.string,
-    realm: PropTypes.string,
     onCSCClick: PropTypes.func,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
@@ -26,13 +24,16 @@ export default class CSCExpanded extends PureComponent {
     name: '',
     salindex: undefined,
     group: '',
-    realm: '',
     onCSCClick: () => 0,
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
     summaryStateData: undefined,
     logMessageData: [],
     errorCodeData: [],
+  };
+
+  componentDidMount = () => {
+    this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   constructor(props) {
@@ -105,63 +106,72 @@ export default class CSCExpanded extends PureComponent {
     if (this.props.heartbeatData) {
       nLost = this.props.heartbeatData.lost;
       if (this.props.heartbeatData.last_heartbeat_timestamp < 0) timeDiff = -1;
-      if (this.props.heartbeatData.last_heartbeat_timestamp == -2) timeDiff = -2;
+      if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
 
     let timeDiffText = 'Unknown';
 
-    if (timeDiff == -2) {
+    if (timeDiff === -2) {
       timeDiffText = 'No heartbeat event in Remote.';
-    } else if (timeDiff == -1) {
+    } else if (timeDiff === -1) {
       timeDiffText = 'Never';
     } else if (timeDiff >= 0) {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
-    let heartbeatTitle = `${this.props.name +
-      '-' +
-      this.props.salindex} heartbeat\nLost: ${nLost}\nLast seen: ${timeDiffText}`;
-    if (timeDiff == -2) {
-      heartbeatTitle = `${this.props.name + '-' + this.props.salindex} heartbeat\n${timeDiffText}`;
+    let heartbeatTitle = `${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
+
+    if (timeDiff === -2) {
+      heartbeatTitle += `${timeDiffText}`;
+    } else {
+      heartbeatTitle += `Last seen: ${timeDiffText}`;
     }
 
     return (
-      <div className={styles.CSCExpandedContainer}>
-        <div className={styles.topBarContainerWrapper}>
-          <div className={styles.topBarContainer}>
-            <div className={styles.breadcrumContainer}>
-              <div
-                className={styles.backArrowIconWrapper}
-                onClick={() =>
-                  this.props.onCSCClick(this.props.realm, this.props.group, this.props.name, this.props.salindex)
-                }
-              >
-                <BackArrowIcon />
+      <div className={styles.CSCGroupContainer}>
+        <div className={styles.CSCExpandedContainer}>
+          <div className={styles.topBarContainerWrapper}>
+            <div className={styles.topBarContainer}>
+              <div className={styles.breadcrumContainer}>
+                {this.props.group && (
+                  <>
+                    <div
+                      className={styles.backArrowIconWrapper}
+                      onClick={() => this.props.onCSCClick({ group: this.props.group })}
+                    >
+                      <BackArrowIcon />
+                    </div>
+                    <span
+                      className={styles.breadcrumbGroup}
+                      onClick={() =>
+                        this.props.onCSCClick({ group: this.props.group, csc: 'all' })
+                      }
+                    >
+                      {props.group}
+                    </span>
+                    <span> &#62; </span>
+                  </>
+                )}
+                <span>{cscText(this.props.name, this.props.salindex)}</span>
               </div>
-              <span
-                className={styles.breadcrumbGroup}
-                onClick={() => this.props.onCSCClick(this.props.realm, this.props.group, 'all')}
-              >
-                {props.group}{' '}
-              </span>
-              <span>&#62; </span>
-              <span>{props.name}-{props.salindex} </span>
-            </div>
-            <div className={[styles.stateContainer].join(' ')}>
-              <div>
-                <span className={[styles.summaryState, summaryState.class].join(' ')} title={summaryState.userReadable}>
-                  {summaryState.name}
-                </span>
-              </div>
-              <div className={styles.heartbeatIconWrapper}>
-                <HeartbeatIcon status={heartbeatStatus} title={heartbeatTitle} />
+              <div className={[styles.stateContainer].join(' ')}>
+                <div>
+                  <span
+                    className={[styles.summaryState, summaryState.class].join(' ')}
+                    title={summaryState.userReadable}
+                  >
+                    {summaryState.name}
+                  </span>
+                </div>
+                <div className={styles.heartbeatIconWrapper}>
+                  <HeartbeatIcon className={styles.heartbeatIcon} status={heartbeatStatus} title={heartbeatTitle} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        {this.props.errorCodeData.length > 0 ? (
+          {this.props.errorCodeData.length > 0 ? (
           <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
             <div className={styles.logContainerTopBar}>
               <div>ERROR CODE</div>
@@ -175,15 +185,15 @@ export default class CSCExpanded extends PureComponent {
               </div>
             </div>
             <div className={[styles.log, styles.messageLogContent].join(' ')}>
-              {this.props.errorCodeData.map((msg) => {
+              {this.props.errorCodeData.map((msg, index) => {
                 return (
-                  <div key={msg.private_rcvStamp.value} className={styles.logMessage}>
+                  <div key={`${msg.private_rcvStamp.value}-${index}`} className={styles.logMessage}>
                     <div className={styles.errorCode} title={`Error code ${msg.errorCode.value}`}>
                       {msg.errorCode.value}
                     </div>
                     <div className={styles.messageTextContainer}>
                       <div className={styles.timestamp} title="private_rcvStamp">
-                        {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
+                        {formatTimestamp(msg.private_rcvStamp.value * 1000)}
                       </div>
                       <div className={styles.messageText}>{msg.errorReport.value}</div>
                       <div className={styles.messageTraceback}>{msg.traceback.value}</div>
@@ -193,60 +203,12 @@ export default class CSCExpanded extends PureComponent {
               })}
             </div>
           </div>
-        ) : null}
-        <div className={[styles.logContainer, styles.messageLogContainer].join(' ')}>
-          <div className={styles.logContainerTopBar}>
-            <div>MESSAGE LOG</div>
-            <div>
-              <Button
-                size="extra-small"
-                onClick={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
-              >
-                CLEAR
-              </Button>
-            </div>
-          </div>
-          <div className={styles.filtersContainer}>
-            {Object.keys(this.state.messageFilters).map((key) => {
-              return (
-                <div key={key}>
-                  <label>
-                    <input
-                      onChange={(event) => this.updateFilter(key, event.target.checked)}
-                      type="checkbox"
-                      alt={`select ${key}`}
-                      checked={this.state.messageFilters[key].value}
-                    />
-                    <span>{this.state.messageFilters[key].name}</span>
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-          <div className={[styles.log, styles.messageLogContent].join(' ')}>
-            {this.props.logMessageData.length > 0
-              ? this.props.logMessageData.map((msg) => {
-                  const filter = this.state.messageFilters[msg.level.value];
-                  if (filter && !filter.value) return null;
-                  let icon = <span title="Debug">d</span>;
-                  if (msg.level.value === 20) icon = <InfoIcon title="Information" />;
-                  if (msg.level.value === 30) icon = <WarningIcon title="Warning" />;
-                  if (msg.level.value === 40) icon = <ErrorIcon title="Error" />;
-                  return (
-                    <div key={`${msg.private_rcvStamp.value}-${msg.level.value}`} className={styles.logMessage}>
-                      <div className={styles.messageIcon}>{icon}</div>
-                      <div className={styles.messageTextContainer}>
-                        <div className={styles.timestamp} title="private_rcvStamp">
-                          {new Date(msg.private_rcvStamp.value * 1000).toUTCString()}
-                        </div>
-                        <div className={styles.messageText}>{msg.message.value}</div>
-                        <div className={styles.messageTraceback}>{msg.traceback.value}</div>
-                      </div>
-                    </div>
-                  );
-                })
-              : null}
-          </div>
+          ) : null}
+
+          <LogMessageDisplay
+            logMessageData={this.props.logMessageData}
+            clearCSCLogMessages={() => this.props.clearCSCLogMessages(this.props.name, this.props.salindex)}
+          />
         </div>
       </div>
     );

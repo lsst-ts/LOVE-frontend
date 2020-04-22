@@ -1,0 +1,39 @@
+.container {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 1fr min-content;
+}
+
+.content {
+  text-align: center;
+}
+
+/* .modal {
+  height: 30%;
+  top: 50%;
+  left: 50%;
+  right: auto;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+} */
+
+/* @media screen and (min-width: 426px) {
+  .modal {
+    left: 10%;
+    right: 10%;
+  }
+}
+
+@media screen and (min-width: 701px) {
+  .modal {
+    left: 20%;
+    right: 20%;
+  }
+}
+
+@media screen and (min-width: 1201px) {
+  .modal {
+    left: 30%;
+    right: 30%;
+  }
+} */

@@ -34,6 +34,9 @@
 
 .estimatedTimeValue {
 }
+.checkpointContainer{
+  text-align:right;
+}
 
 .elapsedTimeContainer {
   display: inline-block;
@@ -56,6 +59,9 @@
   flex-direction: column;
 }
 
+.currentScriptButtonContainer{
+  margin-bottom: 0.5rem;
+}
 .invisible {
   visibility: hidden;
 }
@@ -66,4 +72,10 @@
   flex-grow: 1;
   font-size: var(--font-size-larger);
   padding-bottom: 0;
+}
+
+.heartbeatIcon {
+  display: inline-block;
+  margin: 0.2em;
+  vertical-align: top;
 }

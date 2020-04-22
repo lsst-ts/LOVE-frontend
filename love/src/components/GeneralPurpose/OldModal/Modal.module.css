@@ -1,0 +1,49 @@
+.modal {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  background-color: var(--secondary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 10px;
+  position: absolute;
+  overflow: auto;
+  webkit-overflow-scrolling: touch;
+  borderRadius: 4px;
+  outline: none;
+  /* padding: 1em; */
+  top: 1em;
+  left: 1em;
+  right: 1em;
+  bottom: 1em;
+}
+
+@media screen and (min-width: 800px) {
+  .modal {
+    top: 2em;
+    left: 2em;
+    right: 2em;
+    bottom: 2em;
+  }
+}
+
+.overlay {
+  background-color: var(--overlay-background-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000;
+  backdrop-filter: blur(2px);
+  -o-backdrop-filter: blur(2px);
+  -ms-backdrop-filter: blur(2px);
+  -moz-backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.topbar {
+  display: inline-flex;
+  width: 100%;
+  justify-content: flex-end;
+  padding: 0.5em 0.5em 0 0.5em;
+  box-sizing: border-box;
+}

@@ -1,0 +1,97 @@
+.switchContainer {
+  /* padding: 0em 1em; */
+}
+
+.modeSelection {
+  user-select: none;
+  cursor: pointer;
+}
+
+.highlightText {
+  color: white;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 25px; /* this is switch_width */
+  height: 8px; /* this is switch_height */
+  vertical-align: middle;
+  margin: 0px 10px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  display: none;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #aab1b9;
+  -webkit-transition: 0.2s;
+  transition: 0.2s;
+}
+
+/* Slider moving button */
+.slider:before {
+  position: absolute;
+  content: '';
+  height: 10px; /*this is slider_height*/
+  width: 10px; /** this is slider_height */
+  left: 2px;
+  bottom: -3px;
+  /* To center this button bottom must be
+    bottom = -slider_border - (slider_height -switch_height)/2
+  (ctrl+f for definitions)
+
+  */
+  border: 2px solid white; /** the px defines slider_border */
+  background: #aab1b9;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #aab1b9;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #aab1b9;
+}
+
+input:checked + .slider:before {
+  /*this controls the position  when the input is checked
+  to preserve symmetry it must be equal to 
+  pos =  switch_width - (slider_width + 2 * slider_border)
+
+  (ctrl+f for definitions)
+  */
+  -webkit-transform: translateX(7px);
+  -ms-transform: translateX(7px);
+  transform: translateX(7px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 5px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.highlightText {
+  color: white;
+}
+
+.modeSelection {
+  user-select: none;
+  cursor: pointer;
+}
