@@ -2,18 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Clock from './Clock/Clock';
 import styles from './TimeDisplay.module.css';
-import { DateTime } from 'luxon';
-import { siderealSecond } from '../../Utils';
 
 export default class TimeDisplay extends React.Component {
   static propTypes = {
-    /** Time Data from the server */
-    timeData: PropTypes.object,
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
-    /** Current time clocks */
-    clock: PropTypes.object,
+    /** 
+     * Current time clocks from the server in the following format:
+     *  {
+          utc: <utc time in seconds>,
+          tai: <tai time in seconds>,
+          mjd: <modified julian date in days>,
+          sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
+          sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
+        }
+    */
+    clock: PropTypes.shape({
+      utc: PropTypes.object,
+      tai: PropTypes.object,
+      mjd: PropTypes.number,
+      sidereal_summit: PropTypes.object,
+      sidereal_greenwich: PropTypes.object,
+    }),
     /**
      * Layout of clocks in JSON format.
         It is a list of horizontalGroups, each of which list of vertically-aligned elements.
@@ -45,16 +56,6 @@ export default class TimeDisplay extends React.Component {
   static defaultProps = {
     locale: 'en-GB',
     clocks_layout: [],
-    timeData: {
-      server_time: {
-        utc: 0,
-        tai: 0,
-        mjd: 0,
-        sidereal_summit: 0,
-        sidereal_greenwich: 0,
-        tai_to_utc: 0,
-      },
-    },
     clock: {
       utc: 0,
       tai: 0,
@@ -82,7 +83,7 @@ export default class TimeDisplay extends React.Component {
                     } else if (element.timezone === 'MJD') {
                       timestamp = this.props.clock.mjd;
                     }
-                    return <Clock key={index} {...element} timestamp={timestamp} timeData={this.props.timeData} />;
+                    return <Clock key={index} {...element} clock={this.props.clock}/>;
                   })}
                 </div>
               );

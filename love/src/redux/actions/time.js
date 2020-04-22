@@ -24,14 +24,16 @@ export function tick() {
     dispatch({
       type: CLOCK_TICK,
       clock: {
-        utc: DateTime.fromSeconds(time.server_time.utc + diffLocalUtc),
-        tai: DateTime.fromSeconds(time.server_time.tai + diffLocalUtc),
+        utc: DateTime.fromSeconds(time.server_time.utc + diffLocalUtc, { zone: 'utc' }),
+        tai: DateTime.fromSeconds(time.server_time.tai + diffLocalUtc, { zone: 'utc' }),
         mjd: time.server_time.mjd + diffLocalUtc / (3600 * 24),
         sidereal_summit: DateTime.fromSeconds(
-          time.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc
+          time.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc,
+          { zone: 'utc' }
         ),
         sidereal_greenwich: DateTime.fromSeconds(
-          time.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc
+          time.server_time.sidereal_greenwich * 3600 + siderealSecond * diffLocalUtc,
+          { zone: 'utc' }
         ),
       }
     });
