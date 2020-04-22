@@ -17,9 +17,10 @@ export default class Clock extends React.Component {
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
-    /** The timezone to display the timestamps. Null or empty if current should be used 'UTC' for UTC. Null by default.
+    /** The timezone to display the timestamps. 'local' if current should be used. 'local' by default.
      * The format for this string must be: <Continent (camelcase)>-<City (camelcase)>.
      * For example:
+     * - For local time use local
      * - For UTC use UTC
      * - For TAI use TAI
      * - For 'La Serena' use 'America/Santiago' (yes America, not Chile)

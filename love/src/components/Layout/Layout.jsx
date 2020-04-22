@@ -14,7 +14,7 @@ import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
-import Clock from '../Time/Clock/Clock';
+import ClockContainer from '../Time/Clock/Clock.container';
 import styles from './Layout.module.css';
 
 const BREAK_1 = 865;
@@ -322,7 +322,7 @@ class Layout extends Component {
                 this.props.mode === modes.EDIT && !this.state.toolbarOverflow ? styles.hidden : '',
               ].join(' ')}
             >
-              <Clock timeData={this.props.timeData} hideAnalog hideOffset={true} />
+              <ClockContainer timezone='local' hideAnalog hideOffset={true} />
             </div>
           </div>
 
