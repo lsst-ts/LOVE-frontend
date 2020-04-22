@@ -259,25 +259,27 @@ class Layout extends Component {
   };
 
   render() {
-    const producerHeartbeatStatus = [
+    const producerHeartbeats = [
       HEARTBEAT_COMPONENTS.EVENTS,
       HEARTBEAT_COMPONENTS.TELEMETRIES,
       HEARTBEAT_COMPONENTS.HEARTBEATS,
       HEARTBEAT_COMPONENTS.LOVE,
       HEARTBEAT_COMPONENTS.SCRIPTQUEUE,
-    ]
-      .map((source) => this.state.heartbeatStatus[source])
-      .includes('alert')
-      ? 'alert'
-      : 'ok';
+    ].map((source) => this.state.heartbeatStatus[source]);
+    let producerHeartbeatStatus;
+    if (!producerHeartbeats.every((hb) => hb === undefined)) {
+      producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
+    }
 
-    const overallHeartbeatStatus = [
+    const summaryHeartbeats = [
       producerHeartbeatStatus,
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
-    ].includes('alert')
-      ? 'alert'
-      : 'ok';
+    ];
+    let summaryHeartbeatStatus;
+    if (!summaryHeartbeats.every((hb) => hb === undefined)) {
+      summaryHeartbeatStatus = summaryHeartbeats.includes('alert') ? 'alert' : 'ok';
+    }
     return (
       <>
         <div className={styles.hidden}>
@@ -362,7 +364,7 @@ class Layout extends Component {
                   className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
                   style={{
                     visibility:
-                      this.props.token && (overallHeartbeatStatus !== 'ok' || this.state.hovered)
+                      this.props.token && (summaryHeartbeatStatus !== 'ok' || this.state.hovered)
                         ? 'visible'
                         : 'hidden',
                   }}
@@ -372,7 +374,7 @@ class Layout extends Component {
                 >
                   <HeartbeatIcon
                     className={styles.icon}
-                    status={overallHeartbeatStatus}
+                    status={summaryHeartbeatStatus}
                     title={this.getHeartbeatTitle('')}
                   />
                 </Button>
@@ -469,15 +471,9 @@ class Layout extends Component {
                       groupName={'event-ATMCS-0-m3State'}
                       stateToLabelMap={{
                         0: 'UNKNOWN',
-                        1: 'ENABLED',
-                        2: 'UPDATING',
-                        3: 'UPDATING',
                       }}
                       stateToStyleMap={{
                         0: 'unknown',
-                        1: 'ok',
-                        2: 'running',
-                        3: 'running',
                       }}
                     />
                   </div>
@@ -488,15 +484,9 @@ class Layout extends Component {
                       groupName={'event-ATMCS-0-m3State'}
                       stateToLabelMap={{
                         0: 'UNKNOWN',
-                        1: 'RUNNING',
-                        2: 'UNRESPONSIVE',
-                        3: 'RUNNING',
                       }}
                       stateToStyleMap={{
                         0: 'unknown',
-                        1: 'ok',
-                        2: 'alert',
-                        3: 'ok',
                       }}
                     />
                   </div>
