@@ -4,7 +4,7 @@ import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { DateTime } from 'luxon';
 import { emptyToken, doReceiveToken, logout } from '../actions/auth';
-import { clockStart, clockStop, receiveServerTime } from '../actions/time';
+import { clockStart, clockStop, receiveServerTime, tick } from '../actions/time';
 import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
@@ -77,30 +77,51 @@ describe('Given the user is logged in and the clock is STARTED, ', () => {
 });
 
 
-// TEST SERVER TIME RECEPTION
-describe('Given the user is logged in, ', () => {
-  beforeEach(async () => {
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0 ));
-    await server.connected;
+// TEST TIME INDEPENDENTLY
+describe('Given the inital state', () => {
+
+  const request_time = DateTime.utc().toMillis() / 1000;
+  const server_time = {
+    utc: 1587747218.377575,
+    tai: 1587747255.377575,
+    mjd: 58963.70391640712,
+    sidereal_greenwich: 7.105572546869015,
+    sidereal_summit: 2.388944746869015,
+    tai_to_utc: -37,
+  };
+
+  it('When the clock starts then its status is STARTED, and when it stops then the status is STOPPED', async () => {
+    // BEFORE
+    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
+    // START
+    await store.dispatch(clockStart());
+    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
+    // STOP
+    await store.dispatch(clockStop());
+    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
   });
 
   it('When we receive server time, then it is saved', async () => {
     // ARRANGE
-    const request_time = DateTime.utc().toMillis() / 1000;
-    const server_time = {
-      utc: 1587747218.377575,
-      tai: 1587747255.377575,
-      mjd: 58963.70391640712,
-      sidereal_greenwich: 7.105572546869015,
-      sidereal_summit: 2.388944746869015,
-      tai_to_utc: -37,
-    }
+    let time = getAllTime(store.getState());
+    expect(time).toEqual(initialState);
     // ACT
     await store.dispatch(receiveServerTime(server_time, request_time));
     // ASSERT
-    let time = getAllTime(store.getState());
+    time = getAllTime(store.getState());
     expect(time.server_time).toEqual(server_time);
     expect(time.request_time).toEqual(request_time);
     expect(time.receive_time).toBeTruthy();
+    expect(time.clock).toEqual(initialState.clock);
+  });
+
+  it('When the clock ticks, then the internal clock is updated', async () => {
+    // ARRANGE
+    await store.dispatch(receiveServerTime(server_time, request_time));
+    // ACT
+    await store.dispatch(tick());
+    // ASSERT
+    let time = getAllTime(store.getState());
+    expect(time.clock).not.toEqual(initialState.clock);
   });
 });
