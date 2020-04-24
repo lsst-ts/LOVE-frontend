@@ -77,66 +77,40 @@ describe('Given the inital state', () => {
     expect(time.clock).not.toEqual(initialState.clock);
   });
 
-  it('When local-time is in time with server-time, then the clock is updated correctly', async () => {
+  it('Test tick under different cases of differences between local and server time', async () => {
     // Config
-    const request_time = server_time.utc - 1;
-    const receive_time = server_time.utc + 1;
-    const tick_time    = receive_time + 5;
-    const diff = tick_time - (receive_time + request_time) / 2;
-    // Receive Server time
-    Settings.now = () => new Date(receive_time * 1000).valueOf();
-    await store.dispatch(receiveServerTime(server_time, request_time));
-    // Tick
-    Settings.now = () => new Date(tick_time * 1000).valueOf();
-    await store.dispatch(tick());
-    // Assertå
-    let time = getAllTime(store.getState());
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
-    expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
-  });
-
-  it('When local-time is before server-time, then the clock is updated correctly', async () => {
-    // Config
-    const request_time = server_time.utc - 1 - 5*60;
-    const receive_time = server_time.utc + 1 - 5*60;
-    const tick_time    = receive_time + 5;
-    const diff = tick_time - (receive_time + request_time) / 2;
-    // Receive Server time
-    Settings.now = () => new Date(receive_time * 1000).valueOf();
-    await store.dispatch(receiveServerTime(server_time, request_time));
-    // Tick
-    Settings.now = () => new Date(tick_time * 1000).valueOf();
-    await store.dispatch(tick());
-    // Assertå
-    let time = getAllTime(store.getState());
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
-    expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
-  });
-
-  it('When local-time is after server-time, then the clock is updated correctly', async () => {
-    // Config
-    const request_time = server_time.utc - 1 + 5*60;
-    const receive_time = server_time.utc + 1 + 5*60;
-    const tick_time    = receive_time + 5;
-    const diff = tick_time - (receive_time + request_time) / 2;
-    // Receive Server time
-    Settings.now = () => new Date(receive_time * 1000).valueOf();
-    await store.dispatch(receiveServerTime(server_time, request_time));
-    // Tick
-    Settings.now = () => new Date(tick_time * 1000).valueOf();
-    await store.dispatch(tick());
-    // Assertå
-    let time = getAllTime(store.getState());
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
-    expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
+    const cases = [
+      { // In sync
+        request_time: server_time.utc - 1,
+        receive_time: server_time.utc + 1,
+      },
+      { // Local 5 minutes behind server
+        request_time: server_time.utc - 1 - 5*60,
+        receive_time: server_time.utc + 1 - 5*60,
+      },
+      { // Local 5 minutes ahead of server
+        request_time: server_time.utc - 1 + 5*60,
+        receive_time: server_time.utc + 1 + 5*60,
+      },
+    ];
+    for (const element of cases) {
+      const request_time = element.request_time;
+      const receive_time = element.receive_time;
+      const tick_time = receive_time + 5;
+      const diff = tick_time - (receive_time + request_time) / 2;
+      // Receive Server time
+      Settings.now = () => new Date(receive_time * 1000).valueOf();
+      await store.dispatch(receiveServerTime(server_time, request_time));
+      // Tick
+      Settings.now = () => new Date(tick_time * 1000).valueOf();
+      await store.dispatch(tick());
+      // Assert
+      let time = getAllTime(store.getState());
+      expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
+      expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
+      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
+      expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
+      expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
+    };
   });
 });
