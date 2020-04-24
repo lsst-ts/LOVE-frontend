@@ -8,6 +8,7 @@ import { clockStart, clockStop, receiveServerTime, tick } from '../actions/time'
 import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
+import { siderealSecond } from '../../Utils';
 
 let store, server;
 
@@ -27,53 +28,6 @@ beforeEach(async () => {
 
 afterEach(() => {
   WS.clean();
-});
-
-// TEST CLOCK START
-describe('Given the clock is STOPPED, ', () => {
-  it('When the clock starts, then its status is STARTED', async () => {
-    // BEFORE
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
-    // ACT
-    await store.dispatch(clockStart());
-    // ASSERT
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
-  });
-
-  it('When the user logs in, then the clock is STARTED and server time is received', async () => {
-    // ASSERT BEFORE
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
-    // ACT
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
-    // ASSERT
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
-  });
-});
-
-// TEST CLOCK STOP
-describe('Given the user is logged in and the clock is STARTED, ', () => {
-  beforeEach(async () => {
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
-    await server.connected;
-  });
-
-  it('When the clock stops, then its status is STOPPED', async () => {
-    // BEFORE
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
-    // ACT
-    await store.dispatch(clockStop());
-    // ASSERT
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
-  });
-
-  it('When the the user logs out, then its status is STOPPED', async () => {
-    // BEFORE
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
-    // ACT
-    await store.dispatch(logout());
-    // ASSERT
-    expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
-  });
 });
 
 // TEST TIME INDEPENDENTLY
@@ -123,72 +77,66 @@ describe('Given the inital state', () => {
     expect(time.clock).not.toEqual(initialState.clock);
   });
 
-  it('When the CLOCK TICKS with NO DELAY at the SAME TIME OF THE SERVER, then the internal clock is updated correctly', async () => {
-    // ARRANGE
-    const request_time = server_time.utc; // Request time
-    Settings.now = () => new Date(server_time.utc * 1000).valueOf(); // Receive time & tick time
+  it('When local-time is in time with server-time, then the clock is updated correctly', async () => {
+    // Config
+    const request_time = server_time.utc - 1;
+    const receive_time = server_time.utc + 1;
+    const tick_time    = receive_time + 5;
+    const diff = tick_time - (receive_time + request_time) / 2;
+    // Receive Server time
+    Settings.now = () => new Date(receive_time * 1000).valueOf();
     await store.dispatch(receiveServerTime(server_time, request_time));
-    // ACT
+    // Tick
+    Settings.now = () => new Date(tick_time * 1000).valueOf();
     await store.dispatch(tick());
-    // ASSERT
+    // Assertå
     let time = getAllTime(store.getState());
-    expect(time.clock).not.toEqual(initialState.clock);
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai);
-    expect(time.clock.mjd).toEqual(server_time.mjd);
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600);
+    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
+    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
+    expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
+    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
+    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
   });
 
-  it('When the CLOCK TICKS with NO DELAY at a TIME BEFORE THE SERVER TIME, then the internal clock is updated correctly', async () => {
-    // ARRANGE
-    const request_time = server_time.utc - 10; // Request time
-    Settings.now = () => new Date((server_time.utc - 10) * 1000).valueOf(); // Receive time
+  it('When local-time is before server-time, then the clock is updated correctly', async () => {
+    // Config
+    const request_time = server_time.utc - 1 - 5*60;
+    const receive_time = server_time.utc + 1 - 5*60;
+    const tick_time    = receive_time + 5;
+    const diff = tick_time - (receive_time + request_time) / 2;
+    // Receive Server time
+    Settings.now = () => new Date(receive_time * 1000).valueOf();
     await store.dispatch(receiveServerTime(server_time, request_time));
-    // ACT
+    // Tick
+    Settings.now = () => new Date(tick_time * 1000).valueOf();
     await store.dispatch(tick());
-    // ASSERT
+    // Assertå
     let time = getAllTime(store.getState());
-    expect(time.clock).not.toEqual(initialState.clock);
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai);
-    expect(time.clock.mjd).toEqual(server_time.mjd);
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600);
+    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
+    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
+    expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
+    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
+    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
   });
 
-  it('When the CLOCK TICKS with NO DELAY at a TIME AFTER THE SERVER TIME, then the internal clock is updated correctly', async () => {
-    // ARRANGE
-    const request_time = server_time.utc + 10; // Request time
-    Settings.now = () => new Date((server_time.utc + 10) * 1000).valueOf(); // Receive time
+  it('When local-time is after server-time, then the clock is updated correctly', async () => {
+    // Config
+    const request_time = server_time.utc - 1 + 5*60;
+    const receive_time = server_time.utc + 1 + 5*60;
+    const tick_time    = receive_time + 5;
+    const diff = tick_time - (receive_time + request_time) / 2;
+    // Receive Server time
+    Settings.now = () => new Date(receive_time * 1000).valueOf();
     await store.dispatch(receiveServerTime(server_time, request_time));
-    // ACT
+    // Tick
+    Settings.now = () => new Date(tick_time * 1000).valueOf();
     await store.dispatch(tick());
-    // ASSERT
+    // Assertå
     let time = getAllTime(store.getState());
-    expect(time.clock).not.toEqual(initialState.clock);
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai);
-    expect(time.clock.mjd).toEqual(server_time.mjd);
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600);
-  });
-
-  it('When the CLOCK TICKS with DELAY at a TIME BEFORE THE SERVER TIME, then the internal clock is updated correctly', async () => {
-    // ARRANGE
-    const request_time = server_time.utc - 10; // Request time
-    Settings.now = () => new Date((server_time.utc - 8) * 1000).valueOf(); // Receive time
-    await store.dispatch(receiveServerTime(server_time, request_time));
-    Settings.now = () => new Date((server_time.utc - 7) * 1000).valueOf(); // Tick time
-    // ACT
-    await store.dispatch(tick());
-    // ASSERT
-    let time = getAllTime(store.getState());
-    expect(time.clock).not.toEqual(initialState.clock);
-    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai);
-    expect(time.clock.mjd).toEqual(server_time.mjd);
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600);
+    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
+    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
+    expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
+    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
+    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
   });
 });
