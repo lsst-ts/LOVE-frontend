@@ -15,7 +15,7 @@ import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
 import { getToken } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
-import { receiveServerTime, clockStart } from './time';
+import { receiveServerTime, clockStart, clockStop } from './time';
 
 export const requestToken = (username, password) => ({ type: REQUEST_TOKEN, username, password });
 
@@ -101,6 +101,7 @@ export function doRequestRemoveToken() {
   return (dispatch) => {
     dispatch(requestRemoveToken);
     dispatch(closeWebsocketConnection());
+    dispatch(clockStop());
     localStorage.removeItem('LOVE-TOKEN');
   };
 }
