@@ -16,23 +16,10 @@ beforeEach(async () => {
   // ARRANGE
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   await store.dispatch(emptyToken);
-  server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
-  server.on('connection', (socket) => {
-    const [, token] = socket.url.split('?token=');
-    if (token !== 'love-token') {
-      socket.close();
-    }
-  });
-  expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-});
-
-afterEach(() => {
-  WS.clean();
 });
 
 // TEST TIME INDEPENDENTLY
 describe('Given the inital state', () => {
-  const request_time = DateTime.utc().toMillis() / 1000;
   const server_time = {
     utc: 1587747218.377,
     tai: 1587747255.377,
@@ -43,20 +30,25 @@ describe('Given the inital state', () => {
   };
 
   it('When the clock starts then its status is STARTED, and when it stops then the status is STOPPED', async () => {
+    jest.useFakeTimers();
     // BEFORE
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
     // START
     await store.dispatch(clockStart());
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
+    expect(clearInterval).toHaveBeenCalledTimes(1);
+    expect(setInterval).toHaveBeenCalledTimes(1);
     // STOP
     await store.dispatch(clockStop());
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
   });
 
   it('When we receive server time, then it is saved', async () => {
     // ARRANGE
     let time = getAllTime(store.getState());
     expect(time).toEqual(initialState);
+    const request_time = DateTime.utc().toMillis() / 1000;
     // ACT
     await store.dispatch(receiveServerTime(server_time, request_time));
     // ASSERT
@@ -69,6 +61,7 @@ describe('Given the inital state', () => {
 
   it('When the CLOCK TICKS, then the internal clock is updated', async () => {
     // ARRANGE
+    const request_time = DateTime.utc().toMillis() / 1000;
     await store.dispatch(receiveServerTime(server_time, request_time));
     // ACT
     await store.dispatch(tick());
@@ -113,4 +106,63 @@ describe('Given the inital state', () => {
       expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
     };
   });
+});
+
+// TEST TIME PASS
+describe('Given the inital state', () => {
+  const server_time = {
+    utc: 1587747218.377,
+    tai: 1587747255.377,
+    mjd: 58963.70391640712,
+    sidereal_greenwich: 7.105572546869015,
+    sidereal_summit: 2.388944746869015,
+    tai_to_utc: -37,
+  };
+
+  it('When the clock starts then its status is STARTED, and when it stops then the status is STOPPED', async () => {
+    // Arrange
+    const request_time = server_time.utc - 1;
+    const receive_time = server_time.utc + 1;
+    jest.useFakeTimers();
+    let time = getAllTime(store.getState());
+    expect(time.clock_status).toEqual(clockStatuses.STOPPED);
+    expect(time.clock).toEqual(initialState.clock);
+    
+    // Login should start time
+    let tick_time = (receive_time + request_time) / 2 + 1;
+    Settings.now = () => new Date(receive_time * 1000).valueOf();
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time, request_time));
+    time = getAllTime(store.getState());
+    expect(time.clock_status).toEqual(clockStatuses.STARTED);
+    expect(clearInterval).toHaveBeenCalledTimes(1);
+    expect(setInterval).toHaveBeenCalledTimes(1);
+
+    // It should have ticked once
+    expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + 1);
+    expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + 1);
+    expect(time.clock.mjd).toEqual(server_time.mjd + 1 / (3600*24));
+    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + 1 * siderealSecond);
+    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + 1 * siderealSecond);
+
+    // Next 10 ticks
+    for (let diff = 2; diff < 10; diff++) {
+      tick_time = tick_time + 1;
+      Settings.now = () => new Date(tick_time * 1000).valueOf();
+      jest.advanceTimersByTime(1000);
+      time = getAllTime(store.getState());
+      expect(time.clock).not.toEqual(initialState.clock);
+      expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
+      expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
+      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
+      expect(time.clock.sidereal_greenwich.toSeconds().toFixed(10)).toEqual((server_time.sidereal_greenwich * 3600 + diff * siderealSecond).toFixed(10));
+      expect(time.clock.sidereal_summit.toSeconds().toFixed(10)).toEqual((server_time.sidereal_summit * 3600 + diff * siderealSecond).toFixed(10));
+    }
+
+    // Logout should stop timer
+    await store.dispatch(logout());
+    time = getAllTime(store.getState());
+    expect(time.clock_status).toEqual(clockStatuses.STOPPED);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
+  });
+
 });
