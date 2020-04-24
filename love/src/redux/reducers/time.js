@@ -12,7 +12,7 @@ export const clockStatuses = {
 }
 
 
-const initialState = {
+export const initialState = {
   request_time: 0,
   receive_time: 0,
   server_time: {
