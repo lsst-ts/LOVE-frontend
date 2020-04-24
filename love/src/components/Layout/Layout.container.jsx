@@ -9,7 +9,7 @@ import {
   getViews,
   getLastManagerHeartbeat,
   getLastComponentHeartbeat,
-  getTimeData,
+  getAllTime,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
@@ -29,7 +29,7 @@ const mapStateToProps = (state) => {
   const getComponentHeartbeat = (component) => getLastComponentHeartbeat(state, component);
   const viewsStatus = getViewsStatus(state);
   const views = getViews(state);
-  const timeData = getTimeData(state);
+  const timeData = getAllTime(state);
   return {
     user,
     lastSALCommand,
