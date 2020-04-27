@@ -164,8 +164,11 @@ export const openWebsocketConnection = () => {
         const data = JSON.parse(msg.data);
         if (!data.category) {
           if (data.time_data) {
-            const time_data = JSON.parse(data.time_data);
-            const request_time = JSON.parse(data.request_time);
+            const time_data = data.time_data;
+            const request_time = data.request_time;
+            console.log('data: ', data)
+            console.log('time_data: ', time_data)
+            console.log('request_time: ', request_time)
             dispatch(receiveServerTime(time_data, request_time));
           }
           else if (data.data.includes('unsubscribed')) {
@@ -456,6 +459,7 @@ export const sendLOVECscObservingLogs = (user, message) => {
  * Request an action to the server
  */
 export const sendAction = (action) => {
+  console.log('sending action: ', action)
   return (dispatch) => {
     socket.json({
       action: action,
