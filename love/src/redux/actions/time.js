@@ -50,6 +50,7 @@ export function tick() {
  * Send a websockets message to the server requesting a time update
  */
 export function requestServerTime() {
+  console.log('sending server time');
   return (dispatch) => {
     dispatch(sendAction('get_time_data'));
   }
@@ -66,7 +67,7 @@ export function clockStart() {
     clearInterval(tickTimer);
     clearInterval(syncTimer);
     tickTimer = setInterval(() => dispatch(tick()), 1000);
-    syncTimer = setInterval(() => dispatch(requestServerTime()), 10000);
+    syncTimer = setInterval(() => dispatch(requestServerTime()), 5000);
     dispatch({ type: CLOCK_START });
     dispatch(tick());
   }
