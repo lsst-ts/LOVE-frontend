@@ -9,15 +9,18 @@ import {
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
+  SEND_ACTION,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, receiveHeartbeatInfo } from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
+import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions } from '../selectors';
 import { tokenStates } from '../reducers/auth';
+import { DateTime } from 'luxon';
 
 /**
  * Set of possible connection status values
@@ -160,7 +163,10 @@ export const openWebsocketConnection = () => {
 
         const data = JSON.parse(msg.data);
         if (!data.category) {
-          if (data.data.includes('unsubscribed')) {
+          if (data.time_data) {
+            dispatch(receiveServerTime(data.time_data, data.request_time));
+          }
+          else if (data.data.includes('unsubscribed')) {
             dispatch(_receiveUnsubscriptionConfirmation(data.data));
           } else {
             dispatch(_receiveSubscriptionConfirmation(data.data));
@@ -440,6 +446,25 @@ export const sendLOVECscObservingLogs = (user, message) => {
     socket.json({
       category: 'love_csc',
       data: [logsObject],
+    });
+  };
+};
+
+/**
+ * Request an action to the server
+ */
+export const sendAction = (action) => {
+  return (dispatch, getState) => {
+    if (getConnectionStatus(getState()) !== connectionStates.OPEN) {
+      return;
+    }
+    socket.json({
+      action: action,
+      request_time: DateTime.utc().toSeconds(),
+    });
+    dispatch({
+      type: SEND_ACTION,
+      action,
     });
   };
 };
