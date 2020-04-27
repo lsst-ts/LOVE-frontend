@@ -4,7 +4,7 @@ import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { DateTime, Settings } from 'luxon';
 import { emptyToken, doReceiveToken, logout } from '../actions/auth';
-import { clockStart, clockStop, receiveServerTime, tick } from '../actions/time';
+import { clockStart, clockStop, receiveServerTime, tick, SYNC_PERIOD } from '../actions/time';
 import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
@@ -185,6 +185,22 @@ describe('Given the inital state', () => {
       sidereal_summit: 2.488944746869015,
       tai_to_utc: -37,
     },
+    {
+      utc: 1587747238.377,
+      tai: 1587747275.377,
+      mjd: 58963.90391640712,
+      sidereal_greenwich: 7.305572546869015,
+      sidereal_summit: 2.588944746869015,
+      tai_to_utc: -37,
+    },
+    {
+      utc: 1587747248.377,
+      tai: 1587747285.377,
+      mjd: 58964.00391640712,
+      sidereal_greenwich: 7.405572546869015,
+      sidereal_summit: 2.688944746869015,
+      tai_to_utc: -37,
+    },
   ];
   let serverIndex = 0;
 
@@ -199,12 +215,13 @@ describe('Given the inital state', () => {
         socket.close();
       }
       socket.on('message', msg => {
+        
         const message = JSON.parse(msg);
+        serverIndex++;
         server.send({
           time_data: server_time[serverIndex],
           request_time: message.request_time,
         });
-        serverIndex++;
       });
     });
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
@@ -214,19 +231,15 @@ describe('Given the inital state', () => {
     WS.clean();
   });
 
-  it.only('When the clock starts then its status is STARTED, and when it stops then the status is STOPPED', async () => {
+  it('When the clock starts then its requests and receives server time periodically', async () => {
     // Arrange
-    const request_time = server_time[serverIndex].utc - 1;
-    const receive_time = server_time[serverIndex].utc + 1;
     let time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STOPPED);
     expect(time.clock).toEqual(initialState.clock);
     
     // Login should start time
-    let tick_time = (receive_time + request_time) / 2 + 1;
-    Settings.now = () => new Date(receive_time * 1000).valueOf();
     jest.useFakeTimers();
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time[serverIndex], request_time));
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time[serverIndex], DateTime.utc().toSeconds()));
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
     jest.advanceTimersByTime(10);
     const connected = await server.connected;
@@ -235,30 +248,12 @@ describe('Given the inital state', () => {
 
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STARTED);
+    expect(time.server_time).toEqual(server_time[serverIndex]);
 
-    // It should have ticked once
-    expect(time.clock.utc.toSeconds()).toEqual(server_time[serverIndex].utc + 1);
-    expect(time.clock.tai.toSeconds()).toEqual(server_time[serverIndex].tai + 1);
-    expect(time.clock.mjd).toEqual(server_time[serverIndex].mjd + 1 / (3600*24));
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time[serverIndex].sidereal_greenwich * 3600 + 1 * siderealSecond);
-    expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time[serverIndex].sidereal_summit * 3600 + 1 * siderealSecond);
-
-    // Next 10 ticks
-    for (let diff = 2; diff <= 10; diff++) {
-      console.log('diff: ', diff)
-      tick_time = tick_time + 1;
-      Settings.now = () => new Date(tick_time * 1000).valueOf();
-      // await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      jest.advanceTimersByTime(1000);
+    for (let count = 1; count < 4; count++) {
+      jest.advanceTimersByTime(SYNC_PERIOD);
       time = getAllTime(store.getState());
-      expect(time.clock).not.toEqual(initialState.clock);
-      console.log('expected2: ', server_time[serverIndex].utc + diff)
-      expect(time.clock.utc.toSeconds()).toEqual(server_time[serverIndex].utc + diff);
-      expect(time.clock.tai.toSeconds()).toEqual(server_time[serverIndex].tai + diff);
-      expect(time.clock.mjd).toEqual(server_time[serverIndex].mjd + diff / (3600*24));
-      expect(time.clock.sidereal_greenwich.toSeconds().toFixed(10)).toEqual((server_time[serverIndex].sidereal_greenwich * 3600 + diff * siderealSecond).toFixed(10));
-      expect(time.clock.sidereal_summit.toSeconds().toFixed(10)).toEqual((server_time[serverIndex].sidereal_summit * 3600 + diff * siderealSecond).toFixed(10));
+      expect(time.server_time).toEqual(server_time[count]);
     }
 
     // Logout should stop timer

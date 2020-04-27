@@ -9,6 +9,8 @@ import { sendAction } from './ws';
 import { getAllTime } from '../selectors';
 import { siderealSecond } from '../../Utils';
 
+export const SYNC_PERIOD = 5000;
+
 /**
  * Receive server time data
  */
@@ -50,7 +52,6 @@ export function tick() {
  * Send a websockets message to the server requesting a time update
  */
 export function requestServerTime() {
-  console.log('sending server time');
   return (dispatch) => {
     dispatch(sendAction('get_time_data'));
   }
@@ -67,7 +68,7 @@ export function clockStart() {
     clearInterval(tickTimer);
     clearInterval(syncTimer);
     tickTimer = setInterval(() => dispatch(tick()), 1000);
-    syncTimer = setInterval(() => dispatch(requestServerTime()), 5000);
+    syncTimer = setInterval(() => dispatch(requestServerTime()), SYNC_PERIOD);
     dispatch({ type: CLOCK_START });
     dispatch(tick());
   }
