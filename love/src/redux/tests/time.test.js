@@ -36,12 +36,12 @@ describe('Given the inital state', () => {
     // START
     await store.dispatch(clockStart());
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
-    expect(clearInterval).toHaveBeenCalledTimes(1);
-    expect(setInterval).toHaveBeenCalledTimes(1);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(setInterval).toHaveBeenCalledTimes(2);
     // STOP
     await store.dispatch(clockStop());
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
-    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(clearInterval).toHaveBeenCalledTimes(4);
   });
 
   it('When we receive server time, then it is saved', async () => {
@@ -134,8 +134,8 @@ describe('Given the inital state', () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time, request_time));
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STARTED);
-    expect(clearInterval).toHaveBeenCalledTimes(1);
-    expect(setInterval).toHaveBeenCalledTimes(1);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(setInterval).toHaveBeenCalledTimes(2);
 
     // It should have ticked once
     expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + 1);
@@ -162,7 +162,7 @@ describe('Given the inital state', () => {
     await store.dispatch(logout());
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STOPPED);
-    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(clearInterval).toHaveBeenCalledTimes(4);
   });
 
 });
