@@ -5,10 +5,15 @@ import {
   CLOCK_STOP,
   CLOCK_TICK,
 } from './actionTypes';
+import { sendAction } from './ws';
 import { getAllTime } from '../selectors';
 import { siderealSecond } from '../../Utils';
 
+export const SYNC_PERIOD = 5000;
 
+/**
+ * Receive server time data
+ */
 export function receiveServerTime(time_data, request_time) {
   return (dispatch) => {
     const receive_time = DateTime.utc().toMillis() / 1000;
@@ -17,6 +22,9 @@ export function receiveServerTime(time_data, request_time) {
   };
 }
 
+/**
+ * Update the internal clock
+ */
 export function tick() {
   return (dispatch, getState) => {
     const time = getAllTime(getState());
@@ -40,19 +48,39 @@ export function tick() {
   }
 };
 
-let timerID = null;
+/**
+ * Send a websockets message to the server requesting a time update
+ */
+export function requestServerTime() {
+  return (dispatch) => {
+    dispatch(sendAction('get_time_data'));
+  }
+}
+
+let tickTimer = null;
+let syncTimer = null;
+
+/**
+ * Start an internal clock, setting it to update every second and requesting a server sync every 10 seconds
+ */
 export function clockStart() {
   return (dispatch) => {
-    clearInterval(timerID);
-    timerID = setInterval(() => dispatch(tick()), 1000);
+    clearInterval(tickTimer);
+    clearInterval(syncTimer);
+    tickTimer = setInterval(() => dispatch(tick()), 1000);
+    syncTimer = setInterval(() => dispatch(requestServerTime()), SYNC_PERIOD);
     dispatch({ type: CLOCK_START });
     dispatch(tick());
   }
 }
 
+/**
+ * Stop the internal clock
+ */
 export function clockStop() {
   return (dispatch) => {
-    clearInterval(timerID);
+    clearInterval(tickTimer);
+    clearInterval(syncTimer);
     dispatch({ type: CLOCK_STOP });
   }
 }

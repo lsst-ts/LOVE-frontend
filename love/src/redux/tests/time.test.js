@@ -4,7 +4,7 @@ import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { DateTime, Settings } from 'luxon';
 import { emptyToken, doReceiveToken, logout } from '../actions/auth';
-import { clockStart, clockStop, receiveServerTime, tick } from '../actions/time';
+import { clockStart, clockStop, receiveServerTime, tick, SYNC_PERIOD } from '../actions/time';
 import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
@@ -36,12 +36,12 @@ describe('Given the inital state', () => {
     // START
     await store.dispatch(clockStart());
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STARTED);
-    expect(clearInterval).toHaveBeenCalledTimes(1);
-    expect(setInterval).toHaveBeenCalledTimes(1);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(setInterval).toHaveBeenCalledTimes(2);
     // STOP
     await store.dispatch(clockStop());
     expect(getAllTime(store.getState()).clock_status).toEqual(clockStatuses.STOPPED);
-    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(clearInterval).toHaveBeenCalledTimes(4);
   });
 
   it('When we receive server time, then it is saved', async () => {
@@ -134,8 +134,8 @@ describe('Given the inital state', () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time, request_time));
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STARTED);
-    expect(clearInterval).toHaveBeenCalledTimes(1);
-    expect(setInterval).toHaveBeenCalledTimes(1);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(setInterval).toHaveBeenCalledTimes(2);
 
     // It should have ticked once
     expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + 1);
@@ -162,7 +162,103 @@ describe('Given the inital state', () => {
     await store.dispatch(logout());
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STOPPED);
-    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(clearInterval).toHaveBeenCalledTimes(4);
+  });
+});
+
+// TEST TIME PASS
+describe('Given the inital state', () => {
+  const server_time = [
+    {
+      utc: 1587747218.377,
+      tai: 1587747255.377,
+      mjd: 58963.70391640712,
+      sidereal_greenwich: 7.105572546869015,
+      sidereal_summit: 2.388944746869015,
+      tai_to_utc: -37,
+    },
+    {
+      utc: 1587747228.377,
+      tai: 1587747265.377,
+      mjd: 58963.80391640712,
+      sidereal_greenwich: 7.205572546869015,
+      sidereal_summit: 2.488944746869015,
+      tai_to_utc: -37,
+    },
+    {
+      utc: 1587747238.377,
+      tai: 1587747275.377,
+      mjd: 58963.90391640712,
+      sidereal_greenwich: 7.305572546869015,
+      sidereal_summit: 2.588944746869015,
+      tai_to_utc: -37,
+    },
+    {
+      utc: 1587747248.377,
+      tai: 1587747285.377,
+      mjd: 58964.00391640712,
+      sidereal_greenwich: 7.405572546869015,
+      sidereal_summit: 2.688944746869015,
+      tai_to_utc: -37,
+    },
+  ];
+  let serverIndex = 0;
+
+  beforeEach(async () => {
+    // ARRANGE
+    store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
+    await store.dispatch(emptyToken);
+    server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
+    server.on('connection', socket => {
+      const [, token] = socket.url.split('?token=');
+      if (token !== 'love-token') {
+        socket.close();
+      }
+      socket.on('message', msg => {
+        
+        const message = JSON.parse(msg);
+        serverIndex++;
+        server.send({
+          time_data: server_time[serverIndex],
+          request_time: message.request_time,
+        });
+      });
+    });
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+  });
+  
+  afterEach(() => {
+    WS.clean();
   });
 
+  it('When the clock starts then its requests and receives server time periodically', async () => {
+    // Arrange
+    let time = getAllTime(store.getState());
+    expect(time.clock_status).toEqual(clockStatuses.STOPPED);
+    expect(time.clock).toEqual(initialState.clock);
+    
+    // Login should start time
+    jest.useFakeTimers();
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time[serverIndex], DateTime.utc().toSeconds()));
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
+    jest.advanceTimersByTime(10);
+    const connected = await server.connected;
+    expect(connected.readyState).toEqual(WebSocket.OPEN);
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    time = getAllTime(store.getState());
+    expect(time.clock_status).toEqual(clockStatuses.STARTED);
+    expect(time.server_time).toEqual(server_time[serverIndex]);
+
+    for (let count = 1; count < 4; count++) {
+      jest.advanceTimersByTime(SYNC_PERIOD);
+      time = getAllTime(store.getState());
+      expect(time.server_time).toEqual(server_time[count]);
+    }
+
+    // Logout should stop timer
+    await store.dispatch(logout());
+    time = getAllTime(store.getState());
+    expect(time.clock_status).toEqual(clockStatuses.STOPPED);
+  });
 });
