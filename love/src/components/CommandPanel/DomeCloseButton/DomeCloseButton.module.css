@@ -1,0 +1,49 @@
+.buttonWrapper {
+}
+
+.button {
+  display: grid;
+  grid-template-columns: min-content;
+  grid-template-rows: min-content min-content;
+  border-radius: 5px;
+  overflow: hidden;
+  width: fit-content;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background: var(--status-alert-color);
+}
+
+.button:hover {
+  background: var(--status-alert-dimmed-color-2);
+}
+
+.domeSVG {
+}
+
+.domeSVG path {
+  transform: translate(-140px, -120px);
+  fill: #fde8df;
+}
+
+.domePath {
+}
+
+.domeXPath {
+  stroke: var(--status-alert-color);
+  stroke-width: 3;
+  stroke-miterlimit: 10;
+}
+
+.button:hover .domeXPath {
+  stroke: var(--status-alert-dimmed-color-2);
+  stroke-width: 3;
+  stroke-miterlimit: 10;
+}
+
+.buttonLabel {
+  padding: 0.5em 1em;
+  padding-top: 0;
+  color: white;
+  font-size: var(--font-size-large);
+}

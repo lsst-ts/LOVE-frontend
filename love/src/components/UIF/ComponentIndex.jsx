@@ -214,6 +214,16 @@ export const uifIndex = {
       }
     },
   },
+  CommandPanel: {
+    component: require('../CommandPanel/CommandPanel.container').default,
+    schema: {
+      ...require('../CommandPanel/CommandPanel.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../CommandPanel/CommandPanel.container').schema.props,
+      }
+    },
+  },
 };
 
 export const auxtelIndex = {
