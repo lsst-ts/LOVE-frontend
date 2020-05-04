@@ -4,6 +4,8 @@ import HealthStatusSummary from './HealthStatusSummary';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 import ManagerInterface, { saveGroupSubscriptions } from '../../Utils';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
+
+const defaultHealthFunction = `return 1;`;
 export const schema = {
   description: `Table containing the health status for all telemetries, as defined by 
                 custom health status functions defined in the component`,
@@ -42,24 +44,27 @@ export const schema = {
       `,
       isPrivate: false,
       default: {
-        'ATMCS-0-mount_AzEl_Encoders': ['cRIO_timestamp', 'elevationCalculatedAngle'],
-        'ATDome-0-position': [
-          'dropoutDoorOpeningPercentage',
-          'mainDoorOpeningPercentage',
-          'azimuthPosition',
-          'azimuthEncoderPosition',
-        ],
-        'ATMCS-0-mount_Nasmyth_Encoders': [
-          'nasmyth1CalculatedAngle',
-          'nasmyth2CalculatedAngle',
-          'nasmyth1Encoder1Raw',
-          'nasmyth1Encoder2Raw',
-          'nasmyth1Encoder3Raw',
-          'nasmyth2Encoder1Raw',
-          'nasmyth2Encoder2Raw',
-          'nasmyth2Encoder3Raw',
-          'trackId',
-        ],
+        'ATMCS-0-mount_AzEl_Encoders': {
+          cRIO_timestamp: defaultHealthFunction,
+          elevationCalculatedAngle: defaultHealthFunction,
+        },
+        'ATDome-0-position': {
+          dropoutDoorOpeningPercentage: defaultHealthFunction,
+          mainDoorOpeningPercentage: defaultHealthFunction,
+          azimuthPosition: defaultHealthFunction,
+          azimuthEncoderPosition: defaultHealthFunction,
+        },
+        'ATMCS-0-mount_Nasmyth_Encoders': {
+          nasmyth1CalculatedAngle: defaultHealthFunction,
+          nasmyth2CalculatedAngle: defaultHealthFunction,
+          nasmyth1Encoder1Raw: defaultHealthFunction,
+          nasmyth1Encoder2Raw: defaultHealthFunction,
+          nasmyth1Encoder3Raw: defaultHealthFunction,
+          nasmyth2Encoder1Raw: defaultHealthFunction,
+          nasmyth2Encoder2Raw: defaultHealthFunction,
+          nasmyth2Encoder3Raw: defaultHealthFunction,
+          trackId: defaultHealthFunction,
+        },
       },
     },
   },
@@ -70,22 +75,23 @@ const HealthStatusSummaryContainer = ({
   streams,
   subscribeToStreams,
   unsubscribeToStreams,
-  ...props
 }) => {
-  const telemetryMetadata = Object.keys(telemetriesToMonitor).reduce((prevDict, subscriptionName) => {
+  const telemetryConfiguration = Object.keys(telemetriesToMonitor).reduce((prevDict, subscriptionName) => {
     const [component, salindex, topic] = subscriptionName.split('-');
     if (!prevDict[`${component}-${salindex}`]) prevDict[`${component}-${salindex}`] = {};
-    if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = [];
+    if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = {};
 
-    prevDict[`${component}-${salindex}`][topic] = [
-      ...prevDict[`${component}-${salindex}`][topic],
-      ...telemetriesToMonitor[subscriptionName],
-    ];
+    Object.keys(telemetriesToMonitor[subscriptionName]).forEach((parameterName) => {
+      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function(
+        telemetriesToMonitor[subscriptionName][parameterName],
+      );
+    });
     return prevDict;
   }, {});
+
   return (
     <HealthStatusSummary
-      telemetryMetadata={telemetryMetadata}
+      telemetryConfiguration={telemetryConfiguration}
       streams={streams}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
