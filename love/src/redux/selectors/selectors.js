@@ -535,6 +535,7 @@ export const getAllEvents = (state) => {
 };
 
 function cleanAlarm(alarm) {
+  if (!alarm) return alarm;
   const cleanAlarm = {};
   Object.keys(alarm).map((key) => {
     cleanAlarm[key] = alarm[key].value;
@@ -550,9 +551,23 @@ export const getAllAlarms = (state) => {
   });
 };
 
+export const getLastestAlarms = (state) => {
+  if (state.ws === undefined) return undefined;
+  return state.ws.latestAlarms;
+  // return state.ws.latestAlarms.map((alarm) => {
+  //   return cleanAlarm(alarm);
+  // });
+};
+
 export const getLastAlarm = (state) => {
   if (state.ws === undefined) return undefined;
-  return cleanAlarm(getStreamData(state, 'event-Watcher-0-alarm'));
+  const lastAlarms = getStreamData(state, 'event-Watcher-0-alarm');
+  if (!lastAlarms) {
+    return lastAlarms;
+  }
+  return lastAlarms.map((alarm) => {
+    return cleanAlarm(alarm);
+  });
 };
 
 export const getObservingLogs = (state) => {
