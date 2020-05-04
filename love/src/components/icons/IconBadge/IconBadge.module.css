@@ -1,0 +1,21 @@
+.iconWrapper {
+  position: relative;
+}
+
+.content {
+  position: initial;
+}
+
+.badge {
+  position: absolute;
+  bottom: -1em;
+  right: 0;
+  font-size: var(--font-size-small);
+  text-align: center;
+  transform: translate(50%, 0);
+  background: var(--status-alert-color);
+  border-radius: 3px;
+  font-weight: bold;
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
