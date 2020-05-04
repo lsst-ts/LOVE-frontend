@@ -45,6 +45,7 @@
   display: grid;
   grid-template-columns: max-content 1fr;
   align-items: center;
+  min-width: 13em;
 }
 
 .timestamp {
