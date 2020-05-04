@@ -1,0 +1,57 @@
+.alarmContainer {
+  background-color: var(--second-secondary-background-color);
+  padding: 0.7em 0.7em;
+  margin-bottom: 0.3em;
+  border-radius: 5px;
+}
+
+.alarmWrapper {
+  display: grid;
+  grid-template-columns: 1fr max-content max-content;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.25em;
+  justify-content: space-evenly;
+}
+
+.newLabel {
+  background-color: var(--info-background-color);
+  color: var(--info-font-color);
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.42857143;
+  font-weight: 400;
+  font-size: 14px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.name {
+  font-size: var(--font-size-large);
+}
+
+.labelWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.label {
+  font-size: var(--font-size-medium);
+  color: var(--secondary-font-color);
+  text-align: right;
+  white-space: pre;
+}
+
+.timestampContainer {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+}
+
+.timestamp {
+  font-size: var(--font-size-medium);
+  white-space: nowrap;
+}
+
+.statusContainer {
+  min-width: 8em;
+}
