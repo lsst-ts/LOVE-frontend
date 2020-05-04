@@ -296,3 +296,7 @@
   height: fit-content;
   will-change: transform;
 }
+
+.alarmsTitle {
+  font-size: var(--font-size-large);
+}

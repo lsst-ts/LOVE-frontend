@@ -12,6 +12,7 @@ import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
+import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
@@ -485,19 +486,29 @@ class Layout extends Component {
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
-                  <NotificationIcon className={styles.icon} />
+                  <IconBadge content={this.props.alarms?.length ?? ''} display={this.props.alarms?.length > 0}>
+                    <NotificationIcon className={styles.icon} />
+                  </IconBadge>
                 </Button>
                 <div className={styles.alarmsContainer} title="Alarms">
-                  {this.props.alarms.map((alarm) => {
-                    const { name, severity, maxSeverity, acknowledged, muted } = alarm;
-                    const timestamp = alarm.timestampSeverityOldest * 1000;
-                    const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc)
-                    const alarmProps = {
-                      name, severity, maxSeverity, acknowledged, muted, severityUpdateTimestamp,
-                    };
-                    
-                    return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
-                  })}
+                  <div className={styles.alarmsTitle}>Alarms</div>
+                  {this.props.alarms
+                    .sort((a, b) => (a.severity > b.severity ? -1 : 1))
+                    .map((alarm) => {
+                      const { name, severity, maxSeverity, acknowledged, muted } = alarm;
+                      const timestamp = alarm.timestampSeverityOldest * 1000;
+                      const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
+                      const alarmProps = {
+                        name,
+                        severity,
+                        maxSeverity,
+                        acknowledged,
+                        muted,
+                        severityUpdateTimestamp,
+                      };
+
+                      return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
+                    })}
                 </div>
               </DropdownMenu>
 
