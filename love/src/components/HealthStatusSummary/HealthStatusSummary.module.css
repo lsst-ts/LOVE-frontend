@@ -1,7 +1,6 @@
 .container {
   display: grid;
   grid-template-rows: min-content minmax(10px, 1fr);
-  max-height: 100%;
 }
 
 .topButtons {
@@ -19,4 +18,75 @@
   align-self: baseline;
   padding-bottom: 0.3em;
   padding-left: 0.5em;
+}
+
+
+.componentContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.componentName {
+  color: var(--highlighted-font-color);
+  text-decoration: underline;
+  margin-bottom: 0.5rem;
+  margin-top: 1rem;
+}
+
+.topic {
+  display:flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 0.3rem;
+}
+
+.topicName {
+  color: var(--highlighted-font-color);
+}
+.parameterContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 97%;
+  margin-left: 3%;
+  margin-bottom: 0.15rem;
+  margin-top: 0.15rem;
+}
+
+.parameterDescription {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+.parameterName {
+  justify-self: start;
+  color: var(--highlighted-font-color);
+}
+
+.parameterUnits {
+  justify-self: start;
+  margin-left:0.2rem;
+  margin-right: 0.4rem;
+}
+
+.parameterValue {
+  margin-left:0.2rem;
+}
+
+.divider {
+  margin-top: 0.1rem;
+  margin-bottom: 0.3rem;
+  width: 100%;
+  height: 2px;
+  background: var(--tertiary-background-color);
+  align-self: center;
+}
+
+.healthStatus {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
 }
