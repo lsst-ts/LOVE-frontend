@@ -45,7 +45,7 @@ export default class DropdownMenu extends PureComponent {
         <span onClick={this.toggleOpen} ref={(node) => (this.refButtonNode = node)}>
           {firstChild}
         </span>
-        <div className={[styles.dropdown, this.state.isOpen ? styles.isOpen : ''].join(' ')}>{children}</div>
+        {this.state.isOpen && <div className={[styles.dropdown, this.state.isOpen ? styles.isOpen : ''].join(' ')}>{children}</div>}
       </span>
     );
   }
