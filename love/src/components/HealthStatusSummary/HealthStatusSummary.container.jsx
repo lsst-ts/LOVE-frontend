@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import HealthStatusSummary from './HealthStatusSummary';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import ManagerInterface, { saveGroupSubscriptions } from '../../Utils';
 
 export const schema = {
   description: `Table containing the health status for all telemetries, as defined by 
@@ -25,11 +27,60 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
+    telemetriesToMonitor: {
+      type: 'object',
+      description: `Dictionary describing the telemetries to monitor
+      Its shape must be: 
+      {
+        "<component.salindex.topic>": ["<parameter_name>", ...]
+        
+      }
+      such that for each <parameter_name> the data could be accessed in python with 
+      
+      data = await salobj.Remote(domain, <component>, <salindex>).tel_<topic>
+      value = data.<parameter_name>
+      `,
+      isPrivate: false,
+      default: {
+        'ATMCS-0-mount_AzEl_Encoders': ['cRIO_timestamp', 'elevationCalculatedAngle'],
+        'ATDome-0-position': [
+          'dropoutDoorOpeningPercentage',
+          'mainDoorOpeningPercentage',
+          'azimuthPosition',
+          'azimuthEncoderPosition',
+        ],
+        'ATMCS-0-mount_Nasmyth_Encoders': [
+          'nasmyth1CalculatedAngle',
+          'nasmyth2CalculatedAngle',
+          'nasmyth1Encoder1Raw',
+          'nasmyth1Encoder2Raw',
+          'nasmyth1Encoder3Raw',
+          'nasmyth2Encoder1Raw',
+          'nasmyth2Encoder2Raw',
+          'nasmyth2Encoder3Raw',
+          'trackId',
+        ],
+      },
+    },
   },
 };
 
-const HealthStatusSummaryContainer = () => {
-  return <HealthStatusSummary />;
+const HealthStatusSummaryContainer = ({
+  telemetriesToMonitor = schema.props.telemetriesToMonitor.default,
+  ...props
+}) => {
+  const telemetryMetadata = Object.keys(telemetriesToMonitor).reduce((prevDict, subscriptionName) => {
+    const [component, salindex, topic] = subscriptionName.split('-');
+    if (!prevDict[`${component}-${salindex}`]) prevDict[`${component}-${salindex}`] = {};
+    if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = [];
+
+    prevDict[`${component}-${salindex}`][topic] = [
+      ...prevDict[`${component}-${salindex}`][topic],
+      ...telemetriesToMonitor[subscriptionName],
+    ];
+    return prevDict;
+  }, {});
+  return <HealthStatusSummary telemetryMetadata={telemetryMetadata} />;
 };
 
 const mapStateToProps = () => ({});
