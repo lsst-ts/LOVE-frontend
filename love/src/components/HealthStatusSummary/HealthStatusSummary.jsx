@@ -6,7 +6,7 @@ import Button from './Button/Button';
 import ExportIcon from '../icons/ExportIcon/ExportIcon';
 import styles from './HealthStatusSummary.module.css';
 import UploadButton from './Button/UploadButton';
-import ManagerInterface, { saveGroupSubscriptions } from '../../Utils';
+import ManagerInterface, { formatTimestamp } from '../../Utils';
 
 /**
  * Configurable summary displaying the health status of an arbitrary subset
@@ -80,9 +80,17 @@ export default class HealthStatusSummary extends Component {
     healthFunctions: this.state.healthFunctions,
   });
 
-  render() {
-    const { telemetryMetadata } = this.props;
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+  };
 
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
+  };
+  render() {
+    const { telemetryMetadata, streams } = this.props;
+
+    console.log('streams', this.props.streams);
     return (
       <div className={styles.container}>
         {Object.keys(telemetryMetadata).map((indexedComponentName) => {
@@ -93,22 +101,35 @@ export default class HealthStatusSummary extends Component {
             <div key={indexedComponentName} className={styles.componentContainer}>
               <div className={styles.componentName}>{componentName}</div>
               {Object.keys(telemetryMetadata[indexedComponentName]).map((topic) => {
+                let timestamp = streams[`telemetry-${indexedComponentName}-${topic}`]?.private_rcvStamp;
+                timestamp = timestamp?.value !== undefined ? formatTimestamp(timestamp.value * 1000) : '-';
+
                 return (
-                  <React.Fragment>
+                  <React.Fragment key={`${indexedComponentName}${topic}`}>
                     <div className={styles.topic}>
                       <div className={styles.topicName}>{topic}</div>
-                      <div className={styles.topicTimestamp}>2012-01-01 12:34:12</div>
+                      <div className={styles.topicTimestamp}>{timestamp}</div>
                     </div>
                     <div className={styles.divider}></div>
-                    {telemetryMetadata[indexedComponentName][topic].map((parameter) => {
+                    {telemetryMetadata[indexedComponentName][topic].map((parameterName) => {
+                      const parameterValue = streams[`telemetry-${indexedComponentName}-${topic}`]?.[parameterName];
+                      let renderedValue = '';
+                      if (parameterValue?.value !== undefined) {
+                        if (Array.isArray(parameterValue.value)) {
+                          renderedValue = '[Array]';
+                        } else {
+                          renderedValue = parameterValue.value.toFixed(4);
+                        }
+                      }
                       return (
-                        <div key={`${indexedComponentName}${topic}${parameter}`} className={styles.parameterContainer}>
-                          <div className={styles.parameterName}> {parameter} </div>
-                          {/* <div className={styles.parameterDescription}> */}
-                          {/* </div> */}
+                        <div
+                          key={`${indexedComponentName}${topic}${parameterName}`}
+                          className={styles.parameterContainer}
+                        >
+                          <div className={styles.parameterName}> {parameterName} </div>
                           <div className={styles.healthStatus}>
-                            <div className={styles.parameterValue}> {(12312123.123123).toFixed(4)}</div>
-                            <div className={styles.parameterUnits}> second</div>
+                            <div className={styles.parameterValue}> {renderedValue}</div>
+                            <div className={styles.parameterUnits}> {parameterValue?.units ?? ''}</div>
                             <StatusText status={healthStatusCodes[3].toLowerCase()}>{healthStatusCodes[3]}</StatusText>
                           </div>
                         </div>

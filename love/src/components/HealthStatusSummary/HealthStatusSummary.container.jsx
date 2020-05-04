@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import HealthStatusSummary from './HealthStatusSummary';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 import ManagerInterface, { saveGroupSubscriptions } from '../../Utils';
-
+import { getStreamsData } from '../../redux/selectors/selectors.js';
 export const schema = {
   description: `Table containing the health status for all telemetries, as defined by 
                 custom health status functions defined in the component`,
@@ -67,6 +67,9 @@ export const schema = {
 
 const HealthStatusSummaryContainer = ({
   telemetriesToMonitor = schema.props.telemetriesToMonitor.default,
+  streams,
+  subscribeToStreams,
+  unsubscribeToStreams,
   ...props
 }) => {
   const telemetryMetadata = Object.keys(telemetriesToMonitor).reduce((prevDict, subscriptionName) => {
@@ -80,10 +83,44 @@ const HealthStatusSummaryContainer = ({
     ];
     return prevDict;
   }, {});
-  return <HealthStatusSummary telemetryMetadata={telemetryMetadata} />;
+  return (
+    <HealthStatusSummary
+      telemetryMetadata={telemetryMetadata}
+      streams={streams}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
+    />
+  );
 };
 
-const mapStateToProps = () => ({});
-const mapDispatchToProps = () => ({});
+const mapStateToProps = (state, ownProps) => {
+  const telemetriesToMonitor = ownProps.telemetriesToMonitor || schema.props.telemetriesToMonitor.default;
+  const groupNames = Object.keys(telemetriesToMonitor).map((key) => `telemetry-${key}`);
+  const streams = getStreamsData(state, groupNames);
+  return {
+    streams,
+  };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    subscribeToStreams: () => {
+      const telemetriesToMonitor = ownProps.telemetriesToMonitor || schema.props.telemetriesToMonitor.default;
+      const groupNames = Object.keys(telemetriesToMonitor).map((key) => `telemetry-${key}`);
+
+      groupNames.forEach((groupName) => {
+        dispatch(addGroupSubscription(groupName));
+      });
+    },
+    unsubscribeToStreams: () => {
+      const telemetriesToMonitor = ownProps.telemetriesToMonitor || schema.props.telemetriesToMonitor.default;
+      const groupNames = Object.keys(telemetriesToMonitor).map((key) => `telemetry-${key}`);
+
+      groupNames.forEach((groupName) => {
+        dispatch(requestGroupSubscriptionRemoval(groupName));
+      });
+    },
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HealthStatusSummaryContainer);
