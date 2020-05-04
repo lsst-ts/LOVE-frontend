@@ -5,7 +5,7 @@ import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../red
 import ManagerInterface, { saveGroupSubscriptions } from '../../Utils';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
 
-const defaultHealthFunction = `return 1;`;
+const defaultHealthFunction = `return Math.floor(new Date().getSeconds()  / 4) % 5 ;`;
 export const schema = {
   description: `Table containing the health status for all telemetries, as defined by 
                 custom health status functions defined in the component`,
@@ -29,7 +29,7 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
-    telemetriesToMonitor: {
+    telemetryConfiguration: {
       type: 'object',
       description: `Dictionary describing the telemetries to monitor
       Its shape must be: 
@@ -71,19 +71,19 @@ export const schema = {
 };
 
 const HealthStatusSummaryContainer = ({
-  telemetriesToMonitor = schema.props.telemetriesToMonitor.default,
+  telemetryConfiguration = schema.props.telemetryConfiguration.default,
   streams,
   subscribeToStreams,
   unsubscribeToStreams,
 }) => {
-  const telemetryConfiguration = Object.keys(telemetriesToMonitor).reduce((prevDict, subscriptionName) => {
+  const parsedTelemetryConfiguration = Object.keys(telemetryConfiguration).reduce((prevDict, subscriptionName) => {
     const [component, salindex, topic] = subscriptionName.split('-');
     if (!prevDict[`${component}-${salindex}`]) prevDict[`${component}-${salindex}`] = {};
     if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = {};
 
-    Object.keys(telemetriesToMonitor[subscriptionName]).forEach((parameterName) => {
+    Object.keys(telemetryConfiguration[subscriptionName]).forEach((parameterName) => {
       prevDict[`${component}-${salindex}`][topic][parameterName] = new Function(
-        telemetriesToMonitor[subscriptionName][parameterName],
+        telemetryConfiguration[subscriptionName][parameterName],
       );
     });
     return prevDict;
@@ -91,7 +91,7 @@ const HealthStatusSummaryContainer = ({
 
   return (
     <HealthStatusSummary
-      telemetryConfiguration={telemetryConfiguration}
+      telemetryConfiguration={parsedTelemetryConfiguration}
       streams={streams}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
@@ -100,8 +100,8 @@ const HealthStatusSummaryContainer = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const telemetriesToMonitor = ownProps.telemetriesToMonitor || schema.props.telemetriesToMonitor.default;
-  const groupNames = Object.keys(telemetriesToMonitor).map((key) => `telemetry-${key}`);
+  const telemetryConfiguration = ownProps.telemetryConfiguration || schema.props.telemetryConfiguration.default;
+  const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
   const streams = getStreamsData(state, groupNames);
   return {
     streams,
@@ -111,16 +111,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
-      const telemetriesToMonitor = ownProps.telemetriesToMonitor || schema.props.telemetriesToMonitor.default;
-      const groupNames = Object.keys(telemetriesToMonitor).map((key) => `telemetry-${key}`);
+      const telemetryConfiguration = ownProps.telemetryConfiguration || schema.props.telemetryConfiguration.default;
+      const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
 
       groupNames.forEach((groupName) => {
         dispatch(addGroupSubscription(groupName));
       });
     },
     unsubscribeToStreams: () => {
-      const telemetriesToMonitor = ownProps.telemetriesToMonitor || schema.props.telemetriesToMonitor.default;
-      const groupNames = Object.keys(telemetriesToMonitor).map((key) => `telemetry-${key}`);
+      const telemetryConfiguration = ownProps.telemetryConfiguration || schema.props.telemetryConfiguration.default;
+      const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
 
       groupNames.forEach((groupName) => {
         dispatch(requestGroupSubscriptionRemoval(groupName));

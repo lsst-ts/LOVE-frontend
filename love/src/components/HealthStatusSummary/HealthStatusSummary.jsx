@@ -81,7 +81,10 @@ export default class HealthStatusSummary extends Component {
                           <div className={styles.healthStatus}>
                             <div className={styles.parameterValue}> {renderedValue}</div>
                             <div className={styles.parameterUnits}> {parameterValue?.units ?? ''}</div>
+                            <div className={styles.statusText}>
                             <StatusText status={healthStatusCodes[healthStatusCode].toLowerCase()}>{healthStatusCodes[healthStatusCode]}</StatusText>
+
+                            </div>
                           </div>
                         </div>
                       );
