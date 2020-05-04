@@ -11,6 +11,7 @@ import {
   getLastComponentHeartbeat,
   getAllTime,
   getAllAlarms,
+  getLastestAlarms,
   getTaiToUtc,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
@@ -33,6 +34,7 @@ const mapStateToProps = (state) => {
   const views = getViews(state);
   const timeData = getAllTime(state);
   const alarms = getAllAlarms(state);
+  const newAlarms = getLastestAlarms(state);
   const taiToUtc = getTaiToUtc(state);
   return {
     user,
@@ -45,6 +47,7 @@ const mapStateToProps = (state) => {
     views,
     timeData,
     alarms,
+    newAlarms,
     taiToUtc,
   };
 };

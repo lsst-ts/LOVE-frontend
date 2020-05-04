@@ -72,6 +72,8 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
+      newAlarms: null,
+      alarms: null,
     };
 
     this.requestToastID = null;
@@ -101,6 +103,12 @@ class Layout extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
       this.moveCustomTopbar();
+    }
+
+    if (this.props.newAlarms !== prevProps.newAlarms) {
+      console.log('newAlarms: ', this.props.newAlarms);
+      console.log('alarms: ', this.props.alarms);
+      console.log('prev alarms: ', prevProps.alarms);
     }
 
     if (this.props.token === null && prevProps.token !== null) {

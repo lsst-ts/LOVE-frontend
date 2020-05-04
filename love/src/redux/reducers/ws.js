@@ -15,6 +15,7 @@ import { connectionStates, groupStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
   alarms: [],
+  latestAlarms: [],
   connectionState: connectionStates.CLOSED,
   socket: null, // Reference to the websocket client object
   subscriptions: [],
@@ -178,26 +179,24 @@ export default function(state = initialState, action) {
     }
 
     case RECEIVE_ALARMS: {
-      let actionAlarms = action.alarms;
-      if (!Array.isArray(action.alarms)) {
-        actionAlarms = [actionAlarms];
-      }
-      let newAlarms = Array.from(state.alarms);
-      actionAlarms.forEach((actionAlarm) => {
+      const latestAlarms = Array.isArray(action.alarms) ? Array.from(action.alarms) : Array.from([action.alarms]);
+      let alarms = Array.from(state.alarms);
+      latestAlarms.forEach((actionAlarm) => {
         if (actionAlarm === undefined) return;
-        const alarmIndex = newAlarms.findIndex((stateAlarm) => {
+        const alarmIndex = alarms.findIndex((stateAlarm) => {
           return stateAlarm.name.value === actionAlarm.name.value;
         });
         if (alarmIndex === -1) {
-          newAlarms.push(actionAlarm);
+          alarms.push(actionAlarm);
         } else {
-          newAlarms[alarmIndex] = actionAlarm;
+          alarms[alarmIndex] = actionAlarm;
         }
       });
 
       return {
         ...state,
-        alarms: newAlarms,
+        alarms,
+        latestAlarms,
       };
     }
 
