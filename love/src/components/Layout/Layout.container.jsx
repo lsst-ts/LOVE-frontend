@@ -10,6 +10,8 @@ import {
   getLastManagerHeartbeat,
   getLastComponentHeartbeat,
   getAllTime,
+  getAllAlarms,
+  getTaiToUtc,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
@@ -30,6 +32,8 @@ const mapStateToProps = (state) => {
   const viewsStatus = getViewsStatus(state);
   const views = getViews(state);
   const timeData = getAllTime(state);
+  const alarms = getAllAlarms(state);
+  const taiToUtc = getTaiToUtc(state);
   return {
     user,
     lastSALCommand,
@@ -40,14 +44,26 @@ const mapStateToProps = (state) => {
     getLastComponentHeartbeat: getComponentHeartbeat,
     views,
     timeData,
+    alarms,
+    taiToUtc,
   };
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  logout: () => dispatch(logout()),
-  clearViewToEdit: () => dispatch(clearViewToEdit),
-  subscribeToStreams: () => dispatch(addGroupSubscription('heartbeat-manager-0-stream')),
-  unsubscribeToStreams: () => dispatch(requestGroupSubscriptionRemoval('heartbeat-manager-0-stream')),
-});
+const mapDispatchToProps = (dispatch) => {
+  const subscriptions = ['heartbeat-manager-0-stream', 'event-Watcher-0-alarm'];
+  return {
+    subscriptions,
+    logout: () => dispatch(logout()),
+    clearViewToEdit: () => dispatch(clearViewToEdit),
+    subscribeToStreams: () => dispatch(addGroupSubscription('heartbeat-manager-0-stream')),
+    unsubscribeToStreams: () => dispatch(requestGroupSubscriptionRemoval('heartbeat-manager-0-stream')),
+    subscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+    },
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+    },
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(LayoutContainer);
