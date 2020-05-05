@@ -21,6 +21,7 @@ import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import CompactAlarm from './CompactAlarm/CompactAlarm';
+import { severityEnum } from '../../Config';
 
 import warningAudio from '../../sounds/up_to_warning.mp3';
 import seriousAudio from '../../sounds/up_to_serious.mp3';
@@ -198,15 +199,15 @@ class Layout extends Component {
         newAlarm.severity.value > newAlarm.mutedSeverity.value 
       ) {
         switch(newAlarm.maxSeverity.value) {
-          case 2: {
+          case severityEnum.warning: {
             this.warningSound.play();
             break;
           }
-          case 3: {
+          case severityEnum.serious: {
             this.seriousSound.play();
             break;
           }
-          case 4: {
+          case severityEnum.critical: {
             this.criticalSound.play();
             break;
           }

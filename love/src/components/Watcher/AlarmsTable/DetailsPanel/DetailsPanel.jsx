@@ -3,7 +3,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import Button from '../../../GeneralPurpose/Button/Button';
 import TimestampDisplay from '../../../GeneralPurpose/TimestampDisplay/TimestampDisplay';
-import { severityToStatus } from '../../Alarm/Alarm';
+import { severityToStatus } from '../../../../Config';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
