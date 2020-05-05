@@ -29,7 +29,6 @@
     "redux-thunk": "^2.3.0",
     "redux-undo": "^1.0.0",
     "rfdc": "^1.1.4",
-    "uifx": "^2.0.7",
     "vega": "^5.4.0",
     "vega-embed": "^6.4.0",
     "vega-lib": "^4.4.0",
