@@ -197,16 +197,18 @@ class Layout extends Component {
         (!oldAlarm || newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) && 
         newAlarm.severity.value > newAlarm.mutedSeverity.value 
       ) {
-        console.log('Sound: ', newAlarm.maxSeverity.value);
         switch(newAlarm.maxSeverity.value) {
           case 2: {
             this.warningSound.play();
+            break;
           }
           case 3: {
             this.seriousSound.play();
+            break;
           }
           case 4: {
             this.criticalSound.play();
+            break;
           }
         }
       }
