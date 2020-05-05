@@ -1,12 +1,7 @@
 import React, { Component } from 'react';
-import saveAs from 'file-saver';
 import StatusText from '../GeneralPurpose/StatusText/StatusText';
-import TelemetrySelectionTableContainer from './TelemetrySelectionTable/TelemetrySelectionTable.container';
-import Button from './Button/Button';
-import ExportIcon from '../icons/ExportIcon/ExportIcon';
 import styles from './HealthStatusSummary.module.css';
-import UploadButton from './Button/UploadButton';
-import ManagerInterface, { formatTimestamp } from '../../Utils';
+import { formatTimestamp } from '../../Utils';
 
 /**
  * Configurable summary displaying the health status of an arbitrary subset
