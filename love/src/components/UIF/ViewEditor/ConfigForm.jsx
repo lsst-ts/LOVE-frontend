@@ -23,7 +23,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   const [externalStep, setExternalStep] = useState({
     show: false,
     component: null,
-    propKey: ''
+    propKey: '',
   });
 
   useEffect(() => {
@@ -53,15 +53,15 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     setExternalStep({
       show: false,
       component: undefined,
-      propKey: ''
-    })
+      propKey: '',
+    });
   };
 
-  const showExtraStep = (propKey, propData) => {
-    const Component = externalStepComponents[propData.externalStep];
+  const showExtraStep = (propKey, propConfig, propData) => {
+    const Component = externalStepComponents[propConfig.externalStep];
     setExternalStep({
       show: true,
-      component: <Component onSave={onExtraStepSave} onCancel={onExtraStepCancel} />,
+      component: <Component onSave={onExtraStepSave} onCancel={onExtraStepCancel} initialData={propData} />,
       propKey,
     });
   };
@@ -69,7 +69,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   if (!isOpen) {
     return null;
   }
-
 
   if (externalStep.show) {
     return (
@@ -123,7 +122,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
                   <React.Fragment>
                     <Button
                       status="default"
-                      onClick={() => showExtraStep(key, componentProps[key])}
+                      onClick={() => showExtraStep(key, componentProps[key], value)}
                       className={styles.editButton}
                     >
                       {`Edit ${key}`}
@@ -157,7 +156,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
                 );
               }
             }
-            if (componentProps[key].externalStep == undefined && ['boolean'].includes(componentProps[key].type)) {
+            if (['boolean'].includes(componentProps[key].type)) {
               configElementInput = (
                 <input
                   type={'checkbox'}

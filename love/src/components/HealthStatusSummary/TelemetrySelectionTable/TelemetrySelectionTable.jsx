@@ -55,6 +55,18 @@ export default class TelemetrySelectionTable extends PureComponent {
     onSetSelection: PropTypes.func,
     /** Indicates if component should display bottom selection bar*/
     showSelection: PropTypes.bool,
+
+    /** Object that describes the initially selected telemetries. 
+     * Must have his structure:
+     * 
+     * {
+     *   "<component.salindex.topic>": {
+     *     <parameter_name>: healthfunction,
+     *     ...
+     *   }
+     * }
+     */
+    initialData: PropTypes.object,
   };
 
   static defaultProps = {
@@ -73,6 +85,7 @@ export default class TelemetrySelectionTable extends PureComponent {
     ],
     telemetries: {},
     showSelection: true,
+    initialData: {}
   };
 
   constructor() {
@@ -133,6 +146,16 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   componentDidMount = () => {
     this.props.subscribeToStream();
+
+    const initialData = JSON.parse(this.props.initialData);
+    const selectedRows = Object.keys(initialData).flatMap((cscSalindexTopic) =>{
+      return Object.keys(initialData[cscSalindexTopic]).map(parameterName => {
+        return `${cscSalindexTopic}-${parameterName}`;
+      });
+    });
+    this.setState({
+      selectedRows
+    });
   };
 
   componentWillUnmount = () => {
@@ -408,12 +431,12 @@ export default class TelemetrySelectionTable extends PureComponent {
     return data;
   };
 
-  setSelection = (event) => {
+  setSelection = () => {
     const data = this.getData().filter((row) => {
       const key = `${row.component}-${row.stream}-${row.param_name}`;
       return this.state.selectedRows.indexOf(key) >= 0;
     });
-    this.props.onSetSelection(this.state.selectedRows, data, event);
+    this.props.onSetSelection(this.state.selectedRows, data);
   };
 
   render() {
@@ -695,7 +718,7 @@ export default class TelemetrySelectionTable extends PureComponent {
               title="Set selected telemetries"
               className={styles.selectionSetButton}
               onClick={(ev) => {
-                this.setSelection(this.state.selectedRows, ev);
+                this.setSelection();
               }}
             >
               {' '}
