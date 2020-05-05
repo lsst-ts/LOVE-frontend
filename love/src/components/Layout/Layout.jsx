@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import UIfx from 'uifx'; 
-import {Howl, Howler} from 'howler';
+import {Howl} from 'howler';
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
@@ -23,9 +22,9 @@ import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/Labe
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import CompactAlarm from './CompactAlarm/CompactAlarm';
 
-import warningAudio from '../../sounds/warning.mp3';
-import seriousAudio from '../../sounds/serious.mp3';
-import criticalAudio from '../../sounds/critical.mp3';
+import warningAudio from '../../sounds/up_to_warning.mp3';
+import seriousAudio from '../../sounds/up_to_serious.mp3';
+import criticalAudio from '../../sounds/up_to_critical.mp3';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -98,9 +97,6 @@ class Layout extends Component {
       onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
       onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
     });
-    // this.warningSound = new UIfx(warningAudio, {throttleMs: 100});
-    // this.seriousSound = new UIfx(seriousAudio, {throttleMs: 100});
-    // this.criticalSound = new UIfx(criticalAudio, {throttleMs: 100});
   }
 
   UNSAFE_componentWillMount = () => {
@@ -110,8 +106,6 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
-    console.log('this.warningSound: ', this.warningSound)
-    this.warningSound.play()
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
@@ -199,9 +193,9 @@ class Layout extends Component {
       const oldAlarm = oldAlarms.find((oldAlarm) => {
         return oldAlarm.name.value === newAlarm.name.value;
       });
-      if (!oldAlarm || newAlarm.severity.value > oldAlarm.severity.value) {
-        console.log('Sound: ', newAlarm.severity.value);
-        switch(newAlarm.severity.value) {
+      if (!oldAlarm || newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) {
+        console.log('Sound: ', newAlarm.maxSeverity.value);
+        switch(newAlarm.maxSeverity.value) {
           case 2: {
             this.warningSound.play();
           }
