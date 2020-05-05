@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import UIfx from 'uifx'; 
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
@@ -20,6 +21,10 @@ import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import CompactAlarm from './CompactAlarm/CompactAlarm';
+
+import warningAudio from '../../sounds/warning.mp3';
+import seriousAudio from '../../sounds/serious.mp3';
+import criticalAudio from '../../sounds/critical.mp3';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -77,6 +82,9 @@ class Layout extends Component {
     };
 
     this.requestToastID = null;
+    this.warningSound = new UIfx(warningAudio);
+    this.seriousSound = new UIfx(seriousAudio);
+    this.criticalSound = new UIfx(criticalAudio);
   }
 
   UNSAFE_componentWillMount = () => {
@@ -86,6 +94,8 @@ class Layout extends Component {
   };
 
   componentDidMount = () => {
+    console.log('this.warningSound: ', this.warningSound)
+    this.warningSound.play()
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
@@ -106,6 +116,7 @@ class Layout extends Component {
     }
 
     if (this.props.newAlarms !== prevProps.newAlarms) {
+      console.log('---------------');
       console.log('newAlarms: ', this.props.newAlarms);
       console.log('alarms: ', this.props.alarms);
       console.log('prev alarms: ', prevProps.alarms);
@@ -178,6 +189,17 @@ class Layout extends Component {
       });
       if (!oldAlarm || newAlarm.severity.value > oldAlarm.severity.value) {
         console.log('Sound: ', newAlarm.severity.value);
+        switch(newAlarm.severity.value) {
+          case 2: {
+            this.warningSound.play();
+          }
+          case 3: {
+            this.seriousSound.play();
+          }
+          case 4: {
+            this.criticalSound.play();
+          }
+        }
       }
     });
   }
