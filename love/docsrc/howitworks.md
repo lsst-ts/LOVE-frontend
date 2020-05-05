@@ -153,6 +153,7 @@ The token, websocket and subscriptions handling is summarized in the following g
 - When token is received/validated we dispatch an `openWebsocketConnection` action
 - When connection is opened, then the connection status is OPENING, and when ready it is OPEN
 - On most errors or close, the connection status is RETRYING
+- When status is RETRYING an interval function runs every 3 seconds, attempting to reconnect
 - When connection is gracefully closed, then the status is CLOSED
 
 ### Subscriptions are decoupled from connection
