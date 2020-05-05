@@ -32,15 +32,25 @@ export const schema = {
     telemetryConfiguration: {
       type: 'object',
       description: `Dictionary describing the telemetries to monitor
+      and functions that can return an integer from 0 to 4 that represents
+      a different health status level.
+      
       Its shape must be: 
       {
-        "<component.salindex.topic>": ["<parameter_name>", ...]
+        "<component.salindex.topic>": {
+          <parameter_name>: healthfunction,
+          ...
+        }
         
       }
       such that for each <parameter_name> the data could be accessed in python with 
       
-      data = await salobj.Remote(domain, <component>, <salindex>).tel_<topic>
-      value = data.<parameter_name>
+      
+      >>> data = await salobj.Remote(domain, <component>, <salindex>).tel_<topic>
+      >>> value = data.<parameter_name>
+
+      
+      
       `,
       isPrivate: false,
       externalStep: 'TelemetrySelectionTable',

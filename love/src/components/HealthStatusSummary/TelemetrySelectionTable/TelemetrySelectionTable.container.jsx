@@ -18,6 +18,8 @@ const TelemetrySelectionTableContainer = ({
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
       allTelemetries={allTelemetries}
+      onCancel={onCancel}
+      onSetSelection={onSave}
     />
   );
 };
