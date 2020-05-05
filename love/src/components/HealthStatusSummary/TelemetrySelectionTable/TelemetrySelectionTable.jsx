@@ -56,7 +56,7 @@ export default class TelemetrySelectionTable extends PureComponent {
     /** Indicates if component should display bottom selection bar*/
     showSelection: PropTypes.bool,
 
-    /** Object that describes the initially selected telemetries. 
+    /** Object that describes the initially selected telemetries and their health functions.
      * Must have his structure:
      * 
      * {
@@ -142,6 +142,13 @@ export default class TelemetrySelectionTable extends PureComponent {
       filters,
       setFilters: this.setFilters,
     };
+  }
+
+  componentDidUpdate = () => {
+    console.log('this.props.allTelemetries', this.props.allTelemetries);
+    if(this.props.allTelemetries && Object.keys(this.props.allTelemetries).length > 4){
+      this.props.unsubscribeToStream();
+    }
   }
 
   componentDidMount = () => {
@@ -501,23 +508,6 @@ export default class TelemetrySelectionTable extends PureComponent {
                         filter={this.state.filters.stream}
                       />
                     )}
-                    {this.props.columnsToDisplay.includes('timestamp') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Timestamp'}
-                        filterName={'timestamp'}
-                        filter={this.state.filters.timestamp}
-                        secondaryText={'YYYY/MM/DD'}
-                      />
-                    )}
-                    {this.props.columnsToDisplay.includes('name') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Name'}
-                        filterName={'name'}
-                        filter={this.state.filters.name}
-                      />
-                    )}
                     {this.props.columnsToDisplay.includes('param_name') && (
                       <ColumnHeader
                         {...defaultColumnProps}
@@ -535,14 +525,14 @@ export default class TelemetrySelectionTable extends PureComponent {
                         filter={this.state.filters.data_type}
                       />
                     )}
-                    {this.props.columnsToDisplay.includes('value') && (
+                    {/* {this.props.columnsToDisplay.includes('value') && (
                       <ColumnHeader
                         {...defaultColumnProps}
                         header={'Value'}
                         filterName={'value'}
                         filter={this.state.filters.value}
                       />
-                    )}
+                    )} */}
                     {this.props.columnsToDisplay.includes('units') && (
                       <ColumnHeader
                         className={styles.narrowCol}
@@ -590,19 +580,15 @@ export default class TelemetrySelectionTable extends PureComponent {
                       {this.props.columnsToDisplay.includes('stream') && (
                         <td className={styles.string}>{row.stream}</td>
                       )}
-                      {this.props.columnsToDisplay.includes('timestamp') && (
-                        <td className={styles.string}>{formatTimestamp(row.timestamp)}</td>
-                      )}
-                      {this.props.columnsToDisplay.includes('name') && <td className={styles.string}>{row.name}</td>}
                       {this.props.columnsToDisplay.includes('param_name') && (
                         <td className={styles.string}>{row.param_name}</td>
                       )}
                       {this.props.columnsToDisplay.includes('data_type') && (
                         <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
                       )}
-                      {this.props.columnsToDisplay.includes('value') && (
+                      {/* {this.props.columnsToDisplay.includes('value') && (
                         <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
-                      )}
+                      )} */}
                       {this.props.columnsToDisplay.includes('units') && (
                         <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
                       )}
