@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import UIfx from 'uifx'; 
+import {Howl, Howler} from 'howler';
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
@@ -82,9 +83,24 @@ class Layout extends Component {
     };
 
     this.requestToastID = null;
-    this.warningSound = new UIfx(warningAudio);
-    this.seriousSound = new UIfx(seriousAudio);
-    this.criticalSound = new UIfx(criticalAudio);
+    this.warningSound = new Howl({
+      src: [warningAudio],
+      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
+      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
+    });
+    this.seriousSound = new Howl({
+      src: [seriousAudio],
+      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
+      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
+    });
+    this.criticalSound = new Howl({
+      src: [criticalAudio],
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+    });
+    // this.warningSound = new UIfx(warningAudio, {throttleMs: 100});
+    // this.seriousSound = new UIfx(seriousAudio, {throttleMs: 100});
+    // this.criticalSound = new UIfx(criticalAudio, {throttleMs: 100});
   }
 
   UNSAFE_componentWillMount = () => {
@@ -116,10 +132,6 @@ class Layout extends Component {
     }
 
     if (this.props.newAlarms !== prevProps.newAlarms) {
-      console.log('---------------');
-      console.log('newAlarms: ', this.props.newAlarms);
-      console.log('alarms: ', this.props.alarms);
-      console.log('prev alarms: ', prevProps.alarms);
       this.checkAndNotifyAlarms(this.props.newAlarms, prevProps.alarms);
     }
 
