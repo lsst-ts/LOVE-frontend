@@ -403,7 +403,7 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter((a) => a.severity > 1);
+    const filteredAlarms = this.props.alarms.filter((a) => a.severity > 1 && !a.acknowledged);
     return (
       <>
         <div className={styles.hidden}>
@@ -504,6 +504,7 @@ class Layout extends Component {
                           const timestamp = alarm.timestampSeverityOldest * 1000;
                           const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
                           const alarmProps = {
+                            user: this.props.user,
                             name,
                             severity,
                             maxSeverity,
@@ -511,6 +512,7 @@ class Layout extends Component {
                             muted,
                             severityUpdateTimestamp,
                             reason,
+                            ackAlarm: this.props.ackAlarm
                           };
 
                           return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
