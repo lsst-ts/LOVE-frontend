@@ -43,6 +43,9 @@
   margin-top: 0.3rem;
 }
 
+.topicTimestamp {
+  margin-left: 1em;
+}
 .topicName {
   color: var(--highlighted-font-color);
 }
@@ -93,4 +96,14 @@
 
 .statusText {
   width: 15ch;
+}
+
+.hidden {
+  display: none;
+}
+
+.trimmedLabel {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 22ch;
 }
