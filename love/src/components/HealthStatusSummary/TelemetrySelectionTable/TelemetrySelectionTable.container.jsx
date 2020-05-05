@@ -12,12 +12,18 @@ const TelemetrySelectionTableContainer = ({
   onCancel,
   ...props
 }) => {
+
+  const [telemetries, setTelemetries] = React.useState({});
+
+  if(allTelemetries && Object.keys(allTelemetries).length > 4 && Object.keys(telemetries).length === 0){
+    setTelemetries(allTelemetries);
+  }
   return (
     <TelemetrySelectionTable
       {...props}
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
-      allTelemetries={allTelemetries}
+      allTelemetries={telemetries}
       onCancel={onCancel}
       onSetSelection={onSave}
     />
