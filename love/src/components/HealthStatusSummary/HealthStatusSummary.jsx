@@ -24,24 +24,45 @@ const healthStatusCodes = {
   3: 'Alert',
   4: 'Invalid',
 };
+
+const WIDTH_THRESHOLD = 480;
 export default class HealthStatusSummary extends Component {
   static defaultProps = {
     telemetryConfiguration: {},
     streams: undefined
   };
 
+  constructor(props){
+    super(props);
+    this.containerRef = React.createRef();
+    this.resizeObserver = undefined;
+    this.state = {
+      containerWidth: Infinity
+    }
+  }
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const container = entries[0];
+      this.setState({
+        containerWidth: container.contentRect.width
+      })
+    });
+
+    this.resizeObserver.observe(this.containerRef.current.parentNode.parentNode);
+
   };
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams();
+    this.resizeObserver.disconnect();
   };
   render() {
     const { telemetryConfiguration, streams } = this.props;
     return (
-      <div className={styles.container}>
+      <div ref={this.containerRef} className={styles.container}>
         {Object.keys(telemetryConfiguration).map((indexedComponentName) => {
           const [component, salindex] = indexedComponentName.split('-');
           const componentName = `${component}${parseInt(salindex) === 0 ? '' : `.${salindex}`}`;
@@ -78,10 +99,10 @@ export default class HealthStatusSummary extends Component {
                           className={styles.parameterContainer}
                           title={`Item: ${indexedComponentName}.${topic}.${parameterName}`}
                         >
-                          <div className={styles.parameterName}> {parameterName} </div>
+                          <div className={[styles.parameterName, this.state.containerWidth < WIDTH_THRESHOLD ? styles.trimmedLabel: ''].join(' ')}> {parameterName} </div>
                           <div className={styles.healthStatus}>
-                            <div className={styles.parameterValue}> {renderedValue}</div>
-                            <div className={styles.parameterUnits}> {parameterValue?.units ?? ''}</div>
+                            <div className={[styles.parameterValue, this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden: ''].join(' ')}> {renderedValue}</div>
+                            <div className={[styles.parameterUnits, this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden: ''].join(' ')}> {parameterValue?.units ?? ''}</div>
                             <div className={styles.statusText}>
                             <StatusText status={healthStatusCodes[healthStatusCode].toLowerCase()}>{healthStatusCodes[healthStatusCode]}</StatusText>
 
