@@ -11,6 +11,7 @@ import {
   getLastComponentHeartbeat,
   getAllTime,
   getAllAlarms,
+  getRawAlarms,
   getLastestAlarms,
   getTaiToUtc,
 } from '../../redux/selectors';
@@ -33,7 +34,7 @@ const mapStateToProps = (state) => {
   const viewsStatus = getViewsStatus(state);
   const views = getViews(state);
   const timeData = getAllTime(state);
-  const alarms = getAllAlarms(state);
+  const alarms = getRawAlarms(state);
   const newAlarms = getLastestAlarms(state);
   const taiToUtc = getTaiToUtc(state);
   return {

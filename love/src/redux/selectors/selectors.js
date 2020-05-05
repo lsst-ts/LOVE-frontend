@@ -551,12 +551,14 @@ export const getAllAlarms = (state) => {
   });
 };
 
+export const getRawAlarms = (state) => {
+  if (state.ws === undefined) return undefined;
+  return state.ws.alarms;
+};
+
 export const getLastestAlarms = (state) => {
   if (state.ws === undefined) return undefined;
   return state.ws.latestAlarms;
-  // return state.ws.latestAlarms.map((alarm) => {
-  //   return cleanAlarm(alarm);
-  // });
 };
 
 export const getLastAlarm = (state) => {
