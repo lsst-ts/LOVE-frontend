@@ -18,6 +18,7 @@ const initialState = {
   latestAlarms: [],
   connectionState: connectionStates.CLOSED,
   socket: null, // Reference to the websocket client object
+  retryInterval: undefined,
   subscriptions: [],
   lastSALCommand: {
     status: SALCommandStatus.EMPTY,
@@ -31,10 +32,24 @@ const initialState = {
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
  */
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case CHANGE_WS_STATE: {
-      return { ...state, connectionState: action.connectionState };
+      let { retryInterval } = state;
+      if (
+        state.connectionState !== connectionStates.RETRYING &&
+        action.connectionState === connectionStates.RETRYING &&
+        action.socket
+      ) {
+        clearInterval(retryInterval);
+        retryInterval = setInterval(action.socket.reconnect, 3000);
+      } else if (
+        state.connectionState === connectionStates.RETRYING &&
+        action.connectionState !== connectionStates.RETRYING
+      ) {
+        clearInterval(retryInterval);
+      }
+      return { ...state, connectionState: action.connectionState, retryInterval };
     }
     case ADD_GROUP_SUBSCRIPTION: {
       const matchingGroup = state.subscriptions.filter((subscription) => subscription.groupName === action.groupName);
@@ -55,10 +70,12 @@ export default function(state = initialState, action) {
       };
     }
     case REQUEST_SUBSCRIPTIONS: {
-      const subscriptions = action.subscriptions.map(subscription => ({
+      const subscriptions = action.subscriptions.map((subscription) => ({
         ...subscription,
-        status: subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING ?
-          groupStates.REQUESTING : subscription.status,
+        status:
+          subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING
+            ? groupStates.REQUESTING
+            : subscription.status,
       }));
       return {
         ...state,
@@ -84,7 +101,7 @@ export default function(state = initialState, action) {
     }
     case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
       const subscriptions = state.subscriptions.filter((subscription) => {
-        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName)
+        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName);
       });
       return {
         ...state,
