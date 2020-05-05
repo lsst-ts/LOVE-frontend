@@ -403,6 +403,7 @@ class Layout extends Component {
   };
 
   render() {
+    const filteredAlarms = this.props.alarms.filter((a) => a.severity > 1);
     return (
       <>
         <div className={styles.hidden}>
@@ -486,29 +487,36 @@ class Layout extends Component {
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
-                  <IconBadge content={this.props.alarms?.length ?? ''} display={this.props.alarms?.length > 0}>
+                  <IconBadge content={filteredAlarms.length ?? ''} display={filteredAlarms?.length > 0}>
                     <NotificationIcon className={styles.icon} />
                   </IconBadge>
                 </Button>
                 <div className={styles.alarmsContainer} title="Alarms">
-                  <div className={styles.alarmsTitle}>Alarms</div>
-                  {this.props.alarms
-                    .sort((a, b) => (a.severity > b.severity ? -1 : 1))
-                    .map((alarm) => {
-                      const { name, severity, maxSeverity, acknowledged, muted } = alarm;
-                      const timestamp = alarm.timestampSeverityOldest * 1000;
-                      const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
-                      const alarmProps = {
-                        name,
-                        severity,
-                        maxSeverity,
-                        acknowledged,
-                        muted,
-                        severityUpdateTimestamp,
-                      };
+                  {filteredAlarms.length < 1 ? (
+                    <div className={styles.alarmsTitle}>No active alarms</div>
+                  ) : (
+                    <>
+                      <div className={styles.alarmsTitle}>Active alarms</div>
+                      {filteredAlarms
+                        .sort((a, b) => (a.severity > b.severity ? -1 : 1))
+                        .map((alarm) => {
+                          const { name, severity, maxSeverity, acknowledged, muted, reason } = alarm;
+                          const timestamp = alarm.timestampSeverityOldest * 1000;
+                          const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
+                          const alarmProps = {
+                            name,
+                            severity,
+                            maxSeverity,
+                            acknowledged,
+                            muted,
+                            severityUpdateTimestamp,
+                            reason,
+                          };
 
-                      return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
-                    })}
+                          return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
+                        })}
+                    </>
+                  )}
                 </div>
               </DropdownMenu>
 
