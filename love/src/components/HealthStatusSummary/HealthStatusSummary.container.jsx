@@ -43,6 +43,7 @@ export const schema = {
       value = data.<parameter_name>
       `,
       isPrivate: false,
+      externalStep: 'TelemetrySelectionTable',
       default: {
         'ATMCS-0-mount_AzEl_Encoders': {
           cRIO_timestamp: defaultHealthFunction,

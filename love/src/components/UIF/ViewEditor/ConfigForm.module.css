@@ -21,3 +21,8 @@
   background: transparent;
   border: 1px solid var(--secondary-font-dimmed-color);
 }
+
+.editButton {
+  margin-top: 1rem;
+  margin-bottom: -0.5rem;
+}

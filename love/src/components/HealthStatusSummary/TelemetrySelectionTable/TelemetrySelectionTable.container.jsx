@@ -4,7 +4,12 @@ import { getAllTelemetries } from '../../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
 import TelemetrySelectionTable from './TelemetrySelectionTable';
 
-const TelemetrySelectionTableContainer = ({ allTelemetries, subscribeToStream, unsubscribeToStream,
+const TelemetrySelectionTableContainer = ({
+  allTelemetries,
+  subscribeToStream,
+  unsubscribeToStream,
+  onSave,
+  onCancel,
   ...props
 }) => {
   return (
@@ -35,7 +40,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TelemetrySelectionTableContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(TelemetrySelectionTableContainer);
