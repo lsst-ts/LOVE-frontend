@@ -193,7 +193,10 @@ class Layout extends Component {
       const oldAlarm = oldAlarms.find((oldAlarm) => {
         return oldAlarm.name.value === newAlarm.name.value;
       });
-      if (!oldAlarm || newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) {
+      if (
+        (!oldAlarm || newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) && 
+        newAlarm.severity.value > newAlarm.mutedSeverity.value 
+      ) {
         console.log('Sound: ', newAlarm.maxSeverity.value);
         switch(newAlarm.maxSeverity.value) {
           case 2: {
