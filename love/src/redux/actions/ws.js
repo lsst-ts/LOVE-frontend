@@ -67,9 +67,10 @@ let socket;
 /**
  * Change to connectionState to the given value
  */
-const _changeConnectionState = (connectionState) => ({
+const _changeConnectionState = (connectionState, currentSocket) => ({
   type: CHANGE_WS_STATE,
   connectionState,
+  socket: currentSocket,
 });
 
 /**
@@ -128,7 +129,7 @@ export const openWebsocketConnection = () => {
     if (nonConnectableTokenStates.includes(tokenStatus)) {
       const connectionStatus = getConnectionStatus(getState());
       if (connectionStatus !== connectionStates.CLOSED) {
-        dispatch(_changeConnectionState(connectionStates.CLOSED));
+        dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
       }
       return;
     }
@@ -139,23 +140,23 @@ export const openWebsocketConnection = () => {
     }
     const token = getToken(getState());
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-    dispatch(_changeConnectionState(connectionStates.OPENING));
+    dispatch(_changeConnectionState(connectionStates.OPENING, socket));
 
     socket = sockette(connectionPath, {
       onopen: () => {
-        dispatch(_changeConnectionState(connectionStates.OPEN));
+        dispatch(_changeConnectionState(connectionStates.OPEN, socket));
         dispatch(_requestSubscriptions());
       },
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
-          dispatch(_changeConnectionState(connectionStates.CLOSED));
+          dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
         } else {
-          dispatch(_changeConnectionState(connectionStates.RETRYING));
+          dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
           dispatch(_resetSubscriptions(getSubscriptions(getState())));
         }
       },
       onerror: () => {
-        dispatch(_changeConnectionState(connectionStates.RETRYING));
+        dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
         dispatch(_resetSubscriptions(getSubscriptions(getState())));
       },
       onmessage: (msg) => {
@@ -254,7 +255,7 @@ export const closeWebsocketConnection = () => {
     dispatch({ type: RESET_SUBSCRIPTIONS, subscriptions: [] });
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
-      dispatch(_changeConnectionState(connectionStates.CLOSED));
+      dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
     }
   }
 };
