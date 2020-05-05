@@ -12,6 +12,7 @@ import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
 import GearIcon from '../icons/GearIcon/GearIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
+import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
@@ -19,6 +20,7 @@ import ClockContainer from '../Time/Clock/Clock.container';
 import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
+import CompactAlarm from './CompactAlarm/CompactAlarm';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -258,7 +260,7 @@ class Layout extends Component {
     this.setState({ hovered: value });
   };
 
-  render() {
+  renderHeartbeatsMenu = () => {
     const producerHeartbeats = [
       HEARTBEAT_COMPONENTS.EVENTS,
       HEARTBEAT_COMPONENTS.TELEMETRIES,
@@ -280,6 +282,128 @@ class Layout extends Component {
     if (!summaryHeartbeats.every((hb) => hb === undefined)) {
       summaryHeartbeatStatus = summaryHeartbeats.includes('alert') ? 'alert' : 'ok';
     }
+    return (
+      <DropdownMenu className={styles.settingsDropdown}>
+        <Button
+          className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
+          style={{
+            visibility:
+              this.props.token && (summaryHeartbeatStatus !== 'ok' || this.state.hovered) ? 'visible' : 'hidden',
+          }}
+          title={this.getHeartbeatTitle('')}
+          onClick={() => {}}
+          status="transparent"
+        >
+          <HeartbeatIcon className={styles.icon} status={summaryHeartbeatStatus} title={this.getHeartbeatTitle('')} />
+        </Button>
+
+        <div className={styles.heartbeatsMenu} title="Heartbeats menu">
+          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
+            />
+            <span>LOVE manager</span>
+          </div>
+          <div className={styles.heartbeatMenuElement}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={producerHeartbeatStatus}
+              title={this.getHeartbeatTitle('')}
+            />
+            <span title={this.getHeartbeatTitle('')}>LOVE producer</span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
+            />
+            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)} className={styles.heartbeatSubElement}>
+              {HEARTBEAT_COMPONENTS.EVENTS}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
+            />
+            <span
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
+              className={styles.heartbeatSubElement}
+            >
+              {HEARTBEAT_COMPONENTS.TELEMETRIES}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
+            />
+            <span
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
+              className={styles.heartbeatSubElement}
+            >
+              {HEARTBEAT_COMPONENTS.HEARTBEATS}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
+            />
+            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)} className={styles.heartbeatSubElement}>
+              {HEARTBEAT_COMPONENTS.LOVE}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
+            />
+            <span
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
+              className={styles.heartbeatSubElement}
+            >
+              {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
+            </span>
+          </div>
+          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
+            />
+            <span>LOVE commander</span>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.statusMenuElement} title="SAL status">
+            <LabeledStatusTextContainer
+              label={'SAL status'}
+              groupName={'event-ATMCS-0-m3State'}
+              stateToLabelMap={{
+                0: 'UNKNOWN',
+              }}
+              stateToStyleMap={{
+                0: 'unknown',
+              }}
+            />
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.statusMenuElement} title="EFD status">
+            <LabeledStatusTextContainer
+              label={'EFD status'}
+              groupName={'event-ATMCS-0-m3State'}
+              stateToLabelMap={{
+                0: 'UNKNOWN',
+              }}
+              stateToStyleMap={{
+                0: 'unknown',
+              }}
+            />
+          </div>
+        </div>
+      </DropdownMenu>
+    );
+  };
+
+  render() {
+    const filteredAlarms = this.props.alarms.filter((a) => a.severity > 1 && !a.acknowledged);
     return (
       <>
         <div className={styles.hidden}>
@@ -351,7 +475,7 @@ class Layout extends Component {
                 this.props.mode === modes.EDIT && !this.state.toolbarOverflow ? styles.hidden : '',
               ].join(' ')}
             >
-              <ClockContainer timezone='local' hideAnalog hideOffset={true} />
+              <ClockContainer timezone="local" hideAnalog hideOffset={true} />
             </div>
           </div>
 
@@ -359,143 +483,44 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
+              {this.renderHeartbeatsMenu()}
+
               <DropdownMenu className={styles.settingsDropdown}>
-                <Button
-                  className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
-                  style={{
-                    visibility:
-                      this.props.token && (summaryHeartbeatStatus !== 'ok' || this.state.hovered)
-                        ? 'visible'
-                        : 'hidden',
-                  }}
-                  title={this.getHeartbeatTitle('')}
-                  onClick={() => {}}
-                  status="transparent"
-                >
-                  <HeartbeatIcon
-                    className={styles.icon}
-                    status={summaryHeartbeatStatus}
-                    title={this.getHeartbeatTitle('')}
-                  />
+                <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
+                  <IconBadge content={filteredAlarms.length ?? ''} display={filteredAlarms?.length > 0}>
+                    <NotificationIcon className={styles.icon} />
+                  </IconBadge>
                 </Button>
-                <div className={styles.heartbeatsMenu} title="Heartbeats menu">
-                  <div
-                    className={styles.heartbeatMenuElement}
-                    title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
-                  >
-                    <HeartbeatIcon
-                      className={styles.icon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
-                    />
-                    <span>LOVE manager</span>
-                  </div>
-                  <div className={styles.heartbeatMenuElement}>
-                    <HeartbeatIcon
-                      className={styles.icon}
-                      status={producerHeartbeatStatus}
-                      title={this.getHeartbeatTitle('')}
-                    />
-                    <span title={this.getHeartbeatTitle('')}>LOVE producer</span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.EVENTS}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.TELEMETRIES}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.HEARTBEATS}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.LOVE}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
-                    </span>
-                  </div>
-                  <div
-                    className={styles.heartbeatMenuElement}
-                    title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
-                  >
-                    <HeartbeatIcon
-                      className={styles.icon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
-                    />
-                    <span>LOVE commander</span>
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.statusMenuElement} title="SAL status">
-                    <LabeledStatusTextContainer
-                      label={'SAL status'}
-                      groupName={'event-ATMCS-0-m3State'}
-                      stateToLabelMap={{
-                        0: 'UNKNOWN',
-                      }}
-                      stateToStyleMap={{
-                        0: 'unknown',
-                      }}
-                    />
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.statusMenuElement} title="EFD status">
-                    <LabeledStatusTextContainer
-                      label={'EFD status'}
-                      groupName={'event-ATMCS-0-m3State'}
-                      stateToLabelMap={{
-                        0: 'UNKNOWN',
-                      }}
-                      stateToStyleMap={{
-                        0: 'unknown',
-                      }}
-                    />
-                  </div>
+                <div className={styles.alarmsContainer} title="Alarms">
+                  {filteredAlarms.length < 1 ? (
+                    <div className={styles.alarmsTitle}>No active alarms</div>
+                  ) : (
+                    <>
+                      <div className={styles.alarmsTitle}>Active alarms</div>
+                      {filteredAlarms
+                        .sort((a, b) => (a.severity > b.severity ? -1 : 1))
+                        .map((alarm) => {
+                          const { name, severity, maxSeverity, acknowledged, muted, reason } = alarm;
+                          const timestamp = alarm.timestampSeverityOldest * 1000;
+                          const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
+                          const alarmProps = {
+                            user: this.props.user,
+                            name,
+                            severity,
+                            maxSeverity,
+                            acknowledged,
+                            muted,
+                            severityUpdateTimestamp,
+                            reason,
+                            ackAlarm: this.props.ackAlarm
+                          };
+
+                          return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
+                        })}
+                    </>
+                  )}
                 </div>
               </DropdownMenu>
-
-              <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
-                <NotificationIcon className={styles.icon} />
-              </Button>
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="Settings" status="transparent">
