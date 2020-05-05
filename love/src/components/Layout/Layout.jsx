@@ -109,6 +109,7 @@ class Layout extends Component {
       console.log('newAlarms: ', this.props.newAlarms);
       console.log('alarms: ', this.props.alarms);
       console.log('prev alarms: ', prevProps.alarms);
+      this.checkAndNotifyAlarms(this.props.newAlarms, prevProps.alarms);
     }
 
     if (this.props.token === null && prevProps.token !== null) {
@@ -168,6 +169,18 @@ class Layout extends Component {
       }
     }
   };
+
+  checkAndNotifyAlarms = (newAlarms, oldAlarms) => {
+    newAlarms.forEach((newAlarm) => {
+      if (newAlarm === undefined) return;
+      const oldAlarm = oldAlarms.find((oldAlarm) => {
+        return oldAlarm.name.value === newAlarm.name.value;
+      });
+      if (!oldAlarm || newAlarm.severity.value > oldAlarm.severity.value) {
+        console.log('Sound: ', newAlarm.severity.value);
+      }
+    });
+  }
 
   moveCustomTopbar = () => {
     const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
