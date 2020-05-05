@@ -46,9 +46,9 @@ export default class TelemetrySelectionTable extends PureComponent {
     ]),
     /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
         separated by a dash. Values are javascript code as text */
-    healthFunctions: PropTypes.object,
+    // healthFunctions: PropTypes.object,
     /** Function called to set healthStatus functions. It receives a dictionary containing the healthStatus functions to be set */
-    setHealthFunctions: PropTypes.func,
+    // setHealthFunctions: PropTypes.func,
     /** Dictionary of telemetries that are displayed. See examples below */
     telemetries: PropTypes.object,
     /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
@@ -56,9 +56,9 @@ export default class TelemetrySelectionTable extends PureComponent {
     /** Indicates if component should display bottom selection bar*/
     showSelection: PropTypes.bool,
 
-    /** Object that describes the initially selected telemetries and their health functions.
+    /** JSON string that describes the initially selected telemetries and their health functions.
      * Must have his structure:
-     * 
+     *
      * {
      *   "<component.salindex.topic>": {
      *     <parameter_name>: healthfunction,
@@ -66,7 +66,7 @@ export default class TelemetrySelectionTable extends PureComponent {
      *   }
      * }
      */
-    initialData: PropTypes.object,
+    initialData: PropTypes.string,
   };
 
   static defaultProps = {
@@ -85,7 +85,7 @@ export default class TelemetrySelectionTable extends PureComponent {
     ],
     telemetries: {},
     showSelection: true,
-    initialData: {}
+    initialData: {},
   };
 
   constructor() {
@@ -141,27 +141,36 @@ export default class TelemetrySelectionTable extends PureComponent {
       selectedRows: [],
       filters,
       setFilters: this.setFilters,
+      healthFunctions: {},
     };
   }
 
   componentDidUpdate = () => {
     console.log('this.props.allTelemetries', this.props.allTelemetries);
-    if(this.props.allTelemetries && Object.keys(this.props.allTelemetries).length > 4){
+    if (this.props.allTelemetries && Object.keys(this.props.allTelemetries).length > 4) {
       this.props.unsubscribeToStream();
     }
-  }
+  };
 
   componentDidMount = () => {
     this.props.subscribeToStream();
 
     const initialData = JSON.parse(this.props.initialData);
-    const selectedRows = Object.keys(initialData).flatMap((cscSalindexTopic) =>{
-      return Object.keys(initialData[cscSalindexTopic]).map(parameterName => {
+    const selectedRows = Object.keys(initialData).flatMap((cscSalindexTopic) => {
+      return Object.keys(initialData[cscSalindexTopic]).map((parameterName) => {
         return `${cscSalindexTopic}-${parameterName}`;
       });
     });
+
+    const healthFunctions = Object.keys(initialData || {}).reduce((prevDict, cscSalindexTopic) => {
+      Object.keys(initialData?.[cscSalindexTopic] || {}).forEach((parameterName) => {
+        prevDict[[cscSalindexTopic, parameterName].join('-')] = initialData[cscSalindexTopic][parameterName];
+      });
+      return prevDict;
+    }, {});
     this.setState({
-      selectedRows
+      selectedRows,
+      healthFunctions
     });
   };
 
@@ -247,7 +256,7 @@ export default class TelemetrySelectionTable extends PureComponent {
       }
       if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'health') {
         let healthStatus = 0;
-        if (this.props.healthFunctions !== undefined) {
+        if (this.state.healthFunctions !== undefined) {
           healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
         }
         return this.state.filters[rowKey].value.test(healthStatus);
@@ -270,10 +279,10 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   getHealthStatusCode = (paramName, value) => {
     let statusCode = 0;
-    if (this.props.healthFunctions[paramName]) {
+    if (this.state.healthFunctions[paramName]) {
       try {
         // eslint-disable-next-line
-        let user_func = new Function('value', this.props.healthFunctions[paramName]);
+        let user_func = new Function('value', this.state.healthFunctions[paramName]);
         statusCode = user_func(value);
       } catch (err) {
         statusCode = 4;
@@ -291,10 +300,10 @@ export default class TelemetrySelectionTable extends PureComponent {
   };
 
   setHealthFunction = (paramName) => {
-    const { healthFunctions } = this.props;
-    healthFunctions[paramName] = document.getElementById(`${paramName}-healthFunction`).value;
-    this.props.setHealthFunctions(healthFunctions);
-    localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
+    // const { healthFunctions } = this.state;
+    // healthFunctions[paramName] = document.getElementById(`${paramName}-healthFunction`).value;
+    // this.props.setHealthFunctions(healthFunctions);
+    // localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
     this.toggleRow(paramName);
   };
 
@@ -449,7 +458,7 @@ export default class TelemetrySelectionTable extends PureComponent {
   render() {
     const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
     let data = this.getData();
-    if (this.props.healthFunctions !== undefined) {
+    if (this.state.healthFunctions !== undefined) {
       data = data.map((row) => {
         const key = [row.component, row.stream, row.param_name].join('-');
         return {
@@ -635,7 +644,7 @@ export default class TelemetrySelectionTable extends PureComponent {
                             <textarea
                               id={`${key}-healthFunction`}
                               defaultValue={
-                                this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText
+                                this.state.healthFunctions[key] ? this.state.healthFunctions[key] : this.defaultCodeText
                               }
                             />
                             <p>{'}'}</p>
