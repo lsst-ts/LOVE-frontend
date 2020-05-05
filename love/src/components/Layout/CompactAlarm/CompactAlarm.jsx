@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '../../GeneralPurpose/Button/Button';
 import styles from './CompactAlarm.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 
@@ -11,6 +12,7 @@ export const severityToStatus = {
 };
 
 export default function CompactAlarm({
+  user,
   name,
   severity,
   maxSeverity,
@@ -18,6 +20,7 @@ export default function CompactAlarm({
   muted,
   reason,
   severityUpdateTimestamp,
+  ackAlarm,
 }) {
   const severityStatus = severityToStatus[severity];
   const maxSeverityStatus = severityToStatus[maxSeverity];
@@ -61,12 +64,20 @@ export default function CompactAlarm({
         <span className={styles.label}>Reason:</span>
         <div className={styles.reason}>
           {reason}
-          dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa
-          dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa
-          dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa
-          dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa
-          dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa
-          dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa dsadsa
+        </div>
+        <div className={styles.ackButtonContainer}>
+          <Button
+            title="Acknowledge"
+            status="info"
+            shape="rounder"
+            onClick={(event) => {
+              event.stopPropagation();
+              ackAlarm(name, maxSeverity, user);
+              event.nativeEvent.stopImmediatePropagation();
+            }}
+          >
+            ACK
+          </Button>
         </div>
       </div>
     </div>
