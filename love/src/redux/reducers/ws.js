@@ -181,15 +181,15 @@ export default function(state = initialState, action) {
     case RECEIVE_ALARMS: {
       const latestAlarms = Array.isArray(action.alarms) ? Array.from(action.alarms) : Array.from([action.alarms]);
       let alarms = Array.from(state.alarms);
-      latestAlarms.forEach((actionAlarm) => {
-        if (actionAlarm === undefined) return;
+      latestAlarms.forEach((latestAlarm) => {
+        if (latestAlarm === undefined) return;
         const alarmIndex = alarms.findIndex((stateAlarm) => {
-          return stateAlarm.name.value === actionAlarm.name.value;
+          return stateAlarm.name.value === latestAlarm.name.value;
         });
         if (alarmIndex === -1) {
-          alarms.push(actionAlarm);
+          alarms.push(latestAlarm);
         } else {
-          alarms[alarmIndex] = actionAlarm;
+          alarms[alarmIndex] = latestAlarm;
         }
       });
 
