@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import HealthStatusSummary from './HealthStatusSummary';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
-import { saveGroupSubscriptions } from '../../Utils';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
