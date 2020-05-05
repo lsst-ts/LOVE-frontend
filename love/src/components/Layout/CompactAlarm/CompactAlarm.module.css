@@ -1,13 +1,18 @@
 .alarmContainer {
-  background-color: var(--second-secondary-background-color);
-  padding: 0.7em 0.7em;
+  background-color: var(--second-primary-background-color);
   margin-bottom: 0.3em;
   border-radius: 5px;
+  cursor: pointer;
+}
+
+.alarmContainer:hover {
+  background-color: var(--second-secondary-background-color);
 }
 
 .alarmWrapper {
   display: grid;
   grid-template-columns: 1fr max-content max-content;
+  padding: 0.7em 0.7em;
   grid-column-gap: 0.5em;
   grid-row-gap: 0.25em;
   justify-content: space-evenly;
@@ -55,4 +60,27 @@
 
 .statusContainer {
   min-width: 8em;
+}
+
+.expandedAlarm {
+  padding: 0.7em 0.7em;
+  padding-top: 0;
+  grid-column: span 3;
+}
+
+.separator {
+  grid-column: span 3;
+  border-top: 1px solid var(--second-tertiary-background-color);;
+  margin: 0.5em 0;
+}
+
+.reason {
+  padding: 0.5em;
+  background: var(--second-secondary-background-color);
+  max-height: 10em;
+  overflow-y: auto;
+}
+
+.hidden {
+  display: none;
 }
