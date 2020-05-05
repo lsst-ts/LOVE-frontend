@@ -2,8 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import HealthStatusSummary from './HealthStatusSummary';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
-import ManagerInterface, { saveGroupSubscriptions } from '../../Utils';
+import { saveGroupSubscriptions } from '../../Utils';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
+import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 const defaultHealthFunction = `return Math.floor(new Date().getSeconds()  / 4) % 5 ;`;
 export const schema = {
@@ -27,7 +28,7 @@ export const schema = {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
       isPrivate: true,
-      default: false,
+      default: true,
     },
     telemetryConfiguration: {
       type: 'object',
@@ -75,6 +76,8 @@ const HealthStatusSummaryContainer = ({
   streams,
   subscribeToStreams,
   unsubscribeToStreams,
+  isRaw,
+  ...props
 }) => {
   const parsedTelemetryConfiguration = Object.keys(telemetryConfiguration).reduce((prevDict, subscriptionName) => {
     const [component, salindex, topic] = subscriptionName.split('-');
@@ -88,6 +91,11 @@ const HealthStatusSummaryContainer = ({
     });
     return prevDict;
   }, {});
+
+  if (isRaw) {
+    const subscriptions = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
 
   return (
     <HealthStatusSummary
