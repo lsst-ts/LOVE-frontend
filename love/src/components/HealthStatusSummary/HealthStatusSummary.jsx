@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
-import saveAs from 'file-saver';
-import TelemetrySelectionTableContainer from './TelemetrySelectionTable/TelemetrySelectionTable.container';
-import Button from './Button/Button';
-import ExportIcon from '../icons/ExportIcon/ExportIcon';
+import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import styles from './HealthStatusSummary.module.css';
-import UploadButton from './Button/UploadButton';
-import ManagerInterface from '../../Utils';
+import { formatTimestamp } from '../../Utils';
 
 /**
  * Configurable summary displaying the health status of an arbitrary subset
@@ -15,62 +11,108 @@ import ManagerInterface from '../../Utils';
  * status. Then the user launches another YET TO BE IMPLEMENTED "printed" table.
  *
  */
+
+const healthStatusCodes = {
+  0: 'Undefined',
+  1: 'OK',
+  2: 'Warning',
+  3: 'Alert',
+  4: 'Invalid',
+};
+
+const WIDTH_THRESHOLD = 480;
 export default class HealthStatusSummary extends Component {
-  constructor() {
-    super();
-    // eslint-disable-next-line
-    RegExp.prototype.toJSON = RegExp.prototype.toString;
+  static defaultProps = {
+    telemetryConfiguration: {},
+    streams: undefined
+  };
 
-    let healthFunctions = localStorage.getItem('healthFunctions');
-    if (!healthFunctions) {
-      healthFunctions = {
-        timestamp0: '//asdasdadsa',
-        altitude_decel0: '//dsasdssa\nreturn ALERT;',
-        altitude_accel0: 'return WARNING;',
-        altitude_maxspeed0: 'return OK;',
-      };
-    } else {
-      healthFunctions = JSON.parse(healthFunctions);
-    }
-    this.managerInterface = new ManagerInterface();
-
+  constructor(props){
+    super(props);
+    this.containerRef = React.createRef();
+    this.resizeObserver = undefined;
     this.state = {
-      healthFunctions,
-      setHealthFunctions: this.setHealthFunctions,
-    };
+      containerWidth: Infinity
+    }
   }
 
-  setHealthFunctions = (healthFunctions) => {
-    this.setState({
-      healthFunctions: { ...healthFunctions },
+  componentDidMount = () => {
+    this.props.subscribeToStreams();
+
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const container = entries[0];
+      this.setState({
+        containerWidth: container.contentRect.width
+      })
     });
+
+    this.resizeObserver.observe(this.containerRef.current.parentNode.parentNode);
+
   };
 
-  download = (data, filename) => {
-    const jsonBlob = new Blob([JSON.stringify(data)], { type: 'application/javascript;charset=utf-8' });
-    saveAs(jsonBlob, filename);
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
+    this.resizeObserver.disconnect();
   };
-
-  onLoadFile = (data) => {
-    try {
-      const parsedData = JSON.parse(data);
-      // console.log('onLoadFile', parsedData);
-      this.setFilters(parsedData.filters);
-      this.setHealthFunctions(parsedData.healthFunctions);
-    } catch (error) {
-      // console.error(error);
-    }
-  };
-
-  getOutputConfig = () => ({
-    filters: this.state.filters,
-    healthFunctions: this.state.healthFunctions,
-  });
-
   render() {
+    const { telemetryConfiguration, streams } = this.props;
     return (
-      <div className={styles.container}>
-        <div className={styles.topButtons}>
+      <div ref={this.containerRef} className={styles.container}>
+        {Object.keys(telemetryConfiguration).map((indexedComponentName) => {
+          const [component, salindex] = indexedComponentName.split('-');
+          const componentName = `${component}${parseInt(salindex) === 0 ? '' : `.${salindex}`}`;
+
+          return (
+            <div key={indexedComponentName} className={styles.componentContainer}>
+              <div className={styles.componentName} title={`CSC: ${componentName}`}>{componentName}</div>
+              {Object.keys(telemetryConfiguration[indexedComponentName]).map((topic) => {
+                let timestamp = streams[`telemetry-${indexedComponentName}-${topic}`]?.private_rcvStamp;
+                timestamp = timestamp?.value !== undefined ? formatTimestamp(timestamp.value * 1000) : '-';
+
+                return (
+                  <React.Fragment key={`${indexedComponentName}${topic}`}>
+                    <div className={styles.topic} title={`Topic: ${componentName}.${topic}`}>
+                      <div className={styles.topicName}>{topic}</div>
+                      <div className={styles.topicTimestamp}>{timestamp}</div>
+                    </div>
+                    <div className={styles.divider}></div>
+                    {Object.keys(telemetryConfiguration[indexedComponentName][topic]).map((parameterName) => {
+                      const parameterValue = streams[`telemetry-${indexedComponentName}-${topic}`]?.[parameterName];
+                      let renderedValue = '';
+                      if (parameterValue?.value !== undefined) {
+                        if (Array.isArray(parameterValue.value)) {
+                          renderedValue = '[Array]';
+                        } else {
+                          renderedValue = parameterValue.value.toFixed(4);
+                        }
+                      }
+
+                      const healthStatusCode = telemetryConfiguration[indexedComponentName][topic][parameterName]();
+                      return (
+                        <div
+                          key={`${indexedComponentName}${topic}${parameterName}`}
+                          className={styles.parameterContainer}
+                          title={`Item: ${indexedComponentName}.${topic}.${parameterName}`}
+                        >
+                          <div className={[styles.parameterName, this.state.containerWidth < WIDTH_THRESHOLD ? styles.trimmedLabel: ''].join(' ')}> {parameterName} </div>
+                          <div className={styles.healthStatus}>
+                            <div className={[styles.parameterValue, this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden: ''].join(' ')}> {renderedValue}</div>
+                            <div className={[styles.parameterUnits, this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden: ''].join(' ')}> {parameterValue?.units ?? ''}</div>
+                            <div className={styles.statusText}>
+                            <StatusText status={healthStatusCodes[healthStatusCode].toLowerCase()}>{healthStatusCodes[healthStatusCode]}</StatusText>
+
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+          );
+        })}
+        {/* <div className={styles.topButtons}>
           <div className={styles.buttonWrapper}>
             <UploadButton onLoadFile={this.onLoadFile} />
           </div>
@@ -79,17 +121,16 @@ export default class HealthStatusSummary extends Component {
               <ExportIcon />
               Export
             </Button>
-            {/* </a> */}
           </div>
-        </div>
-        <div className={styles.telemetryTableWrapper}>
+        </div> */}
+        {/* <div className={styles.telemetryTableWrapper}>
           <TelemetrySelectionTableContainer
             {...this.state}
             // eslint-disable-next-line
             onClick={() => console.log('RawTel Click')}
             showSelection={false}
           />
-        </div>
+        </div> */}
       </div>
     );
   }
