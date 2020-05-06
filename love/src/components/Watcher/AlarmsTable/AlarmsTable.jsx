@@ -12,12 +12,12 @@ import styles from './AlarmsTable.module.css';
 /**
  * Auxiliary function to define wether an alarm is acknowledged or not
  */
-const acknowledged = (alarm) => alarm.acknowledged || (alarm.severity === 1 && alarm.maxSeverity === 1);
+const acknowledged = (alarm) => alarm.acknowledged?.value || (alarm.severity?.value === 1 && alarm.maxSeverity?.value === 1);
 
 /**
  * Auxiliary function to define wether an alarm can be unacknowledged or not
  */
-const canUnack = (alarm) => alarm.acknowledged && alarm.severity !== 1;
+const canUnack = (alarm) => alarm.acknowledged?.value && alarm.severity?.value !== 1;
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -274,10 +274,10 @@ export default class AlarmsTable extends PureComponent {
             <tbody onClick={this.closeFilterDialogs}>
               {data.sort(this.sortData).map((row) => {
                 if (this.testFilter(row)) {
-                  const key = row.name;
+                  const key = row.name.value;
                   const isExpanded = this.state.expandedRows[key];
-                  const reasonStr = 'Reason: ' + row.reason;
-                  const timestamp = row.timestampSeverityOldest * 1000;
+                  const reasonStr = 'Reason: ' + row.reason.value;
+                  const timestamp = row.timestampSeverityOldest.value * 1000;
                   return (
                     <React.Fragment key={key}>
                       <tr
@@ -299,7 +299,7 @@ export default class AlarmsTable extends PureComponent {
                                 status="info"
                                 onClick={(event) => {
                                   event.stopPropagation();
-                                  this.props.ackAlarm(row.name, row.maxSeverity, user);
+                                  this.props.ackAlarm(row.name.value, row.maxSeverity.value, user);
                                 }}
                               >
                                 ACK
@@ -312,7 +312,7 @@ export default class AlarmsTable extends PureComponent {
                               status="default"
                               onClick={(event) => {
                                 event.stopPropagation();
-                                this.props.unackAlarm(row.name);
+                                this.props.unackAlarm(row.name.value);
                               }}
                             >
                               Unack
@@ -326,13 +326,13 @@ export default class AlarmsTable extends PureComponent {
                               <RowExpansionIcon expanded={isExpanded} />
                             </div>
                             <Alarm
-                              severity={row.severity}
-                              maxSeverity={row.maxSeverity}
+                              severity={row.severity.value}
+                              maxSeverity={row.maxSeverity.value}
                               acknowledged={acknowledged(row)}
-                              muted={row.mutedSeverity <= row.severity}
+                              muted={row.mutedSeverity.value <= row.severity.value}
                               ackAlarm={(event) => {
                                 event.stopPropagation();
-                                this.props.ackAlarm(row.name, row.maxSeverity, user);
+                                this.props.ackAlarm(row.name.value, row.maxSeverity.value, user);
                               }}
                             />
                             <div className={styles.expansionIconWrapper} />
@@ -340,11 +340,11 @@ export default class AlarmsTable extends PureComponent {
                         </td>
                         <td title={reasonStr} className={[styles.cell, styles.maxSeverity].join(' ')}>
                           <div className={styles.maxSeverityWrapper}>
-                            <Alarm severity={row.maxSeverity} />
+                            <Alarm severity={row.maxSeverity.value} />
                           </div>
                         </td>
                         <td title={reasonStr} className={[styles.cell, styles.name].join(' ')}>
-                          <div className={styles.textWrapper}> {row.name} </div>
+                          <div className={styles.textWrapper}> {row.name.value} </div>
                         </td>
                         <td
                           title={formatTimestamp(timestamp)}
@@ -366,11 +366,11 @@ export default class AlarmsTable extends PureComponent {
                               taiToUtc={taiToUtc}
                               muteAlarm={(event, duration, severity) => {
                                 event.stopPropagation();
-                                this.props.muteAlarm(row.name, severity, duration, user);
+                                this.props.muteAlarm(row.name.value.value, severity, duration, user);
                               }}
                               unmuteAlarm={(event) => {
                                 event.stopPropagation();
-                                this.props.unmuteAlarm(row.name);
+                                this.props.unmuteAlarm(row.name.value);
                               }}
                             />
                           </td>

@@ -58,11 +58,11 @@ export default class Watcher extends Component {
   }
 
   sortFunctions = {
-    default: (row) => (row['acknowledged'] ? '0-' : '1-') + row['severity'],
-    severity: (row) => row['severity'] + (row['acknowledged'] ? '-0' : '-1'),
-    maxSeverity: (row) => row['maxSeverity'] + (row['acknowledged'] ? '-0' : '-1'),
-    name: (row) => row['name'] + (row['acknowledged'] ? '-0' : '-1'),
-    timestampSeverityOldest: (row) => row['timestampSeverityOldest'] + (row['acknowledged'] ? '-0' : '-1'),
+    default: (row) => (row.acknowledged.value ? '0-' : '1-') + row.severity.value,
+    severity: (row) => row.severity.value + (row.acknowledged.value ? '-0' : '-1'),
+    maxSeverity: (row) => row.maxSeverity.value + (row.acknowledged.value ? '-0' : '-1'),
+    name: (row) => row.name.value + (row.acknowledged.value ? '-0' : '-1'),
+    timestampSeverityOldest: (row) => row.timestampSeverityOldest.value + (row.acknowledged.value ? '-0' : '-1'),
   };
 
   mutedSortFunctions = {
@@ -87,13 +87,13 @@ export default class Watcher extends Component {
     const now = DateTime.local().toSeconds() - this.props.taiToUtc;
 
     this.props.alarms.forEach((alarm) => {
-      if (alarm['severity'] <= 1 && alarm['maxSeverity'] <= 1 && now - alarm['timestampAcknowledged'] >= TIMEOUT) {
+      if (alarm.severity.value <= 1 && alarm.maxSeverity.value <= 1 && now - alarm.timestampAcknowledged.value >= TIMEOUT) {
         return;
       }
 
-      if (alarm['mutedBy'] === '') {
+      if (alarm.mutedBy.value === '') {
         unmutedAlarmsCount += 1;
-        unackUnmutedAlarmsCount += alarm['acknowledged'] ? 0 : 1;
+        unackUnmutedAlarmsCount += alarm.acknowledged.value ? 0 : 1;
         if (this.state.selectedTab === 'unmuted') {
           alarmsToShow.push(alarm);
         }
