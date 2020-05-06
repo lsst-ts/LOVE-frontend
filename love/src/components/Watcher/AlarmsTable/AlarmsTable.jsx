@@ -366,7 +366,7 @@ export default class AlarmsTable extends PureComponent {
                               taiToUtc={taiToUtc}
                               muteAlarm={(event, duration, severity) => {
                                 event.stopPropagation();
-                                this.props.muteAlarm(row.name.value.value, severity, duration, user);
+                                this.props.muteAlarm(row.name.value, severity, duration, user);
                               }}
                               unmuteAlarm={(event) => {
                                 event.stopPropagation();
