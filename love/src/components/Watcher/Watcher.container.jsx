@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
+import { getUsername, getRawAlarms, getTaiToUtc } from '../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
@@ -47,8 +47,8 @@ const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream
 
 const mapStateToProps = (state) => {
   // const alarms = mockAlarms;
-  // const alarms = getAllAlarms(state).concat(mockAlarms);
-  const alarms = getAllAlarms(state);
+  // const alarms = getRawAlarms(state).concat(mockAlarms);
+  const alarms = getRawAlarms(state);
   const user = getUsername(state);
   const taiToUtc = getTaiToUtc(state);
   return { alarms, user, taiToUtc };

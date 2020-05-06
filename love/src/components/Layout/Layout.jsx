@@ -122,6 +122,7 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    console.log('alarms: ', this.props.alarms)
     if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
       this.moveCustomTopbar();
     }
