@@ -458,7 +458,7 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter((a) => a.severity?.value > 1 && !a.acknowledged?.value);
+    const filteredAlarms = this.props.alarms.filter((a) => a.severity?.value > 1 && !a.acknowledged?.value  && !a.mutedBy?.value);
     return (
       <>
         <div className={styles.hidden}>
