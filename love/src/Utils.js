@@ -25,7 +25,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
 
-  function noop() { }
+  function noop() {}
   const opts = optsPar || {};
 
   let ws;
@@ -69,11 +69,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   };
 
   $.json = (x) => {
-    ws.send(JSON.stringify(x));
+    if (ws.readyState === 1) ws.send(JSON.stringify(x));
   };
 
   $.send = (x) => {
-    ws.send(x);
+    if (ws.readyState === 1) ws.send(x);
   };
 
   $.close = (x, y) => {
@@ -441,11 +441,9 @@ export const getNotificationMessage = (salCommand) => {
   const result = salCommand.result;
   const component = salCommand.component ?? salCommand.csc;
 
-
   if (salCommand.status === SALCommandStatus.REQUESTED) {
-    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`,]
+    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`];
   }
-
 
   if (component === 'Watcher') {
     const alarm = salCommand.params.name;
