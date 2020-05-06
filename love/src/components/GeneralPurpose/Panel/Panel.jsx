@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Panel.module.css';
 import Button from '../Button/Button';
-import GearIcon from '../../icons/GearIcon/GearIcon';
 
 /**
  * A generic placeholder with a title that can be used

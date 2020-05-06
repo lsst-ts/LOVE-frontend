@@ -4,6 +4,7 @@ import HealthStatusSummary from './HealthStatusSummary';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { HEALTH_STATUS_VARIABLES_DECLARATION } from './TelemetrySelectionTable/TelemetrySelectionTable';
 
 const defaultHealthFunction = `return Math.floor(new Date().getSeconds()  / 4) % 5 ;`;
 export const schema = {
@@ -32,17 +33,28 @@ export const schema = {
     telemetryConfiguration: {
       type: 'object',
       description: `Dictionary describing the telemetries to monitor
+      and functions that can return an integer from 0 to 4 that represents
+      a different health status level.
+      
       Its shape must be: 
       {
-        "<component.salindex.topic>": ["<parameter_name>", ...]
+        "<component.salindex.topic>": {
+          <parameter_name>: healthfunction,
+          ...
+        }
         
       }
       such that for each <parameter_name> the data could be accessed in python with 
       
-      data = await salobj.Remote(domain, <component>, <salindex>).tel_<topic>
-      value = data.<parameter_name>
+      
+      >>> data = await salobj.Remote(domain, <component>, <salindex>).tel_<topic>
+      >>> value = data.<parameter_name>
+
+      
+      
       `,
       isPrivate: false,
+      externalStep: 'TelemetrySelectionTable',
       default: {
         'ATMCS-0-mount_AzEl_Encoders': {
           cRIO_timestamp: defaultHealthFunction,
@@ -84,9 +96,11 @@ const HealthStatusSummaryContainer = ({
     if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = {};
 
     Object.keys(telemetryConfiguration[subscriptionName]).forEach((parameterName) => {
-      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function(
-        telemetryConfiguration[subscriptionName][parameterName],
+      const code = [HEALTH_STATUS_VARIABLES_DECLARATION, telemetryConfiguration[subscriptionName][parameterName]].join(
+        '\n',
       );
+      /* eslint-disable no-new-func*/
+      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function('value', code);
     });
     return prevDict;
   }, {});

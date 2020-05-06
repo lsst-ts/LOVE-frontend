@@ -35,7 +35,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../ScriptQueue/ScriptQueue.container').schema.props,
-      }
+      },
     },
   },
   CSCDetail: {
@@ -45,7 +45,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../CSCSummary/CSCDetail/CSCDetail.container').schema.props,
-      }
+      },
     },
   },
   CSCExpanded: {
@@ -55,7 +55,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../CSCSummary/CSCExpanded/CSCExpanded.container').schema.props,
-      }
+      },
     },
   },
   CSCGroupLog: {
@@ -65,7 +65,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../CSCSummary/CSCGroupLog/CSCGroupLog.container').schema.props,
-      }
+      },
     },
   },
   CSCGroup: {
@@ -75,7 +75,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../CSCSummary/CSCGroup/CSCGroup.container').schema.props,
-      }
+      },
     },
   },
   CSCSummary: {
@@ -85,7 +85,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../CSCSummary/CSCSummary.container').schema.props,
-      }
+      },
     },
   },
   LabeledStatusText: {
@@ -95,29 +95,10 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').schema.props,
-      }
+      },
     },
   },
-  TimeSeriesPlot: {
-    component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
-    schema: {
-      ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema.props,
-      }
-    },
-  },
-  TelemetryLog: {
-    component: require('../TelemetryLog/TelemetryLog.container').default,
-    schema: {
-      ...require('../TelemetryLog/TelemetryLog.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../TelemetryLog/TelemetryLog.container').schema.props,
-      }
-    },
-  },
+
   Watcher: {
     component: require('../Watcher/Watcher.container').default,
     schema: {
@@ -125,7 +106,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../Watcher/Watcher.container').schema.props,
-      }
+      },
     },
   },
   GenericCamera: {
@@ -135,7 +116,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../GenericCamera/GenericCamera').schema.props,
-      }
+      },
     },
   },
   ObservingLogInput: {
@@ -145,7 +126,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../ObservingLog/ObservingLogInput.container').schema.props,
-      }
+      },
     },
   },
   ObservingLogMessages: {
@@ -155,7 +136,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../ObservingLog/ObservingLogMessages.container').schema.props,
-      }
+      },
     },
   },
   HealthStatusSummary: {
@@ -165,7 +146,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../HealthStatusSummary/HealthStatusSummary.container').schema.props,
-      }
+      },
     },
   },
   Clock: {
@@ -183,13 +164,33 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../TimeSeries/TimeSeries.container').schema.props,
-      }
+      },
     },
   },
+  // TimeSeriesPlot: {
+  //   component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
+  //   schema: {
+  //     ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
+  //     props: {
+  //       ...defaultSchemaProps,
+  //       ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema.props,
+  //     }
+  //   },
+  // },
   TimeSeriesPlot: {
     component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
     schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
   },
+  // TelemetryLog: {
+  //   component: require('../TelemetryLog/TelemetryLog.container').default,
+  //   schema: {
+  //     ...require('../TelemetryLog/TelemetryLog.container').schema,
+  //     props: {
+  //       ...defaultSchemaProps,
+  //       ...require('../TelemetryLog/TelemetryLog.container').schema.props,
+  //     }
+  //   },
+  // },
   TelemetryLog: {
     component: require('../TelemetryLog/TelemetryLog.container').default,
     schema: require('../TelemetryLog/TelemetryLog.container').schema,
@@ -201,7 +202,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../GeneralPurpose/SubscriptionTable/SubscriptionTable.container').schema.props,
-      }
+      },
     },
   },
   EventLog: {
@@ -211,7 +212,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../EventLog/EventLog.container').schema.props,
-      }
+      },
     },
   },
   CommandPanel: {
@@ -221,7 +222,7 @@ export const uifIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../CommandPanel/CommandPanel.container').schema.props,
-      }
+      },
     },
   },
 };
@@ -234,7 +235,7 @@ export const auxtelIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema.props,
-      }
+      },
     },
   },
   LightPath: {
@@ -244,7 +245,7 @@ export const auxtelIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../AuxTel/Mount/LightPath.container').schema.props,
-      }
+      },
     },
   },
   MotorTable: {
@@ -254,7 +255,7 @@ export const auxtelIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema.props,
-      }
+      },
     },
   },
   Camera: {
@@ -264,7 +265,7 @@ export const auxtelIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../AuxTel/Camera/Camera.container').schema.props,
-      }
+      },
     },
   },
   Dome: {
@@ -274,7 +275,7 @@ export const auxtelIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../AuxTel/Dome/Dome.container').schema.props,
-      }
+      },
     },
   },
   LATISS: {
@@ -284,7 +285,7 @@ export const auxtelIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../AuxTel/LATISS/LATISS.container').schema.props,
-      }
+      },
     },
   },
 };

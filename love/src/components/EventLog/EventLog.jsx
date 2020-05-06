@@ -1,14 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './EventLog.module.css';
-import BackArrowIcon from '../icons/BackArrowIcon/BackArrowIcon';
-import CSCDetailContainer from '../CSCSummary/CSCDetail/CSCDetail.container';
-import Button from '../GeneralPurpose/Button/Button';
 import { formatTimestamp, getStringRegExp } from '../../Utils';
 import InfoIcon from '../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
-import { CardList, Card, Title, SubTitle, Separator } from '../GeneralPurpose/CardList/CardList';
+import { CardList, Card, Title, Separator } from '../GeneralPurpose/CardList/CardList';
 import TextField from '../TextField/TextField';
 
 export default class EventLog extends PureComponent {
@@ -174,8 +171,6 @@ export default class EventLog extends PureComponent {
   };
 
   render() {
-    const { props } = this;
-
     return (
       <div className={styles.CSCGroupLogContainer}>
         <CardList className={styles.cardList}>
