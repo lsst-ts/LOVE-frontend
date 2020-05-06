@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styles from './LATISS.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import { stateToStyleLATISS, movingElementStateMap, raftsStateMap, shutterStateMap } from '../../../Config';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export default class LATISS extends Component {
   static FILTER_ANGLE = 5.71;

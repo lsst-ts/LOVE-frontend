@@ -75,12 +75,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (streams) => {
-      streams.map((groupName) => {
+      streams.forEach((groupName) => {
         dispatch(addGroupSubscription(groupName));
       });
     },
     unsubscribeToStreams: (streams) => {
-      streams.map((groupName) => {
+      streams.forEach((groupName) => {
         dispatch(requestGroupSubscriptionRemoval(groupName));
       });
     },
