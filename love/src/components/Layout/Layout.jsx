@@ -458,7 +458,7 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter((a) => a.severity > 1 && !a.acknowledged);
+    const filteredAlarms = this.props.alarms.filter((a) => a.severity?.value > 1 && !a.acknowledged?.value);
     return (
       <>
         <div className={styles.hidden}>
@@ -553,24 +553,23 @@ class Layout extends Component {
                     <>
                       <div className={styles.alarmsTitle}>Active alarms</div>
                       {filteredAlarms
-                        .sort((a, b) => (a.severity > b.severity ? -1 : 1))
+                        .sort((a, b) => (a.severity.value > b.severity.value ? -1 : 1))
                         .map((alarm) => {
-                          const { name, severity, maxSeverity, acknowledged, muted, reason } = alarm;
-                          const timestamp = alarm.timestampSeverityOldest * 1000;
+                          const timestamp = alarm.timestampSeverityOldest.value * 1000;
                           const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
                           const alarmProps = {
                             user: this.props.user,
-                            name,
-                            severity,
-                            maxSeverity,
-                            acknowledged,
-                            muted,
+                            name: alarm.name?.value,
+                            severity: alarm.severity?.value,
+                            maxSeverity: alarm.maxSeverity?.value,
+                            acknowledged: alarm.acknowledged?.value,
+                            muted: alarm.muted?.value,
                             severityUpdateTimestamp,
-                            reason,
+                            reason: alarm.reason?.value,
                             ackAlarm: this.props.ackAlarm
                           };
 
-                          return <CompactAlarm key={name} {...alarmProps}></CompactAlarm>;
+                          return <CompactAlarm key={alarm.name?.value} {...alarmProps}></CompactAlarm>;
                         })}
                     </>
                   )}
