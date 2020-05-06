@@ -31,6 +31,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   }, [componentConfig]);
 
   const updateConfig = (key, value) => {
+    console.log('key', key, value);
     const newConfig = { ...config };
     newConfig[key] = value;
     setConfig(newConfig);
@@ -44,8 +45,13 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     onSaveConfig(componentIndex, newConfig);
   };
 
-  const onExtraStepSave = () => {
-    console.log('saved');
+  const onExtraStepSave = (propKey, newData) => {
+    updateConfig(propKey, newData);
+    setExternalStep({
+      show: false,
+      component: undefined,
+      propKey: ''
+    })
   };
 
   const onExtraStepCancel = () => {
@@ -61,7 +67,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     const Component = externalStepComponents[propConfig.externalStep];
     setExternalStep({
       show: true,
-      component: <Component onSave={onExtraStepSave} onCancel={onExtraStepCancel} initialData={propData} />,
+      component: <Component onSave={(newData) => onExtraStepSave(propKey, newData)} onCancel={onExtraStepCancel} initialData={propData} />,
       propKey,
     });
   };
@@ -70,6 +76,8 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     return null;
   }
 
+  console.log('externalStep', externalStep);
+
   if (externalStep.show) {
     return (
       <Modal isOpen={externalStep.show} onRequestClose={onExtraStepCancel} contentLabel="Component configuration modal">
@@ -77,6 +85,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
       </Modal>
     );
   }
+
   return (
     <Modal
       isOpen={isOpen}
