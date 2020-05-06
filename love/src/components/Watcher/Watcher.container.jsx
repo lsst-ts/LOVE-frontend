@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
+import { getUsername, getAllAlarms, getTaiToUtc, getAllTime } from '../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
@@ -52,7 +52,8 @@ const mapStateToProps = (state) => {
   const alarms = getAllAlarms(state);
   const user = getUsername(state);
   const taiToUtc = getTaiToUtc(state);
-  return { alarms, user, taiToUtc };
+  const timeData = getAllTime(state);
+  return { alarms, user, taiToUtc, timeData };
 };
 
 const mapDispatchToProps = (dispatch) => {
