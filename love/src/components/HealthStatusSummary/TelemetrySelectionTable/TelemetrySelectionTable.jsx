@@ -9,6 +9,20 @@ import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
 import { getFakeUnits, formatTimestamp } from '../../../Utils';
 
+const HEALTH_STATUS_CODES = {
+  0: 'Undefined',
+  1: 'OK',
+  2: 'Warning',
+  3: 'Alert',
+  4: 'Invalid',
+};
+
+const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_CODES)
+  .map(([key, label]) => {
+    return `const ${label.toUpperCase()}=${key};`;
+  })
+  .join('\n');
+
 /**
  * Configurable table displaying an arbitrary subset
  * of telemetries provided in the component props. It has an optional selection column
@@ -97,13 +111,7 @@ export default class TelemetrySelectionTable extends PureComponent {
 
     this.defaultCodeText =
       "// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. 'return OK'";
-    this.healthStatusCodes = {
-      0: 'Undefined',
-      1: 'OK',
-      2: 'Warning',
-      3: 'Alert',
-      4: 'Invalid',
-    };
+    this.healthStatusCodes = HEALTH_STATUS_CODES;
     this.healthStatusPriorities = {
       3: 5,
       2: 4,
@@ -111,9 +119,6 @@ export default class TelemetrySelectionTable extends PureComponent {
       4: 2,
       0: 1,
     };
-    window.OK = 1;
-    window.WARNING = 2;
-    window.ALERT = 3;
 
     const filters = {
       component: { type: 'regexp', value: new RegExp('(?:)') },
@@ -142,6 +147,7 @@ export default class TelemetrySelectionTable extends PureComponent {
       filters,
       setFilters: this.setFilters,
       healthFunctions: {},
+      temporaryHealthFunctions: {},
     };
   }
 
@@ -170,7 +176,7 @@ export default class TelemetrySelectionTable extends PureComponent {
     }, {});
     this.setState({
       selectedRows,
-      healthFunctions
+      healthFunctions,
     });
   };
 
@@ -201,14 +207,30 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   toggleRow = (rowId) => {
     this.closeFilterDialogs();
-    let { expandedRows } = this.state;
-    if (expandedRows[rowId]) expandedRows[rowId] = false;
-    else {
-      expandedRows = {};
-      expandedRows[rowId] = true;
+    if (this.state.expandedRows[rowId]) {
+      this.setState((state) => ({
+        expandedRows: {
+          ...state.expandedRows,
+          [rowId]: false,
+        },
+        temporaryHealthFunctions: {
+          ...state.temporaryHealthFunctions,
+          [rowId]: undefined,
+        },
+      }));
+      return;
     }
-    this.setState({
-      expandedRows: { ...expandedRows },
+
+    this.setState((state) => {
+      return {
+        expandedRows: {
+          [rowId]: true,
+        },
+        temporaryHealthFunctions: {
+          ...state.temporaryHealthFunctions,
+          [rowId]: state.healthFunctions[rowId],
+        },
+      };
     });
   };
 
@@ -282,7 +304,8 @@ export default class TelemetrySelectionTable extends PureComponent {
     if (this.state.healthFunctions[paramName]) {
       try {
         // eslint-disable-next-line
-        let user_func = new Function('value', this.state.healthFunctions[paramName]);
+        const code = [HEALTH_STATUS_VARIABLES_DECLARATION, this.state.healthFunctions[paramName]].join('\n');
+        let user_func = new Function('value', code);
         statusCode = user_func(value);
       } catch (err) {
         statusCode = 4;
@@ -299,12 +322,16 @@ export default class TelemetrySelectionTable extends PureComponent {
     return this.healthStatusCodes[parsedStatusCode];
   };
 
-  setHealthFunction = (paramName) => {
-    // const { healthFunctions } = this.state;
-    // healthFunctions[paramName] = document.getElementById(`${paramName}-healthFunction`).value;
-    // this.props.setHealthFunctions(healthFunctions);
-    // localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
-    this.toggleRow(paramName);
+  setHealthFunction = (rowKey) => {
+    this.setState((state) => {
+      return {
+        healthFunctions: {
+          ...state.healthFunctions,
+          [rowKey]: state.temporaryHealthFunctions[rowKey],
+        },
+      };
+    });
+    this.toggleRow(rowKey);
   };
 
   displayHealthFunction = (paramName, functionType) => {
@@ -448,13 +475,26 @@ export default class TelemetrySelectionTable extends PureComponent {
   };
 
   setSelection = () => {
-    const data = this.getData().filter((row) => {
-      const key = `${row.component}-${row.stream}-${row.param_name}`;
-      return this.state.selectedRows.indexOf(key) >= 0;
-    });
-    this.props.onSetSelection(this.state.selectedRows, data);
+    const newSelectionData = this.state.selectedRows.reduce((prevDict, rowKey) => {
+      const [component, salindex, topic, item] = rowKey.split('-');
+      const cscSalindexTopic = [component, salindex, topic].join('-');
+      if (!prevDict[cscSalindexTopic]) prevDict[cscSalindexTopic] = {};
+      prevDict[cscSalindexTopic][item] = this.state.healthFunctions[rowKey] ?? 'return INVALID;';
+      return prevDict;
+    }, {});
+    this.props.onSetSelection(newSelectionData);
   };
 
+  onTemporaryHealthFunctionChange = (rowId, event) => {
+    const newValue = event.target.value;
+
+    this.setState((state) => ({
+      temporaryHealthFunctions: {
+        ...state.temporaryHealthFunctions,
+        [rowId]: newValue,
+      },
+    }));
+  };
   render() {
     const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
     let data = this.getData();
@@ -642,10 +682,8 @@ export default class TelemetrySelectionTable extends PureComponent {
                           <div>
                             <p>{'function ( value ) {'}</p>
                             <textarea
-                              id={`${key}-healthFunction`}
-                              defaultValue={
-                                this.state.healthFunctions[key] ? this.state.healthFunctions[key] : this.defaultCodeText
-                              }
+                              value={this.state.temporaryHealthFunctions[key]}
+                              onChange={(event) => this.onTemporaryHealthFunctionChange(key, event)}
                             />
                             <p>{'}'}</p>
                             <div onClick={() => this.setHealthFunction(key)}>
@@ -676,9 +714,9 @@ export default class TelemetrySelectionTable extends PureComponent {
 
                               <div className={styles.statusConfigTitle}> Available Status:</div>
                               <div className={styles.statusList}>
-                                <div> OK</div>
-                                <div> WARNING</div>
-                                <div> ALERT</div>
+                                {Object.entries(HEALTH_STATUS_CODES).map(([code, name]) => {
+                                  return <div> {name.toUpperCase()}</div>;
+                                })}
                               </div>
                             </div>
                           </div>
