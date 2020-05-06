@@ -4,6 +4,7 @@ import HealthStatusSummary from './HealthStatusSummary';
 import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { HEALTH_STATUS_VARIABLES_DECLARATION } from './TelemetrySelectionTable/TelemetrySelectionTable';
 
 const defaultHealthFunction = `return Math.floor(new Date().getSeconds()  / 4) % 5 ;`;
 export const schema = {
@@ -95,9 +96,10 @@ const HealthStatusSummaryContainer = ({
     if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = {};
 
     Object.keys(telemetryConfiguration[subscriptionName]).forEach((parameterName) => {
-      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function(
-        telemetryConfiguration[subscriptionName][parameterName],
+      const code = [HEALTH_STATUS_VARIABLES_DECLARATION, telemetryConfiguration[subscriptionName][parameterName]].join(
+        '\n',
       );
+      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function('value', code);
     });
     return prevDict;
   }, {});

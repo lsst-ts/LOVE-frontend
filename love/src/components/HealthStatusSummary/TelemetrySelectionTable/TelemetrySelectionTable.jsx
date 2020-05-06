@@ -17,7 +17,7 @@ const HEALTH_STATUS_CODES = {
   4: 'Invalid',
 };
 
-const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_CODES)
+export const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_CODES)
   .map(([key, label]) => {
     return `const ${label.toUpperCase()}=${key};`;
   })
