@@ -147,9 +147,9 @@ export default class AlarmsTable extends PureComponent {
 
   testFilter = (row) => {
     const values = Object.keys(this.state.filters).map((key) => {
-      if (row[key] !== undefined && this.state.filters[key].type === 'regexp') {
+      if (row[key]?.value !== undefined && this.state.filters[key].type === 'regexp') {
         const func = this.state.filters[key].function ? this.state.filters[key].function : (value) => value;
-        return this.state.filters[key].value.test(func(row[key]));
+        return this.state.filters[key].value.test(func(row[key]?.value));
       }
       return true;
     });
