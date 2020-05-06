@@ -200,10 +200,10 @@ class Layout extends Component {
         newAlarm.severity.value > newAlarm.mutedSeverity.value 
       ) {
         switch(newAlarm.maxSeverity.value) {
-          case severityEnum.warning: {
-            this.warningSound.play();
-            break;
-          }
+          // case severityEnum.warning: {
+          //   this.warningSound.play();
+          //   break;
+          // }
           case severityEnum.serious: {
             this.seriousSound.play();
             break;
