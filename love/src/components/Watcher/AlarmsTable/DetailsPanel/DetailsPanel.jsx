@@ -3,7 +3,7 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 import Button from '../../../GeneralPurpose/Button/Button';
 import TimestampDisplay from '../../../GeneralPurpose/TimestampDisplay/TimestampDisplay';
-import { severityToStatus } from '../../Alarm/Alarm';
+import { severityToStatus } from '../../../../Config';
 import styles from './DetailsPanel.module.css';
 
 const timeoutOptions = [
@@ -28,26 +28,26 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
   const [timeout, setTimeout] = useState(initialState.timeout);
   const [muteSeverity, setMuteSeverity] = useState(initialState.muteSeverity);
 
-  const sevUpdate = alarm.timestampSeverityOldest;
-  const maxSevUpdate = alarm.timestampMaxSeverity;
-  const lastUpdate = alarm.timestampSeverityNewest;
+  const sevUpdate = alarm.timestampSeverityOldest?.value;
+  const maxSevUpdate = alarm.timestampMaxSeverity?.value;
+  const lastUpdate = alarm.timestampSeverityNewest?.value;
 
-  const acked = alarm.acknowledged;
-  const acknowledgedBy = !acked ? 'Not acknowledged' : alarm.acknowledgedBy ? alarm.acknowledgedBy : 'Nobody';
+  const acked = alarm.acknowledged?.value;
+  const acknowledgedBy = !acked ? 'Not acknowledged' : alarm.acknowledgedBy?.value ? alarm.acknowledgedBy?.value : 'Nobody';
   const ackTimeTitle = acked ? 'Acknowledged at:' : 'Un-acknowledged at:';
-  const ackTime = alarm.timestampAcknowledged;
-  const willAutoAckTime = alarm.timestampAutoAcknowledge;
+  const ackTime = alarm.timestampAcknowledged?.value;
+  const willAutoAckTime = alarm.timestampAutoAcknowledge?.value;
 
-  const escalated = alarm.escalated;
+  const escalated = alarm.escalated?.value;
   const escalatedToTitle = escalated ? 'Escalated to:' : 'Will escalate to:';
-  const escalatedTo = alarm.escalatedTo ? alarm.escalatedTo : 'Nobody';
+  const escalatedTo = alarm.escalatedTo?.value ? alarm.escalatedTo?.value : 'Nobody';
   const escalatedTimeTitle = escalated ? 'Escalated at:' : 'Will escalate at:';
-  const escalatedTime = alarm.timestampEscalate;
+  const escalatedTime = alarm.timestampEscalate?.value;
 
-  const muted = alarm.mutedBy !== '';
-  const mutedBy = alarm.mutedBy ? alarm.mutedBy : 'Not muted';
-  const mutedSeverity = alarm.mutedSeverity ? severityToStatus[alarm.mutedSeverity].toUpperCase() : 'Not muted';
-  const willUnmuteTime = alarm.timestampUnmute;
+  const muted = alarm.mutedBy?.value !== '';
+  const mutedBy = alarm.mutedBy?.value ? alarm.mutedBy?.value : 'Not muted';
+  const mutedSeverity = alarm.mutedSeverity?.value ? severityToStatus[alarm.mutedSeverity?.value].toUpperCase() : 'Not muted';
+  const willUnmuteTime = alarm.timestampUnmute?.value;
 
   return (
     <>
@@ -86,7 +86,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           <Dropdown
             className={styles.dropDownClassName}
             controlClassName={styles.dropDownControlClassName}
-            menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged ? null : styles.unack].join(' ')}
+            menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged?.value ? null : styles.unack].join(' ')}
             arrowClassName={styles.arrowClassName}
             options={timeoutOptions}
             onChange={(option) => setTimeout(option)}
@@ -98,7 +98,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
           <Dropdown
             className={styles.dropDownClassName}
             controlClassName={styles.dropDownControlClassName}
-            menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged ? null : styles.unack].join(' ')}
+            menuClassName={[styles.dropDownMenuClassName, alarm.acknowledged?.value ? null : styles.unack].join(' ')}
             arrowClassName={styles.arrowClassName}
             options={severityOptions}
             onChange={(option) => setMuteSeverity(option)}
@@ -156,7 +156,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
       <div className={styles.panel4}>
         <div className={styles.title}>Alarm reason:</div>
         <div className={styles.reason}>
-          <p>{alarm.reason}</p>
+          <p>{alarm.reason?.value}</p>
         </div>
       </div>
     </div>
