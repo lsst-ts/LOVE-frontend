@@ -534,24 +534,7 @@ export const getAllEvents = (state) => {
   return getStreamData(state, 'event-all-all-all');
 };
 
-function cleanAlarm(alarm) {
-  if (!alarm) return alarm;
-  const cleanAlarm = {};
-  Object.keys(alarm).map((key) => {
-    cleanAlarm[key] = alarm[key].value;
-    return 0;
-  });
-  return cleanAlarm;
-}
-
 export const getAllAlarms = (state) => {
-  if (state.ws === undefined) return undefined;
-  return state.ws.alarms.map((alarm) => {
-    return cleanAlarm(alarm);
-  });
-};
-
-export const getRawAlarms = (state) => {
   if (state.ws === undefined) return undefined;
   return state.ws.alarms;
 };
@@ -563,13 +546,7 @@ export const getLastestAlarms = (state) => {
 
 export const getLastAlarm = (state) => {
   if (state.ws === undefined) return undefined;
-  const lastAlarms = getStreamData(state, 'event-Watcher-0-alarm');
-  if (!lastAlarms) {
-    return lastAlarms;
-  }
-  return lastAlarms.map((alarm) => {
-    return cleanAlarm(alarm);
-  });
+  return getStreamData(state, 'event-Watcher-0-alarm');
 };
 
 export const getObservingLogs = (state) => {
