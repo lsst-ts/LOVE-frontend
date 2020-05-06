@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getRawAlarms, getTaiToUtc } from '../../redux/selectors';
+import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
 import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
+// import mockAlarms from './AlarmsTable/mock'
 
 export const schema = {
   description: `Table containing alarms triggered by all CSCs, with the corresponding
@@ -47,8 +48,8 @@ const WatcherContainer = ({ alarms, user, subscribeToStream, unsubscribeToStream
 
 const mapStateToProps = (state) => {
   // const alarms = mockAlarms;
-  // const alarms = getRawAlarms(state).concat(mockAlarms);
-  const alarms = getRawAlarms(state);
+  // const alarms = getAllAlarms(state).concat(mockAlarms);
+  const alarms = getAllAlarms(state);
   const user = getUsername(state);
   const taiToUtc = getTaiToUtc(state);
   return { alarms, user, taiToUtc };
