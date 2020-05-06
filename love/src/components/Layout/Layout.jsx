@@ -196,8 +196,12 @@ class Layout extends Component {
         return oldAlarm.name.value === newAlarm.name.value;
       });
       if (
-        (!oldAlarm || newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) && 
-        newAlarm.severity.value > newAlarm.mutedSeverity.value 
+        newAlarm.severity.value > newAlarm.mutedSeverity.value &&
+        (
+          !oldAlarm ||
+          newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value ||
+          (!newAlarm.acknowledged.value && oldAlarm.acknowledged.value)
+        )
       ) {
         switch(newAlarm.maxSeverity.value) {
           // case severityEnum.warning: {
@@ -458,7 +462,7 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter((a) => a.severity?.value > 1 && !a.acknowledged?.value);
+    const filteredAlarms = this.props.alarms.filter((a) => a.severity?.value > 1 && !a.acknowledged?.value  && !a.mutedBy?.value);
     return (
       <>
         <div className={styles.hidden}>
