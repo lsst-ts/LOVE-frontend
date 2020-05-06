@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import SummaryPanel from '../SummaryPanel/SummaryPanel';
-import Label from '../SummaryPanel/Label';
 import Value from '../SummaryPanel/Value';
 // import Title from '../SummaryPanel/Title';
 import { CardList, Card, Title, SubTitle, Separator } from '../CardList/CardList';
