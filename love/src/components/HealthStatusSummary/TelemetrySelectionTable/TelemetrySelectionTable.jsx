@@ -303,8 +303,8 @@ export default class TelemetrySelectionTable extends PureComponent {
     let statusCode = 0;
     if (this.state.healthFunctions[paramName]) {
       try {
-        // eslint-disable-next-line
         const code = [HEALTH_STATUS_VARIABLES_DECLARATION, this.state.healthFunctions[paramName]].join('\n');
+        /* eslint-disable no-new-func*/
         let user_func = new Function('value', code);
         statusCode = user_func(value);
       } catch (err) {

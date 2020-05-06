@@ -4,10 +4,6 @@ import EventLog from './EventLog';
 import { addGroupSubscription } from '../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../redux/actions/summaryData';
 import {
-  getStreamData,
-  getCSCHeartbeat,
-  getCSCLogMessages,
-  getCSCErrorCodeData,
   getGroupSortedErrorCodeData,
   getGroupSortedLogMessageData,
 } from '../../redux/selectors';

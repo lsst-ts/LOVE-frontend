@@ -99,6 +99,7 @@ const HealthStatusSummaryContainer = ({
       const code = [HEALTH_STATUS_VARIABLES_DECLARATION, telemetryConfiguration[subscriptionName][parameterName]].join(
         '\n',
       );
+      /* eslint-disable no-new-func*/
       prevDict[`${component}-${salindex}`][topic][parameterName] = new Function('value', code);
     });
     return prevDict;
