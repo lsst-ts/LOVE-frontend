@@ -16,7 +16,7 @@ import {
   getTaiToUtc,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import Layout from './Layout';
 
@@ -66,6 +66,20 @@ const mapDispatchToProps = (dispatch) => {
     },
     unsubscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+    },
+    ackAlarm: (name, severity, acknowledgedBy) => {
+      return dispatch(
+        requestSALCommand({
+          cmd: 'cmd_acknowledge',
+          component: 'Watcher',
+          salindex: 0,
+          params: {
+            name,
+            severity,
+            acknowledgedBy,
+          },
+        }),
+      );
     },
   };
 };
