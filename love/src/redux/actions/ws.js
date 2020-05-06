@@ -13,7 +13,12 @@ import {
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
-import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, receiveHeartbeatInfo } from './heartbeats';
+import {
+  receiveScriptHeartbeat,
+  removeScriptsHeartbeats,
+  receiveCSCHeartbeat,
+  receiveHeartbeatInfo,
+} from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveServerTime } from './time';
@@ -108,13 +113,15 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 const _resetSubscriptions = (subscriptions) => {
   return {
     type: RESET_SUBSCRIPTIONS,
-    subscriptions: subscriptions ? subscriptions.map(sub => ({
-      ...sub,
-      status: groupStates.PENDING,
-      confirmationMessage: undefined,
-    })) : [],
-  }
-}
+    subscriptions: subscriptions
+      ? subscriptions.map((sub) => ({
+          ...sub,
+          status: groupStates.PENDING,
+          confirmationMessage: undefined,
+        }))
+      : [],
+  };
+};
 
 /**
  * Opens a new websocket connection assuming:
@@ -122,7 +129,6 @@ const _resetSubscriptions = (subscriptions) => {
  * - it does not matter if it was or was not connected before
  */
 export const openWebsocketConnection = () => {
-
   return (dispatch, getState) => {
     const tokenStatus = getTokenStatus(getState());
 
@@ -166,8 +172,7 @@ export const openWebsocketConnection = () => {
         if (!data.category) {
           if (data.time_data) {
             dispatch(receiveServerTime(data.time_data, data.request_time));
-          }
-          else if (data.data.includes('unsubscribed')) {
+          } else if (data.data.includes('unsubscribed')) {
             dispatch(_receiveUnsubscriptionConfirmation(data.data));
           } else {
             dispatch(_receiveSubscriptionConfirmation(data.data));
@@ -229,7 +234,6 @@ export const openWebsocketConnection = () => {
           }
         }
 
-
         if (data.data[0].data.observingLog) {
           dispatch(receiveObservingLog(data.data[0].data.observingLog));
         }
@@ -257,7 +261,7 @@ export const closeWebsocketConnection = () => {
       socket.close();
       dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
     }
-  }
+  };
 };
 
 /**
@@ -284,7 +288,7 @@ const _requestSubscriptions = () => {
       return;
     }
     const subscriptions = getSubscriptions(state);
-    subscriptions.forEach(subscription => {
+    subscriptions.forEach((subscription) => {
       if (subscription.status !== groupStates.PENDING && subscription.status !== groupStates.UNSUBSCRIBING) return;
       const [category, csc, salindex, stream] = subscription.groupName.split('-');
       socket.json({
@@ -360,33 +364,37 @@ export const requestSALCommand = (data) => {
       params: data.params,
       csc: data.csc ?? data.component, // this is for backwards compatibility
       salindex: data.salindex,
-
     };
-    dispatch(updateLastSALCommand(
-      {
-        ...commandStatus,
-        statusCode: null, cmd_id: commandID
-      },
-      SALCommandStatus.REQUESTED, null));
+    dispatch(
+      updateLastSALCommand(
+        {
+          ...commandStatus,
+          statusCode: null,
+          cmd_id: commandID,
+        },
+        SALCommandStatus.REQUESTED,
+        null,
+      ),
+    );
 
     return fetch(url, {
       method: 'POST',
       body: JSON.stringify({ ...commandStatus }),
-      headers: ManagerInterface.getHeaders()
-    }).then(r => {
-      return r.json().then(data => ({
-        statusCode: r.status,
-        data
-      }))
-    }).then(({statusCode, data}) => {
-      dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
+      headers: ManagerInterface.getHeaders(),
     })
-  }
-
-}
+      .then((r) => {
+        return r.json().then((data) => ({
+          statusCode: r.status,
+          data,
+        }));
+      })
+      .then(({ statusCode, data }) => {
+        dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
+      });
+  };
+};
 
 export const _requestSALCommand = (data) => {
-
   const commandID = `${Date.now()}-${data.cmd}`;
   return (dispatch, getState) => {
     const state = getState();
