@@ -215,6 +215,7 @@ export default class AlarmAudio extends Component {
       //       this.unackedWarningSound.play();
       //       break;
       //     }
+      //     default: break;
       //   }
       //   break;
       // }
@@ -232,6 +233,8 @@ export default class AlarmAudio extends Component {
             this.unackedSeriousSound.play();
             break;
           }
+          default:
+            break;
         }
         break;
       }
@@ -252,9 +255,13 @@ export default class AlarmAudio extends Component {
             this.unackedCriticalSound.play();
             break;
           }
+          default:
+            break;
         }
         break;
       }
+      default:
+        break;
     }
   };
 

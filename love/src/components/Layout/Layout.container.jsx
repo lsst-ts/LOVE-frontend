@@ -55,8 +55,6 @@ const mapDispatchToProps = (dispatch) => {
     subscriptions,
     logout: () => dispatch(logout()),
     clearViewToEdit: () => dispatch(clearViewToEdit),
-    subscribeToStreams: () => dispatch(addGroupSubscription('heartbeat-manager-0-stream')),
-    unsubscribeToStreams: () => dispatch(requestGroupSubscriptionRemoval('heartbeat-manager-0-stream')),
     subscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },

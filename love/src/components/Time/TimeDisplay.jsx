@@ -63,7 +63,7 @@ export default class TimeDisplay extends React.Component {
       mjd: 0,
       sidereal_summit: 0,
       sidereal_greenwich: 0,
-    }
+    },
   };
 
   render() {
@@ -76,15 +76,7 @@ export default class TimeDisplay extends React.Component {
               return (
                 <div key={index} className={styles.verticalGroup}>
                   {verticalGroup.map((element, index) => {
-                    let timestamp = this.props.clock.utc;
-                    if (element.timezone === 'sidereal-greenwich') {
-                      timestamp = this.props.clock.sidereal_greenwich;
-                    } else if (element.timezone === 'sidereal-summit') {
-                      timestamp = this.props.clock.sidereal_summit;
-                    } else if (element.timezone === 'MJD') {
-                      timestamp = this.props.clock.mjd;
-                    }
-                    return <Clock key={index} {...element} clock={this.props.clock}/>;
+                    return <Clock key={index} {...element} clock={this.props.clock} />;
                   })}
                 </div>
               );
