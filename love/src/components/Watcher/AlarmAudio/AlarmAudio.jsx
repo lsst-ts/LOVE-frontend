@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Howl } from 'howler';
 
 import { severityEnum } from '../../../Config';
+import { isAcknowledged, isMuted, isMaxCritical } from '../AlarmUtils';
 
 import newWarningFile from '../../../sounds/new_warning.mp3';
 import newSeriousFile from '../../../sounds/new_serious.mp3';
@@ -158,10 +159,10 @@ export default class AlarmAudio extends Component {
       });
 
       // If they are non-acked and non-muted
-      if (!newAlarm.acknowledged.value && newAlarm.severity.value > newAlarm.mutedSeverity.value) {
+      if (!isAcknowledged(newAlarm) && !isMuted(newAlarm)) {
         // If they are new, play the "new" sound
         if (!oldAlarm || oldAlarm.maxSeverity.value === severityEnum.ok) {
-          if (newAlarm.maxSeverity.value === severityEnum.critical) deltaCriticals++;
+          if (isMaxCritical(newAlarm)) deltaCriticals++;
           this.playSound(newAlarm.maxSeverity.value, 'new');
         }
         // If they have increased, play the "increased" sound
@@ -170,7 +171,7 @@ export default class AlarmAudio extends Component {
           this.playSound(newAlarm.maxSeverity.value, 'increased');
         }
         // If they have been unacked, play the "unacked" sound
-        else if (!newAlarm.acknowledged.value && oldAlarm.acknowledged.value) {
+        else if (!isAcknowledged(newAlarm) && isAcknowledged(oldAlarm)) {
           if (newAlarm.maxSeverity.value === severityEnum.critical) deltaCriticals++;
           this.playSound(newAlarm.maxSeverity.value, 'unacked');
         }
@@ -179,12 +180,10 @@ export default class AlarmAudio extends Component {
       // If they are critical and cleared, discount them
       if (
         oldAlarm &&
-        oldAlarm.maxSeverity.value === severityEnum.critical &&
-        !oldAlarm.acknowledged.value &&
-        oldAlarm.severity.value > oldAlarm.mutedSeverity.value &&
-        (newAlarm.acknowledged.value ||
-          newAlarm.severity.value <= newAlarm.mutedSeverity.value ||
-          newAlarm.maxSeverity.value != severityEnum.critical)
+        isMaxCritical(oldAlarm) &&
+        !isAcknowledged(oldAlarm) &&
+        !isMuted(oldAlarm) &&
+        (isAcknowledged(newAlarm) || isMuted(newAlarm) || !isMaxCritical(newAlarm))
       ) {
         deltaCriticals--;
       }
