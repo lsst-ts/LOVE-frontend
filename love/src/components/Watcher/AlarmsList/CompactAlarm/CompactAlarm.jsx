@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Button from '../../GeneralPurpose/Button/Button';
+import Button from '../../../GeneralPurpose/Button/Button';
 import styles from './CompactAlarm.module.css';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import { severityToStatus } from '../../../Config';
+import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
+import { severityToStatus } from '../../../../Config';
 
 export default function CompactAlarm({
   user,
@@ -55,9 +55,7 @@ export default function CompactAlarm({
         }}
       >
         <span className={styles.label}>Reason:</span>
-        <div className={styles.reason}>
-          {reason}
-        </div>
+        <div className={styles.reason}>{reason}</div>
         <div className={styles.ackButtonContainer}>
           <Button
             title="Acknowledge"

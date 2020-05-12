@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import {Howl} from 'howler';
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime } from '../../Utils';
@@ -21,12 +20,9 @@ import ClockContainer from '../Time/Clock/Clock.container';
 import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
-import CompactAlarm from './CompactAlarm/CompactAlarm';
-import { severityEnum } from '../../Config';
-
-import warningAudio from '../../sounds/up_to_warning.mp3';
-import seriousAudio from '../../sounds/up_to_serious.mp3';
-import criticalAudio from '../../sounds/up_to_critical.mp3';
+import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
+import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
+import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -38,6 +34,8 @@ const urls = {
 
 class Layout extends Component {
   static propTypes = {
+    /** List of alarms that are displayed */
+    alarms: PropTypes.array,
     /** React Router location object */
     location: PropTypes.object,
     /** Children components */
@@ -63,6 +61,7 @@ class Layout extends Component {
   };
 
   static defaultProps = {
+    alarms: [],
     lastSALCommand: undefined,
   };
 
@@ -79,26 +78,9 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
-      newAlarms: null,
-      alarms: null,
     };
 
     this.requestToastID = null;
-    this.warningSound = new Howl({
-      src: [warningAudio],
-      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
-      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
-    });
-    this.seriousSound = new Howl({
-      src: [seriousAudio],
-      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
-      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
-    });
-    this.criticalSound = new Howl({
-      src: [criticalAudio],
-      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
-      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
-    });
   }
 
   UNSAFE_componentWillMount = () => {
@@ -125,10 +107,6 @@ class Layout extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
       this.moveCustomTopbar();
-    }
-
-    if (this.props.newAlarms !== prevProps.newAlarms) {
-      this.checkAndNotifyAlarms(this.props.newAlarms, prevProps.alarms);
     }
 
     if (this.props.token === null && prevProps.token !== null) {
@@ -188,38 +166,6 @@ class Layout extends Component {
       }
     }
   };
-
-  checkAndNotifyAlarms = (newAlarms, oldAlarms) => {
-    newAlarms.forEach((newAlarm) => {
-      if (newAlarm === undefined) return;
-      const oldAlarm = oldAlarms.find((oldAlarm) => {
-        return oldAlarm.name.value === newAlarm.name.value;
-      });
-      if (
-        newAlarm.severity.value > newAlarm.mutedSeverity.value &&
-        (
-          !oldAlarm ||
-          newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value ||
-          (!newAlarm.acknowledged.value && oldAlarm.acknowledged.value)
-        )
-      ) {
-        switch(newAlarm.maxSeverity.value) {
-          // case severityEnum.warning: {
-          //   this.warningSound.play();
-          //   break;
-          // }
-          case severityEnum.serious: {
-            this.seriousSound.play();
-            break;
-          }
-          case severityEnum.critical: {
-            this.criticalSound.play();
-            break;
-          }
-        }
-      }
-    });
-  }
 
   moveCustomTopbar = () => {
     const toolbarParent = document.getElementById(this.state.toolbarOverflow ? 'overflownToolbar' : 'middleTopbar');
@@ -462,9 +408,10 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter((a) => a.severity?.value > 1 && !a.acknowledged?.value  && !a.mutedBy?.value);
+    const filteredAlarms = this.props.alarms.filter((a) => isActive(a) && !isAcknowledged(a) && !isMuted(a));
     return (
       <>
+        <AlarmAudioContainer />
         <div className={styles.hidden}>
           <div id="customTopbar" />
         </div>
@@ -550,34 +497,12 @@ class Layout extends Component {
                     <NotificationIcon className={styles.icon} />
                   </IconBadge>
                 </Button>
-                <div className={styles.alarmsContainer} title="Alarms">
-                  {filteredAlarms.length < 1 ? (
-                    <div className={styles.alarmsTitle}>No active alarms</div>
-                  ) : (
-                    <>
-                      <div className={styles.alarmsTitle}>Active alarms</div>
-                      {filteredAlarms
-                        .sort((a, b) => (a.severity.value > b.severity.value ? -1 : 1))
-                        .map((alarm) => {
-                          const timestamp = alarm.timestampSeverityOldest.value * 1000;
-                          const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
-                          const alarmProps = {
-                            user: this.props.user,
-                            name: alarm.name?.value,
-                            severity: alarm.severity?.value,
-                            maxSeverity: alarm.maxSeverity?.value,
-                            acknowledged: alarm.acknowledged?.value,
-                            muted: alarm.muted?.value,
-                            severityUpdateTimestamp,
-                            reason: alarm.reason?.value,
-                            ackAlarm: this.props.ackAlarm
-                          };
-
-                          return <CompactAlarm key={alarm.name?.value} {...alarmProps}></CompactAlarm>;
-                        })}
-                    </>
-                  )}
-                </div>
+                <AlarmsList
+                  alarms={filteredAlarms}
+                  ackAlarm={this.props.ackAlarm}
+                  taiToUtc={this.props.taiToUtc}
+                  user={this.props.user}
+                />
               </DropdownMenu>
 
               <DropdownMenu className={styles.settingsDropdown}>
