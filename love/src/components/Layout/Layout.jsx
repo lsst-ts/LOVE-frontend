@@ -24,9 +24,16 @@ import { HEARTBEAT_COMPONENTS } from '../../Config';
 import CompactAlarm from './CompactAlarm/CompactAlarm';
 import { severityEnum } from '../../Config';
 
-import warningAudio from '../../sounds/up_to_warning.mp3';
-import seriousAudio from '../../sounds/up_to_serious.mp3';
-import criticalAudio from '../../sounds/up_to_critical.mp3';
+import newWarningFile from '../../sounds/new_warning.mp3';
+import newSeriousFile from '../../sounds/new_serious.mp3';
+import newCriticalFile from '../../sounds/new_critical.mp3';
+import increasedWarningFile from '../../sounds/increased_warning.mp3';
+import increasedSeriousFile from '../../sounds/increased_serious.mp3';
+import increasedCriticalFile from '../../sounds/increased_critical.mp3';
+import unackedWarningFile from '../../sounds/unacked_warning.mp3';
+import unackedSeriousFile from '../../sounds/unacked_serious.mp3';
+import unackedCriticalFile from '../../sounds/unacked_critical.mp3';
+import criticalFile from '../../sounds/critical_alarm.mp3';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -83,58 +90,58 @@ class Layout extends Component {
 
     this.requestToastID = null;
     this.newWarningSound = new Howl({
-      src: [warningAudio],
-      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
-      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
+      src: [newWarningFile],
+      onplayerror: () => { console.error('Error playing sound for warning alarm: ', newWarningFile)},
+      onloaderror: () => { console.error('Error loading sound for warning alarm: ', newWarningFile)},
     });
     this.newSeriousSound = new Howl({
-      src: [seriousAudio],
-      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
-      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
+      src: [newSeriousFile],
+      onplayerror: () => { console.error('Error playing sound for serious alarm: ', newSeriousFile)},
+      onloaderror: () => { console.error('Error loading sound for serious alarm: ', newSeriousFile)},
     });
     this.newCriticalSound = new Howl({
-      src: [criticalAudio],
+      src: [newCriticalFile],
       loop: 1,
-      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
-      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', newCriticalFile)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', newCriticalFile)},
     });
     this.increasedWarningSound = new Howl({
-      src: [warningAudio],
-      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
-      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
+      src: [increasedWarningFile],
+      onplayerror: () => { console.error('Error playing sound for warning alarm: ', increasedWarningFile)},
+      onloaderror: () => { console.error('Error loading sound for warning alarm: ', increasedWarningFile)},
     });
     this.increasedSeriousSound = new Howl({
-      src: [seriousAudio],
-      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
-      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
+      src: [increasedSeriousFile],
+      onplayerror: () => { console.error('Error playing sound for serious alarm: ', increasedSeriousFile)},
+      onloaderror: () => { console.error('Error loading sound for serious alarm: ', increasedSeriousFile)},
     });
     this.increasedCriticalSound = new Howl({
-      src: [criticalAudio],
+      src: [increasedCriticalFile],
       loop: 1,
-      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
-      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', increasedCriticalFile)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', increasedCriticalFile)},
     });
     this.unackedWarningSound = new Howl({
-      src: [warningAudio],
-      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
-      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
+      src: [unackedWarningFile],
+      onplayerror: () => { console.error('Error playing sound for warning alarm: ', unackedWarningFile)},
+      onloaderror: () => { console.error('Error loading sound for warning alarm: ', unackedWarningFile)},
     });
     this.unackedSeriousSound = new Howl({
-      src: [seriousAudio],
-      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
-      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
+      src: [unackedSeriousFile],
+      onplayerror: () => { console.error('Error playing sound for serious alarm: ', unackedSeriousFile)},
+      onloaderror: () => { console.error('Error loading sound for serious alarm: ', unackedSeriousFile)},
     });
     this.unackedCriticalSound = new Howl({
-      src: [criticalAudio],
+      src: [unackedCriticalFile],
       loop: 1,
-      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
-      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', unackedCriticalFile)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', unackedCriticalFile)},
     });
     this.criticalSound = new Howl({
-      src: [criticalAudio],
+      src: [criticalFile],
       loop: 1,
-      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
-      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalFile)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalFile)},
     });
   }
 
@@ -234,7 +241,7 @@ class Layout extends Component {
         return oldAlarm.name.value === newAlarm.name.value;
       });
       if (!newAlarm.acknowledged.value && newAlarm.severity.value > newAlarm.mutedSeverity.value ) {
-        if (!oldAlarm) {
+        if (!oldAlarm || oldAlarm.maxSeverity.value === severityEnum.ok) {
           if (newAlarm.maxSeverity.value === severityEnum.critical) numCriticals++;
           this.playSound(newAlarm.maxSeverity.value, 'new');
         }
