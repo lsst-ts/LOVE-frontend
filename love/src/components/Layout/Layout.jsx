@@ -33,7 +33,6 @@ import increasedCriticalFile from '../../sounds/increased_critical.mp3';
 import unackedWarningFile from '../../sounds/unacked_warning.mp3';
 import unackedSeriousFile from '../../sounds/unacked_serious.mp3';
 import unackedCriticalFile from '../../sounds/unacked_critical.mp3';
-import criticalFile from '../../sounds/critical_alarm.mp3';
 import stillCriticalFile from '../../sounds/still_critical.mp3';
 
 const BREAK_1 = 865;
