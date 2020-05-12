@@ -20,8 +20,8 @@ import ClockContainer from '../Time/Clock/Clock.container';
 import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
-import CompactAlarm from './CompactAlarm/CompactAlarm';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
+import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
 import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 
 const BREAK_1 = 865;
@@ -497,34 +497,12 @@ class Layout extends Component {
                     <NotificationIcon className={styles.icon} />
                   </IconBadge>
                 </Button>
-                <div className={styles.alarmsContainer} title="Alarms">
-                  {filteredAlarms.length < 1 ? (
-                    <div className={styles.alarmsTitle}>No active alarms</div>
-                  ) : (
-                    <>
-                      <div className={styles.alarmsTitle}>Active alarms</div>
-                      {filteredAlarms
-                        .sort((a, b) => (a.severity.value > b.severity.value ? -1 : 1))
-                        .map((alarm) => {
-                          const timestamp = alarm.timestampSeverityOldest.value * 1000;
-                          const severityUpdateTimestamp = relativeTime(timestamp, this.props.taiToUtc);
-                          const alarmProps = {
-                            user: this.props.user,
-                            name: alarm.name?.value,
-                            severity: alarm.severity?.value,
-                            maxSeverity: alarm.maxSeverity?.value,
-                            acknowledged: alarm.acknowledged?.value,
-                            muted: alarm.muted?.value,
-                            severityUpdateTimestamp,
-                            reason: alarm.reason?.value,
-                            ackAlarm: this.props.ackAlarm,
-                          };
-
-                          return <CompactAlarm key={alarm.name?.value} {...alarmProps}></CompactAlarm>;
-                        })}
-                    </>
-                  )}
-                </div>
+                <AlarmsList
+                  alarms={filteredAlarms}
+                  ackAlarm={this.props.ackAlarm}
+                  taiToUtc={this.props.taiToUtc}
+                  user={this.props.user}
+                />
               </DropdownMenu>
 
               <DropdownMenu className={styles.settingsDropdown}>
