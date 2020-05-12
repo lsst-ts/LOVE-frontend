@@ -79,23 +79,60 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
-      newAlarms: null,
-      alarms: null,
     };
 
     this.requestToastID = null;
-    this.warningSound = new Howl({
+    this.newWarningSound = new Howl({
       src: [warningAudio],
       onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
       onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
     });
-    this.seriousSound = new Howl({
+    this.newSeriousSound = new Howl({
       src: [seriousAudio],
       onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
       onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
     });
+    this.newCriticalSound = new Howl({
+      src: [criticalAudio],
+      loop: 1,
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+    });
+    this.increasedWarningSound = new Howl({
+      src: [warningAudio],
+      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
+      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
+    });
+    this.increasedSeriousSound = new Howl({
+      src: [seriousAudio],
+      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
+      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
+    });
+    this.increasedCriticalSound = new Howl({
+      src: [criticalAudio],
+      loop: 1,
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+    });
+    this.unackedWarningSound = new Howl({
+      src: [warningAudio],
+      onplayerror: () => { console.error('Error playing sound for warning alarm: ', warningAudio)},
+      onloaderror: () => { console.error('Error loading sound for warning alarm: ', warningAudio)},
+    });
+    this.unackedSeriousSound = new Howl({
+      src: [seriousAudio],
+      onplayerror: () => { console.error('Error playing sound for serious alarm: ', seriousAudio)},
+      onloaderror: () => { console.error('Error loading sound for serious alarm: ', seriousAudio)},
+    });
+    this.unackedCriticalSound = new Howl({
+      src: [criticalAudio],
+      loop: 1,
+      onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
+      onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
+    });
     this.criticalSound = new Howl({
       src: [criticalAudio],
+      loop: 1,
       onplayerror: () => { console.error('Error playing sound for critical alarm: ', criticalAudio)},
       onloaderror: () => { console.error('Error loading sound for critical alarm: ', criticalAudio)},
     });
@@ -190,35 +227,87 @@ class Layout extends Component {
   };
 
   checkAndNotifyAlarms = (newAlarms, oldAlarms) => {
+    let numCriticals = 0;
     newAlarms.forEach((newAlarm) => {
       if (newAlarm === undefined) return;
       const oldAlarm = oldAlarms.find((oldAlarm) => {
         return oldAlarm.name.value === newAlarm.name.value;
       });
-      if (
-        newAlarm.severity.value > newAlarm.mutedSeverity.value &&
-        (
-          !oldAlarm ||
-          newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value ||
-          (!newAlarm.acknowledged.value && oldAlarm.acknowledged.value)
-        )
-      ) {
-        switch(newAlarm.maxSeverity.value) {
-          // case severityEnum.warning: {
-          //   this.warningSound.play();
-          //   break;
-          // }
-          case severityEnum.serious: {
-            this.seriousSound.play();
-            break;
-          }
-          case severityEnum.critical: {
-            this.criticalSound.play();
-            break;
-          }
+      if (!newAlarm.acknowledged.value && newAlarm.severity.value > newAlarm.mutedSeverity.value ) {
+        if (!oldAlarm) {
+          if (newAlarm.maxSeverity.value === severityEnum.critical) numCriticals++;
+          this.playSound(newAlarm.maxSeverity.value, 'new');
+        }
+        else if (newAlarm.maxSeverity.value > oldAlarm.maxSeverity.value) {
+          if (newAlarm.maxSeverity.value === severityEnum.critical) numCriticals++;
+          this.playSound(newAlarm.maxSeverity.value, 'increased');
+        }
+        else if (!newAlarm.acknowledged.value && oldAlarm.acknowledged.value) {
+          if (newAlarm.maxSeverity.value === severityEnum.critical) numCriticals++;
+          this.playSound(newAlarm.maxSeverity.value, 'unacked');
         }
       }
     });
+    if (numCriticals === 0) {
+      this.criticalSound.stop();
+    }
+  }
+
+  playSound = (severity, type) => {
+    console.log('severity: ', severity, ', type: ', type);
+    switch(severity) {
+      case severityEnum.warning: {
+        switch(type) {
+          case 'new': {
+            this.newWarningSound.play();
+            break;
+          }
+          case 'increased': {
+            this.increasedWarningSound.play();
+            break;
+          }
+          case 'unacked': {
+            this.unackedWarningSound.play();
+            break;
+          }
+        }
+        break;
+      }
+      case severityEnum.serious: {
+        switch(type) {
+          case 'new': {
+            this.newSeriousSound.play();
+            break;
+          }
+          case 'increased': {
+            this.increasedSeriousSound.play();
+            break;
+          }
+          case 'unacked': {
+            this.unackedSeriousSound.play();
+            break;
+          }
+        }
+        break;
+      }
+      case severityEnum.critical: {
+        switch(type) {
+          case 'new': {
+            this.newCriticalSound.play();
+            break;
+          }
+          case 'increased': {
+            this.increasedCriticalSound.play();
+            break;
+          }
+          case 'unacked': {
+            this.unackedCriticalSound.play();
+            break;
+          }
+        }
+        break;
+      }
+    }
   }
 
   moveCustomTopbar = () => {
