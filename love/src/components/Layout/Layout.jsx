@@ -22,6 +22,7 @@ import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/Labe
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import CompactAlarm from './CompactAlarm/CompactAlarm';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
+import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -407,9 +408,7 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter(
-      (a) => a.severity?.value > 1 && !a.acknowledged?.value && !a.mutedBy?.value,
-    );
+    const filteredAlarms = this.props.alarms.filter((a) => isActive(a) && !isAcknowledged(a) && !isMuted(a));
     return (
       <>
         <AlarmAudioContainer />
