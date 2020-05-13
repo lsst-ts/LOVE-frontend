@@ -56,7 +56,6 @@ export const markErrorRemoveToken = {
   type: MARK_ERROR_REMOVE_TOKEN,
 };
 
-
 export function doGetTokenFromStorage() {
   return (dispatch) => {
     const token = localStorage.getItem('LOVE-TOKEN');
@@ -206,7 +205,7 @@ export function validateToken() {
     }
 
     const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-    const request_time =  DateTime.utc().toMillis() / 1000;
+    const request_time = DateTime.utc().toMillis() / 1000;
     return fetch(url, {
       method: 'GET',
       headers: new Headers({
