@@ -11,7 +11,7 @@ function Palette(props) {
     '--font-size-larger',
   ];
 
-  const fontWeights = ['lighter', 'normal', 'bold', 'bolder', , '100', '200', '300', '400', '500', '700', '800', '900'];
+  const fontWeights = ['normal', 'bold', , '100', '200', '300', '400', '500', '700', '800', '900'];
 
   const fontColors = [
     '--base-font-color',
@@ -92,7 +92,10 @@ function Palette(props) {
           <h1> Font Weights </h1>
 
           {fontWeights.map((fontWeight) => (
-            <div style={{ fontWeight: `${fontWeight}` }}> font-weight: {fontWeight} </div>
+            <div>
+              <span style={{ fontWeight: `${fontWeight}` }}> regular {fontWeight} </span>
+              <span style={{ fontWeight: `${fontWeight}`, fontStyle: 'italic' }}> italic {fontWeight} </span>
+            </div>
           ))}
         </div>
 
