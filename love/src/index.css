@@ -1,17 +1,85 @@
 @font-face {
   font-family: 'Arial';
+  font-style: normal;
+  font-weight: normal;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: bold;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 100;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 400;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 700;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: normal;
+  font-weight: 900;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: normal;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: bold;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: 100;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: 400;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: 700;
+  src: local(Arial);}
+
+@font-face {
+  font-family: 'Arial';
+  font-style: italic;
+  font-weight: 900;
   src: local(Arial);}
 
 body {
   color: var(--base-font-color);
   background: var(--base-background-color);
-  /* font-family: Arial; */
   font-family: 'Arial';
+  -webkit-font-smoothing: antialiased !important;
   margin: 0;
 }
 
 :root {
-    backface-visibility: hidden;
+  backface-visibility: hidden;
   --topbar-height: 2em;
   --content-padding: 1em;
   --base-font-color: hsl(194, 16%, 79%);
