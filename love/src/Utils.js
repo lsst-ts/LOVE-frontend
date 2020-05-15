@@ -516,16 +516,19 @@ export const getStringRegExp = (str) => {
 export const siderealSecond = 1.00273788;
 
 export const takeScreenshot = (callback) => {
-  html2canvas(document.body, {
+  const el = document.children[0];
+  html2canvas(el, {
     allowTaint: true,
+    useCORS: true,
     foreignObjectRendering: true,
     backgroundColor: null,
     y: 0,
     x: 0,
+    logging: false,
     windowWidth: window.innerWidth,
     windowHeight: window.innerHeight,
-    ignoreElements: (el) => {
-      return el.tagName === 'NOSCRIPT';
+    ignoreElements: (e) => {
+      return e.tagName === 'NOSCRIPT';
     }
   }).then((canvas) => {
     callback(canvas.toDataURL('image/png'));
