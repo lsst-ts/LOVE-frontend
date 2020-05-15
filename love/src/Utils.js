@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { SALCommandStatus } from './redux/actions/ws.js';
 
@@ -513,3 +514,20 @@ export const getStringRegExp = (str) => {
 };
 
 export const siderealSecond = 1.00273788;
+
+export const takeScreenshot = (callback) => {
+  html2canvas(document.body, {
+    allowTaint: true,
+    foreignObjectRendering: true,
+    backgroundColor: null,
+    y: 0,
+    x: 0,
+    windowWidth: window.innerWidth,
+    windowHeight: window.innerHeight,
+    ignoreElements: (el) => {
+      return el.tagName === 'NOSCRIPT';
+    }
+  }).then((canvas) => {
+    callback(canvas.toDataURL('image/png'));
+  });
+};
