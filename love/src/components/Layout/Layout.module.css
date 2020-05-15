@@ -212,9 +212,10 @@
 }
 
 .settingsDropdown .menuElement {
+  white-space: pre;
   text-align: left;
   cursor: pointer;
-  padding: 0.5em 1em;
+  padding: 0.5em 0.5em;
 }
 
 .settingsDropdown .menuElement:hover {
@@ -285,4 +286,8 @@
 .heartbeatMenuElement .heartbeatSubElement {
   color: var(--secondary-font-color);
   line-height: 1.3em;
+}
+
+.userMenu {
+  padding: 0.5em;
 }
