@@ -135,7 +135,7 @@
   flex-flow: column;
   height: calc(100vh - 3em);
   z-index: 1000;
-  width: 25ch;
+  width: 200px;
   box-sizing: border-box;
   text-align: left;
   transition: all 0.5s ease-in-out;
