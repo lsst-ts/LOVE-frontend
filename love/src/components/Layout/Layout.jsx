@@ -5,11 +5,11 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates, modes } from '../../redux/reducers/uif';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { getNotificationMessage, relativeTime } from '../../Utils';
+import { getNotificationMessage, relativeTime, takeScreenshot, parseTimestamp, formatTimestamp } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import DropdownMenu from '../GeneralPurpose/DropdownMenu/DropdownMenu';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
-import GearIcon from '../icons/GearIcon/GearIcon';
+import UserIcon from '../icons/UserIcon/UserIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
 import IconBadge from '../icons/IconBadge/IconBadge';
@@ -507,10 +507,29 @@ class Layout extends Component {
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="Settings" status="transparent">
-                  <GearIcon className={styles.icon} />
+                  <UserIcon className={styles.icon} />
                 </Button>
-                <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                  Logout
+                <div className={styles.userMenu}>
+                  <div className={styles.menuElement}>
+                    <span>User </span>
+                    <span>{this.props.user}</span>
+                  </div>
+                  <div className={styles.divider}></div>
+                  <div className={styles.menuElement} onClick={() => takeScreenshot((img) => {
+                    const link = document.createElement('a');
+                    const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai))
+                    link.href = img;
+                    link.download = `${timestamp}.png`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                  })}>
+                    <span>Screenshot </span>
+                  </div>
+                  <div className={styles.divider}></div>
+                  <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
+                    Logout
+                  </div>
                 </div>
               </DropdownMenu>
             </div>
