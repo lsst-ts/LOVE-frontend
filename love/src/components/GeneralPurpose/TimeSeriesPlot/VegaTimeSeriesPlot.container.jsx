@@ -9,6 +9,24 @@ export const schema = {
     description: "vega plot",
     defaultSize: [8, 8],
     props: {
+        titleBar: {
+            type: 'boolean',
+            description: 'Whether to display the title bar',
+            isPrivate: false,
+            default: true,
+        },
+        title: {
+            type: 'string',
+            description: 'Name diplayed in the title bar (if visible)',
+            isPrivate: false,
+            default: 'Time series plot',
+        },
+        hasRawMode: {
+            type: 'boolean',
+            description: 'Whether the component has a raw mode version',
+            isPrivate: true,
+            default: true,
+        },
         subscriptions: {
             type: 'array',
             description: 'lits of subscriptions',
@@ -244,7 +262,6 @@ export default function () {
     return (
         <VegaTimeSeriesPlot
             data={props.data}
-            horizontalLinesData={[]}
             linesStyles={props.linesStyles}
             units={{ y: "deg" }}
             yAxisTitle={"Telementry"}

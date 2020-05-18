@@ -32,7 +32,7 @@ export const DASHES = [
 ];
 
 
-class VegaTimeseriesChart extends Component {
+class VegaTimeseriesPlot extends Component {
 
   static defaultProps = {
     /** List of {name, x, y} with points of lines to be plotted
@@ -97,6 +97,15 @@ class VegaTimeseriesChart extends Component {
      * Defaults to undefined to use vega-lite defaults.
      */
     xDomain: undefined
+  }
+
+  constructor(props) {
+    super(props);
+    this.containerRef = React.createRef();
+    this.resizeObserver = undefined;
+    this.state = {
+      containerWidth: 500
+    }
   }
 
   makeAxisTitle = (title, units) => {
@@ -327,10 +336,33 @@ class VegaTimeseriesChart extends Component {
     ]
   }
 
+  componentDidMount = () => {
+    // this.props.subscribeToStreams();
+
+    window.setWidth = (width) => {
+      this.setState({
+        containerWidth: width
+      })
+    }
+    this.resizeObserver = new ResizeObserver((entries) => {
+      const container = entries[0];
+      this.setState({
+        containerWidth: container.contentRect.width
+      })
+    });
+
+    this.resizeObserver.observe(this.containerRef.current.parentNode.parentNode);
+
+  }
+
+  componentWillUnmount = () => {
+    // this.props.unsubscribeToStreams();
+    this.resizeObserver.disconnect();
+  }
   render() {
     const spec = {
-      width: "container",
-      height: 150,
+      width: this.state.containerWidth - (8+15)*2 -16,
+      height: 200,
       config: {
         padding: 5,
         background: null,
@@ -404,21 +436,30 @@ class VegaTimeseriesChart extends Component {
 
     }
 
+    console.log('this.state.containerWidth', `${parseInt(this.state.containerWidth)}px`);
     return (
-      (<VegaLite
-        renderer="svg"
-        spec={spec}
-        data={{
-          table: this.props.data,
-          horizontalLines: this.props.horizontalLinesData,
-          bars: this.props.barsData,
-          gaps: this.props.gapsData,
-          ...rightAxisData
-        }}
-        className={styles.plotContainer}
-        actions={false} />)
+      // <div style={{ width: `${parseInt(this.state.containerWidth)}px`, height:'100px' }} ref={this.containerRef}>
+      // <div style={{ width:'500px'}}>
+      <div style={{ width: `${this.state.containerWidth-(8+15)*2}px` }} ref={this.containerRef}>
+        <VegaLite
+          style={{
+            display: 'flex'
+          }}
+          renderer="svg"
+          spec={spec}
+          data={{
+            table: this.props.data,
+            horizontalLines: this.props.horizontalLinesData,
+            bars: this.props.barsData,
+            gaps: this.props.gapsData,
+            ...rightAxisData
+          }}
+          className={styles.plotContainer}
+          actions={false} />
+
+      </div>
     );
   }
 }
 
-export default VegaTimeseriesChart;
+export default VegaTimeseriesPlot;
