@@ -2,9 +2,9 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { addGroup, removeGroup } from '../actions/ws';
+import { addGroup, removeGroup, groupStates } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
-import { getAllTelemetries, getAllEvents, getStreamData } from '../selectors';
+import { getAllTelemetries, getAllEvents, getStreamData, getSubscription } from '../selectors';
 
 let store, server;
 
@@ -177,11 +177,27 @@ describe('Test subscription to Telemetries and Events, given the connection is o
     expect(getStreamData(store.getState(), 'event-ATMCS-1-stream2')).toEqual(undefined);
   });
 
-  xit('When subscribed N times to an event and then unsubscribed M < N times, then should still receive the event ', async () => {
-    // Subscribe N=3 times
+  it(`When subscriptions are added, then they are counted, and when they are removed, 
+  they are discounted, and unsubscription is only requested when counter equals 0`, async () => {
+    // Subscribe
+    // N = 0
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toBeFalsy();
+    // N = 1
     await store.dispatch(addGroup('event-ATDome-1-stream1'));
-    await store.dispatch(addGroup('event-ATDome-1-stream1'));
-    await store.dispatch(addGroup('event-ATDome-1-stream1'));
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 1,
+      status: groupStates.REQUESTING,
+    });
+    server.send({
+      data: 'Successfully subscribed to event-ATDome-1-stream1',
+    });
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 1,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: 'Successfully subscribed to event-ATDome-1-stream1',
+    });
     await expect(server).toReceiveMessage({
       category: 'event',
       csc: 'ATDome',
@@ -189,72 +205,48 @@ describe('Test subscription to Telemetries and Events, given the connection is o
       salindex: '1',
       stream: 'stream1',
     });
-
-    // Receive message
-    let msg = {
-      category: 'event',
-      data: [
-        {
-          csc: 'ATDome',
-          salindex: 1,
-          data: {
-            stream1: {
-              key11: 'value11',
-              key12: 'value12',
-            },
-            stream2: {
-              key21: 'value21',
-              key22: 'value22',
-            },
-          },
-        },
-      ],
-    };
-    server.send(msg);
-    expect(getStreamData(store.getState(), 'event-ATDome-1-stream1')).toEqual({
-      key11: 'value11',
-      key12: 'value12',
+    // N = 2
+    await store.dispatch(addGroup('event-ATDome-1-stream1'));
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 2,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: 'Successfully subscribed to event-ATDome-1-stream1',
+    });
+    // N = 3
+    await store.dispatch(addGroup('event-ATDome-1-stream1'));
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 3,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: 'Successfully subscribed to event-ATDome-1-stream1',
     });
 
-    // Unsubscribe M=2 times
+    // Unsubscribe
+    // N = 2
     await store.dispatch(removeGroup('event-ATDome-1-stream1'));
-    await store.dispatch(removeGroup('event-ATDome-1-stream1'));
-    await expect(server).not.toReceiveMessage({
-      category: 'event',
-      csc: 'ATDome',
-      option: 'unsubscribe',
-      salindex: '1',
-      stream: 'stream1',
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 2,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: 'Successfully subscribed to event-ATDome-1-stream1',
     });
-
-    // Still receive message
-    msg = {
-      category: 'event',
-      data: [
-        {
-          csc: 'ATDome',
-          salindex: 1,
-          data: {
-            stream1: {
-              key11: 'value11_2',
-              key12: 'value12_2',
-            },
-            stream2: {
-              key21: 'value21_2',
-              key22: 'value22_2',
-            },
-          },
-        },
-      ],
-    };
-    server.send(msg);
-    expect(getStreamData(store.getState(), 'event-ATDome-1-stream1')).toEqual({
-      key11: 'value11_2',
-      key12: 'value12_2',
-    });
-
-    // Unsubscribe N-M = 1 times
+    // N = 1
     await store.dispatch(removeGroup('event-ATDome-1-stream1'));
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 1,
+      status: groupStates.SUBSCRIBED,
+      confirmationMessage: 'Successfully subscribed to event-ATDome-1-stream1',
+    });
+    // N = 0
+    await store.dispatch(removeGroup('event-ATDome-1-stream1'));
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toEqual({
+      groupName: 'event-ATDome-1-stream1',
+      counter: 0,
+      status: groupStates.UNSUBSCRIBING,
+      confirmationMessage: 'Successfully subscribed to event-ATDome-1-stream1',
+    });
     await expect(server).toReceiveMessage({
       category: 'event',
       csc: 'ATDome',
@@ -262,31 +254,9 @@ describe('Test subscription to Telemetries and Events, given the connection is o
       salindex: '1',
       stream: 'stream1',
     });
-
-    // Not receive message
-    msg = {
-      category: 'event',
-      data: [
-        {
-          csc: 'ATDome',
-          salindex: 1,
-          data: {
-            stream1: {
-              key11: 'value11_3',
-              key12: 'value12_3',
-            },
-            stream2: {
-              key21: 'value21_3',
-              key22: 'value22_3',
-            },
-          },
-        },
-      ],
-    };
-    server.send(msg);
-    expect(getStreamData(store.getState(), 'event-ATDome-1-stream1')).toEqual({
-      key11: 'value11_2',
-      key12: 'value12_2',
+    server.send({
+      data: 'Successfully unsubscribed to event-ATDome-1-stream1',
     });
+    expect(getSubscription(store.getState(), 'event-ATDome-1-stream1')).toBeFalsy();
   });
 });

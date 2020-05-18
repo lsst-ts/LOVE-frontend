@@ -224,6 +224,7 @@ describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () 
       {
         groupName: 'telemetry-all-all-all',
         status: groupStates.PENDING,
+        counter: 1,
       },
     ]);
   });
@@ -261,10 +262,12 @@ describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ',
       expect(getSubscriptions(store.getState())).toEqual([
         {
           groupName: 'telemetry-all-all-all',
+          counter: 1,
           status: groupStates.REQUESTING,
         },
         {
           groupName: 'event-all-all-all',
+          counter: 1,
           status: groupStates.REQUESTING,
         },
       ]);
@@ -277,10 +280,12 @@ describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ',
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
+          counter: 1,
           status: groupStates.REQUESTING,
         },
       ]);
@@ -293,11 +298,13 @@ describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ',
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -350,15 +357,18 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
         {
           groupName: 'cmd-all-all-all',
+          counter: 1,
           status: groupStates.REQUESTING,
         },
       ]);
@@ -370,16 +380,19 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
         {
           groupName: 'cmd-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to cmd-all-all-all',
         },
       ]);
@@ -403,11 +416,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.UNSUBSCRIBING,
+          counter: 0,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -419,6 +434,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -436,6 +452,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'event-all-all-all',
           status: groupStates.UNSUBSCRIBING,
+          counter: 0,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -465,11 +482,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.UNSUBSCRIBING,
+          counter: 0,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -479,11 +498,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.REQUESTING,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -495,11 +516,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.REQUESTING,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -511,11 +534,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -540,11 +565,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.UNSUBSCRIBING,
+          counter: 0,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -554,11 +581,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.REQUESTING,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -570,11 +599,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -586,11 +617,13 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         {
           groupName: 'telemetry-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
         },
         {
           groupName: 'event-all-all-all',
           status: groupStates.SUBSCRIBED,
+          counter: 1,
           confirmationMessage: 'Successfully subscribed to event-all-all-all',
         },
       ]);
@@ -611,10 +644,12 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     expect(getSubscriptions(store.getState())).toEqual([
       {
         groupName: 'telemetry-all-all-all',
+        counter: 1,
         status: groupStates.PENDING,
       },
       {
         groupName: 'event-all-all-all',
+        counter: 1,
         status: groupStates.PENDING,
       },
     ]);
