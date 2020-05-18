@@ -159,35 +159,35 @@ export default class TimeSeries extends PureComponent {
       accessors[key] = (stream) => stream[streams[key].paramName].value;
     });
 
-    return this.state.step === 0 ? (
-      <TelemetrySelectionTableContainer
-        telemetries={this.props.telemetries}
-        {...this.state}
-        columnsToDisplay={columnsToDisplay}
-        checkedFilterColumn="units"
-        onSetSelection={this.onSetSelection}
+    // return this.state.step === 0 ? (
+    //   <TelemetrySelectionTableContainer
+    //     telemetries={this.props.telemetries}
+    //     {...this.state}
+    //     columnsToDisplay={columnsToDisplay}
+    //     checkedFilterColumn="units"
+    //     onSetSelection={this.onSetSelection}
+    //   />
+    // ) : (
+    return (<div className={styles.timeseriesContainer}>
+      <TimeSeriesControls
+        setTimeWindow={this.setTimeWindow}
+        timeWindow={String(this.state.timeWindow)}
+        setLiveMode={this.setLiveMode}
+        isLive={this.state.isLive}
+        setHistoricalData={this.setHistoricalData}
+        goBack={this.goBack}
       />
-    ) : (
-      <div className={styles.timeseriesContainer}>
-        <TimeSeriesControls
-          setTimeWindow={this.setTimeWindow}
-          timeWindow={String(this.state.timeWindow)}
-          setLiveMode={this.setLiveMode}
-          isLive={this.state.isLive}
-          setHistoricalData={this.setHistoricalData}
-          goBack={this.goBack}
-        />
-        <TimeSeriesPlotContainer
-          dataSources={dataSources}
-          layers={layers}
-          encoding={encoding}
-          groupNames={groupNames}
-          accessors={accessors}
-          dateInterval={this.state.timeWindow * 60 * 1000}
-          width={600}
-          height={600 / 1.77}
-        />
-      </div>
+      <TimeSeriesPlotContainer
+        dataSources={dataSources}
+        layers={layers}
+        encoding={encoding}
+        groupNames={groupNames}
+        accessors={accessors}
+        dateInterval={this.state.timeWindow * 60 * 1000}
+        width={600}
+        height={600 / 1.77}
+      />
+    </div>
     );
   }
 }
