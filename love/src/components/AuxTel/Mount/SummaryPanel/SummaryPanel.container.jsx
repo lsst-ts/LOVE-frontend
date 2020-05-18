@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SummaryPanel from './SummaryPanel';
 import { getMountState, getMountSubscriptions } from '../../../../redux/selectors';
-import { addGroupSubscription, removeGroup } from '../../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
@@ -36,7 +36,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions: mountSubscriptions,
     subscribeToStream: () => {
-      mountSubscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      mountSubscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStream: () => {
       mountSubscriptions.forEach((stream) => dispatch(removeGroup(stream)));

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getAllTelemetries } from '../../../redux/selectors';
-import { addGroupSubscription, removeGroup } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import TelemetrySelectionTable from './TelemetrySelectionTable';
 
 const TelemetrySelectionTableContainer = ({
@@ -38,7 +38,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: () => {
       //All telemetriesdsa
-      dispatch(addGroupSubscription('telemetry-all-all-all'));
+      dispatch(addGroup('telemetry-all-all-all'));
     },
     unsubscribeToStream: () => {
       //All telemetriesdsa

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Camera from './Camera';
 import { getCameraState } from '../../../redux/selectors';
-import { addGroupSubscription, removeGroup } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
@@ -61,7 +61,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));

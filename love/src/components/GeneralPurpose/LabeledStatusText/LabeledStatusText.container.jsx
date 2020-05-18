@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getStreamData } from '../../../redux/selectors';
-import { addGroupSubscription, removeGroup } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import LabeledStatusText from './LabeledStatusText';
 
 export const schema = {
@@ -109,7 +109,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: (groupName) => {
-      dispatch(addGroupSubscription(groupName));
+      dispatch(addGroup(groupName));
     },
     unsubscribeToStream: (groupName) => {
       dispatch(removeGroup(groupName));

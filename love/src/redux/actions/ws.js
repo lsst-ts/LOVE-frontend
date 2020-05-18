@@ -267,7 +267,7 @@ export const closeWebsocketConnection = () => {
 /**
  * Add a group to the list of subscriptions, groups are added in PENDING state
  */
-export const addGroupSubscription = (groupName) => {
+export const addGroup = (groupName) => {
   return (dispatch, _getState) => {
     dispatch({
       type: ADD_GROUP_SUBSCRIPTION,

@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { addGroupSubscription, removeGroup } from '../actions/ws';
+import { addGroup, removeGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { getAllTelemetries, getAllEvents, getStreamData } from '../selectors';
 
@@ -31,7 +31,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
 
   it('When subscribed to all telemetries, then should receive all telemetries', async () => {
     // ACT
-    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+    await store.dispatch(addGroup('telemetry-all-all-all'));
     let msg = {
       category: 'telemetry',
       data: [
@@ -61,7 +61,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
   });
 
   it('When subscribed to some telemetries, then should receive those telemetries and no others', async () => {
-    await store.dispatch(addGroupSubscription('telemetry-ATDome-1-stream1'));
+    await store.dispatch(addGroup('telemetry-ATDome-1-stream1'));
     await expect(server).toReceiveMessage({
       category: 'telemetry',
       csc: 'ATDome',
@@ -105,7 +105,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
 
   it('When subscribed to all events, then should receive all events', async () => {
     // ACT
-    await store.dispatch(addGroupSubscription('event-all-all-all'));
+    await store.dispatch(addGroup('event-all-all-all'));
     let msg = {
       category: 'event',
       data: [
@@ -135,7 +135,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
   });
 
   it('When subscribed to some events, then should receive those events and no others', async () => {
-    await store.dispatch(addGroupSubscription('event-ATDome-1-stream1'));
+    await store.dispatch(addGroup('event-ATDome-1-stream1'));
     await expect(server).toReceiveMessage({
       category: 'event',
       csc: 'ATDome',
@@ -179,9 +179,9 @@ describe('Test subscription to Telemetries and Events, given the connection is o
 
   xit('When subscribed N times to an event and then unsubscribed M < N times, then should still receive the event ', async () => {
     // Subscribe N=3 times
-    await store.dispatch(addGroupSubscription('event-ATDome-1-stream1'));
-    await store.dispatch(addGroupSubscription('event-ATDome-1-stream1'));
-    await store.dispatch(addGroupSubscription('event-ATDome-1-stream1'));
+    await store.dispatch(addGroup('event-ATDome-1-stream1'));
+    await store.dispatch(addGroup('event-ATDome-1-stream1'));
+    await store.dispatch(addGroup('event-ATDome-1-stream1'));
     await expect(server).toReceiveMessage({
       category: 'event',
       csc: 'ATDome',

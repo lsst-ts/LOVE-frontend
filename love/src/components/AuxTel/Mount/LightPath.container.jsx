@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LightPath from './LightPath';
 import { getMountState, getMountSubscriptions } from '../../../redux/selectors';
-import { addGroupSubscription, removeGroup } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
@@ -45,7 +45,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions: mountSubscriptions,
     subscribeToStream: () => {
-      mountSubscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      mountSubscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStream: () => {
       mountSubscriptions.forEach((stream) => dispatch(removeGroup(stream)));

@@ -8,7 +8,7 @@ import {
   groupStates,
   openWebsocketConnection,
   closeWebsocketConnection,
-  addGroupSubscription,
+  addGroup,
   removeGroup,
 } from '../actions/ws';
 import { getConnectionStatus, getSubscriptions } from '../selectors';
@@ -216,7 +216,7 @@ describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () 
   it('When a SUBSCRIPTION is DISPATCHED, then it is added to the list of subscriptions as PENDING', async () => {
     expect(getSubscriptions(store.getState())).toEqual([]);
     // ACT
-    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+    await store.dispatch(addGroup('telemetry-all-all-all'));
 
     // ASSERT
     const subscriptions = getSubscriptions(store.getState());
@@ -231,8 +231,8 @@ describe('Given the CONNECTION is CLOSED and the SUBSCRIPTIONS are EMPTY, ', () 
 
 describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ', () => {
   beforeEach(async () => {
-    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
-    await store.dispatch(addGroupSubscription('event-all-all-all'));
+    await store.dispatch(addGroup('telemetry-all-all-all'));
+    await store.dispatch(addGroup('event-all-all-all'));
   });
 
   it(
@@ -309,8 +309,8 @@ describe('Given the CONNECTION is CLOSED and there are PENDING SUBSCRIPTIONS, ',
 describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () => {
   beforeEach(async () => {
     await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
-    await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
-    await store.dispatch(addGroupSubscription('event-all-all-all'));
+    await store.dispatch(addGroup('telemetry-all-all-all'));
+    await store.dispatch(addGroup('event-all-all-all'));
     await expect(server).toReceiveMessage({
       option: 'subscribe',
       category: 'telemetry',
@@ -338,7 +338,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
       'and when the server confirms each unsubscription, that subscription is removed',
     async () => {
       // Add new group
-      await store.dispatch(addGroupSubscription('cmd-all-all-all'));
+      await store.dispatch(addGroup('cmd-all-all-all'));
       await expect(server).toReceiveMessage({
         option: 'subscribe',
         category: 'cmd',
@@ -474,7 +474,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         },
       ]);
       // Request subscribe to group 1 again
-      await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+      await store.dispatch(addGroup('telemetry-all-all-all'));
       expect(getSubscriptions(store.getState())).toEqual([
         {
           groupName: 'telemetry-all-all-all',
@@ -549,7 +549,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
         },
       ]);
       // Request subscribe to group 1 again
-      await store.dispatch(addGroupSubscription('telemetry-all-all-all'));
+      await store.dispatch(addGroup('telemetry-all-all-all'));
       expect(getSubscriptions(store.getState())).toEqual([
         {
           groupName: 'telemetry-all-all-all',

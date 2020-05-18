@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCDetail from './CSCDetail';
-import { addGroupSubscription } from '../../../redux/actions/ws';
+import { addGroup } from '../../../redux/actions/ws';
 import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
 export const schema = {
@@ -34,15 +34,13 @@ export const schema = {
     },
     salindex: {
       type: 'number',
-      description:
-        'Salindex of the CSC',
+      description: 'Salindex of the CSC',
       isPrivate: false,
       default: 1,
     },
     hasHeartbeat: {
       type: 'boolean',
-      description:
-        'Whether the CSC produces heartbeat',
+      description: 'Whether the CSC produces heartbeat',
       isPrivate: false,
       default: true,
     },
@@ -54,8 +52,7 @@ export const schema = {
     },
     _functionProps: {
       type: 'array',
-      description:
-        'Array containing the props that are functions',
+      description: 'Array containing the props that are functions',
       isPrivate: true,
       default: [],
     },
@@ -84,17 +81,17 @@ const CSCDetailContainer = ({
       subscribeToStreams={subscribeToStreams}
       heartbeatData={heartbeatData}
       embedded={embedded}
-  />
+    />
   );
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStreams: (cscName, index) => {
-      dispatch(addGroupSubscription('event-Heartbeat-0-stream'));
-      dispatch(addGroupSubscription(`event-${cscName}-${index}-summaryState`));
-      dispatch(addGroupSubscription(`event-${cscName}-${index}-logMessage`));
-      dispatch(addGroupSubscription(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroup('event-Heartbeat-0-stream'));
+      dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
+      dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
+      dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
     },
   };
 };
@@ -112,7 +109,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(CSCDetailContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CSCDetailContainer);
