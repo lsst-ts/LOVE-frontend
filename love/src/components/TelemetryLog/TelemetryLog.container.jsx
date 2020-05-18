@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { saveGroupSubscriptions } from '../../Utils';
 
 export const schema = {
@@ -70,10 +70,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: (groupName) => {
-      dispatch(addGroupSubscription(groupName));
+      dispatch(addGroup(groupName));
     },
     unsubscribeToStream: (groupName) => {
-      dispatch(requestGroupSubscriptionRemoval(groupName));
+      dispatch(removeGroup(groupName));
     },
     requestSALCommand: (cmd) => {
       dispatch(requestSALCommand(cmd));

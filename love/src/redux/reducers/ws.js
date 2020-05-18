@@ -1,7 +1,8 @@
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
-  ADD_GROUP_SUBSCRIPTION,
+  ADD_GROUP,
+  REMOVE_GROUP,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
@@ -51,23 +52,28 @@ export default function (state = initialState, action) {
       }
       return { ...state, connectionState: action.connectionState, retryInterval };
     }
-    case ADD_GROUP_SUBSCRIPTION: {
-      const matchingGroup = state.subscriptions.filter((subscription) => subscription.groupName === action.groupName);
-      if (matchingGroup.length > 0) {
-        return state;
+    case ADD_GROUP: {
+      const index = state.subscriptions.findIndex((subscription) => subscription.groupName === action.groupName);
+      if (index < 0) {
+        return {
+          ...state,
+          subscriptions: [
+            ...state.subscriptions,
+            {
+              groupName: action.groupName,
+              status: groupStates.PENDING,
+              counter: 1,
+            },
+          ],
+        };
+      } else {
+        const subscriptions = [...state.subscriptions];
+        subscriptions[index].counter = subscriptions[index].counter + 1;
+        return {
+          ...state,
+          subscriptions,
+        };
       }
-
-      const subscriptions = [
-        ...state.subscriptions,
-        {
-          groupName: action.groupName,
-          status: groupStates.PENDING,
-        },
-      ];
-      return {
-        ...state,
-        subscriptions,
-      };
     }
     case REQUEST_SUBSCRIPTIONS: {
       const subscriptions = action.subscriptions.map((subscription) => ({
@@ -99,9 +105,15 @@ export default function (state = initialState, action) {
         subscriptions,
       };
     }
-    case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
-      const subscriptions = state.subscriptions.filter((subscription) => {
-        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName);
+    case REMOVE_GROUP: {
+      const subscriptions = state.subscriptions.map((subscription) => {
+        if (action.groupName === subscription.groupName) {
+          return {
+            ...subscription,
+            counter: subscription.counter - 1,
+          };
+        }
+        return subscription;
       });
       return {
         ...state,
@@ -114,9 +126,19 @@ export default function (state = initialState, action) {
           return {
             ...subscription,
             status: groupStates.UNSUBSCRIBING,
+            counter: 0,
           };
         }
         return subscription;
+      });
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
+      const subscriptions = state.subscriptions.filter((subscription) => {
+        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName);
       });
       return {
         ...state,

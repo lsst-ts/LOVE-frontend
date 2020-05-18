@@ -1,7 +1,8 @@
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
-  ADD_GROUP_SUBSCRIPTION,
+  ADD_GROUP,
+  REMOVE_GROUP,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
@@ -23,7 +24,7 @@ import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
 import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
-import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions } from '../selectors';
+import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
 import { tokenStates } from '../reducers/auth';
 import { DateTime } from 'luxon';
 
@@ -267,10 +268,10 @@ export const closeWebsocketConnection = () => {
 /**
  * Add a group to the list of subscriptions, groups are added in PENDING state
  */
-export const addGroupSubscription = (groupName) => {
+export const addGroup = (groupName) => {
   return (dispatch, _getState) => {
     dispatch({
-      type: ADD_GROUP_SUBSCRIPTION,
+      type: ADD_GROUP,
       groupName,
     });
     dispatch(_requestSubscriptions());
@@ -307,9 +308,25 @@ const _requestSubscriptions = () => {
 };
 
 /**
+ * Reduce the counter of subscriptions for a given group. If the counter reaches 0 then an unsubscription is requested
+ */
+export const removeGroup = (groupName) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const subscription = getSubscription(state, groupName);
+    dispatch({
+      type: REMOVE_GROUP,
+      groupName,
+    });
+    if (subscription.counter === 1) {
+      dispatch(requestGroupRemoval(groupName));
+    }
+  };
+};
+/**
  * Request the unsubscription of a given group
  */
-export const requestGroupSubscriptionRemoval = (groupName) => {
+export const requestGroupRemoval = (groupName) => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);

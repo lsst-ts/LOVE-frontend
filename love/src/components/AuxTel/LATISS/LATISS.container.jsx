@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import { getLATISSState } from '../../../redux/selectors';
 import LATISS from './LATISS';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
@@ -87,10 +87,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(addGroupSubscription(s)));
+      subscriptions.forEach((s) => dispatch(addGroup(s)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((s) => dispatch(requestGroupSubscriptionRemoval(s)));
+      subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
   };
 };

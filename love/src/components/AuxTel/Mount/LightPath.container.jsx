@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LightPath from './LightPath';
 import { getMountState, getMountSubscriptions } from '../../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover',
+  description:
+    'Diagram containing high-level information about the AT mount sub-components, including M1, M2, M3, nasmyth ports, and mirror cover',
   defaultSize: [22, 34],
   props: {
     title: {
@@ -44,10 +45,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions: mountSubscriptions,
     subscribeToStream: () => {
-      mountSubscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      mountSubscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStream: () => {
-      mountSubscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      mountSubscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
 };

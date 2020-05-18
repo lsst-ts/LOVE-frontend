@@ -10,11 +10,11 @@ export const getServerTimeRequest = (state) => state.time.request_time;
 
 export const getServerTimeReceive = (state) => state.time.receive_time;
 
-export const getServerTime = (state) => ({...state.time.server_time});
+export const getServerTime = (state) => ({ ...state.time.server_time });
 
-export const getAllTime = (state) => ({...state.time});
+export const getAllTime = (state) => ({ ...state.time });
 
-export const getClock = (state) => ({...state.time.clock});
+export const getClock = (state) => ({ ...state.time.clock });
 
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
@@ -23,6 +23,9 @@ export const getTokenStatus = (state) => state.auth.status;
 export const getConnectionStatus = (state) => state.ws.connectionState;
 
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
+
+export const getSubscription = (state, groupName) =>
+  state.ws.subscriptions.find((subscription) => subscription.groupName === groupName);
 
 export const getSubscriptions = (state) => state.ws.subscriptions;
 
@@ -202,7 +205,16 @@ export const getMountState = (state, index) => {
     positionLimits: positionLimits ? positionLimits[positionLimits.length - 1] : {},
     mountEncoders: mountEncoders ? mountEncoders : {},
     //ATAOS
-    correctionOffsets: correctionOffsets ? correctionOffsets[correctionOffsets.length - 1] : {x:{value: 1.1234} ,y:{value: 2.1234} ,z:{value: 3.1234} ,u:{value: 4.1234} ,v:{value: 5.1234} ,w:{value: 6.1234} },
+    correctionOffsets: correctionOffsets
+      ? correctionOffsets[correctionOffsets.length - 1]
+      : {
+          x: { value: 1.1234 },
+          y: { value: 2.1234 },
+          z: { value: 3.1234 },
+          u: { value: 4.1234 },
+          v: { value: 5.1234 },
+          w: { value: 6.1234 },
+        },
   };
 };
 
@@ -404,7 +416,6 @@ export const getCSCHeartbeat = (state, csc, salindex) => {
   return state.heartbeats.cscs.find((heartbeat) => heartbeat.csc === csc && heartbeat.salindex === salindex);
 };
 
-
 /**
  * Selects the latest manager heartbeat
  * @param {object} state
@@ -495,7 +506,6 @@ export const getGroupSortedErrorCodeData = (state, group) => {
 
   return sorted;
 };
-
 
 /**
  * Returns a sorted list of log messages data for a CSC group

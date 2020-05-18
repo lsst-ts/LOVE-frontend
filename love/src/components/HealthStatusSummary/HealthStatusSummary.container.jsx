@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import HealthStatusSummary from './HealthStatusSummary';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../redux/actions/ws';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { HEALTH_STATUS_VARIABLES_DECLARATION } from './TelemetrySelectionTable/TelemetrySelectionTable';
@@ -136,7 +136,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
 
       groupNames.forEach((groupName) => {
-        dispatch(addGroupSubscription(groupName));
+        dispatch(addGroup(groupName));
       });
     },
     unsubscribeToStreams: () => {
@@ -144,7 +144,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
 
       groupNames.forEach((groupName) => {
-        dispatch(requestGroupSubscriptionRemoval(groupName));
+        dispatch(removeGroup(groupName));
       });
     },
   };
