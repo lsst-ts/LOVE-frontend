@@ -246,7 +246,6 @@ export default function () {
             data={props.data}
             horizontalLinesData={[]}
             linesStyles={props.linesStyles}
-            names={props.linesStyles.map(l => l.name)}
             units={{ y: "deg" }}
             yAxisTitle={"Telementry"}
             xAxisTitle={"Time ago"}
