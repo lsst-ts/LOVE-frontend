@@ -110,7 +110,7 @@ export default function (state = initialState, action) {
         if (action.groupName === subscription.groupName) {
           return {
             ...subscription,
-            counter: subscription.counter - 1,
+            counter: subscription.counter <= 1 ? 0 : subscription.counter - 1,
           };
         }
         return subscription;
