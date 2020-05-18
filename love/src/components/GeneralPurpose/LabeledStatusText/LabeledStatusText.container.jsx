@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getStreamData } from '../../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroupSubscription, removeGroup } from '../../../redux/actions/ws';
 import LabeledStatusText from './LabeledStatusText';
 
 export const schema = {
@@ -62,8 +62,7 @@ export const schema = {
     },
     _functionProps: {
       type: 'array',
-      description:
-        'Array containing the props that are functions',
+      description: 'Array containing the props that are functions',
       isPrivate: true,
       default: ['accessor'],
     },
@@ -113,7 +112,7 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroupSubscription(groupName));
     },
     unsubscribeToStream: (groupName) => {
-      dispatch(requestGroupSubscriptionRemoval(groupName));
+      dispatch(removeGroup(groupName));
     },
   };
 };

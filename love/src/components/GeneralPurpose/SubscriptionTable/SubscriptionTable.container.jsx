@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getStreamData } from '../../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroupSubscription, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTable from './SubscriptionTable';
 
 export const schema = {
@@ -81,7 +81,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     unsubscribeToStreams: (streams) => {
       streams.forEach((groupName) => {
-        dispatch(requestGroupSubscriptionRemoval(groupName));
+        dispatch(removeGroup(groupName));
       });
     },
   };

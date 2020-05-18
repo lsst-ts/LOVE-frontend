@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getUsername, getAllAlarms, getTaiToUtc, getAllTime } from '../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroupSubscription, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
 // import mockAlarms from './AlarmsTable/mock'
@@ -57,7 +57,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['event-Watcher-0-alarm']
+  const subscriptions = ['event-Watcher-0-alarm'];
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -66,7 +66,7 @@ const mapDispatchToProps = (dispatch) => {
     },
     unsubscribeToStreams: () => {
       //Alarms
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
       return dispatch(

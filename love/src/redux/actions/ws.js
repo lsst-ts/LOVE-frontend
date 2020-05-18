@@ -309,7 +309,7 @@ const _requestSubscriptions = () => {
 /**
  * Request the unsubscription of a given group
  */
-export const requestGroupSubscriptionRemoval = (groupName) => {
+export const removeGroup = (groupName) => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroupSubscription, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import {
   getScriptQueueState,
   getScriptHeartbeats,
@@ -102,7 +102,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     requestSALCommand: (cmd) => {
       if (cmd.csc === 'Script') {

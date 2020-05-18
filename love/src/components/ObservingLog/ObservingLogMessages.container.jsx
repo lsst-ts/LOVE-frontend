@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { addGroupSubscription, removeGroup } from '../../redux/actions/ws';
 import { getObservingLogs, getTaiToUtc } from '../../redux/selectors';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ObservingLogMessages from './ObservingLogMessages';
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
       subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     sendMessage: (message) => {
       //   return dispatch(requestSALCommand({ ...cmd, component: 'ObservingLogMessages', salindex: ownProps.salindex }));

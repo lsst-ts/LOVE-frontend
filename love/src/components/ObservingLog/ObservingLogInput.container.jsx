@@ -1,10 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {
-  addGroupSubscription,
-  requestGroupSubscriptionRemoval,
-  sendLOVECscObservingLogs,
-} from '../../redux/actions/ws';
+import { addGroupSubscription, removeGroup, sendLOVECscObservingLogs } from '../../redux/actions/ws';
 import { getUsername } from '../../redux/selectors';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ObservingLogInput from './ObservingLogInput';
@@ -50,16 +46,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [
-    'event-LOVE-0-observingLog',
-  ];
+  const subscriptions = ['event-LOVE-0-observingLog'];
   return {
     subscriptions,
     subscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     sendMessage: (user, message) => {
       return dispatch(sendLOVECscObservingLogs(user, message));

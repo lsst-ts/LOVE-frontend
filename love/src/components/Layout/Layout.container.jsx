@@ -14,7 +14,7 @@ import {
   getTaiToUtc,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroupSubscription, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import Layout from './Layout';
 
@@ -59,7 +59,7 @@ const mapDispatchToProps = (dispatch) => {
       subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
       return dispatch(
