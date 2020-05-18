@@ -314,6 +314,7 @@ export const removeGroup = (groupName) => {
   return (dispatch, getState) => {
     const state = getState();
     const subscription = getSubscription(state, groupName);
+    if (!subscription) return;
     dispatch({
       type: REMOVE_GROUP,
       groupName,
