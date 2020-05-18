@@ -1,7 +1,7 @@
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
-  ADD_GROUP_SUBSCRIPTION,
+  ADD_GROUP,
   REMOVE_GROUP,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
@@ -52,7 +52,7 @@ export default function (state = initialState, action) {
       }
       return { ...state, connectionState: action.connectionState, retryInterval };
     }
-    case ADD_GROUP_SUBSCRIPTION: {
+    case ADD_GROUP: {
       const index = state.subscriptions.findIndex((subscription) => subscription.groupName === action.groupName);
       if (index < 0) {
         return {

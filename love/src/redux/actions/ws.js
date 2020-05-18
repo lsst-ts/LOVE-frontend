@@ -1,7 +1,7 @@
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
-  ADD_GROUP_SUBSCRIPTION,
+  ADD_GROUP,
   REMOVE_GROUP,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
@@ -271,7 +271,7 @@ export const closeWebsocketConnection = () => {
 export const addGroup = (groupName) => {
   return (dispatch, _getState) => {
     dispatch({
-      type: ADD_GROUP_SUBSCRIPTION,
+      type: ADD_GROUP,
       groupName,
     });
     dispatch(_requestSubscriptions());
