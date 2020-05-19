@@ -23,6 +23,8 @@ import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
 import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
 import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
+import Modal from '../GeneralPurpose/Modal/Modal';
+import XMLTable from './XMLTable/XMLTable';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -78,6 +80,7 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
+      isXMLModalOpen: false,
     };
 
     this.requestToastID = null;
@@ -515,16 +518,28 @@ class Layout extends Component {
                     <span>{this.props.user}</span>
                   </div>
                   <div className={styles.divider}></div>
-                  <div className={styles.menuElement} onClick={() => takeScreenshot((img) => {
-                    const link = document.createElement('a');
-                    const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai))
-                    link.href = img;
-                    link.download = `${timestamp}.png`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  })}>
+                  <div
+                    className={styles.menuElement}
+                    onClick={() =>
+                      takeScreenshot((img) => {
+                        const link = document.createElement('a');
+                        const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
+                        link.href = img;
+                        link.download = `${timestamp}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      })
+                    }
+                  >
                     <span>Screenshot </span>
+                  </div>
+                  <div
+                    className={styles.menuElement}
+                    onClick={() => this.setState({isXMLModalOpen: true})
+                    }
+                  >
+                    <span>XML versions </span>
                   </div>
                   <div className={styles.divider}></div>
                   <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
@@ -568,7 +583,13 @@ class Layout extends Component {
         </div>
 
         <div className={styles.contentWrapper}>{this.props.children}</div>
-
+        <Modal
+          isOpen={this.state.isXMLModalOpen}
+          onRequestClose={() => this.setState({ isXMLModalOpen: false })}
+          contentLabel="Component selection modal"
+        >
+          <XMLTable></XMLTable>
+        </Modal>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
     );
