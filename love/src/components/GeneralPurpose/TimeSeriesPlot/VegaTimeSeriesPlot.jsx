@@ -104,7 +104,8 @@ class VegaTimeseriesPlot extends Component {
     this.containerRef = React.createRef();
     this.resizeObserver = undefined;
     this.state = {
-      containerWidth: 500
+      containerWidth: 500,
+      containerHeight: 200,
     }
   }
 
@@ -347,7 +348,8 @@ class VegaTimeseriesPlot extends Component {
     this.resizeObserver = new ResizeObserver((entries) => {
       const container = entries[0];
       this.setState({
-        containerWidth: container.contentRect.width
+        containerHeight: container.contentRect.height-16-5*2-75,
+        containerWidth: container.contentRect.width - (8 + 15) * 2 - 16-2*10
       })
     });
 
@@ -361,10 +363,10 @@ class VegaTimeseriesPlot extends Component {
   }
   render() {
     const spec = {
-      width: this.state.containerWidth - (8+15)*2 -16,
-      height: 200,
+      width: this.state.containerWidth ,
+      height: this.state.containerHeight,
       config: {
-        padding: 5,
+        padding: 0,
         background: null,
         title: { color: '#ddd' },
         style: {
@@ -436,11 +438,14 @@ class VegaTimeseriesPlot extends Component {
 
     }
 
-    console.log('this.state.containerWidth', `${parseInt(this.state.containerWidth)}px`);
     return (
       // <div style={{ width: `${parseInt(this.state.containerWidth)}px`, height:'100px' }} ref={this.containerRef}>
       // <div style={{ width:'500px'}}>
-      <div style={{ width: `${this.state.containerWidth-(8+15)*2}px` }} ref={this.containerRef}>
+      <div style={{
+        width: `${this.state.containerWidth}px`,
+        height: this.state.containerHeight
+      }}
+        ref={this.containerRef}>
         <VegaLite
           style={{
             display: 'flex'
