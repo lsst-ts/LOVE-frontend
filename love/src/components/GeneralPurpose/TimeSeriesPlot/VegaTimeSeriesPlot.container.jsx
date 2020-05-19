@@ -1,6 +1,9 @@
 
 
 import React from 'react';
+import { connect } from 'react-redux';
+import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { getStreamsData } from '../../../redux/selectors/selectors.js';
 import VegaTimeSeriesPlot from './VegaTimeSeriesPlot';
 import moment from 'moment';
 
@@ -31,233 +34,76 @@ export const schema = {
             type: 'array',
             description: 'lits of subscriptions',
             isPrivate: false,
-            default: [
-                'telemetry-ATDome-0-position'
-            ]
+            default: {
+                'telemetry-ATMCS-0-mount_AzEl_Encoders': {
+                    'elevationCalculatedAngle': 'Elevation',
+                },
+                "telemetry-ATDome-0-position": {
+                    'azimuthPosition': 'ATDome azimuth'
+                }
+            }
         }
     }
 }
 
 
-const props = {
-    data: new Array(10).fill(1).flatMap((e, index) => [
-        {
-            name: "dome-1",
-            index: 0,
-            x: 0 + index * 325,
-            y: 731.8853820597765,
-        },
-        {
-            name: "dome-1",
-            index: 32,
-            x: 321.3190234103885 + index * 325,
-            y: 841.4329524302399,
-        },
-        {
-            name:
-                "ATMCS.2",
-            index: 13,
-            x: 65 + index * 390,
-            y: 232.8850183373796,
-        },
-        {
-            name:
-                "ATMCS.2",
-            index: 45,
-            x: 225.00224166312543 + index * 390,
-            y: 431.5274682630082,
-        },
-        {
-            name:
-                "ATMCS.2",
-            index: 77,
-            x: 385 + index * 390,
-            y: 437.9825160809631,
-        },
-    ]),
-    data2: [
-        {
-            name: "dome-1",
-            index: 0,
-            x: moment('2019-01-01'),
-            y: 731.8853820597765,
-        },
-        {
-            name: "dome-1",
-            index: 32,
-            x: moment('2019-04-01'),
-            y: 841.4329524302399,
-        },
-        {
-            name:
-                "ATMCS.2",
-            index: 13,
-            x: moment('2019-07-01'),
-            y: 232.8850183373796,
-        },
-        {
-            name:
-                "ATMCS.2",
-            index: 45,
-            x: moment('2019-10-01'),
-            y: 431.5274682630082,
-        },
-        {
-            name:
-                "ATMCS.2",
-            index: 77,
-            x: moment('2020-01-01'),
-            y: 437.9825160809631,
-        },
-    ],
-    horizontalLinesData: [
-        {
-            value: 120.00000000,
-            name: "nombre-3",
-            kind: "cota-instalacion",
-        },
-        {
-            value: 500.00000000,
-            name: "otronombre-1",
-            kind: null,
-        },
-        {
-            value: 600.00000000,
-            name: "otronombre-2",
-            kind: null,
-        },
-        {
-            value: 820.00000000,
-            name: "otronombre-1",
-            kind: null,
-        },
-    ],
-    barsData: [
-        {
-            x: 400,
-            y: 200,
-            name: 'bar1'
-        },
-        {
-            x: 800,
-            y: 400,
-            name: 'bar1'
-        },
-        {
-            x: 2000,
-            y: 600,
-            name: 'bar2'
-        },
-        {
-            x: 2400,
-            y: 300,
-            name: 'bar2'
-        },
-        {
-            x: 1400,
-            y: 300,
-            name: 'bar3'
-        }
-    ],
-    rectanglesData: [
-        {
-            x: 400,
-            x2: 620,
-            name: 'rect1'
-        },
-        {
-            x: 1100,
-            x2: 1300,
-            name: 'rect2'
-        },
-        {
-            x: 3300,
-            x2: 4000,
-            name: 'rect3'
-        }
-    ],
-    linesStyles: [
-        {
-            color: "#ff7bb5",
-            shape: "circle",
-            filled: true,
-            dash: [4, 0],
-            name: "dome-1",
-        },
-        {
-            color: "#ff7bb5",
-            shape: "circle",
-            filled: false,
-            dash: [4, 0],
-            name:
-                "ATMCS.2",
-        },
-        {
-            color: "#00b7ff",
-            shape: "square",
-            filled: true,
-            dash: [4, 0],
-            name: "nombre-3",
-        },
-        {
-            color: "#00b7ff",
-            shape: "square",
-            filled: false,
-            dash: [4, 0],
-            name: "otronombre-1",
-        },
-        {
-            color: "#97e54f",
-            shape: "diamond",
-            filled: true,
-            dash: [4, 0],
-            name: "otronombre-2",
-        },
-        {
-            color: "#97e54f",
-            shape: "diamond",
-            filled: false,
-            dash: [4, 0],
-            name: "otronombre-1",
-        },
-        {
-            color: "#97e54f",
-            name: "bar1",
-            markType: 'bar'
-        },
-        {
-            color: "#f9b200",
-            name: "bar2",
-            markType: 'bar'
-        },
-        {
-            color: "#a9a5ff",
-            name: "bar3",
-            markType: 'bar'
-        }
-    ],
-};
 
-
-export default function () {
-
+const VegaTimeSeriesPlotContainer = function ({ subscriptions, streams, subscribeToStreams, unsubscribeToStreams, ...props }) {
+    console.log('subscriptions', subscriptions)
     const startDate = moment().subtract(2, 'year').startOf('day');
 
-    const data = new Array(100).fill(0).map((v, index) => ({
-        name: 'test data',
-        x: startDate.add(index, 'day')
-    }));
+    const [data, setData] = React.useState([]);
+
+
 
     const names = ['test data'];
     const linesStyles = [
         { name: names[0] }
     ]
 
-    // return <VegaTimeSeriesPlot
-    //     data={data}
-    //     temporalXAxis={true}
-    //     names={names}
-    //     linesStyles={linesStyles} />
+
+
+    React.useEffect(() => {
+        subscribeToStreams();
+    }, []);
+
+    React.useEffect(() => {
+
+        const newData = Object.keys(streams).reduce((prevStreamArray, streamName) => {
+            if (!Object.keys(subscriptions).includes(streamName)) {
+                return;
+            }
+
+            if (!streams[streamName]?.private_rcvStamp?.value) {
+                return;
+            }
+
+            Object.keys(subscriptions[streamName]).forEach((paramName) => {
+                if (!Object.keys(subscriptions[streamName]).includes(paramName)) {
+                    return;
+                }
+
+                if (!streams[streamName]?.[paramName]?.value) {
+                    return;
+                }
+                const { value, ...others } = streams[streamName][paramName];
+                prevStreamArray.push({
+                    name: `${streamName}-${paramName}`,
+                    x: moment.unix(streams[streamName]?.private_rcvStamp?.value),
+                    y: Array.isArray(value) ? value[0] : value,
+                    ...others
+                })
+            });
+
+            return prevStreamArray;
+        }, [])
+
+        if (newData?.length > 0) {
+            setData(data => data.concat(newData).slice(-100))
+        }
+
+    }, [streams]);
+
 
     return (
         <VegaTimeSeriesPlot
@@ -271,3 +117,40 @@ export default function () {
         />
     )
 }
+
+
+const mapStateToProps = (state, ownProps) => {
+    const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
+    const groupNames = Object.keys(subscriptions);
+
+    const streams = getStreamsData(state, groupNames);
+    return {
+        streams,
+    };
+};
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        subscribeToStreams: () => {
+            const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
+            const groupNames = Object.keys(subscriptions);
+            console.log('groupNames', groupNames)
+            groupNames.forEach((groupName) => {
+                dispatch(addGroupSubscription(groupName));
+            });
+        },
+        unsubscribeToStreams: () => {
+            const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
+            const groupNames = Object.keys(subscriptions);
+            groupNames.forEach((groupName) => {
+                dispatch(requestGroupSubscriptionRemoval(groupName));
+            });
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(VegaTimeSeriesPlotContainer);
+
+
+// 'Mount Azimuth': 'telemetry-ATMCS-0-mount_AzEl_Encoders',
+// 'Mount Azimuth': (data) => (data.azimuthCalculatedAngle ? data.azimuthCalculatedAngle.value[0] : 0),
