@@ -25,6 +25,7 @@ import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
 import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 import Modal from '../GeneralPurpose/Modal/Modal';
 import XMLTable from './XMLTable/XMLTable';
+import UserDetails from './UserDetails/UserDetails';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -513,14 +514,11 @@ class Layout extends Component {
                   <UserIcon className={styles.icon} />
                 </Button>
                 <div className={styles.userMenu}>
-                  <div className={styles.menuElement}>
-                    <span>User </span>
-                    <span>{this.props.user}</span>
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div
-                    className={styles.menuElement}
-                    onClick={() =>
+                  <UserDetails
+                    menuElementClassName={styles.menuElement}
+                    username={this.props.user}
+                    execPermission={this.props.execPermission}
+                    takeScreenshot={() =>
                       takeScreenshot((img) => {
                         const link = document.createElement('a');
                         const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
@@ -531,20 +529,9 @@ class Layout extends Component {
                         document.body.removeChild(link);
                       })
                     }
-                  >
-                    <span>Screenshot </span>
-                  </div>
-                  <div
-                    className={styles.menuElement}
-                    onClick={() => this.setState({isXMLModalOpen: true})
-                    }
-                  >
-                    <span>XML versions </span>
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                    Logout
-                  </div>
+                    logout={this.props.logout}
+                    onXMLClick={() => this.setState({ isXMLModalOpen: true })}
+                  ></UserDetails>
                 </div>
               </DropdownMenu>
             </div>

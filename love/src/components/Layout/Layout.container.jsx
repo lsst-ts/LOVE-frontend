@@ -12,6 +12,7 @@ import {
   getAllTime,
   getAllAlarms,
   getTaiToUtc,
+  getPermCmdExec,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
@@ -34,6 +35,8 @@ const mapStateToProps = (state) => {
   const timeData = getAllTime(state);
   const alarms = getAllAlarms(state);
   const taiToUtc = getTaiToUtc(state);
+  const execPermission = getPermCmdExec(state);
+  const getExecPermission = () => getPermCmdExec(state);
   return {
     user,
     lastSALCommand,
@@ -46,6 +49,8 @@ const mapStateToProps = (state) => {
     timeData,
     alarms,
     taiToUtc,
+    execPermission,
+    getExecPermission,
   };
 };
 
