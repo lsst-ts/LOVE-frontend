@@ -80,7 +80,7 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
-      isXMLModalOpen: true,
+      isXMLModalOpen: false,
     };
 
     this.requestToastID = null;
