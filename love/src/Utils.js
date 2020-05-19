@@ -222,8 +222,7 @@ export default class ManagerInterface {
         return false;
       }
       return response.json().then((resp) => {
-        console.log(resp)
-        return true;
+        return resp;
       });
     });
   }
