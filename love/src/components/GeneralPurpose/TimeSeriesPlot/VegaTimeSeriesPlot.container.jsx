@@ -47,20 +47,61 @@ export const schema = {
 }
 
 
+const defaultStyles = [
+    {
+        color: "#ff7bb5",
+        shape: "circle",
+        filled: true,
+        dash: [4, 0],
+    },
+    {
+        color: "#ff7bb5",
+        shape: "circle",
+        filled: false,
+        dash: [4, 0],
+    },
+    {
+        color: "#00b7ff",
+        shape: "square",
+        filled: true,
+        dash: [4, 0],
+    },
+    {
+        color: "#00b7ff",
+        shape: "square",
+        filled: false,
+        dash: [4, 0],
+    },
+    {
+        color: "#97e54f",
+        shape: "diamond",
+        filled: true,
+        dash: [4, 0],
+    },
+    {
+        color: "#97e54f",
+        shape: "diamond",
+        filled: false,
+        dash: [4, 0],
+    }
+];
+
+
 
 const VegaTimeSeriesPlotContainer = function ({ subscriptions, streams, subscribeToStreams, unsubscribeToStreams, ...props }) {
-    console.log('subscriptions', subscriptions)
+
+
+
+
     const startDate = moment().subtract(2, 'year').startOf('day');
 
     const [data, setData] = React.useState([]);
 
+    const names = Object.keys(subscriptions).flatMap(streamName => {
+        return Object.keys(subscriptions[streamName]).map(paramName => `${streamName}-${paramName}`);
+    });
 
-
-    const names = ['test data'];
-    const linesStyles = [
-        { name: names[0] }
-    ]
-
+    const linesStyles = names.map((name, index) => ({ name, ...defaultStyles[index % defaultStyles.length] }));
 
 
     React.useEffect(() => {
@@ -69,34 +110,23 @@ const VegaTimeSeriesPlotContainer = function ({ subscriptions, streams, subscrib
 
     React.useEffect(() => {
 
-        const newData = Object.keys(streams).reduce((prevStreamArray, streamName) => {
-            if (!Object.keys(subscriptions).includes(streamName)) {
-                return;
+        const newData = names.reduce((prevStreamArray, name) => {
+            const splitName = name.split('-');
+            const param = splitName[splitName.length - 1];
+            const stream = splitName.slice(0, -1).join('-')
+            if (!streams?.[stream]?.[param]?.value) {
+                return prevStreamArray;
             }
 
-            if (!streams[streamName]?.private_rcvStamp?.value) {
-                return;
-            }
-
-            Object.keys(subscriptions[streamName]).forEach((paramName) => {
-                if (!Object.keys(subscriptions[streamName]).includes(paramName)) {
-                    return;
-                }
-
-                if (!streams[streamName]?.[paramName]?.value) {
-                    return;
-                }
-                const { value, ...others } = streams[streamName][paramName];
-                prevStreamArray.push({
-                    name: `${streamName}-${paramName}`,
-                    x: moment.unix(streams[streamName]?.private_rcvStamp?.value),
-                    y: Array.isArray(value) ? value[0] : value,
-                    ...others
-                })
+            const { value, ...others } = streams[stream][param];
+            prevStreamArray.push({
+                name,
+                x: moment.unix(streams[stream]?.private_rcvStamp?.value),
+                y: Array.isArray(value) ? value[0] : value,
+                ...others
             });
-
             return prevStreamArray;
-        }, [])
+        }, []);
 
         if (newData?.length > 0) {
             setData(data => data.concat(newData).slice(-100))
@@ -107,8 +137,8 @@ const VegaTimeSeriesPlotContainer = function ({ subscriptions, streams, subscrib
 
     return (
         <VegaTimeSeriesPlot
-            data={props.data}
-            linesStyles={props.linesStyles}
+            data={data}
+            linesStyles={linesStyles}
             units={{ y: "deg" }}
             yAxisTitle={"Telementry"}
             xAxisTitle={"Time ago"}
