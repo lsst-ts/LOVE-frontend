@@ -4,6 +4,7 @@ const headers = [
     field: 'position',
     label: 'Position',
     type: 'number',
+    formatter: (value) => isNaN(value) ? '-' : value.toFixed(3)
   },
   {
     field: 'description',
@@ -18,7 +19,7 @@ const headers = [
 ];
 
 const data = [
-  { position: 1, description: 'asdf', level: 0 },
+  { position: NaN, description: 'asdf', level: 0 },
   { position: 1.5, description: 'asdf', level: 1 },
   { position: 2.2, description: 'asdf', level: 2 },
   { position: 3.213, description: 'asdf', level: 23 },

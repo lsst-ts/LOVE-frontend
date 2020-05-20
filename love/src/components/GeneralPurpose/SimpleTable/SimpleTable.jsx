@@ -7,6 +7,9 @@ export { Table, Thead, Tr, Td, Th, Tbody };
  * Renders a table from data configuration 
  */
 function SimpleTable({ headers, data }) {
+
+  const defaultFormatter = (value) => value;
+
   return (
     <Table>
       <Thead>
@@ -21,10 +24,11 @@ function SimpleTable({ headers, data }) {
           return (
             <Tr key={index}>
               {headers.map((header) => {
+                const formatter = header.formatter || defaultFormatter;
                 const value = row[header.field];
                 return (
                   <Td key={header.field} isNumber={header.type === 'number'}>
-                    {isNaN(value) || Number.isInteger(value) ? value : `${Math.round(value * 10000) / 10000}º`}
+                    {formatter(value)}
                   </Td>
                 );
               })}
@@ -44,7 +48,9 @@ SimpleTable.propTypes = {
     /** Node to be rendered as header label */
     label: PropTypes.node,
     /** Data type of this column: number, string, ... */
-    type: PropTypes.string
+    type: PropTypes.string,
+    /** Callback that receives this column's value and should return a `node` */
+    formatter: PropTypes.func
   }),
   /** Rows to be rendered in the table */
   data: PropTypes.arrayOf(PropTypes.object)
