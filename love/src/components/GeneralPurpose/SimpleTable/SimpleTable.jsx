@@ -1,9 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Table, Thead, Tr, Td, Th, Tbody } from './Table';
 export { Table, Thead, Tr, Td, Th, Tbody };
 
-export default function SimpleTable({ headers, data }) {
-
+/**
+ * Renders a table from data configuration 
+ */
+function SimpleTable({ headers, data }) {
   return (
     <Table>
       <Thead>
@@ -32,3 +35,19 @@ export default function SimpleTable({ headers, data }) {
     </Table>
   );
 }
+
+SimpleTable.propTypes = {
+  /** Description of headers and columns content*/
+  headers: PropTypes.shape({
+    /** Property accessor of this column's value on each data row */
+    field: PropTypes.string,
+    /** Node to be rendered as header label */
+    label: PropTypes.node,
+    /** Data type of this column: number, string, ... */
+    type: PropTypes.string
+  }),
+  /** Rows to be rendered in the table */
+  data: PropTypes.arrayOf(PropTypes.object)
+}
+
+export default SimpleTable;

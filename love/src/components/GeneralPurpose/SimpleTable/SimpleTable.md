@@ -1,6 +1,4 @@
 ```jsx
-import { Table, Thead, Tr, Td, Th, Tbody } from './SimpleTable';
-
 const headers = [
   {
     field: 'position',
