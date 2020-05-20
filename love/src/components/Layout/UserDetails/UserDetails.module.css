@@ -1,0 +1,28 @@
+.bigIconRow {
+    display: grid;
+    grid-template-columns: 2.5em max-content;
+    column-gap: 0.5em;
+}
+
+.menuElement {
+    line-height: 1.7em;
+}
+
+.smallIconRow {
+    display: grid;
+    grid-template-columns: 1.5em max-content;
+    column-gap: 0.5em;
+}
+
+.iconContainer {
+    padding: 0.1em;
+}
+
+.highlight {
+  color: var(--highlighted-font-color);
+  font-weight: 500;
+}
+
+.secondary {
+  color: var(--secondary-font-color);
+}
