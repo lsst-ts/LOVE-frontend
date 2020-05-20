@@ -1,30 +1,34 @@
 import React from 'react';
-import styles from './SimpleTable.module.css';
+import { Table, Thead, Tr, Td, Th, Tbody } from './Table';
+export { Table, Thead, Tr, Td, Th, Tbody };
 
-export function Table({ children, className }) {
-  return <table className={[styles.common, styles.table, className].join(' ')}>{children}</table>;
-}
+export default function SimpleTable({ headers, data }) {
 
-export function Thead({ children, className }) {
-  return <thead className={[styles.common, styles.thead, className].join(' ')}>{children}</thead>;
-}
-
-export function Tbody({ children, className }) {
-  return <tbody className={[styles.common, styles.tbody, className].join(' ')}>{children}</tbody>;
-}
-
-export function Td({ children, isNumber, className }) {
   return (
-    <td className={[styles.common, styles.td, className, isNumber ? styles.number : styles.string].join(' ')}>
-      {children}
-    </td>
+    <Table>
+      <Thead>
+        <Tr>
+          {headers.map((header) => (
+            <Th key={header.field}>{header.label}</Th>
+          ))}
+        </Tr>
+      </Thead>
+      <Tbody>
+        {data.map((row, index) => {
+          return (
+            <Tr key={index}>
+              {headers.map((header) => {
+                const value = row[header.field];
+                return (
+                  <Td key={header.field} isNumber={header.type === 'number'}>
+                    {isNaN(value) || Number.isInteger(value) ? value : `${Math.round(value * 10000) / 10000}º`}
+                  </Td>
+                );
+              })}
+            </Tr>
+          );
+        })}
+      </Tbody>
+    </Table>
   );
-}
-
-export function Th({ children, className }) {
-  return <th className={[styles.common, styles.th, className].join(' ')}>{children}</th>;
-}
-
-export function Tr({ children, className }) {
-  return <tr className={[styles.common, styles.tr, className].join(' ')}>{children}</tr>;
 }

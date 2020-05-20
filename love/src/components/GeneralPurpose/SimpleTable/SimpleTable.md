@@ -1,5 +1,5 @@
 ```jsx
-import { Thead, Tr, Td, Th, Tbody } from './SimpleTable';
+import { Table, Thead, Tr, Td, Th, Tbody } from './SimpleTable';
 
 const headers = [
   {
@@ -28,61 +28,44 @@ const data = [
   { position: 3.23, description: 'asdf', level: 4 },
 ];
 
-<Table>
-  <Thead>
-    <Tr>
-      {headers.map((header) => (
-        <Th key={header.field}>{header.label}</Th>
-      ))}
-    </Tr>
-  </Thead>
-  <Tbody>
-    {data.map((row, index) => {
-      return (
-        <Tr key={index}>
-          {headers.map((header) => {
-            const value = row[header.field];
-            return (
-              <Td key={header.field} isNumber={header.type === 'number'}>
-                {isNaN(value) || Number.isInteger(value) ? value : `${Math.round(value * 10000) / 10000}º`}
-              </Td>
-            );
-            // if (col === 'driveStatus') {
-            //   const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
-            //   return (
-            //     <Td key={col} className={styles.statusColumn}>
-            //       <StatusText small status={stateToStyleMotorDrive[driveStatus]}>
-            //         {driveStatus}
-            //       </StatusText>
-            //     </Td>
-            //   );
-            // }
-            // if (col === 'brakeStatus') {
-            //   const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
-            //   return (
-            //     <Td key={col} className={styles.statusColumn}>
-            //       <StatusText small status={stateToStyleMotorBrake[brakeStatus]}>
-            //         {brakeStatus}
-            //       </StatusText>
-            //     </Td>
-            //   );
-            // }
-            // if (isNaN(value)) {
-            //   return (
-            //     <Td isNumber key={col}>
-            //       {value}
-            //     </Td>
-            //   );
-            // }
-            // return (
-            //   <Td isNumber key={col}>
-            //     {Number.isInteger(value) ? value : Math.round(value * 10000) / 10000}
-            //   </Td>
-            // );
-          })}
-        </Tr>
-      );
-    })}
-  </Tbody>
-</Table>;
+<div
+  style={{
+    width: '400px',
+  }}
+>
+  <SimpleTable data={data} headers={headers} />
+</div>;
+
+// if (col === 'driveStatus') {
+//   const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
+//   return (
+//     <Td key={col} className={styles.statusColumn}>
+//       <StatusText small status={stateToStyleMotorDrive[driveStatus]}>
+//         {driveStatus}
+//       </StatusText>
+//     </Td>
+//   );
+// }
+// if (col === 'brakeStatus') {
+//   const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
+//   return (
+//     <Td key={col} className={styles.statusColumn}>
+//       <StatusText small status={stateToStyleMotorBrake[brakeStatus]}>
+//         {brakeStatus}
+//       </StatusText>
+//     </Td>
+//   );
+// }
+// if (isNaN(value)) {
+//   return (
+//     <Td isNumber key={col}>
+//       {value}
+//     </Td>
+//   );
+// }
+// return (
+//   <Td isNumber key={col}>
+//     {Number.isInteger(value) ? value : Math.round(value * 10000) / 10000}
+//   </Td>
+// );
 ```
