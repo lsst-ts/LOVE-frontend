@@ -1,19 +1,21 @@
 import React from 'react';
 import styles from './UserDetails.module.css';
 import UserIcon from '../../icons/UserIcon/UserIcon';
+import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
 
 export default function UserDetails({
   username,
   execPermission,
   menuElementClassName,
+  dividerClassName,
   onXMLClick,
   logout,
   takeScreenshot,
 }) {
   return (
     <>
-      <div className={menuElementClassName}>
-        <div className={styles.container}>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')}>
+        <div className={styles.bigIconRow}>
           <div className={styles.iconContainer}>
             <UserIcon />
           </div>
@@ -27,15 +29,21 @@ export default function UserDetails({
           </div>
         </div>
       </div>
-      <div className={styles.divider}></div>
-      <div className={styles.menuElement} onClick={takeScreenshot}>
-        <span>Screenshot </span>
+      <div className={dividerClassName}></div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={takeScreenshot}>
+        <div className={styles.smallIconRow}>
+          <ScreenshotIcon />
+          <span>Screenshot </span>
+        </div>
       </div>
-      <div className={styles.menuElement} onClick={onXMLClick}>
-        <span>XML versions </span>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
+        <div className={styles.smallIconRow}>
+          <span> </span>
+          <span>XML versions </span>
+        </div>
       </div>
-      <div className={styles.divider}></div>
-      <div className={styles.menuElement} title="Logout" onClick={logout}>
+      <div className={dividerClassName}></div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} title="Logout" onClick={logout}>
         Logout
       </div>
     </>

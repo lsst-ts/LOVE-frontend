@@ -516,6 +516,7 @@ class Layout extends Component {
                 <div className={styles.userMenu}>
                   <UserDetails
                     menuElementClassName={styles.menuElement}
+                    dividerClassName={styles.divider}
                     username={this.props.user}
                     execPermission={this.props.execPermission}
                     takeScreenshot={() =>
