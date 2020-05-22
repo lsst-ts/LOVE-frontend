@@ -1,10 +1,14 @@
+Basic example with with a column with custom styles.
 ```jsx
+import styles from './examplestyle.module.css';
+import SimpleTable from './SimpleTable';
+
 const headers = [
   {
     field: 'position',
     label: 'Position',
     type: 'number',
-    formatter: (value) => isNaN(value) ? '-' : value.toFixed(3)
+    formatter: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
   },
   {
     field: 'description',
@@ -15,6 +19,7 @@ const headers = [
     field: 'level',
     label: 'Severity',
     type: 'number',
+    className: styles.exampleClass,
   },
 ];
 
@@ -27,44 +32,7 @@ const data = [
   { position: 3.23, description: 'asdf', level: 4 },
 ];
 
-<div
-  style={{
-    width: '400px',
-  }}
->
+<div style={{ width: '400px' }}>
   <SimpleTable data={data} headers={headers} />
 </div>;
-
-// if (col === 'driveStatus') {
-//   const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
-//   return (
-//     <Td key={col} className={styles.statusColumn}>
-//       <StatusText small status={stateToStyleMotorDrive[driveStatus]}>
-//         {driveStatus}
-//       </StatusText>
-//     </Td>
-//   );
-// }
-// if (col === 'brakeStatus') {
-//   const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
-//   return (
-//     <Td key={col} className={styles.statusColumn}>
-//       <StatusText small status={stateToStyleMotorBrake[brakeStatus]}>
-//         {brakeStatus}
-//       </StatusText>
-//     </Td>
-//   );
-// }
-// if (isNaN(value)) {
-//   return (
-//     <Td isNumber key={col}>
-//       {value}
-//     </Td>
-//   );
-// }
-// return (
-//   <Td isNumber key={col}>
-//     {Number.isInteger(value) ? value : Math.round(value * 10000) / 10000}
-//   </Td>
-// );
 ```

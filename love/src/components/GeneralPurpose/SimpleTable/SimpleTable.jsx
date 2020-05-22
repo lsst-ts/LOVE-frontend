@@ -4,7 +4,7 @@ import { Table, Thead, Tr, Td, Th, Tbody } from './Table';
 export { Table, Thead, Tr, Td, Th, Tbody };
 
 /**
- * Renders a table from data configuration 
+ * Renders a table from data and headers configuration 
  */
 function SimpleTable({ headers, data }) {
 
@@ -15,7 +15,7 @@ function SimpleTable({ headers, data }) {
       <Thead>
         <Tr>
           {headers.map((header) => (
-            <Th key={header.field}>{header.label}</Th>
+            <Th key={header.field} className={header.className}>{header.label}</Th>
           ))}
         </Tr>
       </Thead>
@@ -27,7 +27,7 @@ function SimpleTable({ headers, data }) {
                 const formatter = header.formatter || defaultFormatter;
                 const value = row[header.field];
                 return (
-                  <Td key={header.field} isNumber={header.type === 'number'}>
+                  <Td key={header.field} isNumber={header.type === 'number'} className={header.className}>
                     {formatter(value)}
                   </Td>
                 );
@@ -50,7 +50,9 @@ SimpleTable.propTypes = {
     /** Data type of this column: number, string, ... */
     type: PropTypes.string,
     /** Callback that receives this column's value and should return a `node` */
-    formatter: PropTypes.func
+    formatter: PropTypes.func,
+    /** className to be applied to the whole column */
+    className: PropTypes.string
   }),
   /** Rows to be rendered in the table */
   data: PropTypes.arrayOf(PropTypes.object)
