@@ -12,3 +12,11 @@
 .svg {
   vertical-align: top;
 }
+
+.active {
+  stroke:var(--base-font-color);
+}
+
+.inactive {
+  stroke: var(--secondary-font-color);
+}

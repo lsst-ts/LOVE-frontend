@@ -3,19 +3,20 @@ import styles from './RequeueIcon.module.css';
 
 export default class RequeueIcon extends Component {
   render() {
-    return (
+  const status = this.props.active !== undefined && this.props.active === false ? styles.inactive : styles.active;
+  return (
       <svg
-      className={styles.svg} 
+      className={[styles.svg, this.props.className].join(' ')} 
       viewBox="0 0 22 27.25"
     >
       <title>{'Requeue script'}</title>
       <path
-        className={styles.st0}
+        className={[styles.st0, status].join(' ')}
         d="M18.36 22.49v-14L14.74 5H3a1.34 1.34 0 00-1.35 1.36v19.28A1.34 1.34 0 003 27h14a1.34 1.34 0 001.34-1.34"
         transform="translate(-1.15 -.23)"
       />
       <path
-        className={styles.st0}
+        className={[styles.st0, status].join(' ')}
         d="M18.36 9.21h-2.71a1.52 1.52 0 01-1.59-1.44V5.5"
         transform="translate(-1.15 -.23)"
       />
@@ -25,12 +26,12 @@ export default class RequeueIcon extends Component {
         transform="translate(-1.15 -.23)"
       />
       <path
-        className={styles.st0}
+        className={[styles.st0, status].join(' ')}
         d="M22.65 18.2v-14L19 .73H7.29A1.34 1.34 0 006 2.07v2.81"
         transform="translate(-1.15 -.23)"
       />
       <path
-        className={styles.st0}
+        className={[styles.st0, status].join(' ')}
         d="M22.65 4.92H20a1.52 1.52 0 01-1.59-1.44V1.2"
         transform="translate(-1.15 -.23)"
       />

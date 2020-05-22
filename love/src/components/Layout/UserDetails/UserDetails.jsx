@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './UserDetails.module.css';
 import UserIcon from '../../icons/UserIcon/UserIcon';
 import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
+import RequeueIcon from '../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 
 export default function UserDetails({
   username,
@@ -38,7 +39,7 @@ export default function UserDetails({
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
         <div className={styles.smallIconRow}>
-          <span> </span>
+          <RequeueIcon active={false} className={styles.paddedIcon}/>
           <span>XML versions </span>
         </div>
       </div>
