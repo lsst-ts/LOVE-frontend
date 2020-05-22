@@ -227,6 +227,41 @@ export default class ManagerInterface {
     });
   }
 
+  static getTopicData(categories = null) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    let queryParam = null;
+    if (typeof categories === 'string') {
+      queryParam = categories;
+    } else if (Array.isArray(categories)) {
+      queryParam = categories.join(' ');
+    }
+    const url = queryParam
+      ? `${this.getApiBaseUrl()}salinfo/topic-data?categories=${queryParam}`
+      : `${this.getApiBaseUrl()}salinfo/topic-data`;
+
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
   logout = () => {
     if (this.socket) this.socket.close(4000);
     this.socket = null;
@@ -555,7 +590,7 @@ export const takeScreenshot = (callback) => {
     windowHeight: window.innerHeight,
     ignoreElements: (e) => {
       return e.tagName === 'NOSCRIPT';
-    }
+    },
   }).then((canvas) => {
     callback(canvas.toDataURL('image/png'));
   });
