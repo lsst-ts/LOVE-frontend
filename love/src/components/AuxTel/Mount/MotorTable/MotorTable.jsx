@@ -125,43 +125,43 @@ export default class MotorTable extends Component {
     const headers = [
       {
         field: 'name',
-        label: 'Motor'
+        title: 'Motor'
       },
       {
         field: 'angle',
-        label: <>Axis Angle <span className={styles.units}>[deg]</span></>,
+        title: <>Axis Angle <span className={styles.units}>[deg]</span></>,
         type: 'number',
         formatter: (value) => isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(5)}º`
       },
       {
         field: 'velocity',
-        label: <>Velocity <span className={styles.units}>[deg/s]</span></>,
+        title: <>Velocity <span className={styles.units}>[deg/s]</span></>,
         type: 'number',
         formatter: defaultFormatter
       },
       {
         field: 'measuredTorque',
-        label: <>Meas. Torque <span className={styles.units}>[A]</span></>,
+        title: <>Meas. Torque <span className={styles.units}>[A]</span></>,
         formatter: defaultFormatter
       },
       {
         field: 'torqueDemand',
-        label: <>Dem. Torque <span className={styles.units}>[A]</span></>,
+        title: <>Dem. Torque <span className={styles.units}>[A]</span></>,
         formatter: defaultFormatter
       },
       {
         field: 'motorEncoder',
-        label: 'Encoder',
+        title: 'Encoder',
         formatter: defaultFormatter
       },
       {
         field: 'motorEncoderRaw',
-        label: 'Encoder Raw',
+        title: 'Encoder Raw',
         formatter: defaultFormatter
       },
       {
         field: 'brakeStatus',
-        label: 'Brake status',
+        title: 'Brake status',
         className: styles.statusColumn,
         formatter: (value) => {
           const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
@@ -175,7 +175,7 @@ export default class MotorTable extends Component {
       },
       {
         field: 'driveStatus',
-        label: 'Drive status',
+        title: 'Drive status',
         formatter: (value) => {
           const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
           return (

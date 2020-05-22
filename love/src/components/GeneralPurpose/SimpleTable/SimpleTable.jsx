@@ -15,7 +15,7 @@ function SimpleTable({ headers, data }) {
       <Thead>
         <Tr>
           {headers.map((header) => (
-            <Th key={header.field} className={header.className}>{header.label}</Th>
+            <Th key={header.field} className={header.className}>{header.title}</Th>
           ))}
         </Tr>
       </Thead>
@@ -47,7 +47,7 @@ SimpleTable.propTypes = {
       /** Property accessor of this column's value on each data row */
       field: PropTypes.string,
       /** Node to be rendered as header label */
-      label: PropTypes.node,
+      title: PropTypes.node,
       /** Data type of this column: number, string, ... */
       type: PropTypes.string,
       /** Callback that receives this column's value and should return a `node`. 

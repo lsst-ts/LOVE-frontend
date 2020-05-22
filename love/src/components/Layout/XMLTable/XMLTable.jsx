@@ -20,19 +20,19 @@ export default class XMLTable extends Component {
     const headers = [
       {
         field: 'name',
-        label: 'Name'
+        title: 'Name'
       },
       {
         field: 'sal_version',
-        label: 'SAL version',
+        title: 'SAL version',
       },
       {
         field: 'xml_version',
-        label: 'XML version (LOVE)'
+        title: 'XML version (LOVE)'
       },
       {
         field: 'xml_version_reported',
-        label: 'XML version (reported)'
+        title: 'XML version (reported)'
       }
     ];
 
