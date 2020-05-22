@@ -12,12 +12,22 @@ import FilterDialog from '../../HealthStatusSummary/TelemetrySelectionTable/Filt
  */
 const ActionableTable = function ({ data, headers }) {
 
+    const [activeFilterDialogIndex, setActiveFilterDialogIndex] = React.useState(null);
+
+    const columnOnClick = (ev, index) => {
+        if (activeFilterDialogIndex === index) {
+            setActiveFilterDialogIndex(null);
+            return;
+        }
+
+        setActiveFilterDialogIndex(index);
+    }
+
+
     const newHeaders = headers.map((header, index) => {
 
         const sortDirection = 'ascending';
-        const isActive = index === 0;
         const isFiltered = index === 1;
-        const columnOnClick = () => console.log('onclick');
         const filterName = `filterName-${index}`;
 
         const changeFilter = (filtername) => () => console.log('changing filter to', filtername);
@@ -36,13 +46,13 @@ const ActionableTable = function ({ data, headers }) {
                     <span className={styles.secondaryText}>{header.subtitle}</span>
                     <FilterButton
                         filterName={filterName}
-                        selected={isActive}
+                        selected={activeFilterDialogIndex === index}
                         isFiltered={isFiltered}
-                        columnOnClick={columnOnClick}
+                        columnOnClick={(ev) => columnOnClick(ev, index)}
                         sortDirection={sortDirection}
                     />
                     <FilterDialog
-                        show={isActive}
+                        show={activeFilterDialogIndex === index}
                         changeFilter={changeFilter(filterName)}
                         closeFilterDialogs={closeFilterDialogs}
                         changeSortDirection={changeSortDirection}
@@ -53,7 +63,7 @@ const ActionableTable = function ({ data, headers }) {
             )
         }
     });
-    
+
     return <SimpleTable data={data} headers={newHeaders} />
 }
 
