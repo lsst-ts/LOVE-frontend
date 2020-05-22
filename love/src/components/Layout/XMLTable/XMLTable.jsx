@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ManagerInterface from '../../../Utils';
-import { Table, Thead, Tbody, Td, Tr, Th } from '../../GeneralPurpose/SimpleTable/SimpleTable';
+import SimpleTable, { Table, Thead, Tbody, Td, Tr, Th } from '../../GeneralPurpose/SimpleTable/SimpleTable';
 import styles from './XMLTable.module.css';
 
 export default class XMLTable extends Component {
@@ -17,32 +17,39 @@ export default class XMLTable extends Component {
   }
 
   render() {
-    return this.state.data ? (
-      <Table className={styles.table}>
-        <Thead>
-          <Tr className={styles.headerRow}>
-            <Th>Name</Th>
-            <Th>SAL version</Th>
-            <Th>XML version (LOVE)</Th>
-            <Th>XML version (reported)</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {Object.keys(this.state.data).map((key) => {
-            const csc = this.state.data[key];
-            return (
-              <Tr key={key}>
-                <Td>{key}</Td>
-                <Td isNumber>{csc?.['sal_version'] ?? 'Unkonwn'}</Td>
-                <Td isNumber>{csc?.['xml_version'] ?? 'Unkonwn'}</Td>
-                <Td isNumber>-</Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
-    ) : (
-      <span>Loading...</span>
-    );
+    const headers = [
+      {
+        field: 'name',
+        label: 'Name'
+      },
+      {
+        field: 'sal_version',
+        label: 'SAL version',
+      },
+      {
+        field: 'xml_version',
+        label: 'XML version (LOVE)'
+      },
+      {
+        field: 'xml_version_reported',
+        label: 'XML version (reported)'
+      }
+    ];
+
+    if (!this.state.data) {
+      return <span>Loading...</span>;
+    }
+
+    const data = this.state.data ? Object.entries(this.state.data).map(([key, data]) => {
+
+      return {
+        ...data,
+        name: key
+      }
+    }) : [];
+
+
+    return <SimpleTable headers={headers} data={data} />
+
   }
 }
