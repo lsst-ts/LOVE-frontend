@@ -66,7 +66,7 @@ export default class TelemetrySelectionTable extends PureComponent {
     /** Dictionary of telemetries that are displayed. See examples below */
     telemetries: PropTypes.object,
     /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
-    onSetSelection: PropTypes.func,
+    onSave: PropTypes.func,
     /** Indicates if component should display bottom selection bar*/
     showSelection: PropTypes.bool,
 
@@ -84,7 +84,7 @@ export default class TelemetrySelectionTable extends PureComponent {
   };
 
   static defaultProps = {
-    onSetSelection: () => {},
+    onSave: () => {},
     columnsToDisplay: [
       'selection_column',
       'category',
@@ -433,7 +433,7 @@ export default class TelemetrySelectionTable extends PureComponent {
       prevDict[cscSalindexTopic][item] = this.state.healthFunctions[rowKey] ?? 'return INVALID;';
       return prevDict;
     }, {});
-    this.props.onSetSelection(newSelectionData);
+    this.props.onSave(newSelectionData);
   };
 
   onTemporaryHealthFunctionChange = (rowId, event) => {
