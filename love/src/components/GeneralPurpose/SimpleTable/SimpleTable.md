@@ -8,7 +8,7 @@ const headers = [
     field: 'position',
     label: 'Position',
     type: 'number',
-    formatter: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+    render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
   },
   {
     field: 'description',

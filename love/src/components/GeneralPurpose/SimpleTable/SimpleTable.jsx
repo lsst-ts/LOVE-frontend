@@ -8,7 +8,7 @@ export { Table, Thead, Tr, Td, Th, Tbody };
  */
 function SimpleTable({ headers, data }) {
 
-  const defaultFormatter = (value) => value;
+  const defaultRenderMethod = (value) => value;
 
   return (
     <Table>
@@ -24,11 +24,11 @@ function SimpleTable({ headers, data }) {
           return (
             <Tr key={index}>
               {headers.map((header) => {
-                const formatter = header.formatter || defaultFormatter;
+                const render = header.render || defaultRenderMethod;
                 const value = row[header.field];
                 return (
                   <Td key={header.field} isNumber={header.type === 'number'} className={header.className}>
-                    {formatter(value)}
+                    {render(value)}
                   </Td>
                 );
               })}
@@ -41,19 +41,22 @@ function SimpleTable({ headers, data }) {
 }
 
 SimpleTable.propTypes = {
-  /** Description of headers and columns content*/
-  headers: PropTypes.shape({
-    /** Property accessor of this column's value on each data row */
-    field: PropTypes.string,
-    /** Node to be rendered as header label */
-    label: PropTypes.node,
-    /** Data type of this column: number, string, ... */
-    type: PropTypes.string,
-    /** Callback that receives this column's value and should return a `node` */
-    formatter: PropTypes.func,
-    /** className to be applied to the whole column */
-    className: PropTypes.string
-  }),
+  /** Array with properties of table columns and its headers.*/
+  headers: PropTypes.arrayOf(
+    PropTypes.shape({
+      /** Property accessor of this column's value on each data row */
+      field: PropTypes.string,
+      /** Node to be rendered as header label */
+      label: PropTypes.node,
+      /** Data type of this column: number, string, ... */
+      type: PropTypes.string,
+      /** Callback that receives this column's value and should return a `node`. 
+       * Use it customize how the cell's value is   */
+      render: PropTypes.func,
+      /** className to be applied to the whole column */
+      className: PropTypes.string
+    }),
+  ),
   /** Rows to be rendered in the table */
   data: PropTypes.arrayOf(PropTypes.object)
 }
