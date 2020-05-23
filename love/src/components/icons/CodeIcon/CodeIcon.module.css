@@ -1,0 +1,22 @@
+.st0 {
+  fill: none;
+  stroke: var(--second-base-font-color);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.st1 {
+  fill: var(--second-base-font-color);
+}
+
+.svg {
+  vertical-align: top;
+}
+
+.active {
+  stroke:var(--base-font-color);
+}
+
+.inactive {
+  stroke: var(--secondary-font-color);
+}
