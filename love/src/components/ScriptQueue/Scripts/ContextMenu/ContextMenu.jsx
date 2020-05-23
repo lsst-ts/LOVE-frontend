@@ -33,7 +33,7 @@ export default class ContextMenu extends Component {
           {this.props.options.map((child, index) => {
             return (
               <div className={styles.row} key={index} onClick={child.action}>
-                <div>{child.icon}</div>
+                <div className={styles.iconWrapper}>{child.icon}</div>
                 <div className={styles.buttonText}>{child.text}</div>
               </div>
             );

@@ -20,7 +20,7 @@
 }
 
 .mainScriptButton:hover {
-  border: 1px solid var(--second-quinary-background-color);
+  background: var(--commandable-background-hover);
 }
 
 .scriptContainerOff {

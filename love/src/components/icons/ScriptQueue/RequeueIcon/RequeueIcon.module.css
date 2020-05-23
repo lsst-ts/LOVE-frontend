@@ -1,22 +1,19 @@
 .st0 {
   fill: none;
-  /* stroke: var(--second-base-font-color); */
   stroke: var(--second-primary-background-color);
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .st1 {
-  /* fill: var(--second-base-font-color); */
   fill: var(--second-primary-background-color);
 }
 
 .svg {
-  vertical-align: top;
+  vertical-align: middle;
 }
 
 .active {
-  /* stroke:var(--base-font-color); */
   stroke: var(--second-primary-background-color);
 }
 
@@ -25,11 +22,5 @@
 }
 
 .svg path {
-  fill: var(--commandable-font-color);
   stroke: var(--commandable-font-color);
-}
-
-.svg:hover path {
-  fill: var(--commandable-font-color-hover);
-  stroke: var(--commandable-font-color-hover);
 }
