@@ -633,7 +633,7 @@ export default class ScriptQueue extends Component {
                     onClick={this.closeAvailableList}
                     title="Close available script list"
                   >
-                    <span>&#8854;</span>
+                    <span style={{'width': '100%'}}>&#8854;</span>
                   </div>
                 </div>
                 <ScriptList noOverflow={true}>
@@ -792,7 +792,7 @@ export default class ScriptQueue extends Component {
                     onClick={this.closeFinishedList}
                     title="Close finished script list"
                   >
-                    <span>&#8854;</span>
+                    <span style={{'width': '100%'}}>&#8854;</span>
                   </div>
                 </div>
                 <ScriptList>

@@ -12,6 +12,8 @@
     display: grid;
     grid-template-columns: 1.5em max-content;
     column-gap: 0.5em;
+    justify-items: center;
+    align-items: center;
 }
 
 .iconContainer {
@@ -25,4 +27,8 @@
 
 .secondary {
   color: var(--secondary-font-color);
+}
+
+.paddedIcon {
+  width: 1.2em;
 }
