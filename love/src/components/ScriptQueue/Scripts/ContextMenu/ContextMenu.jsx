@@ -26,7 +26,7 @@ export default class ContextMenu extends Component {
       this.props.isOpen && (
         <div
           className={styles.container}
-          style={{ left: this.props.contextMenuData.right, top: this.props.contextMenuData.bottom }}
+          style={{ left: this.props.contextMenuData.right, top: `calc( -3.3em + ${this.props.contextMenuData.bottom}px)` }}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >

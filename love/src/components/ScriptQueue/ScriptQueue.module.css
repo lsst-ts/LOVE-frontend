@@ -221,7 +221,7 @@
 
 .pauseIconWrapper {
   width: 1em;
-  background: var(--second-tertiary-background-color);
+  background: var(--commandable-background);
   padding: 0.25em 0.5em;
   border-radius: 1em;
 }
