@@ -294,6 +294,7 @@ export default class AlarmsTable extends PureComponent {
                                   event.stopPropagation();
                                   this.props.ackAlarm(row.name.value, row.maxSeverity.value, user);
                                 }}
+                                command
                               >
                                 ACK
                               </Button>

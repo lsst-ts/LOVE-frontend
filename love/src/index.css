@@ -257,9 +257,9 @@ body {
   --font-size-larger: 1.4em;
 
   --commandable-background: hsl(188, 79%, 56%);
-  --commandable-background-hover: hsl(188, 79%, 26%);
+  --commandable-background-hover: hsl(188, 79%, 46%);
   --commandable-font-color: hsl(201, 26%, 23%);
-  --commandable-font-color-hover: hsl(188, 79%, 56%);
+  --commandable-font-color-hover: hsl(201, 26%, 23%);
 }
 
 /* width */
