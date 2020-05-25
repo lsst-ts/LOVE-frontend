@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import Button from '../../GeneralPurpose/Button/Button';
 import MuteIcon from '../../icons/MuteIcon/MuteIcon';
 import styles from './HealthStatusConfig.module.css';
 import TelemetrySelectionTable from '../TelemetrySelectionTable/TelemetrySelectionTable';
@@ -98,6 +99,7 @@ export default class HealthStatusConfig extends PureComponent {
   constructor() {
     super();
     this.state = {
+      selectedTopics: {},
       healthFunctions: {},
       tab: TABS.TABLE,
     };
@@ -106,6 +108,11 @@ export default class HealthStatusConfig extends PureComponent {
   changeTab(tab) {
     this.setState({ tab });
   }
+
+  onTableSet = (selectedTopics, onClick) => {
+    console.log('selectedTopics: ', selectedTopics);
+    this.setState({ selectedTopics, tab: TABS.FUNCTIONS });
+  };
 
   render() {
     return (
@@ -137,17 +144,16 @@ export default class HealthStatusConfig extends PureComponent {
         </div>
 
         <div className={[styles.contentWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
-          {this.state.tab === TABS.TABLE ? (
+          <div className={this.state.tab === TABS.TABLE ? styles.content : styles.hidden}>
             <TelemetrySelectionTable
-              onSave={this.props.onSave}
+              onSave={this.onTableSet}
               columnsToDisplay={this.props.columnsToDisplay}
               telemetries={this.props.telemetries}
               showSelection={this.props.showSelection}
               initialData={this.props.initialData}
             />
-          ) : (
-            'BLAAA'
-          )}
+          </div>
+          <div className={this.state.tab === TABS.FUNCTIONS ? styles.content : styles.hidden}>'BLAAA'</div>
         </div>
       </div>
     );

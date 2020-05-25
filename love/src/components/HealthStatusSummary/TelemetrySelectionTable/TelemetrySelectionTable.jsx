@@ -521,8 +521,7 @@ export default class TelemetrySelectionTable extends PureComponent {
                 this.setSelection();
               }}
             >
-              {' '}
-              Set{' '}
+              Set
             </Button>
           </div>
         )}

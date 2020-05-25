@@ -83,7 +83,21 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
 
   if (externalStep.show) {
     return (
-      <Modal isOpen={externalStep.show} onRequestClose={onExtraStepCancel} contentLabel="Component configuration modal">
+      <Modal
+        isOpen={externalStep.show}
+        onRequestClose={onExtraStepCancel}
+        contentLabel="Component configuration modal"
+        footerChildren={
+          <>
+            <Button status="default" onClick={onExtraStepCancel}>
+              Cancel
+            </Button>
+            <Button status="primary" onClick={() => customSaveConfig(componentIndex, config)}>
+              Apply
+            </Button>
+          </>
+        }
+      >
         {externalStep.component}
       </Modal>
     );
