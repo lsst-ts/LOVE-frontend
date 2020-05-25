@@ -32,12 +32,12 @@ export default class FilterDialog extends Component {
   shouldComponentUpdate = (nextProps) => nextProps.show !== this.props.show;
 
   sortAscending = () => {
-    this.props.changeSortDirection('ascending', this.props.columnName);
+    this.props.changeSortDirection(ASCENDING, this.props.columnName);
     this.props.closeFilterDialogs();
   };
 
   sortDescending = () => {
-    this.props.changeSortDirection('descending', this.props.columnName);
+    this.props.changeSortDirection(DESCENDING, this.props.columnName);
     this.props.closeFilterDialogs();
   };
 
@@ -56,7 +56,7 @@ export default class FilterDialog extends Component {
     this.textInput.current.value = '';
     this.props.changeFilter({ target: '' });
     if (this.props.columnName === this.props.sortingColumn) {
-      this.props.changeSortDirection('None', this.props.columnName);
+      this.props.changeSortDirection(UNSORTED, this.props.columnName);
     }
     this.props.closeFilterDialogs();
   };
@@ -97,7 +97,7 @@ export default class FilterDialog extends Component {
             </div>
             <span className={styles.filterText}>Filter...</span>
           </div>
-          <TextField 
+          <TextField
             ref={this.textInput}
             onChange={this.props.changeFilter}
             onKeyUp={this.onInputKeyUp}

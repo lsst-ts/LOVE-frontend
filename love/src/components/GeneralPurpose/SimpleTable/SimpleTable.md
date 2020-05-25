@@ -1,4 +1,5 @@
 Basic example with with a column with custom styles.
+
 ```jsx
 import styles from './examplestyle.module.css';
 import SimpleTable from './SimpleTable';
@@ -6,18 +7,18 @@ import SimpleTable from './SimpleTable';
 const headers = [
   {
     field: 'position',
-    label: 'Position',
+    title: 'Position',
     type: 'number',
     render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
   },
   {
     field: 'description',
-    label: 'Descr.',
+    title: 'Descr.',
     type: 'string',
   },
   {
     field: 'level',
-    label: 'Severity',
+    title: 'Severity',
     type: 'number',
     className: styles.exampleClass,
   },
