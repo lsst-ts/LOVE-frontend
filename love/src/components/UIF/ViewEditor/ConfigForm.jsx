@@ -32,7 +32,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   }, [componentConfig]);
 
   const updateConfig = (key, value) => {
-    console.log('key', key, value);
     const newConfig = { ...config };
     newConfig[key] = value;
     setConfig(newConfig);
@@ -56,7 +55,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   };
 
   const onExtraStepCancel = () => {
-    console.log('canceled');
     setExternalStep({
       show: false,
       component: undefined,
@@ -82,8 +80,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   if (!isOpen) {
     return null;
   }
-
-  console.log('externalStep', externalStep);
 
   if (externalStep.show) {
     return (
@@ -158,7 +154,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
                         if (mode !== 'javascript') newConfig = JSON.parse(val);
                         updateConfig(key, newConfig);
                       } catch (error) {
-                        console.log(error);
+                        console.error(error);
                       }
                     }}
                     width={'100%'}
