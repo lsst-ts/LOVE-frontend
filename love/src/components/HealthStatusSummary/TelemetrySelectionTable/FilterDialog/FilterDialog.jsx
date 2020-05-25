@@ -5,6 +5,10 @@ import FilterIcon from '../../../icons/FilterIcon/FilterIcon';
 import ArrowIcon from '../../../icons/ArrowIcon/ArrowIcon';
 import TextField from '../../../TextField/TextField';
 
+export const ASCENDING = 'ascending';
+export const DESCENDING = 'descending';
+export const UNSORTED = 'None';
+
 export default class FilterDialog extends Component {
   static propTypes = {
     show: PropTypes.bool,
@@ -70,7 +74,6 @@ export default class FilterDialog extends Component {
             </div>
             <span className={styles.filterText}>Sort as...</span>
             <span className={styles.clearAll} onClick={this.clearAllOnClick}>
-              {' '}
               Clear all
             </span>
           </div>

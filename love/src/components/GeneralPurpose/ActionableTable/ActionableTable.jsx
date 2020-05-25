@@ -3,7 +3,7 @@ import SimpleTable from '../SimpleTable/SimpleTable';
 import styles from './ActionableTable.module.css';
 import FilterButton from '../../HealthStatusSummary/TelemetrySelectionTable/ColumnHeader/FilterButton/FilterButton';
 import FilterDialog from '../../HealthStatusSummary/TelemetrySelectionTable/FilterDialog/FilterDialog';
-
+import { ASCENDING, DESCENDING, UNSORTED } from '../../HealthStatusSummary/TelemetrySelectionTable/FilterDialog/FilterDialog.jsx'
 
 /**
  * A table that can run actions over its data such as
@@ -14,6 +14,8 @@ const ActionableTable = function ({ data, headers }) {
 
     const [activeFilterDialogIndex, setActiveFilterDialogIndex] = React.useState(null);
     const [filters, setFilters] = React.useState({});
+    const [sortDirections, setSortDirections] = React.useState({});
+    const [sortingColumn, setSortingColumn] = React.useState(null);
 
     React.useEffect(() => {
         const initialFilters = headers.reduce((prevDict, header) => {
@@ -23,7 +25,14 @@ const ActionableTable = function ({ data, headers }) {
             }
             return prevDict;
         }, {});
+
+        const initialSortDirections = headers.reduce((prevDict, header) => {
+            prevDict[header.field] = UNSORTED;
+            return prevDict;
+        }, {});
+
         setFilters(initialFilters);
+        setSortDirections(initialSortDirections)
     }, [headers]);
 
     const columnOnClick = (ev, index) => {
@@ -54,17 +63,21 @@ const ActionableTable = function ({ data, headers }) {
         }
     }
 
+    const closeFilterDialogs = () => {
+        setActiveFilterDialogIndex(null);
+    }
+
+    const changeSortDirection = (direction, column) => {
+        console.log('direction,column', direction,column)
+        setSortDirections(sortDirections => ({
+            ...sortDirections,
+            [column]: direction
+        }));
+        setSortingColumn(column);
+    }
+
     const newHeaders = headers.map((header, index) => {
-
-        const sortDirection = 'ascending';
         const isFiltered = filters?.[header.field] ? filters?.[header.field].value.toString().substring(0, 6) !== '/(?:)/' : false;
-        /** To set no active filter dialog */
-        const closeFilterDialogs = () => console.log('adsfsadf')
-
-        const changeSortDirection = (direction, column) => console.log('direction, column', direction, column);
-
-        const sortingColumn = `filterName-0`;
-
         return {
             ...header,
             title: (
@@ -76,7 +89,7 @@ const ActionableTable = function ({ data, headers }) {
                         selected={activeFilterDialogIndex === index}
                         isFiltered={isFiltered}
                         columnOnClick={(ev) => columnOnClick(ev, index)}
-                        sortDirection={sortDirection}
+                        sortDirection={sortDirections[header.field]}
                     />
                     <FilterDialog
                         show={activeFilterDialogIndex === index}
@@ -93,9 +106,27 @@ const ActionableTable = function ({ data, headers }) {
 
     const transformedData = data.filter(row => {
         return headers.reduce((prevBool, header) => {
-            console.log(header.field, filters[header.field]?.value?.test(row[header.field]))
             return prevBool && filters[header.field]?.value?.test(row[header.field]);
         }, true);
+    }).sort((row1, row2) => {
+        /** No sorting */
+        const sortDirection = sortDirections[sortingColumn];
+        if (sortDirection === UNSORTED) return 0;
+
+        /** No sorting column */
+        if (!sortingColumn) return 0;
+
+        /** No cell value */
+        const value1 = row1?.[sortingColumn];
+        const value2 = row2?.[sortingColumn];
+        if (value1 === undefined || value1 === null) return 0;
+        if (value2 === undefined || value2 === null) return 0;
+
+
+        const sortFactor = sortDirection === ASCENDING ? 1 : -1;
+        if (value1 < value2) return -1 * sortFactor;
+        if (value1 > value2) return 1 * sortFactor;
+        return 0;
     })
 
     return <SimpleTable data={transformedData} headers={newHeaders} />
