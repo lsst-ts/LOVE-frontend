@@ -14,6 +14,7 @@ import 'brace/theme/solarized_dark';
 const externalStepComponents = {
   TelemetrySelectionTable: require('../../../components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable')
     .default,
+  HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);

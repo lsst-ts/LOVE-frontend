@@ -54,7 +54,7 @@ export const schema = {
       
       `,
       isPrivate: false,
-      externalStep: 'TelemetrySelectionTable',
+      externalStep: 'HealthStatusConfig',
       default: {
         'ATMCS-0-mount_AzEl_Encoders': {
           cRIO_timestamp: defaultHealthFunction,
