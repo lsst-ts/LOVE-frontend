@@ -4,10 +4,9 @@ import styles from './TelemetrySelectionTable.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
-import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
-import ManagerInterface, { getFakeUnits, formatTimestamp } from '../../../Utils';
+import ManagerInterface, { formatTimestamp } from '../../../Utils';
 
 const HEALTH_STATUS_CODES = {
   0: 'Undefined',
