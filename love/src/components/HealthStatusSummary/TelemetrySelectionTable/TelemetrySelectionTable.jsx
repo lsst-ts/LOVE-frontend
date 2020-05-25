@@ -1,26 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TelemetrySelectionTable.module.css';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
 import ManagerInterface, { formatTimestamp } from '../../../Utils';
-
-const HEALTH_STATUS_CODES = {
-  0: 'Undefined',
-  1: 'OK',
-  2: 'Warning',
-  3: 'Alert',
-  4: 'Invalid',
-};
-
-export const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_CODES)
-  .map(([key, label]) => {
-    return `const ${label.toUpperCase()}=${key};`;
-  })
-  .join('\n');
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -109,14 +93,6 @@ export default class TelemetrySelectionTable extends PureComponent {
 
     this.defaultCodeText =
       "// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. 'return OK'";
-    this.healthStatusCodes = HEALTH_STATUS_CODES;
-    this.healthStatusPriorities = {
-      3: 5,
-      2: 4,
-      1: 3,
-      4: 2,
-      0: 1,
-    };
 
     const filters = {
       category: { type: 'regexp', value: new RegExp('(?:)') },
@@ -134,7 +110,6 @@ export default class TelemetrySelectionTable extends PureComponent {
       data_type: { type: 'regexp', value: new RegExp('(?:)') },
       value: { type: 'regexp', value: new RegExp('(?:)') },
       units: { type: 'regexp', value: new RegExp('(?:)') },
-      health_status: { type: 'health', value: new RegExp('(?:)') },
     };
 
     this.state = {
@@ -259,13 +234,6 @@ export default class TelemetrySelectionTable extends PureComponent {
         }
         return regexpFilterResult && checkedFilterResult;
       }
-      if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'health') {
-        let healthStatus = 0;
-        if (this.state.healthFunctions !== undefined) {
-          healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
-        }
-        return this.state.filters[rowKey].value.test(healthStatus);
-      }
       return true;
     });
     const value = values.reduce((a, b) => a && b, true);
@@ -282,29 +250,6 @@ export default class TelemetrySelectionTable extends PureComponent {
     }
   };
 
-  getHealthStatusCode = (paramName, value) => {
-    let statusCode = 0;
-    if (this.state.healthFunctions[paramName]) {
-      try {
-        const code = [HEALTH_STATUS_VARIABLES_DECLARATION, this.state.healthFunctions[paramName]].join('\n');
-        /* eslint-disable no-new-func*/
-        let user_func = new Function('value', code);
-        statusCode = user_func(value);
-      } catch (err) {
-        statusCode = 4;
-        // console.log('Error parsing custom function');
-        // console.log(err);
-      }
-    }
-    return statusCode;
-  };
-
-  getHealthText = (statusCode) => {
-    let parsedStatusCode = statusCode;
-    if (statusCode === undefined) parsedStatusCode = 0;
-    return this.healthStatusCodes[parsedStatusCode];
-  };
-
   setHealthFunction = (rowKey) => {
     this.setState((state) => {
       return {
@@ -315,18 +260,6 @@ export default class TelemetrySelectionTable extends PureComponent {
       };
     });
     this.toggleRow(rowKey);
-  };
-
-  displayHealthFunction = (paramName, functionType) => {
-    const textArea = document.getElementById(`${paramName}-healthFunction`);
-    let text = '';
-    if (functionType === 'text') text = 'if(value === <targetValue>)\n    return ALERT;';
-    if (functionType === 'range') {
-      text =
-        'if(value > <targetValue1>)\n    return WARNING;\nif(value > <targetValue1>)\n    return ALERT;\n return OK\n';
-    }
-    textArea.value = text;
-    return 0;
   };
 
   renderValueAsList = (values) => {
@@ -369,12 +302,6 @@ export default class TelemetrySelectionTable extends PureComponent {
       return -1;
     }
     if (selectedKeys.indexOf(bKey) > -1 && !(selectedKeys.indexOf(aKey) > -1)) return 1;
-
-    if (column === 'health_status') {
-      const aValue = this.healthStatusPriorities[a.healthStatusCode];
-      const bValue = this.healthStatusPriorities[b.healthStatusCode];
-      return aValue < bValue ? -direction : direction;
-    }
     return a[column] <= b[column] ? -direction : direction;
   };
 
@@ -433,28 +360,9 @@ export default class TelemetrySelectionTable extends PureComponent {
     this.props.onSave(newSelectionData);
   };
 
-  onTemporaryHealthFunctionChange = (rowId, event) => {
-    const newValue = event.target.value;
-
-    this.setState((state) => ({
-      temporaryHealthFunctions: {
-        ...state.temporaryHealthFunctions,
-        [rowId]: newValue,
-      },
-    }));
-  };
   render() {
     const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
     let data = this.state.tableData;
-    if (this.state.healthFunctions !== undefined) {
-      data = data.map((row) => {
-        const key = [row.component, row.stream, row.param_name].join('-');
-        return {
-          healthStatusCode: this.getHealthStatusCode(key, row.value),
-          ...row,
-        };
-      });
-    }
     return (
       <div className={styles.telemetrySelectionTableWrapper}>
         <table className={styles.telemetrySelectionTable}>
@@ -539,14 +447,6 @@ export default class TelemetrySelectionTable extends PureComponent {
                         filter={this.state.filters.units}
                       />
                     )}
-                    {this.props.columnsToDisplay.includes('health_status') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Health status'}
-                        filterName={'health_status'}
-                        filter={this.state.filters.health_status}
-                      />
-                    )}
                   </>
                 );
               })()}
@@ -589,88 +489,7 @@ export default class TelemetrySelectionTable extends PureComponent {
                       {this.props.columnsToDisplay.includes('units') && (
                         <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
                       )}
-                      {this.props.columnsToDisplay.includes('health_status') && (
-                        <td
-                          className={[
-                            styles.healthStatusCell,
-                            this.state.expandedRows[key] ? styles.selectedHealthStatus : '',
-                          ].join(' ')}
-                          key={`${key}-row`}
-                        >
-                          <div className={styles.healthStatusWrapper}>
-                            <div className={styles.statusTextWrapper}>
-                              <StatusText
-                                status={
-                                  this.healthStatusCodes[row.healthStatusCode]
-                                    ? this.healthStatusCodes[row.healthStatusCode].toLowerCase()
-                                    : ''
-                                }
-                              >
-                                {this.getHealthText(row.healthStatusCode)}
-                              </StatusText>
-                            </div>
-                            <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                              <GearIcon active={this.state.expandedRows[key]} />
-                            </div>
-                          </div>
-                        </td>
-                      )}
                     </tr>
-                    {this.state.expandedRows[key] ? (
-                      <tr onClick={this.closeFilterDialogs} key={`${key}-expanded`} className={styles.expandedRow}>
-                        <td colSpan={4}>
-                          <div>
-                            <p>Value</p>
-                            {row.value.length > 1
-                              ? this.renderValueAsList(row.value)
-                              : this.renderValueAsList([row.value])}
-                          </div>
-                        </td>
-                        <td colSpan={4}>
-                          <div>
-                            <p>{'function ( value ) {'}</p>
-                            <textarea
-                              value={this.state.temporaryHealthFunctions[key]}
-                              onChange={(event) => this.onTemporaryHealthFunctionChange(key, event)}
-                            />
-                            <p>{'}'}</p>
-                            <div onClick={() => this.setHealthFunction(key)}>
-                              <Button title="Set health status function" className={styles.setButton}>
-                                Set
-                              </Button>
-                            </div>
-                          </div>
-                        </td>
-                        <td colSpan={1}>
-                          <div>
-                            <div className={styles.snippetsContainer}>
-                              <p className={styles.lineJump}> </p>
-
-                              <div className={styles.snippetsTitle}>Snippets</div>
-                              <div className={styles.snippetsList}>
-                                <div className={styles.snippetButtonWrapper}>
-                                  <Button secondary className={styles.snippetButton}>
-                                    <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
-                                  </Button>
-                                </div>
-                                <div className={styles.snippetButtonWrapper}>
-                                  <Button secondary className={styles.snippetButton}>
-                                    <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
-                                  </Button>
-                                </div>
-                              </div>
-
-                              <div className={styles.statusConfigTitle}> Available Status:</div>
-                              <div className={styles.statusList}>
-                                {Object.entries(HEALTH_STATUS_CODES).map(([code, name]) => {
-                                  return <div> {name.toUpperCase()}</div>;
-                                })}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : null}
                   </React.Fragment>
                 );
               }

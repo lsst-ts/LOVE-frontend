@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import MuteIcon from '../../icons/MuteIcon/MuteIcon';
 import styles from './HealthStatusConfig.module.css';
 import TelemetrySelectionTable from '../TelemetrySelectionTable/TelemetrySelectionTable';
 
@@ -17,16 +18,19 @@ export const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_
   })
   .join('\n');
 
+const TABS = {
+  TABLE: 0,
+  FUNCTIONS: 1,
+};
+
 /**
- * Configurable table displaying an arbitrary subset
- * of telemetries provided in the component props. It has an optional selection column
- * to be used as a telemetry selection feature, along with the filtering and sorting methods.
- * By pressing the Set button, the list of telemetries is passed to a callback function in the component props.
- *
+ * Component to configure the HealthStatusSummary
+ * Contains the TelemetrySelectionTable used to define the telemetries (end events),
+ * and a FunctionConfig component used to configure the rules for the Health Status
  */
 export default class HealthStatusConfig extends PureComponent {
   static propTypes = {
-    /** Display the selection column or not */
+    /** Columns to be displayed in the TelemetrySelectionTable */
     columnsToDisplay: PropTypes.arrayOf(
       PropTypes.oneOf([
         'selection_column',
@@ -41,7 +45,8 @@ export default class HealthStatusConfig extends PureComponent {
         'health_status',
       ]),
     ),
-    /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
+    /** Column to use to restrict values when selecting a row in the TelemetrySelectionTable,
+     * such as limiting only selection of rows with the same units */
     checkedFilterColumn: PropTypes.oneOf([
       'category',
       'component',
@@ -52,14 +57,9 @@ export default class HealthStatusConfig extends PureComponent {
       'data_type',
       'units',
     ]),
-    /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
-        separated by a dash. Values are javascript code as text */
-    // healthFunctions: PropTypes.object,
-    /** Function called to set healthStatus functions. It receives a dictionary containing the healthStatus functions to be set */
-    // setHealthFunctions: PropTypes.func,
-    /** Dictionary of telemetries that are displayed. See examples below */
+    /** Dictionary of telemetries that are displayed in the TelemetrySelectionTable*/
     telemetries: PropTypes.object,
-    /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
+    /** Function called when the "Set" button is clicked in the TelemetrySelectionTable. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
     onSave: PropTypes.func,
     /** Indicates if component should display bottom selection bar*/
     showSelection: PropTypes.bool,
@@ -97,18 +97,59 @@ export default class HealthStatusConfig extends PureComponent {
 
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      healthFunctions: {},
+      tab: TABS.TABLE,
+    };
+  }
+
+  changeTab(tab) {
+    this.setState({ tab });
   }
 
   render() {
     return (
-      <TelemetrySelectionTable
-        onSave={this.props.onSave}
-        columnsToDisplay={this.props.columnsToDisplay}
-        telemetries={this.props.telemetries}
-        showSelection={this.props.showSelection}
-        initialData={this.props.initialData}
-      />
+      <div className={styles.tabsWrapper}>
+        <div className={styles.tabsRow}>
+          <div
+            className={[styles.tab, this.state.tab === TABS.TABLE ? styles.selected : ''].join(' ')}
+            onClick={() => this.changeTab(TABS.TABLE)}
+          >
+            <div className={styles.tabLabel}>
+              {/* <div className={styles.iconWrapper}>
+                <MuteIcon unmuted style={this.state.tab === TABS.TABLE ? styles.selectedIcon : ''} />
+              </div> */}
+              Select Telemetries and Events
+            </div>
+          </div>
+
+          <div
+            className={[styles.tab, this.state.tab === TABS.FUNCTIONS ? styles.selected : ''].join(' ')}
+            onClick={() => this.changeTab(TABS.FUNCTIONS)}
+          >
+            <div className={styles.tabLabel}>
+              {/* <div className={styles.iconWrapper}>
+                <MuteIcon style={this.state.tab === TABS.FUNCTIONS ? styles.selectedIcon : ''} />
+              </div> */}
+              Configure Functions
+            </div>
+          </div>
+        </div>
+
+        <div className={[styles.contentWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
+          {this.state.tab === TABS.TABLE ? (
+            <TelemetrySelectionTable
+              onSave={this.props.onSave}
+              columnsToDisplay={this.props.columnsToDisplay}
+              telemetries={this.props.telemetries}
+              showSelection={this.props.showSelection}
+              initialData={this.props.initialData}
+            />
+          ) : (
+            'BLAAA'
+          )}
+        </div>
+      </div>
     );
   }
 }

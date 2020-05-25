@@ -1,381 +1,72 @@
-:root{
-    --scrollbar-width: 10px;
+:root {
+  --scrollbar-width: 10px;
 }
 
-.telemetrySelectionTableWrapper {
-    display: grid;
-    height: 100%;
-    grid-template-rows: minmax(0, 1fr) min-content;
-    background: var(--base-background-color);
-    min-width: 1350px;
+.tabsWrapper {
+  display: flex;
+  flex-flow: column nowrap;
+  height: 100%;
 }
 
-.telemetrySelectionTable {
-    display: grid;
-    grid-template-rows: min-content minmax(0, 1fr);
-    width: 100%;
-    table-layout: fixed;
-    border-collapse: collapse;
+.tabsRow {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
+  padding-left: 1.7em;
+  border: 0;
+  flex: 0;
+  min-height: 3em;
 }
 
-.telemetrySelectionTable thead {
-    display: table;
-    table-layout:fixed;
-    width: calc(100% - var(--scrollbar-width));
-    word-wrap:break-word;
-}
-.telemetrySelectionTable tbody {
-    /* background: var(--secondary-background-color); */
-    display: block;
-    height: inherit; /* necessary for scroll */
-    width: 100%;
-    overflow-y: scroll;
-    overflow-x: hidden;
-}
-.telemetrySelectionTable tbody tr {
-    display: table;
-    table-layout:fixed;
-    width: 100%;
-}
-.telemetrySelectionTable th, td {
-    width: auto;
+.tab {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.5em 2em;
+  margin-left: 0.2em;
+  margin-right: 0.2em;
+  border: 1px solid transparent;
+  background-color: var(--second-secondary-background-color);
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+  margin-bottom: -1px;
+  cursor: pointer;
+  width: 18em;
 }
 
-.telemetrySelectionTable th {
-    border: 1px solid var(--base-background-color);
-    background: var(--tertiary-background-color);
-    padding: 0em 0.5em;
-    padding-left: 1em;
-    text-align: left;
+.tabLabel {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
 }
 
-.telemetrySelectionTable .narrowCol {
-    width: 7%;
+.selected {
+  border: 1px solid hsl(199, 43%, 16%);
+  border-bottom: 1px solid var(--second-secondary-background-color);
+  z-index: 1;
+  color: var(--base-font-color);
 }
 
-.telemetrySelectionTable .mediumCol {
-    width: 9%;
+.selectedIcon {
+  fill: var(--base-font-color);
 }
 
-.telemetrySelectionTable .wideCol {
-    width: 12%;
+.iconWrapper {
+  width: 2em;
+  height: 2em;
+  padding-right: 1em;
 }
 
-.telemetrySelectionTable tr:hover.dataRow{
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable tr:hover td{
-    border-bottom: 1px solid var(--secondary-background-color);
-    border-top: 1px solid var(--secondary-background-color);
-}
-
-.telemetrySelectionTable tr:hover.expandedRow td{
-    border-bottom: 1px solid var(--secondary-background-color);
-    border-top: 1px solid transparent;
-}
-
-.telemetrySelectionTable tr:nth-child(even) {
-    background: var(--secondary-background-dimmed-color);
-}
-
-.telemetrySelectionTable tr:nth-child(odd) {
-    background: var(--secondary-background-color);
-}
-
-.dataRow {
-    /* cursor: pointer; */
-}
-
-.telemetrySelectionTable th:first-of-type {
-    border-top-left-radius: 7px;
-}
-
-.telemetrySelectionTable th:last-of-type {
-    border-top-right-radius: 7px;
-}
-
-.telemetrySelectionTable td {
-    color: var(--secondary-font-color);
-    padding: 0.4em 1em;
-    word-wrap:break-word;
-    max-width: 0;
-    border-top: 1px solid transparent;
-    border-bottom: 1px solid transparent;
-    border-left: 1px solid var(--base-background-color);
-    border-right: 1px solid var(--base-background-color);
-}
-
-.telemetrySelectionTable td.string {
-    text-align: left;
-}
-
-.telemetrySelectionTable td.number {
-    text-align: right;
-}
-
-.telemetrySelectionTable .valueCell {
-    padding: 0.4em 0.5em;
-    word-wrap:break-word;
-    word-wrap: normal;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.telemetrySelectionTable td input {
-    min-width: 10px;
-}
-
-.telemetrySelectionTable tr:last-of-type td:first-of-type {
-    border-bottom-left-radius: 7px;
-}
-
-.telemetrySelectionTable tr:last-of-type td:last-of-type {
-    border-bottom-right-radius: 7px;
-}
-
-.telemetrySelectionTable .healthStatusWrapper {
-    display: flex;
-    position: relative;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0;
-}
-
-.telemetrySelectionTable .healthStatusCell.selectedHealthStatus {
-    background: var(--tertiary-background-color);
-    border-bottom: 1px solid var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable .gearIconWrapper {
-    position: absolute;
-    right: 0;
-    width: 1.5em;
-    min-width: 1em;
-    cursor: pointer;
-    padding-right: 0.3em;
-}
-
-.telemetrySelectionTable .statusTextWrapper {
-    flex-grow: 1;
-    padding: 0.0em 1.5em;
-    margin-right: 2em;
-}
-
-.telemetrySelectionTable .snippetsContainer {
-    /* display: flex; */
-}
-
-.telemetrySelectionTable .snippetsList {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-}
-
-
-.telemetrySelectionTable .snippetButtonWrapper {
-    padding: 0.3em 1em;
-    padding-left:0;
-    flex-grow: 1;
-}
-
-.telemetrySelectionTable .setButton {
-    padding: 0em 2em;
-    margin: auto;
-    display:flex;
-}
-
-.telemetrySelectionTable .snippetButton {
-    width: 100%;
-    height: auto;
-    padding: 0;
-}
-
-.telemetrySelectionTable .snippetButton span {
-    padding: 0.25em 0.5em;
-    height: auto;
-}
-
-.telemetrySelectionTable .valuesList {
-    counter-reset: values-list-counter -1;
-    list-style: none;
-    -webkit-padding-start: 0;
-    position: relative;
-}
-
-
-.telemetrySelectionTable .valuesListItem::before {
-    content: counter(values-list-counter) ". ";
-    color: var(--secondary-font-dimmed-color);
-    white-space: pre-wrap;
-    font-family: monospace;
-    text-align: right;
-    position: absolute;
-    width: 4em;
-}
-
-
-.telemetrySelectionTable .valuesListItem {
-    counter-increment: values-list-counter;
-    padding: 0 0.4em;
-}
-
-.telemetrySelectionTable .valuesListItemValue {
-    position: relative;
-    padding: 0 0.4em;
-    left: 3em;
-}
-/* .telemetrySelectionTable .addedColumn {
-    width: 5%;
-} */
-
-.telemetrySelectionTable .firstColumn {
-    width: 1em;
-    background: var(--base-background-color);
-    padding: 0em 0.5em;
-    text-align: center;
-    border: 1px solid var(--base-background-color)
-}
-
-.telemetrySelectionTable .firstColumn input {
-    margin: 0;
-}
-
-.telemetrySelectionTable .expandedRow {
-    text-align: left;
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable tr:nth-child(even).expandedRow {
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable tr:nth-child(odd).expandedRow {
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable .expandedRow td {
-    vertical-align: top;
-    border: 1px solid transparent;
-    padding: 1em;
-}
-
-.telemetrySelectionTable .expandedRow p {
-    line-height: 0;
-}
-
-.telemetrySelectionTable .expandedRow textarea {
-    background: var(--secondary-background-dimmed-color);
-    color: var(--base-font-color);
-    border: none;
-    width: calc(100% - 3em);
-    margin-left: 2em;
-    height: 13em;
-    font-size: 1em;
-    resize: none;
-    border-radius: 5px;
-    padding: 0.6em 0.6em;
-}
-
-.telemetrySelectionTable .healthStatusCell {
-    padding: 0.4em 0.5em;
-    border-bottom: 1px solid transparent;
-}
-
-.telemetrySelectionTable .healthStatusCell:hover {
-    background: var(--tertiary-background-color);
-}
-
-.telemetrySelectionTable .healthStatusCell:hover .gearIconWrapper {
-    visibility: visible;
-}
-
-/* width */
-.telemetrySelectionTable ::-webkit-scrollbar {
-    width: var(--scrollbar-width);
-}
-
-/* Track */
-.telemetrySelectionTable ::-webkit-scrollbar-track {
-    background: var(--tertiary-background-color); 
-}
- 
-/* Handle */
-.telemetrySelectionTable ::-webkit-scrollbar-thumb {
-    /* background: var(--quinary-background-color); */
-    background: var(--tertiary-font-color);
-    border-radius: 1.1em;
-}
-
-/* Handle on hover */
-.telemetrySelectionTable ::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-font-color);
-}
-
-/* for describing sections in the expandable row */
-.statusConfigTitle, .snippetsTitle{ 
-    color: var(--base-font-color);
-    margin-bottom: 0.2em;
-}
-
-.statusConfigTitle {
-    margin-top:0.8em;
-}
-
-.lineJump{
-    white-space: pre;
-}
-
-.statusList {
-    font-size:small;
-}
-
-.selectionContainer {
-    display:flex;
-    align-items:center;
-    color: var(--base-font-color);
-    text-align:left;
-    padding: 1em;
-    background: var(--base-background-color);
-}
-
-.selectionList{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: flex-start;
-    background:#cfd7d9;
-    width:100%;
-    border: 1px solid #ccc;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    padding: 4px 6px;
-    color: #555;
-    vertical-align: middle;
-    border-radius: 4px;
-    max-width: 100%;
-    line-height: 22px;
-    cursor: text;    
-    box-sizing: border-box;
-    min-height:2em;
-    margin-left:0.5em;
-}
-
-button.selectionSetButton {
-    margin-left: 0.5em;
-    padding-left: 1em;
-    padding-right: 1em;
-    font-size: 14pt;
-    border-radius: 0.3em;
-    padding-top:0.3em;
-}
-
-.hidden {
-    visibility: hidden;
-}
-
-.checkboxCell input[type="checkbox"] {
-    cursor: pointer;
-    transform: scale(1.6);
+.contentWrapper {
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 7px;
+  display: block;
+  width: 100%;
+  min-width: 1200px;
+  padding: 1em 0;
+  flex: 1;
+  min-height: 0;
 }
