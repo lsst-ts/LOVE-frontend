@@ -156,8 +156,6 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   componentDidMount = () => {
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
-      console.log('data: ', data);
-
       let tableData = [];
       for (const [cscKey, cscValue] of Object.entries(data)) {
         for (const category of ['event', 'telemetry']) {
@@ -447,7 +445,6 @@ export default class TelemetrySelectionTable extends PureComponent {
     }));
   };
   render() {
-    console.log('this.state.tableData: ', this.state.tableData);
     const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
     let data = this.state.tableData;
     if (this.state.healthFunctions !== undefined) {
