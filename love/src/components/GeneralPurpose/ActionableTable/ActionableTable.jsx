@@ -13,6 +13,18 @@ import FilterDialog from '../../HealthStatusSummary/TelemetrySelectionTable/Filt
 const ActionableTable = function ({ data, headers }) {
 
     const [activeFilterDialogIndex, setActiveFilterDialogIndex] = React.useState(null);
+    const [filters, setFilters] = React.useState({});
+
+    React.useEffect(() => {
+        const initialFilters = headers.reduce((prevDict, header) => {
+            prevDict[header.field] = {
+                type: 'regexp',
+                value: new RegExp('(?:)')
+            }
+            return prevDict;
+        }, {});
+        setFilters(initialFilters);
+    }, [headers]);
 
     const columnOnClick = (ev, index) => {
         if (activeFilterDialogIndex === index) {
@@ -23,14 +35,29 @@ const ActionableTable = function ({ data, headers }) {
         setActiveFilterDialogIndex(index);
     }
 
+    const changeFilter = (event, filterName) => {
+        try {
+
+            const newFilter = event.target.value === '' ? new RegExp('(?:)') : new RegExp(event.target.value, 'i');
+            setFilters((filters) => {
+                return {
+                    ...filters,
+                    [filterName]: {
+                        ...filters[filterName],
+                        value: newFilter
+                    }
+                }
+            })
+
+        } catch (e) {
+            console.warn('Invalid filter', event?.target?.value);
+        }
+    }
 
     const newHeaders = headers.map((header, index) => {
 
         const sortDirection = 'ascending';
-        const isFiltered = index === 1;
-        const filterName = `filterName-${index}`;
-
-        const changeFilter = (filtername) => () => console.log('changing filter to', filtername);
+        const isFiltered = filters?.[header.field] ? filters?.[header.field].value.toString().substring(0, 6) !== '/(?:)/' : false;
         /** To set no active filter dialog */
         const closeFilterDialogs = () => console.log('adsfsadf')
 
@@ -45,7 +72,7 @@ const ActionableTable = function ({ data, headers }) {
                     <span className={styles.primaryText}>{header.title}</span>
                     <span className={styles.secondaryText}>{header.subtitle}</span>
                     <FilterButton
-                        filterName={filterName}
+                        filterName={header.field}
                         selected={activeFilterDialogIndex === index}
                         isFiltered={isFiltered}
                         columnOnClick={(ev) => columnOnClick(ev, index)}
@@ -53,10 +80,10 @@ const ActionableTable = function ({ data, headers }) {
                     />
                     <FilterDialog
                         show={activeFilterDialogIndex === index}
-                        changeFilter={changeFilter(filterName)}
+                        changeFilter={(event) => changeFilter(event, header.field)}
                         closeFilterDialogs={closeFilterDialogs}
                         changeSortDirection={changeSortDirection}
-                        columnName={filterName}
+                        columnName={header.field}
                         sortingColumn={sortingColumn}
                     />
                 </div>
@@ -64,7 +91,14 @@ const ActionableTable = function ({ data, headers }) {
         }
     });
 
-    return <SimpleTable data={data} headers={newHeaders} />
+    const transformedData = data.filter(row => {
+        return headers.reduce((prevBool, header) => {
+            console.log(header.field, filters[header.field]?.value?.test(row[header.field]))
+            return prevBool && filters[header.field]?.value?.test(row[header.field]);
+        }, true);
+    })
+
+    return <SimpleTable data={transformedData} headers={newHeaders} />
 }
 
 
