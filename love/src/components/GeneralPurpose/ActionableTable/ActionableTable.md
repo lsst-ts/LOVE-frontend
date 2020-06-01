@@ -23,14 +23,17 @@ const headers = [
   },
 ];
 
-const data = [
+const data = new Array(100).fill(1).flatMap(() => [
   { position: NaN, description: 'asdf', level: 0 },
-  { position: 1.5, description: 'qwe', level: 1 },
-  { position: 2.2, description: 'sdsf', level: 2 },
-  { position: 3.213, description: 'azxc', level: 23 },
-  { position: 5.23, description: 'qwertf', level: 3 },
-  { position: 3.23, description: 'zxczxc', level: 4 },
-];
+  { position: 1.5, description: 'asdf', level: 1 },
+  { position: 2.2, description: 'asdf', level: 2 },
+  { position: 3.213, description: 'asdf', level: 23 },
+  { position: 5.23, description: 'asdf', level: 3 },
+  { position: 3.23, description: 'asdf', level: 4 },
+]);
+
+
+
 
 <div style={{ width: '800px', background: 'black' }}>
   <ActionableTable data={data} headers={headers} />

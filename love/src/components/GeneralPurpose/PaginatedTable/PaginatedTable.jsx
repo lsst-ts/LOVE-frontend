@@ -43,33 +43,33 @@ const PaginatedTable = ({ headers, data }) => {
   return (
     <div>
       <SimpleTable headers={headers} data={pageData} />
-      <div className={styles.paginationContainer}>
-        {feasibleItemsPerPage.length > 0 && (
+      {feasibleItemsPerPage.length > 0 && (
+        <div className={styles.paginationContainer}>
           <Select
             onChange={onSelectChange}
             controlClassName={styles.select}
             option={itemsPerPage}
             options={feasibleItemsPerPage.map((v) => v.toString())}
           />
-        )}
-        <Button status="transparent" onClick={goToFirst} className={styles.iconBtn}>
-          &#x21E4;
-        </Button>
-        <span className={styles.adjacentPageControl}>
-          <Button status="transparent" onClick={goToPrevious} className={styles.iconBtn}>
-            &#x2190;
+          <Button status="transparent" onClick={goToFirst} className={styles.iconBtn}>
+            &#x21E4;
           </Button>
-          <span className={styles.contentRange}>
-            {page * itemsPerPage + 1}-{(page + 1) * itemsPerPage} of {data.length}
+          <span className={styles.adjacentPageControl}>
+            <Button status="transparent" onClick={goToPrevious} className={styles.iconBtn}>
+              &#x2190;
+            </Button>
+            <span className={styles.contentRange}>
+              {page * itemsPerPage + 1}-{(page + 1) * itemsPerPage} of {data.length}
+            </span>
+            <Button status="transparent" onClick={goToNext} className={styles.iconBtn}>
+              &#x2192;
+            </Button>
           </span>
-          <Button status="transparent" onClick={goToNext} className={styles.iconBtn}>
-            &#x2192;
+          <Button status="transparent" onClick={goToLast} className={styles.iconBtn}>
+            &#x21E5;
           </Button>
-        </span>
-        <Button status="transparent" onClick={goToLast} className={styles.iconBtn}>
-          &#x21E5;
-        </Button>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
