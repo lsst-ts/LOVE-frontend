@@ -27,7 +27,7 @@ const data =  new Array(100).fill(1).flatMap(() => ([
   { position: 3.23, description: 'asdf', level: 4 },
 ]));
 
-<div style={{ width: '400px' }}>
+<div style={{ width: '400px', background:'black' }}>
   <PaginatedTable data={data} headers={headers} />
 </div>;
 ```
