@@ -1,7 +1,6 @@
 Basic example with with a column with custom styles.
+
 ```jsx
-
-
 const headers = [
   {
     field: 'position',
@@ -33,7 +32,7 @@ const data = [
   { position: 3.23, description: 'zxczxc', level: 4 },
 ];
 
-<div style={{ width: '800px' }}>
+<div style={{ width: '800px', background: 'black' }}>
   <ActionableTable data={data} headers={headers} />
 </div>;
 ```
