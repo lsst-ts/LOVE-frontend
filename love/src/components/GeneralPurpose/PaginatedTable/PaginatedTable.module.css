@@ -1,0 +1,23 @@
+.paginationContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+}
+.adjacentPageControl {
+  margin-left: 1rem;
+  margin-right: urem;
+}
+
+.contentRange {
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.iconBtn {
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}
