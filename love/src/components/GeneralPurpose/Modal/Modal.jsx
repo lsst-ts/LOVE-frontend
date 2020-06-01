@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import Button from '../Button/Button';
@@ -19,7 +19,6 @@ Modal.propTypes = {
   modalClassName: PropTypes.string,
 };
 
-
 export default function Modal(props) {
   ReactModal.setAppElement('#root');
   const { children, modalClassName, footerChildren, ...other } = props;
@@ -27,18 +26,14 @@ export default function Modal(props) {
   return (
     <ReactModal {...other} className={[styles.modal, modalClassName].join(' ')} overlayClassName={styles.overlay}>
       <div className={styles.topbar}>
-        <Button title='Close' status='transparent' onClick={props.onRequestClose}>
+        <Button title="Close" status="transparent" onClick={props.onRequestClose}>
           &#10005;
         </Button>
       </div>
 
-      <div className={styles.content}>
-        {children}
-      </div>
+      <div className={styles.content}>{children}</div>
 
-      <div className={styles.footer}>
-        {footerChildren}
-      </div>
+      {footerChildren && <div className={styles.footer}>{footerChildren}</div>}
     </ReactModal>
   );
-};
+}

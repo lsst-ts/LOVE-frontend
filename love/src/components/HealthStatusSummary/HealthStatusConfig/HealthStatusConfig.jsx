@@ -79,6 +79,7 @@ export default class HealthStatusConfig extends PureComponent {
   };
 
   static defaultProps = {
+    onCancel: () => {},
     onSave: () => {},
     columnsToDisplay: [
       'selection_column',
@@ -154,6 +155,14 @@ export default class HealthStatusConfig extends PureComponent {
             />
           </div>
           <div className={this.state.tab === TABS.FUNCTIONS ? styles.content : styles.hidden}>'BLAAA'</div>
+        </div>
+        <div className={styles.footer}>
+          <Button status="default" onClick={this.props.onCancel}>
+            Cancel
+          </Button>
+          <Button status="primary" onClick={() => this.props.onSave()}>
+            Apply
+          </Button>
         </div>
       </div>
     );
