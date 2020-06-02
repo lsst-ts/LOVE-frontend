@@ -13,6 +13,7 @@ import {
   RECEIVE_SWAP_TOKEN,
   REJECT_SWAP_TOKEN,
   MARK_ERROR_SWAP_TOKEN,
+  REQUIRE_SWAP_TOKEN,
 } from '../actions/actionTypes';
 
 export const tokenStates = {
@@ -29,6 +30,7 @@ export const tokenStates = {
 };
 
 export const tokenSwapStates = {
+  REQUIRED: 'SWAP_REQUIRED',
   REQUESTED: 'SWAP_REQUESTED',
   RECEIVED: 'SWAP_RECEIVED',
   ERROR: 'SWAP_ERROR',
@@ -42,101 +44,104 @@ const initialState = {
   permissions: {
     cmd_exec: false,
   },
+  swapStatus: tokenSwapStates.RECEIVED,
 };
 /**
  * Modifies the state of the authentication mainly characterized by the
  * token received from the LOVE-manager and its status.
  */
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
-    case REQUEST_TOKEN:
-      {
-        return Object.assign({}, state, {
-          status: tokenStates.REQUESTED
-        });
-      }
-    case GET_TOKEN_FROM_LOCALSTORAGE:
-      {
-        return Object.assign({}, state, {
-          status: tokenStates.READ_FROM_STORAGE,
-          token: action.token,
-        });
-      }
-    case RECEIVE_TOKEN:
-      {
-        if (action.permissions === null || action.permissions === undefined) {
-          return Object.assign({}, state, {
-            username: action.username,
-            token: action.token,
-            status: tokenStates.RECEIVED,
-            permissions: initialState.permissions,
-          });
-        }
+    case REQUEST_TOKEN: {
+      return Object.assign({}, state, {
+        status: tokenStates.REQUESTED,
+      });
+    }
+    case GET_TOKEN_FROM_LOCALSTORAGE: {
+      return Object.assign({}, state, {
+        status: tokenStates.READ_FROM_STORAGE,
+        token: action.token,
+      });
+    }
+    case RECEIVE_TOKEN: {
+      if (action.permissions === null || action.permissions === undefined) {
         return Object.assign({}, state, {
           username: action.username,
           token: action.token,
           status: tokenStates.RECEIVED,
-          permissions: {
-            cmd_exec: action.permissions['execute_commands'],
-          },
+          permissions: initialState.permissions,
         });
       }
+      return Object.assign({}, state, {
+        username: action.username,
+        token: action.token,
+        status: tokenStates.RECEIVED,
+        permissions: {
+          cmd_exec: action.permissions['execute_commands'],
+        },
+      });
+    }
     case REJECT_TOKEN:
       return {
         ...initialState,
         token: null,
-        status: tokenStates.REJECTED
+        status: tokenStates.REJECTED,
       };
     case EXPIRE_TOKEN:
       return {
         ...initialState,
-        status: tokenStates.EXPIRED
+        status: tokenStates.EXPIRED,
       };
     case EMPTY_TOKEN:
       return {
-        ...initialState
+        ...initialState,
       };
     case MARK_ERROR_TOKEN:
       return {
         ...initialState,
-        status: tokenStates.ERROR
+        status: tokenStates.ERROR,
       };
 
     case REQUEST_REMOVE_TOKEN:
       return {
         ...initialState,
-        status: tokenStates.REMOVE_REQUESTED
+        status: tokenStates.REMOVE_REQUESTED,
       };
     case REMOVE_REMOTE_TOKEN:
       return {
         ...initialState,
-        status: tokenStates.REMOVED_REMOTELY
+        status: tokenStates.REMOVED_REMOTELY,
       };
     case MARK_ERROR_REMOVE_TOKEN:
       return {
         ...initialState,
-        status: tokenStates.REMOVE_ERROR
+        status: tokenStates.REMOVE_ERROR,
       };
     case REQUEST_SWAP_TOKEN:
       return {
         ...state,
-        swapStatus: tokenSwapStates.REQUESTED
-      }
+        swapStatus: tokenSwapStates.REQUESTED,
+      };
     case RECEIVE_SWAP_TOKEN:
       return {
         ...state,
-        swapStatus: tokenSwapStates.RECEIVED
-      }
+        swapStatus: tokenSwapStates.RECEIVED,
+      };
     case REJECT_SWAP_TOKEN:
       return {
         ...state,
-        swapStatus: tokenSwapStates.REJECTED
-      }
+        swapStatus: tokenSwapStates.REJECTED,
+      };
     case MARK_ERROR_SWAP_TOKEN:
       return {
         ...state,
-        swapStatus: tokenSwapStates.ERROR
-      }
+        swapStatus: tokenSwapStates.ERROR,
+      };
+    case REQUIRE_SWAP_TOKEN:
+      return {
+        ...state,
+        swapStatus: tokenSwapStates.REQUIRED,
+      };
     default:
       return state;
   }

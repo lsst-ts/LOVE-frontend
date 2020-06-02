@@ -14,6 +14,8 @@ import {
   RECEIVE_SWAP_TOKEN,
   REJECT_SWAP_TOKEN,
   MARK_ERROR_SWAP_TOKEN,
+  REQUIRE_SWAP_TOKEN,
+  CANCEL_SWAP_TOKEN,
 } from './actionTypes';
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
@@ -74,6 +76,14 @@ export const rejectSwapToken = {
 
 export const markErrorSwapToken = {
   type: MARK_ERROR_SWAP_TOKEN,
+};
+
+export const requireSwapToken = {
+  type: REQUIRE_SWAP_TOKEN,
+};
+
+export const cancelSwapToken = {
+  type: CANCEL_SWAP_TOKEN,
 };
 
 
