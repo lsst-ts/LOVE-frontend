@@ -57,6 +57,10 @@ export default class Button extends Component {
      * Define wether or not the button is disabled.
      */
     disabled: PropTypes.bool,
+    /**
+     * Define wether or not the button sends a command.
+     */
+    command: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   };
 
@@ -69,6 +73,7 @@ export default class Button extends Component {
     type: 'button',
     shape: 'default',
     disabled: false,
+    command: false,
   };
 
   render() {
@@ -94,7 +99,12 @@ export default class Button extends Component {
     const statusStyle = statusStyleDict[this.props.status];
     const sizeStyle = sizeStyleDict[this.props.size];
     const style = [
-      btn, statusStyle, sizeStyle, this.props.className, this.props.disabled? styles.disabled : null
+      btn,
+      statusStyle,
+      sizeStyle,
+      this.props.className,
+      this.props.disabled ? styles.disabled : null,
+      this.props.command ? styles.command : null,
     ].join(' ');
 
     return (

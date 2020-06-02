@@ -10,11 +10,13 @@
 }
 
 .svg {
-  vertical-align: middle;
+  vertical-align: top;
 }
 
+.active {
+  stroke:var(--base-font-color);
+}
 
-.svg path {
-  fill: var(--commandable-font-color);
-  stroke: var(--commandable-font-color);
+.inactive {
+  stroke: var(--secondary-font-color);
 }

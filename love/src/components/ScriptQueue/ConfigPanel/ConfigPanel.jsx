@@ -408,6 +408,7 @@ export default class ConfigPanel extends Component {
                 size="large"
                 onClick={this.onLaunch}
                 disabled={[ERROR, VALIDATING, NEED_REVALIDATION].includes(this.state.validationStatus)}
+                command
               >
                 Add
               </Button>

@@ -174,11 +174,11 @@ export default class CurrentScript extends Component {
                         e.stopPropagation();
                       }}
                     >
-                      <div className={scriptStyles.commandButton}>
+                      <div className={[scriptStyles.commandButton, scriptStyles.compact].join(' ')}>
                         <div>
                           <StopIcon />
                         </div>
-                        <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                        {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div> */}
                       </div>
                     </div>
                     {isPaused ? (
@@ -189,21 +189,23 @@ export default class CurrentScript extends Component {
                           e.stopPropagation();
                         }}
                       >
-                        <div className={scriptStyles.commandButton}>
+                        <div className={[scriptStyles.commandButton, scriptStyles.compact].join(' ')}>
                           <div>
                             <ResumeIcon />
                           </div>
-                          <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Resume'}</div>
+                          {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Resume'}</div> */}
                         </div>
                       </div>
                     ) : null}
 
                     <div
-                      className={scriptStyles.buttonContainer}
+                      className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
                       onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
                     >
-                      {' '}
-                      &#8943;{' '}
+                      <span>
+                        {' '}
+                        &#8943;{' '}
+                      </span>
                     </div>
                   </div>
                 )}

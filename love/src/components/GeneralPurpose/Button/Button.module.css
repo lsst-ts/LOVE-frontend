@@ -251,3 +251,15 @@
     background-color: var(--primary-active-hover-background-color);
     color: var(--primary-active-font-color);
 }
+
+.command {
+    background-color: var(--commandable-background);
+    background: var(--commandable-background);
+    color: var(--commandable-font-color);
+}
+
+.command:hover {
+    background-color: var(--commandable-background-hover);
+    background: var(--commandable-background-hover);
+    color: var(--commandable-font-color-hover);
+}

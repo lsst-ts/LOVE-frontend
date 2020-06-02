@@ -10,6 +10,12 @@ import {
   REMOVE_REMOTE_TOKEN,
   MARK_ERROR_REMOVE_TOKEN,
   GET_TOKEN_FROM_LOCALSTORAGE,
+  REQUEST_SWAP_TOKEN,
+  RECEIVE_SWAP_TOKEN,
+  REJECT_SWAP_TOKEN,
+  MARK_ERROR_SWAP_TOKEN,
+  REQUIRE_SWAP_TOKEN,
+  CANCEL_SWAP_TOKEN,
 } from './actionTypes';
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
@@ -55,6 +61,31 @@ export const removeRemoteToken = {
 export const markErrorRemoveToken = {
   type: MARK_ERROR_REMOVE_TOKEN,
 };
+
+export const requestSwapToken = {
+  type: REQUEST_SWAP_TOKEN,
+};
+
+export const receiveSwapToken = {
+  type: RECEIVE_SWAP_TOKEN,
+};
+
+export const rejectSwapToken = {
+  type: REJECT_SWAP_TOKEN,
+};
+
+export const markErrorSwapToken = {
+  type: MARK_ERROR_SWAP_TOKEN,
+};
+
+export const requireSwapToken = {
+  type: REQUIRE_SWAP_TOKEN,
+};
+
+export const cancelSwapToken = {
+  type: CANCEL_SWAP_TOKEN,
+};
+
 
 export function doGetTokenFromStorage() {
   return (dispatch) => {
@@ -236,5 +267,50 @@ export function validateToken() {
         return Promise.resolve();
       });
     });
+  };
+}
+
+/**
+ * Swaps current user for a new one.
+ * Nothing changes if credentials are wrong.
+ */
+export function swapUser(username, password) {
+  const url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+  return (dispatch, getState) => {
+    dispatch(requestSwapToken);
+    const request_time = DateTime.utc().toMillis() / 1000;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 400) {
+          dispatch(rejectSwapToken);
+          return false;
+        } else {
+          dispatch(markErrorSwapToken);
+          return false;
+        }
+      })
+      .then((response) => {
+        if (response) {
+          const token = response.token;
+          let username = '';
+          if (response.user) {
+            username = response.user.username;
+          }
+          const time_data = response.time_data;
+          const permissions = response.permissions;
+          if (token !== undefined && token !== null) {
+            dispatch(receiveSwapToken);
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
+            return;
+          }
+        }
+      })
+      .catch((e) => console.log(e));
   };
 }

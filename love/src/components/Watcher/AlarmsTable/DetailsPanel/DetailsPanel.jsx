@@ -82,6 +82,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
               onClick={(event) => {
                 unmuteAlarm(event);
               }}
+              command
             >
               UNMUTE
             </Button>
@@ -120,6 +121,7 @@ export default function DetailsPanel({ alarm, taiToUtc, muteAlarm, unmuteAlarm }
               onClick={(event) => {
                 muteAlarm(event, timeout.value, muteSeverity.value);
               }}
+              command
             >
               MUTE
             </Button>
