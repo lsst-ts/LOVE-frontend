@@ -23,7 +23,7 @@ const defaultSort = (row1, row2, sortingColumn, sortDirection) => {
   return 0;
 };
 
-const defaultColumnFilter = (filterString, value) => {
+const defaultColumnFilter = (filterString, value, row) => {
   try {
     const regexp = filterString === '' || filterString === undefined? new RegExp('(?:)') : new RegExp(filterString, 'i');
     return regexp.test(value);
@@ -128,7 +128,7 @@ const ActionableTable = function ({ data, headers }) {
           //   debugger;
           // }
           const filter = header.filter ?? defaultColumnFilter;
-          const filterResult = filter(filters[header.field], row[header.field]);
+          const filterResult = filter(filters[header.field], row[header.field], row);
           return prevBool && filterResult;
         }, true);
       })
@@ -170,7 +170,7 @@ ActionableTable.propTypes = {
       render: PropTypes.func,
       /** (Inherited from SimpleTable) className to be applied to the whole column */
       className: PropTypes.string,
-      /** Function to sort table rows.
+      /** Function to sort table rows. Defaults to regular (>, <, ===) comparison.
        * Its signature is `(row1, row2, sortingColumn, sortingDirection) => value` where:
        * (row1, row2)  are two rows of the `data` array to compare;
        * (sortingColumn) is the currently selected column that runs the sorting. Only one column at a time;
@@ -178,6 +178,14 @@ ActionableTable.propTypes = {
        * (value) is 1, 0 or -1, and passed to Array.Prototype.sort
        * */
       sort: PropTypes.func,
+      /** Function to filter table rows. Defaults to regexp comparison.
+       * Its signature is (filterString, value, row) => result where: 
+       * `filterString` is the input text in the filter textbox
+       * `value` is the value of the cell in the current row and column
+       * `row` is the complete data row from the `data` prop
+       * result: boolean, if any column result is false the row won't be displayed
+       */
+      filter: PropTypes.func
     }),
   ),
   /** Rows to be rendered in the table */

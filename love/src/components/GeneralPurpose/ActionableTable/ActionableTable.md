@@ -67,11 +67,15 @@ const headers = [
     type: 'number',
     render: (value) => {
       const status = !!labelsDict[value] ? labelsDict[value] : 'invalid';
-      return <StatusText status={status}>{status}-{value}</StatusText>;
+      return (
+        <StatusText status={status}>
+          {status}-{value}
+        </StatusText>
+      );
     },
-    sort: (value1, value2, sortingFactor, row1, row2 ) => {
-      const status1 = !!labelsDict[value1] ? labelsDict[v1] : 'invalid';
-      const status2 = !!labelsDict[value2] ? labelsDict[v2] : 'invalid';
+    sort: (value1, value2, sortingFactor, row1, row2) => {
+      const status1 = !!labelsDict[value1] ? labelsDict[value1] : 'invalid';
+      const status2 = !!labelsDict[value2] ? labelsDict[value1] : 'invalid';
 
       if (status1 > status2) {
         return 1 * sortingFactor;
@@ -80,6 +84,19 @@ const headers = [
         return -1 * sortingFactor;
       }
       return 0;
+    },
+    filter: (filterString, value, row) => {
+      /** Test against the label {status}-{value}, not just the value **/
+      try {
+        const regexp =
+          filterString === '' || filterString === undefined ? new RegExp('(?:)') : new RegExp(filterString, 'i');
+        
+        const status = !!labelsDict[value] ? labelsDict[value] : 'invalid';
+        return regexp.test(`${status}-${value}`);
+      } catch (e) {
+        console.warn('Invalid filter value in regexp', value);
+      }
+      return true;
     },
   },
 ];
