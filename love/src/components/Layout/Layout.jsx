@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates, modes } from '../../redux/reducers/uif';
+import { tokenSwapStates } from '../../redux/reducers/auth';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime, takeScreenshot, parseTimestamp, formatTimestamp } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
@@ -26,6 +27,7 @@ import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 import Modal from '../GeneralPurpose/Modal/Modal';
 import XMLTable from './XMLTable/XMLTable';
 import UserDetails from './UserDetails/UserDetails';
+import UserSwapContainer from '../Login/UserSwap.container';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -61,6 +63,10 @@ class Layout extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
     unsubscribeToStreams: PropTypes.func,
+    /** Current token swap status */
+    tokenSwapStatus: PropTypes.string,
+    /** Function to be called when requiring a user swap, similar to a logout */
+    requireUserSwap: PropTypes.func,
   };
 
   static defaultProps = {
@@ -82,6 +88,7 @@ class Layout extends Component {
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
       isXMLModalOpen: false,
+      tokenSwapRequested: false,
     };
 
     this.requestToastID = null;
@@ -413,6 +420,7 @@ class Layout extends Component {
 
   render() {
     const filteredAlarms = this.props.alarms.filter((a) => isActive(a) && !isAcknowledged(a) && !isMuted(a));
+    console.log(this.props.tokenSwapStatus);
     return (
       <>
         <AlarmAudioContainer />
@@ -531,6 +539,10 @@ class Layout extends Component {
                       })
                     }
                     logout={this.props.logout}
+                    requireUserSwap={() => {
+                      this.setState({ tokenSwapRequested: true });
+                      this.props.requireUserSwap(true);
+                    }}
                     onXMLClick={() => this.setState({ isXMLModalOpen: true })}
                   ></UserDetails>
                 </div>
@@ -577,6 +589,23 @@ class Layout extends Component {
           contentLabel="Component selection modal"
         >
           <XMLTable></XMLTable>
+        </Modal>
+        <Modal
+          isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}
+          onRequestClose={() => {
+            this.setState({ tokenSwapRequested: false });
+            this.props.requireUserSwap(false);
+          }}
+          contentLabel="User swap"
+          displayFooter={false}
+        >
+          <UserSwapContainer
+            tokenStatus={this.props.tokenSwapStatus}
+            onFinish={() => {
+              this.setState({ tokenSwapRequested: false });
+              this.props.requireUserSwap(false);
+            }}
+          />
         </Modal>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
