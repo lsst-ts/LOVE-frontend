@@ -6,7 +6,7 @@ import Select from '../Select/Select';
 
 const AVAILABLE_ITEMS_PER_PAGE = [10, 25, 50, 100];
 /**
- * Adds pagination handler to #SimpleTable
+ * Adds pagination handlers to #SimpleTable.
  */
 const PaginatedTable = ({ headers, data }) => {
   const [itemsPerPage, setItemsPerPage] = React.useState(AVAILABLE_ITEMS_PER_PAGE[0].toString());
