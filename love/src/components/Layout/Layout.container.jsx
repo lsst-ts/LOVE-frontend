@@ -13,10 +13,12 @@ import {
   getAllAlarms,
   getTaiToUtc,
   getPermCmdExec,
+  getTokenSwapStatus,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
+import { requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import Layout from './Layout';
 
 const LayoutContainer = ({ ...props }) => {
@@ -37,6 +39,7 @@ const mapStateToProps = (state) => {
   const taiToUtc = getTaiToUtc(state);
   const execPermission = getPermCmdExec(state);
   const getExecPermission = () => getPermCmdExec(state);
+  const tokenSwapStatus = getTokenSwapStatus(state);
   return {
     user,
     lastSALCommand,
@@ -51,6 +54,7 @@ const mapStateToProps = (state) => {
     taiToUtc,
     execPermission,
     getExecPermission,
+    tokenSwapStatus,
   };
 };
 
@@ -79,6 +83,12 @@ const mapDispatchToProps = (dispatch) => {
           },
         }),
       );
+    },
+    requireUserSwap: (bool) => {
+      if(bool)
+        dispatch(requireSwapToken)
+      else 
+        dispatch(cancelSwapToken)
     },
   };
 };

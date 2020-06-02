@@ -20,6 +20,8 @@ export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
 export const getTokenStatus = (state) => state.auth.status;
 
+export const getTokenSwapStatus = (state) => state.auth.swapStatus;
+
 export const getConnectionStatus = (state) => state.ws.connectionState;
 
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;

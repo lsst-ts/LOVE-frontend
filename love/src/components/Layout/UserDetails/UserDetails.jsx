@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './UserDetails.module.css';
 import UserIcon from '../../icons/UserIcon/UserIcon';
 import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
-import RequeueIcon from '../../icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import CodeIcon from '../../icons/CodeIcon/CodeIcon';
 
 export default function UserDetails({
   username,
@@ -11,6 +11,7 @@ export default function UserDetails({
   dividerClassName,
   onXMLClick,
   logout,
+  requireUserSwap,
   takeScreenshot,
 }) {
   return (
@@ -39,11 +40,14 @@ export default function UserDetails({
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
         <div className={styles.smallIconRow}>
-          <RequeueIcon active={false} className={styles.paddedIcon}/>
+          <CodeIcon active={false} className={styles.paddedIcon}/>
           <span>XML versions </span>
         </div>
       </div>
       <div className={dividerClassName}></div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} title="User swap" onClick={requireUserSwap}>
+        User swap
+      </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} title="Logout" onClick={logout}>
         Logout
       </div>

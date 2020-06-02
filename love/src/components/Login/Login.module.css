@@ -5,6 +5,12 @@
   height: 70vh;
 }
 
+.userSwap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /*--------- PANEL ---------*/
 /*DEFAULT*/
 .panel {
