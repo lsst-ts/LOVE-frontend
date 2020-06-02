@@ -4,6 +4,7 @@ import Button from '../../GeneralPurpose/Button/Button';
 import MuteIcon from '../../icons/MuteIcon/MuteIcon';
 import styles from './HealthStatusConfig.module.css';
 import TelemetrySelectionTable from '../TelemetrySelectionTable/TelemetrySelectionTable';
+import FunctionConfig from '../FunctionConfig/FunctionConfig';
 
 const HEALTH_STATUS_CODES = {
   0: 'Undefined',
@@ -100,19 +101,27 @@ export default class HealthStatusConfig extends PureComponent {
   constructor() {
     super();
     this.state = {
-      selectedTopics: {},
-      healthFunctions: {},
+      currentConfig: {},
+      hidden: {},
       tab: TABS.TABLE,
     };
+  }
+
+  componentDidMount() {
+    this.setState({ currentConfig: { ...this.props.initialData } });
   }
 
   changeTab(tab) {
     this.setState({ tab });
   }
 
-  onTableSet = (selectedTopics, onClick) => {
+  onTableChange = (selectedTopics, onClick) => {
     console.log('selectedTopics: ', selectedTopics);
-    this.setState({ selectedTopics, tab: TABS.FUNCTIONS });
+    this.setState({ currentConfig: selectedTopics, tab: TABS.FUNCTIONS });
+  };
+
+  onFunctionsChange = (newData) => {
+    console.log('onFunctionsChange: ', newData);
   };
 
   render() {
@@ -147,20 +156,22 @@ export default class HealthStatusConfig extends PureComponent {
         <div className={[styles.contentWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
           <div className={this.state.tab === TABS.TABLE ? styles.content : styles.hidden}>
             <TelemetrySelectionTable
-              onSave={this.onTableSet}
+              onSave={this.onTableChange}
               columnsToDisplay={this.props.columnsToDisplay}
               telemetries={this.props.telemetries}
               showSelection={this.props.showSelection}
               initialData={this.props.initialData}
             />
           </div>
-          <div className={this.state.tab === TABS.FUNCTIONS ? styles.content : styles.hidden}>'BLAAA'</div>
+          <div className={this.state.tab === TABS.FUNCTIONS ? styles.content : styles.hidden}>
+            <FunctionConfig topics={this.props.healthFunctions} onChange={this.onFunctionsChange} />
+          </div>
         </div>
         <div className={styles.footer}>
           <Button status="default" onClick={this.props.onCancel}>
             Cancel
           </Button>
-          <Button status="primary" onClick={() => this.props.onSave()}>
+          <Button status="primary" onClick={() => this.props.onSave(this.state.selectedTopics)}>
             Apply
           </Button>
         </div>

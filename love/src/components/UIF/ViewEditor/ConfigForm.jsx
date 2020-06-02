@@ -46,6 +46,8 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   };
 
   const onExtraStepSave = (propKey, newData) => {
+    console.log('propKey: ', propKey);
+    console.log('newData: ', newData);
     updateConfig(propKey, newData);
     setExternalStep({
       show: false,
