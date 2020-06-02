@@ -1,4 +1,4 @@
-Basic example with with a column with custom styles.
+Basic example.
 
 ```jsx
 const headers = [
@@ -69,14 +69,9 @@ const headers = [
       const status = !!labelsDict[value] ? labelsDict[value] : 'invalid';
       return <StatusText status={status}>{status}-{value}</StatusText>;
     },
-    sort: (row1, row2, sortingColumn, sortingDirection) => {
-      const v1 = row1[sortingColumn];
-      const v2 = row2[sortingColumn];
-      const status1 = !!labelsDict[v1] ? labelsDict[v1] : 'invalid';
-      const status2 = !!labelsDict[v2] ? labelsDict[v2] : 'invalid';
-
-      const sortingFactor = sortingDirection === 'ascending' ? 1 : -1;
-      console.log('sortingFactor, status1, status2', sortingFactor, status1, status2);
+    sort: (value1, value2, sortingFactor, row1, row2 ) => {
+      const status1 = !!labelsDict[value1] ? labelsDict[v1] : 'invalid';
+      const status2 = !!labelsDict[value2] ? labelsDict[v2] : 'invalid';
 
       if (status1 > status2) {
         return 1 * sortingFactor;
@@ -89,13 +84,13 @@ const headers = [
   },
 ];
 
-const data = new Array(100).fill(1).flatMap(() => [
+const data = new Array(1).fill(1).flatMap(() => [
   { position: NaN, description: 'asdf', level: 0 },
-  { position: 1.5, description: 'asdf', level: 1 },
-  { position: 2.2, description: 'asdf', level: 2 },
-  { position: 3.213, description: 'asdf', level: 23 },
-  { position: 5.23, description: 'asdf', level: 3 },
-  { position: 3.23, description: 'asdf', level: 4 },
+  { position: 1.5, description: 'bsdf', level: 1 },
+  { position: 2.2, description: 'csdf', level: 2 },
+  { position: 3.213, description: 'dsdf', level: 23 },
+  { position: 5.23, description: 'esdf', level: 3 },
+  { position: 3.23, description: 'fsdf', level: 4 },
 ]);
 
 <div style={{ width: '800px', background: 'black' }}>

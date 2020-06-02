@@ -22,11 +22,21 @@ const defaultSort = (row1, row2, sortingColumn, sortDirection) => {
   if (value1 > value2) return 1 * sortFactor;
   return 0;
 };
+
+const defaultColumnFilter = (filterString, value) => {
+  try {
+    const regexp = filterString === '' || filterString === undefined? new RegExp('(?:)') : new RegExp(filterString, 'i');
+    return regexp.test(value);
+  } catch (e) {
+    console.warn('Invalid filter value in regexp', value);
+  }
+  return true;
+};
 /**
  * A table that can run actions over its data such as
  * sorting and filtering from a dialog in its column header.
  * Default actions are sorting and filtering but can be overwritten.
- * 
+ *
  * It is built with <a href="/#/API?id=simpletable">SimpleTable<a/>
  */
 const ActionableTable = function ({ data, headers }) {
@@ -37,10 +47,7 @@ const ActionableTable = function ({ data, headers }) {
 
   React.useEffect(() => {
     const initialFilters = headers.reduce((prevDict, header) => {
-      prevDict[header.field] = {
-        type: 'regexp',
-        value: new RegExp('(?:)'),
-      };
+      prevDict[header.field] = '';
       return prevDict;
     }, {});
 
@@ -63,20 +70,13 @@ const ActionableTable = function ({ data, headers }) {
   };
 
   const changeFilter = (event, filterName) => {
-    try {
-      const newFilter = event.target.value === '' ? new RegExp('(?:)') : new RegExp(event.target.value, 'i');
-      setFilters((filters) => {
-        return {
-          ...filters,
-          [filterName]: {
-            ...filters[filterName],
-            value: newFilter,
-          },
-        };
-      });
-    } catch (e) {
-      console.warn('Invalid filter', event?.target?.value);
-    }
+    const value = event.target.value;
+    setFilters((filters) => {
+      return {
+        ...filters,
+        [filterName]: value,
+      };
+    });
   };
 
   const closeFilterDialogs = () => {
@@ -92,9 +92,7 @@ const ActionableTable = function ({ data, headers }) {
   };
 
   const newHeaders = headers.map((header, index) => {
-    const isFiltered = filters?.[header.field]
-      ? filters?.[header.field].value.toString().substring(0, 6) !== '/(?:)/'
-      : false;
+    const isFiltered = filters?.[header.field] !== '';
     return {
       ...header,
       title: (
@@ -121,30 +119,36 @@ const ActionableTable = function ({ data, headers }) {
     };
   });
 
-  const transformedData = React.useMemo(()=>{
+  // only recalculate when necessary.
+  const transformedData = React.useMemo(() => {
     const newData = data
       .filter((row) => {
         return headers.reduce((prevBool, header) => {
-          return prevBool && filters[header.field]?.value?.test(row[header.field]);
+          // if(header.field === 'position'){
+          //   debugger;
+          // }
+          const filter = header.filter ?? defaultColumnFilter;
+          const filterResult = filter(filters[header.field], row[header.field]);
+          return prevBool && filterResult;
         }, true);
       })
       .sort((row1, row2) => {
         /** No sorting */
         const sortDirection = sortDirections[sortingColumn];
         if (sortDirection === UNSORTED) return 0;
-  
+
         /** No sorting column */
         if (!sortingColumn) return 0;
-  
+
         /** No cell value */
         const header = headers.find((header) => header.field === sortingColumn);
-  
         const sort = header?.sort ?? defaultSort;
-  
-        return sort(row1, row2, sortingColumn, sortDirection);
+        const sortFactor = sortDirection === ASCENDING ? 1 : -1;
+
+        return sort(row1[sortingColumn], row2[sortingColumn], sortFactor, row1, row2);
       });
-      return newData;
-  },[data, sortingColumn, sortDirections, filters])
+    return newData;
+  }, [data, sortingColumn, sortDirections, filters]);
 
   return <PaginatedTable data={transformedData} headers={newHeaders} />;
 };
@@ -153,18 +157,12 @@ ActionableTable.propTypes = {
   /** Array with properties of table columns and its headers.*/
   headers: PropTypes.arrayOf(
     PropTypes.shape({
-      /** Function to sort table rows. 
-       * Its signature is `(row1, row2, sortingColumn, sortingDirection) => value` where:
-       * (row1, row2)  are two rows of the `data` array to compare; 
-       * (sortingColumn) is the currently selected column that runs the sorting. Only one column at a time; 
-       * (sortingDirection): indicates the user-selected sorting direction, can be 'ascending' or something else for descending
-       * (value) is 1, 0 or -1, and passed to Array.Prototype.sort
-       * */
-      sort: PropTypes.func,
       /** (Inherited from SimpleTable) Property accessor of this column's value on each data row */
       field: PropTypes.string,
       /** (Inherited from SimpleTable)  Node to be rendered as header label */
       title: PropTypes.node,
+      /** Text/node shown below the header title */
+      subtitle: PropTypes.node,
       /** (Inherited from SimpleTable) Data type of this column: number, string, ... */
       type: PropTypes.string,
       /** (Inherited from SimpleTable) Callback that receives this column's value and should return a `node`.
@@ -172,6 +170,14 @@ ActionableTable.propTypes = {
       render: PropTypes.func,
       /** (Inherited from SimpleTable) className to be applied to the whole column */
       className: PropTypes.string,
+      /** Function to sort table rows.
+       * Its signature is `(row1, row2, sortingColumn, sortingDirection) => value` where:
+       * (row1, row2)  are two rows of the `data` array to compare;
+       * (sortingColumn) is the currently selected column that runs the sorting. Only one column at a time;
+       * (sortingDirection): indicates the user-selected sorting direction, can be 'ascending' or something else for descending
+       * (value) is 1, 0 or -1, and passed to Array.Prototype.sort
+       * */
+      sort: PropTypes.func,
     }),
   ),
   /** Rows to be rendered in the table */
