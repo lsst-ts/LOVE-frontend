@@ -75,8 +75,8 @@ const headers = [
     },
     sort: (value1, value2, sortingFactor, row1, row2) => {
       const status1 = !!labelsDict[value1] ? labelsDict[value1] : 'invalid';
-      const status2 = !!labelsDict[value2] ? labelsDict[value1] : 'invalid';
-
+      const status2 = !!labelsDict[value2] ? labelsDict[value2] : 'invalid';
+      
       if (status1 > status2) {
         return 1 * sortingFactor;
       }
@@ -90,7 +90,7 @@ const headers = [
       try {
         const regexp =
           filterString === '' || filterString === undefined ? new RegExp('(?:)') : new RegExp(filterString, 'i');
-        
+
         const status = !!labelsDict[value] ? labelsDict[value] : 'invalid';
         return regexp.test(`${status}-${value}`);
       } catch (e) {
@@ -98,6 +98,8 @@ const headers = [
       }
       return true;
     },
+    ascendingSortLabel: 'Less critical first',
+    descendingSortLabel: 'More critical first',
   },
 ];
 

@@ -17,7 +17,14 @@ export default class FilterDialog extends Component {
     changeSortDirection: PropTypes.func,
     closeFilterDialogs: PropTypes.func,
     changeFilter: PropTypes.func,
+    ascendingSortLabel: PropTypes.node,
+    descendingSortLabel: PropTypes.node,
   };
+
+  static defaultProps = {
+    ascendingSortLabel: 'A - Z',
+    descendingSortLabel: 'Z - A'
+  }
 
   constructor(props) {
     super(props);
@@ -81,13 +88,13 @@ export default class FilterDialog extends Component {
             <div className={styles.filterIconWrapper}>
               <ArrowIcon active={false} up />
             </div>
-            <span className={styles.sortOption}>A - Z</span>
+            <span className={styles.sortOption}>{this.props.ascendingSortLabel}</span>
           </div>
           <div onClick={this.sortDescending} className={styles.dialogRow}>
             <div className={styles.filterIconWrapper}>
               <ArrowIcon active={false} />
             </div>
-            <span className={styles.sortOption}>Z - A</span>
+            <span className={styles.sortOption}>{this.props.descendingSortLabel}</span>
           </div>
 
           <div className={styles.line}> </div>
@@ -97,11 +104,7 @@ export default class FilterDialog extends Component {
             </div>
             <span className={styles.filterText}>Filter...</span>
           </div>
-          <TextField
-            ref={this.textInput}
-            onChange={this.props.changeFilter}
-            onKeyUp={this.onInputKeyUp}
-          />
+          <TextField ref={this.textInput} onChange={this.props.changeFilter} onKeyUp={this.onInputKeyUp} />
         </div>
       </div>
     );

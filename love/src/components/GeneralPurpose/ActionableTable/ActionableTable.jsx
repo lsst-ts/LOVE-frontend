@@ -25,7 +25,8 @@ const defaultSort = (row1, row2, sortingColumn, sortDirection) => {
 
 const defaultColumnFilter = (filterString, value, row) => {
   try {
-    const regexp = filterString === '' || filterString === undefined? new RegExp('(?:)') : new RegExp(filterString, 'i');
+    const regexp =
+      filterString === '' || filterString === undefined ? new RegExp('(?:)') : new RegExp(filterString, 'i');
     return regexp.test(value);
   } catch (e) {
     console.warn('Invalid filter value in regexp', value);
@@ -113,6 +114,8 @@ const ActionableTable = function ({ data, headers }) {
             changeSortDirection={changeSortDirection}
             columnName={header.field}
             sortingColumn={sortingColumn}
+            ascendingSortLabel={header.ascendingSortLabel}
+            descendingSortLabel={header.descendingSortLabel}
           />
         </div>
       ),
@@ -179,13 +182,17 @@ ActionableTable.propTypes = {
        * */
       sort: PropTypes.func,
       /** Function to filter table rows. Defaults to regexp comparison.
-       * Its signature is (filterString, value, row) => result where: 
+       * Its signature is (filterString, value, row) => result where:
        * `filterString` is the input text in the filter textbox
        * `value` is the value of the cell in the current row and column
        * `row` is the complete data row from the `data` prop
        * result: boolean, if any column result is false the row won't be displayed
        */
-      filter: PropTypes.func
+      filter: PropTypes.func,
+      /** Node for the "ascending order" option in the column menu  */
+      ascendingSortLabel: PropTypes.node,
+      /** Node for the "descending order" option in the column menu  */
+      descendingSortLabel: PropTypes.node,
     }),
   ),
   /** Rows to be rendered in the table */
