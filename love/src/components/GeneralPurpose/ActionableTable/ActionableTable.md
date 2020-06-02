@@ -69,7 +69,7 @@ const headers = [
       const status = !!labelsDict[value] ? labelsDict[value] : 'invalid';
       return (
         <StatusText status={status}>
-          {status}-{value}
+          {`${status}-${value}`}
         </StatusText>
       );
     },
