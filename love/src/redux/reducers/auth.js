@@ -8,7 +8,11 @@ import {
   REQUEST_REMOVE_TOKEN,
   REMOVE_REMOTE_TOKEN,
   MARK_ERROR_REMOVE_TOKEN,
-  GET_TOKEN_FROM_LOCALSTORAGE
+  GET_TOKEN_FROM_LOCALSTORAGE,
+  REQUEST_SWAP_TOKEN,
+  RECEIVE_SWAP_TOKEN,
+  REJECT_SWAP_TOKEN,
+  MARK_ERROR_SWAP_TOKEN,
 } from '../actions/actionTypes';
 
 export const tokenStates = {
@@ -22,6 +26,13 @@ export const tokenStates = {
   REMOVED_REMOTELY: 'REMOVED_REMOTELY',
   REMOVE_REQUESTED: 'REMOVE_REQUESTED',
   REMOVE_ERROR: 'REMOVE_ERROR',
+};
+
+export const tokenSwapStates = {
+  REQUESTED: 'SWAP_REQUESTED',
+  RECEIVED: 'SWAP_RECEIVED',
+  ERROR: 'SWAP_ERROR',
+  REJECTED: 'SWAP_REJECTED',
 };
 
 const initialState = {
@@ -106,6 +117,26 @@ export default function(state = initialState, action) {
         ...initialState,
         status: tokenStates.REMOVE_ERROR
       };
+    case REQUEST_SWAP_TOKEN:
+      return {
+        ...state,
+        swapStatus: tokenSwapStates.REQUESTED
+      }
+    case RECEIVE_SWAP_TOKEN:
+      return {
+        ...state,
+        swapStatus: tokenSwapStates.RECEIVED
+      }
+    case REJECT_SWAP_TOKEN:
+      return {
+        ...state,
+        swapStatus: tokenSwapStates.ERROR
+      }
+    case MARK_ERROR_SWAP_TOKEN:
+      return {
+        ...state,
+        swapStatus: tokenSwapStates.REJECTED
+      }
     default:
       return state;
   }
