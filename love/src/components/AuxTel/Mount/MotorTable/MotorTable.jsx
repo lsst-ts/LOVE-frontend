@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Thead, Tbody, Td, Tr, Th } from '../../../GeneralPurpose/SimpleTable/SimpleTable';
+import SimpleTable from '../../../GeneralPurpose/SimpleTable/SimpleTable';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import {
   motorDriveStateMap,
@@ -116,83 +116,86 @@ export default class MotorTable extends Component {
       },
     };
 
-    // console.log(data);
-    // console.log(this.props);
+    const simpleTableData = Object.values(data);
+    const defaultFormatter = value => {
+      if (isNaN(value)) return value;
+      return Number.isInteger(value) ? value : value.toFixed(5)
+    };
+
+    const headers = [
+      {
+        field: 'name',
+        title: 'Motor'
+      },
+      {
+        field: 'angle',
+        title: <>Axis Angle <span className={styles.units}>[deg]</span></>,
+        type: 'number',
+        formatter: (value) => isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(5)}º`
+      },
+      {
+        field: 'velocity',
+        title: <>Velocity <span className={styles.units}>[deg/s]</span></>,
+        type: 'number',
+        formatter: defaultFormatter
+      },
+      {
+        field: 'measuredTorque',
+        title: <>Meas. Torque <span className={styles.units}>[A]</span></>,
+        formatter: defaultFormatter
+      },
+      {
+        field: 'torqueDemand',
+        title: <>Dem. Torque <span className={styles.units}>[A]</span></>,
+        formatter: defaultFormatter
+      },
+      {
+        field: 'motorEncoder',
+        title: 'Encoder',
+        formatter: defaultFormatter
+      },
+      {
+        field: 'motorEncoderRaw',
+        title: 'Encoder Raw',
+        formatter: defaultFormatter
+      },
+      {
+        field: 'brakeStatus',
+        title: 'Brake status',
+        className: styles.statusColumn,
+        formatter: (value) => {
+          const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
+
+          return (
+            <StatusText small status={stateToStyleMotorBrake[brakeStatus]}>
+              {brakeStatus}
+            </StatusText>
+          )
+        }
+      },
+      {
+        field: 'driveStatus',
+        title: 'Drive status',
+        formatter: (value) => {
+          const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
+          return (
+            <StatusText small status={stateToStyleMotorDrive[driveStatus]}>
+              {driveStatus}
+            </StatusText>
+          );
+        },
+        className: styles.statusColumn
+      }
+    ];
+
+
+
     return (
-      <Table className={styles.table}>
-        <Thead>
-          <Tr className={styles.headerRow}>
-            <Th>Motor</Th>
-            <Th>
-              Axis Angle <span className={styles.units}>[deg]</span>
-            </Th>
-            <Th>
-              Velocity <span className={styles.units}>[deg/s]</span>
-            </Th>
-            <Th>
-              Meas. Torque <span className={styles.units}>[A]</span>
-            </Th>
-            <Th>
-              Dem. Torque <span className={styles.units}>[A]</span>
-            </Th>
-            <Th>Encoder</Th>
-            <Th>Encoder Raw</Th>
-            <Th className={styles.statusColumn}>Brake status</Th>
-            <Th className={styles.statusColumn}>Drive status</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {Object.keys(data).map((key) => {
-            const row = data[key];
-            return (
-              <Tr key={key}>
-                {Object.keys(row).map((col) => {
-                  const value = row[col];
-                  if (col === 'angle') {
-                    return (
-                      <Td key={col} isNumber>
-                        {isNaN(value) || Number.isInteger(value) ? value : `${Math.round(value * 10000) / 10000}º`}
-                      </Td>
-                    );
-                  }
-                  if (col === 'driveStatus') {
-                    const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
-                    return (
-                      <Td key={col} className={styles.statusColumn}>
-                        <StatusText small status={stateToStyleMotorDrive[driveStatus]}>
-                          {driveStatus}
-                        </StatusText>
-                      </Td>
-                    );
-                  }
-                  if (col === 'brakeStatus') {
-                    const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
-                    return (
-                      <Td key={col} className={styles.statusColumn}>
-                        <StatusText small status={stateToStyleMotorBrake[brakeStatus]}>
-                          {brakeStatus}
-                        </StatusText>
-                      </Td>
-                    );
-                  }
-                  if (isNaN(value)) {
-                    return (
-                      <Td isNumber key={col}>
-                        {value}
-                      </Td>
-                    );
-                  }
-                  return (
-                    <Td isNumber key={col}>
-                      {Number.isInteger(value) ? value : Math.round(value * 10000) / 10000}
-                    </Td>
-                  );
-                })}
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <SimpleTable headers={headers} data={simpleTableData} />
+      </div>
+
+
     );
   }
 }

@@ -5,6 +5,10 @@ import FilterIcon from '../../../icons/FilterIcon/FilterIcon';
 import ArrowIcon from '../../../icons/ArrowIcon/ArrowIcon';
 import TextField from '../../../TextField/TextField';
 
+export const ASCENDING = 'ascending';
+export const DESCENDING = 'descending';
+export const UNSORTED = 'None';
+
 export default class FilterDialog extends Component {
   static propTypes = {
     show: PropTypes.bool,
@@ -13,7 +17,14 @@ export default class FilterDialog extends Component {
     changeSortDirection: PropTypes.func,
     closeFilterDialogs: PropTypes.func,
     changeFilter: PropTypes.func,
+    ascendingSortLabel: PropTypes.node,
+    descendingSortLabel: PropTypes.node,
   };
+
+  static defaultProps = {
+    ascendingSortLabel: 'A - Z',
+    descendingSortLabel: 'Z - A'
+  }
 
   constructor(props) {
     super(props);
@@ -28,12 +39,12 @@ export default class FilterDialog extends Component {
   shouldComponentUpdate = (nextProps) => nextProps.show !== this.props.show;
 
   sortAscending = () => {
-    this.props.changeSortDirection('ascending', this.props.columnName);
+    this.props.changeSortDirection(ASCENDING, this.props.columnName);
     this.props.closeFilterDialogs();
   };
 
   sortDescending = () => {
-    this.props.changeSortDirection('descending', this.props.columnName);
+    this.props.changeSortDirection(DESCENDING, this.props.columnName);
     this.props.closeFilterDialogs();
   };
 
@@ -52,7 +63,7 @@ export default class FilterDialog extends Component {
     this.textInput.current.value = '';
     this.props.changeFilter({ target: '' });
     if (this.props.columnName === this.props.sortingColumn) {
-      this.props.changeSortDirection('None', this.props.columnName);
+      this.props.changeSortDirection(UNSORTED, this.props.columnName);
     }
     this.props.closeFilterDialogs();
   };
@@ -70,7 +81,6 @@ export default class FilterDialog extends Component {
             </div>
             <span className={styles.filterText}>Sort as...</span>
             <span className={styles.clearAll} onClick={this.clearAllOnClick}>
-              {' '}
               Clear all
             </span>
           </div>
@@ -78,13 +88,13 @@ export default class FilterDialog extends Component {
             <div className={styles.filterIconWrapper}>
               <ArrowIcon active={false} up />
             </div>
-            <span className={styles.sortOption}>A - Z</span>
+            <span className={styles.sortOption}>{this.props.ascendingSortLabel}</span>
           </div>
           <div onClick={this.sortDescending} className={styles.dialogRow}>
             <div className={styles.filterIconWrapper}>
               <ArrowIcon active={false} />
             </div>
-            <span className={styles.sortOption}>Z - A</span>
+            <span className={styles.sortOption}>{this.props.descendingSortLabel}</span>
           </div>
 
           <div className={styles.line}> </div>
@@ -94,11 +104,7 @@ export default class FilterDialog extends Component {
             </div>
             <span className={styles.filterText}>Filter...</span>
           </div>
-          <TextField 
-            ref={this.textInput}
-            onChange={this.props.changeFilter}
-            onKeyUp={this.onInputKeyUp}
-          />
+          <TextField ref={this.textInput} onChange={this.props.changeFilter} onKeyUp={this.onInputKeyUp} />
         </div>
       </div>
     );
