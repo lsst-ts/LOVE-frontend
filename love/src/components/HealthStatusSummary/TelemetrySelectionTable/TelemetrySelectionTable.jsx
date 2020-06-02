@@ -64,6 +64,27 @@ export default class TelemetrySelectionTable extends PureComponent {
      * }
      */
     initialData: PropTypes.string,
+
+    /** Dictionary with the intially selected telemetries and events and their health functions.
+     * Must have this structure:
+     *
+     * {
+     *   "<component.salindex.topic>": {
+     *     <parameter_name>: healthfunction,
+     *     ...
+     *   }
+     * }
+     */
+    currentConfig: PropTypes.object,
+
+    /** Function to call when adding or removing a row to the selection
+     * Must receive these arguments:
+     *
+     * - selected: true if the row is selected (changin to be selected), false of not
+     * - topic: string with the name of the topic
+     * - item: string with the name of the item within the topic
+     */
+    onRowSelection: PropTypes.func,
   };
 
   static defaultProps = {
