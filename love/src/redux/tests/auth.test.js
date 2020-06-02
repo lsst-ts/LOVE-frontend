@@ -6,11 +6,12 @@ import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 
 import { fetchToken, validateToken, logout, swapUser, getTokenFromStorage } from '../actions/auth';
-import { tokenStates } from '../reducers/auth';
+import { tokenStates, tokenSwapStates } from '../reducers/auth';
 import {
   getToken,
   getUsername,
   getTokenStatus,
+  getTokenSwapStatus,
   getPermCmdExec,
   getTaiToUtc,
   getServerTime,
@@ -253,6 +254,7 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(token).toEqual('new-token');
     expect(storedToken).toEqual('new-token');
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
+    expect(getTokenSwapStatus(store.getState())).toEqual(tokenSwapStates.RECEIVED);
   });
 
   it('Should keep token if swap credentials are incorrect', async () => {
@@ -274,5 +276,28 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(token).toEqual(initialToken);
     expect(storedToken).toEqual(initialToken);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.READ_FROM_STORAGE);
+    expect(getTokenSwapStatus(store.getState())).toEqual(tokenSwapStates.REJECTED);
+  });
+
+  it('Should keep token if server returns error', async () => {
+    // Arrange:
+    url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+    fetchMock.mock(
+      url,
+      {
+        status: 500,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    const initialToken = getToken(store.getState());
+    // Act:
+    await store.dispatch(swapUser('username', 'password'));
+    // Assert:
+    const token = getToken(store.getState());
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(token).toEqual(initialToken);
+    expect(storedToken).toEqual(initialToken);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.READ_FROM_STORAGE);
+    expect(getTokenSwapStatus(store.getState())).toEqual(tokenSwapStates.ERROR);
   });
 });

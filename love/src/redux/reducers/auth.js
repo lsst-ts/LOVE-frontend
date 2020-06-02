@@ -130,12 +130,12 @@ export default function(state = initialState, action) {
     case REJECT_SWAP_TOKEN:
       return {
         ...state,
-        swapStatus: tokenSwapStates.ERROR
+        swapStatus: tokenSwapStates.REJECTED
       }
     case MARK_ERROR_SWAP_TOKEN:
       return {
         ...state,
-        swapStatus: tokenSwapStates.REJECTED
+        swapStatus: tokenSwapStates.ERROR
       }
     default:
       return state;
