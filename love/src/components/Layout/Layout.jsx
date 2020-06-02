@@ -420,7 +420,6 @@ class Layout extends Component {
 
   render() {
     const filteredAlarms = this.props.alarms.filter((a) => isActive(a) && !isAcknowledged(a) && !isMuted(a));
-    console.log(this.props.tokenSwapStatus);
     return (
       <>
         <AlarmAudioContainer />
