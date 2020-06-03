@@ -1,0 +1,14 @@
+:root {
+  --scrollbar-width: 10px;
+}
+
+.container {
+  min-width: 500px;
+  min-height: 500px;
+}
+
+.list {
+  display: grid;
+  grid-template-rows: repeat(auto-fill, min-content);
+  grid-gap: 1em;
+}
