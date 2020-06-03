@@ -3,38 +3,63 @@ import ActionableTable from '../../GeneralPurpose/ActionableTable/ActionableTabl
 import styles from './TelemetrySelectionTable.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
+import ManagerInterface, { formatTimestamp } from '../../../Utils';
 
 const TelemetrySelectionTable = function (props) {
   const selectedRows = [];
+  const [topicsData, setTopicsData] = React.useState([]);
 
-  console.log(props);
+  React.useEffect(() => {
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      let tableData = [];
+      for (const [cscKey, cscValue] of Object.entries(data)) {
+        for (const category of ['event', 'telemetry']) {
+          const categoryKey = `${category}_data`;
+          for (const [streamKey, streamValue] of Object.entries(cscValue[categoryKey])) {
+            for (const [paramKey, paramValue] of Object.entries(streamValue)) {
+              tableData.push({
+                category,
+                component: cscKey,
+                stream: streamKey,
+                param_name: paramKey,
+                data_type: paramValue?.type_name,
+                units: paramValue?.units,
+              });
+            }
+          }
+        }
+      }
+      setTopicsData(tableData);
+    });
+  }, []);
+
+  // {
+  //   "category": "event",
+  //   "component": "Watcher",
+  //   "stream": "alarm",
+  //   "param_name": "WatcherID",
+  //   "data_type": "long",
+  //   "units": null
+  // }
+
   const headers = [
     {
-      title: 'Position',
-      type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      title: 'Component',
+      field: 'component',
     },
     {
-      field: 'description',
-      title: 'Descr.',
-      type: 'string',
+      title: 'Topic',
+      field: 'stream',
+    },
+    {
+      title: 'Item',
+      field: 'param_name',
     },
   ];
 
-  const data = new Array(1).fill(1).flatMap(() => [
-    { position: NaN, description: 'asdf', level: 0 },
-    { position: 1.5, description: 'bsdf', level: 1 },
-    { position: 2.2, description: 'csdf', level: 2 },
-    { position: 3.213, description: 'dsdf', level: 23 },
-    { position: 5.23, description: 'esdf', level: 3 },
-    { position: 3.23, description: 'fsdf', level: 4 },
-  ]);
-
   return (
     <>
-      <div className={styles.telemetrySelectionTableWrapper}>
-        <ActionableTable data={data} headers={headers} />
-      </div>
+      <ActionableTable data={topicsData} headers={headers} paginationOptions={[10, 15, 25, 50]}/>
       <div className={styles.selectionContainer}>
         TELEMETRIES:
         <span className={styles.selectionList}>
