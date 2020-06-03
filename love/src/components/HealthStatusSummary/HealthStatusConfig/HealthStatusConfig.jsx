@@ -101,14 +101,14 @@ export default class HealthStatusConfig extends PureComponent {
   constructor() {
     super();
     this.state = {
-      currentConfig: {},
+      newTopics: {},
       hidden: {},
       tab: TABS.TABLE,
     };
   }
 
   componentDidMount() {
-    this.setState({ currentConfig: { ...this.props.initialData } });
+    this.setState({ newTopics: JSON.parse(this.props.initialData) });
   }
 
   changeTab(tab) {
@@ -117,7 +117,7 @@ export default class HealthStatusConfig extends PureComponent {
 
   onTableChange = (selectedTopics, onClick) => {
     console.log('selectedTopics: ', selectedTopics);
-    this.setState({ currentConfig: selectedTopics, tab: TABS.FUNCTIONS });
+    this.setState({ newTopics: selectedTopics, tab: TABS.FUNCTIONS });
   };
 
   onFunctionsChange = (newData) => {
@@ -161,10 +161,11 @@ export default class HealthStatusConfig extends PureComponent {
               telemetries={this.props.telemetries}
               showSelection={this.props.showSelection}
               initialData={this.props.initialData}
+              topics={this.state.newTopics}
             />
           </div>
           <div className={this.state.tab === TABS.FUNCTIONS ? styles.content : styles.hidden}>
-            <FunctionConfig topics={this.props.healthFunctions} onChange={this.onFunctionsChange} />
+            <FunctionConfig topics={this.state.newTopics} onChange={this.onFunctionsChange} />
           </div>
         </div>
         <div className={styles.footer}>

@@ -29,6 +29,15 @@ export default class FunctionConfig extends PureComponent {
   }
 
   render() {
-    return <div className={styles.container}>Blah</div>;
+    console.log('topics: ', this.props.topics);
+    return (
+      <div className={styles.container}>
+        {Object.entries(this.props.topics).map(([topic, data], _) => (
+          <div className={styles.topic}>
+            <div className={styles.topicName}>{topic}</div>
+          </div>
+        ))}
+      </div>
+    );
   }
 }

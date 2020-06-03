@@ -75,7 +75,7 @@ export default class TelemetrySelectionTable extends PureComponent {
      *   }
      * }
      */
-    currentConfig: PropTypes.object,
+    topics: PropTypes.object,
 
     /** Function to call when adding or removing a row to the selection
      * Must receive these arguments:
