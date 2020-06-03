@@ -1,0 +1,9 @@
+:root {
+  --scrollbar-width: 10px;
+}
+
+.conatiner {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, min-content);
+  grid-gap: 1em;
+}
