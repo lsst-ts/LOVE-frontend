@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Button from '../../GeneralPurpose/Button/Button';
 import MuteIcon from '../../icons/MuteIcon/MuteIcon';
 import styles from './HealthStatusConfig.module.css';
-import TelemetrySelectionTable from '../TelemetrySelectionTable/TelemetrySelectionTable';
+import TelemetrySelectionTable from '../TelemetrySelectionTable/TelemetrySelectionTable2';
 import FunctionConfig from '../FunctionConfig/FunctionConfig';
 
 const HEALTH_STATUS_CODES = {
