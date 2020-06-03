@@ -40,7 +40,7 @@ const defaultColumnFilter = (filterString, value, row) => {
  *
  * It is built with <a href="/#/API?id=simpletable">SimpleTable<a/>
  */
-const ActionableTable = function ({ data, headers }) {
+const ActionableTable = function ({ data, headers, ...otherProps }) {
   const [activeFilterDialogIndex, setActiveFilterDialogIndex] = React.useState(null);
   const [filters, setFilters] = React.useState({});
   const [sortDirections, setSortDirections] = React.useState({});
@@ -153,7 +153,7 @@ const ActionableTable = function ({ data, headers }) {
     return newData;
   }, [data, sortingColumn, sortDirections, filters]);
 
-  return <PaginatedTable data={transformedData} headers={newHeaders} />;
+  return <PaginatedTable data={transformedData} headers={newHeaders} {...otherProps}/>;
 };
 
 ActionableTable.propTypes = {
@@ -197,6 +197,8 @@ ActionableTable.propTypes = {
   ),
   /** Rows to be rendered in the table */
   data: PropTypes.arrayOf(PropTypes.object),
+  /** Available pagination options for the dropdown */
+  paginationOptions: PropTypes.arrayOf(PropTypes.number)
 };
 
 export default ActionableTable;

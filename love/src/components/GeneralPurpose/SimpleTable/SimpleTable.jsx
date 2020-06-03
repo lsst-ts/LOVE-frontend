@@ -14,8 +14,8 @@ function SimpleTable({ headers, data }) {
     <Table>
       <Thead>
         <Tr>
-          {headers.map((header) => (
-            <Th key={header.field} className={header.className}>{header.title}</Th>
+          {headers.map((header, index) => (
+            <Th key={`header-${index}`} className={header.className}>{header.title}</Th>
           ))}
         </Tr>
       </Thead>
@@ -23,11 +23,11 @@ function SimpleTable({ headers, data }) {
         {data.map((row, index) => {
           return (
             <Tr key={index}>
-              {headers.map((header) => {
+              {headers.map((header, headerIndex) => {
                 const render = header.render || defaultRenderMethod;
                 const value = row[header.field];
                 return (
-                  <Td key={header.field} isNumber={header.type === 'number'} className={header.className}>
+                  <Td key={headerIndex} isNumber={header.type === 'number'} className={header.className}>
                     {render(value)}
                   </Td>
                 );
