@@ -6,6 +6,7 @@
   display: inline-flex;
   flex-flow: row wrap;
   justify-content: stretch;
+  align-items: stretch;
 }
 
 .input {
@@ -31,11 +32,8 @@
   color: var(--secondary-font-color);
 }
 
-.button1 {
+.button {
   margin-right: 0.5em;
   margin-bottom: 0.5em;
-}
-
-.button2 {
-  margin-bottom: 0.5em;
+  height: 2.5em;
 }

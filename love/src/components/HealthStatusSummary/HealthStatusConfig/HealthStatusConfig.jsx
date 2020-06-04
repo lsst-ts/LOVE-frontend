@@ -61,9 +61,12 @@ export default class HealthStatusConfig extends PureComponent {
   onEntryChange = (name, inputs, funcBody, index) => {
     const newConfig = [...this.state.currentConfig];
     newConfig[index] = { name, inputs, funcBody };
-    this.setState({
-      currentConfig: newConfig,
-    });
+    this.setState({ currentConfig: newConfig });
+  };
+
+  onEntryRemove = (index) => {
+    const newConfig = this.state.currentConfig.filter((_el, i) => i !== index);
+    this.setState({ currentConfig: newConfig });
   };
 
   render() {
@@ -80,6 +83,7 @@ export default class HealthStatusConfig extends PureComponent {
                 funcBody={entry.funcBody}
                 optionsTree={this.state.optionsTree}
                 onChange={(name, inputs, funcBody) => this.onEntryChange(name, inputs, funcBody, index)}
+                onRemove={() => this.onEntryRemove(index)}
               />
             );
           })}

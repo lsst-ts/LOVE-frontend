@@ -49,6 +49,11 @@ export default class HSCEntry extends PureComponent {
      */
     onChange: PropTypes.func,
     /**
+     * Callback to call when removing the input, should have the following arguments:
+     * - index
+     */
+    onRemove: PropTypes.func,
+    /**
      * Dictionary containing the strtucture for the options of the dropdown inputs
      */
     optionsTree: PropTypes.object,
@@ -59,6 +64,7 @@ export default class HSCEntry extends PureComponent {
     name: null,
     funcBody: null,
     onChange: (name, inputs, funcBody) => {},
+    onRemove: null,
   };
 
   onNameChange = (name) => {
@@ -86,12 +92,17 @@ export default class HSCEntry extends PureComponent {
     const nextIndex = this.props.inputs.length;
     return (
       <div className={styles.container}>
-        <Input
-          className={styles.input}
-          placeholder="Insert a name for the Health Status"
-          value={this.props.name || ''}
-          onChange={(ev) => this.props.onNameChange(ev.target?.value)}
-        />
+        <div className={styles.firstRow}>
+          <Input
+            className={styles.input}
+            placeholder="Insert a name for the Health Status"
+            value={this.props.name || ''}
+            onChange={(ev) => this.props.onNameChange(ev.target?.value)}
+          />
+          <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
+            Remove
+          </Button>
+        </div>
         {this.props.inputs.map((input, index) => (
           <HSCInput
             key={index}

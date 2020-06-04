@@ -5,16 +5,30 @@
 .container {
   display: grid;
   grid-auto-rows: min-content;
-  grid-gap: 1em;
+  grid-gap: 0.5em;
   padding: 1em;
   border: 1px solid var(--secondary-font-dimmed-color);
   min-height: 100px;
 }
 
-.input {
+.firstRow {
+  display: inline-flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: stretch;
+  margin-bottom: 0.5em;
+}
+
+.firstRow .input {
+  min-width: 10ch;
+  max-width: 50ch;
   background-color: var(--second-secondary-background-color);
   color: var(--base-font-color);
   border: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.firstRow .button {
+  margin-right: 0.5em;
 }
 
 .input::placeholder {
