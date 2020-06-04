@@ -42,6 +42,11 @@ export default class HSCInput extends PureComponent {
      */
     onRemove: PropTypes.func,
     /**
+     * Callback to call when clicking the "Get Name" button, should have the following arguments:
+     * - name: <string>
+     */
+    onGetName: PropTypes.func,
+    /**
      * Dictionary containing the strtucture for the options of the  dropdown inputs
      */
     optionsTree: PropTypes.object,
@@ -51,6 +56,7 @@ export default class HSCInput extends PureComponent {
     input: null,
     onChange: (input) => {},
     onRemove: null,
+    onGetName: null,
   };
 
   onSelectChange = (value, key) => {
@@ -102,7 +108,7 @@ export default class HSCInput extends PureComponent {
         <Input
           className={styles.input}
           type="number"
-          value={input?.salindex}
+          value={input?.salindex || ''}
           placeholder="salindex"
           onChange={(ev) => this.onSelectChange(parseInt(ev.target.value), 'salindex')}
         />
@@ -120,8 +126,11 @@ export default class HSCInput extends PureComponent {
           placeholder="Select an item"
           onChange={(selection) => this.onSelectChange(selection.value, 'item')}
         />
+        <Button onClick={this.props.onGetName} disabled={this.props.onGetName === null}>
+          Use as Name
+        </Button>
         <Button onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
-          -
+          Remove
         </Button>
       </div>
     );

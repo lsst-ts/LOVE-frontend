@@ -4,8 +4,8 @@
 
 .container {
   display: inline-grid;
-  grid-template-columns: 20ch 20ch 9ch 20ch 20ch 3ch;
-  grid-gap: 1em;
+  grid-template-columns: 20ch 20ch 9ch 20ch 20ch 11ch 8ch;
+  grid-gap: 0.5em;
 }
 
 .input {

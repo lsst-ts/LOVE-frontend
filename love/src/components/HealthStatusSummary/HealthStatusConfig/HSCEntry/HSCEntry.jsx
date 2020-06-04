@@ -5,6 +5,7 @@ import HSCInput from './HSCInput/HSCInput';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../../icons/GearIcon/GearIcon';
 import Button from '../../../GeneralPurpose/Button/Button';
+import Input from '../../../GeneralPurpose/Input/Input';
 import Select from '../../../GeneralPurpose/Select/Select';
 import { getFakeUnits, formatTimestamp } from '../../../../Utils';
 
@@ -13,10 +14,6 @@ import { getFakeUnits, formatTimestamp } from '../../../../Utils';
  */
 export default class HSCEntry extends PureComponent {
   static propTypes = {
-    /**
-     * Index of the entry within the list of entries
-     */
-    index: PropTypes.number,
     /**
      * Name of the entry
      */
@@ -46,6 +43,7 @@ export default class HSCEntry extends PureComponent {
     funcBody: PropTypes.string,
     /**
      * Callback to call when making a change, should have the followinf arguments:
+     * - name
      * - inputs
      * - funcBody
      */
@@ -57,34 +55,50 @@ export default class HSCEntry extends PureComponent {
   };
 
   static defaultProps = {
-    index: -1,
     inputs: [],
     name: null,
     funcBody: null,
-    onChange: (inputs, funcBody) => {},
+    onChange: (name, inputs, funcBody) => {},
+  };
+
+  onNameChange = (name) => {
+    this.props.onChange(name, this.props.input, this.props.funcBody);
   };
 
   onInputChange = (input, index) => {
     const newInputs = [...this.props.inputs];
     newInputs[index] = input;
-    this.props.onChange(newInputs, this.props.funcBody);
+    this.props.onChange(this.props.name, newInputs, this.props.funcBody);
+  };
+
+  onInputGetName = (input) => {
+    const { category, csc, salindex, topic, item } = input;
+    const newName = `${category}-${csc}-${salindex}-${topic}-${item}`;
+    this.props.onChange(newName, this.props.inputs, this.props.funcBody);
   };
 
   onInputRemove = (index) => {
     const newInputs = this.props.inputs.filter((_el, i) => i !== index);
-    this.props.onChange(newInputs, this.props.funcBody);
+    this.props.onChange(this.props.name, newInputs, this.props.funcBody);
   };
 
   render() {
     const nextIndex = this.props.inputs.length;
     return (
       <div className={styles.container}>
+        <Input
+          className={styles.input}
+          placeholder="Insert a name for the Health Status"
+          value={this.props.name || ''}
+          onChange={(ev) => this.props.onNameChange(ev.target?.value)}
+        />
         {this.props.inputs.map((input, index) => (
           <HSCInput
             key={index}
             input={input}
             onChange={(input) => this.onInputChange(input, index)}
             onRemove={() => this.onInputRemove(index)}
+            onGetName={() => this.onInputGetName(input)}
             optionsTree={this.props.optionsTree}
           />
         ))}
