@@ -2,8 +2,11 @@
   --scrollbar-width: 10px;
 }
 
-.conatiner {
+.container {
   display: grid;
-  grid-template-rows: repeat(auto-fill, min-content);
+  grid-auto-rows: min-content;
   grid-gap: 1em;
+  padding: 1em;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  min-height: 100px;
 }

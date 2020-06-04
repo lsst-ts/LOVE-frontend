@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HSCEntry.module.css';
+import HSCInput from './HSCInput/HSCInput';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../../icons/GearIcon/GearIcon';
 import Button from '../../../GeneralPurpose/Button/Button';
@@ -67,14 +68,15 @@ export default class HSCEntry extends PureComponent {
     const { index, inputs, name, funcBody } = this.props;
     return (
       <div className={styles.container}>
-        <div className={styles.input}>
+        <HSCInput onChange={this.onSelectChange} />
+        {/* <div className={styles.input}>
           <Select
             options={['event', 'telemetry']}
             value={inputs[0]}
             placeholder="Select a category"
             onChange={this.onSelectChange}
           />
-        </div>
+        </div> */}
       </div>
     );
   }

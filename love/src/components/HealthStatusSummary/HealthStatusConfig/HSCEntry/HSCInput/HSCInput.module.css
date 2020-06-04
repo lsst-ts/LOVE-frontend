@@ -2,8 +2,22 @@
   --scrollbar-width: 10px;
 }
 
-.conatiner {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, min-content);
+.container {
+  display: inline-grid;
+  grid-template-columns: 20ch 20ch 9ch 20ch 20ch;
   grid-gap: 1em;
+}
+
+.input {
+  background-color: var(--second-secondary-background-color);
+  color: var(--base-font-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+}
+
+.input::placeholder {
+  color: var(--secondary-font-color);
+}
+
+.select::placeholder {
+  color: var(--secondary-font-color);
 }
