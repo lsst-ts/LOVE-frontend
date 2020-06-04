@@ -60,23 +60,14 @@ export default class HSCEntry extends PureComponent {
     onChange: (inputs, funcBody) => {},
   };
 
-  onSelectChange = (selection) => {
-    this.props.onChange([selection.value], this.props.funcBody);
+  onInputChange = (input) => {
+    this.props.onChange([input], this.props.funcBody);
   };
 
   render() {
-    const { index, inputs, name, funcBody } = this.props;
     return (
       <div className={styles.container}>
-        <HSCInput onChange={this.onSelectChange} />
-        {/* <div className={styles.input}>
-          <Select
-            options={['event', 'telemetry']}
-            value={inputs[0]}
-            placeholder="Select a category"
-            onChange={this.onSelectChange}
-          />
-        </div> */}
+        <HSCInput input={this.props.inputs[0]} onChange={this.onInputChange} />
       </div>
     );
   }

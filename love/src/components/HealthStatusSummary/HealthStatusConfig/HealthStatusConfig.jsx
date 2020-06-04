@@ -79,7 +79,11 @@ export default class HealthStatusConfig extends PureComponent {
               />
             );
           })}
-          <HSCEntry onChange={(inputs, funcBody) => this.onEntryChange(inputs, funcBody, nextIndex)} />
+          <HSCEntry
+            key={nextIndex}
+            className={styles.empty}
+            onChange={(inputs, funcBody) => this.onEntryChange(inputs, funcBody, nextIndex)}
+          />
         </div>
       </div>
     );

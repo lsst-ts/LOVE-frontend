@@ -48,9 +48,16 @@ export default class HSCInput extends PureComponent {
   };
 
   onSelectChange = (value, key) => {
-    const newInput = { ...this.props.input, value };
+    const newInput = { ...this.props.input };
     newInput[key] = value;
     this.props.onChange(newInput);
+  };
+
+  onSalindexInputChange = (ev) => {
+    const salindex = parseInt(ev.target.value);
+    if (salindex) {
+      this.onSelectChange(salindex, 'salindex');
+    }
   };
 
   render() {
@@ -76,7 +83,7 @@ export default class HSCInput extends PureComponent {
           type="number"
           value={input?.salindex}
           placeholder="salindex"
-          onChange={(ev) => this.onSelectChange(ev.target.value, 'salindex')}
+          onChange={(ev) => this.onSelectChange(parseInt(ev.target.value), 'salindex')}
         />
         <Select
           className={styles.select}

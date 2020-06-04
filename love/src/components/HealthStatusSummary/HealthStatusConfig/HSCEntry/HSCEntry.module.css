@@ -10,3 +10,7 @@
   border: 1px solid var(--secondary-font-dimmed-color);
   min-height: 100px;
 }
+
+.empty {
+  background: red;
+}
