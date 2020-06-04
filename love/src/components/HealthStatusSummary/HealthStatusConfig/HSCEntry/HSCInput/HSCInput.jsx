@@ -54,26 +54,47 @@ export default class HSCInput extends PureComponent {
   };
 
   onSelectChange = (value, key) => {
+    if (this.props.input && this.props.input[key] === value) {
+      return;
+    }
     const newInput = { ...this.props.input };
     newInput[key] = value;
+    if (key === 'csc') {
+      newInput['topic'] = null;
+      newInput['item'] = null;
+    } else if (key === 'topic') {
+      newInput['item'] = null;
+    }
     this.props.onChange(newInput);
   };
 
   render() {
     const input = this.props.input;
-    console.log('options: ', this.props.optionsTree);
+    const optionsTree = this.props.optionsTree;
+    const categoryOptions = ['event', 'telemetry'];
+    let cscOptions = [];
+    let topicOptions = [];
+    let itemOptions = [];
+    if (this.props.optionsTree) {
+      cscOptions = Object.keys(optionsTree);
+      if (this.props.input) {
+        const { category, csc, salindex, topic, item } = this.props.input;
+        topicOptions = csc && category ? Object.keys(optionsTree[csc][`${category}_data`]) : [];
+        itemOptions = topic ? Object.keys(optionsTree[csc][`${category}_data`][topic]) : [];
+      }
+    }
     return (
       <div className={styles.container}>
         <Select
           className={styles.select}
-          options={['event', 'telemetry']}
+          options={categoryOptions}
           value={input?.category}
           placeholder="Select a category"
           onChange={(selection) => this.onSelectChange(selection.value, 'category')}
         />
         <Select
           className={styles.select}
-          options={['ATDome', 'ATMount']}
+          options={cscOptions}
           value={input?.csc}
           placeholder="Select a CSC"
           onChange={(selection) => this.onSelectChange(selection.value, 'csc')}
@@ -87,14 +108,14 @@ export default class HSCInput extends PureComponent {
         />
         <Select
           className={styles.select}
-          options={['position', 'asdasd']}
+          options={topicOptions}
           value={input?.topic}
           placeholder="Select a topic"
           onChange={(selection) => this.onSelectChange(selection.value, 'topic')}
         />
         <Select
           className={styles.select}
-          options={['position', 'asdasd']}
+          options={itemOptions}
           value={input?.item}
           placeholder="Select an item"
           onChange={(selection) => this.onSelectChange(selection.value, 'item')}
