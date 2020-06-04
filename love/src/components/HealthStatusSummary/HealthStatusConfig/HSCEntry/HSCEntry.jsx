@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import AceEditor from 'react-ace';
+import 'brace/mode/javascript';
+import 'brace/theme/solarized_dark';
 import styles from './HSCEntry.module.css';
 import HSCInput from './HSCInput/HSCInput';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
-import GearIcon from '../../../icons/GearIcon/GearIcon';
 import Button from '../../../GeneralPurpose/Button/Button';
 import Input from '../../../GeneralPurpose/Input/Input';
-import Select from '../../../GeneralPurpose/Select/Select';
-import { getFakeUnits, formatTimestamp } from '../../../../Utils';
 
 /**
  * Component to configure the Health Status Summary
@@ -88,6 +87,13 @@ export default class HSCEntry extends PureComponent {
     this.props.onChange(this.props.name, newInputs, this.props.funcBody);
   };
 
+  onEditorChange = (newValue) => {};
+
+  getFunctionHeader = () => {
+    const vars = this.props.inputs.map((input) => input.item);
+    return `(${vars.join(', ')}) = > {`;
+  };
+
   render() {
     const nextIndex = this.props.inputs.length;
     return (
@@ -103,6 +109,7 @@ export default class HSCEntry extends PureComponent {
             Remove
           </Button>
         </div>
+
         {this.props.inputs.map((input, index) => (
           <HSCInput
             key={index}
@@ -118,6 +125,19 @@ export default class HSCEntry extends PureComponent {
           onChange={(input) => this.onInputChange(input, nextIndex)}
           optionsTree={this.props.optionsTree}
         />
+
+        <div>Function: </div>
+        <div>{this.getFunctionHeader()}</div>
+        <AceEditor
+          mode="javascript"
+          className={styles.editor}
+          theme="solarized_dark"
+          name="UNIQUE_ID_OF_DIV"
+          // onChange={this.onEditorChange}
+          width={'100%'}
+          // value={this.props.funcBody}
+        />
+        <div>{'}'}</div>
       </div>
     );
   }
