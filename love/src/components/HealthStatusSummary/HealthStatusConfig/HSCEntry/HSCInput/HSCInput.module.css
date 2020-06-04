@@ -4,7 +4,7 @@
 
 .container {
   display: inline-grid;
-  grid-template-columns: 20ch 20ch 9ch 20ch 20ch;
+  grid-template-columns: 20ch 20ch 9ch 20ch 20ch 3ch;
   grid-gap: 1em;
 }
 

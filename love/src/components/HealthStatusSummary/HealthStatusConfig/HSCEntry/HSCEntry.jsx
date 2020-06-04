@@ -66,12 +66,22 @@ export default class HSCEntry extends PureComponent {
     this.props.onChange(newInputs, this.props.funcBody);
   };
 
+  onInputRemove = (index) => {
+    const newInputs = this.props.inputs.filter((_el, i) => i !== index);
+    this.props.onChange(newInputs, this.props.funcBody);
+  };
+
   render() {
     const nextIndex = this.props.inputs.length;
     return (
       <div className={styles.container}>
         {this.props.inputs.map((input, index) => (
-          <HSCInput key={index} input={input} onChange={(input) => this.onInputChange(input, index)} />
+          <HSCInput
+            key={index}
+            input={input}
+            onChange={(input) => this.onInputChange(input, index)}
+            onRemove={() => this.onInputRemove(index)}
+          />
         ))}
         <HSCInput key={nextIndex} onChange={(input) => this.onInputChange(input, nextIndex)} />
       </div>

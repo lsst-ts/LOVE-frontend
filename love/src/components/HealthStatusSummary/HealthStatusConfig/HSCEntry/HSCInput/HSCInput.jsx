@@ -37,6 +37,11 @@ export default class HSCInput extends PureComponent {
      */
     onChange: PropTypes.func,
     /**
+     * Callback to call when removing the input, should have the following arguments:
+     * - index
+     */
+    onRemove: PropTypes.func,
+    /**
      * Dictionary containing the strtucture for the options of the input
      */
     optionsTree: PropTypes.object,
@@ -45,19 +50,13 @@ export default class HSCInput extends PureComponent {
   static defaultProps = {
     input: null,
     onChange: (input) => {},
+    onRemove: null,
   };
 
   onSelectChange = (value, key) => {
     const newInput = { ...this.props.input };
     newInput[key] = value;
     this.props.onChange(newInput);
-  };
-
-  onSalindexInputChange = (ev) => {
-    const salindex = parseInt(ev.target.value);
-    if (salindex) {
-      this.onSelectChange(salindex, 'salindex');
-    }
   };
 
   render() {
@@ -99,6 +98,9 @@ export default class HSCInput extends PureComponent {
           placeholder="Select an item"
           onChange={(selection) => this.onSelectChange(selection.value, 'item')}
         />
+        <Button onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
+          -
+        </Button>
       </div>
     );
   }
