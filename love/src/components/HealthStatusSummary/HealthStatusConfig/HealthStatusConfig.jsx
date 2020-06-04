@@ -5,7 +5,7 @@ import HSCEntry from './HSCEntry/HSCEntry';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
-import { getFakeUnits, formatTimestamp } from '../../../Utils';
+import ManagerInterface, { getFakeUnits, formatTimestamp } from '../../../Utils';
 
 const HEALTH_STATUS_CODES = {
   0: 'Undefined',
@@ -47,11 +47,15 @@ export default class HealthStatusConfig extends PureComponent {
     super();
     this.state = {
       currentConfig: [],
+      optionsTree: null,
     };
   }
 
   componentDidMount = () => {
     console.log('initialData: ', this.props.initialData);
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      this.setState({ optionsTree: data });
+    });
   };
 
   onEntryChange = (inputs, funcBody, index) => {
@@ -75,6 +79,7 @@ export default class HealthStatusConfig extends PureComponent {
                 index={index}
                 inputs={entry.inputs}
                 funcBody={entry.funcBody}
+                optionsTree={this.state.optionsTree}
                 onChange={(inputs, funcBody) => this.onEntryChange(inputs, funcBody, index)}
               />
             );
@@ -82,6 +87,7 @@ export default class HealthStatusConfig extends PureComponent {
           <HSCEntry
             key={nextIndex}
             className={styles.empty}
+            optionsTree={this.state.optionsTree}
             onChange={(inputs, funcBody) => this.onEntryChange(inputs, funcBody, nextIndex)}
           />
         </div>

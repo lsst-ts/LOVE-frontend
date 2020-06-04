@@ -50,6 +50,10 @@ export default class HSCEntry extends PureComponent {
      * - funcBody
      */
     onChange: PropTypes.func,
+    /**
+     * Dictionary containing the strtucture for the options of the dropdown inputs
+     */
+    optionsTree: PropTypes.object,
   };
 
   static defaultProps = {
@@ -81,9 +85,14 @@ export default class HSCEntry extends PureComponent {
             input={input}
             onChange={(input) => this.onInputChange(input, index)}
             onRemove={() => this.onInputRemove(index)}
+            optionsTree={this.props.optionsTree}
           />
         ))}
-        <HSCInput key={nextIndex} onChange={(input) => this.onInputChange(input, nextIndex)} />
+        <HSCInput
+          key={nextIndex}
+          onChange={(input) => this.onInputChange(input, nextIndex)}
+          optionsTree={this.props.optionsTree}
+        />
       </div>
     );
   }

@@ -42,7 +42,7 @@ export default class HSCInput extends PureComponent {
      */
     onRemove: PropTypes.func,
     /**
-     * Dictionary containing the strtucture for the options of the input
+     * Dictionary containing the strtucture for the options of the  dropdown inputs
      */
     optionsTree: PropTypes.object,
   };
@@ -61,6 +61,7 @@ export default class HSCInput extends PureComponent {
 
   render() {
     const input = this.props.input;
+    console.log('options: ', this.props.optionsTree);
     return (
       <div className={styles.container}>
         <Select
