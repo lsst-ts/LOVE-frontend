@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import * as CameraUtils from './CameraUtils';
 import styles from './GenericCamera.module.css';
+import HealpixOverlay from './HealpixOverlay';
 
 export const schema = {
   description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
@@ -67,7 +68,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
         setContainerHeight(container.contentRect.height);
       });
 
-      observer.observe(canvasNode.parentNode);
+      observer.observe(canvasNode.parentNode.parentNode);
 
       return () => {
         observer.disconnect();
@@ -127,7 +128,6 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
     };
   }, [serverURL, canvasRef]);
 
-
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
     if (error !== null) return;
@@ -172,5 +172,15 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
     );
   }
 
-  return <canvas ref={onCanvasRefChange}></canvas>;
+  const imageAspectRatio = imageWidth / imageHeight;
+
+  return (
+    <div>
+      <HealpixOverlay
+        width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+        height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+      ></HealpixOverlay>
+      <canvas ref={onCanvasRefChange}></canvas>
+    </div>
+  );
 }
