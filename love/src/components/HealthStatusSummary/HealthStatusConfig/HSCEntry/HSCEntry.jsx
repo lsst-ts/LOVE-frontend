@@ -116,14 +116,14 @@ export default class HSCEntry extends PureComponent {
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
-          {/** DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER */}
           <Input
             className={styles.input}
             placeholder="Insert a name for the Health Status"
             value={this.props.name || ''}
-            onChange={(ev) => this.onNameChange(ev.target?.value)}
+            readOnly
+            // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
+            // onChange={(ev) => this.onNameChange(ev.target?.value)}
           />
-          {/* <div></div> */}
           <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
             Remove
           </Button>

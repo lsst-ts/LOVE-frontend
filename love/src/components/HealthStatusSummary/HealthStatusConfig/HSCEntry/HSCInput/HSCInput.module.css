@@ -7,7 +7,7 @@
   flex-flow: row wrap;
   justify-content: stretch;
   align-items: stretch;
-  font-size: 12px;
+  font-size: 0.75em;
 }
 
 .input {

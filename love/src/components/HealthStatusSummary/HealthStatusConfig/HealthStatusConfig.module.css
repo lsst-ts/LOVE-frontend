@@ -2,8 +2,21 @@
   --scrollbar-width: 10px;
 }
 
+.title {
+  font-size: 2em;
+  text-align: center;
+  margin-bottom: 0.5em;
+}
+
 .container {
-  min-height: 700px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
+.content {
+  height: 75vh;
+  overflow-x: hidden;
+  overflow-y: overlay;
 }
 
 .list {
@@ -19,4 +32,5 @@
   justify-content: center;
   padding: 1em 0;
   height: 2em;
+  width: 100%;
 }

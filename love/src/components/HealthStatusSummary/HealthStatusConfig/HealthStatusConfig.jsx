@@ -134,8 +134,9 @@ export default class HealthStatusConfig extends PureComponent {
   render() {
     const nextIndex = this.state.currentConfig.length;
     return (
-      <>
-        <div className={styles.container}>
+      <div className={styles.container}>
+        <div className={styles.title}>Topic Configuration</div>
+        <div className={styles.content}>
           <div className={styles.list}>
             {this.state.currentConfig.map((entry, index) => {
               return (
@@ -159,16 +160,19 @@ export default class HealthStatusConfig extends PureComponent {
           </div>
         </div>
         <div className={styles.footer}>
-          <>
-            <Button status="default" onClick={this.props.onCancel} className={styles.button}>
-              Cancel
-            </Button>
-            <Button status="primary" onClick={() => this.onApply()} className={styles.button}>
-              Apply
-            </Button>
-          </>
+          <Button status="default" onClick={this.props.onCancel} className={styles.button}>
+            Cancel
+          </Button>
+          <Button
+            status="primary"
+            onClick={() => this.onApply()}
+            className={styles.button}
+            disabled={!this.state.changed}
+          >
+            Apply
+          </Button>
         </div>
-      </>
+      </div>
     );
   }
 }
