@@ -96,7 +96,6 @@ export default class HSCEntry extends PureComponent {
     const vars = this.props.inputs.map((input) => input.item);
     const header = `(${vars.join(', ')}) = > {`;
     const preLines = HEALTH_STATUS_VARIABLES_DECLARATION.split(';').filter((line) => line.trim() !== '');
-    console.log('preLines:', preLines);
     return (
       <>
         {header}

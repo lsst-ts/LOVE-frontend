@@ -87,8 +87,9 @@ export default class HealthStatusSummary extends Component {
                           renderedValue = parameterValue.value.toFixed(4);
                         }
                       }
-
-                      const healthStatusCode = telemetryConfiguration[indexedComponentName][topic][parameterName]();
+                      const healthStatusCode = telemetryConfiguration[indexedComponentName][topic][parameterName](
+                        parameterValue?.value,
+                      );
                       return (
                         <div
                           key={`${indexedComponentName}${topic}${parameterName}`}

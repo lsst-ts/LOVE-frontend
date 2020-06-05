@@ -100,7 +100,7 @@ const HealthStatusSummaryContainer = ({
         '\n',
       );
       /* eslint-disable no-new-func*/
-      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function('value', code);
+      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function(parameterName, code);
     });
     return prevDict;
   }, {});
