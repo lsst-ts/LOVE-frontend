@@ -126,6 +126,7 @@ export default class HSCInput extends PureComponent {
           placeholder="Select an item"
           onChange={(selection) => this.onSelectChange(selection.value, 'item')}
         />
+        {/** DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER */}
         {/* <Button className={styles.button} onClick={this.props.onGetName} disabled={this.props.onGetName === null}>
           Use as Name
         </Button>

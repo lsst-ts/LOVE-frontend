@@ -108,11 +108,15 @@ export default class HSCEntry extends PureComponent {
 
   render() {
     const nextIndex = this.props.inputs.length;
+
+    // Delete the following 2 lines when going back to multiple inputs:
     const input = this.props.inputs[0];
     const index = 0;
+
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
+          {/** DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER */}
           {/* <Input
             className={styles.input}
             placeholder="Insert a name for the Health Status"
@@ -125,6 +129,7 @@ export default class HSCEntry extends PureComponent {
           </Button>
         </div>
 
+        {/** DELETE THE FOLLOWING ELEMENT AND UNCOMMENT WHAT IS BELOW (when goping back to multiple inputs) */}
         <HSCInput
           key={index}
           input={input}
@@ -134,6 +139,7 @@ export default class HSCEntry extends PureComponent {
           optionsTree={this.props.optionsTree}
         />
 
+        {/** DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER */}
         {/* {this.props.inputs.map((input, index) => (
           <HSCInput
             key={index}
