@@ -23,7 +23,7 @@ const healthStatusCodes = {
 const WIDTH_THRESHOLD = 480;
 export default class HealthStatusSummary extends Component {
   static defaultProps = {
-    telemetryConfiguration: {},
+    topicConfiguration: {},
     streams: undefined,
   };
 
@@ -54,11 +54,11 @@ export default class HealthStatusSummary extends Component {
     this.resizeObserver.disconnect();
   };
   render() {
-    const { telemetryConfiguration, streams } = this.props;
+    const { topicConfiguration, streams } = this.props;
     return (
       <div ref={this.containerRef} className={styles.container}>
-        {Object.keys(telemetryConfiguration).map((indexedComponentName) => {
-          const [component, salindex] = indexedComponentName.split('-');
+        {Object.keys(topicConfiguration).map((indexedComponentName) => {
+          const [category, component, salindex] = indexedComponentName.split('-');
           const componentName = `${component}${parseInt(salindex) === 0 ? '' : `.${salindex}`}`;
 
           return (
@@ -66,8 +66,8 @@ export default class HealthStatusSummary extends Component {
               <div className={styles.componentName} title={`CSC: ${componentName}`}>
                 {componentName}
               </div>
-              {Object.keys(telemetryConfiguration[indexedComponentName]).map((topic) => {
-                let timestamp = streams[`telemetry-${indexedComponentName}-${topic}`]?.private_rcvStamp;
+              {Object.keys(topicConfiguration[indexedComponentName]).map((topic) => {
+                let timestamp = streams[`${indexedComponentName}-${topic}`]?.private_rcvStamp;
                 timestamp = timestamp?.value !== undefined ? formatTimestamp(timestamp.value * 1000) : '-';
 
                 return (
@@ -77,8 +77,8 @@ export default class HealthStatusSummary extends Component {
                       <div className={styles.topicTimestamp}>{timestamp}</div>
                     </div>
                     <div className={styles.divider}></div>
-                    {Object.keys(telemetryConfiguration[indexedComponentName][topic]).map((parameterName) => {
-                      const parameterValue = streams[`telemetry-${indexedComponentName}-${topic}`]?.[parameterName];
+                    {Object.keys(topicConfiguration[indexedComponentName][topic]).map((parameterName) => {
+                      const parameterValue = streams[`${indexedComponentName}-${topic}`]?.[parameterName];
                       let renderedValue = '';
                       if (parameterValue?.value !== undefined) {
                         if (Array.isArray(parameterValue.value)) {
@@ -87,7 +87,7 @@ export default class HealthStatusSummary extends Component {
                           renderedValue = parameterValue.value.toFixed(4);
                         }
                       }
-                      const healthStatusCode = telemetryConfiguration[indexedComponentName][topic][parameterName](
+                      const healthStatusCode = topicConfiguration[indexedComponentName][topic][parameterName](
                         parameterValue?.value,
                       );
                       return (
