@@ -7,13 +7,14 @@
   flex-flow: row wrap;
   justify-content: stretch;
   align-items: stretch;
+  font-size: 12px;
 }
 
 .input {
   background-color: var(--second-secondary-background-color);
   color: var(--base-font-color);
   border: 1px solid var(--secondary-font-dimmed-color);
-  width: 9ch;
+  width: 10ch;
   margin-bottom: 0.5em;
   margin-right: 0.5em;
 }
@@ -23,9 +24,13 @@
 }
 
 .select {
-  width: 20ch;
+  width: 30ch;
   margin-right: 0.5em;
   margin-bottom: 0.5em;
+}
+
+.category {
+  width: 12ch;
 }
 
 .select::placeholder {

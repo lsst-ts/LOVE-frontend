@@ -55,6 +55,7 @@ export default class HealthStatusConfig extends PureComponent {
     const conf = this.dataToConf(this.props.initialData);
     console.log('initialData: ', this.props.initialData);
     console.log('conf: ', conf);
+    this.setState({ currentConfig: conf });
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
       this.setState({ optionsTree: data });
     });
@@ -65,18 +66,24 @@ export default class HealthStatusConfig extends PureComponent {
     const conf = [];
     for (const topicKey of Object.keys(dict)) {
       const topicData = dict[topicKey];
-      const [csc, salindex, topic] = topicKey.split('-');
+      let [category, csc, salindex, topic] = topicKey.split('-');
+      if (salindex !== null && salindex !== undefined) {
+        salindex = parseInt(salindex);
+      }
       for (const item of Object.keys(topicData)) {
         const funcBody = topicData[item];
         const name = `${topicKey}-${item}`;
         conf.push({
           name,
-          inputs: {
-            csc,
-            salindex,
-            topic,
-            item,
-          },
+          inputs: [
+            {
+              category,
+              csc,
+              salindex,
+              topic,
+              item,
+            },
+          ],
           funcBody,
         });
       }

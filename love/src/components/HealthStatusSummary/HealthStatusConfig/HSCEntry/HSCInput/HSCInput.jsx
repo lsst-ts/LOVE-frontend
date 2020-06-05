@@ -65,7 +65,7 @@ export default class HSCInput extends PureComponent {
     }
     const newInput = { ...this.props.input };
     newInput[key] = value;
-    if (key === 'csc') {
+    if (key === 'csc' || key === 'category') {
       newInput['topic'] = null;
       newInput['item'] = null;
     } else if (key === 'topic') {
@@ -92,7 +92,7 @@ export default class HSCInput extends PureComponent {
     return (
       <div className={styles.container}>
         <Select
-          className={styles.select}
+          className={[styles.select, styles.category].join(' ')}
           options={categoryOptions}
           value={input?.category}
           placeholder="Select a category"
