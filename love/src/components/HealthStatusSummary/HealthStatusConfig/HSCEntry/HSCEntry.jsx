@@ -103,7 +103,7 @@ export default class HSCEntry extends PureComponent {
             className={styles.input}
             placeholder="Insert a name for the Health Status"
             value={this.props.name || ''}
-            onChange={(ev) => this.props.onNameChange(ev.target?.value)}
+            onChange={(ev) => this.onNameChange(ev.target?.value)}
           />
           <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
             Remove
