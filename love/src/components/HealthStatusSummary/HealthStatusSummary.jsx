@@ -24,16 +24,16 @@ const WIDTH_THRESHOLD = 480;
 export default class HealthStatusSummary extends Component {
   static defaultProps = {
     telemetryConfiguration: {},
-    streams: undefined
+    streams: undefined,
   };
 
-  constructor(props){
+  constructor(props) {
     super(props);
     this.containerRef = React.createRef();
     this.resizeObserver = undefined;
     this.state = {
-      containerWidth: Infinity
-    }
+      containerWidth: Infinity,
+    };
   }
 
   componentDidMount = () => {
@@ -42,12 +42,11 @@ export default class HealthStatusSummary extends Component {
     this.resizeObserver = new ResizeObserver((entries) => {
       const container = entries[0];
       this.setState({
-        containerWidth: container.contentRect.width
-      })
+        containerWidth: container.contentRect.width,
+      });
     });
 
     this.resizeObserver.observe(this.containerRef.current.parentNode.parentNode);
-
   };
 
   componentWillUnmount = () => {
@@ -64,7 +63,9 @@ export default class HealthStatusSummary extends Component {
 
           return (
             <div key={indexedComponentName} className={styles.componentContainer}>
-              <div className={styles.componentName} title={`CSC: ${componentName}`}>{componentName}</div>
+              <div className={styles.componentName} title={`CSC: ${componentName}`}>
+                {componentName}
+              </div>
               {Object.keys(telemetryConfiguration[indexedComponentName]).map((topic) => {
                 let timestamp = streams[`telemetry-${indexedComponentName}-${topic}`]?.private_rcvStamp;
                 timestamp = timestamp?.value !== undefined ? formatTimestamp(timestamp.value * 1000) : '-';
@@ -94,13 +95,38 @@ export default class HealthStatusSummary extends Component {
                           className={styles.parameterContainer}
                           title={`Item: ${indexedComponentName}.${topic}.${parameterName}`}
                         >
-                          <div className={[styles.parameterName, this.state.containerWidth < WIDTH_THRESHOLD ? styles.trimmedLabel: ''].join(' ')}> {parameterName} </div>
+                          <div
+                            className={[
+                              styles.parameterName,
+                              this.state.containerWidth < WIDTH_THRESHOLD ? styles.trimmedLabel : '',
+                            ].join(' ')}
+                          >
+                            {' '}
+                            {parameterName}{' '}
+                          </div>
                           <div className={styles.healthStatus}>
-                            <div className={[styles.parameterValue, this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden: ''].join(' ')}> {renderedValue}</div>
-                            <div className={[styles.parameterUnits, this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden: ''].join(' ')}> {parameterValue?.units ?? ''}</div>
+                            <div
+                              className={[
+                                styles.parameterValue,
+                                this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden : '',
+                              ].join(' ')}
+                            >
+                              {' '}
+                              {renderedValue}
+                            </div>
+                            <div
+                              className={[
+                                styles.parameterUnits,
+                                this.state.containerWidth < WIDTH_THRESHOLD ? styles.hidden : '',
+                              ].join(' ')}
+                            >
+                              {' '}
+                              {parameterValue?.units ?? ''}
+                            </div>
                             <div className={styles.statusText}>
-                            <StatusText status={healthStatusCodes[healthStatusCode].toLowerCase()}>{healthStatusCodes[healthStatusCode]}</StatusText>
-
+                              <StatusText status={healthStatusCodes[healthStatusCode].toLowerCase()}>
+                                {healthStatusCodes[healthStatusCode]}
+                              </StatusText>
                             </div>
                           </div>
                         </div>

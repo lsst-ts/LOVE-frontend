@@ -34,3 +34,13 @@
 .input::placeholder {
   color: var(--secondary-font-color);
 }
+
+.funcHeader {
+  font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
+  font-size: 12px;
+}
+
+.funcHeader p {
+  margin: 0;
+  margin-left: 3.5em;
+}

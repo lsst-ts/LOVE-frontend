@@ -7,6 +7,7 @@ import styles from './HSCEntry.module.css';
 import HSCInput from './HSCInput/HSCInput';
 import Button from '../../../GeneralPurpose/Button/Button';
 import Input from '../../../GeneralPurpose/Input/Input';
+import { HEALTH_STATUS_VARIABLES_DECLARATION } from '../HealthStatusConfig';
 
 /**
  * Component to configure the Health Status Summary
@@ -93,7 +94,17 @@ export default class HSCEntry extends PureComponent {
 
   getFunctionHeader = () => {
     const vars = this.props.inputs.map((input) => input.item);
-    return `(${vars.join(', ')}) = > {`;
+    const header = `(${vars.join(', ')}) = > {`;
+    const preLines = HEALTH_STATUS_VARIABLES_DECLARATION.split(';').filter((line) => line.trim() !== '');
+    console.log('preLines:', preLines);
+    return (
+      <>
+        {header}
+        {preLines.map((line) => (
+          <p>{`${line};`}</p>
+        ))}
+      </>
+    );
   };
 
   render() {
@@ -129,7 +140,8 @@ export default class HSCEntry extends PureComponent {
         />
 
         <div>Function: </div>
-        <div>{this.getFunctionHeader()}</div>
+        <div className={styles.funcHeader}>{this.getFunctionHeader()}</div>
+
         <AceEditor
           mode="javascript"
           className={styles.editor}
@@ -141,7 +153,7 @@ export default class HSCEntry extends PureComponent {
           height={'100px'}
           value={this.props.funcBody || ''}
         />
-        <div>{'}'}</div>
+        <div className={styles.funcHeader}>{'}'}</div>
       </div>
     );
   }

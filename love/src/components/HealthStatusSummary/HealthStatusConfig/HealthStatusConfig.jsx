@@ -70,6 +70,7 @@ export default class HealthStatusConfig extends PureComponent {
   };
 
   render() {
+    console.log('currentConfig: ', this.state.currentConfig);
     const nextIndex = this.state.currentConfig.length;
     return (
       <div className={styles.container}>
