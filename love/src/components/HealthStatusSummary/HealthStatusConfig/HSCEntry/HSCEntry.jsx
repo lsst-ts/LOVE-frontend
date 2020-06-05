@@ -87,7 +87,9 @@ export default class HSCEntry extends PureComponent {
     this.props.onChange(this.props.name, newInputs, this.props.funcBody);
   };
 
-  onEditorChange = (newValue) => {};
+  onEditorChange = (funcBody) => {
+    this.props.onChange(this.props.name, this.props.inputs, funcBody);
+  };
 
   getFunctionHeader = () => {
     const vars = this.props.inputs.map((input) => input.item);
@@ -133,9 +135,11 @@ export default class HSCEntry extends PureComponent {
           className={styles.editor}
           theme="solarized_dark"
           name="UNIQUE_ID_OF_DIV"
-          // onChange={this.onEditorChange}
+          onChange={this.onEditorChange}
+          debounceChangePeriod={100}
           width={'100%'}
-          // value={this.props.funcBody}
+          height={'100px'}
+          value={this.props.funcBody || ''}
         />
         <div>{'}'}</div>
       </div>
