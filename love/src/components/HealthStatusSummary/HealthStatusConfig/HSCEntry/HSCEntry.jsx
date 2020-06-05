@@ -74,7 +74,9 @@ export default class HSCEntry extends PureComponent {
   onInputChange = (input, index) => {
     const newInputs = [...this.props.inputs];
     newInputs[index] = input;
-    this.props.onChange(this.props.name, newInputs, this.props.funcBody);
+    const { category, csc, salindex, topic, item } = input;
+    const newName = `${category}-${csc}-${salindex}-${topic}-${item}`;
+    this.props.onChange(newName, newInputs, this.props.funcBody);
   };
 
   onInputGetName = (input) => {
@@ -94,14 +96,12 @@ export default class HSCEntry extends PureComponent {
 
   getFunctionHeader = () => {
     const vars = this.props.inputs.map((input) => input.item);
-    const header = `(${vars.join(', ')}) = > {`;
+    const header = `(${vars.join(', ')}) => {`;
     const preLines = HEALTH_STATUS_VARIABLES_DECLARATION.split(';').filter((line) => line.trim() !== '');
     return (
       <>
         {header}
-        {preLines.map((line, index) => (
-          <p key={index}>{`${line};`}</p>
-        ))}
+        <p>{preLines.map((line, index) => `${line}; `)}</p>
       </>
     );
   };
@@ -117,13 +117,13 @@ export default class HSCEntry extends PureComponent {
       <div className={styles.container}>
         <div className={styles.firstRow}>
           {/** DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER */}
-          {/* <Input
+          <Input
             className={styles.input}
             placeholder="Insert a name for the Health Status"
             value={this.props.name || ''}
             onChange={(ev) => this.onNameChange(ev.target?.value)}
-          /> */}
-          <div></div>
+          />
+          {/* <div></div> */}
           <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
             Remove
           </Button>

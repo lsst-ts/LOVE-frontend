@@ -3,13 +3,20 @@
 }
 
 .container {
-  /* min-width: 700px; */
   min-height: 700px;
-  /* font-size: 12pt; */
 }
 
 .list {
   display: grid;
   grid-auto-rows: min-content;
   grid-gap: 1em;
+}
+
+.footer {
+  display: inline-grid;
+  grid-template-columns: minmax(14ch, 15ch) minmax(14ch, 15ch);
+  grid-gap: 5%;
+  justify-content: center;
+  padding: 1em 0;
+  height: 2em;
 }

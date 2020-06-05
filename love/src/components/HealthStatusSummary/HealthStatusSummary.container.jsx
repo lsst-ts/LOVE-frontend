@@ -32,7 +32,7 @@ export const schema = {
     },
     topicConfiguration: {
       type: 'object',
-      description: `Dictionary describing the telemetries to monitor
+      description: `Dictionary describing the telemetries and/or events to monitor
       and functions that can return an integer from 0 to 4 that represents
       a different health status level.
       

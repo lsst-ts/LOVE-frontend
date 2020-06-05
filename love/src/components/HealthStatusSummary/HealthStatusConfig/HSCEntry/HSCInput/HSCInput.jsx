@@ -95,7 +95,7 @@ export default class HSCInput extends PureComponent {
           className={[styles.select, styles.category].join(' ')}
           options={categoryOptions}
           value={input?.category}
-          placeholder="Select a category"
+          placeholder="Select category"
           onChange={(selection) => this.onSelectChange(selection.value, 'category')}
         />
         <Select
