@@ -3,6 +3,7 @@
 }
 
 .container {
+  background-color: var(--second-secondary-background-color);
   display: grid;
   grid-auto-rows: min-content;
   grid-gap: 0.5em;

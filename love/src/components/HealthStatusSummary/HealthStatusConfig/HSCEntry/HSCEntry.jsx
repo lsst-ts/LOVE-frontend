@@ -99,8 +99,8 @@ export default class HSCEntry extends PureComponent {
     return (
       <>
         {header}
-        {preLines.map((line) => (
-          <p>{`${line};`}</p>
+        {preLines.map((line, index) => (
+          <p key={index}>{`${line};`}</p>
         ))}
       </>
     );
@@ -108,21 +108,33 @@ export default class HSCEntry extends PureComponent {
 
   render() {
     const nextIndex = this.props.inputs.length;
+    const input = this.props.inputs[0];
+    const index = 0;
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
-          <Input
+          {/* <Input
             className={styles.input}
             placeholder="Insert a name for the Health Status"
             value={this.props.name || ''}
             onChange={(ev) => this.onNameChange(ev.target?.value)}
-          />
+          /> */}
+          <div></div>
           <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
             Remove
           </Button>
         </div>
 
-        {this.props.inputs.map((input, index) => (
+        <HSCInput
+          key={index}
+          input={input}
+          onChange={(input) => this.onInputChange(input, index)}
+          onRemove={null}
+          onGetName={input ? () => this.onInputGetName(input) : null}
+          optionsTree={this.props.optionsTree}
+        />
+
+        {/* {this.props.inputs.map((input, index) => (
           <HSCInput
             key={index}
             input={input}
@@ -136,7 +148,7 @@ export default class HSCEntry extends PureComponent {
           key={nextIndex}
           onChange={(input) => this.onInputChange(input, nextIndex)}
           optionsTree={this.props.optionsTree}
-        />
+        /> */}
 
         <div>Function: </div>
         <div className={styles.funcHeader}>{this.getFunctionHeader()}</div>
