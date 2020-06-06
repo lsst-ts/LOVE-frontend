@@ -1,8 +1,15 @@
 .input {
-    width: 100%;
-    box-sizing: border-box;
-    background: var(--base-font-color);
-    border: none;
-    border-radius: 3px;
-    padding: 0.4em;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--base-font-color);
+  border: none;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.input::placeholder {
+  font-family: inherit;
+  font-size: inherit;
 }

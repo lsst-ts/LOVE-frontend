@@ -1,0 +1,27 @@
+.path {
+  fill: var(--secondary-font-color);
+}
+
+.checked .circle {
+  opacity: 0.2;
+}
+
+.checked .path {
+  fill: #00a370;
+}
+
+.checked .polyline {
+  fill: none;
+  stroke: #00a370;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+}
+
+.unckecked .circle {
+  opacity: 0.2;
+}
+
+.unchecked .path {
+  fill: #e15801;
+}

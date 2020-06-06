@@ -12,8 +12,7 @@ import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
-  TelemetrySelectionTable: require('../../../components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.container')
-    .default,
+  HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
@@ -50,8 +49,8 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     setExternalStep({
       show: false,
       component: undefined,
-      propKey: ''
-    })
+      propKey: '',
+    });
   };
 
   const onExtraStepCancel = () => {
@@ -67,7 +66,13 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     const Component = externalStepComponents[propConfig.externalStep];
     setExternalStep({
       show: true,
-      component: <Component onSave={(newData) => onExtraStepSave(propKey, newData)} onCancel={onExtraStepCancel} initialData={propData} />,
+      component: (
+        <Component
+          onSave={(newData) => onExtraStepSave(propKey, newData)}
+          onCancel={onExtraStepCancel}
+          initialData={propData}
+        />
+      ),
       propKey,
     });
   };
@@ -75,8 +80,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   if (!isOpen) {
     return null;
   }
-
-  console.log('externalStep', externalStep);
 
   if (externalStep.show) {
     return (

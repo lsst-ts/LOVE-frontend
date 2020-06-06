@@ -44,7 +44,7 @@ export default function Modal(props) {
 
       <div className={styles.content}>{children}</div>
 
-      {displayFooter && <div className={styles.footer}>{footerChildren}</div>}
+      {displayFooter && footerChildren && <div className={styles.footer}>{footerChildren}</div>}
     </ReactModal>
   );
 }

@@ -30,9 +30,9 @@ export const schema = {
       isPrivate: true,
       default: true,
     },
-    telemetryConfiguration: {
+    topicConfiguration: {
       type: 'object',
-      description: `Dictionary describing the telemetries to monitor
+      description: `Dictionary describing the telemetries and/or events to monitor
       and functions that can return an integer from 0 to 4 that represents
       a different health status level.
       
@@ -54,19 +54,19 @@ export const schema = {
       
       `,
       isPrivate: false,
-      externalStep: 'TelemetrySelectionTable',
+      externalStep: 'HealthStatusConfig',
       default: {
-        'ATMCS-0-mount_AzEl_Encoders': {
+        'telemetry-ATMCS-0-mount_AzEl_Encoders': {
           cRIO_timestamp: defaultHealthFunction,
           elevationCalculatedAngle: defaultHealthFunction,
         },
-        'ATDome-0-position': {
+        'telemetry-ATDome-0-position': {
           dropoutDoorOpeningPercentage: defaultHealthFunction,
           mainDoorOpeningPercentage: defaultHealthFunction,
           azimuthPosition: defaultHealthFunction,
           azimuthEncoderPosition: defaultHealthFunction,
         },
-        'ATMCS-0-mount_Nasmyth_Encoders': {
+        'telemetry-ATMCS-0-mount_Nasmyth_Encoders': {
           nasmyth1CalculatedAngle: defaultHealthFunction,
           nasmyth2CalculatedAngle: defaultHealthFunction,
           nasmyth1Encoder1Raw: defaultHealthFunction,
@@ -83,36 +83,37 @@ export const schema = {
 };
 
 const HealthStatusSummaryContainer = ({
-  telemetryConfiguration = schema.props.telemetryConfiguration.default,
+  topicConfiguration = schema.props.topicConfiguration.default,
   streams,
   subscribeToStreams,
   unsubscribeToStreams,
   isRaw,
   ...props
 }) => {
-  const parsedTelemetryConfiguration = Object.keys(telemetryConfiguration).reduce((prevDict, subscriptionName) => {
-    const [component, salindex, topic] = subscriptionName.split('-');
-    if (!prevDict[`${component}-${salindex}`]) prevDict[`${component}-${salindex}`] = {};
-    if (!prevDict[`${component}-${salindex}`][topic]) prevDict[`${component}-${salindex}`][topic] = {};
+  const parsedTelemetryConfiguration = Object.keys(topicConfiguration).reduce((prevDict, subscriptionName) => {
+    const [category, component, salindex, topic] = subscriptionName.split('-');
+    if (!prevDict[`${category}-${component}-${salindex}`]) prevDict[`${category}-${component}-${salindex}`] = {};
+    if (!prevDict[`${category}-${component}-${salindex}`][topic])
+      prevDict[`${category}-${component}-${salindex}`][topic] = {};
 
-    Object.keys(telemetryConfiguration[subscriptionName]).forEach((parameterName) => {
-      const code = [HEALTH_STATUS_VARIABLES_DECLARATION, telemetryConfiguration[subscriptionName][parameterName]].join(
+    Object.keys(topicConfiguration[subscriptionName]).forEach((parameterName) => {
+      const code = [HEALTH_STATUS_VARIABLES_DECLARATION, topicConfiguration[subscriptionName][parameterName]].join(
         '\n',
       );
       /* eslint-disable no-new-func*/
-      prevDict[`${component}-${salindex}`][topic][parameterName] = new Function('value', code);
+      prevDict[`${category}-${component}-${salindex}`][topic][parameterName] = new Function(parameterName, code);
     });
     return prevDict;
   }, {});
 
   if (isRaw) {
-    const subscriptions = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
+    const subscriptions = Object.keys(topicConfiguration).map((key) => `${key}`);
     return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
   }
 
   return (
     <HealthStatusSummary
-      telemetryConfiguration={parsedTelemetryConfiguration}
+      topicConfiguration={parsedTelemetryConfiguration}
       streams={streams}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
@@ -121,8 +122,8 @@ const HealthStatusSummaryContainer = ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const telemetryConfiguration = ownProps.telemetryConfiguration || schema.props.telemetryConfiguration.default;
-  const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
+  const topicConfiguration = ownProps.topicConfiguration || schema.props.topicConfiguration.default;
+  const groupNames = Object.keys(topicConfiguration).map((key) => `${key}`);
   const streams = getStreamsData(state, groupNames);
   return {
     streams,
@@ -132,16 +133,16 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
-      const telemetryConfiguration = ownProps.telemetryConfiguration || schema.props.telemetryConfiguration.default;
-      const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
+      const topicConfiguration = ownProps.topicConfiguration || schema.props.topicConfiguration.default;
+      const groupNames = Object.keys(topicConfiguration).map((key) => `${key}`);
 
       groupNames.forEach((groupName) => {
         dispatch(addGroup(groupName));
       });
     },
     unsubscribeToStreams: () => {
-      const telemetryConfiguration = ownProps.telemetryConfiguration || schema.props.telemetryConfiguration.default;
-      const groupNames = Object.keys(telemetryConfiguration).map((key) => `telemetry-${key}`);
+      const topicConfiguration = ownProps.topicConfiguration || schema.props.topicConfiguration.default;
+      const groupNames = Object.keys(topicConfiguration).map((key) => `${key}`);
 
       groupNames.forEach((groupName) => {
         dispatch(removeGroup(groupName));
