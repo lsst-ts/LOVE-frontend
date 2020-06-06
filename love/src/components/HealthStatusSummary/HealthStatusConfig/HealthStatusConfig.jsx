@@ -2,10 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HealthStatusConfig.module.css';
 import HSCEntry from './HSCEntry/HSCEntry';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
-import ManagerInterface, { getFakeUnits, formatTimestamp } from '../../../Utils';
+import ManagerInterface from '../../../Utils';
 
 const HEALTH_STATUS_CODES = {
   0: 'Undefined',

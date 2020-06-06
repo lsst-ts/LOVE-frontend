@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HSCInput.module.css';
-import StatusText from '../../../../GeneralPurpose/StatusText/StatusText';
-import GearIcon from '../../../../icons/GearIcon/GearIcon';
 import Button from '../../../../GeneralPurpose/Button/Button';
 import Input from '../../../../GeneralPurpose/Input/Input';
 import Select from '../../../../GeneralPurpose/Select/Select';
-import { getFakeUnits, formatTimestamp } from '../../../../../Utils';
 
 /**
  * Component to configure the Health Status Summary

@@ -107,11 +107,10 @@ export default class HSCEntry extends PureComponent {
   };
 
   render() {
-    const nextIndex = this.props.inputs.length;
-
-    // Delete the following 2 lines when going back to multiple inputs:
+    // Delete the following 2 lines and uncomment the third when going back to multiple inputs:
     const input = this.props.inputs[0];
     const index = 0;
+    // const nextIndex = this.props.inputs.length;
 
     return (
       <div className={styles.container}>

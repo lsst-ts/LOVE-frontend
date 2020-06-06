@@ -81,8 +81,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     return null;
   }
 
-  console.log('externalStep', externalStep);
-
   if (externalStep.show) {
     return (
       <Modal isOpen={externalStep.show} onRequestClose={onExtraStepCancel} contentLabel="Component configuration modal">

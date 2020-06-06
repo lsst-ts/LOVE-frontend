@@ -11,7 +11,7 @@ function Palette(props) {
     '--font-size-larger',
   ];
 
-  const fontWeights = ['normal', 'bold', , '100', '200', '300', '400', '500', '700', '800', '900'];
+  const fontWeights = ['normal', 'bold', '100', '200', '300', '400', '500', '700', '800', '900'];
 
   const fontColors = [
     '--base-font-color',
