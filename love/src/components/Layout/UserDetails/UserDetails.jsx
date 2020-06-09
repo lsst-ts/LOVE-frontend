@@ -10,6 +10,7 @@ export default function UserDetails({
   menuElementClassName,
   dividerClassName,
   onXMLClick,
+  onConfigClick,
   logout,
   requireUserSwap,
   takeScreenshot,
@@ -40,8 +41,14 @@ export default function UserDetails({
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
         <div className={styles.smallIconRow}>
-          <CodeIcon active={false} className={styles.paddedIcon}/>
+          <CodeIcon active={false} className={styles.paddedIcon} />
           <span>XML versions </span>
+        </div>
+      </div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onConfigClick}>
+        <div className={styles.smallIconRow}>
+          <CodeIcon active={false} className={styles.paddedIcon} />
+          <span>LOVE Config File </span>
         </div>
       </div>
       <div className={dividerClassName}></div>
