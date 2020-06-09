@@ -17,6 +17,7 @@ import {
   getServerTime,
   getServerTimeRequest,
   getServerTimeReceive,
+  getConfig,
 } from '../selectors';
 
 let store;
@@ -31,6 +32,14 @@ const mockServerTime = {
   sidereal_summit: 5.762640319739233,
   sidereal_greenwich: 10.479268119739233,
   tai_to_utc: -37,
+};
+
+const mockConfig = {
+  alarm_sounds: {
+    critical: 1,
+    serious: 1,
+    warning: 0,
+  },
 };
 
 describe('GIVEN the token does not exist in localStorage', () => {
@@ -58,6 +67,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
           execute_commands: true,
         },
         time_data: mockServerTime,
+        config: mockConfig,
       },
       new Headers({
         Accept: 'application/json',
@@ -78,6 +88,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
     expect(getServerTimeReceive(newState)).toBeGreaterThan(0);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
     expect(getPermCmdExec(newState)).toEqual(true);
+    expect(getConfig(newState)).toEqual(mockConfig);
     expect(storedToken).toEqual(newToken);
   });
 
@@ -129,6 +140,7 @@ describe('GIVEN the token exists in localStorage', () => {
           execute_commands: true,
         },
         time_data: mockServerTime,
+        config: mockConfig,
       },
       ManagerInterface.getHeaders(),
     );
@@ -145,6 +157,7 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(getServerTimeReceive(store.getState())).toBeGreaterThan(0);
     expect(getUsername(store.getState())).toEqual('my-user');
     expect(getPermCmdExec(store.getState())).toEqual(true);
+    expect(getConfig(store.getState())).toEqual(mockConfig);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 

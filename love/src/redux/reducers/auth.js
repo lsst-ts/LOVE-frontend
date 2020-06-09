@@ -14,6 +14,7 @@ import {
   REJECT_SWAP_TOKEN,
   MARK_ERROR_SWAP_TOKEN,
   REQUIRE_SWAP_TOKEN,
+  RECEIVE_CONFIG,
 } from '../actions/actionTypes';
 
 export const tokenStates = {
@@ -45,6 +46,7 @@ const initialState = {
     cmd_exec: false,
   },
   swapStatus: tokenSwapStates.RECEIVED,
+  config: null,
 };
 /**
  * Modifies the state of the authentication mainly characterized by the
@@ -141,6 +143,11 @@ export default function (state = initialState, action) {
       return {
         ...state,
         swapStatus: tokenSwapStates.REQUIRED,
+      };
+    case RECEIVE_CONFIG:
+      return {
+        ...state,
+        config: action.config,
       };
     default:
       return state;

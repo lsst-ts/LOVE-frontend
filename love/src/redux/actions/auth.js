@@ -16,6 +16,7 @@ import {
   MARK_ERROR_SWAP_TOKEN,
   REQUIRE_SWAP_TOKEN,
   CANCEL_SWAP_TOKEN,
+  RECEIVE_CONFIG,
 } from './actionTypes';
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
@@ -30,6 +31,11 @@ export const receiveToken = (username, token, permissions) => ({
   username,
   token,
   permissions,
+});
+
+export const receiveConfig = (config) => ({
+  type: RECEIVE_CONFIG,
+  config,
 });
 
 export const getTokenFromStorage = (token) => ({ type: GET_TOKEN_FROM_LOCALSTORAGE, token });
@@ -86,7 +92,6 @@ export const cancelSwapToken = {
   type: CANCEL_SWAP_TOKEN,
 };
 
-
 export function doGetTokenFromStorage() {
   return (dispatch) => {
     const token = localStorage.getItem('LOVE-TOKEN');
@@ -109,10 +114,13 @@ function doMarkErrorToken() {
   };
 }
 
-export function doReceiveToken(username, token, permissions, time_data, request_time) {
+export function doReceiveToken(username, token, permissions, time_data, request_time, config) {
   return (dispatch) => {
     dispatch(receiveToken(username, token, permissions));
     dispatch(receiveServerTime(time_data, request_time));
+    if (config) {
+      dispatch(receiveConfig(config));
+    }
     dispatch(openWebsocketConnection());
     dispatch(clockStart());
     localStorage.setItem('LOVE-TOKEN', token);
@@ -179,8 +187,9 @@ export function fetchToken(username, password) {
           }
           const time_data = response.time_data;
           const permissions = response.permissions;
+          const config = response.config;
           if (token !== undefined && token !== null) {
-            dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
             dispatch(requestViews());
             return;
           }
@@ -262,8 +271,9 @@ export function validateToken() {
         if (user) {
           ({ username } = user);
         }
-        const { permissions, time_data } = resp;
-        dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
+        const { permissions, time_data, config } = resp;
+        console.log('config: ', config);
+        dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
         return Promise.resolve();
       });
     });
@@ -304,9 +314,10 @@ export function swapUser(username, password) {
           }
           const time_data = response.time_data;
           const permissions = response.permissions;
+          const config = response.config;
           if (token !== undefined && token !== null) {
             dispatch(receiveSwapToken);
-            dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
             return;
           }
         }
