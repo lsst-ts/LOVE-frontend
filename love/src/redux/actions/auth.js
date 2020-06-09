@@ -205,7 +205,7 @@ export function fetchToken(username, password) {
 export function logout() {
   const url = `${ManagerInterface.getApiBaseUrl()}logout/`;
 
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const token = localStorage.getItem('LOVE-TOKEN');
     if (!token) {
       dispatch(doRemoveRemoteToken());
@@ -276,7 +276,6 @@ export function validateToken() {
           ({ username } = user);
         }
         const { permissions, time_data, config } = resp;
-        console.log('config: ', config);
         dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
         return Promise.resolve();
       });
@@ -289,8 +288,17 @@ export function validateToken() {
  * Nothing changes if credentials are wrong.
  */
 export function swapUser(username, password) {
-  const url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
   return (dispatch, getState) => {
+    const state = getState();
+    const token = getToken(state);
+    if (token === null || token === undefined) {
+      return Promise.resolve();
+    }
+    const current_config = getConfig(state);
+    let url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+    if (current_config) {
+      url = url + 'no_config/';
+    }
     dispatch(requestSwapToken);
     const request_time = DateTime.utc().toMillis() / 1000;
     return fetch(url, {
