@@ -10,6 +10,7 @@ ConfigPanel.propTypes = {
   config: PropTypes.object,
 };
 
+/** Contents of the Config File view Panel, displayed in a modal */
 export default function ConfigPanel({ config }) {
   const configStr = JSON.stringify(config, null, 2);
   return (
