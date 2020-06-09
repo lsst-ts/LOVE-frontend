@@ -20,7 +20,7 @@ import {
 } from './actionTypes';
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
-import { getToken } from '../selectors';
+import { getToken, getConfig } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
 import { receiveServerTime, clockStart, clockStop } from './time';
 
@@ -239,12 +239,16 @@ export function logout() {
  */
 export function validateToken() {
   return async (dispatch, getState) => {
-    const token = getToken(getState());
+    const state = getState();
+    const token = getToken(state);
     if (token === null || token === undefined) {
       return Promise.resolve();
     }
-
-    const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    const current_config = getConfig(state);
+    let url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    if (current_config) {
+      url = url + 'no_config/';
+    }
     const request_time = DateTime.utc().toMillis() / 1000;
     return fetch(url, {
       method: 'GET',

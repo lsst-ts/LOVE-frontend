@@ -5,7 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 
-import { fetchToken, validateToken, logout, swapUser, getTokenFromStorage } from '../actions/auth';
+import { fetchToken, validateToken, logout, swapUser, getTokenFromStorage, receiveConfig } from '../actions/auth';
 import { tokenStates, tokenSwapStates } from '../reducers/auth';
 import {
   getToken,
@@ -32,6 +32,14 @@ const mockServerTime = {
   sidereal_summit: 5.762640319739233,
   sidereal_greenwich: 10.479268119739233,
   tai_to_utc: -37,
+};
+
+const initialMockConfig = {
+  alarm_sounds: {
+    critical: 1,
+    serious: 0,
+    warning: 0,
+  },
 };
 
 const mockConfig = {
@@ -111,7 +119,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
 });
 
 describe('GIVEN the token exists in localStorage', () => {
-  let initialToken, url;
+  let initialToken, url, url_no_config;
 
   beforeEach(async () => {
     const token = '"love-token"';
@@ -120,6 +128,7 @@ describe('GIVEN the token exists in localStorage', () => {
     initialToken = getToken(store.getState());
     expect(initialToken).toEqual(token);
     url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    url_no_config = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
   });
 
   afterEach(() => {
@@ -127,7 +136,7 @@ describe('GIVEN the token exists in localStorage', () => {
     fetchMock.reset();
   });
 
-  it('Should not change the token state when the token is valid', async () => {
+  it('Should validate the token and not change the token state when the token is valid', async () => {
     // Arrange:
     fetchMock.mock(
       url,
@@ -158,6 +167,40 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(getUsername(store.getState())).toEqual('my-user');
     expect(getPermCmdExec(store.getState())).toEqual(true);
     expect(getConfig(store.getState())).toEqual(mockConfig);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
+  });
+
+  it('Should not request config when validating the token if the config is already on the state', async () => {
+    // Arrange:
+    await store.dispatch(receiveConfig(initialMockConfig));
+    fetchMock.mock(
+      url_no_config,
+      {
+        detail: 'Token is valid',
+        user: {
+          username: 'my-user',
+        },
+        permissions: {
+          execute_commands: true,
+        },
+        time_data: mockServerTime,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    // Act:
+    await store.dispatch(validateToken());
+    // Assert:
+    const newToken = getToken(store.getState());
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(newToken).toEqual(initialToken);
+    expect(storedToken).toEqual(initialToken);
+    expect(getTaiToUtc(store.getState())).toEqual(mockServerTime.tai_to_utc);
+    expect(getServerTime(store.getState())).toEqual(mockServerTime);
+    expect(getServerTimeRequest(store.getState())).toBeGreaterThan(0);
+    expect(getServerTimeReceive(store.getState())).toBeGreaterThan(0);
+    expect(getUsername(store.getState())).toEqual('my-user');
+    expect(getPermCmdExec(store.getState())).toEqual(true);
+    expect(getConfig(store.getState())).toEqual(initialMockConfig);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 
