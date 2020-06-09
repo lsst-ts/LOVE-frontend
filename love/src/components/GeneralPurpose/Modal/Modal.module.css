@@ -7,9 +7,10 @@
   border-radius: 10px;
   position: absolute;
   overflow: hidden;
-  webkit-overflow-scrolling: touch;
+  --webkit-overflow-scrolling: touch;
   outline: none;
   max-height: 95%;
+  min-width: 50%;
   width: fit-content;
   max-width: 92%;
   top: 50%;

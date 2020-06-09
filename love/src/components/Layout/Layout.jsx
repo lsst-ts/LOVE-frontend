@@ -26,6 +26,7 @@ import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
 import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 import Modal from '../GeneralPurpose/Modal/Modal';
 import XMLTable from './XMLTable/XMLTable';
+import ConfigPanel from './ConfigPanel/ConfigPanel';
 import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 
@@ -39,6 +40,10 @@ const urls = {
 
 class Layout extends Component {
   static propTypes = {
+    /** Name of the current user */
+    user: PropTypes.string,
+    /** Current LOVE configuration */
+    config: PropTypes.object,
     /** List of alarms that are displayed */
     alarms: PropTypes.array,
     /** React Router location object */
@@ -88,6 +93,7 @@ class Layout extends Component {
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
       isXMLModalOpen: false,
+      isConfigModalOpen: false,
       tokenSwapRequested: false,
     };
 
@@ -543,6 +549,7 @@ class Layout extends Component {
                       this.props.requireUserSwap(true);
                     }}
                     onXMLClick={() => this.setState({ isXMLModalOpen: true })}
+                    onConfigClick={() => this.setState({ isConfigModalOpen: true })}
                   ></UserDetails>
                 </div>
               </DropdownMenu>
@@ -585,9 +592,16 @@ class Layout extends Component {
         <Modal
           isOpen={this.state.isXMLModalOpen}
           onRequestClose={() => this.setState({ isXMLModalOpen: false })}
-          contentLabel="Component selection modal"
+          contentLabel="XML versions modal"
         >
-          <XMLTable></XMLTable>
+          <XMLTable />
+        </Modal>
+        <Modal
+          isOpen={this.state.isConfigModalOpen}
+          onRequestClose={() => this.setState({ isConfigModalOpen: false })}
+          contentLabel="LOVE Config File modal"
+        >
+          <ConfigPanel config={this.props.config} />
         </Modal>
         <Modal
           isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}
