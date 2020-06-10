@@ -637,6 +637,36 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     expect(getSubscriptions(store.getState())).toEqual([]);
   });
 
+  it.only('The server closes the connection with a 1000 code, then connection is CLOSED', async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', (_socket) => {
+      disconnected = true;
+    });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    server.close({ code: 1000 });
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        counter: 1,
+        status: groupStates.PENDING,
+      },
+      {
+        groupName: 'event-all-all-all',
+        counter: 1,
+        status: groupStates.PENDING,
+      },
+    ]);
+    expect(disconnected).toBe(true);
+    await server.closed;
+  });
+
   it('When the CONNECTION is RETRYING, then the subscriptions are PENDING', async () => {
     server.close({ code: 1003 });
     await server.closed;

@@ -157,6 +157,7 @@ export const openWebsocketConnection = () => {
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
           dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
+          dispatch(_resetSubscriptions(getSubscriptions(getState())));
         } else {
           dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
           dispatch(_resetSubscriptions(getSubscriptions(getState())));
