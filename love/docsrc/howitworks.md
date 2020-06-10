@@ -138,19 +138,30 @@ This data is colected after being added to the `ws.subscriptions` state so the h
 
 The token, websocket and subscriptions handling is summarized in the following graphs:
 
-![redux state machine graph](./assets/redux-ws-connection.svg 'Redux state machine graph')
+![redux state machine graph](./assets/redux-auth.svg 'Redux token authentication state machine graph')
 
 ### Token handling
 
 - Token starts with status EMPTY
 - When the application initiates, it tries to read the token from the local storage (status is READ_FROM_LOCAL_STORAGE)
-- If there is a token it is validated (status REQUESTING)
+- If there is a token it is validated (status REQUESTED)
 - If there is no token it remains in EMPTY
-- Once the user logs in, the status is REQUESTING
+- Once the user logs in, the status is REQUESTED
 - Once the response is ok (200), the status changes to RECEIVED and the websockets connection is opened
-- If the response fails it goes to either ERROR, REJECTED or EXPIRED, depending on response codes. In any case the websocket connection is closed
+- If the response fails, it goes to either ERROR, REJECTED or EXPIRED, depending on response codes. In any case the websocket connection is closed
 - When a user logs out, then the status is REMOVE_REQUESTED
 - When the response arrives and it was deleted (204) the status is REMOVED_REMOTELY, otherwise REMOVE_ERROR
+
+### Token swap
+
+- Token swap starts with (swap) status SWAP_RECEIVED
+- Once the user opens the swap login panel, the swap status changes to SWAP_REQUIRED
+- If the user cancels the swap login panel, the swap status changes back to SWAP_RECEIVED
+- Once the user attempts a user swap, the swap status is SWAP_REQUESTED
+- Once the response is ok (200), the status changes to SWAP_RECEIVED and the websockets connection is opened
+- If the response fails, it goes to either SWAP_ERROR or SWAP_REJECTED, depending on response codes. The websocket connection is not closed since the previous token is still in use
+
+![redux state machine graph](./assets/redux-ws-connection.svg 'Redux ws connection and subscriptions state machine graph')
 
 ### Websocket connection handling
 
