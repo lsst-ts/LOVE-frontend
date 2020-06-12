@@ -83,18 +83,20 @@ function Palette(props) {
         <div>
           <h1> Font Sizes </h1>
 
-          {fontSizes.map((fontSize) => (
-            <div style={{ fontSize: `var(${fontSize})` }}> {fontSize} </div>
+          {fontSizes.map((fontSize, index) => (
+            <div key={index} tyle={{ fontSize: `var(${fontSize})` }}>
+              {fontSize}
+            </div>
           ))}
         </div>
 
         <div>
           <h1> Font Weights </h1>
 
-          {fontWeights.map((fontWeight) => (
-            <div>
-              <span style={{ fontWeight: `${fontWeight}` }}> regular {fontWeight} </span>
-              <span style={{ fontWeight: `${fontWeight}`, fontStyle: 'italic' }}> italic {fontWeight} </span>
+          {fontWeights.map((fontWeight, index) => (
+            <div key={index}>
+              <span style={{ fontWeight: `${fontWeight}` }}>regular {fontWeight}</span>
+              <span style={{ fontWeight: `${fontWeight}`, fontStyle: 'italic' }}>italic {fontWeight}</span>
             </div>
           ))}
         </div>
@@ -103,62 +105,62 @@ function Palette(props) {
           <h1> Buttons </h1>
           <div className={styles.buttons}>
             <span> Enabled: </span>
-            {statuses.map((status) => (
-              <Button status={status}> {status} </Button>
-            ))}
-
-            <span> Disabled: </span>
-            {statuses.map((status) => (
-              <Button status={status} disabled>
-                {' '}
-                {status}{' '}
+            {statuses.map((status, index) => (
+              <Button key={index} status={status}>
+                {status}
               </Button>
             ))}
 
-            {sizes.map((size) => (
-              <>
+            <span> Disabled: </span>
+            {statuses.map((status, index) => (
+              <Button key={index} status={status} disabled>
+                {status}
+              </Button>
+            ))}
+
+            {sizes.map((size, index) => (
+              <React.Fragment key={index}>
                 <span> {size}: </span>
-                {statuses.map((status) => (
-                  <Button status={status} size={size}>
-                    {' '}
-                    {status}{' '}
+                {statuses.map((status, index) => (
+                  <Button key={index} status={status} size={size}>
+                    {status}
                   </Button>
                 ))}
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>
       </div>
 
       <h1> Regular Backgrounds and Foregrounds </h1>
-      {fontColors.map((fontColor) => (
-        <>
+      {fontColors.map((fontColor, index) => (
+        <React.Fragment key={index}>
           <h2> Font color: {fontColor} </h2>
           <div className={styles.grid}>
-            {backgroundColors.map((backgroundColor) => {
+            {backgroundColors.map((backgroundColor, i) => {
               const style = {
                 backgroundColor: `var(${backgroundColor})`,
                 color: `var(${fontColor})`,
               };
               return (
-                <div style={style}>
+                <div key={i} style={style}>
                   <p> {fontColor} </p>
                   <p> {backgroundColor} </p>
                 </div>
               );
             })}
           </div>
-        </>
+        </React.Fragment>
       ))}
 
       <h1> Status colors </h1>
       <div className={styles.grid}>
-        {statusColors.map((color) => {
+        {statusColors.map((color, index) => {
           const style = {
             backgroundColor: `var(${color})`,
           };
           return (
-            <div style={style}>
+            <div style={style} key={index}>
               <p> {color} </p>
             </div>
           );
@@ -167,12 +169,12 @@ function Palette(props) {
 
       <h1> Script colors </h1>
       <div className={styles.grid}>
-        {scriptColors.map((color) => {
+        {scriptColors.map((color, index) => {
           const style = {
             backgroundColor: `var(${color})`,
           };
           return (
-            <div style={style}>
+            <div style={style} key={index}>
               <p> {color} </p>
             </div>
           );
