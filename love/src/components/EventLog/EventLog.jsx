@@ -144,7 +144,7 @@ export default class EventLog extends PureComponent {
 
     return (
       filterResult &&
-      this.state.messageFilters[value].value && (
+      this.state.messageFilters[value]?.value && (
         <Card key={`${msg.private_rcvStamp.value}-${msg.level.value}-${index}`} className={styles.card}>
           <div className={styles.messageTextContainer}>
             <div className={styles.messageTopSection}>
