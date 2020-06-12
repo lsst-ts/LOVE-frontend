@@ -47,7 +47,6 @@
 }
 
 .bottomBar {
-  /* background: red; */
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
@@ -81,15 +80,6 @@
   grid-row-gap: 0.1rem;
   grid-column-gap: 0.25rem;
 }
-
-/* .checkpointsRegexpContainer {
-  display: grid;
-  grid-template-columns: 5rem 10rem;
-  align-items: center;
-  margin-right: 1rem;
-  grid-row-gap: 0.1rem;
-  
-} */
 
 .checkpointsInput {
   max-height: 1.5rem;
@@ -142,9 +132,6 @@
   display: flex;
   align-items: center;
   transform: translateY(-0.2em);
-}
-
-.divider {
 }
 
 .horizontalDivider {

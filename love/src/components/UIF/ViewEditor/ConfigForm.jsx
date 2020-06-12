@@ -4,6 +4,7 @@ import AceEditor from 'react-ace';
 import styles from './ConfigForm.module.css';
 import Modal from '../../GeneralPurpose/Modal/Modal';
 import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
 import { indexes } from '../ComponentIndex';
 
 import JSONPretty from 'react-json-pretty';
@@ -110,7 +111,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
         <div>
           {Object.keys(componentProps).map((key) => {
             let configElementInput = (
-              <input
+              <Input
                 defaultValue={componentConfig[key]}
                 onChange={(event) => {
                   updateConfig(key, event.target.value);
