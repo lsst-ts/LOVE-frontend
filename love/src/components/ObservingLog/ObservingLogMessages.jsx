@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './ObservingLogMessages.module.css';
-import TextField from '../TextField/TextField';
+import Input from '../GeneralPurpose/Input/Input';
 import DateTime from '../GeneralPurpose/DateTime/DateTime';
 import Toggle from '../GeneralPurpose/Toggle/Toggle';
 import TimeWindow from '../GeneralPurpose/TimeWindow/TimeWindow';
@@ -180,8 +180,7 @@ export default class ObservingLogInput extends Component {
   render() {
     const filteredMessages = this.props.logMessages.filter((msg) => {
       const messageDate = new Date((msg.private_rcvStamp.value + this.props.taiToUtc) * 1000);
-      const contentFilter =
-        this.state.contentFilter === '' || this.state.contentRegExp.test(msg.message.value);
+      const contentFilter = this.state.contentFilter === '' || this.state.contentRegExp.test(msg.message.value);
       const userFilter = this.state.userFilter === '' || this.state.userRegExp.test();
       const timeFilter = messageDate > this.state.timeFilterDateStart && messageDate < this.state.timeFilterDateEnd;
       const filter = contentFilter && userFilter && timeFilter;
@@ -236,12 +235,12 @@ export default class ObservingLogInput extends Component {
             <div className={styles.filters}>
               <div className={styles.filter}>
                 <span className={styles.filterLabel}>By content: </span>
-                <TextField type="text" value={this.state.contentFilter} onChange={this.changeContentFilter} />
+                <Input type="text" value={this.state.contentFilter} onChange={this.changeContentFilter} />
               </div>
 
               <div className={styles.filter}>
                 <span className={styles.filterLabel}>By user name: </span>
-                <TextField type="text" value={this.state.userFilter} onChange={this.changeUserFilter} />
+                <Input type="text" value={this.state.userFilter} onChange={this.changeUserFilter} />
               </div>
             </div>
           </div>

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
+import Input from '../GeneralPurpose/Input/Input';
 import styles from './Login.module.css';
 import { tokenSwapStates } from '../../redux/reducers/auth';
-import TextField from '../TextField/TextField';
 
 export default class UserSwap extends Component {
   static propTypes = {
@@ -80,10 +79,10 @@ export default class UserSwap extends Component {
               ) : null}
               <p className={styles.formEntry}>
                 <label htmlFor="id_username" className={styles.label}>
-                  Username
+                  Username:
                 </label>
 
-                <TextField
+                <Input
                   name="username"
                   autoFocus=""
                   required=""
@@ -94,9 +93,9 @@ export default class UserSwap extends Component {
               </p>
               <p className={styles.formEntry}>
                 <label htmlFor="id_password" className={styles.label}>
-                  Password
+                  Password:
                 </label>
-                <TextField
+                <Input
                   type="password"
                   name="password"
                   required=""

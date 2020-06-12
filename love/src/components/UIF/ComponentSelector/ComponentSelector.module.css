@@ -63,7 +63,7 @@
   border: 2px solid #fff;
   border-top: none;
   border-right: none;
-  content: "";
+  content: '';
   height: 0.3em;
   left: 0.3em;
   opacity: 0;
@@ -73,16 +73,16 @@
   width: 0.8em;
 }
 
-.customCheckbox input[type="checkbox"] {
+.customCheckbox input[type='checkbox'] {
   visibility: hidden;
 }
 
-.customCheckbox input[type="checkbox"]:checked + label {
+.customCheckbox input[type='checkbox']:checked + label {
   background-color: var(--info-background-color);
   border-color: var(--info-background-color);
 }
 
-.customCheckbox input[type="checkbox"]:checked + label:after {
+.customCheckbox input[type='checkbox']:checked + label:after {
   opacity: 1;
 }
 
@@ -94,7 +94,7 @@
   width: 100%;
   min-width: 27ch;
   max-width: 50ch;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .filterLabel {

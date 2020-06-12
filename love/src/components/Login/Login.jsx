@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import Button from '../GeneralPurpose/Button/Button';
+import Input from '../GeneralPurpose/Input/Input';
 import styles from './Login.module.css';
 import { tokenStates } from '../../redux/reducers/auth';
-import TextField from '../TextField/TextField';
 
 export default class Login extends Component {
   static propTypes = {
@@ -119,7 +119,7 @@ export default class Login extends Component {
                   Username
                 </label>
 
-                <TextField
+                <Input
                   name="username"
                   autoFocus=""
                   required=""
@@ -132,7 +132,7 @@ export default class Login extends Component {
                 <label htmlFor="id_password" className={styles.label}>
                   Password
                 </label>
-                <TextField
+                <Input
                   type="password"
                   name="password"
                   required=""

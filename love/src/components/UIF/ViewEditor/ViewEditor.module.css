@@ -31,10 +31,11 @@
   width: 24px;
 }
 
-.textField {
+.input {
   width: 20ch;
-  background-color: var(--second-tertiary-background-color);
-  color: var(--base-font-color);
+  height: 2em;
+  /* background-color: var(--second-tertiary-background-color);
+  color: var(--base-font-color); */
   font-style: italic;
 }
 
@@ -45,12 +46,11 @@
 }
 
 .toolbar {
-  /* display: grid;
-  grid-template-columns: min-content repeat(8, min-content); */
   display: flex;
-  flex-wrap: wrap;
-  /* grid-gap: 0.2em; */
+  flex-flow: row wrap;
+  align-items: stretch;
 }
+
 .toolbarContainer {
   display: flex;
   justify-content: center;
@@ -78,6 +78,7 @@
 
 .deviceSelect {
   width: 15ch;
+  height: 2.2em;
 }
 
 .element {

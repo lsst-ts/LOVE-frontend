@@ -92,14 +92,7 @@
 } */
 
 .checkpointsInput {
-  background: var(--tertiary-background-color);
   max-height: 1.5rem;
-  /* border-radius: 0px; */
-  color: var(--secondary-font-color);
-}
-
-.checkpointsInput:focus {
-  outline: var(--primary-active-font-color) auto 5px;
 }
 
 .logLevelLabel {
@@ -108,9 +101,8 @@
 
 .logLevelSelect {
   color: var(--secondary-font-color);
-  background-color: var(--tertiary-background-color);
-  border: 1px solid var(--primary-active-font-color);
-  border: none;
+  background-color: transparent;
+  border: 1px solid var(--secondary-font-dimmed-color);
   border-radius: 3px;
   padding: 0.3em 0.3em 0.15em 0.15em;
   width: 100%;
@@ -118,7 +110,7 @@
 }
 
 .logLevelSelect:focus {
-  border: none;
+  border: 1px solid var(--secondary-font-color);
   outline: var(--primary-active-font-color) auto 5px;
   outline: none;
 }
