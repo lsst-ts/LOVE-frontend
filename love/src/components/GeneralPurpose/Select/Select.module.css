@@ -12,6 +12,10 @@
   text-align: left;
 }
 
+.dropDownControlClassName:focus {
+  border: 1px solid var(--secondary-font-color);
+}
+
 .small {
   padding-left: 0.4em;
   padding-right: 0.3em;

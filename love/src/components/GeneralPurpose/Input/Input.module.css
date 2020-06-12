@@ -1,15 +1,25 @@
 .input {
   width: 100%;
   box-sizing: border-box;
-  background: var(--base-font-color);
-  border: none;
   border-radius: 3px;
   padding: 0.4em;
   font-family: inherit;
   font-size: inherit;
+  background-color: transparent;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  /* color: inherit; */
+  color: var(--base-font-color);
 }
 
 .input::placeholder {
+  color: var(--secondary-font-color);
+  opacity: 1; /* Firefox */
   font-family: inherit;
   font-size: inherit;
+}
+
+.input:focus {
+  outline: none;
+  border: 1px solid var(--secondary-font-color);
+  /* outline: var(--primary-active-font-color) auto 5px; */
 }

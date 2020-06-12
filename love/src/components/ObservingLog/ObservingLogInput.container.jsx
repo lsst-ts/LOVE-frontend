@@ -6,7 +6,7 @@ import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/Subs
 import ObservingLogInput from './ObservingLogInput';
 
 export const schema = {
-  description: 'Component a textfield for the submission of observing log messages',
+  description: 'Input component for the submission of observing log messages',
   defaultSize: [36, 28],
   props: {
     titleBar: {

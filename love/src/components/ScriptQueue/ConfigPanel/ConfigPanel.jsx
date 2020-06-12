@@ -8,7 +8,7 @@ import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
-import TextField from '../../TextField/TextField';
+import Input from '../../GeneralPurpose/Input/Input';
 import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
 import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
@@ -382,11 +382,11 @@ export default class ConfigPanel extends Component {
             <div className={styles.checkpointsRegexpContainer}>
               <span>Pause checkpoints</span>
               <span>.*</span>
-              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('pauseCheckpoint')} />
+              <Input className={styles.checkpointsInput} onChange={this.onCheckpointChange('pauseCheckpoint')} />
 
               <span>Stop checkpoints</span>
               <span> .*</span>
-              <TextField className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
+              <Input className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
 
               <span className={styles.logLevelLabel}>Log level</span>
               <select className={styles.logLevelSelect} defaultValue={this.state.logLevel}>
