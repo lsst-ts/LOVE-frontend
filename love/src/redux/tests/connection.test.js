@@ -637,7 +637,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     expect(getSubscriptions(store.getState())).toEqual([]);
   });
 
-  it.only('The server closes the connection with a 1000 code, then connection is CLOSED', async () => {
+  it('The server closes the connection with a 1000 code, then connection is CLOSED', async () => {
     // ARRANGE
     let disconnected = false;
     server.on('close', (_socket) => {
