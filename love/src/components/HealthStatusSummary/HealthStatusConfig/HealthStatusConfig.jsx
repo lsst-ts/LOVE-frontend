@@ -1,10 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Button from '../../GeneralPurpose/Button/Button';
-import MuteIcon from '../../icons/MuteIcon/MuteIcon';
 import styles from './HealthStatusConfig.module.css';
-import TelemetrySelectionTable from '../TelemetrySelectionTable/TelemetrySelectionTable2';
-import FunctionConfig from '../FunctionConfig/FunctionConfig';
+import HSCEntry from './HSCEntry/HSCEntry';
+import Button from '../../GeneralPurpose/Button/Button';
+import ManagerInterface from '../../../Utils';
 
 const HEALTH_STATUS_CODES = {
   0: 'Undefined',
@@ -20,52 +19,11 @@ export const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_
   })
   .join('\n');
 
-const TABS = {
-  TABLE: 0,
-  FUNCTIONS: 1,
-};
-
 /**
- * Component to configure the HealthStatusSummary
- * Contains the TelemetrySelectionTable used to define the telemetries (end events),
- * and a FunctionConfig component used to configure the rules for the Health Status
+ * Component to configure the Health Status Summary
  */
 export default class HealthStatusConfig extends PureComponent {
   static propTypes = {
-    /** Columns to be displayed in the TelemetrySelectionTable */
-    columnsToDisplay: PropTypes.arrayOf(
-      PropTypes.oneOf([
-        'selection_column',
-        'category',
-        'component',
-        'stream',
-        'timestamp',
-        'name',
-        'param_name',
-        'data_type',
-        'units',
-        'health_status',
-      ]),
-    ),
-    /** Column to use to restrict values when selecting a row in the TelemetrySelectionTable,
-     * such as limiting only selection of rows with the same units */
-    checkedFilterColumn: PropTypes.oneOf([
-      'category',
-      'component',
-      'stream',
-      'timestamp',
-      'name',
-      'param_name',
-      'data_type',
-      'units',
-    ]),
-    /** Dictionary of telemetries that are displayed in the TelemetrySelectionTable*/
-    telemetries: PropTypes.object,
-    /** Function called when the "Set" button is clicked in the TelemetrySelectionTable. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
-    onSave: PropTypes.func,
-    /** Indicates if component should display bottom selection bar*/
-    showSelection: PropTypes.bool,
-
     /** JSON string that describes the initially selected telemetries and their health functions.
      * Must have his structure:
      *
@@ -77,102 +35,138 @@ export default class HealthStatusConfig extends PureComponent {
      * }
      */
     initialData: PropTypes.string,
+    /**
+     * Function to call when clicking the save button.
+     * Should receive as argument the new configuration as a dictionary with the same structure as initalData
+     */
+    onSave: PropTypes.func,
+    /**
+     * Function to call when cancel the save button
+     */
+    onCancel: PropTypes.func,
   };
 
   static defaultProps = {
-    onCancel: () => {},
-    onSave: () => {},
-    columnsToDisplay: [
-      'selection_column',
-      'category',
-      'component',
-      'stream',
-      'timestamp',
-      'name',
-      'param_name',
-      'data_type',
-      'units',
-    ],
-    telemetries: {},
-    showSelection: true,
     initialData: {},
   };
 
   constructor() {
     super();
     this.state = {
-      newTopics: {},
-      hidden: {},
-      tab: TABS.TABLE,
+      currentConfig: [],
+      optionsTree: null,
+      changed: false,
     };
   }
 
-  componentDidMount() {
-    this.setState({ newTopics: JSON.parse(this.props.initialData) });
-  }
-
-  changeTab(tab) {
-    this.setState({ tab });
-  }
-
-  onTableChange = (selectedTopics, onClick) => {
-    console.log('selectedTopics: ', selectedTopics);
-    this.setState({ newTopics: selectedTopics, tab: TABS.FUNCTIONS });
+  componentDidMount = () => {
+    const conf = this.dataToConf(this.props.initialData);
+    this.setState({ currentConfig: conf });
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      this.setState({ optionsTree: data });
+    });
   };
 
-  onFunctionsChange = (newData) => {
-    console.log('onFunctionsChange: ', newData);
+  dataToConf = (data) => {
+    const dict = JSON.parse(data);
+    const conf = [];
+    for (const topicKey of Object.keys(dict)) {
+      const topicData = dict[topicKey];
+      let [category, csc, salindex, topic] = topicKey.split('-');
+      if (salindex !== null && salindex !== undefined) {
+        salindex = parseInt(salindex);
+      }
+      for (const item of Object.keys(topicData)) {
+        const funcBody = topicData[item];
+        const name = `${topicKey}-${item}`;
+        conf.push({
+          name,
+          inputs: [
+            {
+              category,
+              csc,
+              salindex,
+              topic,
+              item,
+            },
+          ],
+          funcBody,
+        });
+      }
+    }
+    return conf;
+  };
+
+  currentConfigToData = () => {
+    const conf = {};
+    for (const entry of this.state.currentConfig) {
+      const { category, csc, salindex, topic, item } = entry.inputs[0];
+      const funcBody = entry.funcBody;
+      const topicKey = `${category}-${csc}-${salindex}-${topic}`;
+      if (!(topicKey in conf)) {
+        conf[topicKey] = {};
+      }
+      conf[topicKey][item] = funcBody;
+    }
+    return conf;
+  };
+
+  onEntryChange = (name, inputs, funcBody, index) => {
+    const newConfig = [...this.state.currentConfig];
+    newConfig[index] = { name, inputs, funcBody };
+    this.setState({ currentConfig: newConfig, changed: true });
+  };
+
+  onEntryRemove = (index) => {
+    const newConfig = this.state.currentConfig.filter((_el, i) => i !== index);
+    this.setState({ currentConfig: newConfig, changed: true });
+  };
+
+  onApply = () => {
+    if (this.state.changed) {
+      const conf = this.currentConfigToData();
+      this.props.onSave(conf);
+    }
   };
 
   render() {
+    const nextIndex = this.state.currentConfig.length;
     return (
-      <div className={styles.tabsWrapper}>
-        <div className={styles.tabsRow}>
-          <div
-            className={[styles.tab, this.state.tab === TABS.TABLE ? styles.selected : ''].join(' ')}
-            onClick={() => this.changeTab(TABS.TABLE)}
-          >
-            <div className={styles.tabLabel}>
-              {/* <div className={styles.iconWrapper}>
-                <MuteIcon unmuted style={this.state.tab === TABS.TABLE ? styles.selectedIcon : ''} />
-              </div> */}
-              Select Telemetries and Events
-            </div>
-          </div>
-
-          <div
-            className={[styles.tab, this.state.tab === TABS.FUNCTIONS ? styles.selected : ''].join(' ')}
-            onClick={() => this.changeTab(TABS.FUNCTIONS)}
-          >
-            <div className={styles.tabLabel}>
-              {/* <div className={styles.iconWrapper}>
-                <MuteIcon style={this.state.tab === TABS.FUNCTIONS ? styles.selectedIcon : ''} />
-              </div> */}
-              Configure Functions
-            </div>
-          </div>
-        </div>
-
-        <div className={[styles.contentWrapper, this.props.embedded ? styles.embedded : ''].join(' ')}>
-          <div className={this.state.tab === TABS.TABLE ? styles.content : styles.hidden}>
-            <TelemetrySelectionTable
-              onSave={this.onTableChange}
-              columnsToDisplay={this.props.columnsToDisplay}
-              telemetries={this.props.telemetries}
-              showSelection={this.props.showSelection}
-              initialData={this.props.initialData}
-              topics={this.state.newTopics}
+      <div className={styles.container}>
+        <div className={styles.title}>Topic Configuration</div>
+        <div className={styles.content}>
+          <div className={styles.list}>
+            {this.state.currentConfig.map((entry, index) => {
+              return (
+                <HSCEntry
+                  key={index}
+                  name={entry.name}
+                  inputs={entry.inputs}
+                  funcBody={entry.funcBody}
+                  optionsTree={this.state.optionsTree}
+                  onChange={(name, inputs, funcBody) => this.onEntryChange(name, inputs, funcBody, index)}
+                  onRemove={() => this.onEntryRemove(index)}
+                />
+              );
+            })}
+            <HSCEntry
+              key={nextIndex}
+              className={styles.empty}
+              optionsTree={this.state.optionsTree}
+              onChange={(name, inputs, funcBody) => this.onEntryChange(name, inputs, funcBody, nextIndex)}
             />
-          </div>
-          <div className={this.state.tab === TABS.FUNCTIONS ? styles.content : styles.hidden}>
-            <FunctionConfig topics={this.state.newTopics} onChange={this.onFunctionsChange} />
           </div>
         </div>
         <div className={styles.footer}>
-          <Button status="default" onClick={this.props.onCancel}>
+          <Button status="default" onClick={this.props.onCancel} className={styles.button}>
             Cancel
           </Button>
-          <Button status="primary" onClick={() => this.props.onSave(this.state.selectedTopics)}>
+          <Button
+            status="primary"
+            onClick={() => this.onApply()}
+            className={styles.button}
+            disabled={!this.state.changed}
+          >
             Apply
           </Button>
         </div>

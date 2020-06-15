@@ -10,6 +10,7 @@ import {
   closeWebsocketConnection,
   addGroup,
   removeGroup,
+  resetSubscriptions,
 } from '../actions/ws';
 import { getConnectionStatus, getSubscriptions } from '../selectors';
 
@@ -341,6 +342,64 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
   });
 
   it(
+    'When the subscriptions are reset their state change to REQUESTING and send subscription messages to the server,' +
+      'and when the server confirms each unsubscription, that subscription is re-added',
+    async () => {
+      // Add new group
+      await store.dispatch(resetSubscriptions(getSubscriptions(store.getState())));
+      expect(getSubscriptions(store.getState())).toEqual([
+        {
+          groupName: 'telemetry-all-all-all',
+          status: groupStates.REQUESTING,
+          counter: 1,
+          confirmationMessage: undefined,
+        },
+        {
+          groupName: 'event-all-all-all',
+          status: groupStates.REQUESTING,
+          counter: 1,
+          confirmationMessage: undefined,
+        },
+      ]);
+      await expect(server).toReceiveMessage({
+        option: 'subscribe',
+        category: 'telemetry',
+        csc: 'all',
+        salindex: 'all',
+        stream: 'all',
+      });
+      await expect(server).toReceiveMessage({
+        option: 'subscribe',
+        category: 'event',
+        csc: 'all',
+        salindex: 'all',
+        stream: 'all',
+      });
+      // Server subscribes the groups
+      server.send({
+        data: 'Successfully subscribed to telemetry-all-all-all',
+      });
+      server.send({
+        data: 'Successfully subscribed to event-all-all-all',
+      });
+      expect(getSubscriptions(store.getState())).toEqual([
+        {
+          groupName: 'telemetry-all-all-all',
+          status: groupStates.SUBSCRIBED,
+          counter: 1,
+          confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+        },
+        {
+          groupName: 'event-all-all-all',
+          status: groupStates.SUBSCRIBED,
+          counter: 1,
+          confirmationMessage: 'Successfully subscribed to event-all-all-all',
+        },
+      ]);
+    },
+  );
+
+  it(
     'When a new GROUP IS ADDED, then the subscriptions state change to PENDING and then REQUESTING, ' +
       'and when the server confirms each unsubscription, that subscription is removed',
     async () => {
@@ -635,6 +694,36 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     await store.dispatch(closeWebsocketConnection());
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
     expect(getSubscriptions(store.getState())).toEqual([]);
+  });
+
+  it('The server closes the connection with a 1000 code, then connection is CLOSED', async () => {
+    // ARRANGE
+    let disconnected = false;
+    server.on('close', (_socket) => {
+      disconnected = true;
+    });
+    // Assert connection is open before
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+
+    // ACT
+    server.close({ code: 1000 });
+
+    // ASSERT
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        counter: 1,
+        status: groupStates.PENDING,
+      },
+      {
+        groupName: 'event-all-all-all',
+        counter: 1,
+        status: groupStates.PENDING,
+      },
+    ]);
+    expect(disconnected).toBe(true);
+    await server.closed;
   });
 
   it('When the CONNECTION is RETRYING, then the subscriptions are PENDING', async () => {

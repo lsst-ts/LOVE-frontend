@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
 import styles from './ComponentSelector.module.css';
 import { indexes } from '../ComponentIndex';
-import TextField from '../../TextField/TextField';
 import Modal from '../../GeneralPurpose/Modal/Modal';
-
 
 export default class ComponentSelector extends Component {
   static propTypes = {
@@ -45,11 +44,11 @@ export default class ComponentSelector extends Component {
     });
   };
 
-  changeFilter = (event) =>{
+  changeFilter = (event) => {
     this.setState({
-      filter: event.target.value
-    })
-  }
+      filter: event.target.value,
+    });
+  };
   render() {
     const buttonsDisabled = this.state.selected.length === 0;
     return (
@@ -57,7 +56,7 @@ export default class ComponentSelector extends Component {
         isOpen={this.props.isOpen}
         onRequestClose={this.props.onRequestClose}
         contentLabel="Component selection modal"
-        footerChildren={(
+        footerChildren={
           <>
             <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
               Clear Selection
@@ -70,13 +69,13 @@ export default class ComponentSelector extends Component {
               Insert
             </Button>
           </>
-        )}
+        }
       >
         <div className={styles.content}>
           <h2> Select Components </h2>
           <div className={styles.filterContainer}>
             <span className={styles.filterLabel}>Filter: </span>
-            <TextField value={this.state.filter} onChange={this.changeFilter}/>
+            <Input value={this.state.filter} onChange={this.changeFilter} />
           </div>
 
           {indexes.map((index) => {

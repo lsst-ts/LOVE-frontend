@@ -22,6 +22,16 @@ export default class AlarmAudio extends Component {
     alarms: PropTypes.array,
     /** List of new alarms, that si they are either new or have been changed */
     newAlarms: PropTypes.array,
+    /**
+     * Contents of the LOVE configuration file.
+     * It is expected to have a "alarm_sounds" key with the following structure:
+     * alarm_sounds {
+     *   critical: <ON/OFF, either 1, 0 of boolean>,
+     *   serious: <ON/OFF, either 1, 0 of boolean>,
+     *   warning: <ON/OFF, either 1, 0 of boolean>,
+     * }
+     */
+    config: PropTypes.object,
     /** Function to subscribe to streams to receive the alarms */
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
@@ -31,8 +41,16 @@ export default class AlarmAudio extends Component {
   static defaultProps = {
     alarms: [],
     newAlarms: [],
+    config: null,
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
+  };
+
+  /** A conservative default configuration, all alarms sound... */
+  defaultConf = {
+    critical: 1,
+    serious: 1,
+    warning: 1,
   };
 
   constructor(props) {
@@ -200,68 +218,61 @@ export default class AlarmAudio extends Component {
   };
 
   playSound = (severity, type) => {
-    switch (severity) {
-      // case severityEnum.warning: {
-      //   switch (type) {
-      //     case 'new': {
-      //       this.newWarningSound.play();
-      //       break;
-      //     }
-      //     case 'increased': {
-      //       this.increasedWarningSound.play();
-      //       break;
-      //     }
-      //     case 'unacked': {
-      //       this.unackedWarningSound.play();
-      //       break;
-      //     }
-      //     default: break;
-      //   }
-      //   break;
-      // }
-      case severityEnum.serious: {
-        switch (type) {
-          case 'new': {
-            this.newSeriousSound.play();
-            break;
-          }
-          case 'increased': {
-            this.increasedSeriousSound.play();
-            break;
-          }
-          case 'unacked': {
-            this.unackedSeriousSound.play();
-            break;
-          }
-          default:
-            break;
+    const config = this.props.config?.alarm_sounds || this.defaultConf;
+    if (severity === severityEnum.warning && config.warning) {
+      switch (type) {
+        case 'new': {
+          this.newWarningSound.play();
+          break;
         }
-        break;
-      }
-      case severityEnum.critical: {
-        switch (type) {
-          case 'new': {
-            this.stopCriticals();
-            this.newCriticalSound.play();
-            break;
-          }
-          case 'increased': {
-            this.stopCriticals();
-            this.increasedCriticalSound.play();
-            break;
-          }
-          case 'unacked': {
-            this.stopCriticals();
-            this.unackedCriticalSound.play();
-            break;
-          }
-          default:
-            break;
+        case 'increased': {
+          this.increasedWarningSound.play();
+          break;
         }
-        break;
+        case 'unacked': {
+          this.unackedWarningSound.play();
+          break;
+        }
+        default:
+          break;
       }
-      default:
-        break;
+    } else if (severity === severityEnum.serious && config.serious) {
+      switch (type) {
+        case 'new': {
+          this.newSeriousSound.play();
+          break;
+        }
+        case 'increased': {
+          this.increasedSeriousSound.play();
+          break;
+        }
+        case 'unacked': {
+          this.unackedSeriousSound.play();
+          break;
+        }
+        default:
+          break;
+      }
+    } else if (severity === severityEnum.critical && config.critical) {
+      switch (type) {
+        case 'new': {
+          this.stopCriticals();
+          this.newCriticalSound.play();
+          break;
+        }
+        case 'increased': {
+          this.stopCriticals();
+          this.increasedCriticalSound.play();
+          break;
+        }
+        case 'unacked': {
+          this.stopCriticals();
+          this.unackedCriticalSound.play();
+          break;
+        }
+        default:
+          break;
+      }
     }
   };
 

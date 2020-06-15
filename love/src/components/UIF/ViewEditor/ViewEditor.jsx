@@ -438,7 +438,7 @@ class ViewEditor extends Component {
         <div className={styles.toolbarWrapper}>
           <div className={styles.toolbar}>
             <Input
-              className={[styles.textField, styles.element].join(' ')}
+              className={[styles.input, styles.element].join(' ')}
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}

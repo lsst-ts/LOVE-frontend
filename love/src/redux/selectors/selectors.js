@@ -12,6 +12,8 @@ export const getServerTimeReceive = (state) => state.time.receive_time;
 
 export const getServerTime = (state) => ({ ...state.time.server_time });
 
+export const getConfig = (state) => (state.auth.config ? { ...state.auth.config } : null);
+
 export const getAllTime = (state) => ({ ...state.time });
 
 export const getClock = (state) => ({ ...state.time.clock });

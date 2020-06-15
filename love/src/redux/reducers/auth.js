@@ -10,10 +10,12 @@ import {
   MARK_ERROR_REMOVE_TOKEN,
   GET_TOKEN_FROM_LOCALSTORAGE,
   REQUEST_SWAP_TOKEN,
+  CANCEL_SWAP_TOKEN,
   RECEIVE_SWAP_TOKEN,
   REJECT_SWAP_TOKEN,
   MARK_ERROR_SWAP_TOKEN,
   REQUIRE_SWAP_TOKEN,
+  RECEIVE_CONFIG,
 } from '../actions/actionTypes';
 
 export const tokenStates = {
@@ -45,6 +47,7 @@ const initialState = {
     cmd_exec: false,
   },
   swapStatus: tokenSwapStates.RECEIVED,
+  config: null,
 };
 /**
  * Modifies the state of the authentication mainly characterized by the
@@ -141,6 +144,16 @@ export default function (state = initialState, action) {
       return {
         ...state,
         swapStatus: tokenSwapStates.REQUIRED,
+      };
+    case CANCEL_SWAP_TOKEN:
+      return {
+        ...state,
+        swapStatus: tokenSwapStates.RECEIVED,
+      };
+    case RECEIVE_CONFIG:
+      return {
+        ...state,
+        config: action.config,
       };
     default:
       return state;

@@ -1,265 +1,300 @@
 .btn {
-    border: none;
-    font-weight: 400;
-    text-shadow: none;
-    border-radius: 4px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    /* boostrap inherited */
-    display: inline-block;
-    margin-bottom: 0;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: middle;
-    touch-action: manipulation;
-    cursor: pointer;
-    user-select: none;
+  border: none;
+  font-weight: 400;
+  text-shadow: none;
+  border-radius: 4px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  /* boostrap inherited */
+  display: inline-block;
+  margin-bottom: 0;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  user-select: none;
 
-    padding: 6px 12px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    font-size: 14px;
-    line-height: 1.42857143;
-    outline: none;
+  padding: 6px 12px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  font-size: 14px;
+  line-height: 1.42857143;
+}
+
+.btnWrapper {
+  display: inherit;
+}
+
+.btn:active {
+  font-weight: bold;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.btnWrapper:focus {
+  outline: none;
+}
+
+.btnWrapper:focus > .btn {
+  box-shadow: 0 0 2px 2px var(--highlighted-font-color);
 }
 
 .btn.disabled {
-    cursor: not-allowed;
-    opacity: .45;
+  cursor: not-allowed;
+  opacity: 0.45;
 }
 
 /* ------------SIZES-------*/
 .btnLG {
-    padding: 2px 16px;
-    font-size: 18px;
-    line-height: 1.3333333;
+  padding: 2px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
 }
 
-.btnSM{
-    padding-left: 10px;
-    padding-right: 10px;
-    font-size: 12px;
-    line-height: 1.5;
+.btnSM {
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
-.btnXS{
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 12px;
-    line-height: 1.2;
+.btnXS {
+  padding-left: 5px;
+  padding-right: 5px;
+  font-size: 12px;
+  line-height: 1.2;
 }
 
 /* ------------STATUS-----------*/
 
 /* DEFAULT */
-.btnDefault, .btnDefault.disabled, .btnDefault.disabled:hover {
-    background-image: none;
-    background-color: var(--default-background-color);
-    color: var(--default-font-color);
-    border:none;
+.btnDefault,
+.btnDefault.disabled,
+.btnDefault.disabled:hover {
+  background-image: none;
+  background-color: var(--default-background-color);
+  color: var(--default-font-color);
+  border: none;
 }
-.btnDefault:hover, .btnDefault:active:hover{
-    background-image: none;
-    background-color: var(--default-active-background-color);
-    color: var(--default-active-font-color);
+.btnDefault:hover,
+.btnDefault:active:hover {
+  background-image: none;
+  background-color: var(--default-active-background-color);
+  color: var(--default-active-font-color);
 }
 .btnDefault.active {
-    background-image: none;
-    background-color: var(--default-active-background-color);
-    color: var(--default-active-font-color);
+  background-image: none;
+  background-color: var(--default-active-background-color);
+  color: var(--default-active-font-color);
 }
 .btnDefault.active:hover {
-    background-image: none;
-    background-color: var(--default-active-hover-background-color);
-    color: var(--default-active-font-color);
+  background-image: none;
+  background-color: var(--default-active-hover-background-color);
+  color: var(--default-active-font-color);
 }
-
-
 
 /* PRIMARY */
 .btnPrimary {
-    background-repeat: repeat-x;
+  background-repeat: repeat-x;
 }
-.btnPrimary, .btnPrimary.disabled, .btnPrimary.disabled:hover {
-    background-image: none;
-    background-color: var(--primary-background-color);
-    color: var(--primary-font-color);
-    /* border: solid 1px #273b46; */
-    box-shadow: 1px 2px 4px 0px var(--primary-shadow-color);
+.btnPrimary,
+.btnPrimary.disabled,
+.btnPrimary.disabled:hover {
+  background-image: none;
+  background-color: var(--primary-background-color);
+  color: var(--primary-font-color);
+  /* border: solid 1px #273b46; */
+  box-shadow: 1px 2px 4px 0px var(--primary-shadow-color);
 }
-.btnPrimary:hover, .btnPrimary:active:hover {
-    background-image: none;
-    background-color: var(--primary-active-background-color);
-    color: var(--primary-active-font-colors);
+.btnPrimary:hover,
+.btnPrimary:active:hover {
+  background-image: none;
+  background-color: var(--primary-active-background-color);
+  color: var(--primary-active-font-colors);
 }
 .btnPrimary.active {
-    background-image: none;
-    background-color: var(--primary-active-background-color);
-    color: var(--primary-active-font-colors);
+  background-image: none;
+  background-color: var(--primary-active-background-color);
+  color: var(--primary-active-font-colors);
 }
 .btnPrimary.active:hover {
-    background-image: none;
-    background-color: var(--primary-active-hover-background-color);
-    color: var(--primary-active-font-color);
+  background-image: none;
+  background-color: var(--primary-active-hover-background-color);
+  color: var(--primary-active-font-color);
 }
-
 
 /* SUCCESS */
 
-
-.btnSuccess, .btnSuccess.disabled, .btnSuccess.disabled:hover {
-    background-image: none;
-    background-color: var(--success-background-color);
-    color: var(--success-font-color);
+.btnSuccess,
+.btnSuccess.disabled,
+.btnSuccess.disabled:hover {
+  background-image: none;
+  background-color: var(--success-background-color);
+  color: var(--success-font-color);
 }
-.btnSuccess:hover, .btnSuccess:active:hover  {
-    background-image: none;
-    background-color: var(--success-active-background-color);
-    color: var(--success-active-font-color);
+.btnSuccess:hover,
+.btnSuccess:active:hover {
+  background-image: none;
+  background-color: var(--success-active-background-color);
+  color: var(--success-active-font-color);
 }
 .btnSuccess.active {
-    background-image: none;
-    background-color: var(--success-active-background-color);
-    color: var(--success-active-font-color);
+  background-image: none;
+  background-color: var(--success-active-background-color);
+  color: var(--success-active-font-color);
 }
 .btnSuccess.active:hover {
-    background-color: var(--success-active-hover-background-color);
-    color: var(--succes-active-font-color);
+  background-color: var(--success-active-hover-background-color);
+  color: var(--succes-active-font-color);
 }
-
-
-
 
 /*INFO*/
-.btnInfo, .btnInfo.disabled, .btnInfo.disabled:hover {
-    background-image: none;
-    background-color: var(--info-background-color);
-    color: var(--info-font-color);
-    font-weight: 500;
-    box-shadow: 1px 2px 4px 0px var(--info-shadow-color);
+.btnInfo,
+.btnInfo.disabled,
+.btnInfo.disabled:hover {
+  background-image: none;
+  background-color: var(--info-background-color);
+  color: var(--info-font-color);
+  font-weight: 500;
+  box-shadow: 1px 2px 4px 0px var(--info-shadow-color);
 }
-.btnInfo:hover, .btnInfo:active:hover {
-    background-image: none;
-    background-color: var(--info-hover-background-color);
-    color: var(--info-hover-font-color);
-    font-weight: 500;
+.btnInfo:hover,
+.btnInfo:active:hover {
+  background-image: none;
+  background-color: var(--info-hover-background-color);
+  color: var(--info-hover-font-color);
+  font-weight: 500;
 }
 .btnInfo.active {
-    background-image: none;
-    background-color: var(--info-active-background-color);
-    color: var(--info-active-font-color);
-    font-weight: 500;
+  background-image: none;
+  background-color: var(--info-active-background-color);
+  color: var(--info-active-font-color);
+  font-weight: 500;
 }
 .btnInfo.active:hover {
-    background-color: var(--info-active-hover-background-color);
-    color: var(--info-active-font-color);
-    font-weight: 500;
-    border-color: var(--info-active-hover-border-color);
+  background-color: var(--info-active-hover-background-color);
+  color: var(--info-active-font-color);
+  font-weight: 500;
+  border-color: var(--info-active-hover-border-color);
 }
-
-
 
 /*WARNING*/
-.btnWarning, .btnWarning.disabled, .btnWarning.disabled:hover {
-    background-image: none;
-    background-color: var(--warning-background-color);
-    color: var(--warning-font-color);
+.btnWarning,
+.btnWarning.disabled,
+.btnWarning.disabled:hover {
+  background-image: none;
+  background-color: var(--warning-background-color);
+  color: var(--warning-font-color);
 }
-.btnWarning:hover, .btnWarning:active:hover {
-    background-image: none;
-    background-color: var(--warning-hover-background-color);
-    color: var(--warning-hover-font-color);
+.btnWarning:hover,
+.btnWarning:active:hover {
+  background-image: none;
+  background-color: var(--warning-hover-background-color);
+  color: var(--warning-hover-font-color);
 }
 .btnWarning.active {
-    background-image: none;
-    background-color: var(--warning-active-background-color);
-    color: var(--warning-active-font-color);
+  background-image: none;
+  background-color: var(--warning-active-background-color);
+  color: var(--warning-active-font-color);
 }
 .btnWarning.active:hover {
-    background-image: none;
-    background-color: var(--warning-active-hover-background-color);
-    color: var(--warning-active-hover-font-color);
+  background-image: none;
+  background-color: var(--warning-active-hover-background-color);
+  color: var(--warning-active-hover-font-color);
 }
-
 
 /*DANGER*/
-.btnDanger, .btnDanger.disabled, .btnDanger.disabled:hover {
-    background-image: none;
-    background-color: var(--danger-background-color);
-    color: var(--danger-font-color);
+.btnDanger,
+.btnDanger.disabled,
+.btnDanger.disabled:hover {
+  background-image: none;
+  background-color: var(--danger-background-color);
+  color: var(--danger-font-color);
 }
-.btnDanger:hover, .btnDanger:active:hover {
-    background-image: none;
-    background-color: var(--danger-hover-background-color);
-    color: var(--danger-hover-font-color);
+.btnDanger:hover,
+.btnDanger:active:hover {
+  background-image: none;
+  background-color: var(--danger-hover-background-color);
+  color: var(--danger-hover-font-color);
 }
 .btnDanger.active {
-    background-image: none;
-    background-color: var(--danger-active-background-color);
-    color: var(--danger-active-font-color);
+  background-image: none;
+  background-color: var(--danger-active-background-color);
+  color: var(--danger-active-font-color);
 }
 .btnDanger.active:hover {
-    background-image: none;
-    background-color: var(--danger-active-hover-background-color);
-    color: var(--danger-active-hover-font-color);
+  background-image: none;
+  background-color: var(--danger-active-hover-background-color);
+  color: var(--danger-active-hover-font-color);
 }
-
 
 /*LINK*/
 .btnLink:focus {
-    border-color: red;
+  border-color: red;
 }
-.btnLink, .btnLink.disabled, .btnLink.disabled:hover {
-    color: var(--link-font-color);
+.btnLink,
+.btnLink.disabled,
+.btnLink.disabled:hover {
+  color: var(--link-font-color);
 }
-.btnLink:hover, .btnLink:active:hover {
-    color: var(--link-hover-font-color);
-    text-decoration: underline;
+.btnLink:hover,
+.btnLink:active:hover {
+  color: var(--link-hover-font-color);
+  text-decoration: underline;
 }
 .btnLink.active {
-    color: var(--link-active-font-color);
-    text-decoration: underline;
+  color: var(--link-active-font-color);
+  text-decoration: underline;
 }
 
-.btnLink, .btnLink.active, .btnLink:active, .btnLink[disabled], fieldset[disabled] .btnLink {
-    background-color: transparent;
+.btnLink,
+.btnLink.active,
+.btnLink:active,
+.btnLink[disabled],
+fieldset[disabled] .btnLink {
+  background-color: transparent;
 }
-
 
 /*TRANSPARENT*/
 .btnTransparent:focus {
-    border-color: red;
+  border-color: red;
 }
-.btnTransparent, .btnTransparent.disabled, .btnTransparent.disabled:hover {
+.btnTransparent,
+.btnTransparent.disabled,
+.btnTransparent.disabled:hover {
   background-image: none;
   background-color: transparent;
   color: var(--default-font-color);
-  border:none;
+  border: none;
 }
-.btnTransparent:hover, .btnTransparent:active:hover {
-    background-image: none;
-    background-color: var(--primary-active-background-color);
-    color: var(--primary-active-font-colors);
+.btnTransparent:hover,
+.btnTransparent:active:hover {
+  background-image: none;
+  background-color: var(--primary-active-background-color);
+  color: var(--primary-active-font-colors);
 }
 .btnTransparent.active {
-    background-image: none;
-    background-color: var(--primary-active-background-color);
-    color: var(--primary-active-font-colors);
+  background-image: none;
+  background-color: var(--primary-active-background-color);
+  color: var(--primary-active-font-colors);
 }
 .btnTransparent.active:hover {
-    background-image: none;
-    background-color: var(--primary-active-hover-background-color);
-    color: var(--primary-active-font-color);
+  background-image: none;
+  background-color: var(--primary-active-hover-background-color);
+  color: var(--primary-active-font-color);
 }
 
 .command {
-    background-color: var(--commandable-background);
-    background: var(--commandable-background);
-    color: var(--commandable-font-color);
+  background-color: var(--commandable-background);
+  background: var(--commandable-background);
+  color: var(--commandable-font-color);
 }
 
 .command:hover {
-    background-color: var(--commandable-background-hover);
-    background: var(--commandable-background-hover);
-    color: var(--commandable-font-color-hover);
+  background-color: var(--commandable-background-hover);
+  background: var(--commandable-background-hover);
+  color: var(--commandable-font-color-hover);
 }

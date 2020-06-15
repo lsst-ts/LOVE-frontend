@@ -14,6 +14,7 @@ import {
   getTaiToUtc,
   getPermCmdExec,
   getTokenSwapStatus,
+  getConfig,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
@@ -27,6 +28,7 @@ const LayoutContainer = ({ ...props }) => {
 
 const mapStateToProps = (state) => {
   const user = getUsername(state);
+  const config = getConfig(state);
   const lastSALCommand = getLastSALCommand(state);
   const mode = getMode(state);
   const getCurrentView = (id) => getViewSummary(state, id);
@@ -42,6 +44,7 @@ const mapStateToProps = (state) => {
   const tokenSwapStatus = getTokenSwapStatus(state);
   return {
     user,
+    config,
     lastSALCommand,
     mode,
     getCurrentView,
@@ -85,10 +88,8 @@ const mapDispatchToProps = (dispatch) => {
       );
     },
     requireUserSwap: (bool) => {
-      if(bool)
-        dispatch(requireSwapToken)
-      else 
-        dispatch(cancelSwapToken)
+      if (bool) dispatch(requireSwapToken);
+      else dispatch(cancelSwapToken);
     },
   };
 };

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ManagerInterface from '../../../Utils';
-import SimpleTable, { Table, Thead, Tbody, Td, Tr, Th } from '../../GeneralPurpose/SimpleTable/SimpleTable';
-import styles from './XMLTable.module.css';
+import SimpleTable from '../../GeneralPurpose/SimpleTable/SimpleTable';
 
 export default class XMLTable extends Component {
   constructor(props) {
@@ -20,7 +19,7 @@ export default class XMLTable extends Component {
     const headers = [
       {
         field: 'name',
-        title: 'Name'
+        title: 'Name',
       },
       {
         field: 'sal_version',
@@ -28,28 +27,27 @@ export default class XMLTable extends Component {
       },
       {
         field: 'xml_version',
-        title: 'XML version (LOVE)'
+        title: 'XML version (LOVE)',
       },
       {
         field: 'xml_version_reported',
-        title: 'XML version (reported)'
-      }
+        title: 'XML version (reported)',
+      },
     ];
 
     if (!this.state.data) {
       return <span>Loading...</span>;
     }
 
-    const data = this.state.data ? Object.entries(this.state.data).map(([key, data]) => {
+    const data = this.state.data
+      ? Object.entries(this.state.data).map(([key, data]) => {
+          return {
+            ...data,
+            name: key,
+          };
+        })
+      : [];
 
-      return {
-        ...data,
-        name: key
-      }
-    }) : [];
-
-
-    return <SimpleTable headers={headers} data={data} />
-
+    return <SimpleTable headers={headers} data={data} />;
   }
 }
