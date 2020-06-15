@@ -10,6 +10,7 @@ import {
   closeWebsocketConnection,
   addGroup,
   removeGroup,
+  resetSubscriptions,
 } from '../actions/ws';
 import { getConnectionStatus, getSubscriptions } from '../selectors';
 
@@ -339,6 +340,64 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
       data: 'Successfully subscribed to event-all-all-all',
     });
   });
+
+  it(
+    'When the subscriptions are reset their state change to REQUESTING and send subscription messages to the server,' +
+      'and when the server confirms each unsubscription, that subscription is re-added',
+    async () => {
+      // Add new group
+      await store.dispatch(resetSubscriptions(getSubscriptions(store.getState())));
+      expect(getSubscriptions(store.getState())).toEqual([
+        {
+          groupName: 'telemetry-all-all-all',
+          status: groupStates.REQUESTING,
+          counter: 1,
+          confirmationMessage: undefined,
+        },
+        {
+          groupName: 'event-all-all-all',
+          status: groupStates.REQUESTING,
+          counter: 1,
+          confirmationMessage: undefined,
+        },
+      ]);
+      await expect(server).toReceiveMessage({
+        option: 'subscribe',
+        category: 'telemetry',
+        csc: 'all',
+        salindex: 'all',
+        stream: 'all',
+      });
+      await expect(server).toReceiveMessage({
+        option: 'subscribe',
+        category: 'event',
+        csc: 'all',
+        salindex: 'all',
+        stream: 'all',
+      });
+      // Server subscribes the groups
+      server.send({
+        data: 'Successfully subscribed to telemetry-all-all-all',
+      });
+      server.send({
+        data: 'Successfully subscribed to event-all-all-all',
+      });
+      expect(getSubscriptions(store.getState())).toEqual([
+        {
+          groupName: 'telemetry-all-all-all',
+          status: groupStates.SUBSCRIBED,
+          counter: 1,
+          confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+        },
+        {
+          groupName: 'event-all-all-all',
+          status: groupStates.SUBSCRIBED,
+          counter: 1,
+          confirmationMessage: 'Successfully subscribed to event-all-all-all',
+        },
+      ]);
+    },
+  );
 
   it(
     'When a new GROUP IS ADDED, then the subscriptions state change to PENDING and then REQUESTING, ' +
