@@ -225,6 +225,16 @@ export const uifIndex = {
       },
     },
   },
+  Scheduler: {
+    component: require('../Scheduler/Scheduler.container').default,
+    schema: {
+      ...require('../Scheduler/Scheduler.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Scheduler/Scheduler.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
