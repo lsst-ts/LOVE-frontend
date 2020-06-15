@@ -111,16 +111,19 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 /**
  * Reset all the given subscriptions (status PENDING and noo confirmationMessage)
  */
-const _resetSubscriptions = (subscriptions) => {
-  return {
-    type: RESET_SUBSCRIPTIONS,
-    subscriptions: subscriptions
-      ? subscriptions.map((sub) => ({
-          ...sub,
-          status: groupStates.PENDING,
-          confirmationMessage: undefined,
-        }))
-      : [],
+export const resetSubscriptions = (subscriptions) => {
+  return (dispatch, _getState) => {
+    dispatch({
+      type: RESET_SUBSCRIPTIONS,
+      subscriptions: subscriptions
+        ? subscriptions.map((sub) => ({
+            ...sub,
+            status: groupStates.PENDING,
+            confirmationMessage: undefined,
+          }))
+        : [],
+    });
+    dispatch(_requestSubscriptions());
   };
 };
 
@@ -157,15 +160,14 @@ export const openWebsocketConnection = () => {
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
           dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
-          dispatch(_resetSubscriptions(getSubscriptions(getState())));
         } else {
           dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
-          dispatch(_resetSubscriptions(getSubscriptions(getState())));
         }
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onerror: () => {
         dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
-        dispatch(_resetSubscriptions(getSubscriptions(getState())));
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onmessage: (msg) => {
         if (!msg.data) return;

@@ -181,8 +181,7 @@ The token, websocket and subscriptions handling is summarized in the following g
 - When confirmation is received, then they change to status SUBSCRIBED
 - When unsubscribing, then they change to UNSUBSCRIBING
 - When confirmation of unsubscription arrive, then the subscription is deleted
-- When connection is closed (gracefully, connection status is CLOSED), then all subscriptions are deleted (the manager will forget those subscriptions anyway)
-- When connection is closed (by error, connection status is RETRYING), then all subscriptions are PENDING. This way, when we open the connection again, we will be able to re-subscribe
+- When connection is closed, then all subscriptions are PENDING. This way, when we open the connection again, we will be able to re-subscribe
 
 ---
 
