@@ -182,7 +182,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
             key={index}
             width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
             height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-            azelData={overlay.azelData}
+            {...overlay}
           ></HealpixOverlay>
         );
       })}
