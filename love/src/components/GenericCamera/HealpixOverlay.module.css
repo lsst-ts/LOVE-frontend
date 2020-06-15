@@ -1,3 +1,8 @@
 .svg {
     position: absolute;
 }
+
+.polygons {
+    /* hardcoded due to geo voronoi lib limitation */
+    transform: translate(-230px, 0);
+}
