@@ -140,9 +140,7 @@ class ViewEditor extends Component {
       });
     }
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
-      if (this.props.editedViewStatus.code === editViewStates.SAVING) {
-        console.log('Saving');
-      } else if (
+      if (
         prevProps.editedViewStatus.code === editViewStates.SAVING &&
         this.props.editedViewStatus.code === editViewStates.SAVED
       ) {
@@ -562,7 +560,6 @@ class ViewEditor extends Component {
   };
 
   render() {
-    // console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />

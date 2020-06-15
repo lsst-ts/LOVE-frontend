@@ -1,0 +1,11 @@
+:root {
+  --scrollbar-width: 10px;
+}
+
+.wrapper {
+  display: grid;
+  height: 100%;
+  grid-template-rows: minmax(0, 1fr) min-content;
+  background: var(--base-background-color);
+  min-width: 1350px;
+}

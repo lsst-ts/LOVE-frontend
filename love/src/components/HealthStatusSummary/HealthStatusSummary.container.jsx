@@ -4,7 +4,7 @@ import HealthStatusSummary from './HealthStatusSummary';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import { getStreamsData } from '../../redux/selectors/selectors.js';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { HEALTH_STATUS_VARIABLES_DECLARATION } from './TelemetrySelectionTable/TelemetrySelectionTable';
+import { HEALTH_STATUS_VARIABLES_DECLARATION } from './HealthStatusConfig/HealthStatusConfig';
 
 const defaultHealthFunction = `return Math.floor(new Date().getSeconds()  / 4) % 5 ;`;
 export const schema = {

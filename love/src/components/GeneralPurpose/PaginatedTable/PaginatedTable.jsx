@@ -3,13 +3,15 @@ import SimpleTable from '../SimpleTable/SimpleTable';
 import styles from './PaginatedTable.module.css';
 import Button from '../Button/Button';
 import Select from '../Select/Select';
+import PropTypes from 'prop-types';
 
 const AVAILABLE_ITEMS_PER_PAGE = [10, 25, 50, 100];
 /**
  * Adds pagination handlers to #SimpleTable.
  */
-const PaginatedTable = ({ headers, data }) => {
-  const [itemsPerPage, setItemsPerPage] = React.useState(AVAILABLE_ITEMS_PER_PAGE[0].toString());
+const PaginatedTable = ({ headers, data, paginationOptions }) => {
+  const availableItemsPerPage = paginationOptions ?? AVAILABLE_ITEMS_PER_PAGE;
+  const [itemsPerPage, setItemsPerPage] = React.useState(availableItemsPerPage[0].toString());
   const [page, setPage] = React.useState(0);
 
   const lastPage =
@@ -39,7 +41,11 @@ const PaginatedTable = ({ headers, data }) => {
     setPage(0);
   };
 
-  const feasibleItemsPerPage = AVAILABLE_ITEMS_PER_PAGE.filter((threshold) => data.length > threshold);
+  React.useEffect(()=>{
+    setPage(0);
+  }, [data, headers]);
+
+  const feasibleItemsPerPage = availableItemsPerPage.filter((threshold) => data.length > threshold);
   return (
     <div>
       <SimpleTable headers={headers} data={pageData} />
@@ -74,4 +80,7 @@ const PaginatedTable = ({ headers, data }) => {
   );
 };
 
+PaginatedTable.propTypes = {
+  paginationOptions: PropTypes.arrayOf(PropTypes.number)
+}
 export default PaginatedTable;

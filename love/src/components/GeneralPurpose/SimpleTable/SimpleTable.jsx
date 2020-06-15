@@ -8,14 +8,14 @@ export { Table, Thead, Tr, Td, Th, Tbody };
  */
 function SimpleTable({ headers, data }) {
 
-  const defaultRenderMethod = (value) => value;
+  const defaultRenderMethod = (value, row) => value;
 
   return (
     <Table>
       <Thead>
         <Tr>
-          {headers.map((header) => (
-            <Th key={header.field} className={header.className}>{header.title}</Th>
+          {headers.map((header, index) => (
+            <Th key={`header-${index}`} className={header.className}>{header.title}</Th>
           ))}
         </Tr>
       </Thead>
@@ -23,12 +23,12 @@ function SimpleTable({ headers, data }) {
         {data.map((row, index) => {
           return (
             <Tr key={index}>
-              {headers.map((header) => {
+              {headers.map((header, headerIndex) => {
                 const render = header.render || defaultRenderMethod;
                 const value = row[header.field];
                 return (
-                  <Td key={header.field} isNumber={header.type === 'number'} className={header.className}>
-                    {render(value)}
+                  <Td key={headerIndex} isNumber={header.type === 'number'} className={header.className}>
+                    {render(value, row)}
                   </Td>
                 );
               })}
@@ -50,8 +50,8 @@ SimpleTable.propTypes = {
       title: PropTypes.node,
       /** Data type of this column: number, string, ... */
       type: PropTypes.string,
-      /** Callback that receives this column's value and should return a `node`. 
-       * Use it customize how the cell's value is   */
+      /** Callback with signature (value,row) => node 
+       * Use it customize how the cell's value is displayed  */
       render: PropTypes.func,
       /** className to be applied to the whole column */
       className: PropTypes.string
