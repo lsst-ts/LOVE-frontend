@@ -1,6 +1,15 @@
 .container {
-  display: flex;
-  /* justify-content: center;
-  align-items: center; */
+  display: grid;
   height: 100%;
+  grid-template-columns: max-content 1fr;
+}
+
+.selectorTitle {
+  font-size: var(--font-size-large);
+  color: var(--primary-font-color);
+}
+
+.selectorContainer {
+  padding: 0 1em;
+  text-align: left;
 }

@@ -175,10 +175,10 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
   const imageAspectRatio = imageWidth / imageHeight;
 
   return (
-    <div>
+    <div className={styles.cameraContainer}>
       {healpixOverlays.map((overlay, index) => {
         return (
-          <HealpixOverlay
+          overlay.display && <HealpixOverlay
             key={index}
             width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
             height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
