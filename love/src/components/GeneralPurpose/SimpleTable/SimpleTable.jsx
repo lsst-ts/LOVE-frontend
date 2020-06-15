@@ -8,7 +8,7 @@ export { Table, Thead, Tr, Td, Th, Tbody };
  */
 function SimpleTable({ headers, data }) {
 
-  const defaultRenderMethod = (value) => value;
+  const defaultRenderMethod = (value, row) => value;
 
   return (
     <Table>
@@ -28,7 +28,7 @@ function SimpleTable({ headers, data }) {
                 const value = row[header.field];
                 return (
                   <Td key={headerIndex} isNumber={header.type === 'number'} className={header.className}>
-                    {render(value)}
+                    {render(value, row)}
                   </Td>
                 );
               })}
@@ -50,8 +50,8 @@ SimpleTable.propTypes = {
       title: PropTypes.node,
       /** Data type of this column: number, string, ... */
       type: PropTypes.string,
-      /** Callback that receives this column's value and should return a `node`. 
-       * Use it customize how the cell's value is   */
+      /** Callback with signature (value,row) => node 
+       * Use it customize how the cell's value is displayed  */
       render: PropTypes.func,
       /** className to be applied to the whole column */
       className: PropTypes.string
