@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllAlarms, getLastestAlarms } from '../../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { getAllAlarms, getLastestAlarms, getConfig } from '../../../redux/selectors';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import AlarmAudio from './AlarmAudio';
 
 const AlarmAudioContainer = ({ ...props }) => {
@@ -11,9 +11,11 @@ const AlarmAudioContainer = ({ ...props }) => {
 const mapStateToProps = (state) => {
   const alarms = getAllAlarms(state);
   const newAlarms = getLastestAlarms(state);
+  const config = getConfig(state);
   return {
     alarms,
     newAlarms,
+    config,
   };
 };
 
@@ -22,10 +24,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
 };

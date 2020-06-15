@@ -4,6 +4,7 @@ import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates, modes } from '../../redux/reducers/uif';
+import { tokenSwapStates } from '../../redux/reducers/auth';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import { getNotificationMessage, relativeTime, takeScreenshot, parseTimestamp, formatTimestamp } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
@@ -23,6 +24,11 @@ import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
 import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
 import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
+import Modal from '../GeneralPurpose/Modal/Modal';
+import XMLTable from './XMLTable/XMLTable';
+import ConfigPanel from './ConfigPanel/ConfigPanel';
+import UserDetails from './UserDetails/UserDetails';
+import UserSwapContainer from '../Login/UserSwap.container';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -34,6 +40,10 @@ const urls = {
 
 class Layout extends Component {
   static propTypes = {
+    /** Name of the current user */
+    user: PropTypes.string,
+    /** Current LOVE configuration */
+    config: PropTypes.object,
     /** List of alarms that are displayed */
     alarms: PropTypes.array,
     /** React Router location object */
@@ -58,6 +68,10 @@ class Layout extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
     unsubscribeToStreams: PropTypes.func,
+    /** Current token swap status */
+    tokenSwapStatus: PropTypes.string,
+    /** Function to be called when requiring a user swap, similar to a logout */
+    requireUserSwap: PropTypes.func,
   };
 
   static defaultProps = {
@@ -78,6 +92,9 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
+      isXMLModalOpen: false,
+      isConfigModalOpen: false,
+      tokenSwapRequested: false,
     };
 
     this.requestToastID = null;
@@ -510,26 +527,30 @@ class Layout extends Component {
                   <UserIcon className={styles.icon} />
                 </Button>
                 <div className={styles.userMenu}>
-                  <div className={styles.menuElement}>
-                    <span>User </span>
-                    <span>{this.props.user}</span>
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.menuElement} onClick={() => takeScreenshot((img) => {
-                    const link = document.createElement('a');
-                    const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai))
-                    link.href = img;
-                    link.download = `${timestamp}.png`;
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                  })}>
-                    <span>Screenshot </span>
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                    Logout
-                  </div>
+                  <UserDetails
+                    menuElementClassName={styles.menuElement}
+                    dividerClassName={styles.divider}
+                    username={this.props.user}
+                    execPermission={this.props.execPermission}
+                    takeScreenshot={() =>
+                      takeScreenshot((img) => {
+                        const link = document.createElement('a');
+                        const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
+                        link.href = img;
+                        link.download = `${timestamp}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      })
+                    }
+                    logout={this.props.logout}
+                    requireUserSwap={() => {
+                      this.setState({ tokenSwapRequested: true });
+                      this.props.requireUserSwap(true);
+                    }}
+                    onXMLClick={() => this.setState({ isXMLModalOpen: true })}
+                    onConfigClick={() => this.setState({ isConfigModalOpen: true })}
+                  ></UserDetails>
                 </div>
               </DropdownMenu>
             </div>
@@ -568,7 +589,37 @@ class Layout extends Component {
         </div>
 
         <div className={styles.contentWrapper}>{this.props.children}</div>
-
+        <Modal
+          isOpen={this.state.isXMLModalOpen}
+          onRequestClose={() => this.setState({ isXMLModalOpen: false })}
+          contentLabel="XML versions modal"
+        >
+          <XMLTable />
+        </Modal>
+        <Modal
+          isOpen={this.state.isConfigModalOpen}
+          onRequestClose={() => this.setState({ isConfigModalOpen: false })}
+          contentLabel="LOVE Config File modal"
+        >
+          <ConfigPanel config={this.props.config} />
+        </Modal>
+        <Modal
+          isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}
+          onRequestClose={() => {
+            this.setState({ tokenSwapRequested: false });
+            this.props.requireUserSwap(false);
+          }}
+          contentLabel="User swap"
+          displayFooter={false}
+        >
+          <UserSwapContainer
+            tokenStatus={this.props.tokenSwapStatus}
+            onFinish={() => {
+              this.setState({ tokenSwapRequested: false });
+              this.props.requireUserSwap(false);
+            }}
+          />
+        </Modal>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
     );

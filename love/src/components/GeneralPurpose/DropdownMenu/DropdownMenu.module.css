@@ -56,11 +56,10 @@
   max-height: 2em;
 }
 
-
 .iconBtn {
-    display: inline;
-    border-radius: 50%;
-    padding: 0.3em;
-    height: 2em;
-    width: 2em;
-  }
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 2em;
+  width: 2em;
+}

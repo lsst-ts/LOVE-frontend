@@ -1,9 +1,14 @@
 .st0 {
-  fill: #798d99;
-  stroke: #798d99;
+  fill: var(--second-primary-background-color);
+  stroke: var(--second-primary-background-color);
   stroke-miterlimit: 10;
 }
 
 .svg {
   vertical-align: middle;
+}
+
+.svg path {
+  fill: var(--commandable-font-color);
+  stroke: var(--commandable-font-color);
 }

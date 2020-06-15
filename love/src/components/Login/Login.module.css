@@ -5,6 +5,12 @@
   height: 70vh;
 }
 
+.userSwap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 /*--------- PANEL ---------*/
 /*DEFAULT*/
 .panel {
@@ -44,18 +50,13 @@
 
 .formEntry {
   display: flex;
-  flex-wrap: wrap;
+  flex-flow: row;
+  align-items: center;
 }
 
-.label{
+.label {
   text-align: left;
-  width: 63px;
-  margin: 0;
-}
-
-.panelBody label{
-  text-align: left;
-  width: 63px;
+  width: 7em;
   margin: 0;
 }
 
@@ -84,9 +85,7 @@
 }
 
 .panelBody input {
-  border: none;
-  border-radius: 4px;
-  color: black;
-  margin-left: 10px;
-  width: 80%;
+  border: 1px solid var(--secondary-font-color);
+  margin-left: 1em;
+  min-width: 10em;
 }

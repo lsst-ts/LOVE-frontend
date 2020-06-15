@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getTimestampedStreamData } from '../../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../SubscriptionTable/SubscriptionTable.container';
 import TimeSeriesPlot from './TimeSeriesPlot';
 
@@ -95,12 +95,11 @@ const TimeSeriesPlotContainer = ({
   //   console.log(groupName)
   // });
 
-
   if (props.isRaw) {
     const subscriptions = Object.values(props.groupNames || {});
     return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
   }
-    return (
+  return (
     <TimeSeriesPlot
       streamStates={streamStates}
       groupName={groupName}
@@ -126,10 +125,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     subscribeToStream: (groupName) => {
-      dispatch(addGroupSubscription(groupName));
+      dispatch(addGroup(groupName));
     },
     unsubscribeToStream: (groupName) => {
-      dispatch(requestGroupSubscriptionRemoval(groupName));
+      dispatch(removeGroup(groupName));
     },
   };
 };

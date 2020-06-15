@@ -11,7 +11,7 @@ import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
 import WS from 'jest-websocket-mock';
 import { doReceiveToken } from './actions/auth';
-import { openWebsocketConnection, addGroupSubscription } from './actions/ws';
+import { openWebsocketConnection, addGroup } from './actions/ws';
 import thunkMiddleware from 'redux-thunk';
 import { cameraStates, imageStates } from '../Constants';
 
@@ -20,7 +20,7 @@ beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', 'love-token');
   server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
-  server.on('connection', socket => {
+  server.on('connection', (socket) => {
     const [, token] = socket.url.split('?token=');
     if (token !== 'love-token') {
       socket.close();
@@ -64,7 +64,7 @@ it('Should extract the stream correctly with a selector', async () => {
   const groupName = [category, csc, salindex, stream].join('-');
 
   // Act
-  await store.dispatch(addGroupSubscription(groupName));
+  await store.dispatch(addGroup(groupName));
   server.send({
     category,
     data: [
@@ -138,8 +138,8 @@ it('Should extract streams correctly with a selector', async () => {
   const groupNames = ['telemetry-Environment-1-airPressure', 'telemetry-Environment-1-temperature'];
 
   // Act
-  await store.dispatch(addGroupSubscription(groupNames[0]));
-  await store.dispatch(addGroupSubscription(groupNames[1]));
+  await store.dispatch(addGroup(groupNames[0]));
+  await store.dispatch(addGroup(groupNames[1]));
   server.send({
     category: 'telemetry',
     data: [
@@ -181,7 +181,7 @@ it('Should extract the timestamped stream correctly with a selector', async () =
   const groupName = 'telemetry-Environment-1-airPressure';
   const timestamp = new Date();
   // Act
-  await store.dispatch(addGroupSubscription(groupName));
+  await store.dispatch(addGroup(groupName));
   server.send({
     category: 'telemetry',
     data: [
@@ -298,7 +298,7 @@ describe('Test image sequence data passes correctly to component', () => {
       const groupName = `event-ATCamera-1-${stagePair[0]}`;
 
       // Act
-      await store.dispatch(addGroupSubscription(groupName));
+      await store.dispatch(addGroup(groupName));
       server.send({
         category: 'event',
         data: [
@@ -341,7 +341,7 @@ describe('Test camera component status data passes correctly to component', () =
         [componentPair[0]]: stateData,
       };
       // Act
-      await store.dispatch(addGroupSubscription(groupName));
+      await store.dispatch(addGroup(groupName));
 
       server.send({
         category: 'event',
@@ -454,8 +454,8 @@ it('Append readout parameters to image', async () => {
     ],
   };
 
-  await store.dispatch(addGroupSubscription('event-ATCamera-1-startIntegration'));
-  await store.dispatch(addGroupSubscription('event-ATCamera-1-imageReadoutParameters'));
+  await store.dispatch(addGroup('event-ATCamera-1-startIntegration'));
+  await store.dispatch(addGroup('event-ATCamera-1-imageReadoutParameters'));
 
   server.send({
     category: 'event',
@@ -626,7 +626,7 @@ it('Should extract the ScriptQueue state correctly with a selector', async () =>
     },
   };
 
-  await store.dispatch(addGroupSubscription('event-ScriptQueueState-1-stream'));
+  await store.dispatch(addGroup('event-ScriptQueueState-1-stream'));
   server.send({
     category: 'event',
     data: [
@@ -698,7 +698,7 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
   const groupName = 'event-ScriptQueue-1-summaryState';
 
   // Act
-  await store.dispatch(addGroupSubscription(groupName));
+  await store.dispatch(addGroup(groupName));
 
   server.send({
     category: 'event',
@@ -848,9 +848,9 @@ it('Should extract the Mount motors values correctly with a selector', async () 
     ],
   };
   // Act
-  await store.dispatch(addGroupSubscription(groupNames[0]));
-  await store.dispatch(addGroupSubscription(groupNames[1]));
-  await store.dispatch(addGroupSubscription(groupNames[2]));
+  await store.dispatch(addGroup(groupNames[0]));
+  await store.dispatch(addGroup(groupNames[1]));
+  await store.dispatch(addGroup(groupNames[2]));
   server.send({
     category: 'telemetry',
     data: [

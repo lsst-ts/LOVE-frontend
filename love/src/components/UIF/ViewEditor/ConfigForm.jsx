@@ -4,6 +4,7 @@ import AceEditor from 'react-ace';
 import styles from './ConfigForm.module.css';
 import Modal from '../../GeneralPurpose/Modal/Modal';
 import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
 import { indexes } from '../ComponentIndex';
 
 import JSONPretty from 'react-json-pretty';
@@ -12,8 +13,7 @@ import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
-  TelemetrySelectionTable: require('../../../components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.container')
-    .default,
+  HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
@@ -31,7 +31,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   }, [componentConfig]);
 
   const updateConfig = (key, value) => {
-    console.log('key', key, value);
     const newConfig = { ...config };
     newConfig[key] = value;
     setConfig(newConfig);
@@ -46,16 +45,17 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   };
 
   const onExtraStepSave = (propKey, newData) => {
+    console.log('propKey: ', propKey);
+    console.log('newData: ', newData);
     updateConfig(propKey, newData);
     setExternalStep({
       show: false,
       component: undefined,
-      propKey: ''
-    })
+      propKey: '',
+    });
   };
 
   const onExtraStepCancel = () => {
-    console.log('canceled');
     setExternalStep({
       show: false,
       component: undefined,
@@ -67,7 +67,13 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
     const Component = externalStepComponents[propConfig.externalStep];
     setExternalStep({
       show: true,
-      component: <Component onSave={(newData) => onExtraStepSave(propKey, newData)} onCancel={onExtraStepCancel} initialData={propData} />,
+      component: (
+        <Component
+          onSave={(newData) => onExtraStepSave(propKey, newData)}
+          onCancel={onExtraStepCancel}
+          initialData={propData}
+        />
+      ),
       propKey,
     });
   };
@@ -75,8 +81,6 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   if (!isOpen) {
     return null;
   }
-
-  console.log('externalStep', externalStep);
 
   if (externalStep.show) {
     return (
@@ -107,7 +111,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
         <div>
           {Object.keys(componentProps).map((key) => {
             let configElementInput = (
-              <input
+              <Input
                 defaultValue={componentConfig[key]}
                 onChange={(event) => {
                   updateConfig(key, event.target.value);
@@ -151,7 +155,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
                         if (mode !== 'javascript') newConfig = JSON.parse(val);
                         updateConfig(key, newConfig);
                       } catch (error) {
-                        console.log(error);
+                        console.error(error);
                       }
                     }}
                     width={'100%'}

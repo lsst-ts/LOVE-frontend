@@ -26,14 +26,14 @@ export default class ContextMenu extends Component {
       this.props.isOpen && (
         <div
           className={styles.container}
-          style={{ left: this.props.contextMenuData.right, top: this.props.contextMenuData.bottom }}
+          style={{ left: this.props.contextMenuData.right, top: `calc( -3.3em + ${this.props.contextMenuData.bottom}px)` }}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {this.props.options.map((child, index) => {
             return (
               <div className={styles.row} key={index} onClick={child.action}>
-                <div>{child.icon}</div>
+                <div className={styles.iconWrapper}>{child.icon}</div>
                 <div className={styles.buttonText}>{child.text}</div>
               </div>
             );

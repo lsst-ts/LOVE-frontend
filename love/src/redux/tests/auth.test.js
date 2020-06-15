@@ -5,17 +5,19 @@ import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
 
-import { fetchToken, validateToken, logout, getTokenFromStorage } from '../actions/auth';
-import { tokenStates } from '../reducers/auth';
+import { fetchToken, validateToken, logout, swapUser, getTokenFromStorage, receiveConfig } from '../actions/auth';
+import { tokenStates, tokenSwapStates } from '../reducers/auth';
 import {
   getToken,
   getUsername,
   getTokenStatus,
+  getTokenSwapStatus,
   getPermCmdExec,
   getTaiToUtc,
   getServerTime,
   getServerTimeRequest,
   getServerTimeReceive,
+  getConfig,
 } from '../selectors';
 
 let store;
@@ -30,6 +32,22 @@ const mockServerTime = {
   sidereal_summit: 5.762640319739233,
   sidereal_greenwich: 10.479268119739233,
   tai_to_utc: -37,
+};
+
+const initialMockConfig = {
+  alarm_sounds: {
+    critical: 1,
+    serious: 0,
+    warning: 0,
+  },
+};
+
+const mockConfig = {
+  alarm_sounds: {
+    critical: 1,
+    serious: 1,
+    warning: 0,
+  },
 };
 
 describe('GIVEN the token does not exist in localStorage', () => {
@@ -57,6 +75,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
           execute_commands: true,
         },
         time_data: mockServerTime,
+        config: mockConfig,
       },
       new Headers({
         Accept: 'application/json',
@@ -77,6 +96,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
     expect(getServerTimeReceive(newState)).toBeGreaterThan(0);
     expect(getTokenStatus(newState)).toEqual(tokenStates.RECEIVED);
     expect(getPermCmdExec(newState)).toEqual(true);
+    expect(getConfig(newState)).toEqual(mockConfig);
     expect(storedToken).toEqual(newToken);
   });
 
@@ -99,7 +119,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
 });
 
 describe('GIVEN the token exists in localStorage', () => {
-  let initialToken, url;
+  let initialToken, url, url_no_config;
 
   beforeEach(async () => {
     const token = '"love-token"';
@@ -108,6 +128,7 @@ describe('GIVEN the token exists in localStorage', () => {
     initialToken = getToken(store.getState());
     expect(initialToken).toEqual(token);
     url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    url_no_config = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
   });
 
   afterEach(() => {
@@ -115,10 +136,45 @@ describe('GIVEN the token exists in localStorage', () => {
     fetchMock.reset();
   });
 
-  it('Should not change the token state when the token is valid', async () => {
+  it('Should validate the token and not change the token state when the token is valid', async () => {
     // Arrange:
     fetchMock.mock(
       url,
+      {
+        detail: 'Token is valid',
+        user: {
+          username: 'my-user',
+        },
+        permissions: {
+          execute_commands: true,
+        },
+        time_data: mockServerTime,
+        config: mockConfig,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    // Act:
+    await store.dispatch(validateToken());
+    // Assert:
+    const newToken = getToken(store.getState());
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(newToken).toEqual(initialToken);
+    expect(storedToken).toEqual(initialToken);
+    expect(getTaiToUtc(store.getState())).toEqual(mockServerTime.tai_to_utc);
+    expect(getServerTime(store.getState())).toEqual(mockServerTime);
+    expect(getServerTimeRequest(store.getState())).toBeGreaterThan(0);
+    expect(getServerTimeReceive(store.getState())).toBeGreaterThan(0);
+    expect(getUsername(store.getState())).toEqual('my-user');
+    expect(getPermCmdExec(store.getState())).toEqual(true);
+    expect(getConfig(store.getState())).toEqual(mockConfig);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
+  });
+
+  it('Should not request config when validating the token if the config is already on the state', async () => {
+    // Arrange:
+    await store.dispatch(receiveConfig(initialMockConfig));
+    fetchMock.mock(
+      url_no_config,
       {
         detail: 'Token is valid',
         user: {
@@ -144,6 +200,7 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(getServerTimeReceive(store.getState())).toBeGreaterThan(0);
     expect(getUsername(store.getState())).toEqual('my-user');
     expect(getPermCmdExec(store.getState())).toEqual(true);
+    expect(getConfig(store.getState())).toEqual(initialMockConfig);
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
   });
 
@@ -225,5 +282,78 @@ describe('GIVEN the token exists in localStorage', () => {
     expect(token).toBeNull();
     expect(storedToken).toBeNull();
     expect(getTokenStatus(store.getState())).toEqual(tokenStates.REMOVE_ERROR);
+  });
+
+  it('Should be able to swap user account', async () => {
+    // Arrange:
+    url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+    fetchMock.mock(
+      url,
+      {
+        status: 200,
+        token: 'new-token',
+        user: {
+          username: 'my-user',
+        },
+        permissions: {
+          execute_commands: true,
+        },
+        time_data: mockServerTime,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    // Act:
+    await store.dispatch(swapUser('username', 'password'));
+    // Assert:
+    const token = getToken(store.getState());
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(token).toEqual('new-token');
+    expect(storedToken).toEqual('new-token');
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.RECEIVED);
+    expect(getTokenSwapStatus(store.getState())).toEqual(tokenSwapStates.RECEIVED);
+  });
+
+  it('Should keep token if swap credentials are incorrect', async () => {
+    // Arrange:
+    url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+    fetchMock.mock(
+      url,
+      {
+        status: 400,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    const initialToken = getToken(store.getState());
+    // Act:
+    await store.dispatch(swapUser('username', 'incorrect'));
+    // Assert:
+    const token = getToken(store.getState());
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(token).toEqual(initialToken);
+    expect(storedToken).toEqual(initialToken);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.READ_FROM_STORAGE);
+    expect(getTokenSwapStatus(store.getState())).toEqual(tokenSwapStates.REJECTED);
+  });
+
+  it('Should keep token if server returns error', async () => {
+    // Arrange:
+    url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+    fetchMock.mock(
+      url,
+      {
+        status: 500,
+      },
+      ManagerInterface.getHeaders(),
+    );
+    const initialToken = getToken(store.getState());
+    // Act:
+    await store.dispatch(swapUser('username', 'password'));
+    // Assert:
+    const token = getToken(store.getState());
+    const storedToken = localStorage.getItem('LOVE-TOKEN');
+    expect(token).toEqual(initialToken);
+    expect(storedToken).toEqual(initialToken);
+    expect(getTokenStatus(store.getState())).toEqual(tokenStates.READ_FROM_STORAGE);
+    expect(getTokenSwapStatus(store.getState())).toEqual(tokenSwapStates.ERROR);
   });
 });

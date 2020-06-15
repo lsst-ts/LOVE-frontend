@@ -140,9 +140,7 @@ class ViewEditor extends Component {
       });
     }
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
-      if (this.props.editedViewStatus.code === editViewStates.SAVING) {
-        console.log('Saving');
-      } else if (
+      if (
         prevProps.editedViewStatus.code === editViewStates.SAVING &&
         this.props.editedViewStatus.code === editViewStates.SAVED
       ) {
@@ -224,7 +222,6 @@ class ViewEditor extends Component {
   };
 
   confirmLayoutChange = (newLayoutProperties) => {
-    console.log('confirmLayoutChange this.state.responsiveLayoutState', this.state.responsiveLayoutState);
     this.onLayoutChange(newLayoutProperties);
     if (this.state.responsiveLayoutState === COLS_DECREASED || this.state.responsiveLayoutState === EDIT_CANCELED) {
       this.setState({
@@ -414,14 +411,17 @@ class ViewEditor extends Component {
     if (this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION) {
       this.props.undo();
     }
-    
+
     this.setState({
       responsiveLayoutState: EDIT_CANCELED,
     });
   };
 
   undo = () => {
-    if (this.state.responsiveLayoutState === EDIT_CANCELED || this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION) {
+    if (
+      this.state.responsiveLayoutState === EDIT_CANCELED ||
+      this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION
+    ) {
       this.setState({
         responsiveLayoutState: UNDO_NEEDS_CONFIRMATION,
       });
@@ -433,13 +433,12 @@ class ViewEditor extends Component {
   renderToolbar() {
     const isSaved = this.viewIsSaved();
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
-    console.log('responsiveLayoutState', this.state.responsiveLayoutState)
     return (
       <>
         <div className={styles.toolbarWrapper}>
           <div className={styles.toolbar}>
             <Input
-              className={[styles.textField, styles.element].join(' ')}
+              className={[styles.input, styles.element].join(' ')}
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
@@ -561,7 +560,6 @@ class ViewEditor extends Component {
   };
 
   render() {
-    // console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />

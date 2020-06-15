@@ -12,10 +12,14 @@ import {
   getAllTime,
   getAllAlarms,
   getTaiToUtc,
+  getPermCmdExec,
+  getTokenSwapStatus,
+  getConfig,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
+import { requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import Layout from './Layout';
 
 const LayoutContainer = ({ ...props }) => {
@@ -24,6 +28,7 @@ const LayoutContainer = ({ ...props }) => {
 
 const mapStateToProps = (state) => {
   const user = getUsername(state);
+  const config = getConfig(state);
   const lastSALCommand = getLastSALCommand(state);
   const mode = getMode(state);
   const getCurrentView = (id) => getViewSummary(state, id);
@@ -34,8 +39,12 @@ const mapStateToProps = (state) => {
   const timeData = getAllTime(state);
   const alarms = getAllAlarms(state);
   const taiToUtc = getTaiToUtc(state);
+  const execPermission = getPermCmdExec(state);
+  const getExecPermission = () => getPermCmdExec(state);
+  const tokenSwapStatus = getTokenSwapStatus(state);
   return {
     user,
+    config,
     lastSALCommand,
     mode,
     getCurrentView,
@@ -46,6 +55,9 @@ const mapStateToProps = (state) => {
     timeData,
     alarms,
     taiToUtc,
+    execPermission,
+    getExecPermission,
+    tokenSwapStatus,
   };
 };
 
@@ -56,10 +68,10 @@ const mapDispatchToProps = (dispatch) => {
     logout: () => dispatch(logout()),
     clearViewToEdit: () => dispatch(clearViewToEdit),
     subscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
       return dispatch(
@@ -74,6 +86,10 @@ const mapDispatchToProps = (dispatch) => {
           },
         }),
       );
+    },
+    requireUserSwap: (bool) => {
+      if (bool) dispatch(requireSwapToken);
+      else dispatch(cancelSwapToken);
     },
   };
 };

@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../redux/actions/ws';
 import { getObservingLogs, getTaiToUtc } from '../../redux/selectors';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ObservingLogMessages from './ObservingLogMessages';
 
 export const schema = {
-  description: 'Component a textfield for the submission of observing log messages',
+  description: 'Component for the submission of observing log messages',
   defaultSize: [36, 28],
   props: {
     titleBar: {
@@ -56,10 +56,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions,
     subscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     sendMessage: (message) => {
       //   return dispatch(requestSALCommand({ ...cmd, component: 'ObservingLogMessages', salindex: ownProps.salindex }));

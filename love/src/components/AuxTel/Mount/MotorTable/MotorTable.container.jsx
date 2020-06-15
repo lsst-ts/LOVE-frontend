@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import MotorTable from './MotorTable';
 import { getMountMotorsState, getMountMotorsSubscriptions } from '../../../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
@@ -36,10 +36,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     subscriptions: mountMotorSubscriptions,
     subscribeToStream: () => {
-      mountMotorSubscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      mountMotorSubscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStream: () => {
-      mountMotorSubscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      mountMotorSubscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
   };
 };

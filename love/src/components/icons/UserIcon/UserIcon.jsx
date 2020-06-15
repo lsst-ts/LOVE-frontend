@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './UserIcon.module.css';
 
-export default function GearIcon(props) {
+export default function UserIcon(props) {
   const status = props.active ? styles.active : styles.inactive;
   const className = [styles.userIcon, props.className, props.style].join(' ');
   return (

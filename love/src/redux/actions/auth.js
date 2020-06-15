@@ -10,10 +10,17 @@ import {
   REMOVE_REMOTE_TOKEN,
   MARK_ERROR_REMOVE_TOKEN,
   GET_TOKEN_FROM_LOCALSTORAGE,
+  REQUEST_SWAP_TOKEN,
+  RECEIVE_SWAP_TOKEN,
+  REJECT_SWAP_TOKEN,
+  MARK_ERROR_SWAP_TOKEN,
+  REQUIRE_SWAP_TOKEN,
+  CANCEL_SWAP_TOKEN,
+  RECEIVE_CONFIG,
 } from './actionTypes';
 import { requestViews } from './uif';
 import ManagerInterface from '../../Utils';
-import { getToken } from '../selectors';
+import { getToken, getConfig } from '../selectors';
 import { openWebsocketConnection, closeWebsocketConnection } from './ws';
 import { receiveServerTime, clockStart, clockStop } from './time';
 
@@ -24,6 +31,11 @@ export const receiveToken = (username, token, permissions) => ({
   username,
   token,
   permissions,
+});
+
+export const receiveConfig = (config) => ({
+  type: RECEIVE_CONFIG,
+  config,
 });
 
 export const getTokenFromStorage = (token) => ({ type: GET_TOKEN_FROM_LOCALSTORAGE, token });
@@ -56,6 +68,30 @@ export const markErrorRemoveToken = {
   type: MARK_ERROR_REMOVE_TOKEN,
 };
 
+export const requestSwapToken = {
+  type: REQUEST_SWAP_TOKEN,
+};
+
+export const receiveSwapToken = {
+  type: RECEIVE_SWAP_TOKEN,
+};
+
+export const rejectSwapToken = {
+  type: REJECT_SWAP_TOKEN,
+};
+
+export const markErrorSwapToken = {
+  type: MARK_ERROR_SWAP_TOKEN,
+};
+
+export const requireSwapToken = {
+  type: REQUIRE_SWAP_TOKEN,
+};
+
+export const cancelSwapToken = {
+  type: CANCEL_SWAP_TOKEN,
+};
+
 export function doGetTokenFromStorage() {
   return (dispatch) => {
     const token = localStorage.getItem('LOVE-TOKEN');
@@ -78,10 +114,13 @@ function doMarkErrorToken() {
   };
 }
 
-export function doReceiveToken(username, token, permissions, time_data, request_time) {
+export function doReceiveToken(username, token, permissions, time_data, request_time, config) {
   return (dispatch) => {
     dispatch(receiveToken(username, token, permissions));
     dispatch(receiveServerTime(time_data, request_time));
+    if (config) {
+      dispatch(receiveConfig(config));
+    }
     dispatch(openWebsocketConnection());
     dispatch(clockStart());
     localStorage.setItem('LOVE-TOKEN', token);
@@ -148,8 +187,9 @@ export function fetchToken(username, password) {
           }
           const time_data = response.time_data;
           const permissions = response.permissions;
+          const config = response.config;
           if (token !== undefined && token !== null) {
-            dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
             dispatch(requestViews());
             return;
           }
@@ -165,7 +205,7 @@ export function fetchToken(username, password) {
 export function logout() {
   const url = `${ManagerInterface.getApiBaseUrl()}logout/`;
 
-  return (dispatch, getState) => {
+  return (dispatch) => {
     const token = localStorage.getItem('LOVE-TOKEN');
     if (!token) {
       dispatch(doRemoveRemoteToken());
@@ -199,12 +239,16 @@ export function logout() {
  */
 export function validateToken() {
   return async (dispatch, getState) => {
-    const token = getToken(getState());
+    const state = getState();
+    const token = getToken(state);
     if (token === null || token === undefined) {
       return Promise.resolve();
     }
-
-    const url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    const current_config = getConfig(state);
+    let url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
+    if (current_config) {
+      url = url + 'no_config/';
+    }
     const request_time = DateTime.utc().toMillis() / 1000;
     return fetch(url, {
       method: 'GET',
@@ -231,10 +275,65 @@ export function validateToken() {
         if (user) {
           ({ username } = user);
         }
-        const { permissions, time_data } = resp;
-        dispatch(doReceiveToken(username, token, permissions, time_data, request_time));
+        const { permissions, time_data, config } = resp;
+        dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
         return Promise.resolve();
       });
     });
+  };
+}
+
+/**
+ * Swaps current user for a new one.
+ * Nothing changes if credentials are wrong.
+ */
+export function swapUser(username, password) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const token = getToken(state);
+    if (token === null || token === undefined) {
+      return Promise.resolve();
+    }
+    const current_config = getConfig(state);
+    let url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
+    if (current_config) {
+      url = url + 'no_config/';
+    }
+    dispatch(requestSwapToken);
+    const request_time = DateTime.utc().toMillis() / 1000;
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 400) {
+          dispatch(rejectSwapToken);
+          return false;
+        } else {
+          dispatch(markErrorSwapToken);
+          return false;
+        }
+      })
+      .then((response) => {
+        if (response) {
+          const token = response.token;
+          let username = '';
+          if (response.user) {
+            username = response.user.username;
+          }
+          const time_data = response.time_data;
+          const permissions = response.permissions;
+          const config = response.config;
+          if (token !== undefined && token !== null) {
+            dispatch(receiveSwapToken);
+            dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
+            return;
+          }
+        }
+      })
+      .catch((e) => console.log(e));
   };
 }

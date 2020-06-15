@@ -163,11 +163,11 @@ export default class WaitingScript extends PureComponent {
                       e.stopPropagation();
                     }}
                   >
-                    <div className={[scriptStyles.commandButton, this.props.isCompact ? scriptStyles.compact : ''].join(' ')}>
+                    <div className={[scriptStyles.commandButton, scriptStyles.compact].join(' ')}>
                       <div>
                         <MoveUpIcon />
                       </div>
-                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move up'}</div>
+                      {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move up'}</div> */}
                     </div>
                   </div>
                   <div
@@ -177,11 +177,11 @@ export default class WaitingScript extends PureComponent {
                       e.stopPropagation();
                     }}
                   >
-                    <div className={[scriptStyles.commandButton, this.props.isCompact ? scriptStyles.compact : ''].join(' ')}>
+                    <div className={[scriptStyles.commandButton, scriptStyles.compact].join(' ')}>
                       <div>
                         <MoveDownIcon />
                       </div>
-                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move down'}</div>
+                      {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Move down'}</div> */}
                     </div>
                   </div>
                   <div
@@ -191,18 +191,18 @@ export default class WaitingScript extends PureComponent {
                       e.stopPropagation();
                     }}
                   >
-                    <div className={[scriptStyles.commandButton, this.props.isCompact ? scriptStyles.compact : ''].join(' ')}>
+                    <div className={[scriptStyles.commandButton, scriptStyles.compact].join(' ')}>
                       <div>
                         <StopIcon />
                       </div>
-                      <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div>
+                      {/* <div className={scriptStyles.commandButtonText}>{this.props.isCompact ? '' : 'Stop'}</div> */}
                     </div>
                   </div>
                   <div
-                    className={scriptStyles.buttonContainer}
+                    className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
                     onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
                   >
-                    {' '}&#8943;{' '}
+                    <span style={{'width': '100%'}}>&#8943;</span>
                   </div>
                 </div>
               )}

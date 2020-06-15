@@ -1,0 +1,10 @@
+.title {
+  font-size: 1.5em;
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.rndEditor {
+  border-radius: 7px;
+  width: 400px;
+}

@@ -12,6 +12,7 @@ export default function Alarm({ severity, ackButtonLocation, acknowledged, muted
       status='info'
       disabled={acknowledged}
       onClick={(event) => {ackAlarm(event)}}
+      command
     >
       ACK
     </Button>

@@ -4,7 +4,7 @@ import styles from './StopIcon.module.css';
 export default class StopIcon extends Component {
   render() {
     return (
-      <svg viewBox="0 0 23.9 23.9" className={styles.svg}>
+      <svg viewBox="1 0 23.9 23.9" className={styles.svg}>
         <title>{'Stop script'}</title>
         <path
           className={styles.st0}
