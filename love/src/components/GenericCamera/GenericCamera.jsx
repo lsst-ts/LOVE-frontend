@@ -44,7 +44,7 @@ export const schema = {
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
-export default function GenericCamera({ serverURL = schema.props.serverURL.default }) {
+export default function GenericCamera({ serverURL = schema.props.serverURL.default, healpixOverlays = [] }) {
   const [imageWidth, setImageWidth] = useState(1024);
   const [imageHeight, setImageHeight] = useState(1024);
   const [containerWidth, setContainerWidth] = useState(1);
@@ -176,10 +176,17 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
 
   return (
     <div>
-      <HealpixOverlay
-        width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
-        height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-      ></HealpixOverlay>
+      {healpixOverlays.map((overlay, index) => {
+        return (
+          <HealpixOverlay
+            key={index}
+            width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+            height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+            azelData={overlay.azelData}
+          ></HealpixOverlay>
+        );
+      })}
+
       <canvas ref={onCanvasRefChange}></canvas>
     </div>
   );
