@@ -212,16 +212,30 @@ describe('Given a connection is OPEN, ', () => {
   });
 
   it('When we RECEIVE A NEW TOKEN, then we DISCONNECT and RECONNECT again with the new token', async () => {
-    // ARRANGE
-    let reconnected = false;
-    server.on('connection', (_socket) => {
-      reconnected = true;
+    let disconnected = false;
+    server.on('close', (_socket) => {
+      disconnected = true;
     });
     // ACT:
     await store.dispatch(doReceiveToken('new-username', 'swapped-token', {}, 0));
     // ASSERT:
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
     await server.closed;
+    expect(disconnected).toEqual(true);
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
+  });
+
+  it('When we RECEIVE THE SAME TOKEN, then we NO NOT DISCONNECT', async () => {
+    let disconnected_2 = false;
+    server.on('close', (_socket) => {
+      disconnected_2 = true;
+    });
+    // ACT:
+    console.log('before: ', getConnectionStatus(store.getState()));
+    await store.dispatch(doReceiveToken('new-username', 'love-token', {}, 0));
+    // ASSERT:
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+    expect(disconnected_2).toEqual(false);
   });
 });
 
