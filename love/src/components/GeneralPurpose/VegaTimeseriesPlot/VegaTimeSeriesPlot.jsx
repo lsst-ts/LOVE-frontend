@@ -1,25 +1,25 @@
 import React, { Component } from 'react';
-import { VegaLite } from 'react-vega'
+import { VegaLite } from 'react-vega';
 import styles from './VegaTimeSeriesPlot.module.css';
 import PropTypes from 'prop-types';
 
 export const SHAPES = [
-  "circle",
-  "square",
-  "diamond",
-  "triangle-up",
-  "triangle-down",
-  "triangle-right",
-  "triangle-left",
-  "cross",
+  'circle',
+  'square',
+  'diamond',
+  'triangle-up',
+  'triangle-down',
+  'triangle-right',
+  'triangle-left',
+  'cross',
 ];
 
 export const COLORS = [
-  "#ff7bb5", // pink
-  "#97e54f", // green
-  "#00b7ff", // light blue
-  "#f9b200", // orange-ish
-  "#a9a5ff", // purple-ish
+  '#ff7bb5', // pink
+  '#97e54f', // green
+  '#00b7ff', // light blue
+  '#f9b200', // orange-ish
+  '#a9a5ff', // purple-ish
 ];
 
 export const DASHES = [
@@ -33,15 +33,13 @@ export const DASHES = [
   [8, 1],
 ];
 
-
 /**
- * Generates plots using different marks (lines, points, bars, etc) on different layers 
+ * Generates plots using different marks (lines, points, bars, etc) on different layers
  * on a canvas that is auto-sized to match its parent node size.
  */
 class VegaTimeseriesPlot extends Component {
-
   static propTypes = {
-    /** Object with data separated on different keys to be plotted in different layers. 
+    /** Object with data separated on different keys to be plotted in different layers.
      * Passed directly as <VegaLite data={layers} ...>
      */
     layers: PropTypes.shape({
@@ -49,14 +47,14 @@ class VegaTimeseriesPlot extends Component {
        *  name distinguishes a line from another
        *  x,y are the plot-axis coordinates of a point in that line
        */
-      lines: PropTypes.arrayOf(PropTypes.object)
-    })
-  }
+      lines: PropTypes.arrayOf(PropTypes.object),
+    }),
+  };
 
   static defaultProps = {
-
-    data: [],
-  }
+    layers: {},
+    temporalXAxis: true,
+  };
 
   constructor(props) {
     super(props);
@@ -65,62 +63,61 @@ class VegaTimeseriesPlot extends Component {
     this.state = {
       containerWidth: 500,
       containerHeight: 200,
-    }
+    };
   }
 
   makeAxisTitle = (title, units) => {
     return `${title.toUpperCase()} ${units ? `[${units}]` : ''}`;
-  }
+  };
 
   makeStyleEncoding = () => {
-    const marksStyles = this.props.marksStyles.filter(l => l.name !== '' && !l.labelOnly);
-    const names = marksStyles.map(style => style.name);
+    const marksStyles = this.props.marksStyles.filter((l) => l.name !== '' && !l.labelOnly);
+    const names = marksStyles.map((style) => style.name);
 
     return {
       stroke: {
         field: 'name',
-        type: "nominal",
+        type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map(style => style.color ?? COLORS[0])
-        }
+          range: marksStyles.map((style) => style.color ?? COLORS[0]),
+        },
       },
       fill: {
         field: 'name',
-        type: "nominal",
+        type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map(style => {
+          range: marksStyles.map((style) => {
             if (style.filled !== undefined && !style.filled) {
               return 'none';
             }
             return style.color ?? COLORS[0];
-          })
-        }
+          }),
+        },
       },
       shape: {
         field: 'name',
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map(style => style.shape ?? SHAPES[0])
+          range: marksStyles.map((style) => style.shape ?? SHAPES[0]),
         },
-        legend: false
+        legend: false,
       },
       strokeDash: {
         field: 'name',
         type: 'nominal',
         scale: {
           domain: names,
-          range: marksStyles.map(style => style.dash ?? DASHES[0])
+          range: marksStyles.map((style) => style.dash ?? DASHES[0]),
         },
-        legend: false
-      }
-    }
-  }
+        legend: false,
+      },
+    };
+  };
 
   makeLineLayer = (dataName) => {
-
     const styleEncoding = this.makeStyleEncoding();
 
     return [
@@ -135,28 +132,31 @@ class VegaTimeseriesPlot extends Component {
             field: 'x',
             type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
             axis: {
-              title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x)
+              title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+              format: '%H:%M:%S'
             },
-            scale: this.props.xDomain ? {
-              domain: this.props.xDomain,
-            } : undefined,
+            scale: this.props.xDomain
+              ? {
+                  domain: this.props.xDomain,
+                }
+              : undefined,
           },
           y: {
             field: 'y',
             type: 'quantitative',
             axis: {
-              title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y)
-            }
+              title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+            },
           },
           stroke: styleEncoding.stroke,
-          strokeDash: styleEncoding.strokeDash
-        }
+          strokeDash: styleEncoding.strokeDash,
+        },
       },
       // line points
       {
         data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
         mark: {
-          type: "point",
+          type: 'point',
           size: 80,
           clip: true,
         },
@@ -169,7 +169,7 @@ class VegaTimeseriesPlot extends Component {
             field: 'y',
             type: 'quantitative',
             scale: {
-              type: "continuous",
+              type: 'continuous',
               zero: false,
             },
           },
@@ -177,39 +177,38 @@ class VegaTimeseriesPlot extends Component {
           fill: styleEncoding.fill,
           shape: styleEncoding.shape,
         },
-        transform: [{
-          filter: `floor(${this.props.skipPointsEvery}*(datum.index/${this.props.skipPointsEvery} - floor(datum.index/${this.props.skipPointsEvery})))==0`
-        }]
-      }
-
-    ]
-  }
-
+        transform: [
+          {
+            filter: `floor(${this.props.skipPointsEvery}*(datum.index/${this.props.skipPointsEvery} - floor(datum.index/${this.props.skipPointsEvery})))==0`,
+          },
+        ],
+      },
+    ];
+  };
 
   componentDidMount = () => {
     // this.props.subscribeToStreams();
 
     window.setWidth = (width) => {
       this.setState({
-        containerWidth: width
-      })
-    }
+        containerWidth: width,
+      });
+    };
     this.resizeObserver = new ResizeObserver((entries) => {
       const container = entries[0];
       this.setState({
         containerHeight: container.contentRect.height, //-16-5*2-75,
         containerWidth: container.contentRect.width, // - (8 + 15) * 2 - 16-2*10
-      })
+      });
     });
 
     this.resizeObserver.observe(this.containerRef.current.parentNode);
-
-  }
+  };
 
   componentWillUnmount = () => {
     // this.props.unsubscribeToStreams();
     this.resizeObserver.disconnect();
-  }
+  };
   render() {
     const { layers } = this.props;
     const lineLayer = this.makeLineLayer('lines');
@@ -217,8 +216,8 @@ class VegaTimeseriesPlot extends Component {
       width: this.state.containerWidth,
       height: this.state.containerHeight,
       autosize: {
-        type: "fit",
-        contains: "padding"
+        type: 'fit',
+        contains: 'padding',
       },
       config: {
         background: null,
@@ -236,27 +235,35 @@ class VegaTimeseriesPlot extends Component {
           gridColor: '#626262',
           tickColor: null,
         },
-
+        axisX: {
+          titlePadding: 16,
+          titleFontWeight: 750,
+          // labelAngle: -45,
+          labelFontWeight: 750,
+          tickCount: 10,
+        },
       },
-      ...lineLayer[0]
+      ...lineLayer[0],
     };
 
     return (
-      <div style={{
-        width: `${this.state.containerWidth}px`,
-        height: this.state.containerHeight
-      }}
-        ref={this.containerRef}>
+      <div
+        style={{
+          width: `${this.state.containerWidth}px`,
+          height: this.state.containerHeight,
+        }}
+        ref={this.containerRef}
+      >
         <VegaLite
           style={{
-            display: 'flex'
+            display: 'flex',
           }}
           renderer="svg"
           spec={spec}
           data={layers}
           className={styles.plotContainer}
-          actions={false} />
-
+          actions={false}
+        />
       </div>
     );
   }
