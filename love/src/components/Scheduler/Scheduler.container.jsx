@@ -44,4 +44,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(() => {}, mapDispatchToProps)(SchedulerContainer);
+export default connect(() => {return {}}, mapDispatchToProps)(SchedulerContainer);

@@ -1,5 +1,10 @@
 .svg {
     position: absolute;
+    pointer-events: none;
+}
+
+.svg > g, .svg > path {
+    pointer-events: auto;
 }
 
 .polygons {

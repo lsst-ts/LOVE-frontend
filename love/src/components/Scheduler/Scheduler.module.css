@@ -7,9 +7,14 @@
 .selectorTitle {
   font-size: var(--font-size-large);
   color: var(--primary-font-color);
+  padding-top: 0.5em;
 }
 
 .selectorContainer {
   padding: 0 1em;
   text-align: left;
+}
+
+.value {
+  color: var(--primary-font-color);
 }
