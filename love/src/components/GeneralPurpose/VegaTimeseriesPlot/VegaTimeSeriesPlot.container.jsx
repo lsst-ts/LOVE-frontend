@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroupSubscription, requestGroupSubscriptionRemoval } from '../../../redux/actions/ws';
+import { addGroup, requestGroupRemoval } from '../../../redux/actions/ws';
 import { getStreamsData } from '../../../redux/selectors/selectors.js';
 import VegaTimeSeriesPlot from './VegaTimeSeriesPlot';
 import moment from 'moment';
@@ -166,14 +166,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
             const groupNames = Object.keys(subscriptions);
             console.log('groupNames', groupNames)
             groupNames.forEach((groupName) => {
-                dispatch(addGroupSubscription(groupName));
+                dispatch(addGroup(groupName));
             });
         },
         unsubscribeToStreams: () => {
             const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
             const groupNames = Object.keys(subscriptions);
             groupNames.forEach((groupName) => {
-                dispatch(requestGroupSubscriptionRemoval(groupName));
+                dispatch(requestGroupRemoval(groupName));
             });
         },
     };
