@@ -109,7 +109,7 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 };
 
 /**
- * Reset all the given subscriptions (status PENDING and noo confirmationMessage)
+ * Reset all the given subscriptions (status PENDING and no confirmationMessage)
  */
 export const resetSubscriptions = (subscriptions) => {
   return (dispatch, _getState) => {
@@ -140,6 +140,7 @@ export const openWebsocketConnection = () => {
       const connectionStatus = getConnectionStatus(getState());
       if (connectionStatus !== connectionStates.CLOSED) {
         dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       }
       return;
     }
@@ -149,6 +150,7 @@ export const openWebsocketConnection = () => {
       return;
     }
     const token = getToken(getState());
+
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
     dispatch(_changeConnectionState(connectionStates.OPENING, socket));
 
@@ -260,7 +262,7 @@ export const openWebsocketConnection = () => {
  */
 export const closeWebsocketConnection = () => {
   return (dispatch, getState) => {
-    dispatch({ type: RESET_SUBSCRIPTIONS, subscriptions: [] });
+    dispatch(resetSubscriptions(getSubscriptions(getState())));
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
       dispatch(_changeConnectionState(connectionStates.CLOSED, socket));

@@ -121,6 +121,7 @@ export function doReceiveToken(username, token, permissions, time_data, request_
     if (config) {
       dispatch(receiveConfig(config));
     }
+    dispatch(closeWebsocketConnection());
     dispatch(openWebsocketConnection());
     dispatch(clockStart());
     localStorage.setItem('LOVE-TOKEN', token);
