@@ -44,15 +44,23 @@ class VegaTimeseriesPlot extends Component {
      */
     layers: PropTypes.shape({
       /** List of {name, x, y} with points of lines to be plotted as lines
-       *  - name distinguishes a line from another
+       *  - name distinguishes a mark from another
        *  - x,y are the plot-axis coordinates of a point in that line
        */
       lines: PropTypes.arrayOf(PropTypes.object),
-      /** List of {name, x, y} with points of lines to be plotted as lines with points
-       *  - name distinguishes a line from another
+      /** 
+       * ------ PENDING see example-------
+       * List of {name, x, y} with points of lines to be plotted as lines with points
+       *  - name distinguishes a mark from another
        *  - x,y are the plot-axis coordinates of a point in that line
        */
       pointLines: PropTypes.arrayOf(PropTypes.object),
+      /** 
+       * List of `{name, x, y}` of bars to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,y are the plot-axis coordinates of a point in that line
+       */
+      bars: PropTypes.arrayOf(PropTypes.object)
     }).isRequired,
 
     /**
@@ -86,15 +94,15 @@ class VegaTimeseriesPlot extends Component {
     /** If true, x axis labels will be rendered as timestamps */
     temporalXAxis: PropTypes.bool,
 
-    /** Dictionary with units of measurements. 
+    /** Dictionary with units of measurements.
      * Will be rendered in the title as [<unit>]
-    */
+     */
     units: PropTypes.shape({
       /** For the x axis */
       x: PropTypes.string,
       /** For the y axis */
-      y: PropTypes.string
-    })
+      y: PropTypes.string,
+    }),
   };
 
   static defaultProps = {
@@ -121,14 +129,6 @@ class VegaTimeseriesPlot extends Component {
     const names = marksStyles.map((style) => style.name);
 
     return {
-      stroke: {
-        field: 'name',
-        type: 'nominal',
-        scale: {
-          domain: names,
-          range: marksStyles.map((style) => style.color ?? COLORS[0]),
-        },
-      },
       fill: {
         field: 'name',
         type: 'nominal',
@@ -141,6 +141,7 @@ class VegaTimeseriesPlot extends Component {
             return style.color ?? COLORS[0];
           }),
         },
+        legend: null,
       },
       shape: {
         field: 'name',
@@ -149,7 +150,25 @@ class VegaTimeseriesPlot extends Component {
           domain: names,
           range: marksStyles.map((style) => style.shape ?? SHAPES[0]),
         },
-        legend: false,
+        legend: null,
+      },
+      color: {
+        field: 'name',
+        type: 'nominal',
+        scale: {
+          domain: names,
+          range: marksStyles.map((style) => style.color ?? COLORS[0]),
+        },
+        legend: null,
+      },
+      stroke: {
+        field: 'name',
+        type: 'nominal',
+        scale: {
+          domain: names,
+          range: marksStyles.map((style) => style.color ?? COLORS[0]),
+        },
+        legend: null,
       },
       strokeDash: {
         field: 'name',
@@ -158,7 +177,7 @@ class VegaTimeseriesPlot extends Component {
           domain: names,
           range: marksStyles.map((style) => style.dash ?? DASHES[0]),
         },
-        legend: false,
+        legend: null,
       },
     };
   };
@@ -193,7 +212,10 @@ class VegaTimeseriesPlot extends Component {
             title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
           },
         },
-        stroke: styleEncoding.stroke,
+        color: {
+          ...styleEncoding.color,
+          legend: true,
+        },
         strokeDash: styleEncoding.strokeDash,
       },
     };
@@ -230,7 +252,7 @@ class VegaTimeseriesPlot extends Component {
               title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
             },
           },
-          stroke: styleEncoding.stroke,
+          stroke: { ...styleEncoding.stroke, legend: true },
           strokeDash: styleEncoding.strokeDash,
         },
       },
@@ -263,6 +285,28 @@ class VegaTimeseriesPlot extends Component {
     ];
   };
 
+  makeBarLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+
+    return {
+      data: { name: dataName },
+      mark: {
+        type: 'bar',
+      },
+      encoding: {
+        x: {
+          field: 'x',
+          type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+        },
+        y: {
+          field: 'y',
+          type: 'quantitative',
+        },
+        color: {...styleEncoding.color, legend: true},
+      },
+    };
+  };
+
   componentDidMount = () => {
     // this.props.subscribeToStreams();
 
@@ -288,6 +332,7 @@ class VegaTimeseriesPlot extends Component {
   };
   render() {
     const { layers } = this.props;
+    console.log('layers', layers);
     const spec = {
       width: this.state.containerWidth,
       height: this.state.containerHeight,
@@ -319,7 +364,12 @@ class VegaTimeseriesPlot extends Component {
           tickCount: 10,
         },
       },
-      layer: [this.makeLineLayer('lines'), ...this.makePointLineLayer('pointLines')],
+      layer: [
+        this.makeLineLayer('lines'),
+        this.makeBarLayer('bars')
+        // TODO: pointLines postponed for now: https://github.com/vega/vega-lite/issues/6496
+        // ...(layers.pointLines ? this.makePointLineLayer('pointLines') : [])
+      ],
     };
 
     return (
