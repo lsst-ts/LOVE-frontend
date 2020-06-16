@@ -158,7 +158,7 @@ The token, websocket and subscriptions handling is summarized in the following g
 - Once the user opens the swap login panel, the swap status changes to SWAP_REQUIRED
 - If the user cancels the swap login panel, the swap status changes back to SWAP_RECEIVED
 - Once the user attempts a user swap, the swap status is SWAP_REQUESTED
-- Once the response is ok (200), the status changes to SWAP_RECEIVED and the websockets connection is opened
+- Once the response is ok (200), the status changes to SWAP_RECEIVED and the websockets connection is closed and then reopened
 - If the response fails, it goes to either SWAP_ERROR or SWAP_REJECTED, depending on response codes. The websocket connection is not closed since the previous token is still in use
 
 ![redux state machine graph](./assets/redux-ws-connection.svg 'Redux ws connection and subscriptions state machine graph')

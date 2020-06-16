@@ -23,7 +23,7 @@ beforeEach(async () => {
   server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
   server.on('connection', (socket) => {
     const [, token] = socket.url.split('?token=');
-    if (token !== 'love-token') {
+    if (token !== 'love-token' && token !== 'swapped-token') {
       socket.close();
     }
   });
@@ -210,6 +210,33 @@ describe('Given a connection is OPEN, ', () => {
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
     expect(reconnected).toBe(false);
   });
+
+  it('When we RECEIVE A NEW TOKEN, then we DISCONNECT and RECONNECT again with the new token', async () => {
+    let disconnected = false;
+    server.on('close', (_socket) => {
+      disconnected = true;
+    });
+    // ACT:
+    await store.dispatch(doReceiveToken('new-username', 'swapped-token', {}, 0));
+    // ASSERT:
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
+    await server.closed;
+    expect(disconnected).toEqual(true);
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
+  });
+
+  it('When we RECEIVE THE SAME TOKEN, then we NO NOT DISCONNECT', async () => {
+    let disconnected_2 = false;
+    server.on('close', (_socket) => {
+      disconnected_2 = true;
+    });
+    // ACT:
+    console.log('before: ', getConnectionStatus(store.getState()));
+    await store.dispatch(doReceiveToken('new-username', 'love-token', {}, 0));
+    // ASSERT:
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
+    expect(disconnected_2).toEqual(false);
+  });
 });
 
 // TEST SUBSCRIPTIONS AND HOW THEY INTERACT WITH CONNECTION
@@ -339,6 +366,24 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     server.send({
       data: 'Successfully subscribed to event-all-all-all',
     });
+  });
+
+  it('When the CONNECTION is RETRYING, then the subscriptions are PENDING', async () => {
+    server.close({ code: 1003 });
+    await server.closed;
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        counter: 1,
+        status: groupStates.PENDING,
+      },
+      {
+        groupName: 'event-all-all-all',
+        counter: 1,
+        status: groupStates.PENDING,
+      },
+    ]);
   });
 
   it(
@@ -689,11 +734,24 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     },
   );
 
-  it('When the CONNECTION is CLOSED, then the subscriptions are EMPTY', async () => {
+  it('When the CONNECTION is CLOSED, then the subscriptions are PENDING (or REQUESTING)', async () => {
     // Close connection
     await store.dispatch(closeWebsocketConnection());
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
-    expect(getSubscriptions(store.getState())).toEqual([]);
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.REQUESTING,
+        counter: 1,
+        confirmationMessage: undefined,
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.REQUESTING,
+        counter: 1,
+        confirmationMessage: undefined,
+      },
+    ]);
   });
 
   it('The server closes the connection with a 1000 code, then connection is CLOSED', async () => {
@@ -724,23 +782,5 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     ]);
     expect(disconnected).toBe(true);
     await server.closed;
-  });
-
-  it('When the CONNECTION is RETRYING, then the subscriptions are PENDING', async () => {
-    server.close({ code: 1003 });
-    await server.closed;
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
-    expect(getSubscriptions(store.getState())).toEqual([
-      {
-        groupName: 'telemetry-all-all-all',
-        counter: 1,
-        status: groupStates.PENDING,
-      },
-      {
-        groupName: 'event-all-all-all',
-        counter: 1,
-        status: groupStates.PENDING,
-      },
-    ]);
   });
 });

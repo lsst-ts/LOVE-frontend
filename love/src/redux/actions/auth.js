@@ -115,11 +115,15 @@ function doMarkErrorToken() {
 }
 
 export function doReceiveToken(username, token, permissions, time_data, request_time, config) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    const oldToken = getToken(getState());
     dispatch(receiveToken(username, token, permissions));
     dispatch(receiveServerTime(time_data, request_time));
     if (config) {
       dispatch(receiveConfig(config));
+    }
+    if (oldToken !== token) {
+      dispatch(closeWebsocketConnection());
     }
     dispatch(openWebsocketConnection());
     dispatch(clockStart());
