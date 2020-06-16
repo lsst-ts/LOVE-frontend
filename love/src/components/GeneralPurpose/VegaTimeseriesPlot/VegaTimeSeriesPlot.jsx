@@ -120,6 +120,42 @@ class VegaTimeseriesPlot extends Component {
   makeLineLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
 
+    return {
+      data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
+      mark: {
+        type: 'line',
+        clip: true,
+      },
+      encoding: {
+        x: {
+          field: 'x',
+          type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+          axis: {
+            title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+            format: '%H:%M:%S',
+          },
+          scale: this.props.xDomain
+            ? {
+                domain: this.props.xDomain,
+              }
+            : undefined,
+        },
+        y: {
+          field: 'y',
+          type: 'quantitative',
+          axis: {
+            title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+          },
+        },
+        stroke: styleEncoding.stroke,
+        strokeDash: styleEncoding.strokeDash,
+      },
+    };
+  };
+
+  makePointLineLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+
     return [
       {
         data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
@@ -133,7 +169,7 @@ class VegaTimeseriesPlot extends Component {
             type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
             axis: {
               title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-              format: '%H:%M:%S'
+              format: '%H:%M:%S',
             },
             scale: this.props.xDomain
               ? {
@@ -177,11 +213,6 @@ class VegaTimeseriesPlot extends Component {
           fill: styleEncoding.fill,
           shape: styleEncoding.shape,
         },
-        transform: [
-          {
-            filter: `floor(${this.props.skipPointsEvery}*(datum.index/${this.props.skipPointsEvery} - floor(datum.index/${this.props.skipPointsEvery})))==0`,
-          },
-        ],
       },
     ];
   };
@@ -211,7 +242,6 @@ class VegaTimeseriesPlot extends Component {
   };
   render() {
     const { layers } = this.props;
-    const lineLayer = this.makeLineLayer('lines');
     const spec = {
       width: this.state.containerWidth,
       height: this.state.containerHeight,
@@ -243,9 +273,13 @@ class VegaTimeseriesPlot extends Component {
           tickCount: 10,
         },
       },
-      ...lineLayer[0],
+      layer: [
+        this.makeLineLayer('lines'),
+        ...this.makePointLineLayer('pointLines')
+      ]
     };
 
+    console.log('spec', spec)
     return (
       <div
         style={{
