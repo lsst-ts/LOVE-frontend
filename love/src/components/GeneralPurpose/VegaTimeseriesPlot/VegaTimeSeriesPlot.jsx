@@ -43,12 +43,58 @@ class VegaTimeseriesPlot extends Component {
      * Passed directly as <VegaLite data={layers} ...>
      */
     layers: PropTypes.shape({
-      /** List of {name, x, y} with points of lines to be plotted
-       *  name distinguishes a line from another
-       *  x,y are the plot-axis coordinates of a point in that line
+      /** List of {name, x, y} with points of lines to be plotted as lines
+       *  - name distinguishes a line from another
+       *  - x,y are the plot-axis coordinates of a point in that line
        */
       lines: PropTypes.arrayOf(PropTypes.object),
-    }),
+      /** List of {name, x, y} with points of lines to be plotted as lines with points
+       *  - name distinguishes a line from another
+       *  - x,y are the plot-axis coordinates of a point in that line
+       */
+      pointLines: PropTypes.arrayOf(PropTypes.object),
+    }).isRequired,
+
+    /**
+     * Defines the styles of each mark to be plotted.
+     */
+    marksStyles: PropTypes.arrayOf(
+      PropTypes.shape({
+        /** (All layers) `name` attribute of the data to apply these styles.
+         * Rows of data with no name-matching markStyle will not be rendered.
+         */
+        name: PropTypes.string,
+        /** (All layers) hex color */
+        color: PropTypes.string,
+        /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
+         * a line with a pattern of 2 "filled" pixels and 1 "empty" pixel.
+         */
+        dash: PropTypes.arrayOf(PropTypes.number),
+        /** (Only `pointLines` layer). Shape of the points to be drawn https://vega.github.io/vega-lite/docs/point.html*/
+        shape: PropTypes.string,
+        /** (Only `pointLines`) layer. Whether to draw a filled point or only its border. */
+        filled: PropTypes.bool,
+      }),
+    ).isRequired,
+
+    /** Title of the x axis */
+    xAxisTitle: PropTypes.string,
+
+    /** Title of the y axis */
+    yAxisTitle: PropTypes.string,
+
+    /** If true, x axis labels will be rendered as timestamps */
+    temporalXAxis: PropTypes.bool,
+
+    /** Dictionary with units of measurements. 
+     * Will be rendered in the title as [<unit>]
+    */
+    units: PropTypes.shape({
+      /** For the x axis */
+      x: PropTypes.string,
+      /** For the y axis */
+      y: PropTypes.string
+    })
   };
 
   static defaultProps = {
@@ -273,13 +319,9 @@ class VegaTimeseriesPlot extends Component {
           tickCount: 10,
         },
       },
-      layer: [
-        this.makeLineLayer('lines'),
-        ...this.makePointLineLayer('pointLines')
-      ]
+      layer: [this.makeLineLayer('lines'), ...this.makePointLineLayer('pointLines')],
     };
 
-    console.log('spec', spec)
     return (
       <div
         style={{
