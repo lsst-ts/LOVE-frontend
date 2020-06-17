@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './VegaLegend.module.css';
+import VegaMiniPlot from './VegaMiniPlot';
 
 const VegaLegend = function ({ gridData, marksStyles }) {
   const nrows = gridData.length;
@@ -21,11 +22,18 @@ const VegaLegend = function ({ gridData, marksStyles }) {
     >
       {filledGridData.map((row) => {
         return row.map((cell) => {
-          return <div>{cell?.label || ''}</div>;
+          const style = marksStyles.find((s) => s.name === cell.name);
+
+          return <div>{cell?.label || ''} {style && <VegaMiniPlot {...style}/> }</div>;
         });
       })}
     </div>
   );
 };
+
+VegaLegend.defaultProps = {
+    gridData: [[]],
+    marksStyles: [] 
+}
 
 export default VegaLegend;

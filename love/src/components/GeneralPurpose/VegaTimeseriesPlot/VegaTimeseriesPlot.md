@@ -82,7 +82,7 @@ const gridData = [
   ],
   [
     {
-      mame: 'eexample-1',
+      name: 'example-1',
       label: 'Line 1',
     },
     {
@@ -92,7 +92,7 @@ const gridData = [
   ],
   [
     {
-      mame: 'example-2',
+      name: 'example-2',
       label: 'Line 2',
     },
   ],
@@ -110,7 +110,7 @@ const gridData = [
       temporalXAxis
     />
   </div>
-  <VegaLegend gridData={gridData} />
+  <VegaLegend gridData={gridData} marksStyles={marksStyles}/>
 </div>;
 ```
 
