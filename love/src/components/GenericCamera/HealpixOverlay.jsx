@@ -105,10 +105,25 @@ HealpixOverlay.propTypes = {
   baseColor: PropTypes.string,
   /** Function to be called when a cell is clicked */
   onLayerClick: PropTypes.func,
+  /** Layer width */
+  width: PropTypes.number,
+  /** Layer height */
+  height: PropTypes.number,
+  /** Object containing the selected cell information, with the following schema: 
+   * {
+        layerName,
+        value,
+        index,
+      } 
+    */
+  selectedCell: PropTypes.object,
 };
 
 HealpixOverlay.defaultProps = {
   azelData: [],
   baseColor: 'white',
   onLayerClick: () => {},
+  width: 500,
+  height: 500,
+  selectedCell: {},
 };
