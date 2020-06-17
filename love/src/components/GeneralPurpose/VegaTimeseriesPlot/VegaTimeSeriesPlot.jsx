@@ -212,10 +212,7 @@ class VegaTimeseriesPlot extends Component {
             title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
           },
         },
-        color: {
-          ...styleEncoding.color,
-          legend: true,
-        },
+        color: styleEncoding.color,
         strokeDash: styleEncoding.strokeDash,
       },
     };
@@ -252,7 +249,7 @@ class VegaTimeseriesPlot extends Component {
               title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
             },
           },
-          stroke: { ...styleEncoding.stroke, legend: true },
+          stroke: styleEncoding.stroke,
           strokeDash: styleEncoding.strokeDash,
         },
       },
@@ -302,7 +299,7 @@ class VegaTimeseriesPlot extends Component {
           field: 'y',
           type: 'quantitative',
         },
-        color: {...styleEncoding.color, legend: true},
+        color: styleEncoding.color,
       },
     };
   };
@@ -365,10 +362,8 @@ class VegaTimeseriesPlot extends Component {
         },
       },
       layer: [
+        this.makeBarLayer('bars'),
         this.makeLineLayer('lines'),
-        this.makeBarLayer('bars')
-        // TODO: pointLines postponed for now: https://github.com/vega/vega-lite/issues/6496
-        // ...(layers.pointLines ? this.makePointLineLayer('pointLines') : [])
       ],
     };
 

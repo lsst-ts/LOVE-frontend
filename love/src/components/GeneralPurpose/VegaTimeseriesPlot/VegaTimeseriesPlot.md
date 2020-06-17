@@ -42,18 +42,21 @@ import { COLORS, DASHES } from './VegaTimeSeriesPlot';
 const length = 100;
 const dt = 2;
 const names = new Array(5).fill('').map((_, index) => `example-${index}`);
-const data = new Array(length).fill({}).flatMap((_, index) => {
-  return names.map((name, nameIndex) => ({
-    name,
-    x: moment().subtract(dt * (length - 1 - index), 'seconds'),
-    y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
-  }));
-});
+
+const data = names.map((name, nameIndex) => {
+  return new Array(length).fill({}).map((_, index) => {
+    return {
+      name,
+      x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+      y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
+    };
+  });
+}).flat();
 
 const marksStyles = names.map((name, index) => ({
   name,
   color: COLORS[index % (COLORS.length - 1)],
-  dash: DASHES[index % (COLORS.length - 1)],
+  dash: DASHES[index % (DASHES.length - 1)],
 }));
 
 <div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
@@ -135,26 +138,27 @@ const data = new Array(length).fill({}).flatMap((_, index) => {
 const bars = new Array(length / 5).fill({}).map((_, index) => {
   return {
     name: 'some bars',
-    x: moment().subtract(dt * (length  - 1 - index * 5 ), 'seconds'),
-    y: Math.cos(((index * Math.PI) / length ) * 25),
+    x: moment().subtract(dt * (length - 1 - index * 5), 'seconds'),
+    y: Math.cos(((index * Math.PI) / length) * 25),
   };
 });
 
-const marksStyles = names.map((name, index) => ({
-  name,
-  color: COLORS[index % (COLORS.length - 1)],
-  dash: DASHES[index % (COLORS.length - 1)],
-})).concat({
+const marksStyles = names
+  .map((name, index) => ({
+    name,
+    color: COLORS[index % (COLORS.length - 1)],
+    dash: DASHES[index % (COLORS.length - 1)],
+  }))
+  .concat({
     name: 'some bars',
-    color: 'gray'
-});
-
+    color: '#ddd',
+  });
 
 <div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
   <VegaTimeseriesPlot
     layers={{
       lines: data,
-      bars
+      bars,
     }}
     xAxisTitle="Time"
     yAxisTitle="Quantity [u]"
@@ -164,10 +168,8 @@ const marksStyles = names.map((name, index) => ({
   ;
 </div>;
 ```
-
-- Bars
 - Tooltips
 - Date x-axis
 - Quantitative x-axis
-- Legend
+- Legend component
 - prop container node
