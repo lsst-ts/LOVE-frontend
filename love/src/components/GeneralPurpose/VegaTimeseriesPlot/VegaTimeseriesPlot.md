@@ -2,6 +2,7 @@ Render a line using default styles
 
 ```jsx
 import moment from 'moment';
+import VegaMiniPlot from './VegaMiniPlot';
 
 const length = 100;
 const dt = 2;
@@ -19,17 +20,22 @@ const marksStyles = [
   },
 ];
 
-<div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
-  <VegaTimeseriesPlot
-    layers={{
-      lines: data,
-    }}
-    xAxisTitle="date title"
-    yAxisTitle="values title"
-    marksStyles={marksStyles}
-    temporalXAxis
-  />
-  ;
+<div>
+  <div style={{display: 'flex', flexDirection: 'row', background: 'black', width:'500px' }}>
+    <span> Example line </span>
+    <VegaMiniPlot/>
+  </div>
+  <div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
+    <VegaTimeseriesPlot
+      layers={{
+        lines: data,
+      }}
+      xAxisTitle="date title"
+      yAxisTitle="values title"
+      marksStyles={marksStyles}
+      temporalXAxis
+    />
+  </div>
 </div>;
 ```
 
@@ -43,15 +49,17 @@ const length = 100;
 const dt = 2;
 const names = new Array(5).fill('').map((_, index) => `example-${index}`);
 
-const data = names.map((name, nameIndex) => {
-  return new Array(length).fill({}).map((_, index) => {
-    return {
-      name,
-      x: moment().subtract(dt * (length - 1 - index), 'seconds'),
-      y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
-    };
-  });
-}).flat();
+const data = names
+  .map((name, nameIndex) => {
+    return new Array(length).fill({}).map((_, index) => {
+      return {
+        name,
+        x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+        y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
+      };
+    });
+  })
+  .flat();
 
 const marksStyles = names.map((name, index) => ({
   name,
@@ -168,8 +176,10 @@ const marksStyles = names
   ;
 </div>;
 ```
+
+- Legend component
 - Tooltips
+- Point lines
 - Date x-axis
 - Quantitative x-axis
-- Legend component
 - prop container node
