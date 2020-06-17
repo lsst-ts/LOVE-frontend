@@ -202,6 +202,7 @@ export default function GenericCamera({
           width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
           height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
           onLayerClick={onLayerClick}
+          selectedCell={selectedCell}
           {...targetOverlay}
         ></TargetLayer>
       )}

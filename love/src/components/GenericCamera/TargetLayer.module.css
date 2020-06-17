@@ -22,3 +22,8 @@
     fill: var(--tertiary-background-color);
     opacity: 0.5;
 }
+
+.selected {
+    stroke: white;
+    stroke-width: 1.5;
+}
