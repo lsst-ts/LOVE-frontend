@@ -1,0 +1,24 @@
+.svg {
+    position: absolute;
+    pointer-events: none;
+}
+
+.svg > g, .svg > path {
+    pointer-events: auto;
+}
+
+.text {
+    text-anchor: middle;
+    stroke: black;
+    fill: white;
+    stroke-width: 0.1;
+    font-size: 16px;
+    user-select: none;
+}
+
+.circle {
+    stroke: black;
+    stroke-width: 1;
+    fill: var(--tertiary-background-color);
+    opacity: 0.5;
+}

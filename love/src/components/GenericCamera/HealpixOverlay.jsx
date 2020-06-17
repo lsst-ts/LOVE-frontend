@@ -9,9 +9,6 @@ export default class HealpixOverlay extends PureComponent {
   constructor(props) {
     super(props);
     this.svgRef = React.createRef();
-    this.state = {
-      selectedCell: undefined,
-    };
   }
 
   componentDidMount() {
@@ -54,7 +51,7 @@ export default class HealpixOverlay extends PureComponent {
       })
       .on('click', (d, i) => {
         const value = d?.properties?.site?.value;
-        props.onCellClick(props.name, value, i);
+        props.onLayerClick(props.name, value, i);
         self.redraw();
       });
     this.nodes = nodes;
@@ -65,7 +62,7 @@ export default class HealpixOverlay extends PureComponent {
   }
 
   componentDidUpdate(prevState, prevProps){
-    if(prevProps.selectedCell?.layerName !== this.props.selectedCell?.layerName)
+    if(prevProps?.selectedCell?.layerName !== this.props.selectedCell?.layerName)
       this.redraw();
   }
 
@@ -107,11 +104,11 @@ HealpixOverlay.propTypes = {
   /** Base RGB color for each cell. Cell values will then modify the opacity of this color */
   baseColor: PropTypes.string,
   /** Function to be called when a cell is clicked */
-  onCellClick: PropTypes.func,
+  onLayerClick: PropTypes.func,
 };
 
 HealpixOverlay.defaultProps = {
   azelData: [],
   baseColor: 'white',
-  onCellClick: () => {},
+  onLayerClick: () => {},
 };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import * as CameraUtils from './CameraUtils';
 import styles from './GenericCamera.module.css';
 import HealpixOverlay from './HealpixOverlay';
+import TargetLayer from './TargetLayer';
 
 export const schema = {
   description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
@@ -48,6 +49,8 @@ export default function GenericCamera({
   serverURL = schema.props.serverURL.default,
   healpixOverlays = [],
   selectedCell = undefined,
+  onLayerClick = () => {},
+  targetOverlay = {},
 }) {
   const [imageWidth, setImageWidth] = useState(1024);
   const [imageHeight, setImageHeight] = useState(1024);
@@ -189,11 +192,19 @@ export default function GenericCamera({
               height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
               selectedCell={selectedCell}
               {...overlay}
+              onLayerClick={onLayerClick}
             ></HealpixOverlay>
           )
         );
       })}
-
+      {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
+        <TargetLayer
+          width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+          height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+          onLayerClick={onLayerClick}
+          {...targetOverlay}
+        ></TargetLayer>
+      )}
       <canvas ref={onCanvasRefChange}></canvas>
     </div>
   );

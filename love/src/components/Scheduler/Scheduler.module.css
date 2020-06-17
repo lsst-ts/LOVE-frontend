@@ -18,3 +18,12 @@
 .value {
   color: var(--primary-font-color);
 }
+
+.targetData {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  padding-left: 0.5em;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.1em;
+  padding-top: 0.1em;
+}

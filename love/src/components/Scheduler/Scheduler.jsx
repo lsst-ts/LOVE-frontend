@@ -19,31 +19,78 @@ export default class Scheduler extends Component {
       };
     });
 
-    const onCellClick = (layerName, value, index) => {
-      this.setState({
-        selectedCell: {
-          layerName,
-          value,
-          index,
-        },
-      });
-    };
-
     this.state = {
       healpixOverlays: [
-        { azelData: data, baseColor: 'blue', name: 'Layer one', display: true, onCellClick },
-        { azelData: data2, baseColor: 'red', name: 'Layer two', display: true, onCellClick },
+        { azelData: data, baseColor: 'blue', name: 'Layer one', display: true },
+        { azelData: data2, baseColor: 'red', name: 'Layer two', display: true },
       ],
+      targetData: [
+        { xy: [100, 140], filter: 'u', id: 123 },
+        { xy: [140, 160], filter: 'g', id: 124 },
+        { xy: [200, 240], filter: 'r', id: 125 },
+      ],
+      displayTargetLayer: true,
       selectedCell: undefined,
     };
   }
 
+  onLayerClick = (layerName, value, index) => {
+    this.setState({
+      selectedCell: {
+        layerName,
+        value,
+        index,
+      },
+    });
+  };
+
+  renderCellValue = (cell) => {
+    const value = cell.value;
+    if (typeof value === 'number')
+      return <div className={styles.targetData}>
+          <span>Cell value: </span>
+          <span className={styles.value}>{Math.round(this.state.selectedCell?.value * 100) / 100}</span>
+        </div>
+    if (typeof value === 'object')
+      return (
+        <div className={styles.targetData}>
+          {Object.keys(value).map((key, i) => {
+            return (
+              <>
+                <span>{key}: </span>
+                <span className={styles.value}>{value[key]}</span>
+              </>
+            );
+          })}
+        </div>
+      );
+    return JSON.stringify(value);
+  };
+
   render() {
+    const targetOverlay = {
+      display: this.state.displayTargetLayer,
+      name: 'Target layer',
+      data: this.state.targetData,
+    };
     return (
       <div className={styles.container}>
         <div className={styles.selectorContainer}>
           <span className={styles.selectorTitle}>Layers:</span>
           <div>
+            <div>
+              <label>
+                <input
+                  onChange={(event) => {
+                    this.setState({ displayTargetLayer: !this.state.displayTargetLayer });
+                  }}
+                  type="checkbox"
+                  alt={`toggle target layer`}
+                  checked={this.state.displayTargetLayer}
+                />
+                <span>{targetOverlay.name}</span>
+              </label>
+            </div>
             {this.state.healpixOverlays.map((overlay, index) => {
               return (
                 <div key={overlay.name}>
@@ -68,15 +115,17 @@ export default class Scheduler extends Component {
           </div>
           {this.state.selectedCell && (
             <>
-              <div className={styles.selectorTitle}>Selected cell:</div>
+              <div className={styles.selectorTitle}>Selected object:</div>
               <span>{this.state.selectedCell?.layerName}: </span>
-              <span className={styles.value}>{Math.round(this.state.selectedCell?.value * 100) / 100}</span>
+              {this.renderCellValue(this.state.selectedCell)}
             </>
           )}
         </div>
         <GenericCamera
           healpixOverlays={this.state.healpixOverlays}
+          targetOverlay={targetOverlay}
           selectedCell={this.state.selectedCell}
+          onLayerClick={this.onLayerClick}
         ></GenericCamera>
       </div>
     );
