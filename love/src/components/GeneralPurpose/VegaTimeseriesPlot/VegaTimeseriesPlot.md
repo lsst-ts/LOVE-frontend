@@ -3,6 +3,7 @@ Render a line using default styles
 ```jsx
 import moment from 'moment';
 import VegaMiniPlot from './VegaMiniPlot';
+import VegaLegend from './VegaLegend';
 
 const length = 100;
 const dt = 2;
@@ -21,9 +22,9 @@ const marksStyles = [
 ];
 
 <div>
-  <div style={{display: 'flex', flexDirection: 'row', background: 'black', width:'500px' }}>
+  <div style={{ display: 'flex', flexDirection: 'row', background: 'black', width: '500px' }}>
     <span> Example line </span>
-    <VegaMiniPlot/>
+    <VegaMiniPlot />
   </div>
   <div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
     <VegaTimeseriesPlot
@@ -44,6 +45,7 @@ Render many lines with custom styles
 ```jsx
 import moment from 'moment';
 import { COLORS, DASHES } from './VegaTimeSeriesPlot';
+import VegaLegend from './VegaLegend';
 
 const length = 100;
 const dt = 2;
@@ -67,17 +69,48 @@ const marksStyles = names.map((name, index) => ({
   dash: DASHES[index % (DASHES.length - 1)],
 }));
 
-<div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
-  <VegaTimeseriesPlot
-    layers={{
-      lines: data,
-    }}
-    xAxisTitle="Time"
-    yAxisTitle="Quantity [u]"
-    marksStyles={marksStyles}
-    temporalXAxis
-  />
-  ;
+const gridData = [
+  [
+    {
+      name: 'example-0',
+      label: 'Line 0',
+    },
+    {
+      name: 'example-3',
+      label: 'Line 3',
+    },
+  ],
+  [
+    {
+      mame: 'eexample-1',
+      label: 'Line 1',
+    },
+    {
+      name: 'example-4',
+      label: 'Line 4',
+    },
+  ],
+  [
+    {
+      mame: 'example-2',
+      label: 'Line 2',
+    },
+  ],
+];
+
+<div style={{background: 'var(--secondary-background-dimmed-color)'}}>
+  <div style={{ width: '500px', height: '200px' }}>
+    <VegaTimeseriesPlot
+      layers={{
+        lines: data,
+      }}
+      xAxisTitle="Time"
+      yAxisTitle="Quantity [u]"
+      marksStyles={marksStyles}
+      temporalXAxis
+    />
+  </div>
+  <VegaLegend gridData={gridData} />
 </div>;
 ```
 
