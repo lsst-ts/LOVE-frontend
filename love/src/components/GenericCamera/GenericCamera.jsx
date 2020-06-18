@@ -1,49 +1,34 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import * as CameraUtils from './CameraUtils';
 import styles from './GenericCamera.module.css';
 
-export const schema = {
-  description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
-  defaultSize: [10, 10],
-  props: {
-    titleBar: {
-      type: 'boolean',
-      description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: false,
-    },
-    title: {
-      type: 'string',
-      description: 'Name diplayed in the title bar (if visible)',
-      isPrivate: false,
-      default: 'Generic camera',
-    },
-    margin: {
-      type: 'boolean',
-      description: 'Whether to display component with a margin',
-      isPrivate: false,
-      default: true,
-    },
-    serverURL: {
-      type: 'string',
-      description: 'URL of the live view server',
-      isPrivate: false,
-      default: '/gencam',
-    },
-    hasRawMode: {
-      type: 'boolean',
-      description: 'Whether the component has a raw mode version',
-      isPrivate: true,
-      default: false,
-    },
-  },
+const DEFAULT_URL = 'http://localhost/gencam';
+
+GenericCamera.propTypes = {
+  /**
+   * Name to identify the live view server
+   */
+  feedKey: PropTypes.string,
+
+  /**
+   * Dictionary of live feed URLs
+   */
+  camFeeds: PropTypes.object,
+};
+
+GenericCamera.defaultProps = {
+  feedKey: 'generic',
+  camFeeds: null,
 };
 
 /**
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
-export default function GenericCamera({ serverURL = schema.props.serverURL.default }) {
+export default function GenericCamera({ feedKey, camFeeds }) {
+  const feedUrl = camFeeds && feedKey in camFeeds ? camFeeds[feedKey] : DEFAULT_URL;
+  console.log('feedUrl: ', feedUrl);
   const [imageWidth, setImageWidth] = useState(1024);
   const [imageHeight, setImageHeight] = useState(1024);
   const [containerWidth, setContainerWidth] = useState(1);
@@ -101,7 +86,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
     const signal = controller.signal;
     const fetchAndRetry = () => {
       CameraUtils.fetchImageFromStream(
-        serverURL,
+        feedUrl,
         (image) => {
           setError(null);
           setInitialLoading(false);
@@ -125,8 +110,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
       controller.abort();
       clearTimeout(retryTimeout);
     };
-  }, [serverURL, canvasRef]);
-
+  }, [feedUrl, canvasRef]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
@@ -158,6 +142,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
   if (error !== null) {
     return (
       <div className={styles.errorContainer}>
+        <p>Fetching stream from {feedUrl}, please wait.</p>
         <p>{`ERROR: ${error.message}`}</p>
         <span>Retrying {`(${retryCount})`} </span>
       </div>
@@ -167,7 +152,7 @@ export default function GenericCamera({ serverURL = schema.props.serverURL.defau
   if (initialLoading) {
     return (
       <div className={styles.errorContainer}>
-        <p>Fetching stream from {serverURL}, please wait.</p>
+        <p>Fetching stream from {feedUrl}, please wait.</p>
       </div>
     );
   }

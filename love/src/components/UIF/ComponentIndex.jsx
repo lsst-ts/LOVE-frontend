@@ -110,12 +110,12 @@ export const uifIndex = {
     },
   },
   GenericCamera: {
-    component: require('../GenericCamera/GenericCamera').default,
+    component: require('../GenericCamera/GenericCamera.container').default,
     schema: {
-      ...require('../GenericCamera/GenericCamera').schema,
+      ...require('../GenericCamera/GenericCamera.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GenericCamera/GenericCamera').schema.props,
+        ...require('../GenericCamera/GenericCamera.container').schema.props,
       },
     },
   },
