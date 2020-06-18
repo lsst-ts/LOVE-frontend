@@ -1,0 +1,29 @@
+.container {
+  display: grid;
+  height: 100%;
+  grid-template-columns: max-content 1fr;
+}
+
+.selectorTitle {
+  font-size: var(--font-size-large);
+  color: var(--primary-font-color);
+  padding-top: 0.5em;
+}
+
+.selectorContainer {
+  padding: 0 1em;
+  text-align: left;
+}
+
+.value {
+  color: var(--primary-font-color);
+}
+
+.targetData {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  padding-left: 0.5em;
+  grid-column-gap: 0.5em;
+  grid-row-gap: 0.1em;
+  padding-top: 0.1em;
+}

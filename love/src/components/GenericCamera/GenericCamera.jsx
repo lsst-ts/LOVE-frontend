@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as CameraUtils from './CameraUtils';
 import styles from './GenericCamera.module.css';
+import HealpixOverlay from './HealpixOverlay';
+import TargetLayer from './TargetLayer';
 
 const DEFAULT_URL = 'http://localhost/gencam';
 
@@ -26,9 +28,15 @@ GenericCamera.defaultProps = {
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
-export default function GenericCamera({ feedKey, camFeeds }) {
+export default function GenericCamera({
+  feedKey,
+  camFeeds,
+  healpixOverlays = [],
+  selectedCell = undefined,
+  onLayerClick = () => {},
+  targetOverlay = {},
+}) {
   const feedUrl = camFeeds && feedKey in camFeeds ? camFeeds[feedKey] : DEFAULT_URL;
-  console.log('feedUrl: ', feedUrl);
   const [imageWidth, setImageWidth] = useState(1024);
   const [imageHeight, setImageHeight] = useState(1024);
   const [containerWidth, setContainerWidth] = useState(1);
@@ -52,7 +60,7 @@ export default function GenericCamera({ feedKey, camFeeds }) {
         setContainerHeight(container.contentRect.height);
       });
 
-      observer.observe(canvasNode.parentNode);
+      observer.observe(canvasNode.parentNode.parentNode);
 
       return () => {
         observer.disconnect();
@@ -157,5 +165,34 @@ export default function GenericCamera({ feedKey, camFeeds }) {
     );
   }
 
-  return <canvas ref={onCanvasRefChange}></canvas>;
+  const imageAspectRatio = imageWidth / imageHeight;
+
+  return (
+    <div className={styles.cameraContainer}>
+      {healpixOverlays.map((overlay, index) => {
+        return (
+          overlay.display && (
+            <HealpixOverlay
+              key={index}
+              width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+              height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+              selectedCell={selectedCell}
+              {...overlay}
+              onLayerClick={onLayerClick}
+            ></HealpixOverlay>
+          )
+        );
+      })}
+      {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
+        <TargetLayer
+          width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+          height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+          onLayerClick={onLayerClick}
+          selectedCell={selectedCell}
+          {...targetOverlay}
+        ></TargetLayer>
+      )}
+      <canvas ref={onCanvasRefChange}></canvas>
+    </div>
+  );
 }
