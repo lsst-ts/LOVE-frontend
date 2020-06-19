@@ -124,9 +124,12 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.config?.alarms !== prevProps.config?.alarms) {
-      const minSeverityNotification = this.props.config?.alarms?.minSeverityNotification?.trim().toLowerCase();
-      if (minSeverityNotification) {
+    if (this.props.config?.alarms && this.props.config.alarms !== prevProps.config?.alarms) {
+      const minSeverityNotification = this.props.config.alarms.minSeverityNotification?.trim().toLowerCase();
+      if (!minSeverityNotification || minSeverityNotification === 'mute' || minSeverityNotification === 'muted') {
+        // If minSeverityNotification is null or "mute" or "muted", then do not play any sound
+        this.setState({ minSeverityNotification: severityEnum.critical + 1 });
+      } else {
         this.setState({ minSeverityNotification: severityEnum[minSeverityNotification] });
       }
     }

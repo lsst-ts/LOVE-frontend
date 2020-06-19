@@ -153,9 +153,12 @@ export default class AlarmAudio extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
-    if (this.props.alarmsConfig !== prevProps.alarmsConfig) {
-      const minSeveritySound = this.props.alarmsConfig?.minSeveritySound?.trim().toLowerCase();
-      if (minSeveritySound) {
+    if (this.props.alarmsConfig && this.props.alarmsConfig !== prevProps.alarmsConfig) {
+      const minSeveritySound = this.props.alarmsConfig.minSeveritySound?.trim().toLowerCase();
+      if (!minSeveritySound || minSeveritySound === 'mute' || minSeveritySound === 'muted') {
+        // If minSeveritySound is null or "mute" or "muted", then do not play any sound
+        this.setState({ minSeveritySound: severityEnum.critical + 1 });
+      } else {
         this.setState({ minSeveritySound: severityEnum[minSeveritySound] });
       }
     }
