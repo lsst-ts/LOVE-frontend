@@ -35,18 +35,16 @@ const mockServerTime = {
 };
 
 const initialMockConfig = {
-  alarm_sounds: {
-    critical: 1,
-    serious: 0,
-    warning: 0,
+  setting1: {
+    setting11: 0,
+    setting12: 0,
   },
 };
 
 const mockConfig = {
-  alarm_sounds: {
-    critical: 1,
-    serious: 1,
-    warning: 0,
+  setting1: {
+    setting11: 1,
+    setting12: 2,
   },
 };
 
