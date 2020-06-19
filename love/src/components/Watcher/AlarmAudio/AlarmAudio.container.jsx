@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllAlarms, getLastestAlarms, getConfig } from '../../../redux/selectors';
+import { getAllAlarms, getLastestAlarms, getConfig, getAlarmConfig } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import AlarmAudio from './AlarmAudio';
 
@@ -11,11 +11,11 @@ const AlarmAudioContainer = ({ ...props }) => {
 const mapStateToProps = (state) => {
   const alarms = getAllAlarms(state);
   const newAlarms = getLastestAlarms(state);
-  const config = getConfig(state);
+  const alarmsConfig = getAlarmConfig(state);
   return {
     alarms,
     newAlarms,
-    config,
+    alarmsConfig,
   };
 };
 

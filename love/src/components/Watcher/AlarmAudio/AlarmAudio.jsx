@@ -23,15 +23,10 @@ export default class AlarmAudio extends Component {
     /** List of new alarms, that si they are either new or have been changed */
     newAlarms: PropTypes.array,
     /**
-     * Contents of the LOVE configuration file.
-     * It is expected to have a "alarm_sounds" key with the following structure:
-     * alarm_sounds {
-     *   critical: <ON/OFF, either 1, 0 of boolean>,
-     *   serious: <ON/OFF, either 1, 0 of boolean>,
-     *   warning: <ON/OFF, either 1, 0 of boolean>,
-     * }
+     * Contents of the alarms entry of LOVE configuration file.
+     * It is expected to have a "minSeveritySound" with a values of either "warning", "serious" or "critical"
      */
-    config: PropTypes.object,
+    alarmsConfig: PropTypes.object,
     /** Function to subscribe to streams to receive the alarms */
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
@@ -41,21 +36,21 @@ export default class AlarmAudio extends Component {
   static defaultProps = {
     alarms: [],
     newAlarms: [],
-    config: null,
+    alarmsConfig: null,
     subscribeToStreams: () => {},
     unsubscribeToStreams: () => {},
   };
 
   /** A conservative default configuration, all alarms sound... */
   defaultConf = {
-    critical: 1,
-    serious: 1,
-    warning: 1,
+    minSeveritySound: 'serious',
   };
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      minSeveritySound: severityEnum.warning,
+    };
 
     this.numCriticals = 0;
     this.newWarningSound = new Howl({
@@ -162,7 +157,14 @@ export default class AlarmAudio extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
+  componentDidUpdate = (prevProps, _prevState) => {
+    if (this.props.alarmsConfig !== prevProps.alarmsConfig) {
+      const minSeveritySound = this.props.alarmsConfig?.minSeveritySound?.trim().toLowerCase();
+      if (minSeveritySound) {
+        this.setState({ minSeveritySound: severityEnum[minSeveritySound] });
+      }
+    }
+
     if (this.props.newAlarms !== prevProps.newAlarms) {
       this.checkAndNotifyAlarms(this.props.newAlarms, prevProps.alarms);
     }
@@ -218,8 +220,10 @@ export default class AlarmAudio extends Component {
   };
 
   playSound = (severity, type) => {
-    const config = this.props.config?.alarm_sounds || this.defaultConf;
-    if (severity === severityEnum.warning && config.warning) {
+    if (severity < this.state.minSeveritySound) {
+      return;
+    }
+    if (severity === severityEnum.warning) {
       switch (type) {
         case 'new': {
           this.newWarningSound.play();
@@ -236,7 +240,7 @@ export default class AlarmAudio extends Component {
         default:
           break;
       }
-    } else if (severity === severityEnum.serious && config.serious) {
+    } else if (severity === severityEnum.serious) {
       switch (type) {
         case 'new': {
           this.newSeriousSound.play();
@@ -253,7 +257,7 @@ export default class AlarmAudio extends Component {
         default:
           break;
       }
-    } else if (severity === severityEnum.critical && config.critical) {
+    } else if (severity === severityEnum.critical) {
       switch (type) {
         case 'new': {
           this.stopCriticals();
