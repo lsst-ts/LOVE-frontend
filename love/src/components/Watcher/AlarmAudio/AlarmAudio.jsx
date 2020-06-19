@@ -41,11 +41,6 @@ export default class AlarmAudio extends Component {
     unsubscribeToStreams: () => {},
   };
 
-  /** A conservative default configuration, all alarms sound... */
-  defaultConf = {
-    minSeveritySound: 'serious',
-  };
-
   constructor(props) {
     super(props);
     this.state = {

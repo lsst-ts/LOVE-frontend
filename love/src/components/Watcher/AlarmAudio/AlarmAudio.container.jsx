@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllAlarms, getLastestAlarms, getConfig, getAlarmConfig } from '../../../redux/selectors';
+import { getAllAlarms, getLastestAlarms, getAlarmConfig } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import AlarmAudio from './AlarmAudio';
 
