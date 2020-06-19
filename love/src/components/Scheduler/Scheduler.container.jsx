@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
+import { getCamFeeds } from '../../redux/selectors';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Scheduler from './Scheduler';
 
@@ -20,6 +21,12 @@ export const schema = {
       isPrivate: true,
       default: true,
     },
+    feedKey: {
+      type: 'string',
+      description: 'Name to identify the live view server',
+      isPrivate: false,
+      default: 'all_sky',
+    },
   },
 };
 
@@ -30,6 +37,10 @@ const SchedulerContainer = ({ ...props }) => {
   return <Scheduler {...props} />;
 };
 
+const mapStateToProps = (state) => {
+  const camFeeds = getCamFeeds(state);
+  return { camFeeds };
+};
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [];
@@ -44,4 +55,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(() => {return {}}, mapDispatchToProps)(SchedulerContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(SchedulerContainer);

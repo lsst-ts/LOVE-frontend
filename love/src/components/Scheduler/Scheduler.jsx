@@ -1,9 +1,27 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import GenericCamera from '../GenericCamera/GenericCamera';
 import { azel_sample } from '../GenericCamera/CameraUtils';
 import styles from './Scheduler.module.css';
 
 export default class Scheduler extends Component {
+  static propTypes = {
+    /**
+     * Name to identify the live view server
+     */
+    feedKey: PropTypes.string,
+
+    /**
+     * Dictionary of live feed URLs
+     */
+    camFeeds: PropTypes.object,
+  };
+
+  static defaultProps = {
+    feedKey: 'all_sky',
+    camFeeds: null,
+  };
+
   constructor(props) {
     super(props);
     const data = azel_sample.map((azel) => {
@@ -47,10 +65,12 @@ export default class Scheduler extends Component {
   renderCellValue = (cell) => {
     const value = cell.value;
     if (typeof value === 'number')
-      return <div className={styles.targetData}>
+      return (
+        <div className={styles.targetData}>
           <span>Cell value: </span>
           <span className={styles.value}>{Math.round(this.state.selectedCell?.value * 100) / 100}</span>
         </div>
+      );
     if (typeof value === 'object')
       return (
         <div className={styles.targetData}>
@@ -126,6 +146,8 @@ export default class Scheduler extends Component {
           targetOverlay={targetOverlay}
           selectedCell={this.state.selectedCell}
           onLayerClick={this.onLayerClick}
+          camFeeds={this.props.camFeeds}
+          feedKey={this.props.feedKey}
         ></GenericCamera>
       </div>
     );

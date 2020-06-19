@@ -17,6 +17,26 @@ GenericCamera.propTypes = {
    * Dictionary of live feed URLs
    */
   camFeeds: PropTypes.object,
+
+  /**
+   * List of objects describing the healpix layers
+   */
+  healpixOverlays: PropTypes.array,
+
+  /**
+   * Object describing the selected cell
+   */
+  selectedCell: PropTypes.object,
+
+  /**
+   * Callback to run when clicking on a layer
+   */
+  onLayerClick: PropTypes.func,
+
+  /**
+   * Object describing the target layer of click events
+   */
+  targetOverlay: PropTypes.object,
 };
 
 GenericCamera.defaultProps = {
