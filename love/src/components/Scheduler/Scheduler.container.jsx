@@ -25,7 +25,7 @@ export const schema = {
       type: 'string',
       description: 'Name to identify the live view server',
       isPrivate: false,
-      default: 'all_sky',
+      default: 'allSky',
     },
   },
 };

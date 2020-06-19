@@ -29,6 +29,7 @@ import XMLTable from './XMLTable/XMLTable';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
+import { severityEnum } from '../../Config';
 
 const BREAK_1 = 865;
 const BREAK_2 = 630;
@@ -82,6 +83,7 @@ class Layout extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      minSeverityNotification: severityEnum.warning,
       collapsedLogo: false,
       viewOnNotch: true,
       toolbarOverflow: false,
@@ -122,6 +124,16 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.config?.alarms && this.props.config.alarms !== prevProps.config?.alarms) {
+      const minSeverityNotification = this.props.config.alarms.minSeverityNotification?.trim().toLowerCase();
+      if (!minSeverityNotification || minSeverityNotification === 'mute' || minSeverityNotification === 'muted') {
+        // If minSeverityNotification is null or "mute" or "muted", then do not play any sound
+        this.setState({ minSeverityNotification: severityEnum.critical + 1 });
+      } else {
+        this.setState({ minSeverityNotification: severityEnum[minSeverityNotification] });
+      }
+    }
+
     if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
       this.moveCustomTopbar();
     }
@@ -425,7 +437,10 @@ class Layout extends Component {
   };
 
   render() {
-    const filteredAlarms = this.props.alarms.filter((a) => isActive(a) && !isAcknowledged(a) && !isMuted(a));
+    const filteredAlarms = this.props.alarms.filter(
+      (a) =>
+        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification,
+    );
     return (
       <>
         <AlarmAudioContainer />

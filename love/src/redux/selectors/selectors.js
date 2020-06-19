@@ -14,7 +14,9 @@ export const getServerTime = (state) => ({ ...state.time.server_time });
 
 export const getConfig = (state) => (state.auth.config ? { ...state.auth.config } : null);
 
-export const getCamFeeds = (state) => getConfig(state)?.cam_feeds;
+export const getCamFeeds = (state) => getConfig(state)?.camFeeds;
+
+export const getAlarmConfig = (state) => getConfig(state)?.alarms;
 
 export const getAllTime = (state) => ({ ...state.time });
 
