@@ -206,26 +206,52 @@ const data = names.map((name, nameIndex) => {
   });
 });
 
+const listData = [
+  {
+    name: 'line-1',
+    label: 'Line 1',
+  },
+  {
+    name: 'line-2',
+    label: 'Line 2',
+  },
+  {
+    name: 'line-3',
+    label: 'Line 3',
+  },
+  {
+    name: 'pointline-4',
+    label: 'PointLine 4',
+  },
+  {
+    name: 'pointline-5',
+    label: 'PointLine 5',
+  },
+];
+
 const marksStyles = names.map((name, index) => ({
   name,
   color: COLORS[index % (COLORS.length - 1)],
   dash: DASHES[index % (COLORS.length - 1)],
 }));
 
-<div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
-  <VegaTimeseriesPlot
-    layers={{
-      lines: data.slice(0, 3).flat(),
-      pointLines: data
-        .slice(3)
-        .map((d) => d.filter((el, index) => index % 5 === 0))
-        .flat(),
-    }}
-    xAxisTitle="Time"
-    yAxisTitle="Quantity [u]"
-    marksStyles={marksStyles}
-    temporalXAxis
-  />
+<div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
+  <div style={{ width: '500px', height: '200px' }}>
+    <VegaTimeseriesPlot
+      layers={{
+        lines: data.slice(0, 3).flat(),
+        pointLines: data
+          .slice(3)
+          .map((d) => d.filter((el, index) => index % 5 === 0))
+          .flat(),
+      }}
+      xAxisTitle="Time"
+      yAxisTitle="Quantity [u]"
+      marksStyles={marksStyles}
+      temporalXAxis
+    />
+  </div>
+  <VegaLegend listData={listData} marksStyles={marksStyles} />
 </div>;
 ```
 
