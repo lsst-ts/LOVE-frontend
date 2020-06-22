@@ -288,7 +288,7 @@ const marksStyles = names
   .map((name, index) => ({
     name,
     color: COLORS[index % (COLORS.length - 1)],
-    dash: DASHES[index % (COLORS.length - 1)],
+    dash: DASHES[index % (DASHES.length - 1)],
   }))
   .concat({
     name: 'some bars',
