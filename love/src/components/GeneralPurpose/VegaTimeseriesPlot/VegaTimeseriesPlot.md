@@ -190,6 +190,7 @@ Lines and lines with points.
 ```jsx static
 import moment from 'moment';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
+import VegaLegend from './VegaLegend';
 
 const length = 100;
 const dt = 2;
@@ -233,6 +234,7 @@ Bars and lines
 ```jsx
 import moment from 'moment';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
+import VegaLegend from './VegaLegend';
 
 const length = 100;
 const dt = 2;
@@ -253,6 +255,35 @@ const bars = new Array(length / 5).fill({}).map((_, index) => {
   };
 });
 
+const listData = [
+  {
+    name: 'example-0',
+    label: 'Line 0',
+  },
+  {
+    name: 'example-1',
+    label: 'Line 1',
+  },
+  {
+    name: 'example-2',
+    label: 'Line 2',
+  },
+  {
+    name: 'example-3',
+    label: 'Long label line 3',
+  },
+  {
+    name: 'example-4',
+    label: 'Line 4',
+    markType: 'line',
+  },
+  {
+    name: 'some bars',
+    label: 'Bars',
+    markType: 'bar',
+  },
+];
+
 const marksStyles = names
   .map((name, index) => ({
     name,
@@ -264,18 +295,20 @@ const marksStyles = names
     color: '#ddd',
   });
 
-<div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
-  <VegaTimeseriesPlot
-    layers={{
-      lines: data,
-      bars,
-    }}
-    xAxisTitle="Time"
-    yAxisTitle="Quantity [u]"
-    marksStyles={marksStyles}
-    temporalXAxis
-  />
-  ;
+<div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
+  <div style={{ width: '500px', height: '200px' }}>
+    <VegaTimeseriesPlot
+      layers={{
+        lines: data,
+        bars,
+      }}
+      xAxisTitle="Time"
+      yAxisTitle="Quantity [u]"
+      marksStyles={marksStyles}
+      temporalXAxis
+    />
+  </div>
+  <VegaLegend listData={listData} marksStyles={marksStyles} />
 </div>;
 ```
 

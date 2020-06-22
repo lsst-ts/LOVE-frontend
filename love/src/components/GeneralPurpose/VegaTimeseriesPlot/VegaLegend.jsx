@@ -3,8 +3,6 @@ import styles from './VegaLegend.module.css';
 import VegaMiniPlot from './VegaMiniPlot';
 
 const VegaLegend = function ({ gridData, marksStyles, listData }) {
-  console.log('gridData: ', gridData);
-  console.log('listData: ', listData);
   if (listData.length > 0) {
     return (
       <div className={styles.autoGrid}>
@@ -13,7 +11,7 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
 
           return (
             <div className={styles.cell}>
-              {style && <VegaMiniPlot {...style} />} {cell?.label || ''}
+              {style && <VegaMiniPlot {...style} markType={cell.markType || 'line'} />} {cell?.label || ''}
             </div>
           );
         })}
@@ -39,10 +37,9 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
       {filledGridData.map((row) => {
         return row.map((cell) => {
           const style = marksStyles.find((s) => s.name === cell.name);
-
           return (
             <div className={styles.cell}>
-              {style && <VegaMiniPlot {...style} />} {cell?.label || ''}
+              {style && <VegaMiniPlot {...style} markType={cell.markType || 'line'} />} {cell?.label || ''}
             </div>
           );
         });
