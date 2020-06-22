@@ -222,10 +222,12 @@ const listData = [
   {
     name: 'pointline-4',
     label: 'PointLine 4',
+    markType: 'pointLine',
   },
   {
     name: 'pointline-5',
     label: 'PointLine 5',
+    markType: 'pointLine',
   },
 ];
 

@@ -17,10 +17,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   static propTypes = {
-    markType: PropTypes.oneOf([
-      'line',
-      'bar',
-    ]),
+    markType: PropTypes.oneOf(['line', 'pointLine', 'bar']),
     /** (All layers) hex color */
     color: PropTypes.string,
     /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
@@ -33,17 +30,23 @@ class VegaLegendMiniPlot extends React.PureComponent {
     filled: PropTypes.bool,
   };
 
-  lineSpec = () => {
+  lineSpec = (markType) => {
+    if (markType !== 'line' && markType !== 'pointLine') {
+      return {};
+    }
     return {
       data: {
         values: [{ a: -100 }, { a: 0 }, { a: 100 }],
       },
       mark: {
         type: 'line',
-        point: {
-          style: 'triangle',
-          filled: this.props.filled,
-        },
+        point:
+          markType === 'line'
+            ? null
+            : {
+                style: 'triangle',
+                filled: this.props.filled,
+              },
         color: this.props.color,
         clip: true,
         strokeDash: this.props.dash,
@@ -75,7 +78,10 @@ class VegaLegendMiniPlot extends React.PureComponent {
     };
   };
 
-  barSpec = () => {
+  barSpec = (markType) => {
+    if (markType !== 'bar') {
+      return {};
+    }
     return {
       data: { values: [{ a: 0, b: 0.5 }] },
       mark: {
@@ -106,8 +112,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
     };
   };
   render() {
-    const lineSpec = this.props.markType === 'line' ? this.lineSpec() : {};
-    const barSpec = this.props.markType === 'bar' ? this.barSpec() : {};
+    const lineSpec = this.lineSpec(this.props.markType);
+    const barSpec = this.barSpec(this.props.markType);
     const spec = {
       schema: 'https://vega.github.io/schema/vega-lite/v4.json',
       width: 32,
