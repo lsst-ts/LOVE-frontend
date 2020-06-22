@@ -48,19 +48,19 @@ class VegaTimeseriesPlot extends Component {
        *  - x,y are the plot-axis coordinates of a point in that line
        */
       lines: PropTypes.arrayOf(PropTypes.object),
-      /** 
+      /**
        * ------ PENDING see example-------
        * List of {name, x, y} with points of lines to be plotted as lines with points
        *  - name distinguishes a mark from another
        *  - x,y are the plot-axis coordinates of a point in that line
        */
       pointLines: PropTypes.arrayOf(PropTypes.object),
-      /** 
+      /**
        * List of `{name, x, y}` of bars to be plotted.
        *  - name distinguishes a mark from another
        *  - x,y are the plot-axis coordinates of a point in that line
        */
-      bars: PropTypes.arrayOf(PropTypes.object)
+      bars: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
 
     /**
@@ -184,7 +184,6 @@ class VegaTimeseriesPlot extends Component {
 
   makeLineLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
-
     return {
       data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
       mark: {
@@ -218,73 +217,37 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
-  makePointLineLayer = (dataName) => {
+  makePointsLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
-
-    return [
-      {
-        data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
-        mark: {
-          type: 'line',
-          clip: true,
-        },
-        encoding: {
-          x: {
-            field: 'x',
-            type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
-            axis: {
-              title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
-              format: '%H:%M:%S',
-            },
-            scale: this.props.xDomain
-              ? {
-                  domain: this.props.xDomain,
-                }
-              : undefined,
-          },
-          y: {
-            field: 'y',
-            type: 'quantitative',
-            axis: {
-              title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
-            },
-          },
-          stroke: styleEncoding.stroke,
-          strokeDash: styleEncoding.strokeDash,
-        },
+    return {
+      data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
+      mark: {
+        type: 'point',
+        size: 80,
+        clip: true,
       },
-      // line points
-      {
-        data: { name: dataName }, // note: vega-lite data attribute is a plain object instead of an array
-        mark: {
-          type: 'point',
-          size: 80,
-          clip: true,
+      encoding: {
+        x: {
+          field: 'x',
+          type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
         },
-        encoding: {
-          x: {
-            field: 'x',
-            type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+        y: {
+          field: 'y',
+          type: 'quantitative',
+          scale: {
+            type: 'continuous',
+            zero: false,
           },
-          y: {
-            field: 'y',
-            type: 'quantitative',
-            scale: {
-              type: 'continuous',
-              zero: false,
-            },
-          },
-          stroke: styleEncoding.stroke,
-          fill: styleEncoding.fill,
-          shape: styleEncoding.shape,
         },
+        stroke: styleEncoding.stroke,
+        fill: styleEncoding.fill,
+        shape: styleEncoding.shape,
       },
-    ];
+    };
   };
 
   makeBarLayer = (dataName) => {
     const styleEncoding = this.makeStyleEncoding();
-
     return {
       data: { name: dataName },
       mark: {
@@ -364,9 +327,14 @@ class VegaTimeseriesPlot extends Component {
       layer: [
         this.makeBarLayer('bars'),
         this.makeLineLayer('lines'),
+        this.makeLineLayer('pointLines'),
+        this.makePointsLayer('pointLines'),
       ],
     };
-
+    if (layers.pointLines) {
+      console.log('data: ', layers);
+      console.log('spec: ', spec);
+    }
     return (
       <div
         style={{

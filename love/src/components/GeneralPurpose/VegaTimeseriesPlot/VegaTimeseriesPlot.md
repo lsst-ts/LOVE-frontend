@@ -187,7 +187,7 @@ Lines and lines with points.
 
 **NOT YET IMPLENTED https://github.com/vega/vega-lite/issues/6496**
 
-```jsx static
+```jsx
 import moment from 'moment';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 import VegaLegend from './VegaLegend';
