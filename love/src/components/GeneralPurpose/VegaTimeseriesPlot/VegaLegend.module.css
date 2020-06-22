@@ -1,3 +1,16 @@
 .grid {
-    display: grid;
+  display: grid;
+}
+
+.autoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  column-gap: 0.5em;
+}
+
+.cell {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-evenly;
+  align-items: center;
 }
