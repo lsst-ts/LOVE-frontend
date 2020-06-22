@@ -78,7 +78,7 @@ const gridData = [
     },
     {
       name: 'example-3',
-      label: 'Line 3',
+      label: 'Long label line 3',
     },
   ],
   [
@@ -144,35 +144,6 @@ const marksStyles = names.map((name, index) => ({
   dash: DASHES[index % (DASHES.length - 1)],
 }));
 
-const gridData = [
-  [
-    {
-      name: 'example-0',
-      label: 'Line 0',
-    },
-    {
-      name: 'example-3',
-      label: 'Line 3',
-    },
-  ],
-  [
-    {
-      name: 'example-1',
-      label: 'Line 1',
-    },
-    {
-      name: 'example-4',
-      label: 'Line 4',
-    },
-  ],
-  [
-    {
-      name: 'example-2',
-      label: 'Line 2',
-    },
-  ],
-];
-
 const listData = [
   {
     name: 'example-0',
@@ -188,7 +159,7 @@ const listData = [
   },
   {
     name: 'example-3',
-    label: 'Line 3',
+    label: 'Long label line 3',
   },
   {
     name: 'example-4',
