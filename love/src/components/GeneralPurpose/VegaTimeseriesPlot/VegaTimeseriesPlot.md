@@ -2,6 +2,7 @@ Render a line using default styles
 
 ```jsx
 import moment from 'moment';
+import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
 import VegaMiniPlot from './VegaMiniPlot';
 import VegaLegend from './VegaLegend';
 
@@ -44,7 +45,7 @@ Render many lines with custom styles
 
 ```jsx
 import moment from 'moment';
-import { COLORS, DASHES } from './VegaTimeSeriesPlot';
+import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 import VegaLegend from './VegaLegend';
 
 const length = 100;
@@ -98,7 +99,7 @@ const gridData = [
   ],
 ];
 
-<div style={{background: 'var(--secondary-background-dimmed-color)'}}>
+<div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
   <div style={{ width: '500px', height: '200px' }}>
     <VegaTimeseriesPlot
       layers={{
@@ -110,7 +111,7 @@ const gridData = [
       temporalXAxis
     />
   </div>
-  <VegaLegend gridData={gridData} marksStyles={marksStyles}/>
+  <VegaLegend gridData={gridData} marksStyles={marksStyles} />
 </div>;
 ```
 
@@ -120,7 +121,7 @@ Lines and lines with points.
 
 ```jsx static
 import moment from 'moment';
-import { COLORS, DASHES } from './VegaTimeSeriesPlot';
+import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 
 const length = 100;
 const dt = 2;
@@ -163,7 +164,7 @@ Bars and lines
 
 ```jsx
 import moment from 'moment';
-import { COLORS, DASHES } from './VegaTimeSeriesPlot';
+import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 
 const length = 100;
 const dt = 2;
