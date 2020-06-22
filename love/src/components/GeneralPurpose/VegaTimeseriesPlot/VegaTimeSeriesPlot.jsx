@@ -234,10 +234,10 @@ class VegaTimeseriesPlot extends Component {
         y: {
           field: 'y',
           type: 'quantitative',
-          scale: {
-            type: 'continuous',
-            zero: false,
-          },
+          // scale: {
+          //   type: 'linear',
+          //   zero: false,
+          // },
         },
         stroke: styleEncoding.stroke,
         fill: styleEncoding.fill,
@@ -292,7 +292,6 @@ class VegaTimeseriesPlot extends Component {
   };
   render() {
     const { layers } = this.props;
-    console.log('layers', layers);
     const spec = {
       width: this.state.containerWidth,
       height: this.state.containerHeight,
@@ -331,10 +330,6 @@ class VegaTimeseriesPlot extends Component {
         this.makePointsLayer('pointLines'),
       ],
     };
-    if (layers.pointLines) {
-      console.log('data: ', layers);
-      console.log('spec: ', spec);
-    }
     return (
       <div
         style={{

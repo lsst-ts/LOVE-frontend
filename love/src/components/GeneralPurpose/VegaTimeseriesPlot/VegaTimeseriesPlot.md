@@ -1,7 +1,7 @@
 Render a line using default styles
 
 ```jsx
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
 import VegaMiniPlot from './VegaMiniPlot';
 import VegaLegend from './VegaLegend';
@@ -11,7 +11,7 @@ const dt = 2;
 const data = new Array(length).fill({}).map((_, index) => {
   return {
     name: 'example-1',
-    x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+    x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
     y: Math.cos((index * Math.PI) / length / 2),
   };
 });
@@ -44,7 +44,7 @@ const marksStyles = [
 Render many lines with custom styles with a defined legend layout
 
 ```jsx
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 import VegaLegend from './VegaLegend';
 
@@ -57,7 +57,7 @@ const data = names
     return new Array(length).fill({}).map((_, index) => {
       return {
         name,
-        x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+        x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
         y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
       };
     });
@@ -118,7 +118,7 @@ const gridData = [
 Render many lines with custom styles with an automatic and responsive legend layout
 
 ```jsx
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 import VegaLegend from './VegaLegend';
 
@@ -131,7 +131,7 @@ const data = names
     return new Array(length).fill({}).map((_, index) => {
       return {
         name,
-        x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+        x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
         y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
       };
     });
@@ -188,7 +188,7 @@ Lines and lines with points.
 **NOT YET IMPLENTED https://github.com/vega/vega-lite/issues/6496**
 
 ```jsx
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 import VegaLegend from './VegaLegend';
 
@@ -200,7 +200,7 @@ const data = names.map((name, nameIndex) => {
   return new Array(length).fill({}).map((_, index) => {
     return {
       name,
-      x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+      x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
       y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
     };
   });
@@ -260,7 +260,7 @@ const marksStyles = names.map((name, index) => ({
 Bars and lines
 
 ```jsx
-import moment from 'moment';
+import { DateTime } from 'luxon';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
 import VegaLegend from './VegaLegend';
 
@@ -270,7 +270,7 @@ const names = new Array(5).fill('').map((_, index) => `example-${index}`);
 const data = new Array(length).fill({}).flatMap((_, index) => {
   return names.map((name, nameIndex) => ({
     name,
-    x: moment().subtract(dt * (length - 1 - index), 'seconds'),
+    x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
     y: Math.cos(((index * Math.PI) / length / 2) * (nameIndex + 1)),
   }));
 });
@@ -278,7 +278,7 @@ const data = new Array(length).fill({}).flatMap((_, index) => {
 const bars = new Array(length / 5).fill({}).map((_, index) => {
   return {
     name: 'some bars',
-    x: moment().subtract(dt * (length - 1 - index * 5), 'seconds'),
+    x: DateTime.local().minus({ seconds: dt * (length - 1 - index * 5) }),
     y: Math.cos(((index * Math.PI) / length) * 25),
   };
 });
