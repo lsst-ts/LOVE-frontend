@@ -117,6 +117,7 @@ class VegaTimeseriesPlot extends Component {
     this.state = {
       containerWidth: 500,
       containerHeight: 200,
+      spec: {},
     };
   }
 
@@ -269,6 +270,46 @@ class VegaTimeseriesPlot extends Component {
 
   componentDidMount = () => {
     // this.props.subscribeToStreams();
+    this.setState({
+      spec: {
+        width: this.state.containerWidth,
+        height: this.state.containerHeight,
+        autosize: {
+          type: 'fit',
+          contains: 'padding',
+        },
+        config: {
+          background: null,
+          title: { color: '#ddd' },
+          style: {
+            'guide-label': {
+              fill: '#ddd',
+            },
+            'guide-title': {
+              fill: '#ddd',
+            },
+          },
+          axis: {
+            domainColor: '#626262',
+            gridColor: '#626262',
+            tickColor: null,
+          },
+          axisX: {
+            titlePadding: 16,
+            titleFontWeight: 750,
+            // labelAngle: -45,
+            labelFontWeight: 750,
+            tickCount: 10,
+          },
+        },
+        layer: [
+          this.makeBarLayer('bars'),
+          this.makeLineLayer('lines'),
+          this.makeLineLayer('pointLines'),
+          this.makePointsLayer('pointLines'),
+        ],
+      },
+    });
 
     window.setWidth = (width) => {
       this.setState({
@@ -290,46 +331,9 @@ class VegaTimeseriesPlot extends Component {
     // this.props.unsubscribeToStreams();
     this.resizeObserver.disconnect();
   };
+
   render() {
     const { layers } = this.props;
-    const spec = {
-      width: this.state.containerWidth,
-      height: this.state.containerHeight,
-      autosize: {
-        type: 'fit',
-        contains: 'padding',
-      },
-      config: {
-        background: null,
-        title: { color: '#ddd' },
-        style: {
-          'guide-label': {
-            fill: '#ddd',
-          },
-          'guide-title': {
-            fill: '#ddd',
-          },
-        },
-        axis: {
-          domainColor: '#626262',
-          gridColor: '#626262',
-          tickColor: null,
-        },
-        axisX: {
-          titlePadding: 16,
-          titleFontWeight: 750,
-          // labelAngle: -45,
-          labelFontWeight: 750,
-          tickCount: 10,
-        },
-      },
-      layer: [
-        this.makeBarLayer('bars'),
-        this.makeLineLayer('lines'),
-        this.makeLineLayer('pointLines'),
-        this.makePointsLayer('pointLines'),
-      ],
-    };
     return (
       <div
         style={{
@@ -343,7 +347,7 @@ class VegaTimeseriesPlot extends Component {
             display: 'flex',
           }}
           renderer="svg"
-          spec={spec}
+          spec={this.state.spec}
           data={layers}
           className={styles.plotContainer}
           actions={false}
