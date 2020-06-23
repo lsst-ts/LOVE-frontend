@@ -7,6 +7,7 @@ import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
 import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
+import VegaTimeSeriesPlotContainer from '../../GeneralPurpose/VegaTimeSeriesPlot/VegaTimeSeriesPlot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 
@@ -33,6 +34,7 @@ export default class Dome extends Component {
   }
 
   componentDidMount = () => {
+    console.log('Dome');
     this.props.subscribeToStream();
   };
 
@@ -210,7 +212,8 @@ export default class Dome extends Component {
             <h2>Elevation</h2>
             <div className={styles.elevationPlot}>
               <div>
-                <TimeSeriesPlotContainer
+                <VegaTimeSeriesPlotContainer />
+                {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{
                     'Mount Elevation': {
@@ -242,7 +245,7 @@ export default class Dome extends Component {
                       data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value[0] : 0,
                     'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>
