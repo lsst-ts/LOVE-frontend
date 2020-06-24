@@ -84,63 +84,90 @@ const VegaTimeSeriesPlotContainer = function ({
   unsubscribeToStreams,
   ...props
 }) {
-  console.log('subscriptions: ', subscriptions);
-  console.log('streams: ', streams);
   const startDate = moment().subtract(2, 'year').startOf('day');
-  const [data, setData] = React.useState([]);
-  const [layers, setLayers] = React.useState([]);
-  const parameters = Object.keys(subscriptions).flatMap((streamName) => {
+  const [subscriptionsData, setSubscriptionsData] = React.useState({});
+  let index = -1;
+  const marksStyles = Object.keys(subscriptions).flatMap((streamName) => {
     return Object.keys(subscriptions[streamName]).map((paramName) => {
       const paramConfig = subscriptions[streamName][paramName];
+      index++;
       return {
-        streamName,
-        paramName,
         name: paramConfig.name,
-        type: paramConfig.type,
-        accessor: paramConfig.accessor,
+        ...defaultStyles[index % defaultStyles.length],
       };
     });
   });
-  console.log('parameters: ', parameters);
-  const marksStyles = parameters.map((param, index) => ({
-    name: param.name,
-    ...defaultStyles[index % defaultStyles.length],
-  }));
-  console.log('marksStyles: ', marksStyles);
 
   React.useEffect(() => {
     subscribeToStreams();
   }, []);
 
   React.useEffect(() => {
-    const newData = [];
-    parameters.forEach((param) => {
-      const { paramName, streamName, name, accessor, type } = param;
-      if (!streams?.[streamName]?.[paramName]?.value) {
-        return;
-      }
-
-      const { value, ...others } = streams[streamName][paramName];
-      newData.push({
-        name,
-        x: parseTimestamp(streams[streamName]?.private_rcvStamp?.value),
-        y: accessor(value),
-        ...others,
+    const subscriptionsData = {};
+    Object.keys(subscriptions).forEach((streamName) => {
+      const streamDict = {};
+      Object.keys(subscriptions[streamName]).forEach((paramName) => {
+        const { name } = subscriptions[streamName][paramName];
+        streamDict[paramName] = [];
+        marksStyles.push({
+          name,
+          ...defaultStyles[index % defaultStyles.length],
+        });
+        index++;
       });
+      subscriptionsData[streamName] = streamDict;
     });
+    setSubscriptionsData(subscriptionsData);
+  }, [subscriptions]);
 
-    if (newData?.length > 0) {
-      setData((data) => data.concat(newData).slice(-100));
+  React.useEffect(() => {
+    let changed = false;
+    for (const [streamName, streamConfig] of Object.entries(subscriptions)) {
+      for (const [paramName, paramConfig] of Object.entries(streamConfig)) {
+        const { name, accessor, type } = paramConfig;
+        if (!streams?.[streamName]?.[paramName]?.value) {
+          continue;
+        }
+        const { value, ...others } = streams[streamName][paramName];
+        const newValue = {
+          name,
+          x: parseTimestamp(streams[streamName]?.private_rcvStamp?.value),
+          y: accessor(value),
+          ...others,
+        };
+        const subsData = subscriptionsData[streamName][paramName];
+        const lastValue = subsData[subsData.length - 1];
+        if (!lastValue || lastValue.x?.ts !== newValue.x?.ts) {
+          changed = true;
+          subsData.push(newValue);
+        }
+        if (subsData.length > 100) {
+          changed = true;
+          subsData.slice(-100);
+        }
+      }
+    }
+    if (changed) {
+      setSubscriptionsData(subscriptionsData);
     }
   }, [streams]);
-
-  console.log('data: ', data);
+  const layers = { lines: [], bars: [], pointLines: [] };
+  for (const [streamName, streamData] of Object.entries(subscriptionsData)) {
+    for (const [paramName, paramData] of Object.entries(streamData)) {
+      const { name, type } = subscriptions[streamName][paramName];
+      const typeStr = type + 's';
+      if (!type in layers) {
+        continue;
+      }
+      layers[typeStr] = layers[typeStr].concat(paramData);
+    }
+  }
 
   return (
     <div>
       <div style={{ width: '500px', height: '200px' }}>
         <VegaTimeSeriesPlot
-          layers={{ lines: data }}
+          layers={layers}
           marksStyles={marksStyles}
           units={{ y: 'deg' }}
           yAxisTitle={'Telementry'}

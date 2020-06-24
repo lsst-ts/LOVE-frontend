@@ -333,8 +333,7 @@ class VegaTimeseriesPlot extends Component {
   };
 
   render() {
-    const { layers } = this.props;
-    console.log('layers: ', layers);
+    const { layers, marksStyles } = this.props;
     return (
       <div
         style={{
