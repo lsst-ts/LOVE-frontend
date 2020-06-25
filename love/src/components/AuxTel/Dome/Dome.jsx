@@ -42,6 +42,54 @@ export default class Dome extends Component {
     this.props.unsubscribeToStream();
   };
 
+  elevationPlotSubscriptions = {
+    'telemetry-ATMCS-0-mount_AzEl_Encoders': {
+      elevationCalculatedAngle: {
+        name: 'Elevation',
+        type: 'line',
+        accessor: (x) => x[0],
+      },
+    },
+    'telemetry-ATDome-0-position': {
+      azimuthPosition: {
+        name: 'ATDome azimuth',
+        type: 'line',
+        accessor: (x) => x,
+      },
+    },
+  };
+
+  azimuthPlotSubscriptions = {
+    'telemetry-ATDome-0-position': {
+      azimuthPosition: {
+        name: 'Dome Azimuth',
+        type: 'line',
+        accessor: (x) => x,
+      },
+    },
+    'event-ATDome-0-azimuthCommandedState': {
+      azimuth: {
+        name: 'Dome Target Az',
+        type: 'line',
+        accessor: (x) => x,
+      },
+    },
+    'telemetry-ATMCS-0-mount_AzEl_Encoders': {
+      azimuthCalculatedAngle: {
+        name: 'Mount Azimuth',
+        type: 'line',
+        accessor: (x) => x[0],
+      },
+    },
+    'event-ATMCS-0-target': {
+      azimuth: {
+        name: 'Mount Target',
+        type: 'line',
+        accessor: (x) => x,
+      },
+    },
+  };
+
   render() {
     const width = this.props.width;
     const height = this.props.height;
@@ -151,7 +199,8 @@ export default class Dome extends Component {
             <h2>Azimuth</h2>
             <div className={styles.azimuthPlot}>
               <div>
-                <TimeSeriesPlotContainer
+                <VegaTimeSeriesPlotContainer subscriptions={this.azimuthPlotSubscriptions} />
+                {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
                   layers={{
@@ -203,7 +252,7 @@ export default class Dome extends Component {
                     'Mount Target': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>
@@ -212,7 +261,7 @@ export default class Dome extends Component {
             <h2>Elevation</h2>
             <div className={styles.elevationPlot}>
               <div>
-                <VegaTimeSeriesPlotContainer />
+                <VegaTimeSeriesPlotContainer subscriptions={this.elevationPlotSubscriptions} />
                 {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{

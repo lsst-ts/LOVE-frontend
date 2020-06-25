@@ -34,8 +34,13 @@ export const schema = {
       description: 'lits of subscriptions',
       isPrivate: false,
       default: {
+        Elevation: {
+          group: 'telemetry-ATMCS-0-mount_AzEl_Encoders',
+          item: 'elevationCalculatedAngle',
+          type: 'line',
+          accessor: (x) => x,
+        },
         'telemetry-ATMCS-0-mount_AzEl_Encoders': {
-          // elevationCalculatedAngle: 'Elevation',
           elevationCalculatedAngle: {
             name: 'Elevation',
             type: 'line',
@@ -43,15 +48,20 @@ export const schema = {
           },
         },
         'telemetry-ATDome-0-position': {
-          // azimuthPosition: 'ATDome azimuth',
           azimuthPosition: {
-            name: 'ATDome azimuth',
+            name: 'ATDome azimuthh',
             type: 'line',
             accessor: (x) => x,
           },
         },
       },
     },
+  },
+  _functionProps: {
+    type: 'array',
+    description: 'Array containing the props that are functions',
+    isPrivate: true,
+    default: ['subscriptions'],
   },
 };
 
@@ -87,16 +97,18 @@ const VegaTimeSeriesPlotContainer = function ({
   const startDate = moment().subtract(2, 'year').startOf('day');
   const [subscriptionsData, setSubscriptionsData] = React.useState({});
   let index = -1;
-  const marksStyles = Object.keys(subscriptions).flatMap((streamName) => {
-    return Object.keys(subscriptions[streamName]).map((paramName) => {
-      const paramConfig = subscriptions[streamName][paramName];
-      index++;
-      return {
-        name: paramConfig.name,
-        ...defaultStyles[index % defaultStyles.length],
-      };
+  const marksStyles = React.useMemo(() => {
+    return Object.keys(subscriptions).flatMap((streamName) => {
+      return Object.keys(subscriptions[streamName]).map((paramName) => {
+        const paramConfig = subscriptions[streamName][paramName];
+        index++;
+        return {
+          name: paramConfig.name,
+          ...defaultStyles[index % defaultStyles.length],
+        };
+      });
     });
-  });
+  }, [subscriptions]);
 
   React.useEffect(() => {
     subscribeToStreams();
@@ -107,13 +119,7 @@ const VegaTimeSeriesPlotContainer = function ({
     Object.keys(subscriptions).forEach((streamName) => {
       const streamDict = {};
       Object.keys(subscriptions[streamName]).forEach((paramName) => {
-        const { name } = subscriptions[streamName][paramName];
         streamDict[paramName] = [];
-        marksStyles.push({
-          name,
-          ...defaultStyles[index % defaultStyles.length],
-        });
-        index++;
       });
       subscriptionsData[streamName] = streamDict;
     });
@@ -132,7 +138,7 @@ const VegaTimeSeriesPlotContainer = function ({
         const newValue = {
           name,
           x: parseTimestamp(streams[streamName]?.private_rcvStamp?.value),
-          y: accessor(value),
+          y: Array.isArray(value) ? accessor(value?.[0]) : accessor(value),
           ...others,
         };
         const subsData = subscriptionsData[streamName][paramName];
