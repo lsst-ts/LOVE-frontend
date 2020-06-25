@@ -30,6 +30,7 @@ export const schema = {
       default: true,
     },
     inputs: {
+      externalStep: 'TimeSeriesConfig',
       type: 'object',
       description: 'lits of inputs',
       isPrivate: false,
