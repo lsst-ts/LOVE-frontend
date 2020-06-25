@@ -42,51 +42,63 @@ export default class Dome extends Component {
     this.props.unsubscribeToStream();
   };
 
-  elevationPlotSubscriptions = {
-    'telemetry-ATMCS-0-mount_AzEl_Encoders': {
-      elevationCalculatedAngle: {
-        name: 'Elevation',
-        type: 'line',
-        accessor: (x) => x[0],
-      },
+  elevationPlotInputs = {
+    Elevation: {
+      category: 'telemetry',
+      csc: 'ATMCS',
+      salindex: '0',
+      topic: 'mount_AzEl_Encoders',
+      item: 'elevationCalculatedAngle',
+      type: 'line',
+      accessor: (x) => x[0],
     },
-    'telemetry-ATDome-0-position': {
-      azimuthPosition: {
-        name: 'ATDome azimuth',
-        type: 'line',
-        accessor: (x) => x,
-      },
+    'ATDome azimuth': {
+      category: 'telemetry',
+      csc: 'ATDome',
+      salindex: '0',
+      topic: 'position',
+      item: 'azimuthPosition',
+      type: 'line',
+      accessor: (x) => x,
     },
   };
 
-  azimuthPlotSubscriptions = {
-    'telemetry-ATDome-0-position': {
-      azimuthPosition: {
-        name: 'Dome Azimuth',
-        type: 'line',
-        accessor: (x) => x,
-      },
+  azimuthPlotInputs = {
+    'Dome Azimuth': {
+      category: 'telemetry',
+      csc: 'ATDome',
+      salindex: 0,
+      topic: 'position',
+      item: 'azimuthPosition',
+      type: 'line',
+      accessor: (x) => x,
     },
-    'event-ATDome-0-azimuthCommandedState': {
-      azimuth: {
-        name: 'Dome Target Az',
-        type: 'line',
-        accessor: (x) => x,
-      },
+    'Dome Target Az': {
+      category: 'event',
+      csc: 'ATDome',
+      salindex: 0,
+      topic: 'azimuthCommandedState',
+      item: 'azimuth',
+      type: 'line',
+      accessor: (x) => x,
     },
-    'telemetry-ATMCS-0-mount_AzEl_Encoders': {
-      azimuthCalculatedAngle: {
-        name: 'Mount Azimuth',
-        type: 'line',
-        accessor: (x) => x[0],
-      },
+    'Mount Azimuth': {
+      category: 'telemetry',
+      csc: 'ATMCS',
+      salindex: 0,
+      topic: 'mount_AzEl_Encoders',
+      item: 'azimuthCalculatedAngle',
+      type: 'line',
+      accessor: (x) => x[0],
     },
-    'event-ATMCS-0-target': {
-      azimuth: {
-        name: 'Mount Target',
-        type: 'line',
-        accessor: (x) => x,
-      },
+    'Mount Target': {
+      category: 'event',
+      csc: 'ATMCS',
+      salindex: 0,
+      topic: 'target',
+      item: 'azimuth',
+      type: 'line',
+      accessor: (x) => x,
     },
   };
 
@@ -199,7 +211,7 @@ export default class Dome extends Component {
             <h2>Azimuth</h2>
             <div className={styles.azimuthPlot}>
               <div>
-                <VegaTimeSeriesPlotContainer subscriptions={this.azimuthPlotSubscriptions} />
+                <VegaTimeSeriesPlotContainer inputs={this.azimuthPlotInputs} />
                 {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
@@ -261,7 +273,7 @@ export default class Dome extends Component {
             <h2>Elevation</h2>
             <div className={styles.elevationPlot}>
               <div>
-                <VegaTimeSeriesPlotContainer subscriptions={this.elevationPlotSubscriptions} />
+                <VegaTimeSeriesPlotContainer inputs={this.elevationPlotInputs} />
                 {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{
