@@ -8,7 +8,7 @@ import { parseTimestamp } from '../../../Utils';
 import moment from 'moment';
 
 export const schema = {
-  description: 'vega plot',
+  description: 'Time series plot for any data stream coming from SAL',
   defaultSize: [8, 8],
   props: {
     titleBar: {
@@ -30,7 +30,7 @@ export const schema = {
       default: true,
     },
     inputs: {
-      type: 'array',
+      type: 'object',
       description: 'lits of inputs',
       isPrivate: false,
       default: {
@@ -41,7 +41,7 @@ export const schema = {
           topic: 'mount_AzEl_Encoders',
           item: 'elevationCalculatedAngle',
           type: 'line',
-          accessor: (x) => x[0],
+          accessor: '(x) => x[0]',
         },
         'ATDome azimuth': {
           category: 'telemetry',
@@ -50,15 +50,10 @@ export const schema = {
           topic: 'position',
           item: 'azimuthPosition',
           type: 'line',
-          accessor: (x) => x,
+          accessor: '(x) => x',
         },
       },
     },
-    // _functionProps: {
-    //   type: 'array',
-    //   description: 'Array containing the props that are functions',
-    //   isPrivate: true,
-    //   default: ['subscriptions'],
   },
 };
 
@@ -124,6 +119,8 @@ const VegaTimeSeriesPlotContainer = function ({
     }
     for (const [input, inputConfig] of Object.entries(inputs)) {
       const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
+      /* eslint no-eval: 0 */
+      const accessorFunc = eval(accessor);
       const inputData = data[input] || [];
       const lastValue = inputData[inputData.length - 1];
       const streamName = `${category}-${csc}-${salindex}-${topic}`;
@@ -134,7 +131,7 @@ const VegaTimeSeriesPlotContainer = function ({
       const newValue = {
         name: input,
         x: parseTimestamp(streamValue.private_rcvStamp?.value),
-        y: accessor(streamValue[item]?.value),
+        y: accessorFunc(streamValue[item]?.value),
       };
       if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
         changed = true;
