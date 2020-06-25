@@ -68,65 +68,74 @@ export default class TimeSeriesConfig extends PureComponent {
     });
   };
 
-  dataToConf = (data) => {
-    const dict = JSON.parse(data);
-    const conf = [];
-    for (const topicKey of Object.keys(dict)) {
-      const topicData = dict[topicKey];
-      let [category, csc, salindex, topic] = topicKey.split('-');
-      if (salindex !== null && salindex !== undefined) {
-        salindex = parseInt(salindex);
-      }
-      for (const item of Object.keys(topicData)) {
-        const funcBody = topicData[item];
-        const name = `${topicKey}-${item}`;
-        conf.push({
-          name,
-          inputs: [
-            {
-              category,
-              csc,
-              salindex,
-              topic,
-              item,
-            },
-          ],
-          funcBody,
-        });
-      }
-    }
-    return conf;
+  // dataToConf = (data) => {
+  //   const dict = JSON.parse(data);
+  //   const conf = [];
+  //   for (const topicKey of Object.keys(dict)) {
+  //     const topicData = dict[topicKey];
+  //     let [category, csc, salindex, topic] = topicKey.split('-');
+  //     if (salindex !== null && salindex !== undefined) {
+  //       salindex = parseInt(salindex);
+  //     }
+  //     for (const item of Object.keys(topicData)) {
+  //       const accessor = topicData[item];
+  //       const name = `${topicKey}-${item}`;
+  //       conf.push({
+  //         name,
+  //         inputs: [
+  //           {
+  //             category,
+  //             csc,
+  //             salindex,
+  //             topic,
+  //             item,
+  //           },
+  //         ],
+  //         accessor,
+  //       });
+  //     }
+  //   }
+  //   return conf;
+  // };
+
+  // currentConfigToData = () => {
+  //   const conf = {};
+  //   for (const entry of this.state.currentConfig) {
+  //     const { category, csc, salindex, topic, item } = entry.inputs[0];
+  //     const accessor = entry.accessor;
+  //     const topicKey = `${category}-${csc}-${salindex}-${topic}`;
+  //     if (!(topicKey in conf)) {
+  //       conf[topicKey] = {};
+  //     }
+  //     conf[topicKey][item] = accessor;
+  //   }
+  //   return conf;
+  // };
+
+  onEntryChange = (name, inputs, accessor, type) => {
+    const newInputs = { ...this.state.inputs };
+    newInputs[name] = {
+      name,
+      accessor,
+      type,
+      category: inputs[0].category,
+      csc: inputs[0].csc,
+      salindex: inputs[0].salindex,
+      topic: inputs[0].topic,
+      item: inputs[0].category,
+    };
+    this.setState({ inputs: newInputs, changed: true });
   };
 
-  currentConfigToData = () => {
-    const conf = {};
-    for (const entry of this.state.currentConfig) {
-      const { category, csc, salindex, topic, item } = entry.inputs[0];
-      const funcBody = entry.funcBody;
-      const topicKey = `${category}-${csc}-${salindex}-${topic}`;
-      if (!(topicKey in conf)) {
-        conf[topicKey] = {};
-      }
-      conf[topicKey][item] = funcBody;
-    }
-    return conf;
-  };
-
-  onEntryChange = (name, inputs, funcBody, index) => {
-    const newConfig = [...this.state.currentConfig];
-    newConfig[index] = { name, inputs, funcBody };
-    this.setState({ currentConfig: newConfig, changed: true });
-  };
-
-  onEntryRemove = (index) => {
-    const newConfig = this.state.currentConfig.filter((_el, i) => i !== index);
-    this.setState({ currentConfig: newConfig, changed: true });
+  onEntryRemove = (name) => {
+    const newInputs = { ...this.state.inputs };
+    delete newInputs[name];
+    this.setState({ inputs: newInputs, changed: true });
   };
 
   onApply = () => {
     if (this.state.changed) {
-      const conf = this.currentConfigToData();
-      this.props.onSave(conf);
+      this.props.onSave(this.state.inputs);
     }
   };
 
@@ -149,15 +158,15 @@ export default class TimeSeriesConfig extends PureComponent {
                     {
                       category,
                       csc,
-                      salindex,
+                      salindex: parseInt(salindex),
                       topic,
                       item,
                     },
                   ]}
-                  funcBody={accessor}
+                  accessor={accessor}
                   optionsTree={this.state.optionsTree}
-                  onChange={(name, inputs, funcBody) => this.onEntryChange(name, inputs, funcBody, index)}
-                  onRemove={() => this.onEntryRemove(index)}
+                  onChange={(name, inputs, accessor, type) => this.onEntryChange(name, inputs, accessor, type)}
+                  onRemove={() => this.onEntryRemove(name)}
                 />
               );
             })}
@@ -165,7 +174,7 @@ export default class TimeSeriesConfig extends PureComponent {
               key={nextIndex}
               className={styles.empty}
               optionsTree={this.state.optionsTree}
-              onChange={(name, inputs, funcBody) => this.onEntryChange(name, inputs, funcBody, nextIndex)}
+              onChange={(name, inputs, accessor) => this.onEntryChange(name, inputs, accessor, nextIndex)}
             />
           </div>
         </div>

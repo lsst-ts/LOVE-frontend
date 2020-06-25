@@ -39,12 +39,12 @@ export default class TSCEntry extends PureComponent {
     /**
      * String describing the body a function
      */
-    funcBody: PropTypes.string,
+    accessor: PropTypes.string,
     /**
      * Callback to call when making a change, should have the followinf arguments:
      * - name
      * - inputs
-     * - funcBody
+     * - accessor
      */
     onChange: PropTypes.func,
     /**
@@ -61,13 +61,13 @@ export default class TSCEntry extends PureComponent {
   static defaultProps = {
     inputs: [],
     name: null,
-    funcBody: null,
-    onChange: (name, inputs, funcBody) => {},
+    accessor: null,
+    onChange: (name, inputs, accessor) => {},
     onRemove: null,
   };
 
   onNameChange = (name) => {
-    this.props.onChange(name, this.props.input, this.props.funcBody);
+    this.props.onChange(name, this.props.inputs, this.props.accessor);
   };
 
   onInputChange = (input, index) => {
@@ -75,22 +75,22 @@ export default class TSCEntry extends PureComponent {
     newInputs[index] = input;
     const { category, csc, salindex, topic, item } = input;
     const newName = `${category}-${csc}-${salindex}-${topic}-${item}`;
-    this.props.onChange(newName, newInputs, this.props.funcBody);
+    this.props.onChange(newName, newInputs, this.props.accessor);
   };
 
   onInputGetName = (input) => {
     const { category, csc, salindex, topic, item } = input;
     const newName = `${category}-${csc}-${salindex}-${topic}-${item}`;
-    this.props.onChange(newName, this.props.inputs, this.props.funcBody);
+    this.props.onChange(newName, this.props.inputs, this.props.accessor);
   };
 
   onInputRemove = (index) => {
     const newInputs = this.props.inputs.filter((_el, i) => i !== index);
-    this.props.onChange(this.props.name, newInputs, this.props.funcBody);
+    this.props.onChange(this.props.name, newInputs, this.props.accessor);
   };
 
-  onEditorChange = (funcBody) => {
-    this.props.onChange(this.props.name, this.props.inputs, funcBody);
+  onEditorChange = (accessor) => {
+    this.props.onChange(this.props.name, this.props.inputs, accessor);
   };
 
   getFunctionHeader = () => {
@@ -158,7 +158,7 @@ export default class TSCEntry extends PureComponent {
           debounceChangePeriod={100}
           width={'100%'}
           height={'50px'}
-          value={this.props.funcBody || ''}
+          value={this.props.accessor || ''}
         />
       </div>
     );
