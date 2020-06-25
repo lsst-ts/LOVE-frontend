@@ -29,39 +29,36 @@ export const schema = {
       isPrivate: true,
       default: true,
     },
-    subscriptions: {
+    inputs: {
       type: 'array',
-      description: 'lits of subscriptions',
+      description: 'lits of inputs',
       isPrivate: false,
       default: {
         Elevation: {
-          group: 'telemetry-ATMCS-0-mount_AzEl_Encoders',
+          category: 'telemetry',
+          csc: 'ATMCS',
+          salindex: '0',
+          topic: 'mount_AzEl_Encoders',
           item: 'elevationCalculatedAngle',
+          type: 'line',
+          accessor: (x) => x[0],
+        },
+        'ATDome azimuth': {
+          category: 'telemetry',
+          csc: 'ATDome',
+          salindex: '0',
+          topic: 'position',
+          item: 'azimuthPosition',
           type: 'line',
           accessor: (x) => x,
         },
-        'telemetry-ATMCS-0-mount_AzEl_Encoders': {
-          elevationCalculatedAngle: {
-            name: 'Elevation',
-            type: 'line',
-            accessor: (x) => x[0],
-          },
-        },
-        'telemetry-ATDome-0-position': {
-          azimuthPosition: {
-            name: 'ATDome azimuthh',
-            type: 'line',
-            accessor: (x) => x,
-          },
-        },
       },
     },
-  },
-  _functionProps: {
-    type: 'array',
-    description: 'Array containing the props that are functions',
-    isPrivate: true,
-    default: ['subscriptions'],
+    // _functionProps: {
+    //   type: 'array',
+    //   description: 'Array containing the props that are functions',
+    //   isPrivate: true,
+    //   default: ['subscriptions'],
   },
 };
 
@@ -89,85 +86,88 @@ const defaultStyles = [
 
 const VegaTimeSeriesPlotContainer = function ({
   subscriptions = schema.props.subscriptions.default,
+  inputs = schema.props.inputs.default,
   streams,
   subscribeToStreams,
   unsubscribeToStreams,
   ...props
 }) {
   const startDate = moment().subtract(2, 'year').startOf('day');
-  const [subscriptionsData, setSubscriptionsData] = React.useState({});
+  const [data, setData] = React.useState({});
+
   let index = -1;
   const marksStyles = React.useMemo(() => {
-    return Object.keys(subscriptions).flatMap((streamName) => {
-      return Object.keys(subscriptions[streamName]).map((paramName) => {
-        const paramConfig = subscriptions[streamName][paramName];
-        index++;
-        return {
-          name: paramConfig.name,
-          ...defaultStyles[index % defaultStyles.length],
-        };
-      });
+    return Object.keys(inputs).map((input) => {
+      index++;
+      return {
+        name: input,
+        ...defaultStyles[index % defaultStyles.length],
+      };
     });
-  }, [subscriptions]);
+  }, [inputs]);
 
   React.useEffect(() => {
     subscribeToStreams();
   }, []);
 
   React.useEffect(() => {
-    const subscriptionsData = {};
-    Object.keys(subscriptions).forEach((streamName) => {
-      const streamDict = {};
-      Object.keys(subscriptions[streamName]).forEach((paramName) => {
-        streamDict[paramName] = [];
-      });
-      subscriptionsData[streamName] = streamDict;
-    });
-    setSubscriptionsData(subscriptionsData);
-  }, [subscriptions]);
+    const data = {};
+    for (const key of Object.keys(inputs)) {
+      data[key] = [];
+    }
+    setData(data);
+  }, [inputs]);
 
   React.useEffect(() => {
     let changed = false;
-    for (const [streamName, streamConfig] of Object.entries(subscriptions)) {
-      for (const [paramName, paramConfig] of Object.entries(streamConfig)) {
-        const { name, accessor, type } = paramConfig;
-        if (!streams?.[streamName]?.[paramName]?.value) {
-          continue;
-        }
-        const { value, ...others } = streams[streamName][paramName];
-        const newValue = {
-          name,
-          x: parseTimestamp(streams[streamName]?.private_rcvStamp?.value),
-          y: Array.isArray(value) ? accessor(value?.[0]) : accessor(value),
-          ...others,
-        };
-        const subsData = subscriptionsData[streamName][paramName];
-        const lastValue = subsData[subsData.length - 1];
-        if (!lastValue || lastValue.x?.ts !== newValue.x?.ts) {
-          changed = true;
-          subsData.push(newValue);
-        }
-        if (subsData.length > 100) {
-          changed = true;
-          subsData.slice(-100);
-        }
-      }
+    if (data === {}) {
+      return;
     }
-    if (changed) {
-      setSubscriptionsData(subscriptionsData);
-    }
-  }, [streams]);
-  const layers = { lines: [], bars: [], pointLines: [] };
-  for (const [streamName, streamData] of Object.entries(subscriptionsData)) {
-    for (const [paramName, paramData] of Object.entries(streamData)) {
-      const { name, type } = subscriptions[streamName][paramName];
-      const typeStr = type + 's';
-      if (!type in layers) {
+    for (const [input, inputConfig] of Object.entries(inputs)) {
+      const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
+      const inputData = data[input] || [];
+      const lastValue = inputData[inputData.length - 1];
+      const streamName = `${category}-${csc}-${salindex}-${topic}`;
+      if (!streams[streamName] || !streams[streamName]?.[item]) {
         continue;
       }
-      layers[typeStr] = layers[typeStr].concat(paramData);
+      const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+      const newValue = {
+        name: input,
+        x: parseTimestamp(streamValue.private_rcvStamp?.value),
+        y: accessor(streamValue[item]?.value),
+      };
+      if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+        changed = true;
+        inputData.push(newValue);
+      }
+      if (inputData.length > 100) {
+        changed = true;
+        inputData.slice(-100);
+      }
+      data[input] = inputData;
     }
+    if (changed) {
+      setData(data);
+    }
+  }, [inputs, streams]);
+
+  const layers = { lines: [], bars: [], pointLines: [] };
+  for (const [input, inputData] of Object.entries(data)) {
+    const { type } = inputs[input];
+    const typeStr = type + 's';
+    if (!typeStr in layers) {
+      continue;
+    }
+    layers[typeStr] = layers[typeStr].concat(inputData);
   }
+
+  // console.log('-----------------');
+  // console.log('inputs: ', inputs);
+  // console.log('marksStyles: ', marksStyles);
+  // console.log('streams: ', streams);
+  // console.log('data: ', data);
+  // console.log('layers: ', layers);
 
   return (
     <div>
@@ -220,6 +220,3 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(VegaTimeSeriesPlotContainer);
-
-// 'Mount Azimuth': 'telemetry-ATMCS-0-mount_AzEl_Encoders',
-// 'Mount Azimuth': (data) => (data.azimuthCalculatedAngle ? data.azimuthCalculatedAngle.value[0] : 0),
