@@ -158,13 +158,6 @@ const VegaTimeSeriesPlotContainer = function ({
     layers[typeStr] = layers[typeStr].concat(inputData);
   }
 
-  // console.log('-----------------');
-  // console.log('inputs: ', inputs);
-  // console.log('marksStyles: ', marksStyles);
-  // console.log('streams: ', streams);
-  // console.log('data: ', data);
-  // console.log('layers: ', layers);
-
   return (
     <div>
       <div style={{ width: '500px', height: '200px' }}>
