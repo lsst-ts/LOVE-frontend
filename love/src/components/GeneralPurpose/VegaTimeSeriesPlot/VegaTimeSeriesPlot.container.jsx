@@ -85,7 +85,6 @@ const defaultStyles = [
 ];
 
 const VegaTimeSeriesPlotContainer = function ({
-  subscriptions = schema.props.subscriptions.default,
   inputs = schema.props.inputs.default,
   streams,
   subscribeToStreams,
@@ -190,28 +189,31 @@ const VegaTimeSeriesPlotContainer = function ({
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
-  const groupNames = Object.keys(subscriptions);
-
+  const inputs = ownProps.inputs || schema.props.inputs.default;
+  const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
   return {
     streams,
   };
 };
 
+const getGroupNames = (inputs) =>
+  Object.values(inputs).map(
+    (inputConfig) => `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`,
+  );
+
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
-      const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
-      const groupNames = Object.keys(subscriptions);
-      console.log('groupNames', groupNames);
+      const inputs = ownProps.inputs || schema.props.inputs.default;
+      const groupNames = getGroupNames(inputs);
       groupNames.forEach((groupName) => {
         dispatch(addGroup(groupName));
       });
     },
     unsubscribeToStreams: () => {
-      const subscriptions = ownProps.subscriptions || schema.props.subscriptions.default;
-      const groupNames = Object.keys(subscriptions);
+      const inputs = ownProps.inputs || schema.props.inputs.default;
+      const groupNames = getGroupNames(inputs);
       groupNames.forEach((groupName) => {
         dispatch(requestGroupRemoval(groupName));
       });
