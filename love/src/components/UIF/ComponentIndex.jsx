@@ -235,6 +235,16 @@ export const uifIndex = {
       },
     },
   },
+  EmbeddedView: {
+    component: require('../EmbeddedView/EmbeddedView.container').default,
+    schema: {
+      ...require('../EmbeddedView/EmbeddedView.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../EmbeddedView/EmbeddedView.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
