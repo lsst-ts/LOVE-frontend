@@ -66,7 +66,7 @@ export default class TSCEntry extends PureComponent {
   static defaultProps = {
     inputs: [],
     name: null,
-    accessor: null,
+    accessor: '(x) => x',
     type: null,
     onChange: (name, inputs, accessor) => {},
     onRemove: null,
