@@ -4,7 +4,6 @@ Render a line using default styles
 import { DateTime } from 'luxon';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
 import VegaMiniPlot from './VegaMiniPlot';
-import VegaLegend from './VegaLegend';
 
 const length = 100;
 const dt = 2;
@@ -52,7 +51,7 @@ const marksStyles = [
 
 ## Plot with legend
 
-Render many lines with custom styles with a defined legend layout
+Render many lines with custom styles with a fixed legend layout
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -83,34 +82,26 @@ const marksStyles = names.map((name, index) => ({
 
 const gridData = [
   [
-    {
-      name: 'example-0',
-      label: 'Line 0',
-    },
-    {
-      name: 'example-3',
-      label: 'Long label line 3',
-    },
+    { name: 'example-0', label: 'Line 0' },
+    { name: 'example-3', label: 'Long label line 3' },
   ],
+  // second row only has one column 
+  // the second column will be filled automatically with an empty div
+  [{ name: 'example-2', label: 'Line 2' }], 
   [
-    {
-      name: 'example-1',
-      label: 'Line 1',
-    },
-    {
-      name: 'example-4',
-      label: 'Line 4',
-    },
-  ],
-  [
-    {
-      name: 'example-2',
-      label: 'Line 2',
-    },
+    { name: 'example-1', label: 'Line 1' },
+    { name: 'example-4', label: 'Line 4' },
   ],
 ];
 
-<div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
+<div
+  style={{
+    background: 'var(--secondary-background-dimmed-color)',
+    display: 'grid',
+    gridTemplateColumns: 'max-content max-content',
+    columnGap: '1em'
+  }}
+>
   <VegaTimeseriesPlot
     layers={{
       lines: data,
@@ -127,6 +118,7 @@ const gridData = [
 ```
 
 Render many lines with custom styles with an automatic and responsive legend layout
+
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -181,8 +173,8 @@ const listData = [
 <div
   style={{
     background: 'var(--secondary-background-dimmed-color)',
-    display:'flex',
-    flexDirection: 'row'
+    display: 'flex',
+    flexDirection: 'row',
   }}
 >
   <VegaTimeseriesPlot
@@ -204,6 +196,7 @@ const listData = [
 ## Different marks
 
 Lines and lines with points.
+
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -276,6 +269,7 @@ const marksStyles = names.map((name, index) => ({
 ```
 
 Bars and lines
+
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -363,6 +357,7 @@ const marksStyles = names
 
 Fixed width and height
 
+
 ```jsx
 import { DateTime } from 'luxon';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
@@ -404,6 +399,7 @@ const marksStyles = [
 
 Responsive size: auto resize to fit parent (or any) node size
 
+
 ```jsx
 import React from 'react';
 import { DateTime } from 'luxon';
@@ -429,7 +425,7 @@ const marksStyles = [
 
 const ResizingPlot = () => {
   const [time, setTime] = React.useState(0);
-  const containerRef = React.useRef({});
+  const containerRef = React.useRef(undefined);
   React.useEffect(() => {
     const interval = setInterval(() => {
       setTime((t) => t + 0.1);
