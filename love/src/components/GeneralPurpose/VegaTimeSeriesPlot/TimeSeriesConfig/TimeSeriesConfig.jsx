@@ -68,6 +68,7 @@ export default class TimeSeriesConfig extends PureComponent {
       return input;
     });
     console.log('entries: ', entries);
+    this.setState({ entries });
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
       this.setState({ optionsTree: data });
     });
@@ -123,11 +124,11 @@ export default class TimeSeriesConfig extends PureComponent {
       name,
       accessor,
       type,
-      category: inputs[0].category,
-      csc: inputs[0].csc,
-      salindex: inputs[0].salindex,
-      topic: inputs[0].topic,
-      item: inputs[0].category,
+      category: inputs?.[0]?.category,
+      csc: inputs?.[0]?.csc,
+      salindex: inputs?.[0]?.salindex,
+      topic: inputs?.[0]?.topic,
+      item: inputs?.[0]?.item,
     };
     this.setState({ entries: newEntries, changed: true });
   };
@@ -184,7 +185,7 @@ export default class TimeSeriesConfig extends PureComponent {
               key={nextIndex}
               className={styles.empty}
               optionsTree={this.state.optionsTree}
-              onChange={(name, inputs, accessor) => this.onEntryChange(name, inputs, accessor, nextIndex)}
+              onChange={(name, inputs, accessor, type) => this.onEntryChange(name, inputs, accessor, type, nextIndex)}
             />
           </div>
         </div>

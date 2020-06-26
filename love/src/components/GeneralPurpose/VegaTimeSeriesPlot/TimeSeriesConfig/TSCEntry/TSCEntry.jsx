@@ -74,8 +74,7 @@ export default class TSCEntry extends PureComponent {
     const newInputs = [...this.props.inputs];
     newInputs[index] = input;
     const { category, csc, salindex, topic, item } = input;
-    const newName = `${category}-${csc}-${salindex}-${topic}-${item}`;
-    this.props.onChange(newName, newInputs, this.props.accessor);
+    this.props.onChange(this.props.name, newInputs, this.props.accessor);
   };
 
   onInputGetName = (input) => {
