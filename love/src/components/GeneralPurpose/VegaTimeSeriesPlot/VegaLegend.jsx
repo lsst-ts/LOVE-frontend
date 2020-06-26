@@ -1,4 +1,5 @@
 import React from 'react';
+import PropType from 'prop-types';
 import styles from './VegaLegend.module.css';
 import VegaMiniPlot from './VegaMiniPlot';
 
@@ -10,7 +11,7 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
           const style = marksStyles.find((s) => s.name === cell.name);
 
           return (
-            <div className={styles.cell}>
+            <div key={cell.name} className={styles.cell}>
               {style && <VegaMiniPlot {...style} markType={cell.markType || 'line'} />} {cell?.label || ''}
             </div>
           );
@@ -24,7 +25,7 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
     if (row.length === ncols) {
       return row;
     }
-    return [...row, new Array(ncols - row.length).fill(undefined)];
+    return [...row, ...new Array(ncols - row.length).fill(undefined)];
   });
 
   return (
@@ -34,11 +35,19 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
         gridTemplateColumns: `repeat(${ncols}, auto`,
       }}
     >
-      {filledGridData.map((row) => {
-        return row.map((cell) => {
+      {filledGridData.map((row, rowIndex) => {
+        return row.map((cell, colIndex) => {
+          if (cell === undefined) {
+            return (
+              <div key={`${rowIndex}-${colIndex}`} className={styles.cell}>
+                {' '}
+              </div>
+            );
+          }
+
           const style = marksStyles.find((s) => s.name === cell.name);
           return (
-            <div className={styles.cell}>
+            <div key={cell.name} className={styles.cell}>
               {style && <VegaMiniPlot {...style} markType={cell.markType || 'line'} />} {cell?.label || ''}
             </div>
           );
@@ -52,6 +61,23 @@ VegaLegend.defaultProps = {
   gridData: [[]],
   listData: [],
   marksStyles: [],
+};
+
+VegaLegend.propTypes = {
+  gridData: PropType.arrayOf(
+    PropType.arrayOf(
+      PropType.shape({
+        name: PropType.string,
+        label: PropType.node,
+      }),
+    ),
+  ),
+  listData: PropType.arrayOf(
+    PropType.shape({
+      name: PropType.string,
+      label: PropType.node,
+    }),
+  ),
 };
 
 export default VegaLegend;
