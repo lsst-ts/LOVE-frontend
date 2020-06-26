@@ -14,6 +14,8 @@ import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
   HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
+  TimeSeriesConfig: require('../../../components/GeneralPurpose/VegaTimeSeriesPlot/TimeSeriesConfig/TimeSeriesConfig')
+    .default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
