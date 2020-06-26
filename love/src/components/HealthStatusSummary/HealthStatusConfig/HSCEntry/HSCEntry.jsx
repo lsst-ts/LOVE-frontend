@@ -123,7 +123,13 @@ export default class HSCEntry extends PureComponent {
             // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
             // onChange={(ev) => this.onNameChange(ev.target?.value)}
           />
-          <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
+          <Button
+            className={styles.button}
+            onClick={this.props.onRemove}
+            disabled={this.props.onRemove === null}
+            size="small"
+            title="Remove from config"
+          >
             Remove
           </Button>
         </div>
