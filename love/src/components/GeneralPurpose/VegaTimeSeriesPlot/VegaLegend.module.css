@@ -7,8 +7,10 @@
 
 .autoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
   column-gap: 0.5em;
+  justify-content: start;
+  align-content: start
 }
 
 .cell {
