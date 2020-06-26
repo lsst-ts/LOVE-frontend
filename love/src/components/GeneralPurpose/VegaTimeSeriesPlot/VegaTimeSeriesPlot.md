@@ -22,26 +22,31 @@ const marksStyles = [
   },
 ];
 
-<div>
-  <div style={{ display: 'flex', flexDirection: 'row', background: 'black', width: '500px' }}>
+<div
+  style={{
+    background: 'var(--secondary-background-dimmed-color)',
+  }}
+>
+  <div
+    style={{
+      display: 'flex',
+      flexDirection: 'row',
+    }}
+  >
     <span> Example line </span>
     <VegaMiniPlot />
   </div>
-  <div
-    id="vegaPlotContainer"
-    style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}
-  >
-    <VegaTimeseriesPlot
-      layers={{
-        lines: data,
-      }}
-      xAxisTitle="date title"
-      yAxisTitle="values title"
-      marksStyles={marksStyles}
-      temporalXAxis
-      containerNode={document.getElementById('vegaPlotContainer')}
-    />
-  </div>
+  <VegaTimeseriesPlot
+    layers={{
+      lines: data,
+    }}
+    xAxisTitle="date title"
+    yAxisTitle="values title"
+    marksStyles={marksStyles}
+    temporalXAxis
+    width={300}
+    height={150}
+  />
 </div>;
 ```
 
@@ -106,18 +111,17 @@ const gridData = [
 ];
 
 <div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
-    <VegaTimeseriesPlot
-      layers={{
-        lines: data,
-      }}
-      xAxisTitle="Time"
-      yAxisTitle="Quantity [u]"
-      marksStyles={marksStyles}
-      temporalXAxis
-      containerNode={document.getElementById('vegaPlotContainer')}
-    />
-  </div>
+  <VegaTimeseriesPlot
+    layers={{
+      lines: data,
+    }}
+    xAxisTitle="Time"
+    yAxisTitle="Quantity [u]"
+    marksStyles={marksStyles}
+    temporalXAxis
+    width={500}
+    height={200}
+  />
   <VegaLegend gridData={gridData} marksStyles={marksStyles} />
 </div>;
 ```
@@ -174,19 +178,25 @@ const listData = [
   },
 ];
 
-<div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
-    <VegaTimeseriesPlot
-      layers={{
-        lines: data,
-      }}
-      xAxisTitle="Time"
-      yAxisTitle="Quantity [u]"
-      marksStyles={marksStyles}
-      temporalXAxis
-      containerNode={document.getElementById('vegaPlotContainer')}
-    />
-  </div>
+<div
+  style={{
+    background: 'var(--secondary-background-dimmed-color)',
+    display:'flex',
+    flexDirection: 'row'
+  }}
+>
+  <VegaTimeseriesPlot
+    layers={{
+      lines: data,
+    }}
+    xAxisTitle="Time"
+    yAxisTitle="Quantity [u]"
+    marksStyles={marksStyles}
+    temporalXAxis
+    containerNode={document.getElementById('vegaPlotContainer')}
+    width={500}
+    height={300}
+  />
   <VegaLegend listData={listData} marksStyles={marksStyles} />
 </div>;
 ```
@@ -246,23 +256,22 @@ const marksStyles = names.map((name, index) => ({
 }));
 
 <div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
-    <VegaTimeseriesPlot
-      layers={{
-        lines: data.slice(0, 3).flat(),
-        pointLines: data
-          .slice(3)
-          .map((d) => d.filter((el, index) => index % 5 === 0))
-          .flat(),
-      }}
-      xAxisTitle="Time"
-      yAxisTitle="Quantity [u]"
-      marksStyles={marksStyles}
-      temporalXAxis
-      containerNode={document.getElementById('vegaPlotContainer')}
-    />
-  </div>
-  <VegaLegend listData={listData} marksStyles={marksStyles} />
+  <VegaTimeseriesPlot
+    layers={{
+      lines: data.slice(0, 3).flat(),
+      pointLines: data
+        .slice(3)
+        .map((d) => d.filter((el, index) => index % 5 === 0))
+        .flat(),
+    }}
+    xAxisTitle="Time"
+    yAxisTitle="Quantity [u]"
+    marksStyles={marksStyles}
+    temporalXAxis
+    containerNode={document.getElementById('vegaPlotContainer')}
+    width={500}
+    height={200}
+  />
 </div>;
 ```
 
@@ -350,9 +359,50 @@ const marksStyles = names
 </div>;
 ```
 
-## Resize options
+## Size and responsiveness
 
-Auto-resize to fit parent node size
+Fixed width and height
+
+```jsx
+import { DateTime } from 'luxon';
+import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
+
+const length = 100;
+const dt = 2;
+const data = new Array(length).fill({}).map((_, index) => {
+  return {
+    name: 'example-1',
+    x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
+    y: Math.cos((index * Math.PI) / length / 2),
+  };
+});
+
+const marksStyles = [
+  {
+    name: 'example-1',
+  },
+];
+
+<div
+  style={{
+    background: 'var(--secondary-background-dimmed-color)',
+  }}
+>
+  <VegaTimeseriesPlot
+    layers={{
+      lines: data,
+    }}
+    xAxisTitle="date title"
+    yAxisTitle="values title"
+    marksStyles={marksStyles}
+    temporalXAxis
+    width={800}
+    height={100}
+  />
+</div>;
+```
+
+Responsive size: auto resize to fit parent (or any) node size
 
 ```jsx
 import React from 'react';
@@ -416,10 +466,9 @@ const ResizingPlot = () => {
 <ResizingPlot />;
 ```
 
-- prop container node
-- prop width/height
 - Legend component
+  - Title
+  - Width/height/responsive
 - Tooltips
-- Point lines
 - Date x-axis
 - Quantitative x-axis

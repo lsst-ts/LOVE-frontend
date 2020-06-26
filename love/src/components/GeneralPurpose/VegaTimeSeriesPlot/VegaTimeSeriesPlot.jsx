@@ -39,6 +39,17 @@ export const DASHES = [
  */
 class VegaTimeseriesPlot extends Component {
   static propTypes = {
+    /** Width of the plot in pixels */
+    width: PropTypes.number,
+
+    /** Height of the plot in pixels */
+    height: PropTypes.number,
+
+    /** Node to be used to track width and height.
+     *  Use this instead of props.width and props.height for responsive plots.
+     *  Will be ignored if both props.width and props.height are provided */
+    containerNode: PropTypes.node,
+
     /** Object with data separated on different keys to be plotted in different layers.
      * Passed directly as <VegaLite data={layers} ...>
      */
@@ -103,9 +114,6 @@ class VegaTimeseriesPlot extends Component {
       /** For the y axis */
       y: PropTypes.string,
     }),
-
-    /** Node to be used to resize */
-    containerNode: PropTypes.node
   };
 
   static defaultProps = {
@@ -203,8 +211,8 @@ class VegaTimeseriesPlot extends Component {
           },
           scale: this.props.xDomain
             ? {
-              domain: this.props.xDomain,
-            }
+                domain: this.props.xDomain,
+              }
             : undefined,
         },
         y: {
@@ -270,12 +278,11 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
-  componentDidMount = () => {
-    // this.props.subscribeToStreams();
+  updateSpec = () => {
     this.setState({
       spec: {
-        width: this.state.containerWidth,
-        height: this.state.containerHeight,
+        width: this.props.width !== undefined && this.props.height !== undefined ? this.props.width : this.state.containerWidth,
+        height: this.props.width !== undefined && this.props.height !== undefined ? this.props.height : this.state.containerHeight,
         autosize: {
           type: 'fit',
           contains: 'padding',
@@ -312,28 +319,45 @@ class VegaTimeseriesPlot extends Component {
         ],
       },
     });
+  };
 
-
+  componentDidMount = () => {
+    this.updateSpec();
   };
 
   componentDidUpdate = (prevProps) => {
-    if (prevProps.containerNode !== this.props.containerNode) {
+    if (
+      prevProps.containerNode !== this.props.containerNode &&
+      this.props.width === undefined && // width/height have more priority
+      this.props.height === undefined
+    ) {
       if (this.props.containerNode) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
           this.setState({
-            containerHeight: container.contentRect.height, //-16-5*2-75,
-            containerWidth: container.contentRect.width, // - (8 + 15) * 2 - 16-2*10
+            containerHeight: container.contentRect.height,
+            containerWidth: container.contentRect.width,
           });
         });
 
         this.resizeObserver.observe(this.props.containerNode);
       }
     }
-  }
+
+    if (
+      this.props.width !== undefined &&
+      this.props.height !== undefined &&
+      this.props.width !== prevProps.width &&
+      this.props.height !== prevProps.height
+    ) {
+      this.updateSpec();
+    }
+  };
   componentWillUnmount = () => {
     // this.props.unsubscribeToStreams();
-    this.resizeObserver.disconnect();
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+    }
   };
 
   render() {
@@ -341,8 +365,8 @@ class VegaTimeseriesPlot extends Component {
     return (
       <div
         style={{
-          width: `${this.state.containerWidth}px`,
-          height: this.state.containerHeight,
+          width: `${this.props.width !== undefined && this.props.height !== undefined ? this.props.width : this.state.containerWidth}px`,
+          height: `${this.props.width !== undefined && this.props.height !== undefined ? this.props.height : this.state.containerHeight}px`,
         }}
       >
         <VegaLite
