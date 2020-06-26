@@ -9,6 +9,7 @@ const Select = ({ options = [], small = false, onChange = () => {}, option = und
     controlClassName: propsControlClassName,
     menuClassName: propsMenuClassName,
     arrowClassName: propsArrowClassName,
+    // placeholderClassName: propsPlaceholderClassName,
     ...otherProps
   } = props;
 
@@ -18,6 +19,7 @@ const Select = ({ options = [], small = false, onChange = () => {}, option = und
       controlClassName={[styles.dropDownControlClassName, small ? styles.small : '', propsControlClassName].join(' ')}
       menuClassName={[styles.dropDownMenuClassName, propsMenuClassName].join(' ')}
       arrowClassName={[styles.arrowClassName, propsArrowClassName].join(' ')}
+      placeholderClassName={option ? null : styles.dropDownPlaceHolderClassName}
       options={options}
       onChange={onChange}
       value={option}

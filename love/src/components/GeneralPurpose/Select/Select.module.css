@@ -12,6 +12,10 @@
   text-align: left;
 }
 
+.dropDownPlaceHolderClassName {
+  color: var(--secondary-font-color);
+}
+
 .dropDownControlClassName:focus {
   border: 1px solid var(--secondary-font-color);
 }

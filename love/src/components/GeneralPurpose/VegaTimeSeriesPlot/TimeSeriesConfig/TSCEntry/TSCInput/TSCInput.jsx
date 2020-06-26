@@ -91,14 +91,14 @@ export default class TSCInput extends PureComponent {
         <Select
           className={[styles.select, styles.category].join(' ')}
           options={categoryOptions}
-          value={input?.category}
+          option={input?.category}
           placeholder="Select category"
           onChange={(selection) => this.onSelectChange(selection.value, 'category')}
         />
         <Select
           className={styles.select}
           options={cscOptions}
-          value={input?.csc}
+          option={input?.csc}
           placeholder="Select a CSC"
           onChange={(selection) => this.onSelectChange(selection.value, 'csc')}
         />
@@ -112,14 +112,14 @@ export default class TSCInput extends PureComponent {
         <Select
           className={styles.select}
           options={topicOptions}
-          value={input?.topic}
+          option={input?.topic}
           placeholder="Select a topic"
           onChange={(selection) => this.onSelectChange(selection.value, 'topic')}
         />
         <Select
           className={styles.select}
           options={itemOptions}
-          value={input?.item}
+          option={input?.item}
           placeholder="Select an item"
           onChange={(selection) => this.onSelectChange(selection.value, 'item')}
         />

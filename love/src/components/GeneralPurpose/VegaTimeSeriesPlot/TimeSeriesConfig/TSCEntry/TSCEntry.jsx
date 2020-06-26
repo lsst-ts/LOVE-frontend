@@ -125,7 +125,7 @@ export default class TSCEntry extends PureComponent {
             <Select
               className={styles.select}
               options={this.itemOptions}
-              value={this.props.type}
+              option={this.props.type}
               placeholder="Select mark"
               onChange={(selection) => this.onTypeChange(selection.value)}
             />
@@ -135,7 +135,7 @@ export default class TSCEntry extends PureComponent {
             onClick={this.props.onRemove}
             disabled={this.props.onRemove === null}
             size="small"
-            title="Remove from plot"
+            title="Remove from config"
           >
             Remove
           </Button>
