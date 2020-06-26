@@ -5,32 +5,23 @@ import TSCEntry from './TSCEntry/TSCEntry';
 import Button from '../../../GeneralPurpose/Button/Button';
 import ManagerInterface from '../../../../Utils';
 
-const HEALTH_STATUS_CODES = {
-  0: 'Undefined',
-  1: 'OK',
-  2: 'Warning',
-  3: 'Alert',
-  4: 'Invalid',
-};
-
-export const HEALTH_STATUS_VARIABLES_DECLARATION = Object.entries(HEALTH_STATUS_CODES)
-  .map(([key, label]) => {
-    return `const ${label.toUpperCase()}=${key};`;
-  })
-  .join('\n');
-
 /**
  * Component to configure the Health Status Summary
  */
 export default class TimeSeriesConfig extends PureComponent {
   static propTypes = {
-    /** JSON string that describes the initially selected telemetries and their health functions.
-     * Must have his structure:
+    /** JSON string that describes the initially selected telemetries or events.
+     * Must have this structure:
      *
      * {
-     *   "<component.salindex.topic>": {
-     *     <parameter_name>: healthfunction,
-     *     ...
+     *   "<name_for_legend>": {
+     *     "category": <telemetry or event>,
+     *     "csc": <CSC name>,
+     *     "salindex": <salindex>,
+     *     "topic": <topic>,
+     *     "item": <item of the topic>,
+     *     "type": <"bar", "line" or "pointLine">,
+     *     "accessor": <Access function as string>,
      *   }
      * }
      */
@@ -67,56 +58,11 @@ export default class TimeSeriesConfig extends PureComponent {
       input['name'] = key;
       return input;
     });
-    console.log('entries: ', entries);
     this.setState({ entries });
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
       this.setState({ optionsTree: data });
     });
   };
-
-  // dataToConf = (data) => {
-  //   const dict = JSON.parse(data);
-  //   const conf = [];
-  //   for (const topicKey of Object.keys(dict)) {
-  //     const topicData = dict[topicKey];
-  //     let [category, csc, salindex, topic] = topicKey.split('-');
-  //     if (salindex !== null && salindex !== undefined) {
-  //       salindex = parseInt(salindex);
-  //     }
-  //     for (const item of Object.keys(topicData)) {
-  //       const accessor = topicData[item];
-  //       const name = `${topicKey}-${item}`;
-  //       conf.push({
-  //         name,
-  //         inputs: [
-  //           {
-  //             category,
-  //             csc,
-  //             salindex,
-  //             topic,
-  //             item,
-  //           },
-  //         ],
-  //         accessor,
-  //       });
-  //     }
-  //   }
-  //   return conf;
-  // };
-
-  // currentConfigToData = () => {
-  //   const conf = {};
-  //   for (const entry of this.state.currentConfig) {
-  //     const { category, csc, salindex, topic, item } = entry.inputs[0];
-  //     const accessor = entry.accessor;
-  //     const topicKey = `${category}-${csc}-${salindex}-${topic}`;
-  //     if (!(topicKey in conf)) {
-  //       conf[topicKey] = {};
-  //     }
-  //     conf[topicKey][item] = accessor;
-  //   }
-  //   return conf;
-  // };
 
   onEntryChange = (name, inputs, accessor, type, index) => {
     const newEntries = [...this.state.entries];
@@ -151,8 +97,6 @@ export default class TimeSeriesConfig extends PureComponent {
   };
 
   render() {
-    console.log('this.props: ', this.props);
-    console.log('this.state.entries: ', this.state.entries);
     const nextIndex = this.state.entries.length;
     return (
       <div className={styles.container}>
@@ -175,6 +119,7 @@ export default class TimeSeriesConfig extends PureComponent {
                     },
                   ]}
                   accessor={accessor}
+                  type={type}
                   optionsTree={this.state.optionsTree}
                   onChange={(name, inputs, accessor, type) => this.onEntryChange(name, inputs, accessor, type, index)}
                   onRemove={() => this.onEntryRemove(index)}

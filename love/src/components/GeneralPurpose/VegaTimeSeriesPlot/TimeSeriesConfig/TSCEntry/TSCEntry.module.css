@@ -10,6 +10,7 @@
   padding: 1em;
   border: 1px solid var(--secondary-font-dimmed-color);
   min-height: 100px;
+  font-size: 0.8em;
 }
 
 .firstRow {
@@ -20,12 +21,24 @@
   margin-bottom: 0.5em;
 }
 
-.firstRow .input {
+.firstRow .nameMark {
+  display: inline-flex;
+  flex-flow: row;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+
+.firstRow .nameMark .input {
   min-width: 10ch;
   max-width: 50ch;
   background-color: var(--second-secondary-background-color);
   color: var(--base-font-color);
   border: 1px solid var(--secondary-font-dimmed-color);
+  margin-right: 0.5em;
+}
+
+.firstRow .nameMark .select {
+  width: 28ch;
 }
 
 .firstRow .button {

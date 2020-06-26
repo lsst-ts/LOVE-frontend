@@ -7,6 +7,7 @@ import styles from './TSCEntry.module.css';
 import TSCInput from './TSCInput/TSCInput';
 import Button from '../../../Button/Button';
 import Input from '../../../Input/Input';
+import Select from '../../../Select/Select';
 
 /**
  * Component to configure the Health Status Summary
@@ -41,6 +42,10 @@ export default class TSCEntry extends PureComponent {
      */
     accessor: PropTypes.string,
     /**
+     * String describing the type of mark, can be either "line", "bar" or "pointLine"
+     */
+    type: PropTypes.string,
+    /**
      * Callback to call when making a change, should have the followinf arguments:
      * - name
      * - inputs
@@ -62,40 +67,41 @@ export default class TSCEntry extends PureComponent {
     inputs: [],
     name: null,
     accessor: null,
+    type: null,
     onChange: (name, inputs, accessor) => {},
     onRemove: null,
   };
 
+  itemOptions = ['line', 'pointLine', 'bar'];
+
   onNameChange = (name) => {
-    this.props.onChange(name, this.props.inputs, this.props.accessor);
+    this.props.onChange(name, this.props.inputs, this.props.accessor, this.props.type);
   };
 
   onInputChange = (input, index) => {
     const newInputs = [...this.props.inputs];
     newInputs[index] = input;
     const { category, csc, salindex, topic, item } = input;
-    this.props.onChange(this.props.name, newInputs, this.props.accessor);
+    this.props.onChange(this.props.name, newInputs, this.props.accessor, this.props.type);
   };
 
   onInputGetName = (input) => {
     const { category, csc, salindex, topic, item } = input;
     const newName = `${category}-${csc}-${salindex}-${topic}-${item}`;
-    this.props.onChange(newName, this.props.inputs, this.props.accessor);
+    this.props.onChange(newName, this.props.inputs, this.props.accessor, this.props.type);
   };
 
   onInputRemove = (index) => {
     const newInputs = this.props.inputs.filter((_el, i) => i !== index);
-    this.props.onChange(this.props.name, newInputs, this.props.accessor);
+    this.props.onChange(this.props.name, newInputs, this.props.accessor, this.props.type);
+  };
+
+  onTypeChange = (type) => {
+    this.props.onChange(this.props.name, this.props.inputs, this.props.accessor, type);
   };
 
   onEditorChange = (accessor) => {
-    this.props.onChange(this.props.name, this.props.inputs, accessor);
-  };
-
-  getFunctionHeader = () => {
-    const vars = this.props.inputs.map((input) => input.item);
-    const header = `(${vars.join(', ')}) => {`;
-    return <>{header}</>;
+    this.props.onChange(this.props.name, this.props.inputs, accessor, this.props.type);
   };
 
   render() {
@@ -107,14 +113,23 @@ export default class TSCEntry extends PureComponent {
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
-          <Input
-            className={styles.input}
-            placeholder="Insert a name for the legend"
-            value={this.props.name || ''}
-            // readOnly
-            // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
-            onChange={(ev) => this.onNameChange(ev.target?.value)}
-          />
+          <div className={styles.nameMark}>
+            <Input
+              className={styles.input}
+              placeholder="Insert a name for the legend"
+              value={this.props.name || ''}
+              // readOnly
+              // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
+              onChange={(ev) => this.onNameChange(ev.target?.value)}
+            />
+            <Select
+              className={styles.select}
+              options={this.itemOptions}
+              value={this.props.type}
+              placeholder="Select mark"
+              onChange={(selection) => this.onTypeChange(selection.value)}
+            />
+          </div>
           <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
             Remove
           </Button>
