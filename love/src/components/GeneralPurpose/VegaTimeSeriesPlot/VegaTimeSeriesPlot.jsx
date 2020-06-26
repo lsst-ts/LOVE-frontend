@@ -281,8 +281,14 @@ class VegaTimeseriesPlot extends Component {
   updateSpec = () => {
     this.setState({
       spec: {
-        width: this.props.width !== undefined && this.props.height !== undefined ? this.props.width : this.state.containerWidth,
-        height: this.props.width !== undefined && this.props.height !== undefined ? this.props.height : this.state.containerHeight,
+        width:
+          this.props.width !== undefined && this.props.height !== undefined
+            ? this.props.width
+            : this.state.containerWidth,
+        height:
+          this.props.width !== undefined && this.props.height !== undefined
+            ? this.props.height
+            : this.state.containerHeight,
         autosize: {
           type: 'fit',
           contains: 'padding',
@@ -363,23 +369,16 @@ class VegaTimeseriesPlot extends Component {
   render() {
     const { layers } = this.props;
     return (
-      <div
+      <VegaLite
         style={{
-          width: `${this.props.width !== undefined && this.props.height !== undefined ? this.props.width : this.state.containerWidth}px`,
-          height: `${this.props.width !== undefined && this.props.height !== undefined ? this.props.height : this.state.containerHeight}px`,
+          display: 'flex',
         }}
-      >
-        <VegaLite
-          style={{
-            display: 'flex',
-          }}
-          renderer="svg"
-          spec={this.state.spec}
-          data={layers}
-          className={styles.plotContainer}
-          actions={false}
-        />
-      </div>
+        renderer="svg"
+        spec={this.state.spec}
+        data={layers}
+        className={styles.plotContainer}
+        actions={false}
+      />
     );
   }
 }
