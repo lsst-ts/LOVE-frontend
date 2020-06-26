@@ -130,7 +130,13 @@ export default class TSCEntry extends PureComponent {
               onChange={(selection) => this.onTypeChange(selection.value)}
             />
           </div>
-          <Button className={styles.button} onClick={this.props.onRemove} disabled={this.props.onRemove === null}>
+          <Button
+            className={styles.button}
+            onClick={this.props.onRemove}
+            disabled={this.props.onRemove === null}
+            size="small"
+            title="Remove from plot"
+          >
             Remove
           </Button>
         </div>
