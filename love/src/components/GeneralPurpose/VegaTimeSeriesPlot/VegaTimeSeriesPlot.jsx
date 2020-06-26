@@ -103,6 +103,9 @@ class VegaTimeseriesPlot extends Component {
       /** For the y axis */
       y: PropTypes.string,
     }),
+
+    /** Node to be used to resize */
+    containerNode: PropTypes.node
   };
 
   static defaultProps = {
@@ -112,7 +115,6 @@ class VegaTimeseriesPlot extends Component {
 
   constructor(props) {
     super(props);
-    this.containerRef = React.createRef();
     this.resizeObserver = undefined;
     this.state = {
       containerWidth: 500,
@@ -201,8 +203,8 @@ class VegaTimeseriesPlot extends Component {
           },
           scale: this.props.xDomain
             ? {
-                domain: this.props.xDomain,
-              }
+              domain: this.props.xDomain,
+            }
             : undefined,
         },
         y: {
@@ -311,36 +313,37 @@ class VegaTimeseriesPlot extends Component {
       },
     });
 
-    window.setWidth = (width) => {
-      this.setState({
-        containerWidth: width,
-      });
-    };
-    this.resizeObserver = new ResizeObserver((entries) => {
-      const container = entries[0];
-      this.setState({
-        containerHeight: container.contentRect.height, //-16-5*2-75,
-        containerWidth: container.contentRect.width, // - (8 + 15) * 2 - 16-2*10
-      });
-    });
 
-    this.resizeObserver.observe(this.containerRef.current.parentNode);
   };
 
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.containerNode !== this.props.containerNode) {
+      if (this.props.containerNode) {
+        this.resizeObserver = new ResizeObserver((entries) => {
+          const container = entries[0];
+          this.setState({
+            containerHeight: container.contentRect.height, //-16-5*2-75,
+            containerWidth: container.contentRect.width, // - (8 + 15) * 2 - 16-2*10
+          });
+        });
+
+        this.resizeObserver.observe(this.props.containerNode);
+      }
+    }
+  }
   componentWillUnmount = () => {
     // this.props.unsubscribeToStreams();
     this.resizeObserver.disconnect();
   };
 
   render() {
-    const { layers, marksStyles } = this.props;
+    const { layers } = this.props;
     return (
       <div
         style={{
           width: `${this.state.containerWidth}px`,
           height: this.state.containerHeight,
         }}
-        ref={this.containerRef}
       >
         <VegaLite
           style={{

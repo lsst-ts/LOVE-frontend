@@ -27,7 +27,10 @@ const marksStyles = [
     <span> Example line </span>
     <VegaMiniPlot />
   </div>
-  <div style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}>
+  <div
+    id="vegaPlotContainer"
+    style={{ width: '500px', height: '200px', background: 'var(--secondary-background-dimmed-color)' }}
+  >
     <VegaTimeseriesPlot
       layers={{
         lines: data,
@@ -36,10 +39,13 @@ const marksStyles = [
       yAxisTitle="values title"
       marksStyles={marksStyles}
       temporalXAxis
+      containerNode={document.getElementById('vegaPlotContainer')}
     />
   </div>
 </div>;
 ```
+
+## Plot with legend
 
 Render many lines with custom styles with a defined legend layout
 
@@ -100,7 +106,7 @@ const gridData = [
 ];
 
 <div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div style={{ width: '500px', height: '200px' }}>
+  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
     <VegaTimeseriesPlot
       layers={{
         lines: data,
@@ -109,6 +115,7 @@ const gridData = [
       yAxisTitle="Quantity [u]"
       marksStyles={marksStyles}
       temporalXAxis
+      containerNode={document.getElementById('vegaPlotContainer')}
     />
   </div>
   <VegaLegend gridData={gridData} marksStyles={marksStyles} />
@@ -168,7 +175,7 @@ const listData = [
 ];
 
 <div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div style={{ width: '500px', height: '200px' }}>
+  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
     <VegaTimeseriesPlot
       layers={{
         lines: data,
@@ -177,15 +184,16 @@ const listData = [
       yAxisTitle="Quantity [u]"
       marksStyles={marksStyles}
       temporalXAxis
+      containerNode={document.getElementById('vegaPlotContainer')}
     />
   </div>
   <VegaLegend listData={listData} marksStyles={marksStyles} />
 </div>;
 ```
 
-Lines and lines with points.
+## Different marks
 
-**NOT YET IMPLENTED https://github.com/vega/vega-lite/issues/6496**
+Lines and lines with points.
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -238,7 +246,7 @@ const marksStyles = names.map((name, index) => ({
 }));
 
 <div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div style={{ width: '500px', height: '200px' }}>
+  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
     <VegaTimeseriesPlot
       layers={{
         lines: data.slice(0, 3).flat(),
@@ -251,6 +259,7 @@ const marksStyles = names.map((name, index) => ({
       yAxisTitle="Quantity [u]"
       marksStyles={marksStyles}
       temporalXAxis
+      containerNode={document.getElementById('vegaPlotContainer')}
     />
   </div>
   <VegaLegend listData={listData} marksStyles={marksStyles} />
@@ -324,7 +333,7 @@ const marksStyles = names
   });
 
 <div style={{ background: 'var(--secondary-background-dimmed-color)' }}>
-  <div style={{ width: '500px', height: '200px' }}>
+  <div id="vegaPlotContainer" style={{ width: '500px', height: '200px' }}>
     <VegaTimeseriesPlot
       layers={{
         lines: data,
@@ -334,15 +343,83 @@ const marksStyles = names
       yAxisTitle="Quantity [u]"
       marksStyles={marksStyles}
       temporalXAxis
+      containerNode={document.getElementById('vegaPlotContainer')}
     />
   </div>
   <VegaLegend listData={listData} marksStyles={marksStyles} />
 </div>;
 ```
 
+## Resize options
+
+Auto-resize to fit parent node size
+
+```jsx
+import React from 'react';
+import { DateTime } from 'luxon';
+import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
+import VegaMiniPlot from './VegaMiniPlot';
+import VegaLegend from './VegaLegend';
+
+const length = 100;
+const dt = 2;
+const data = new Array(length).fill({}).map((_, index) => {
+  return {
+    name: 'example-1',
+    x: DateTime.local().minus({ seconds: dt * (length - 1 - index) }),
+    y: Math.cos((index * Math.PI) / length / 2),
+  };
+});
+
+const marksStyles = [
+  {
+    name: 'example-1',
+  },
+];
+
+const ResizingPlot = () => {
+  const [time, setTime] = React.useState(0);
+  const containerRef = React.useRef({});
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTime((t) => t + 0.1);
+    }, 100);
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
+  const width = 450 + 50 * Math.sin(time * Math.PI);
+  return (
+    <div
+      ref={containerRef}
+      style={{
+        width: `${width}px`,
+        height: '200px',
+        background: 'var(--secondary-background-dimmed-color)',
+      }}
+    >
+      <VegaTimeseriesPlot
+        layers={{
+          lines: data,
+        }}
+        xAxisTitle="date title"
+        yAxisTitle="values title"
+        marksStyles={marksStyles}
+        temporalXAxis
+        containerNode={containerRef.current}
+      />
+    </div>
+  );
+};
+
+<ResizingPlot />;
+```
+
+- prop container node
+- prop width/height
 - Legend component
 - Tooltips
 - Point lines
 - Date x-axis
 - Quantitative x-axis
-- prop container node
