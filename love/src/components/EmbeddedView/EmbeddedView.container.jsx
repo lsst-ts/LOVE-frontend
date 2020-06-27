@@ -3,20 +3,20 @@ import { connect } from 'react-redux';
 import EmbeddedView from './EmbeddedView';
 
 export const schema = {
-  description: 'Panel containing multiple buttons that execute different commands, such as closing the dome',
+  description: 'Component that renders an external web page. The server hosting the page should allow it to be embeddable (no X-Frame-Options in the HTTP header)',
   defaultSize: [57, 35],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Command Panel',
+      default: 'Embedded view',
     },
     url: {
       type: 'string',
       description: 'URL to be embedded in the component',
       isPrivate: false,
-      default: 'http://lsst.org',
+      default: 'https://dashboard.ampath.net/maddash-webui/index.cgi',
     },
     hasRawMode: {
       type: 'boolean',
