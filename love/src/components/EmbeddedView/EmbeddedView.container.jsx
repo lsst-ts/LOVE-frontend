@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestSALCommand } from '../../redux/actions/ws';
 import EmbeddedView from './EmbeddedView';
 
 export const schema = {
@@ -12,6 +11,12 @@ export const schema = {
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
       default: 'Command Panel',
+    },
+    url: {
+      type: 'string',
+      description: 'URL to be embedded in the component',
+      isPrivate: false,
+      default: 'http://lsst.org',
     },
     hasRawMode: {
       type: 'boolean',
@@ -26,12 +31,4 @@ const EmbeddedViewContainer = ({ ...props }) => {
   return <EmbeddedView {...props} />;
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  return {
-    requestSALCommand: (component, salindex, cmd) => {
-      return dispatch(requestSALCommand({ ...cmd, component, salindex }));
-    },
-  };
-};
-
-export default connect(() => {}, mapDispatchToProps)(EmbeddedViewContainer);
+export default connect(() => {return {}}, () => {return {}})(EmbeddedViewContainer);
