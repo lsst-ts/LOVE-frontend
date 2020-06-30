@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TSCInput.module.css';
-import Button from '../../../../Button/Button';
-import Input from '../../../../Input/Input';
-import Select from '../../../../Select/Select';
+import Input from 'components/GeneralPurpose/Input/Input.jsx';
+import Select from 'components/GeneralPurpose/Select/Select.jsx';
 
 /**
  * Component to configure the Health Status Summary

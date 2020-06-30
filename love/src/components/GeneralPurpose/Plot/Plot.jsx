@@ -1,7 +1,7 @@
 import React from 'react';
-import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import VegaLegend from '../VegaTimeSeriesPlot/VegaLegend';
-import styles from './VegaResponsivePlot.module.css';
+import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
+import styles from './Plot.module.css';
 
 const defaultStyles = [
   {
@@ -25,7 +25,7 @@ const defaultStyles = [
   },
 ];
 
-const VegaResponsivePlot = ({ layers, legend, width, height, containerNode }) => {
+const Plot = ({ layers, legend, width, height, containerNode }) => {
   const marksStyles = legend.map(({ name }, index) => {
     return {
       ...defaultStyles[index % defaultStyles.length],
@@ -83,4 +83,4 @@ const VegaResponsivePlot = ({ layers, legend, width, height, containerNode }) =>
   );
 };
 
-export default VegaResponsivePlot;
+export default Plot;

@@ -5,9 +5,9 @@ import 'brace/mode/javascript';
 import 'brace/theme/solarized_dark';
 import styles from './TSCEntry.module.css';
 import TSCInput from './TSCInput/TSCInput';
-import Button from '../../../Button/Button';
-import Input from '../../../Input/Input';
-import Select from '../../../Select/Select';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
+import Select from 'components/GeneralPurpose/Select/Select';
 
 /**
  * Component to configure the Health Status Summary

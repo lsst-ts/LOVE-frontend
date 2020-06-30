@@ -7,7 +7,7 @@ import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
 import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
-import VegaTimeSeriesPlotContainer from '../../GeneralPurpose/VegaTimeSeriesPlot/VegaTimeSeriesPlot.container';
+import VegaTimeSeriesPlotContainer from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getAllTelemetries } from '../../../../redux/selectors';
-import { addGroup, removeGroup } from '../../../../redux/actions/ws';
+import { getAllTelemetries } from 'redux/selectors';
+import { addGroup, removeGroup } from 'redux/actions/ws';
 import TimeSeriesConfig from './TimeSeriesConfig';
 const TimeSeriesConfigContainer = ({
   allTelemetries,

@@ -2,8 +2,8 @@ Fixed width and height
 
 ```jsx
 import { DateTime } from 'luxon';
-import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import VegaMiniPlot from '../VegaTimeSeriesPlot/VegaMiniPlot';
+import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import VegaMiniPlot from './VegaTimeSeriesPlot/VegaMiniPlot';
 
 const length = 100;
 const dt = 2;
@@ -30,7 +30,7 @@ const legend = names.map((name) => ({
     background: 'var(--secondary-background-dimmed-color)',
   }}
 >
-  <VegaResponsivePlot layers={{ lines: data }} legend={legend} width={300} height={100} />
+  <Plot layers={{ lines: data }} legend={legend} width={300} height={100} />
 </div>;
 ```
 
@@ -38,8 +38,8 @@ Responsive size
 
 ```jsx
 import { DateTime } from 'luxon';
-import VegaTimeseriesPlot from '../VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import VegaMiniPlot from '../VegaTimeSeriesPlot/VegaMiniPlot';
+import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import VegaMiniPlot from './VegaTimeSeriesPlot/VegaMiniPlot';
 
 const length = 100;
 const dt = 2;
@@ -83,6 +83,6 @@ const height = 200 + 10 * Math.sin(time * Math.PI);
   }}
   containerNode={containerRef.current}
 >
-  <VegaResponsivePlot layers={{ lines: data }} legend={legend} containerNode={containerRef.current} />
+  <Plot layers={{ lines: data }} legend={legend} containerNode={containerRef.current} />
 </div>;
 ```

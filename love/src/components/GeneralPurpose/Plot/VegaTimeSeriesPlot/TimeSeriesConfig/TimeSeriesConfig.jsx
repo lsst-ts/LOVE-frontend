@@ -2,8 +2,9 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TimeSeriesConfig.module.css';
 import TSCEntry from './TSCEntry/TSCEntry';
-import Button from '../../../GeneralPurpose/Button/Button';
-import ManagerInterface from '../../../../Utils';
+import Button from 'components/GeneralPurpose/Button/Button';
+import ManagerInterface from 'Utils';
+
 
 /**
  * Component to configure the Health Status Summary

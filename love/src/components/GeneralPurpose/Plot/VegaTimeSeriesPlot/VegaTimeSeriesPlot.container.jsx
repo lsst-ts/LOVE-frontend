@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, requestGroupRemoval } from '../../../redux/actions/ws';
-import { getStreamsData } from '../../../redux/selectors/selectors.js';
+import { addGroup, requestGroupRemoval } from '../../../../redux/actions/ws';
+import { getStreamsData } from '../../../../redux/selectors/selectors';
 import { DateTime } from 'luxon';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
-import { parseTimestamp } from '../../../Utils';
+import { parseTimestamp } from '../../../../Utils';
 import VegaLegend from './VegaLegend';
 import styles from './VegaTimeSeriesPlot.module.css';
 
