@@ -25,7 +25,7 @@ const defaultStyles = [
   },
 ];
 
-const VegaResponsivePlot = ({ layers, legend }) => {
+const VegaResponsivePlot = ({ layers, legend, width, height }) => {
   const marksStyles = legend.map(({ name }, index) => {
     return {
       ...defaultStyles[index % defaultStyles.length],
@@ -34,15 +34,21 @@ const VegaResponsivePlot = ({ layers, legend }) => {
   });
 
   return (
-    <div className={styles.container}>
+    <div
+      className={styles.container}
+      style={{
+        width: `${width}px`,
+        height: `${height}px`,
+      }}
+    >
       <VegaTimeseriesPlot
         layers={layers}
         xAxisTitle="date title"
         yAxisTitle="values title"
         marksStyles={marksStyles}
         temporalXAxis
-        width={300}
-        height={150}
+        width={width-150} // from the .autogrid grid-template-columns 
+        height={height}
         className={styles.plot}
       />
       <VegaLegend listData={legend} marksStyles={marksStyles} />

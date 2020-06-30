@@ -1,4 +1,4 @@
-Render many lines with custom styles with an automatic and responsive legend layout
+Fixed width and height
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -30,6 +30,6 @@ const legend = names.map(name => ({
     background: 'var(--secondary-background-dimmed-color)',
   }}
 >
-  <VegaResponsivePlot layers={{ lines: data }} legend={legend} />
+  <VegaResponsivePlot layers={{ lines: data }} legend={legend} width={300} height={100}/>
 </div>;
 ```
