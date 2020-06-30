@@ -165,7 +165,6 @@ const PlotContainer = function ({
     });
   }, [inputs]);
 
-  console.log('containerNode', containerNode);
   return (
     <Plot
       layers={layers}
