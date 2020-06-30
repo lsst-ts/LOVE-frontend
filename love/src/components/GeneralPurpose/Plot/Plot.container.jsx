@@ -83,6 +83,9 @@ const PlotContainer = function ({
   streams,
   subscribeToStreams,
   unsubscribeToStreams,
+  containerNode,
+  width,
+  height
 }) {
   const [data, setData] = React.useState({});
 
@@ -162,6 +165,7 @@ const PlotContainer = function ({
     });
   }, [inputs]);
 
+  console.log('containerNode', containerNode);
   return (
     <Plot
       layers={layers}
@@ -170,8 +174,9 @@ const PlotContainer = function ({
       marksStyles={marksStyles}
       temporalXAxis
       legend={legend}
-      width={500}
-      height={200}
+      width={width}
+      height={height}
+      containerNode={containerNode}
     />
   );
 };

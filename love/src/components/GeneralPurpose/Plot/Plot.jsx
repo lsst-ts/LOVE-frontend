@@ -53,6 +53,7 @@ const Plot = ({ layers, legend, width, height, containerNode }) => {
         });
       });
 
+      if(!(containerNode instanceof Element)) return;
       resizeObserver.observe(containerNode);
       return () => {
         resizeObserver.disconnect();

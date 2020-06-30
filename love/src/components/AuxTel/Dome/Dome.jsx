@@ -30,6 +30,9 @@ export default class Dome extends Component {
       az: 0,
       el: 0,
     };
+
+    this.azimuthPlotRef = React.createRef();
+    this.elevationPlotRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -208,9 +211,9 @@ export default class Dome extends Component {
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
             <h2>Azimuth</h2>
-            <div className={styles.azimuthPlot}>
+            <div ref={this.azimuthPlotRef} className={styles.azimuthPlot}>
               <div>
-                <PlotContainer inputs={this.azimuthPlotInputs} />
+                <PlotContainer inputs={this.azimuthPlotInputs} containerNode={this.azimuthPlotRef?.current}/>
                 {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
@@ -270,9 +273,9 @@ export default class Dome extends Component {
 
           <div className={styles.elevationSection}>
             <h2>Elevation</h2>
-            <div className={styles.elevationPlot}>
+            <div ref={this.elevationPlotRef} className={styles.elevationPlot}>
               <div>
-                <PlotContainer inputs={this.elevationPlotInputs} />
+                <PlotContainer inputs={this.elevationPlotInputs} containerNode={this.elevationPlotRef?.current}/>
                 {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{
