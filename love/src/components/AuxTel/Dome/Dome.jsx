@@ -6,8 +6,7 @@ import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
-import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
-import VegaTimeSeriesPlotContainer from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.container';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 
@@ -211,7 +210,7 @@ export default class Dome extends Component {
             <h2>Azimuth</h2>
             <div className={styles.azimuthPlot}>
               <div>
-                <VegaTimeSeriesPlotContainer inputs={this.azimuthPlotInputs} />
+                <PlotContainer inputs={this.azimuthPlotInputs} />
                 {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
@@ -273,7 +272,7 @@ export default class Dome extends Component {
             <h2>Elevation</h2>
             <div className={styles.elevationPlot}>
               <div>
-                <VegaTimeSeriesPlotContainer inputs={this.elevationPlotInputs} />
+                <PlotContainer inputs={this.elevationPlotInputs} />
                 {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{

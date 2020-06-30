@@ -182,8 +182,8 @@ export const uifIndex = {
     schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
   },
   VegaTimeSeriesPlot: {
-    component: require('../GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.container').default,
-    schema: require('../GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.container').schema,
+    component: require('../GeneralPurpose/Plot/Plot.container').default,
+    schema: require('../GeneralPurpose/Plot/Plot.container').schema,
   },
   // TelemetryLog: {
   //   component: require('../TelemetryLog/TelemetryLog.container').default,

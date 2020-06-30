@@ -1,12 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, requestGroupRemoval } from '../../../../redux/actions/ws';
-import { getStreamsData } from '../../../../redux/selectors/selectors';
-import { DateTime } from 'luxon';
-import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
-import { parseTimestamp } from '../../../../Utils';
-import VegaLegend from './VegaLegend';
-import styles from './VegaTimeSeriesPlot.module.css';
+import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
+import { getStreamsData } from 'redux/selectors/selectors';
+import Plot from './Plot';
+import { parseTimestamp } from 'Utils';
 
 export const schema = {
   description: 'Time series plot for any data stream coming from SAL',
@@ -81,7 +78,7 @@ const defaultStyles = [
   },
 ];
 
-const VegaTimeSeriesPlotContainer = function ({
+const PlotContainer = function ({
   inputs = schema.props.inputs.default,
   streams,
   subscribeToStreams,
@@ -137,7 +134,7 @@ const VegaTimeSeriesPlotContainer = function ({
     }
   }, [inputs, streams]);
 
-  const layers = { lines: [], bars: [], pointLines: [] };
+  const layers = { lines: [] };
   for (const [input, inputData] of Object.entries(data)) {
     const { type } = inputs[input];
     const typeStr = type + 's';
@@ -156,25 +153,26 @@ const VegaTimeSeriesPlotContainer = function ({
     });
   }, [inputs]);
 
-  const legendData = marksStyles.map(({ name }) => ({
-    name,
-    label: name,
-  }));
-
+  const legend = React.useMemo(() => {
+    return Object.keys(inputs).map((inputName, index) => {
+      return {
+        label: inputName,
+        name: inputName,
+      };
+    });
+  }, [inputs]);
 
   return (
-    <div className={styles.container}>
-      <VegaTimeseriesPlot
-        layers={layers}
-        xAxisTitle="Time"
-        yAxisTitle="Quantity [u]"
-        marksStyles={marksStyles}
-        temporalXAxis
-        width={500}
-        height={200}
-      />
-      <VegaLegend listData={legendData} marksStyles={marksStyles} />
-    </div>
+    <Plot
+      layers={layers}
+      xAxisTitle="Time"
+      yAxisTitle="Quantity [u]"
+      marksStyles={marksStyles}
+      temporalXAxis
+      legend={legend}
+      width={500}
+      height={200}
+    />
   );
 };
 
@@ -211,4 +209,4 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VegaTimeSeriesPlotContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(PlotContainer);
