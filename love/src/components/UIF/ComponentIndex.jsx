@@ -13,6 +13,12 @@ const defaultSchemaProps = {
     isPrivate: false,
     default: 'Title',
   },
+  link: {
+    type: 'string',
+    description: 'Internal or external link displayed in the title bar (if visible)',
+    isPrivate: false,
+    default: '',
+  },
   margin: {
     type: 'boolean',
     description: 'Whether to display component with a margin',
