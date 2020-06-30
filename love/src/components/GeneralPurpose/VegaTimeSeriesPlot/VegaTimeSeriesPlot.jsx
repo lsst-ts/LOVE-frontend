@@ -114,11 +114,15 @@ class VegaTimeseriesPlot extends Component {
       /** For the y axis */
       y: PropTypes.string,
     }),
+
+    /** classname to be appended to the default one in <VegaLite ...> */
+    className: PropTypes.string
   };
 
   static defaultProps = {
     layers: {},
     temporalXAxis: true,
+    className: ''
   };
 
   constructor(props) {
@@ -314,14 +318,14 @@ class VegaTimeseriesPlot extends Component {
             titleFontWeight: 750,
             // labelAngle: -45,
             labelFontWeight: 750,
-            tickCount: 10,
+            tickCount: 5,
           },
         },
         layer: [
-          this.makeBarLayer('bars'),
+          // this.makeBarLayer('bars'),
           this.makeLineLayer('lines'),
-          this.makeLineLayer('pointLines'),
-          this.makePointsLayer('pointLines'),
+          // this.makeLineLayer('pointLines'),
+          // this.makePointsLayer('pointLines'),
         ],
       },
     });
@@ -368,6 +372,9 @@ class VegaTimeseriesPlot extends Component {
 
   render() {
     const { layers } = this.props;
+
+    console.log('aa this.props', this.props);
+    console.log('spec', this.state.spec);
     return (
       <VegaLite
         style={{
@@ -376,7 +383,7 @@ class VegaTimeseriesPlot extends Component {
         renderer="svg"
         spec={this.state.spec}
         data={layers}
-        className={styles.plotContainer}
+        className={[styles.plotContainer, this.props.className].join(' ')}
         actions={false}
       />
     );
