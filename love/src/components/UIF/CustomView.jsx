@@ -32,7 +32,9 @@ export const DEVICE_TO_COLS = {
 };
 
 const MOBILE_REFERENCE_COLS_THRESHOLD = 2;
-const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find((label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD);
+const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find(
+  (label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD,
+);
 const MOBILE_REFERENCE_WIDTH = DEVICE_TO_SIZE[MOBILE_REFERENCE_LABEL];
 
 class CustomView extends Component {
@@ -165,7 +167,12 @@ class CustomView extends Component {
         </div>
         {parsedConfig.titleBar ? (
           <ErrorBoundary>
-            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode}>
+            <Panel
+              title={parsedConfig.title}
+              fit={false}
+              hasRawMode={parsedConfig.hasRawMode}
+              link={parsedConfig.link}
+            >
               {comp}
             </Panel>
           </ErrorBoundary>
@@ -195,13 +202,13 @@ class CustomView extends Component {
   };
 
   getDeviceLabel = (width) => {
-    const minDevice = Object.entries(DEVICE_TO_SIZE).reduce((previousMinKey, [key, width])=> {
-      if(previousMinKey===''){
+    const minDevice = Object.entries(DEVICE_TO_SIZE).reduce((previousMinKey, [key, width]) => {
+      if (previousMinKey === '') {
         return key;
       }
 
-      if(width < DEVICE_TO_SIZE[previousMinKey]){
-        return key;        
+      if (width < DEVICE_TO_SIZE[previousMinKey]) {
+        return key;
       }
       return previousMinKey;
     }, '');
@@ -236,8 +243,8 @@ class CustomView extends Component {
     // otherwise x.properties.w must be used
 
     let colsScalingFactor = 1;
-    if( container.properties.cols <= MOBILE_REFERENCE_COLS_THRESHOLD){
-      colsScalingFactor = MOBILE_REFERENCE_WIDTH / deviceWidth * deviceCols / container.properties.cols;
+    if (container.properties.cols <= MOBILE_REFERENCE_COLS_THRESHOLD) {
+      colsScalingFactor = ((MOBILE_REFERENCE_WIDTH / deviceWidth) * deviceCols) / container.properties.cols;
     }
 
     const layout = Object.values(container.content).map((x) => {
@@ -287,8 +294,8 @@ class CustomView extends Component {
                 maxWidth: `${Math.max(window.innerWidth - deviceWidth, 100)}px`,
               }}
             >
-              This area will be invisible to the user on the selected device. 
-              Please change the device size on the top bar before dragging components here.
+              This area will be invisible to the user on the selected device. Please change the device size on the top
+              bar before dragging components here.
             </div>
           </>
         )}

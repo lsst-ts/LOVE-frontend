@@ -19,6 +19,8 @@ export default class Panel extends Component {
     expandHeight: PropTypes.bool,
     /** Wether to show the raw mode button */
     hasRawMode: PropTypes.bool,
+    /** If a valid url, displayed as a link button in the title bar*/
+    link: PropTypes.string,
   };
 
   static defaultProps = {
@@ -60,8 +62,20 @@ export default class Panel extends Component {
           <h3 className={styles.panelTitle}>{this.props.title}</h3>
           <div className={styles.panelButtonWrapper}>
             {this.props.hasRawMode && (
-              <Button onClick={() => this.toggleRaw()} className={styles.panelButton} size={'small'}>
+              <Button 
+                title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}
+                onClick={() => this.toggleRaw()} className={styles.panelButton} size={'small'}>
                 <span>{this.state.isRaw ? '<' : 'i'}</span>
+              </Button>
+            )}
+            {this.props.link && this.props.link !== '' && (
+              <Button
+                title={`External link: ${this.props.link}`}
+                onMouseDown={() => window.open(this.props.link, '_blank')}
+                className={[styles.panelButton, styles.horizontalFlip].join(' ')}
+                size={'small'}
+              >
+                <span>⇱</span>
               </Button>
             )}
           </div>
