@@ -28,8 +28,9 @@
 
 .endpointsContainer {
   display: grid;
-  grid-template-columns: max-content max-content max-content max-content;
-  grid-column-gap: 0.5em;
+  grid-template-columns: max-content 1fr max-content 1fr;
+  grid-column-gap: 0.3em;
+  justify-items: flex-start;
 }
 
 .highlight {
@@ -37,11 +38,12 @@
 }
 
 .ip {
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 
 .valuesContainer {
   display: grid;
-  grid-template-columns: max-content max-content max-content max-content max-content max-content;
-  grid-column-gap: 0.5em;
+  grid-template-columns: max-content 1fr max-content 1fr max-content 1fr;
+  grid-column-gap: 0.3em;
+  justify-items: flex-start;
 }

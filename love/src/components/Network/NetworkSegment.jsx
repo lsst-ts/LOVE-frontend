@@ -4,7 +4,8 @@ import styles from './Network.module.css';
 
 export default class NetworkSegment extends Component {
   static propTypes = {
-    url: PropTypes.string,
+      /** One of the archive dictionaries coming  */
+    metadata: PropTypes.string,
   };
 
   constructor(props) {
@@ -20,7 +21,6 @@ export default class NetworkSegment extends Component {
     const event = metadata['event-types'].filter((e) => {
       return e['event-type'] === 'histogram-rtt';
     })[0];
-    console.log(event);
     const summary = event.summaries.filter((sum) => {
       return sum['summary-type'] === 'statistics' && sum['summary-window'] === '0';
     })[0];
@@ -37,7 +37,6 @@ export default class NetworkSegment extends Component {
   render() {
     const { metadata } = this.props;
     const { data } = this.state;
-    console.log(data);
     const maxValue = data?.val?.maximum ? Math.round(data?.val?.maximum * 100) / 100 : '?';
     const minValue = data?.val?.maximum ? Math.round(data?.val?.minimum * 100) / 100 : '?';
     const meanValue = data?.val?.maximum ? Math.round(data?.val?.mean * 100) / 100 : '?';
