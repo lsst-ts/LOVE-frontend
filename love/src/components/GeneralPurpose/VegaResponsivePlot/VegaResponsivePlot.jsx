@@ -25,7 +25,7 @@ const defaultStyles = [
   },
 ];
 
-const VegaResponsivePlot = ({ layers, legend, width, height }) => {
+const VegaResponsivePlot = ({ layers, legend, width, height, containerNode }) => {
   const marksStyles = legend.map(({ name }, index) => {
     return {
       ...defaultStyles[index % defaultStyles.length],
@@ -33,12 +33,39 @@ const VegaResponsivePlot = ({ layers, legend, width, height }) => {
     };
   });
 
+  const [containerSize, setContainerSize] = React.useState({});
+
+  React.useEffect(() => {
+    if (width !== undefined && height !== undefined) {
+      setContainerSize({
+        width,
+        height,
+      });
+      return;
+    }
+
+    if (containerNode !== undefined) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        const container = entries[0];
+        setContainerSize({
+          width: container.contentRect.width,
+          height: container.contentRect.height,
+        });
+      });
+
+      resizeObserver.observe(containerNode);
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }
+  }, [containerNode, width, height]);
+
   return (
     <div
       className={styles.container}
       style={{
-        width: `${width}px`,
-        height: `${height}px`,
+        width: `${containerSize.width}px`,
+        height: `${containerSize.height}px`,
       }}
     >
       <VegaTimeseriesPlot
@@ -47,8 +74,8 @@ const VegaResponsivePlot = ({ layers, legend, width, height }) => {
         yAxisTitle="values title"
         marksStyles={marksStyles}
         temporalXAxis
-        width={width-150} // from the .autogrid grid-template-columns 
-        height={height}
+        width={containerSize.width - 150} // from the .autogrid grid-template-columns
+        height={containerSize.height}
         className={styles.plot}
       />
       <VegaLegend listData={legend} marksStyles={marksStyles} />

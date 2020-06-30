@@ -373,8 +373,6 @@ class VegaTimeseriesPlot extends Component {
   render() {
     const { layers } = this.props;
 
-    console.log('aa this.props', this.props);
-    console.log('spec', this.state.spec);
     return (
       <VegaLite
         style={{
