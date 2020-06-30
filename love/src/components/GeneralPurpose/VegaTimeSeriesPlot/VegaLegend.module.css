@@ -8,9 +8,11 @@
 .autoGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-rows: repeat(auto-fill, 12pt);
+  font-size: 8pt;
   column-gap: 0.5em;
   justify-content: start;
-  align-content: start
+  align-content: start;
 }
 
 .cell {
