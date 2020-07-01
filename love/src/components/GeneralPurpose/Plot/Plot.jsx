@@ -25,7 +25,7 @@ const defaultStyles = [
   },
 ];
 
-const Plot = ({ layers, legend, width, height, containerNode }) => {
+const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisTitle, units }) => {
   const marksStyles = legend.map(({ name }, index) => {
     return {
       ...defaultStyles[index % defaultStyles.length],
@@ -71,8 +71,9 @@ const Plot = ({ layers, legend, width, height, containerNode }) => {
     >
       <VegaTimeseriesPlot
         layers={layers}
-        xAxisTitle="date title"
-        yAxisTitle="values title"
+        xAxisTitle={xAxisTitle}
+        yAxisTitle={yAxisTitle}
+        units={units}
         marksStyles={marksStyles}
         temporalXAxis
         width={containerSize.width - 150} // from the .autogrid grid-template-columns

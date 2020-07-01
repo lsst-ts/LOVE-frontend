@@ -12,25 +12,25 @@ export const schema = {
     titleBar: {
       type: 'boolean',
       description: 'Whether to display the title bar',
-      isPrivate: false,
-      default: true,
+      isPrivate: true,
+      default: false,
     },
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
-      isPrivate: false,
+      isPrivate: true,
       default: 'Time series plot',
     },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
       isPrivate: true,
-      default: true,
+      default: false,
     },
     inputs: {
       externalStep: 'TimeSeriesConfig',
       type: 'object',
-      description: 'lits of inputs',
+      description: 'list of inputs',
       isPrivate: false,
       default: {
         Elevation: {
@@ -53,6 +53,18 @@ export const schema = {
         },
       },
     },
+    xAxisTitle: {
+      type: 'string',
+      description: 'Title of the horizontal axis of this plot',
+      default: 'Time',
+      isPrivate: false
+    },
+    yAxisTitle: {
+      type: 'string',
+      description: 'Title of the vertical axis of this plot',
+      default: '',
+      isPrivate: false
+    }
   },
 };
 
@@ -85,21 +97,27 @@ const PlotContainer = function ({
   unsubscribeToStreams,
   containerNode,
   width,
-  height
+  height,
+  xAxisTitle,
+  yAxisTitle,
+  units
 }) {
   const [data, setData] = React.useState({});
+
+  const containerRef = React.useRef(undefined);
 
   React.useEffect(() => {
     subscribeToStreams();
   }, []);
 
-  React.useEffect(() => {
-    const data = {};
-    for (const key of Object.keys(inputs)) {
-      data[key] = [];
-    }
-    setData(data);
-  }, [inputs]);
+  /** TODO: find a way to detect "real" changes in inputs */
+  // React.useEffect(() => {
+  //   const data = {};
+  //   for (const key of Object.keys(inputs)) {
+  //     data[key] = [];
+  //   }
+  //   setData(data);
+  // }, [inputs]);
 
   React.useEffect(() => {
     let changed = false;
@@ -165,14 +183,36 @@ const PlotContainer = function ({
     });
   }, [inputs]);
 
+  // this should be the case for a component loaded from the UI Framework
+  if (!width && !height && !containerNode) {
+    return (
+      <div ref={containerRef}>
+        <Plot
+          layers={layers}
+          legend={legend}
+          marksStyles={marksStyles}
+          xAxisTitle={xAxisTitle}
+          yAxisTitle={yAxisTitle}
+          units={units}
+          temporalXAxis
+          width={width}
+          height={height}
+          // containerNode={containerRef.current?.parentNode?.parentNode} // titlebar
+          containerNode={containerRef.current?.parentNode} //no titlebar
+        />
+      </div>
+    );
+  }
+
   return (
     <Plot
       layers={layers}
-      xAxisTitle="Time"
-      yAxisTitle="Quantity [u]"
-      marksStyles={marksStyles}
-      temporalXAxis
       legend={legend}
+      marksStyles={marksStyles}
+      xAxisTitle={xAxisTitle}
+      yAxisTitle={yAxisTitle}
+      units={units}
+      temporalXAxis
       width={width}
       height={height}
       containerNode={containerNode}

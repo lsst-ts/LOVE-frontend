@@ -122,7 +122,9 @@ class VegaTimeseriesPlot extends Component {
   static defaultProps = {
     layers: {},
     temporalXAxis: true,
-    className: ''
+    className: '',
+    xAxisTitle: 'time',
+    yAxisTitle: 'y axis title'
   };
 
   constructor(props) {
