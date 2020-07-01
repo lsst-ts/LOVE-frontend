@@ -111,12 +111,13 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 /**
  * Reset all the given subscriptions (status PENDING and no confirmationMessage)
  */
-export const resetSubscriptions = (subscriptions) => {
-  return (dispatch, _getState) => {
+export const resetSubscriptions = (subscriptions = null) => {
+  return (dispatch, getState) => {
+    const subs = subscriptions ? subscriptions : getSubscriptions(getState());
     dispatch({
       type: RESET_SUBSCRIPTIONS,
-      subscriptions: subscriptions
-        ? subscriptions.map((sub) => ({
+      subscriptions: subs
+        ? subs.map((sub) => ({
             ...sub,
             status: groupStates.PENDING,
             confirmationMessage: undefined,
