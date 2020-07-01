@@ -17,7 +17,7 @@ import {
   getConfig,
 } from '../../redux/selectors';
 import { logout } from '../../redux/actions/auth';
-import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import { requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
 import Layout from './Layout';
@@ -67,6 +67,7 @@ const mapDispatchToProps = (dispatch) => {
     subscriptions,
     logout: () => dispatch(logout()),
     clearViewToEdit: () => dispatch(clearViewToEdit),
+    resetSubscriptions: () => dispatch(resetSubscriptions()),
     subscribeToStreams: () => {
       subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
