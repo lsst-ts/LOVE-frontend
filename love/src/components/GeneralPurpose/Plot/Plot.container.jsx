@@ -57,14 +57,14 @@ export const schema = {
       type: 'string',
       description: 'Title of the horizontal axis of this plot',
       default: 'Time',
-      isPrivate: false
+      isPrivate: false,
     },
     yAxisTitle: {
       type: 'string',
       description: 'Title of the vertical axis of this plot',
       default: '',
-      isPrivate: false
-    }
+      isPrivate: false,
+    },
   },
 };
 
@@ -100,7 +100,6 @@ const PlotContainer = function ({
   height,
   xAxisTitle,
   yAxisTitle,
-  units
 }) {
   const [data, setData] = React.useState({});
 
@@ -118,6 +117,26 @@ const PlotContainer = function ({
   //   }
   //   setData(data);
   // }, [inputs]);
+
+  // console.log('inputs', inputs);
+  // console.log('Object.keys(inputs)', Object.keys(inputs));
+  // console.log('sreams', streams);
+
+  const streamsItems = React.useMemo(() =>
+    Object.entries(inputs).map(
+      ([inputName, inputConfig]) => {
+        const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
+        const streamName = `${category}-${csc}-${salindex}-${topic}`;
+        return streams[streamName]?.[item];
+      },
+      [inputs, streams],
+    ),
+  );
+
+  const units = React.useMemo(
+    () => streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units,
+    [streamsItems],
+  );
 
   React.useEffect(() => {
     let changed = false;
@@ -140,6 +159,7 @@ const PlotContainer = function ({
         x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
         y: accessorFunc(streamValue[item]?.value),
       };
+
       if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
         changed = true;
         inputData.push(newValue);
@@ -184,19 +204,27 @@ const PlotContainer = function ({
   }, [inputs]);
 
   // this should be the case for a component loaded from the UI Framework
+  const plotProps = {
+    layers: layers,
+    legend: legend,
+    marksStyles: marksStyles,
+    xAxisTitle: xAxisTitle,
+    yAxisTitle: yAxisTitle,
+    units:
+      units !== undefined
+        ? {
+            y: units,
+          }
+        : undefined,
+    temporalXAxis: true,
+    width: width,
+    height: height,
+  };
   if (!width && !height && !containerNode) {
     return (
       <div ref={containerRef}>
         <Plot
-          layers={layers}
-          legend={legend}
-          marksStyles={marksStyles}
-          xAxisTitle={xAxisTitle}
-          yAxisTitle={yAxisTitle}
-          units={units}
-          temporalXAxis
-          width={width}
-          height={height}
+          {...plotProps}
           // containerNode={containerRef.current?.parentNode?.parentNode} // titlebar
           containerNode={containerRef.current?.parentNode} //no titlebar
         />
@@ -204,20 +232,7 @@ const PlotContainer = function ({
     );
   }
 
-  return (
-    <Plot
-      layers={layers}
-      legend={legend}
-      marksStyles={marksStyles}
-      xAxisTitle={xAxisTitle}
-      yAxisTitle={yAxisTitle}
-      units={units}
-      temporalXAxis
-      width={width}
-      height={height}
-      containerNode={containerNode}
-    />
-  );
+  return <Plot {...plotProps} containerNode={containerNode} />;
 };
 
 const getGroupNames = (inputs) =>

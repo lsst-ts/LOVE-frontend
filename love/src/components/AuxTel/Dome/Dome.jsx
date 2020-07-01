@@ -213,7 +213,12 @@ export default class Dome extends Component {
             <h2>Azimuth</h2>
             <div ref={this.azimuthPlotRef} className={styles.azimuthPlot}>
               <div>
-                <PlotContainer inputs={this.azimuthPlotInputs} containerNode={this.azimuthPlotRef?.current}/>
+                <PlotContainer
+                  inputs={this.azimuthPlotInputs}
+                  containerNode={this.azimuthPlotRef?.current}
+                  xAxisTitle="Time"
+                  yAxisTitle="Azimuth"
+                />
                 {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
@@ -275,7 +280,12 @@ export default class Dome extends Component {
             <h2>Elevation</h2>
             <div ref={this.elevationPlotRef} className={styles.elevationPlot}>
               <div>
-                <PlotContainer inputs={this.elevationPlotInputs} containerNode={this.elevationPlotRef?.current}/>
+                <PlotContainer
+                  inputs={this.elevationPlotInputs}
+                  containerNode={this.elevationPlotRef?.current}
+                  xAxisTitle="Time"
+                  yAxisTitle="Elevation"
+                />
                 {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{

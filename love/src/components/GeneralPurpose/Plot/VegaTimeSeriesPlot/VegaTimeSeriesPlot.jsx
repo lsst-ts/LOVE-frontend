@@ -116,7 +116,7 @@ class VegaTimeseriesPlot extends Component {
     }),
 
     /** classname to be appended to the default one in <VegaLite ...> */
-    className: PropTypes.string
+    className: PropTypes.string,
   };
 
   static defaultProps = {
@@ -124,7 +124,7 @@ class VegaTimeseriesPlot extends Component {
     temporalXAxis: true,
     className: '',
     xAxisTitle: 'time',
-    yAxisTitle: 'y axis title'
+    yAxisTitle: 'y axis title',
   };
 
   constructor(props) {
@@ -359,9 +359,12 @@ class VegaTimeseriesPlot extends Component {
     if (
       this.props.width !== undefined &&
       this.props.height !== undefined &&
-      this.props.width !== prevProps.width &&
-      this.props.height !== prevProps.height
+      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
     ) {
+      this.updateSpec();
+    }
+
+    if (this.props.units !== prevProps.units) {
       this.updateSpec();
     }
   };
