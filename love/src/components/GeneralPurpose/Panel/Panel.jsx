@@ -71,7 +71,7 @@ export default class Panel extends Component {
             {this.props.link && this.props.link !== '' && (
               <Button
                 title={`External link: ${this.props.link}`}
-                onMouseDown={() => window.open(this.props.link, '_blank')}
+                onClick={() => window.open(this.props.link, '_blank')}
                 className={[styles.panelButton, styles.horizontalFlip].join(' ')}
                 size={'small'}
               >

@@ -251,6 +251,16 @@ export const uifIndex = {
       },
     },
   },
+  Network: {
+    component: require('../Network/Network.container').default,
+    schema: {
+      ...require('../Network/Network.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Network/Network.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
