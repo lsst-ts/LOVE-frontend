@@ -109,14 +109,18 @@ const PlotContainer = function ({
     subscribeToStreams();
   }, []);
 
-  /** TODO: find a way to detect "real" changes in inputs */
-  // React.useEffect(() => {
-  //   const data = {};
-  //   for (const key of Object.keys(inputs)) {
-  //     data[key] = [];
-  //   }
-  //   setData(data);
-  // }, [inputs]);
+  /** TODO: find a way to detect "real" changes in inputs 
+   * now resizing the plot also makes the inputs prop to change
+  */
+  React.useEffect(() => {
+    unsubscribeToStreams();
+    subscribeToStreams();
+    const data = {};
+    for (const key of Object.keys(inputs)) {
+      data[key] = [];
+    }
+    setData(data);
+  }, [inputs]);
 
   // console.log('inputs', inputs);
   // console.log('Object.keys(inputs)', Object.keys(inputs));
@@ -176,13 +180,15 @@ const PlotContainer = function ({
   }, [inputs, streams]);
 
   const layers = { lines: [] };
-  for (const [input, inputData] of Object.entries(data)) {
-    const { type } = inputs[input];
+  for (const [inputName, inputConfig] of Object.entries(inputs)) {
+    const { type } = inputConfig;
     const typeStr = type + 's';
     if (!typeStr in layers) {
       continue;
     }
-    layers[typeStr] = layers[typeStr].concat(inputData);
+    if(!data[inputName]) continue;
+
+    layers[typeStr] = layers[typeStr].concat(data[inputName]);
   }
 
   const marksStyles = React.useMemo(() => {
