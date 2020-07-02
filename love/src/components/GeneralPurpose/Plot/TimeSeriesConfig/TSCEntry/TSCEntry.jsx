@@ -165,30 +165,36 @@ export default class TSCEntry extends PureComponent {
             onChange={(selection) => this.onStyleChange('color', selection)}
           />
 
-          <Select
-            className={styles.select}
-            options={DASHES.map((d) => JSON.stringify(d))}
-            option={JSON.stringify(input?.dash)}
-            placeholder="Select a dash pattern"
-            onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
-          />
-
-          <Select
-            className={styles.select}
-            options={SHAPES}
-            option={input?.color}
-            placeholder="Select a shape"
-            onChange={(selection) => this.onStyleChange('shape', selection)}
-          />
-
-          <div className={styles.labeledCheckbox}>
-            <span>Filled</span>
-            <input
-              type="checkbox"
-              defaultChecked={input?.filled}
-              onChange={() => this.onStyleChange('filled', { value: !input?.filled })}
+          {['line', 'pointLine'].includes(this.props.type) && (
+            <Select
+              className={styles.select}
+              options={DASHES.map((d) => JSON.stringify(d))}
+              option={JSON.stringify(input?.dash)}
+              placeholder="Select a dash pattern"
+              onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
             />
-          </div>
+          )}
+
+          {['pointLine'].includes(this.props.type) && (
+            <Select
+              className={styles.select}
+              options={SHAPES}
+              option={input?.color}
+              placeholder="Select a shape"
+              onChange={(selection) => this.onStyleChange('shape', selection)}
+            />
+          )}
+
+          {['pointLine'].includes(this.props.type) && (
+            <div className={styles.labeledCheckbox}>
+              <span>Filled</span>
+              <input
+                type="checkbox"
+                defaultChecked={input?.filled}
+                onChange={() => this.onStyleChange('filled', { value: !input?.filled })}
+              />
+            </div>
+          )}
         </div>
 
         {/** DELETE THE FOLLOWING ELEMENT AND UNCOMMENT WHAT IS BELOW (when goping back to multiple inputs) */}
