@@ -124,6 +124,7 @@ export default class TSCEntry extends PureComponent {
     // Delete the following 2 lines and uncomment the third when going back to multiple inputs:
     const input = this.props.inputs[0];
     const index = 0;
+    console.log('input', input);
     // const nextIndex = this.props.inputs.length;
 
     return (
@@ -171,8 +172,29 @@ export default class TSCEntry extends PureComponent {
             options={DASHES.map((d) => JSON.stringify(d))}
             option={JSON.stringify(input?.dash)}
             placeholder="Select a dash pattern"
-            onChange={(selection) => this.onStyleChange('dash', {...selection, value: JSON.parse(selection.value)})}
+            onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
           />
+
+          <Select
+            className={styles.select}
+            options={SHAPES}
+            option={input?.color}
+            placeholder="Select a shape"
+            onChange={(selection) => this.onStyleChange('shape', selection)}
+          />
+
+          <div
+            style={{
+              display: 'flex',
+            }}
+          >
+            <span>Filled</span>
+            <input
+              type="checkbox"
+              defaultChecked={input?.filled}
+              onChange={() => this.onStyleChange('filled', { value: !input?.filled })}
+            />
+          </div>
         </div>
 
         {/** DELETE THE FOLLOWING ELEMENT AND UNCOMMENT WHAT IS BELOW (when goping back to multiple inputs) */}
