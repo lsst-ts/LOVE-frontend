@@ -6,7 +6,7 @@ import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
-import TimeSeriesPlotContainer from '../../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 
@@ -30,14 +30,87 @@ export default class Dome extends Component {
       az: 0,
       el: 0,
     };
+
+    this.azimuthPlotRef = React.createRef();
+    this.elevationPlotRef = React.createRef();
   }
 
   componentDidMount = () => {
+    console.log('Dome');
     this.props.subscribeToStream();
   };
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
+  };
+
+  elevationPlotInputs = {
+    'Mount elevation': {
+      category: 'telemetry',
+      csc: 'ATMCS',
+      salindex: '0',
+      topic: 'mount_AzEl_Encoders',
+      item: 'elevationCalculatedAngle',
+      type: 'line',
+      accessor: (x) => x[0],
+      color: 'hsl(201, 70%, 40%)',
+    },
+    'Mount target': {
+      category: 'event',
+      csc: 'ATMCS',
+      salindex: '0',
+      topic: 'target',
+      item: 'elevation',
+      type: 'line',
+      accessor: (x) => x,
+      color: 'white',
+      dash: [4, 1]
+    },
+  };
+
+  azimuthPlotInputs = {
+    'Dome Azimuth': {
+      category: 'telemetry',
+      csc: 'ATDome',
+      salindex: 0,
+      topic: 'position',
+      item: 'azimuthPosition',
+      type: 'line',
+      accessor: (x) => x,
+      color: 'hsl(201, 70%, 40%)',
+    },
+    'Dome Target Az': {
+      category: 'event',
+      csc: 'ATDome',
+      salindex: 0,
+      topic: 'azimuthCommandedState',
+      item: 'azimuth',
+      type: 'line',
+      accessor: (x) => x,
+      color: 'hsl(201, 70%, 40%)',
+      dash: [4, 1]
+    },
+    'Mount Azimuth': {
+      category: 'telemetry',
+      csc: 'ATMCS',
+      salindex: 0,
+      topic: 'mount_AzEl_Encoders',
+      item: 'azimuthCalculatedAngle',
+      type: 'line',
+      accessor: (x) => x[0],
+      color: 'hsl(160, 70%, 40%)',
+    },
+    'Mount Target': {
+      category: 'event',
+      csc: 'ATMCS',
+      salindex: 0,
+      topic: 'target',
+      item: 'azimuth',
+      type: 'line',
+      accessor: (x) => x,
+      color: 'hsl(160, 70%, 40%)',
+      dash: [4, 1]
+    },
   };
 
   render() {
@@ -147,9 +220,15 @@ export default class Dome extends Component {
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
             <h2>Azimuth</h2>
-            <div className={styles.azimuthPlot}>
+            <div ref={this.azimuthPlotRef} className={styles.azimuthPlot}>
               <div>
-                <TimeSeriesPlotContainer
+                <PlotContainer
+                  inputs={this.azimuthPlotInputs}
+                  containerNode={this.azimuthPlotRef?.current}
+                  xAxisTitle="Time"
+                  yAxisTitle="Azimuth"
+                />
+                {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
                   // dataSources={['Mount Target']}
                   layers={{
@@ -201,16 +280,22 @@ export default class Dome extends Component {
                     'Mount Target': (data) =>
                       data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>
 
           <div className={styles.elevationSection}>
             <h2>Elevation</h2>
-            <div className={styles.elevationPlot}>
+            <div ref={this.elevationPlotRef} className={styles.elevationPlot}>
               <div>
-                <TimeSeriesPlotContainer
+                <PlotContainer
+                  inputs={this.elevationPlotInputs}
+                  containerNode={this.elevationPlotRef?.current}
+                  xAxisTitle="Time"
+                  yAxisTitle="Elevation"
+                />
+                {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}
                   layers={{
                     'Mount Elevation': {
@@ -242,7 +327,7 @@ export default class Dome extends Component {
                       data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value[0] : 0,
                     'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
                   }}
-                />
+                /> */}
               </div>
             </div>
           </div>

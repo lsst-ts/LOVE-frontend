@@ -33,15 +33,15 @@ module.exports = {
           name: 'Container Components',
           content: 'docsrc/ui.md',
           components: ['src/components/**/*.container.jsx'],
-          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'
         },
         {
           name: 'UI Components',
           content: 'docsrc/ui.md',
           components: ['src/components/GeneralPurpose/**/*.jsx'],
-          exampleMode: 'expand', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'expand', // 'hide' | 'collapse' | 'expand'
+          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+          usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'
         }
       ]
     }

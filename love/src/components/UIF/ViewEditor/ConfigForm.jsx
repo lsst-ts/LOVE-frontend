@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import styles from './ConfigForm.module.css';
-import Modal from '../../GeneralPurpose/Modal/Modal';
-import Button from '../../GeneralPurpose/Button/Button';
-import Input from '../../GeneralPurpose/Input/Input';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
 import { indexes } from '../ComponentIndex';
 
 import JSONPretty from 'react-json-pretty';
@@ -14,6 +14,8 @@ import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
   HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
+  TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig')
+    .default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);

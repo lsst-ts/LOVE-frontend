@@ -1,14 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import styles from './HSCInput.module.css';
-import Button from '../../../../GeneralPurpose/Button/Button';
-import Input from '../../../../GeneralPurpose/Input/Input';
-import Select from '../../../../GeneralPurpose/Select/Select';
+import styles from './TSCInput.module.css';
+import Input from 'components/GeneralPurpose/Input/Input.jsx';
+import Select from 'components/GeneralPurpose/Select/Select.jsx';
 
 /**
  * Component to configure the Health Status Summary
  */
-export default class HSCInput extends PureComponent {
+export default class TSCInput extends PureComponent {
   static propTypes = {
     /**
      * Dictionary describing an input to the function, must have this structure:
@@ -105,6 +104,7 @@ export default class HSCInput extends PureComponent {
         <Input
           className={styles.input}
           type="number"
+          min={0}
           value={input?.salindex || input?.salindex === 0 ? input.salindex : ''}
           placeholder="salindex"
           onChange={(ev) => this.onSelectChange(parseInt(ev.target.value), 'salindex')}
