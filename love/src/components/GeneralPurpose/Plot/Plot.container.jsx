@@ -41,6 +41,7 @@ export const schema = {
           item: 'elevationCalculatedAngle',
           type: 'line',
           accessor: '(x) => x[0]',
+          color: 'red',
         },
         'ATDome azimuth': {
           category: 'telemetry',
@@ -109,9 +110,9 @@ const PlotContainer = function ({
     subscribeToStreams();
   }, []);
 
-  /** TODO: find a way to detect "real" changes in inputs 
+  /** TODO: find a way to detect "real" changes in inputs
    * now resizing the plot also makes the inputs prop to change
-  */
+   */
   React.useEffect(() => {
     unsubscribeToStreams();
     subscribeToStreams();
@@ -164,10 +165,13 @@ const PlotContainer = function ({
         y: accessorFunc(streamValue[item]?.value),
       };
 
+      // TODO: use reselect to never get repeated timestamps
       if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
         changed = true;
         inputData.push(newValue);
       }
+
+      // TODO: change by a date range filter
       if (inputData.length > 100) {
         changed = true;
         inputData.slice(-100);
@@ -186,7 +190,7 @@ const PlotContainer = function ({
     if (!typeStr in layers) {
       continue;
     }
-    if(!data[inputName]) continue;
+    if (!data[inputName]) continue;
 
     layers[typeStr] = layers[typeStr].concat(data[inputName]);
   }
@@ -196,6 +200,10 @@ const PlotContainer = function ({
       return {
         name: input,
         ...defaultStyles[index % defaultStyles.length],
+        ...(inputs[input].color !== undefined ? { color: inputs[input].color } : {}),
+        ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
+        ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
+        ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
       };
     });
   }, [inputs]);

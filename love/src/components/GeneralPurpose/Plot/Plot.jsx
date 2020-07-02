@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import styles from './Plot.module.css';
@@ -25,13 +26,19 @@ const defaultStyles = [
   },
 ];
 
-const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisTitle, units }) => {
-  const marksStyles = legend.map(({ name }, index) => {
-    return {
-      ...defaultStyles[index % defaultStyles.length],
-      name,
-    };
-  });
+const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisTitle, units, marksStyles }) => {
+  const completedMarksStyles = React.useMemo(() => {
+    return legend.map(({ name }, index) => {
+      const style = marksStyles.find((style) => style.name === name);
+      if (!style) {
+        return {
+          ...defaultStyles[index % defaultStyles.length],
+          name,
+        };
+      }
+      return style;
+    });
+  }, [legend, marksStyles]);
 
   const [containerSize, setContainerSize] = React.useState({});
 
@@ -53,7 +60,7 @@ const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisT
         });
       });
 
-      if(!(containerNode instanceof Element)) return;
+      if (!(containerNode instanceof Element)) return;
       resizeObserver.observe(containerNode);
       return () => {
         resizeObserver.disconnect();
@@ -74,15 +81,40 @@ const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisT
         xAxisTitle={xAxisTitle}
         yAxisTitle={yAxisTitle}
         units={units}
-        marksStyles={marksStyles}
+        marksStyles={completedMarksStyles}
         temporalXAxis
         width={containerSize.width - 150} // from the .autogrid grid-template-columns
         height={containerSize.height}
         className={styles.plot}
       />
-      <VegaLegend listData={legend} marksStyles={marksStyles} />
+      <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
     </div>
   );
+};
+
+Plot.propTypes = {
+  /**
+   * (optional) defines the styles of each mark to be plotted.
+   * Defaults to values from a styles-loop.
+   */
+  marksStyles: PropTypes.arrayOf(
+    PropTypes.shape({
+      /** (All layers) `name` attribute of the data to apply these styles.
+       * Rows of data with no name-matching markStyle will not be rendered.
+       */
+      name: PropTypes.string,
+      /** (All layers) hex color */
+      color: PropTypes.string,
+      /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
+       * a line with a pattern of 2 "filled" pixels and 1 "empty" pixel.
+       */
+      dash: PropTypes.arrayOf(PropTypes.number),
+      /** (Only `pointLines` layer). Shape of the points to be drawn https://vega.github.io/vega-lite/docs/point.html*/
+      shape: PropTypes.string,
+      /** (Only `pointLines`) layer. Whether to draw a filled point or only its border. */
+      filled: PropTypes.bool,
+    }),
+  ),
 };
 
 export default Plot;
