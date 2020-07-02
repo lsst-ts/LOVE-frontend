@@ -8,7 +8,8 @@ import TSCInput from './TSCInput/TSCInput';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
-import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
+import { COLORS, DASHES, SHAPES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
+
 
 /**
  * Component to configure the Health Status Summary
@@ -159,10 +160,18 @@ export default class TSCEntry extends PureComponent {
         <div>
           <Select
             className={styles.select}
-            options={defaultStyles.map((s) => s.color)}
+            options={COLORS}
             option={input?.color}
             placeholder="Select a color"
             onChange={(selection) => this.onStyleChange('color', selection)}
+          />
+
+          <Select
+            className={styles.select}
+            options={DASHES.map((d) => JSON.stringify(d))}
+            option={JSON.stringify(input?.dash)}
+            placeholder="Select a dash pattern"
+            onChange={(selection) => this.onStyleChange('dash', {...selection, value: JSON.parse(selection.value)})}
           />
         </div>
 

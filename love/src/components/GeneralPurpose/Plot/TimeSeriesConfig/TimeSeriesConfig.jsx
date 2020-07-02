@@ -5,7 +5,6 @@ import TSCEntry from './TSCEntry/TSCEntry';
 import Button from 'components/GeneralPurpose/Button/Button';
 import ManagerInterface from 'Utils';
 import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
-
 /**
  * Component to configure the Health Status Summary
  */
@@ -76,7 +75,7 @@ export default class TimeSeriesConfig extends PureComponent {
       salindex: inputs?.[0]?.salindex,
       topic: inputs?.[0]?.topic,
       item: inputs?.[0]?.item,
-      ...style
+      ...style,
     };
     this.setState({ entries: newEntries, changed: true });
   };
@@ -138,7 +137,9 @@ export default class TimeSeriesConfig extends PureComponent {
               key={nextIndex}
               className={styles.empty}
               optionsTree={this.state.optionsTree}
-              onChange={(name, inputs, accessor, type, style) => this.onEntryChange(name, inputs, accessor, type, style, nextIndex)}
+              onChange={(name, inputs, accessor, type, style) =>
+                this.onEntryChange(name, inputs, accessor, type, style, nextIndex)
+              }
             />
           </div>
         </div>
