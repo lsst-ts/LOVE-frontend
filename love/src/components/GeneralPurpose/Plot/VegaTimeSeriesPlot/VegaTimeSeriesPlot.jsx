@@ -324,10 +324,10 @@ class VegaTimeseriesPlot extends Component {
           },
         },
         layer: [
-          // this.makeBarLayer('bars'),
+          this.makeBarLayer('bars'),
           this.makeLineLayer('lines'),
-          // this.makeLineLayer('pointLines'),
-          // this.makePointsLayer('pointLines'),
+          this.makeLineLayer('pointLines'),
+          this.makePointsLayer('pointLines'),
         ],
       },
     });

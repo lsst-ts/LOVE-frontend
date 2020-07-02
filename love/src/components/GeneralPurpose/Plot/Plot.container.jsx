@@ -186,7 +186,7 @@ const PlotContainer = function ({
     }
   }, [inputs, streams]);
 
-  const layers = { lines: [] };
+  const layers = { lines: [], bars: [], pointLines: [] };
   for (const [inputName, inputConfig] of Object.entries(inputs)) {
     const { type } = inputConfig;
     const typeStr = type + 's';
