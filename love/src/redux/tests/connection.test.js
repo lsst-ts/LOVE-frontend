@@ -3,6 +3,7 @@ import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { doReceiveToken, emptyToken, doExpireToken, doRejectToken, doRequestRemoveToken } from '../actions/auth';
+import { RESET_SUBS_PERIOD } from '../actions/ws';
 import {
   connectionStates,
   groupStates,
@@ -782,5 +783,77 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     ]);
     expect(disconnected).toBe(true);
     await server.closed;
+  });
+});
+
+// TEST SUBSCRIPTIONS RESET
+describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () => {
+  beforeEach(async () => {
+    await store.dispatch(doReceiveToken('username', 'love-token', {}, 0));
+    await store.dispatch(addGroup('telemetry-all-all-all'));
+    await store.dispatch(addGroup('event-all-all-all'));
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'telemetry',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    await expect(server).toReceiveMessage({
+      option: 'subscribe',
+      category: 'event',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    server.send({
+      data: 'Successfully subscribed to telemetry-all-all-all',
+    });
+    server.send({
+      data: 'Successfully subscribed to event-all-all-all',
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to event-all-all-all',
+      },
+    ]);
+  });
+
+  it('RESET_SUBS_PERIOD time after resetting subscriptions the subscriptions are reset again', async () => {
+    jest.useFakeTimers();
+    expect(clearInterval).toHaveBeenCalledTimes(0);
+    expect(setInterval).toHaveBeenCalledTimes(0);
+
+    // Reset subscriptions and assert timers were started and subscriptions reset
+    await store.dispatch(resetSubscriptions());
+    expect(clearInterval).toHaveBeenCalledTimes(1);
+    expect(setInterval).toHaveBeenCalledTimes(1);
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.REQUESTING,
+        counter: 1,
+        confirmationMessage: undefined,
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.REQUESTING,
+        counter: 1,
+        confirmationMessage: undefined,
+      },
+    ]);
+    // After RESET_SUBS_PERIOD the timer should have been cleared and reset
+    jest.advanceTimersByTime(RESET_SUBS_PERIOD + 100);
+    expect(clearInterval).toHaveBeenCalledTimes(2);
+    expect(setInterval).toHaveBeenCalledTimes(2);
   });
 });
