@@ -104,6 +104,7 @@ export default class TSCInput extends PureComponent {
         <Input
           className={styles.input}
           type="number"
+          min={0}
           value={input?.salindex || input?.salindex === 0 ? input.salindex : ''}
           placeholder="salindex"
           onChange={(ev) => this.onSelectChange(parseInt(ev.target.value), 'salindex')}
