@@ -58,3 +58,14 @@
   margin: 0;
   margin-left: 3.5em;
 }
+
+.stylesContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
+  gap: 1rem;
+  align-items: center;
+}
+
+.labeledCheckbox {
+  display: flex;
+}

@@ -10,7 +10,6 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
 import { COLORS, DASHES, SHAPES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 
-
 /**
  * Component to configure the Health Status Summary
  */
@@ -124,7 +123,6 @@ export default class TSCEntry extends PureComponent {
     // Delete the following 2 lines and uncomment the third when going back to multiple inputs:
     const input = this.props.inputs[0];
     const index = 0;
-    console.log('input', input);
     // const nextIndex = this.props.inputs.length;
 
     return (
@@ -158,7 +156,7 @@ export default class TSCEntry extends PureComponent {
           </Button>
         </div>
 
-        <div>
+        <div className={styles.stylesContainer}>
           <Select
             className={styles.select}
             options={COLORS}
@@ -183,11 +181,7 @@ export default class TSCEntry extends PureComponent {
             onChange={(selection) => this.onStyleChange('shape', selection)}
           />
 
-          <div
-            style={{
-              display: 'flex',
-            }}
-          >
+          <div className={styles.labeledCheckbox}>
             <span>Filled</span>
             <input
               type="checkbox"
