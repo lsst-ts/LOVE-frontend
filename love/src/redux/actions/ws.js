@@ -29,6 +29,12 @@ import { tokenStates } from '../reducers/auth';
 import { DateTime } from 'luxon';
 
 /**
+ * Time to wait before reseting subscriptions in miliseconds
+ * Now set to 5 minutes
+ */
+export const RESET_SUBS_PERIOD = 5 * 60000;
+
+/**
  * Set of possible connection status values
  */
 export const connectionStates = {
@@ -110,6 +116,7 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 
 /**
  * Reset all the given subscriptions (status PENDING and no confirmationMessage)
+ * If the "subscriptions" argument is absent or null, then all the subscriptions are reset
  */
 export const resetSubscriptions = (subscriptions = null) => {
   return (dispatch, getState) => {
@@ -285,7 +292,13 @@ export const addGroup = (groupName) => {
 };
 
 /**
+ * Reference to the timer used to reset subscriptions periodically
+ */
+let resetSubsTimer = null;
+
+/**
  * Request subscription for all PENDING subscriptions
+ * It also sets a timer to reset the subscriptions again (calling itself) after the priod defined by RESET_SUBS_PERIOD
  */
 const _requestSubscriptions = () => {
   return (dispatch, getState) => {
@@ -306,6 +319,8 @@ const _requestSubscriptions = () => {
         stream,
       });
     });
+    clearInterval(resetSubsTimer);
+    resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
     dispatch({
       type: REQUEST_SUBSCRIPTIONS,
       subscriptions,
