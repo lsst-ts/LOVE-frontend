@@ -73,6 +73,8 @@ class Layout extends Component {
     tokenSwapStatus: PropTypes.string,
     /** Function to be called when requiring a user swap, similar to a logout */
     requireUserSwap: PropTypes.func,
+    /** Function to call in order to rese4t subscriptions (when the manager heartbeat is missed) */
+    resetSubscriptions: PropTypes.func,
   };
 
   static defaultProps = {
@@ -193,6 +195,11 @@ class Layout extends Component {
           toast.info(message);
         }
       }
+    }
+
+    const managerKey = HEARTBEAT_COMPONENTS?.MANAGER;
+    if (this.state.heartbeatStatus?.[managerKey] === 'alert' && prevState.heartbeatStatus?.[managerKey] !== 'alert') {
+      this.props.resetSubscriptions();
     }
   };
 

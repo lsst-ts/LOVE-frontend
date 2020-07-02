@@ -180,8 +180,9 @@ The token, websocket and subscriptions handling is summarized in the following g
 - Also when the connection is opened, then all PENDING subscriptions are requested
 - When confirmation is received, then they change to status SUBSCRIBED
 - When unsubscribing, then they change to UNSUBSCRIBING
-- When confirmation of unsubscription arrive, then the subscription is deleted
+- When confirmation of unsubscription arrive, then the subscription changes to PENDING
 - When connection is closed, then all subscriptions are PENDING. This way, when we open the connection again, we will be able to re-subscribe
+- Also, subscription are reset (changed to PENDING and re-requested) every 5 minutes
 
 ---
 
