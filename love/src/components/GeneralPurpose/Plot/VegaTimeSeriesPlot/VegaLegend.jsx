@@ -12,7 +12,7 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
 
           return (
             <div key={cell.name} className={styles.cell}>
-              {style && <VegaMiniPlot {...style} markType={cell.markType || 'line'} />} {cell?.label || ''}
+              {style && <VegaMiniPlot {...style} markType={style.markType || 'line'} />} {cell?.label || ''}
             </div>
           );
         })}

@@ -27,21 +27,27 @@ const defaultStyles = [
 ];
 
 const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisTitle, units, marksStyles }) => {
+  /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
   const completedMarksStyles = React.useMemo(() => {
-    return legend.map(({ name }, index) => {
+    return legend.map(({ name, markType }, index) => {
       const style = marksStyles.find((style) => style.name === name);
       if (!style) {
         return {
           ...defaultStyles[index % defaultStyles.length],
+          ...(markType !== undefined ? { markType } : {}),
           name,
         };
       }
-      return style;
+      return {
+        ...style,
+        ...(markType !== undefined ? { markType } : {}),
+      };
     });
   }, [legend, marksStyles]);
 
   const [containerSize, setContainerSize] = React.useState({});
 
+  /** Auto resize features */
   React.useEffect(() => {
     if (width !== undefined && height !== undefined) {
       setContainerSize({
@@ -93,6 +99,19 @@ const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisT
 };
 
 Plot.propTypes = {
+  /** Data to be used to build a legend */
+  legend: PropTypes.arrayOf(
+    PropTypes.shape({
+      /** Name of the mark that is being plotted */
+      name: PropTypes.string.isRequired,
+
+      /** Node or text to be displayed in the legend for this mark */
+      label: PropTypes.node,
+
+      /** Which mark to use to plot this data */
+      markType: PropTypes.oneOf(['line', 'pointLine', 'bar']),
+    }),
+  ),
   /**
    * (optional) defines the styles of each mark to be plotted.
    * Defaults to values from a styles-loop.

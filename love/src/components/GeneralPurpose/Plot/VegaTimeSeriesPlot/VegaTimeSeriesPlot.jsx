@@ -82,7 +82,7 @@ class VegaTimeseriesPlot extends Component {
         /** (All layers) `name` attribute of the data to apply these styles.
          * Rows of data with no name-matching markStyle will not be rendered.
          */
-        name: PropTypes.string,
+        name: PropTypes.string.isRequired,
         /** (All layers) hex color */
         color: PropTypes.string,
         /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws

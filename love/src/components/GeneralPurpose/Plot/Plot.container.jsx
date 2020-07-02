@@ -216,6 +216,7 @@ const PlotContainer = function ({
       return {
         label: inputName,
         name: inputName,
+        markType: inputs[inputName].type
       };
     });
   }, [inputs]);
