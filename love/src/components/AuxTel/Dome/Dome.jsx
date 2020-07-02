@@ -45,7 +45,7 @@ export default class Dome extends Component {
   };
 
   elevationPlotInputs = {
-    Elevation: {
+    'Mount elevation': {
       category: 'telemetry',
       csc: 'ATMCS',
       salindex: '0',
@@ -53,15 +53,18 @@ export default class Dome extends Component {
       item: 'elevationCalculatedAngle',
       type: 'line',
       accessor: (x) => x[0],
+      color: 'hsl(201, 70%, 40%)',
     },
-    'ATDome azimuth': {
-      category: 'telemetry',
-      csc: 'ATDome',
+    'Mount target': {
+      category: 'event',
+      csc: 'ATMCS',
       salindex: '0',
-      topic: 'position',
-      item: 'azimuthPosition',
+      topic: 'target',
+      item: 'elevation',
       type: 'line',
       accessor: (x) => x,
+      color: 'white',
+      dash: [4, 1]
     },
   };
 
@@ -74,6 +77,7 @@ export default class Dome extends Component {
       item: 'azimuthPosition',
       type: 'line',
       accessor: (x) => x,
+      color: 'hsl(201, 70%, 40%)',
     },
     'Dome Target Az': {
       category: 'event',
@@ -83,6 +87,8 @@ export default class Dome extends Component {
       item: 'azimuth',
       type: 'line',
       accessor: (x) => x,
+      color: 'hsl(201, 70%, 40%)',
+      dash: [4, 1]
     },
     'Mount Azimuth': {
       category: 'telemetry',
@@ -92,6 +98,7 @@ export default class Dome extends Component {
       item: 'azimuthCalculatedAngle',
       type: 'line',
       accessor: (x) => x[0],
+      color: 'hsl(160, 70%, 40%)',
     },
     'Mount Target': {
       category: 'event',
@@ -101,6 +108,8 @@ export default class Dome extends Component {
       item: 'azimuth',
       type: 'line',
       accessor: (x) => x,
+      color: 'hsl(160, 70%, 40%)',
+      dash: [4, 1]
     },
   };
 
