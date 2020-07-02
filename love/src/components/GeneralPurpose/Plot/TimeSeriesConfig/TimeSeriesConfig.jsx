@@ -4,7 +4,7 @@ import styles from './TimeSeriesConfig.module.css';
 import TSCEntry from './TSCEntry/TSCEntry';
 import Button from 'components/GeneralPurpose/Button/Button';
 import ManagerInterface from 'Utils';
-
+import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
 
 /**
  * Component to configure the Health Status Summary
@@ -65,7 +65,7 @@ export default class TimeSeriesConfig extends PureComponent {
     });
   };
 
-  onEntryChange = (name, inputs, accessor, type, index) => {
+  onEntryChange = (name, inputs, accessor, type, style, index) => {
     const newEntries = [...this.state.entries];
     newEntries[index] = {
       name,
@@ -76,6 +76,7 @@ export default class TimeSeriesConfig extends PureComponent {
       salindex: inputs?.[0]?.salindex,
       topic: inputs?.[0]?.topic,
       item: inputs?.[0]?.item,
+      ...style
     };
     this.setState({ entries: newEntries, changed: true });
   };
@@ -105,7 +106,7 @@ export default class TimeSeriesConfig extends PureComponent {
         <div className={styles.content}>
           <div className={styles.list}>
             {this.state.entries.map((entry, index) => {
-              const { name, category, csc, salindex, topic, item, type, accessor } = entry;
+              const { name, category, csc, salindex, topic, item, type, accessor, color, dash, shape, filled } = entry;
               return (
                 <TSCEntry
                   key={index}
@@ -117,12 +118,18 @@ export default class TimeSeriesConfig extends PureComponent {
                       salindex: parseInt(salindex),
                       topic,
                       item,
+                      color: color ?? defaultStyles[index % (defaultStyles.length - 1)].color,
+                      dash: dash ?? defaultStyles[index % (defaultStyles.length - 1)].dash,
+                      shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,
+                      filled: filled ?? defaultStyles[index % (defaultStyles.length - 1)].filled,
                     },
                   ]}
                   accessor={accessor}
                   type={type}
                   optionsTree={this.state.optionsTree}
-                  onChange={(name, inputs, accessor, type) => this.onEntryChange(name, inputs, accessor, type, index)}
+                  onChange={(name, inputs, accessor, type, style) =>
+                    this.onEntryChange(name, inputs, accessor, type, style, index)
+                  }
                   onRemove={() => this.onEntryRemove(index)}
                 />
               );
@@ -131,7 +138,7 @@ export default class TimeSeriesConfig extends PureComponent {
               key={nextIndex}
               className={styles.empty}
               optionsTree={this.state.optionsTree}
-              onChange={(name, inputs, accessor, type) => this.onEntryChange(name, inputs, accessor, type, nextIndex)}
+              onChange={(name, inputs, accessor, type, style) => this.onEntryChange(name, inputs, accessor, type, style, nextIndex)}
             />
           </div>
         </div>

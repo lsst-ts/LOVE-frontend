@@ -5,6 +5,28 @@ import { getStreamsData } from 'redux/selectors/selectors';
 import Plot from './Plot';
 import { parseTimestamp } from 'Utils';
 
+export const defaultStyles = [
+  {
+    color: '#ff7bb5',
+    shape: 'circle',
+    filled: false,
+    dash: [4, 0],
+  },
+  {
+    color: '#00b7ff',
+    shape: 'square',
+    filled: true,
+    dash: [4, 0],
+  },
+
+  {
+    color: '#97e54f',
+    shape: 'diamond',
+    filled: true,
+    dash: [4, 0],
+  },
+];
+
 export const schema = {
   description: 'Time series plot for any data stream coming from SAL',
   defaultSize: [8, 8],
@@ -41,7 +63,7 @@ export const schema = {
           item: 'elevationCalculatedAngle',
           type: 'line',
           accessor: '(x) => x[0]',
-          color: 'red',
+          ...defaultStyles[0]
         },
         'ATDome azimuth': {
           category: 'telemetry',
@@ -51,6 +73,7 @@ export const schema = {
           item: 'azimuthPosition',
           type: 'line',
           accessor: '(x) => x',
+          ...defaultStyles[1]
         },
       },
     },
@@ -69,27 +92,7 @@ export const schema = {
   },
 };
 
-const defaultStyles = [
-  {
-    color: '#ff7bb5',
-    shape: 'circle',
-    filled: false,
-    dash: [4, 0],
-  },
-  {
-    color: '#00b7ff',
-    shape: 'square',
-    filled: true,
-    dash: [4, 0],
-  },
 
-  {
-    color: '#97e54f',
-    shape: 'diamond',
-    filled: true,
-    dash: [4, 0],
-  },
-];
 
 const PlotContainer = function ({
   inputs = schema.props.inputs.default,

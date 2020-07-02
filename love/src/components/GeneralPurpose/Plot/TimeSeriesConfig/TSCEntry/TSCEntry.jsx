@@ -8,6 +8,7 @@ import TSCInput from './TSCInput/TSCInput';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
+import { defaultStyles } from 'components/GeneralPurpose/Plot/Plot.container';
 
 /**
  * Component to configure the Health Status Summary
@@ -20,21 +21,25 @@ export default class TSCEntry extends PureComponent {
     name: PropTypes.string,
     /**
      * List of inputs for the configuration.
-     * Must be a list of dictionaries with this structure:
-     *
-     * {
-     *   category: <string> ("event" or "telemetry"),
-     *   csc: <string> (name of a CS),
-     *   salindex: <integer> (salindex of the CSC),
-     *   topic: <string> (name of the topic),
-     * }
      */
     inputs: PropTypes.arrayOf(
       PropTypes.shape({
-        category: PropTypes.string,
+        /** Category of the message obtained from salobj */
+        category: PropTypes.oneOf(['event', 'telemetry']),
+        /** Name of the CSC that generates the data */
         csc: PropTypes.string,
+        /** SalIndex of the CSC, use 0 for unnumbered CSCs */
         salindex: PropTypes.number,
+        /** Name of the topic in the xml */
         topic: PropTypes.string,
+        /** (optional) Color of the mark to be used */
+        color: PropTypes.string.isRequired,
+        /** (optional) Dashes pattern for line and pointline marks */
+        dash: PropTypes.arrayOf(PropTypes.number).isRequired,
+        /** (optional) Shape used for the mark. Used in point and pointLine marks.*/
+        shape: PropTypes.string.isRequired,
+        /** (optional) Whether to plot a filled or empty (contour only) point. Used in point and pointLine marks.*/
+        filled: PropTypes.bool.isRequired,
       }),
     ),
     /**
@@ -100,6 +105,16 @@ export default class TSCEntry extends PureComponent {
     this.props.onChange(this.props.name, this.props.inputs, this.props.accessor, type);
   };
 
+  onStyleChange = (styleName, style) => {
+    this.props.onChange(this.props.name, this.props.inputs, this.props.accessor, this.props.type, {
+      color: this.props.inputs[0].color,
+      dash: this.props.inputs[0].dash,
+      shape: this.props.inputs[0].shape,
+      filled: this.props.inputs[0].filled,
+      [styleName]: style.value,
+    });
+  };
+
   onEditorChange = (accessor) => {
     this.props.onChange(this.props.name, this.props.inputs, accessor, this.props.type);
   };
@@ -139,6 +154,16 @@ export default class TSCEntry extends PureComponent {
           >
             Remove
           </Button>
+        </div>
+
+        <div>
+          <Select
+            className={styles.select}
+            options={defaultStyles.map((s) => s.color)}
+            option={input?.color}
+            placeholder="Select a color"
+            onChange={(selection) => this.onStyleChange('color', selection)}
+          />
         </div>
 
         {/** DELETE THE FOLLOWING ELEMENT AND UNCOMMENT WHAT IS BELOW (when goping back to multiple inputs) */}
