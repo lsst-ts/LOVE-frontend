@@ -73,17 +73,20 @@ describe('Given the inital state', () => {
   it('Test tick under different cases of differences between local and server time', async () => {
     // Config
     const cases = [
-      { // In sync
+      {
+        // In sync
         request_time: server_time.utc - 1,
         receive_time: server_time.utc + 1,
       },
-      { // Local 5 minutes behind server
-        request_time: server_time.utc - 1 - 5*60,
-        receive_time: server_time.utc + 1 - 5*60,
+      {
+        // Local 5 minutes behind server
+        request_time: server_time.utc - 1 - 5 * 60,
+        receive_time: server_time.utc + 1 - 5 * 60,
       },
-      { // Local 5 minutes ahead of server
-        request_time: server_time.utc - 1 + 5*60,
-        receive_time: server_time.utc + 1 + 5*60,
+      {
+        // Local 5 minutes ahead of server
+        request_time: server_time.utc - 1 + 5 * 60,
+        receive_time: server_time.utc + 1 + 5 * 60,
       },
     ];
     for (const element of cases) {
@@ -101,10 +104,14 @@ describe('Given the inital state', () => {
       let time = getAllTime(store.getState());
       expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
       expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
-      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
-      expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + diff * siderealSecond);
-      expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + diff * siderealSecond);
-    };
+      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600 * 24));
+      expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(
+        server_time.sidereal_greenwich * 3600 + diff * siderealSecond,
+      );
+      expect(time.clock.sidereal_summit.toSeconds()).toEqual(
+        server_time.sidereal_summit * 3600 + diff * siderealSecond,
+      );
+    }
   });
 });
 
@@ -127,21 +134,21 @@ describe('Given the inital state', () => {
     let time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STOPPED);
     expect(time.clock).toEqual(initialState.clock);
-    
+
     // Login should start time
     let tick_time = (receive_time + request_time) / 2 + 1;
     Settings.now = () => new Date(receive_time * 1000).valueOf();
     await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time, request_time));
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STARTED);
-    expect(clearInterval).toHaveBeenCalledTimes(2);
-    expect(setInterval).toHaveBeenCalledTimes(2);
 
     // It should have ticked once
     expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + 1);
     expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + 1);
-    expect(time.clock.mjd).toEqual(server_time.mjd + 1 / (3600*24));
-    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(server_time.sidereal_greenwich * 3600 + 1 * siderealSecond);
+    expect(time.clock.mjd).toEqual(server_time.mjd + 1 / (3600 * 24));
+    expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(
+      server_time.sidereal_greenwich * 3600 + 1 * siderealSecond,
+    );
     expect(time.clock.sidereal_summit.toSeconds()).toEqual(server_time.sidereal_summit * 3600 + 1 * siderealSecond);
 
     // Next 10 ticks
@@ -153,16 +160,19 @@ describe('Given the inital state', () => {
       expect(time.clock).not.toEqual(initialState.clock);
       expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
       expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
-      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600*24));
-      expect(time.clock.sidereal_greenwich.toSeconds().toFixed(10)).toEqual((server_time.sidereal_greenwich * 3600 + diff * siderealSecond).toFixed(10));
-      expect(time.clock.sidereal_summit.toSeconds().toFixed(10)).toEqual((server_time.sidereal_summit * 3600 + diff * siderealSecond).toFixed(10));
+      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600 * 24));
+      expect(time.clock.sidereal_greenwich.toSeconds().toFixed(10)).toEqual(
+        (server_time.sidereal_greenwich * 3600 + diff * siderealSecond).toFixed(10),
+      );
+      expect(time.clock.sidereal_summit.toSeconds().toFixed(10)).toEqual(
+        (server_time.sidereal_summit * 3600 + diff * siderealSecond).toFixed(10),
+      );
     }
 
     // Logout should stop timer
     await store.dispatch(logout());
     time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STOPPED);
-    expect(clearInterval).toHaveBeenCalledTimes(4);
   });
 });
 
@@ -209,13 +219,12 @@ describe('Given the inital state', () => {
     store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
     await store.dispatch(emptyToken);
     server = new WS('ws://localhost/manager/ws/subscription', { jsonProtocol: true });
-    server.on('connection', socket => {
+    server.on('connection', (socket) => {
       const [, token] = socket.url.split('?token=');
       if (token !== 'love-token') {
         socket.close();
       }
-      socket.on('message', msg => {
-        
+      socket.on('message', (msg) => {
         const message = JSON.parse(msg);
         serverIndex++;
         server.send({
@@ -226,7 +235,7 @@ describe('Given the inital state', () => {
     });
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
   });
-  
+
   afterEach(() => {
     WS.clean();
   });
@@ -236,10 +245,12 @@ describe('Given the inital state', () => {
     let time = getAllTime(store.getState());
     expect(time.clock_status).toEqual(clockStatuses.STOPPED);
     expect(time.clock).toEqual(initialState.clock);
-    
+
     // Login should start time
     jest.useFakeTimers();
-    await store.dispatch(doReceiveToken('username', 'love-token', {}, server_time[serverIndex], DateTime.utc().toSeconds()));
+    await store.dispatch(
+      doReceiveToken('username', 'love-token', {}, server_time[serverIndex], DateTime.utc().toSeconds()),
+    );
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
     jest.advanceTimersByTime(10);
     const connected = await server.connected;

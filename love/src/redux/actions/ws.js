@@ -115,12 +115,20 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 };
 
 /**
+ * Reference to the timer used to reset subscriptions periodically
+ */
+let resetSubsTimer = null;
+
+/**
  * Reset all the given subscriptions (status PENDING and no confirmationMessage)
  * If the "subscriptions" argument is absent or null, then all the subscriptions are reset
+ * It also sets a timer to reset the subscriptions again (calling itself) after the priod defined by RESET_SUBS_PERIOD
  */
 export const resetSubscriptions = (subscriptions = null) => {
   return (dispatch, getState) => {
     const subs = subscriptions ? subscriptions : getSubscriptions(getState());
+    clearInterval(resetSubsTimer);
+    resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
     dispatch({
       type: RESET_SUBSCRIPTIONS,
       subscriptions: subs
@@ -166,6 +174,8 @@ export const openWebsocketConnection = () => {
       onopen: () => {
         dispatch(_changeConnectionState(connectionStates.OPEN, socket));
         dispatch(_requestSubscriptions());
+        clearInterval(resetSubsTimer);
+        resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
       },
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
@@ -292,13 +302,7 @@ export const addGroup = (groupName) => {
 };
 
 /**
- * Reference to the timer used to reset subscriptions periodically
- */
-let resetSubsTimer = null;
-
-/**
  * Request subscription for all PENDING subscriptions
- * It also sets a timer to reset the subscriptions again (calling itself) after the priod defined by RESET_SUBS_PERIOD
  */
 const _requestSubscriptions = () => {
   return (dispatch, getState) => {
@@ -319,8 +323,6 @@ const _requestSubscriptions = () => {
         stream,
       });
     });
-    clearInterval(resetSubsTimer);
-    resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
     dispatch({
       type: REQUEST_SUBSCRIPTIONS,
       subscriptions,
