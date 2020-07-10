@@ -265,6 +265,16 @@ export const uifIndex = {
       },
     },
   },
+  WeatherStation: {
+    component: require('../WeatherStation/WeatherStation.container').default,
+    schema: {
+      ...require('../WeatherStation/WeatherStation.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherStation/WeatherStation.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
