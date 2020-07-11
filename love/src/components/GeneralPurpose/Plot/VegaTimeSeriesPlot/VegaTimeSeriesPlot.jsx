@@ -312,7 +312,7 @@ class VegaTimeseriesPlot extends Component {
           },
           axis: {
             domainColor: '#626262',
-            gridColor: '#626262',
+            gridColor: '#424242',
             tickColor: null,
           },
           axisX: {

@@ -21,4 +21,5 @@
   grid-template-columns: min-content auto;
   column-gap: 0.2em;
   align-items: center;
+  color: var(--base-font-color);
 }
