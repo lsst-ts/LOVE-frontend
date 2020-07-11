@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import { SHAPES, COLORS, DASHES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import styles from './WeatherStation.module.css';
 
 export default class WeatherStation extends Component {
@@ -8,13 +9,156 @@ export default class WeatherStation extends Component {
     url: PropTypes.string,
   };
 
+
+  // weather
+
+  temperaturePlot = {
+    'Air temperature': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'airTemperature',
+      item: 'avg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+    'Soil temperature': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'soilTemperature',
+      item: 'avg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[1],
+    },
+    'Dew point': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'dewPoint',
+      item: 'avg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[2],
+    },
+  };
+
+  humidityPlot = {
+    Humidity: {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'relativeHumidity',
+      item: 'avg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+  };
+
+  pressurePlot = {
+    'Air pressure': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'airPressure',
+      item: 'paAvg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+  };
+
+  solarPlot = {
+    'Solar radiation': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'solarNetRadiation',
+      item: 'avg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+  };
+
+  windDirectionPlot = {
+    'Wind direction': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'windDirection',
+      item: 'value',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+    'Gust direction': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'windGustDirection',
+      item: 'value10M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[1],
+    },
+  };
+
+  windSpeedPlot = {
+    'Wind speed': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'windSpeed',
+      item: 'value',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+  };
+
+  precipitationPlot = {
+    Precipitation: {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'precipitation',
+      item: 'prSum1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+  };
+
+  snowDepthPlot = {
+    'Snow depth': {
+      category: 'telemetry',
+      csc: 'Environment',
+      salindex: this.props.salindex,
+      topic: 'snowDepth',
+      item: 'avg1M',
+      type: 'line',
+      accessor: (x) => x,
+      color: COLORS[0],
+    },
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       archivesMetadata: [],
     };
-    this.azimuthPlotRef = React.createRef();
-    this.elevationPlotRef = React.createRef();
+    this.temperaturePlotRef = React.createRef();
+    this.humidityPlotRef = React.createRef();
+    this.windDirectionPlotRef = React.createRef();
+    this.windSpeedPlotRef = React.createRef();
+    this.solarPlotRef = React.createRef();
+    this.pressurePlotRef = React.createRef();
+    this.precipitationPlotRef = React.createRef();
+    this.snowDepthPlotRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -26,29 +170,92 @@ export default class WeatherStation extends Component {
   };
 
   render() {
-    console.log(this.props.salindex);
-    const temperaturePlot = {
-      airTemperature: {
-        category: 'telemetry',
-        csc: 'Environment',
-        salindex: '1',
-        topic: 'airTemperature',
-        item: 'avg1M',
-        type: 'line',
-        accessor: (x) => x,
-        color: 'hsl(201, 70%, 40%)',
-      },
-    };
 
     return (
       <div className={styles.container}>
-        <div ref={this.elevationPlotRef} className={styles.elevationPlot}>
-          <div>
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Temperature</div>
+          <div ref={this.temperaturePlotRef} className={styles.plot}>
             <PlotContainer
-              inputs={temperaturePlot}
-              containerNode={this.elevationPlotRef?.current}
+              inputs={this.temperaturePlot}
+              containerNode={this.temperaturePlotRef?.current}
               xAxisTitle="Time"
-              yAxisTitle="Elevation"
+              yAxisTitle="Temperature"
+            />
+          </div>
+        </div>
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Humidity</div>
+          <div ref={this.humidityPlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.humidityPlot}
+              containerNode={this.humidityPlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Relative humidity"
+            />
+          </div>
+        </div>
+        <div className={styles.doubleSection}>
+          <div className={styles.sectionTitle}>Wind</div>
+          <div ref={this.windDirectionPlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.windDirectionPlot}
+              containerNode={this.windDirectionPlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Wind direction"
+            />
+          </div>
+          <div ref={this.windSpeedPlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.windSpeedPlot}
+              containerNode={this.windSpeedPlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Wind speed"
+            />
+          </div>
+        </div>
+
+        <div className={styles.doubleSection}>
+          <div className={styles.sectionTitle}>Precipitation</div>
+          <div ref={this.precipitationPlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.precipitationPlot}
+              containerNode={this.precipitationPlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Precipitation"
+            />
+          </div>
+
+          <div ref={this.snowDepthPlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.snowDepthPlot}
+              containerNode={this.snowDepthPlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Snow depth"
+            />
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Solar radiation</div>
+          <div ref={this.solarPlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.solarPlot}
+              containerNode={this.solarPlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Solar radiation"
+            />
+          </div>
+        </div>
+
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Air pressure</div>
+          <div ref={this.pressurePlotRef} className={styles.plot}>
+            <PlotContainer
+              inputs={this.pressurePlot}
+              containerNode={this.pressurePlotRef?.current}
+              xAxisTitle="Time"
+              yAxisTitle="Air pressure"
             />
           </div>
         </div>

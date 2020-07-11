@@ -1,2 +1,37 @@
 .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  overflow: hidden;
+}
+
+.section {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  width: 100%;
+  overflow: hidden;
+}
+
+.sectionTitle {
+  color: var(--base-font-color);
+  font-size: var(--font-size-large);
+  padding: 0.5em;
+}
+
+.doubleSection {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-column: 1 / span 2;
+  width: 100%;
+  overflow: hidden;
+}
+
+.doubleSection .sectionTitle {
+  grid-column: 1 / span 2;
+}
+
+.plot {
+  width: 100%;
+  overflow: hidden;
 }
