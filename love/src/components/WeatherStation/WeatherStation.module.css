@@ -3,6 +3,8 @@
   grid-template-columns: 1fr 1fr;
   width: 100%;
   overflow: hidden;
+  column-gap: 1em;
+  row-gap: 1em;
 }
 
 .section {
@@ -10,6 +12,10 @@
   grid-template-rows: min-content 1fr;
   width: 100%;
   overflow: hidden;
+  border: 2px solid var(--second-tertiary-background-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 0.5em;
 }
 
 .sectionTitle {
@@ -25,6 +31,10 @@
   grid-column: 1 / span 2;
   width: 100%;
   overflow: hidden;
+  border: 2px solid var(--second-tertiary-background-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 0.5em;
 }
 
 .doubleSection .sectionTitle {
@@ -34,4 +44,24 @@
 .plot {
   width: 100%;
   overflow: hidden;
+}
+
+.summary {
+  border-radius: 0px;
+  grid-column: 1 / span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.summaryVariable {
+  border-radius: 0px;
+}
+
+.summaryLabel {
+  font-size: var(--font-size-large);
+}
+
+.summaryValue {
+  color: var(--base-font-color);
+  font-size: var(--font-size-larger);
 }

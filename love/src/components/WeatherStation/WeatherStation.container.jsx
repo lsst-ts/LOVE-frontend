@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
+import { getStreamData } from '../../redux/selectors';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import WeatherStation from './WeatherStation';
 
@@ -36,9 +37,10 @@ const WeatherStationContainer = ({ ...props }) => {
   return <WeatherStation {...props} />;
 };
 
-
 const mapStateToProps = (state, ownProps) => {
-  return {};
+  return {
+    weather: getStreamData(state, `telemetry-Environment-1-weather`),
+  };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {

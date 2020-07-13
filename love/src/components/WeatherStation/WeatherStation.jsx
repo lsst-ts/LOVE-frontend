@@ -9,9 +9,6 @@ export default class WeatherStation extends Component {
     url: PropTypes.string,
   };
 
-
-  // weather
-
   temperaturePlot = {
     'Air temperature': {
       category: 'telemetry',
@@ -148,9 +145,6 @@ export default class WeatherStation extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      archivesMetadata: [],
-    };
     this.temperaturePlotRef = React.createRef();
     this.humidityPlotRef = React.createRef();
     this.windDirectionPlotRef = React.createRef();
@@ -162,17 +156,36 @@ export default class WeatherStation extends Component {
   }
 
   componentDidMount = () => {
-    // this.props.subscribeToStreams();
+    this.props.subscribeToStreams();
   };
 
   componentWillUnmount = () => {
-    // this.props.unsubscribeToStreams();
+    this.props.unsubscribeToStreams();
   };
 
   render() {
-
+    const currentTemperature = this.props.weather?.ambient_temp?.value;
+    const currentHumidity = this.props.weather?.humidity?.value;
+    const currentPressure = Math.round(this.props.weather?.pressure?.value * 100) / 100;
     return (
       <div className={styles.container}>
+        <div className={styles.doubleSection}>
+          <div className={styles.sectionTitle}>Current values</div>
+          <div className={styles.summary}>
+            <div className={styles.summaryVariable}>
+              <div className={styles.summaryLabel}>Temperature</div>
+              <div className={styles.summaryValue}>{currentTemperature ? `${currentTemperature}ºC` : '-'}</div>
+            </div>
+            <div className={styles.summaryVariable}>
+              <div className={styles.summaryLabel}>Humidity</div>
+              <div className={styles.summaryValue}>{currentHumidity ? `${currentHumidity}%` : '-'}</div>
+            </div>
+            <div className={styles.summaryVariable}>
+              <div className={styles.summaryLabel}>Pressure</div>
+              <div className={styles.summaryValue}>{currentPressure ? `${currentPressure} pa` : '-'}</div>
+            </div>
+          </div>
+        </div>
         <div className={styles.section}>
           <div className={styles.sectionTitle}>Temperature</div>
           <div ref={this.temperaturePlotRef} className={styles.plot}>
