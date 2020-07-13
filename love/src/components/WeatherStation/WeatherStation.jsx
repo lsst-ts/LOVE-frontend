@@ -169,7 +169,7 @@ export default class WeatherStation extends Component {
     const currentPressure = Math.round(this.props.weather?.pressure?.value * 100) / 100;
     return (
       <div className={styles.container}>
-        <div className={styles.doubleSection}>
+        <div className={styles.section}>
           <div className={styles.sectionTitle}>Current values</div>
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>

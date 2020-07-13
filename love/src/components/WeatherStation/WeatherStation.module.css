@@ -1,16 +1,20 @@
 .container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   width: 100%;
   overflow: hidden;
   column-gap: 1em;
   row-gap: 1em;
+  grid-template-rows: auto;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  grid-auto-flow: row dense;
 }
 
 .section {
   display: grid;
   grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr;
   width: 100%;
+  min-width: 400px;
   overflow: hidden;
   border: 2px solid var(--second-tertiary-background-color);
   border-radius: 5px;
@@ -50,7 +54,9 @@
   border-radius: 0px;
   grid-column: 1 / span 2;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  justify-items: center;
+  align-items: center;
 }
 
 .summaryVariable {
