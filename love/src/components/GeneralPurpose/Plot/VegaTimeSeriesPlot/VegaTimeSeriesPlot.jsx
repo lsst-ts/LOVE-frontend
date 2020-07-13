@@ -337,6 +337,28 @@ class VegaTimeseriesPlot extends Component {
     this.updateSpec();
   };
 
+  shouldComponentUpdate = (prevProps, prevState) => {
+    if (
+      prevProps.containerNode !== this.props.containerNode &&
+      this.props.width === undefined && // width/height have more priority
+      this.props.height === undefined
+    ) {
+      return true;
+    }
+    if (
+      this.props.width !== undefined &&
+      this.props.height !== undefined &&
+      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
+    ) {
+      return true;
+    }
+
+    if (this.props.units?.x !== prevProps.units?.x || this.props.units?.y !== prevProps.units?.y) {
+      return true;
+    }
+    return prevState !== this.state || JSON.stringify(this.props.layers) !== JSON.stringify(prevProps.layers);
+  };
+
   componentDidUpdate = (prevProps) => {
     if (
       prevProps.containerNode !== this.props.containerNode &&
@@ -364,10 +386,11 @@ class VegaTimeseriesPlot extends Component {
       this.updateSpec();
     }
 
-    if (this.props.units !== prevProps.units) {
+    if (this.props.units?.x !== prevProps.units?.x || this.props.units?.y !== prevProps.units?.y) {
       this.updateSpec();
     }
   };
+
   componentWillUnmount = () => {
     // this.props.unsubscribeToStreams();
     if (this.resizeObserver) {
@@ -377,7 +400,6 @@ class VegaTimeseriesPlot extends Component {
 
   render() {
     const { layers } = this.props;
-
     return (
       <VegaLite
         style={{

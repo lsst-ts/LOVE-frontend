@@ -63,7 +63,7 @@ export const schema = {
           item: 'elevationCalculatedAngle',
           type: 'line',
           accessor: '(x) => x[0]',
-          ...defaultStyles[0]
+          ...defaultStyles[0],
         },
         'ATDome azimuth': {
           category: 'telemetry',
@@ -73,7 +73,7 @@ export const schema = {
           item: 'azimuthPosition',
           type: 'line',
           accessor: '(x) => x',
-          ...defaultStyles[1]
+          ...defaultStyles[1],
         },
       },
     },
@@ -91,8 +91,6 @@ export const schema = {
     },
   },
 };
-
-
 
 const PlotContainer = function ({
   inputs = schema.props.inputs.default,
@@ -155,7 +153,7 @@ const PlotContainer = function ({
       const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
       /* eslint no-eval: 0 */
       const accessorFunc = eval(accessor);
-      const inputData = data[inputName] || [];
+      let inputData = data[inputName] || [];
       const lastValue = inputData[inputData.length - 1];
       const streamName = `${category}-${csc}-${salindex}-${topic}`;
       if (!streams[streamName] || !streams[streamName]?.[item]) {
@@ -177,7 +175,7 @@ const PlotContainer = function ({
       // TODO: change by a date range filter
       if (inputData.length > 100) {
         changed = true;
-        inputData.slice(-100);
+        inputData = inputData.slice(-100);
       }
       data[inputName] = inputData;
     }
@@ -194,10 +192,8 @@ const PlotContainer = function ({
       continue;
     }
     if (!data[inputName]) continue;
-
     layers[typeStr] = layers[typeStr].concat(data[inputName]);
   }
-
   const marksStyles = React.useMemo(() => {
     return Object.keys(inputs).map((input, index) => {
       return {
@@ -216,7 +212,7 @@ const PlotContainer = function ({
       return {
         label: inputName,
         name: inputName,
-        markType: inputs[inputName].type
+        markType: inputs[inputName].type,
       };
     });
   }, [inputs]);
