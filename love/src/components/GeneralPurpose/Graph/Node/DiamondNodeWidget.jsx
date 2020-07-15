@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PortModelAlignment, PortWidget } from '@projectstorm/react-diagrams';
+import {  PortModelAlignment, PortWidget } from '@projectstorm/react-diagrams';
 import styles from './DiamondNodeWidget.module.css';
 
 

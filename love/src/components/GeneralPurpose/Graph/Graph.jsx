@@ -27,12 +27,12 @@ export default () => {
   var model = new DiagramModel();
 
   //3-A) create a default node
-  var node1 = new DiamondNodeModel('node1');
+  var node1 = new DiamondNodeModel('This is node 1');
   var port1 = node1.getPort(PortModelAlignment.TOP);
   node1.setPosition(100, 200);
 
   //3-B) create our new custom node
-  var node2 = new DiamondNodeModel('node2');
+  var node2 = new DiamondNodeModel('This is node 2');
   node2.setPosition(250, 108);
 
   var node3 = new DefaultNodeModel('Node 3', 'red');
