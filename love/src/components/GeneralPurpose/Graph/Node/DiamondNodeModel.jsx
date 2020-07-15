@@ -2,10 +2,11 @@ import { NodeModel, NodeModelGenerics, PortModelAlignment } from '@projectstorm/
 import { DiamondPortModel } from './DiamondPortModel';
 
 export class DiamondNodeModel extends NodeModel{
-	constructor() {
+	constructor(label) {
 		super({
 			type: 'diamond'
 		});
+		this.label = label;
 		this.addPort(new DiamondPortModel(PortModelAlignment.TOP));
 		this.addPort(new DiamondPortModel(PortModelAlignment.LEFT));
 		this.addPort(new DiamondPortModel(PortModelAlignment.BOTTOM));

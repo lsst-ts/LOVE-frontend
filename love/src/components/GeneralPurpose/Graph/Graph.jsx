@@ -32,7 +32,7 @@ export default () => {
   node1.setPosition(100, 200);
 
   //3-B) create our new custom node
-  var node2 = new DiamondNodeModel();
+  var node2 = new DiamondNodeModel('holaholahola');
   node2.setPosition(250, 108);
 
   var node3 = new DefaultNodeModel('Node 3', 'red');
