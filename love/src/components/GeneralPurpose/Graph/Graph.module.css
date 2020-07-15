@@ -1,0 +1,12 @@
+.container {
+  height: 500px;
+  width: 500px;
+  background-color: rgb(60, 60, 60);
+  display: flex;
+}
+
+.container > * {
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+}
