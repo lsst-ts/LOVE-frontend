@@ -1,0 +1,21 @@
+.port {
+  width: 16px;
+  height: 16px;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.port:hover {
+  background: rgba(0, 0, 0, 1);
+}
+
+.node {
+  background-color: var(--second-primary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
+  display: grid;
+  grid-template-rows: 2em minmax(1em, 1fr);
+  box-sizing: border-box;
+}

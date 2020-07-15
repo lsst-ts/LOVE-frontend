@@ -1,10 +1,10 @@
 import React from 'react';
 import createEngine, { DefaultNodeModel, DiagramModel, PortModelAlignment } from '@projectstorm/react-diagrams';
 // import the custom models
-import { DiamondNodeModel } from './DiamondNodeModel';
-import { DiamondNodeFactory } from './DiamondNodeFactory';
-import { DiamondPortModel } from './DiamondPortModel';
-import { SimplePortFactory } from './SimplePortFactory';
+import { DiamondNodeModel } from './Node//DiamondNodeModel';
+import { DiamondNodeFactory } from './Node/DiamondNodeFactory';
+import { DiamondPortModel } from './Node/DiamondPortModel';
+import { SimplePortFactory } from './Node/SimplePortFactory';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import styles from './Graph.module.css';
 
@@ -57,7 +57,8 @@ export default () => {
 
   //4) add the models to the root graph
   model.addAll(node1, node2, node3, link1, link2, node4, link3, link4, node5);
-
+  model.setLocked(true);
+  
   //5) load model into engine
   engine.setModel(model);
 

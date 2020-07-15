@@ -1,5 +1,11 @@
-asdfafds 
+asdfafds
 
 ```jsx
-<Graph/>
+<div
+  style={{
+    background: 'black',
+  }}
+>
+  <Graph />
+</div>
 ```

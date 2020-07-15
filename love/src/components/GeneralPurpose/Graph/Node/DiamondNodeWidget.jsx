@@ -32,9 +32,10 @@ export class DiamondNodeWidget extends React.Component {
 				style={{
 					position: 'relative',
 					width: this.props.size,
-					height: this.props.size
+                    height: this.props.size,
+                    display: 'flex'
 				}}>
-				<svg
+				{/* <svg
 					width={this.props.size}
 					height={this.props.size}
 					dangerouslySetInnerHTML={{
@@ -61,12 +62,15 @@ export class DiamondNodeWidget extends React.Component {
           </g>
         `
 					}}
-				/>
+				/> */}
+                <span className={styles.node}>Nodo custom</span>
+                    
 				<PortWidget
 					style={{
 						top: this.props.size / 2 - 8,
 						left: -8,
-						position: 'absolute'
+						position: 'absolute',
+						visibility: 'hidden'
 					}}
 					port={this.props.node.getPort(PortModelAlignment.LEFT)}
 					engine={this.props.engine}>
@@ -76,7 +80,8 @@ export class DiamondNodeWidget extends React.Component {
 					style={{
 						left: this.props.size / 2 - 8,
 						top: -8,
-						position: 'absolute'
+						position: 'absolute',
+						visibility: 'hidden'
 					}}
 					port={this.props.node.getPort(PortModelAlignment.TOP)}
 					engine={this.props.engine}>
@@ -86,7 +91,8 @@ export class DiamondNodeWidget extends React.Component {
 					style={{
 						left: this.props.size - 8,
 						top: this.props.size / 2 - 8,
-						position: 'absolute'
+						position: 'absolute',
+						visibility: 'hidden'
 					}}
 					port={this.props.node.getPort(PortModelAlignment.RIGHT)}
 					engine={this.props.engine}>
@@ -96,7 +102,8 @@ export class DiamondNodeWidget extends React.Component {
 					style={{
 						left: this.props.size / 2 - 8,
 						top: this.props.size - 8,
-						position: 'absolute'
+						position: 'absolute',
+						visibility: 'hidden'
 					}}
 					port={this.props.node.getPort(PortModelAlignment.BOTTOM)}
 					engine={this.props.engine}>
