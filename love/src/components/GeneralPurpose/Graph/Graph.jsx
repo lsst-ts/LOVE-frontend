@@ -1,5 +1,5 @@
 import React from 'react';
-import createEngine, { DefaultNodeModel, DiagramModel, PortModelAlignment } from '@projectstorm/react-diagrams';
+import createEngine, { DefaultNodeModel, DefaultPortModel, DiagramModel, PortModelAlignment } from '@projectstorm/react-diagrams';
 // import the custom models
 import { DiamondNodeModel } from './Node//DiamondNodeModel';
 import { DiamondNodeFactory } from './Node/DiamondNodeFactory';
@@ -27,12 +27,12 @@ export default () => {
   var model = new DiagramModel();
 
   //3-A) create a default node
-  var node1 = new DefaultNodeModel('Node 1', 'rgb(0,192,255)');
-  var port1 = node1.addOutPort('Out');
+  var node1 = new DiamondNodeModel('node1');
+  var port1 = node1.getPort(PortModelAlignment.TOP);
   node1.setPosition(100, 200);
 
   //3-B) create our new custom node
-  var node2 = new DiamondNodeModel('holaholahola');
+  var node2 = new DiamondNodeModel('node2');
   node2.setPosition(250, 108);
 
   var node3 = new DefaultNodeModel('Node 3', 'red');

@@ -1,15 +1,22 @@
 import { LinkModel, PortModel, DefaultLinkModel, PortModelAlignment } from '@projectstorm/react-diagrams';
 
 export class DiamondPortModel extends PortModel {
-	constructor(alignment) {
-		super({
-			type: 'diamond',
-			name: alignment,
-			alignment: alignment
-		});
-	}
+  constructor(alignment) {
+    super({
+      type: 'diamond',
+      name: alignment,
+      alignment: alignment,
+    });
+  }
 
-	createLinkModel() {
-		return new DefaultLinkModel();
-	}
+  link = (port) => {
+    let link = this.createLinkModel();
+    link.setSourcePort(this);
+    link.setTargetPort(port);
+    return link;
+  }
+
+  createLinkModel() {
+    return new DefaultLinkModel();
+  }
 }
