@@ -47,7 +47,7 @@ export class DiamondNodeWidget extends React.Component {
             return (
               <StyledPortWidget
                 key={index}
-                left={-2}
+                left={0}
                 top={this.props.size * (0.5 - (index - 1) * 0.2)}
                 port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
                 engine={this.props.engine} />
@@ -61,7 +61,7 @@ export class DiamondNodeWidget extends React.Component {
               <StyledPortWidget
                 key={index}
                 left={this.props.size * (0.5 - (index - 1) * 0.2)}
-                top={-2}
+                top={0}
                 port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
                 engine={this.props.engine} />
             )
@@ -73,7 +73,7 @@ export class DiamondNodeWidget extends React.Component {
             return (
               <StyledPortWidget
                 key={index}
-                left={this.props.size + 2}
+                left={this.props.size}
                 top={this.props.size * (0.5 - (index - 1) * 0.2)}
                 port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
                 engine={this.props.engine} />
@@ -87,7 +87,7 @@ export class DiamondNodeWidget extends React.Component {
               <StyledPortWidget
                 key={index}
                 left={this.props.size * (0.5 - (index - 1) * 0.2)}
-                top={this.props.size + 2}
+                top={this.props.size}
                 port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
                 engine={this.props.engine} />
             )

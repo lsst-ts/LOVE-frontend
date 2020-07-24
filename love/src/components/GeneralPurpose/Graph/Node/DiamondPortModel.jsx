@@ -32,6 +32,6 @@ export class DiamondPortModel extends PortModel {
   }
 
   createLinkModel() {
-    return new DefaultLinkModel();
+    return new DefaultLinkModel({curvyness: 0});
   }
 }
