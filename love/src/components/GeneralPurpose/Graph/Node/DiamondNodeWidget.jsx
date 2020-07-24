@@ -42,20 +42,18 @@ export class DiamondNodeWidget extends React.Component {
           {this.props.node.label}
         </span>
 
-        <PortWidget
-          style={{
-            top: this.props.size / 2 - 8,
-            left: -8,
-            position: 'absolute',
-            visibility: 'hidden',
-          }}
-          port={this.props.node.getPort(PortModelAlignment.LEFT)}
-          engine={this.props.engine}
-        >
-          <Port />
-        </PortWidget>
-
-
+        {
+          new Array(3).fill('LEFT').map((location, index) => {
+            return (
+              <StyledPortWidget
+                key={index}
+                left={-2}
+                top={this.props.size * (0.5 - (index - 1) * 0.2)}
+                port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
+                engine={this.props.engine} />
+            )
+          })
+        }
 
         {
           new Array(3).fill('TOP').map((location, index) => {
@@ -70,30 +68,31 @@ export class DiamondNodeWidget extends React.Component {
           })
         }
 
-        <PortWidget
-          style={{
-            left: this.props.size - 8,
-            top: this.props.size / 2 - 8,
-            position: 'absolute',
-            visibility: 'hidden',
-          }}
-          port={this.props.node.getPort(PortModelAlignment.RIGHT)}
-          engine={this.props.engine}
-        >
-          <Port />
-        </PortWidget>
-        <PortWidget
-          style={{
-            left: this.props.size / 2 - 8,
-            top: this.props.size - 8,
-            position: 'absolute',
-            visibility: 'hidden',
-          }}
-          port={this.props.node.getPort(PortModelAlignment.BOTTOM)}
-          engine={this.props.engine}
-        >
-          <Port />
-        </PortWidget>
+        {
+          new Array(3).fill('RIGHT').map((location, index) => {
+            return (
+              <StyledPortWidget
+                key={index}
+                left={this.props.size + 2}
+                top={this.props.size * (0.5 - (index - 1) * 0.2)}
+                port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
+                engine={this.props.engine} />
+            )
+          })
+        }
+
+        {
+          new Array(3).fill('BOTTOM').map((location, index) => {
+            return (
+              <StyledPortWidget
+                key={index}
+                left={this.props.size * (0.5 - (index - 1) * 0.2)}
+                top={this.props.size + 2}
+                port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
+                engine={this.props.engine} />
+            )
+          })
+        }
       </div>
     );
   }

@@ -1,12 +1,18 @@
 import { LinkModel, PortModel, DefaultLinkModel } from '@projectstorm/react-diagrams';
 
-export const PortModelAlignment  = {
-  TOP1: "top1",
-  TOP2: "top2",
-  TOP3: "top3",
-  LEFT: "left",
-  BOTTOM: "bottom",
-  RIGHT: "right"
+export const PortModelAlignment = {
+  TOP1: "TOP1",
+  TOP2: "TOP2",
+  TOP3: "TOP3",
+  LEFT1: "LEFT1",
+  LEFT2: "LEFT2",
+  LEFT3: "LEFT3",
+  BOTTOM1: "BOTTOM1",
+  BOTTOM2: "BOTTOM2",
+  BOTTOM3: "BOTTOM3",
+  RIGHT1: "RIGHT1",
+  RIGHT2: "RIGHT2",
+  RIGHT3: "RIGHT3",
 }
 
 export class DiamondPortModel extends PortModel {
