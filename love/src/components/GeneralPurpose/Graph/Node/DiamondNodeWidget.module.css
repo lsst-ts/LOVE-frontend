@@ -1,9 +1,11 @@
 .port {
-  width: 16px;
-  height: 16px;
+  width: 8px;
+  height: 8px;
   z-index: 10;
-  background: rgba(0, 0, 0, 0.5);
-  border-radius: 8px;
+  background: var(--primary-font-color);
+  opacity: 0.3;
+  visibility: hidden;
+  border-radius: 4px;
   cursor: pointer;
 }
 
@@ -20,7 +22,6 @@
   align-items: center;
   padding: 0.5rem;
 }
-
 
 .selected {
   border: 2px solid var(--default-background-color);

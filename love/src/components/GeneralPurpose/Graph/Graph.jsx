@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import createEngine, {
   DefaultNodeModel,
   DefaultPortModel,
-  DiagramModel,
-  PortModelAlignment,
+  DiagramModel
 } from '@projectstorm/react-diagrams';
 // import the custom models
 import { DiamondNodeModel } from './Node//DiamondNodeModel';
 import { DiamondNodeFactory } from './Node/DiamondNodeFactory';
-import { DiamondPortModel } from './Node/DiamondPortModel';
+import { DiamondPortModel, PortModelAlignment } from './Node/DiamondPortModel';
 import { SimplePortFactory } from './Node/SimplePortFactory';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import styles from './Graph.module.css';

@@ -11,10 +11,10 @@ const nodes = [
 ];
 
 const links = [
-  { id: 'link1', source: { id: 'node1', port: 'top' }, target: { id: 'node2', port: 'left' } },
-  { id: 'link2', source: { id: 'node3', port: 'top' }, target: { id: 'node2', port: 'right' } },
-  { id: 'link3', source: { id: 'node4', port: 'top' }, target: { id: 'node2', port: 'right' } },
-  { id: 'link4', source: { id: 'node5', port: 'top' }, target: { id: 'node2', port: 'right' } },
+  { id: 'link1', source: { id: 'node1', port: 'top1' }, target: { id: 'node2', port: 'top1' } },
+  { id: 'link2', source: { id: 'node3', port: 'top1' }, target: { id: 'node2', port: 'top2' } },
+  { id: 'link3', source: { id: 'node4', port: 'top1' }, target: { id: 'node2', port: 'top3' } },
+  { id: 'link4', source: { id: 'node5', port: 'top1' }, target: { id: 'node2', port: 'right' } },
 
 ];
 

@@ -1,11 +1,28 @@
 import * as React from 'react';
-import {  PortModelAlignment, PortWidget } from '@projectstorm/react-diagrams';
+import { PortWidget } from '@projectstorm/react-diagrams';
 import styles from './DiamondNodeWidget.module.css';
-
+import { PortModelAlignment } from './DiamondPortModel';
 
 const Port = ({ children }) => {
   return <div className={styles.port}>{children}</div>;
 };
+
+const StyledPortWidget = ({ left, top, port, engine }) => {
+  return (<PortWidget
+    style={{
+      position: 'absolute',
+      transform: 'translate(-50%, -50%)',
+      color: 'white',
+      // visibility: 'hidden',
+      left,
+      top
+    }}
+    port={port}
+    engine={engine}
+  >
+    <Port />
+  </PortWidget>)
+}
 
 /**
  * @author Dylan Vorster
@@ -37,18 +54,22 @@ export class DiamondNodeWidget extends React.Component {
         >
           <Port />
         </PortWidget>
-        <PortWidget
-          style={{
-            left: this.props.size / 2 - 8,
-            top: -8,
-            position: 'absolute',
-            visibility: 'hidden',
-          }}
-          port={this.props.node.getPort(PortModelAlignment.TOP)}
-          engine={this.props.engine}
-        >
-          <Port />
-        </PortWidget>
+
+
+
+        {
+          new Array(3).fill('TOP').map((location, index) => {
+            return (
+              <StyledPortWidget
+                key={index}
+                left={this.props.size * (0.5 - (index - 1) * 0.2)}
+                top={-2}
+                port={this.props.node.getPort(PortModelAlignment[`${location}${index + 1}`])}
+                engine={this.props.engine} />
+            )
+          })
+        }
+
         <PortWidget
           style={{
             left: this.props.size - 8,
