@@ -3,6 +3,7 @@
   width: 500px;
   background-color: none;
   display: flex;
+  color: 'white'
 }
 
 .container > * {

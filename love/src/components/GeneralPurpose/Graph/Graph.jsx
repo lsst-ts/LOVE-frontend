@@ -12,7 +12,8 @@ import { DiamondPortModel, PortModelAlignment } from './entities/port/DiamondPor
 import { SimplePortFactory } from './entities/port/SimplePortFactory';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import styles from './Graph.module.css';
-
+import { EditableLabelModel } from './entities/label/EditableLabelModel';
+import { EditableLabelFactory } from './entities/label/EditableLabelFactory';
 
 const Graph = ({ nodes, links }) => {
 
@@ -21,10 +22,10 @@ const Graph = ({ nodes, links }) => {
     const engine = createEngine();
 
     // register some other factories as well
-    engine
-      .getPortFactories()
+    engine.getPortFactories()
       .registerFactory(new SimplePortFactory('diamond', (config) => new DiamondPortModel(PortModelAlignment.LEFT)));
     engine.getNodeFactories().registerFactory(new DiamondNodeFactory());
+    engine.getLabelFactories().registerFactory(new EditableLabelFactory());
 
     //2) setup the diagram model
     const model = new DiagramModel();
@@ -44,7 +45,14 @@ const Graph = ({ nodes, links }) => {
       const target = nodeModels[link.target.id];
       const targetPort = target.getPort(PortModelAlignment[link.target.port.toUpperCase()]);
 
-      prevDict[link.id] = sourcePort.link(targetPort, link.color, link.width);
+      const linkObject = sourcePort.link(targetPort, link.color, link.width);
+      linkObject.addLabel(
+        new EditableLabelModel({
+          value: 'adsfadsf label'
+        })
+      );
+      console.log('linkObject', linkObject);
+      prevDict[link.id] = linkObject;
 
       return prevDict;
     }, {});
@@ -54,7 +62,6 @@ const Graph = ({ nodes, links }) => {
 
     //5) load model into engine
     engine.setModel(model);
-
     return engine;
   }, [nodes, links]);
 
