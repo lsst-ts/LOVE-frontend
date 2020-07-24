@@ -10,7 +10,7 @@ const nodes = [
 ];
 
 const links = [
-  { id: 'link1', source: { id: 'node1', port: 'right3' }, target: { id: 'node2', port: 'bottom3' }, color: 'white', selectedColor: 'red' },
+  { id: 'link1', source: { id: 'node1', port: 'right3' }, target: { id: 'node2', port: 'bottom3' }, color: 'white', width: 2 },
   { id: 'link2', source: { id: 'node3', port: 'left1' }, target: { id: 'node2', port: 'right2' } },
   { id: 'link3', source: { id: 'node4', port: 'bottom3' }, target: { id: 'node2', port: 'top3' } },
   { id: 'link4', source: { id: 'node5', port: 'top1' }, target: { id: 'node2', port: 'bottom1' } },

@@ -24,10 +24,11 @@ export class DiamondPortModel extends PortModel {
     });
   }
 
-  link = (port, color) => {
+  link = (port, color, width) => {
     const link = new DefaultLinkModel({
       curvyness: 0,
       ...(color !== undefined ? { color } : {}),
+      ...(width !== undefined ? { width } : {}),
     });
     link.setSourcePort(this);
     link.setTargetPort(port);

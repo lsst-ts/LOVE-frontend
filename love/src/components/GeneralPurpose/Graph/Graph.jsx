@@ -44,7 +44,7 @@ const Graph = ({ nodes, links }) => {
       const target = nodeModels[link.target.id];
       const targetPort = target.getPort(PortModelAlignment[link.target.port.toUpperCase()]);
 
-      prevDict[link.id] = sourcePort.link(targetPort, link.color);
+      prevDict[link.id] = sourcePort.link(targetPort, link.color, link.width);
 
       return prevDict;
     }, {});
