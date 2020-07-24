@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PortWidget } from '@projectstorm/react-diagrams';
 import styles from './DiamondNodeWidget.module.css';
-import { PortModelAlignment } from './DiamondPortModel';
+import { PortModelAlignment } from '../port/DiamondPortModel';
 
 const Port = ({ children }) => {
   return <div className={styles.port}>{children}</div>;

@@ -6,10 +6,10 @@ import createEngine, {
   DiagramModel
 } from '@projectstorm/react-diagrams';
 // import the custom models
-import { DiamondNodeModel } from './Node//DiamondNodeModel';
-import { DiamondNodeFactory } from './Node/DiamondNodeFactory';
-import { DiamondPortModel, PortModelAlignment } from './Node/DiamondPortModel';
-import { SimplePortFactory } from './Node/SimplePortFactory';
+import { DiamondNodeModel } from './entities/node/DiamondNodeModel';
+import { DiamondNodeFactory } from './entities/node/DiamondNodeFactory';
+import { DiamondPortModel, PortModelAlignment } from './entities/port/DiamondPortModel';
+import { SimplePortFactory } from './entities/port/SimplePortFactory';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import styles from './Graph.module.css';
 
