@@ -24,14 +24,13 @@ export class DiamondPortModel extends PortModel {
     });
   }
 
-  link = (port) => {
-    let link = this.createLinkModel();
+  link = (port, color) => {
+    const link = new DefaultLinkModel({
+      curvyness: 0,
+      ...(color !== undefined ? { color } : {}),
+    });
     link.setSourcePort(this);
     link.setTargetPort(port);
     return link;
-  }
-
-  createLinkModel() {
-    return new DefaultLinkModel({curvyness: 0});
   }
 }

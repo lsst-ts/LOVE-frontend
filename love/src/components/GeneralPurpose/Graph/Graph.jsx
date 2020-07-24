@@ -44,7 +44,8 @@ const Graph = ({ nodes, links }) => {
       const target = nodeModels[link.target.id];
       const targetPort = target.getPort(PortModelAlignment[link.target.port.toUpperCase()]);
 
-      prevDict[link.id] = sourcePort.link(targetPort);
+      prevDict[link.id] = sourcePort.link(targetPort, link.color);
+
       return prevDict;
     }, {});
 
@@ -99,7 +100,9 @@ Graph.propTypes = {
       id: PropTypes.string.isRequired,
       /** Node's port to which it is attached (TODO: make a list of available ports)*/
       port: PropTypes.string.isRequired
-    }).isRequired
+    }).isRequired,
+    /** Color of the line, defaults to grey */
+    color: PropTypes.string
   })).isRequired
 }
 
