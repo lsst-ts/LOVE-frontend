@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { relativeTime } from '../../../../Utils';
 import PropTypes from 'prop-types';
 import styles from './PolarPlot.module.css';
 
@@ -106,34 +107,50 @@ export default class PolarPlot extends Component {
     return d;
   };
 
-  getRadialMarkers = (radialMarkers, radialMarkersUnits, maxRadialValue, minRadialValue) => {
+  getRadialMarkers = (radialMarkers, radialMarkersUnits, minRadialValue, maxRadialValue) => {
     const w = PolarPlot.WIDTH;
     const h = PolarPlot.HEIGHT;
     const margin = PolarPlot.MARGIN;
-
+    const temporalRadius = this.props.temporalEncoding === 'radial';
+    let r;
+    if (maxRadialValue === minRadialValue) {
+      r = (w / 2 - margin);
+      return (
+        <g>
+          <circle className={styles['cls-27']} cx={w / 2} cy={h / 2} r={r} />
+          <text className={styles.label} x={w / 2 + r} y={(h * (1 + 0.05)) / 2}>
+            {temporalRadius ? relativeTime(maxRadialValue, this.props.taiToUtc) : maxRadialValue}
+            {temporalRadius ? '' : radialMarkersUnits}
+          </text>
+        </g>
+      );
+    }
     return [...new Array(radialMarkers)].map((v, i) => {
       const value = minRadialValue + ((maxRadialValue - minRadialValue) / radialMarkers) * (i + 1);
-      const r = ((value - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
+      if (maxRadialValue === minRadialValue) r = 1;
+      else r = ((value - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
       return (
         <g key={`circle ${i}`}>
           <circle className={styles['cls-27']} cx={w / 2} cy={h / 2} r={r} />
-          <text className={styles.label} x={w / 2 + r} y={h / 2}>
-            {value}
-            {radialMarkersUnits}
+          <text className={styles.label} x={w / 2 + r} y={(h * (1 + (i % 2 === 0 ? 0.03 : -0.03))) / 2}>
+            {temporalRadius ? relativeTime(value, this.props.taiToUtc) : value}
+            {temporalRadius ? '' : radialMarkersUnits}
           </text>
         </g>
       );
     });
   };
 
-  getCartesianCoordinates = (triplet, maxRadialValue, minRadialValue) => {
+  getCartesianCoordinates = (triplet, minRadialValue, maxRadialValue) => {
     const w = PolarPlot.WIDTH;
     const h = PolarPlot.HEIGHT;
     const margin = PolarPlot.MARGIN;
 
     const centerX = w / 2;
     const centerY = h / 2;
-    const radius = ((triplet.r - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
+    let radius;
+    if (maxRadialValue === minRadialValue) radius = (w / 2 - margin);
+    else radius = ((triplet.r - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
     const angleInRadians = (triplet.theta * Math.PI) / 180.0;
 
     return {
@@ -153,9 +170,6 @@ export default class PolarPlot extends Component {
 
     const ticks = this.getTicks(tickAngles, w, h, margin * 2);
     const radialLines = this.getRadialLines(radialLinesAngles, w, h, margin);
-
-    const radialMarkers = 4;
-    const radialMarkersUnits = 'km/s';
 
     // console.log(this.props.layers);
     // console.log(this.props.data);
@@ -217,7 +231,7 @@ export default class PolarPlot extends Component {
         {
           name: 'WindSpeed',
           time: '2020-07-24T16:29:58.504-04:00',
-          value: 1.0,
+          value: 1.05,
         },
         {
           name: 'WindSpeed',
@@ -342,7 +356,6 @@ export default class PolarPlot extends Component {
       Object.values(data)?.[0]?.map((d, i) => {
         const styles = this.props.marksStyles ?? [];
         const timestamps = styles.map((ms) => {
-          console.log(ms);
           const index = Math.min(i, data[ms.name].length - 1);
           return new Date(data[ms.name][index]?.time);
         });
@@ -361,19 +374,29 @@ export default class PolarPlot extends Component {
         });
         return triplet;
       }) ?? [];
-    console.log(triplets);
+
+    // console.log(data);
+    // console.log(triplets);
     const colorValues = triplets.map((t) => t.color);
     const maxColorValue = Math.max(...colorValues);
     const minColorValue = Math.min(...colorValues);
 
     const radiiValues = triplets.map((t) => t.r);
-    const maxRadialValue = Math.max(...radiiValues);
-    const minRadialValue = Math.min(...radiiValues);
+    const maxRadialValue = radiiValues.length > 0 ? Math.max(...radiiValues) : 0;
+    const minRadialValue = radiiValues.length > 0 ? Math.min(...radiiValues) : 0;
 
-    const opacityInterpolation = (value) => {
-      return 0.01 + ((value - minColorValue) / (maxColorValue - minColorValue)) * 0.9;
+    const opacityInterpolation = (value, minValue, maxValue) => {
+      if (maxValue === minValue) return 1;
+      return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;
     };
-    const circles = this.getRadialMarkers(radialMarkers, radialMarkersUnits, maxRadialValue, minRadialValue);
+    const colorInterpolation = (value, minValue, maxValue) => {
+      const proportion = (value - minValue) / (maxValue - minValue);
+      return [255, 255 * (1 - proportion), 255 * (1 - proportion)];
+    };
+
+    const radialMarkers = 4;
+    const radialMarkersUnits = 'km/s';
+    const circles = this.getRadialMarkers(radialMarkers, radialMarkersUnits, minRadialValue, maxRadialValue);
     return (
       <svg
         className={styles.grid}
@@ -408,33 +431,38 @@ export default class PolarPlot extends Component {
         </g>
         <g className={styles.dataLayer}>
           {triplets.map((triplet, i) => {
+            if (triplet.theta === undefined || triplet.r === undefined) return null;
             const nextTriplet = i < triplets.length - 1 ? triplets[i + 1] : undefined;
-            const cart = this.getCartesianCoordinates(triplet, maxRadialValue, minRadialValue);
+            const cart = this.getCartesianCoordinates(triplet, minRadialValue, maxRadialValue);
             const nextCart = nextTriplet
-              ? this.getCartesianCoordinates(nextTriplet, maxRadialValue, minRadialValue)
+              ? this.getCartesianCoordinates(nextTriplet, minRadialValue, maxRadialValue)
               : undefined;
+            const rgb = colorInterpolation(triplet.color, minColorValue, maxColorValue);
+            const opacity = opacityInterpolation(triplet.color, minColorValue, maxColorValue);
+            const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
             return (
-              <>
+              <React.Fragment key={`datapoint${i}`}>
                 <circle
-                  key={`datapoint${i}`}
                   className={styles.dataPoint}
                   cx={cart.x}
                   cy={cart.y}
                   r={5}
-                  fillOpacity={opacityInterpolation(triplet.color)}
-                  strokeOpacity={opacityInterpolation(triplet.color)}
+                  fill={color}
+                  fillOpacity={opacity}
+                  strokeOpacity={opacity}
                 />
-                {
-                  nextCart !== undefined && <line
+                {nextCart !== undefined && (
+                  <line
                     x1={cart.x}
                     y1={cart.y}
                     x2={nextCart.x}
                     y2={nextCart.y}
-                    fillOpacity={opacityInterpolation(triplet.color)}
-                    strokeOpacity={opacityInterpolation(triplet.color)}
+                    stroke={color}
+                    fillOpacity={opacity}
+                    strokeOpacity={opacity}
                   />
-                }
-              </>
+                )}
+              </React.Fragment>
             );
           })}
         </g>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
-import { getStreamsData } from 'redux/selectors/selectors';
+import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
 import PolarPlot from './PolarPlot';
 import { parseTimestamp } from 'Utils';
 
@@ -79,6 +79,12 @@ export const schema = {
         },
       },
     },
+    temporalEncoding: {
+      type: 'string',
+      description: 'Which variable encodes time. One of the following: radial, color or angular',
+      default: 'radial',
+      isPrivate: false,
+    },
     xAxisTitle: {
       type: 'string',
       description: 'Title of the horizontal axis of this plot',
@@ -103,6 +109,8 @@ const PolarPlotContainer = function ({
   height,
   xAxisTitle,
   yAxisTitle,
+  temporalEncoding,
+  taiToUtc,
 }) {
   const [data, setData] = React.useState({});
 
@@ -232,6 +240,8 @@ const PolarPlotContainer = function ({
           }
         : undefined,
     temporalXAxis: true,
+    temporalEncoding: temporalEncoding,
+    taiToUtc: taiToUtc,
     width: width,
     height: height,
   };
@@ -267,6 +277,7 @@ const mapStateToProps = (state, ownProps) => {
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
   return {
+    taiToUtc: getTaiToUtc(state),
     streams,
   };
 };
