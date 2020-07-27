@@ -1,0 +1,6 @@
+.tooltipContainer {
+    display: flex;
+    background: gray;
+    border-radius: 0.2rem;
+    padding: 0.2rem;
+}
