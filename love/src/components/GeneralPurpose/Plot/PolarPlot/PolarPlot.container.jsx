@@ -29,7 +29,7 @@ export const defaultStyles = [
 
 export const schema = {
   description: 'Time series plot for any data stream coming from SAL',
-  defaultSize: [8, 8],
+  defaultSize: [40, 40],
   props: {
     titleBar: {
       type: 'boolean',
@@ -55,25 +55,27 @@ export const schema = {
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        Elevation: {
+        WindSpeed: {
           category: 'telemetry',
-          csc: 'ATMCS',
-          salindex: '0',
-          topic: 'mount_AzEl_Encoders',
-          item: 'elevationCalculatedAngle',
-          type: 'line',
-          accessor: '(x) => x[0]',
-          ...defaultStyles[0],
-        },
-        'ATDome azimuth': {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: '0',
-          topic: 'position',
-          item: 'azimuthPosition',
+          csc: 'Environment',
+          salindex: '1',
+          topic: 'windSpeed',
+          item: 'avg2M',
           type: 'line',
           accessor: '(x) => x',
-          ...defaultStyles[1],
+          encoding: 'color', // radial, color, angular
+          ...defaultStyles[0],
+        },
+        WindDirection: {
+          category: 'telemetry',
+          csc: 'Environment',
+          salindex: '1',
+          topic: 'windDirection',
+          item: 'avg2M',
+          type: 'line',
+          accessor: '(x) => x',
+          encoding: 'angular', // radial, color, angular
+          ...defaultStyles[0],
         },
       },
     },
@@ -159,12 +161,12 @@ const PolarPlotContainer = function ({
       const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
       const newValue = {
         name: inputName,
-        x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-        y: accessorFunc(streamValue[item]?.value),
+        time: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+        value: accessorFunc(streamValue[item]?.value),
       };
 
       // TODO: use reselect to never get repeated timestamps
-      if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+      if ((!lastValue || lastValue.time?.ts !== newValue.time?.ts) && newValue.time) {
         changed = true;
         inputData.push(newValue);
       }
@@ -200,6 +202,7 @@ const PolarPlotContainer = function ({
         ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
+        ...(inputs[input].encoding !== undefined ? { encoding: inputs[input].encoding } : {}),
       };
     });
   }, [inputs]);
@@ -217,6 +220,7 @@ const PolarPlotContainer = function ({
   // this should be the case for a component loaded from the UI Framework
   const plotProps = {
     layers: layers,
+    data: data,
     legend: legend,
     marksStyles: marksStyles,
     xAxisTitle: xAxisTitle,

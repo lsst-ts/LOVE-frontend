@@ -40,3 +40,7 @@
   alignment-baseline: middle;
   dominant-baseline: central;
 }
+
+.dataPoint {
+  fill: white;
+}
