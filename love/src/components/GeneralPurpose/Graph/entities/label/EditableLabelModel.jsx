@@ -12,7 +12,6 @@ export class EditableLabelModel extends LabelModel {
             type: 'editable-label'
         });
         this.value = options.value || '';
-        console.log('options', options)
     }
 
     serialize() {

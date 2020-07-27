@@ -7,13 +7,10 @@ import styles from './EditableLabelWidget.module.css';
 
 
 export const EditableLabelWidget = (props) => {
-    const [str, setStr] = React.useState(props.model.value);
-
-    console.log('widget')
     return (
 
         <div className={styles.tooltipContainer}>
-            custom tooltip
+            {props.model.value}
         </div>
     );
 };

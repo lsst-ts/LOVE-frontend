@@ -14,7 +14,7 @@
 }
 
 .node {
-  background-color: var(--second-primary-background-color);
+  background-color: var(--tertiary-background-color);
   border: 1px solid hsl(199, 43%, 16%);
   border-radius: 6px;
   display: flex;

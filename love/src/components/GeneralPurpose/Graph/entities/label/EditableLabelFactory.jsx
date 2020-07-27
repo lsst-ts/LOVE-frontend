@@ -15,7 +15,6 @@ export class EditableLabelFactory extends AbstractReactFactory {
 	}
 
 	generateReactWidget(event) {
-		console.log('editablefactory')
 		return <EditableLabelWidget model={event.model} />;
 	}
 }

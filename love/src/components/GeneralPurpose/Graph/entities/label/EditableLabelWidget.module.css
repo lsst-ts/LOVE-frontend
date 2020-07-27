@@ -1,6 +1,6 @@
 .tooltipContainer {
     display: flex;
-    background: gray;
+    background: var(--second-secondary-background-color);
     border-radius: 0.2rem;
-    padding: 0.2rem;
+    padding: 0.4rem;
 }

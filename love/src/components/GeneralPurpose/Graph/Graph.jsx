@@ -15,7 +15,7 @@ import styles from './Graph.module.css';
 import { EditableLabelModel } from './entities/label/EditableLabelModel';
 import { EditableLabelFactory } from './entities/label/EditableLabelFactory';
 
-const Graph = ({ nodes, links }) => {
+const Graph = ({ nodes, links, width = 500, height = 500 }) => {
 
   const engine = React.useMemo(() => {
     //1) setup the diagram engine
@@ -48,10 +48,9 @@ const Graph = ({ nodes, links }) => {
       const linkObject = sourcePort.link(targetPort, link.color, link.width);
       linkObject.addLabel(
         new EditableLabelModel({
-          value: 'adsfadsf label'
+          value: link.tooltip
         })
       );
-      console.log('linkObject', linkObject);
       prevDict[link.id] = linkObject;
 
       return prevDict;
@@ -67,7 +66,7 @@ const Graph = ({ nodes, links }) => {
 
   //6) render the diagram!
   return (
-    <div className={styles.container}>
+    <div className={styles.container} style={{ width, height }}>
       <CanvasWidget engine={engine} />
     </div>
   );
@@ -75,6 +74,10 @@ const Graph = ({ nodes, links }) => {
 
 
 Graph.propTypes = {
+  /** Width of the diagram canvas, defaults to 500px */
+  width: PropTypes.number,
+  /** Height of the diagram canvas, defaults to 500px */
+  height: PropTypes.number,
   /** Array describing the nodes of the graph */
   nodes: PropTypes.arrayOf(PropTypes.shape({
     /** Unique identifier of a node */
