@@ -112,7 +112,9 @@ Graph.propTypes = {
       port: PropTypes.string.isRequired
     }).isRequired,
     /** Color of the line, defaults to grey */
-    color: PropTypes.string
+    color: PropTypes.string,
+    /** Tooltip to be displayed in the middle of the line */
+    tooltip: PropTypes.node
   })).isRequired
 }
 

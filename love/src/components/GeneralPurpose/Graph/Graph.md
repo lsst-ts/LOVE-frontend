@@ -27,7 +27,7 @@ const links = [
     id: 'link3',
     source: { id: 'node1', port: 'right1' },
     target: { id: 'node4', port: 'left3' },
-    tooltip: 'link3'
+    tooltip: (<div style={{maxWidth: 100, padding: '1rem', background: 'grey'}}>Custom node tooltip</div>)
   },
 ];
 

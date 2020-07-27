@@ -5,12 +5,10 @@ import styled from '@emotion/styled';
 import EventLogContainer from 'components/EventLog/EventLog.container';
 import styles from './EditableLabelWidget.module.css';
 
-
 export const EditableLabelWidget = (props) => {
-    return (
-
-        <div className={styles.tooltipContainer}>
-            {props.model.value}
-        </div>
-    );
+  return typeof props.model.value === 'string' ? (
+    <div className={styles.tooltipContainer}>{props.model.value}</div>
+  ) : (
+    props.model.value
+  );
 };
