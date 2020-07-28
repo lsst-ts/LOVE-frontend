@@ -8,6 +8,8 @@ import createEngine, {
 import * as React from 'react';
 import { CanvasWidget } from '@projectstorm/react-canvas-core';
 
+import { AdvancedLinkWidget } from './AdvancedLinkWidget';
+
 // export class AdvancedLinkSegment extends React.Component {
 // 	// path: SVGPathElement;
 // 	// circle: SVGCircleElement;
@@ -84,9 +86,25 @@ export class AdvancedLinkModel extends DefaultLinkModel {
 	constructor(options) {
 		super({
 			type: 'advanced',
+			selected: false,
 			...options
 		});
 	}
+
+	// setSelected(selected) {
+	// 	console.log('selectd', selected);
+	// 	console.log('this.options', this.options)
+	// 	if (this.options.selected !== selected) {
+	// 		this.options.selected = selected;
+
+	// 		this.fireEvent(
+	// 			{
+	// 				isSelected: selected
+	// 			},
+	// 			'selectionChanged'
+	// 		);
+	// 	}
+	// }
 }
 
 export class AdvancedLinkFactory extends DefaultLinkFactory {
@@ -94,15 +112,22 @@ export class AdvancedLinkFactory extends DefaultLinkFactory {
 		super('advanced');
 	}
 
-	// generateModel() {
-	// 	return new AdvancedLinkModel();
-	// }
+	generateReactWidget(event) {
+		return <AdvancedLinkWidget link={event.model} diagramEngine={this.engine} />;
+	}
 
-	// generateLinkSegment(model, selected, path) {
-	// 	return (
-	// 		<g>
-	// 			<AdvancedLinkSegment model={model} path={path} />
-	// 		</g>
-	// 	);
-	// }
+	generateModel(event) {
+		return new DefaultLinkModel();
+	}
+
+	generateLinkSegment(model, selected, path) {
+		return (
+			<path
+				stroke={selected ? model.getOptions().selectedColor : model.getOptions().color}
+				strokeWidth={model.getOptions().width}
+				d={path}
+				pointerEvents='all'
+			/>
+		);
+	}
 }
