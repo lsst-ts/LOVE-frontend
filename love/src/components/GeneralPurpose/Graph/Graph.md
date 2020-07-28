@@ -11,7 +11,9 @@ const nodes = [
   { id: 'node4', label: 'This is node 4', position: { x: 500, y: 400 } },
 ];
 
-const onSelectedLink = (id, ev) => setSelectedLinkId(id);
+const onSelectedLink = (id, ev) => {
+  console.log(id, ev)
+}
 
 const links = [
   {
