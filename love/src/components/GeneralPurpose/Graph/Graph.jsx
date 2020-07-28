@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createEngine, { DefaultNodeModel, DefaultPortModel, DiagramModel } from '@projectstorm/react-diagrams';
+import createEngine, { DefaultNodeModel, DefaultPortModel, DiagramModel, DefaultLinkModel } from '@projectstorm/react-diagrams';
 // import the custom models
 import { DiamondNodeModel } from './entities/node/DiamondNodeModel';
 import { DiamondNodeFactory } from './entities/node/DiamondNodeFactory';
@@ -10,6 +10,7 @@ import { CanvasWidget } from '@projectstorm/react-canvas-core';
 import styles from './Graph.module.css';
 import { EditableLabelModel } from './entities/label/EditableLabelModel';
 import { EditableLabelFactory } from './entities/label/EditableLabelFactory';
+import { AdvancedLinkFactory, AdvancedLinkModel } from './entities/link';
 
 const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
   const engine = React.useMemo(() => {
@@ -22,6 +23,7 @@ const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
       .registerFactory(new SimplePortFactory('diamond', (config) => new DiamondPortModel(PortModelAlignment.LEFT)));
     engine.getNodeFactories().registerFactory(new DiamondNodeFactory());
     engine.getLabelFactories().registerFactory(new EditableLabelFactory());
+    engine.getLinkFactories().registerFactory(new AdvancedLinkFactory());
 
     //2) setup the diagram model
     const model = new DiagramModel();
@@ -41,19 +43,28 @@ const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
       const target = nodeModels[link.target.id];
       const targetPort = target.getPort(PortModelAlignment[link.target.port.toUpperCase()]);
 
-      const linkObject = sourcePort.link(targetPort, link.color, link.width);
-      linkObject.addLabel(
-        new EditableLabelModel({
-          value: link.tooltip,
-        }),
-      );
+      // const linkObject = sourcePort.link(targetPort, link.color, link.width);
+      // linkObject.addLabel(
+      //   new EditableLabelModel({
+      //     value: link.tooltip,
+      //   }),
+      // );
+
+      const linkObject = new AdvancedLinkModel({
+        curvyness: 0,
+        ...(link.color !== undefined ? { color: link.color } : {}),
+        ...(link.width !== undefined ? { width: link.width } : {}),
+      });
+
+      linkObject.setSourcePort(sourcePort);
+      linkObject.setTargetPort(targetPort);
 
       linkObject.registerListener({
         eventDidFire: (event) => {
-          if(event.function === "selectionChanged" && event.isSelected){
-            onSelectedLink(link.id, event)
+          if (event.function === 'selectionChanged' && event.isSelected) {
+            onSelectedLink(link.id, event);
           }
-        }
+        },
       });
 
       prevDict[link.id] = linkObject;
@@ -124,12 +135,12 @@ Graph.propTypes = {
     }),
   ).isRequired,
 
-  /** 
+  /**
    * Callback called when a link is selected.
-   * @param {String} id Link id from the links prop. 
+   * @param {String} id Link id from the links prop.
    * @param {Object} event react-diagrams event object
    */
-  onSelectedLink: PropTypes.func
+  onSelectedLink: PropTypes.func,
 };
 
 export default Graph;
