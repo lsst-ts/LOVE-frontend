@@ -52,13 +52,6 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
       const targetModel = nodeModels[target.id];
       const targetPort = targetModel.getPort(PortModelAlignment[target.port.toUpperCase()]);
 
-      // const linkObject = sourcePort.link(targetPort, link.color, link.width);
-      // linkObject.addLabel(
-      //   new EditableLabelModel({
-      //     value: link.tooltip,
-      //   }),
-      // );
-
       const linkObject = new AdvancedLinkModel({
         curvyness: 0,
         ...options,
@@ -69,7 +62,9 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
 
       linkObject.registerListener({
         eventDidFire: (event) => {
-          onLinkSelectionChanged(link.id, event);
+          if (event.function === 'selectionChanged') {
+            onLinkSelectionChanged(link.id, event);
+          }
         },
       });
 
@@ -139,7 +134,7 @@ Graph.propTypes = {
       /** Width of the line, defaults to grey. Inherited from DefaultLinkModel */
       width: PropTypes.number,
       /** color of the line when selected, defaults to rgb(0, 192, 255). Inherited from DefaultLinkModel */
-      selectedColor: PropTypes.number,      
+      selectedColor: PropTypes.number,
       /** Tooltip to be displayed in the middle of the line */
       tooltip: PropTypes.node,
     }),
