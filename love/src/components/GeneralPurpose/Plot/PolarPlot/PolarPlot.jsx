@@ -16,6 +16,11 @@ export default class PolarPlot extends Component {
     height: 596,
   };
 
+  constructor(props) {
+    super(props);
+    this.prevAzimuth = 0;
+  }
+
   static WIDTH = 596;
   static HEIGHT = 596;
   static MARGIN = 3;
@@ -100,7 +105,7 @@ export default class PolarPlot extends Component {
     const start = this.polarToCartesian(x, y, radius, endAngle);
     const end = this.polarToCartesian(x, y, radius, startAngle);
 
-    const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
+    const largeArcFlag = '1';
 
     const d = ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
 
@@ -114,7 +119,7 @@ export default class PolarPlot extends Component {
     const temporalRadius = this.props.temporalEncoding === 'radial';
     let r;
     if (maxRadialValue === minRadialValue) {
-      r = (w / 2 - margin);
+      r = w / 2 - margin;
       return (
         <g>
           <circle className={styles['cls-27']} cx={w / 2} cy={h / 2} r={r} />
@@ -149,7 +154,7 @@ export default class PolarPlot extends Component {
     const centerX = w / 2;
     const centerY = h / 2;
     let radius;
-    if (maxRadialValue === minRadialValue) radius = (w / 2 - margin);
+    if (maxRadialValue === minRadialValue) radius = w / 2 - margin;
     else radius = ((triplet.r - minRadialValue) / (maxRadialValue - minRadialValue)) * (w / 2 - margin);
     const angleInRadians = (triplet.theta * Math.PI) / 180.0;
 
@@ -158,6 +163,17 @@ export default class PolarPlot extends Component {
       y: centerY + radius * Math.sin(angleInRadians),
     };
   };
+
+  closestEquivalentAngle = (from, to) => {
+    const delta = ((((to - from) % 360) + 540) % 360) - 180;
+    return from + delta;
+  };
+
+  componentDidUpdate(prevProps) {
+    const azimuthPosition = this.props.domeAzimuth?.azimuthPosition?.value ?? 0;
+    const prevAzimuth = prevProps.domeAzimuth?.azimuthPosition?.value ?? 0;
+    if (prevAzimuth !== azimuthPosition) this.prevAzimuth = this.closestEquivalentAngle(this.prevAzimuth, prevAzimuth);
+  }
 
   render() {
     const w = PolarPlot.WIDTH;
@@ -387,11 +403,23 @@ export default class PolarPlot extends Component {
 
     const opacityInterpolation = this.props.opacityInterpolation;
     const colorInterpolation = this.props.colorInterpolation;
-    
 
     const radialMarkers = 4;
     const radialMarkersUnits = 'km/s';
     const circles = this.getRadialMarkers(radialMarkers, radialMarkersUnits, minRadialValue, maxRadialValue);
+
+    const domeAngle = 90;
+    const offset = 10;
+    const viewBoxSize = 596 - 2 * offset;
+    const x0 = viewBoxSize / 2 + offset;
+    const y0 = viewBoxSize / 2 + offset;
+    const r = w / 2 + viewboxMargin - 5;
+    const extraApperture = r / 4;
+    const alpha = Math.PI / 12;
+    const rSinAlpha = r * Math.sin(alpha);
+    const rCosAlpha = r * Math.cos(alpha);
+    const azimuthPosition = this.props.domeAzimuth?.azimuthPosition?.value ?? 0;
+    const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, azimuthPosition);
     return (
       <svg
         className={styles.grid}
@@ -400,9 +428,55 @@ export default class PolarPlot extends Component {
         height={'100%'}
         viewBox={`-${viewboxMargin} -${viewboxMargin} ${w + 2 * viewboxMargin} ${h + 2 * viewboxMargin}`}
       >
+        <defs>
+          <radialGradient id="radGrad">
+            <stop offset="0" stopColor="white" stopOpacity="0" />
+            <stop offset="0.7" stopColor="white" stopOpacity="0" />
+            <stop offset="0.8" stopColor="white" stopOpacity="0.0" />
+            <stop offset="1" stopColor="white" stopOpacity="0.4" />
+          </radialGradient>
+          <mask id="mask">
+            <circle id="c" cx={w / 2} cy={h / 2} r={r} fill="url(#radGrad)"/>
+          </mask>
+        </defs>
+
+        {this.props.displayDome && (
+          <>
+            <g
+              className={styles.rotatingDome}
+              style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `${w / 2}px ${w / 2}px` }}
+              mask="url(#mask)"
+            >
+              {/* Dome */}
+              <path
+                className={styles.innerDome}
+                d={`
+                M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
+                A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+                L ${x0} ${y0}
+                L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+              `}
+              />
+            </g>
+            <g
+              className={styles.rotatingDome}
+              style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `${w / 2}px ${w / 2}px` }}
+            >
+              <path
+                className={styles.domeCircle}
+                d={this.describeArc(w / 2, h / 2, w / 2 + viewboxMargin - 5, domeAngle + 15, domeAngle - 15)}
+              >
+                <title>Dome</title>
+              </path>
+            </g>
+          </>
+        )}
+
         <rect className={styles.backgroundRect} width="100%" height="100%" fill="none" />
         <circle className={styles.backgroundCircle} cx={w / 2} cy={h / 2} r={w / 2 - margin} />
-        <circle className={styles.domeCircle} cx={w / 2} cy={h / 2} r={w / 2 + viewboxMargin - 5} />
+
         <g>
           <text className={styles.text} y={-10} x={w / 2}>
             N

@@ -85,6 +85,12 @@ export const schema = {
       default: 'radial',
       isPrivate: false,
     },
+    displayDome: {
+      type: 'boolean',
+      description: 'Whether to display a representation of the dome in the background',
+      default: true,
+      isPrivate: false,
+    },
     opacityInterpolation: {
       type: 'function',
       description: 'Opacity interpolation function',
@@ -124,6 +130,8 @@ export const schema = {
   },
 };
 
+const domeAzimuthGroupName = 'telemetry-ATDome-0-position';
+
 const PolarPlotContainer = function ({
   inputs = schema.props.inputs.default,
   streams,
@@ -137,6 +145,7 @@ const PolarPlotContainer = function ({
   taiToUtc,
   colorInterpolation,
   opacityInterpolation,
+  displayDome,
 }) {
   const [data, setData] = React.useState({});
 
@@ -157,22 +166,10 @@ const PolarPlotContainer = function ({
     setData(data);
   }, [inputs]);
 
-  // console.log('inputs', inputs);
-  // console.log('Object.keys(inputs)', Object.keys(inputs));
-  // console.log('sreams', streams);
-
   const streamsItems = React.useMemo(() =>
     Object.entries(inputs).map(
       ([inputName, inputConfig]) => {
-        const {
-          category,
-          csc,
-          salindex,
-          topic,
-          item,
-          type,
-          accessor,
-        } = inputConfig;
+        const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
         const streamName = `${category}-${csc}-${salindex}-${topic}`;
         return streams[streamName]?.[item];
       },
@@ -225,16 +222,6 @@ const PolarPlotContainer = function ({
     }
   }, [inputs, streams]);
 
-  const layers = { lines: [], bars: [], pointLines: [] };
-  for (const [inputName, inputConfig] of Object.entries(inputs)) {
-    const { type } = inputConfig;
-    const typeStr = type + 's';
-    if (!typeStr in layers) {
-      continue;
-    }
-    if (!data[inputName]) continue;
-    layers[typeStr] = layers[typeStr].concat(data[inputName]);
-  }
   const marksStyles = React.useMemo(() => {
     return Object.keys(inputs).map((input, index) => {
       return {
@@ -267,7 +254,6 @@ const PolarPlotContainer = function ({
   }, [opacityInterpolation]);
   // this should be the case for a component loaded from the UI Framework
   const plotProps = {
-    layers: layers,
     data: data,
     legend: legend,
     marksStyles: marksStyles,
@@ -286,27 +272,40 @@ const PolarPlotContainer = function ({
     height: height,
     colorInterpolation: colorInterpolationFunc,
     opacityInterpolation: opacityInterpolationFunc,
+    domeAzimuth: streams[domeAzimuthGroupName],
+    displayDome: displayDome,
   };
   return <PolarPlot {...plotProps} />;
 };
 
-const getGroupNames = (inputs) =>
-  Object.values(inputs).map(
+const getGroupNames = (inputs, displayDome) => {
+  const domeGroupNames = [domeAzimuthGroupName];
+  const dataGroups = Object.values(inputs).map(
     (inputConfig) => `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`,
   );
+  if(displayDome){
+    return [
+      ...dataGroups,
+      ...domeGroupNames,
+    ];
+  };
+  return dataGroups;
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: () => {
       const inputs = ownProps.inputs || schema.props.inputs.default;
-      const groupNames = getGroupNames(inputs);
+      const displayDome = ownProps.displayDome || schema.props.displayDome.default;
+      const groupNames = getGroupNames(inputs, displayDome);
       groupNames.forEach((groupName) => {
         dispatch(addGroup(groupName));
       });
     },
     unsubscribeToStreams: () => {
       const inputs = ownProps.inputs || schema.props.inputs.default;
-      const groupNames = getGroupNames(inputs);
+      const displayDome = ownProps.displayDome || schema.props.displayDome.default;
+      const groupNames = getGroupNames(inputs, displayDome);
       groupNames.forEach((groupName) => {
         dispatch(requestGroupRemoval(groupName));
       });
@@ -316,7 +315,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => {
   const inputs = ownProps.inputs || schema.props.inputs.default;
-  const groupNames = getGroupNames(inputs);
+  const displayDome = ownProps.displayDome || schema.props.displayDome.default;
+  const groupNames = getGroupNames(inputs, displayDome);
   const streams = getStreamsData(state, groupNames);
   return {
     taiToUtc: getTaiToUtc(state),

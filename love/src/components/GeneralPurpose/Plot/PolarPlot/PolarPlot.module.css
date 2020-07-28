@@ -41,6 +41,13 @@
   dominant-baseline: central;
 }
 
-.dataPoint {
-  /* fill: white; */
+.innerDome {
+  fill: var(--second-tertiary-background-color);
+  stroke: var(--second-tertiary-background-color);
+  stroke-width: 2;
+}
+
+.rotatingDome {
+  transition: transform 1.5s linear;
+  stroke-width: 2;
 }
