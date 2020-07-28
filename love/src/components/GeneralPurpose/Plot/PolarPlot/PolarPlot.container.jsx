@@ -85,6 +85,30 @@ export const schema = {
       default: 'radial',
       isPrivate: false,
     },
+    opacityInterpolation: {
+      type: 'function',
+      description: 'Opacity interpolation function',
+      default: `(value, minValue, maxValue) => {
+  if (maxValue === minValue) return 1;
+  return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;
+}`,
+      isPrivate: false,
+    },
+    colorInterpolation: {
+      type: 'function',
+      description: 'Color interpolation function',
+      default: `(value, minValue, maxValue) => { 
+  const proportion = (value - minValue) / (maxValue - minValue); 
+  return [255, 255 * (1 - proportion), 255 * (1 - proportion)]; 
+}`,
+      isPrivate: false,
+    },
+    _functionProps: {
+      type: 'array',
+      description: 'Array containing the props that are functions',
+      isPrivate: true,
+      default: ['opacityInterpolation', 'colorInterpolation'],
+    },
     xAxisTitle: {
       type: 'string',
       description: 'Title of the horizontal axis of this plot',
@@ -111,6 +135,8 @@ const PolarPlotContainer = function ({
   yAxisTitle,
   temporalEncoding,
   taiToUtc,
+  colorInterpolation,
+  opacityInterpolation,
 }) {
   const [data, setData] = React.useState({});
 
@@ -138,7 +164,15 @@ const PolarPlotContainer = function ({
   const streamsItems = React.useMemo(() =>
     Object.entries(inputs).map(
       ([inputName, inputConfig]) => {
-        const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
+        const {
+          category,
+          csc,
+          salindex,
+          topic,
+          item,
+          type,
+          accessor,
+        } = inputConfig;
         const streamName = `${category}-${csc}-${salindex}-${topic}`;
         return streams[streamName]?.[item];
       },
@@ -225,6 +259,12 @@ const PolarPlotContainer = function ({
     });
   }, [inputs]);
 
+  const colorInterpolationFunc = React.useMemo(() => {
+    return eval(colorInterpolation);
+  }, [colorInterpolation]);
+  const opacityInterpolationFunc = React.useMemo(() => {
+    return eval(opacityInterpolation);
+  }, [opacityInterpolation]);
   // this should be the case for a component loaded from the UI Framework
   const plotProps = {
     layers: layers,
@@ -244,6 +284,8 @@ const PolarPlotContainer = function ({
     taiToUtc: taiToUtc,
     width: width,
     height: height,
+    colorInterpolation: colorInterpolationFunc,
+    opacityInterpolation: opacityInterpolationFunc,
   };
   return <PolarPlot {...plotProps} />;
 };

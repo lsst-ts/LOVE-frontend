@@ -385,14 +385,9 @@ export default class PolarPlot extends Component {
     const maxRadialValue = radiiValues.length > 0 ? Math.max(...radiiValues) : 0;
     const minRadialValue = radiiValues.length > 0 ? Math.min(...radiiValues) : 0;
 
-    const opacityInterpolation = (value, minValue, maxValue) => {
-      if (maxValue === minValue) return 1;
-      return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;
-    };
-    const colorInterpolation = (value, minValue, maxValue) => {
-      const proportion = (value - minValue) / (maxValue - minValue);
-      return [255, 255 * (1 - proportion), 255 * (1 - proportion)];
-    };
+    const opacityInterpolation = this.props.opacityInterpolation;
+    const colorInterpolation = this.props.colorInterpolation;
+    
 
     const radialMarkers = 4;
     const radialMarkersUnits = 'km/s';
