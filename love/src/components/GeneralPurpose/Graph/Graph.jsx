@@ -1,6 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createEngine, { DefaultNodeModel, DefaultPortModel, DiagramModel, DefaultLinkModel } from '@projectstorm/react-diagrams';
+import createEngine, {
+  DefaultNodeModel,
+  DefaultPortModel,
+  DiagramModel,
+  DefaultLinkModel,
+} from '@projectstorm/react-diagrams';
 // import the custom models
 import { DiamondNodeModel } from './entities/node/DiamondNodeModel';
 import { DiamondNodeFactory } from './entities/node/DiamondNodeFactory';
@@ -12,7 +17,10 @@ import { EditableLabelModel } from './entities/label/EditableLabelModel';
 import { EditableLabelFactory } from './entities/label/EditableLabelFactory';
 import { AdvancedLinkFactory, AdvancedLinkModel } from './entities/link';
 
-const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
+/**
+ * Renders a graph structure with custom node and link labels.
+ */
+const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged = () => {} }) => {
   const engine = React.useMemo(() => {
     //1) setup the diagram engine
     const engine = createEngine();
@@ -37,11 +45,12 @@ const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
     }, {});
 
     const linkModels = links.reduce((prevDict, link) => {
-      const source = nodeModels[link.source.id];
-      const sourcePort = source.getPort(PortModelAlignment[link.source.port.toUpperCase()]);
+      const { source, target, ...options } = link;
+      const sourceModel = nodeModels[source.id];
+      const sourcePort = sourceModel.getPort(PortModelAlignment[source.port.toUpperCase()]);
 
-      const target = nodeModels[link.target.id];
-      const targetPort = target.getPort(PortModelAlignment[link.target.port.toUpperCase()]);
+      const targetModel = nodeModels[target.id];
+      const targetPort = targetModel.getPort(PortModelAlignment[target.port.toUpperCase()]);
 
       // const linkObject = sourcePort.link(targetPort, link.color, link.width);
       // linkObject.addLabel(
@@ -52,8 +61,7 @@ const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
 
       const linkObject = new AdvancedLinkModel({
         curvyness: 0,
-        ...(link.color !== undefined ? { color: link.color } : {}),
-        ...(link.width !== undefined ? { width: link.width } : {}),
+        ...options,
       });
 
       linkObject.setSourcePort(sourcePort);
@@ -61,9 +69,7 @@ const Graph = ({ nodes, links, width = 500, height = 500, onSelectedLink }) => {
 
       linkObject.registerListener({
         eventDidFire: (event) => {
-          if (event.function === 'selectionChanged' && event.isSelected) {
-            onSelectedLink(link.id, event);
-          }
+          onLinkSelectionChanged(link.id, event);
         },
       });
 
@@ -109,7 +115,7 @@ Graph.propTypes = {
       }).isRequired,
     }),
   ).isRequired,
-  /** Array describing the links (i.e., connectors, edges, etc) of the graph */
+  /** Array describing the links (i.e., connectors, edges, etc) of the graph. */
   links: PropTypes.arrayOf(
     PropTypes.shape({
       /** Unique identifier of the link */
@@ -128,8 +134,12 @@ Graph.propTypes = {
         /** Node's port to which it is attached (TODO: make a list of available ports)*/
         port: PropTypes.string.isRequired,
       }).isRequired,
-      /** Color of the line, defaults to grey */
+      /** Color of the line, defaults to grey. Inherited from DefaultLinkModel */
       color: PropTypes.string,
+      /** Width of the line, defaults to grey. Inherited from DefaultLinkModel */
+      width: PropTypes.number,
+      /** color of the line when selected, defaults to rgb(0, 192, 255). Inherited from DefaultLinkModel */
+      selectedColor: PropTypes.number,      
       /** Tooltip to be displayed in the middle of the line */
       tooltip: PropTypes.node,
     }),
@@ -138,9 +148,9 @@ Graph.propTypes = {
   /**
    * Callback called when a link is selected.
    * @param {String} id Link id from the links prop.
-   * @param {Object} event react-diagrams event object
+   * @param {Object} event react-diagrams event object.
    */
-  onSelectedLink: PropTypes.func,
+  onLinkSelectionChanged: PropTypes.func,
 };
 
 export default Graph;
