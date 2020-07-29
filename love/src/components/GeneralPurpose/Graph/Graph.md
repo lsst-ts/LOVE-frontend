@@ -37,10 +37,9 @@ const links = React.useMemo(
       tooltip: 'link1',
     },
     {
-      id: 'link2',
+      id: 'link2 (no tooltip)',
       source: { id: 'node1', port: 'right2' },
       target: { id: 'node3', port: 'left2' },
-      tooltip: 'link2',
     },
     {
       id: 'link3',
@@ -63,12 +62,22 @@ const links = React.useMemo(
   [],
 );
 
+const getSerializedOnEvent = React.useCallback((serialized) => {
+  console.log('serialized', serialized);
+}, []);
+
 <div
   style={{
     background: 'black',
   }}
 >
   <span>Link selected: {selectedLinkId || 'none'}</span>
-  <Graph nodes={nodes} links={links} width={800} onLinkSelectionChanged={onLinkSelectionChanged} />
+  <Graph
+    nodes={nodes}
+    links={links}
+    width={800}
+    onLinkSelectionChanged={onLinkSelectionChanged}
+    getSerializedOnEvent1={getSerializedOnEvent}
+  />
 </div>;
 ```

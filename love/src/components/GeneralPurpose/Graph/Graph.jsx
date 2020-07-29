@@ -17,10 +17,41 @@ import { EditableLabelModel } from './entities/label/EditableLabelModel';
 import { EditableLabelFactory } from './entities/label/EditableLabelFactory';
 import { AdvancedLinkFactory, AdvancedLinkModel } from './entities/link';
 
+const transformSerialized = (serialized) => {
+  const nodesLayer = serialized.layers.find((layer) => layer.type === 'diagram-nodes');
+  const linksLayer = serialized.layers.find((layer) => layer.type === 'diagram-links');
+
+  const nodesData = Object.values(nodesLayer.models).map((node) => {
+    return {
+      id: node.nodeId,
+      label: node.label,
+      x: node.x,
+      y: node.y,
+    };
+  });
+
+  return nodesData;
+};
+
 /**
  * Renders a graph structure with custom node and link labels.
  */
-const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged = () => {} }) => {
+const Graph = ({
+  nodes,
+  links,
+  width = 500,
+  height = 500,
+  onLinkSelectionChanged = () => {},
+  getSerializedOnEvent1 = () => {},
+}) => {
+  const getSerializedOnEvent = React.useCallback(
+    (serialized) => {
+      const transformed = transformSerialized(serialized);
+      getSerializedOnEvent1(transformed);
+    },
+    [getSerializedOnEvent1],
+  );
+
   const engine = React.useMemo(() => {
     //1) setup the diagram engine
     const engine = createEngine();
@@ -37,8 +68,14 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
     const model = new DiagramModel();
 
     const nodeModels = nodes.reduce((prevDict, node) => {
-      const nodeModel = new DiamondNodeModel(node.label);
+      const nodeModel = new DiamondNodeModel(node.label, node.id);
       nodeModel.setPosition(node.position.x, node.position.y);
+
+      nodeModel.registerListener({
+        eventDidFire: (event) => {
+          getSerializedOnEvent(model.serialize(), event);
+        },
+      });
 
       prevDict[node.id] = nodeModel;
       return prevDict;
@@ -62,6 +99,7 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
 
       linkObject.registerListener({
         eventDidFire: (event) => {
+          getSerializedOnEvent(model.serialize(), event);
           if (event.function === 'selectionChanged') {
             onLinkSelectionChanged(link.id, event);
           }
@@ -80,10 +118,17 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
     }, {});
 
     model.addAll(...Object.values(nodeModels), ...Object.values(linkModels));
-    // model.setLocked(true);
+    model.setLocked(true);
+
+    model.registerListener({
+      eventDidFire: (event) => {
+        getSerializedOnEvent(model.serialize(), event);
+      },
+    });
 
     //5) load model into engine
     engine.setModel(model);
+
     return engine;
   }, [nodes, links]);
 
@@ -121,16 +166,16 @@ Graph.propTypes = {
     PropTypes.shape({
       /** Unique identifier of the link */
       id: PropTypes.string.isRequired,
-      /** Source point of the link */
+      /** Source point ({id, port}) of the link */
       source: PropTypes.shape({
-        /** Node that the link is attached to */
+        /** Node where the link starts */
         id: PropTypes.string.isRequired,
         /** Node's port to which it is attached */
         port: PropTypes.string.isRequired,
       }).isRequired,
-      /** End point of the link */
+      /** End point ({id, port})  of the link */
       target: PropTypes.shape({
-        /** Node that the link is attached to */
+        /** Node that the link ends*/
         id: PropTypes.string.isRequired,
         /** Node's port to which it is attached (TODO: make a list of available ports)*/
         port: PropTypes.string.isRequired,
@@ -141,7 +186,7 @@ Graph.propTypes = {
       width: PropTypes.number,
       /** color of the line when selected, defaults to rgb(0, 192, 255). Inherited from DefaultLinkModel */
       selectedColor: PropTypes.string,
-      /** Tooltip to be displayed in the middle of the line */
+      /** Tooltip to be displayed in the middle of the line. No tooltip if undefined. */
       tooltip: PropTypes.node,
     }),
   ).isRequired,
@@ -152,6 +197,13 @@ Graph.propTypes = {
    * @param {Object} event react-diagrams event object.
    */
   onLinkSelectionChanged: PropTypes.func,
+  /**
+   * Callback that returns a serialized version when any change happens, including
+   * the creation of the model
+   * @paran {Object} serialized Serialized representation of the model
+   * @param {event} event Event that triggered this call.
+   */
+  getSerializedOnEvent: PropTypes.func,
 };
 
 export default Graph;
