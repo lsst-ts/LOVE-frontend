@@ -98,11 +98,9 @@ export class AdvancedLinkWidget extends React.Component {
           this.addPointToLink(event, 1);
         },
         onMouseEnter: () => {
-          console.log('enter');
           this.setState({ hovered: true });
         },
         onMouseLeave: () => {
-          console.log('leave');
           this.setState({ hovered: false });
         },
       },
@@ -171,6 +169,7 @@ export class AdvancedLinkWidget extends React.Component {
                 point={point}
                 colorSelected={this.props.link.getOptions().selectedColor}
                 color={this.props.link.getOptions().color}
+                diagramEngine={this.props.diagramEngine}
               />
             );
           })}

@@ -11,6 +11,26 @@ export class LinkPointWidget extends React.Component {
     };
   }
 
+  handleMove = (event) => {
+    console.log('event', event);
+    console.log(this.props.diagramEngine);
+    const newPosition = this.props.diagramEngine.getRelativeMousePoint(event);
+
+    this.props.point.setPosition(newPosition);
+    console.log('newPosition', newPosition);
+  };
+
+  handleUp = () => {
+    console.log('up');
+  };
+
+  handleUp = (event) => {
+    // Unregister handlers to avoid multiple event handlers for other links
+    this.setState({ canDrag: false, selected: false });
+    window.removeEventListener('mousemove', this.handleMove);
+    window.removeEventListener('mouseup', this.handleUp);
+  };
+
   render() {
     const { point, location } = this.props;
 
@@ -20,6 +40,7 @@ export class LinkPointWidget extends React.Component {
           <circle
             cx={point.getPosition().x}
             cy={point.getPosition().y}
+            opacity={0.5}
             r={5}
             // fill={this.state.selected || this.props.point.isSelected() ? this.props.colorSelected : this.props.color}
             fill={'white'}
@@ -35,6 +56,10 @@ export class LinkPointWidget extends React.Component {
           }}
           onMouseEnter={() => {
             this.setState({ hovered: true });
+          }}
+          onMouseDown={() => {
+            window.addEventListener('mousemove', this.handleMove);
+            window.addEventListener('mouseup', this.handleUp);
           }}
           //   onMouseDown={(ev) => {
           //     this.setState({
