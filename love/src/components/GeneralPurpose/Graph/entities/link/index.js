@@ -29,7 +29,7 @@ export class AdvancedLinkFactory extends DefaultLinkFactory {
 	}
 
 	generateReactWidget(event) {
-		console.log('event', event)
+		// console.log('event', event)
 		// return super.generateReactWidget(event);
 		return <AdvancedLinkWidget link={event.model} diagramEngine={this.engine} />;
 	}

@@ -12,12 +12,9 @@ export class LinkPointWidget extends React.Component {
   }
 
   handleMove = (event) => {
-    console.log('event', event);
-    console.log(this.props.diagramEngine);
     const newPosition = this.props.diagramEngine.getRelativeMousePoint(event);
 
     this.props.point.setPosition(newPosition);
-    console.log('newPosition', newPosition);
   };
 
   handleUp = () => {

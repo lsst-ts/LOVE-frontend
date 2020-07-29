@@ -3,4 +3,5 @@
     background: var(--second-secondary-background-color);
     border-radius: 0.2rem;
     padding: 0.4rem;
+    transform: translate(0, -80%)
 }

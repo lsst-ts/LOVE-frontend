@@ -72,7 +72,7 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
         value: link.tooltip,
       });
 
-      // linkObject.addLabel(label);
+      linkObject.addLabel(label);
 
       prevDict[link.id] = linkObject;
 

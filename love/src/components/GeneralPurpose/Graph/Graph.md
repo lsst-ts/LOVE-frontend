@@ -52,6 +52,7 @@ const links = React.useMemo(
             maxWidth: 100,
             padding: '1rem',
             background: 'grey',
+            transform: 'translate(-50%, 60%)',
           }}
         >
           Custom node tooltip
