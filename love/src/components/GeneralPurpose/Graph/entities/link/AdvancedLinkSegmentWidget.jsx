@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, path }) => {
+export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, path, buttonLocation }) => {
   const highlightedColor = React.useMemo(
     () => getComputedStyle(document.body).getPropertyValue('--second-quinary-background-color'),
     [],
@@ -12,8 +12,11 @@ export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, 
   const [highlighted, setHighlighted] = React.useState(false);
 
   React.useEffect(() => {
+    if (!topCircle.current || !bottomCircle.current) {
+      return;
+    }
     const path = forwardRef.current;
-    const midPoint = path.getPointAtLength(path.getTotalLength() * 0.5);
+    const midPoint = path.getPointAtLength(path.getTotalLength() * buttonLocation);
 
     topCircle.current.setAttribute('cx', '' + midPoint.x);
     topCircle.current.setAttribute('cy', '' + midPoint.y);
@@ -46,8 +49,12 @@ export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, 
       />
       <path ref={forwardRef} stroke={color} strokeWidth={link.getOptions().width} d={path} {...commonProps} />
 
-      <circle ref={bottomCircle} r={6.4} stroke={color} fill={color} opacity={0.5} {...commonProps} />
-      <circle ref={topCircle} r={3.2} stroke={color} fill={color} {...commonProps} />
+      {buttonLocation !== undefined && (
+        <>
+          <circle ref={bottomCircle} r={6.4} stroke={color} fill={color} opacity={0.5} {...commonProps} />
+          <circle ref={topCircle} r={3.2} stroke={color} fill={color} {...commonProps} />
+        </>
+      )}
     </g>
   );
 };

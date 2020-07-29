@@ -75,7 +75,7 @@ export class AdvancedLinkWidget extends React.Component {
 		);
 	}
 
-	generateLink(path, extraProps, id) {
+	generateLink(path, extraProps, id, buttonLocation) {
 		const ref = React.createRef();
 		this.refPaths.push(ref);
 		return (
@@ -90,6 +90,7 @@ export class AdvancedLinkWidget extends React.Component {
 				onSelection={(selected) => {
 					this.setState({ selected: selected });
 				}}
+				buttonLocation={buttonLocation}
 				extras={extraProps}
 			/>
 		);
@@ -99,8 +100,9 @@ export class AdvancedLinkWidget extends React.Component {
 		//ensure id is present for all points on the path
 		var points = this.props.link.getPoints();
 		var paths = [];
-		this.refPaths = [];
 
+		this.refPaths = [];
+		
 		if (points.length === 2) {
 			paths.push(
 				this.generateLink(
@@ -110,7 +112,8 @@ export class AdvancedLinkWidget extends React.Component {
 							this.addPointToLink(event, 1);
 						}
 					},
-					'0'
+					'0',
+					0.5
 				)
 			);
 
@@ -131,9 +134,11 @@ export class AdvancedLinkWidget extends React.Component {
 								this.addPointToLink(event, j + 1);
 							}
 						},
-						j
+						j,
+						0.5
 					)
 				);
+				console.log(this.refPaths)
 			}
 
 			//render the circles
