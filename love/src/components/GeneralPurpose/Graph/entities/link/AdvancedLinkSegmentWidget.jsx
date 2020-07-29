@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const AdvancedLinkSegmentWidget = (props) => {
+export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, path }) => {
   const highlightedColor = React.useMemo(
     () => getComputedStyle(document.body).getPropertyValue('--second-quinary-background-color'),
     [],
@@ -12,7 +12,7 @@ export const AdvancedLinkSegmentWidget = (props) => {
   const [highlighted, setHighlighted] = React.useState(false);
 
   React.useEffect(() => {
-    const path = props.forwardRef.current;
+    const path = forwardRef.current;
     const midPoint = path.getPointAtLength(path.getTotalLength() * 0.5);
 
     topCircle.current.setAttribute('cx', '' + midPoint.x);
@@ -20,8 +20,6 @@ export const AdvancedLinkSegmentWidget = (props) => {
     bottomCircle.current.setAttribute('cx', '' + midPoint.x);
     bottomCircle.current.setAttribute('cy', '' + midPoint.y);
   });
-
-  const selected = props.selected || props.link.isSelected();
 
   const commonProps = {
     pointerEvents: 'all',
@@ -32,26 +30,21 @@ export const AdvancedLinkSegmentWidget = (props) => {
     onMouseLeave: () => {
       setHighlighted(false);
     },
+    ...extras,
   };
 
-  const color = selected ? props.link.getOptions().selectedColor : props.link.getOptions().color;
+  const color = selected || link.isSelected() ? link.getOptions().selectedColor : link.getOptions().color;
   return (
     <g>
       <path
         strokeLinecap="round"
         stroke={highlightedColor}
         opacity={highlighted ? 0.7 : 0}
-        strokeWidth={props.link.getOptions().width + 10}
-        d={props.path}
+        strokeWidth={link.getOptions().width + 10}
+        d={path}
         {...commonProps}
       />
-      <path
-        ref={props.forwardRef}
-        stroke={color}
-        strokeWidth={props.link.getOptions().width}
-        d={props.path}
-        {...commonProps}
-      />
+      <path ref={forwardRef} stroke={color} strokeWidth={link.getOptions().width} d={path} {...commonProps} />
 
       <circle ref={bottomCircle} r={6.4} stroke={color} fill={color} opacity={0.5} {...commonProps} />
       <circle ref={topCircle} r={3.2} stroke={color} fill={color} {...commonProps} />

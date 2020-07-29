@@ -9,6 +9,7 @@ import createEngine, {
 } from '@projectstorm/react-diagrams';
 
 import {AdvancedLinkSegmentWidget} from './AdvancedLinkSegmentWidget';
+import {LinkPointWidget} from './LinkPointWidget';
 import { MouseEvent } from 'react';
 
 export class AdvancedLinkWidget extends React.Component {
@@ -65,7 +66,7 @@ export class AdvancedLinkWidget extends React.Component {
 
 	generatePoint(point) {
 		return (
-			<DefaultLinkPointWidget
+			<LinkPointWidget
 				key={point.getID()}
 				point={point }
 				colorSelected={this.props.link.getOptions().selectedColor}
