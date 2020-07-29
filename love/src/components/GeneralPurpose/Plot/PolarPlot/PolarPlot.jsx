@@ -448,7 +448,7 @@ export default class PolarPlot extends Component {
               mask="url(#mask)"
             >
               {/* Dome */}
-              <path
+              {/* <path
                 className={styles.innerDome}
                 d={`
                 M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
@@ -458,9 +458,24 @@ export default class PolarPlot extends Component {
                 L ${x0} ${y0}
                 L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               `}
+              /> */}
+              <path
+                id="curve" 
+                className={styles.innerDome}
+                d={`
+                M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+                A ${r} ${r} 0 0 0 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
+                L ${x0} ${y0}
+                L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
+              `}
               />
+              {/* <text width="50" >
+                <textPath textAnchor="middle" href="#curve">
+                  Dome
+                </textPath>
+              </text> */}
             </g>
-            <g
+            {/* <g
               className={styles.rotatingDome}
               style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `${w / 2}px ${w / 2}px` }}
             >
@@ -470,7 +485,7 @@ export default class PolarPlot extends Component {
               >
                 <title>Dome</title>
               </path>
-            </g>
+            </g> */}
           </>
         )}
 

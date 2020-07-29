@@ -43,8 +43,8 @@
 
 .innerDome {
   fill: var(--second-tertiary-background-color);
-  stroke: var(--second-tertiary-background-color);
-  stroke-width: 2;
+  stroke: var(--second-quinary-background-color);
+  stroke-width: 4;
 }
 
 .rotatingDome {
