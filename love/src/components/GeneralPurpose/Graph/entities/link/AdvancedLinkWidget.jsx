@@ -20,6 +20,7 @@ export class AdvancedLinkWidget extends React.Component {
     };
     this.state = {
       selected: false,
+      hovered: false,
     };
   }
 
@@ -59,6 +60,10 @@ export class AdvancedLinkWidget extends React.Component {
       this.props.link.addPoint(point, index);
       event.persist();
       event.stopPropagation();
+
+      this.setState({
+        hovered: false,
+      });
       this.forceUpdate(() => {
         this.props.diagramEngine.getActionEventBus().fireAction({
           event,
@@ -73,6 +78,26 @@ export class AdvancedLinkWidget extends React.Component {
     var points = this.props.link.getPoints();
     var paths = [];
 
+    const commonSegmentProps = {
+      link: this.props.link,
+      onSelection: (selected) => {
+        this.setState({ selected: selected });
+      },
+      hovered: this.state.hovered,
+      extras: {
+        onMouseDown: (event) => {
+          this.addPointToLink(event, 1);
+        },
+        onMouseEnter: () => {
+          console.log('enter');
+          this.setState({ hovered: true });
+        },
+        onMouseLeave: () => {
+          console.log('leave');
+          this.setState({ hovered: false });
+        },
+      },
+    };
     return (
       <g data-default-link-test={this.props.link.getOptions().testName}>
         {/* line paths without middle points  */}
@@ -88,17 +113,9 @@ export class AdvancedLinkWidget extends React.Component {
             selected={this.state.selected}
             diagramEngine={this.props.diagramEngine}
             factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
-            link={this.props.link}
-            forwardRef={this.refPaths[0]}
-            onSelection={(selected) => {
-              this.setState({ selected: selected });
-            }}
             buttonLocation={0.5}
-            extras={{
-              onMouseDown: (event) => {
-                this.addPointToLink(event, 1);
-              },
-            }}
+            forwardRef={this.refPaths[0]}
+            {...commonSegmentProps}
           />
         )}
 
@@ -113,16 +130,13 @@ export class AdvancedLinkWidget extends React.Component {
               <AdvancedLinkSegmentWidget
                 key={`link-${index}`}
                 path={LinkWidget.generateLinePath(point, points[index + 1])}
+                forwardRef={this.refPaths[index]}
                 selected={this.state.selected}
                 diagramEngine={this.props.diagramEngine}
-                factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
-                link={this.props.link}
-                forwardRef={this.refPaths[index]}
-                onSelection={(selected) => {
-                  this.setState({ selected: selected });
-                }}
                 buttonLocation={0.5}
+                {...commonSegmentProps}
                 extras={{
+                  ...commonSegmentProps.extras,
                   'data-linkid': this.props.link.getID(),
                   'data-point': index,
                   onMouseDown: (event) => {

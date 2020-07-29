@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, path, buttonLocation }) => {
+export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, hovered, link, extras, path, buttonLocation }) => {
   const highlightedColor = React.useMemo(
     () => getComputedStyle(document.body).getPropertyValue('--second-quinary-background-color'),
     [],
@@ -8,8 +8,6 @@ export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, 
 
   const topCircle = React.useRef();
   const bottomCircle = React.useRef();
-
-  const [highlighted, setHighlighted] = React.useState(false);
 
   React.useEffect(() => {
     if (!topCircle.current || !bottomCircle.current) {
@@ -27,12 +25,6 @@ export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, 
   const commonProps = {
     pointerEvents: 'all',
     style: { cursor: 'pointer' },
-    onMouseEnter: () => {
-      setHighlighted(true);
-    },
-    onMouseLeave: () => {
-      setHighlighted(false);
-    },
     ...extras,
   };
 
@@ -42,7 +34,7 @@ export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, link, extras, 
       <path
         strokeLinecap="round"
         stroke={highlightedColor}
-        opacity={highlighted ? 0.7 : 0}
+        opacity={hovered ? 0.7 : 0}
         strokeWidth={link.getOptions().width + 10}
         d={path}
         {...commonProps}

@@ -28,6 +28,7 @@ export class LinkPointWidget extends React.Component {
         <circle
           style={{
             pointerEvents: 'all',
+            cursor: 'pointer',
           }}
           onMouseLeave={() => {
             this.setState({ hovered: false });
