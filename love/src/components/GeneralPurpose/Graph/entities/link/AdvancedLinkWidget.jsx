@@ -1,156 +1,151 @@
 import * as React from 'react';
 import { DiagramEngine, LinkWidget, PointModel } from '@projectstorm/react-diagrams-core';
 import createEngine, {
-	DiagramModel,
-	DefaultNodeModel,
-	DefaultPortModel,
-    DefaultLinkFactory,
-    DefaultLinkPointWidget,
+  DiagramModel,
+  DefaultNodeModel,
+  DefaultPortModel,
+  DefaultLinkFactory,
+  DefaultLinkPointWidget,
 } from '@projectstorm/react-diagrams';
 
-import {AdvancedLinkSegmentWidget} from './AdvancedLinkSegmentWidget';
-import {LinkPointWidget} from './LinkPointWidget';
+import { AdvancedLinkSegmentWidget } from './AdvancedLinkSegmentWidget';
+import { LinkPointWidget } from './LinkPointWidget';
 import { MouseEvent } from 'react';
 
 export class AdvancedLinkWidget extends React.Component {
+  constructor(props) {
+    super(props);
+    this.refPaths = {
+      0: React.createRef(),
+    };
+    this.state = {
+      selected: false,
+    };
+  }
 
-	constructor(props) {
-		super(props);
-		this.refPaths = [];
-		this.state = {
-			selected: false
-		};
-	}
+  componentDidUpdate() {
+    this.props.link.setRenderedPaths(
+      Object.values(this.refPaths).map((ref) => {
+        return ref.current;
+      }),
+    );
+  }
 
-	componentDidUpdate() {
-		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
-		);
-	}
+  componentDidMount() {
+    this.props.link.setRenderedPaths(
+      Object.values(this.refPaths).map((ref) => {
+        return ref.current;
+      }),
+    );
+  }
 
-	componentDidMount() {
-		this.props.link.setRenderedPaths(
-			this.refPaths.map((ref) => {
-				return ref.current;
-			})
-		);
-	}
+  componentWillUnmount() {
+    this.props.link.setRenderedPaths([]);
+  }
 
-	componentWillUnmount() {
-		this.props.link.setRenderedPaths([]);
-	}
+  addPointToLink(event, index) {
+    if (
+      !event.shiftKey &&
+      !this.props.link.isLocked() &&
+      this.props.link.getPoints().length - 1 <= this.props.diagramEngine.getMaxNumberPointsPerLink()
+    ) {
+      const newRefKey = Math.max(...Object.keys(this.refPaths)) + 1;
+      this.refPaths[newRefKey] = React.createRef();
 
-	addPointToLink(event, index){
-		if (
-			!event.shiftKey &&
-			!this.props.link.isLocked() &&
-			this.props.link.getPoints().length - 1 <= this.props.diagramEngine.getMaxNumberPointsPerLink()
-		) {
-			const point = new PointModel({
-				link: this.props.link,
-				position: this.props.diagramEngine.getRelativeMousePoint(event)
-			});
-			this.props.link.addPoint(point, index);
-			event.persist();
-			event.stopPropagation();
-			this.forceUpdate(() => {
-				this.props.diagramEngine.getActionEventBus().fireAction({
-					event,
-					model: point
-				});
-			});
-		}
-	}
+      const point = new PointModel({
+        link: this.props.link,
+        position: this.props.diagramEngine.getRelativeMousePoint(event),
+      });
+      this.props.link.addPoint(point, index);
+      event.persist();
+      event.stopPropagation();
+      this.forceUpdate(() => {
+        this.props.diagramEngine.getActionEventBus().fireAction({
+          event,
+          model: point,
+        });
+      });
+    }
+  }
 
-	generatePoint(point) {
-		return (
-			<LinkPointWidget
-				key={point.getID()}
-				point={point }
-				colorSelected={this.props.link.getOptions().selectedColor}
-				color={this.props.link.getOptions().color}
-			/>
-		);
-	}
+  render() {
+    //ensure id is present for all points on the path
+    var points = this.props.link.getPoints();
+    var paths = [];
 
-	generateLink(path, extraProps, id, buttonLocation) {
-		const ref = React.createRef();
-		this.refPaths.push(ref);
-		return (
-			<AdvancedLinkSegmentWidget
-				key={`link-${id}`}
-				path={path}
-				selected={this.state.selected}
-				diagramEngine={this.props.diagramEngine}
-				factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
-				link={this.props.link}
-				forwardRef={ref}
-				onSelection={(selected) => {
-					this.setState({ selected: selected });
-				}}
-				buttonLocation={buttonLocation}
-				extras={extraProps}
-			/>
-		);
-	}
+    return (
+      <g data-default-link-test={this.props.link.getOptions().testName}>
+        {/* line paths without middle points  */}
+        {points.length === 2 && (
+          // draw the link as dangeling
+          // if (this.props.link.getTargetPort() == null) {
+          // 	paths.push(this.generatePoint(points[1]));
+          // }
 
-	render() {
-		//ensure id is present for all points on the path
-		var points = this.props.link.getPoints();
-		var paths = [];
+          <AdvancedLinkSegmentWidget
+            key={`link-${0}`}
+            path={this.props.link.getSVGPath()}
+            selected={this.state.selected}
+            diagramEngine={this.props.diagramEngine}
+            factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
+            link={this.props.link}
+            forwardRef={this.refPaths[0]}
+            onSelection={(selected) => {
+              this.setState({ selected: selected });
+            }}
+            buttonLocation={0.5}
+            extras={{
+              onMouseDown: (event) => {
+                this.addPointToLink(event, 1);
+              },
+            }}
+          />
+        )}
 
-		this.refPaths = [];
-		
-		if (points.length === 2) {
-			paths.push(
-				this.generateLink(
-					this.props.link.getSVGPath(),
-					{
-						onMouseDown: (event) => {
-							this.addPointToLink(event, 1);
-						}
-					},
-					'0',
-					0.5
-				)
-			);
+        {/* line paths with middle points */}
+        {points.length > 2 &&
+          points.slice(0, -1).map((point, index) => {
+            // if (this.props.link.getTargetPort() == null) {
+            // 	paths.push(this.generatePoint(points[points.length - 1]));
+            // }
 
-			// draw the link as dangeling
-			if (this.props.link.getTargetPort() == null) {
-				paths.push(this.generatePoint(points[1]));
-			}
-		} else {
-			//draw the multiple anchors and complex line instead
-			for (let j = 0; j < points.length - 1; j++) {
-				paths.push(
-					this.generateLink(
-						LinkWidget.generateLinePath(points[j], points[j + 1]),
-						{
-							'data-linkid': this.props.link.getID(),
-							'data-point': j,
-							onMouseDown: (event) => {
-								this.addPointToLink(event, j + 1);
-							}
-						},
-						j,
-						0.5
-					)
-				);
-				console.log(this.refPaths)
-			}
+            return (
+              <AdvancedLinkSegmentWidget
+                key={`link-${index}`}
+                path={LinkWidget.generateLinePath(point, points[index + 1])}
+                selected={this.state.selected}
+                diagramEngine={this.props.diagramEngine}
+                factory={this.props.diagramEngine.getFactoryForLink(this.props.link)}
+                link={this.props.link}
+                forwardRef={this.refPaths[index]}
+                onSelection={(selected) => {
+                  this.setState({ selected: selected });
+                }}
+                buttonLocation={0.5}
+                extras={{
+                  'data-linkid': this.props.link.getID(),
+                  'data-point': index,
+                  onMouseDown: (event) => {
+                    this.addPointToLink(event, index + 1);
+                  },
+                }}
+              />
+            );
+          })}
 
-			//render the circles
-			for (let i = 1; i < points.length - 1; i++) {
-				paths.push(this.generatePoint(points[i]));
-			}
-
-			if (this.props.link.getTargetPort() == null) {
-				paths.push(this.generatePoint(points[points.length - 1]));
-			}
-		}
-
-		return <g data-default-link-test={this.props.link.getOptions().testName}>{paths}</g>;
-	}
+        {/* middle points */}
+        {points.length > 2 &&
+          points.slice(0, -1).map((point, index) => {
+            return (
+              <LinkPointWidget
+                key={point.getID()}
+                point={point}
+                colorSelected={this.props.link.getOptions().selectedColor}
+                color={this.props.link.getOptions().color}
+              />
+            );
+          })}
+      </g>
+    );
+  }
 }
