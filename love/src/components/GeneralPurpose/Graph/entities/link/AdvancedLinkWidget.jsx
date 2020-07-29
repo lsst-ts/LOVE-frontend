@@ -76,7 +76,16 @@ export class AdvancedLinkWidget extends React.Component {
   render() {
     //ensure id is present for all points on the path
     var points = this.props.link.getPoints();
-    var paths = [];
+
+    const cummulativeLengths = Object.values(this.refPaths)
+      .map((svg) => svg?.current?.getTotalLength() ?? 0)
+      .reduce((sums, length) => {
+        const totalCurrentLength = sums.slice(-1)[0] ?? 0;
+        return sums.concat(totalCurrentLength + length);
+      }, []);
+
+    const halfLength = (cummulativeLengths.slice(-1)[0] ?? 0) / 2;
+    const midSegmentIndex = cummulativeLengths.findIndex((length) => length > halfLength);
 
     const commonSegmentProps = {
       link: this.props.link,
@@ -126,6 +135,12 @@ export class AdvancedLinkWidget extends React.Component {
             // 	paths.push(this.generatePoint(points[points.length - 1]));
             // }
 
+            const segmentLength = this.refPaths[index]?.current?.getTotalLength();
+            const pixelButtonLocation = segmentLength - (cummulativeLengths[midSegmentIndex] - halfLength);
+
+			const buttonLocation = pixelButtonLocation / (segmentLength > 0 ? segmentLength : 1);
+			
+
             return (
               <AdvancedLinkSegmentWidget
                 key={`link-${index}`}
@@ -133,7 +148,7 @@ export class AdvancedLinkWidget extends React.Component {
                 forwardRef={this.refPaths[index]}
                 selected={this.state.selected}
                 diagramEngine={this.props.diagramEngine}
-                buttonLocation={0.5}
+                buttonLocation={midSegmentIndex === index ? buttonLocation : undefined}
                 {...commonSegmentProps}
                 extras={{
                   ...commonSegmentProps.extras,

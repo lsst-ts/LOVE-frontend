@@ -10,7 +10,7 @@ export const AdvancedLinkSegmentWidget = ({ forwardRef, selected, hovered, link,
   const bottomCircle = React.useRef();
 
   React.useEffect(() => {
-    if (!topCircle.current || !bottomCircle.current) {
+    if (!topCircle.current || !bottomCircle.current || !buttonLocation) {
       return;
     }
     const path = forwardRef.current;
