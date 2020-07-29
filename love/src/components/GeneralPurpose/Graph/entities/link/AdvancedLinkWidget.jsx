@@ -6,9 +6,9 @@ import createEngine, {
 	DefaultPortModel,
     DefaultLinkFactory,
     DefaultLinkPointWidget,
-    DefaultLinkSegmentWidget
 } from '@projectstorm/react-diagrams';
 
+import {AdvancedLinkSegmentWidget} from './AdvancedLinkSegmentWidget';
 import { MouseEvent } from 'react';
 
 export class AdvancedLinkWidget extends React.Component {
@@ -78,7 +78,7 @@ export class AdvancedLinkWidget extends React.Component {
 		const ref = React.createRef();
 		this.refPaths.push(ref);
 		return (
-			<DefaultLinkSegmentWidget
+			<AdvancedLinkSegmentWidget
 				key={`link-${id}`}
 				path={path}
 				selected={this.state.selected}

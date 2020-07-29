@@ -68,13 +68,19 @@ const Graph = ({ nodes, links, width = 500, height = 500, onLinkSelectionChanged
         },
       });
 
+      const label = new EditableLabelModel({
+        value: link.tooltip,
+      });
+
+      // linkObject.addLabel(label);
+
       prevDict[link.id] = linkObject;
 
       return prevDict;
     }, {});
 
     model.addAll(...Object.values(nodeModels), ...Object.values(linkModels));
-    model.setLocked(true);
+    // model.setLocked(true);
 
     //5) load model into engine
     engine.setModel(model);
@@ -134,7 +140,7 @@ Graph.propTypes = {
       /** Width of the line, defaults to grey. Inherited from DefaultLinkModel */
       width: PropTypes.number,
       /** color of the line when selected, defaults to rgb(0, 192, 255). Inherited from DefaultLinkModel */
-      selectedColor: PropTypes.number,
+      selectedColor: PropTypes.string,
       /** Tooltip to be displayed in the middle of the line */
       tooltip: PropTypes.node,
     }),
