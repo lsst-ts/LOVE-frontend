@@ -232,6 +232,7 @@ const PolarPlotContainer = function ({
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
         ...(inputs[input].encoding !== undefined ? { encoding: inputs[input].encoding } : {}),
+        ...(inputs[input].group !== undefined ? { group: inputs[input].group } : {}),
       };
     });
   }, [inputs]);
