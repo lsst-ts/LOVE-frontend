@@ -30,11 +30,34 @@ const transformSerialized = (serialized) => {
     };
   });
 
-  return nodesData;
+  const linksData = Object.values(linksLayer.models).map((link) => {
+    return {
+      id: link.linkId,
+      color: link.color,
+      width: link.width,
+      selectedColor: link.selectedColor,
+      tooltip: typeof link.tooltip === 'string' ? link.tooltip : null,
+      source: {
+        id: nodesLayer.models[link.source],
+        port: nodesLayer.models[link.source].ports.find((port) => port.id === link.sourcePort)?.alignment,
+      },
+      target: {
+        id: nodesLayer.models[link.target],
+        port: nodesLayer.models[link.target].ports.find((port) => port.id === link.targetPort)?.alignment,
+      },
+    };
+  });
+
+  return {
+    nodes: nodesData,
+    links: linksData,
+  };
 };
 
 /**
  * Renders a graph structure with custom node and link labels.
+ * This is a memoized component: render will only be triggered
+ * after there is a change in values or references in any of its props.
  */
 const Graph = ({
   nodes,
@@ -42,14 +65,15 @@ const Graph = ({
   width = 500,
   height = 500,
   onLinkSelectionChanged = () => {},
-  getSerializedOnEvent1 = () => {},
+  getSerializedOnEvent = () => {},
+  unlocked = false,
 }) => {
-  const getSerializedOnEvent = React.useCallback(
-    (serialized) => {
+  const getSerializedOnEventWrapper = React.useCallback(
+    (serialized, event) => {
       const transformed = transformSerialized(serialized);
-      getSerializedOnEvent1(transformed);
+      getSerializedOnEvent(transformed);
     },
-    [getSerializedOnEvent1],
+    [getSerializedOnEvent],
   );
 
   const engine = React.useMemo(() => {
@@ -73,7 +97,7 @@ const Graph = ({
 
       nodeModel.registerListener({
         eventDidFire: (event) => {
-          getSerializedOnEvent(model.serialize(), event);
+          getSerializedOnEventWrapper(model.serialize(), event);
         },
       });
 
@@ -82,7 +106,7 @@ const Graph = ({
     }, {});
 
     const linkModels = links.reduce((prevDict, link) => {
-      const { source, target, ...options } = link;
+      const { source, target, id, ...options } = link;
       const sourceModel = nodeModels[source.id];
       const sourcePort = sourceModel.getPort(PortModelAlignment[source.port.toUpperCase()]);
 
@@ -91,6 +115,7 @@ const Graph = ({
 
       const linkObject = new AdvancedLinkModel({
         curvyness: 0,
+        linkId: id,
         ...options,
       });
 
@@ -99,7 +124,7 @@ const Graph = ({
 
       linkObject.registerListener({
         eventDidFire: (event) => {
-          getSerializedOnEvent(model.serialize(), event);
+          getSerializedOnEventWrapper(model.serialize(), event);
           if (event.function === 'selectionChanged') {
             onLinkSelectionChanged(link.id, event);
           }
@@ -118,11 +143,11 @@ const Graph = ({
     }, {});
 
     model.addAll(...Object.values(nodeModels), ...Object.values(linkModels));
-    model.setLocked(true);
+    model.setLocked(!unlocked);
 
     model.registerListener({
       eventDidFire: (event) => {
-        getSerializedOnEvent(model.serialize(), event);
+        getSerializedOnEventWrapper(model.serialize(), event);
       },
     });
 
@@ -145,6 +170,8 @@ Graph.propTypes = {
   width: PropTypes.number,
   /** Height of the diagram canvas, defaults to 500px */
   height: PropTypes.number,
+  /** If  true the user will be able to drag nodes in the canvas.*/
+  unlocked: PropTypes.bool,
   /** Array describing the nodes of the graph */
   nodes: PropTypes.arrayOf(
     PropTypes.shape({
@@ -206,4 +233,4 @@ Graph.propTypes = {
   getSerializedOnEvent: PropTypes.func,
 };
 
-export default Graph;
+export default React.memo(Graph);

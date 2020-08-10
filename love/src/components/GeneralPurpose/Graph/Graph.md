@@ -1,9 +1,8 @@
-asdfafds
+Example:
 
 ```jsx
 import React from 'react';
 const [selectedLinkId, setSelectedLinkId] = React.useState(null);
-
 const nodes = React.useMemo(
   () => [
     { id: 'node1', label: 'This is node 1', position: { x: 50, y: 200 } },
@@ -72,12 +71,14 @@ const getSerializedOnEvent = React.useCallback((serialized) => {
   }}
 >
   <span>Link selected: {selectedLinkId || 'none'}</span>
+  <span>Check logs for serialized version onChange </span>
   <Graph
     nodes={nodes}
     links={links}
     width={800}
     onLinkSelectionChanged={onLinkSelectionChanged}
-    getSerializedOnEvent1={getSerializedOnEvent}
+    getSerializedOnEvent={getSerializedOnEvent}
+    unlocked
   />
 </div>;
 ```

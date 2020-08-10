@@ -18,8 +18,15 @@ export class AdvancedLinkModel extends DefaultLinkModel {
 			selected: false,
 			...options
 		});
+		this.linkId = options.linkId
 	}
 
+	serialize() {
+		return {
+		  ...super.serialize(),
+		  linkId: this.linkId,
+		};
+	  }
 
 }
 
