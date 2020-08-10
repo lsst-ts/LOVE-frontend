@@ -1,0 +1,28 @@
+.port {
+  width: 8px;
+  height: 8px;
+  z-index: 10;
+  background: var(--primary-font-color);
+  opacity: 0.3;
+  visibility: hidden;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.port:hover {
+  background: rgba(0, 0, 0, 1);
+}
+
+.node {
+  background-color: var(--tertiary-background-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.selected {
+  border: 2px solid var(--default-background-color);
+}
