@@ -50,7 +50,7 @@ export const schema = {
       default: false,
     },
     inputs: {
-      externalStep: 'TimeSeriesConfig',
+      externalStep: 'PolarPlotConfig',
       type: 'object',
       description: 'list of inputs',
       isPrivate: false,

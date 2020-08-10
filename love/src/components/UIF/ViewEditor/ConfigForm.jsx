@@ -16,6 +16,8 @@ const externalStepComponents = {
   HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
   TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig')
     .default,
+  PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig')
+  .default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
