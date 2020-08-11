@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
 import { SHAPES, COLORS, DASHES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import styles from './WeatherStation.module.css';
 
@@ -81,41 +82,6 @@ export default class WeatherStation extends Component {
     },
   };
 
-  windDirectionPlot = {
-    'Wind direction': {
-      category: 'telemetry',
-      csc: 'Environment',
-      salindex: this.props.salindex,
-      topic: 'windDirection',
-      item: 'value',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-    'Gust direction': {
-      category: 'telemetry',
-      csc: 'Environment',
-      salindex: this.props.salindex,
-      topic: 'windGustDirection',
-      item: 'value10M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[1],
-    },
-  };
-
-  windSpeedPlot = {
-    'Wind speed': {
-      category: 'telemetry',
-      csc: 'Environment',
-      salindex: this.props.salindex,
-      topic: 'windSpeed',
-      item: 'value',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-  };
 
   precipitationPlot = {
     Precipitation: {
@@ -141,6 +107,63 @@ export default class WeatherStation extends Component {
       accessor: (x) => x,
       color: COLORS[0],
     },
+  };
+
+  windPlot = {
+    title: 'Time series plot',
+    inputs: {
+      GustSpeed: {
+        csc: 'Environment',
+        item: 'avg2M',
+        group: 1,
+        topic: 'windSpeed',
+        accessor: '(x) => x',
+        category: 'telemetry',
+        encoding: 'radial',
+        salindex: 1,
+      },
+      WindSpeed: {
+        csc: 'Environment',
+        item: 'avg2M',
+        group: 0,
+        topic: 'windSpeed',
+        accessor: '(x) => x',
+        category: 'telemetry',
+        encoding: 'radial',
+        salindex: 1,
+      },
+      GustDirection: {
+        csc: 'Environment',
+        item: 'value10M',
+        group: 1,
+        topic: 'windGustDirection',
+        accessor: '(x) => x',
+        category: 'telemetry',
+        encoding: 'angular',
+        salindex: 1,
+      },
+      WindDirection: {
+        csc: 'Environment',
+        item: 'avg2M',
+        group: 0,
+        topic: 'windDirection',
+        accessor: '(x) => x',
+        category: 'telemetry',
+        encoding: 'angular',
+        salindex: 1,
+      },
+    },
+    titleBar: false,
+    hasRawMode: false,
+    xAxisTitle: 'Time',
+    yAxisTitle: '',
+    displayDome: true,
+    groupTitles: ['Wind', 'Gust'],
+    radialUnits: 'km/s',
+    colorInterpolation:
+      '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = (value - minValue) / (maxValue - minValue); \n        return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n    }\n  const proportion = (value - minValue) / (maxValue - minValue); \n  return [255 * (1 - proportion), 255 * (1 - proportion), 255]; \n}',
+    opacityInterpolation:
+      '(value, minValue, maxValue, group) => {\n  if (maxValue === minValue) return 1;\n  return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;\n}',
   };
 
   constructor(props) {
@@ -186,6 +209,14 @@ export default class WeatherStation extends Component {
             </div>
           </div>
         </div>
+
+        <div className={styles.doubleSection}>
+          <div className={styles.sectionTitle}>Wind</div>
+          <div className={styles.windPlotContainer}>
+            <PolarPlotContainer {...this.windPlot} />
+          </div>
+        </div>
+
         <div className={styles.section}>
           <div className={styles.sectionTitle}>Temperature</div>
           <div ref={this.temperaturePlotRef} className={styles.plot}>
@@ -205,25 +236,6 @@ export default class WeatherStation extends Component {
               containerNode={this.humidityPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
-            />
-          </div>
-        </div>
-        <div className={styles.doubleSection}>
-          <div className={styles.sectionTitle}>Wind</div>
-          <div ref={this.windDirectionPlotRef} className={styles.plot}>
-            <PlotContainer
-              inputs={this.windDirectionPlot}
-              containerNode={this.windDirectionPlotRef?.current}
-              xAxisTitle="Time"
-              yAxisTitle="Wind direction"
-            />
-          </div>
-          <div ref={this.windSpeedPlotRef} className={styles.plot}>
-            <PlotContainer
-              inputs={this.windSpeedPlot}
-              containerNode={this.windSpeedPlotRef?.current}
-              xAxisTitle="Time"
-              yAxisTitle="Wind speed"
             />
           </div>
         </div>
