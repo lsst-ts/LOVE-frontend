@@ -6,7 +6,6 @@
 .plotContainer {
   width: 100%;
   display: flex;
-  flex-direction: column;
 }
 
 .backgroundCircle {
@@ -60,13 +59,12 @@
 
 .legend {
   display: flex;
-  justify-content: space-around
+  flex-direction: column;
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  padding: 1em;
 }
 
 .legendItem > span {
