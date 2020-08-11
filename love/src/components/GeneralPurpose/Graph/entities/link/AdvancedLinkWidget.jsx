@@ -1,16 +1,7 @@
 import * as React from 'react';
-import { DiagramEngine, LinkWidget, PointModel } from '@projectstorm/react-diagrams-core';
-import createEngine, {
-  DiagramModel,
-  DefaultNodeModel,
-  DefaultPortModel,
-  DefaultLinkFactory,
-  DefaultLinkPointWidget,
-} from '@projectstorm/react-diagrams';
-
+import { LinkWidget, PointModel } from '@projectstorm/react-diagrams-core';
 import { AdvancedLinkSegmentWidget } from './AdvancedLinkSegmentWidget';
 import { LinkPointWidget } from './LinkPointWidget';
-import { MouseEvent } from 'react';
 
 export class AdvancedLinkWidget extends React.Component {
   constructor(props) {

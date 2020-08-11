@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import createEngine, {
-  DefaultNodeModel,
-  DefaultPortModel,
   DiagramModel,
-  DefaultLinkModel,
 } from '@projectstorm/react-diagrams';
 // import the custom models
 import { DiamondNodeModel } from './entities/node/DiamondNodeModel';
@@ -155,7 +152,7 @@ const Graph = ({
     engine.setModel(model);
 
     return engine;
-  }, [nodes, links]);
+  }, [nodes, links, getSerializedOnEventWrapper, onLinkSelectionChanged, unlocked]);
 
   //6) render the diagram!
   return (

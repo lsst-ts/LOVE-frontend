@@ -1,7 +1,5 @@
 import React from 'react';
-import { AbstractReactFactory, GenerateWidgetEvent } from '@projectstorm/react-canvas-core';
-import { DiagramEngine } from '@projectstorm/react-diagrams';
-
+import { AbstractReactFactory } from '@projectstorm/react-canvas-core';
 import { EditableLabelModel } from './EditableLabelModel';
 import { EditableLabelWidget } from './EditableLabelWidget';
 

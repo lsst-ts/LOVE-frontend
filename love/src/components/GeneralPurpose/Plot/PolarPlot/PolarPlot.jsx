@@ -549,7 +549,9 @@ export default class PolarPlot extends Component {
       groups[ms.group] = { ...groups[ms?.group], [ms?.encoding]: ms?.name };
     });
     const tripletGroups = groups.map((g, i) => {
-      if (g === undefined) return;
+      if (g === undefined) {
+        return undefined;
+      }
       const radialData = data?.[g.radial];
       const angularData = data?.[g.angular];
       const colorData = data?.[g.color];
@@ -580,13 +582,13 @@ export default class PolarPlot extends Component {
     const radialMarkersUnits = this.props.radialUnits ?? '';
     const circles = this.getRadialMarkers(radialMarkers, radialMarkersUnits, minRadialValue, maxRadialValue);
 
-    const domeAngle = 90;
+    // const domeAngle = 90;
     const offset = 10;
     const viewBoxSize = 596 - 2 * offset;
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
     const r = w / 2 + viewboxMargin - 5;
-    const extraApperture = r / 4;
+    // const extraApperture = r / 4;
     const alpha = Math.PI / 12;
     const rSinAlpha = r * Math.sin(alpha);
     const rCosAlpha = r * Math.cos(alpha);

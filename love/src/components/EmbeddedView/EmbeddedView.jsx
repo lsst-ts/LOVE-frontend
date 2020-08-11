@@ -7,10 +7,6 @@ export default class EmbeddedView extends Component {
     url: PropTypes.string,
   };
 
-  constructor(props){
-    super(props);
-  }
-
   render() {
     return (
       <div className={styles.container}>
@@ -20,6 +16,7 @@ export default class EmbeddedView extends Component {
           className={styles.iframeElement}
           src={this.props.url}
           frameBorder="0"
+          title={this.props.url}
         ></iframe>
       </div>
     );

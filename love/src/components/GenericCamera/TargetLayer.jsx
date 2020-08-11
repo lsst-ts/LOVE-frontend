@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TargetLayer.module.css';
-import { xy_sample } from './CameraUtils';
+// import { xy_sample } from './CameraUtils';
 
 export default class TargetLayer extends PureComponent {
   constructor(props) {

@@ -95,7 +95,7 @@ export default class Button extends Component {
   };
 
   onKeyUp = (event) => {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       this.props.onClick();
     }
   };

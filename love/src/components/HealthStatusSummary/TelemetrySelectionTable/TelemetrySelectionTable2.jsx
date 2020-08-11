@@ -3,7 +3,7 @@ import ActionableTable from '../../GeneralPurpose/ActionableTable/ActionableTabl
 import styles from './TelemetrySelectionTable.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
-import ManagerInterface, { formatTimestamp } from '../../../Utils';
+import ManagerInterface from '../../../Utils';
 
 const TelemetrySelectionTable = function (props) {
   const selectedRows = [];

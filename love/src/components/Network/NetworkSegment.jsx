@@ -52,7 +52,7 @@ export default class NetworkSegment extends Component {
     const ts = data?.ts ? formatTimestamp(data?.ts * 1000) : '-';
     const valid = maxValue !== '?' && minValue !== '?' && meanValue !== '?';
     return (
-      <div className={[styles.segmentContainer, valid == false ? styles.error : ''].join(' ')}>
+      <div className={[styles.segmentContainer, valid === false ? styles.error : ''].join(' ')}>
         <div className={styles.timestampContainer}>
           <span className={styles.highlight}>{ts}</span>
         </div>
