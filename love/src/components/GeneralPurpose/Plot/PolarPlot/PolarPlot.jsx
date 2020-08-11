@@ -548,9 +548,8 @@ export default class PolarPlot extends Component {
     this.props.marksStyles.forEach((ms) => {
       groups[ms.group] = { ...groups[ms?.group], [ms?.encoding]: ms?.name };
     });
-    const tripletGroups = groups.map((g) => {
+    const tripletGroups = groups.map((g, i) => {
       if (g === undefined) return;
-      const keys = Object.keys(g);
       const radialData = data?.[g.radial];
       const angularData = data?.[g.angular];
       const colorData = data?.[g.color];
@@ -564,10 +563,12 @@ export default class PolarPlot extends Component {
           r: t[0]?.value ?? ts,
           theta: t[1]?.value ?? ts,
           color: t[2]?.value ?? ts,
+          group: i,
         };
       });
       return triplets;
     });
+    console.log(tripletGroups)
 
     const radiiValues = tripletGroups.flatMap(triplets => triplets.map((t) => t.r));
     const maxRadialValue = radiiValues.length > 0 ? Math.max(...radiiValues) : 0;
@@ -699,8 +700,8 @@ export default class PolarPlot extends Component {
                 const nextCart = nextTriplet
                   ? this.getCartesianCoordinates(nextTriplet, minRadialValue, maxRadialValue)
                   : undefined;
-                const rgb = colorInterpolation(triplet.color, minColorValue, maxColorValue);
-                const opacity = opacityInterpolation(triplet.color, minColorValue, maxColorValue);
+                const rgb = colorInterpolation(triplet.color, minColorValue, maxColorValue, triplet.group);
+                const opacity = opacityInterpolation(triplet.color, minColorValue, maxColorValue, triplet.group);
                 const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
                 return (
                   <React.Fragment key={`datapoint${i}`}>

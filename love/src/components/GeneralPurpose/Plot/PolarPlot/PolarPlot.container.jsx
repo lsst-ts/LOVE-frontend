@@ -52,7 +52,7 @@ export const schema = {
     inputs: {
       externalStep: 'PolarPlotConfig',
       type: 'object',
-      description: 'list of inputs',
+      description: 'List of inputs. Each input for a single plot line should share the same group index',
       isPrivate: false,
       default: {
         WindSpeed: {
@@ -94,7 +94,7 @@ export const schema = {
     opacityInterpolation: {
       type: 'function',
       description: 'Opacity interpolation function',
-      default: `(value, minValue, maxValue) => {
+      default: `(value, minValue, maxValue, group) => {
   if (maxValue === minValue) return 1;
   return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;
 }`,
@@ -102,8 +102,8 @@ export const schema = {
     },
     colorInterpolation: {
       type: 'function',
-      description: 'Color interpolation function',
-      default: `(value, minValue, maxValue) => { 
+      description: 'Color interpolation function. It takes a value, its range (min and max) and the group index.',
+      default: `(value, minValue, maxValue, group) => { 
   const proportion = (value - minValue) / (maxValue - minValue); 
   return [255, 255 * (1 - proportion), 255 * (1 - proportion)]; 
 }`,
