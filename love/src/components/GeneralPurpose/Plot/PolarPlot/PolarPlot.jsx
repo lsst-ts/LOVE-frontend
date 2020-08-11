@@ -193,356 +193,7 @@ export default class PolarPlot extends Component {
     const ticks = this.getTicks(tickAngles, w, h, margin * 2);
     const radialLines = this.getRadialLines(radialLinesAngles, w, h, margin);
 
-    const data = {
-      WindSpeed: [
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:37.992-04:00',
-          value: 0.05,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:40.034-04:00',
-          value: 0.15,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:42.098-04:00',
-          value: 0.25,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:44.090-04:00',
-          value: 0.35,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:46.134-04:00',
-          value: 0.45,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:48.215-04:00',
-          value: 0.55,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:50.280-04:00',
-          value: 0.65,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:52.318-04:00',
-          value: 0.75,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:54.313-04:00',
-          value: 0.85,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:56.385-04:00',
-          value: 0.95,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:29:58.504-04:00',
-          value: 1.05,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:30:00.519-04:00',
-          value: 0.9,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:30:02.618-04:00',
-          value: 0.8,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:30:04.618-04:00',
-          value: 0.7,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:30:06.678-04:00',
-          value: 0.6,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:30:08.713-04:00',
-          value: 0.5,
-        },
-        {
-          name: 'WindSpeed',
-          time: '2020-07-24T16:30:10.780-04:00',
-          value: 0.4,
-        },
-      ],
-      WindDirection: [
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:37.988-04:00',
-          value: 203,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:40.031-04:00',
-          value: 213,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:42.098-04:00',
-          value: 223,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:44.089-04:00',
-          value: 233,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:46.130-04:00',
-          value: 243,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:48.212-04:00',
-          value: 253,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:50.277-04:00',
-          value: 263,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:52.317-04:00',
-          value: 273,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:54.310-04:00',
-          value: 283,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:56.383-04:00',
-          value: 293,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:29:58.502-04:00',
-          value: 303,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:30:00.519-04:00',
-          value: 313,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:30:02.618-04:00',
-          value: 323,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:30:04.616-04:00',
-          value: 333,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:30:06.673-04:00',
-          value: 343,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:30:08.708-04:00',
-          value: 353,
-        },
-        {
-          name: 'WindDirection',
-          time: '2020-07-24T16:30:10.775-04:00',
-          value: 363,
-        },
-      ],
-      GustDirection: [
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:37.988-04:00',
-          value: 203,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:40.031-04:00',
-          value: 213,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:42.098-04:00',
-          value: 223,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:44.089-04:00',
-          value: 233,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:46.130-04:00',
-          value: 143,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:48.212-04:00',
-          value: 253,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:50.277-04:00',
-          value: 263,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:52.317-04:00',
-          value: 273,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:54.310-04:00',
-          value: 283,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:56.383-04:00',
-          value: 293,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:29:58.502-04:00',
-          value: 303,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:30:00.519-04:00',
-          value: 313,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:30:02.618-04:00',
-          value: 323,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:30:04.616-04:00',
-          value: 333,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:30:06.673-04:00',
-          value: 343,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:30:08.708-04:00',
-          value: 353,
-        },
-        {
-          name: 'GustDirection',
-          time: '2020-07-24T16:30:10.775-04:00',
-          value: 363,
-        },
-      ],
-      GustSpeed: [
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:37.992-04:00',
-          value: 0.05,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:40.034-04:00',
-          value: 0.15,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:42.098-04:00',
-          value: 0.25,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:44.090-04:00',
-          value: 0.35,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:46.134-04:00',
-          value: 0.45,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:48.215-04:00',
-          value: 0.55,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:50.280-04:00',
-          value: 0.65,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:52.318-04:00',
-          value: 0.75,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:54.313-04:00',
-          value: 0.85,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:56.385-04:00',
-          value: 0.95,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:29:58.504-04:00',
-          value: 1.35,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:30:00.519-04:00',
-          value: 0.9,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:30:02.618-04:00',
-          value: 0.8,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:30:04.618-04:00',
-          value: 0.7,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:30:06.678-04:00',
-          value: 0.6,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:30:08.713-04:00',
-          value: 0.5,
-        },
-        {
-          name: 'GustSpeed',
-          time: '2020-07-24T16:30:10.780-04:00',
-          value: 0.4,
-        },
-      ],
-    };
+    const data = this.props.data;
 
     const groups = [];
     this.props.marksStyles.forEach((ms) => {
@@ -580,13 +231,11 @@ export default class PolarPlot extends Component {
     const radialMarkersUnits = this.props.radialUnits ?? '';
     const circles = this.getRadialMarkers(radialMarkers, radialMarkersUnits, minRadialValue, maxRadialValue);
 
-    const domeAngle = 90;
     const offset = 10;
     const viewBoxSize = 596 - 2 * offset;
     const x0 = viewBoxSize / 2 + offset;
     const y0 = viewBoxSize / 2 + offset;
     const r = w / 2 + viewboxMargin - 5;
-    const extraApperture = r / 4;
     const alpha = Math.PI / 12;
     const rSinAlpha = r * Math.sin(alpha);
     const rCosAlpha = r * Math.cos(alpha);
@@ -623,18 +272,6 @@ export default class PolarPlot extends Component {
                 }}
                 mask="url(#mask)"
               >
-                {/* Dome */}
-                {/* <path
-                className={styles.innerDome}
-                d={`
-                M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-                A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
-                A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
-                A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-                L ${x0} ${y0}
-                L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-              `}
-              /> */}
                 <path
                   id="curve"
                   className={styles.innerDome}
@@ -645,23 +282,7 @@ export default class PolarPlot extends Component {
                 L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               `}
                 />
-                {/* <text width="50" >
-                <textPath textAnchor="middle" href="#curve">
-                  Dome
-                </textPath>
-              </text> */}
               </g>
-              {/* <g
-              className={styles.rotatingDome}
-              style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `${w / 2}px ${w / 2}px` }}
-            >
-              <path
-                className={styles.domeCircle}
-                d={this.describeArc(w / 2, h / 2, w / 2 + viewboxMargin - 5, domeAngle + 15, domeAngle - 15)}
-              >
-                <title>Dome</title>
-              </path>
-            </g> */}
             </>
           )}
 
@@ -740,7 +361,7 @@ export default class PolarPlot extends Component {
             const colorValues = triplets.map((t) => t.color);
             const maxColorValue = Math.max(...colorValues);
             const minColorValue = Math.min(...colorValues);
-            const rgb = colorInterpolation(maxColorValue, minColorValue, maxColorValue, triplets[0].group);
+            const rgb = colorInterpolation(maxColorValue, minColorValue, maxColorValue, triplets?.[0]?.group);
             const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
             return (
               <div key={`legend-item-${layerIndex}`} className={styles.legendItem}>
