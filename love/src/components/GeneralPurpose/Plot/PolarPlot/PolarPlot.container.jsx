@@ -63,7 +63,8 @@ export const schema = {
           item: 'avg2M',
           type: 'line',
           accessor: '(x) => x',
-          encoding: 'color', // radial, color, angular
+          encoding: 'radial', // radial, color, angular
+          group: 0,
           ...defaultStyles[0],
         },
         WindDirection: {
@@ -75,6 +76,7 @@ export const schema = {
           type: 'line',
           accessor: '(x) => x',
           encoding: 'angular', // radial, color, angular
+          group: 0,
           ...defaultStyles[0],
         },
       },
@@ -82,7 +84,7 @@ export const schema = {
     temporalEncoding: {
       type: 'string',
       description: 'Which variable encodes time. One of the following: radial, color or angular',
-      default: 'radial',
+      default: 'color',
       isPrivate: false,
     },
     displayDome: {
@@ -115,17 +117,11 @@ export const schema = {
       isPrivate: true,
       default: ['opacityInterpolation', 'colorInterpolation'],
     },
-    xAxisTitle: {
-      type: 'string',
-      description: 'Title of the horizontal axis of this plot',
-      default: 'Time',
+    groupTitles: {
+      type: 'array',
+      description: 'Array containing group names, to be displayed in the legend',
       isPrivate: false,
-    },
-    yAxisTitle: {
-      type: 'string',
-      description: 'Title of the vertical axis of this plot',
-      default: '',
-      isPrivate: false,
+      default: ['Wind'],
     },
   },
 };
@@ -139,8 +135,7 @@ const PolarPlotContainer = function ({
   unsubscribeToStreams,
   width,
   height,
-  xAxisTitle,
-  yAxisTitle,
+  groupTitles,
   temporalEncoding,
   taiToUtc,
   colorInterpolation,
@@ -258,8 +253,7 @@ const PolarPlotContainer = function ({
     data: data,
     legend: legend,
     marksStyles: marksStyles,
-    xAxisTitle: xAxisTitle,
-    yAxisTitle: yAxisTitle,
+    groupTitles: groupTitles,
     units:
       units !== undefined
         ? {

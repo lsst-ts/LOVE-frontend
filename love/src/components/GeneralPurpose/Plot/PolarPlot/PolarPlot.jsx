@@ -138,7 +138,7 @@ export default class PolarPlot extends Component {
         <g key={`circle ${i}`}>
           <circle className={styles['cls-27']} cx={w / 2} cy={h / 2} r={r} />
           <text className={styles.label} x={w / 2 + r} y={(h * (1 + (i % 2 === 0 ? 0.03 : -0.03))) / 2}>
-            {temporalRadius ? relativeTime(value, this.props.taiToUtc) : Math.round(100*value)/100}
+            {temporalRadius ? relativeTime(value, this.props.taiToUtc) : Math.round(100 * value) / 100}
             {temporalRadius ? '' : radialMarkersUnits}
           </text>
         </g>
@@ -568,9 +568,8 @@ export default class PolarPlot extends Component {
       });
       return triplets;
     });
-    console.log(tripletGroups)
 
-    const radiiValues = tripletGroups.flatMap(triplets => triplets.map((t) => t.r));
+    const radiiValues = tripletGroups.flatMap((triplets) => triplets.map((t) => t.r));
     const maxRadialValue = radiiValues.length > 0 ? Math.max(...radiiValues) : 0;
     const minRadialValue = radiiValues.length > 0 ? Math.min(...radiiValues) : 0;
 
@@ -594,34 +593,38 @@ export default class PolarPlot extends Component {
     const azimuthPosition = this.props.domeAzimuth?.azimuthPosition?.value ?? 0;
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, azimuthPosition);
     return (
-      <svg
-        className={styles.grid}
-        xmlns="http://www.w3.org/2000/svg"
-        width={'100%'}
-        height={'100%'}
-        viewBox={`-${viewboxMargin} -${viewboxMargin} ${w + 2 * viewboxMargin} ${h + 2 * viewboxMargin}`}
-      >
-        <defs>
-          <radialGradient id="radGrad">
-            <stop offset="0" stopColor="white" stopOpacity="0" />
-            <stop offset="0.7" stopColor="white" stopOpacity="0" />
-            <stop offset="0.8" stopColor="white" stopOpacity="0.0" />
-            <stop offset="1" stopColor="white" stopOpacity="0.4" />
-          </radialGradient>
-          <mask id="mask">
-            <circle id="c" cx={w / 2} cy={h / 2} r={r} fill="url(#radGrad)" />
-          </mask>
-        </defs>
+      <div className={styles.plotContainer}>
+        <svg
+          className={styles.grid}
+          xmlns="http://www.w3.org/2000/svg"
+          width={'100%'}
+          height={'100%'}
+          viewBox={`-${viewboxMargin} -${viewboxMargin} ${w + 2 * viewboxMargin} ${h + 2 * viewboxMargin}`}
+        >
+          <defs>
+            <radialGradient id="radGrad">
+              <stop offset="0" stopColor="white" stopOpacity="0" />
+              <stop offset="0.7" stopColor="white" stopOpacity="0" />
+              <stop offset="0.8" stopColor="white" stopOpacity="0.0" />
+              <stop offset="1" stopColor="white" stopOpacity="0.4" />
+            </radialGradient>
+            <mask id="mask">
+              <circle id="c" cx={w / 2} cy={h / 2} r={r} fill="url(#radGrad)" />
+            </mask>
+          </defs>
 
-        {this.props.displayDome && (
-          <>
-            <g
-              className={styles.rotatingDome}
-              style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `${w / 2}px ${w / 2}px` }}
-              mask="url(#mask)"
-            >
-              {/* Dome */}
-              {/* <path
+          {this.props.displayDome && (
+            <>
+              <g
+                className={styles.rotatingDome}
+                style={{
+                  transform: `rotateZ(${270 + equivalentAzimuth}deg)`,
+                  transformOrigin: `${w / 2}px ${w / 2}px`,
+                }}
+                mask="url(#mask)"
+              >
+                {/* Dome */}
+                {/* <path
                 className={styles.innerDome}
                 d={`
                 M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
@@ -632,23 +635,23 @@ export default class PolarPlot extends Component {
                 L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               `}
               /> */}
-              <path
-                id="curve"
-                className={styles.innerDome}
-                d={`
+                <path
+                  id="curve"
+                  className={styles.innerDome}
+                  d={`
                 M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
                 A ${r} ${r} 0 0 0 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
                 L ${x0} ${y0}
                 L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
               `}
-              />
-              {/* <text width="50" >
+                />
+                {/* <text width="50" >
                 <textPath textAnchor="middle" href="#curve">
                   Dome
                 </textPath>
               </text> */}
-            </g>
-            {/* <g
+              </g>
+              {/* <g
               className={styles.rotatingDome}
               style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `${w / 2}px ${w / 2}px` }}
             >
@@ -659,79 +662,105 @@ export default class PolarPlot extends Component {
                 <title>Dome</title>
               </path>
             </g> */}
-          </>
-        )}
+            </>
+          )}
 
-        <rect className={styles.backgroundRect} width="100%" height="100%" fill="none" />
-        <circle className={styles.backgroundCircle} cx={w / 2} cy={h / 2} r={w / 2 - margin} />
+          <rect className={styles.backgroundRect} width="100%" height="100%" fill="none" />
+          <circle className={styles.backgroundCircle} cx={w / 2} cy={h / 2} r={w / 2 - margin} />
 
-        <g>
-          <text className={styles.text} y={-10} x={w / 2}>
-            N
-          </text>
-          <text className={styles.text} y={h + 15} x={w / 2}>
-            S
-          </text>
-          <text className={styles.text} y={h / 2} x={-15}>
-            W
-          </text>
-          <text className={styles.text} y={h / 2} x={w + 15}>
-            E
-          </text>
-        </g>
-        <g className={styles.currentLayer}>
-          {ticks}
-          <g className={styles.innerGrid} id="svg_144">
-            {radialLines}
-            {circles}
+          <g>
+            <text className={styles.text} y={-10} x={w / 2}>
+              N
+            </text>
+            <text className={styles.text} y={h + 15} x={w / 2}>
+              S
+            </text>
+            <text className={styles.text} y={h / 2} x={-15}>
+              W
+            </text>
+            <text className={styles.text} y={h / 2} x={w + 15}>
+              E
+            </text>
           </g>
-        </g>
-        {tripletGroups.map((triplets, layerIndex) => {
-          const colorValues = triplets.map((t) => t.color);
-          const maxColorValue = Math.max(...colorValues);
-          const minColorValue = Math.min(...colorValues);
+          <g className={styles.currentLayer}>
+            {ticks}
+            <g className={styles.innerGrid} id="svg_144">
+              {radialLines}
+              {circles}
+            </g>
+          </g>
+          {tripletGroups.map((triplets, layerIndex) => {
+            const colorValues = triplets.map((t) => t.color);
+            const maxColorValue = Math.max(...colorValues);
+            const minColorValue = Math.min(...colorValues);
 
-          return (
-            <g key={`layer-${layerIndex}`} className={styles.dataLayer}>
-              {triplets.map((triplet, i) => {
-                if (triplet.theta === undefined || triplet.r === undefined) return null;
-                const nextTriplet = i < triplets.length - 1 ? triplets[i + 1] : undefined;
-                const cart = this.getCartesianCoordinates(triplet, minRadialValue, maxRadialValue);
-                const nextCart = nextTriplet
-                  ? this.getCartesianCoordinates(nextTriplet, minRadialValue, maxRadialValue)
-                  : undefined;
-                const rgb = colorInterpolation(triplet.color, minColorValue, maxColorValue, triplet.group);
-                const opacity = opacityInterpolation(triplet.color, minColorValue, maxColorValue, triplet.group);
-                const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
-                return (
-                  <React.Fragment key={`datapoint${i}`}>
-                    <circle
-                      className={styles.dataPoint}
-                      cx={cart.x}
-                      cy={cart.y}
-                      r={5}
-                      fill={color}
-                      fillOpacity={opacity}
-                      strokeOpacity={opacity}
-                    />
-                    {nextCart !== undefined && (
-                      <line
-                        x1={cart.x}
-                        y1={cart.y}
-                        x2={nextCart.x}
-                        y2={nextCart.y}
-                        stroke={color}
+            return (
+              <g key={`layer-${layerIndex}`} className={styles.dataLayer}>
+                {triplets.map((triplet, i) => {
+                  if (triplet.theta === undefined || triplet.r === undefined) return null;
+                  const nextTriplet = i < triplets.length - 1 ? triplets[i + 1] : undefined;
+                  const cart = this.getCartesianCoordinates(triplet, minRadialValue, maxRadialValue);
+                  const nextCart = nextTriplet
+                    ? this.getCartesianCoordinates(nextTriplet, minRadialValue, maxRadialValue)
+                    : undefined;
+                  const rgb = colorInterpolation(triplet.color, minColorValue, maxColorValue, triplet.group);
+                  const opacity = opacityInterpolation(triplet.color, minColorValue, maxColorValue, triplet.group);
+                  const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+                  return (
+                    <React.Fragment key={`datapoint${i}`}>
+                      <circle
+                        className={styles.dataPoint}
+                        cx={cart.x}
+                        cy={cart.y}
+                        r={5}
+                        fill={color}
                         fillOpacity={opacity}
                         strokeOpacity={opacity}
                       />
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </g>
-          );
-        })}
-      </svg>
+                      {nextCart !== undefined && (
+                        <line
+                          x1={cart.x}
+                          y1={cart.y}
+                          x2={nextCart.x}
+                          y2={nextCart.y}
+                          stroke={color}
+                          fillOpacity={opacity}
+                          strokeOpacity={opacity}
+                        />
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </g>
+            );
+          })}
+        </svg>
+        <span className={styles.legend}>
+          {tripletGroups.map((triplets, layerIndex) => {
+            const colorValues = triplets.map((t) => t.color);
+            const maxColorValue = Math.max(...colorValues);
+            const minColorValue = Math.min(...colorValues);
+            const rgb = colorInterpolation(maxColorValue, minColorValue, maxColorValue, triplets[0].group);
+            const color = `rgb(${rgb[0]},${rgb[1]},${rgb[2]})`;
+            return (
+              <div key={`legend-item-${layerIndex}`} className={styles.legendItem}>
+                <svg width={10} height={10}>
+                  <circle
+                    className={styles.dataPoint}
+                    cx={5}
+                    cy={5}
+                    r={5}
+                    fill={color}
+                    fillOpacity={1}
+                    strokeOpacity={1}
+                  />
+                </svg>
+                <span>{this.props.groupTitles?.[layerIndex] ?? `Group ${layerIndex}`}</span>
+              </div>
+            );
+          })}
+        </span>
+      </div>
     );
   }
 }

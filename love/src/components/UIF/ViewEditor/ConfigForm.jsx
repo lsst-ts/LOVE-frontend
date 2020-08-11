@@ -43,7 +43,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   const customSaveConfig = () => {
     const newConfig = { ...config };
     Object.keys(newConfig).forEach((key) => {
-      if (componentProps[key].type === 'number') newConfig[key] = Number(newConfig[key]);
+      if (componentProps[key]?.type === 'number') newConfig[key] = Number(newConfig[key]);
     });
     onSaveConfig(componentIndex, newConfig);
   };
