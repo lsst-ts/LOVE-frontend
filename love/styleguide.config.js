@@ -28,7 +28,6 @@ module.exports = {
   exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
   usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'm
   styleguideDir: '../docs',
-  skipComponentsWithoutExample: true,
   propsParser(filePath, source, resolver, handlers) {
     // if (filePath.indexOf('.container.jsx') > -1) {
     //   handlers.push((documentation, nodePath) => {
@@ -60,7 +59,15 @@ module.exports = {
       name: "Presentational Components",
       sectionDepth: 2,
       components: ['src/components/**/*.jsx', 'src/components/**/*.js'],
-      ignore: ['src/components/**/*.container.jsx', ...commonIgnored]
+      ignore: ['src/components/**/*.container.jsx', ...commonIgnored],
+      skipComponentsWithoutExample: true,
+
+    },
+    {
+      // name: "Container Components",
+      // sectionDepth: 2,
+      // components: ['love/src/components/GeneralPurpose/Plot/Plot.container.jsx'],
+      // skipComponentsWithoutExample: true,
     }
   ],
 
