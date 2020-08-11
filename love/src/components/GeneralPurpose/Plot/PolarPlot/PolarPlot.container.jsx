@@ -123,6 +123,12 @@ export const schema = {
       isPrivate: false,
       default: ['Wind'],
     },
+    radialUnits: {
+      type: 'string',
+      description: 'Units for the radial values',
+      default: 'km/s',
+      isPrivate: false,
+    },
   },
 };
 
@@ -141,6 +147,7 @@ const PolarPlotContainer = function ({
   colorInterpolation,
   opacityInterpolation,
   displayDome,
+  radialUnits,
 }) {
   const [data, setData] = React.useState({});
 
@@ -269,6 +276,7 @@ const PolarPlotContainer = function ({
     opacityInterpolation: opacityInterpolationFunc,
     domeAzimuth: streams[domeAzimuthGroupName],
     displayDome: displayDome,
+    radialUnits: radialUnits,
   };
   return <PolarPlot {...plotProps} />;
 };
@@ -278,14 +286,11 @@ const getGroupNames = (inputs, displayDome) => {
   const dataGroups = Object.values(inputs).map(
     (inputConfig) => `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`,
   );
-  if(displayDome){
-    return [
-      ...dataGroups,
-      ...domeGroupNames,
-    ];
-  };
+  if (displayDome) {
+    return [...dataGroups, ...domeGroupNames];
+  }
   return dataGroups;
-}
+};
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {

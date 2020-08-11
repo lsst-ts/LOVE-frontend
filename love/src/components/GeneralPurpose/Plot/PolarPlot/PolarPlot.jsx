@@ -577,7 +577,7 @@ export default class PolarPlot extends Component {
     const colorInterpolation = this.props.colorInterpolation;
 
     const radialMarkers = 4;
-    const radialMarkersUnits = 'km/s';
+    const radialMarkersUnits = this.props.radialUnits ?? '';
     const circles = this.getRadialMarkers(radialMarkers, radialMarkersUnits, minRadialValue, maxRadialValue);
 
     const domeAngle = 90;
