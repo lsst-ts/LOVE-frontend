@@ -138,7 +138,7 @@ export default class PolarPlot extends Component {
         <g key={`circle ${i}`}>
           <circle className={styles['cls-27']} cx={w / 2} cy={h / 2} r={r} />
           <text className={styles.label} x={w / 2 + r} y={(h * (1 + (i % 2 === 0 ? 0.03 : -0.03))) / 2}>
-            {temporalRadius ? relativeTime(value, this.props.taiToUtc) : value}
+            {temporalRadius ? relativeTime(value, this.props.taiToUtc) : Math.round(100*value)/100}
             {temporalRadius ? '' : radialMarkersUnits}
           </text>
         </g>
