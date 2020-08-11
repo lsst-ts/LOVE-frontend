@@ -1,5 +1,23 @@
 const path = require('path');
 
+const commonIgnored = [
+  'src/components/Watcher/AlarmUtils.js',
+  "src/components/Watcher/AlarmsTable/mock.js ",
+  "src/components/GenericCamera/CameraUtils.js ",
+  "src/components/UIF/ViewsIndex/ViewLauncher/ViewLauncher.jsx",
+  "src/components/GeneralPurpose/Graph/entities/link/index.js ",
+  "src/components/UIF/ComponentIndex.jsx",
+  "src/components/ScriptQueue/Scripts/Scripts.jsx",
+  "src/components/ScriptQueue/QueueMessage.jsx",
+  "src/components/HealthStatusSummary/TelemetrySelectionTable/fakeData.jsx",
+  "src/components/GeneralPurpose/Graph/entities/port/SimplePortFactory.jsx",
+  "src/components/GeneralPurpose/Graph/entities/port/DiamondPortModel.jsx",
+  "src/components/GeneralPurpose/Graph/entities/node/DiamondNodeFactory.jsx",
+  "src/components/GeneralPurpose/Graph/entities/node/DiamondNodeModel.jsx",
+  "src/components/GeneralPurpose/Graph/entities/label/EditableLabelModel.jsx",
+  "src/components/GeneralPurpose/Graph/entities/label/EditableLabelFactory.jsx",
+];
+
 module.exports = {
   title: 'LOVE-frontend',
   serverPort: 3001,
@@ -7,6 +25,17 @@ module.exports = {
   assetsDir: 'docsrc/assets',
   pagePerSection: true,
   tocMode: 'collapse',
+  exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
+  usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'm
+  styleguideDir: '../docs',
+  propsParser(filePath, source, resolver, handlers) {
+    // if (filePath.indexOf('.container.jsx') > -1) {
+    //   handlers.push((documentation, nodePath) => {
+    //     documentation.set('testes','DASDASDSADSA');
+    //   })
+    // }
+    return require('react-docgen').parse(source, resolver, handlers);
+  },
   sections: [
     {
       name: 'Overview',
@@ -27,34 +56,21 @@ module.exports = {
       content: 'docsrc/howitworks.md',
     },
     {
-      name: "API",
-      sections: [
-        {
-          name: 'Container Components',
-          content: 'docsrc/ui.md',
-          components: ['src/components/**/*.container.jsx'],
-          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-        },
-        {
-          name: 'UI Components',
-          content: 'docsrc/ui.md',
-          components: ['src/components/GeneralPurpose/**/*.jsx'],
-          exampleMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-          usageMode: 'collapse', // 'hide' | 'collapse' | 'expand'
-        }
-      ]
+      name: "Presentational Components",
+      sectionDepth: 2,
+      components: ['src/components/**/*.jsx', 'src/components/**/*.js'],
+      ignore: ['src/components/**/*.container.jsx', ...commonIgnored],
+      skipComponentsWithoutExample: true,
+
+    },
+    {
+      // name: "Container Components",
+      // sectionDepth: 2,
+      // components: ['love/src/components/GeneralPurpose/Plot/Plot.container.jsx'],
+      // skipComponentsWithoutExample: true,
     }
   ],
-  styleguideDir: '../docs',
-  propsParser(filePath, source, resolver, handlers) {
-    // if (filePath.indexOf('.container.jsx') > -1) {
-    //   handlers.push((documentation, nodePath) => {
-    //     documentation.set('testes','DASDASDSADSA');
-    //   })
-    // }
-    return require('react-docgen').parse(source, resolver, handlers);
-  },
+
   // ignore: ['**/*']
   // ignore: ['**/__tests__/**',
   // '**/*.test.{js,jsx,ts,tsx}',

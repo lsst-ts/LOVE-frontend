@@ -8,7 +8,7 @@ import PPCInput from './PPCInput/PPCInput';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
-import { COLORS, DASHES, SHAPES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
+import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 
 /**
  * Component to configure the Health Status Summary
@@ -80,7 +80,6 @@ export default class PPCEntry extends PureComponent {
   onInputChange = (input, index) => {
     const newInputs = [...this.props.inputs];
     newInputs[index] = input;
-    const { category, csc, salindex, topic, item } = input;
     this.props.onChange(this.props.name, newInputs, this.props.accessor, this.props.encoding, this.props.group);
   };
 

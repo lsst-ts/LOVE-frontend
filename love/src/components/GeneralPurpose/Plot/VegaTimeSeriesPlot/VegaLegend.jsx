@@ -19,7 +19,7 @@ const VegaLegend = function ({ gridData, marksStyles, listData }) {
       </div>
     );
   }
-  const nrows = gridData.length;
+  // const nrows = gridData.length;
   const ncols = gridData.reduce((prevMax, row) => Math.max(row.length, prevMax), 0);
   const filledGridData = gridData.map((row) => {
     if (row.length === ncols) {

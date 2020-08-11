@@ -1,8 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './FunctionConfig.module.css';
-import Button from '../../GeneralPurpose/Button/Button';
-import ManagerInterface, { formatTimestamp } from '../../../Utils';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -24,12 +22,7 @@ export default class FunctionConfig extends PureComponent {
     topics: {},
   };
 
-  constructor() {
-    super();
-  }
-
   render() {
-    console.log('topics: ', this.props.topics);
     return (
       <div className={styles.container}>
         {Object.entries(this.props.topics).map(([topic, data], _) => (

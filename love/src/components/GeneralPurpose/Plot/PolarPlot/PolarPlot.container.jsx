@@ -153,7 +153,7 @@ const PolarPlotContainer = function ({
 
   React.useEffect(() => {
     subscribeToStreams();
-  }, []);
+  }, [subscribeToStreams]);
 
   /** TODO: find a way to detect "real" changes in inputs
    * now resizing the plot also makes the inputs prop to change
@@ -166,17 +166,16 @@ const PolarPlotContainer = function ({
       data[key] = [];
     }
     setData(data);
-  }, [inputs]);
+  }, [inputs, subscribeToStreams, unsubscribeToStreams]);
 
-  const streamsItems = React.useMemo(() =>
-    Object.entries(inputs).map(
-      ([inputName, inputConfig]) => {
-        const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
+  const streamsItems = React.useMemo(
+    () =>
+      Object.entries(inputs).map(([_, inputConfig]) => {
+        const { category, csc, salindex, topic, item } = inputConfig;
         const streamName = `${category}-${csc}-${salindex}-${topic}`;
         return streams[streamName]?.[item];
-      },
-      [inputs, streams],
-    ),
+      }),
+    [inputs, streams],
   );
 
   const units = React.useMemo(
@@ -190,7 +189,7 @@ const PolarPlotContainer = function ({
       return;
     }
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
-      const { category, csc, salindex, topic, item, type, accessor } = inputConfig;
+      const { category, csc, salindex, topic, item, accessor } = inputConfig;
       /* eslint no-eval: 0 */
       const accessorFunc = eval(accessor);
       let inputData = data[inputName] || [];
@@ -222,7 +221,7 @@ const PolarPlotContainer = function ({
     if (changed) {
       setData(data);
     }
-  }, [inputs, streams]);
+  }, [data, inputs, streams]);
 
   const marksStyles = React.useMemo(() => {
     return Object.keys(inputs).map((input, index) => {

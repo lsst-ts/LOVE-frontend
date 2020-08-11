@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HSCInput.module.css';
-import Button from '../../../../GeneralPurpose/Button/Button';
 import Input from '../../../../GeneralPurpose/Input/Input';
 import Select from '../../../../GeneralPurpose/Select/Select';
 
@@ -81,7 +80,7 @@ export default class HSCInput extends PureComponent {
     if (this.props.optionsTree) {
       cscOptions = Object.keys(optionsTree);
       if (this.props.input) {
-        const { category, csc, salindex, topic, item } = this.props.input;
+        const { category, csc, topic } = this.props.input;
         topicOptions = csc && category ? Object.keys(optionsTree[csc][`${category}_data`]) : [];
         itemOptions = topic ? Object.keys(optionsTree[csc][`${category}_data`][topic]) : [];
       }

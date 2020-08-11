@@ -1,4 +1,4 @@
-import { LinkModel, PortModel, DefaultLinkModel } from '@projectstorm/react-diagrams';
+import { PortModel } from '@projectstorm/react-diagrams';
 import { AdvancedLinkModel } from '../link';
 export const PortModelAlignment = {
   TOP1: 'TOP1',
