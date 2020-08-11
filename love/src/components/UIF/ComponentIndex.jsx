@@ -191,6 +191,10 @@ export const uifIndex = {
     component: require('../GeneralPurpose/Plot/Plot.container').default,
     schema: require('../GeneralPurpose/Plot/Plot.container').schema,
   },
+  PolarPlot: {
+    component: require('../GeneralPurpose/Plot/PolarPlot/PolarPlot.container').default,
+    schema: require('../GeneralPurpose/Plot/PolarPlot/PolarPlot.container').schema,
+  },
   // TelemetryLog: {
   //   component: require('../TelemetryLog/TelemetryLog.container').default,
   //   schema: {

@@ -1,0 +1,72 @@
+
+.backgroundRect {
+  stroke: none;
+}
+
+.plotContainer {
+  width: 100%;
+  display: flex;
+}
+
+.backgroundCircle {
+  fill: var(--second-secondary-background-color);
+  stroke: var(--tertiary-font-color);
+}
+
+.domeCircle {
+  stroke: var(--second-tertiary-background-color);
+  fill: none;
+  stroke-width: 4px;
+}
+
+.grid {
+  stroke:var(--tertiary-font-color);
+}
+
+.innerGrid {
+  opacity: 0.3;
+  fill: none;
+  stroke-miterlimit: 10;
+}
+
+.text {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  dominant-baseline: central;
+  font-family: MyriadPro-Bold, Myriad Pro;
+  font-weight: 700;
+  font-size: 20px;
+  fill: var(--base-font-color);
+  stroke: none;
+}
+
+.label {
+  text-anchor: middle;
+  alignment-baseline: middle;
+  dominant-baseline: central;
+}
+
+.innerDome {
+  fill: var(--second-tertiary-background-color);
+  stroke: var(--second-quinary-background-color);
+  stroke-width: 4;
+}
+
+.rotatingDome {
+  transition: transform 1.5s linear;
+  stroke-width: 2;
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+}
+
+.legendItem > span {
+  padding: 0.5em;
+}
