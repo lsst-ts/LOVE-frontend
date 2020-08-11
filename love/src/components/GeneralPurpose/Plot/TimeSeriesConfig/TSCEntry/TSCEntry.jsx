@@ -179,7 +179,7 @@ export default class TSCEntry extends PureComponent {
             <Select
               className={styles.select}
               options={SHAPES}
-              option={input?.color}
+              option={input?.shape}
               placeholder="Select a shape"
               onChange={(selection) => this.onStyleChange('shape', selection)}
             />
