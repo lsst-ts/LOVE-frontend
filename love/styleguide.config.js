@@ -60,7 +60,7 @@ module.exports = {
       sectionDepth: 2,
       components: [
         "src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}",
-        "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.{js,jsx}",
+        // "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.{js,jsx}",
         "src/components/GeneralPurpose/InfoPanel/InfoPanel.{js,jsx}",
         "src/components/GeneralPurpose/Graph/Graph.{js,jsx}",
         "src/components/GeneralPurpose/Panel/Panel.{js,jsx}",
