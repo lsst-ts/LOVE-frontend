@@ -58,16 +58,33 @@ module.exports = {
     {
       name: "Presentational Components",
       sectionDepth: 2,
-      components: ['src/components/**/*.jsx', 'src/components/**/*.js'],
+      components: [
+        "src/components/HealthStatusSummary/HealthStatusSummary.md",
+        "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.md",
+        "src/components/GeneralPurpose/InfoPanel/InfoPanel.md",
+        "src/components/GeneralPurpose/Graph/Graph.md",
+        "src/components/GeneralPurpose/Panel/Panel.md",
+        "src/components/GeneralPurpose/Button/Button.md",
+        "src/components/GeneralPurpose/Hoverable/Hoverable.md",
+        "src/components/GeneralPurpose/ActionableTable/ActionableTable.md",
+        "src/components/GeneralPurpose/LoadingBar/LoadingBar.md",
+        "src/components/GeneralPurpose/PaginatedTable/PaginatedTable.md",
+        "src/components/GeneralPurpose/SimpleTable/SimpleTable.md",
+        "src/components/GeneralPurpose/Plot/Plot.md",
+        "src/components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.md",
+        "src/components/Vega/Vega.md",
+        "src/components/ScriptQueue/Scripts/AvailableScript/AvailableScript.md",
+        "src/components/ScriptQueue/Scripts/CurrentScript/CurrentScript.md",
+        "src/components/ScriptQueue/Scripts/WaitingScript/WaitingScript.md",
+        "src/components/ScriptQueue/Scripts/ScriptList/ScriptList.md",
+        "src/components/ScriptQueue/Scripts/FinishedScript/FinishedScript.md",
+      ],
       ignore: ['src/components/**/*.container.jsx', ...commonIgnored],
-      skipComponentsWithoutExample: true,
-
     },
     {
       // name: "Container Components",
       // sectionDepth: 2,
       // components: ['love/src/components/GeneralPurpose/Plot/Plot.container.jsx'],
-      // skipComponentsWithoutExample: true,
     }
   ],
 
