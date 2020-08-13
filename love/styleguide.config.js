@@ -56,35 +56,48 @@ module.exports = {
       content: 'docsrc/howitworks.md',
     },
     {
-      name: "Presentational Components",
-      sectionDepth: 2,
-      components: [
-        "src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}",
-        // "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.{js,jsx}",
-        "src/components/GeneralPurpose/InfoPanel/InfoPanel.{js,jsx}",
-        "src/components/GeneralPurpose/Graph/Graph.{js,jsx}",
-        "src/components/GeneralPurpose/Panel/Panel.{js,jsx}",
-        "src/components/GeneralPurpose/Button/Button.{js,jsx}",
-        "src/components/GeneralPurpose/Hoverable/Hoverable.{js,jsx}",
-        "src/components/GeneralPurpose/ActionableTable/ActionableTable.{js,jsx}",
-        "src/components/GeneralPurpose/LoadingBar/LoadingBar.{js,jsx}",
-        "src/components/GeneralPurpose/PaginatedTable/PaginatedTable.{js,jsx}",
-        "src/components/GeneralPurpose/SimpleTable/SimpleTable.{js,jsx}",
-        "src/components/GeneralPurpose/Plot/Plot.{js,jsx}",
-        // "src/components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.{js,jsx}",
-        // "src/components/Vega/Vega.{js,jsx}",
-        "src/components/ScriptQueue/Scripts/AvailableScript/AvailableScript.{js,jsx}",
-        "src/components/ScriptQueue/Scripts/CurrentScript/CurrentScript.{js,jsx}",
-        "src/components/ScriptQueue/Scripts/WaitingScript/WaitingScript.{js,jsx}",
-        "src/components/ScriptQueue/Scripts/ScriptList/ScriptList.{js,jsx}",
-        "src/components/ScriptQueue/Scripts/FinishedScript/FinishedScript.{js,jsx}",
-      ],
-      ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],
-    },
-    {
-      // name: "Container Components",
-      // sectionDepth: 2,
-      // components: ['love/src/components/GeneralPurpose/Plot/Plot.container.jsx'],
+      name: "Components",
+      sectionDepth: 3,
+      sections: [
+        {
+          name: "Obervatory",
+          components: [
+            "src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}",
+            "src/components/ScriptQueue/Scripts/AvailableScript/AvailableScript.{js,jsx}",
+            "src/components/ScriptQueue/Scripts/CurrentScript/CurrentScript.{js,jsx}",
+            "src/components/ScriptQueue/Scripts/WaitingScript/WaitingScript.{js,jsx}",
+            "src/components/ScriptQueue/Scripts/ScriptList/ScriptList.{js,jsx}",
+            "src/components/ScriptQueue/Scripts/FinishedScript/FinishedScript.{js,jsx}",
+          ],
+          ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],          
+        },
+        {
+          name: "Auxiliary Telescope",
+          components: [
+          ],
+          ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],          
+        },
+        {
+          name: "General Purpose",
+          components: [
+            "src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}",
+            // "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.{js,jsx}",
+            "src/components/GeneralPurpose/InfoPanel/InfoPanel.{js,jsx}",
+            "src/components/GeneralPurpose/Graph/Graph.{js,jsx}",
+            "src/components/GeneralPurpose/Panel/Panel.{js,jsx}",
+            "src/components/GeneralPurpose/Button/Button.{js,jsx}",
+            "src/components/GeneralPurpose/Hoverable/Hoverable.{js,jsx}",
+            "src/components/GeneralPurpose/ActionableTable/ActionableTable.{js,jsx}",
+            "src/components/GeneralPurpose/LoadingBar/LoadingBar.{js,jsx}",
+            "src/components/GeneralPurpose/PaginatedTable/PaginatedTable.{js,jsx}",
+            "src/components/GeneralPurpose/SimpleTable/SimpleTable.{js,jsx}",
+            "src/components/GeneralPurpose/Plot/Plot.{js,jsx}",
+            // "src/components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.{js,jsx}",
+            // "src/components/Vega/Vega.{js,jsx}",
+          ],
+          ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],          
+        }
+      ]
     }
   ],
 
