@@ -1,6 +1,19 @@
-![frontend details](./assets/details.svg 'Logo Title Text 1')
+The LOVE-frontend interacts with the rest of the LOVE system through the [LOVE-manager](https://lsst-ts.github.io/LOVE-manager/html/index.html). The LOVE-frontend is a client-side web-application, that is, it is built as static content (javascript, html and css) that is interpreted and executed in the client's web browser. The LOVE-manager instead is a server-side application, that is executed in the LSST Servers, along with the rest of the system.
 
-## Redux: Global state management
+![frontend details](./Frontend_overview.svg "Overview")
+
+When a user navigates to the LOVE-frontend for the first time, the only available view is the Login. After the user inserts its credentials (username and password), the LOVE-frontend sends the credentials to the LOVE-manager through an HTTP request. The LOVE-manager responds to the request with an access token (if the credentials are valid) or with an error if not.
+
+After the user logs in successfully, the LOVE-frontend validates the token in each new navigation, sending it to the LOVE-manager and waiting for a confirmation before allowing navigation. This way, if the token is expired, the response will state so and the LOVE-frontend will logout the user automatically. After logging-in the LOVE-frontend also establishes a websocket connection with the LOVE-manager
+
+Once the LOVE-frontend renders a component that requires data from the LSST, it sends a subscription message to the LOVE-manager stating to which data (telemetries, events, etc) it needs to subscribe. The LOVE-manager then sends that information to the LOVE-frontend through the same websockets connection.
+
+To see more details of how these messages are structured see the section ["How to use it"](https://lsst-ts.github.io/LOVE-manager/html/modules/how_to_use_it.html) of the documentation of the LOVE-manager
+
+
+
+### Redux: Global state management
+![frontend details](./details.svg 'Logo Title Text 1')
 
 [Redux](https://redux.js.org/) is a state container library that facilitates building more predictable apps by centralizing both the state and its changes. In LOVE, a Redux `store` is used to save all the data that comes from the LOVE-manager, enabling having a unique websockets connection per client, avoiding unnecessary data redundancy, while also giving a robust characterization to the authentication process.
 
@@ -22,15 +35,15 @@ Each of its branches (topmost keys) are handled by a separate reducer through th
 
 ---
 
-## Container and presentational components
+### Container and presentational components
 
 Apart from the global state stored in Redux, each component handles its own state with specific information for its own elements. This leads to the distinction of `Container` components and `Presentational` components. Container components are meant to wrap Presentational components to abstract them from all the logic of reading the global state. Containers can read the Redux state through the usage of `selectors`, which are functions (located at `src/redux/selectors`) that receive a copy of the state object and return some data for which they are designed. Selectors are meant to be reused across components so if the state tree were to change, changing the selector should be sufficient to recover the functionality of all related components. Changes to the state are made by `dispatching` `actions`. This is wrapped in the Container component with callbacks tha are passed to Presentational components. The Presentational components use this and other input `props`, and possibly internal state variables to render the component to the users on their screens.
 
 ---
 
-## State tree
+### State tree
 
-### `auth` - Authentication
+##### `auth` - Authentication
 
 ```md
 {
@@ -48,7 +61,7 @@ cmd_exec: false,
 - `status`: State of the currently stored token. The `token` state can go from `EMPTY` to `RECEIVED` and fail for several reasons such as expiration (after some time), rejection (if password changed for example), etc.
 - `permissions`: Dictionary with flags about the permissions of the logged in user. Right now it is useful to decide if command-related interfaces should be rendered or not, or if should be rendered differently.
 
-### `ws` - Websockets
+##### `ws` - Websockets
 
 ```md
 {
@@ -77,7 +90,7 @@ data // optional
 
 where `groupName` is name of the group of the subscription (e.g., `event-ScriptQueue-1-summaryState`); `confirmationMessage` is a string returned by the LOVE-manager confirming the subscription to the group; and `data` is a dictionary containing all the parameters of the group message.
 
-### `camera`- Camera state
+##### `camera`- Camera state
 
 ```md
 {
@@ -105,7 +118,7 @@ event-ATCamera-1-imageReadoutParameters
 
 This data is colected after being added to the `ws.subscriptions` state because the information comes in separate groups and otherwise only the latest CSC info would be available.
 
-### `heartbeats`- CSC heartbeats
+##### `heartbeats`- CSC heartbeats
 
 ```md
 {
@@ -119,7 +132,7 @@ cscs: [],
 
 This data is colected after being added to the `ws.subscriptions` state because the information comes in separate groups and otherwise only the latest CSC info would be available.
 
-### `summaryData` - CSC Summary data
+##### `summaryData` - CSC Summary data
 
 ```md
 logMessageData: [],
@@ -134,13 +147,13 @@ This data is colected after being added to the `ws.subscriptions` state so the h
 
 ---
 
-## Token, websocket connection and groups subscriptions
+### Token, websocket connection and groups subscriptions
 
 The token, websocket and subscriptions handling is summarized in the following graphs:
 
-![redux state machine graph](./assets/redux-auth.svg 'Redux token authentication state machine graph')
+![redux state machine graph](./redux-auth.svg 'Redux token authentication state machine graph')
 
-### Token handling
+##### Token handling
 
 - Token starts with status EMPTY
 - When the application initiates, it tries to read the token from the local storage (status is READ_FROM_LOCAL_STORAGE)
@@ -152,7 +165,7 @@ The token, websocket and subscriptions handling is summarized in the following g
 - When a user logs out, then the status is REMOVE_REQUESTED
 - When the response arrives and it was deleted (204) the status is REMOVED_REMOTELY, otherwise REMOVE_ERROR
 
-### Token swap
+##### Token swap
 
 - Token swap starts with (swap) status SWAP_RECEIVED
 - Once the user opens the swap login panel, the swap status changes to SWAP_REQUIRED
@@ -161,9 +174,9 @@ The token, websocket and subscriptions handling is summarized in the following g
 - Once the response is ok (200), the status changes to SWAP_RECEIVED and the websockets connection is closed and then reopened
 - If the response fails, it goes to either SWAP_ERROR or SWAP_REJECTED, depending on response codes. The websocket connection is not closed since the previous token is still in use
 
-![redux state machine graph](./assets/redux-ws-connection.svg 'Redux ws connection and subscriptions state machine graph')
+![redux state machine graph](./redux-ws-connection.svg 'Redux ws connection and subscriptions state machine graph')
 
-### Websocket connection handling
+##### Websocket connection handling
 
 - Connection status starts as CLOSED
 - When token is received/validated we dispatch an `openWebsocketConnection` action
@@ -172,7 +185,7 @@ The token, websocket and subscriptions handling is summarized in the following g
 - When status is RETRYING an interval function runs every 3 seconds, attempting to reconnect
 - When connection is gracefully closed, then the status is CLOSED
 
-### Subscriptions are decoupled from connection
+##### Subscriptions are decoupled from connection
 
 - Each subscription has a status: PENDING, REQUESTING, SUBSCRIBED or UNSUBSCRIBING
 - Components add subscriptions dispatching `addGroupSubnscription` action (status PENDING)
@@ -186,13 +199,13 @@ The token, websocket and subscriptions handling is summarized in the following g
 
 ---
 
-## ScriptQueue scripts schema validation
+### ScriptQueue scripts schema validation
 
 Validation is performed in the LOVE-manager (instead of the frontend) asynchronously and should respond to config changes by the user.
 
 The behavior can be represented by this (pseudo) state machine diagram:
 
-![redux script validation](./ssets/redux-script-validation.svg 'Script validation state machine')
+![redux script validation](./redux-script-validation.svg 'Script validation state machine')
 
 - `EMPTY`
   - Is the initial state, assuming there is no schema yet and no text has been written
@@ -230,7 +243,7 @@ The behavior can be represented by this (pseudo) state machine diagram:
   - Can send scripts
   - On `keypress` goes back to validating
 
-## ViewEditor responsive layout simulator
+### ViewEditor responsive layout simulator
 
 The `ViewEditor` located at `love/src/components/UIF/ViewEditor/ViewEditor.jsx` enables a user to edit the size and position of a `View`. On top of these features, in order to support the user to be aware of how other users will see its currently created view on different devices, a responsive layout simulator was implemented. This simulator enables the user to select a device size (such as `Laptop`, `4K`, `Mobile S`, among others) and see how the components are re-organized accordingly on screen.
 
@@ -238,7 +251,7 @@ The behavior of this responsive layout with respect to other features is describ
 
 The most important issue that motivates the complexity of this representation is that smaller devices may handle the content with a smaller number of columns, and thus, changes to the layout may be irreversible if the user is not properly aware. In summary, moving to a smaller device will reorganize content on the configured columns, possibly moving some of then to different rows; moving to a bigger device will attempt to re-scale the content to fit the same pixel-area in the new layout.
 
-![State machine of the responsive layout simulator](./assets/responsive-grid-state-machine.svg 'State machine of the responsive layout simulator')
+![State machine of the responsive layout simulator](./responsive-grid-state-machine.svg 'State machine of the responsive layout simulator')
 
 - `COLS_NOT_CHANGED`
 
@@ -281,15 +294,15 @@ The most important issue that motivates the complexity of this representation is
   - This behavior is also dependant on the `container` to have the proper number of `.cols`.
   - Editing moves the state to `COLS_NOT_CHANGED`.
 
-## Server Time sync and calculation
+### Server Time sync and calculation
 
 The LOVE-frontend `Clock` and `TimeDisplay` components show server time rather than client time. This is in order to ensure no particular time settings on the client side will change the displayed time.
 
-### Server time saved in Redux
+#### Server time saved in Redux
 
 In order to do this, server time is obtained everytime the authentication token is requested or validated (e.g. in each browser navigation or refresh) in the LOVE-manager. The information is then stored in the Redux store as follows:
 
-```js
+```js static
 timeData: {
   request_time: <local UTC time in seconds when the request was made>,
   receive_time: <local UTC time in seconds when the response arrived>,
@@ -304,7 +317,7 @@ timeData: {
 }
 ```
 
-### Syncing calculations
+##### Syncing calculations
 
 The `Clock` and `TimeDisplay` components obtain the server time data from Redux update the clock every second. The calculation is as follows.
 
@@ -331,43 +344,43 @@ t_mjd      = t_mjd_0      + (t_local - t_local_0) / (3600 * 24)
 t_sidereal = t_sidereal_0 + (t_local - t_local_0) * 1.00273788 / 3600
 ```
 
-### Calculation rationale
+##### Calculation rationale
 
 We assume there will always be a lag between request and response, and the server time is calculated between request and response time. Hence, assuming server and local time are in sync we have:
 
-```
+```static
 timeData.receive_time < timeData.server_time.utc < timeData.request_time
 ```
 
 We assume the server_time was calculated at the midpoint between request and receive times, so we assume:
 
-```
+```static
 t_local_0  = (timeData.receive_time + timeData.request_time) / 2
 ```
 
 Now, if we consider that server and local times could be shifted by a constant offset `C`, we have that for every server time `t_server` its corresponding local time `t_local` should be:
 
-```
+```static
 t_server = t_local + C
 ```
 
 Hence, if we consider any 2 points in time (`t_local`, `t_server`) and (`t_local_0`, `t_server_0`):
 
-```
+```static
 t_server - t_server_0 = (t_local + C) - (t_local_0 + C) = t_local - t_local_0
 t_server = t_server_0 + t_local - t_local_0
 ```
 
 Similarly, if the server time is in a different scale (.e.g sidereal time), and we know we can transform local time scale (e.g. UTC) time to server time scale with a function `f` (plus the constant offset `C`), we have:
 
-```
+```static
 t_server - t_server_0 = (f(t_local) + C) - (f(t_local_0) + C) = f(t_local) - f(t_local_0)
 t_server = t_server_0 + f(t_local) - f(t_local_0)
 ```
 
 Now if `f` is a linear function, like in Sidereal Time and MJD cases:
 
-```
+```static
 t_server = t_server_0 + f(t_local) - f(t_local_0) = t_server_0 + f(t_local - t_local_0)
 t_server = t_server_0 + f(t_local - t_local_0)
 ```
