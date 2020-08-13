@@ -2,20 +2,20 @@ const path = require('path');
 
 const commonIgnored = [
   'src/components/Watcher/AlarmUtils.js',
-  "src/components/Watcher/AlarmsTable/mock.js ",
-  "src/components/GenericCamera/CameraUtils.js ",
-  "src/components/UIF/ViewsIndex/ViewLauncher/ViewLauncher.jsx",
-  "src/components/GeneralPurpose/Graph/entities/link/index.js ",
-  "src/components/UIF/ComponentIndex.jsx",
-  "src/components/ScriptQueue/Scripts/Scripts.jsx",
-  "src/components/ScriptQueue/QueueMessage.jsx",
-  "src/components/HealthStatusSummary/TelemetrySelectionTable/fakeData.jsx",
-  "src/components/GeneralPurpose/Graph/entities/port/SimplePortFactory.jsx",
-  "src/components/GeneralPurpose/Graph/entities/port/DiamondPortModel.jsx",
-  "src/components/GeneralPurpose/Graph/entities/node/DiamondNodeFactory.jsx",
-  "src/components/GeneralPurpose/Graph/entities/node/DiamondNodeModel.jsx",
-  "src/components/GeneralPurpose/Graph/entities/label/EditableLabelModel.jsx",
-  "src/components/GeneralPurpose/Graph/entities/label/EditableLabelFactory.jsx",
+  'src/components/Watcher/AlarmsTable/mock.js ',
+  'src/components/GenericCamera/CameraUtils.js ',
+  'src/components/UIF/ViewsIndex/ViewLauncher/ViewLauncher.jsx',
+  'src/components/GeneralPurpose/Graph/entities/link/index.js ',
+  'src/components/UIF/ComponentIndex.jsx',
+  'src/components/ScriptQueue/Scripts/Scripts.jsx',
+  'src/components/ScriptQueue/QueueMessage.jsx',
+  'src/components/HealthStatusSummary/TelemetrySelectionTable/fakeData.jsx',
+  'src/components/GeneralPurpose/Graph/entities/port/SimplePortFactory.jsx',
+  'src/components/GeneralPurpose/Graph/entities/port/DiamondPortModel.jsx',
+  'src/components/GeneralPurpose/Graph/entities/node/DiamondNodeFactory.jsx',
+  'src/components/GeneralPurpose/Graph/entities/node/DiamondNodeModel.jsx',
+  'src/components/GeneralPurpose/Graph/entities/label/EditableLabelModel.jsx',
+  'src/components/GeneralPurpose/Graph/entities/label/EditableLabelFactory.jsx',
 ];
 
 module.exports = {
@@ -42,6 +42,81 @@ module.exports = {
       content: 'docsrc/overview.md',
     },
     {
+      name: 'How it works',
+      content: 'docsrc/howitworks/01-howitworks.md',
+      sectionDepth: 2,
+      sections: [
+        {
+          name: 'Global state management with Redux',
+          content: 'docsrc/howitworks/02-redux.md'
+        },
+        {
+          name: "Token, websocket connection and groups subscriptions",
+          content: 'docsrc/howitworks/02.1-auth-and-subscriptions.md'
+        },
+        {
+          name: 'Clock sync',
+          content: 'docsrc/howitworks/03-time-sync.md'
+        },
+        {
+          name: 'View editor',
+          content: 'docsrc/howitworks/04-view-editor.md'
+        },
+        {
+          name: 'Scripts config validation',
+          content: 'docsrc/howitworks/05-scripts-validation.md'
+        }
+      ]
+    },
+    {
+      name: 'Components',
+      sectionDepth: 3,
+      content: 'docsrc/components/components.md',
+      sections: [
+        {
+          name: 'Obervatory',
+          content: 'docsrc/components/observatory.md',
+          components: [
+            'src/components/AuxTel/Camera/Camera.container.jsx',
+            'src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}',
+            'src/components/ScriptQueue/Scripts/AvailableScript/AvailableScript.{js,jsx}',
+            'src/components/ScriptQueue/Scripts/CurrentScript/CurrentScript.{js,jsx}',
+            'src/components/ScriptQueue/Scripts/WaitingScript/WaitingScript.{js,jsx}',
+            'src/components/ScriptQueue/Scripts/ScriptList/ScriptList.{js,jsx}',
+            'src/components/ScriptQueue/Scripts/FinishedScript/FinishedScript.{js,jsx}',
+          ],
+          ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],
+        },
+        {
+          name: 'Auxiliary Telescope',
+          content: 'docsrc/components/auxtel.md',
+          components: [],
+          ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],
+        },
+        {
+          name: 'General Purpose',
+          content: 'docsrc/components/general-purpose.md',
+          components: [
+            'src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}',
+            // "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.{js,jsx}",
+            'src/components/GeneralPurpose/InfoPanel/InfoPanel.{js,jsx}',
+            'src/components/GeneralPurpose/Graph/Graph.{js,jsx}',
+            'src/components/GeneralPurpose/Panel/Panel.{js,jsx}',
+            'src/components/GeneralPurpose/Button/Button.{js,jsx}',
+            'src/components/GeneralPurpose/Hoverable/Hoverable.{js,jsx}',
+            'src/components/GeneralPurpose/ActionableTable/ActionableTable.{js,jsx}',
+            'src/components/GeneralPurpose/LoadingBar/LoadingBar.{js,jsx}',
+            'src/components/GeneralPurpose/PaginatedTable/PaginatedTable.{js,jsx}',
+            'src/components/GeneralPurpose/SimpleTable/SimpleTable.{js,jsx}',
+            'src/components/GeneralPurpose/Plot/Plot.{js,jsx}',
+            // "src/components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.{js,jsx}",
+            // "src/components/Vega/Vega.{js,jsx}",
+          ],
+          ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],
+        },
+      ],
+    },
+    {
       name: 'Instructions',
       external: true,
       href: 'https://github.com/lsst-ts/LOVE-frontend/blob/develop/README.md',
@@ -50,24 +125,6 @@ module.exports = {
       name: 'Contributing',
       external: true,
       href: 'https://github.com/lsst-ts/LOVE-frontend/blob/develop/CONTRIBUTING.md',
-    },
-    {
-      name: 'How it works',
-      content: 'docsrc/howitworks.md',
-    },
-    {
-      name: "Presentational Components",
-      sectionDepth: 2,
-      components: ['src/components/**/*.jsx', 'src/components/**/*.js'],
-      ignore: ['src/components/**/*.container.jsx', ...commonIgnored],
-      skipComponentsWithoutExample: true,
-
-    },
-    {
-      // name: "Container Components",
-      // sectionDepth: 2,
-      // components: ['love/src/components/GeneralPurpose/Plot/Plot.container.jsx'],
-      // skipComponentsWithoutExample: true,
     }
   ],
 

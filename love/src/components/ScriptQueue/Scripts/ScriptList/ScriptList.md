@@ -1,9 +1,11 @@
 Example:
 
-``` jsx
-  <ScriptList>
-    <WaitingScript/>
-    <WaitingScript/>
-    <WaitingScript/>
-  </ScriptList>
+```jsx
+import WaitingScript from '../WaitingScript/WaitingScript';
+
+<ScriptList>
+  <WaitingScript />
+  <WaitingScript />
+  <WaitingScript />
+</ScriptList>;
 ```
