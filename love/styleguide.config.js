@@ -51,6 +51,10 @@ module.exports = {
           content: 'docsrc/howitworks/02-redux.md'
         },
         {
+          name: "Token, websocket connection and groups subscriptions",
+          content: 'docsrc/howitworks/02.1-auth-and-subscriptions.md'
+        },
+        {
           name: 'Clock sync',
           content: 'docsrc/howitworks/03-time-sync.md'
         },
