@@ -43,7 +43,26 @@ module.exports = {
     },
     {
       name: 'How it works',
-      content: 'docsrc/howitworks.md',
+      content: 'docsrc/howitworks/01-howitworks.md',
+      sectionDepth: 2,
+      sections: [
+        {
+          name: 'Global state management with Redux',
+          content: 'docsrc/howitworks/02-redux.md'
+        },
+        {
+          name: 'Clock sync',
+          content: 'docsrc/howitworks/03-time-sync.md'
+        },
+        {
+          name: 'View editor',
+          content: 'docsrc/howitworks/04-view-editor.md'
+        },
+        {
+          name: 'Scripts config validation',
+          content: 'docsrc/howitworks/05-scripts-validation.md'
+        }
+      ]
     },
     {
       name: 'Components',

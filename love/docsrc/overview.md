@@ -2,4 +2,4 @@ The `LOVE-frontend` contains all the user interfaces of the LSST Operation and V
 
 With this purpose, the `LOVE-frontend` contains a collection of visual components that can be configured and mixed together to create (and load) customized screens or `views`, either through a view-editor user interface called the `UI Framework` or by directly changing the source code. This way the `LOVE` provides operators and developers with the flexibility to adapt in time to the Vera C. Rubin Observatory operation's needs, especially during commissioning and early-stage operations.
 
-This document specifies how the `LOVE-frontend` works and also which components are available to build new user interfaces. 
+The `LOVE-frontend` is a `React-Redux` `Javascript` application and here we explain how it works and which components are available for operators and developers.
