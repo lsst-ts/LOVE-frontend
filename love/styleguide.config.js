@@ -71,10 +71,11 @@ module.exports = {
     {
       name: 'Components',
       sectionDepth: 3,
-      content: 'docsrc/components.md',
+      content: 'docsrc/components/components.md',
       sections: [
         {
           name: 'Obervatory',
+          content: 'docsrc/components/observatory.md',
           components: [
             'src/components/AuxTel/Camera/Camera.container.jsx',
             'src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}',
@@ -88,11 +89,13 @@ module.exports = {
         },
         {
           name: 'Auxiliary Telescope',
+          content: 'docsrc/components/auxtel.md',
           components: [],
           ignore: ['src/components/**/*.container.{js, jsx}', ...commonIgnored],
         },
         {
           name: 'General Purpose',
+          content: 'docsrc/components/general-purpose.md',
           components: [
             'src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}',
             // "src/components/HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.{js,jsx}",
