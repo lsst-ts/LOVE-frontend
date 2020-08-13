@@ -1,1 +1,5 @@
-The LOVE-frontend is the user interface of the LSST Operation and Visualization Environment (L.O.V.E.) project. It is written as a web application written using ReactJS and Redux.
+The `LOVE-frontend` contains all the user interfaces of the LSST Operation and Visualization Environment (L.O.V.E.). These user interfaces are built to support situation awareness of the Vera C. Rubin Observatory operators so they can efficiently make decisions and achieve their goals during the operations. 
+
+With this purpose, the `LOVE-frontend` contains a collection of visual components that can be configured and mixed together to create (and load) customized screens or `views`, either through a view-editor user interface called the `UI Framework` or by directly changing the source code. This way the `LOVE` provides operators and developers with the flexibility to adapt in time to the Vera C. Rubin Observatory operation's needs, especially during commissioning and early-stage operations.
+
+This document specifies how the `LOVE-frontend` works and also which components are available to build new user interfaces. 
