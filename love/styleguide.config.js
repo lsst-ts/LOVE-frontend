@@ -71,10 +71,12 @@ module.exports = {
     {
       name: 'Components',
       sectionDepth: 3,
+      content: 'docsrc/components.md',
       sections: [
         {
           name: 'Obervatory',
           components: [
+            'src/components/AuxTel/Camera/Camera.container.jsx',
             'src/components/HealthStatusSummary/HealthStatusSummary.{js,jsx}',
             'src/components/ScriptQueue/Scripts/AvailableScript/AvailableScript.{js,jsx}',
             'src/components/ScriptQueue/Scripts/CurrentScript/CurrentScript.{js,jsx}',
