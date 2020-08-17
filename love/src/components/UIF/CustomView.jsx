@@ -306,7 +306,21 @@ class CustomView extends Component {
           breakpoints={DEVICE_TO_SIZE}
           items={layout.length}
           rowHeight={20}
-          onResizeStop={this.onResizeStop}
+          onResizeStop={(layout) => {
+            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
+            this.onResizeStop(layout);
+          }}
+          onResizeStart={(a, b, c, d, e) => {
+            this.gridRef = document.getElementsByClassName(styles.gridLayout)[0];
+            this.minHeight = 0;
+            console.log(a, b, c, d, e)
+          }}
+          onResize={(a, b, c, d, e) => {
+            if(this.gridRef.clientHeight > this.minHeight){
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight ?? 0);
+              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            }
+          }}
           onDragStop={this.onDragStop}
           cols={cols}
           width={deviceWidth + 1}
