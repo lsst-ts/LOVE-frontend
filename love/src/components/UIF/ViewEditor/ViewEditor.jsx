@@ -339,7 +339,7 @@ class ViewEditor extends Component {
       };
       startingIndex += 1;
     });
-    parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
+    parsedLayout.content = { ...additionalContent, ...parsedLayout.content };
     this.updateEditedViewLayout(parsedLayout);
   };
 
