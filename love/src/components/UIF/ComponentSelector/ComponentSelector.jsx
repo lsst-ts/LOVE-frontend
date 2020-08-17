@@ -44,6 +44,16 @@ export default class ComponentSelector extends Component {
     });
   };
 
+  onModalClose = (event) => {
+    this.props.onRequestClose(event);
+    this.clearSelection();
+  };
+
+  onInsertButtonClick = () => {
+    this.props.selectCallback(this.state.selected);
+    this.clearSelection();
+  };
+
   changeFilter = (event) => {
     this.setState({
       filter: event.target.value,
@@ -54,7 +64,7 @@ export default class ComponentSelector extends Component {
     return (
       <Modal
         isOpen={this.props.isOpen}
-        onRequestClose={this.props.onRequestClose}
+        onRequestClose={this.onModalClose}
         contentLabel="Component selection modal"
         footerChildren={
           <>
@@ -64,7 +74,8 @@ export default class ComponentSelector extends Component {
             <Button
               status="primary"
               disabled={buttonsDisabled}
-              onClick={() => this.props.selectCallback(this.state.selected)}
+              onClick={this.onInsertButtonClick}
+              // onClick={() => this.props.selectCallback(this.state.selected)}
             >
               Insert
             </Button>
