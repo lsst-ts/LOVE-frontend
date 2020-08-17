@@ -49,8 +49,9 @@ export default function UserDetails({
             <span>User </span>
             <span className={styles.highlight}>{username}</span>
             <div>
-              <span>{execPermission ? '☑ ' : '☒ '}</span>
-              <span className={styles.secondary}>Command execution</span>
+              <span className={styles.secondary}>
+                {execPermission ? 'Allowed to run Commands' : 'Not allowed to run Commands'}
+              </span>
             </div>
           </div>
         </div>
