@@ -61,6 +61,12 @@ export default class ComponentSelector extends Component {
   };
   render() {
     const buttonsDisabled = this.state.selected.length === 0;
+    let regex = null;
+    try {
+      regex = new RegExp(this.state.filter, 'i');
+    } catch (e) {
+      console.error('Error in regular expression, using simple string includes instead. ', e);
+    }
     return (
       <Modal
         isOpen={this.props.isOpen}
@@ -102,7 +108,9 @@ export default class ComponentSelector extends Component {
                     const selected = this.state.selected.includes(componentDict);
                     const checkboxId = `checkbox-${component}`;
                     const filter =
-                      this.state.filter === '' || new RegExp(this.state.filter, 'i').test(componentDict.name);
+                      this.state.filter === '' || regex
+                        ? regex.test(componentDict.name)
+                        : componentDict.name.includes(this.state.filter);
                     return (
                       filter && (
                         <div
