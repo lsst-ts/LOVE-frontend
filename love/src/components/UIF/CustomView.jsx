@@ -310,14 +310,13 @@ class CustomView extends Component {
             document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
             this.onResizeStop(layout);
           }}
-          onResizeStart={(a, b, c, d, e) => {
+          onResizeStart={() => {
             this.gridRef = document.getElementsByClassName(styles.gridLayout)[0];
             this.minHeight = 0;
-            console.log(a, b, c, d, e)
           }}
-          onResize={(a, b, c, d, e) => {
+          onResize={() => {
             if(this.gridRef.clientHeight > this.minHeight){
-              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight ?? 0);
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
               document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
             }
           }}
