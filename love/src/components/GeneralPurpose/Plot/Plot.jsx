@@ -30,7 +30,7 @@ const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisT
   /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
   const completedMarksStyles = React.useMemo(() => {
     return legend.map(({ name, markType }, index) => {
-      const style = marksStyles.find((style) => style.name === name);
+      const style = marksStyles?.find((style) => style.name === name);
       if (!style) {
         return {
           ...defaultStyles[index % defaultStyles.length],

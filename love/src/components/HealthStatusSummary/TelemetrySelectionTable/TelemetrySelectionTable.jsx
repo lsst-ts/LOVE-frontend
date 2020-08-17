@@ -245,7 +245,6 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   testFilter = (row) => {
     const values = Object.keys(row).map((rowKey) => {
-      const key = [row.component, row.stream, row.param_name].join('-');
       if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'regexp') {
         const func = this.state.filters[rowKey].function ? this.state.filters[rowKey].function : (value) => value;
         const regexpFilterResult = this.state.filters[rowKey].value.test(func(row[rowKey]));

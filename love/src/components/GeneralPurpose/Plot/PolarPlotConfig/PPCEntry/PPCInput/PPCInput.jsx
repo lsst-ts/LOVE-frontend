@@ -80,7 +80,7 @@ export default class PPCInput extends PureComponent {
     if (this.props.optionsTree) {
       cscOptions = Object.keys(optionsTree);
       if (this.props.input) {
-        const { category, csc, salindex, topic, item } = this.props.input;
+        const { category, csc, topic } = this.props.input;
         topicOptions = csc && category ? Object.keys(optionsTree[csc][`${category}_data`]) : [];
         itemOptions = topic ? Object.keys(optionsTree[csc][`${category}_data`][topic]) : [];
       }

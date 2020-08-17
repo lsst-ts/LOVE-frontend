@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { PointModel } from '@projectstorm/react-diagrams-core';
 
 export class LinkPointWidget extends React.Component {
   constructor(props) {
@@ -29,7 +28,7 @@ export class LinkPointWidget extends React.Component {
   };
 
   render() {
-    const { point, location } = this.props;
+    const { point } = this.props;
 
     return (
       <g>

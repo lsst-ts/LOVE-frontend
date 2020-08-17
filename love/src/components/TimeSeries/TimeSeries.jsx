@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import TelemetrySelectionTableContainer from '../HealthStatusSummary/TelemetrySelectionTable/TelemetrySelectionTable.container';
 import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import { hasFakeData } from '../../Config';
@@ -120,16 +119,6 @@ export default class TimeSeries extends PureComponent {
   };
 
   render() {
-    const columnsToDisplay = [
-      'selection_column',
-      'component',
-      'stream',
-      'name',
-      'param_name',
-      'data_type',
-      'value',
-      'units',
-    ];
 
     const streams = this.state.subscribedStreams;
     const dataSources = Object.keys(streams);

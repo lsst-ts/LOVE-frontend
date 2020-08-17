@@ -200,7 +200,9 @@ export default class PolarPlot extends Component {
       groups[ms.group] = { ...groups[ms?.group], [ms?.encoding]: ms?.name };
     });
     const tripletGroups = groups.map((g, i) => {
-      if (g === undefined) return;
+      if (g === undefined) {
+        return undefined;
+      }
       const radialData = data?.[g.radial];
       const angularData = data?.[g.angular];
       const colorData = data?.[g.color];

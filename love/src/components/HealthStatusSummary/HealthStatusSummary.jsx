@@ -58,7 +58,7 @@ export default class HealthStatusSummary extends Component {
     return (
       <div ref={this.containerRef} className={styles.container}>
         {Object.keys(topicConfiguration).map((indexedComponentName) => {
-          const [category, component, salindex] = indexedComponentName.split('-');
+          const [component, salindex] = indexedComponentName.split('-');
           const componentName = `${component}${parseInt(salindex) === 0 ? '' : `.${salindex}`}`;
 
           return (

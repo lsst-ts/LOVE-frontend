@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './HealpixOverlay.module.css';
-import { xy_sample, azel_sample } from './CameraUtils';
+import { xy_sample } from './CameraUtils'; // azel_sample
 import { geoVoronoi } from 'd3-geo-voronoi';
 import * as d3 from 'd3';
 
@@ -61,9 +61,8 @@ export default class HealpixOverlay extends PureComponent {
     // }, 50);
   }
 
-  componentDidUpdate(prevState, prevProps){
-    if(prevProps?.selectedCell?.layerName !== this.props.selectedCell?.layerName)
-      this.redraw();
+  componentDidUpdate(prevState, prevProps) {
+    if (prevProps?.selectedCell?.layerName !== this.props.selectedCell?.layerName) this.redraw();
   }
 
   redraw = () => {

@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 import {
   ASCENDING,
-  DESCENDING,
+  // DESCENDING,
   UNSORTED,
 } from '../../HealthStatusSummary/TelemetrySelectionTable/FilterDialog/FilterDialog.jsx';
 
@@ -151,7 +151,7 @@ const ActionableTable = function ({ data, headers, ...otherProps }) {
         return sort(row1[sortingColumn], row2[sortingColumn], sortFactor, row1, row2);
       });
     return newData;
-  }, [data, sortingColumn, sortDirections, filters]);
+  }, [data, sortingColumn, sortDirections, filters, headers]);
 
   return <PaginatedTable data={transformedData} headers={newHeaders} {...otherProps}/>;
 };
