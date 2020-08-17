@@ -6,6 +6,7 @@ import '../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
+import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon.jsx';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
@@ -158,21 +159,21 @@ class CustomView extends Component {
         ].join(' ')}
       >
         <div className={styles.editableComponentActions}>
-          <Button onClick={() => this.props.onComponentConfig(component)}>
+          <Button onClick={() => this.props.onComponentConfig(component)} title="Configure" className={styles.iconButton}>
             <div className={styles.gearIconWrapper}>
-              <GearIcon active />
+              <GearIcon active className={styles.icon}/>
             </div>
           </Button>
-          <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
+          <Button onClick={() => this.props.onComponentDelete(component)} title="Remove" className={styles.iconButton}>
+            <div className={styles.gearIconWrapper}>
+              <DeleteIcon className={styles.icon}/>
+            </div>
+          </Button>
         </div>
+
         {parsedConfig.titleBar ? (
           <ErrorBoundary>
-            <Panel
-              title={parsedConfig.title}
-              fit={false}
-              hasRawMode={parsedConfig.hasRawMode}
-              link={parsedConfig.link}
-            >
+            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode} link={parsedConfig.link}>
               {comp}
             </Panel>
           </ErrorBoundary>
