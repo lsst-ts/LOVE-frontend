@@ -164,8 +164,6 @@ class ViewEditor extends Component {
       ...this.props.editedViewCurrent,
       data: newLayout,
     });
-    const layoutElement = document.getElementById(LAYOUT_CONTAINER_ID);
-    setTimeout(() => layoutElement.scrollTo({ top: layoutElement?.scrollHeight ?? 0, behavior: 'smooth' }), 0);
   };
 
   onNameInputChange = (event) => {
@@ -344,6 +342,8 @@ class ViewEditor extends Component {
     });
     parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
     this.updateEditedViewLayout(parsedLayout);
+    const layoutElement = document.getElementById(LAYOUT_CONTAINER_ID);
+    setTimeout(() => layoutElement.scrollTo({ top: layoutElement?.scrollHeight ?? 0, behavior: 'smooth' }), 0);
   };
 
   onComponentDelete = (component) => {
