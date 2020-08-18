@@ -23,7 +23,7 @@
 
 .panelHeading {
   display: grid;
-  grid-template-columns: 1fr min-content;
+  grid-template-columns: auto min-content;
   align-content: space-around;
   color: var(--secondary-font-color);
   font-weight: 300;
@@ -58,11 +58,16 @@
   justify-content: center;
   padding-right: 0.5em;
   grid-template-rows: 1fr;
-  grid-auto-columns: 2em;
+  grid-template-columns: 5em;
   grid-auto-flow: column;
   grid-column-gap: 0.2em;
   padding: 0.2em;
-  padding-right: 0.5em;
+  margin-right: 0.5em;
+}
+
+.panelTwoButtonsWrapper {
+  grid-template-columns: 5em 1.5em;
+  margin-right: 1.5em;
 }
 
 .panelButton {

@@ -306,7 +306,7 @@ export default class ScriptQueue extends Component {
         name: script.name,
         show: true,
         x: x,
-        y: y - height,
+        y: 100,
         configSchema: script.configSchema,
       },
     });

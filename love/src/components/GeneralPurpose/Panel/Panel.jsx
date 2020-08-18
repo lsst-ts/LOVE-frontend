@@ -56,26 +56,30 @@ export default class Panel extends Component {
         isRaw: this.state.isRaw,
       });
     });
+    const hasLink = this.props.link && this.props.link !== '';
     return (
       <div className={classNames}>
         <div className={styles.panelHeading}>
           <h3 className={styles.panelTitle}>{this.props.title}</h3>
-          <div className={styles.panelButtonWrapper}>
+          <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
             {this.props.hasRawMode && (
-              <Button 
+              <Button
                 title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}
-                onClick={() => this.toggleRaw()} className={styles.panelButton} size={'small'}>
-                <span>{this.state.isRaw ? '<' : 'i'}</span>
+                onClick={() => this.toggleRaw()}
+                className={styles.panelButton}
+                size={'small'}
+              >
+                {this.state.isRaw ? <span> &#5176; &nbsp; back</span> : <span>raw data</span>}
               </Button>
             )}
-            {this.props.link && this.props.link !== '' && (
+            {hasLink && (
               <Button
                 title={`External link: ${this.props.link}`}
                 onClick={() => window.open(this.props.link, '_blank')}
-                className={[styles.panelButton, styles.horizontalFlip].join(' ')}
+                className={styles.panelButton}
                 size={'small'}
               >
-                <span>⇱</span>
+                <span>&#8599;</span>
               </Button>
             )}
           </div>

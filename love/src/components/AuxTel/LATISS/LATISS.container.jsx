@@ -8,7 +8,7 @@ import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/S
 export const schema = {
   description:
     'Summary view of the LATISS. Contains information about the filter and grating wheel, shutter and CCDs state',
-  defaultSize: [61, 31],
+  defaultSize: [61, 32],
   props: {
     title: {
       type: 'string',

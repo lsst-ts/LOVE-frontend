@@ -272,7 +272,7 @@ export const HEARTBEAT_COMPONENTS = {
   TELEMETRIES: 'Telemetries',
   HEARTBEATS: 'CSCHeartbeats',
   LOVE: 'LOVE CSC',
-  SCRIPTQUEUE: 'ScriptQueue-0',
+  SCRIPTQUEUE: 'ScriptQueue-1',
   COMMANDER: 'Commander',
 }
 
