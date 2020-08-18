@@ -74,7 +74,7 @@ export default class ComponentSelector extends Component {
         contentLabel="Component selection modal"
         footerChildren={
           <>
-            <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
+            <Button status="transparent" disabled={buttonsDisabled} onClick={this.clearSelection}>
               Clear Selection
             </Button>
             <Button
