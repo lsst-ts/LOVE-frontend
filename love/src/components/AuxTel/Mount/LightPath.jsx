@@ -72,10 +72,10 @@ export default class LightPath extends Component {
           ></path>
         </svg>
         <foreignObject
-          x={10 + 121.5 + 140 / 2}
-          y={270}
+          x={-140 / 2 - 20}
+          y={80}
           width="1600"
-          height="1600"
+          height="200"
           transform-origin={`${10 + 121.5 + 140 / 2} ${270}`}
           transform="scale(0.5,0.5)"
         >
@@ -223,10 +223,10 @@ export default class LightPath extends Component {
           ) : null}
         </g>
         <foreignObject
-          x={121.5 + 30}
-          y={240}
+          x={-35}
+          y={50}
           width="1600"
-          height="1600"
+          height="200"
           transform-origin={`${121.5 + 30} ${240}`}
           transform="scale(0.5,0.5)"
         >
@@ -319,10 +319,10 @@ export default class LightPath extends Component {
           ></rect>
         </g>
         <foreignObject
-          x={45}
-          y={270}
+          x={65}
+          y={-50}
           width="1600"
-          height="1600"
+          height="300"
           transform-origin={`${45} ${270}`}
           transform="scale(0.5,0.5)"
         >
@@ -404,10 +404,10 @@ export default class LightPath extends Component {
           ></rect>
         </g>
         <foreignObject
-          x={240}
-          y={270}
+          x={-130}
+          y={-50}
           width="1600"
-          height="1600"
+          height="300"
           transform-origin={`${240} ${270}`}
           transform="scale(0.5,0.5)"
         >
