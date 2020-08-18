@@ -353,7 +353,7 @@ class Layout extends Component {
               status={producerHeartbeatStatus}
               title={this.getHeartbeatTitle('')}
             />
-            <span title={this.getHeartbeatTitle('')}>LOVE producer</span>
+            <span title={this.getHeartbeatTitle('')}>LOVE producers:</span>
             <HeartbeatIcon
               className={styles.miniIcon}
               status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
