@@ -31,6 +31,7 @@ import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
 
+export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
@@ -610,7 +611,7 @@ class Layout extends Component {
           </div>
         </div>
 
-        <div className={styles.contentWrapper}>{this.props.children}</div>
+        <div className={styles.contentWrapper} id={LAYOUT_CONTAINER_ID}>{this.props.children}</div>
         <Modal
           isOpen={this.state.isXMLModalOpen}
           onRequestClose={() => this.setState({ isXMLModalOpen: false })}

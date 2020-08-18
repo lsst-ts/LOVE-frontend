@@ -210,7 +210,7 @@ export default class WeatherStation extends Component {
           </div>
         </div>
 
-        <div className={styles.doubleSection}>
+        <div className={styles.windPlotSection}>
           <div className={styles.sectionTitle}>Wind</div>
           <div className={styles.windPlotContainer}>
             <PolarPlotContainer {...this.windPlot} />

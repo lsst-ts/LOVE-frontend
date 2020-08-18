@@ -77,3 +77,21 @@
   width: 150%;
   transform: translate(17.5%, 0);
 }
+
+.windPlotSection {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-column: 2 / span 2;
+  grid-row: 1 / span 2;
+  width: 100%;
+  overflow: hidden;
+  border: 2px solid var(--second-tertiary-background-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 0.5em;
+}
+
+.windPlotSection .sectionTitle {
+  grid-column: 1 / span 2;
+}

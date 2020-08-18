@@ -306,8 +306,46 @@ class CustomView extends Component {
           breakpoints={DEVICE_TO_SIZE}
           items={layout.length}
           rowHeight={20}
-          onResizeStop={this.onResizeStop}
-          onDragStop={this.onDragStop}
+          onResizeStart={() => {
+            this.gridRef = document.getElementsByClassName(styles.gridLayout)[0];
+            this.minHeight = 0;
+            this.minWidth = 0;
+          }}
+          onResize={() => {
+            if(this.gridRef.clientHeight > this.minHeight){
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            }
+            if(this.gridRef.clientWidth > this.minWidth){
+              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-width", `${this.minWidth}px`);
+            }
+          }}
+          onResizeStop={(layout) => {
+            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
+            document.documentElement.style.setProperty("--min-editor-width", `${0}px`);
+            this.onResizeStop(layout);
+          }}
+          onDragStart={() => {
+            this.gridRef = document.getElementsByClassName(styles.gridLayout)[0];
+            this.minHeight = 0;
+            this.minWidth = 0;
+          }}
+          onDrag={() => {
+            if(this.gridRef.clientHeight > this.minHeight){
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            }
+            if(this.gridRef.clientWidth > this.minWidth){
+              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-width", `${this.minWidth}px`);
+            }
+          }}
+          onDragStop={(layout) => {
+            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
+            document.documentElement.style.setProperty("--min-editor-width", `${0}px`);
+            this.onDragStop(layout);
+          }}
           cols={cols}
           width={deviceWidth + 1}
           margin={[0, 0]}

@@ -7,6 +7,8 @@
 
 .gridLayout {
   position: relative;
+  min-height: var(--min-editor-height);
+  min-width: var(--min-editor-width);
 }
 
 .componentWrapper {

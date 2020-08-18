@@ -23,6 +23,7 @@ import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 import Select from '../../GeneralPurpose/Select/Select';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
+import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
 
 import { DEVICE_TO_SIZE, DEVICE_TO_COLS } from '../CustomView';
 
@@ -163,6 +164,8 @@ class ViewEditor extends Component {
       ...this.props.editedViewCurrent,
       data: newLayout,
     });
+    const layoutElement = document.getElementById(LAYOUT_CONTAINER_ID);
+    setTimeout(() => layoutElement.scrollTo({ top: layoutElement?.scrollHeight ?? 0, behavior: 'smooth' }), 0);
   };
 
   onNameInputChange = (event) => {
@@ -328,7 +331,7 @@ class ViewEditor extends Component {
         properties: {
           type: 'component',
           x: 0,
-          y: 0,
+          y: Infinity,
           w: defaultSize[0],
           h: defaultSize[1],
           allowOverflow: schema.allowOverflow,
