@@ -272,6 +272,22 @@ export const HEARTBEAT_COMPONENTS = {
   TELEMETRIES: 'Telemetries',
   HEARTBEATS: 'CSCHeartbeats',
   LOVE: 'LOVE CSC',
-  SCRIPTQUEUE: 'ScriptQueue-0',
+  SCRIPTQUEUE: 'ScriptQueue-1',
   COMMANDER: 'Commander',
 }
+
+export const severityToStatus = {
+  0: 'unknown',
+  1: 'ok',
+  2: 'warning',
+  3: 'serious',
+  4: 'critical',
+};
+
+export const severityEnum = {
+  unknown: 0,
+  ok: 1,
+  warning: 2,
+  serious: 3,
+  critical: 4,
+};

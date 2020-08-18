@@ -144,7 +144,7 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the workspaces are requested, THEN the state should contain the workspaces', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name`;
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
     fetchMock.mock(url, mockWorkspaces, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(requestWorkspaces());
@@ -155,7 +155,7 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the views are requested, THEN the state should contain the views', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
     fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
@@ -170,7 +170,7 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the views are requested, THEN a view name should be obtainable', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
     fetchMock.mock(url, mockViews, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
@@ -185,16 +185,15 @@ describe('Get workspaces and views. GIVEN the store is empty', () => {
 });
 
 describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
-
   afterEach(() => {
     fetchMock.reset();
   });
 
   it('WHEN the workspaces request fails due to unauthentication, THEN the state workspaces should be empty', async () => {
     // Arrange:
-    const responseBody = { detail: "Authentication credentials were not provided."};
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name`;
-    fetchMock.mock(url, {status: 401, body: responseBody}, ManagerInterface.getHeaders());
+    const responseBody = { detail: 'Authentication credentials were not provided.' };
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
+    fetchMock.mock(url, { status: 401, body: responseBody }, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(requestWorkspaces());
     // Assert:
@@ -206,9 +205,9 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the views request fails due to unauthentication, THEN the state views should be empty', async () => {
     // Arrange:
-    const responseBody = { detail: "Authentication credentials were not provided."};
-    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
-    fetchMock.mock(url, {status: 401, body: responseBody}, ManagerInterface.getHeaders());
+    const responseBody = { detail: 'Authentication credentials were not provided.' };
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
+    fetchMock.mock(url, { status: 401, body: responseBody }, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
     // Act:
@@ -222,9 +221,9 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the workspaces request fails due to permissions, THEN the state workspaces should be empty', async () => {
     // Arrange:
-    const responseBody = { detail: "Unautorized."};
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name`;
-    fetchMock.mock(url, {status: 403, body: responseBody}, ManagerInterface.getHeaders());
+    const responseBody = { detail: 'Unautorized.' };
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
+    fetchMock.mock(url, { status: 403, body: responseBody }, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(requestWorkspaces());
     // Assert:
@@ -236,9 +235,9 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
 
   it('WHEN the views request fails due to permissions, THEN the state views should be empty', async () => {
     // Arrange:
-    const responseBody = { detail: "Unautorized."};
-    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
-    fetchMock.mock(url, {status: 403, body: responseBody}, ManagerInterface.getHeaders());
+    const responseBody = { detail: 'Unautorized.' };
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
+    fetchMock.mock(url, { status: 403, body: responseBody }, ManagerInterface.getHeaders());
     let viewsStatus = getViewsStatus(store.getState());
     expect(viewsStatus).toEqual(viewsStates.EMPTY);
     // Act:
@@ -266,7 +265,7 @@ describe('GIVEN the store contains the list of workspaces', () => {
 
   it('WHEN a full workspace is requested, THEN the state should contain the workspace', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/0/full`;
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/0/full/`;
     const mockFullWorkspace = {
       ...mockWorkspaces[0],
       views: mockViews,
@@ -338,7 +337,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
   it('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views/`;
-    fetchMock.post(url, {status: 201, body: newViewData}, ManagerInterface.getHeaders());
+    fetchMock.post(url, { status: 201, body: newViewData }, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(saveEditedView());
     // Assert:
@@ -364,7 +363,7 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
     await store.dispatch(savedEditedView(newViewData));
     await store.dispatch(updateEditedView(newViewData2));
-    fetchMock.put(url, {status: 200, body: newViewData2}, ManagerInterface.getHeaders());
+    fetchMock.put(url, { status: 200, body: newViewData2 }, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(saveEditedView());
     // Assert:
@@ -394,8 +393,8 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
     await store.dispatch(savedEditedView(newViewData));
     await store.dispatch(updateEditedView(newViewData2));
-    const responseBody = {name: 'field is required'};
-    fetchMock.put(url, {status: 400, body: responseBody}, ManagerInterface.getHeaders());
+    const responseBody = { name: 'field is required' };
+    fetchMock.put(url, { status: 400, body: responseBody }, ManagerInterface.getHeaders());
     // Act:
     await store.dispatch(saveEditedView());
     // Assert:
@@ -432,8 +431,8 @@ describe('Load view to edit. GIVEN the store contains views', () => {
 
   it('WHEN one of the views is loaded to edit, THEN the editedView should be updated', async () => {
     // Act:
-    const url = `${ManagerInterface.getUifBaseUrl()}views/1`;
-    fetchMock.mock(url, {...detailedMockViews[1]}, ManagerInterface.getHeaders());
+    const url = `${ManagerInterface.getUifBaseUrl()}views/1/`;
+    fetchMock.mock(url, { ...detailedMockViews[1] }, ManagerInterface.getHeaders());
     await store.dispatch(requestViewToEdit(1));
     await store.dispatch(receiveView(detailedMockViews[1]));
     // Assert:
@@ -474,7 +473,6 @@ describe('Load view to edit. GIVEN the store contains views', () => {
 });
 
 describe('Change mode', () => {
-
   it('GIVEN LOVE is in VIEW mode, WHEN it changes to EDIT, THEN the mode is EDIT', async () => {
     // Arrange:
     expect(getMode(store.getState())).toEqual(modes.VIEW);

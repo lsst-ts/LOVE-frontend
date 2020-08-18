@@ -135,7 +135,7 @@
   flex-flow: column;
   height: calc(100vh - 3em);
   z-index: 1000;
-  width: 25ch;
+  width: 200px;
   box-sizing: border-box;
   text-align: left;
   transition: all 0.5s ease-in-out;
@@ -212,9 +212,10 @@
 }
 
 .settingsDropdown .menuElement {
+  white-space: pre;
   text-align: left;
   cursor: pointer;
-  padding: 0.5em 1em;
+  padding: 0.5em 0.5em;
 }
 
 .settingsDropdown .menuElement:hover {
@@ -285,4 +286,8 @@
 .heartbeatMenuElement .heartbeatSubElement {
   color: var(--secondary-font-color);
   line-height: 1.3em;
+}
+
+.userMenu {
+  padding: 0.5em;
 }

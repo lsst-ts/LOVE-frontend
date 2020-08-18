@@ -12,6 +12,7 @@
   flex-wrap: wrap;
   position: relative;
   width: 70%;
+  max-width: 700px;
 }
 
 .skymapGridContainer svg {

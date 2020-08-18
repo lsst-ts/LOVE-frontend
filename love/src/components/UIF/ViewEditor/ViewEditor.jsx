@@ -23,6 +23,7 @@ import DebugIcon from '../../icons/DebugIcon/DebugIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
 import Select from '../../GeneralPurpose/Select/Select';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
+import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
 
 import { DEVICE_TO_SIZE, DEVICE_TO_COLS } from '../CustomView';
 
@@ -140,9 +141,7 @@ class ViewEditor extends Component {
       });
     }
     if (prevProps.editedViewStatus !== this.props.editedViewStatus) {
-      if (this.props.editedViewStatus.code === editViewStates.SAVING) {
-        console.log('Saving');
-      } else if (
+      if (
         prevProps.editedViewStatus.code === editViewStates.SAVING &&
         this.props.editedViewStatus.code === editViewStates.SAVED
       ) {
@@ -224,7 +223,6 @@ class ViewEditor extends Component {
   };
 
   confirmLayoutChange = (newLayoutProperties) => {
-    console.log('confirmLayoutChange this.state.responsiveLayoutState', this.state.responsiveLayoutState);
     this.onLayoutChange(newLayoutProperties);
     if (this.state.responsiveLayoutState === COLS_DECREASED || this.state.responsiveLayoutState === EDIT_CANCELED) {
       this.setState({
@@ -331,7 +329,7 @@ class ViewEditor extends Component {
         properties: {
           type: 'component',
           x: 0,
-          y: 0,
+          y: Infinity,
           w: defaultSize[0],
           h: defaultSize[1],
           allowOverflow: schema.allowOverflow,
@@ -344,6 +342,8 @@ class ViewEditor extends Component {
     });
     parsedLayout.content = { ...parsedLayout.content, ...additionalContent };
     this.updateEditedViewLayout(parsedLayout);
+    const layoutElement = document.getElementById(LAYOUT_CONTAINER_ID);
+    setTimeout(() => layoutElement.scrollTo({ top: layoutElement?.scrollHeight ?? 0, behavior: 'smooth' }), 0);
   };
 
   onComponentDelete = (component) => {
@@ -414,14 +414,17 @@ class ViewEditor extends Component {
     if (this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION) {
       this.props.undo();
     }
-    
+
     this.setState({
       responsiveLayoutState: EDIT_CANCELED,
     });
   };
 
   undo = () => {
-    if (this.state.responsiveLayoutState === EDIT_CANCELED || this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION) {
+    if (
+      this.state.responsiveLayoutState === EDIT_CANCELED ||
+      this.state.responsiveLayoutState === UNDO_NEEDS_CONFIRMATION
+    ) {
       this.setState({
         responsiveLayoutState: UNDO_NEEDS_CONFIRMATION,
       });
@@ -433,13 +436,12 @@ class ViewEditor extends Component {
   renderToolbar() {
     const isSaved = this.viewIsSaved();
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
-    console.log('responsiveLayoutState', this.state.responsiveLayoutState)
     return (
       <>
         <div className={styles.toolbarWrapper}>
           <div className={styles.toolbar}>
             <Input
-              className={[styles.textField, styles.element].join(' ')}
+              className={[styles.input, styles.element].join(' ')}
               defaultValue={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
               onBlur={this.onNameInputBlur}
               key={this.props.editedViewCurrent ? this.props.editedViewCurrent.name : ''}
@@ -561,7 +563,6 @@ class ViewEditor extends Component {
   };
 
   render() {
-    // console.log('this.getEditedViewLayout()', this.getEditedViewLayout()?.content?.['newPanel-3']?.properties);
     return (
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />

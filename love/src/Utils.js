@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { SALCommandStatus } from './redux/actions/ws.js';
 
@@ -25,7 +26,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
   */
 
-  function noop() { }
+  function noop() {}
   const opts = optsPar || {};
 
   let ws;
@@ -69,11 +70,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   };
 
   $.json = (x) => {
-    ws.send(JSON.stringify(x));
+    if (ws.readyState === 1) ws.send(JSON.stringify(x));
   };
 
   $.send = (x) => {
-    ws.send(x);
+    if (ws.readyState === 1) ws.send(x);
   };
 
   $.close = (x, y) => {
@@ -196,6 +197,67 @@ export default class ManagerInterface {
         // console.log('Session expired. Logging out');
         this.removeToken();
         return false;
+      });
+    });
+  }
+
+  static getXMLMetadata() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}salinfo/metadata`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getTopicData(categories = null) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    let queryParam = null;
+    if (typeof categories === 'string') {
+      queryParam = categories;
+    } else if (Array.isArray(categories)) {
+      queryParam = categories.join(' ');
+    }
+    const url = queryParam
+      ? `${this.getApiBaseUrl()}salinfo/topic-data?categories=${queryParam}`
+      : `${this.getApiBaseUrl()}salinfo/topic-data`;
+
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
       });
     });
   }
@@ -441,11 +503,9 @@ export const getNotificationMessage = (salCommand) => {
   const result = salCommand.result;
   const component = salCommand.component ?? salCommand.csc;
 
-
   if (salCommand.status === SALCommandStatus.REQUESTED) {
-    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`,]
+    return [`Requesting command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd}`];
   }
-
 
   if (component === 'Watcher') {
     const alarm = salCommand.params.name;
@@ -515,3 +575,23 @@ export const getStringRegExp = (str) => {
 };
 
 export const siderealSecond = 1.00273788;
+
+export const takeScreenshot = (callback) => {
+  const el = document.children[0];
+  html2canvas(el, {
+    allowTaint: true,
+    useCORS: true,
+    foreignObjectRendering: true,
+    backgroundColor: null,
+    y: 0,
+    x: 0,
+    logging: false,
+    windowWidth: window.innerWidth,
+    windowHeight: window.innerHeight,
+    ignoreElements: (e) => {
+      return e.tagName === 'NOSCRIPT';
+    },
+  }).then((canvas) => {
+    callback(canvas.toDataURL('image/png'));
+  });
+};

@@ -21,6 +21,7 @@
   padding-left: 1.7em;
   border: 0;
   flex: 0;
+  min-height: 3em;
 }
 
 .tab {

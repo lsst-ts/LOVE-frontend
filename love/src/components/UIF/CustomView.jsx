@@ -1,16 +1,15 @@
 import React, { Component } from 'react';
-import { Responsive as ResponsiveGridLayout, WidthProvider } from 'react-grid-layout'; // GridLayout
+import { Responsive as ResponsiveGridLayout } from 'react-grid-layout'; // GridLayout
 import PropTypes from 'prop-types';
 import styles from './CustomView.module.css';
 import '../AuxTel/Mount/MotorTable/MotorTable.container';
 import componentIndex from './ComponentIndex';
 import Button from '../GeneralPurpose/Button/Button';
 import GearIcon from '../icons/GearIcon/GearIcon';
+import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon.jsx';
 import ErrorBoundary from '../GeneralPurpose/ErrorBoundary/ErrorBoundary';
 import Panel from '../GeneralPurpose/Panel/Panel';
 import DashedBox from '../GeneralPurpose/DashedBox/DashedBox';
-
-const WithProvidedResponsiveGridLayout = WidthProvider(ResponsiveGridLayout);
 
 export const DEVICE_TO_SIZE = {
   '4K': 2560,
@@ -34,7 +33,9 @@ export const DEVICE_TO_COLS = {
 };
 
 const MOBILE_REFERENCE_COLS_THRESHOLD = 2;
-const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find((label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD);
+const MOBILE_REFERENCE_LABEL = Object.keys(DEVICE_TO_COLS).find(
+  (label) => DEVICE_TO_COLS[label] <= MOBILE_REFERENCE_COLS_THRESHOLD,
+);
 const MOBILE_REFERENCE_WIDTH = DEVICE_TO_SIZE[MOBILE_REFERENCE_LABEL];
 
 class CustomView extends Component {
@@ -158,16 +159,21 @@ class CustomView extends Component {
         ].join(' ')}
       >
         <div className={styles.editableComponentActions}>
-          <Button onClick={() => this.props.onComponentConfig(component)}>
+          <Button onClick={() => this.props.onComponentConfig(component)} title="Configure" className={styles.iconButton}>
             <div className={styles.gearIconWrapper}>
-              <GearIcon active />
+              <GearIcon active className={styles.icon}/>
             </div>
           </Button>
-          <Button onClick={() => this.props.onComponentDelete(component)}>&#10005;</Button>
+          <Button onClick={() => this.props.onComponentDelete(component)} title="Remove" className={styles.iconButton}>
+            <div className={styles.gearIconWrapper}>
+              <DeleteIcon className={styles.icon}/>
+            </div>
+          </Button>
         </div>
+
         {parsedConfig.titleBar ? (
           <ErrorBoundary>
-            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode}>
+            <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode} link={parsedConfig.link}>
               {comp}
             </Panel>
           </ErrorBoundary>
@@ -197,13 +203,13 @@ class CustomView extends Component {
   };
 
   getDeviceLabel = (width) => {
-    const minDevice = Object.entries(DEVICE_TO_SIZE).reduce((previousMinKey, [key, width])=> {
-      if(previousMinKey===''){
+    const minDevice = Object.entries(DEVICE_TO_SIZE).reduce((previousMinKey, [key, width]) => {
+      if (previousMinKey === '') {
         return key;
       }
 
-      if(width < DEVICE_TO_SIZE[previousMinKey]){
-        return key;        
+      if (width < DEVICE_TO_SIZE[previousMinKey]) {
+        return key;
       }
       return previousMinKey;
     }, '');
@@ -238,8 +244,8 @@ class CustomView extends Component {
     // otherwise x.properties.w must be used
 
     let colsScalingFactor = 1;
-    if( container.properties.cols <= MOBILE_REFERENCE_COLS_THRESHOLD){
-      colsScalingFactor = MOBILE_REFERENCE_WIDTH / deviceWidth * deviceCols / container.properties.cols;
+    if (container.properties.cols <= MOBILE_REFERENCE_COLS_THRESHOLD) {
+      colsScalingFactor = ((MOBILE_REFERENCE_WIDTH / deviceWidth) * deviceCols) / container.properties.cols;
     }
 
     const layout = Object.values(container.content).map((x) => {
@@ -289,8 +295,8 @@ class CustomView extends Component {
                 maxWidth: `${Math.max(window.innerWidth - deviceWidth, 100)}px`,
               }}
             >
-              This area will be invisible to the user on the selected device. 
-              Please change the device size on the top bar before dragging components here.
+              This area will be invisible to the user on the selected device. Please change the device size on the top
+              bar before dragging components here.
             </div>
           </>
         )}
@@ -300,8 +306,46 @@ class CustomView extends Component {
           breakpoints={DEVICE_TO_SIZE}
           items={layout.length}
           rowHeight={20}
-          onResizeStop={this.onResizeStop}
-          onDragStop={this.onDragStop}
+          onResizeStart={() => {
+            this.gridRef = document.getElementsByClassName(styles.gridLayout)[0];
+            this.minHeight = 0;
+            this.minWidth = 0;
+          }}
+          onResize={() => {
+            if(this.gridRef.clientHeight > this.minHeight){
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            }
+            if(this.gridRef.clientWidth > this.minWidth){
+              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-width", `${this.minWidth}px`);
+            }
+          }}
+          onResizeStop={(layout) => {
+            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
+            document.documentElement.style.setProperty("--min-editor-width", `${0}px`);
+            this.onResizeStop(layout);
+          }}
+          onDragStart={() => {
+            this.gridRef = document.getElementsByClassName(styles.gridLayout)[0];
+            this.minHeight = 0;
+            this.minWidth = 0;
+          }}
+          onDrag={() => {
+            if(this.gridRef.clientHeight > this.minHeight){
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            }
+            if(this.gridRef.clientWidth > this.minWidth){
+              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth +300?? 0);
+              document.documentElement.style.setProperty("--min-editor-width", `${this.minWidth}px`);
+            }
+          }}
+          onDragStop={(layout) => {
+            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
+            document.documentElement.style.setProperty("--min-editor-width", `${0}px`);
+            this.onDragStop(layout);
+          }}
           cols={cols}
           width={deviceWidth + 1}
           margin={[0, 0]}

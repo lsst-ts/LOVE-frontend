@@ -11,6 +11,8 @@ function Palette(props) {
     '--font-size-larger',
   ];
 
+  const fontWeights = ['normal', 'bold', '100', '200', '300', '400', '500', '700', '800', '900'];
+
   const fontColors = [
     '--base-font-color',
     '--second-base-font-color',
@@ -18,7 +20,7 @@ function Palette(props) {
     '--secondary-font-dimmed-color',
     '--tertiary-font-color',
     '--highlighted-font-color',
-  ]
+  ];
 
   const backgroundColors = [
     '--base-background-color',
@@ -62,26 +64,10 @@ function Palette(props) {
     '--status-running-dimmed-color-3',
   ];
 
-  const scriptColors = [
-    '--script-ok-color',
-    '--script-ok-dimmed-color',
-  ];
+  const scriptColors = ['--script-ok-color', '--script-ok-dimmed-color'];
 
-  const statuses = [
-    'default',
-    'primary',
-    'info',
-    'success',
-    'warning',
-    'danger',
-    'link',
-  ];
-  const sizes = [
-    'large',
-    'default',
-    'small',
-    'extra-small',
-  ];
+  const statuses = ['default', 'primary', 'info', 'success', 'warning', 'danger', 'link'];
+  const sizes = ['large', 'default', 'small', 'extra-small'];
   return (
     <div className={styles.container}>
       <div className={styles.topSection}>
@@ -97,8 +83,21 @@ function Palette(props) {
         <div>
           <h1> Font Sizes </h1>
 
-          {fontSizes.map( fontSize => (
-            <div style={{fontSize: `var(${fontSize})`}}> {fontSize} </div>
+          {fontSizes.map((fontSize, index) => (
+            <div key={index} tyle={{ fontSize: `var(${fontSize})` }}>
+              {fontSize}
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <h1> Font Weights </h1>
+
+          {fontWeights.map((fontWeight, index) => (
+            <div key={index}>
+              <span style={{ fontWeight: `${fontWeight}` }}>regular {fontWeight}</span>
+              <span style={{ fontWeight: `${fontWeight}`, fontStyle: 'italic' }}>italic {fontWeight}</span>
+            </div>
           ))}
         </div>
 
@@ -106,76 +105,81 @@ function Palette(props) {
           <h1> Buttons </h1>
           <div className={styles.buttons}>
             <span> Enabled: </span>
-            {statuses.map(status => (
-              <Button status={status}> {status} </Button>
+            {statuses.map((status, index) => (
+              <Button key={index} status={status}>
+                {status}
+              </Button>
             ))}
 
             <span> Disabled: </span>
-            {statuses.map(status => (
-              <Button status={status} disabled> {status} </Button>
+            {statuses.map((status, index) => (
+              <Button key={index} status={status} disabled>
+                {status}
+              </Button>
             ))}
 
-            {sizes.map(size => (
-              <>
-              <span> {size}: </span>
-                {statuses.map(status => (
-                  <Button status={status} size={size}> {status} </Button>
+            {sizes.map((size, index) => (
+              <React.Fragment key={index}>
+                <span> {size}: </span>
+                {statuses.map((status, index) => (
+                  <Button key={index} status={status} size={size}>
+                    {status}
+                  </Button>
                 ))}
-              </>
+              </React.Fragment>
             ))}
           </div>
         </div>
       </div>
 
       <h1> Regular Backgrounds and Foregrounds </h1>
-      {fontColors.map(fontColor => (
-        <>
+      {fontColors.map((fontColor, index) => (
+        <React.Fragment key={index}>
           <h2> Font color: {fontColor} </h2>
           <div className={styles.grid}>
-            {backgroundColors.map(backgroundColor => {
+            {backgroundColors.map((backgroundColor, i) => {
               const style = {
                 backgroundColor: `var(${backgroundColor})`,
                 color: `var(${fontColor})`,
-              }
+              };
               return (
-                <div style={style}>
+                <div key={i} style={style}>
                   <p> {fontColor} </p>
                   <p> {backgroundColor} </p>
                 </div>
               );
             })}
           </div>
-        </>
+        </React.Fragment>
       ))}
 
       <h1> Status colors </h1>
       <div className={styles.grid}>
-        {statusColors.map(color => {
+        {statusColors.map((color, index) => {
           const style = {
             backgroundColor: `var(${color})`,
-          }
+          };
           return (
-            <div style={style}>
-              <p> {color} </p>
-            </div>
-          )
-        })}
-      </div>
-
-      <h1> Script colors </h1>
-      <div className={styles.grid}>
-        {scriptColors.map(color => {
-          const style = {
-            backgroundColor: `var(${color})`,
-          }
-          return (
-            <div style={style}>
+            <div style={style} key={index}>
               <p> {color} </p>
             </div>
           );
         })}
       </div>
 
+      <h1> Script colors </h1>
+      <div className={styles.grid}>
+        {scriptColors.map((color, index) => {
+          const style = {
+            backgroundColor: `var(${color})`,
+          };
+          return (
+            <div style={style} key={index}>
+              <p> {color} </p>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }

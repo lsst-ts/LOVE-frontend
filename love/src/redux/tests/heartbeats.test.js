@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { addGroupSubscription } from '../actions/ws';
+import { addGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import {
   getLastManagerHeartbeat,
@@ -77,7 +77,7 @@ describe('GIVEN are not subscribed to the manager heartbeat', () => {
 describe('GIVEN we are subscribed to the manager heartbeat', () => {
   // Arrange:
   beforeEach(async () => {
-    await store.dispatch(addGroupSubscription('heartbeat-manager-0-stream'));
+    await store.dispatch(addGroup('heartbeat-manager-0-stream'));
   });
 
   describe('WHEN we receive a manager heartbeat', () => {

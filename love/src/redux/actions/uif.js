@@ -155,7 +155,7 @@ export const savedEditedView = (view) => {
  */
 export function requestWorkspaces() {
   return async (dispatch, getState) => {
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name`;
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -184,7 +184,7 @@ export function requestWorkspaces() {
 export function requestViews() {
   return async (dispatch, getState) => {
     dispatch(loadingViews);
-    const url = `${ManagerInterface.getUifBaseUrl()}views/summary`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -205,7 +205,6 @@ export function requestViews() {
   };
 }
 
-
 /**
  * requestView - Action to request a single view
  *
@@ -214,7 +213,7 @@ export function requestViews() {
 export function requestView(id) {
   return async (dispatch, getState) => {
     dispatch(loadingViews);
-    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}/`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -243,7 +242,7 @@ export function requestView(id) {
 export function requestViewToEdit(id) {
   return async (dispatch, getState) => {
     dispatch(loadingViews);
-    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}`;
+    const url = `${ManagerInterface.getUifBaseUrl()}views/${id}/`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -251,8 +250,8 @@ export function requestViewToEdit(id) {
       .then((response) => {
         if (response.status === 200) {
           return response.json().then((view) => {
-            dispatch(receiveView({...view}));
-            dispatch(loadViewToEdit({...view}));
+            dispatch(receiveView({ ...view }));
+            dispatch(loadViewToEdit({ ...view }));
             return Promise.resolve();
           });
         }
@@ -273,7 +272,7 @@ export function requestViewToEdit(id) {
  */
 export function requestWorkspace(id) {
   return async (dispatch, getState) => {
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/${id}/full`;
+    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/${id}/full/`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),

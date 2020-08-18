@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Panel.module.css';
 import Button from '../Button/Button';
-import GearIcon from '../../icons/GearIcon/GearIcon';
 
 /**
  * A generic placeholder with a title that can be used
@@ -20,6 +19,8 @@ export default class Panel extends Component {
     expandHeight: PropTypes.bool,
     /** Wether to show the raw mode button */
     hasRawMode: PropTypes.bool,
+    /** If a valid url, displayed as a link button in the title bar*/
+    link: PropTypes.string,
   };
 
   static defaultProps = {
@@ -55,14 +56,30 @@ export default class Panel extends Component {
         isRaw: this.state.isRaw,
       });
     });
+    const hasLink = this.props.link && this.props.link !== '';
     return (
       <div className={classNames}>
         <div className={styles.panelHeading}>
           <h3 className={styles.panelTitle}>{this.props.title}</h3>
-          <div className={styles.panelButtonWrapper}>
+          <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
             {this.props.hasRawMode && (
-              <Button onClick={() => this.toggleRaw()} className={styles.panelButton} size={'small'}>
-                <span>{this.state.isRaw ? '<' : 'i'}</span>
+              <Button
+                title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}
+                onClick={() => this.toggleRaw()}
+                className={styles.panelButton}
+                size={'small'}
+              >
+                {this.state.isRaw ? <span> &#5176; &nbsp; back</span> : <span>raw data</span>}
+              </Button>
+            )}
+            {hasLink && (
+              <Button
+                title={`External link: ${this.props.link}`}
+                onClick={() => window.open(this.props.link, '_blank')}
+                className={styles.panelButton}
+                size={'small'}
+              >
+                <span>&#8599;</span>
               </Button>
             )}
           </div>

@@ -1,0 +1,32 @@
+:root {
+  --scrollbar-width: 10px;
+}
+
+.container {
+  display: inline-flex;
+  flex-flow: row wrap;
+  justify-content: stretch;
+  align-items: stretch;
+}
+
+.input {
+  width: 10ch;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+}
+
+.select {
+  width: 30ch;
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.category {
+  width: 20ch;
+}
+
+.button {
+  margin-right: 0.5em;
+  margin-bottom: 0.5em;
+  height: 2.5em;
+}

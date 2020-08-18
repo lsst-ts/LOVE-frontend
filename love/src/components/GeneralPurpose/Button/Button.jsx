@@ -57,6 +57,10 @@ export default class Button extends Component {
      * Define wether or not the button is disabled.
      */
     disabled: PropTypes.bool,
+    /**
+     * Define wether or not the button sends a command.
+     */
+    command: PropTypes.bool,
     children: PropTypes.oneOfType([PropTypes.string, PropTypes.array, PropTypes.object]),
   };
 
@@ -69,45 +73,60 @@ export default class Button extends Component {
     type: 'button',
     shape: 'default',
     disabled: false,
+    command: false,
+  };
+
+  statusStyleDict = {
+    default: styles.btnDefault,
+    primary: styles.btnPrimary,
+    success: styles.btnSuccess,
+    info: styles.btnInfo,
+    warning: styles.btnWarning,
+    danger: styles.btnDanger,
+    link: styles.btnLink,
+    transparent: styles.btnTransparent,
+  };
+
+  sizeStyleDict = {
+    large: styles.btnLG,
+    default: '',
+    small: styles.btnSM,
+    'extra-small': styles.btnXS,
+  };
+
+  onKeyUp = (event) => {
+    if (event.keyCode === 13) {
+      this.props.onClick();
+    }
   };
 
   render() {
-    const statusStyleDict = {
-      default: styles.btnDefault,
-      primary: styles.btnPrimary,
-      success: styles.btnSuccess,
-      info: styles.btnInfo,
-      warning: styles.btnWarning,
-      danger: styles.btnDanger,
-      link: styles.btnLink,
-      transparent: styles.btnTransparent,
-    };
-
-    const sizeStyleDict = {
-      large: styles.btnLG,
-      default: '',
-      small: styles.btnSM,
-      'extra-small': styles.btnXS,
-    };
-
     const { btn } = styles;
-    const statusStyle = statusStyleDict[this.props.status];
-    const sizeStyle = sizeStyleDict[this.props.size];
+    const statusStyle = this.statusStyleDict[this.props.status];
+    const sizeStyle = this.sizeStyleDict[this.props.size];
     const style = [
-      btn, statusStyle, sizeStyle, this.props.className, this.props.disabled? styles.disabled : null
+      btn,
+      statusStyle,
+      sizeStyle,
+      this.props.className,
+      this.props.disabled ? styles.disabled : null,
+      this.props.command ? styles.command : null,
     ].join(' ');
 
     return (
-      <button
-        title={this.props.title}
-        className={style}
-        style={this.props.style}
-        type={this.props.type}
-        onClick={this.props.onClick}
-        disabled={this.props.disabled}
-      >
-        {this.props.children}{' '}
-      </button>
+      <span className={styles.btnWrapper} onKeyUp={this.onKeyUp} tabIndex="0">
+        <button
+          tabIndex="-1"
+          title={this.props.title}
+          className={style}
+          style={this.props.style}
+          type={this.props.type}
+          onClick={this.props.onClick}
+          disabled={this.props.disabled}
+        >
+          {this.props.children}{' '}
+        </button>
+      </span>
     );
   }
 }

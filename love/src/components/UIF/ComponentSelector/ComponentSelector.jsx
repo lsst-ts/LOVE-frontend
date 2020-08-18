@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Button from '../../GeneralPurpose/Button/Button';
+import Input from '../../GeneralPurpose/Input/Input';
 import styles from './ComponentSelector.module.css';
 import { indexes } from '../ComponentIndex';
-import TextField from '../../TextField/TextField';
 import Modal from '../../GeneralPurpose/Modal/Modal';
-
 
 export default class ComponentSelector extends Component {
   static propTypes = {
@@ -45,38 +44,55 @@ export default class ComponentSelector extends Component {
     });
   };
 
-  changeFilter = (event) =>{
+  onModalClose = (event) => {
+    this.props.onRequestClose(event);
+    this.clearSelection();
+  };
+
+  onInsertButtonClick = () => {
+    this.props.selectCallback(this.state.selected);
+    this.clearSelection();
+  };
+
+  changeFilter = (event) => {
     this.setState({
-      filter: event.target.value
-    })
-  }
+      filter: event.target.value,
+    });
+  };
   render() {
     const buttonsDisabled = this.state.selected.length === 0;
+    let regex = null;
+    try {
+      regex = new RegExp(this.state.filter, 'i');
+    } catch (e) {
+      console.error('Error in regular expression, using simple string includes instead. ', e);
+    }
     return (
       <Modal
         isOpen={this.props.isOpen}
-        onRequestClose={this.props.onRequestClose}
+        onRequestClose={this.onModalClose}
         contentLabel="Component selection modal"
-        footerChildren={(
+        footerChildren={
           <>
-            <Button status="default" disabled={buttonsDisabled} onClick={this.clearSelection}>
+            <Button status="transparent" disabled={buttonsDisabled} onClick={this.clearSelection}>
               Clear Selection
             </Button>
             <Button
               status="primary"
               disabled={buttonsDisabled}
-              onClick={() => this.props.selectCallback(this.state.selected)}
+              onClick={this.onInsertButtonClick}
+              // onClick={() => this.props.selectCallback(this.state.selected)}
             >
               Insert
             </Button>
           </>
-        )}
+        }
       >
         <div className={styles.content}>
           <h2> Select Components </h2>
           <div className={styles.filterContainer}>
             <span className={styles.filterLabel}>Filter: </span>
-            <TextField value={this.state.filter} onChange={this.changeFilter}/>
+            <Input value={this.state.filter} onChange={this.changeFilter} />
           </div>
 
           {indexes.map((index) => {
@@ -92,7 +108,9 @@ export default class ComponentSelector extends Component {
                     const selected = this.state.selected.includes(componentDict);
                     const checkboxId = `checkbox-${component}`;
                     const filter =
-                      this.state.filter === '' || new RegExp(this.state.filter, 'i').test(componentDict.name);
+                      this.state.filter === '' || regex
+                        ? regex.test(componentDict.name)
+                        : componentDict.name.includes(this.state.filter);
                     return (
                       filter && (
                         <div

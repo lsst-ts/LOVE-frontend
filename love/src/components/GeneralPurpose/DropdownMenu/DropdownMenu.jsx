@@ -11,12 +11,10 @@ export default class DropdownMenu extends PureComponent {
 
   componentDidMount() {
     document.addEventListener('click', this.handleDocumentClick, false);
-    document.addEventListener('touchend', this.handleDocumentClick, false);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.handleDocumentClick, false);
-    document.removeEventListener('touchend', this.handleDocumentClick, false);
   }
 
   toggleOpen = (event) => {
@@ -38,14 +36,15 @@ export default class DropdownMenu extends PureComponent {
     let children;
     if (this.props.children.length > 1) [firstChild, ...children] = this.props.children;
     else firstChild = this.props.children;
-    // console.log(this.props.children, firstChild);
     const { className } = this.props;
     return (
       <span className={[styles.refNode, className].join(' ')}>
         <span onClick={this.toggleOpen} ref={(node) => (this.refButtonNode = node)}>
           {firstChild}
         </span>
-        <div className={[styles.dropdown, this.state.isOpen ? styles.isOpen : ''].join(' ')}>{children}</div>
+        {this.state.isOpen && (
+          <div className={[styles.dropdown, this.state.isOpen ? styles.isOpen : ''].join(' ')}>{children}</div>
+        )}
       </span>
     );
   }

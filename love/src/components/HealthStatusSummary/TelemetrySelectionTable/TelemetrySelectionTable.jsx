@@ -1,13 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import styles from './TelemetrySelectionTable.module.css';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import GearIcon from '../../icons/GearIcon/GearIcon';
 import Button from '../../GeneralPurpose/Button/Button';
-import fakeData from './fakeData';
 import ColumnHeader from './ColumnHeader/ColumnHeader';
 import TelemetrySelectionTag from './TelemetrySelectionTag/TelemetrySelectionTag';
-import { getFakeUnits, formatTimestamp } from '../../../Utils';
+import ManagerInterface, { formatTimestamp } from '../../../Utils';
 
 /**
  * Configurable table displaying an arbitrary subset
@@ -22,57 +19,90 @@ export default class TelemetrySelectionTable extends PureComponent {
     columnsToDisplay: PropTypes.arrayOf(
       PropTypes.oneOf([
         'selection_column',
+        'category',
         'component',
         'stream',
         'timestamp',
         'name',
         'param_name',
         'data_type',
-        'value',
         'units',
         'health_status',
       ]),
     ),
     /** Column to use to restrict values when selecting a row, such as limiting only selection of rows with the same units */
     checkedFilterColumn: PropTypes.oneOf([
+      'category',
       'component',
       'stream',
       'timestamp',
       'name',
       'param_name',
       'data_type',
-      'value',
       'units',
     ]),
     /** Dictionary containing the definition of healthStatus functions. Keys are a concatenation of component, stream, param_name
         separated by a dash. Values are javascript code as text */
-    healthFunctions: PropTypes.object,
+    // healthFunctions: PropTypes.object,
     /** Function called to set healthStatus functions. It receives a dictionary containing the healthStatus functions to be set */
-    setHealthFunctions: PropTypes.func,
+    // setHealthFunctions: PropTypes.func,
     /** Dictionary of telemetries that are displayed. See examples below */
     telemetries: PropTypes.object,
     /** Function called when the "Set" button is clicked. It receives the list of keys of the selected rows and the onClick event object of the associated `<button>` */
-    onSetSelection: PropTypes.func,
+    onSave: PropTypes.func,
     /** Indicates if component should display bottom selection bar*/
     showSelection: PropTypes.bool,
+
+    /** JSON string that describes the initially selected telemetries and their health functions.
+     * Must have his structure:
+     *
+     * {
+     *   "<component.salindex.topic>": {
+     *     <parameter_name>: healthfunction,
+     *     ...
+     *   }
+     * }
+     */
+    initialData: PropTypes.string,
+
+    /** Dictionary with the intially selected telemetries and events and their health functions.
+     * Must have this structure:
+     *
+     * {
+     *   "<component.salindex.topic>": {
+     *     <parameter_name>: healthfunction,
+     *     ...
+     *   }
+     * }
+     */
+    topics: PropTypes.object,
+
+    /** Function to call when adding or removing a row to the selection
+     * Must receive these arguments:
+     *
+     * - selected: true if the row is selected (changin to be selected), false of not
+     * - topic: string with the name of the topic
+     * - item: string with the name of the item within the topic
+     */
+    onRowSelection: PropTypes.func,
   };
 
   static defaultProps = {
-    onSetSelection: () => {},
+    onSave: () => {},
     columnsToDisplay: [
       'selection_column',
+      'category',
       'component',
       'stream',
       'timestamp',
       'name',
       'param_name',
       'data_type',
-      'value',
       'units',
-      'health_status',
     ],
     telemetries: {},
     showSelection: true,
+    initialData: {},
   };
 
   constructor() {
@@ -84,25 +114,9 @@ export default class TelemetrySelectionTable extends PureComponent {
 
     this.defaultCodeText =
       "// Function should return one of the following global variables:\n// ALERT, WARNING, OK. I.e. 'return OK'";
-    this.healthStatusCodes = {
-      0: 'Undefined',
-      1: 'OK',
-      2: 'Warning',
-      3: 'Alert',
-      4: 'Invalid',
-    };
-    this.healthStatusPriorities = {
-      3: 5,
-      2: 4,
-      1: 3,
-      4: 2,
-      0: 1,
-    };
-    window.OK = 1;
-    window.WARNING = 2;
-    window.ALERT = 3;
 
     const filters = {
+      category: { type: 'regexp', value: new RegExp('(?:)') },
       component: { type: 'regexp', value: new RegExp('(?:)') },
       stream: { type: 'regexp', value: new RegExp('(?:)') },
       timestamp: {
@@ -117,7 +131,6 @@ export default class TelemetrySelectionTable extends PureComponent {
       data_type: { type: 'regexp', value: new RegExp('(?:)') },
       value: { type: 'regexp', value: new RegExp('(?:)') },
       units: { type: 'regexp', value: new RegExp('(?:)') },
-      health_status: { type: 'health', value: new RegExp('(?:)') },
     };
 
     this.state = {
@@ -128,15 +141,56 @@ export default class TelemetrySelectionTable extends PureComponent {
       selectedRows: [],
       filters,
       setFilters: this.setFilters,
+      healthFunctions: {},
+      temporaryHealthFunctions: {},
+      eventData: [],
+      telemetryData: [],
+      tableData: [],
     };
   }
 
   componentDidMount = () => {
-    this.props.subscribeToStream();
-  };
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      let tableData = [];
+      for (const [cscKey, cscValue] of Object.entries(data)) {
+        for (const category of ['event', 'telemetry']) {
+          const categoryKey = `${category}_data`;
+          for (const [streamKey, streamValue] of Object.entries(cscValue[categoryKey])) {
+            for (const [paramKey, paramValue] of Object.entries(streamValue)) {
+              tableData.push({
+                category,
+                component: cscKey,
+                stream: streamKey,
+                param_name: paramKey,
+                data_type: paramValue?.type_name,
+                units: paramValue?.units,
+              });
+            }
+          }
+        }
+      }
+      this.setState({
+        tableData,
+      });
+    });
 
-  componentWillUnmount = () => {
-    this.props.unsubscribeToStream();
+    const initialData = JSON.parse(this.props.initialData);
+    const selectedRows = Object.keys(initialData).flatMap((cscSalindexTopic) => {
+      return Object.keys(initialData[cscSalindexTopic]).map((parameterName) => {
+        return `${cscSalindexTopic}-${parameterName}`;
+      });
+    });
+
+    const healthFunctions = Object.keys(initialData || {}).reduce((prevDict, cscSalindexTopic) => {
+      Object.keys(initialData?.[cscSalindexTopic] || {}).forEach((parameterName) => {
+        prevDict[[cscSalindexTopic, parameterName].join('-')] = initialData[cscSalindexTopic][parameterName];
+      });
+      return prevDict;
+    }, {});
+    this.setState({
+      selectedRows,
+      healthFunctions,
+    });
   };
 
   setFilters = (filters) => {
@@ -162,50 +216,35 @@ export default class TelemetrySelectionTable extends PureComponent {
 
   toggleRow = (rowId) => {
     this.closeFilterDialogs();
-    let { expandedRows } = this.state;
-    if (expandedRows[rowId]) expandedRows[rowId] = false;
-    else {
-      expandedRows = {};
-      expandedRows[rowId] = true;
+    if (this.state.expandedRows[rowId]) {
+      this.setState((state) => ({
+        expandedRows: {
+          ...state.expandedRows,
+          [rowId]: false,
+        },
+        temporaryHealthFunctions: {
+          ...state.temporaryHealthFunctions,
+          [rowId]: undefined,
+        },
+      }));
+      return;
     }
-    this.setState({
-      expandedRows: { ...expandedRows },
-    });
-  };
 
-  convertData = (data) => {
-    const newData = [];
-    for (let i = 0; i < Object.keys(data).length; i += 1) {
-      const component = data[Object.keys(data)[i]];
-      const componentName = Object.keys(data)[i];
-      for (let j = 0; j < Object.keys(component).length; j += 1) {
-        const telemetryStream = component[Object.keys(component)[j]];
-        const telemetryStreamName = Object.keys(component)[j];
-        const streamTimestamp = telemetryStream.timestamp;
-        const { parameters } = telemetryStream;
-        for (let k = 0; k < parameters.length; k += 1) {
-          const parameter = parameters[k];
-          newData.push({
-            // change to fixed length
-            component: componentName,
-            stream: telemetryStreamName,
-            timestamp: streamTimestamp,
-            name: parameter.name,
-            param_name: parameter.param_name,
-            data_type: parameter.data_type,
-            value: parameter.value,
-            units: parameter.units,
-            health_status: () => 'Not defined',
-          });
-        }
-      }
-    }
-    return newData;
+    this.setState((state) => {
+      return {
+        expandedRows: {
+          [rowId]: true,
+        },
+        temporaryHealthFunctions: {
+          ...state.temporaryHealthFunctions,
+          [rowId]: state.healthFunctions[rowId],
+        },
+      };
+    });
   };
 
   testFilter = (row) => {
     const values = Object.keys(row).map((rowKey) => {
-      const key = [row.component, row.stream, row.param_name].join('-');
       if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'regexp') {
         const func = this.state.filters[rowKey].function ? this.state.filters[rowKey].function : (value) => value;
         const regexpFilterResult = this.state.filters[rowKey].value.test(func(row[rowKey]));
@@ -214,13 +253,6 @@ export default class TelemetrySelectionTable extends PureComponent {
           checkedFilterResult = this.state.checkedFilter[rowKey].test(func(row[rowKey]));
         }
         return regexpFilterResult && checkedFilterResult;
-      }
-      if (this.state.filters[rowKey] !== undefined && this.state.filters[rowKey].type === 'health') {
-        let healthStatus = 0;
-        if (this.props.healthFunctions !== undefined) {
-          healthStatus = this.getHealthText(this.getHealthStatusCode(key, row.value));
-        }
-        return this.state.filters[rowKey].value.test(healthStatus);
       }
       return true;
     });
@@ -238,46 +270,16 @@ export default class TelemetrySelectionTable extends PureComponent {
     }
   };
 
-  getHealthStatusCode = (paramName, value) => {
-    let statusCode = 0;
-    if (this.props.healthFunctions[paramName]) {
-      try {
-        // eslint-disable-next-line
-        let user_func = new Function('value', this.props.healthFunctions[paramName]);
-        statusCode = user_func(value);
-      } catch (err) {
-        statusCode = 4;
-        // console.log('Error parsing custom function');
-        // console.log(err);
-      }
-    }
-    return statusCode;
-  };
-
-  getHealthText = (statusCode) => {
-    let parsedStatusCode = statusCode;
-    if (statusCode === undefined) parsedStatusCode = 0;
-    return this.healthStatusCodes[parsedStatusCode];
-  };
-
-  setHealthFunction = (paramName) => {
-    const { healthFunctions } = this.props;
-    healthFunctions[paramName] = document.getElementById(`${paramName}-healthFunction`).value;
-    this.props.setHealthFunctions(healthFunctions);
-    localStorage.setItem('healthFunctions', JSON.stringify(healthFunctions));
-    this.toggleRow(paramName);
-  };
-
-  displayHealthFunction = (paramName, functionType) => {
-    const textArea = document.getElementById(`${paramName}-healthFunction`);
-    let text = '';
-    if (functionType === 'text') text = 'if(value === <targetValue>)\n    return ALERT;';
-    if (functionType === 'range') {
-      text =
-        'if(value > <targetValue1>)\n    return WARNING;\nif(value > <targetValue1>)\n    return ALERT;\n return OK\n';
-    }
-    textArea.value = text;
-    return 0;
+  setHealthFunction = (rowKey) => {
+    this.setState((state) => {
+      return {
+        healthFunctions: {
+          ...state.healthFunctions,
+          [rowKey]: state.temporaryHealthFunctions[rowKey],
+        },
+      };
+    });
+    this.toggleRow(rowKey);
   };
 
   renderValueAsList = (values) => {
@@ -320,12 +322,6 @@ export default class TelemetrySelectionTable extends PureComponent {
       return -1;
     }
     if (selectedKeys.indexOf(bKey) > -1 && !(selectedKeys.indexOf(aKey) > -1)) return 1;
-
-    if (column === 'health_status') {
-      const aValue = this.healthStatusPriorities[a.healthStatusCode];
-      const bValue = this.healthStatusPriorities[b.healthStatusCode];
-      return aValue < bValue ? -direction : direction;
-    }
     return a[column] <= b[column] ? -direction : direction;
   };
 
@@ -373,61 +369,20 @@ export default class TelemetrySelectionTable extends PureComponent {
     this.updateSelectedList(checked, key);
   };
 
-  getData = () => {
-    let data = Object.assign({}, fakeData); // load "fake" data as template;
-    const telemetryCSCs = this.props.allTelemetries ? Object.keys(this.props.allTelemetries) : []; // the raw telemetry as it comes from the manager
-    telemetryCSCs.forEach((telemetryCSC) => {
-      data[telemetryCSC] = {};
-      // look at one telemetry
-      const streamsData = this.props.allTelemetries[telemetryCSC];
-      const streamKeys = Object.keys(streamsData);
-      streamKeys.forEach((streamKey) => {
-        const streamData = streamsData[streamKey];
-        const parameters = Object.keys(streamData).filter((p) => !p.startsWith('private_'));
-        data[telemetryCSC][streamKey] = {
-          timestamp: streamData.private_rcvStamp ? streamData.private_rcvStamp.value : 0,
-          parameters: parameters.map((p) => {
-            // look at one parameter
-            const parameter = streamData[p];
-            const name = p;
-            const measurement = parameter;
-            const units = undefined;
-            return {
-              name,
-              param_name: name,
-              data_type: measurement.dataType ? measurement.dataType : '?',
-              value: measurement.value,
-              units: units || getFakeUnits(name),
-            };
-          }),
-        };
-      });
-    }, this);
-
-    data = this.convertData(data);
-    return data;
-  };
-
-  setSelection = (event) => {
-    const data = this.getData().filter((row) => {
-      const key = `${row.component}-${row.stream}-${row.param_name}`;
-      return this.state.selectedRows.indexOf(key) >= 0;
-    });
-    this.props.onSetSelection(this.state.selectedRows, data, event);
+  setSelection = () => {
+    const newSelectionData = this.state.selectedRows.reduce((prevDict, rowKey) => {
+      const [component, salindex, topic, item] = rowKey.split('-');
+      const cscSalindexTopic = [component, salindex, topic].join('-');
+      if (!prevDict[cscSalindexTopic]) prevDict[cscSalindexTopic] = {};
+      prevDict[cscSalindexTopic][item] = this.state.healthFunctions[rowKey] ?? 'return INVALID;';
+      return prevDict;
+    }, {});
+    this.props.onSave(newSelectionData);
   };
 
   render() {
     const displayHeaderCheckbock = this.props.checkedFilterColumn === undefined;
-    let data = this.getData();
-    if (this.props.healthFunctions !== undefined) {
-      data = data.map((row) => {
-        const key = [row.component, row.stream, row.param_name].join('-');
-        return {
-          healthStatusCode: this.getHealthStatusCode(key, row.value),
-          ...row,
-        };
-      });
-    }
+    let data = this.state.tableData;
     return (
       <div className={styles.telemetrySelectionTableWrapper}>
         <table className={styles.telemetrySelectionTable}>
@@ -462,6 +417,14 @@ export default class TelemetrySelectionTable extends PureComponent {
 
                 return (
                   <>
+                    {this.props.columnsToDisplay.includes('category') && (
+                      <ColumnHeader
+                        {...defaultColumnProps}
+                        header={'Category'}
+                        filterName={'category'}
+                        filter={this.state.filters.category}
+                      />
+                    )}
                     {this.props.columnsToDisplay.includes('component') && (
                       <ColumnHeader
                         {...defaultColumnProps}
@@ -476,23 +439,6 @@ export default class TelemetrySelectionTable extends PureComponent {
                         header={'Stream'}
                         filterName={'stream'}
                         filter={this.state.filters.stream}
-                      />
-                    )}
-                    {this.props.columnsToDisplay.includes('timestamp') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Timestamp'}
-                        filterName={'timestamp'}
-                        filter={this.state.filters.timestamp}
-                        secondaryText={'YYYY/MM/DD'}
-                      />
-                    )}
-                    {this.props.columnsToDisplay.includes('name') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Name'}
-                        filterName={'name'}
-                        filter={this.state.filters.name}
                       />
                     )}
                     {this.props.columnsToDisplay.includes('param_name') && (
@@ -512,14 +458,6 @@ export default class TelemetrySelectionTable extends PureComponent {
                         filter={this.state.filters.data_type}
                       />
                     )}
-                    {this.props.columnsToDisplay.includes('value') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Value'}
-                        filterName={'value'}
-                        filter={this.state.filters.value}
-                      />
-                    )}
                     {this.props.columnsToDisplay.includes('units') && (
                       <ColumnHeader
                         className={styles.narrowCol}
@@ -527,14 +465,6 @@ export default class TelemetrySelectionTable extends PureComponent {
                         header={'Units'}
                         filterName={'units'}
                         filter={this.state.filters.units}
-                      />
-                    )}
-                    {this.props.columnsToDisplay.includes('health_status') && (
-                      <ColumnHeader
-                        {...defaultColumnProps}
-                        header={'Health status'}
-                        filterName={'health_status'}
-                        filter={this.state.filters.health_status}
                       />
                     )}
                   </>
@@ -545,7 +475,7 @@ export default class TelemetrySelectionTable extends PureComponent {
           <tbody onClick={this.closeFilterDialogs}>
             {data.sort(this.sortData).map((row) => {
               if (this.testFilter(row)) {
-                const key = [row.component, row.stream, row.param_name].join('-');
+                const key = [row.category, row.component, row.stream, row.param_name].join('-');
                 const isChecked = this.state.selectedRows.indexOf(key) >= 0;
 
                 return (
@@ -561,112 +491,25 @@ export default class TelemetrySelectionTable extends PureComponent {
                           />
                         </td>
                       ) : null}
+                      {this.props.columnsToDisplay.includes('category') && (
+                        <td className={styles.string}>{row.category}</td>
+                      )}
                       {this.props.columnsToDisplay.includes('component') && (
                         <td className={styles.string}>{row.component}</td>
                       )}
                       {this.props.columnsToDisplay.includes('stream') && (
                         <td className={styles.string}>{row.stream}</td>
                       )}
-                      {this.props.columnsToDisplay.includes('timestamp') && (
-                        <td className={styles.string}>{formatTimestamp(row.timestamp)}</td>
-                      )}
-                      {this.props.columnsToDisplay.includes('name') && <td className={styles.string}>{row.name}</td>}
                       {this.props.columnsToDisplay.includes('param_name') && (
                         <td className={styles.string}>{row.param_name}</td>
                       )}
                       {this.props.columnsToDisplay.includes('data_type') && (
                         <td className={[styles.string, styles.mediumCol].join(' ')}>{row.data_type}</td>
                       )}
-                      {this.props.columnsToDisplay.includes('value') && (
-                        <td className={[styles.number, styles.valueCell].join(' ')}>{JSON.stringify(row.value)}</td>
-                      )}
                       {this.props.columnsToDisplay.includes('units') && (
                         <td className={[styles.string, styles.narrowCol].join(' ')}>{row.units}</td>
                       )}
-                      {this.props.columnsToDisplay.includes('health_status') && (
-                        <td
-                          className={[
-                            styles.healthStatusCell,
-                            this.state.expandedRows[key] ? styles.selectedHealthStatus : '',
-                          ].join(' ')}
-                          key={`${key}-row`}
-                        >
-                          <div className={styles.healthStatusWrapper}>
-                            <div className={styles.statusTextWrapper}>
-                              <StatusText
-                                status={
-                                  this.healthStatusCodes[row.healthStatusCode]
-                                    ? this.healthStatusCodes[row.healthStatusCode].toLowerCase()
-                                    : ''
-                                }
-                              >
-                                {this.getHealthText(row.healthStatusCode)}
-                              </StatusText>
-                            </div>
-                            <div onClick={() => this.clickGearIcon(key)} className={styles.gearIconWrapper}>
-                              <GearIcon active={this.state.expandedRows[key]} />
-                            </div>
-                          </div>
-                        </td>
-                      )}
                     </tr>
-                    {this.state.expandedRows[key] ? (
-                      <tr onClick={this.closeFilterDialogs} key={`${key}-expanded`} className={styles.expandedRow}>
-                        <td colSpan={4}>
-                          <div>
-                            <p>Value</p>
-                            {row.value.length > 1
-                              ? this.renderValueAsList(row.value)
-                              : this.renderValueAsList([row.value])}
-                          </div>
-                        </td>
-                        <td colSpan={4}>
-                          <div>
-                            <p>{'function ( value ) {'}</p>
-                            <textarea
-                              id={`${key}-healthFunction`}
-                              defaultValue={
-                                this.props.healthFunctions[key] ? this.props.healthFunctions[key] : this.defaultCodeText
-                              }
-                            />
-                            <p>{'}'}</p>
-                            <div onClick={() => this.setHealthFunction(key)}>
-                              <Button title="Set health status function" className={styles.setButton}>
-                                Set
-                              </Button>
-                            </div>
-                          </div>
-                        </td>
-                        <td colSpan={1}>
-                          <div>
-                            <div className={styles.snippetsContainer}>
-                              <p className={styles.lineJump}> </p>
-
-                              <div className={styles.snippetsTitle}>Snippets</div>
-                              <div className={styles.snippetsList}>
-                                <div className={styles.snippetButtonWrapper}>
-                                  <Button secondary className={styles.snippetButton}>
-                                    <span onClick={() => this.displayHealthFunction(key, 'range')}>Range</span>
-                                  </Button>
-                                </div>
-                                <div className={styles.snippetButtonWrapper}>
-                                  <Button secondary className={styles.snippetButton}>
-                                    <span onClick={() => this.displayHealthFunction(key, 'text')}>Text value</span>
-                                  </Button>
-                                </div>
-                              </div>
-
-                              <div className={styles.statusConfigTitle}> Available Status:</div>
-                              <div className={styles.statusList}>
-                                <div> OK</div>
-                                <div> WARNING</div>
-                                <div> ALERT</div>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : null}
                   </React.Fragment>
                 );
               }
@@ -695,11 +538,10 @@ export default class TelemetrySelectionTable extends PureComponent {
               title="Set selected telemetries"
               className={styles.selectionSetButton}
               onClick={(ev) => {
-                this.setSelection(this.state.selectedRows, ev);
+                this.setSelection();
               }}
             >
-              {' '}
-              Set{' '}
+              Set
             </Button>
           </div>
         )}

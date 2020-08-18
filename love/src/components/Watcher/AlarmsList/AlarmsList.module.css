@@ -1,0 +1,16 @@
+.alarmsContainer {
+  user-select: none;
+  padding: 0.5em;
+  max-height: 300px;
+  overflow-y: auto;
+  width: fit-content;
+  height: fit-content;
+  will-change: transform;
+  max-height: calc(100vh - 4.7em);
+}
+
+.alarmsTitle {
+  font-size: var(--font-size-large);
+  white-space: pre;
+  padding: 0.25em 0;
+}

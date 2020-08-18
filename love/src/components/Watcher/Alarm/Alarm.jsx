@@ -2,14 +2,7 @@ import React from 'react';
 import styles from './Alarm.module.css';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import Button from '../../GeneralPurpose/Button/Button';
-
-export const severityToStatus = {
-  0: 'unknown',
-  1: 'ok',
-  2: 'warning',
-  3: 'serious',
-  4: 'critical',
-};
+import { severityToStatus } from '../../../Config';
 
 export default function Alarm({ severity, ackButtonLocation, acknowledged, muted, ackAlarm }) {
   const status = severityToStatus[severity];
@@ -19,6 +12,7 @@ export default function Alarm({ severity, ackButtonLocation, acknowledged, muted
       status='info'
       disabled={acknowledged}
       onClick={(event) => {ackAlarm(event)}}
+      command
     >
       ACK
     </Button>

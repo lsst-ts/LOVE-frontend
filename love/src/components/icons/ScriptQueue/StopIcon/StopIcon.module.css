@@ -5,5 +5,10 @@
 }
 
 .svg {
-  vertical-align: top;
+  vertical-align: middle;
+}
+
+.svg path {
+  fill: var(--commandable-font-color);
+  stroke: var(--commandable-font-color);
 }

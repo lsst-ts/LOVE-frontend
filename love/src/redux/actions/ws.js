@@ -1,7 +1,8 @@
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
-  ADD_GROUP_SUBSCRIPTION,
+  ADD_GROUP,
+  REMOVE_GROUP,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
@@ -9,15 +10,29 @@ import {
   CHANGE_WS_STATE,
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
+  SEND_ACTION,
 } from '../actions/actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
-import { receiveScriptHeartbeat, removeScriptsHeartbeats, receiveCSCHeartbeat, receiveHeartbeatInfo } from './heartbeats';
+import {
+  receiveScriptHeartbeat,
+  removeScriptsHeartbeats,
+  receiveCSCHeartbeat,
+  receiveHeartbeatInfo,
+} from './heartbeats';
 import { receiveLogMessageData, receiveErrorCodeData } from './summaryData';
 import { receiveAlarms } from './alarms';
+import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
-import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions } from '../selectors';
+import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
 import { tokenStates } from '../reducers/auth';
+import { DateTime } from 'luxon';
+
+/**
+ * Time to wait before reseting subscriptions in miliseconds
+ * Now set to 5 minutes
+ */
+export const RESET_SUBS_PERIOD = 5 * 60000;
 
 /**
  * Set of possible connection status values
@@ -64,9 +79,10 @@ let socket;
 /**
  * Change to connectionState to the given value
  */
-const _changeConnectionState = (connectionState) => ({
+const _changeConnectionState = (connectionState, currentSocket) => ({
   type: CHANGE_WS_STATE,
   connectionState,
+  socket: currentSocket,
 });
 
 /**
@@ -99,18 +115,33 @@ const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
 };
 
 /**
- * Reset all the given subscriptions (status PENDING and noo confirmationMessage)
+ * Reference to the timer used to reset subscriptions periodically
  */
-const _resetSubscriptions = (subscriptions) => {
-  return {
-    type: RESET_SUBSCRIPTIONS,
-    subscriptions: subscriptions ? subscriptions.map(sub => ({
-      ...sub,
-      status: groupStates.PENDING,
-      confirmationMessage: undefined,
-    })) : [],
-  }
-}
+let resetSubsTimer = null;
+
+/**
+ * Reset all the given subscriptions (status PENDING and no confirmationMessage)
+ * If the "subscriptions" argument is absent or null, then all the subscriptions are reset
+ * It also sets a timer to reset the subscriptions again (calling itself) after the priod defined by RESET_SUBS_PERIOD
+ */
+export const resetSubscriptions = (subscriptions = null) => {
+  return (dispatch, getState) => {
+    const subs = subscriptions ? subscriptions : getSubscriptions(getState());
+    clearInterval(resetSubsTimer);
+    resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
+    dispatch({
+      type: RESET_SUBSCRIPTIONS,
+      subscriptions: subs
+        ? subs.map((sub) => ({
+            ...sub,
+            status: groupStates.PENDING,
+            confirmationMessage: undefined,
+          }))
+        : [],
+    });
+    dispatch(_requestSubscriptions());
+  };
+};
 
 /**
  * Opens a new websocket connection assuming:
@@ -118,14 +149,14 @@ const _resetSubscriptions = (subscriptions) => {
  * - it does not matter if it was or was not connected before
  */
 export const openWebsocketConnection = () => {
-
   return (dispatch, getState) => {
     const tokenStatus = getTokenStatus(getState());
 
     if (nonConnectableTokenStates.includes(tokenStatus)) {
       const connectionStatus = getConnectionStatus(getState());
       if (connectionStatus !== connectionStates.CLOSED) {
-        dispatch(_changeConnectionState(connectionStates.CLOSED));
+        dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       }
       return;
     }
@@ -135,32 +166,37 @@ export const openWebsocketConnection = () => {
       return;
     }
     const token = getToken(getState());
+
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-    dispatch(_changeConnectionState(connectionStates.OPENING));
+    dispatch(_changeConnectionState(connectionStates.OPENING, socket));
 
     socket = sockette(connectionPath, {
       onopen: () => {
-        dispatch(_changeConnectionState(connectionStates.OPEN));
+        dispatch(_changeConnectionState(connectionStates.OPEN, socket));
         dispatch(_requestSubscriptions());
+        clearInterval(resetSubsTimer);
+        resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
       },
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
-          dispatch(_changeConnectionState(connectionStates.CLOSED));
+          dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
         } else {
-          dispatch(_changeConnectionState(connectionStates.RETRYING));
-          dispatch(_resetSubscriptions(getSubscriptions(getState())));
+          dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
         }
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onerror: () => {
-        dispatch(_changeConnectionState(connectionStates.RETRYING));
-        dispatch(_resetSubscriptions(getSubscriptions(getState())));
+        dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
+        dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onmessage: (msg) => {
         if (!msg.data) return;
 
         const data = JSON.parse(msg.data);
         if (!data.category) {
-          if (data.data.includes('unsubscribed')) {
+          if (data.time_data) {
+            dispatch(receiveServerTime(data.time_data, data.request_time));
+          } else if (data.data.includes('unsubscribed')) {
             dispatch(_receiveUnsubscriptionConfirmation(data.data));
           } else {
             dispatch(_receiveSubscriptionConfirmation(data.data));
@@ -222,7 +258,6 @@ export const openWebsocketConnection = () => {
           }
         }
 
-
         if (data.data[0].data.observingLog) {
           dispatch(receiveObservingLog(data.data[0].data.observingLog));
         }
@@ -245,21 +280,21 @@ export const openWebsocketConnection = () => {
  */
 export const closeWebsocketConnection = () => {
   return (dispatch, getState) => {
-    dispatch({ type: RESET_SUBSCRIPTIONS, subscriptions: [] });
+    dispatch(resetSubscriptions(getSubscriptions(getState())));
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
-      dispatch(_changeConnectionState(connectionStates.CLOSED));
+      dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
     }
-  }
+  };
 };
 
 /**
  * Add a group to the list of subscriptions, groups are added in PENDING state
  */
-export const addGroupSubscription = (groupName) => {
+export const addGroup = (groupName) => {
   return (dispatch, _getState) => {
     dispatch({
-      type: ADD_GROUP_SUBSCRIPTION,
+      type: ADD_GROUP,
       groupName,
     });
     dispatch(_requestSubscriptions());
@@ -277,7 +312,7 @@ const _requestSubscriptions = () => {
       return;
     }
     const subscriptions = getSubscriptions(state);
-    subscriptions.forEach(subscription => {
+    subscriptions.forEach((subscription) => {
       if (subscription.status !== groupStates.PENDING && subscription.status !== groupStates.UNSUBSCRIBING) return;
       const [category, csc, salindex, stream] = subscription.groupName.split('-');
       socket.json({
@@ -296,9 +331,26 @@ const _requestSubscriptions = () => {
 };
 
 /**
+ * Reduce the counter of subscriptions for a given group. If the counter reaches 0 then an unsubscription is requested
+ */
+export const removeGroup = (groupName) => {
+  return (dispatch, getState) => {
+    const state = getState();
+    const subscription = getSubscription(state, groupName);
+    if (!subscription) return;
+    dispatch({
+      type: REMOVE_GROUP,
+      groupName,
+    });
+    if (subscription.counter === 1) {
+      dispatch(requestGroupRemoval(groupName));
+    }
+  };
+};
+/**
  * Request the unsubscription of a given group
  */
-export const requestGroupSubscriptionRemoval = (groupName) => {
+export const requestGroupRemoval = (groupName) => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);
@@ -353,33 +405,37 @@ export const requestSALCommand = (data) => {
       params: data.params,
       csc: data.csc ?? data.component, // this is for backwards compatibility
       salindex: data.salindex,
-
     };
-    dispatch(updateLastSALCommand(
-      {
-        ...commandStatus,
-        statusCode: null, cmd_id: commandID
-      },
-      SALCommandStatus.REQUESTED, null));
+    dispatch(
+      updateLastSALCommand(
+        {
+          ...commandStatus,
+          statusCode: null,
+          cmd_id: commandID,
+        },
+        SALCommandStatus.REQUESTED,
+        null,
+      ),
+    );
 
     return fetch(url, {
       method: 'POST',
       body: JSON.stringify({ ...commandStatus }),
-      headers: ManagerInterface.getHeaders()
-    }).then(r => {
-      return r.json().then(data => ({
-        statusCode: r.status,
-        data
-      }))
-    }).then(({statusCode, data}) => {
-      dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
+      headers: ManagerInterface.getHeaders(),
     })
-  }
-
-}
+      .then((r) => {
+        return r.json().then((data) => ({
+          statusCode: r.status,
+          data,
+        }));
+      })
+      .then(({ statusCode, data }) => {
+        dispatch(updateLastSALCommandStatus(SALCommandStatus.ACK, statusCode, data?.ack));
+      });
+  };
+};
 
 export const _requestSALCommand = (data) => {
-
   const commandID = `${Date.now()}-${data.cmd}`;
   return (dispatch, getState) => {
     const state = getState();
@@ -440,6 +496,25 @@ export const sendLOVECscObservingLogs = (user, message) => {
     socket.json({
       category: 'love_csc',
       data: [logsObject],
+    });
+  };
+};
+
+/**
+ * Request an action to the server
+ */
+export const sendAction = (action) => {
+  return (dispatch, getState) => {
+    if (getConnectionStatus(getState()) !== connectionStates.OPEN) {
+      return;
+    }
+    socket.json({
+      action: action,
+      request_time: DateTime.utc().toSeconds(),
+    });
+    dispatch({
+      type: SEND_ACTION,
+      action,
     });
   };
 };

@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getUsername, getAllAlarms, getTaiToUtc } from '../../redux/selectors';
-import { addGroupSubscription, requestGroupSubscriptionRemoval, requestSALCommand } from '../../redux/actions/ws';
+import { getUsername, getAllAlarms, getTaiToUtc, getAllTime } from '../../redux/selectors';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import Watcher from './Watcher';
+// import mockAlarms from './AlarmsTable/mock'
 
 export const schema = {
   description: `Table containing alarms triggered by all CSCs, with the corresponding
@@ -51,20 +52,21 @@ const mapStateToProps = (state) => {
   const alarms = getAllAlarms(state);
   const user = getUsername(state);
   const taiToUtc = getTaiToUtc(state);
-  return { alarms, user, taiToUtc };
+  const timeData = getAllTime(state);
+  return { alarms, user, taiToUtc, timeData };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = ['event-Watcher-0-alarm']
+  const subscriptions = ['event-Watcher-0-alarm'];
   return {
     subscriptions,
     subscribeToStreams: () => {
       //Alarms
-      subscriptions.forEach((stream) => dispatch(addGroupSubscription(stream)));
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },
     unsubscribeToStreams: () => {
       //Alarms
-      subscriptions.forEach((stream) => dispatch(requestGroupSubscriptionRemoval(stream)));
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     ackAlarm: (name, severity, acknowledgedBy) => {
       return dispatch(

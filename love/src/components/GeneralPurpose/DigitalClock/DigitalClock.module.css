@@ -13,5 +13,5 @@
 
 .date {
   font-size: 0.9em;
-  /* height: 1.4em; */
+  white-space: nowrap;
 }

@@ -2,19 +2,33 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
 import styles from './ConfigForm.module.css';
-import Modal from '../../GeneralPurpose/Modal/Modal';
-import Button from '../../GeneralPurpose/Button/Button';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
 import { indexes } from '../ComponentIndex';
 
+import JSONPretty from 'react-json-pretty';
 import 'brace/mode/javascript';
 import 'brace/mode/json';
 import 'brace/theme/solarized_dark';
 
+const externalStepComponents = {
+  HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
+  TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig')
+    .default,
+  PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig')
+  .default,
+};
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
   const schema = componentDict ? componentDict.schema : {};
   const componentProps = schema ? schema.props : {};
   const [config, setConfig] = useState(componentConfig);
+  const [externalStep, setExternalStep] = useState({
+    show: false,
+    component: null,
+    propKey: '',
+  });
 
   useEffect(() => {
     setConfig(componentConfig);
@@ -29,13 +43,55 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
   const customSaveConfig = () => {
     const newConfig = { ...config };
     Object.keys(newConfig).forEach((key) => {
-      if (componentProps[key].type === 'number') newConfig[key] = Number(newConfig[key]);
+      if (componentProps[key]?.type === 'number') newConfig[key] = Number(newConfig[key]);
     });
     onSaveConfig(componentIndex, newConfig);
   };
 
+  const onExtraStepSave = (propKey, newData) => {
+    console.log('propKey: ', propKey);
+    console.log('newData: ', newData);
+    updateConfig(propKey, newData);
+    setExternalStep({
+      show: false,
+      component: undefined,
+      propKey: '',
+    });
+  };
+
+  const onExtraStepCancel = () => {
+    setExternalStep({
+      show: false,
+      component: undefined,
+      propKey: '',
+    });
+  };
+
+  const showExtraStep = (propKey, propConfig, propData) => {
+    const Component = externalStepComponents[propConfig.externalStep];
+    setExternalStep({
+      show: true,
+      component: (
+        <Component
+          onSave={(newData) => onExtraStepSave(propKey, newData)}
+          onCancel={onExtraStepCancel}
+          initialData={propData}
+        />
+      ),
+      propKey,
+    });
+  };
+
   if (!isOpen) {
     return null;
+  }
+
+  if (externalStep.show) {
+    return (
+      <Modal isOpen={externalStep.show} onRequestClose={onExtraStepCancel} contentLabel="Component configuration modal">
+        {externalStep.component}
+      </Modal>
+    );
   }
 
   return (
@@ -43,7 +99,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
       isOpen={isOpen}
       onRequestClose={onCancel}
       contentLabel="Component configuration modal"
-      footerChildren={(
+      footerChildren={
         <>
           <Button status="default" onClick={onCancel}>
             Cancel
@@ -52,22 +108,23 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
             Save
           </Button>
         </>
-      )}
+      }
     >
       <div className={styles.content}>
         <h2> {`${componentName} configuration`} </h2>
         <div>
           {Object.keys(componentProps).map((key) => {
             let configElementInput = (
-              <input
+              <Input
                 defaultValue={componentConfig[key]}
                 onChange={(event) => {
                   updateConfig(key, event.target.value);
                 }}
               />
             );
+
             if (['array', 'object', 'function'].includes(componentProps[key].type)) {
-              const stringValue = config?.[key] ? JSON.stringify(config[key], null, 2) : '\'\'';
+              const stringValue = config?.[key] ? JSON.stringify(config[key], null, 2) : "''";
               let value = stringValue;
               let mode = 'json';
               let options = {};
@@ -77,29 +134,44 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
                 mode = 'javascript';
                 options = { useWorker: false };
               }
-              configElementInput = (
-                <AceEditor
-                  mode={mode}
-                  theme="solarized_dark"
-                  name={`${key}-editor`}
-                  onChange={(val) => {
-                    try {
-                      let newConfig = val;
-                      if (mode !== 'javascript') newConfig = JSON.parse(val);
-                      updateConfig(key, newConfig);
-                    } catch (error) {
-                      console.log(error);
-                    }
-                  }}
-                  width={'100%'}
-                  height={`${Math.min(Math.max(10, stringValue.split('\n').length), 20)}em`}
-                  value={value}
-                  setOptions={options}
-                  editorProps={{ $blockScrolling: true }}
-                  fontSize={14}
-                  showPrintMargin={false}
-                />
-              );
+              if (componentProps[key].externalStep !== undefined) {
+                configElementInput = (
+                  <React.Fragment>
+                    <Button
+                      status="default"
+                      onClick={() => showExtraStep(key, componentProps[key], value)}
+                      className={styles.editButton}
+                    >
+                      {`Edit ${key}`}
+                    </Button>
+                    <JSONPretty data={value} />
+                  </React.Fragment>
+                );
+              } else {
+                configElementInput = (
+                  <AceEditor
+                    mode={mode}
+                    theme="solarized_dark"
+                    name={`${key}-editor`}
+                    onChange={(val) => {
+                      try {
+                        let newConfig = val;
+                        if (mode !== 'javascript') newConfig = JSON.parse(val);
+                        updateConfig(key, newConfig);
+                      } catch (error) {
+                        console.error(error);
+                      }
+                    }}
+                    width={'100%'}
+                    height={`${Math.min(Math.max(10, stringValue.split('\n').length), 20)}em`}
+                    value={value}
+                    setOptions={options}
+                    editorProps={{ $blockScrolling: true }}
+                    fontSize={14}
+                    showPrintMargin={false}
+                  />
+                );
+              }
             }
             if (['boolean'].includes(componentProps[key].type)) {
               configElementInput = (

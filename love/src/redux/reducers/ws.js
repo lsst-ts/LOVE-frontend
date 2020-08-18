@@ -1,7 +1,8 @@
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
-  ADD_GROUP_SUBSCRIPTION,
+  ADD_GROUP,
+  REMOVE_GROUP,
   REQUEST_SUBSCRIPTIONS,
   REQUEST_GROUP_UNSUBSCRIPTION,
   RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION,
@@ -15,8 +16,10 @@ import { connectionStates, groupStates, SALCommandStatus } from '../actions/ws';
 
 const initialState = {
   alarms: [],
+  latestAlarms: [],
   connectionState: connectionStates.CLOSED,
   socket: null, // Reference to the websocket client object
+  retryInterval: undefined,
   subscriptions: [],
   lastSALCommand: {
     status: SALCommandStatus.EMPTY,
@@ -30,34 +33,55 @@ const initialState = {
 /**
  * Changes the state of the websocket connection to the LOVE-manager Django-Channels interface along with the list of subscriptions groups
  */
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case CHANGE_WS_STATE: {
-      return { ...state, connectionState: action.connectionState };
-    }
-    case ADD_GROUP_SUBSCRIPTION: {
-      const matchingGroup = state.subscriptions.filter((subscription) => subscription.groupName === action.groupName);
-      if (matchingGroup.length > 0) {
-        return state;
+      let { retryInterval } = state;
+      if (
+        state.connectionState !== connectionStates.RETRYING &&
+        action.connectionState === connectionStates.RETRYING &&
+        action.socket
+      ) {
+        clearInterval(retryInterval);
+        retryInterval = setInterval(action.socket.reconnect, 3000);
+      } else if (
+        state.connectionState === connectionStates.RETRYING &&
+        action.connectionState !== connectionStates.RETRYING
+      ) {
+        clearInterval(retryInterval);
       }
-
-      const subscriptions = [
-        ...state.subscriptions,
-        {
-          groupName: action.groupName,
-          status: groupStates.PENDING,
-        },
-      ];
-      return {
-        ...state,
-        subscriptions,
-      };
+      return { ...state, connectionState: action.connectionState, retryInterval };
+    }
+    case ADD_GROUP: {
+      const index = state.subscriptions.findIndex((subscription) => subscription.groupName === action.groupName);
+      if (index < 0) {
+        return {
+          ...state,
+          subscriptions: [
+            ...state.subscriptions,
+            {
+              groupName: action.groupName,
+              status: groupStates.PENDING,
+              counter: 1,
+            },
+          ],
+        };
+      } else {
+        const subscriptions = [...state.subscriptions];
+        subscriptions[index].counter = subscriptions[index].counter + 1;
+        return {
+          ...state,
+          subscriptions,
+        };
+      }
     }
     case REQUEST_SUBSCRIPTIONS: {
-      const subscriptions = action.subscriptions.map(subscription => ({
+      const subscriptions = action.subscriptions.map((subscription) => ({
         ...subscription,
-        status: subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING ?
-          groupStates.REQUESTING : subscription.status,
+        status:
+          subscription.status === groupStates.PENDING || subscription.status === groupStates.UNSUBSCRIBING
+            ? groupStates.REQUESTING
+            : subscription.status,
       }));
       return {
         ...state,
@@ -81,9 +105,15 @@ export default function(state = initialState, action) {
         subscriptions,
       };
     }
-    case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
-      const subscriptions = state.subscriptions.filter((subscription) => {
-        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName)
+    case REMOVE_GROUP: {
+      const subscriptions = state.subscriptions.map((subscription) => {
+        if (action.groupName === subscription.groupName) {
+          return {
+            ...subscription,
+            counter: subscription.counter <= 1 ? 0 : subscription.counter - 1,
+          };
+        }
+        return subscription;
       });
       return {
         ...state,
@@ -96,9 +126,19 @@ export default function(state = initialState, action) {
           return {
             ...subscription,
             status: groupStates.UNSUBSCRIBING,
+            counter: 0,
           };
         }
         return subscription;
+      });
+      return {
+        ...state,
+        subscriptions,
+      };
+    }
+    case RECEIVE_GROUP_UNSUBSCRIPTION_CONFIRMATION: {
+      const subscriptions = state.subscriptions.filter((subscription) => {
+        return subscription.status !== groupStates.UNSUBSCRIBING || !action.data.includes(subscription.groupName);
       });
       return {
         ...state,
@@ -178,26 +218,24 @@ export default function(state = initialState, action) {
     }
 
     case RECEIVE_ALARMS: {
-      let actionAlarms = action.alarms;
-      if (!Array.isArray(action.alarms)) {
-        actionAlarms = [actionAlarms];
-      }
-      let newAlarms = Array.from(state.alarms);
-      actionAlarms.forEach((actionAlarm) => {
-        if (actionAlarm === undefined) return;
-        const alarmIndex = newAlarms.findIndex((stateAlarm) => {
-          return stateAlarm.name.value === actionAlarm.name.value;
+      const latestAlarms = Array.isArray(action.alarms) ? Array.from(action.alarms) : Array.from([action.alarms]);
+      let alarms = Array.from(state.alarms);
+      latestAlarms.forEach((latestAlarm) => {
+        if (latestAlarm === undefined) return;
+        const alarmIndex = alarms.findIndex((stateAlarm) => {
+          return stateAlarm.name.value === latestAlarm.name.value;
         });
         if (alarmIndex === -1) {
-          newAlarms.push(actionAlarm);
+          alarms.push(latestAlarm);
         } else {
-          newAlarms[alarmIndex] = actionAlarm;
+          alarms[alarmIndex] = latestAlarm;
         }
       });
 
       return {
         ...state,
-        alarms: newAlarms,
+        alarms,
+        latestAlarms,
       };
     }
 

@@ -4,14 +4,16 @@ import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates, modes } from '../../redux/reducers/uif';
+import { tokenSwapStates } from '../../redux/reducers/auth';
 import { SALCommandStatus } from '../../redux/actions/ws';
-import { getNotificationMessage, relativeTime } from '../../Utils';
+import { getNotificationMessage, relativeTime, takeScreenshot, parseTimestamp, formatTimestamp } from '../../Utils';
 import Button from '../GeneralPurpose/Button/Button';
 import DropdownMenu from '../GeneralPurpose/DropdownMenu/DropdownMenu';
 import NotificationIcon from '../icons/NotificationIcon/NotificationIcon';
-import GearIcon from '../icons/GearIcon/GearIcon';
+import UserIcon from '../icons/UserIcon/UserIcon';
 import LogoIcon from '../icons/LogoIcon/LogoIcon';
 import MenuIcon from '../icons/MenuIcon/MenuIcon';
+import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
@@ -19,7 +21,17 @@ import ClockContainer from '../Time/Clock/Clock.container';
 import styles from './Layout.module.css';
 import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
+import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
+import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
+import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
+import Modal from '../GeneralPurpose/Modal/Modal';
+import XMLTable from './XMLTable/XMLTable';
+import ConfigPanel from './ConfigPanel/ConfigPanel';
+import UserDetails from './UserDetails/UserDetails';
+import UserSwapContainer from '../Login/UserSwap.container';
+import { severityEnum } from '../../Config';
 
+export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
 const BREAK_2 = 630;
 const BREAK_3 = 375;
@@ -30,6 +42,12 @@ const urls = {
 
 class Layout extends Component {
   static propTypes = {
+    /** Name of the current user */
+    user: PropTypes.string,
+    /** Current LOVE configuration */
+    config: PropTypes.object,
+    /** List of alarms that are displayed */
+    alarms: PropTypes.array,
     /** React Router location object */
     location: PropTypes.object,
     /** Children components */
@@ -52,15 +70,23 @@ class Layout extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving the alarms */
     unsubscribeToStreams: PropTypes.func,
+    /** Current token swap status */
+    tokenSwapStatus: PropTypes.string,
+    /** Function to be called when requiring a user swap, similar to a logout */
+    requireUserSwap: PropTypes.func,
+    /** Function to call in order to rese4t subscriptions (when the manager heartbeat is missed) */
+    resetSubscriptions: PropTypes.func,
   };
 
   static defaultProps = {
+    alarms: [],
     lastSALCommand: undefined,
   };
 
   constructor(props) {
     super(props);
     this.state = {
+      minSeverityNotification: severityEnum.warning,
       collapsedLogo: false,
       viewOnNotch: true,
       toolbarOverflow: false,
@@ -71,6 +97,9 @@ class Layout extends Component {
       heartbeatStatus: {},
       heartbeatInfo: {},
       hovered: false, // true if leftTopbar is being hovered
+      isXMLModalOpen: false,
+      isConfigModalOpen: false,
+      tokenSwapRequested: false,
     };
 
     this.requestToastID = null;
@@ -98,6 +127,16 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.config?.alarms && this.props.config.alarms !== prevProps.config?.alarms) {
+      const minSeverityNotification = this.props.config.alarms.minSeverityNotification?.trim().toLowerCase();
+      if (!minSeverityNotification || minSeverityNotification === 'mute' || minSeverityNotification === 'muted') {
+        // If minSeverityNotification is null or "mute" or "muted", then do not play any sound
+        this.setState({ minSeverityNotification: severityEnum.critical + 1 });
+      } else {
+        this.setState({ minSeverityNotification: severityEnum[minSeverityNotification] });
+      }
+    }
+
     if (this.state.toolbarOverflow !== prevState.toolbarOverflow) {
       this.moveCustomTopbar();
     }
@@ -157,6 +196,11 @@ class Layout extends Component {
           toast.info(message);
         }
       }
+    }
+
+    const managerKey = HEARTBEAT_COMPONENTS?.MANAGER;
+    if (this.state.heartbeatStatus?.[managerKey] === 'alert' && prevState.heartbeatStatus?.[managerKey] !== 'alert') {
+      this.props.resetSubscriptions();
     }
   };
 
@@ -258,7 +302,7 @@ class Layout extends Component {
     this.setState({ hovered: value });
   };
 
-  render() {
+  renderHeartbeatsMenu = () => {
     const producerHeartbeats = [
       HEARTBEAT_COMPONENTS.EVENTS,
       HEARTBEAT_COMPONENTS.TELEMETRIES,
@@ -281,7 +325,133 @@ class Layout extends Component {
       summaryHeartbeatStatus = summaryHeartbeats.includes('alert') ? 'alert' : 'ok';
     }
     return (
+      <DropdownMenu className={styles.settingsDropdown}>
+        <Button
+          className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
+          style={{
+            visibility:
+              this.props.token && (summaryHeartbeatStatus !== 'ok' || this.state.hovered) ? 'visible' : 'hidden',
+          }}
+          title={this.getHeartbeatTitle('')}
+          onClick={() => {}}
+          status="transparent"
+        >
+          <HeartbeatIcon className={styles.icon} status={summaryHeartbeatStatus} title={this.getHeartbeatTitle('')} />
+        </Button>
+
+        <div className={styles.heartbeatsMenu} title="Heartbeats menu">
+          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
+            />
+            <span>LOVE manager</span>
+          </div>
+          <div className={styles.heartbeatMenuElement}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={producerHeartbeatStatus}
+              title={this.getHeartbeatTitle('')}
+            />
+            <span title={this.getHeartbeatTitle('')}>LOVE producers:</span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
+            />
+            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)} className={styles.heartbeatSubElement}>
+              {HEARTBEAT_COMPONENTS.EVENTS}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
+            />
+            <span
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
+              className={styles.heartbeatSubElement}
+            >
+              {HEARTBEAT_COMPONENTS.TELEMETRIES}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
+            />
+            <span
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
+              className={styles.heartbeatSubElement}
+            >
+              {HEARTBEAT_COMPONENTS.HEARTBEATS}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
+            />
+            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)} className={styles.heartbeatSubElement}>
+              {HEARTBEAT_COMPONENTS.LOVE}
+            </span>
+            <HeartbeatIcon
+              className={styles.miniIcon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
+            />
+            <span
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
+              className={styles.heartbeatSubElement}
+            >
+              {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
+            </span>
+          </div>
+          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
+            />
+            <span>LOVE commander</span>
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.statusMenuElement} title="SAL status">
+            <LabeledStatusTextContainer
+              label={'SAL status'}
+              groupName={'event-ATMCS-0-m3State'}
+              stateToLabelMap={{
+                0: 'UNKNOWN',
+              }}
+              stateToStyleMap={{
+                0: 'unknown',
+              }}
+            />
+          </div>
+          <div className={styles.divider}></div>
+          <div className={styles.statusMenuElement} title="EFD status">
+            <LabeledStatusTextContainer
+              label={'EFD status'}
+              groupName={'event-ATMCS-0-m3State'}
+              stateToLabelMap={{
+                0: 'UNKNOWN',
+              }}
+              stateToStyleMap={{
+                0: 'unknown',
+              }}
+            />
+          </div>
+        </div>
+      </DropdownMenu>
+    );
+  };
+
+  render() {
+    const filteredAlarms = this.props.alarms.filter(
+      (a) =>
+        isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification,
+    );
+    return (
       <>
+        <AlarmAudioContainer />
         <div className={styles.hidden}>
           <div id="customTopbar" />
         </div>
@@ -351,7 +521,7 @@ class Layout extends Component {
                 this.props.mode === modes.EDIT && !this.state.toolbarOverflow ? styles.hidden : '',
               ].join(' ')}
             >
-              <ClockContainer timezone='local' hideAnalog hideOffset={true} />
+              <ClockContainer timezone="local" hideAnalog hideOffset={true} />
             </div>
           </div>
 
@@ -359,150 +529,51 @@ class Layout extends Component {
             <NotchCurve className={styles.notchCurve} flip="true" />
 
             <div className={styles.rightTopbar}>
-              <DropdownMenu className={styles.settingsDropdown}>
-                <Button
-                  className={[styles.iconBtn, styles.heartbeatButton].join(' ')}
-                  style={{
-                    visibility:
-                      this.props.token && (summaryHeartbeatStatus !== 'ok' || this.state.hovered)
-                        ? 'visible'
-                        : 'hidden',
-                  }}
-                  title={this.getHeartbeatTitle('')}
-                  onClick={() => {}}
-                  status="transparent"
-                >
-                  <HeartbeatIcon
-                    className={styles.icon}
-                    status={summaryHeartbeatStatus}
-                    title={this.getHeartbeatTitle('')}
-                  />
-                </Button>
-                <div className={styles.heartbeatsMenu} title="Heartbeats menu">
-                  <div
-                    className={styles.heartbeatMenuElement}
-                    title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
-                  >
-                    <HeartbeatIcon
-                      className={styles.icon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
-                    />
-                    <span>LOVE manager</span>
-                  </div>
-                  <div className={styles.heartbeatMenuElement}>
-                    <HeartbeatIcon
-                      className={styles.icon}
-                      status={producerHeartbeatStatus}
-                      title={this.getHeartbeatTitle('')}
-                    />
-                    <span title={this.getHeartbeatTitle('')}>LOVE producer</span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.EVENTS]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.EVENTS)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.EVENTS}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.TELEMETRIES]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.TELEMETRIES)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.TELEMETRIES}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.HEARTBEATS]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.HEARTBEATS)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.HEARTBEATS}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.LOVE]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.LOVE)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.LOVE}
-                    </span>
-                    <HeartbeatIcon
-                      className={styles.miniIcon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPTQUEUE]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-                    />
-                    <span
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPTQUEUE)}
-                      className={styles.heartbeatSubElement}
-                    >
-                      {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
-                    </span>
-                  </div>
-                  <div
-                    className={styles.heartbeatMenuElement}
-                    title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
-                  >
-                    <HeartbeatIcon
-                      className={styles.icon}
-                      status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER]}
-                      title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
-                    />
-                    <span>LOVE commander</span>
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.statusMenuElement} title="SAL status">
-                    <LabeledStatusTextContainer
-                      label={'SAL status'}
-                      groupName={'event-ATMCS-0-m3State'}
-                      stateToLabelMap={{
-                        0: 'UNKNOWN',
-                      }}
-                      stateToStyleMap={{
-                        0: 'unknown',
-                      }}
-                    />
-                  </div>
-                  <div className={styles.divider}></div>
-                  <div className={styles.statusMenuElement} title="EFD status">
-                    <LabeledStatusTextContainer
-                      label={'EFD status'}
-                      groupName={'event-ATMCS-0-m3State'}
-                      stateToLabelMap={{
-                        0: 'UNKNOWN',
-                      }}
-                      stateToStyleMap={{
-                        0: 'unknown',
-                      }}
-                    />
-                  </div>
-                </div>
-              </DropdownMenu>
+              {this.renderHeartbeatsMenu()}
 
-              <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
-                <NotificationIcon className={styles.icon} />
-              </Button>
+              <DropdownMenu className={styles.settingsDropdown}>
+                <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
+                  <IconBadge content={filteredAlarms.length ?? ''} display={filteredAlarms?.length > 0}>
+                    <NotificationIcon className={styles.icon} />
+                  </IconBadge>
+                </Button>
+                <AlarmsList
+                  alarms={filteredAlarms}
+                  ackAlarm={this.props.ackAlarm}
+                  taiToUtc={this.props.taiToUtc}
+                  user={this.props.user}
+                />
+              </DropdownMenu>
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="Settings" status="transparent">
-                  <GearIcon className={styles.icon} />
+                  <UserIcon className={styles.icon} />
                 </Button>
-                <div className={styles.menuElement} title="Logout" onClick={this.props.logout}>
-                  Logout
+                <div className={styles.userMenu}>
+                  <UserDetails
+                    menuElementClassName={styles.menuElement}
+                    dividerClassName={styles.divider}
+                    username={this.props.user}
+                    execPermission={this.props.execPermission}
+                    takeScreenshot={() =>
+                      takeScreenshot((img) => {
+                        const link = document.createElement('a');
+                        const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
+                        link.href = img;
+                        link.download = `${timestamp}.png`;
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      })
+                    }
+                    logout={this.props.logout}
+                    requireUserSwap={() => {
+                      this.setState({ tokenSwapRequested: true });
+                      this.props.requireUserSwap(true);
+                    }}
+                    onXMLClick={() => this.setState({ isXMLModalOpen: true })}
+                    onConfigClick={() => this.setState({ isConfigModalOpen: true })}
+                  ></UserDetails>
                 </div>
               </DropdownMenu>
             </div>
@@ -540,8 +611,38 @@ class Layout extends Component {
           </div>
         </div>
 
-        <div className={styles.contentWrapper}>{this.props.children}</div>
-
+        <div className={styles.contentWrapper} id={LAYOUT_CONTAINER_ID}>{this.props.children}</div>
+        <Modal
+          isOpen={this.state.isXMLModalOpen}
+          onRequestClose={() => this.setState({ isXMLModalOpen: false })}
+          contentLabel="XML versions modal"
+        >
+          <XMLTable />
+        </Modal>
+        <Modal
+          isOpen={this.state.isConfigModalOpen}
+          onRequestClose={() => this.setState({ isConfigModalOpen: false })}
+          contentLabel="LOVE Config File modal"
+        >
+          <ConfigPanel config={this.props.config} />
+        </Modal>
+        <Modal
+          isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}
+          onRequestClose={() => {
+            this.setState({ tokenSwapRequested: false });
+            this.props.requireUserSwap(false);
+          }}
+          contentLabel="User swap"
+          displayFooter={false}
+        >
+          <UserSwapContainer
+            tokenStatus={this.props.tokenSwapStatus}
+            onFinish={() => {
+              this.setState({ tokenSwapRequested: false });
+              this.props.requireUserSwap(false);
+            }}
+          />
+        </Modal>
         <ToastContainer position={toast.POSITION.BOTTOM_CENTER} transition={Slide} hideProgressBar />
       </>
     );
