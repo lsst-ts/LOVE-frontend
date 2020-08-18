@@ -117,66 +117,82 @@ export default class MotorTable extends Component {
     };
 
     const simpleTableData = Object.values(data);
-    const defaultFormatter = value => {
+    const defaultFormatter = (value) => {
       if (isNaN(value)) return value;
-      return Number.isInteger(value) ? value : value.toFixed(5)
+      return Number.isInteger(value) ? value : value.toFixed(5);
     };
 
     const headers = [
       {
         field: 'name',
-        title: 'Motor'
+        title: 'Motor',
       },
       {
         field: 'angle',
-        title: <>Axis Angle <span className={styles.units}>[deg]</span></>,
+        title: (
+          <>
+            Axis Angle <span className={styles.units}>[deg]</span>
+          </>
+        ),
         type: 'number',
-        formatter: (value) => isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(5)}º`
+        render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(5)}º`),
       },
       {
         field: 'velocity',
-        title: <>Velocity <span className={styles.units}>[deg/s]</span></>,
+        title: (
+          <>
+            Velocity <span className={styles.units}>[deg/s]</span>
+          </>
+        ),
         type: 'number',
-        formatter: defaultFormatter
+        render: defaultFormatter,
       },
       {
         field: 'measuredTorque',
-        title: <>Meas. Torque <span className={styles.units}>[A]</span></>,
-        formatter: defaultFormatter
+        title: (
+          <>
+            Meas. Torque <span className={styles.units}>[A]</span>
+          </>
+        ),
+        render: defaultFormatter,
       },
       {
         field: 'torqueDemand',
-        title: <>Dem. Torque <span className={styles.units}>[A]</span></>,
-        formatter: defaultFormatter
+        title: (
+          <>
+            Dem. Torque <span className={styles.units}>[A]</span>
+          </>
+        ),
+        render: defaultFormatter,
       },
       {
         field: 'motorEncoder',
         title: 'Encoder',
-        formatter: defaultFormatter
+        render: defaultFormatter,
       },
       {
         field: 'motorEncoderRaw',
         title: 'Encoder Raw',
-        formatter: defaultFormatter
+        render: defaultFormatter,
       },
       {
         field: 'brakeStatus',
         title: 'Brake status',
         className: styles.statusColumn,
-        formatter: (value) => {
+        render: (value) => {
           const brakeStatus = value === 'Unknown' || value === '-' ? value : motorBrakeStateMap[value];
 
           return (
             <StatusText small status={stateToStyleMotorBrake[brakeStatus]}>
               {brakeStatus}
             </StatusText>
-          )
-        }
+          );
+        },
       },
       {
         field: 'driveStatus',
         title: 'Drive status',
-        formatter: (value) => {
+        render: (value) => {
           const driveStatus = value === 'Unknown' || value === '-' ? value : motorDriveStateMap[value];
           return (
             <StatusText small status={stateToStyleMotorDrive[driveStatus]}>
@@ -184,18 +200,14 @@ export default class MotorTable extends Component {
             </StatusText>
           );
         },
-        className: styles.statusColumn
-      }
+        className: styles.statusColumn,
+      },
     ];
-
-
 
     return (
       <div style={{ display: 'flex', flexDirection: 'column' }}>
         <SimpleTable headers={headers} data={simpleTableData} />
       </div>
-
-
     );
   }
 }
