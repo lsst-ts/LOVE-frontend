@@ -237,6 +237,7 @@ export default class WeatherStation extends Component {
               containerNode={this.temperaturePlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Temperature"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -248,6 +249,7 @@ export default class WeatherStation extends Component {
               containerNode={this.humidityPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -260,6 +262,7 @@ export default class WeatherStation extends Component {
               containerNode={this.precipitationPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
+              legendPosition="bottom"
             />
           </div>
 
@@ -269,6 +272,7 @@ export default class WeatherStation extends Component {
               containerNode={this.snowDepthPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -281,6 +285,7 @@ export default class WeatherStation extends Component {
               containerNode={this.solarPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -293,6 +298,7 @@ export default class WeatherStation extends Component {
               containerNode={this.pressurePlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
+              legendPosition="bottom"
             />
           </div>
         </div>
