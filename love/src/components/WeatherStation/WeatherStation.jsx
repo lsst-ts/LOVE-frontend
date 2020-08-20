@@ -7,7 +7,10 @@ import styles from './WeatherStation.module.css';
 
 export default class WeatherStation extends Component {
   static propTypes = {
-    url: PropTypes.string,
+    /* Weather stream data */
+    weather: PropTypes.object,
+    /* Wind speed stream data */
+    windSpeed: PropTypes.object,
   };
 
   temperaturePlot = {
@@ -81,7 +84,6 @@ export default class WeatherStation extends Component {
       color: COLORS[0],
     },
   };
-
 
   precipitationPlot = {
     Precipitation: {
@@ -190,6 +192,8 @@ export default class WeatherStation extends Component {
     const currentTemperature = this.props.weather?.ambient_temp?.value;
     const currentHumidity = this.props.weather?.humidity?.value;
     const currentPressure = Math.round(this.props.weather?.pressure?.value * 100) / 100;
+    const currentWindSpeed = this.props.windSpeed?.value?.value;
+    const currentWindSpeedUnits = this.props.windSpeed?.value?.units;
     return (
       <div className={styles.container}>
         <div className={styles.section}>
@@ -197,15 +201,23 @@ export default class WeatherStation extends Component {
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Temperature</div>
-              <div className={styles.summaryValue}>{currentTemperature ? `${currentTemperature}ºC` : '-'}</div>
+              <div className={styles.summaryValue}>{currentTemperature !== undefined ? `${currentTemperature}ºC` : '-'}</div>
             </div>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Humidity</div>
-              <div className={styles.summaryValue}>{currentHumidity ? `${currentHumidity}%` : '-'}</div>
+              <div className={styles.summaryValue}>{currentHumidity !== undefined ? `${currentHumidity}%` : '-'}</div>
             </div>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Pressure</div>
               <div className={styles.summaryValue}>{currentPressure ? `${currentPressure} pa` : '-'}</div>
+            </div>
+            <div className={styles.summaryVariable}>
+              <div className={styles.summaryLabel}>Wind speed</div>
+              <div className={styles.summaryValue}>
+                {currentWindSpeed !== undefined
+                  ? `${currentWindSpeed} ${currentWindSpeedUnits !== 'unitless' ? currentWindSpeedUnits : ''}`
+                  : '-'}
+              </div>
             </div>
           </div>
         </div>
@@ -225,6 +237,7 @@ export default class WeatherStation extends Component {
               containerNode={this.temperaturePlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Temperature"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -236,6 +249,7 @@ export default class WeatherStation extends Component {
               containerNode={this.humidityPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -248,6 +262,7 @@ export default class WeatherStation extends Component {
               containerNode={this.precipitationPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
+              legendPosition="bottom"
             />
           </div>
 
@@ -257,6 +272,7 @@ export default class WeatherStation extends Component {
               containerNode={this.snowDepthPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -269,6 +285,7 @@ export default class WeatherStation extends Component {
               containerNode={this.solarPlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
+              legendPosition="bottom"
             />
           </div>
         </div>
@@ -281,6 +298,7 @@ export default class WeatherStation extends Component {
               containerNode={this.pressurePlotRef?.current}
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
+              legendPosition="bottom"
             />
           </div>
         </div>
