@@ -89,6 +89,12 @@ export const schema = {
       default: '',
       isPrivate: false,
     },
+    legendPosition: {
+      type: 'string',
+      description: 'Whether to display the legend to the right of the plot or at the bottom. One of \'right\' or \'bottom\'',
+      default: 'right',
+      isPrivate: false,
+    }
   },
 };
 
@@ -102,6 +108,7 @@ const PlotContainer = function ({
   height,
   xAxisTitle,
   yAxisTitle,
+  legendPosition,
 }) {
   const [data, setData] = React.useState({});
 
@@ -232,6 +239,7 @@ const PlotContainer = function ({
     temporalXAxis: true,
     width: width,
     height: height,
+    legendPosition: legendPosition,
   };
   if (!width && !height && !containerNode) {
     return (
