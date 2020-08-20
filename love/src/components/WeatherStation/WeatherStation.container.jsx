@@ -39,7 +39,8 @@ const WeatherStationContainer = ({ ...props }) => {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    weather: getStreamData(state, `telemetry-Environment-1-weather`),
+    weather: getStreamData(state, `telemetry-Environment-${ownProps.salindex}-weather`),
+    windSpeed: getStreamData(state, `telemetry-Environment-${ownProps.salindex}-windSpeed`),
   };
 };
 
