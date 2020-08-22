@@ -26,7 +26,18 @@ const defaultStyles = [
   },
 ];
 
-const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisTitle, units, marksStyles }) => {
+const Plot = ({
+  layers,
+  legend,
+  width,
+  height,
+  containerNode,
+  xAxisTitle,
+  yAxisTitle,
+  units,
+  marksStyles,
+  legendPosition = 'right',
+}) => {
   /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
   const completedMarksStyles = React.useMemo(() => {
     return legend.map(({ name, markType }, index) => {
@@ -76,7 +87,7 @@ const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisT
 
   return (
     <div
-      className={styles.container}
+      className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}
       style={{
         width: `${containerSize.width}px`,
         height: `${containerSize.height}px`,
@@ -89,8 +100,8 @@ const Plot = ({ layers, legend, width, height, containerNode, xAxisTitle, yAxisT
         units={units}
         marksStyles={completedMarksStyles}
         temporalXAxis
-        width={containerSize.width - 150} // from the .autogrid grid-template-columns
-        height={containerSize.height}
+        width={legendPosition === 'right' ? containerSize.width - 150 : containerSize.width} // from the .autogrid grid-template-columns
+        height={legendPosition === 'bottom' ? containerSize.height - 25 : containerSize.height}
         className={styles.plot}
       />
       <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
@@ -134,6 +145,8 @@ Plot.propTypes = {
       filled: PropTypes.bool,
     }),
   ),
+  /** Legend position: right or bottom */
+  legendPosition: PropTypes.oneOf(['right', 'bottom']),
 };
 
 export default Plot;

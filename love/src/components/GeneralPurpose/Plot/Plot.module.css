@@ -4,6 +4,10 @@
     overflow: hidden;
 }
 
+.bottomLegend {
+    flex-direction: column;
+}
+
 .plot {
     margin-right: 1rem;
 }
