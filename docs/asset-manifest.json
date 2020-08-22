@@ -1,28 +1,31 @@
 {
   "files": {
-    "main.css": "/static/css/main.f1a0019b.chunk.css",
-    "main.js": "/build/main.98f1ed5e.js",
+    "main.css": "/static/css/main.da8110f3.chunk.css",
+    "main.js": "/build/main.b3548170.js",
     "runtime-main.js": "/build/bundle.e2439c58.js",
     "static/css/2.ee241de9.chunk.css": "/static/css/2.ee241de9.chunk.css",
-    "build/2.f48525ee.js": "/build/2.f48525ee.js",
+    "build/2.7e38024c.js": "/build/2.7e38024c.js",
     "Frontend_overview.svg": "/Frontend_overview.svg",
-    "build/2.f48525ee.js.LICENSE.txt": "/build/2.f48525ee.js.LICENSE.txt",
+    "build/2.7e38024c.js.LICENSE.txt": "/build/2.7e38024c.js.LICENSE.txt",
     "details.svg": "/details.svg",
     "index.html": "/index.html",
-    "precache-manifest.9ea304bc0afdc49ab503b923e9031493.js": "/precache-manifest.9ea304bc0afdc49ab503b923e9031493.js",
+    "precache-manifest.c848001c99d8c7adcd5b5ee015a087be.js": "/precache-manifest.c848001c99d8c7adcd5b5ee015a087be.js",
+    "redux-auth.drawio": "/redux-auth.drawio",
+    "redux-auth.svg": "/redux-auth.svg",
     "redux-script-validation.svg": "/redux-script-validation.svg",
+    "redux-ws-connection.drawio": "/redux-ws-connection.drawio",
     "redux-ws-connection.svg": "/redux-ws-connection.svg",
     "responsive-grid-state-machine.svg": "/responsive-grid-state-machine.svg",
     "service-worker.js": "/service-worker.js",
     "static/css/2.ee241de9.chunk.css.map": "/static/css/2.ee241de9.chunk.css.map",
-    "static/css/main.f1a0019b.chunk.css.map": "/static/css/main.f1a0019b.chunk.css.map",
-    "static/media/index.css": "/static/media/AvenirLTStd-Light.0b78ec9d.otf"
+    "static/css/main.da8110f3.chunk.css.map": "/static/css/main.da8110f3.chunk.css.map",
+    "static/media/index.css": "/static/media/Montserrat-ThinItalic.3c2b290f.ttf"
   },
   "entrypoints": [
     "build/bundle.e2439c58.js",
     "static/css/2.ee241de9.chunk.css",
-    "build/2.f48525ee.js",
-    "static/css/main.f1a0019b.chunk.css",
-    "build/main.98f1ed5e.js"
+    "build/2.7e38024c.js",
+    "static/css/main.da8110f3.chunk.css",
+    "build/main.b3548170.js"
   ]
 }
