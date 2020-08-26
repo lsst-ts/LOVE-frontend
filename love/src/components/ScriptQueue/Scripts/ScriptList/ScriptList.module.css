@@ -22,6 +22,7 @@
 /* width */
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
 }
 
 /* Track */
