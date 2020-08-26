@@ -223,7 +223,7 @@ describe('Given a connection is OPEN, ', () => {
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPENING);
     await server.closed;
     expect(disconnected).toEqual(true);
-    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
+    expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
   });
 
   it('When we RECEIVE THE SAME TOKEN, then we NO NOT DISCONNECT', async () => {
