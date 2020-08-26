@@ -1,9 +1,13 @@
 .container {
   z-index: 1;
+  display: flex;
+  width: 100%;
+  height: 100%;
 }
 
 .container svg{
   overflow: visible;
+  width: 100%;
 }
 
 .st1,
