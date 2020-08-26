@@ -33,7 +33,6 @@
   justify-items: center;
   row-gap: 2em;
   padding: 1em 0;
-  min-width: 900px;
   grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
 }
 
@@ -74,7 +73,6 @@
   padding-top: 1em;
   grid-row-gap: 0.5em;
   width: 100%;
-  min-width: 900px;
   overflow: hidden;
   grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
   grid-template-rows: max-content 1fr;
