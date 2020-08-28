@@ -31,8 +31,9 @@
 }
 
 .filterTitle {
-  margin-bottom: 0px;
+  margin: 0.5em 0;
 }
+
 .filterContainer {
   display: flex;
   flex-direction: column;

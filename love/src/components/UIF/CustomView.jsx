@@ -159,27 +159,33 @@ class CustomView extends Component {
         ].join(' ')}
       >
         <div className={styles.editableComponentActions}>
-          <Button onClick={() => this.props.onComponentConfig(component)} title="Configure" className={styles.iconButton}>
+          <Button
+            onClick={() => this.props.onComponentConfig(component)}
+            title="Configure"
+            className={styles.iconButton}
+          >
             <div className={styles.gearIconWrapper}>
-              <GearIcon active className={styles.icon}/>
+              <GearIcon active className={styles.icon} />
             </div>
           </Button>
           <Button onClick={() => this.props.onComponentDelete(component)} title="Remove" className={styles.iconButton}>
             <div className={styles.gearIconWrapper}>
-              <DeleteIcon className={styles.icon}/>
+              <DeleteIcon className={styles.icon} />
             </div>
           </Button>
         </div>
 
-        {parsedConfig.titleBar ? (
-          <ErrorBoundary>
+        <ErrorBoundary>
+          {parsedConfig.titleBar ? (
             <Panel title={parsedConfig.title} fit={false} hasRawMode={parsedConfig.hasRawMode} link={parsedConfig.link}>
               {comp}
             </Panel>
-          </ErrorBoundary>
-        ) : (
-          <ErrorBoundary>{comp}</ErrorBoundary>
-        )}
+          ) : (
+            <Panel title={undefined} fit={false}>
+              {comp}
+            </Panel>
+          )}
+        </ErrorBoundary>
       </div>
     );
   };
@@ -312,18 +318,18 @@ class CustomView extends Component {
             this.minWidth = 0;
           }}
           onResize={() => {
-            if(this.gridRef.clientHeight > this.minHeight){
-              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
-              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            if (this.gridRef.clientHeight > this.minHeight) {
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight + 300 ?? 0);
+              document.documentElement.style.setProperty('--min-editor-height', `${this.minHeight}px`);
             }
-            if(this.gridRef.clientWidth > this.minWidth){
-              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth +300?? 0);
-              document.documentElement.style.setProperty("--min-editor-width", `${this.minWidth}px`);
+            if (this.gridRef.clientWidth > this.minWidth) {
+              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth + 300 ?? 0);
+              document.documentElement.style.setProperty('--min-editor-width', `${this.minWidth}px`);
             }
           }}
           onResizeStop={(layout) => {
-            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
-            document.documentElement.style.setProperty("--min-editor-width", `${0}px`);
+            document.documentElement.style.setProperty('--min-editor-height', `${0}px`);
+            document.documentElement.style.setProperty('--min-editor-width', `${0}px`);
             this.onResizeStop(layout);
           }}
           onDragStart={() => {
@@ -332,18 +338,18 @@ class CustomView extends Component {
             this.minWidth = 0;
           }}
           onDrag={() => {
-            if(this.gridRef.clientHeight > this.minHeight){
-              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight +300?? 0);
-              document.documentElement.style.setProperty("--min-editor-height", `${this.minHeight}px`);
+            if (this.gridRef.clientHeight > this.minHeight) {
+              this.minHeight = Math.max(this.minHeight ?? 0, this.gridRef.clientHeight + 300 ?? 0);
+              document.documentElement.style.setProperty('--min-editor-height', `${this.minHeight}px`);
             }
-            if(this.gridRef.clientWidth > this.minWidth){
-              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth +300?? 0);
-              document.documentElement.style.setProperty("--min-editor-width", `${this.minWidth}px`);
+            if (this.gridRef.clientWidth > this.minWidth) {
+              this.minWidth = Math.max(this.minWidth ?? 0, this.gridRef.clientWidth + 300 ?? 0);
+              document.documentElement.style.setProperty('--min-editor-width', `${this.minWidth}px`);
             }
           }}
           onDragStop={(layout) => {
-            document.documentElement.style.setProperty("--min-editor-height", `${0}px`);
-            document.documentElement.style.setProperty("--min-editor-width", `${0}px`);
+            document.documentElement.style.setProperty('--min-editor-height', `${0}px`);
+            document.documentElement.style.setProperty('--min-editor-width', `${0}px`);
             this.onDragStop(layout);
           }}
           cols={cols}
