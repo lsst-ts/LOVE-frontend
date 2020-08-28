@@ -7,7 +7,7 @@
 
 .autoGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   grid-auto-rows: min-content;
   line-height: 0px;
   font-size: 8pt;
@@ -21,5 +21,6 @@
   grid-template-columns: min-content auto;
   column-gap: 0.2em;
   align-items: center;
+  justify-items: start;
   color: var(--base-font-color);
 }

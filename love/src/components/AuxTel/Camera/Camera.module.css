@@ -204,11 +204,9 @@ td {
 }
 
 .imageTable .imageStatusWrapper {
-  display: flex;
-  position: relative;
-  width: 100%;
-  flex-wrap: wrap;
-  justify-content: space-around;
+  display: grid;
+  grid-template-columns: max-content 2em;
+  justify-content: space-between;
   align-items: center;
   padding: 0;
   min-width: 13em;
@@ -228,9 +226,6 @@ td {
 }
 
 .imageTable .statusTextWrapper {
-  flex-grow: 1;
-  padding: 0em 1.5em;
-  /* margin-right: 2em; */
 }
 
 @media (min-width: 1020px) {

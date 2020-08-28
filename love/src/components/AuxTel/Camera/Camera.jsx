@@ -116,8 +116,8 @@ export default class Camera extends Component {
                         ? Math.min(this.state.timers[imageKey], image.exposureTime)
                         : 0;
                     if (!isIntegrating) currentExposureTime = image.exposureTime;
-                    const roundedExposureTime = Math.floor(image.exposureTime);
-                    const roundedCurrentExposureTime = Math.floor(currentExposureTime);
+                    const roundedExposureTime = Math.round(image.exposureTime*100)/100;
+                    const roundedCurrentExposureTime = Math.round(currentExposureTime*100)/100;
                     return (
                       <React.Fragment key={imageKey}>
                         <tr>
