@@ -87,8 +87,8 @@ export default function (state = initialState, action) {
 
       const newErrorCodeData = [...state.errorCodeData];
       const cscData = newErrorCodeData[cscDataIndex];
-      const nonDuplicates = action?.messages?.filter(
-        (msg) => cscData?.messages?.findIndex((log) => log?.private_sndStamp?.value === msg?.private_sndStamp?.value) === -1,
+      const nonDuplicates = action?.errorCodeData?.filter(
+        (msg) => cscData?.errorCodeData?.findIndex((log) => log?.private_sndStamp?.value === msg?.private_sndStamp?.value) === -1,
       ) ?? [];
       newErrorCodeData[cscDataIndex] = {
         csc: action.csc,

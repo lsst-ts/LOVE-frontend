@@ -147,7 +147,7 @@ it('It should extract all received logMessages from the state for a given CSC', 
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
     const storedMessages = getCSCLogMessages(store.getState(), 'ATDome', 1);
     expect(storedMessages).toEqual(messages);
   });
@@ -174,7 +174,7 @@ it('Should delete all logMessages of a CSC with an action ', async () => {
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
   });
   expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
 
@@ -205,7 +205,7 @@ it('It should extract all errorCode event data  from the state for a given CSC',
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
     const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
     expect(storedMessages).toEqual(messages);
   });
@@ -231,7 +231,7 @@ it('It should delete errorCode event data  from the state for a given CSC', asyn
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
   });
   const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
   expect(storedMessages).toEqual(messages);
