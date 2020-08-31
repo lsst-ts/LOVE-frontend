@@ -90,13 +90,16 @@
 }
 
 .logLevelSelect {
-  color: var(--secondary-font-color);
-  background-color: transparent;
-  border: 1px solid var(--secondary-font-dimmed-color);
-  border-radius: 3px;
-  padding: 0.3em 0.3em 0.15em 0.15em;
   width: 100%;
-  outline: none;
+}
+
+.logLevelSelect > div {
+  padding: 0.1em 0.4em;
+  text-align: left;
+}
+
+.logLevelSelect :global(.Dropdown-option) {
+  padding: 0.2em 0;
 }
 
 .logLevelSelect:focus {

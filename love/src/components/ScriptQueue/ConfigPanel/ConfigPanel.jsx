@@ -14,6 +14,7 @@ import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
+import Select from 'components/GeneralPurpose/Select/Select';
 import ManagerInterface from '../../../Utils';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
@@ -35,6 +36,13 @@ const VALID = 'VALID';
 const ERROR = 'ERROR';
 const SERVER_ERROR = 'SERVER_ERROR';
 const NEED_REVALIDATION = 'NEED_REVALIDATION';
+
+const logLevelMap = {
+  'Debug': 10,
+  'Info': 20,
+  'Warning': 30,
+  'Error': 40,
+}
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -66,13 +74,13 @@ export default class ConfigPanel extends Component {
       loading: false,
       pauseCheckpoint: '',
       stopCheckpoint: '',
-      logLevel: 20,
       orientation: 'stacked',
       sizeWeight: 0.5,
       resizingStart: undefined,
       configErrors: [],
       configErrorTitle: '',
       validationStatus: EMPTY,
+      logLevel: 'Warning',
     };
   }
 
@@ -181,11 +189,6 @@ export default class ConfigPanel extends Component {
     });
   };
 
-  onLogLevelChange = (event) => {
-    this.setState({
-      logLevel: event.target.value,
-    });
-  };
   onResize = (event, direction, element) => {
     this.setState({
       width: parseInt(element.style.width.replace(/px/g, '')),
@@ -209,6 +212,7 @@ export default class ConfigPanel extends Component {
     });
     const script = this.props.configPanel.script;
     const isStandard = script.type === 'standard';
+    const logLevel = logLevelMap[this.state.logLevel] ?? 20;
     this.props.launchScript(
       isStandard,
       script.path,
@@ -217,7 +221,7 @@ export default class ConfigPanel extends Component {
       2,
       this.state.pauseCheckpoint,
       this.state.stopCheckpoint,
-      this.state.logLevel,
+      logLevel,
     );
   };
 
@@ -247,6 +251,10 @@ export default class ConfigPanel extends Component {
     document.onmousemove = null;
     document.onmouseup = null;
   };
+
+  onLogLevelChange = (value) => {
+    this.setState({logLevel: value})
+  }
 
   render() {
     const { orientation } = this.state;
@@ -389,18 +397,18 @@ export default class ConfigPanel extends Component {
               <Input className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
 
               <span className={styles.logLevelLabel}>Log level</span>
-              <select className={styles.logLevelSelect} defaultValue={this.state.logLevel}>
-                {[
-                  { value: 10, label: 'Debug' },
-                  { value: 20, label: 'Info' },
-                  { value: 30, label: 'Warning' },
-                  { value: 40, label: 'Error' },
-                ].map(({ value, label }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
+              <Select
+                className={styles.logLevelSelect}
+                options={[
+                  'Debug',
+                  'Info',
+                  'Warning',
+                  'Error',
+                ]}
+                option={this.state.logLevel}
+                placeholder="Warning"
+                onChange={(selection) => this.onLogLevelChange(selection.value)}
+              />
             </div>
             <div className={styles.addBtnContainer}>
               <Button

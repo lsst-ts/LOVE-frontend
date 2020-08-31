@@ -63,7 +63,10 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
                     <div className={styles.timestamp} title="private_rcvStamp">
                       {formatTimestamp(msg.private_rcvStamp.value * 1000)}
                     </div>
-                    <div className={styles.messageText}>{msg.message.value}</div>
+                    <div className={styles.messageText}>
+                      {msg.ScriptID && <div className={styles.scriptID}>Script {msg.ScriptID?.value}</div>}
+                      {msg.message?.value}
+                    </div>
                     <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                   </div>
                 </div>
