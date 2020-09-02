@@ -35,11 +35,9 @@ export default class ContextMenu extends Component {
         >
           {this.props.options.map((child, index) => {
             return (
-              <div className={[styles.row, !child.disabled ? styles.enabled : ''].join(' ')} key={index} onClick={child.action}>
-                <div className={[styles.iconWrapper, child.disabled ? styles.disabled : ''].join(' ')}>
-                  {child.icon}
-                </div>
-                <div className={[styles.buttonText, child.disabled ? styles.disabled : ''].join(' ')}>{child.text}</div>
+              <div className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')} key={index} onClick={child.action}>
+                <div className={[styles.iconWrapper].join(' ')}>{child.icon}</div>
+                <div className={[styles.buttonText].join(' ')}>{child.text}</div>
               </div>
             );
           })}

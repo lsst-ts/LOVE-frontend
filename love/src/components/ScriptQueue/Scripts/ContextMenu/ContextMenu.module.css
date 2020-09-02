@@ -22,17 +22,16 @@
 .row {
   display: flex;
   cursor: pointer;
+  opacity: 0.5;
+  cursor: default;
 }
 
 
-.row:hover :not(.disabled) {
+.row:hover.enabled {
   background: var(--commandable-background-hover);
   text-shadow:0px 0px 1px white;
 }
 
-.row:hover :not(.disabled) > * {
-  background: var(--commandable-background-hover);
-}
 
 div.buttonText {
   padding-left: 0em;
@@ -41,8 +40,8 @@ div.buttonText {
 }
 
 .iconWrapper {
-  border: 1px solid var(--commandable-background);
-  background: var(--commandable-background);
+  background: none;
+  border: 1px solid var(--commandable-font-color);
   padding: 0.15em;
   border-radius: 100%;
   margin-right: 0.4em;
@@ -50,13 +49,18 @@ div.buttonText {
 }
 
 
-.disabled {
-  opacity: 0.5;
-  cursor: default;
+.enabled {
+  opacity: 1;
+  cursor: pointer;
 }
 
-.iconWrapper.disabled {
-  background: none;
-  border: 1px solid var(--commandable-font-color);
+.enabled .iconWrapper {
+  border: 1px solid var(--commandable-background);
+  background: var(--commandable-background);
 }
+
+/* .disabled:hover > svg {
+  background: none;
+} */
+
 
