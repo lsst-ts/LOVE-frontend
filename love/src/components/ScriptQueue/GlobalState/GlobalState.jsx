@@ -11,7 +11,7 @@ const ALLOWED_COMMANDS = {
   STANDBY: ['start'],
 };
 
-const GlobalState = ({ summaryState, queueState }) => {
+const GlobalState = ({ summaryState, queueState, requestCommand }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = React.useState(false);
   const [contextMenuData, setContextMenuData] = React.useState({});
 
@@ -25,9 +25,9 @@ const GlobalState = ({ summaryState, queueState }) => {
     const handler = () => {
       setContextMenuIsOpen(false);
     };
-    document.body.addEventListener('click', handler);
+    window.addEventListener('click', handler);
     return () => {
-      document.body.removeEventListener('click', handler);
+      window.removeEventListener('click', handler);
     };
   }, []);
 
@@ -35,22 +35,40 @@ const GlobalState = ({ summaryState, queueState }) => {
 
   const contextMenuOptions = [
     {
-      icon: <ResumeIcon/>,
+      icon: <ResumeIcon />,
       text: 'Start',
-      action: () => console.log('asdf'),
+      action: () => {
+        requestCommand('start');
+        setContextMenuIsOpen(false);
+      },
       disabled: !allowedCommands.includes('start'),
     },
     {
-      icon: <ResumeIcon/>,
+      icon: <ResumeIcon />,
       text: 'Enable',
-      action: () => console.log('asd'),
+      action: () => {
+        requestCommand('enable');
+        setContextMenuIsOpen(false);
+      },
       disabled: !allowedCommands.includes('enable'),
     },
     {
-      icon: <ResumeIcon/>,
+      icon: <ResumeIcon />,
       text: 'Disable',
-      action: () => console.log('asdf'),
+      action: () => {
+        requestCommand('disable');
+        setContextMenuIsOpen(false);
+      },
       disabled: !allowedCommands.includes('disable'),
+    },
+    {
+      icon: <ResumeIcon />,
+      text: 'StandBy',
+      action: () => {
+        requestCommand('standby');
+        setContextMenuIsOpen(false);
+      },
+      disabled: !allowedCommands.includes('standby'),
     },
   ];
 

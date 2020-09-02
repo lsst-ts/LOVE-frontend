@@ -424,6 +424,16 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  summaryStateCommand = (commandName) => {
+    if(!['start','enable', 'disable', 'standby'].includes(commandName)){
+      return;
+    }
+
+    this.props.requestSALCommand({
+      cmd: `cmd_${commandName}`,
+      params: {}
+    });
+  }
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
@@ -605,8 +615,8 @@ export default class ScriptQueue extends Component {
             statusText: ScriptQueue.stateStyleDict[this.props.state],
             name: this.props.state,
           }}
+          requestCommand={this.summaryStateCommand}
         />
-        
         {/* LISTS BODY */}
         <div className={styles.listsBody}>
           <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
