@@ -4,31 +4,33 @@
   background: var(--second-quaternary-background-color);
   z-index: 1;
   transform: translate(-100%, 0);
-  display: grid;
-  grid-template-columns: 1.6em 1fr;
+  display: flex;
+  flex-direction: column;
   padding: 0.5em;
   text-align: left;
   user-select: none;
-  grid-row-gap: 0.2em;
-  grid-column-gap: 0.2em;
 }
 
 .container div {
   padding: 0.05em 0.3em;
 }
 
+.container > div:not(:last-child) {
+  margin-bottom: 0.4em;
+}
+
 .row {
-  display: contents;
+  display: flex;
   cursor: pointer;
 }
 
-.row:hover {
-  background: var(--second-quinary-background-color);
+
+.row:hover :not(.disabled) {
   background: var(--commandable-background-hover);
   text-shadow:0px 0px 1px white;
 }
 
-.row:hover > div.iconWrapper {
+.row:hover :not(.disabled) > * {
   background: var(--commandable-background-hover);
 }
 
@@ -39,8 +41,22 @@ div.buttonText {
 }
 
 .iconWrapper {
-  background: var(--commandable-background);
   border: 1px solid var(--commandable-background);
+  background: var(--commandable-background);
   padding: 0.15em;
   border-radius: 100%;
+  margin-right: 0.4em;
+  width: 0.8em;
 }
+
+
+.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.iconWrapper.disabled {
+  background: none;
+  border: 1px solid var(--commandable-font-color);
+}
+
