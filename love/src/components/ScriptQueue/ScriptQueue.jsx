@@ -6,7 +6,6 @@ import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
-import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import Loader from '../GeneralPurpose/Loader/Loader';
 import ManagerInterface from '../../Utils';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
@@ -20,6 +19,7 @@ import RowExpansionIcon from '../icons/RowExpansionIcon/RowExpansionIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
+import GlobalState from './GlobalState/GlobalState';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -99,6 +99,13 @@ export default class ScriptQueue extends Component {
       statusText: 'warning',
     },
   };
+
+  // static stateToCommandsMap = {
+  //   'ENABLED': {
+  //     'label': 'Disable',
+  //     ''
+  //   }
+  // }
 
   componentDidUpdate = (prevProps, _prevState) => {
     if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
@@ -591,21 +598,15 @@ export default class ScriptQueue extends Component {
             </div>
           </div>
         </div>
-        <div className={styles.globalStateWrapper}>
-          <div className={styles.globalStateContainer}>
-            <div className={styles.stateContainer}>
-              CSC STATE
-              <StatusText status={ScriptQueue.summaryStates[this.props.summaryStateValue].statusText}>
-                {ScriptQueue.summaryStates[this.props.summaryStateValue].name}
-              </StatusText>
-            </div>
-            <div className={styles.stateContainer}>
-              QUEUE STATE
-              <StatusText status={ScriptQueue.stateStyleDict[this.props.state]}>{this.props.state}</StatusText>
-            </div>
-          </div>
-        </div>
 
+        <GlobalState
+          summaryState={ScriptQueue.summaryStates[this.props.summaryStateValue]}
+          queueState={{
+            statusText: ScriptQueue.stateStyleDict[this.props.state],
+            name: this.props.state,
+          }}
+        />
+        
         {/* LISTS BODY */}
         <div className={styles.listsBody}>
           <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
@@ -633,7 +634,7 @@ export default class ScriptQueue extends Component {
                     onClick={this.closeAvailableList}
                     title="Close available script list"
                   >
-                    <span style={{'width': '100%'}}>&#8854;</span>
+                    <span style={{ width: '100%' }}>&#8854;</span>
                   </div>
                 </div>
                 <ScriptList noOverflow={true}>
@@ -792,7 +793,7 @@ export default class ScriptQueue extends Component {
                     onClick={this.closeFinishedList}
                     title="Close finished script list"
                   >
-                    <span style={{'width': '100%'}}>&#8854;</span>
+                    <span style={{ width: '100%' }}>&#8854;</span>
                   </div>
                 </div>
                 <ScriptList>
