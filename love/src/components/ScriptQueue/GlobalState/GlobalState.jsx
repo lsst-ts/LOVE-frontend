@@ -84,11 +84,11 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
       </div>
       <div className={styles.globalStateContainer}>
         <div className={styles.stateContainer}>
-          Summary State
+          <span className={styles.stateLabel}>Summary State</span>
           <StatusText status={summaryState.statusText}>{summaryState.name}</StatusText>
         </div>
         <div className={styles.stateContainer}>
-          Queue state
+          <span className={styles.stateLabel}>Queue State</span>
           <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
         </div>
       </div>

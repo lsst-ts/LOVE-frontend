@@ -26,6 +26,12 @@
 }
 
 .stateContainer {
-    width: 8em;
-    padding: 0.5em;
-  }
+  width: 8em;
+  padding: 0em 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.stateLabel {
+  margin-bottom: 0.3rem;
+}
