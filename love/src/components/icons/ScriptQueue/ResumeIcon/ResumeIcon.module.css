@@ -1,6 +1,6 @@
 .st0 {
-  fill: #798d99;
-  stroke: #798d99;
+  fill: var(--commandable-font-color);
+  stroke: var(--commandable-font-color);
   stroke-miterlimit: 10;
 }
 
