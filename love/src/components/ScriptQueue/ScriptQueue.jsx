@@ -9,8 +9,6 @@ import styles from './ScriptQueue.module.css';
 import Loader from '../GeneralPurpose/Loader/Loader';
 import ManagerInterface from '../../Utils';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
-import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
-import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
@@ -615,7 +613,10 @@ export default class ScriptQueue extends Component {
             statusText: ScriptQueue.stateStyleDict[this.props.state],
             name: this.props.state,
           }}
-          requestCommand={this.summaryStateCommand}
+          requestSummaryStateCommand={this.summaryStateCommand}
+          commandExecutePermission={this.props.commandExecutePermission}
+          resumeScriptQueue={this.resumeScriptQueue}
+          pauseScriptQueue={this.pauseScriptQueue}
         />
         {/* LISTS BODY */}
         <div className={styles.listsBody}>
@@ -714,26 +715,6 @@ export default class ScriptQueue extends Component {
                   {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                 </span>
               </div>
-              {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
-                <>
-                  <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
-                    <span>Resume</span>
-                    <div className={styles.pauseIconWrapper} title="Resume Script Queue">
-                      <ResumeIcon />
-                    </div>
-                  </div>
-                </>
-              )}
-              {this.props.state === 'Running' && this.props.commandExecutePermission && (
-                <>
-                  <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
-                    <span>Pause</span>
-                    <div className={styles.pauseIconWrapper} title="Pause Script Queue">
-                      <PauseIcon />
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
             <ScriptList onDragEnter={this.onDragEnter}>
               {waitingList.map((script, listIndex) => {

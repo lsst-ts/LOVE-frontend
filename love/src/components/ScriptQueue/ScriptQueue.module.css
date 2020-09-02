@@ -185,34 +185,6 @@
   opacity: 1;
 }
 
-.pauseIconContainer {
-  display: flex;
-  align-items: center;
-  padding: 0.25em 0.5em;
-  cursor: pointer;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-
-.pauseIconContainer:hover {
-  border: 1px solid var(--second-quaternary-background-color);
-}
-
-.pauseIconContainer:hover .pauseIconWrapper {
-  background: var(--commandable-background-hover);
-}
-
-.pauseIconContainer > span {
-  padding-right: 0.5em;
-}
-
-.pauseIconWrapper {
-  width: 1em;
-  background: var(--commandable-background);
-  border: 1px solid var(--commandable-background);
-  padding: 0.25em 0.5em;
-  border-radius: 1em;
-}
 
 .standardExternalContainer {
   display: grid;

@@ -1,28 +1,95 @@
-.globalStateContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding-bottom: 1.5em;
-}
-
 .globalStateWrapper {
   grid-area: global;
   border-bottom: 1px solid var(--second-tertiary-background-color);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  padding-bottom: 1em;
+  padding-left: 0.5rem;
 }
+
+.globalStateContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5em 0.5em;
+  height: 100%;
+}
+
+.title {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  text-align: start;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: auto 8em auto;
+  grid-column-gap: 0.5rem;
+  grid-row-gap: 0.5rem;
+  margin-top: 0.1rem;
+  align-items: baseline;
+}
+
+.row {
+  display: contents;
+}
+
+.stateLabel {
+  margin-bottom: 0.3rem;
+  text-align: start;
+}
+
+.summaryState {
+  border-radius: 0.2rem;
+  font-weight: 700;
+}
+
+.threeDotsButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.pauseIconContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.pauseIconContainer:hover {
+  border: 1px solid var(--second-quaternary-background-color);
+}
+
+.pauseIconContainer:hover .pauseIconWrapper {
+  background: var(--commandable-background-hover);
+}
+
+.pauseIconContainer > span {
+  padding-right: 0.5em;
+}
+
+.pauseIconWrapper {
+  width: 1em;
+  background: var(--commandable-background);
+  border: 1px solid var(--commandable-background);
+  padding: 0.25em 0.5em;
+  border-radius: 1em;
+}
+
+.gearIcon > path {
+    fill: var(--commandable-font-color);
+}
+
+/* ------ */
 
 .globalStateControls {
   align-self: flex-end;
   margin-right: 1rem;
   cursor: pointer;
-}
-.threeDotsButton {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
 
 .stateContainer {
@@ -30,8 +97,4 @@
   padding: 0em 2em;
   display: flex;
   flex-direction: column;
-}
-
-.stateLabel {
-  margin-bottom: 0.3rem;
 }

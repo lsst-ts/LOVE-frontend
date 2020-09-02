@@ -3,11 +3,18 @@ import PropTypes from 'prop-types';
 
 import styles from './ContextMenu.module.css';
 
+
+
 export default class ContextMenu extends Component {
   static propTypes = {
-    contextMenuData: PropTypes.object,
+    contextMenuData: PropTypes.shape({
+      right: PropTypes.number,
+      bottom: PropTypes.number
+    }),
     isOpen: PropTypes.bool,
-    options: PropTypes.array,
+    options: PropTypes.arrayOf(PropTypes.shape({
+      
+    })),
   };
 
   static defaultProps = {

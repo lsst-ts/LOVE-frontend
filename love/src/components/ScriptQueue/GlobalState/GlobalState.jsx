@@ -3,7 +3,16 @@ import styles from './GlobalState.module.css';
 import scriptStyles from '../Scripts/Scripts.module.css';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
+import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
+import GearIcon from 'components/icons/GearIcon/GearIcon.jsx';
 import ContextMenu from '../Scripts/ContextMenu/ContextMenu';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
+
+const summaryStateToStylesMap = Object.values(CSCDetail.states).reduce((prevDict, value) => {
+  const { name } = value;
+  prevDict[name.toUpperCase()] = value.class;
+  return prevDict;
+}, {});
 
 const ALLOWED_COMMANDS = {
   ENABLED: ['disable'],
@@ -11,7 +20,14 @@ const ALLOWED_COMMANDS = {
   STANDBY: ['start'],
 };
 
-const GlobalState = ({ summaryState, queueState, requestCommand }) => {
+const GlobalState = ({
+  summaryState,
+  queueState,
+  requestSummaryStateCommand,
+  commandExecutePermission,
+  resumeScriptQueue,
+  pauseScriptQueue,
+}) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = React.useState(false);
   const [contextMenuData, setContextMenuData] = React.useState({});
 
@@ -38,7 +54,7 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
       icon: <ResumeIcon />,
       text: 'Start',
       action: () => {
-        requestCommand('start');
+        requestSummaryStateCommand('start');
         setContextMenuIsOpen(false);
       },
       disabled: !allowedCommands.includes('start'),
@@ -47,7 +63,7 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
       icon: <ResumeIcon />,
       text: 'Enable',
       action: () => {
-        requestCommand('enable');
+        requestSummaryStateCommand('enable');
         setContextMenuIsOpen(false);
       },
       disabled: !allowedCommands.includes('enable'),
@@ -56,7 +72,7 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
       icon: <ResumeIcon />,
       text: 'Disable',
       action: () => {
-        requestCommand('disable');
+        requestSummaryStateCommand('disable');
         setContextMenuIsOpen(false);
       },
       disabled: !allowedCommands.includes('disable'),
@@ -65,7 +81,7 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
       icon: <ResumeIcon />,
       text: 'StandBy',
       action: () => {
-        requestCommand('standby');
+        requestSummaryStateCommand('standby');
         setContextMenuIsOpen(false);
       },
       disabled: !allowedCommands.includes('standby'),
@@ -74,7 +90,51 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
 
   return (
     <div className={styles.globalStateWrapper}>
-      <div className={styles.globalStateControls}>
+      <div className={styles.globalStateContainer}>
+        <div className={styles.title}>STATE</div>
+        <div className={styles.body}>
+          <div className={styles.row}>
+            <span className={styles.stateLabel}>Summary State</span>
+            <span className={[summaryStateToStylesMap[summaryState.name], styles.summaryState].join(' ')}>
+              {summaryState.name}
+            </span>
+            {commandExecutePermission && (
+              <>
+                <div className={styles.pauseIconContainer} onClick={(e) => onClickContextMenu(e, true)}>
+                  <div className={styles.pauseIconWrapper} title="Change summaryState">
+                    <GearIcon className={styles.gearIcon}/>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+
+          <div className={styles.row}>
+            <span className={styles.stateLabel}>Queue State</span>
+            <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
+            {queueState.name === 'Stopped' && commandExecutePermission && (
+              <>
+                <div className={styles.pauseIconContainer} onClick={resumeScriptQueue}>
+                  <div className={styles.pauseIconWrapper} title="Resume ScriptQueue">
+                    <ResumeIcon />
+                  </div>
+                </div>
+              </>
+            )}
+            {queueState.name === 'Running' && commandExecutePermission && (
+              <>
+                <div className={styles.pauseIconContainer} onClick={pauseScriptQueue}>
+                  <div className={styles.pauseIconWrapper} title="Pause ScriptQueue">
+                    <PauseIcon />
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+        <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} />
+      </div>
+      {/* <div className={styles.globalStateControls}>
         <div
           className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
           onClick={(e) => onClickContextMenu(e, true)}
@@ -85,14 +145,14 @@ const GlobalState = ({ summaryState, queueState, requestCommand }) => {
       <div className={styles.globalStateContainer}>
         <div className={styles.stateContainer}>
           <span className={styles.stateLabel}>Summary State</span>
-          <StatusText status={summaryState.statusText}>{summaryState.name}</StatusText>
+          <span className={[summaryStateToStylesMap[summaryState.name], styles.summaryState].join(' ')}>{summaryState.name}</span>
         </div>
         <div className={styles.stateContainer}>
           <span className={styles.stateLabel}>Queue State</span>
           <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
         </div>
       </div>
-      <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} />
+      <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} /> */}
     </div>
   );
 };
