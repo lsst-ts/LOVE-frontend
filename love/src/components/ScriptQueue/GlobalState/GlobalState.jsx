@@ -138,25 +138,6 @@ const GlobalState = ({
         </div>
         <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} />
       </div>
-      {/* <div className={styles.globalStateControls}>
-        <div
-          className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
-          onClick={(e) => onClickContextMenu(e, true)}
-        >
-          <span className={styles.threeDotsButton}>&#8943;</span>
-        </div>
-      </div>
-      <div className={styles.globalStateContainer}>
-        <div className={styles.stateContainer}>
-          <span className={styles.stateLabel}>Summary State</span>
-          <span className={[summaryStateToStylesMap[summaryState.name], styles.summaryState].join(' ')}>{summaryState.name}</span>
-        </div>
-        <div className={styles.stateContainer}>
-          <span className={styles.stateLabel}>Queue State</span>
-          <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
-        </div>
-      </div>
-      <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} /> */}
     </div>
   );
 };

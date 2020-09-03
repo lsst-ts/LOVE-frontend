@@ -52,13 +52,6 @@
   font-weight: 700;
 }
 
-.threeDotsButton {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  cursor: pointer;
-}
-
 .pauseIconContainer {
   display: flex;
   align-items: center;
@@ -90,19 +83,4 @@
 
 .gearIcon > path {
     fill: var(--commandable-font-color);
-}
-
-/* ------ */
-
-.globalStateControls {
-  align-self: flex-end;
-  margin-right: 1rem;
-  cursor: pointer;
-}
-
-.stateContainer {
-  width: 8em;
-  padding: 0em 2em;
-  display: flex;
-  flex-direction: column;
 }
