@@ -4,33 +4,34 @@
   background: var(--second-quaternary-background-color);
   z-index: 1;
   transform: translate(-100%, 0);
-  display: grid;
-  grid-template-columns: 1.6em 1fr;
+  display: flex;
+  flex-direction: column;
   padding: 0.5em;
   text-align: left;
   user-select: none;
-  grid-row-gap: 0.2em;
-  grid-column-gap: 0.2em;
 }
 
 .container div {
   padding: 0.05em 0.3em;
 }
 
-.row {
-  display: contents;
-  cursor: pointer;
+.container > div:not(:last-child) {
+  margin-bottom: 0.4em;
 }
 
-.row:hover {
-  background: var(--second-quinary-background-color);
+.row {
+  display: flex;
+  cursor: pointer;
+  opacity: 0.5;
+  cursor: default;
+}
+
+
+.row:hover.enabled {
   background: var(--commandable-background-hover);
   text-shadow:0px 0px 1px white;
 }
 
-.row:hover > div.iconWrapper {
-  background: var(--commandable-background-hover);
-}
 
 div.buttonText {
   padding-left: 0em;
@@ -39,8 +40,27 @@ div.buttonText {
 }
 
 .iconWrapper {
-  background: var(--commandable-background);
-  border: 1px solid var(--commandable-background);
+  background: none;
+  border: 1px solid var(--commandable-font-color);
   padding: 0.15em;
   border-radius: 100%;
+  margin-right: 0.4em;
+  width: 0.8em;
 }
+
+
+.enabled {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.enabled .iconWrapper {
+  border: 1px solid var(--commandable-background);
+  background: var(--commandable-background);
+}
+
+/* .disabled:hover > svg {
+  background: none;
+} */
+
+
