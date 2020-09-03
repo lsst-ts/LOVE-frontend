@@ -95,41 +95,45 @@ const GlobalState = ({
         <div className={styles.body}>
           <div className={styles.row}>
             <span className={styles.stateLabel}>Summary State</span>
-            <span className={[summaryStateToStylesMap[summaryState.name], styles.summaryState].join(' ')}>
-              {summaryState.name}
-            </span>
-            {commandExecutePermission && (
-              <>
-                <div className={styles.pauseIconContainer} onClick={(e) => onClickContextMenu(e, true)}>
-                  <div className={styles.pauseIconWrapper} title="Change summaryState">
-                    <GearIcon className={styles.gearIcon}/>
+            <div className={styles.stateCell}>
+              <span className={[summaryStateToStylesMap[summaryState.name], styles.summaryState].join(' ')}>
+                {summaryState.name}
+              </span>
+              {commandExecutePermission && (
+                <>
+                  <div className={styles.pauseIconContainer} onClick={(e) => onClickContextMenu(e, true)}>
+                    <div className={styles.pauseIconWrapper} title="Change summaryState">
+                      <GearIcon className={styles.gearIcon} />
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
 
           <div className={styles.row}>
             <span className={styles.stateLabel}>Queue State</span>
-            <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
-            {queueState.name === 'Stopped' && commandExecutePermission && (
-              <>
-                <div className={styles.pauseIconContainer} onClick={resumeScriptQueue}>
-                  <div className={styles.pauseIconWrapper} title="Resume ScriptQueue">
-                    <ResumeIcon />
+            <div className={styles.stateCell}>
+              <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
+              {queueState.name === 'Stopped' && commandExecutePermission && (
+                <>
+                  <div className={styles.pauseIconContainer} onClick={resumeScriptQueue}>
+                    <div className={styles.pauseIconWrapper} title="Resume ScriptQueue">
+                      <ResumeIcon />
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
-            {queueState.name === 'Running' && commandExecutePermission && (
-              <>
-                <div className={styles.pauseIconContainer} onClick={pauseScriptQueue}>
-                  <div className={styles.pauseIconWrapper} title="Pause ScriptQueue">
-                    <PauseIcon />
+                </>
+              )}
+              {queueState.name === 'Running' && commandExecutePermission && (
+                <>
+                  <div className={styles.pauseIconContainer} onClick={pauseScriptQueue}>
+                    <div className={styles.pauseIconWrapper} title="Pause ScriptQueue">
+                      <PauseIcon />
+                    </div>
                   </div>
-                </div>
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
         </div>
         <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} />
