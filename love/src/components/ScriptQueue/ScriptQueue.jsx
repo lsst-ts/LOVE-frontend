@@ -98,13 +98,6 @@ export default class ScriptQueue extends Component {
     },
   };
 
-  // static stateToCommandsMap = {
-  //   'ENABLED': {
-  //     'label': 'Disable',
-  //     ''
-  //   }
-  // }
-
   componentDidUpdate = (prevProps, _prevState) => {
     if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
       this.props.availableScriptList.sort((a, b) => {
