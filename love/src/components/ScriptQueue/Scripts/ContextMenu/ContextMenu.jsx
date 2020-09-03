@@ -3,18 +3,29 @@ import PropTypes from 'prop-types';
 
 import styles from './ContextMenu.module.css';
 
-
-
 export default class ContextMenu extends Component {
   static propTypes = {
+    /**Position data for the context menu.
+     * Usually from event.target.getBoundingClientRect()
+     */
     contextMenuData: PropTypes.shape({
       right: PropTypes.number,
-      bottom: PropTypes.number
+      bottom: PropTypes.number,
     }),
     isOpen: PropTypes.bool,
-    options: PropTypes.arrayOf(PropTypes.shape({
-      
-    })),
+    /** List of clickable options to be displayed */
+    options: PropTypes.arrayOf(
+      PropTypes.shape({
+        /** Text label of the button */
+        text: PropTypes.node,
+        /**SVG icon to be shown at the left of the text*/
+        icon: PropTypes.node,
+        /** Callback passed to the onClick event of each option */
+        action: PropTypes.func,
+        /** If `true` the button will be disabled*/
+        disabled: PropTypes.bool,
+      }),
+    ),
   };
 
   static defaultProps = {
@@ -42,7 +53,11 @@ export default class ContextMenu extends Component {
         >
           {this.props.options.map((child, index) => {
             return (
-              <div className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')} key={index} onClick={child.action}>
+              <div
+                className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')}
+                key={index}
+                onClick={!child.disabled ? child.action : undefined}
+              >
                 <div className={[styles.iconWrapper].join(' ')}>{child.icon}</div>
                 <div className={[styles.buttonText].join(' ')}>{child.text}</div>
               </div>
