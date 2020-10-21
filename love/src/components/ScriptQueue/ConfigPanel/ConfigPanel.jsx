@@ -19,17 +19,6 @@ import ManagerInterface from '../../../Utils';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
-const requestConfigValidation = (config, schema) => {
-  return fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
-    method: 'POST',
-    headers: ManagerInterface.getHeaders(),
-    body: JSON.stringify({
-      schema,
-      config,
-    }),
-  });
-};
-
 const EMPTY = 'EMPTY';
 const VALIDATING = 'VALIDATING';
 const VALID = 'VALID';
@@ -105,7 +94,7 @@ export default class ConfigPanel extends Component {
 
     /** Request validation otherwise, and set state VALIDATING */
     this.setState({ validationStatus: VALIDATING });
-    requestConfigValidation(newValue, this.props.configPanel.configSchema)
+    ManagerInterface.requestConfigValidation(newValue, this.props.configPanel.configSchema)
       .then((r) => {
         /** Go to VALIDATING again and perform new request in componentDidUpdate */
         if (this.state.validationStatus === NEED_REVALIDATION) {
