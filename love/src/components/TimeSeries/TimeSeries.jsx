@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
-import ManagerInterface, { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
+import { telemetryObjectToVegaList, getFakeHistoricalTimeSeries } from '../../Utils';
 import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import { hasFakeData } from '../../Config';
 import styles from './TimeSeries.module.css';
@@ -22,8 +22,6 @@ export default class TimeSeries extends PureComponent {
       subscribedStreams: [],
       selectedRows: [],
     };
-
-    this.managerInterface = new ManagerInterface();
   }
 
   onSetSelection = (selectedRows, data) => {

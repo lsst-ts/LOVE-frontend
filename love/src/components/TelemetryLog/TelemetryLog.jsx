@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
-import ManagerInterface from '../../Utils';
 import 'react-json-pretty/themes/monikai.css';
 
 export default class TelemetryLog extends Component {
@@ -25,7 +24,6 @@ export default class TelemetryLog extends Component {
       cmdParams: '{"name": "test.ConfiguredSeverities.Rule1", "severity": 1, "acknowledgedBy":"test"}',
       cmdSalindex: 0,
     };
-    this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
