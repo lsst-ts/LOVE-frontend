@@ -139,65 +139,14 @@ export default class ManagerInterface {
     localStorage.removeItem('LOVE-TOKEN');
   }
 
-  static saveToken(token) {
-    if (token === null) {
-      return false;
-    }
-    localStorage.setItem('LOVE-TOKEN', token);
-    return true;
-  }
-
-  static requestToken(username, password) {
-    const url = `${this.getApiBaseUrl()}get-token/`;
-    const data = {
-      username,
-      password,
-    };
-    return fetch(url, {
+  static requestConfigValidation(config, schema) {
+    return fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
       method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const { token } = response;
-        if (token !== undefined && token !== null) {
-          ManagerInterface.saveToken(token);
-        }
-        return token;
-      });
-  }
-
-  static validateToken() {
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      // console.log('Token not found during validation');
-      return new Promise((resolve) => resolve(false));
-    }
-    const url = `${this.getApiBaseUrl()}validate-token/`;
-    return fetch(url, {
-      method: 'GET',
-      headers: this.getHeaders(),
-    }).then((response) => {
-      if (response.status >= 500) {
-        // console.error('Error communicating with the server. Logging out\n', response);
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        const { detail } = resp;
-        if (detail === 'Token is valid') {
-          return true;
-        }
-        // console.log('Session expired. Logging out');
-        this.removeToken();
-        return false;
-      });
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        schema,
+        config,
+      }),
     });
   }
 
@@ -261,95 +210,6 @@ export default class ManagerInterface {
       });
     });
   }
-
-  logout = () => {
-    if (this.socket) this.socket.close(4000);
-    this.socket = null;
-    this.socketPromise = null;
-  };
-
-  subscribeToStream = (category, csc, stream, callback) => {
-    this.callback = callback;
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      // console.log('Token not available or invalid, skipping connection');
-      return;
-    }
-    this.subscriptions.push([category, csc, stream]);
-    if (this.socketPromise === null && this.socket === null) {
-      this.socketPromise = new Promise((resolve) => {
-        const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-        // eslint-disable-next-line
-        console.log('Openning websocket connection to: ', connectionPath);
-        this.socket = sockette(connectionPath, {
-          onopen: () => {
-            this.connectionIsOpen = true;
-            this.subscriptions.forEach((sub) => {
-              this.socket.json({
-                option: 'subscribe',
-                category: sub[0],
-                csc: sub[1],
-                stream: sub[2],
-              });
-            });
-            resolve();
-          },
-          onmessage: (msg) => {
-            if (this.callback) this.callback(msg);
-          },
-          onclose: () => {
-            this.connectionIsOpen = false;
-            resolve();
-          },
-          onerror: () => {
-            resolve();
-          },
-        });
-      });
-    } else {
-      this.socketPromise.then(() => {
-        this.subscriptions.forEach((sub) => {
-          this.socket.json({
-            option: 'subscribe',
-            category: sub[0],
-            csc: sub[1],
-            stream: sub[2],
-          });
-        });
-      });
-    }
-  };
-
-  unsubscribeToStream = (category, csc, stream, callback) => {
-    const subscriptionKeys = this.subscriptions.map(JSON.stringify);
-    const index = subscriptionKeys.indexOf(JSON.stringify([category, csc, stream]));
-    if (index > -1) this.subscriptions.splice(index, 1);
-    if (this.connectionIsOpen) {
-      this.socket.json({
-        option: 'unsubscribe',
-        category,
-        csc,
-        stream,
-      });
-      this.callback = callback;
-    }
-  };
-
-  subscribeToTelemetry = (csc, stream, callback) => {
-    this.subscribeToStream('telemetry', csc, stream, callback);
-  };
-
-  unsubscribeToTelemetry = (csc, stream, callback) => {
-    this.unsubscribeToStream('telemetry', csc, stream, callback);
-  };
-
-  subscribeToEvents = (csc, stream, callback) => {
-    this.subscribeToStream('event', csc, stream, callback);
-  };
-
-  unsubscribeToEvents = (csc, stream, callback) => {
-    this.unsubscribeToStream('event', csc, stream, callback);
-  };
 }
 
 /**
