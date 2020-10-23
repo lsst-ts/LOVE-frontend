@@ -53,12 +53,12 @@ export default ({ classname, description, remotes, pause_checkpoints, stop_check
 
   return (
     <div className={[scriptStyles.expandedSection].join(' ')}>
-      <div className={scriptStyles.expandedSubSection}>
+      <div >
         <div className={scriptStyles.subSectionTitle}>DESCRIPTION</div>
 
         {fields.map(({ label, defaultDisplayed, defaultValue, value }) => {
           return (
-            <div key={label} className={scriptStyles.subSectionRow}>
+            <div key={label} className={[scriptStyles.subSectionRow, scriptStyles.expandedSubSection].join(' ')}>
               <span className={scriptStyles.subSectionLabel}>{label}</span>
               {value === defaultValue ? (
                 <span className={[scriptStyles.subSectionValue, scriptStyles.subSectionValueUnknown]}>
