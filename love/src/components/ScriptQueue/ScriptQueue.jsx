@@ -95,6 +95,14 @@ export default class ScriptQueue extends Component {
     },
   };
 
+  shouldComponentUpdate = (nextProps, nextState) => {
+    const defaultBehavior = this.props !== nextProps || this.state !== nextState;
+    return (
+      (defaultBehavior && this.props.heartbeats !== nextProps.heartbeats) ||
+      this.state.draggingScriptInstance !== undefined
+    );
+  };
+
   componentDidUpdate = (prevProps, _prevState) => {
     if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
       this.props.availableScriptList.sort((a, b) => {
@@ -210,7 +218,6 @@ export default class ScriptQueue extends Component {
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
-
     const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
@@ -375,15 +382,15 @@ export default class ScriptQueue extends Component {
   };
 
   summaryStateCommand = (commandName) => {
-    if(!['start','enable', 'disable', 'standby'].includes(commandName)){
+    if (!['start', 'enable', 'disable', 'standby'].includes(commandName)) {
       return;
     }
 
     this.props.requestSALCommand({
       cmd: `cmd_${commandName}`,
-      params: {}
+      params: {},
     });
-  }
+  };
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
