@@ -95,14 +95,6 @@ export default class ScriptQueue extends Component {
     },
   };
 
-  shouldComponentUpdate = (nextProps, nextState) => {
-    const defaultBehavior = this.props !== nextProps || this.state !== nextState;
-    return (
-      (defaultBehavior && this.props.heartbeats !== nextProps.heartbeats) ||
-      this.state.draggingScriptInstance !== undefined
-    );
-  };
-
   componentDidUpdate = (prevProps, _prevState) => {
     if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
       this.props.availableScriptList.sort((a, b) => {
