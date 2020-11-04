@@ -368,7 +368,8 @@ class CustomView extends Component {
   };
 
   render() {
-    const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
+    const layout = this.props.layout ? this.props.layout : (this.props.getCurrentView(this.state.id) ?? {}).data;
+    // const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
     const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;
   }
