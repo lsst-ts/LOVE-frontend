@@ -255,7 +255,7 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    let { x, y, height } = e.target.getBoundingClientRect();
+    let { x } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
         script: script,

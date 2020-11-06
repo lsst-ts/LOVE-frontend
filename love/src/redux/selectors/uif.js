@@ -60,7 +60,6 @@ export const getView = createCachedSelector(
   (views, id) => {
     if (views !== undefined) {
       const foundView = views.find((view) => view.id === id);
-      console.log(foundView)
       return foundView;
     }
     return undefined;
@@ -68,7 +67,7 @@ export const getView = createCachedSelector(
 )(
   // re-reselect keySelector (receives selectors' arguments)
   // Use "id" as cacheKey
-  (_state_, id) => id,
+  (_state_, id, id2) => id ?? -1,
 );
 
 

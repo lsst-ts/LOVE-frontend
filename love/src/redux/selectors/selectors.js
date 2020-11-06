@@ -394,7 +394,7 @@ export const getScriptQueueState = (state, salindex) => {
  * @param {obj} state
  * @param {integer} salindex
  */
-const getScripts = (state) => state.heartbeats.scripts;
+const getScripts = (state) => state.heartbeats?.scripts ?? [];
 const getSalindex = (state, salindex) => salindex;
 
 export const getScriptHeartbeats = createCachedSelector(
