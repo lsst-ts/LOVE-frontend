@@ -89,6 +89,8 @@ class CustomView extends Component {
      * DESKTOP
      *  */
     device: PropTypes.string,
+    /** Optional id of the view */
+    id: PropTypes.number,
   };
 
   static defaultProps = {
@@ -111,16 +113,38 @@ class CustomView extends Component {
     };
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.id || this.props.id) {
+      const id = this.state.id ? this.state.id : this.props.id;
+      const loadedView = this.props.getCurrentView(id);
+      if (loadedView && this.state.loadedView !== loadedView) {
+        console.log(this.state.loadedView, loadedView);
+        console.log(this.state.loadedView?.data === loadedView?.data);
+        const layout = this.props.layout ? this.props.layout : loadedView.data;
+        const parsedTree = this.parseElement(layout, 0);
+        this.setState({
+          layout,
+          loadedView: loadedView,
+          parsedTree,
+        });
+      }
+      if (this.props.layout && this.props.layout !== this.state.layout) {
+        const parsedTree = this.parseElement(this.props.layout, 0);
+        this.setState({
+          layout: this.props.layout,
+          parsedTree,
+        });
+      }
+    }
+  }
+
   componentDidMount() {
     if (this.props.location) {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
       if (id !== null && !isNaN(id)) {
-        this.props.requestView(id).then(() => {
-          const loadedView = this.props.getCurrentView(id);
-          this.setState({
-            loadedView: loadedView || {},
-            id,
-          });
+        this.props.requestView(id);
+        this.setState({
+          id,
         });
       }
     }
@@ -368,10 +392,10 @@ class CustomView extends Component {
   };
 
   render() {
-    const layout = this.props.layout ? this.props.layout : (this.props.getCurrentView(this.state.id) ?? {}).data;
-    // const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
+    // const layout = this.props.layout ? this.props.layout : (this.props.getCurrentView(this.state.id) ?? {}).data;
+    const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
     const parsedTree = this.parseElement(layout, 0);
-    return <>{parsedTree}</>;
+    return <>{this.state.parsedTree}</>;
   }
 }
 
