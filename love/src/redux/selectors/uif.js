@@ -1,3 +1,5 @@
+import { createCachedSelector } from 're-reselect';
+
 /**
  * Return the list of workspaces from the state
  *
@@ -48,16 +50,26 @@ export const getViewsStatus = (state) => {
  * @param  {object} state  the state
  * @return {array}        the list of views
  */
-export const getView = (state, id) => {
-  const views = getCachedViews(state);
-  // if (views === undefined || views.length === 0) return undefined;
-  // return views.find((view) => view.id === id);
-  if (views !== undefined) {
-    const foundView = views.find((view) => view.id === id);
-    return foundView;
-  }
-  return undefined;
-};
+const getId = (state, id) => id;
+
+export const getView = createCachedSelector(
+  // inputSelectors
+  getCachedViews,
+  getId,
+  // resultFunc
+  (views, id) => {
+    if (views !== undefined) {
+      const foundView = views.find((view) => view.id === id);
+      console.log(foundView)
+      return foundView;
+    }
+    return undefined;
+  },
+)(
+  // re-reselect keySelector (receives selectors' arguments)
+  // Use "id" as cacheKey
+  (_state_, id) => id,
+);
 
 
 /**
