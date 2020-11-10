@@ -89,6 +89,8 @@ class CustomView extends Component {
      * DESKTOP
      *  */
     device: PropTypes.string,
+    /** Optional id of the view */
+    id: PropTypes.number,
   };
 
   static defaultProps = {
@@ -115,12 +117,9 @@ class CustomView extends Component {
     if (this.props.location) {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
       if (id !== null && !isNaN(id)) {
-        this.props.requestView(id).then(() => {
-          const loadedView = this.props.getCurrentView(id);
-          this.setState({
-            loadedView: loadedView || {},
-            id,
-          });
+        this.props.requestView(id);
+        this.setState({
+          id,
         });
       }
     }
@@ -368,7 +367,7 @@ class CustomView extends Component {
   };
 
   render() {
-    const layout = this.props.layout ? this.props.layout : this.state.loadedView.data;
+    const layout = this.props.layout ? this.props.layout : (this.props.getCurrentView(this.state.id) ?? {}).data;
     const parsedTree = this.parseElement(layout, 0);
     return <>{parsedTree}</>;
   }

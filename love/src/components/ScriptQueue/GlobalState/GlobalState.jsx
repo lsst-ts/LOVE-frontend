@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './GlobalState.module.css';
-import scriptStyles from '../Scripts/Scripts.module.css';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';

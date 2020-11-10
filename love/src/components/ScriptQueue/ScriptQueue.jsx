@@ -210,7 +210,6 @@ export default class ScriptQueue extends Component {
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
-
     const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
@@ -256,7 +255,7 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    let { x, y, height } = e.target.getBoundingClientRect();
+    let { x } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
         script: script,
@@ -375,15 +374,15 @@ export default class ScriptQueue extends Component {
   };
 
   summaryStateCommand = (commandName) => {
-    if(!['start','enable', 'disable', 'standby'].includes(commandName)){
+    if (!['start', 'enable', 'disable', 'standby'].includes(commandName)) {
       return;
     }
 
     this.props.requestSALCommand({
       cmd: `cmd_${commandName}`,
-      params: {}
+      params: {},
     });
-  }
+  };
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });

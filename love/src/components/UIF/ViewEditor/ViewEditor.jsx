@@ -581,6 +581,7 @@ class ViewEditor extends Component {
               onComponentConfig={this.onComponentConfig}
               isEditable={true}
               deviceWidth={this.state.device.value}
+              id={this.state.id}
             ></CustomView>
           </div>
         </div>

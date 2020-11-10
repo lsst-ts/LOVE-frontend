@@ -17,8 +17,6 @@
   justify-content: center;
   box-sizing: border-box;
   position: relative;
-  transition: transform 200ms ease;
-  transition-property: transform;
 }
 
 :global(.react-draggable-dragging) {
@@ -34,6 +32,8 @@
 .editable {
   border: 1px dashed var(--second-quinary-background-color);
   box-shadow: 1px 5px 2px var(--box-shadow-color);
+  transition: transform 200ms ease;
+  transition-property: transform;
 }
 
 .noOverflow {

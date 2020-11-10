@@ -192,7 +192,13 @@ export const openWebsocketConnection = () => {
       onmessage: (msg) => {
         if (!msg.data) return;
 
-        const data = JSON.parse(msg.data);
+        let data = {};
+        try {
+          data = JSON.parse(msg.data);
+        } catch (error) {
+          data = JSON.parse(msg.data.replace(/\bNaN\b/g, 'NaN'));
+        }
+
         if (!data.category) {
           if (data.time_data) {
             dispatch(receiveServerTime(data.time_data, data.request_time));
