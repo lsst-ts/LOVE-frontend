@@ -50,7 +50,7 @@ export default function (state = initialState, action) {
       ) {
         clearInterval(retryInterval);
       }
-      return { ...state, connectionState: action.connectionState, retryInterval };
+      return { ...state, connectionState: action.connectionState, retryInterval, socket: action.socket };
     }
     case ADD_GROUP: {
       const index = state.subscriptions.findIndex((subscription) => subscription.groupName === action.groupName);
