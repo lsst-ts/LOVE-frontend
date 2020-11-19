@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { SALCommandStatus } from './redux/actions/ws.js';
+import { WEBSOCKET_SIMULATION } from 'Config.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -87,7 +88,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   };
 
   $.open(); // init
-
+  $.ws = ws;
   return $;
 };
 
@@ -112,7 +113,10 @@ export default class ManagerInterface {
     return `http://${window.location.host}/manager/ui_framework/`;
   }
 
-  static getWebsocketsUrl() {
+  static getWebsocketsUrl() {    
+    // Connect to a fake local ip when simulating, to avoid getting real messages
+    if(WEBSOCKET_SIMULATION)
+      return 'ws://0.0.0.1/';
     return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
 

@@ -1,5 +1,10 @@
 export const hasFakeData = false;
 export const hasCommandPrivileges = true;
+// Whether to simulate websocket messages
+export const WEBSOCKET_SIMULATION = false;
+// File located in public/websocket-simulations containing a 
+// set of websocket messages
+export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
