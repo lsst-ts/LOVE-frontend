@@ -14623,6 +14623,11 @@ websocket-extensions@>=0.1.1:
   resolved "https://registry.yarnpkg.com/websocket-extensions/-/websocket-extensions-0.1.4.tgz#7f8473bc839dfd87608adb95d7eb075211578a42"
   integrity sha512-OqedPIGOfsDlo31UNwYbCFMSaO9m9G/0faIHj5/dZFDMFqPTcx6UwqyOy3COEaEOg/9VsGIpdqn62W5KhoKSpg==
 
+websocket-playback@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/websocket-playback/-/websocket-playback-1.0.0.tgz#93f3eaca2dcbb56742e6dd3a893c189d7a80082a"
+  integrity sha512-weNw3iK7KfnSRDwUIlARRNpriwI5VJR6Zv0/32bfPmbl5FVFBFtjuFrEv7rAbNpY8zJAtJsd5MAJ1qRuiBrEVw==
+
 whatwg-encoding@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/whatwg-encoding/-/whatwg-encoding-1.0.5.tgz#5abacf777c32166a51d085d6b4f3e7d27113ddb0"

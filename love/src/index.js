@@ -8,6 +8,9 @@ import * as serviceWorker from './serviceWorker';
 import { doGetTokenFromStorage } from './redux/actions/auth';
 import { Provider } from 'react-redux';
 import store from './redux/store';
+import Simulator from 'websocket-playback';
+import { getWebSocket } from './redux/selectors';
+import { WEBSOCKET_SIMULATION, WEBSOCKET_SIMULATION_FILE } from 'Config.js';
 
 store.dispatch(doGetTokenFromStorage());
 
@@ -41,6 +44,18 @@ const getUserConfirmation = (message, callback) => {
     container,
   );
 };
+
+if (WEBSOCKET_SIMULATION) {
+  const interval = setInterval(() => {
+    const webSocket = getWebSocket(store.getState());
+    if (webSocket !== null && webSocket.ws && webSocket.ws.onmessage) {
+      const sim = new Simulator();
+      sim.runSimulation(`/websocket-simulations/${WEBSOCKET_SIMULATION_FILE}`, 200, webSocket.ws.onmessage);
+      clearInterval(interval);
+    }
+  }, 500);
+}
+
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter getUserConfirmation={getUserConfirmation}>

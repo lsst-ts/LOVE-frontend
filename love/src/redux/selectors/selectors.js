@@ -31,6 +31,8 @@ export const getTokenSwapStatus = (state) => state.auth.swapStatus;
 
 export const getConnectionStatus = (state) => state.ws.connectionState;
 
+export const getWebSocket = (state) => state.ws.socket;
+
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
 
 export const getSubscription = (state, groupName) =>

@@ -168,7 +168,6 @@ export const openWebsocketConnection = () => {
     const token = getToken(getState());
 
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-    dispatch(_changeConnectionState(connectionStates.OPENING, socket));
 
     socket = sockette(connectionPath, {
       onopen: () => {
@@ -278,6 +277,7 @@ export const openWebsocketConnection = () => {
         });
       },
     });
+    dispatch(_changeConnectionState(connectionStates.OPENING, socket));
   };
 };
 

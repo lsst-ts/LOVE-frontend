@@ -51,6 +51,7 @@
     "vega-embed": "^6.12.2",
     "vega-lib": "^4.4.0",
     "vega-lite": "^4.17.0",
+    "websocket-playback": "^1.0.0",
     "yaml": "^1.7.2"
   },
   "scripts": {
