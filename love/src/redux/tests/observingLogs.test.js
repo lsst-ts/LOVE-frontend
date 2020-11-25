@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
-import { addGroup, sendLOVECscObservingLogs } from '../actions/ws';
+import { addGroup, _sendLOVECscObservingLogs } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { getObservingLogs } from '../selectors';
 
@@ -28,7 +28,7 @@ afterEach(() => {
 it('Should send an observingLog to the LOVE-Controller and the server should receive it properly', async () => {
   const user = 'an user';
   const message = 'a message';
-  await store.dispatch(sendLOVECscObservingLogs(user, message));
+  await store.dispatch(_sendLOVECscObservingLogs(user, message));
 
   await expect(server).toReceiveMessage({
     category: 'love_csc',
