@@ -487,7 +487,7 @@ export const _requestSALCommand = (data) => {
  */
 export const sendLOVECscObservingLogs = (observingLogMsg) => {
   return (dispatch, getState) => {
-    const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/`;
+    const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/observinglog`;
 
     return fetch(url, {
       method: 'POST',

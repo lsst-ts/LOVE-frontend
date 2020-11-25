@@ -11,7 +11,7 @@ let store;
 
 beforeAll(async () => {
   // Arrange
-  const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/`;
+  const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/observinglog`;
   fetchMock.mock(url, {
     "status": 200,
     "data": {
