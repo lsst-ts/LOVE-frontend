@@ -480,7 +480,29 @@ export const _requestSALCommand = (data) => {
   };
 };
 
-export const sendLOVECscObservingLogs = (user, message) => {
+/**
+ * Requests the LOVE-producer to send a command to the SAL (salobj)
+ * via an HTTP request through the LOVE-manager.
+ *
+ */
+export const sendLOVECscObservingLogs = (observingLogMsg) => {
+  return (dispatch, getState) => {
+    const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/`;
+
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(observingLogMsg),
+      headers: ManagerInterface.getHeaders(),
+    })
+      .then(r => r.json())
+      .then(data => {
+        // TODO: confirmation to the user? what kind?
+        // console.log(data);
+      });
+  };
+};
+
+export const _sendLOVECscObservingLogs = (user, message) => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);
