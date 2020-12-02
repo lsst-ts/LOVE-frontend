@@ -7,7 +7,6 @@ import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
 import Loader from '../GeneralPurpose/Loader/Loader';
-import ManagerInterface from '../../Utils';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
 import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
@@ -52,8 +51,6 @@ export default class ScriptQueue extends Component {
       availableScriptsFilter: '',
       scriptModal: null,
     };
-    this.lastId = 19;
-    this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
@@ -144,44 +141,6 @@ export default class ScriptQueue extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
-    // const url = `${ManagerInterface.getApiBaseUrl()}validate-config-schema/`
-
-    // fetch(url,{
-    //   method: 'POST',
-    //   headers: ManagerInterface.getHeaders(),
-    //   body: JSON.stringify({
-    //     schema: `
-    //     $id: https://github.com/lsst-ts/ts_salobj/TestScript.yaml
-    //     $schema: http://json-schema.org/draft-07/schema#
-    //     additionalProperties: false
-    //     description: Configuration for TestScript
-    //     properties:
-    //       fail_cleanup:
-    //         default: false
-    //         description: If true then raise an exception in the "cleanup" method.
-    //         type: boolean
-    //       fail_run:
-    //         default: false
-    //         description: If true then raise an exception in the "run" method afer the "start"
-    //           checkpoint but before waiting.
-    //         type: boolean
-    //       wait_time:
-    //         default: 0
-    //         description: Time to wait, in seconds
-    //         minimum: 0
-    //         type: number
-    //     required:
-    //     - wait_time
-    //     - fail_run
-    //     - fail_cleanup
-    //     title: TestScript v1
-    //     type: object
-    //       `,
-    //     config: 'wait_time: 10'
-    //   })
-    // }).then(r=>r.json()).then(r=>{
-    //   debugger;
-    // })
   };
 
   componentWillUnmount = () => {
@@ -268,7 +227,6 @@ export default class ScriptQueue extends Component {
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
-
     const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
@@ -314,7 +272,7 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    let { x, y, height } = e.target.getBoundingClientRect();
+    let { x } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
         script: script,
@@ -433,15 +391,15 @@ export default class ScriptQueue extends Component {
   };
 
   summaryStateCommand = (commandName) => {
-    if(!['start','enable', 'disable', 'standby'].includes(commandName)){
+    if (!['start', 'enable', 'disable', 'standby'].includes(commandName)) {
       return;
     }
 
     this.props.requestSALCommand({
       cmd: `cmd_${commandName}`,
-      params: {}
+      params: {},
     });
-  }
+  };
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });

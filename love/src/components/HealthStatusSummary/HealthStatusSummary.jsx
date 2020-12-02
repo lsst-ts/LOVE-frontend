@@ -67,8 +67,9 @@ export default class HealthStatusSummary extends Component {
                 {componentName}
               </div>
               {Object.keys(topicConfiguration[indexedComponentName]).map((topic) => {
-                let timestamp = streams[`${indexedComponentName}-${topic}`]?.private_rcvStamp;
-                timestamp = timestamp?.value !== undefined ? formatTimestamp(timestamp.value * 1000) : '-';
+                const stream = streams[`${indexedComponentName}-${topic}`];
+                let timestamp = stream?.private_rcvStamp;
+                timestamp = timestamp?.value !== undefined ? formatTimestamp(timestamp?.value * 1000) : '-';
 
                 return (
                   <React.Fragment key={`${indexedComponentName}${topic}`}>
@@ -78,7 +79,8 @@ export default class HealthStatusSummary extends Component {
                     </div>
                     <div className={styles.divider}></div>
                     {Object.keys(topicConfiguration[indexedComponentName][topic]).map((parameterName) => {
-                      const parameterValue = streams[`${indexedComponentName}-${topic}`]?.[parameterName];
+                      const stream2 = streams[`${indexedComponentName}-${topic}`];
+                      const parameterValue = stream2?.[parameterName];
                       let renderedValue = '';
                       if (parameterValue?.value !== undefined) {
                         if (Array.isArray(parameterValue.value)) {

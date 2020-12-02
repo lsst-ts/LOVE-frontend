@@ -91,10 +91,11 @@ export const schema = {
     },
     legendPosition: {
       type: 'string',
-      description: 'Whether to display the legend to the right of the plot or at the bottom. One of \'right\' or \'bottom\'',
+      description:
+        "Whether to display the legend to the right of the plot or at the bottom. One of 'right' or 'bottom'",
       default: 'right',
       isPrivate: false,
-    }
+    },
   },
 };
 
@@ -190,15 +191,17 @@ const PlotContainer = function ({
     }
   }, [inputs, streams, data]);
 
-  const layers = { lines: [], bars: [], pointLines: [] };
+  const layerTypes = ['lines', 'bars', 'pointLines']
+  const layers = { };
   for (const [inputName, inputConfig] of Object.entries(inputs)) {
     const { type } = inputConfig;
     const typeStr = type + 's';
-    if (!(typeStr in layers)) {
+    if (!(layerTypes.includes(typeStr))) {
       continue;
     }
+
     if (!data[inputName]) continue;
-    layers[typeStr] = layers[typeStr].concat(data[inputName]);
+    layers[typeStr] = (layers[typeStr] ?? []).concat(data[inputName]);
   }
   const marksStyles = React.useMemo(() => {
     return Object.keys(inputs).map((input, index) => {

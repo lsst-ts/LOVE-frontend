@@ -1,4 +1,5 @@
 import { flatMap } from '../../Utils';
+import { createCachedSelector } from 're-reselect';
 
 export const getToken = (state) => state.auth.token;
 
@@ -29,6 +30,8 @@ export const getTokenStatus = (state) => state.auth.status;
 export const getTokenSwapStatus = (state) => state.auth.swapStatus;
 
 export const getConnectionStatus = (state) => state.ws.connectionState;
+
+export const getWebSocket = (state) => state.ws.socket;
 
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
 
@@ -393,9 +396,22 @@ export const getScriptQueueState = (state, salindex) => {
  * @param {obj} state
  * @param {integer} salindex
  */
-export const getScriptHeartbeats = (state, salindex) => {
-  return state.heartbeats.scripts.filter((heartbeat) => heartbeat.queueSalIndex === salindex);
-};
+const getScripts = (state) => state.heartbeats?.scripts ?? [];
+const getSalindex = (state, salindex) => salindex;
+
+export const getScriptHeartbeats = createCachedSelector(
+  // inputSelectors
+  getScripts,
+  getSalindex,
+  // resultFunc
+  (scripts, salindex) => {
+    return scripts.filter((heartbeat) => heartbeat.queueSalIndex === salindex);
+  },
+)(
+  // re-reselect keySelector (receives selectors' arguments)
+  // Use "salindex" as cacheKey
+  (_state_, salindex) => salindex,
+);
 
 export const getSummaryStateValue = (state, groupName) => {
   const summaryState = getStreamData(state, groupName);
