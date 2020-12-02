@@ -9,8 +9,21 @@ import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
 import { siderealSecond } from '../../Utils';
+import fetchMock from 'fetch-mock';
+import ManagerInterface from '../../Utils';
 
 let store, server;
+
+beforeAll(async () => {
+  // ARRANGE
+  const url = `${ManagerInterface.getApiBaseUrl()}logout/`;
+  fetchMock.mock(url, {
+    "status": 204,
+    "data": {
+      "detail": "Logout successful, Token succesfully deleted",
+    }
+  });
+});
 
 beforeEach(async () => {
   // ARRANGE

@@ -1,16 +1,14 @@
 import { createStore, applyMiddleware } from 'redux';
-import WS from 'jest-websocket-mock';
 import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { requestSALCommand, SALCommandStatus } from '../actions/ws';
-import { doReceiveToken } from '../actions/auth';
 import { getLastSALCommand } from '../selectors';
 
 import ManagerInterface from '../../Utils';
-import fetchMock, { MATCHED } from 'fetch-mock';
+import fetchMock from 'fetch-mock';
 
 
-let store, server;
+let store;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

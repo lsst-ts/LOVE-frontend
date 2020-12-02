@@ -56,7 +56,7 @@ const mapDispatchToProps = (dispatch) => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
     },
     sendMessage: (user, message) => {
-      return dispatch(sendLOVECscObservingLogs(user, message));
+      return dispatch(sendLOVECscObservingLogs({user, message}));
     },
   };
 };
