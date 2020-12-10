@@ -9,10 +9,16 @@ const logLevelLabels = {
   40: 'Error',
 };
 
-export default ({ classname, description, remotes, pause_checkpoints, stop_checkpoints, log_level, ...props }) => {
+export default ({ index, classname, description, remotes, pause_checkpoints, stop_checkpoints, log_level, ...props }) => {
   const logLevelLabel = logLevelLabels[log_level] ? logLevelLabels[log_level] : log_level;
 
   const fields = [
+    {
+      label: 'SAL Index:',
+      defaultDisplayed: '""',
+      defaultValue: '',
+      value: index,
+    },
     {
       label: 'Classname:',
       defaultDisplayed: '""',
