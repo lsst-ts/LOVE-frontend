@@ -265,7 +265,7 @@ export default class CurrentScript extends Component {
             </div>
 
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} isNarrow />
+              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
             </div>
           </div>
           <div
