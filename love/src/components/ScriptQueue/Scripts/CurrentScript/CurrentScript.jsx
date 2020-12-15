@@ -115,6 +115,7 @@ export default class CurrentScript extends Component {
     const isValid = this.props.path !== 'None';
     const typeTag = this.props.isStandard ? 'STANDARD' : 'EXTERNAL';
     const visibilityClass = !isValid ? scriptStyles.hidden : '';
+    const delayedScriptProgressClass = percentage > 100 ? styles.delayedScriptProgress : '';
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
     let heartbeatStatus = 'unknown';
@@ -171,7 +172,7 @@ export default class CurrentScript extends Component {
                 <div className={[styles.timeContainer, visibilityClass].join(' ')}>
                   <div className={styles.elapsedTimeContainer}>
                     <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
-                    <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+                    <span className={[styles.elapsedTimeValue, scriptStyles.highlighted, delayedScriptProgressClass].join(' ')}>
                       {elapsedTime.toFixed(1)} s
                     </span>
                   </div>
@@ -265,7 +266,7 @@ export default class CurrentScript extends Component {
             </div>
 
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
+              <LoadingBar className={delayedScriptProgressClass} percentage={percentage} title={`Script completion: ${percentage}%`} />
             </div>
           </div>
           <div

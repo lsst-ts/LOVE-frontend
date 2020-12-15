@@ -80,3 +80,7 @@
   margin: 0.2em;
   vertical-align: top;
 }
+
+.delayedScriptProgress {
+  color: var(--status-alert-color);
+}
