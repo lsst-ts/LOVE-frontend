@@ -126,6 +126,13 @@
   margin-bottom: 0.25rem;
 }
 
+a.documentationLink {
+  margin-left: 1rem;
+  text-decoration: underline;
+  color: var(--base-font-color);
+  margin-bottom: 0.5rem;
+}
+
 .schemaErrorIcon {
   width: 1em;
   min-width: 1em;

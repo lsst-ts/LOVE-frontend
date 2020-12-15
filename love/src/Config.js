@@ -6,6 +6,8 @@ export const WEBSOCKET_SIMULATION = false;
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 
+export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
+
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
