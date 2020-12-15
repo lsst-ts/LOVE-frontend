@@ -17,6 +17,8 @@ import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottom
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
+import Modal from '../GeneralPurpose/Modal/Modal';
+import ScriptDetails from './Scripts/ScriptDetails';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -47,6 +49,7 @@ export default class ScriptQueue extends Component {
       availableScriptsStandardExpanded: true,
       availableScriptsExternalExpanded: true,
       availableScriptsFilter: '',
+      scriptModal: null,
     };
   }
 
@@ -160,6 +163,20 @@ export default class ScriptQueue extends Component {
     let list = this.props.waitingScriptList;
     for (let i = 0; i < list.length; i += 1) if (list[i].index === index) return list[i];
     return null;
+  };
+
+  onScriptModalOpen = (script) => (
+    () => {
+      this.setState({
+        scriptModal: script
+      });
+    }
+  )
+
+  onScriptModalClose = (event) => {
+    this.setState({
+      scriptModal: null
+    });
   };
 
   onDragStart = (e, draggingId) => {
@@ -508,6 +525,7 @@ export default class ScriptQueue extends Component {
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
     return (
       <div
+        id="container"
         onClick={(e) => {
           this.setState({ isContextMenuOpen: false });
         }}
@@ -553,6 +571,7 @@ export default class ScriptQueue extends Component {
                 onClickContextMenu={this.onClickContextMenu}
                 commandExecutePermission={this.props.commandExecutePermission}
                 resumeScript={this.resumeScript}
+                onClick={this.onScriptModalOpen(current)}
               />
             </div>
           </div>
@@ -699,6 +718,7 @@ export default class ScriptQueue extends Component {
                       moveScriptDown={this.moveScriptDown}
                       commandExecutePermission={this.props.commandExecutePermission}
                       {...script}
+                      onClick={this.onScriptModalOpen(script)}
                     />
                   </DraggableScript>
                 );
@@ -761,6 +781,7 @@ export default class ScriptQueue extends Component {
                           }
                           requeueScript={this.requeueScript}
                           commandExecutePermission={this.props.commandExecutePermission}
+                          onClick={this.onScriptModalOpen(script)}
                         />
                       </DraggableScript>
                     );
@@ -770,6 +791,16 @@ export default class ScriptQueue extends Component {
             </div>
           </div>
         </div>
+        
+        <Modal
+          isOpen={!!this.state.scriptModal}
+          onRequestClose={this.onScriptModalClose}
+          contentLabel="Component selection modal"
+          parentSelector={() => document.querySelector('#container')}
+          size={50}
+          /* footerChildren={} */>
+            <ScriptDetails {...this.state.scriptModal} />
+        </Modal>
       </div>
     );
   }

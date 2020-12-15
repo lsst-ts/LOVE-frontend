@@ -64,6 +64,7 @@ export default class CurrentScript extends Component {
     this.setState({
       expanded: !this.state.expanded,
     });
+    this.props.onClick();
   };
 
   animateProgress = () => {
@@ -268,14 +269,14 @@ export default class CurrentScript extends Component {
               <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} isNarrow />
             </div>
           </div>
-          <div
+          {/* <div
             className={[
               scriptStyles.expandedSectionWrapper,
               this.state.expanded && isValid ? '' : scriptStyles.hidden,
             ].join(' ')}
           >
             {hasCommandPrivileges ? <ScriptDetails {...this.props} /> : null}
-          </div>
+          </div> */}
         </div>
       </div>
     );
