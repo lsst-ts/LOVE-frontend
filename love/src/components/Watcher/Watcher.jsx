@@ -84,6 +84,7 @@ export default class Watcher extends Component {
     let alarmsToShow = [];
     let mutedAlarmsCount = 0;
     let unmutedAlarmsCount = 0;
+    let inactiveAlarmsCount = 0;
     let unackUnmutedAlarmsCount = 0;
     const now = DateTime.local().toSeconds() - this.props.taiToUtc;
 
@@ -97,9 +98,18 @@ export default class Watcher extends Component {
       }
 
       if (isMuted(alarm)) {
-        mutedAlarmsCount += 1;
-        if (this.state.selectedTab === 'muted') {
-          alarmsToShow.push(alarm);
+        if(alarm.severity.value <= 1){
+          // Inactive alarms
+          inactiveAlarmsCount += 1;
+          if (this.state.selectedTab === 'inactive') {
+            alarmsToShow.push(alarm);
+          }
+        } else {
+          // Muted alarms
+          mutedAlarmsCount += 1;
+          if (this.state.selectedTab === 'muted') {
+            alarmsToShow.push(alarm);
+          }
         }
       } else {
         unmutedAlarmsCount += 1;
@@ -137,6 +147,18 @@ export default class Watcher extends Component {
                 <MuteIcon style={this.state.selectedTab === 'muted' ? styles.selectedIcon : ''} />
               </div>
               MUTED ALARMS ({mutedAlarmsCount})
+            </div>
+          </div>
+
+          <div
+            className={[styles.tab, this.state.selectedTab === 'inactive' ? styles.selected : ''].join(' ')}
+            onClick={() => this.changeTab('inactive')}
+          >
+            <div className={styles.tabLabel}>
+              <div className={styles.iconWrapper}>
+                <MuteIcon style={this.state.selectedTab === 'inactive' ? styles.selectedIcon : ''} />
+              </div>
+              INACTIVE ALARMS ({inactiveAlarmsCount})
             </div>
           </div>
         </div>
