@@ -173,7 +173,7 @@ export default class CurrentScript extends Component {
                 <div className={[styles.timeContainer, visibilityClass].join(' ')}>
                   <div className={styles.elapsedTimeContainer}>
                     <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
-                    <span className={[styles.elapsedTimeValue, scriptStyles.highlighted, delayedScriptProgressClass].join(' ')}>
+                    <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
                       {elapsedTime.toFixed(1)} s
                     </span>
                   </div>
@@ -267,7 +267,7 @@ export default class CurrentScript extends Component {
             </div>
 
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-              <LoadingBar className={delayedScriptProgressClass} percentage={percentage} title={`Script completion: ${percentage}%`} />
+              <LoadingBar className={delayedScriptProgressClass} percentage={percentage} title={`Script completion: ${percentage}%`} displayPercentage={false} isNarrow/>
             </div>
           </div>
           {/* <div
