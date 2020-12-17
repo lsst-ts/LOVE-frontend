@@ -170,7 +170,7 @@ export default class CurrentScript extends Component {
                   <span className={scriptStyles.pathText}>{fileExtension}</span>
                 </div>
 
-                <div className={[styles.timeContainer, visibilityClass].join(' ')}>
+                <div className={[styles.timeContainer].join(' ')}>
                   <div className={styles.elapsedTimeContainer}>
                     <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
                     <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
