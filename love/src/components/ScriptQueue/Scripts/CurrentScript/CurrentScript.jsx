@@ -116,6 +116,7 @@ export default class CurrentScript extends Component {
     const isValid = this.props.path !== 'None';
     const typeTag = this.props.isStandard ? 'STANDARD' : 'EXTERNAL';
     const visibilityClass = !isValid ? scriptStyles.hidden : '';
+    const delayedScriptProgressClass = percentage > 100 ? styles.delayedScriptProgress : '';
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
     let heartbeatStatus = 'unknown';
@@ -132,7 +133,7 @@ export default class CurrentScript extends Component {
     const isPaused = this.props.scriptState.toLowerCase() === 'paused';
 
     return (
-      <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
+      <div className={[scriptStyles.scriptContainer].join(' ')}>
         <div>
           <div className={styles.currentScriptContainer} onClick={this.onClick}>
             <div className={styles.topContainer}>
@@ -169,7 +170,7 @@ export default class CurrentScript extends Component {
                   <span className={scriptStyles.pathText}>{fileExtension}</span>
                 </div>
 
-                <div className={[styles.timeContainer, visibilityClass].join(' ')}>
+                <div className={[styles.timeContainer].join(' ')}>
                   <div className={styles.elapsedTimeContainer}>
                     <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
                     <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
@@ -266,7 +267,7 @@ export default class CurrentScript extends Component {
             </div>
 
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} isNarrow />
+              <LoadingBar className={delayedScriptProgressClass} percentage={percentage} title={`Script completion: ${percentage}%`} displayPercentage={false} isNarrow/>
             </div>
           </div>
           {/* <div
