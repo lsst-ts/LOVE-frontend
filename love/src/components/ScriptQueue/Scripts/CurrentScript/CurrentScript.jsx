@@ -133,7 +133,7 @@ export default class CurrentScript extends Component {
     const isPaused = this.props.scriptState.toLowerCase() === 'paused';
 
     return (
-      <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
+      <div className={[scriptStyles.scriptContainer].join(' ')}>
         <div>
           <div className={styles.currentScriptContainer} onClick={this.onClick}>
             <div className={styles.topContainer}>
