@@ -70,6 +70,7 @@ export default class WaitingScript extends PureComponent {
     this.setState({
       expanded: !this.state.expanded,
     });
+    this.props.onClick();
   };
 
   moveToFirst = (index) => {
@@ -228,9 +229,9 @@ export default class WaitingScript extends PureComponent {
               </div>
             </div>
           </div>
-          <div
+          {/* <div
             className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
-          >
+          > */}
             {/* <div className={[styles.expandedSection].join(' ')}>
               <div className={scriptStyles.expandedTopRow}>
                 <p>Script config</p>
@@ -256,10 +257,10 @@ export default class WaitingScript extends PureComponent {
                 }}
               />
             </div> */}
-            {hasCommandPrivileges ? (
+            {/* {hasCommandPrivileges ? (
               <ScriptDetails {...this.props}/>
             ) : null}
-          </div>
+          </div> */}
         </div>
       </div>
     );

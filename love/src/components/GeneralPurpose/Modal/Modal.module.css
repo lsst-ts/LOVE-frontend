@@ -20,6 +20,10 @@
   transform: translate(-50%, -50%);
 }
 
+.modal-50 {
+  max-width: 50%;
+}
+
 .overlay {
   background-color: var(--overlay-background-color);
   position: fixed;
