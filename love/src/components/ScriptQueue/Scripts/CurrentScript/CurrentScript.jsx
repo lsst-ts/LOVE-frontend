@@ -68,8 +68,10 @@ export default class CurrentScript extends Component {
   };
 
   animateProgress = () => {
-    if (this.props.index === undefined) return;
-
+    if (this.props.index === undefined){
+      this.setState({ elapsedTime: 0 });
+      return; 
+    }
     if (this.props.scriptState !== 'RUNNING' && this.props.processState !== 'RUNNING') {
       requestAnimationFrame(this.animateProgress);
       return;
