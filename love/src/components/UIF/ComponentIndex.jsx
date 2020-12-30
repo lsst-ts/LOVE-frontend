@@ -268,16 +268,6 @@ export const utilitiesIndex = {
       },
     },
   },
-  // TimeSeriesPlot: {
-  //   component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
-  //   schema: {
-  //     ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
-  //     props: {
-  //       ...defaultSchemaProps,
-  //       ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema.props,
-  //     }
-  //   },
-  // },
   TimeSeriesPlot: {
     component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
     schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
