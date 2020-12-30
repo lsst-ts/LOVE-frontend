@@ -214,6 +214,58 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static getConfigFilesList() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}configfile`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getConfigFileContent(index) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}configfile/${index}/content`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 }
 
 /**
@@ -395,6 +447,7 @@ export const parseTimestamp = (timestamp) => {
   if (timestamp instanceof DateTime) return timestamp;
   if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
   if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
+  if (typeof timestamp === 'string') return DateTime.fromISO(timestamp);
   else return null;
 };
 
