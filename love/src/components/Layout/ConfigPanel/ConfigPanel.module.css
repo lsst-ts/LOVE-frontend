@@ -1,10 +1,30 @@
 .title {
-  font-size: 1.5em;
+  font-size: var(--font-size-larger);
   text-align: center;
   margin-bottom: 1em;
+}
+
+.subTitle {
+  font-size: var(--font-size-large);
 }
 
 .rndEditor {
   border-radius: 7px;
   width: 400px;
+}
+
+.currentConfig {
+  font-size: var(--font-size-medium);
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-column-gap: 1em;
+  column-gap: 1em;
+}
+
+.currentConfig .label {
+  color: var(--secondary-font-color);
+}
+
+.selectorWrapper {
+  padding-bottom: 1em;
 }
