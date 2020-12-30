@@ -624,7 +624,7 @@ class Layout extends Component {
           onRequestClose={() => this.setState({ isConfigModalOpen: false })}
           contentLabel="LOVE Config File modal"
         >
-          <ConfigPanel config={this.props.config} />
+          <ConfigPanel config={this.props.config} setConfig={this.props.setConfig}/>
         </Modal>
         <Modal
           isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}
