@@ -27,12 +27,10 @@ function ConfigPanel({ config, setConfig }) {
   const onConfigSelection = (selection) => {
     const id = selection?.value?.id;
     ManagerInterface.getConfigFileContent(id).then((conf) => {
-      console.log(conf);
-      console.log(conf.content);
       setConfig({
         content: conf.content,
         filename: conf.filename,
-        lastUpdated: conf.last_updated,
+        lastUpdated: formatTimestamp(conf.update_timestamp),
       });
     });
   };
