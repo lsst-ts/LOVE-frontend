@@ -51,7 +51,7 @@ export default class TimeWindow extends PureComponent {
                       type="radio"
                       value={duration}
                       id={id}
-                      checked={!this.state.isCustom && this.props.timeWindow === duration}
+                      checked={!this.state.isCustom && this.props.timeWindow == duration}
                       onChange={(e) => this.handleTimeWindowSelection(e.target.value, false)}
                     />
                     <label htmlFor={id} onClick={() => this.handleTimeWindowSelection(duration, false)}>
