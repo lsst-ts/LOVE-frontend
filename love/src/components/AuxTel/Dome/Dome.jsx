@@ -9,6 +9,7 @@ import MountTopView from './MountTopView';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
+import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 
 export default class Dome extends Component {
   static propTypes = {
@@ -29,6 +30,9 @@ export default class Dome extends Component {
     this.state = {
       az: 0,
       el: 0,
+      timeWindow: 60,
+      isLive: true,
+      historicalData: [],
     };
 
     this.azimuthPlotRef = React.createRef();
@@ -164,6 +168,13 @@ export default class Dome extends Component {
     let azDiff = Math.abs(domeAz - currentPointing.az);
     if (azDiff > 180) azDiff = azDiff - 360;
     const vignettingDistance = (Math.abs(azDiff) * Math.cos((currentPointing.el * Math.PI) / 180)).toFixed(2);
+
+    const timeSeriesControlsProps = {
+      timeWindow: this.state.timeWindow,
+      isLive: this.state.isLive,
+      historicalData: this.state.historicalData
+    };
+
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
@@ -217,6 +228,14 @@ export default class Dome extends Component {
             positionLimits={positionLimits}
           />
         </div>
+        {this.props.controls && (<div><TimeSeriesControls
+            setTimeWindow={(timeWindow) => this.setState({timeWindow})}
+            timeWindow={this.state.timeWindow}
+            setLiveMode={(isLive) => this.setState({isLive})}
+            isLive={this.state.isLive}
+            setHistoricalData={(historicalData) => this.setState({historicalData})}
+          /></div>)
+        }
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
             <h2>Azimuth</h2>
@@ -227,6 +246,7 @@ export default class Dome extends Component {
                   containerNode={this.azimuthPlotRef?.current}
                   xAxisTitle="Time"
                   yAxisTitle="Azimuth"
+                  timeSeriesControlsProps={timeSeriesControlsProps}
                 />
                 {/* <TimeSeriesPlotContainer
                   dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
@@ -294,6 +314,7 @@ export default class Dome extends Component {
                   containerNode={this.elevationPlotRef?.current}
                   xAxisTitle="Time"
                   yAxisTitle="Elevation"
+                  timeSeriesControlsProps={timeSeriesControlsProps}
                 />
                 {/* <VegaTimeSeriesContainer
                   dataSources={['Mount Elevation', 'Mount Target']}

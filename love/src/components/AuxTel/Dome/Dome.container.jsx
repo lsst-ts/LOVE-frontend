@@ -15,6 +15,13 @@ export const schema = {
       isPrivate: false,
       default: 'Dome',
     },
+    controls: {
+      type: 'boolean',
+      description:
+        "Whether to display controls to configure periods of time'",
+      default: true,
+      isPrivate: false,
+    },
   },
 };
 
@@ -39,6 +46,7 @@ const DomeContainer = ({
   height,
   subscribeToStream,
   unsubscribeToStream,
+  controls,
   ...props
 }) => {
   if (props.isRaw) {
@@ -66,6 +74,7 @@ const DomeContainer = ({
       height={height}
       currentTimesToLimits={currentTimesToLimits}
       positionLimits={positionLimits}
+      controls={controls}
     />
   );
 };
