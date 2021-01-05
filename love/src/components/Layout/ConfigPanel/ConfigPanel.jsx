@@ -6,6 +6,7 @@ import 'brace/theme/solarized_dark';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import ManagerInterface, { formatTimestamp } from 'Utils';
+import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
 
 ConfigPanel.propTypes = {
   /** Current LOVE configuration */
@@ -23,46 +24,50 @@ function ConfigPanel({ config, setConfig }) {
       setConfigList(list);
     });
   }, []);
-
   const onConfigSelection = (selection) => {
     const id = selection?.value?.id;
     ManagerInterface.getConfigFileContent(id).then((conf) => {
       setConfig({
         content: conf.content,
         filename: conf.filename,
-        lastUpdated: formatTimestamp(conf.update_timestamp),
+        update_timestamp: conf.update_timestamp,
       });
     });
   };
 
+  const getConfigSelectOption = (conf, index) => {
+    return {
+      value: conf,
+      label: (
+        <div key={index} className={styles.dropdownOption}>
+          <div className={styles.dropdownOptionLeftSection}>
+            <div className={styles.iconWrapper}>
+              <RequeueIcon></RequeueIcon>
+            </div>
+          </div>
+          <div className={styles.dropdownOptionRightSection}>
+            <div className={styles.dropdownOptionLabel}>{conf.filename}</div>
+            <div className={styles.dropdownOptionDate}>{formatTimestamp(conf.update_timestamp)}</div>
+          </div>
+        </div>
+      ),
+    };
+  };
   const configStr = JSON.stringify(config.content, null, 2);
+  const options = configList ? configList.map((conf, index) => getConfigSelectOption(conf, index)) : [];
+  const defaultOption = getConfigSelectOption(config, 0);
   return (
     <div className={styles.container}>
       <div className={styles.title}>LOVE Configuration File</div>
-      <div className={styles.subTitle}>Change configuration file</div>
+      <div className={styles.subTitle}>Current configuration file</div>
       <div className={styles.selectorWrapper}>
         <Select
           className={styles.logLevelSelect}
-          options={
-            configList
-              ? configList.map((conf, index) => {
-                  return {
-                    key: index,
-                    value: { ...conf, key: index },
-                    label: `${conf.filename} - ${formatTimestamp(conf.update_timestamp)}`,
-                  };
-                })
-              : []
-          }
+          arrowClassName={styles.changeConfigButton}
+          options={options}
+          value={defaultOption}
           onChange={(selection) => onConfigSelection(selection)}
         />
-      </div>
-      <div className={styles.subTitle}>Current configuration</div>
-      <div className={styles.currentConfig}>
-        <div className={styles.label}>File name:</div>
-        <div>{config.filename}</div>
-        <div className={styles.label}>Last updated:</div>
-        <div>{config.lastUpdated}</div>
       </div>
       <AceEditor
         mode="json"
