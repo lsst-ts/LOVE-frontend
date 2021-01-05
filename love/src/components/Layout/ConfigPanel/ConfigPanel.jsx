@@ -43,13 +43,17 @@ function ConfigPanel({ config, setConfig }) {
       <div className={styles.selectorWrapper}>
         <Select
           className={styles.logLevelSelect}
-          options={configList.map((conf, index) => {
-            return {
-              key: index,
-              value: { ...conf, key: index },
-              label: `${conf.filename} - ${formatTimestamp(conf.update_timestamp)}`,
-            };
-          })}
+          options={
+            configList
+              ? configList.map((conf, index) => {
+                  return {
+                    key: index,
+                    value: { ...conf, key: index },
+                    label: `${conf.filename} - ${formatTimestamp(conf.update_timestamp)}`,
+                  };
+                })
+              : []
+          }
           onChange={(selection) => onConfigSelection(selection)}
         />
       </div>
