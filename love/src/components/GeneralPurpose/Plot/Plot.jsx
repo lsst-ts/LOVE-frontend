@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import TimeSeriesControls from '../../TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import styles from './Plot.module.css';
 
@@ -37,6 +38,12 @@ const Plot = ({
   units,
   marksStyles,
   legendPosition = 'right',
+  isLive,
+  setIsLive,
+  timeWindow,
+  setTimeWindow,
+  setHistoricalData,
+  controls,
 }) => {
   /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
   const completedMarksStyles = React.useMemo(() => {
@@ -73,7 +80,7 @@ const Plot = ({
         const container = entries[0];
         setContainerSize({
           width: container.contentRect.width,
-          height: container.contentRect.height,
+          height: container.contentRect.height, //TODO: make this dynamic
         });
       });
 
@@ -86,6 +93,15 @@ const Plot = ({
   }, [containerNode, width, height]);
 
   return (
+    <>
+    {controls && <TimeSeriesControls
+        setTimeWindow={setTimeWindow}
+        timeWindow={timeWindow}
+        setLiveMode={setIsLive}
+        isLive={isLive}
+        setHistoricalData={setHistoricalData}
+      />
+    }
     <div
       className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}
       style={{
@@ -106,6 +122,7 @@ const Plot = ({
       />
       <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
     </div>
+    </>
   );
 };
 
