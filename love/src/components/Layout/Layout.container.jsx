@@ -16,7 +16,7 @@ import {
   getTokenSwapStatus,
   getConfig,
 } from '../../redux/selectors';
-import { logout } from '../../redux/actions/auth';
+import { logout, receiveConfig } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
 import { clearViewToEdit } from '../../redux/actions/uif';
 import { requireSwapToken, cancelSwapToken } from '../../redux/actions/auth';
@@ -92,6 +92,7 @@ const mapDispatchToProps = (dispatch) => {
       if (bool) dispatch(requireSwapToken);
       else dispatch(cancelSwapToken);
     },
+    setConfig: (config) => dispatch(receiveConfig(config)),
   };
 };
 

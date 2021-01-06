@@ -21,6 +21,16 @@ import {
 } from '../selectors';
 
 let store;
+
+beforeAll(async () => {
+  // Arrange
+  let url = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
+  fetchMock.mock(url, {
+    "status": 200,
+    "data": {}
+  });
+});
+
 beforeEach(() => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 });

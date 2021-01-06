@@ -35,6 +35,16 @@ import {
 import { editViewStates, viewsStates, initialState, modes } from '../reducers/uif';
 
 let store;
+
+beforeAll(async () => {
+  // Arrange
+  let url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
+  fetchMock.mock(url, {
+    "status": 200,
+    "data": {}
+  });
+});
+
 beforeEach(() => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
 });
