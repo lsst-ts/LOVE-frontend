@@ -42,7 +42,7 @@ function ConfigPanel({ config, setConfig }) {
         <div key={index} className={styles.dropdownOption}>
           <div className={styles.dropdownOptionLeftSection}>
             <div className={styles.iconWrapper}>
-              <RequeueIcon></RequeueIcon>
+              <RequeueIcon title="Config. file"></RequeueIcon>
             </div>
           </div>
           <div className={styles.dropdownOptionRightSection}>
@@ -64,6 +64,7 @@ function ConfigPanel({ config, setConfig }) {
         <Select
           className={styles.logLevelSelect}
           arrowClassName={styles.changeConfigButton}
+          controlClassName={styles.controlClassName}
           options={options}
           value={defaultOption}
           onChange={(selection) => onConfigSelection(selection)}

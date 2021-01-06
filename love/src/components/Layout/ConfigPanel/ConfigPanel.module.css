@@ -71,6 +71,10 @@
   content: 'Change config. file ⌄'
 }
 
+.controlClassName:hover .changeConfigButton {
+  background: var(--second-quinary-background-color);
+}
+
 .iconWrapper {
   width: 1.4em;
   color: var(--primary-font-color);
@@ -78,4 +82,8 @@
 
 .iconWrapper svg > path {
   stroke: var(--secondary-font-color);
+}
+
+.controlClassName {
+  cursor: pointer;
 }
