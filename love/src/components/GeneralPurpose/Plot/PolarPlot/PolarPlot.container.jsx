@@ -57,7 +57,7 @@ export const schema = {
       default: {
         WindSpeed: {
           category: 'telemetry',
-          csc: 'Environment',
+          csc: 'WeatherStation',
           salindex: '1',
           topic: 'windSpeed',
           item: 'avg2M',
@@ -69,7 +69,7 @@ export const schema = {
         },
         WindDirection: {
           category: 'telemetry',
-          csc: 'Environment',
+          csc: 'WeatherStation',
           salindex: '1',
           topic: 'windDirection',
           item: 'avg2M',
