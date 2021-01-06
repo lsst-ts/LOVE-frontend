@@ -164,7 +164,7 @@ class PlotContainer extends React.Component {
         const newValue = {
           name: inputName,
           x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-          y: accessorFunc(streamValue[item]?.value)+(Math.sin(inputData.length)),
+          y: accessorFunc(streamValue[item]?.value),
         };
   
         // TODO: use reselect to never get repeated timestamps
