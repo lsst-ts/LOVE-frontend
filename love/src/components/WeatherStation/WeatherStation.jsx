@@ -17,7 +17,7 @@ export default class WeatherStation extends Component {
   temperaturePlot = {
     'Air temperature': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'airTemperature',
       item: 'avg1M',
@@ -27,7 +27,7 @@ export default class WeatherStation extends Component {
     },
     'Soil temperature': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'soilTemperature',
       item: 'avg1M',
@@ -37,7 +37,7 @@ export default class WeatherStation extends Component {
     },
     'Dew point': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'dewPoint',
       item: 'avg1M',
@@ -50,7 +50,7 @@ export default class WeatherStation extends Component {
   humidityPlot = {
     Humidity: {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'relativeHumidity',
       item: 'avg1M',
@@ -63,7 +63,7 @@ export default class WeatherStation extends Component {
   pressurePlot = {
     'Air pressure': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'airPressure',
       item: 'paAvg1M',
@@ -76,7 +76,7 @@ export default class WeatherStation extends Component {
   solarPlot = {
     'Solar radiation': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'solarNetRadiation',
       item: 'avg1M',
@@ -89,7 +89,7 @@ export default class WeatherStation extends Component {
   precipitationPlot = {
     Precipitation: {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'precipitation',
       item: 'prSum1M',
@@ -102,7 +102,7 @@ export default class WeatherStation extends Component {
   snowDepthPlot = {
     'Snow depth': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'snowDepth',
       item: 'avg1M',
@@ -116,7 +116,7 @@ export default class WeatherStation extends Component {
     title: 'Time series plot',
     inputs: {
       GustSpeed: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'avg2M',
         group: 1,
         topic: 'windSpeed',
@@ -126,7 +126,7 @@ export default class WeatherStation extends Component {
         salindex: 1,
       },
       WindSpeed: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'avg2M',
         group: 0,
         topic: 'windSpeed',
@@ -136,7 +136,7 @@ export default class WeatherStation extends Component {
         salindex: 1,
       },
       GustDirection: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'value10M',
         group: 1,
         topic: 'windGustDirection',
@@ -146,7 +146,7 @@ export default class WeatherStation extends Component {
         salindex: 1,
       },
       WindDirection: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'avg2M',
         group: 0,
         topic: 'windDirection',

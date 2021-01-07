@@ -153,7 +153,7 @@ export default function (state = initialState, action) {
     case RECEIVE_CONFIG:
       return {
         ...state,
-        config: action.config,
+        config: {...action.config}
       };
     default:
       return state;
