@@ -4,7 +4,7 @@ import styles from './UserDetails.module.css';
 import UserIcon from '../../icons/UserIcon/UserIcon';
 import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
 import CodeIcon from '../../icons/CodeIcon/CodeIcon';
-import InfoIcon from '../../icons/InfoIcon/InfoIcon';
+import ContactIcon from '../../icons/ContactIcon/ContactIcon';
 
 UserDetails.propTypes = {
   /** Name of the current user */
@@ -81,7 +81,7 @@ export default function UserDetails({
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onEmergencyContactsClick}>
         <div className={styles.smallIconRow}>
-          <InfoIcon active={false} className={styles.paddedIcon} />
+          <ContactIcon active={false} className={styles.paddedIcon} />
           <span>Emergency contacts </span>
         </div>
       </div>
