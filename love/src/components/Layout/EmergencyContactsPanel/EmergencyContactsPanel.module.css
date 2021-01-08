@@ -4,87 +4,40 @@
   margin-bottom: 1em;
 }
 
+.filterContainer {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 0.5em;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
 .subTitle {
   font-size: var(--font-size-large);
-  padding-bottom: 0.5em;
-}
-
-.rndEditor {
-  border-radius: 7px;
-  width: 400px;
-}
-
-.currentConfig {
-  font-size: var(--font-size-medium);
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  grid-column-gap: 1em;
-  column-gap: 1em;
-  padding-bottom: 0.5em;
-}
-
-.currentConfig .label {
   color: var(--secondary-font-color);
 }
 
-.selectorWrapper {
-  padding-bottom: 1em;
+.cardContainer {
+  background: var(--second-secondary-background-color);
+  padding: 1em;
+  margin: 1em 0;
 }
 
-.dropdownOption {
-  display: grid;
-  grid-template-columns: 2.2em 1fr;
+.subsystem {
+  font-size: var(--font-size-large);
+  color: var(--highlighted-font-color);
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  padding-bottom: 0.3em;
+  margin-bottom: 0.3em;
 }
 
-.dropdownOptionLeftSection {
-  padding: 0.25em;
-}
-
-.dropdownOptionRightSection {
-  display: grid;
-  grid-template-rows: 1fr 1fr;
-}
-
-.dropdownOptionLabel {
+.contactItem {
   font-size: var(--font-size-medium);
-  color: var(--primary-font-color);
-}
-
-.dropdownOptionDate {
-  font-size: var(--font-size-small);
   color: var(--secondary-font-color);
+  padding: 0.2em 0;
 }
 
-.changeConfigButton {
-  width: max-content;
-  padding: 0 1em;
-  height: 100%;
-  background: var(--second-quaternary-background-color);
-  border: none;
-  top: 0;
-  right: 0;
-  display: flex;
-    justify-items: center;
-    align-items: center;
-}
-
-.changeConfigButton:after {
-  content: 'Change config. file ⌄'
-}
-
-.controlClassName:hover .changeConfigButton {
-  background: var(--second-quinary-background-color);
-}
-
-.iconWrapper {
-  width: 1.4em;
-  color: var(--primary-font-color);
-}
-
-.iconWrapper svg > path {
-  stroke: var(--secondary-font-color);
-}
-
-.controlClassName {
-  cursor: pointer;
+.highlighted {
+  color: var(--highlighted-font-color);
 }
