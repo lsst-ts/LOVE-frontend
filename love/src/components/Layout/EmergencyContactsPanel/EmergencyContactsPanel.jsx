@@ -25,8 +25,12 @@ function EmergencyContactsPanel() {
   const ECCard = (ECData) => {
     return (
       <div className={styles.cardContainer}>
-        <div className={styles.subsystem}>{ECData?.subsystem}</div>
-        <div className={[styles.contactItem, styles.highlighted].join(' ')}>{ECData?.name}</div>
+        <div className={styles.subsystem}>
+          {ECData?.subsystem !== '' ? ECData?.subsystem : 'No subsystem specified'}
+        </div>
+        <div className={[styles.contactItem, styles.highlighted].join(' ')}>
+          {ECData?.name !== '' ? ECData?.name : 'No name specified'}
+        </div>
         <div className={styles.contactItem}>
           <span>Contact info: </span>
           <span>{ECData?.contact_info}</span>
