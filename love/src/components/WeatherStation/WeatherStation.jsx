@@ -210,7 +210,7 @@ export default class WeatherStation extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.section}>
+        <div className={styles.doubleSection}>
           <div className={styles.sectionTitle}>Current values</div>
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>
@@ -234,18 +234,23 @@ export default class WeatherStation extends Component {
               </div>
             </div>
           </div>
-          {this.props.controls && (<>
-            <div className={styles.sectionTitle}>Timeseries Controls</div>
-            <TimeSeriesControls
-                setTimeWindow={(timeWindow) => this.setState({timeWindow})}
-                timeWindow={this.state.timeWindow}
-                setLiveMode={(isLive) => this.setState({isLive})}
-                isLive={this.state.isLive}
-                setHistoricalData={(historicalData) => this.setState({historicalData})}
-              />
-            </>)
-          }
         </div>
+
+        {this.props.controls && (
+          <div className={styles.doubleSection}>
+            <div className={styles.sectionTitle}>Timeseries Controls</div>
+            <div className={styles.timeSeriesControls}>
+              <TimeSeriesControls
+                  setTimeWindow={(timeWindow) => this.setState({timeWindow})}
+                  timeWindow={this.state.timeWindow}
+                  setLiveMode={(isLive) => this.setState({isLive})}
+                  isLive={this.state.isLive}
+                  setHistoricalData={(historicalData) => this.setState({historicalData})}
+              />
+            </div>
+          </div>
+          )
+        }
 
         <div className={styles.windPlotSection}>
           <div className={styles.sectionTitle}>Wind</div>
