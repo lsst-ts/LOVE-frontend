@@ -1,11 +1,5 @@
 pipeline {
-  agent{
-    docker {
-      alwaysPull true
-      image 'lsstts/develop-env:develop'
-      args "-u root --entrypoint=''"
-    }
-  }
+  agent any
   environment {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "lsstts/love-frontend:"
@@ -77,6 +71,13 @@ pipeline {
     }
 
     stage("Deploy documentation") {
+      agent {
+        docker {
+          alwaysPull true
+          image 'lsstts/develop-env:develop'
+          args "-u root --entrypoint=''"
+        }
+      }
       when {
         anyOf {
           changeset "docs/*"
