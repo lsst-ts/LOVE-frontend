@@ -58,8 +58,3 @@ describe('GIVEN the CSCSummary was loaded and rendered', () => {
     });
   });
 });
-
-('se ven los salindex  current, waiting available, finished');
-('se ve el heartbeat de los scripts');
-('el tooltip del heratbeat está bueno');
-('el tooltip del process state/ script state está bueno');

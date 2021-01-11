@@ -155,7 +155,3 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     expect(firstParentMatching).toBeTruthy();
   });
 });
-
-('se ve el heartbeat de los scripts');
-('el tooltip del heratbeat está bueno');
-('el tooltip del process state/ script state está bueno');

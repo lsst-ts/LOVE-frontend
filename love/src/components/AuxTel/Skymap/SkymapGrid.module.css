@@ -28,7 +28,7 @@
   text-anchor: middle;
   alignment-baseline: middle;
   dominant-baseline: central;
-  font-family: MyriadPro-Bold, Myriad Pro;
+  font-family: MyriadPro-Bold, Myriad Pro, sans-serif;
   font-weight: 700;
   font-size: 20px;
   fill: var(--base-font-color);

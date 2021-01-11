@@ -645,6 +645,7 @@ class Layout extends Component {
           }}
           contentLabel="User swap"
           displayFooter={false}
+          modalClassName={styles.noMinWidthModal}
         >
           <UserSwapContainer
             tokenStatus={this.props.tokenSwapStatus}
