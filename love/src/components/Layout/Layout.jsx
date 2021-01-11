@@ -633,6 +633,7 @@ class Layout extends Component {
           isOpen={this.state.isEmergencyContactsModalOpen}
           onRequestClose={() => this.setState({ isEmergencyContactsModalOpen: false })}
           contentLabel="LOVE Emergency contacs modal"
+          modalClassName={styles.fixedModalHeight}
         >
           <EmergencyContactsPanel/>
         </Modal>

@@ -291,3 +291,7 @@
 .userMenu {
   padding: 0.5em;
 }
+
+.fixedModalHeight {
+  height: 70%;
+}
