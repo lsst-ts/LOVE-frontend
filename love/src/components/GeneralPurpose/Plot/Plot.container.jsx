@@ -275,7 +275,7 @@ const getRangedData = (data, timeWindow, rangeArray) => {
   } else {
     filteredData = data.filter(val => {
       const currentSeconds = new Date().getTime() / 1000;
-      const dataSeconds = val.x.toMillis() / 1000 - 36;
+      const dataSeconds = val.x.toMillis() / 1000;
       if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
       else return false;
     });

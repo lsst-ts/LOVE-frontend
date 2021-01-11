@@ -307,7 +307,7 @@ const getRangedData = (data, timeWindow, rangeArray) => {
       for (const input in data) {
         newData[input] = data[input].filter(val => {
           const currentSeconds = new Date().getTime() / 1000;
-          const dataSeconds = val.time.toMillis() / 1000 - 36;
+          const dataSeconds = val.time.toMillis() / 1000;
           if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
           else return false;
         });
