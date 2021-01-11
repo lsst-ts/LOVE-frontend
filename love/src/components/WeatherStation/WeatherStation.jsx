@@ -256,6 +256,7 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Wind</div>
           <div ref={this.windDirectionPlotRef} className={styles.windPlotContainer}>
             <PolarPlotContainer
+                timeSeriesControlsProps={timeSeriesControlsProps}
                 containerNode={this.windDirectionPlotRef} 
                 {...this.windPlot} 
               />
