@@ -65,7 +65,6 @@
 .panelButtonWrapper {
   display: grid;
   justify-content: center;
-  padding-right: 0.5em;
   grid-template-rows: 1fr;
   grid-template-columns: 5em;
   grid-auto-flow: column;

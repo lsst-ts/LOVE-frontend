@@ -1,0 +1,43 @@
+.title {
+  font-size: var(--font-size-larger);
+  text-align: center;
+  margin-bottom: 1em;
+}
+
+.filterContainer {
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 0.5em;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+}
+
+.subTitle {
+  font-size: var(--font-size-large);
+  color: var(--secondary-font-color);
+}
+
+.cardContainer {
+  background: var(--second-secondary-background-color);
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.subsystem {
+  font-size: var(--font-size-large);
+  color: var(--highlighted-font-color);
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  padding-bottom: 0.3em;
+  margin-bottom: 0.3em;
+}
+
+.contactItem {
+  font-size: var(--font-size-medium);
+  color: var(--secondary-font-color);
+  padding: 0.2em 0;
+}
+
+.highlighted {
+  color: var(--highlighted-font-color);
+}

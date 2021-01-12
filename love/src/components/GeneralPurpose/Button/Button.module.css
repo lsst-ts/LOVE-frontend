@@ -15,7 +15,8 @@
   cursor: pointer;
   user-select: none;
 
-  padding: 6px 12px;
+  padding-left: 12px;
+  padding-right: 12px;
   padding-top: 2px;
   padding-bottom: 2px;
   font-size: 14px;
@@ -289,12 +290,10 @@ fieldset[disabled] .btnLink {
 
 .command {
   background-color: var(--commandable-background);
-  background: var(--commandable-background);
   color: var(--commandable-font-color);
 }
 
 .command:hover {
   background-color: var(--commandable-background-hover);
-  background: var(--commandable-background-hover);
   color: var(--commandable-font-color-hover);
 }

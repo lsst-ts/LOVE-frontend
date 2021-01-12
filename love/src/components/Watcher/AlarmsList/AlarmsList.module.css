@@ -1,7 +1,6 @@
 .alarmsContainer {
   user-select: none;
   padding: 0.5em;
-  max-height: 300px;
   overflow-y: auto;
   width: fit-content;
   height: fit-content;

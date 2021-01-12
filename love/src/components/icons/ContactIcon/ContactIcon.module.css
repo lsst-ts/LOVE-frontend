@@ -1,0 +1,19 @@
+.contactIcon {
+  display: inline-block;
+  fill: var(--secondary-font-color);
+}
+
+.st0 {
+  fill: var(--secondary-font-color);
+  stroke: var(--secondary-font-color);
+  stroke-width: 0.5;
+  stroke-miterlimit: 10;
+}
+.st1 {
+  fill: none;
+  stroke: var(--secondary-font-color);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-miterlimit: 10;
+}

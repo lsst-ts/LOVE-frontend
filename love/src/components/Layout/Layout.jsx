@@ -27,6 +27,7 @@ import { isAcknowledged, isMuted, isActive } from '../Watcher/AlarmUtils';
 import Modal from '../GeneralPurpose/Modal/Modal';
 import XMLTable from './XMLTable/XMLTable';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
+import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPanel';
 import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
@@ -99,6 +100,7 @@ class Layout extends Component {
       hovered: false, // true if leftTopbar is being hovered
       isXMLModalOpen: false,
       isConfigModalOpen: false,
+      isEmergencyContactsModalOpen: false,
       tokenSwapRequested: false,
     };
 
@@ -573,6 +575,7 @@ class Layout extends Component {
                     }}
                     onXMLClick={() => this.setState({ isXMLModalOpen: true })}
                     onConfigClick={() => this.setState({ isConfigModalOpen: true })}
+                    onEmergencyContactsClick={() => this.setState({ isEmergencyContactsModalOpen: true })}
                   ></UserDetails>
                 </div>
               </DropdownMenu>
@@ -627,6 +630,14 @@ class Layout extends Component {
           <ConfigPanel config={this.props.config} setConfig={this.props.setConfig}/>
         </Modal>
         <Modal
+          isOpen={this.state.isEmergencyContactsModalOpen}
+          onRequestClose={() => this.setState({ isEmergencyContactsModalOpen: false })}
+          contentLabel="LOVE Emergency contacs modal"
+          modalClassName={styles.fixedModalHeight}
+        >
+          <EmergencyContactsPanel/>
+        </Modal>
+        <Modal
           isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}
           onRequestClose={() => {
             this.setState({ tokenSwapRequested: false });
@@ -634,6 +645,7 @@ class Layout extends Component {
           }}
           contentLabel="User swap"
           displayFooter={false}
+          modalClassName={styles.noMinWidthModal}
         >
           <UserSwapContainer
             tokenStatus={this.props.tokenSwapStatus}
