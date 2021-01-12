@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import DateSelection from './DateSelection/DateSelection';
 import TimeWindow from './TimeWindow/TimeWindow';
 import styles from './TimeSeriesControls.module.css';
-import GearIcon from '../../icons/GearIcon/GearIcon';
 import moment from 'moment';
 
 export default class TimeSeriesControls extends Component {
@@ -25,6 +24,7 @@ export default class TimeSeriesControls extends Component {
 
   constructor(props) {
     super(props);
+    this.containerRef = React.createRef();
     this.state = {
       dateSelectorDates: null,
     };
@@ -41,7 +41,7 @@ export default class TimeSeriesControls extends Component {
 
   render() {
     return (
-      <div className={styles.timeseriesControlsContainer}>
+      <div ref={this.containerRef} className={styles.timeseriesControlsContainer}>
         <div className={styles.switchContainer}>
           <span
             className={[styles.modeSelection, this.props.isLive ? styles.highlightText : ''].join(' ')}
