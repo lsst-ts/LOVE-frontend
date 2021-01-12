@@ -5,6 +5,7 @@ import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPl
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import styles from './WeatherStation.module.css';
+import { DATE_TIME_FORMAT } from 'Config';
 
 export default class WeatherStation extends Component {
   static propTypes = {
@@ -248,6 +249,16 @@ export default class WeatherStation extends Component {
                   setHistoricalData={(historicalData) => this.setState({historicalData})}
               />
             </div>
+          </div>
+          )
+        }
+
+        {this.props.controls && (
+          <div className={styles.doubleSectionSimple}>
+            {this.state.isLive && <span>Showin last <strong>{this.state.timeWindow != 1 ? 
+              this.state.timeWindow + " minutes" : 
+              "minute"}</strong></span>}
+            {!this.state.isLive && <span>Showin from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong></span>}
           </div>
           )
         }
