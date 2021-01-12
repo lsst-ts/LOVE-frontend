@@ -235,7 +235,7 @@ class PlotContainer extends React.Component {
         markType: inputs[inputName].type,
       };
     });
-
+    
     const plotProps = {
       layers: layers,
       legend: legend,
@@ -275,7 +275,8 @@ const getRangedData = (data, timeWindow, rangeArray) => {
   } else {
     filteredData = data.filter(val => {
       const currentSeconds = new Date().getTime() / 1000;
-      const dataSeconds = val.x.toMillis() / 1000;
+      // const dataSeconds = val.x.toMillis() / 1000;
+      const dataSeconds = val.x.toMillis() / 1000 - 36; // Temporal fix
       if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
       else return false;
     });

@@ -213,6 +213,7 @@ class PolarPlotContainer extends React.Component {
         // }
         newData[inputName] = inputData;
       }
+      // console.log(new Date(newData['GustSpeed']?.[0].time - 36000));
       this.setState({ data: newData });
     }
   }
@@ -260,7 +261,6 @@ class PolarPlotContainer extends React.Component {
     const rangedInputData = isLive ?
         getRangedData(data, timeWindow) : 
         getRangedData(data, 0, historicalData);
-    console.log(rangedInputData);
 
     const plotProps = {
       data: rangedInputData,
@@ -307,7 +307,8 @@ const getRangedData = (data, timeWindow, rangeArray) => {
       for (const input in data) {
         newData[input] = data[input].filter(val => {
           const currentSeconds = new Date().getTime() / 1000;
-          const dataSeconds = val.time.toMillis() / 1000;
+          // const dataSeconds = val.time.toMillis() / 1000;
+          const dataSeconds = val.time.toMillis() / 1000 - 36; // Temporal fix
           if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
           else return false;
         });
