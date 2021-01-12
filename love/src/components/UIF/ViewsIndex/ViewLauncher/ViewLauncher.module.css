@@ -69,8 +69,7 @@
 .viewOverlay {
   width: 100%;
   height: 100%;
-  background-color: var(--second-secondary-background-color);
-  background: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0);
   filter: blur(2px);
   transition: filter 0.1s ease-out;
   display: flex;

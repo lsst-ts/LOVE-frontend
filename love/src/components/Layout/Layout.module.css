@@ -295,3 +295,7 @@
 .fixedModalHeight {
   height: 70%;
 }
+
+.noMinWidthModal {
+  min-width: 0;
+}

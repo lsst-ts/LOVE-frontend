@@ -3,7 +3,6 @@
     grid-template-columns: 0.35fr minmax(10em, 0.5fr);
     grid-auto-rows: max-content;
     grid-row-gap: 0.2em;
-    padding: 0 2em;
     max-width: 27em;
     min-width: 24em;
     justify-content: center;

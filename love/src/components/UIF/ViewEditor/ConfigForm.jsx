@@ -104,7 +104,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
           <Button status="default" onClick={onCancel}>
             Cancel
           </Button>
-          <Button status="primary" onClick={() => customSaveConfig(componentIndex, config)}>
+          <Button status="primary" onClick={() => customSaveConfig()}>
             Save
           </Button>
         </>
