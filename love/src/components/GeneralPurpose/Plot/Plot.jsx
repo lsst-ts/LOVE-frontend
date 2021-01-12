@@ -45,6 +45,8 @@ const Plot = ({
   setHistoricalData,
   controls,
 }) => {
+  const timeSeriesControlRef = React.useRef(undefined);
+
   /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
   const completedMarksStyles = React.useMemo(() => {
     return legend.map(({ name, markType }, index) => {
@@ -78,9 +80,14 @@ const Plot = ({
     if (containerNode !== undefined) {
       const resizeObserver = new ResizeObserver((entries) => {
         const container = entries[0];
+
+        const containerHeight =  controls && timeSeriesControlRef?.current?.containerRef?.current?.clientHeight ? 
+          container.contentRect.height - timeSeriesControlRef.current.containerRef.current.clientHeight : 
+          container.contentRect.height;
+        
         setContainerSize({
           width: container.contentRect.width,
-          height: container.contentRect.height, //TODO: make this dynamic
+          height: containerHeight,
         });
       });
 
@@ -93,8 +100,9 @@ const Plot = ({
   }, [containerNode, width, height]);
 
   return (
-    <>
+    <div>
     {controls && <TimeSeriesControls
+        ref={timeSeriesControlRef}
         setTimeWindow={setTimeWindow}
         timeWindow={timeWindow}
         setLiveMode={setIsLive}
@@ -104,10 +112,6 @@ const Plot = ({
     }
     <div
       className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}
-      style={{
-        width: `${containerSize.width}px`,
-        height: `${containerSize.height}px`,
-      }}
     >
       <VegaTimeseriesPlot
         layers={layers}
@@ -122,7 +126,7 @@ const Plot = ({
       />
       <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
     </div>
-    </>
+    </div>
   );
 };
 
