@@ -6,6 +6,12 @@ export const WEBSOCKET_SIMULATION = false;
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 
+// Moment formats
+export const DATE_FORMAT = 'DD-MM-YYYY';
+export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
+export const TIME_FORMAT = 'HH:mm:ss';
+export const DATE_TIME_FORMAT = 'D MMM YYYY, kk:mm';
+
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Aux Telescope': {
