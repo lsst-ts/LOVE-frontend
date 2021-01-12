@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
 import styles from './DateSelection.module.css';
 import './react-datetime.css';
-import moment from 'moment';
 
 export default class DateSelection extends PureComponent {
   static propTypes = {
