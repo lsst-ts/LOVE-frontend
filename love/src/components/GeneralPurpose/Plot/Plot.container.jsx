@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData } from 'redux/selectors/selectors';
+import { getTaiToUtc } from 'redux/selectors';
 import Plot from './Plot';
 import { parseTimestamp } from 'Utils';
 import Moment from 'moment';
@@ -209,9 +210,9 @@ class PlotContainer extends React.Component {
 
       let rangedInputData;
       if (isLive) {
-        rangedInputData = getRangedData(data[inputName], timeWindow);
+        rangedInputData = this.getRangedData(data[inputName], timeWindow);
       } else {
-        rangedInputData = getRangedData(data[inputName], 0, historicalData);
+        rangedInputData = this.getRangedData(data[inputName], 0, historicalData);
       }
       // layers[typeStr] = (layers[typeStr] ?? []).concat(data[inputName]);
       layers[typeStr] = (layers[typeStr] ?? []).concat(rangedInputData);
@@ -265,23 +266,22 @@ class PlotContainer extends React.Component {
       return <Plot {...plotProps} containerNode={containerNode} />;
     }
   }
-}
 
-const getRangedData = (data, timeWindow, rangeArray) => {
-  let filteredData;
-  if (timeWindow == 0 && rangeArray?.length == 2){
-    const range = moment.range(rangeArray);
-    filteredData = data.filter(val => range.contains(val.x));
-  } else {
-    filteredData = data.filter(val => {
-      const currentSeconds = new Date().getTime() / 1000;
-      // const dataSeconds = val.x.toMillis() / 1000;
-      const dataSeconds = val.x.toMillis() / 1000 - 36; // Temporal fix
-      if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
-      else return false;
-    });
+  getRangedData = (data, timeWindow, rangeArray) => {
+    let filteredData;
+    if (timeWindow == 0 && rangeArray?.length == 2){
+      const range = moment.range(rangeArray);
+      filteredData = data.filter(val => range.contains(val.x));
+    } else {
+      filteredData = data.filter(val => {
+        const currentSeconds = new Date().getTime() / 1000;
+        const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
+        if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
+        else return false;
+      });
+    }
+    return filteredData;
   }
-  return filteredData;
 }
 
 const getGroupNames = inputs => (
@@ -313,8 +313,10 @@ const mapStateToProps = (state, ownProps) => {
   const inputs = ownProps.inputs || schema.props.inputs.default;
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
+  const taiToUtc = getTaiToUtc(state);
   return {
     streams,
+    taiToUtc,
   };
 };
 

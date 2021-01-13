@@ -213,7 +213,6 @@ class PolarPlotContainer extends React.Component {
         // }
         newData[inputName] = inputData;
       }
-      // console.log(new Date(newData['GustSpeed']?.[0].time - 36000));
       this.setState({ data: newData });
     }
   }
@@ -259,8 +258,8 @@ class PolarPlotContainer extends React.Component {
 
     // const rangedInputData = data;
     const rangedInputData = isLive ?
-        getRangedData(data, timeWindow) : 
-        getRangedData(data, 0, historicalData);
+        this.getRangedData(data, timeWindow) : 
+        this.getRangedData(data, 0, historicalData);
 
     const plotProps = {
       data: rangedInputData,
@@ -294,9 +293,8 @@ class PolarPlotContainer extends React.Component {
     return <PolarPlot {...plotProps} />;
 
   }
-}
 
-const getRangedData = (data, timeWindow, rangeArray) => {
+  getRangedData = (data, timeWindow, rangeArray) => {
     const newData = {};
     if (timeWindow == 0 && rangeArray?.length == 2){
       const range = moment.range(rangeArray);
@@ -307,8 +305,7 @@ const getRangedData = (data, timeWindow, rangeArray) => {
       for (const input in data) {
         newData[input] = data[input].filter(val => {
           const currentSeconds = new Date().getTime() / 1000;
-          // const dataSeconds = val.time.toMillis() / 1000;
-          const dataSeconds = val.time.toMillis() / 1000 - 36; // Temporal fix
+          const dataSeconds = val.time.toMillis() / 1000 + this.props.taiToUtc;
           if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
           else return false;
         });
@@ -316,6 +313,7 @@ const getRangedData = (data, timeWindow, rangeArray) => {
     }
     return newData;
   }
+}
 
 const getGroupNames = (inputs, displayDome) => {
   const domeGroupNames = [domeAzimuthGroupName];
