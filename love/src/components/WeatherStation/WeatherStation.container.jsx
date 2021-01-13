@@ -27,6 +27,13 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
+    controls: {
+      type: 'boolean',
+      description:
+        "Whether to display controls to configure periods of time'",
+      default: true,
+      isPrivate: false,
+    },
   },
 };
 

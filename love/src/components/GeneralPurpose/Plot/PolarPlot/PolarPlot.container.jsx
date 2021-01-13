@@ -4,6 +4,10 @@ import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
 import PolarPlot from './PolarPlot';
 import { parseTimestamp } from 'Utils';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 export const defaultStyles = [
   {
@@ -129,102 +133,106 @@ export const schema = {
       default: 'km/s',
       isPrivate: false,
     },
+    controls: {
+      type: 'boolean',
+      description:
+        "Whether to display controls to configure periods of time'",
+      default: true,
+      isPrivate: false,
+    },
   },
 };
 
 const domeAzimuthGroupName = 'telemetry-ATDome-0-position';
 
-const PolarPlotContainer = function ({
-  inputs = schema.props.inputs.default,
-  streams,
-  subscribeToStreams,
-  unsubscribeToStreams,
-  width,
-  height,
-  groupTitles,
-  temporalEncoding,
-  taiToUtc,
-  colorInterpolation,
-  opacityInterpolation,
-  displayDome,
-  radialUnits,
-}) {
-  const [data, setData] = React.useState({});
-
-  React.useEffect(() => {
-    subscribeToStreams();
-  }, [subscribeToStreams]);
-
-  /** TODO: find a way to detect "real" changes in inputs
-   * now resizing the plot also makes the inputs prop to change
-   */
-  React.useEffect(() => {
-    unsubscribeToStreams();
-    subscribeToStreams();
-    const data = {};
-    for (const key of Object.keys(inputs)) {
-      data[key] = [];
+class PolarPlotContainer extends React.Component {
+  constructor(props) {
+    super(props);
+    
+    this.state = {
+      data: {},
+      isLive: true,
+      timeWindow: 60,
+      historicalData: [],
     }
-    setData(data);
-  }, [inputs, subscribeToStreams, unsubscribeToStreams]);
 
-  const streamsItems = React.useMemo(
-    () =>
-      Object.entries(inputs).map(([_, inputConfig]) => {
-        const { category, csc, salindex, topic, item } = inputConfig;
+    this.containerRef = React.createRef();
+  }
+
+  componentDidMount() {
+    this.props.subscribeToStreams();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
+    const { data } = this.state;
+
+    if (prevProps.timeSeriesControlsProps != timeSeriesControlsProps) {
+      this.setState({ ...timeSeriesControlsProps });
+    }
+
+    if (prevProps.inputs != inputs || 
+      prevProps.subscribeToStreams != subscribeToStreams ||
+      prevProps.unsubscribeToStreams != unsubscribeToStreams) {
+      unsubscribeToStreams();
+      subscribeToStreams();
+      const data = {};
+      for (const key of Object.keys(inputs)) {
+        data[key] = [];
+      }
+      this.setState({ data });      
+    }
+
+    if (prevProps.inputs != inputs || prevProps.streams != streams) {
+      const newData = {};
+      for (const [inputName, inputConfig] of Object.entries(inputs)) {
+        const { category, csc, salindex, topic, item, accessor } = inputConfig;
+        
+        /* eslint no-eval: 0 */
+        const accessorFunc = eval(accessor);
+        let inputData = data[inputName] || [];
+        const lastValue = inputData[inputData.length - 1];
         const streamName = `${category}-${csc}-${salindex}-${topic}`;
-        return streams[streamName]?.[item];
-      }),
-    [inputs, streams],
-  );
+        if (!streams[streamName] || !streams[streamName]?.[item]) {
+          continue;
+        }
+        const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+        const newValue = {
+          name: inputName,
+          time: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+          value: accessorFunc(streamValue[item]?.value),
+        };
+  
+        // TODO: use reselect to never get repeated timestamps
+        if ((!lastValue || lastValue.time?.ts !== newValue.time?.ts) && newValue.time) {
+          inputData.push(newValue);
+        }
 
-  const units = React.useMemo(
-    () => streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units,
-    [streamsItems],
-  );
-
-  React.useEffect(() => {
-    let changed = false;
-    if (data === {}) {
-      return;
+        // if (inputData.length > 100) {
+        //   inputData = inputData.slice(-100);
+        // }
+        newData[inputName] = inputData;
+      }
+      this.setState({ data: newData });
     }
-    for (const [inputName, inputConfig] of Object.entries(inputs)) {
-      const { category, csc, salindex, topic, item, accessor } = inputConfig;
-      /* eslint no-eval: 0 */
-      const accessorFunc = eval(accessor);
-      let inputData = data[inputName] || [];
-      const lastValue = inputData[inputData.length - 1];
+  }
+
+  render() {
+    const { inputs, streams, width, height, groupTitles, temporalEncoding, taiToUtc, colorInterpolation, 
+      opacityInterpolation, displayDome, radialUnits, controls, timeSeriesControlsProps } = this.props;
+    
+    const { data } = this.state;
+    const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
+
+    const streamsItems = Object.entries(inputs).map(([_, inputConfig]) => {
+      const { category, csc, salindex, topic, item } = inputConfig;
       const streamName = `${category}-${csc}-${salindex}-${topic}`;
-      if (!streams[streamName] || !streams[streamName]?.[item]) {
-        continue;
-      }
-      const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-      const newValue = {
-        name: inputName,
-        time: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-        value: accessorFunc(streamValue[item]?.value),
-      };
+      return streams[streamName]?.[item];
+    });
 
-      // TODO: use reselect to never get repeated timestamps
-      if ((!lastValue || lastValue.time?.ts !== newValue.time?.ts) && newValue.time) {
-        changed = true;
-        inputData.push(newValue);
-      }
-
-      // TODO: change by a date range filter
-      if (inputData.length > 100) {
-        changed = true;
-        inputData = inputData.slice(-100);
-      }
-      data[inputName] = inputData;
-    }
-    if (changed) {
-      setData(data);
-    }
-  }, [data, inputs, streams]);
-
-  const marksStyles = React.useMemo(() => {
-    return Object.keys(inputs).map((input, index) => {
+    const units = streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units;
+    
+    const marksStyles = Object.keys(inputs).map((input, index) => {
       return {
         name: input,
         ...defaultStyles[index % defaultStyles.length],
@@ -236,49 +244,76 @@ const PolarPlotContainer = function ({
         ...(inputs[input].group !== undefined ? { group: inputs[input].group } : {}),
       };
     });
-  }, [inputs]);
 
-  const legend = React.useMemo(() => {
-    return Object.keys(inputs).map((inputName, index) => {
+    const legend = Object.keys(inputs).map((inputName, index) => {
       return {
         label: inputName,
         name: inputName,
         markType: inputs[inputName].type,
       };
     });
-  }, [inputs]);
 
-  const colorInterpolationFunc = React.useMemo(() => {
-    return eval(colorInterpolation);
-  }, [colorInterpolation]);
-  const opacityInterpolationFunc = React.useMemo(() => {
-    return eval(opacityInterpolation);
-  }, [opacityInterpolation]);
-  // this should be the case for a component loaded from the UI Framework
-  const plotProps = {
-    data: data,
-    legend: legend,
-    marksStyles: marksStyles,
-    groupTitles: groupTitles,
-    units:
-      units !== undefined
-        ? {
-            y: units,
-          }
-        : undefined,
-    temporalXAxis: true,
-    temporalEncoding: temporalEncoding,
-    taiToUtc: taiToUtc,
-    width: width,
-    height: height,
-    colorInterpolation: colorInterpolationFunc,
-    opacityInterpolation: opacityInterpolationFunc,
-    domeAzimuth: streams[domeAzimuthGroupName],
-    displayDome: displayDome,
-    radialUnits: radialUnits,
-  };
-  return <PolarPlot {...plotProps} />;
-};
+    const colorInterpolationFunc = eval(colorInterpolation);
+    const opacityInterpolationFunc = eval(opacityInterpolation);
+
+    // const rangedInputData = data;
+    const rangedInputData = isLive ?
+        this.getRangedData(data, timeWindow) : 
+        this.getRangedData(data, 0, historicalData);
+
+    const plotProps = {
+      data: rangedInputData,
+      legend: legend,
+      marksStyles: marksStyles,
+      groupTitles: groupTitles,
+      units:
+        units !== undefined
+          ? {
+              y: units,
+            }
+          : undefined,
+      temporalXAxis: true,
+      temporalEncoding: temporalEncoding,
+      taiToUtc: taiToUtc,
+      width: width,
+      height: height,
+      colorInterpolation: colorInterpolationFunc,
+      opacityInterpolation: opacityInterpolationFunc,
+      domeAzimuth: streams[domeAzimuthGroupName],
+      displayDome: displayDome,
+      radialUnits: radialUnits,
+      isLive: isLive,
+      timeWindow: timeWindow,
+      setIsLive: isLive => { this.setState({ isLive })},
+      setTimeWindow: timeWindow => { this.setState({ timeWindow })},
+      setHistoricalData: historicalData => { this.setState({ historicalData })},
+      controls: controls
+    };
+
+    return <PolarPlot {...plotProps} />;
+
+  }
+
+  getRangedData = (data, timeWindow, rangeArray) => {
+    const newData = {};
+    if (timeWindow == 0 && rangeArray?.length == 2){
+      const range = moment.range(rangeArray);
+      for (const input in data) {
+          newData[input] = data[input].filter(val => range.contains(val.time));
+      }
+    } else {
+      for (const input in data) {
+        newData[input] = data[input].filter(val => {
+          const currentSeconds = new Date().getTime() / 1000;
+          const dataSeconds = val.time.toMillis() / 1000 + this.props.taiToUtc;
+          if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
+          else return false;
+        });
+      }
+    }
+    return newData;
+  }
+}
 
 const getGroupNames = (inputs, displayDome) => {
   const domeGroupNames = [domeAzimuthGroupName];

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import DateSelection from './DateSelection/DateSelection';
 import TimeWindow from './TimeWindow/TimeWindow';
 import styles from './TimeSeriesControls.module.css';
-import GearIcon from '../../icons/GearIcon/GearIcon';
+import moment from 'moment';
 
 export default class TimeSeriesControls extends Component {
   static propTypes = {
@@ -22,14 +22,26 @@ export default class TimeSeriesControls extends Component {
     liveMode: false,
   };
 
+  constructor(props) {
+    super(props);
+    this.containerRef = React.createRef();
+    this.state = {
+      dateSelectorDates: null,
+    };
+  }
+
   handleChangeChk = () => {
     if (this.props.isLive) this.props.setLiveMode(false);
     else this.props.setLiveMode(true);
   };
 
+  componentDidMount() {
+    this.setState({ dateSelectorDates: [moment(), moment().add(1, 'h')]});
+  }
+
   render() {
     return (
-      <div className={styles.timeseriesControlsContainer}>
+      <div ref={this.containerRef} className={styles.timeseriesControlsContainer}>
         <div className={styles.switchContainer}>
           <span
             className={[styles.modeSelection, this.props.isLive ? styles.highlightText : ''].join(' ')}
@@ -57,11 +69,11 @@ export default class TimeSeriesControls extends Component {
         {this.props.isLive ? (
           <TimeWindow setTimeWindow={this.props.setTimeWindow} timeWindow={this.props.timeWindow} />
         ) : (
-          <DateSelection setHistoricalData={this.props.setHistoricalData} />
+          <DateSelection dateSelectorDates={this.state.dateSelectorDates} setHistoricalData={this.props.setHistoricalData} />
         )}
-        <div onClick={this.props.goBack} className={styles.gearIconContainer}>
+        {/* <div onClick={this.props.goBack} className={styles.gearIconContainer}>
           <GearIcon active />
-        </div>
+        </div> */}
       </div>
     );
   }
