@@ -255,10 +255,10 @@ export default class WeatherStation extends Component {
 
         {this.props.controls && (
           <div className={styles.doubleSectionSimple}>
-            {this.state.isLive && <span>Showing last <strong>{this.state.timeWindow != 1 ? 
+            {this.state.isLive && <span>Displaying last <strong>{this.state.timeWindow != 1 ? 
               this.state.timeWindow + " minutes" : 
-              "minute"}</strong></span>}
-            {!this.state.isLive && <span>Showing from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong></span>}
+              "minute"}</strong> of data</span>}
+            {!this.state.isLive && <span>Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong></span>}
           </div>
           )
         }

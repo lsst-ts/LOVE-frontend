@@ -7,10 +7,9 @@ export const WEBSOCKET_SIMULATION = false;
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 
 // Moment formats
-export const DATE_FORMAT = 'DD-MM-YYYY';
-export const ISO_DATE_FORMAT = 'YYYY-MM-DD';
+export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const TIME_FORMAT = 'HH:mm:ss';
-export const DATE_TIME_FORMAT = 'D MMM YYYY, kk:mm';
+export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
