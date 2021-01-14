@@ -248,7 +248,6 @@ export default class ConfigPanel extends Component {
 
   getDocumentationLink = (scriptPath, isStandard) => {
     // 'https://ts-standardscripts.lsst.io/py-api/lsst.ts.standardscripts.auxtel.LatissTakeImage.html'
-    console.log(scriptPath)
     const extensionIndex = scriptPath.lastIndexOf('.');
     const cleanPath = scriptPath.substring(0, extensionIndex);
     const dirIndex = cleanPath.lastIndexOf('/');
@@ -256,7 +255,6 @@ export default class ConfigPanel extends Component {
     const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex+1) : cleanPath;
     const cleanScriptName = scriptName.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
     const cleanDirectory = scriptDirectory.split('/').join('.');
-    console.log(scriptDirectory, scriptName)
     // const camelCasePath = cleanPath.split('/').join('.').split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
     const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
     const fullPath = `lsst.ts.standardscripts.${camelCasePath}`
@@ -265,7 +263,6 @@ export default class ConfigPanel extends Component {
 
   render() {
     const { orientation } = this.state;
-    console.log(this.props);
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
     const scriptPath = this.props.configPanel.script ? this.props.configPanel.script?.path : '';
     const isStandard = this.props.configPanel.script ? this.props.configPanel.script?.type === 'standard' : false;
