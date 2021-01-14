@@ -247,7 +247,6 @@ export default class ConfigPanel extends Component {
   };
 
   getDocumentationLink = (scriptPath, isStandard) => {
-    // 'https://ts-standardscripts.lsst.io/py-api/lsst.ts.standardscripts.auxtel.LatissTakeImage.html'
     const extensionIndex = scriptPath.lastIndexOf('.');
     const cleanPath = scriptPath.substring(0, extensionIndex);
     const dirIndex = cleanPath.lastIndexOf('/');
@@ -255,7 +254,6 @@ export default class ConfigPanel extends Component {
     const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex+1) : cleanPath;
     const cleanScriptName = scriptName.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
     const cleanDirectory = scriptDirectory.split('/').join('.');
-    // const camelCasePath = cleanPath.split('/').join('.').split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
     const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
     const fullPath = `lsst.ts.standardscripts.${camelCasePath}`
     return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
