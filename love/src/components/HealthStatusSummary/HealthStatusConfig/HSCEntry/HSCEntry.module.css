@@ -38,7 +38,7 @@
 }
 
 .funcHeader {
-  font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace;
+  font-family: Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace, sans-serif;
   font-size: 12px;
 }
 

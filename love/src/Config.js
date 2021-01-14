@@ -5,8 +5,12 @@ export const WEBSOCKET_SIMULATION = false;
 // File located in public/websocket-simulations containing a 
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
-
+// Base URL for ScriptQueue scripts' documentation
 export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
+// Moment formats
+export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
+export const TIME_FORMAT = 'HH:mm:ss';
+export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
@@ -43,7 +47,7 @@ export const CSCSummaryHierarchy = {
   },
   Observatory: {
     Queue: [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ScriptQueue', salindex: 2 }],
-    Environment: [{ name: 'DIMM', salindex: 1 }, { name: 'DIMM', salindex: 2 }, { name: 'Environment', salindex: 1 }],
+    WeatherStation: [{ name: 'DIMM', salindex: 1 }, { name: 'DIMM', salindex: 2 }, { name: 'WeatherStation', salindex: 1 }],
   },
 };
 

@@ -194,7 +194,6 @@ export default class PolarPlot extends Component {
     const radialLines = this.getRadialLines(radialLinesAngles, w, h, margin);
 
     const data = this.props.data;
-
     const groups = [];
     this.props.marksStyles.forEach((ms) => {
       groups[ms.group] = { ...groups[ms?.group], [ms?.encoding]: ms?.name };

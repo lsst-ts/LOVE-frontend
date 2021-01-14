@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import styles from './WeatherStation.module.css';
+import { DATE_TIME_FORMAT } from 'Config';
 
 export default class WeatherStation extends Component {
   static propTypes = {
@@ -16,7 +18,7 @@ export default class WeatherStation extends Component {
   temperaturePlot = {
     'Air temperature': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'airTemperature',
       item: 'avg1M',
@@ -26,7 +28,7 @@ export default class WeatherStation extends Component {
     },
     'Soil temperature': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'soilTemperature',
       item: 'avg1M',
@@ -36,7 +38,7 @@ export default class WeatherStation extends Component {
     },
     'Dew point': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'dewPoint',
       item: 'avg1M',
@@ -49,7 +51,7 @@ export default class WeatherStation extends Component {
   humidityPlot = {
     Humidity: {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'relativeHumidity',
       item: 'avg1M',
@@ -62,7 +64,7 @@ export default class WeatherStation extends Component {
   pressurePlot = {
     'Air pressure': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'airPressure',
       item: 'paAvg1M',
@@ -75,7 +77,7 @@ export default class WeatherStation extends Component {
   solarPlot = {
     'Solar radiation': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'solarNetRadiation',
       item: 'avg1M',
@@ -88,7 +90,7 @@ export default class WeatherStation extends Component {
   precipitationPlot = {
     Precipitation: {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'precipitation',
       item: 'prSum1M',
@@ -101,7 +103,7 @@ export default class WeatherStation extends Component {
   snowDepthPlot = {
     'Snow depth': {
       category: 'telemetry',
-      csc: 'Environment',
+      csc: 'WeatherStation',
       salindex: this.props.salindex,
       topic: 'snowDepth',
       item: 'avg1M',
@@ -115,7 +117,7 @@ export default class WeatherStation extends Component {
     title: 'Time series plot',
     inputs: {
       GustSpeed: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'avg2M',
         group: 1,
         topic: 'windSpeed',
@@ -125,7 +127,7 @@ export default class WeatherStation extends Component {
         salindex: 1,
       },
       WindSpeed: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'avg2M',
         group: 0,
         topic: 'windSpeed',
@@ -135,7 +137,7 @@ export default class WeatherStation extends Component {
         salindex: 1,
       },
       GustDirection: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'value10M',
         group: 1,
         topic: 'windGustDirection',
@@ -145,7 +147,7 @@ export default class WeatherStation extends Component {
         salindex: 1,
       },
       WindDirection: {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         item: 'avg2M',
         group: 0,
         topic: 'windDirection',
@@ -178,6 +180,12 @@ export default class WeatherStation extends Component {
     this.pressurePlotRef = React.createRef();
     this.precipitationPlotRef = React.createRef();
     this.snowDepthPlotRef = React.createRef();
+
+    this.state = {
+      isLive: true,
+      timeWindow: 60,
+      historicalData: [],
+    };
   }
 
   componentDidMount = () => {
@@ -194,9 +202,16 @@ export default class WeatherStation extends Component {
     const currentPressure = Math.round(this.props.weather?.pressure?.value * 100) / 100;
     const currentWindSpeed = this.props.windSpeed?.value?.value;
     const currentWindSpeedUnits = this.props.windSpeed?.value?.units;
+
+    const timeSeriesControlsProps = {
+      timeWindow: this.state.timeWindow,
+      isLive: this.state.isLive,
+      historicalData: this.state.historicalData
+    };
+
     return (
       <div className={styles.container}>
-        <div className={styles.section}>
+        <div className={styles.doubleSection}>
           <div className={styles.sectionTitle}>Current values</div>
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>
@@ -222,10 +237,40 @@ export default class WeatherStation extends Component {
           </div>
         </div>
 
+        {this.props.controls && (
+          <div className={styles.doubleSection}>
+            <div className={styles.sectionTitle}>Timeseries Controls</div>
+            <div className={styles.timeSeriesControls}>
+              <TimeSeriesControls
+                  setTimeWindow={(timeWindow) => this.setState({timeWindow})}
+                  timeWindow={this.state.timeWindow}
+                  setLiveMode={(isLive) => this.setState({isLive})}
+                  isLive={this.state.isLive}
+                  setHistoricalData={(historicalData) => this.setState({historicalData})}
+              />
+            </div>
+          </div>
+          )
+        }
+
+        {this.props.controls && (
+          <div className={styles.doubleSectionSimple}>
+            {this.state.isLive && <span>Displaying last <strong>{this.state.timeWindow != 1 ? 
+              this.state.timeWindow + " minutes" : 
+              "minute"}</strong> of data</span>}
+            {!this.state.isLive && <span>Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong></span>}
+          </div>
+          )
+        }
+
         <div className={styles.windPlotSection}>
           <div className={styles.sectionTitle}>Wind</div>
-          <div className={styles.windPlotContainer}>
-            <PolarPlotContainer {...this.windPlot} />
+          <div ref={this.windDirectionPlotRef} className={styles.windPlotContainer}>
+            <PolarPlotContainer
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                containerNode={this.windDirectionPlotRef} 
+                {...this.windPlot} 
+              />
           </div>
         </div>
 
@@ -233,8 +278,9 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Temperature</div>
           <div ref={this.temperaturePlotRef} className={styles.plot}>
             <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.temperaturePlot}
-              containerNode={this.temperaturePlotRef?.current}
+              containerNode={this.temperaturePlotRef}
               xAxisTitle="Time"
               yAxisTitle="Temperature"
               legendPosition="bottom"
@@ -245,8 +291,9 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Humidity</div>
           <div ref={this.humidityPlotRef} className={styles.plot}>
             <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.humidityPlot}
-              containerNode={this.humidityPlotRef?.current}
+              containerNode={this.humidityPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
               legendPosition="bottom"
@@ -258,8 +305,9 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Precipitation</div>
           <div ref={this.precipitationPlotRef} className={styles.plot}>
             <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.precipitationPlot}
-              containerNode={this.precipitationPlotRef?.current}
+              containerNode={this.precipitationPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
               legendPosition="bottom"
@@ -268,8 +316,9 @@ export default class WeatherStation extends Component {
 
           <div ref={this.snowDepthPlotRef} className={styles.plot}>
             <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.snowDepthPlot}
-              containerNode={this.snowDepthPlotRef?.current}
+              containerNode={this.snowDepthPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
               legendPosition="bottom"
@@ -281,8 +330,9 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Solar radiation</div>
           <div ref={this.solarPlotRef} className={styles.plot}>
             <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.solarPlot}
-              containerNode={this.solarPlotRef?.current}
+              containerNode={this.solarPlotRef}
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
               legendPosition="bottom"
@@ -294,8 +344,9 @@ export default class WeatherStation extends Component {
           <div className={styles.sectionTitle}>Air pressure</div>
           <div ref={this.pressurePlotRef} className={styles.plot}>
             <PlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.pressurePlot}
-              containerNode={this.pressurePlotRef?.current}
+              containerNode={this.pressurePlotRef}
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
               legendPosition="bottom"

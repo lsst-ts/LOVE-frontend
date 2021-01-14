@@ -4,6 +4,9 @@ pipeline {
     registryCredential = "dockerhub-inriachile"
     dockerImageName = "lsstts/love-frontend:"
     dockerImage = ""
+    user_ci = credentials('lsst-io')
+    LTD_USERNAME="${user_ci_USR}"
+    LTD_PASSWORD="${user_ci_PSW}"
   }
   stages {
     stage("Build Docker image") {
@@ -63,6 +66,31 @@ pipeline {
         script {
           sh "docker image build -f Dockerfile-test -t love-frontend-test  ."
           sh "docker run love-frontend-test"
+        }
+      }
+    }
+
+    stage("Deploy documentation") {
+      agent {
+        docker {
+          alwaysPull true
+          image 'lsstts/develop-env:develop'
+          args "-u root --entrypoint=''"
+        }
+      }
+      when {
+        anyOf {
+          changeset "docs/*"
+        }
+      }
+      steps {
+        script {
+          sh "pwd"
+          sh """
+            source /home/saluser/.setup_dev.sh
+            pip install ltd-conveyor
+            ltd upload --product love-frontend --git-ref ${GIT_BRANCH} --dir ./docs
+          """
         }
       }
     }

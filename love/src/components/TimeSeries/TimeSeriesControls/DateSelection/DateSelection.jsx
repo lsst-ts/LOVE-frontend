@@ -7,6 +7,7 @@ import './react-datetime.css';
 export default class DateSelection extends PureComponent {
   static propTypes = {
     setHistoricalData: PropTypes.func,
+    dateSelectorDates: PropTypes.array,
   }
 
   constructor() {
@@ -27,22 +28,25 @@ export default class DateSelection extends PureComponent {
     if (isStartDate) {
       this.setState({
         startDate: date,
+      }, () => {
+        this.props.setHistoricalData([this.state.startDate, this.state.endDate]);
       });
     } else {
       this.setState({
         endDate: date,
+      }, () => {
+        this.props.setHistoricalData([this.state.startDate, this.state.endDate]);
       });
     }
   };
 
-  componentDidUpdate() {
-    if (this.state.startDate !== null && this.state.endDate !== null) {
-      if (this.state.startDate > this.state.endDate) {
-        return this.props.setHistoricalData(this.state.startDate, this.state.startDate);
-      }
-      this.props.setHistoricalData(this.state.startDate, this.state.endDate);
-    }
-    return null;
+  componentDidMount() {
+    this.setState({
+      startDate: this.props?.dateSelectorDates?.[0],
+      endDate: this.props?.dateSelectorDates?.[1],
+    }, () => {
+      this.props.setHistoricalData?.([this.state.startDate, this.state.endDate]);
+    });
   }
 
   render() {
@@ -53,7 +57,14 @@ export default class DateSelection extends PureComponent {
           <div className={styles.datetimeContainer}>
             <Datetime
               inputProps={{ placeholder: 'Click to set initial date' }}
-              onBlur={(momentDate) => this.onDateSelected(momentDate, true)}
+              onChange={(date) => this.onDateSelected(date, true)}
+              initialViewMode="time"
+              initialValue={this.props?.dateSelectorDates?.[0]}
+              isValidDate={(currentDate) => {
+                // TODO: datetime constraints
+                // return currentDate.isBefore(moment(maxDate)) && currentDate.isAfter(moment(minDate))
+                return true;
+              }}
             />
           </div>
         </div>
@@ -62,7 +73,14 @@ export default class DateSelection extends PureComponent {
           <div className={styles.datetimeContainer}>
             <Datetime
               inputProps={{ placeholder: 'Click to set final date' }}
-              onBlur={(momentDate) => this.onDateSelected(momentDate, false)}
+              onChange={(date) => this.onDateSelected(date, false)}
+              initialViewMode="time"
+              initialValue={this.props?.dateSelectorDates?.[1]}
+              isValidDate={(currentDate) => {
+                // TODO: datetime constraints
+                // return currentDate.isBefore(moment(maxDate)) && currentDate.isAfter(moment(minDate))
+                return true;
+              }}
             />
           </div>
         </div>

@@ -58,7 +58,7 @@ it('Should extract the stream correctly with a selector', async () => {
     },
   };
   const category = 'telemetry';
-  const csc = 'Environment';
+  const csc = 'WeatherStation';
   const salindex = 1;
   const stream = 'airPressure';
   const groupName = [category, csc, salindex, stream].join('-');
@@ -110,7 +110,7 @@ it('Should extract streams correctly with a selector', async () => {
     },
   };
   const expectedData = {
-    'telemetry-Environment-1-airPressure': {
+    'telemetry-WeatherStation-1-airPressure': {
       paAvg1M: {
         value: 0.12092732556005037,
         dataType: 'Float',
@@ -128,14 +128,14 @@ it('Should extract streams correctly with a selector', async () => {
         dataType: 'String',
       },
     },
-    'telemetry-Environment-1-temperature': {
+    'telemetry-WeatherStation-1-temperature': {
       sensor1: {
         value: 69,
         dataType: 'Float',
       },
     },
   };
-  const groupNames = ['telemetry-Environment-1-airPressure', 'telemetry-Environment-1-temperature'];
+  const groupNames = ['telemetry-WeatherStation-1-airPressure', 'telemetry-WeatherStation-1-temperature'];
 
   // Act
   await store.dispatch(addGroup(groupNames[0]));
@@ -144,7 +144,7 @@ it('Should extract streams correctly with a selector', async () => {
     category: 'telemetry',
     data: [
       {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         salindex: 1,
         data: streams,
       },
@@ -178,7 +178,7 @@ it('Should extract the timestamped stream correctly with a selector', async () =
       },
     },
   };
-  const groupName = 'telemetry-Environment-1-airPressure';
+  const groupName = 'telemetry-WeatherStation-1-airPressure';
   const timestamp = new Date();
   // Act
   await store.dispatch(addGroup(groupName));
@@ -186,7 +186,7 @@ it('Should extract the timestamped stream correctly with a selector', async () =
     category: 'telemetry',
     data: [
       {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         salindex: 1,
         data: streams,
       },
