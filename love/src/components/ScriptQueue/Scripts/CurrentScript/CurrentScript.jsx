@@ -55,15 +55,11 @@ export default class CurrentScript extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       elapsedTime: 0,
     };
   }
 
   onClick = () => {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
     this.props.onClick();
   };
 
@@ -272,14 +268,6 @@ export default class CurrentScript extends Component {
               <LoadingBar className={delayedScriptProgressClass} percentage={percentage} title={`Script completion: ${percentage}%`} displayPercentage={false} isNarrow/>
             </div>
           </div>
-          {/* <div
-            className={[
-              scriptStyles.expandedSectionWrapper,
-              this.state.expanded && isValid ? '' : scriptStyles.hidden,
-            ].join(' ')}
-          >
-            {hasCommandPrivileges ? <ScriptDetails {...this.props} /> : null}
-          </div> */}
         </div>
       </div>
     );

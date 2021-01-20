@@ -5,7 +5,8 @@ export const WEBSOCKET_SIMULATION = false;
 // File located in public/websocket-simulations containing a 
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
-
+// Base URL for ScriptQueue scripts' documentation
+export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
 // Moment formats
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const TIME_FORMAT = 'HH:mm:ss';
