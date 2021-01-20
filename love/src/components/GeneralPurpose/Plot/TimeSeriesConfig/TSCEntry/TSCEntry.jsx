@@ -129,19 +129,13 @@ export default class TSCEntry extends PureComponent {
         <div className={styles.firstRow}>
           <div className={styles.nameMark}>
             <Input
+              label="Plot legend"
               className={styles.input}
               placeholder="Insert a name for the legend"
               value={this.props.name || ''}
               // readOnly
               // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
               onChange={(ev) => this.onNameChange(ev.target?.value)}
-            />
-            <Select
-              className={styles.select}
-              options={this.itemOptions}
-              option={this.props.type}
-              placeholder="Select mark"
-              onChange={(selection) => this.onTypeChange(selection.value)}
             />
           </div>
           <Button
@@ -157,6 +151,15 @@ export default class TSCEntry extends PureComponent {
 
         <div className={styles.stylesContainer}>
           <Select
+            label={"Plot type"}
+            className={styles.select}
+            options={this.itemOptions}
+            option={this.props.type}
+            placeholder="Select mark"
+            onChange={(selection) => this.onTypeChange(selection.value)}
+          />
+          <Select
+            label={"Mark Color"}
             className={styles.select}
             options={COLORS}
             option={input?.color}
@@ -166,6 +169,7 @@ export default class TSCEntry extends PureComponent {
 
           {['line', 'pointLine'].includes(this.props.type) && (
             <Select
+              label={"Dash pattern"}             
               className={styles.select}
               options={DASHES.map((d) => JSON.stringify(d))}
               option={JSON.stringify(input?.dash)}
@@ -176,6 +180,7 @@ export default class TSCEntry extends PureComponent {
 
           {['pointLine'].includes(this.props.type) && (
             <Select
+              label={"Shape"}
               className={styles.select}
               options={SHAPES}
               option={input?.shape}

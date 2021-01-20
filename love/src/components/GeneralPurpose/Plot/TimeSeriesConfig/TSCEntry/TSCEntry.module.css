@@ -63,7 +63,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
   gap: 1rem;
-  align-items: center;
+  align-items: end;
 }
 
 .labeledCheckbox {
