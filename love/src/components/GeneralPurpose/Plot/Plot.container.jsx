@@ -131,6 +131,7 @@ class PlotContainer extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
+    console.log(streams);
     const {data} = this.state;
     if (prevProps.timeSeriesControlsProps != timeSeriesControlsProps) {
       this.setState({ ...timeSeriesControlsProps });
@@ -173,9 +174,10 @@ class PlotContainer extends React.Component {
           inputData.push(newValue);
         }
 
-        // if (inputData.length > 100) {
-        //   inputData = inputData.slice(-100);
-        // }
+        // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > 1800) {
+          inputData = inputData.slice(-1800);
+        }
         newData[inputName] = inputData;
       }
       this.setState({ data: newData });
