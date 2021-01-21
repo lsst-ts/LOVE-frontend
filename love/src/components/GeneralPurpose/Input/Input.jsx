@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Input.module.css';
 
 const labelStyle = {
-  display: "inline-block",
+  display: "block",
   marginBottom: 4,
 }
 

@@ -7,7 +7,7 @@
   font-size: inherit;
   background-color: transparent;
   border: 1px solid var(--secondary-font-dimmed-color);
-  /* color: inherit; */
+  min-height: 31.53px;
   color: var(--base-font-color);
 }
 
