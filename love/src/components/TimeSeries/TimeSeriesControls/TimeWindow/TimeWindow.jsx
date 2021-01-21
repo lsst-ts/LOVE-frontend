@@ -24,7 +24,7 @@ export default class TimeWindow extends PureComponent {
   }
 
   handleCustomInput = (e) => {
-    const timeWindow = e.target.value;
+    const timeWindow = e.target.value <= 60 ? e.target.value : 60;
     this.props.setTimeWindow(timeWindow);
   };
 
