@@ -3,7 +3,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  padding: 1em 0;
+  margin-top: 1em;
 }
 
 .gearIconContainer {
@@ -13,7 +13,8 @@
 }
 
 .switchContainer {
-  padding-right: 4em;
+  margin-right: 4em;
+  margin-bottom: 1em;
 }
 
 /* The switch - the box around the slider */
