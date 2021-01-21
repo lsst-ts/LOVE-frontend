@@ -36,7 +36,7 @@ export default class TimeSeriesControls extends Component {
   };
 
   componentDidMount() {
-    this.setState({ dateSelectorDates: [moment(), moment().add(1, 'h')]});
+    this.setState({ dateSelectorDates: [moment().subtract(1, 'h'), moment()]});
   }
 
   render() {
