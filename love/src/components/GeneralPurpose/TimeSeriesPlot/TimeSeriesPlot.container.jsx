@@ -90,16 +90,11 @@ const TimeSeriesPlotContainer = ({
   unsubscribeToStream,
   ...props
 }) => {
-  // props.dataSources.forEach((dataSource) => {
-  //   const groupName = props.groupNames[dataSource];
-  //   console.log(groupName)
-  // });
-
   if (props.isRaw) {
     const subscriptions = Object.values(props.groupNames || {});
     return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
   }
-  console.log('streamStates: ', streamStates);
+  
   return (
     <TimeSeriesPlot
       streamStates={streamStates}
