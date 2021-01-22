@@ -124,19 +124,13 @@ export default class PPCEntry extends PureComponent {
         <div className={styles.firstRow}>
           <div className={styles.nameMark}>
             <Input
+              label="Plot legend"
               className={styles.input}
               placeholder="Insert a name for the legend"
               value={this.props.name || ''}
               // readOnly
               // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
               onChange={(ev) => this.onNameChange(ev.target?.value)}
-            />
-            <Select
-              className={styles.select}
-              options={this.encodingOptions}
-              option={this.props.encoding}
-              placeholder="Select encoding"
-              onChange={(selection) => this.onEncodingChange(selection.value)}
             />
           </div>
           <Button
@@ -152,6 +146,15 @@ export default class PPCEntry extends PureComponent {
 
         <div className={styles.stylesContainer}>
           <Select
+            label={"Plot type"}
+            className={styles.select}
+            options={this.encodingOptions}
+            option={this.props.encoding}
+            placeholder="Select encoding"
+            onChange={(selection) => this.onEncodingChange(selection.value)}
+          />
+          <Select
+            label={"Mark Color"}
             className={styles.select}
             options={COLORS}
             option={input?.color}
@@ -159,9 +162,9 @@ export default class PPCEntry extends PureComponent {
             onChange={(selection) => this.onStyleChange('color', selection)}
           />
           <Input
+            label={"Group"}
             className={styles.input}
             type="number"
-            placeholder="Insert a name for the legend"
             min={0}
             value={this.props.group || 0}
             onChange={(ev) => this.onGroupChange(parseInt(ev.target.value))}
