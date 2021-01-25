@@ -94,6 +94,10 @@ export default class TSCEntry extends PureComponent {
     return {value: dashString, label: <span><AddIcon className={styles.icon}/>{dashString}</span>};
   });
 
+  shapesOptions = SHAPES.map(shape => {
+    return {value: shape, label: <span><AddIcon className={styles.icon}/>{shape}</span>};
+  });
+
   onNameChange = (name) => {
     this.props.onChange(name, this.props.inputs, this.props.accessor, this.props.type);
   };
@@ -197,7 +201,7 @@ export default class TSCEntry extends PureComponent {
             <Select
               label={"Shape"}
               className={styles.select}
-              options={SHAPES}
+              options={this.shapesOptions}
               option={input?.shape}
               placeholder="Select a shape"
               onChange={(selection) => this.onStyleChange('shape', selection)}
