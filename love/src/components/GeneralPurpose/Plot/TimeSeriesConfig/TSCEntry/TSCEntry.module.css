@@ -61,7 +61,7 @@
 
 .stylesContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15ch, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(16ch, 1fr));
   gap: 1rem;
   align-items: end;
 }
@@ -73,4 +73,11 @@
 .icon {
   height: 1em;
   margin-right: 4px;
+}
+
+.colorIcon {
+  height: 1em;
+  width: 1em;
+  margin-right: 4px;
+  display: inline-block;
 }

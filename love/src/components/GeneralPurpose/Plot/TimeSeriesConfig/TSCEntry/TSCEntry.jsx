@@ -80,10 +80,14 @@ export default class TSCEntry extends PureComponent {
 
   // itemOptions = ['line', 'pointLine', 'bar'];
   itemOptions = [
-    {value: 'line', label: <span><AddIcon className={styles.icon}/>{'line'}</span>}, 
+    {value: 'line', label: <span><AddIcon className={styles.icon}/>{'line'}</span>},
     {value: 'pointLine', label: <span><AddIcon className={styles.icon}/>{'pointLine'}</span>}, 
     {value: 'bar', label: <span><AddIcon className={styles.icon}/>{'bar'}</span>}
   ];
+
+  colorOptions = COLORS.map(color => {
+    return {value: color, label: <span><div className={styles.colorIcon} style={{backgroundColor: color}}></div>{color}</span>}
+  });
 
   onNameChange = (name) => {
     this.props.onChange(name, this.props.inputs, this.props.accessor, this.props.type);
@@ -167,7 +171,7 @@ export default class TSCEntry extends PureComponent {
           <Select
             label={"Mark Color"}
             className={styles.select}
-            options={COLORS}
+            options={this.colorOptions}
             option={input?.color}
             placeholder="Select a color"
             onChange={(selection) => this.onStyleChange('color', selection)}
