@@ -86,7 +86,12 @@ export default class TSCEntry extends PureComponent {
   ];
 
   colorOptions = COLORS.map(color => {
-    return {value: color, label: <span><div className={styles.colorIcon} style={{backgroundColor: color}}></div>{color}</span>}
+    return {value: color, label: <span><div className={styles.colorIcon} style={{backgroundColor: color}}></div>{color}</span>};
+  });
+
+  dashesOptions = DASHES.map(dash => {
+    const dashString = JSON.stringify(dash);
+    return {value: dashString, label: <span><AddIcon className={styles.icon}/>{dashString}</span>};
   });
 
   onNameChange = (name) => {
@@ -181,7 +186,7 @@ export default class TSCEntry extends PureComponent {
             <Select
               label={"Dash pattern"}             
               className={styles.select}
-              options={DASHES.map((d) => JSON.stringify(d))}
+              options={this.dashesOptions}
               option={JSON.stringify(input?.dash)}
               placeholder="Select a dash pattern"
               onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
