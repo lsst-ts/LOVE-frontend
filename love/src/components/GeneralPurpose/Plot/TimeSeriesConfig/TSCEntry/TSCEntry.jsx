@@ -10,6 +10,7 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
 import { COLORS, DASHES, SHAPES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 
+import AddIcon from 'components/icons/AddIcon/AddIcon';
 /**
  * Component to configure the Health Status Summary
  */
@@ -77,7 +78,12 @@ export default class TSCEntry extends PureComponent {
     onRemove: null,
   };
 
-  itemOptions = ['line', 'pointLine', 'bar'];
+  // itemOptions = ['line', 'pointLine', 'bar'];
+  itemOptions = [
+    {value: 'line', label: <span><AddIcon className={styles.icon}/>{'line'}</span>}, 
+    {value: 'pointLine', label: <span><AddIcon className={styles.icon}/>{'pointLine'}</span>}, 
+    {value: 'bar', label: <span><AddIcon className={styles.icon}/>{'bar'}</span>}
+  ];
 
   onNameChange = (name) => {
     this.props.onChange(name, this.props.inputs, this.props.accessor, this.props.type);
