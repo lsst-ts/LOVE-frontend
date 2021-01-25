@@ -113,10 +113,9 @@ export default class ManagerInterface {
     return `http://${window.location.host}/manager/ui_framework/`;
   }
 
-  static getWebsocketsUrl() {    
+  static getWebsocketsUrl() {
     // Connect to a fake local ip when simulating, to avoid getting real messages
-    if(WEBSOCKET_SIMULATION)
-      return 'ws://0.0.0.1/';
+    if (WEBSOCKET_SIMULATION) return 'ws://0.0.0.1/';
     return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
 
@@ -277,6 +276,38 @@ export default class ManagerInterface {
     return fetch(url, {
       method: 'GET',
       headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getEFDTimeseries(start_date, time_window, cscs, resample) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        start_date: start_date,
+        time_window: time_window,
+        cscs: cscs,
+        resample: resample,
+      }),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
