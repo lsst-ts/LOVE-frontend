@@ -569,3 +569,54 @@ export const takeScreenshot = (callback) => {
     callback(canvas.toDataURL('image/png'));
   });
 };
+
+/**
+  * Parse plot inputs and convert them to a format the EFD API understands.
+  * The transformation is done from:
+  * [
+  *   {name: {csc, salindex, topic, item}}
+  * ]
+  * to:
+  * {
+  *   csc: {
+  *     index: {
+  *       topic: [item]
+  *     }
+  *   }
+  * }
+  */
+ export const parsePlotInputs = (inputs) => {
+  const cscs = {};
+  Object.values(inputs).forEach((input) => {
+    const cscDict = cscs?.[input.csc];
+    const indexDict = cscs?.[input.csc]?.[input.salindex];
+    const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
+    let newTopicDict = topicDict ?? [];
+    let newIndexDict = indexDict ?? {};
+    let newCSCDict = cscDict ?? {};
+    if (topicDict) {
+      newIndexDict[input.topic].push(input.item);
+      return;
+    } else {
+      newIndexDict[input.topic] = [input.item];
+    }
+    newTopicDict = newIndexDict[input.topic];
+    if (indexDict) {
+      newCSCDict[input.salindex][input.topic] = newTopicDict;
+      newIndexDict = newCSCDict[input.salindex];
+    } else {
+      newIndexDict = {
+        [input.topic]: newTopicDict,
+      };
+      newCSCDict[input.salindex] = newIndexDict;
+    }
+    if (cscDict) {
+      cscs[input.csc][input.salindex] = newIndexDict;
+    } else {
+      cscs[input.csc] = {
+        [input.salindex]: newIndexDict,
+      };
+    }
+  });
+  return cscs;
+};

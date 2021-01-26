@@ -6,7 +6,7 @@ import { getTaiToUtc } from 'redux/selectors';
 import Plot from './Plot';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import ManagerInterface, { parseTimestamp } from 'Utils';
+import ManagerInterface, { parseTimestamp, parsePlotInputs } from 'Utils';
 
 const moment = extendMoment(Moment);
 
@@ -263,25 +263,13 @@ class PlotContainer extends React.Component {
         this.setState({ timeWindow });
       },
       setHistoricalData: (startDate, timeWindow) => {
-        console.log(startDate, timeWindow);
-        const cscs = {
-          ATDome: {
-            0: {
-              position: ['azimuthPosition'],
-            },
-          },
-          ATMCS: {
-            0: {
-              mount_AzEl_Encoders: ['elevationCalculatedAngle'],
-            },
-          },
-        };
+        const cscs = parsePlotInputs(inputs);
         const parsedDate = startDate.toISOString().split('.')[0];
         // historicalData
         ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
           const parsedData = this.parseCommanderData(data);
           console.log(parsedData);
-          this.setState({ historicalData: parsedData })
+          this.setState({ historicalData: parsedData });
         });
       },
 
@@ -316,16 +304,23 @@ class PlotContainer extends React.Component {
     return newData;
   };
 
+  // Get pairs containing topic and item names of the form
+  // [csc-index-topic, item], based on the inputs
+  getTopicItemPair = (inputs) => {
+    const topics = {};
+    Object.keys(inputs).forEach((inputKey) => {
+      const input = inputs[inputKey];
+      topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+    });
+    return topics;
+  };
+
   getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
     let filteredData;
     // if (timeWindow == 0 && historicalData?.length == 2){
     if (!isLive) {
       const range = moment.range(historicalData);
-      const topics = {};
-      Object.keys(inputs).forEach((inputKey) => {
-        const input = inputs[inputKey];
-        topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
-      });
+      const topics = this.getTopicItemPair(inputs);
       const filteredData2 = Object.keys(topics).flatMap((topicKey) => {
         const topic = topics[topicKey];
         const [topicName, property] = topic;
