@@ -620,3 +620,34 @@ export const takeScreenshot = (callback) => {
   });
   return cscs;
 };
+
+/**
+ * Reformat data coming from the commander, from:
+ * {
+ *   "csc-index-topic": {
+ *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *   }
+ * }
+ * to:
+ * {
+ *   "csc-index-topic": {
+ *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *   }
+ * }
+ */
+export const parseCommanderData = (data, tsLabel='x', valueLabel='y') => {
+  const newData = {};
+  Object.keys(data).forEach((topicKey) => {
+    const topicData = data[topicKey];
+    const newTopicData = {};
+    Object.keys(topicData).forEach((propertyKey) => {
+      const propertyDataArray = topicData[propertyKey];
+      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
+        const tsString = dataPoint?.ts.split(' ').join('T');
+        return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
+      });
+    });
+    newData[topicKey] = newTopicData;
+  });
+  return newData;
+};

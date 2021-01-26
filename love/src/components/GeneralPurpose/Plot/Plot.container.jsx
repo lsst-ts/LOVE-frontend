@@ -6,7 +6,7 @@ import { getTaiToUtc } from 'redux/selectors';
 import Plot from './Plot';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import ManagerInterface, { parseTimestamp, parsePlotInputs } from 'Utils';
+import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
 
 const moment = extendMoment(Moment);
 
@@ -267,7 +267,7 @@ class PlotContainer extends React.Component {
         const parsedDate = startDate.toISOString().split('.')[0];
         // historicalData
         ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
-          const parsedData = this.parseCommanderData(data);
+          const parsedData = parseCommanderData(data);
           console.log(parsedData);
           this.setState({ historicalData: parsedData });
         });
@@ -287,23 +287,6 @@ class PlotContainer extends React.Component {
     }
   }
 
-  parseCommanderData = (data) => {
-    const newData = {};
-    Object.keys(data).forEach((topicKey) => {
-      const topicData = data[topicKey];
-      const newTopicData = {};
-      Object.keys(topicData).forEach((propertyKey) => {
-        const propertyDataArray = topicData[propertyKey];
-        newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
-          const tsString = dataPoint?.ts.split(' ').join('T');
-          return { x: parseTimestamp(tsString), y: dataPoint?.value };
-        });
-      });
-      newData[topicKey] = newTopicData;
-    });
-    return newData;
-  };
-
   // Get pairs containing topic and item names of the form
   // [csc-index-topic, item], based on the inputs
   getTopicItemPair = (inputs) => {
@@ -317,9 +300,7 @@ class PlotContainer extends React.Component {
 
   getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
     let filteredData;
-    // if (timeWindow == 0 && historicalData?.length == 2){
     if (!isLive) {
-      const range = moment.range(historicalData);
       const topics = this.getTopicItemPair(inputs);
       const filteredData2 = Object.keys(topics).flatMap((topicKey) => {
         const topic = topics[topicKey];
