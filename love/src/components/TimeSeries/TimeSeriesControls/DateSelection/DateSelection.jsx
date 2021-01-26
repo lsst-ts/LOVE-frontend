@@ -95,10 +95,10 @@ export default class DateSelection extends PureComponent {
           </div>
         </div>
         <button
+          className={styles.queryButton}
           onClick={(event) => console.log(this.state.timeWindow)}>
           Submit
         </button>
-
       </div>
     );
   }
