@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { relativeTime } from '../../../../Utils';
 import PropTypes from 'prop-types';
 import styles from './PolarPlot.module.css';
+import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 
 export default class PolarPlot extends Component {
   static propTypes = {
@@ -242,7 +243,18 @@ export default class PolarPlot extends Component {
     const rCosAlpha = r * Math.cos(alpha);
     const azimuthPosition = this.props.domeAzimuth?.azimuthPosition?.value ?? 0;
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, azimuthPosition);
+
+    const { controls, setTimeWindow, timeWindow, setIsLive, isLive, setHistoricalData } = this.props;
     return (
+      <div>
+        {controls && <TimeSeriesControls
+            setTimeWindow={setTimeWindow}
+            timeWindow={timeWindow}
+            setLiveMode={setIsLive}
+            isLive={isLive}
+            setHistoricalData={setHistoricalData}
+          />
+        }
       <div className={styles.plotContainer}>
         <svg
           className={styles.grid}
@@ -382,6 +394,7 @@ export default class PolarPlot extends Component {
             );
           })}
         </span>
+      </div>
       </div>
     );
   }
