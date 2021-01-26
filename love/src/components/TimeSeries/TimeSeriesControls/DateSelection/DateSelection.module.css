@@ -1,19 +1,23 @@
 .datesContainer {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .fromDateContainer {
     display: flex;
     padding: 0em 1em;
+    margin-bottom: 1em;
 }
 
 .toDateContainer {
     display: flex;
     padding: 0em 1em;
+    margin-bottom: 1em;
 }
 
-.datetimeContainer {
+.queryButton {
+    margin-bottom: 1em;
 }
 
 .datetimeDescription {

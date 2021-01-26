@@ -30,11 +30,9 @@ export default class DateSelection extends PureComponent {
 
   onDateSelected = (date) => {
     if (!this.isDateValid(date)) return;
-    this.setState(
-      {
-        startDate: date,
-      }
-    );
+    this.setState({
+      startDate: date,
+    });
   };
 
   onTimeWindowChange = (minutes) => {
@@ -62,7 +60,7 @@ export default class DateSelection extends PureComponent {
 
   onSubmitQuery = () => {
     const { startDate, timeWindow } = this.state;
-      this.props.setHistoricalData?.(startDate, timeWindow);
+    this.props.setHistoricalData?.(startDate, timeWindow);
   };
 
   componentDidMount() {
@@ -102,7 +100,9 @@ export default class DateSelection extends PureComponent {
             />
           </div>
         </div>
-        <button onClick={this.onSubmitQuery}>Submit</button>
+        <button className={styles.queryButton} onClick={this.onSubmitQuery}>
+          Submit
+        </button>
       </div>
     );
   }
