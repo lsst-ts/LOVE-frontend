@@ -20,10 +20,7 @@ export default class HeartbeatIcon extends Component {
     if (this.props.status === 'alert') statusStyle = styles.alertStatus;
     const title = this.props.title;
     return this.props.status === 'ok' ? (
-      <svg
-        className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')}
-        viewBox="0 0 63.74 61.19"
-      >
+      <svg className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')} viewBox="0 0 63.74 61.19">
         <title>{title}</title>
         <g id="Icons">
           <path
@@ -33,10 +30,7 @@ export default class HeartbeatIcon extends Component {
         </g>
       </svg>
     ) : (
-      <svg
-        className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')}
-        viewBox="0 0 63.74 61.19"
-      >
+      <svg className={[styles.heartbeatIcon, statusStyle, this.props.className].join(' ')} viewBox="0 0 63.74 61.19">
         <title>{title}</title>
         <line x1="4.55" y1="59.19" x2="61.74" y2="2" />
         <g id="Icons">

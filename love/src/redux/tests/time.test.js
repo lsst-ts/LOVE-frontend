@@ -11,8 +11,8 @@ import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
 import ManagerInterface, { siderealSecond } from '../../Utils';
 
-let store; let
-  server;
+let store;
+let server;
 
 beforeAll(async () => {
   // ARRANGE

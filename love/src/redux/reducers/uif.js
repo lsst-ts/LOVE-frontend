@@ -83,9 +83,7 @@ export default function (state = initialState, action) {
       return { ...state, viewsStatus: viewsStates.ERROR };
     }
     case RECEIVE_VIEWS: {
-      return { ...state,
-        views: action.views,
-        viewsStatus: viewsStates.LOADED };
+      return { ...state, views: action.views, viewsStatus: viewsStates.LOADED };
     }
     case RECEIVE_VIEW: {
       const cachedViews = state.cachedViews ? [...state.cachedViews] : [];
@@ -100,50 +98,58 @@ export default function (state = initialState, action) {
       return { ...state, viewsStatus: viewsStates.LOADING };
     }
     case RECEIVE_CURRENT_WORKSPACE: {
-      return { ...state,
-        currentWorkspace: action.workspace.id,
-        views: action.workspace.views };
+      return { ...state, currentWorkspace: action.workspace.id, views: action.workspace.views };
     }
     case UPDATE_EDITED_VIEW: {
-      return { ...state,
+      return {
+        ...state,
         editedViewCurrent: rfdc()(action.view),
         editedViewStatus: {
           code: editViewStates.UNSAVED,
           details: null,
-        } };
+        },
+      };
     }
     case LOAD_EDITED_VIEW: {
       let view = state.cachedViews.find((v) => v.id === action.id);
       if (view === undefined) {
         view = rfdc()(initialState.editedViewCurrent);
       }
-      return { ...state,
+      return {
+        ...state,
         editedViewCurrent: rfdc()(view),
         editedViewSaved: rfdc()(view),
         editedViewStatus: {
           code: editViewStates.SAVED,
           details: null,
-        } };
+        },
+      };
     }
     case CLEAR_EDITED_VIEW: {
-      return { ...state,
+      return {
+        ...state,
         editedViewCurrent: rfdc()(initialState.editedViewCurrent),
         editedViewSaved: rfdc()(initialState.editedViewSaved),
-        editedViewStatus: rfdc()(initialState.editedViewStatus) };
+        editedViewStatus: rfdc()(initialState.editedViewStatus),
+      };
     }
     case SAVING_EDITED_VIEW: {
-      return { ...state,
+      return {
+        ...state,
         editedViewStatus: {
           code: editViewStates.SAVING,
           details: null,
-        } };
+        },
+      };
     }
     case SAVE_ERROR: {
-      return { ...state,
+      return {
+        ...state,
         editedViewStatus: {
           code: editViewStates.SAVE_ERROR,
           details: action.response,
-        } };
+        },
+      };
     }
     case SAVED_EDITED_VIEW: {
       const newView = rfdc()(action.view);
@@ -154,13 +160,15 @@ export default function (state = initialState, action) {
       } else {
         newViews.push(newView);
       }
-      return { ...state,
+      return {
+        ...state,
         editedViewStatus: {
           code: editViewStates.SAVED,
           details: null,
         },
         editedViewSaved: newView,
-        views: newViews };
+        views: newViews,
+      };
     }
     case CHANGE_MODE: {
       return { ...state, mode: action.mode === modes.EDIT ? modes.EDIT : modes.VIEW };

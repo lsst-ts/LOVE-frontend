@@ -49,5 +49,5 @@
   stroke-miterlimit: 10;
 }
 .foreground {
-  fill: var(--second-quaternary-background-dimmed-color);;
+  fill: var(--second-quaternary-background-dimmed-color);
 }

@@ -15,8 +15,8 @@ import { doReceiveToken } from './actions/auth';
 import { openWebsocketConnection, addGroup } from './actions/ws';
 import { cameraStates, imageStates } from '../Constants';
 
-let store; let
-  server;
+let store;
+let server;
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', 'love-token');

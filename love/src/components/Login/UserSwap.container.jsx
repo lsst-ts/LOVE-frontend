@@ -5,13 +5,7 @@ import { getToken } from '../../redux/selectors';
 import { swapUser } from '../../redux/actions/auth';
 
 const UserSwapContainer = ({ token, tokenStatus, swapUser }) => {
-  return (
-    <UserSwap
-      token={token}
-      tokenStatus={tokenStatus}
-      swapUser={swapUser}
-    />
-  );
+  return <UserSwap token={token} tokenStatus={tokenStatus} swapUser={swapUser} />;
 };
 
 const mapStateToProps = (state) => {
@@ -25,7 +19,4 @@ const mapDispatchToProps = (dispatch) => ({
   swapUser: (username, password) => dispatch(swapUser(username, password)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(UserSwapContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(UserSwapContainer);

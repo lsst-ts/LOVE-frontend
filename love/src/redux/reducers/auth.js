@@ -59,25 +59,27 @@ export default function (state = initialState, action) {
       return { ...state, status: tokenStates.REQUESTED };
     }
     case GET_TOKEN_FROM_LOCALSTORAGE: {
-      return { ...state,
-        status: tokenStates.READ_FROM_STORAGE,
-        token: action.token };
+      return { ...state, status: tokenStates.READ_FROM_STORAGE, token: action.token };
     }
     case RECEIVE_TOKEN: {
       if (action.permissions === null || action.permissions === undefined) {
-        return { ...state,
+        return {
+          ...state,
           username: action.username,
           token: action.token,
           status: tokenStates.RECEIVED,
-          permissions: initialState.permissions };
+          permissions: initialState.permissions,
+        };
       }
-      return { ...state,
+      return {
+        ...state,
         username: action.username,
         token: action.token,
         status: tokenStates.RECEIVED,
         permissions: {
           cmd_exec: action.permissions.execute_commands,
-        } };
+        },
+      };
     }
     case REJECT_TOKEN:
       return {

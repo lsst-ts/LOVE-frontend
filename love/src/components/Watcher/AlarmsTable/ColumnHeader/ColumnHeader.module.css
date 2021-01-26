@@ -1,15 +1,14 @@
-
 .columnHeader {
-    text-transform: uppercase;
-    padding: 0.75em 0em 0.4em;
-    position:relative;
+  text-transform: uppercase;
+  padding: 0.75em 0em 0.4em;
+  position: relative;
 }
 
 .primaryText {
-    display: block;
+  display: block;
 }
 
 .secondaryText {
-    font-size: 0.65em;
-    color: var(--secondary-font-color);
+  font-size: 0.65em;
+  color: var(--secondary-font-color);
 }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import styles from './PauseIcon.module.css';
 
 export default class PauseIcon extends Component {
-
   render() {
     return (
       <svg className={styles.svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.9 23.9">

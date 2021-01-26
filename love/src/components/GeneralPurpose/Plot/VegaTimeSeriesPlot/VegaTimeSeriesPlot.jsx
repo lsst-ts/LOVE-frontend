@@ -338,14 +338,10 @@ class VegaTimeseriesPlot extends Component {
   };
 
   shouldComponentUpdate = (prevProps, prevState) => {
-    if (
-      prevProps.containerNode !== this.props.containerNode
-    ) {
+    if (prevProps.containerNode !== this.props.containerNode) {
       return true;
     }
-    if (
-      (this.props.width !== prevProps.width || this.props.height !== prevProps.height)
-    ) {
+    if (this.props.width !== prevProps.width || this.props.height !== prevProps.height) {
       return true;
     }
 

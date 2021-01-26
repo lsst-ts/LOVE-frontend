@@ -6,8 +6,8 @@ import { addGroup, removeGroup, groupStates } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { getAllTelemetries, getAllEvents, getStreamData, getSubscription } from '../selectors';
 
-let store; let
-  server;
+let store;
+let server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

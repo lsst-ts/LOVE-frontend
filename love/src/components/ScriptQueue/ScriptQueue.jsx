@@ -165,17 +165,15 @@ export default class ScriptQueue extends Component {
     return null;
   };
 
-  onScriptModalOpen = (script) => (
-    () => {
-      this.setState({
-        scriptModal: script
-      });
-    }
-  )
+  onScriptModalOpen = (script) => () => {
+    this.setState({
+      scriptModal: script,
+    });
+  };
 
   onScriptModalClose = (event) => {
     this.setState({
-      scriptModal: null
+      scriptModal: null,
     });
   };
 
@@ -791,15 +789,16 @@ export default class ScriptQueue extends Component {
             </div>
           </div>
         </div>
-        
+
         <Modal
           isOpen={!!this.state.scriptModal}
           onRequestClose={this.onScriptModalClose}
           contentLabel="Component selection modal"
           parentSelector={() => document.querySelector('#container')}
           size={50}
-          /* footerChildren={} */>
-            <ScriptDetails {...this.state.scriptModal} />
+          /* footerChildren={} */
+        >
+          <ScriptDetails {...this.state.scriptModal} />
         </Modal>
       </div>
     );

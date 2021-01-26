@@ -1,4 +1,3 @@
-
 .backgroundRect {
   stroke: none;
 }
@@ -20,7 +19,7 @@
 }
 
 .grid {
-  stroke:var(--tertiary-font-color);
+  stroke: var(--tertiary-font-color);
 }
 
 .innerGrid {

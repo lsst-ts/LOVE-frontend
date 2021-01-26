@@ -60,7 +60,7 @@ export default class Clock extends React.Component {
       mjd: 0,
       sidereal_summit: 0,
       sidereal_greenwich: 0,
-    }
+    },
   };
 
   render() {
@@ -73,29 +73,24 @@ export default class Clock extends React.Component {
       if (this.props.timezone === 'UTC') {
         timestamp = this.props.clock.utc;
         offset = 'UTC';
-      }
-      else if (this.props.timezone === 'TAI') {
+      } else if (this.props.timezone === 'TAI') {
         timestamp = this.props.clock.tai;
         offset = 'TAI';
-      }
-      else if (this.props.timezone === 'MJD') {
+      } else if (this.props.timezone === 'MJD') {
         timestamp = this.props.clock.mjd;
         hideAnalog = true;
         mjd = true;
         offset = 'MJD';
         hideDate = true;
-      }
-      else if (this.props.timezone === 'sidereal-summit') {
+      } else if (this.props.timezone === 'sidereal-summit') {
         timestamp = this.props.clock.sidereal_summit;
         offset = 'Summit-AST';
         hideDate = true;
-      }
-      else if (this.props.timezone === 'sidereal-greenwich') {
+      } else if (this.props.timezone === 'sidereal-greenwich') {
         timestamp = this.props.clock.sidereal_greenwich;
         offset = 'GAST';
         hideDate = true;
-      }
-      else {
+      } else {
         timestamp = this.props.clock.utc.setZone(this.props.timezone);
         offset = timestamp.offsetNameShort;
       }

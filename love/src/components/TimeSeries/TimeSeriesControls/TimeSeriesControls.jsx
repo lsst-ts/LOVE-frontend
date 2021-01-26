@@ -36,7 +36,7 @@ export default class TimeSeriesControls extends Component {
   };
 
   componentDidMount() {
-    this.setState({ dateSelectorDates: [moment().subtract(1, 'h'), moment()]});
+    this.setState({ dateSelectorDates: [moment().subtract(1, 'h'), moment()] });
   }
 
   render() {
@@ -69,7 +69,10 @@ export default class TimeSeriesControls extends Component {
         {this.props.isLive ? (
           <TimeWindow setTimeWindow={this.props.setTimeWindow} timeWindow={this.props.timeWindow} />
         ) : (
-          <DateSelection dateSelectorDates={this.state.dateSelectorDates} setHistoricalData={this.props.setHistoricalData} />
+          <DateSelection
+            dateSelectorDates={this.state.dateSelectorDates}
+            setHistoricalData={this.props.setHistoricalData}
+          />
         )}
         {/* <div onClick={this.props.goBack} className={styles.gearIconContainer}>
           <GearIcon active />

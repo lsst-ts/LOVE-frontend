@@ -174,7 +174,8 @@ export function fetchToken(username, password) {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } if (response.status === 400) {
+        }
+        if (response.status === 400) {
           dispatch(doRejectToken());
           return false;
         }
@@ -310,7 +311,8 @@ export function swapUser(username, password) {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } if (response.status === 400) {
+        }
+        if (response.status === 400) {
           dispatch(rejectSwapToken);
           return false;
         }

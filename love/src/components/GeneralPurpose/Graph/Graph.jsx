@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import createEngine, {
-  DiagramModel,
-} from '@projectstorm/react-diagrams';
+import createEngine, { DiagramModel } from '@projectstorm/react-diagrams';
 // import the custom models
 import { DiamondNodeModel } from './entities/node/DiamondNodeModel';
 import { DiamondNodeFactory } from './entities/node/DiamondNodeFactory';

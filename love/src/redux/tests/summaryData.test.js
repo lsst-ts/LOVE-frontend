@@ -14,8 +14,8 @@ import {
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
 
-let store; let
-  server;
+let store;
+let server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

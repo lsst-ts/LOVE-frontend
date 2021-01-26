@@ -19,7 +19,7 @@
 
 .arrow {
   color: var(--base-font-color);
-  font-size: 2.0em;
+  font-size: 2em;
   animation: blinker 2.5s linear infinite;
   line-height: 0;
   vertical-align: baseline;

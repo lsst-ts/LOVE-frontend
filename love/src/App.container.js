@@ -6,12 +6,14 @@ import { requestWorkspaces, requestViews } from './redux/actions/uif';
 import { getToken } from './redux/selectors';
 
 const AppContainer = ({ requestWorkspaces, requestViews, validateToken, token }) => {
-  return <App
-    requestWorkspaces={requestWorkspaces}
-    requestViews={requestViews}
-    validateToken={validateToken}
-    token={token}
-  />;
+  return (
+    <App
+      requestWorkspaces={requestWorkspaces}
+      requestViews={requestViews}
+      validateToken={validateToken}
+      token={token}
+    />
+  );
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -25,7 +27,4 @@ const mapStateToProps = (state) => {
     token: getToken(state),
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(AppContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(AppContainer);

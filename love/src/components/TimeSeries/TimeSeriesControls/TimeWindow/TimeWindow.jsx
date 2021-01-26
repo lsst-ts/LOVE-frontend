@@ -36,7 +36,11 @@ export default class TimeWindow extends PureComponent {
   };
 
   render() {
-    const timewindowPresets = [['60', '1h'], ['15', '15min'], ['1', '1min']];
+    const timewindowPresets = [
+      ['60', '1h'],
+      ['15', '15min'],
+      ['1', '1min'],
+    ];
     return (
       <div className={styles.timeWindowOptionsContainer}>
         <span className={styles.timeWindowTitle}>Time window: </span>

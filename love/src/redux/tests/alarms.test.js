@@ -7,8 +7,8 @@ import { doReceiveToken } from '../actions/auth';
 import { receiveAlarms } from '../actions/alarms';
 import { getStreamData, getLastAlarm, getAllAlarms } from '../selectors';
 
-let store; let
-  server;
+let store;
+let server;
 
 const alarms = [
   {

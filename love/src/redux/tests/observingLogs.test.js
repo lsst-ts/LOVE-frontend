@@ -6,8 +6,8 @@ import { addGroup, _sendLOVECscObservingLogs } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { getObservingLogs } from '../selectors';
 
-let store; let
-  server;
+let store;
+let server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

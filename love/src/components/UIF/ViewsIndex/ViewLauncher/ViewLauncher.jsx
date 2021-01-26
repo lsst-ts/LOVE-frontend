@@ -4,7 +4,7 @@ import DeleteIcon from '../../../icons/DeleteIcon/DeleteIcon';
 import Button from '../../../GeneralPurpose/Button/Button';
 import styles from './ViewLauncher.module.css';
 
-export default function({
+export default function ({
   view,
   index,
   imgURL,

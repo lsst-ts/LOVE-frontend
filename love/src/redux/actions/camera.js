@@ -2,8 +2,8 @@ import { RECEIVE_IMAGE_SEQUENCE_DATA, RECEIVE_CAMERA_STATE_DATA, RECEIVE_READOUT
 import { imageStates } from '../../Constants';
 
 export const receiveImageSequenceData = (data) => {
-  let imageState; let
-    imageData;
+  let imageState;
+  let imageData;
   if (data.startIntegration) {
     imageData = data.startIntegration;
     imageState = imageStates.INTEGRATING;
@@ -25,8 +25,8 @@ export const receiveImageSequenceData = (data) => {
 };
 
 export const receiveCameraStateData = (data) => {
-  let cameraStateData; let
-    cameraStateKey;
+  let cameraStateData;
+  let cameraStateKey;
   if (data.raftsDetailedState) {
     cameraStateData = data.raftsDetailedState;
     cameraStateKey = 'raftsDetailedState';

@@ -127,8 +127,7 @@ export class AdvancedLinkWidget extends React.Component {
             const segmentLength = this.refPaths[index]?.current?.getTotalLength();
             const pixelButtonLocation = segmentLength - (cummulativeLengths[midSegmentIndex] - halfLength);
 
-			const buttonLocation = pixelButtonLocation / (segmentLength > 0 ? segmentLength : 1);
-			
+            const buttonLocation = pixelButtonLocation / (segmentLength > 0 ? segmentLength : 1);
 
             return (
               <AdvancedLinkSegmentWidget

@@ -1,4 +1,5 @@
 Basic example
+
 ```jsx
 const headers = [
   {
@@ -63,6 +64,6 @@ const data = new Array(100).fill(1).flatMap(() => [
 ]);
 
 <div style={{ width: '400px', background: 'black' }}>
-  <PaginatedTable data={data} headers={headers} paginationOptions={[5, 10, 15, 20]}/>
+  <PaginatedTable data={data} headers={headers} paginationOptions={[5, 10, 15, 20]} />
 </div>;
 ```

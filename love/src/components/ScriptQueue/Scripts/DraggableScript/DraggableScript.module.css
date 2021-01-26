@@ -37,8 +37,10 @@
 
 .dragging > div:before {
   /* border: dashed var(--secondary-font-color) 1px; */
-  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
-    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
+  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
   background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
   background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;
@@ -96,8 +98,10 @@
 }
 
 .pending > div {
-  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
-    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%), linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
+  background: linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(90deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%),
+    linear-gradient(0deg, var(--secondary-font-color) 50%, transparent 50%);
   background-repeat: repeat-x, repeat-x, repeat-y, repeat-y;
   background-size: 10px 1px, 10px 1px, 1px 10px, 1px 10px;
   background-position: 0px 0px, 100% 100%, 0px 100%, 100% 0px;

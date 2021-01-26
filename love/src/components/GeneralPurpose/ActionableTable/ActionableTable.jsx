@@ -153,7 +153,7 @@ const ActionableTable = function ({ data, headers, ...otherProps }) {
     return newData;
   }, [data, sortingColumn, sortDirections, filters, headers]);
 
-  return <PaginatedTable data={transformedData} headers={newHeaders} {...otherProps}/>;
+  return <PaginatedTable data={transformedData} headers={newHeaders} {...otherProps} />;
 };
 
 ActionableTable.propTypes = {
@@ -198,7 +198,7 @@ ActionableTable.propTypes = {
   /** Rows to be rendered in the table */
   data: PropTypes.arrayOf(PropTypes.object),
   /** Available pagination options for the dropdown */
-  paginationOptions: PropTypes.arrayOf(PropTypes.number)
+  paginationOptions: PropTypes.arrayOf(PropTypes.number),
 };
 
 export default ActionableTable;

@@ -133,10 +133,10 @@ export const resetSubscriptions = (subscriptions = null) => {
       type: RESET_SUBSCRIPTIONS,
       subscriptions: subs
         ? subs.map((sub) => ({
-          ...sub,
-          status: groupStates.PENDING,
-          confirmationMessage: undefined,
-        }))
+            ...sub,
+            status: groupStates.PENDING,
+            confirmationMessage: undefined,
+          }))
         : [],
     });
     dispatch(_requestSubscriptions());

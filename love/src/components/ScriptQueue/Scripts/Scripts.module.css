@@ -183,7 +183,7 @@
 }
 
 .subSectionValueUnknown {
-  color: var(--base-font-color)
+  color: var(--base-font-color);
 }
 
 .buttonsContainer {
@@ -217,7 +217,7 @@
   border: 1px solid var(--commandable-background);
 }
 
-.commandButton{
+.commandButton {
   display: grid;
   /* grid-template-columns: 2em 1fr; */
   padding: 0em;

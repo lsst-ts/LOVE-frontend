@@ -1,11 +1,6 @@
 import React from 'react';
 // import telemetries from './HealthStatusSummary.testdata';
-import {
-  render,
-  fireEvent,
-  cleanup,
-  waitForElement,
-} from 'react-testing-library';
+import { render, fireEvent, cleanup, waitForElement } from 'react-testing-library';
 import FileSaver from 'file-saver';
 import HealthStatusSummary from '../HealthStatusSummary';
 
@@ -31,7 +26,6 @@ describe('GIVEN a current telemetry Health Status configuration being displayed'
     });
   });
 });
-
 
 /* Scenario: load config from file */
 

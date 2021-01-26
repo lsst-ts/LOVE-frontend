@@ -42,12 +42,22 @@ export const CSCSummaryHierarchy = {
     ],
   },
   'Main Telescope': {
-    'CSC Group 1': [{ name: 'Test', salindex: 1 }, { name: 'Test', salindex: 2 }],
+    'CSC Group 1': [
+      { name: 'Test', salindex: 1 },
+      { name: 'Test', salindex: 2 },
+    ],
     'CSC Group 2': [],
   },
   Observatory: {
-    Queue: [{ name: 'ScriptQueue', salindex: 1 }, { name: 'ScriptQueue', salindex: 2 }],
-    WeatherStation: [{ name: 'DIMM', salindex: 1 }, { name: 'DIMM', salindex: 2 }, { name: 'WeatherStation', salindex: 1 }],
+    Queue: [
+      { name: 'ScriptQueue', salindex: 1 },
+      { name: 'ScriptQueue', salindex: 2 },
+    ],
+    WeatherStation: [
+      { name: 'DIMM', salindex: 1 },
+      { name: 'DIMM', salindex: 2 },
+      { name: 'WeatherStation', salindex: 1 },
+    ],
   },
 };
 

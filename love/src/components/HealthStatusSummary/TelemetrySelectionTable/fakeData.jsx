@@ -1,6 +1,5 @@
 const fakeData = {
-  scheduler: {
-  },
+  scheduler: {},
 };
 
 // let fakeData = {

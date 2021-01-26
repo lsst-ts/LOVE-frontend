@@ -1,7 +1,8 @@
 .icon {
   display: inline-block;
   max-height: 100%;
-  stroke-miterlimit: 10;stroke-width:2px;
+  stroke-miterlimit: 10;
+  stroke-width: 2px;
   vertical-align: middle;
 }
 

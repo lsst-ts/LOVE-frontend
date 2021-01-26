@@ -11,7 +11,7 @@ export default class DateSelection extends PureComponent {
   static propTypes = {
     setHistoricalData: PropTypes.func,
     dateSelectorDates: PropTypes.array,
-  }
+  };
 
   constructor() {
     super();
@@ -29,16 +29,19 @@ export default class DateSelection extends PureComponent {
 
   onDateSelected = (date) => {
     if (!this.isDateValid(date)) return;
-    this.setState({
-      startDate: date,
-    }, () => {
-      this.props.setHistoricalData([this.state.startDate, null]);
-    });
+    this.setState(
+      {
+        startDate: date,
+      },
+      () => {
+        this.props.setHistoricalData([this.state.startDate, null]);
+      },
+    );
   };
 
   onTimeWindowChange = (minutes) => {
-    this.setState({ 
-      timeWindow: minutes <= 60 ? minutes : 60 
+    this.setState({
+      timeWindow: minutes <= 60 ? minutes : 60,
     });
   };
 
@@ -49,12 +52,15 @@ export default class DateSelection extends PureComponent {
   };
 
   componentDidMount() {
-    this.setState({
-      startDate: this.props?.dateSelectorDates?.[0],
-      endDate: this.props?.dateSelectorDates?.[1],
-    }, () => {
-      this.props.setHistoricalData?.([this.state.startDate, this.state.endDate]);
-    });
+    this.setState(
+      {
+        startDate: this.props?.dateSelectorDates?.[0],
+        endDate: this.props?.dateSelectorDates?.[1],
+      },
+      () => {
+        this.props.setHistoricalData?.([this.state.startDate, this.state.endDate]);
+      },
+    );
   }
 
   render() {
@@ -66,7 +72,7 @@ export default class DateSelection extends PureComponent {
           <span className={styles.datetimeDescription}>From:</span>
           <div className={styles.datetimeContainer}>
             <Datetime
-              inputProps={{ placeholder: 'Click to set initial date' , readOnly: true}}
+              inputProps={{ placeholder: 'Click to set initial date', readOnly: true }}
               onChange={(date) => this.onDateSelected(date, true)}
               initialViewMode="time"
               initialValue={this.props?.dateSelectorDates?.[0]}
@@ -94,9 +100,7 @@ export default class DateSelection extends PureComponent {
             /> */}
           </div>
         </div>
-        <button
-          className={styles.queryButton}
-          onClick={(event) => console.log(this.state.timeWindow)}>
+        <button className={styles.queryButton} onClick={(event) => console.log(this.state.timeWindow)}>
           Submit
         </button>
       </div>

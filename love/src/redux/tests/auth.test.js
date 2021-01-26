@@ -127,8 +127,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
 });
 
 describe('GIVEN the token exists in localStorage', () => {
-  let initialToken; let url; let
-    url_no_config;
+  let initialToken;
+  let url;
+  let url_no_config;
 
   beforeEach(async () => {
     const token = '"love-token"';

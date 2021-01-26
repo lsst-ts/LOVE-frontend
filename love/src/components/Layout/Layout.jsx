@@ -614,7 +614,9 @@ class Layout extends Component {
           </div>
         </div>
 
-        <div className={styles.contentWrapper} id={LAYOUT_CONTAINER_ID}>{this.props.children}</div>
+        <div className={styles.contentWrapper} id={LAYOUT_CONTAINER_ID}>
+          {this.props.children}
+        </div>
         <Modal
           isOpen={this.state.isXMLModalOpen}
           onRequestClose={() => this.setState({ isXMLModalOpen: false })}
@@ -627,7 +629,7 @@ class Layout extends Component {
           onRequestClose={() => this.setState({ isConfigModalOpen: false })}
           contentLabel="LOVE Config File modal"
         >
-          <ConfigPanel config={this.props.config} setConfig={this.props.setConfig}/>
+          <ConfigPanel config={this.props.config} setConfig={this.props.setConfig} />
         </Modal>
         <Modal
           isOpen={this.state.isEmergencyContactsModalOpen}
@@ -635,7 +637,7 @@ class Layout extends Component {
           contentLabel="LOVE Emergency contacs modal"
           modalClassName={styles.fixedModalHeight}
         >
-          <EmergencyContactsPanel/>
+          <EmergencyContactsPanel />
         </Modal>
         <Modal
           isOpen={this.state.tokenSwapRequested && this.props.tokenSwapStatus !== tokenSwapStates.RECEIVED}

@@ -14,8 +14,8 @@ import {
 import * as mockData from './mock';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 
-let store; let
-  server;
+let store;
+let server;
 
 const heartbeatsInfo = [
   {
@@ -38,7 +38,8 @@ const heartbeatsInfo = [
 const compareSalIndex = (a, b) => {
   if (a.salindex < b.salindex) {
     return -1;
-  } if (a.salindex > b.salindex) {
+  }
+  if (a.salindex > b.salindex) {
     return 1;
   }
   return 0;

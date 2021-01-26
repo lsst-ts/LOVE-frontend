@@ -32,18 +32,15 @@ it('Should send a command to the server, save it on the state properly ', async 
   };
   const cmd_id = '10-cmd_closeShutter';
 
-  fetchMock.mock(
-    url,
-    (url1, opts) => {
-      expect(getLastSALCommand(store.getState())).toEqual({
-        status: SALCommandStatus.REQUESTED,
-        statusCode: null,
-        ...commandObject,
-        cmd_id,
-      });
-      return serverResponse;
-    },
-  );
+  fetchMock.mock(url, (url1, opts) => {
+    expect(getLastSALCommand(store.getState())).toEqual({
+      status: SALCommandStatus.REQUESTED,
+      statusCode: null,
+      ...commandObject,
+      cmd_id,
+    });
+    return serverResponse;
+  });
 
   // Act
   await store.dispatch(requestSALCommand({ ...commandObject, cmd_id }));
