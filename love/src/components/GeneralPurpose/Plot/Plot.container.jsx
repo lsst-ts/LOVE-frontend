@@ -268,7 +268,6 @@ class PlotContainer extends React.Component {
         // historicalData
         ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
           const parsedData = parseCommanderData(data);
-          console.log(parsedData);
           this.setState({ historicalData: parsedData });
         });
       },
