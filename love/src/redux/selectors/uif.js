@@ -70,7 +70,6 @@ export const getView = createCachedSelector(
   (_state_, id, id2) => id ?? -1,
 );
 
-
 /**
  * Return the matching view summary
  *

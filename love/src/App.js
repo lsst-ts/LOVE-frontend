@@ -142,7 +142,6 @@ class App extends Component {
             <PrivateRoute token={this.props.token} path="/legacy-index" render={() => <ComponentIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ViewsIndexContainer />} />
 
-
           </Switch>
         </LayoutContainer>
       </div>

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
-import { SALCommandStatus } from './redux/actions/ws.js';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
+import { SALCommandStatus } from './redux/actions/ws.js';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -113,10 +113,9 @@ export default class ManagerInterface {
     return `http://${window.location.host}/manager/ui_framework/`;
   }
 
-  static getWebsocketsUrl() {    
+  static getWebsocketsUrl() {
     // Connect to a fake local ip when simulating, to avoid getting real messages
-    if(WEBSOCKET_SIMULATION)
-      return 'ws://0.0.0.1/';
+    if (WEBSOCKET_SIMULATION) return 'ws://0.0.0.1/';
     return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
 
@@ -441,8 +440,8 @@ const watcherErrorCmds = {
 };
 
 export const getNotificationMessage = (salCommand) => {
-  const cmd = salCommand.cmd;
-  const result = salCommand.result;
+  const { cmd } = salCommand;
+  const { result } = salCommand;
   const component = salCommand.component ?? salCommand.csc;
 
   if (salCommand.status === SALCommandStatus.REQUESTED) {
@@ -453,16 +452,14 @@ export const getNotificationMessage = (salCommand) => {
     const alarm = salCommand.params.name;
     if (result === 'Done') {
       return [`Alarm '${alarm}' ${watcherSuccessfulCmds[cmd]} successfully`, result];
-    } else {
-      return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
     }
+    return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
   }
 
   if (result === 'Done') {
     return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} ran successfully`, result];
-  } else {
-    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
   }
+  return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
 };
 
 export const cscText = (csc, salindex) => {
@@ -474,7 +471,7 @@ export const parseTimestamp = (timestamp) => {
   if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
   if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
   if (typeof timestamp === 'string') return DateTime.fromISO(timestamp);
-  else return null;
+  return null;
 };
 
 /**
@@ -494,7 +491,7 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
  */
 export const isoTimestamp = (timestamp, location = null) => {
   const t = parseTimestamp(timestamp);
-  return [t.toUTC().toISO(), location ? location : null].join(' ');
+  return [t.toUTC().toISO(), location || null].join(' ');
 };
 
 /**

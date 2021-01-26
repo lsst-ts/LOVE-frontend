@@ -1,6 +1,6 @@
 import React from 'react';
-import App from './App';
 import { connect } from 'react-redux';
+import App from './App';
 import { validateToken } from './redux/actions/auth';
 import { requestWorkspaces, requestViews } from './redux/actions/uif';
 import { getToken } from './redux/selectors';
@@ -15,9 +15,9 @@ const AppContainer = ({ requestWorkspaces, requestViews, validateToken, token })
 };
 
 const mapDispatchToProps = (dispatch) => ({
-    validateToken: () => dispatch(validateToken()),
-    requestWorkspaces: () => dispatch(requestWorkspaces()),
-    requestViews: () => dispatch(requestViews()),
+  validateToken: () => dispatch(validateToken()),
+  requestWorkspaces: () => dispatch(requestWorkspaces()),
+  requestViews: () => dispatch(requestViews()),
 });
 
 const mapStateToProps = (state) => {

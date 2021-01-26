@@ -2,7 +2,7 @@ export const hasFakeData = false;
 export const hasCommandPrivileges = true;
 // Whether to simulate websocket messages
 export const WEBSOCKET_SIMULATION = false;
-// File located in public/websocket-simulations containing a 
+// File located in public/websocket-simulations containing a
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
 // Base URL for ScriptQueue scripts' documentation
@@ -23,7 +23,7 @@ export const CSCSummaryHierarchy = {
       { name: 'ATAOS', salindex: 0 },
       { name: 'ATPneumatics', salindex: 0 },
       { name: 'ATHexapod', salindex: 0 },
-      {name:'GenericCamera', salindex: 1}
+      { name: 'GenericCamera', salindex: 1 },
     ],
     ATCalSys: [
       { name: 'ATMonochromator', salindex: 0 },
@@ -115,10 +115,10 @@ export const stateToStyleDome = {
 };
 
 export const stateToStyleLightpath = {
-  'CLOSED': 'ok',
-  'OPEN': 'ok',
+  CLOSED: 'ok',
+  OPEN: 'ok',
   'IN MOTION': 'running',
-  'INVALID': 'warning',
+  INVALID: 'warning',
   'NOT READY': 'running',
   'IN POSITION': 'ok',
 };
@@ -178,7 +178,7 @@ export const m3InPositionStateMap = {
   0: 'UNKNOWN',
 };
 
-//ATPneumatics
+// ATPneumatics
 export const m1CoverStateStateMap = {
   1: 'CLOSED',
   2: 'OPEN',
@@ -199,7 +199,7 @@ export const m1VentsLimitSwitchesStateMap = {
   0: 'UNKNOWN',
 };
 
-//ATHexapod
+// ATHexapod
 export const hexapodInPositionStateMap = {
   1: 'NOT READY',
   2: 'IN POSITION',
@@ -285,7 +285,7 @@ export const HEARTBEAT_COMPONENTS = {
   LOVE: 'LOVE CSC',
   SCRIPTQUEUE: 'ScriptQueue-1',
   COMMANDER: 'Commander',
-}
+};
 
 export const severityToStatus = {
   0: 'unknown',

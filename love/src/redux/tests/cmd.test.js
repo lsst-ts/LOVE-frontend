@@ -1,12 +1,11 @@
 import { createStore, applyMiddleware } from 'redux';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import fetchMock from 'fetch-mock';
+import rootReducer from '../reducers';
 import { requestSALCommand, SALCommandStatus } from '../actions/ws';
 import { getLastSALCommand } from '../selectors';
 
 import ManagerInterface from '../../Utils';
-import fetchMock from 'fetch-mock';
-
 
 let store;
 
@@ -18,13 +17,11 @@ afterEach(() => {
   fetchMock.reset();
 });
 
-
 it('Should send a command to the server, save it on the state properly ', async () => {
-
-  // Arrange 
+  // Arrange
   const url = `${ManagerInterface.getApiBaseUrl()}cmd/`;
-  const expectedStatusCode = 123; 
-  const serverResponse = new Response(JSON.stringify({ 'ack': 'ack message' }), { 'status': expectedStatusCode })
+  const expectedStatusCode = 123;
+  const serverResponse = new Response(JSON.stringify({ ack: 'ack message' }), { status: expectedStatusCode });
   const realDate = Date;
   global.Date.now = () => 10;
   const commandObject = {
@@ -35,7 +32,6 @@ it('Should send a command to the server, save it on the state properly ', async 
   };
   const cmd_id = '10-cmd_closeShutter';
 
-
   fetchMock.mock(
     url,
     (url1, opts) => {
@@ -43,10 +39,10 @@ it('Should send a command to the server, save it on the state properly ', async 
         status: SALCommandStatus.REQUESTED,
         statusCode: null,
         ...commandObject,
-        cmd_id
+        cmd_id,
       });
       return serverResponse;
-    }
+    },
   );
 
   // Act
@@ -65,8 +61,6 @@ it('Should send a command to the server, save it on the state properly ', async 
     statusCode: expectedStatusCode,
     result: 'ack message',
     ...commandObject,
-    cmd_id
+    cmd_id,
   });
-
-
 });

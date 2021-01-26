@@ -74,93 +74,76 @@ export const initialState = {
  * @param  {object} action               the action that is being applied to the state
  * @return {object}                      the modified state
  */
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case RECEIVE_WORKSPACES: {
-      return Object.assign({}, state, {
-        workspaces: action.workspaces,
-      });
+      return { ...state, workspaces: action.workspaces };
     }
     case RECEIVE_WORKSPACES_ERROR: {
-      return Object.assign({}, state, {
-        viewsStatus: viewsStates.ERROR,
-      });
+      return { ...state, viewsStatus: viewsStates.ERROR };
     }
     case RECEIVE_VIEWS: {
-      return Object.assign({}, state, {
+      return { ...state,
         views: action.views,
-        viewsStatus: viewsStates.LOADED,
-      });
+        viewsStatus: viewsStates.LOADED };
     }
     case RECEIVE_VIEW: {
       const cachedViews = state.cachedViews ? [...state.cachedViews] : [];
       const oldViewIndex = cachedViews ? cachedViews.findIndex((view) => view.id === action.view.id) : undefined;
       if (oldViewIndex > -1) cachedViews.splice(oldViewIndex, 1);
-      return Object.assign({}, state, {
-        cachedViews: [...cachedViews, action.view],
-      });
+      return { ...state, cachedViews: [...cachedViews, action.view] };
     }
     case RECEIVE_VIEWS_ERROR: {
-      return Object.assign({}, state, {
-        viewsStatus: viewsStates.ERROR,
-      });
+      return { ...state, viewsStatus: viewsStates.ERROR };
     }
     case LOADING_VIEWS: {
-      return Object.assign({}, state, {
-        viewsStatus: viewsStates.LOADING,
-      });
+      return { ...state, viewsStatus: viewsStates.LOADING };
     }
     case RECEIVE_CURRENT_WORKSPACE: {
-      return Object.assign({}, state, {
+      return { ...state,
         currentWorkspace: action.workspace.id,
-        views: action.workspace.views,
-      });
+        views: action.workspace.views };
     }
     case UPDATE_EDITED_VIEW: {
-      return Object.assign({}, state, {
+      return { ...state,
         editedViewCurrent: rfdc()(action.view),
         editedViewStatus: {
           code: editViewStates.UNSAVED,
           details: null,
-        },
-      });
+        } };
     }
     case LOAD_EDITED_VIEW: {
       let view = state.cachedViews.find((v) => v.id === action.id);
       if (view === undefined) {
         view = rfdc()(initialState.editedViewCurrent);
       }
-      return Object.assign({}, state, {
+      return { ...state,
         editedViewCurrent: rfdc()(view),
         editedViewSaved: rfdc()(view),
         editedViewStatus: {
           code: editViewStates.SAVED,
           details: null,
-        },
-      });
+        } };
     }
     case CLEAR_EDITED_VIEW: {
-      return Object.assign({}, state, {
+      return { ...state,
         editedViewCurrent: rfdc()(initialState.editedViewCurrent),
         editedViewSaved: rfdc()(initialState.editedViewSaved),
-        editedViewStatus: rfdc()(initialState.editedViewStatus),
-      });
+        editedViewStatus: rfdc()(initialState.editedViewStatus) };
     }
     case SAVING_EDITED_VIEW: {
-      return Object.assign({}, state, {
+      return { ...state,
         editedViewStatus: {
           code: editViewStates.SAVING,
           details: null,
-        },
-      });
+        } };
     }
     case SAVE_ERROR: {
-      return Object.assign({}, state, {
+      return { ...state,
         editedViewStatus: {
           code: editViewStates.SAVE_ERROR,
           details: action.response,
-        },
-      });
+        } };
     }
     case SAVED_EDITED_VIEW: {
       const newView = rfdc()(action.view);
@@ -171,19 +154,16 @@ export default function(state = initialState, action) {
       } else {
         newViews.push(newView);
       }
-      return Object.assign({}, state, {
+      return { ...state,
         editedViewStatus: {
           code: editViewStates.SAVED,
           details: null,
         },
         editedViewSaved: newView,
-        views: newViews,
-      });
+        views: newViews };
     }
     case CHANGE_MODE: {
-      return Object.assign({}, state, {
-        mode: action.mode === modes.EDIT ? modes.EDIT : modes.VIEW,
-      });
+      return { ...state, mode: action.mode === modes.EDIT ? modes.EDIT : modes.VIEW };
     }
     default:
       return state;

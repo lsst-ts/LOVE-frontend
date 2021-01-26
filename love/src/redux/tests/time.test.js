@@ -1,27 +1,27 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
 import { DateTime, Settings } from 'luxon';
+import fetchMock from 'fetch-mock';
+import rootReducer from '../reducers';
 import { emptyToken, doReceiveToken, logout } from '../actions/auth';
 import { clockStart, clockStop, receiveServerTime, tick, SYNC_PERIOD } from '../actions/time';
 import { clockStatuses, initialState } from '../reducers/time';
 import { connectionStates } from '../actions/ws';
 import { getConnectionStatus, getAllTime } from '../selectors';
-import { siderealSecond } from '../../Utils';
-import fetchMock from 'fetch-mock';
-import ManagerInterface from '../../Utils';
+import ManagerInterface, { siderealSecond } from '../../Utils';
 
-let store, server;
+let store; let
+  server;
 
 beforeAll(async () => {
   // ARRANGE
   const url = `${ManagerInterface.getApiBaseUrl()}logout/`;
   fetchMock.mock(url, {
-    "status": 204,
-    "data": {
-      "detail": "Logout successful, Token succesfully deleted",
-    }
+    status: 204,
+    data: {
+      detail: 'Logout successful, Token succesfully deleted',
+    },
   });
 });
 
@@ -79,7 +79,7 @@ describe('Given the inital state', () => {
     // ACT
     await store.dispatch(tick());
     // ASSERT
-    let time = getAllTime(store.getState());
+    const time = getAllTime(store.getState());
     expect(time.clock).not.toEqual(initialState.clock);
   });
 
@@ -103,8 +103,8 @@ describe('Given the inital state', () => {
       },
     ];
     for (const element of cases) {
-      const request_time = element.request_time;
-      const receive_time = element.receive_time;
+      const { request_time } = element;
+      const { receive_time } = element;
       const tick_time = receive_time + 5;
       const diff = tick_time - (receive_time + request_time) / 2;
       // Receive Server time
@@ -114,7 +114,7 @@ describe('Given the inital state', () => {
       Settings.now = () => new Date(tick_time * 1000).valueOf();
       await store.dispatch(tick());
       // Assert
-      let time = getAllTime(store.getState());
+      const time = getAllTime(store.getState());
       expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
       expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
       expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600 * 24));
@@ -166,7 +166,7 @@ describe('Given the inital state', () => {
 
     // Next 10 ticks
     for (let diff = 2; diff < 10; diff++) {
-      tick_time = tick_time + 1;
+      tick_time += 1;
       Settings.now = () => new Date(tick_time * 1000).valueOf();
       jest.advanceTimersByTime(1000);
       time = getAllTime(store.getState());

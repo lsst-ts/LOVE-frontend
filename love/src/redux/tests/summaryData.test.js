@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { addGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
@@ -14,7 +14,8 @@ import {
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
 
-let store, server;
+let store; let
+  server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
@@ -290,7 +291,7 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
     };
   });
 
-  let sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
+  const sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
     return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
   });
 

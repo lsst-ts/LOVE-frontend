@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { addGroup, _sendLOVECscObservingLogs } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { getObservingLogs } from '../selectors';
 
-let store, server;
+let store; let
+  server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));

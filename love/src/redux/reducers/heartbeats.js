@@ -16,11 +16,11 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case UPDATE_SCRIPT_HEARTBEAT: {
-      const salindex = action.data.salindex;
+      const { salindex } = action.data;
       const currentHeartbeats = state.scripts;
       let found = false;
 
-      let newHeartbeats = currentHeartbeats.map((current) => {
+      const newHeartbeats = currentHeartbeats.map((current) => {
         if (current.salindex !== salindex) {
           return current;
         }
@@ -46,7 +46,7 @@ export default function (state = initialState, action) {
     case UPDATE_CSC_HEARTBEATS: {
       const currentHeartbeats = state.cscs;
       let found = false;
-      const salindex = action.data.salindex;
+      const { salindex } = action.data;
       const newHeartbeats = currentHeartbeats.map((current) => {
         if (current.csc !== action.data.csc || current.salindex !== salindex) {
           return current;

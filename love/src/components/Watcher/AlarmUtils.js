@@ -1,8 +1,7 @@
 import { severityEnum } from '../../Config';
 
 /** Auxiliary function to define wether an alarm is acknowledged or not */
-export const isAcknowledged = (alarm) =>
-  alarm.acknowledged?.value || (alarm.severity?.value === 1 && alarm.maxSeverity?.value === 1);
+export const isAcknowledged = (alarm) => alarm.acknowledged?.value || (alarm.severity?.value === 1 && alarm.maxSeverity?.value === 1);
 
 /**
  * Auxiliary function to define wether an alarm is muted or not.

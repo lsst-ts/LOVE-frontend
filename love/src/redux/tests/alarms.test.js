@@ -1,13 +1,14 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { addGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { receiveAlarms } from '../actions/alarms';
 import { getStreamData, getLastAlarm, getAllAlarms } from '../selectors';
 
-let store, server;
+let store; let
+  server;
 
 const alarms = [
   {
@@ -142,7 +143,7 @@ describe('GIVEN we have no alarms in the state', () => {
         'and each alarm is stored in the watcher state accordingly ',
       async () => {
         // Arrange:
-        let expectedAlarms = [];
+        const expectedAlarms = [];
         alarms.forEach((alarm, index) => {
           // Act:
           server.send({
@@ -152,7 +153,7 @@ describe('GIVEN we have no alarms in the state', () => {
                 csc: 'Watcher',
                 salindex: 0, // watcher salindex
                 data: {
-                  alarm: alarm,
+                  alarm,
                 },
               },
             ],
@@ -181,7 +182,7 @@ describe('GIVEN we have some alarms in the state', () => {
       status: 'EMPTY',
     },
     ws: {
-      alarms: alarms,
+      alarms,
       connectionState: 'CLOSED',
       subscriptions: [],
       lastSALCommand: {

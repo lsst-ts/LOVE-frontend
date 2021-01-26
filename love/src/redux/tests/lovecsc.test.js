@@ -1,11 +1,10 @@
 import { createStore, applyMiddleware } from 'redux';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import fetchMock from 'fetch-mock';
+import rootReducer from '../reducers';
 import { sendLOVECscObservingLogs } from '../actions/ws';
 
 import ManagerInterface from '../../Utils';
-import fetchMock from 'fetch-mock';
-
 
 let store;
 
@@ -13,10 +12,10 @@ beforeAll(async () => {
   // Arrange
   const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/observinglog`;
   fetchMock.mock(url, {
-    "status": 200,
-    "data": {
-      "ack": "Added new observing log to SAL"
-    }
+    status: 200,
+    data: {
+      ack: 'Added new observing log to SAL',
+    },
   });
 });
 
@@ -28,9 +27,8 @@ afterEach(() => {
   fetchMock.reset();
 });
 
-
 it('Should send an observing log to the server, save it on the state properly ', async () => {
-  // Arrange 
+  // Arrange
   const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/observinglog`;
   const observingLogMsg = {
     user: 'an user',
@@ -38,7 +36,7 @@ it('Should send an observing log to the server, save it on the state properly ',
   };
 
   // Act
-  await store.dispatch(sendLOVECscObservingLogs({...observingLogMsg}));
+  await store.dispatch(sendLOVECscObservingLogs({ ...observingLogMsg }));
 
   // Assert request was sent
   expect(fetchMock.called(url)).toBe(true);

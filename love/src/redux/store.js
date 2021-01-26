@@ -1,10 +1,10 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import rootReducer from './reducers';
 import thunkMiddleware from 'redux-thunk';
 // import logger from 'redux-logger';
 // const middleWares = [thunkMiddleware, logger];
 import { batchedSubscribe } from 'redux-batched-subscribe';
 import throttle from 'lodash.throttle';
+import rootReducer from './reducers';
 
 const THROTTLED = true; // Whether or not to throttle redux updates
 const THROTTLE_TIME = 200; // Minimum time between redux notifications

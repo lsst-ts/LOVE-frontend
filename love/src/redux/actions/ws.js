@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
@@ -11,7 +12,7 @@ import {
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
   SEND_ACTION,
-} from '../actions/actionTypes';
+} from './actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import {
@@ -26,7 +27,6 @@ import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
 import { tokenStates } from '../reducers/auth';
-import { DateTime } from 'luxon';
 
 /**
  * Time to wait before reseting subscriptions in miliseconds
@@ -107,10 +107,10 @@ const _receiveUnsubscriptionConfirmation = (data) => ({
 const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
-    category: category,
-    csc: csc,
-    salindex: salindex,
-    data: data,
+    category,
+    csc,
+    salindex,
+    data,
   };
 };
 
@@ -126,17 +126,17 @@ let resetSubsTimer = null;
  */
 export const resetSubscriptions = (subscriptions = null) => {
   return (dispatch, getState) => {
-    const subs = subscriptions ? subscriptions : getSubscriptions(getState());
+    const subs = subscriptions || getSubscriptions(getState());
     clearInterval(resetSubsTimer);
     resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
     dispatch({
       type: RESET_SUBSCRIPTIONS,
       subscriptions: subs
         ? subs.map((sub) => ({
-            ...sub,
-            status: groupStates.PENDING,
-            confirmationMessage: undefined,
-          }))
+          ...sub,
+          status: groupStates.PENDING,
+          confirmationMessage: undefined,
+        }))
         : [],
     });
     dispatch(_requestSubscriptions());
@@ -369,7 +369,7 @@ export const requestGroupRemoval = (groupName) => {
       option: 'unsubscribe',
       category,
       csc,
-      salindex: salindex,
+      salindex,
       stream,
     });
     dispatch({
@@ -494,8 +494,8 @@ export const sendLOVECscObservingLogs = (observingLogMsg) => {
       body: JSON.stringify(observingLogMsg),
       headers: ManagerInterface.getHeaders(),
     })
-      .then(r => r.json())
-      .then(data => {
+      .then((r) => r.json())
+      .then((data) => {
         // TODO: confirmation to the user? what kind?
         // console.log(data);
       });
@@ -515,8 +515,8 @@ export const _sendLOVECscObservingLogs = (user, message) => {
       salindex: 0,
       data: {
         observingLog: {
-          user: user,
-          message: message,
+          user,
+          message,
         },
       },
     };
@@ -537,7 +537,7 @@ export const sendAction = (action) => {
       return;
     }
     socket.json({
-      action: action,
+      action,
       request_time: DateTime.utc().toSeconds(),
     });
     dispatch({

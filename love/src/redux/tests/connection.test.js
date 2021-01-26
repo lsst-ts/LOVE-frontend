@@ -1,10 +1,9 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { doReceiveToken, emptyToken, doExpireToken, doRejectToken, doRequestRemoveToken } from '../actions/auth';
-import { RESET_SUBS_PERIOD } from '../actions/ws';
-import {
+import { RESET_SUBS_PERIOD,
   connectionStates,
   groupStates,
   openWebsocketConnection,
@@ -13,9 +12,11 @@ import {
   removeGroup,
   resetSubscriptions,
 } from '../actions/ws';
+
 import { getConnectionStatus, getSubscriptions } from '../selectors';
 
-let store, server;
+let store; let
+  server;
 
 beforeEach(async () => {
   // ARRANGE
