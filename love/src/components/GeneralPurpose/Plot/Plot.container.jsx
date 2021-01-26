@@ -218,7 +218,7 @@ class PlotContainer extends React.Component {
         continue;
       }
 
-      if (!data[inputName]) continue;
+      if (isLive && !data[inputName]) continue;
 
       let rangedInputData;
       rangedInputData = this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
