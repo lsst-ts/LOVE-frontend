@@ -216,7 +216,7 @@ export default class WeatherStation extends Component {
         },
       },
     };
-    const parsedDate = startDate.toISOString().split('.')[0];
+    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
     // historicalData
     ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
       const polarData = Object.keys(data)

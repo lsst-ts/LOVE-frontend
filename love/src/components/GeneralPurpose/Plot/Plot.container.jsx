@@ -264,7 +264,8 @@ class PlotContainer extends React.Component {
       },
       setHistoricalData: (startDate, timeWindow) => {
         const cscs = parsePlotInputs(inputs);
-        const parsedDate = startDate.toISOString().split('.')[0];
+        const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+        console.log(startDate, parsedDate)
         // historicalData
         ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
           const parsedData = parseCommanderData(data);
