@@ -61,7 +61,7 @@
 
 .stylesContainer {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16ch, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(18ch, 1fr));
   gap: 1rem;
   align-items: end;
 }
