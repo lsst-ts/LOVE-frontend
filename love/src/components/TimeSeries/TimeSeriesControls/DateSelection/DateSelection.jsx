@@ -41,23 +41,6 @@ export default class DateSelection extends PureComponent {
     });
   };
 
-  parseCommanderData = (data) => {
-    const newData = {};
-    Object.keys(data).forEach((topicKey) => {
-      const topicData = data[topicKey];
-      const newTopicData = {};
-      Object.keys(topicData).forEach((propertyKey) => {
-        const propertyDataArray = topicData[propertyKey];
-        newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
-          const tsString = dataPoint?.ts.split(' ').join('T');
-          return { x: parseTimestamp(tsString), y: dataPoint?.value };
-        });
-      });
-      newData[topicKey] = newTopicData;
-    });
-    return newData;
-  };
-
   onSubmitQuery = () => {
     const { startDate, timeWindow } = this.state;
     this.props.setHistoricalData?.(startDate, timeWindow);
