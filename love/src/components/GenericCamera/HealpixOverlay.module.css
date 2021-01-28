@@ -1,13 +1,14 @@
 .svg {
-    position: absolute;
-    pointer-events: none;
+  position: absolute;
+  pointer-events: none;
 }
 
-.svg > g, .svg > path {
-    pointer-events: auto;
+.svg > g,
+.svg > path {
+  pointer-events: auto;
 }
 
 .polygons {
-    /* hardcoded due to geo voronoi lib limitation */
-    transform: translate(-230px, 0);
+  /* hardcoded due to geo voronoi lib limitation */
+  transform: translate(-230px, 0);
 }

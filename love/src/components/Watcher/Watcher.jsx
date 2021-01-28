@@ -98,7 +98,7 @@ export default class Watcher extends Component {
       }
 
       if (isMuted(alarm)) {
-        if(alarm.severity.value <= 1){
+        if (alarm.severity.value <= 1) {
           // Inactive alarms
           inactiveAlarmsCount += 1;
           if (this.state.selectedTab === 'inactive') {

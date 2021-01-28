@@ -116,7 +116,7 @@ const GlobalState = ({
             <span className={styles.stateLabel}>Queue State</span>
             <div className={styles.stateCell}>
               <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
-              {summaryState.name === "ENABLED" && queueState.name === 'Stopped' && commandExecutePermission && (
+              {summaryState.name === 'ENABLED' && queueState.name === 'Stopped' && commandExecutePermission && (
                 <>
                   <div className={styles.pauseIconContainer} onClick={resumeScriptQueue}>
                     <div className={styles.pauseIconWrapper} title="Resume ScriptQueue">
@@ -125,7 +125,7 @@ const GlobalState = ({
                   </div>
                 </>
               )}
-              {summaryState.name === "ENABLED" && queueState.name === 'Running' && commandExecutePermission && (
+              {summaryState.name === 'ENABLED' && queueState.name === 'Running' && commandExecutePermission && (
                 <>
                   <div className={styles.pauseIconContainer} onClick={pauseScriptQueue}>
                     <div className={styles.pauseIconWrapper} title="Pause ScriptQueue">

@@ -1,28 +1,28 @@
 .container {
-    color: var(--secondary-font-color);
-    text-align: left;
+  color: var(--secondary-font-color);
+  text-align: left;
 }
 
 .header {
 }
 
 .linkList {
-    font-size: 1.3em;
+  font-size: 1.3em;
 }
 
 .linkListItem {
-    padding: 0.2em;
+  padding: 0.2em;
 }
 
 .linkListSubItem {
-    padding-top: 0.25em;
+  padding-top: 0.25em;
 }
 
 a {
-    color: var(--secondary-font-color);
-    text-decoration: none;
+  color: var(--secondary-font-color);
+  text-decoration: none;
 }
 
 a:hover {
-    color: var(--secondary-font-dimmed-color);
+  color: var(--secondary-font-dimmed-color);
 }

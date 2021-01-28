@@ -39,29 +39,21 @@ export default class ConfirmationModal extends Component {
         onRequestClose={this.props.cancelCallback}
         contentLabel="Confirmation Dialog"
         modalClassName={styles.modal}
-        footerChildren={(
+        footerChildren={
           <>
-          <Button
-            status="default"
-            onClick={this.props.cancelCallback}
-            className={styles.button}
-          >
-            {this.props.cancelText}
-          </Button>
-          <Button
-            status="primary"
-            onClick={this.props.confirmCallback}
-            className={styles.button}
-          >
-            {this.props.confirmText}
-          </Button>
+            <Button status="default" onClick={this.props.cancelCallback} className={styles.button}>
+              {this.props.cancelText}
+            </Button>
+            <Button status="primary" onClick={this.props.confirmCallback} className={styles.button}>
+              {this.props.confirmText}
+            </Button>
           </>
-        )}
+        }
       >
         <div className={styles.content}>
           <p> {this.props.message} </p>
         </div>
-    </Modal>
+      </Modal>
     );
   }
 }

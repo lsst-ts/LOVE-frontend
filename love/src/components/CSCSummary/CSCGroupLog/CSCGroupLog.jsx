@@ -6,7 +6,6 @@ import CSCDetailContainer from '../CSCDetail/CSCDetail.container';
 import Button from '../../GeneralPurpose/Button/Button';
 import { formatTimestamp } from '../../../Utils';
 
-
 export default class CSCGroupLog extends Component {
   static propTypes = {
     name: PropTypes.string,
@@ -32,15 +31,15 @@ export default class CSCGroupLog extends Component {
   };
 
   componentDidMount = () => {
-      this.props.cscList.forEach(({ name, salindex }) => {
-        this.props.subscribeToStream(name, salindex);
-      });
+    this.props.cscList.forEach(({ name, salindex }) => {
+      this.props.subscribeToStream(name, salindex);
+    });
   };
 
   clearGroupErrorCodes = () => {
-      this.props.cscList.forEach(({ name, salindex }) => {
-        this.props.clearCSCErrorCodes(name, salindex);
-      });
+    this.props.cscList.forEach(({ name, salindex }) => {
+      this.props.clearCSCErrorCodes(name, salindex);
+    });
   };
 
   render() {
@@ -54,7 +53,7 @@ export default class CSCGroupLog extends Component {
                 {this.props.embedded && (
                   <div
                     className={styles.backArrowIconWrapper}
-                    onClick={() => this.props.onCSCClick({  group: this.props.group })}
+                    onClick={() => this.props.onCSCClick({ group: this.props.group })}
                   >
                     <BackArrowIcon />
                   </div>

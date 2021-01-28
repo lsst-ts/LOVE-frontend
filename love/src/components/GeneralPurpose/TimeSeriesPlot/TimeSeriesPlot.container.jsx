@@ -94,7 +94,7 @@ const TimeSeriesPlotContainer = ({
     const subscriptions = Object.values(props.groupNames || {});
     return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
   }
-  
+
   return (
     <TimeSeriesPlot
       streamStates={streamStates}

@@ -23,8 +23,8 @@ export default class FilterDialog extends Component {
 
   static defaultProps = {
     ascendingSortLabel: 'A - Z',
-    descendingSortLabel: 'Z - A'
-  }
+    descendingSortLabel: 'Z - A',
+  };
 
   constructor(props) {
     super(props);

@@ -1,28 +1,27 @@
 .tagContainer {
-    color: #000000a1;
-    margin-right: 2px;
-    background-color: #798f9b87;
-    border-radius: 3px;
+  color: #000000a1;
+  margin-right: 2px;
+  background-color: #798f9b87;
+  border-radius: 3px;
 
-    /* text-transform: uppercase; */
-    display: inline;
-    padding: .2em .6em .3em;
-    font-weight: bold;
-    line-height: 1;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    box-sizing: border-box;
-    cursor: text;
+  /* text-transform: uppercase; */
+  display: inline;
+  padding: 0.2em 0.6em 0.3em;
+  font-weight: bold;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  box-sizing: border-box;
+  cursor: text;
 
-    cursor:default;
-    user-select:none; 
-    
+  cursor: default;
+  user-select: none;
 }
 
 .remove {
-    margin-left: 8px;
-    box-sizing: border-box;
-    font-weight: 500;
-    cursor:pointer;
+  margin-left: 8px;
+  box-sizing: border-box;
+  font-weight: 500;
+  cursor: pointer;
 }

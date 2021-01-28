@@ -70,7 +70,7 @@ export default class PolarPlotConfig extends PureComponent {
       name,
       accessor,
       encoding,
-      group, 
+      group,
       category: inputs?.[0]?.category,
       csc: inputs?.[0]?.csc,
       salindex: inputs?.[0]?.salindex,

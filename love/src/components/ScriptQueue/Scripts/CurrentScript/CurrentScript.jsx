@@ -64,9 +64,9 @@ export default class CurrentScript extends Component {
   };
 
   animateProgress = () => {
-    if (this.props.index === undefined){
+    if (this.props.index === undefined) {
       this.setState({ elapsedTime: 0 });
-      return; 
+      return;
     }
     if (this.props.scriptState !== 'RUNNING' && this.props.processState !== 'RUNNING') {
       requestAnimationFrame(this.animateProgress);
@@ -265,7 +265,13 @@ export default class CurrentScript extends Component {
             </div>
 
             <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-              <LoadingBar className={delayedScriptProgressClass} percentage={percentage} title={`Script completion: ${percentage}%`} displayPercentage={false} isNarrow/>
+              <LoadingBar
+                className={delayedScriptProgressClass}
+                percentage={percentage}
+                title={`Script completion: ${percentage}%`}
+                displayPercentage={false}
+                isNarrow
+              />
             </div>
           </div>
         </div>

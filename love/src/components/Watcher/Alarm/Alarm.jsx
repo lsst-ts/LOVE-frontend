@@ -8,10 +8,12 @@ export default function Alarm({ severity, ackButtonLocation, acknowledged, muted
   const status = severityToStatus[severity];
   const ackButton = !acknowledged ? (
     <Button
-      title='ack'
-      status='info'
+      title="ack"
+      status="info"
       disabled={acknowledged}
-      onClick={(event) => {ackAlarm(event)}}
+      onClick={(event) => {
+        ackAlarm(event);
+      }}
       command
     >
       ACK
@@ -21,17 +23,17 @@ export default function Alarm({ severity, ackButtonLocation, acknowledged, muted
   );
   return (
     <>
-    <div
-      className={[
-        styles.alarmContainer,
-        ackButtonLocation === 'left'? styles.leftAckButton : '',
-        ackButtonLocation === 'right'? styles.rightAckButton : ''
-      ].join(' ')}
-    >
-      {ackButtonLocation === 'left' ? (ackButton) : null}
-      <StatusText status={status}>{status}</StatusText>
-      {ackButtonLocation === 'right' ? (ackButton) : null}
-    </div>
+      <div
+        className={[
+          styles.alarmContainer,
+          ackButtonLocation === 'left' ? styles.leftAckButton : '',
+          ackButtonLocation === 'right' ? styles.rightAckButton : '',
+        ].join(' ')}
+      >
+        {ackButtonLocation === 'left' ? ackButton : null}
+        <StatusText status={status}>{status}</StatusText>
+        {ackButtonLocation === 'right' ? ackButton : null}
+      </div>
     </>
   );
 }

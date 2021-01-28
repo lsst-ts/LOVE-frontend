@@ -38,10 +38,10 @@ let store;
 
 beforeAll(async () => {
   // Arrange
-  let url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
+  const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
   fetchMock.mock(url, {
-    "status": 200,
-    "data": {}
+    status: 200,
+    data: {},
   });
 });
 

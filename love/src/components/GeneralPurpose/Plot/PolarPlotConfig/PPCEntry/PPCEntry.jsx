@@ -99,10 +99,17 @@ export default class PPCEntry extends PureComponent {
   };
 
   onStyleChange = (styleName, style) => {
-    this.props.onChange(this.props.name, this.props.inputs, this.props.accessor, this.props.encoding, this.props.group, {
-      color: this.props.inputs[0].color,
-      [styleName]: style.value,
-    });
+    this.props.onChange(
+      this.props.name,
+      this.props.inputs,
+      this.props.accessor,
+      this.props.encoding,
+      this.props.group,
+      {
+        color: this.props.inputs[0].color,
+        [styleName]: style.value,
+      },
+    );
   };
 
   onEditorChange = (accessor) => {

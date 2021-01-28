@@ -1,5 +1,5 @@
 Example:
 
-``` jsx
-    <FinishedScript/>
+```jsx
+<FinishedScript />
 ```

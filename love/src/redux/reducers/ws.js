@@ -66,14 +66,13 @@ export default function (state = initialState, action) {
             },
           ],
         };
-      } else {
-        const subscriptions = [...state.subscriptions];
-        subscriptions[index].counter = subscriptions[index].counter + 1;
-        return {
-          ...state,
-          subscriptions,
-        };
       }
+      const subscriptions = [...state.subscriptions];
+      subscriptions[index].counter = subscriptions[index].counter + 1;
+      return {
+        ...state,
+        subscriptions,
+      };
     }
     case REQUEST_SUBSCRIPTIONS: {
       const subscriptions = action.subscriptions.map((subscription) => ({
@@ -219,7 +218,7 @@ export default function (state = initialState, action) {
 
     case RECEIVE_ALARMS: {
       const latestAlarms = Array.isArray(action.alarms) ? Array.from(action.alarms) : Array.from([action.alarms]);
-      let alarms = Array.from(state.alarms);
+      const alarms = Array.from(state.alarms);
       latestAlarms.forEach((latestAlarm) => {
         if (latestAlarm === undefined) return;
         const alarmIndex = alarms.findIndex((stateAlarm) => {

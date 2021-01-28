@@ -8,8 +8,7 @@ export default class DomeAndMountView extends Component {
   render() {
     return (
       <div className={styles.mainGrid}>
-        <div className={styles.statusGrid}>
-        </div>
+        <div className={styles.statusGrid}></div>
         <div className={styles.domeGrid}>
           <Panel title="Dome and Mount view" className={styles.panel}>
             <div className={styles.domeContainer}>

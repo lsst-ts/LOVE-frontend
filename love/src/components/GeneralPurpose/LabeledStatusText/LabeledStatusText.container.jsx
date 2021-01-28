@@ -43,10 +43,10 @@ export const schema = {
       description: 'Mapping of status number to its label',
       isPrivate: true,
       default: {
-        '0': 'UNKNOWN',
-        '1': 'TRACK_DISABLED',
-        '2': 'TRACK_ENABLED',
-        '3': 'STOPPING',
+        0: 'UNKNOWN',
+        1: 'TRACK_DISABLED',
+        2: 'TRACK_ENABLED',
+        3: 'STOPPING',
       },
     },
     stateToStyleMap: {
@@ -54,10 +54,10 @@ export const schema = {
       description: 'Mapping of status number to style class',
       isPrivate: true,
       default: {
-        '0': 'unknown',
-        '1': 'ok',
-        '2': 'running',
-        '3': 'running',
+        0: 'unknown',
+        1: 'ok',
+        2: 'running',
+        3: 'running',
       },
     },
     _functionProps: {
