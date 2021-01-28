@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import EmbeddedView from './EmbeddedView';
 
 export const schema = {
-  description: 'Component that renders an external web page. The server hosting the page should allow it to be embeddable (no X-Frame-Options in the HTTP header)',
+  description:
+    'Component that renders an external web page. The server hosting the page should allow it to be embeddable (no X-Frame-Options in the HTTP header)',
   defaultSize: [57, 35],
   props: {
     title: {
@@ -31,4 +32,11 @@ const EmbeddedViewContainer = ({ ...props }) => {
   return <EmbeddedView {...props} />;
 };
 
-export default connect(() => {return {}}, () => {return {}})(EmbeddedViewContainer);
+export default connect(
+  () => {
+    return {};
+  },
+  () => {
+    return {};
+  },
+)(EmbeddedViewContainer);

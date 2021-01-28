@@ -4,10 +4,7 @@ import styles from './ContactIcon.module.css';
 export default class ContactIcon extends React.Component {
   render() {
     return (
-      <svg
-        className={styles.contactIcon}
-        viewBox="0 0 31.9 39.2"
-      >
+      <svg className={styles.contactIcon} viewBox="0 0 31.9 39.2">
         <path
           d="M17.5 19.2s.1 0 0 0c.1 0 .1 0 0 0h.1c1.1 0 2-.4 2.7-1.2 1.5-1.7 1.2-4.5 1.2-4.8-.1-2-1.1-3-1.8-3.5-.6-.3-1.3-.5-2-.5-.4 0-1.3.1-2 .5-.8.5-1.8 1.4-1.9 3.5 0 .3-.3 3.1 1.2 4.8.5.8 1.4 1.2 2.5 1.2zm-2.8-5.8s0-.1 0 0c.1-2.8 2.1-3.1 2.9-3.1 1 0 2.8.4 2.9 3 0 0 .3 2.6-.9 4-.5.5-1.1.8-2 .8-.8 0-1.5-.3-2-.8-1.2-1.3-.9-3.9-.9-3.9z"
           className={styles.st0}

@@ -67,16 +67,12 @@ const headers = [
     type: 'number',
     render: (value) => {
       const status = !!labelsDict[value] ? labelsDict[value] : 'invalid';
-      return (
-        <StatusText status={status}>
-          {`${status}-${value}`}
-        </StatusText>
-      );
+      return <StatusText status={status}>{`${status}-${value}`}</StatusText>;
     },
     sort: (value1, value2, sortingFactor, row1, row2) => {
       const status1 = !!labelsDict[value1] ? labelsDict[value1] : 'invalid';
       const status2 = !!labelsDict[value2] ? labelsDict[value2] : 'invalid';
-      
+
       if (status1 > status2) {
         return 1 * sortingFactor;
       }

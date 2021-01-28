@@ -19,7 +19,7 @@ TimestampDisplay.propTypes = {
   defValue: PropTypes.string,
 };
 
-export default function TimestampDisplay({ timestamp, taiToUtc, className, defValue='' }) {
+export default function TimestampDisplay({ timestamp, taiToUtc, className, defValue = '' }) {
   const [copied, setCopied] = useState(false);
   const hoverValue = formatTimestamp(timestamp);
   const copyValue = isoTimestamp(timestamp);
@@ -38,16 +38,10 @@ export default function TimestampDisplay({ timestamp, taiToUtc, className, defVa
 
   return (
     <Hoverable bottom>
-      <div
-        className={[className, styles.dataCell].join(' ')}
-        onClick={onClick}
-        onMouseOut={cleanCopied}
-      >
+      <div className={[className, styles.dataCell].join(' ')} onClick={onClick} onMouseOut={cleanCopied}>
         {displayValue}
       </div>
-      <div className={styles.tooltip}>
-        {copied ? "Copied!" : hoverValue + " (click to copy ISO str)"}
-      </div>
+      <div className={styles.tooltip}>{copied ? 'Copied!' : hoverValue + ' (click to copy ISO str)'}</div>
     </Hoverable>
   );
 }

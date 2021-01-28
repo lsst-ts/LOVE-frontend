@@ -44,16 +44,10 @@ export default class TimeSeries extends PureComponent {
     if (!this.state.isLive) return;
     const data = JSON.parse(msg.data);
     const dateEnd = new Date();
-    const dateStart = moment(dateEnd)
-      .subtract(this.state.timeWindow, 'minutes')
-      .toDate();
+    const dateStart = moment(dateEnd).subtract(this.state.timeWindow, 'minutes').toDate();
     if (typeof data.data === 'object') {
       let timestamp = new Date();
-      timestamp = timestamp
-        .toISOString()
-        .slice(0, 19)
-        .replace(/-/g, '/')
-        .replace('T', ' ');
+      timestamp = timestamp.toISOString().slice(0, 19).replace(/-/g, '/').replace('T', ' ');
       const newEntries = telemetryObjectToVegaList(data.data, this.state.selectedRows, timestamp);
       this.setState({
         lastMessageData: newEntries,
@@ -68,9 +62,7 @@ export default class TimeSeries extends PureComponent {
     this.setState({
       timeWindow,
       dateEnd: now,
-      dateStart: moment(now)
-        .subtract(timeWindow, 'minutes')
-        .toDate(),
+      dateStart: moment(now).subtract(timeWindow, 'minutes').toDate(),
     });
   };
 
@@ -117,7 +109,6 @@ export default class TimeSeries extends PureComponent {
   };
 
   render() {
-
     const streams = this.state.subscribedStreams;
     const dataSources = Object.keys(streams);
     let layers = {};
@@ -155,26 +146,27 @@ export default class TimeSeries extends PureComponent {
     //     onSetSelection={this.onSetSelection}
     //   />
     // ) : (
-    return (<div className={styles.timeseriesContainer}>
-      <TimeSeriesControls
-        setTimeWindow={this.setTimeWindow}
-        timeWindow={String(this.state.timeWindow)}
-        setLiveMode={this.setLiveMode}
-        isLive={this.state.isLive}
-        setHistoricalData={this.setHistoricalData}
-        goBack={this.goBack}
-      />
-      <TimeSeriesPlotContainer
-        dataSources={dataSources}
-        layers={layers}
-        encoding={encoding}
-        groupNames={groupNames}
-        accessors={accessors}
-        dateInterval={this.state.timeWindow * 60 * 1000}
-        width={600}
-        height={600 / 1.77}
-      />
-    </div>
+    return (
+      <div className={styles.timeseriesContainer}>
+        <TimeSeriesControls
+          setTimeWindow={this.setTimeWindow}
+          timeWindow={String(this.state.timeWindow)}
+          setLiveMode={this.setLiveMode}
+          isLive={this.state.isLive}
+          setHistoricalData={this.setHistoricalData}
+          goBack={this.goBack}
+        />
+        <TimeSeriesPlotContainer
+          dataSources={dataSources}
+          layers={layers}
+          encoding={encoding}
+          groupNames={groupNames}
+          accessors={accessors}
+          dateInterval={this.state.timeWindow * 60 * 1000}
+          width={600}
+          height={600 / 1.77}
+        />
+      </div>
     );
   }
 }

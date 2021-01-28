@@ -78,10 +78,7 @@ export default class CSCGroup extends Component {
       this.renderExpandedView(selectedCSC)
     ) : (
       <div className={styles.CSCGroupContainer}>
-        <div
-          className={styles.CSCGroupTitle}
-          onClick={() => this.onCSCClick({  group: this.props.name, csc: 'all' })}
-        >
+        <div className={styles.CSCGroupTitle} onClick={() => this.onCSCClick({ group: this.props.name, csc: 'all' })}>
           {this.props.name}
         </div>
         <div className={styles.CSCDetailsContainer}>

@@ -35,8 +35,8 @@
 
 .estimatedTimeValue {
 }
-.checkpointContainer{
-  text-align:right;
+.checkpointContainer {
+  text-align: right;
 }
 
 .elapsedTimeContainer {
@@ -60,7 +60,7 @@
   flex-direction: column;
 }
 
-.currentScriptButtonContainer{
+.currentScriptButtonContainer {
   margin-bottom: 0.5rem;
 }
 .invisible {

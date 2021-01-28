@@ -8,7 +8,7 @@ export default class Button extends Component {
     const classnames = [styles.button, secondaryClass, this.props.className];
     return (
       <button {...props} className={classnames.join(' ')}>
-          {this.props.children}
+        {this.props.children}
       </button>
     );
   }

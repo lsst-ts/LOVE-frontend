@@ -16,7 +16,8 @@
   white-space: pre-line;
 }
 
-.content input, .content textarea {
+.content input,
+.content textarea {
   color: var(--base-font-color);
   background: transparent;
   border: 1px solid var(--secondary-font-dimmed-color);

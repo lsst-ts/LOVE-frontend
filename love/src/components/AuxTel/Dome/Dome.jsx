@@ -68,7 +68,7 @@ export default class Dome extends Component {
       type: 'line',
       accessor: (x) => x,
       color: 'white',
-      dash: [4, 1]
+      dash: [4, 1],
     },
   };
 
@@ -92,7 +92,7 @@ export default class Dome extends Component {
       type: 'line',
       accessor: (x) => x,
       color: 'hsl(201, 70%, 40%)',
-      dash: [4, 1]
+      dash: [4, 1],
     },
     'Mount Azimuth': {
       category: 'telemetry',
@@ -113,7 +113,7 @@ export default class Dome extends Component {
       type: 'line',
       accessor: (x) => x,
       color: 'hsl(160, 70%, 40%)',
-      dash: [4, 1]
+      dash: [4, 1],
     },
   };
 
@@ -172,7 +172,7 @@ export default class Dome extends Component {
     const timeSeriesControlsProps = {
       timeWindow: this.state.timeWindow,
       isLive: this.state.isLive,
-      historicalData: this.state.historicalData
+      historicalData: this.state.historicalData,
     };
 
     // console.log(currentPointing)
@@ -228,14 +228,17 @@ export default class Dome extends Component {
             positionLimits={positionLimits}
           />
         </div>
-        {this.props.controls && (<div><TimeSeriesControls
-            setTimeWindow={(timeWindow) => this.setState({timeWindow})}
-            timeWindow={this.state.timeWindow}
-            setLiveMode={(isLive) => this.setState({isLive})}
-            isLive={this.state.isLive}
-            setHistoricalData={(historicalData) => this.setState({historicalData})}
-          /></div>)
-        }
+        {this.props.controls && (
+          <div>
+            <TimeSeriesControls
+              setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
+              timeWindow={this.state.timeWindow}
+              setLiveMode={(isLive) => this.setState({ isLive })}
+              isLive={this.state.isLive}
+              setHistoricalData={(historicalData) => this.setState({ historicalData })}
+            />
+          </div>
+        )}
         <div className={styles.telemetryTable}>
           <div className={styles.azimuthSection}>
             <h2>Azimuth</h2>

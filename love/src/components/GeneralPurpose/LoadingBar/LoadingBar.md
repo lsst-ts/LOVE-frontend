@@ -1,5 +1,5 @@
 Example:
 
-``` jsx
-  <LoadingBar percentage={70}/>
+```jsx
+<LoadingBar percentage={70} />
 ```

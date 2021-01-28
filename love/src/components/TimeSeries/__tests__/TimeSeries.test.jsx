@@ -1,11 +1,4 @@
-import {
-  render,
-  fireEvent,
-  cleanup,
-  waitForElement,
-  wait,
-  getByTestId,
-} from 'react-testing-library';
+import { render, fireEvent, cleanup, waitForElement, wait, getByTestId } from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect';
 import { Server } from 'mock-socket';
@@ -37,7 +30,6 @@ const telemetries = {
           dataType: 'Float',
         },
       },
-
     },
   },
 };
@@ -47,8 +39,8 @@ afterEach(cleanup);
 describe(`
 GIVEN the user has selected a telemetry from the table and pressed SET
 `, () => {
-  let timeSeries; let
-    mockServer;
+  let timeSeries;
+  let mockServer;
   beforeAll(() => {
     process.env.REACT_APP_WEBSOCKET_HOST = 'mockhost:8000';
     const url = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`;
@@ -66,7 +58,6 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     mockServer.on('connection', (socket) => {
       socket.send(JSON.stringify(messageObject));
     });
-
 
     const RealDate = Date;
     global.Date = jest.fn((...args) => {
@@ -98,21 +89,18 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     const setButton = timeSeries.getByTitle('Set selected telemetries');
     fireEvent.click(setButton);
 
-
     await waitForElement(() => timeSeries.getByText('1h'));
   });
 
   test(`WHEN the plot-view shows up
-        THEN it displays the name of the selected telemetry in a legend`,
-  async () => {
+        THEN it displays the name of the selected telemetry in a legend`, async () => {
     await waitForElement(() => timeSeries.getByText('filterChangeTime'));
     const vegaElement = timeSeries.getByText('filterChangeTime');
     expect(vegaElement).toBeTruthy();
   });
 
   test(`WHEN the user chooses a date range in query mode
-          THEN the plot updates accordingly`,
-  async () => {
+          THEN the plot updates accordingly`, async () => {
     await waitForElement(() => timeSeries.getByAltText('Live/query mode toggle'));
 
     const toggleButton = timeSeries.getByAltText('Live/query mode toggle');
@@ -120,7 +108,11 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     const a = fireEvent;
     fireEvent.click(toggleButton);
 
-    await waitForElement(() => timeSeries.getByPlaceholderText('Click to set initial date') && timeSeries.getByPlaceholderText('Click to set final date'));
+    await waitForElement(
+      () =>
+        timeSeries.getByPlaceholderText('Click to set initial date') &&
+        timeSeries.getByPlaceholderText('Click to set final date'),
+    );
 
     const initialDateInput = timeSeries.getByPlaceholderText('Click to set initial date');
 
@@ -130,12 +122,10 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     const dayFive = timeSeries.getByText('5');
     fireEvent.click(dayFive);
 
-
     const finalDateInput = timeSeries.getByPlaceholderText('Click to set final date');
     fireEvent.mouseDown(finalDateInput);
     fireEvent.click(finalDateInput);
     await waitForElement(() => timeSeries.getAllByText('11').length === 2);
-
 
     const dayEleven = timeSeries.queryAllByText('11')[1];
     fireEvent.click(dayEleven);
@@ -147,7 +137,6 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     expect(axisDateString).toBeTruthy();
   });
 
-
   test(`WHEN the user selects a time window of 1h 
         THEN the plot shows last 1h of data`, async () => {
     await waitForElement(() => timeSeries.getByText('1h'));
@@ -155,7 +144,8 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     fireEvent.click(timeSeries.getByLabelText('1h'));
     await waitForElement(() => timeSeries.queryAllByText(':', { exact: false }));
 
-    const timeAxisLabels = timeSeries.queryAllByText(':', { exact: false })
+    const timeAxisLabels = timeSeries
+      .queryAllByText(':', { exact: false })
       .filter((el) => el.textContent.length === 5)
       .map((el) => el.textContent);
 
@@ -175,7 +165,8 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     fireEvent.click(timeSeries.getByLabelText('15min'));
     await waitForElement(() => timeSeries.queryAllByText(':', { exact: false }));
 
-    const timeAxisLabels = timeSeries.queryAllByText(':', { exact: false })
+    const timeAxisLabels = timeSeries
+      .queryAllByText(':', { exact: false })
       .filter((el) => el.textContent.length <= 5 && el.textContent.length >= 3)
       .map((el) => el.textContent);
     const now = new Date();
@@ -194,7 +185,8 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     fireEvent.click(timeSeries.getByLabelText('1min'));
     await waitForElement(() => timeSeries.queryAllByText(':', { exact: false }));
 
-    const timeAxisLabels = timeSeries.queryAllByText(':', { exact: false })
+    const timeAxisLabels = timeSeries
+      .queryAllByText(':', { exact: false })
       .filter((el) => el.textContent.length <= 5 && el.textContent.length >= 3)
       .map((el) => el.textContent);
 
@@ -210,7 +202,10 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     if (!isNaN(maxAxisDate[0])) {
       maxAxisDate[0] = [NaN, 0];
     }
-    const difference = Math.min(Math.abs(maxAxisDate[1] - minAxisDate[1] - 60), Math.abs(maxAxisDate[1] - minAxisDate[1]));
+    const difference = Math.min(
+      Math.abs(maxAxisDate[1] - minAxisDate[1] - 60),
+      Math.abs(maxAxisDate[1] - minAxisDate[1]),
+    );
     expect(difference).toEqual(5);
     expect(referenceIndex).toBeGreaterThanOrEqual(0);
   });
@@ -226,14 +221,17 @@ GIVEN the user has selected a telemetry from the table and pressed SET
 
     await waitForElement(() => timeSeries.getByValue('300'));
 
-    const timeAxisLabels = timeSeries.queryAllByText(':', { exact: false })
+    const timeAxisLabels = timeSeries
+      .queryAllByText(':', { exact: false })
       .filter((el) => el.textContent.length <= 5 && el.textContent.length >= 3)
       .map((el) => el.textContent);
 
     const minAxisDate = timeAxisLabels[0].split(':').map((val) => parseFloat(val));
     const maxAxisDate = timeAxisLabels[timeAxisLabels.length - 1].split(':').map((val) => parseFloat(val));
 
-    const difference = Math.min(Math.abs((maxAxisDate[0] + 12) * 60 + maxAxisDate[1] - (minAxisDate[0] * 60 + minAxisDate[1])));
+    const difference = Math.min(
+      Math.abs((maxAxisDate[0] + 12) * 60 + maxAxisDate[1] - (minAxisDate[0] * 60 + minAxisDate[1])),
+    );
     expect(difference).toEqual(270);
   });
 

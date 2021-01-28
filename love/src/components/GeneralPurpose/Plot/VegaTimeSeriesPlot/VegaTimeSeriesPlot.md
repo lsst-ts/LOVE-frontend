@@ -85,9 +85,9 @@ const gridData = [
     { name: 'example-0', label: 'Line 0' },
     { name: 'example-3', label: 'Long label line 3' },
   ],
-  // second row only has one column 
+  // second row only has one column
   // the second column will be filled automatically with an empty div
-  [{ name: 'example-2', label: 'Line 2' }], 
+  [{ name: 'example-2', label: 'Line 2' }],
   [
     { name: 'example-1', label: 'Line 1' },
     { name: 'example-4', label: 'Line 4' },
@@ -99,7 +99,7 @@ const gridData = [
     background: 'var(--secondary-background-dimmed-color)',
     display: 'grid',
     gridTemplateColumns: 'max-content max-content',
-    columnGap: '1em'
+    columnGap: '1em',
   }}
 >
   <VegaTimeseriesPlot
@@ -118,7 +118,6 @@ const gridData = [
 ```
 
 Render many lines with custom styles with an automatic and responsive legend layout
-
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -197,7 +196,6 @@ const listData = [
 
 Lines and lines with points.
 
-
 ```jsx
 import { DateTime } from 'luxon';
 import VegaTimeseriesPlot, { COLORS, DASHES } from './VegaTimeSeriesPlot';
@@ -269,7 +267,6 @@ const marksStyles = names.map((name, index) => ({
 ```
 
 Bars and lines
-
 
 ```jsx
 import { DateTime } from 'luxon';
@@ -357,7 +354,6 @@ const marksStyles = names
 
 Fixed width and height
 
-
 ```jsx
 import { DateTime } from 'luxon';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot';
@@ -398,7 +394,6 @@ const marksStyles = [
 ```
 
 Responsive size: auto resize to fit parent (or any) node size
-
 
 ```jsx
 import React from 'react';

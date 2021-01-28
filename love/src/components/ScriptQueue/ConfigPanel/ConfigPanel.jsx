@@ -16,6 +16,7 @@ import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
 import Select from 'components/GeneralPurpose/Select/Select';
 import ManagerInterface from '../../../Utils';
+import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
@@ -27,11 +28,11 @@ const SERVER_ERROR = 'SERVER_ERROR';
 const NEED_REVALIDATION = 'NEED_REVALIDATION';
 
 const logLevelMap = {
-  'Debug': 10,
-  'Info': 20,
-  'Warning': 30,
-  'Error': 40,
-}
+  Debug: 10,
+  Info: 20,
+  Warning: 30,
+  Error: 40,
+};
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -242,13 +243,30 @@ export default class ConfigPanel extends Component {
   };
 
   onLogLevelChange = (value) => {
-    this.setState({logLevel: value})
-  }
+    this.setState({ logLevel: value });
+  };
+
+  getDocumentationLink = (scriptPath, isStandard) => {
+    const extensionIndex = scriptPath.lastIndexOf('.');
+    const cleanPath = scriptPath.substring(0, extensionIndex);
+    const dirIndex = cleanPath.lastIndexOf('/');
+    const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
+    const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
+    const cleanScriptName = scriptName
+      .split('_')
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join('');
+    const cleanDirectory = scriptDirectory.split('/').join('.');
+    const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
+    const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
+    return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
+  };
 
   render() {
     const { orientation } = this.state;
-
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
+    const scriptPath = this.props.configPanel.script ? this.props.configPanel.script?.path : '';
+    const isStandard = this.props.configPanel.script ? this.props.configPanel.script?.type === 'standard' : false;
     const sidePanelSize = {
       stacked: {
         firstWidth: `${this.state.width}px`,
@@ -301,6 +319,15 @@ export default class ConfigPanel extends Component {
               <h3>
                 SCHEMA <span className={styles.readOnly}>(Read only)</span>
               </h3>
+              {isStandard && (
+                <a
+                  className={styles.documentationLink}
+                  target="_blank"
+                  href={this.getDocumentationLink(scriptPath, isStandard)}
+                >
+                  Go to documentation
+                </a>
+              )}
 
               <AceEditor
                 mode="yaml"
@@ -388,12 +415,7 @@ export default class ConfigPanel extends Component {
               <span className={styles.logLevelLabel}>Log level</span>
               <Select
                 className={styles.logLevelSelect}
-                options={[
-                  'Debug',
-                  'Info',
-                  'Warning',
-                  'Error',
-                ]}
+                options={['Debug', 'Info', 'Warning', 'Error']}
                 option={this.state.logLevel}
                 placeholder="Warning"
                 onChange={(selection) => this.onLogLevelChange(selection.value)}

@@ -135,8 +135,7 @@ export const schema = {
     },
     controls: {
       type: 'boolean',
-      description:
-        "Whether to display controls to configure periods of time'",
+      description: "Whether to display controls to configure periods of time'",
       default: true,
       isPrivate: false,
     },
@@ -148,13 +147,13 @@ const domeAzimuthGroupName = 'telemetry-ATDome-0-position';
 class PolarPlotContainer extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       data: {},
       isLive: true,
       timeWindow: 60,
       historicalData: [],
-    }
+    };
 
     this.containerRef = React.createRef();
   }
@@ -171,23 +170,25 @@ class PolarPlotContainer extends React.Component {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (prevProps.inputs != inputs || 
+    if (
+      prevProps.inputs != inputs ||
       prevProps.subscribeToStreams != subscribeToStreams ||
-      prevProps.unsubscribeToStreams != unsubscribeToStreams) {
+      prevProps.unsubscribeToStreams != unsubscribeToStreams
+    ) {
       unsubscribeToStreams();
       subscribeToStreams();
       const data = {};
       for (const key of Object.keys(inputs)) {
         data[key] = [];
       }
-      this.setState({ data });      
+      this.setState({ data });
     }
 
     if (prevProps.inputs != inputs || prevProps.streams != streams) {
       const newData = {};
       for (const [inputName, inputConfig] of Object.entries(inputs)) {
         const { category, csc, salindex, topic, item, accessor } = inputConfig;
-        
+
         /* eslint no-eval: 0 */
         const accessorFunc = eval(accessor);
         let inputData = data[inputName] || [];
@@ -202,15 +203,16 @@ class PolarPlotContainer extends React.Component {
           time: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
           value: accessorFunc(streamValue[item]?.value),
         };
-  
+
         // TODO: use reselect to never get repeated timestamps
         if ((!lastValue || lastValue.time?.ts !== newValue.time?.ts) && newValue.time) {
           inputData.push(newValue);
         }
 
-        // if (inputData.length > 100) {
-        //   inputData = inputData.slice(-100);
-        // }
+        // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > 1800) {
+          inputData = inputData.slice(-1800);
+        }
         newData[inputName] = inputData;
       }
       this.setState({ data: newData });
@@ -218,9 +220,22 @@ class PolarPlotContainer extends React.Component {
   }
 
   render() {
-    const { inputs, streams, width, height, groupTitles, temporalEncoding, taiToUtc, colorInterpolation, 
-      opacityInterpolation, displayDome, radialUnits, controls, timeSeriesControlsProps } = this.props;
-    
+    const {
+      inputs,
+      streams,
+      width,
+      height,
+      groupTitles,
+      temporalEncoding,
+      taiToUtc,
+      colorInterpolation,
+      opacityInterpolation,
+      displayDome,
+      radialUnits,
+      controls,
+      timeSeriesControlsProps,
+    } = this.props;
+
     const { data } = this.state;
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
 
@@ -231,7 +246,7 @@ class PolarPlotContainer extends React.Component {
     });
 
     const units = streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units;
-    
+
     const marksStyles = Object.keys(inputs).map((input, index) => {
       return {
         name: input,
@@ -257,9 +272,7 @@ class PolarPlotContainer extends React.Component {
     const opacityInterpolationFunc = eval(opacityInterpolation);
 
     // const rangedInputData = data;
-    const rangedInputData = isLive ?
-        this.getRangedData(data, timeWindow) : 
-        this.getRangedData(data, 0, historicalData);
+    const rangedInputData = isLive ? this.getRangedData(data, timeWindow) : this.getRangedData(data, 0, historicalData);
 
     const plotProps = {
       data: rangedInputData,
@@ -284,35 +297,40 @@ class PolarPlotContainer extends React.Component {
       radialUnits: radialUnits,
       isLive: isLive,
       timeWindow: timeWindow,
-      setIsLive: isLive => { this.setState({ isLive })},
-      setTimeWindow: timeWindow => { this.setState({ timeWindow })},
-      setHistoricalData: historicalData => { this.setState({ historicalData })},
-      controls: controls
+      setIsLive: (isLive) => {
+        this.setState({ isLive });
+      },
+      setTimeWindow: (timeWindow) => {
+        this.setState({ timeWindow });
+      },
+      setHistoricalData: (historicalData) => {
+        this.setState({ historicalData });
+      },
+      controls: controls,
     };
 
     return <PolarPlot {...plotProps} />;
-
   }
 
   getRangedData = (data, timeWindow, rangeArray) => {
     const newData = {};
-    if (timeWindow == 0 && rangeArray?.length == 2){
+    if (timeWindow == 0 && rangeArray?.length == 2) {
       const range = moment.range(rangeArray);
       for (const input in data) {
-          newData[input] = data[input].filter(val => range.contains(val.time));
+        newData[input] = data[input].filter((val) => range.contains(val.time));
       }
     } else {
       for (const input in data) {
-        newData[input] = data[input].filter(val => {
+        newData[input] = data[input].filter((val) => {
           const currentSeconds = new Date().getTime() / 1000;
           const dataSeconds = val.time.toMillis() / 1000 + this.props.taiToUtc;
-          if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
+          if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
           else return false;
         });
       }
     }
     return newData;
-  }
+  };
 }
 
 const getGroupNames = (inputs, displayDome) => {

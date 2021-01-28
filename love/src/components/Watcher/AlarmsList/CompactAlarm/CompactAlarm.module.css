@@ -70,7 +70,7 @@
 
 .separator {
   grid-column: span 3;
-  border-top: 1px solid var(--second-tertiary-background-color);;
+  border-top: 1px solid var(--second-tertiary-background-color);
   margin: 0.5em 0;
 }
 
@@ -85,7 +85,7 @@
   display: none;
 }
 
-.ackButtonContainer{
+.ackButtonContainer {
   display: flex;
   justify-content: center;
   padding-top: 0.5em;

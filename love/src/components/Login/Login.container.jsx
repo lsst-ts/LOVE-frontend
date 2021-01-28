@@ -5,14 +5,7 @@ import { getToken, getTokenStatus } from '../../redux/selectors';
 import { fetchToken, emptyToken } from '../../redux/actions/auth';
 
 const LoginContainer = ({ token, tokenStatus, fetchToken, emptyToken }) => {
-  return (
-    <Login
-      token={token}
-      tokenStatus={tokenStatus}
-      fetchToken={fetchToken}
-      emptyToken={emptyToken}
-    />
-  );
+  return <Login token={token} tokenStatus={tokenStatus} fetchToken={fetchToken} emptyToken={emptyToken} />;
 };
 
 const mapStateToProps = (state) => {
@@ -29,7 +22,4 @@ const mapDispatchToProps = (dispatch) => ({
   emptyToken: () => dispatch(emptyToken),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(LoginContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);

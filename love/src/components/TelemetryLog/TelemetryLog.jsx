@@ -74,11 +74,15 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
+    this.props.subscribeToStream(
+      [this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'),
+    );
   };
 
   unsubscribeToStream = () => {
-    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
+    this.props.unsubscribeToStream(
+      [this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'),
+    );
   };
 
   cmdComponentChange = (e) => {
@@ -99,7 +103,7 @@ export default class TelemetryLog extends Component {
       cmd: `cmd_${this.state.command}`,
       params: JSON.parse(this.state.cmdParams),
       component: this.state.cmdComponent,
-      salindex: this.state.cmdSalindex
+      salindex: this.state.cmdSalindex,
     });
   };
 

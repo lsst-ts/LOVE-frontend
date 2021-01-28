@@ -16,7 +16,7 @@ import Row from '../../../GeneralPurpose/SummaryPanel/Row';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
-import {stateToStyleDome, stateToStyleMount} from '../../../../Config'
+import { stateToStyleDome, stateToStyleMount } from '../../../../Config';
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -95,7 +95,7 @@ export default class DomeSummaryTable extends Component {
             minRot: minNas2,
             maxRot: maxNas2,
           };
-    const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION'
+    const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     return (
       <SummaryPanel className={styles.summaryTable}>

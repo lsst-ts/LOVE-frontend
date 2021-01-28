@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import styles from './BackArrowIcon.module.css';
 
 export default class ArrowIcon extends Component {
-
   static defaultProps = {
     style: '',
   };
-  
+
   render() {
     return (
       <svg
@@ -16,7 +15,7 @@ export default class ArrowIcon extends Component {
         y="0px"
         viewBox="0 0 492 492"
         className={[styles.arrowIcon, styles.active].join(' ')}
-        >
+      >
         <g>
           <g>
             <path
@@ -33,4 +32,3 @@ export default class ArrowIcon extends Component {
     );
   }
 }
-

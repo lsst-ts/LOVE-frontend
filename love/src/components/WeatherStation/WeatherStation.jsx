@@ -206,7 +206,7 @@ export default class WeatherStation extends Component {
     const timeSeriesControlsProps = {
       timeWindow: this.state.timeWindow,
       isLive: this.state.isLive,
-      historicalData: this.state.historicalData
+      historicalData: this.state.historicalData,
     };
 
     return (
@@ -216,7 +216,9 @@ export default class WeatherStation extends Component {
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Temperature</div>
-              <div className={styles.summaryValue}>{currentTemperature !== undefined ? `${currentTemperature}ºC` : '-'}</div>
+              <div className={styles.summaryValue}>
+                {currentTemperature !== undefined ? `${currentTemperature}ºC` : '-'}
+              </div>
             </div>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Humidity</div>
@@ -242,35 +244,41 @@ export default class WeatherStation extends Component {
             <div className={styles.sectionTitle}>Timeseries Controls</div>
             <div className={styles.timeSeriesControls}>
               <TimeSeriesControls
-                  setTimeWindow={(timeWindow) => this.setState({timeWindow})}
-                  timeWindow={this.state.timeWindow}
-                  setLiveMode={(isLive) => this.setState({isLive})}
-                  isLive={this.state.isLive}
-                  setHistoricalData={(historicalData) => this.setState({historicalData})}
+                setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
+                timeWindow={this.state.timeWindow}
+                setLiveMode={(isLive) => this.setState({ isLive })}
+                isLive={this.state.isLive}
+                setHistoricalData={(historicalData) => this.setState({ historicalData })}
               />
             </div>
           </div>
-          )
-        }
+        )}
 
         {this.props.controls && (
           <div className={styles.doubleSectionSimple}>
-            {this.state.isLive && <span>Displaying last <strong>{this.state.timeWindow != 1 ? 
-              this.state.timeWindow + " minutes" : 
-              "minute"}</strong> of data</span>}
-            {!this.state.isLive && <span>Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong></span>}
+            {this.state.isLive && (
+              <span>
+                Displaying last{' '}
+                <strong>{this.state.timeWindow != 1 ? this.state.timeWindow + ' minutes' : 'minute'}</strong> of data
+              </span>
+            )}
+            {!this.state.isLive && (
+              <span>
+                Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to{' '}
+                <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong>
+              </span>
+            )}
           </div>
-          )
-        }
+        )}
 
         <div className={styles.windPlotSection}>
           <div className={styles.sectionTitle}>Wind</div>
           <div ref={this.windDirectionPlotRef} className={styles.windPlotContainer}>
             <PolarPlotContainer
-                timeSeriesControlsProps={timeSeriesControlsProps}
-                containerNode={this.windDirectionPlotRef} 
-                {...this.windPlot} 
-              />
+              timeSeriesControlsProps={timeSeriesControlsProps}
+              containerNode={this.windDirectionPlotRef}
+              {...this.windPlot}
+            />
           </div>
         </div>
 

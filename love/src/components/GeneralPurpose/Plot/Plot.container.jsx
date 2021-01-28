@@ -7,7 +7,7 @@ import Plot from './Plot';
 import { parseTimestamp } from 'Utils';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
- 
+
 const moment = extendMoment(Moment);
 
 export const defaultStyles = [
@@ -103,8 +103,7 @@ export const schema = {
     },
     controls: {
       type: 'boolean',
-      description:
-        "Whether to display controls to configure periods of time'",
+      description: "Whether to display controls to configure periods of time'",
       default: true,
       isPrivate: false,
     },
@@ -114,13 +113,13 @@ export const schema = {
 class PlotContainer extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       data: {},
       isLive: true,
       timeWindow: 60,
       historicalData: [],
-    }
+    };
 
     this.containerRef = React.createRef();
   }
@@ -131,28 +130,30 @@ class PlotContainer extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
-    const {data} = this.state;
+    const { data } = this.state;
     if (prevProps.timeSeriesControlsProps != timeSeriesControlsProps) {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (prevProps.inputs != inputs || 
+    if (
+      prevProps.inputs != inputs ||
       prevProps.subscribeToStreams != subscribeToStreams ||
-      prevProps.unsubscribeToStreams != unsubscribeToStreams) {
+      prevProps.unsubscribeToStreams != unsubscribeToStreams
+    ) {
       unsubscribeToStreams();
       subscribeToStreams();
       const data = {};
       for (const key of Object.keys(inputs)) {
         data[key] = [];
       }
-      this.setState({ data });      
+      this.setState({ data });
     }
 
     if (prevProps.inputs != inputs || prevProps.streams != streams) {
       const newData = {};
       for (const [inputName, inputConfig] of Object.entries(inputs)) {
         const { category, csc, salindex, topic, item, accessor } = inputConfig;
-        
+
         /* eslint no-eval: 0 */
         const accessorFunc = eval(accessor);
         let inputData = data[inputName] || [];
@@ -167,15 +168,16 @@ class PlotContainer extends React.Component {
           x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
           y: accessorFunc(streamValue[item]?.value),
         };
-  
+
         // TODO: use reselect to never get repeated timestamps
         if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
           inputData.push(newValue);
         }
 
-        // if (inputData.length > 100) {
-        //   inputData = inputData.slice(-100);
-        // }
+        // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > 1800) {
+          inputData = inputData.slice(-1800);
+        }
         newData[inputName] = inputData;
       }
       this.setState({ data: newData });
@@ -183,8 +185,18 @@ class PlotContainer extends React.Component {
   }
 
   render() {
-    const { inputs, streams, containerNode, width, height, xAxisTitle, yAxisTitle, legendPosition,
-      controls, timeSeriesControlsProps } = this.props;
+    const {
+      inputs,
+      streams,
+      containerNode,
+      width,
+      height,
+      xAxisTitle,
+      yAxisTitle,
+      legendPosition,
+      controls,
+      timeSeriesControlsProps,
+    } = this.props;
     const { data } = this.state;
 
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
@@ -197,12 +209,12 @@ class PlotContainer extends React.Component {
 
     const units = streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units;
 
-    const layerTypes = ['lines', 'bars', 'pointLines']
+    const layerTypes = ['lines', 'bars', 'pointLines'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;
       const typeStr = type + 's';
-      if (!(layerTypes.includes(typeStr))) {
+      if (!layerTypes.includes(typeStr)) {
         continue;
       }
 
@@ -236,7 +248,7 @@ class PlotContainer extends React.Component {
         markType: inputs[inputName].type,
       };
     });
-    
+
     const plotProps = {
       layers: layers,
       legend: legend,
@@ -250,9 +262,15 @@ class PlotContainer extends React.Component {
       legendPosition: legendPosition,
       isLive: isLive,
       timeWindow: timeWindow,
-      setIsLive: isLive => { this.setState({ isLive })},
-      setTimeWindow: timeWindow => { this.setState({ timeWindow })},
-      setHistoricalData: historicalData => { this.setState({ historicalData })},
+      setIsLive: (isLive) => {
+        this.setState({ isLive });
+      },
+      setTimeWindow: (timeWindow) => {
+        this.setState({ timeWindow });
+      },
+      setHistoricalData: (historicalData) => {
+        this.setState({ historicalData });
+      },
       controls: controls,
     };
 
@@ -269,26 +287,25 @@ class PlotContainer extends React.Component {
 
   getRangedData = (data, timeWindow, rangeArray) => {
     let filteredData;
-    if (timeWindow == 0 && rangeArray?.length == 2){
+    if (timeWindow == 0 && rangeArray?.length == 2) {
       const range = moment.range(rangeArray);
-      filteredData = data.filter(val => range.contains(val.x));
+      filteredData = data.filter((val) => range.contains(val.x));
     } else {
-      filteredData = data.filter(val => {
+      filteredData = data.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;
         const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
-        if ((currentSeconds - timeWindow * 60) <= dataSeconds) return true;
+        if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
         else return false;
       });
     }
     return filteredData;
-  }
+  };
 }
 
-const getGroupNames = inputs => (
+const getGroupNames = (inputs) =>
   Object.values(inputs).map(
     (inputConfig) => `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`,
-  )
-)
+  );
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {

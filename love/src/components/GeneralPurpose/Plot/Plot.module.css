@@ -1,13 +1,13 @@
 .container {
-    display: flex;
-    flex-direction: row;
-    overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
 }
 
 .bottomLegend {
-    flex-direction: column;
+  flex-direction: column;
 }
 
 .plot {
-    margin-right: 1rem;
+  margin-right: 1rem;
 }

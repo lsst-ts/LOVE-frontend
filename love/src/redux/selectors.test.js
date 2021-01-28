@@ -1,3 +1,6 @@
+import { createStore, applyMiddleware } from 'redux';
+import WS from 'jest-websocket-mock';
+import thunkMiddleware from 'redux-thunk';
 import {
   getStreamData,
   getTimestampedStreamData,
@@ -7,15 +10,13 @@ import {
   getSummaryStateValue,
   getMountMotorsState,
 } from './selectors';
-import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
-import WS from 'jest-websocket-mock';
 import { doReceiveToken } from './actions/auth';
 import { openWebsocketConnection, addGroup } from './actions/ws';
-import thunkMiddleware from 'redux-thunk';
 import { cameraStates, imageStates } from '../Constants';
 
-let store, server;
+let store;
+let server;
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', 'love-token');
@@ -330,10 +331,10 @@ describe('Test camera component status data passes correctly to component', () =
     },
   ];
   [
-    ['raftsDetailedState', cameraStates['raftsDetailedState'][1]],
-    ['shutterDetailedState', cameraStates['shutterDetailedState'][1]],
-    ['imageReadinessDetailedState', cameraStates['imageReadinessDetailedState'][1]],
-    ['calibrationDetailedState', cameraStates['calibrationDetailedState'][1]],
+    ['raftsDetailedState', cameraStates.raftsDetailedState[1]],
+    ['shutterDetailedState', cameraStates.shutterDetailedState[1]],
+    ['imageReadinessDetailedState', cameraStates.imageReadinessDetailedState[1]],
+    ['calibrationDetailedState', cameraStates.calibrationDetailedState[1]],
   ].forEach((componentPair) => {
     it(`Should extract ${componentPair[0]} data from image sequence message`, async () => {
       const groupName = `event-ATCamera-1-${componentPair[0]}`;
@@ -474,7 +475,7 @@ it('Append readout parameters to image', async () => {
       {
         csc: 'ATCamera',
         salindex: 1,
-        data: data,
+        data,
       },
     ],
   });

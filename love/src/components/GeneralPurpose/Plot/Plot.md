@@ -66,7 +66,7 @@ const [time, setTime] = React.useState(0);
 React.useEffect(() => {
   const interval = setInterval(() => {
     setTime((t) => t + 0.01);
-  }, 1000/30);
+  }, 1000 / 30);
   return () => {
     clearInterval(interval);
   };

@@ -28,14 +28,9 @@ function RotateIcon(props) {
         className={styles.prefix__st2}
         d="M19.2 16.6c-.4 0-.8-.3-.9-.6l-1.6-3.8c-.2-.5.1-1 .5-1.3.5-.2 1 .1 1.3.5l1.2 2.9 2.9-1.2c.5-.2 1 .1 1.3.5.2.5-.1 1-.5 1.3l-3.8 1.6c-.1.1-.2.1-.4.1z"
       />
-      <path
-        className={styles.divider}
-        d="M1.4 13.6h11.5"
-      />
+      <path className={styles.divider} d="M1.4 13.6h11.5" />
     </svg>
   );
-
-  
 }
 
 export default RotateIcon;

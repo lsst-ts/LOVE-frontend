@@ -9,7 +9,7 @@ export default class LaunchScriptIcon extends Component {
 
   render() {
     return (
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.5 24" style={{verticalAlign: 'top'}}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26.5 24" style={{ verticalAlign: 'top' }}>
         <title>{this.props.title}</title>
         <defs />
         <polyline className={styles.classOne} points="14.5 15.5 21.5 15.5 21.5 11 26 15.5 21.5 20 21.5 18" />

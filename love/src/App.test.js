@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import AppContainer from './App.container';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import AppContainer from './App.container';
 import store from './redux/store';
 
 it('renders without crashing', () => {
@@ -13,7 +13,7 @@ it('renders without crashing', () => {
         <AppContainer />
       </BrowserRouter>
     </Provider>,
-    div
+    div,
   );
   ReactDOM.unmountComponentAtNode(div);
 });
