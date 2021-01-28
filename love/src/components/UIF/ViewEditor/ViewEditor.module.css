@@ -40,15 +40,18 @@
 }
 
 .toolbarWrapper {
-  padding: 0.5em var(--content-padding);
-  background-color: var(--second-secondary-background-color);
+  display: flex;
   width: fit-content;
 }
 
 .toolbar {
   display: flex;
   flex-flow: row wrap;
-  align-items: stretch;
+  align-items: center;
+  background-color: var(--second-secondary-background-color);
+  padding: 0.5em;
+  margin-right: 0.5em;
+  border-radius: 5px;
 }
 
 .toolbarContainer {
@@ -61,6 +64,19 @@
   padding: 0.3em;
   height: 2em;
   width: 2em;
+}
+
+.iconTextBtn:active {
+  font-weight: 400;
+}
+
+.iconTextBtn {
+  display: grid;
+  grid-template-columns: min-content min-content;
+  column-gap: 0.5em;
+  margin: auto;
+  padding: 0.3em;
+  height: 2em;
 }
 
 .icon {
@@ -78,7 +94,6 @@
 
 .deviceSelect {
   width: 15ch;
-  height: 2.2em;
 }
 
 .element {

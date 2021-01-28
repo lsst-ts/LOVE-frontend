@@ -20,8 +20,8 @@ import AddIcon from '../../icons/AddIcon/AddIcon';
 import UndoIcon from '../../icons/UndoIcon/UndoIcon';
 import RedoIcon from '../../icons/RedoIcon/RedoIcon';
 import DebugIcon from '../../icons/DebugIcon/DebugIcon';
-import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
 import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
+import ThumbnailIcon from '../../icons/ThumbnailIcon/ThumbnailIcon';
 import Select from '../../GeneralPurpose/Select/Select';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
@@ -372,14 +372,14 @@ class ViewEditor extends Component {
     this.takeScreenshot((thumbnail) => {
       this.saveBackendView(thumbnail);
     });
-  }
+  };
 
   saveBackendView = (thumbnail) => {
     this.props.saveEditedView(thumbnail).then((response) => {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
       if (response && response.id && Number.isNaN(id)) this.props.history.push(`?id=${response.id}`);
     });
-  }
+  };
 
   viewIsSaved = () => {
     return this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
@@ -507,15 +507,6 @@ class ViewEditor extends Component {
             >
               <DebugIcon className={styles.icon} />
             </Button>
-            <Button
-              className={[styles.iconBtn, styles.element].join(' ')}
-              title="Update view thumbnail (might take a while)"
-              onClick={this.updateThumbnail}
-              disabled={this.state.editorVisible}
-              status="transparent"
-            >
-              <ScreenshotIcon className={styles.icon} />
-            </Button>
             <span className={styles.divider} />
 
             <Button
@@ -526,6 +517,18 @@ class ViewEditor extends Component {
               status="transparent"
             >
               <ExitModeIcon className={styles.icon} />
+            </Button>
+          </div>
+          <div className={styles.toolbar}>
+            <Button
+              className={[styles.iconTextBtn, styles.element].join(' ')}
+              title="Update view thumbnail (might take a while)"
+              onClick={this.updateThumbnail}
+              disabled={isSaved}
+              status="transparent"
+            >
+                <ThumbnailIcon className={styles.icon} />
+                <span>Save thumbnail</span>
             </Button>
           </div>
         </div>
