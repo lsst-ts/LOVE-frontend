@@ -41,7 +41,7 @@ const PaginatedTable = ({ headers, data, paginationOptions }) => {
     setPage(0);
   };
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     setPage(0);
   }, [data, headers]);
 
@@ -81,6 +81,6 @@ const PaginatedTable = ({ headers, data, paginationOptions }) => {
 };
 
 PaginatedTable.propTypes = {
-  paginationOptions: PropTypes.arrayOf(PropTypes.number)
-}
+  paginationOptions: PropTypes.arrayOf(PropTypes.number),
+};
 export default PaginatedTable;

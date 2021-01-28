@@ -130,7 +130,7 @@ class PlotContainer extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
-    const { data, isLive } = this.state;
+    const { data } = this.state;
     if (prevProps.timeSeriesControlsProps != timeSeriesControlsProps) {
       this.setState({ ...timeSeriesControlsProps });
     }

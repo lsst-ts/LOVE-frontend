@@ -4,10 +4,9 @@ import { Table, Thead, Tr, Td, Th, Tbody } from './Table';
 export { Table, Thead, Tr, Td, Th, Tbody };
 
 /**
- * Renders a table from data and headers configuration 
+ * Renders a table from data and headers configuration
  */
 function SimpleTable({ headers, data }) {
-
   const defaultRenderMethod = (value, row) => value;
 
   return (
@@ -15,7 +14,9 @@ function SimpleTable({ headers, data }) {
       <Thead>
         <Tr>
           {headers.map((header, index) => (
-            <Th key={`header-${index}`} className={header.className}>{header.title}</Th>
+            <Th key={`header-${index}`} className={header.className}>
+              {header.title}
+            </Th>
           ))}
         </Tr>
       </Thead>
@@ -50,15 +51,15 @@ SimpleTable.propTypes = {
       title: PropTypes.node,
       /** Data type of this column: number, string, ... */
       type: PropTypes.string,
-      /** Callback with signature (value,row) => node 
+      /** Callback with signature (value,row) => node
        * Use it customize how the cell's value is displayed  */
       render: PropTypes.func,
       /** className to be applied to the whole column */
-      className: PropTypes.string
+      className: PropTypes.string,
     }),
   ),
   /** Rows to be rendered in the table */
-  data: PropTypes.arrayOf(PropTypes.object)
-}
+  data: PropTypes.arrayOf(PropTypes.object),
+};
 
 export default SimpleTable;

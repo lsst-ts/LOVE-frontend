@@ -71,7 +71,7 @@ export default class Hoverable extends Component {
             </Float>
           )}
         </Trigger>
-        
+
         {this.props.children[1] && this.state.display && !this.props.inside && (
           <Float {...this.props} hide={this.hide} position={this.state.position}>
             {this.props.children[1]}

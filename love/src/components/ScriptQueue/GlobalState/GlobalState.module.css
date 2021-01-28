@@ -37,10 +37,10 @@
 }
 
 .stateCell {
-    display: grid;
-    grid-template-columns: 8em 1fr;
-    align-items: baseline;
-    grid-column-gap: 0.5rem;
+  display: grid;
+  grid-template-columns: 8em 1fr;
+  align-items: baseline;
+  grid-column-gap: 0.5rem;
 }
 .stateLabel {
   margin-bottom: 0.3rem;
@@ -82,5 +82,5 @@
 }
 
 .gearIcon > path {
-    fill: var(--commandable-font-color);
+  fill: var(--commandable-font-color);
 }

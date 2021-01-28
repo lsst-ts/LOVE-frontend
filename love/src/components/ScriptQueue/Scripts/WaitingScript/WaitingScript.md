@@ -1,5 +1,5 @@
 Example:
 
-``` jsx
-  <WaitingScript/>
+```jsx
+<WaitingScript />
 ```

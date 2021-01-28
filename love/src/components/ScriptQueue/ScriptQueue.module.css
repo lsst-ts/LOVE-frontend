@@ -77,8 +77,6 @@
   display: flex;
 }
 
-
-
 .scriptList {
   display: grid;
   grid-template-rows: min-content 1fr;
@@ -185,7 +183,6 @@
   opacity: 1;
 }
 
-
 .standardExternalContainer {
   display: grid;
   height: 100%;
@@ -209,7 +206,8 @@
   padding: 1em 0;
 }
 
-.externalScriptsContainer, .standardScriptsContainer {
+.externalScriptsContainer,
+.standardScriptsContainer {
   max-height: 100%;
   transition: max-height 0.2s;
   padding-right: 0.5em;

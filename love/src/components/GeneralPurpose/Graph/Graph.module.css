@@ -1,7 +1,7 @@
 .container {
   background-color: none;
   display: flex;
-  color: 'white'
+  color: 'white';
 }
 
 .container > * {

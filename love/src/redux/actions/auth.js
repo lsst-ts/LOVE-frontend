@@ -174,28 +174,27 @@ export function fetchToken(username, password) {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } else if (response.status === 400) {
+        }
+        if (response.status === 400) {
           dispatch(doRejectToken());
           return false;
-        } else {
-          dispatch(doMarkErrorToken());
-          return false;
         }
+        dispatch(doMarkErrorToken());
+        return false;
       })
       .then((response) => {
         if (response) {
-          const token = response.token;
+          const { token } = response;
           let username = '';
           if (response.user) {
             username = response.user.username;
           }
-          const time_data = response.time_data;
-          const permissions = response.permissions;
-          const config = response.config;
+          const { time_data } = response;
+          const { permissions } = response;
+          const { config } = response;
           if (token !== undefined && token !== null) {
             dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
             dispatch(requestViews());
-            return;
           }
         }
       })
@@ -228,7 +227,6 @@ export function logout() {
       .then((response) => {
         if (response.status === 204) {
           dispatch(doRemoveRemoteToken());
-          return;
         } else {
           dispatch(markErrorRemoveToken);
         }
@@ -251,7 +249,7 @@ export function validateToken() {
     const current_config = getConfig(state);
     let url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
     if (current_config) {
-      url = url + 'no_config/';
+      url += 'no_config/';
     }
     const request_time = DateTime.utc().toMillis() / 1000;
     return fetch(url, {
@@ -301,7 +299,7 @@ export function swapUser(username, password) {
     const current_config = getConfig(state);
     let url = `${ManagerInterface.getApiBaseUrl()}swap-user/`;
     if (current_config) {
-      url = url + 'no_config/';
+      url += 'no_config/';
     }
     dispatch(requestSwapToken);
     const request_time = DateTime.utc().toMillis() / 1000;
@@ -313,28 +311,27 @@ export function swapUser(username, password) {
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } else if (response.status === 400) {
+        }
+        if (response.status === 400) {
           dispatch(rejectSwapToken);
           return false;
-        } else {
-          dispatch(markErrorSwapToken);
-          return false;
         }
+        dispatch(markErrorSwapToken);
+        return false;
       })
       .then((response) => {
         if (response) {
-          const token = response.token;
+          const { token } = response;
           let username = '';
           if (response.user) {
             username = response.user.username;
           }
-          const time_data = response.time_data;
-          const permissions = response.permissions;
-          const config = response.config;
+          const { time_data } = response;
+          const { permissions } = response;
+          const { config } = response;
           if (token !== undefined && token !== null) {
             dispatch(receiveSwapToken);
             dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
-            return;
           }
         }
       })

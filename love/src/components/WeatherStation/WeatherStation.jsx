@@ -6,7 +6,7 @@ import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTi
 import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import styles from './WeatherStation.module.css';
 import { DATE_TIME_FORMAT } from 'Config';
-import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import ManagerInterface, { parseCommanderData } from 'Utils';
 
 export default class WeatherStation extends Component {
   static propTypes = {

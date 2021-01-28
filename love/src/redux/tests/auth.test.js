@@ -24,10 +24,10 @@ let store;
 
 beforeAll(async () => {
   // Arrange
-  let url = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
+  const url = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
   fetchMock.mock(url, {
-    "status": 200,
-    "data": {}
+    status: 200,
+    data: {},
   });
 });
 
@@ -127,7 +127,9 @@ describe('GIVEN the token does not exist in localStorage', () => {
 });
 
 describe('GIVEN the token exists in localStorage', () => {
-  let initialToken, url, url_no_config;
+  let initialToken;
+  let url;
+  let url_no_config;
 
   beforeEach(async () => {
     const token = '"love-token"';
@@ -237,7 +239,7 @@ describe('GIVEN the token exists in localStorage', () => {
       fetchMock.mock(
         url,
         {
-          status: status,
+          status,
         },
         ManagerInterface.getHeaders(),
       );

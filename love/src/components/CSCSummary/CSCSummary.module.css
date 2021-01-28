@@ -42,13 +42,12 @@
   .CSCRealmContainer:nth-child(2n) {
     border-left: solid var(--second-secondary-background-color) 2px;
   }
-  .CSCRealmContainer:nth-child(2n+3) {
+  .CSCRealmContainer:nth-child(2n + 3) {
     border-top: solid var(--second-secondary-background-color) 2px;
   }
   .CSCRealmContainer:last-of-type {
     max-width: 100%;
   }
-
 }
 
 /* 1 columns*/
@@ -56,7 +55,7 @@
   .CSCRealmContainer {
     flex-basis: 60%;
   }
-  .CSCRealmContainer:nth-child(n+2) {
+  .CSCRealmContainer:nth-child(n + 2) {
     border-top: solid var(--second-secondary-background-color) 2px;
   }
 }

@@ -78,7 +78,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
         const hasProcessState = element.textContent.includes(`Process state${script.process_state}`);
         const hasScriptState = element.textContent.includes(`Script state${script.script_state}`);
         const hasEstimatedTime = element.textContent.includes(`Estimated time: ${script.expected_duration.toFixed(2)}`);
-        
+
         return hasType && hasPath && hasProcessState && hasScriptState && hasEstimatedTime;
       });
 

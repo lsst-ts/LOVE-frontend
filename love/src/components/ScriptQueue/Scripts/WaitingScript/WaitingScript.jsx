@@ -102,8 +102,7 @@ export default class WaitingScript extends PureComponent {
     const timeDiffText =
       this.props.heartbeatData.lastHeartbeatTimestamp <= 0 || timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
-
-      return (
+    return (
       <div className={scriptStyles.scriptContainer}>
         <div>
           <div className={styles.waitingScriptContainer} onClick={this.onClick}>
@@ -197,7 +196,7 @@ export default class WaitingScript extends PureComponent {
                     className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
                     onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
                   >
-                    <span style={{'width': '100%'}}>&#8943;</span>
+                    <span style={{ width: '100%' }}>&#8943;</span>
                   </div>
                 </div>
               )}

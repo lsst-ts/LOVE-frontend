@@ -64,12 +64,12 @@
   top: 0;
   right: 0;
   display: flex;
-    justify-items: center;
-    align-items: center;
+  justify-items: center;
+  align-items: center;
 }
 
 .changeConfigButton:after {
-  content: 'Change config. file ⌄'
+  content: 'Change config. file ⌄';
 }
 
 .controlClassName:hover .changeConfigButton {

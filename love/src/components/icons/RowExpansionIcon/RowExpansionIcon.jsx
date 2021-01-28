@@ -3,7 +3,7 @@ import styles from './RowExpansionIcon.module.css';
 
 export default class RowExpansionIcon extends Component {
   render() {
-    const transform = this.props.expanded ? "rotate(90, 256.004, 256.004)" : '';
+    const transform = this.props.expanded ? 'rotate(90, 256.004, 256.004)' : '';
     return (
       <svg
         className={[styles.icon, styles.color, this.props.style].join(' ')}

@@ -56,33 +56,30 @@ const initialState = {
 export default function (state = initialState, action) {
   switch (action.type) {
     case REQUEST_TOKEN: {
-      return Object.assign({}, state, {
-        status: tokenStates.REQUESTED,
-      });
+      return { ...state, status: tokenStates.REQUESTED };
     }
     case GET_TOKEN_FROM_LOCALSTORAGE: {
-      return Object.assign({}, state, {
-        status: tokenStates.READ_FROM_STORAGE,
-        token: action.token,
-      });
+      return { ...state, status: tokenStates.READ_FROM_STORAGE, token: action.token };
     }
     case RECEIVE_TOKEN: {
       if (action.permissions === null || action.permissions === undefined) {
-        return Object.assign({}, state, {
+        return {
+          ...state,
           username: action.username,
           token: action.token,
           status: tokenStates.RECEIVED,
           permissions: initialState.permissions,
-        });
+        };
       }
-      return Object.assign({}, state, {
+      return {
+        ...state,
         username: action.username,
         token: action.token,
         status: tokenStates.RECEIVED,
         permissions: {
-          cmd_exec: action.permissions['execute_commands'],
+          cmd_exec: action.permissions.execute_commands,
         },
-      });
+      };
     }
     case REJECT_TOKEN:
       return {
@@ -153,7 +150,7 @@ export default function (state = initialState, action) {
     case RECEIVE_CONFIG:
       return {
         ...state,
-        config: {...action.config}
+        config: { ...action.config },
       };
     default:
       return state;

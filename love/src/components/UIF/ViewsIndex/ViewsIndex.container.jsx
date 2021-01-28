@@ -16,7 +16,4 @@ const mapDispatchToProps = (dispatch) => ({
   deleteView: (view) => dispatch(deleteView(view)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ViewsIndexContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewsIndexContainer);

@@ -134,7 +134,7 @@ export const savingEditedView = {
 export const saveErrorEditedView = (response) => {
   return {
     type: SAVE_ERROR,
-    response: response,
+    response,
   };
 };
 
@@ -144,7 +144,7 @@ export const saveErrorEditedView = (response) => {
 export const savedEditedView = (view) => {
   return {
     type: SAVED_EDITED_VIEW,
-    view: view,
+    view,
   };
 };
 

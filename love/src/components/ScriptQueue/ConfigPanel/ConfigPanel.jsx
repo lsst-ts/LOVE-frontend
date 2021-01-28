@@ -250,12 +250,15 @@ export default class ConfigPanel extends Component {
     const extensionIndex = scriptPath.lastIndexOf('.');
     const cleanPath = scriptPath.substring(0, extensionIndex);
     const dirIndex = cleanPath.lastIndexOf('/');
-    const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex+1) : '';
-    const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex+1) : cleanPath;
-    const cleanScriptName = scriptName.split('_').map(s => s.charAt(0).toUpperCase() + s.slice(1)).join('');
+    const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
+    const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
+    const cleanScriptName = scriptName
+      .split('_')
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join('');
     const cleanDirectory = scriptDirectory.split('/').join('.');
     const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
-    const fullPath = `lsst.ts.standardscripts.${camelCasePath}`
+    const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
     return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
   };
 
@@ -316,8 +319,7 @@ export default class ConfigPanel extends Component {
               <h3>
                 SCHEMA <span className={styles.readOnly}>(Read only)</span>
               </h3>
-              {
-                isStandard &&
+              {isStandard && (
                 <a
                   className={styles.documentationLink}
                   target="_blank"
@@ -325,7 +327,7 @@ export default class ConfigPanel extends Component {
                 >
                   Go to documentation
                 </a>
-              }
+              )}
 
               <AceEditor
                 mode="yaml"
