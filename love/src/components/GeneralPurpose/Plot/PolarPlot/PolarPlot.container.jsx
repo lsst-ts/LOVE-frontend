@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
 import PolarPlot from './PolarPlot';
-import { parseTimestamp } from 'Utils';
+import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 
@@ -271,8 +271,7 @@ class PolarPlotContainer extends React.Component {
     const colorInterpolationFunc = eval(colorInterpolation);
     const opacityInterpolationFunc = eval(opacityInterpolation);
 
-    // const rangedInputData = data;
-    const rangedInputData = isLive ? this.getRangedData(data, timeWindow) : this.getRangedData(data, 0, historicalData);
+    const rangedInputData = this.getRangedData(data, timeWindow, historicalData, isLive, inputs);
 
     const plotProps = {
       data: rangedInputData,
@@ -297,31 +296,49 @@ class PolarPlotContainer extends React.Component {
       radialUnits: radialUnits,
       isLive: isLive,
       timeWindow: timeWindow,
-      setIsLive: (isLive) => {
-        this.setState({ isLive });
+      setIsLive: isLive => { this.setState({ isLive })},
+      setTimeWindow: timeWindow => { this.setState({ timeWindow })},
+      setHistoricalData: (startDate, timeWindow) => {
+        const cscs = parsePlotInputs(inputs);
+        const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+        // historicalData
+        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
+          const parsedData = parseCommanderData(data, 'time', 'value');
+          this.setState({ historicalData: parsedData });
+        });
       },
-      setTimeWindow: (timeWindow) => {
-        this.setState({ timeWindow });
-      },
-      setHistoricalData: (historicalData) => {
-        this.setState({ historicalData });
-      },
-      controls: controls,
+      controls: controls
     };
 
     return <PolarPlot {...plotProps} />;
   }
 
-  getRangedData = (data, timeWindow, rangeArray) => {
-    const newData = {};
-    if (timeWindow == 0 && rangeArray?.length == 2) {
-      const range = moment.range(rangeArray);
-      for (const input in data) {
-        newData[input] = data[input].filter((val) => range.contains(val.time));
-      }
+  // Get pairs containing topic and item names of the form
+  // [csc-index-topic, item], based on the inputs
+  getTopicItemPair = (inputs) => {
+    const topics = {};
+    Object.keys(inputs).forEach((inputKey) => {
+      const input = inputs[inputKey];
+      topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+    });
+    return topics;
+  };
+
+  getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
+    let filteredData = {};
+    if (!isLive) {
+      const topics = this.getTopicItemPair(inputs);
+      const filteredHistoricalData = {}
+      Object.keys(topics).forEach((topicKey) => {
+        const topic = topics[topicKey];
+        const [topicName, property] = topic;
+        const dataPoints = historicalData?.[topicName]?.[property] ?? [];
+        filteredHistoricalData[topicKey] = dataPoints
+      });
+      filteredData = filteredHistoricalData;
     } else {
       for (const input in data) {
-        newData[input] = data[input].filter((val) => {
+        filteredData[input] = data[input].filter(val => {
           const currentSeconds = new Date().getTime() / 1000;
           const dataSeconds = val.time.toMillis() / 1000 + this.props.taiToUtc;
           if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
@@ -329,7 +346,7 @@ class PolarPlotContainer extends React.Component {
         });
       }
     }
-    return newData;
+    return filteredData;
   };
 }
 

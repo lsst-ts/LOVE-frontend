@@ -4,9 +4,9 @@ import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData } from 'redux/selectors/selectors';
 import { getTaiToUtc } from 'redux/selectors';
 import Plot from './Plot';
-import { parseTimestamp } from 'Utils';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
 
 const moment = extendMoment(Moment);
 
@@ -218,18 +218,12 @@ class PlotContainer extends React.Component {
         continue;
       }
 
-      if (!data[inputName]) continue;
+      if (isLive && !data[inputName]) continue;
 
       let rangedInputData;
-      if (isLive) {
-        rangedInputData = this.getRangedData(data[inputName], timeWindow);
-      } else {
-        rangedInputData = this.getRangedData(data[inputName], 0, historicalData);
-      }
-      // layers[typeStr] = (layers[typeStr] ?? []).concat(data[inputName]);
+      rangedInputData = this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
       layers[typeStr] = (layers[typeStr] ?? []).concat(rangedInputData);
     }
-
     const marksStyles = Object.keys(inputs).map((input, index) => {
       return {
         name: input,
@@ -268,9 +262,16 @@ class PlotContainer extends React.Component {
       setTimeWindow: (timeWindow) => {
         this.setState({ timeWindow });
       },
-      setHistoricalData: (historicalData) => {
-        this.setState({ historicalData });
+      setHistoricalData: (startDate, timeWindow) => {
+        const cscs = parsePlotInputs(inputs);
+        const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+        // historicalData
+        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
+          const parsedData = parseCommanderData(data);
+          this.setState({ historicalData: parsedData });
+        });
       },
+
       controls: controls,
     };
 
@@ -285,11 +286,33 @@ class PlotContainer extends React.Component {
     }
   }
 
-  getRangedData = (data, timeWindow, rangeArray) => {
+  // Get pairs containing topic and item names of the form
+  // [csc-index-topic, item], based on the inputs
+  getTopicItemPair = (inputs) => {
+    const topics = {};
+    Object.keys(inputs).forEach((inputKey) => {
+      const input = inputs[inputKey];
+      topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+    });
+    return topics;
+  };
+
+  getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
     let filteredData;
-    if (timeWindow == 0 && rangeArray?.length == 2) {
-      const range = moment.range(rangeArray);
-      filteredData = data.filter((val) => range.contains(val.x));
+    if (!isLive) {
+      const topics = this.getTopicItemPair(inputs);
+      const filteredData2 = Object.keys(topics).flatMap((topicKey) => {
+        const topic = topics[topicKey];
+        const [topicName, property] = topic;
+        const dataPoints = historicalData?.[topicName]?.[property] ?? [];
+        return dataPoints.map((dataPoint) => {
+          return {
+            name: topicKey,
+            ...dataPoint,
+          };
+        });
+      });
+      filteredData = filteredData2;
     } else {
       filteredData = data.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;

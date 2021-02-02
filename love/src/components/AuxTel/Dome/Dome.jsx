@@ -10,6 +10,7 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import WindRose from '../../GeneralPurpose/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
+import ManagerInterface, { parseCommanderData } from 'Utils';
 
 export default class Dome extends Component {
   static propTypes = {
@@ -115,6 +116,29 @@ export default class Dome extends Component {
       color: 'hsl(160, 70%, 40%)',
       dash: [4, 1],
     },
+  };
+
+  setHistoricalData = (startDate, timeWindow) => {
+    const cscs = {
+      ATDome: {
+        0: {
+          position: ['azimuthPosition'],
+          azimuthCommandedState: ['azimuth'],
+        },
+      },
+      ATMCS: {
+        0: {
+          mount_AzEl_Encoders: ['azimuthCalculatedAngle', 'elevationCalculatedAngle'],
+          target: ['azimuth', 'elevation'],
+        },
+      },
+    };
+    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+    // historicalData
+    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
+      const parsedPlotData = parseCommanderData(data, 'x', 'y');
+      this.setState({ historicalData: parsedPlotData });
+    });
   };
 
   render() {
@@ -235,7 +259,7 @@ export default class Dome extends Component {
               timeWindow={this.state.timeWindow}
               setLiveMode={(isLive) => this.setState({ isLive })}
               isLive={this.state.isLive}
-              setHistoricalData={(historicalData) => this.setState({ historicalData })}
+              setHistoricalData={this.setHistoricalData}
             />
           </div>
         )}
@@ -251,59 +275,6 @@ export default class Dome extends Component {
                   yAxisTitle="Azimuth"
                   timeSeriesControlsProps={timeSeriesControlsProps}
                 />
-                {/* <TimeSeriesPlotContainer
-                  dataSources={['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target']}
-                  // dataSources={['Mount Target']}
-                  layers={{
-                    'Dome Azimuth': {
-                      mark: {
-                        interpolate: 'linear',
-                      },
-                    },
-                    'Dome Target Az': {
-                      mark: {
-                        interpolate: 'step-before',
-                        strokeWidth: 1,
-                        strokeDash: [8, 8],
-                      },
-                    },
-                    'Mount Azimuth': {
-                      mark: {
-                        interpolate: 'linear',
-                        point: false,
-                      },
-                    },
-                    'Mount Target': {
-                      mark: {
-                        interpolate: 'step-before',
-                        strokeWidth: 1,
-                        strokeDash: [8, 8],
-                      },
-                    },
-                  }}
-                  encoding={{
-                    color: {
-                      scale: {
-                        domain: ['Dome Azimuth', 'Dome Target Az', 'Mount Azimuth', 'Mount Target'],
-                        range: ['hsl(201, 70%, 40%)', 'hsl(201, 70%, 40%)', 'hsl(160, 70%, 40%)', 'hsl(160, 70%, 40%)'],
-                      },
-                    },
-                  }}
-                  groupNames={{
-                    'Dome Azimuth': 'telemetry-ATDome-0-position',
-                    'Dome Target Az': 'event-ATDome-0-azimuthCommandedState',
-                    'Mount Azimuth': 'telemetry-ATMCS-0-mount_AzEl_Encoders',
-                    'Mount Target': 'event-ATMCS-0-target',
-                  }}
-                  accessors={{
-                    'Dome Azimuth': (data) => data.azimuthPosition.value,
-                    'Dome Target Az': (data) =>
-                      data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
-                    'Mount Azimuth': (data) => (data.azimuthCalculatedAngle ? data.azimuthCalculatedAngle.value[0] : 0),
-                    'Mount Target': (data) =>
-                      data[data.length - 1].azimuth ? data[data.length - 1].azimuth.value : undefined,
-                  }}
-                /> */}
               </div>
             </div>
           </div>
@@ -319,39 +290,6 @@ export default class Dome extends Component {
                   yAxisTitle="Elevation"
                   timeSeriesControlsProps={timeSeriesControlsProps}
                 />
-                {/* <VegaTimeSeriesContainer
-                  dataSources={['Mount Elevation', 'Mount Target']}
-                  layers={{
-                    'Mount Elevation': {
-                      mark: {
-                        interpolate: 'linear',
-                        point: false,
-                      },
-                    },
-                    'Mount Target': {
-                      mark: {
-                        interpolate: 'step-before',
-                      },
-                    },
-                  }}
-                  encoding={{
-                    color: {
-                      scale: {
-                        domain: ['Mount Elevation', 'Mount Target'],
-                        range: ['hsl(201, 70%, 40%)', 'white'],
-                      },
-                    },
-                  }}
-                  groupNames={{
-                    'Mount Elevation': 'telemetry-ATMCS-0-mount_AzEl_Encoders',
-                    'Mount Target': 'event-ATMCS-0-target',
-                  }}
-                  accessors={{
-                    'Mount Elevation': (data) =>
-                      data.elevationCalculatedAngle ? data.elevationCalculatedAngle.value[0] : 0,
-                    'Mount Target': (data) => (data[0].elevation ? data[0].elevation.value : undefined),
-                  }}
-                /> */}
               </div>
             </div>
           </div>

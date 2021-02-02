@@ -5,6 +5,7 @@ import styles from './DateSelection.module.css';
 import './react-datetime.css';
 import moment from 'moment';
 import TextField from 'components/TextField/TextField';
+import ManagerInterface, { parseTimestamp } from 'Utils';
 // import Input from 'components/GeneralPurpose/Input/Input';
 
 export default class DateSelection extends PureComponent {
@@ -29,14 +30,9 @@ export default class DateSelection extends PureComponent {
 
   onDateSelected = (date) => {
     if (!this.isDateValid(date)) return;
-    this.setState(
-      {
-        startDate: date,
-      },
-      () => {
-        this.props.setHistoricalData([this.state.startDate, null]);
-      },
-    );
+    this.setState({
+      startDate: date,
+    });
   };
 
   onTimeWindowChange = (minutes) => {
@@ -47,20 +43,14 @@ export default class DateSelection extends PureComponent {
 
   onSubmitQuery = () => {
     const { startDate, timeWindow } = this.state;
-    // TODO: add query interface
-    // queryEFD(startDate, timeWindow)
+    this.props.setHistoricalData?.(startDate, timeWindow);
   };
 
   componentDidMount() {
-    this.setState(
-      {
-        startDate: this.props?.dateSelectorDates?.[0],
-        endDate: this.props?.dateSelectorDates?.[1],
-      },
-      () => {
-        this.props.setHistoricalData?.([this.state.startDate, this.state.endDate]);
-      },
-    );
+    this.setState({
+      startDate: this.props?.dateSelectorDates?.[0],
+      endDate: this.props?.dateSelectorDates?.[1],
+    });
   }
 
   render() {
@@ -77,6 +67,7 @@ export default class DateSelection extends PureComponent {
               initialViewMode="time"
               initialValue={this.props?.dateSelectorDates?.[0]}
               isValidDate={(currentDate) => currentDate.isBefore(currentMoment)}
+              dateFormat="YYYY/MM/DD"
             />
           </div>
         </div>
@@ -90,17 +81,9 @@ export default class DateSelection extends PureComponent {
               onChange={(event) => this.onTimeWindowChange(parseInt(event.target.value))}
               onFocus={(event) => event.target.select()}
             />
-            {/* <Input
-              // className={styles.input}
-              type="number"
-              min={0}
-              max={60}
-              value={timeWindow}
-              onChange={(event) => this.onTimeWindowChange(parseInt(event.target.value))}
-            /> */}
           </div>
         </div>
-        <button className={styles.queryButton} onClick={(event) => console.log(this.state.timeWindow)}>
+        <button className={styles.queryButton} onClick={this.onSubmitQuery}>
           Submit
         </button>
       </div>
