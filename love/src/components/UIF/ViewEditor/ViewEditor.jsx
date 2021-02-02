@@ -377,7 +377,7 @@ class ViewEditor extends Component {
   saveBackendView = (thumbnail) => {
     this.props.saveEditedView(thumbnail).then((response) => {
       const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-      if (response && response.id && Number.isNaN(id)) this.props.history.push(`?id=${response.id}`);
+      if (response?.id && Number.isNaN(id)) this.props.history.push(`?id=${response.id}`);
     });
   };
 
