@@ -6,6 +6,7 @@ import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTi
 import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import styles from './WeatherStation.module.css';
 import { DATE_TIME_FORMAT } from 'Config';
+import ManagerInterface, { parseCommanderData } from 'Utils';
 
 export default class WeatherStation extends Component {
   static propTypes = {
@@ -196,6 +197,46 @@ export default class WeatherStation extends Component {
     this.props.unsubscribeToStreams();
   };
 
+  setHistoricalData = (startDate, timeWindow) => {
+    const cscs = {
+      WeatherStation: {
+        1: {
+          airTemperature: ['avg1M'],
+          soilTemperature: ['avg1M'],
+          dewPoint: ['avg1M'],
+          relativeHumidity: ['avg1M'],
+          airPressure: ['paAvg1M'],
+          solarNetRadiation: ['avg1M'],
+          precipitation: ['prSum1M'],
+          snowDepth: ['avg1M'],
+          windSpeed: ['avg2M'],
+          windSpeed: ['avg2M'],
+          windGustDirection: ['value10M'],
+          windDirection: ['avg2M'],
+        },
+      },
+    };
+    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+    // historicalData
+    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
+      const polarData = Object.keys(data)
+        .filter((key) => key.includes('wind'))
+        .reduce((obj, key) => {
+          obj[key] = data[key];
+          return obj;
+        }, {});
+      const plotData = Object.keys(data)
+        .filter((key) => !key.includes('wind'))
+        .reduce((obj, key) => {
+          obj[key] = data[key];
+          return obj;
+        }, {});
+      const parsedPolarData = parseCommanderData(polarData, 'time', 'value');
+      const parsedPlotData = parseCommanderData(plotData, 'x', 'y');
+      this.setState({ historicalData: {...parsedPolarData, ...parsedPlotData} });
+    });
+  };
+
   render() {
     const currentTemperature = this.props.weather?.ambient_temp?.value;
     const currentHumidity = this.props.weather?.humidity?.value;
@@ -248,7 +289,7 @@ export default class WeatherStation extends Component {
                 timeWindow={this.state.timeWindow}
                 setLiveMode={(isLive) => this.setState({ isLive })}
                 isLive={this.state.isLive}
-                setHistoricalData={(historicalData) => this.setState({ historicalData })}
+                setHistoricalData={this.setHistoricalData}
               />
             </div>
           </div>

@@ -291,6 +291,38 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static getEFDTimeseries(start_date, time_window, cscs, resample) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        start_date: start_date,
+        time_window: time_window,
+        cscs: cscs,
+        resample: resample,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 }
 
 /**
@@ -534,4 +566,86 @@ export const takeScreenshot = (callback) => {
   }).then((canvas) => {
     callback(canvas.toDataURL('image/png'));
   });
+};
+
+/**
+  * Parse plot inputs and convert them to a format the EFD API understands.
+  * The transformation is done from:
+  * [
+  *   {name: {csc, salindex, topic, item}}
+  * ]
+  * to:
+  * {
+  *   csc: {
+  *     index: {
+  *       topic: [item]
+  *     }
+  *   }
+  * }
+  */
+ export const parsePlotInputs = (inputs) => {
+  const cscs = {};
+  Object.values(inputs).forEach((input) => {
+    const cscDict = cscs?.[input.csc];
+    const indexDict = cscs?.[input.csc]?.[input.salindex];
+    const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
+    let newTopicDict = topicDict ?? [];
+    let newIndexDict = indexDict ?? {};
+    let newCSCDict = cscDict ?? {};
+    if (topicDict) {
+      newIndexDict[input.topic].push(input.item);
+      return;
+    } else {
+      newIndexDict[input.topic] = [input.item];
+    }
+    newTopicDict = newIndexDict[input.topic];
+    if (indexDict) {
+      newCSCDict[input.salindex][input.topic] = newTopicDict;
+      newIndexDict = newCSCDict[input.salindex];
+    } else {
+      newIndexDict = {
+        [input.topic]: newTopicDict,
+      };
+      newCSCDict[input.salindex] = newIndexDict;
+    }
+    if (cscDict) {
+      cscs[input.csc][input.salindex] = newIndexDict;
+    } else {
+      cscs[input.csc] = {
+        [input.salindex]: newIndexDict,
+      };
+    }
+  });
+  return cscs;
+};
+
+/**
+ * Reformat data coming from the commander, from:
+ * {
+ *   "csc-index-topic": {
+ *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *   }
+ * }
+ * to:
+ * {
+ *   "csc-index-topic": {
+ *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *   }
+ * }
+ */
+export const parseCommanderData = (data, tsLabel='x', valueLabel='y') => {
+  const newData = {};
+  Object.keys(data).forEach((topicKey) => {
+    const topicData = data[topicKey];
+    const newTopicData = {};
+    Object.keys(topicData).forEach((propertyKey) => {
+      const propertyDataArray = topicData[propertyKey];
+      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
+        const tsString = dataPoint?.ts.split(' ').join('T');
+        return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
+      });
+    });
+    newData[topicKey] = newTopicData;
+  });
+  return newData;
 };
