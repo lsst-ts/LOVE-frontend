@@ -10,7 +10,8 @@
     "object-curly-newline": "off",
     "no-bitwise": "off",
     "no-eval": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "no-plusplus": [0, { "allowForLoopAfterthoughts": true }]
   },
   "plugins": ["only-warn"],
   "settings": {
