@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 import fetchMock from 'fetch-mock';
-import logger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
@@ -199,7 +198,8 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
     fetchMock.reset();
   });
 
-  it('WHEN the workspaces request fails due to unauthentication, THEN the state workspaces should be empty', async () => {
+  it('WHEN the workspaces request fails due to unauthentication,' +
+    'THEN the state workspaces should be empty', async () => {
     // Arrange:
     const responseBody = { detail: 'Authentication credentials were not provided.' };
     const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
@@ -213,7 +213,8 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
     expect(viewsStatus).toEqual(viewsStates.ERROR);
   });
 
-  it('WHEN the views request fails due to unauthentication, THEN the state views should be empty', async () => {
+  it('WHEN the views request fails due to unauthentication,' +
+    'THEN the state views should be empty', async () => {
     // Arrange:
     const responseBody = { detail: 'Authentication credentials were not provided.' };
     const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
@@ -229,7 +230,8 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
     expect(viewsStatus).toEqual(viewsStates.ERROR);
   });
 
-  it('WHEN the workspaces request fails due to permissions, THEN the state workspaces should be empty', async () => {
+  it('WHEN the workspaces request fails due to permissions,' +
+    'THEN the state workspaces should be empty', async () => {
     // Arrange:
     const responseBody = { detail: 'Unautorized.' };
     const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
@@ -243,7 +245,8 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
     expect(viewsStatus).toEqual(viewsStates.ERROR);
   });
 
-  it('WHEN the views request fails due to permissions, THEN the state views should be empty', async () => {
+  it('WHEN the views request fails due to permissions,' +
+    'THEN the state views should be empty', async () => {
     // Arrange:
     const responseBody = { detail: 'Unautorized.' };
     const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
@@ -273,7 +276,8 @@ describe('GIVEN the store contains the list of workspaces', () => {
     fetchMock.reset();
   });
 
-  it('WHEN a full workspace is requested, THEN the state should contain the workspace', async () => {
+  it('WHEN a full workspace is requested,' +
+    'THEN the state should contain the workspace', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}workspaces/0/full/`;
     const mockFullWorkspace = {
@@ -344,7 +348,8 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     fetchMock.reset();
   });
 
-  it('WHEN the edited view is saved, THEN the state should update the current view with the id retrived from the server', async () => {
+  it('WHEN the edited view is saved,' +
+    'THEN the state should update the current view with the id retrived from the server', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views/`;
     fetchMock.post(url, { status: 201, body: newViewData }, ManagerInterface.getHeaders());
@@ -398,7 +403,8 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     expect(saved.data).not.toBe(current.data);
   });
 
-  it('WHEN the edited view cannot be saved again, THEN the state should save the error but keep the current data', async () => {
+  it('WHEN the edited view cannot be saved again,' +
+    'THEN the state should save the error but keep the current data', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
     await store.dispatch(savedEditedView(newViewData));

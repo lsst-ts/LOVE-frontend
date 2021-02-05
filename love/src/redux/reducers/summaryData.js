@@ -36,7 +36,7 @@ export default function (state = initialState, action) {
       const nonDuplicates =
         action?.messages?.filter(
           (msg) =>
-            cscData?.messages?.findIndex((log) => log?.private_sndStamp?.value === msg?.private_sndStamp?.value) === -1,
+            cscData?.messages?.findIndex(log => log?.private_sndStamp?.value === msg?.private_sndStamp?.value) === -1,
         ) ?? [];
       newLogMessageData[cscDataIndex] = {
         csc: action.csc,

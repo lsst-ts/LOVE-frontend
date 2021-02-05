@@ -303,10 +303,10 @@ export default class ManagerInterface {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
-        start_date: start_date,
-        time_window: time_window,
-        cscs: cscs,
-        resample: resample,
+        start_date,
+        time_window,
+        cscs,
+        resample,
       }),
     }).then((response) => {
       if (response.status >= 500) {
@@ -583,7 +583,7 @@ export const takeScreenshot = (callback) => {
   *   }
   * }
   */
- export const parsePlotInputs = (inputs) => {
+export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {
     const cscDict = cscs?.[input.csc];
@@ -591,13 +591,13 @@ export const takeScreenshot = (callback) => {
     const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
     let newTopicDict = topicDict ?? [];
     let newIndexDict = indexDict ?? {};
-    let newCSCDict = cscDict ?? {};
+    const newCSCDict = cscDict ?? {};
     if (topicDict) {
       newIndexDict[input.topic].push(input.item);
       return;
-    } else {
-      newIndexDict[input.topic] = [input.item];
     }
+    newIndexDict[input.topic] = [input.item];
+
     newTopicDict = newIndexDict[input.topic];
     if (indexDict) {
       newCSCDict[input.salindex][input.topic] = newTopicDict;
@@ -633,7 +633,7 @@ export const takeScreenshot = (callback) => {
  *   }
  * }
  */
-export const parseCommanderData = (data, tsLabel='x', valueLabel='y') => {
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
   const newData = {};
   Object.keys(data).forEach((topicKey) => {
     const topicData = data[topicKey];

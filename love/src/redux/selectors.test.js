@@ -12,7 +12,7 @@ import {
 } from './selectors';
 import rootReducer from './reducers';
 import { doReceiveToken } from './actions/auth';
-import { openWebsocketConnection, addGroup } from './actions/ws';
+import { addGroup } from './actions/ws';
 import { cameraStates, imageStates } from '../Constants';
 
 let store;
@@ -180,7 +180,7 @@ it('Should extract the timestamped stream correctly with a selector', async () =
     },
   };
   const groupName = 'telemetry-WeatherStation-1-airPressure';
-  const timestamp = new Date();
+  
   // Act
   await store.dispatch(addGroup(groupName));
   server.send({

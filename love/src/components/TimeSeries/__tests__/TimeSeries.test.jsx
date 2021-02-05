@@ -109,8 +109,7 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     fireEvent.click(toggleButton);
 
     await waitForElement(
-      () =>
-        timeSeries.getByPlaceholderText('Click to set initial date') &&
+      () => timeSeries.getByPlaceholderText('Click to set initial date') &&
         timeSeries.getByPlaceholderText('Click to set final date'),
     );
 

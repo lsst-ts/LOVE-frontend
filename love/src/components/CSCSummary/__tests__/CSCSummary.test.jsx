@@ -2,11 +2,12 @@ import * as rtl from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect';
 import WS from 'jest-websocket-mock';
-import CSCSummary from '../../CSCSummary/CSCSummary';
+import CSCSummary from '../CSCSummary';
 import { CSCSummaryHierarchy } from '../../../Config';
 
 describe('GIVEN the CSCSummary was loaded and rendered', () => {
-  let cscSummary, server;
+  let cscSummary; let
+    server;
 
   beforeEach(async () => {
     // localStorage.setItem('LOVE-TOKEN', '"love-token"');
@@ -29,14 +30,14 @@ describe('GIVEN the CSCSummary was loaded and rendered', () => {
     // server.close();
   });
 
-  test(`THEN it should display the list of realms`, async () => {
+  test('THEN it should display the list of realms', async () => {
     const realms = Object.keys(CSCSummaryHierarchy);
     realms.forEach((realmName) => {
       expect(cscSummary.getByText(realmName)).toBeInTheDocument();
     });
   });
 
-  test(`THEN it should display the list of groups`, async () => {
+  test('THEN it should display the list of groups', async () => {
     const realms = Object.keys(CSCSummaryHierarchy);
     realms.forEach((realmName) => {
       const groupNames = Object.keys(CSCSummaryHierarchy[realmName]);
@@ -46,7 +47,7 @@ describe('GIVEN the CSCSummary was loaded and rendered', () => {
     });
   });
 
-  test(`THEN it should display the list of CSCs`, async () => {
+  test('THEN it should display the list of CSCs', async () => {
     const realms = Object.keys(CSCSummaryHierarchy);
     realms.forEach((realmName) => {
       const groupNames = Object.keys(CSCSummaryHierarchy[realmName]);

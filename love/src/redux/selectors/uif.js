@@ -67,7 +67,7 @@ export const getView = createCachedSelector(
 )(
   // re-reselect keySelector (receives selectors' arguments)
   // Use "id" as cacheKey
-  (_state_, id, id2) => id ?? -1,
+  (_state_, id/* , id2 */) => id ?? -1,
 );
 
 /**

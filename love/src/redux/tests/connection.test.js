@@ -70,7 +70,8 @@ describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
   });
 
-  it('When an incorrect token is RECEIVED, then the connection is OPENING and then CLOSED and Server DID NOT CONNECT', async () => {
+  it(`When an incorrect token is RECEIVED, then the connection is OPENING
+    and then CLOSED and Server DID NOT CONNECT`, async () => {
     // ACT
     await store.dispatch(doReceiveToken('username', 'love-wrong-token', {}, 0));
 
@@ -80,7 +81,8 @@ describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
   });
 
-  it('When a correct token is RECEIVED but the server sends an ERROR, then connection goes to OPENING and RETRYING', async () => {
+  it(`When a correct token is RECEIVED but the server sends an ERROR,
+    then connection goes to OPENING and RETRYING`, async () => {
     // ARRANGE
     server.on('connection', (socket) => {
       socket.close({ wasClean: false, code: 1003, reason: 'NOPE' });
@@ -97,10 +99,11 @@ describe('Given the token is EMPTY and the connection is CLOSED, ', () => {
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.RETRYING);
   });
 
-  it('When a token is RECEIVED but the server closes the connection with a 1000 code, then connection is CLOSED', async () => {
+  it(`When a token is RECEIVED but the server closes the connection with a 1000 code,
+    then connection is CLOSED`, async () => {
     // ARRANGE
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.CLOSED);
@@ -125,10 +128,11 @@ describe('Given a connection is OPEN, ', () => {
     await server.connected;
   });
 
-  it('When a CLOSE CONNECTION is dispatched, then connection goes to CLOSED, and the connection is closed', async () => {
+  it(`When a CLOSE CONNECTION is dispatched, then connection goes to CLOSED,
+    and the connection is closed`, async () => {
     // ARRANGE
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     // Assert connection is open before
@@ -146,7 +150,7 @@ describe('Given a connection is OPEN, ', () => {
   it('When a EXPIRE TOKEN is dispatched, then connection goes to CLOSED, and the connection is closed', async () => {
     // ARRANGE
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     // Assert connection is open before
@@ -164,7 +168,7 @@ describe('Given a connection is OPEN, ', () => {
   it('When a REJECT TOKEN is dispatched, then connection goes to CLOSED, and the connection is closed', async () => {
     // ARRANGE
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     // Assert connection is open before
@@ -182,7 +186,7 @@ describe('Given a connection is OPEN, ', () => {
   it('When a REQUEST REMOVE TOKEN is dispatched, then NOTHING HAPPENS', async () => {
     // ARRANGE
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     // Assert connection is open before
@@ -200,7 +204,7 @@ describe('Given a connection is OPEN, ', () => {
   it('When an OPEN CONNECTION is dispatched, then NOTHING HAPPENS', async () => {
     // ARRANGE
     let reconnected = false;
-    server.on('connection', (_socket) => {
+    server.on('connection', (/* _socket */) => {
       reconnected = true;
     });
     // Assert connection is open before
@@ -216,7 +220,7 @@ describe('Given a connection is OPEN, ', () => {
 
   it('When we RECEIVE A NEW TOKEN, then we DISCONNECT and RECONNECT again with the new token', async () => {
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     // ACT:
@@ -229,16 +233,16 @@ describe('Given a connection is OPEN, ', () => {
   });
 
   it('When we RECEIVE THE SAME TOKEN, then we NO NOT DISCONNECT', async () => {
-    let disconnected_2 = false;
-    server.on('close', (_socket) => {
-      disconnected_2 = true;
+    let disconnected = false;
+    server.on('close', (/* _socket */) => {
+      disconnected = true;
     });
     // ACT:
-    console.log('before: ', getConnectionStatus(store.getState()));
+    // console.log('before: ', getConnectionStatus(store.getState()));
     await store.dispatch(doReceiveToken('new-username', 'love-token', {}, 0));
     // ASSERT:
     expect(getConnectionStatus(store.getState())).toEqual(connectionStates.OPEN);
-    expect(disconnected_2).toEqual(false);
+    expect(disconnected).toEqual(false);
   });
 });
 
@@ -571,88 +575,87 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
     },
   );
 
-  it(
-    'When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING, ' +
-      'and when SUBSCRIPTION is REQUESTED AGAIN before the  server confirms each unsubscription, ' +
-      'then the subscription is REQUESTING and then SUBSCRIBED (when unsubscription is processed before resubscription)',
-    async () => {
-      // Request remove group 1
-      await store.dispatch(removeGroup('telemetry-all-all-all'));
-      await expect(server).toReceiveMessage({
-        option: 'unsubscribe',
-        category: 'telemetry',
-        csc: 'all',
-        salindex: 'all',
-        stream: 'all',
-      });
-      expect(getSubscriptions(store.getState())).toEqual([
-        {
-          groupName: 'telemetry-all-all-all',
-          status: groupStates.UNSUBSCRIBING,
-          counter: 0,
-          confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
-        },
-        {
-          groupName: 'event-all-all-all',
-          status: groupStates.SUBSCRIBED,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to event-all-all-all',
-        },
-      ]);
-      // Request subscribe to group 1 again
-      await store.dispatch(addGroup('telemetry-all-all-all'));
-      expect(getSubscriptions(store.getState())).toEqual([
-        {
-          groupName: 'telemetry-all-all-all',
-          status: groupStates.REQUESTING,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
-        },
-        {
-          groupName: 'event-all-all-all',
-          status: groupStates.SUBSCRIBED,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to event-all-all-all',
-        },
-      ]);
-      // Server removes group 1
-      server.send({
-        data: 'Successfully unsubscribed from telemetry-all-all-all',
-      });
-      expect(getSubscriptions(store.getState())).toEqual([
-        {
-          groupName: 'telemetry-all-all-all',
-          status: groupStates.REQUESTING,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
-        },
-        {
-          groupName: 'event-all-all-all',
-          status: groupStates.SUBSCRIBED,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to event-all-all-all',
-        },
-      ]);
-      // Server subscribes group 1
-      server.send({
-        data: 'Successfully subscribed to telemetry-all-all-all',
-      });
-      expect(getSubscriptions(store.getState())).toEqual([
-        {
-          groupName: 'telemetry-all-all-all',
-          status: groupStates.SUBSCRIBED,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
-        },
-        {
-          groupName: 'event-all-all-all',
-          status: groupStates.SUBSCRIBED,
-          counter: 1,
-          confirmationMessage: 'Successfully subscribed to event-all-all-all',
-        },
-      ]);
-    },
-  );
+  it(`When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING,
+    and when SUBSCRIPTION is REQUESTED AGAIN before the  server confirms each unsubscription,
+    then the subscription is REQUESTING and then SUBSCRIBED
+    (when unsubscription is processed before resubscription)`,
+  async () => {
+    // Request remove group 1
+    await store.dispatch(removeGroup('telemetry-all-all-all'));
+    await expect(server).toReceiveMessage({
+      option: 'unsubscribe',
+      category: 'telemetry',
+      csc: 'all',
+      salindex: 'all',
+      stream: 'all',
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.UNSUBSCRIBING,
+        counter: 0,
+        confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to event-all-all-all',
+      },
+    ]);
+    // Request subscribe to group 1 again
+    await store.dispatch(addGroup('telemetry-all-all-all'));
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.REQUESTING,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to event-all-all-all',
+      },
+    ]);
+    // Server removes group 1
+    server.send({
+      data: 'Successfully unsubscribed from telemetry-all-all-all',
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.REQUESTING,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to event-all-all-all',
+      },
+    ]);
+    // Server subscribes group 1
+    server.send({
+      data: 'Successfully subscribed to telemetry-all-all-all',
+    });
+    expect(getSubscriptions(store.getState())).toEqual([
+      {
+        groupName: 'telemetry-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to telemetry-all-all-all',
+      },
+      {
+        groupName: 'event-all-all-all',
+        status: groupStates.SUBSCRIBED,
+        counter: 1,
+        confirmationMessage: 'Successfully subscribed to event-all-all-all',
+      },
+    ]);
+  });
 
   it(
     'When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING, ' +
@@ -760,7 +763,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
   it('The server closes the connection with a 1000 code, then connection is CLOSED', async () => {
     // ARRANGE
     let disconnected = false;
-    server.on('close', (_socket) => {
+    server.on('close', (/* _socket */) => {
       disconnected = true;
     });
     // Assert connection is open before

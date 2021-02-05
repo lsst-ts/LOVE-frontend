@@ -1,6 +1,5 @@
 import { createStore, applyMiddleware } from 'redux';
 import fetchMock from 'fetch-mock';
-import logger from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import rootReducer from '../reducers';
 import ManagerInterface from '../../Utils';
@@ -111,7 +110,6 @@ describe('GIVEN the token does not exist in localStorage', () => {
   it('Should not save the token and set status=REJECTED when fetched Fail', async () => {
     // Arrange:
     const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
-    const newToken = 'new-token';
     fetchMock.mock(url, {
       status: 400,
     });
@@ -129,7 +127,7 @@ describe('GIVEN the token does not exist in localStorage', () => {
 describe('GIVEN the token exists in localStorage', () => {
   let initialToken;
   let url;
-  let url_no_config;
+  let urlNoConfig;
 
   beforeEach(async () => {
     const token = '"love-token"';
@@ -138,7 +136,7 @@ describe('GIVEN the token exists in localStorage', () => {
     initialToken = getToken(store.getState());
     expect(initialToken).toEqual(token);
     url = `${ManagerInterface.getApiBaseUrl()}validate-token/`;
-    url_no_config = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
+    urlNoConfig = `${ManagerInterface.getApiBaseUrl()}validate-token/no_config/`;
   });
 
   afterEach(() => {
@@ -184,7 +182,7 @@ describe('GIVEN the token exists in localStorage', () => {
     // Arrange:
     await store.dispatch(receiveConfig(initialMockConfig));
     fetchMock.mock(
-      url_no_config,
+      urlNoConfig,
       {
         detail: 'Token is valid',
         user: {
@@ -333,7 +331,7 @@ describe('GIVEN the token exists in localStorage', () => {
       },
       ManagerInterface.getHeaders(),
     );
-    const initialToken = getToken(store.getState());
+    initialToken = getToken(store.getState());
     // Act:
     await store.dispatch(swapUser('username', 'incorrect'));
     // Assert:
@@ -355,7 +353,7 @@ describe('GIVEN the token exists in localStorage', () => {
       },
       ManagerInterface.getHeaders(),
     );
-    const initialToken = getToken(store.getState());
+    initialToken = getToken(store.getState());
     // Act:
     await store.dispatch(swapUser('username', 'password'));
     // Assert:

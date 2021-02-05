@@ -35,8 +35,9 @@ export const getWebSocket = (state) => state.ws.socket;
 
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
 
-export const getSubscription = (state, groupName) =>
-  state.ws.subscriptions.find((subscription) => subscription.groupName === groupName);
+export const getSubscription = (state, groupName) => (
+  state.ws.subscriptions.find((subscription) => subscription.groupName === groupName)
+);
 
 export const getSubscriptions = (state) => state.ws.subscriptions;
 
@@ -219,13 +220,13 @@ export const getMountState = (state, index) => {
     correctionOffsets: correctionOffsets
       ? correctionOffsets[correctionOffsets.length - 1]
       : {
-          x: { value: 1.1234 },
-          y: { value: 2.1234 },
-          z: { value: 3.1234 },
-          u: { value: 4.1234 },
-          v: { value: 5.1234 },
-          w: { value: 6.1234 },
-        },
+        x: { value: 1.1234 },
+        y: { value: 2.1234 },
+        z: { value: 3.1234 },
+        u: { value: 4.1234 },
+        v: { value: 5.1234 },
+        w: { value: 6.1234 },
+      },
   };
 };
 
@@ -379,9 +380,9 @@ export const getKey = (dict, key, def) => {
 
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
-  const running_state = getKey(scriptQueueData, 'running', undefined);
+  const runningState = getKey(scriptQueueData, 'running', undefined);
   return {
-    state: running_state === undefined ? 'Unknown' : running_state ? 'Running' : 'Stopped',
+    state: runningState === undefined ? 'Unknown' : (runningState ? 'Running' : 'Stopped'),
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     current: getKey(scriptQueueData, 'current', 'None'),
