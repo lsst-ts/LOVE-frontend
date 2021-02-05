@@ -37,3 +37,19 @@ If rather than build you want to launch a development server for the documentati
 ```
 yarn guide:start
 ```
+
+### Linting & Formatting
+In order to maintaing code linting and formatting we use `pre-commit` that runs **ESLint** (https://eslint.org/) and **Prettier** (https://prettier.io/) using Git Hooks. To enable this you have to:
+
+1. Install `pre-commit` in your local development environment:
+```
+pip install pre-commit
+```
+
+2. Set up the git hook scripts running:
+```
+pre-commit install
+```
+
+3. Start developing! Linter and Formatter will be executed on every commit you make
+
