@@ -323,6 +323,36 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static runATCSCommand(commandName, params) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}tcs/aux`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        command_name: commandName,
+        params: params,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 }
 
 /**
@@ -569,21 +599,21 @@ export const takeScreenshot = (callback) => {
 };
 
 /**
-  * Parse plot inputs and convert them to a format the EFD API understands.
-  * The transformation is done from:
-  * [
-  *   {name: {csc, salindex, topic, item}}
-  * ]
-  * to:
-  * {
-  *   csc: {
-  *     index: {
-  *       topic: [item]
-  *     }
-  *   }
-  * }
-  */
- export const parsePlotInputs = (inputs) => {
+ * Parse plot inputs and convert them to a format the EFD API understands.
+ * The transformation is done from:
+ * [
+ *   {name: {csc, salindex, topic, item}}
+ * ]
+ * to:
+ * {
+ *   csc: {
+ *     index: {
+ *       topic: [item]
+ *     }
+ *   }
+ * }
+ */
+export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {
     const cscDict = cscs?.[input.csc];
@@ -633,7 +663,7 @@ export const takeScreenshot = (callback) => {
  *   }
  * }
  */
-export const parseCommanderData = (data, tsLabel='x', valueLabel='y') => {
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
   const newData = {};
   Object.keys(data).forEach((topicKey) => {
     const topicData = data[topicKey];
