@@ -30,20 +30,20 @@ it('Should send a command to the server, save it on the state properly ', async 
     csc: 'ATDome',
     salindex: 2,
   };
-  const cmdId = '10-cmd_closeShutter';
+  const cmd_id = '10-cmd_closeShutter';
 
   fetchMock.mock(url, (/* url1, opts */) => {
     expect(getLastSALCommand(store.getState())).toEqual({
       status: SALCommandStatus.REQUESTED,
       statusCode: null,
       ...commandObject,
-      cmdId,
+      cmd_id,
     });
     return serverResponse;
   });
 
   // Act
-  await store.dispatch(requestSALCommand({ ...commandObject, cmdId }));
+  await store.dispatch(requestSALCommand({ ...commandObject, cmd_id }));
 
   // Assert request was sent
   expect(fetchMock.called(url)).toBe(true);
@@ -58,6 +58,6 @@ it('Should send a command to the server, save it on the state properly ', async 
     statusCode: expectedStatusCode,
     result: 'ack message',
     ...commandObject,
-    cmdId,
+    cmd_id,
   });
 });
