@@ -1,13 +1,11 @@
 import * as rtl from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect';
-import WS from 'jest-websocket-mock';
 import CSCSummary from '../CSCSummary';
 import { CSCSummaryHierarchy } from '../../../Config';
 
 describe('GIVEN the CSCSummary was loaded and rendered', () => {
-  let cscSummary; let
-    server;
+  let cscSummary;
 
   beforeEach(async () => {
     // localStorage.setItem('LOVE-TOKEN', '"love-token"');

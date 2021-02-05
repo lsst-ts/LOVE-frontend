@@ -180,7 +180,7 @@ it('Should extract the timestamped stream correctly with a selector', async () =
     },
   };
   const groupName = 'telemetry-WeatherStation-1-airPressure';
-  
+
   // Act
   await store.dispatch(addGroup(groupName));
   server.send({

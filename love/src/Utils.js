@@ -1,8 +1,10 @@
+/* eslint camelcase: 0 */
+
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
-import { SALCommandStatus } from './redux/actions/ws.js';
+import { SALCommandStatus } from 'redux/actions/ws';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -266,7 +268,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getEmergencyContactList(index) {
+  static getEmergencyContactList(/* index */) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');

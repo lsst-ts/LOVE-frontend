@@ -1,3 +1,5 @@
+/* eslint camelcase: 0 */
+
 const decoder = new TextDecoder('utf-8');
 
 /**
@@ -31,10 +33,10 @@ export const getHeaderInfo = (arrayBuffer) => {
     exposure,
     remainder,
     _START: START,
-    width: parseInt(widthString),
-    height: parseInt(heightString),
+    width: parseInt(widthString, 10),
+    height: parseInt(heightString, 10),
     isJPEG: isJPEGString === '1',
-    length: parseInt(lengthString),
+    length: parseInt(lengthString, 10),
     body: encodedBuffer,
   };
 };
@@ -80,7 +82,6 @@ export const readNextBlobFromStream = (reader, remainder) => {
       // first load the remainder from previous chunk
       let fullDecodedBuffer = decoder.decode(remainder);
       controller.enqueue(remainder);
-      return pump();
       function pump() {
         return reader.read().then(({ done, value }) => {
           // Close it if stream closes too
@@ -116,6 +117,7 @@ export const readNextBlobFromStream = (reader, remainder) => {
           controller.close();
         });
       }
+      return pump();
     },
   });
 
@@ -127,7 +129,7 @@ export const readNextBlobFromStream = (reader, remainder) => {
  * @param {Blob} blob
  */
 export const readImageDataFromBlob = (blob, imageErrorCallback) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve/* , reject */) => {
     const fileReader = new FileReader();
     fileReader.onerror = (...e) => imageErrorCallback(e);
     fileReader.onloadend = (event) => {

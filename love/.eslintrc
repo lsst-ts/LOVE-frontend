@@ -11,12 +11,15 @@
     "no-bitwise": "off",
     "no-eval": "off",
     "no-underscore-dangle": "off",
-    "no-plusplus": [0, { "allowForLoopAfterthoughts": true }]
+    "no-plusplus": [0, { "allowForLoopAfterthoughts": true }],
+    "import/no-unresolved": "off",
+    "func-names": "off"
   },
   "plugins": ["only-warn"],
   "settings": {
     "import/resolver": {
       "node": {
+        "paths": ["src"],
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }

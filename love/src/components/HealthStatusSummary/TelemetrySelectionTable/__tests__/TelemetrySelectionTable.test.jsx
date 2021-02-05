@@ -1,4 +1,4 @@
-import { render, fireEvent, cleanup, waitForElement, getByTestId } from 'react-testing-library';
+import { render, fireEvent, waitForElement } from 'react-testing-library';
 import React from 'react';
 import RawTelemetryTable from '../RawTelemetryTable';
 import 'jest-dom/extend-expect';

@@ -48,25 +48,25 @@ module.exports = {
       sections: [
         {
           name: 'Global state management with Redux',
-          content: 'docsrc/howitworks/02-redux.md'
+          content: 'docsrc/howitworks/02-redux.md',
         },
         {
-          name: "Token, websocket connection and groups subscriptions",
-          content: 'docsrc/howitworks/02.1-auth-and-subscriptions.md'
+          name: 'Token, websocket connection and groups subscriptions',
+          content: 'docsrc/howitworks/02.1-auth-and-subscriptions.md',
         },
         {
           name: 'Clock sync',
-          content: 'docsrc/howitworks/03-time-sync.md'
+          content: 'docsrc/howitworks/03-time-sync.md',
         },
         {
           name: 'View editor',
-          content: 'docsrc/howitworks/04-view-editor.md'
+          content: 'docsrc/howitworks/04-view-editor.md',
         },
         {
           name: 'Scripts config validation',
-          content: 'docsrc/howitworks/05-scripts-validation.md'
-        }
-      ]
+          content: 'docsrc/howitworks/05-scripts-validation.md',
+        },
+      ],
     },
     {
       name: 'Components',
@@ -125,7 +125,7 @@ module.exports = {
       name: 'Contributing',
       external: true,
       href: 'https://github.com/lsst-ts/LOVE-frontend/blob/develop/CONTRIBUTING.md',
-    }
+    },
   ],
 
   // ignore: ['**/*']
