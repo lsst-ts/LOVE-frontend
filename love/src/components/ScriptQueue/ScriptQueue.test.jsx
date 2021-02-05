@@ -15,8 +15,8 @@ const findFirstParent = (element, criteria) => {
 };
 
 describe('GIVEN the ScriptQueue was loaded and rendered', () => {
-  let scriptQueue; let
-    server;
+  let scriptQueue;
+  let server;
 
   beforeEach(async () => {
     localStorage.setItem('LOVE-TOKEN', '"love-token"');
@@ -40,9 +40,11 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
   });
 
   test('THEN it should display the list of available scripts', async () => {
-    const availableListColumn = await rtl.waitForElement(() => scriptQueue.getByText((content, el) => {
-      return el.textContent.includes('AVAILABLE SCRIPTS') && !el.textContent.includes('WAITING');
-    }));
+    const availableListColumn = await rtl.waitForElement(() =>
+      scriptQueue.getByText((content, el) => {
+        return el.textContent.includes('AVAILABLE SCRIPTS') && !el.textContent.includes('WAITING');
+      }),
+    );
 
     message.data.ScriptQueueState.stream.available_scripts.forEach(async (script) => {
       const scriptPath = script.path;
@@ -61,9 +63,11 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
   });
 
   test('THEN it should display the list of waiting scripts', async () => {
-    const waitingListColumn = await rtl.waitForElement(() => scriptQueue.getByText((content, el) => {
-      return el.textContent.includes('WAITING') && !el.textContent.includes('AVAILABLE SCRIPTS');
-    }));
+    const waitingListColumn = await rtl.waitForElement(() =>
+      scriptQueue.getByText((content, el) => {
+        return el.textContent.includes('WAITING') && !el.textContent.includes('AVAILABLE SCRIPTS');
+      }),
+    );
 
     message.data.ScriptQueueState.stream.waiting_scripts.forEach(async (script) => {
       const scripIndex = `${script.index}`;
@@ -84,9 +88,11 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
   });
 
   test('THEN it should display the list of finished scripts', async () => {
-    const waitingListColumn = await rtl.waitForElement(() => scriptQueue.getByText((content, el) => {
-      return el.textContent.includes('FINISHED') && !el.textContent.includes('AVAILABLE SCRIPTS');
-    }));
+    const waitingListColumn = await rtl.waitForElement(() =>
+      scriptQueue.getByText((content, el) => {
+        return el.textContent.includes('FINISHED') && !el.textContent.includes('AVAILABLE SCRIPTS');
+      }),
+    );
 
     message.data.ScriptQueueState.stream.finished_scripts.forEach((script) => {
       const scripIndex = `${script.index}`;
@@ -122,9 +128,11 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
   });
 
   test('THEN it should display the current script', async () => {
-    const currentScriptElement = await rtl.waitForElement(() => scriptQueue.getByText((content, el) => {
-      return el.textContent.includes('CURRENT') && !el.textContent.includes('AVAILABLE SCRIPTS');
-    }));
+    const currentScriptElement = await rtl.waitForElement(() =>
+      scriptQueue.getByText((content, el) => {
+        return el.textContent.includes('CURRENT') && !el.textContent.includes('AVAILABLE SCRIPTS');
+      }),
+    );
 
     const script = message.data.ScriptQueueState.stream.current;
     const scripIndex = `${script.index}`;

@@ -125,9 +125,7 @@ describe('Given the inital state', () => {
       expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(
         serverTime.sidereal_greenwich * 3600 + diff * siderealSecond,
       );
-      expect(time.clock.sidereal_summit.toSeconds()).toEqual(
-        serverTime.sidereal_summit * 3600 + diff * siderealSecond,
-      );
+      expect(time.clock.sidereal_summit.toSeconds()).toEqual(serverTime.sidereal_summit * 3600 + diff * siderealSecond);
     }
   });
 });

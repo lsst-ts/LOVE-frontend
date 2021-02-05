@@ -129,7 +129,7 @@ export const readNextBlobFromStream = (reader, remainder) => {
  * @param {Blob} blob
  */
 export const readImageDataFromBlob = (blob, imageErrorCallback) => {
-  return new Promise((resolve/* , reject */) => {
+  return new Promise((resolve /* , reject */) => {
     const fileReader = new FileReader();
     fileReader.onerror = (...e) => imageErrorCallback(e);
     fileReader.onloadend = (event) => {

@@ -571,20 +571,20 @@ export const takeScreenshot = (callback) => {
 };
 
 /**
-  * Parse plot inputs and convert them to a format the EFD API understands.
-  * The transformation is done from:
-  * [
-  *   {name: {csc, salindex, topic, item}}
-  * ]
-  * to:
-  * {
-  *   csc: {
-  *     index: {
-  *       topic: [item]
-  *     }
-  *   }
-  * }
-  */
+ * Parse plot inputs and convert them to a format the EFD API understands.
+ * The transformation is done from:
+ * [
+ *   {name: {csc, salindex, topic, item}}
+ * ]
+ * to:
+ * {
+ *   csc: {
+ *     index: {
+ *       topic: [item]
+ *     }
+ *   }
+ * }
+ */
 export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {

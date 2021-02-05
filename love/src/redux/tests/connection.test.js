@@ -578,8 +578,7 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
   it(`When the SUBSCRIPTIONS REMOVAL are REQUESTED, then the subscriptions state change to UNSUBSCRIBING,
     and when SUBSCRIPTION is REQUESTED AGAIN before the  server confirms each unsubscription,
     then the subscription is REQUESTING and then SUBSCRIBED
-    (when unsubscription is processed before resubscription)`,
-  async () => {
+    (when unsubscription is processed before resubscription)`, async () => {
     // Request remove group 1
     await store.dispatch(removeGroup('telemetry-all-all-all'));
     await expect(server).toReceiveMessage({

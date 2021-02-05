@@ -198,23 +198,24 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
     fetchMock.reset();
   });
 
-  it('WHEN the workspaces request fails due to unauthentication,' +
-    'THEN the state workspaces should be empty', async () => {
-    // Arrange:
-    const responseBody = { detail: 'Authentication credentials were not provided.' };
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
-    fetchMock.mock(url, { status: 401, body: responseBody }, ManagerInterface.getHeaders());
-    // Act:
-    await store.dispatch(requestWorkspaces());
-    // Assert:
-    const retrievedData = getWorkspaces(store.getState());
-    const viewsStatus = getViewsStatus(store.getState());
-    expect(retrievedData).toEqual([]);
-    expect(viewsStatus).toEqual(viewsStates.ERROR);
-  });
+  it(
+    'WHEN the workspaces request fails due to unauthentication,' + 'THEN the state workspaces should be empty',
+    async () => {
+      // Arrange:
+      const responseBody = { detail: 'Authentication credentials were not provided.' };
+      const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
+      fetchMock.mock(url, { status: 401, body: responseBody }, ManagerInterface.getHeaders());
+      // Act:
+      await store.dispatch(requestWorkspaces());
+      // Assert:
+      const retrievedData = getWorkspaces(store.getState());
+      const viewsStatus = getViewsStatus(store.getState());
+      expect(retrievedData).toEqual([]);
+      expect(viewsStatus).toEqual(viewsStates.ERROR);
+    },
+  );
 
-  it('WHEN the views request fails due to unauthentication,' +
-    'THEN the state views should be empty', async () => {
+  it('WHEN the views request fails due to unauthentication,' + 'THEN the state views should be empty', async () => {
     // Arrange:
     const responseBody = { detail: 'Authentication credentials were not provided.' };
     const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
@@ -230,23 +231,24 @@ describe('Fail getting workspaces and views. GIVEN the store is empty', () => {
     expect(viewsStatus).toEqual(viewsStates.ERROR);
   });
 
-  it('WHEN the workspaces request fails due to permissions,' +
-    'THEN the state workspaces should be empty', async () => {
-    // Arrange:
-    const responseBody = { detail: 'Unautorized.' };
-    const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
-    fetchMock.mock(url, { status: 403, body: responseBody }, ManagerInterface.getHeaders());
-    // Act:
-    await store.dispatch(requestWorkspaces());
-    // Assert:
-    const retrievedData = getWorkspaces(store.getState());
-    const viewsStatus = getViewsStatus(store.getState());
-    expect(retrievedData).toEqual([]);
-    expect(viewsStatus).toEqual(viewsStates.ERROR);
-  });
+  it(
+    'WHEN the workspaces request fails due to permissions,' + 'THEN the state workspaces should be empty',
+    async () => {
+      // Arrange:
+      const responseBody = { detail: 'Unautorized.' };
+      const url = `${ManagerInterface.getUifBaseUrl()}workspaces/with_view_name/`;
+      fetchMock.mock(url, { status: 403, body: responseBody }, ManagerInterface.getHeaders());
+      // Act:
+      await store.dispatch(requestWorkspaces());
+      // Assert:
+      const retrievedData = getWorkspaces(store.getState());
+      const viewsStatus = getViewsStatus(store.getState());
+      expect(retrievedData).toEqual([]);
+      expect(viewsStatus).toEqual(viewsStates.ERROR);
+    },
+  );
 
-  it('WHEN the views request fails due to permissions,' +
-    'THEN the state views should be empty', async () => {
+  it('WHEN the views request fails due to permissions,' + 'THEN the state views should be empty', async () => {
     // Arrange:
     const responseBody = { detail: 'Unautorized.' };
     const url = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
@@ -276,8 +278,7 @@ describe('GIVEN the store contains the list of workspaces', () => {
     fetchMock.reset();
   });
 
-  it('WHEN a full workspace is requested,' +
-    'THEN the state should contain the workspace', async () => {
+  it('WHEN a full workspace is requested,' + 'THEN the state should contain the workspace', async () => {
     // Arrange:
     const url = `${ManagerInterface.getUifBaseUrl()}workspaces/0/full/`;
     const mockFullWorkspace = {
@@ -348,30 +349,33 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     fetchMock.reset();
   });
 
-  it('WHEN the edited view is saved,' +
-    'THEN the state should update the current view with the id retrived from the server', async () => {
-    // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views/`;
-    fetchMock.post(url, { status: 201, body: newViewData }, ManagerInterface.getHeaders());
-    // Act:
-    await store.dispatch(saveEditedView());
-    // Assert:
-    const status = getEditedViewStatus(store.getState());
-    const current = getEditedViewCurrent(store.getState());
-    const saved = getEditedViewSaved(store.getState());
-    expect(status).toEqual({
-      code: editViewStates.SAVED,
-      details: null,
-    });
-    expect(current).toEqual(newViewData);
-    expect(saved).toEqual(newViewData);
-    expect(current).not.toBe(newViewData);
-    expect(saved).not.toBe(newViewData);
-    expect(current.data).not.toBe(newViewData.data);
-    expect(saved.data).not.toBe(newViewData.data);
-    expect(saved).not.toBe(current);
-    expect(saved.data).not.toBe(current.data);
-  });
+  it(
+    'WHEN the edited view is saved,' +
+      'THEN the state should update the current view with the id retrived from the server',
+    async () => {
+      // Arrange:
+      const url = `${ManagerInterface.getUifBaseUrl()}views/`;
+      fetchMock.post(url, { status: 201, body: newViewData }, ManagerInterface.getHeaders());
+      // Act:
+      await store.dispatch(saveEditedView());
+      // Assert:
+      const status = getEditedViewStatus(store.getState());
+      const current = getEditedViewCurrent(store.getState());
+      const saved = getEditedViewSaved(store.getState());
+      expect(status).toEqual({
+        code: editViewStates.SAVED,
+        details: null,
+      });
+      expect(current).toEqual(newViewData);
+      expect(saved).toEqual(newViewData);
+      expect(current).not.toBe(newViewData);
+      expect(saved).not.toBe(newViewData);
+      expect(current.data).not.toBe(newViewData.data);
+      expect(saved.data).not.toBe(newViewData.data);
+      expect(saved).not.toBe(current);
+      expect(saved.data).not.toBe(current.data);
+    },
+  );
 
   it('WHEN the edited view is saved again, THEN the state should update the status', async () => {
     // Arrange:
@@ -403,33 +407,35 @@ describe('Save a new view under edition. GIVEN the store contains a view under e
     expect(saved.data).not.toBe(current.data);
   });
 
-  it('WHEN the edited view cannot be saved again,' +
-    'THEN the state should save the error but keep the current data', async () => {
-    // Arrange:
-    const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
-    await store.dispatch(savedEditedView(newViewData));
-    await store.dispatch(updateEditedView(newViewData2));
-    const responseBody = { name: 'field is required' };
-    fetchMock.put(url, { status: 400, body: responseBody }, ManagerInterface.getHeaders());
-    // Act:
-    await store.dispatch(saveEditedView());
-    // Assert:
-    const status = getEditedViewStatus(store.getState());
-    const current = getEditedViewCurrent(store.getState());
-    const saved = getEditedViewSaved(store.getState());
-    expect(status).toEqual({
-      code: editViewStates.SAVE_ERROR,
-      details: responseBody,
-    });
-    expect(current).toEqual(newViewData2);
-    expect(saved).toEqual(newViewData);
-    expect(current).not.toBe(newViewData2);
-    expect(saved).not.toBe(newViewData);
-    expect(current.data).not.toBe(newViewData2.data);
-    expect(saved.data).not.toBe(newViewData.data);
-    expect(saved).not.toBe(current);
-    expect(saved.data).not.toBe(current.data);
-  });
+  it(
+    'WHEN the edited view cannot be saved again,' + 'THEN the state should save the error but keep the current data',
+    async () => {
+      // Arrange:
+      const url = `${ManagerInterface.getUifBaseUrl()}views/${newViewData.id}/`;
+      await store.dispatch(savedEditedView(newViewData));
+      await store.dispatch(updateEditedView(newViewData2));
+      const responseBody = { name: 'field is required' };
+      fetchMock.put(url, { status: 400, body: responseBody }, ManagerInterface.getHeaders());
+      // Act:
+      await store.dispatch(saveEditedView());
+      // Assert:
+      const status = getEditedViewStatus(store.getState());
+      const current = getEditedViewCurrent(store.getState());
+      const saved = getEditedViewSaved(store.getState());
+      expect(status).toEqual({
+        code: editViewStates.SAVE_ERROR,
+        details: responseBody,
+      });
+      expect(current).toEqual(newViewData2);
+      expect(saved).toEqual(newViewData);
+      expect(current).not.toBe(newViewData2);
+      expect(saved).not.toBe(newViewData);
+      expect(current.data).not.toBe(newViewData2.data);
+      expect(saved.data).not.toBe(newViewData.data);
+      expect(saved).not.toBe(current);
+      expect(saved.data).not.toBe(current.data);
+    },
+  );
 });
 
 describe('Load view to edit. GIVEN the store contains views', () => {
