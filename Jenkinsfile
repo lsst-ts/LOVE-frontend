@@ -60,7 +60,6 @@ pipeline {
       when {
         anyOf {
           branch "develop"
-          branch "add-linter-to-pipeline"
         }
       }
       steps {
