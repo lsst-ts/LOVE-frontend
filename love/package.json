@@ -60,7 +60,7 @@
     "build": "npx react-scripts build",
     "test": "npx react-scripts test",
     "eject": "npx react-scripts eject",
-    "guide:start": "npx styleguidist server",
+    "guide:start": "FAST_REFRESH=false npx styleguidist server",
     "guide:build": "npx styleguidist build",
     "lint": "eslint src"
   },
