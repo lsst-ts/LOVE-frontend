@@ -1,0 +1,15 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.selectContainer {
+  cursor: pointer;
+}
+
+.select {
+  cursor: pointer;
+}
+
+.commandParamsContainer {
+}
