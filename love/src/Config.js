@@ -312,3 +312,74 @@ export const severityEnum = {
   serious: 3,
   critical: 4,
 };
+
+/**
+ * Available commands in the TCS and their parameters. Each command is represented
+ * as a dictionary key and their parameters as the values of said dictionary.
+ * Within each dictionary value, each parameter is represented in a separate dictionary.
+ * Each key in this new dictionary contains the parameter name and each corresponding
+ * value contains a 2 item array with its first element being the param type, e.g. 
+ * 'string', 'angle', 'number', 'boolean'. The second element contains the default
+ * value.
+ * 
+ */
+
+const rotTypes = [
+  { label: 'Sky', value: 0 },
+  { label: 'SkyAuto', value: 1 },
+  { label: 'Parallactic', value: 2 },
+  { label: 'PhysicalSky', value: 3 },
+  { label: 'Physical', value: 4 },
+];
+
+export const TCSCommands = {
+  slew_object: {
+    name: ['string', undefined],
+    rot: ['angle', 0.0],
+    rot_type: [rotTypes, rotTypes[1]],
+    slew_timeout: ['number', 240.0],
+  },
+  slew_icrs: {
+    ra: ['angle', undefined],
+    dec: ['angle', undefined],
+    rot: ['angle', 0.0],
+    rot_type: [rotTypes, rotTypes[1]],
+    target_name: ['string', 'slew_icrs'],
+    slew_timeout: ['number', 240.0],
+    stop_before_slew: ['boolean', true],
+    wait_settle: ['boolean', true],
+  },
+  point_azel: {
+    az: ['angle', undefined],
+    el: ['angle', undefined],
+    rot_tel: ['angle', 0.0],
+    target_name: ['string', 'azel_target'],
+    wait_dome: ['boolean', false],
+    slew_timeout: ['number', 1200.0],
+  },
+  offset_xy: {
+    x: ['number', undefined],
+    y: ['number', undefined],
+    relative: ['boolean', false],
+    persistent: ['boolean', false],
+  },
+  offset_azel: {
+    az: ['number', undefined],
+    el: ['number', undefined],
+    relative: ['boolean', false],
+    persistent: ['boolean', false],
+  },
+  offset_radec: {
+    ra: ['angle', undefined],
+    dec: ['angle', undefined],
+  },
+  slew_dome_to: {
+    az: ['number', undefined],
+  },
+  // focus_offset: {},
+  home_dome: {},
+};
+
+export const ATCSCommands = {
+  ...TCSCommands
+};
