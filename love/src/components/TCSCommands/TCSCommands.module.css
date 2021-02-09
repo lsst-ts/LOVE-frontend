@@ -1,6 +1,7 @@
 .container {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-rows: min-content 1fr min-content;
+  height: 100%;
 }
 
 .selectContainer {
@@ -12,4 +13,23 @@
 }
 
 .commandParamsContainer {
+}
+
+.paramContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0.5em;
+  text-align: left;
+}
+
+.paramLabel {
+  padding-left: 0.5em;
+}
+
+.checkboxParam {
+  grid-template-columns: 1fr min-content;
+}
+
+.sendButtonContainer {
+  padding: 1em;
 }
