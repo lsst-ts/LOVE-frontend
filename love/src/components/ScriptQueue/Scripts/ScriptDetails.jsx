@@ -87,7 +87,7 @@ export default ({
             </div>
           );
         })}
-        <div className={scriptStyles.subSectionValue}>
+        {/* <div className={scriptStyles.subSectionValue}>
           <CSCExpandedContainer
             group={''}
             name={'Script'}
@@ -95,7 +95,7 @@ export default ({
             onCSCClick={(a) => console.log(a)}
             displaySummaryState={false}
           />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -19,6 +19,7 @@ import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import Modal from '../GeneralPurpose/Modal/Modal';
 import ScriptDetails from './Scripts/ScriptDetails';
+import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -50,7 +51,12 @@ export default class ScriptQueue extends Component {
       availableScriptsExternalExpanded: true,
       availableScriptsFilter: '',
       scriptModal: null,
+      currentScriptDetailsHeight: 'initial',
+      resetButton: <span>&#9650;</span>
     };
+
+    this.observer = null;
+    this.currentScriptDetailsContainer = React.createRef();
   }
 
   static defaultProps = {
@@ -99,6 +105,15 @@ export default class ScriptQueue extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
+    if (this.state.currentScriptDetailsHeight !== _prevState.currentScriptDetailsHeight) {
+      if (this.state.currentScriptDetailsHeight < 360) {
+        console.log(this.state.currentScriptDetailsHeight);
+        this.setState({ resetButton: (<span>&#9660;</span>) });
+      } else {
+        this.setState({ resetButton: (<span>&#9650;</span>) });
+      }
+    }
+
     if (this.props.availableScriptList && this.props.availableScriptList !== prevProps.availableScriptList) {
       this.props.availableScriptList.sort((a, b) => {
         return a.path.localeCompare(b.path, 'en', { sensitivity: 'base' });
@@ -141,11 +156,33 @@ export default class ScriptQueue extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
+
+    this.observer = new ResizeObserver((entries) => {
+      this.setState({
+        currentScriptDetailsHeight: entries[0].contentRect.height,
+      });
+    });
+    if (this.currentScriptDetailsContainer.current) {
+      this.observer.observe(this.currentScriptDetailsContainer.current);
+    }
   };
 
   componentWillUnmount = () => {
     // this.props.unsubscribeToStreams();
+
+    if (this.observer) {
+      this.observer.unobserve(this.currentScriptDetailsContainer.current);
+    }
   };
+
+  handleResizeButton = () => {
+    const { currentScriptDetailsHeight } = this.state;
+    if (currentScriptDetailsHeight >= 360) {
+      this.setState({ currentScriptDetailsHeight: 0 });
+    } else {
+      this.setState({ currentScriptDetailsHeight: 'initial' });
+    }
+  }
 
   displayAvailableScripts = () => {
     this.setState({
@@ -270,13 +307,13 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    let { x } = e.target.getBoundingClientRect();
+    const { x } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
-        script: script,
+        script,
         name: script.name,
         show: true,
-        x: x,
+        x,
         y: 100,
         configSchema: script.configSchema,
       },
@@ -551,6 +588,19 @@ export default class ScriptQueue extends Component {
           contextMenuData={this.state.contextMenuData}
           options={contextMenuOption}
         />
+
+        <GlobalState
+          summaryState={ScriptQueue.summaryStates[this.props.summaryStateValue]}
+          queueState={{
+            statusText: ScriptQueue.stateStyleDict[this.props.state],
+            name: this.props.state,
+          }}
+          requestSummaryStateCommand={this.summaryStateCommand}
+          commandExecutePermission={this.props.commandExecutePermission}
+          resumeScriptQueue={this.resumeScriptQueue}
+          pauseScriptQueue={this.pauseScriptQueue}
+        />
+
         <div className={styles.currentScriptWrapper}>
           <div className={styles.currentScriptContainerWrapper}>
             <div className={styles.currentScriptContainer}>
@@ -575,17 +625,28 @@ export default class ScriptQueue extends Component {
           </div>
         </div>
 
-        <GlobalState
-          summaryState={ScriptQueue.summaryStates[this.props.summaryStateValue]}
-          queueState={{
-            statusText: ScriptQueue.stateStyleDict[this.props.state],
-            name: this.props.state,
-          }}
-          requestSummaryStateCommand={this.summaryStateCommand}
-          commandExecutePermission={this.props.commandExecutePermission}
-          resumeScriptQueue={this.resumeScriptQueue}
-          pauseScriptQueue={this.pauseScriptQueue}
-        />
+        <div style={{ height: this.state.currentScriptDetailsHeight }}
+          ref={this.currentScriptDetailsContainer} className={styles.currentScriptDetailsWrapper}>
+          { (this.state.currentScriptDetailsHeight !== 'initial') && (
+            <div
+              className={styles.currentScriptResetSizeWrapper}
+              onClick={this.handleResizeButton}>
+                {this.state.resetButton}
+            </div>
+          )}
+          <div className={styles.currentScriptDescriptionWrapper}>
+            <ScriptDetails {...current} />
+          </div>
+          <div className={styles.currentScriptLogsWrapper}>
+            <CSCExpandedContainer
+              group={''}
+              name={'Script'}
+              salindex={current.index ?? 0}
+              onCSCClick={(a) => console.log(a)}
+              displaySummaryState={false}/>
+          </div>
+        </div>
+
         {/* LISTS BODY */}
         <div className={styles.listsBody}>
           <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
