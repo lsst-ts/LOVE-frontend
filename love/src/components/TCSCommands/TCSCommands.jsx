@@ -4,6 +4,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import { TCSCommands } from 'Config.js';
+import ManagerInterface, { parseCommanderData } from 'Utils';
 
 const angleRegExp = new RegExp(/(\d\d(:| )\d\d(:| )\d\d)+(\.\d{1,10})?$/);
 const floatRegExp = new RegExp(/^-?\d*(\.\d+)?$/);
@@ -15,8 +16,17 @@ export default class CommandPanel extends Component {
       selectedCommand: null,
       paramValues: {},
       paramWarnings: {},
+      docstrings: {},
     };
   }
+
+  componentDidMount = () => {
+    ManagerInterface.getATCSDocstrings().then((data) => {
+      this.setState({
+        docstrings: data,
+      })
+    });
+  };
 
   updateParamValue = (name, value, paramType) => {
     this.setState({
@@ -91,10 +101,6 @@ export default class CommandPanel extends Component {
   };
 
   render() {
-    console.log(TCSCommands);
-    console.log(this.state.selectedCommand);
-    console.log(this.state.paramValues);
-    console.log(this.state.paramWarnings);
     const paramsDict = TCSCommands[this.state.selectedCommand] ?? {};
 
     return (
@@ -109,6 +115,7 @@ export default class CommandPanel extends Component {
           />
         </div>
         <div className={styles.commandParamsContainer}>
+          {this.state.selectedCommand && <div>{this.state.docstrings[this.state.selectedCommand]}</div>}
           {Object.keys(paramsDict).map((key) => {
             const param = paramsDict[key];
             return <div>{this.renderParam(key, param)}</div>;
