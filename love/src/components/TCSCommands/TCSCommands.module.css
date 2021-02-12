@@ -33,3 +33,11 @@
 .sendButtonContainer {
   padding: 1em;
 }
+
+.markdown {
+  text-align: left;
+}
+
+.markdown pre {
+  white-space: pre-wrap;
+}

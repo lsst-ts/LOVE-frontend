@@ -5,6 +5,9 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import { TCSCommands } from 'Config.js';
 import ManagerInterface, { parseCommanderData } from 'Utils';
+import { Remarkable } from 'remarkable';
+
+var md = new Remarkable();
 
 const angleRegExp = new RegExp(/(\d\d(:| )\d\d(:| )\d\d)+(\.\d{1,10})?$/);
 const floatRegExp = new RegExp(/^-?\d*(\.\d+)?$/);
@@ -24,7 +27,7 @@ export default class CommandPanel extends Component {
     ManagerInterface.getATCSDocstrings().then((data) => {
       this.setState({
         docstrings: data,
-      })
+      });
     });
   };
 
@@ -102,7 +105,6 @@ export default class CommandPanel extends Component {
 
   render() {
     const paramsDict = TCSCommands[this.state.selectedCommand] ?? {};
-
     return (
       <div className={styles.container}>
         <div className={styles.selectContainer}>
@@ -115,7 +117,14 @@ export default class CommandPanel extends Component {
           />
         </div>
         <div className={styles.commandParamsContainer}>
-          {this.state.selectedCommand && <div>{this.state.docstrings[this.state.selectedCommand]}</div>}
+          {this.state.selectedCommand && (
+            <div
+              className={styles.markdown}
+              dangerouslySetInnerHTML={{
+                __html: md.render(this.state.docstrings[this.state.selectedCommand]),
+              }}
+            ></div>
+          )}
           {Object.keys(paramsDict).map((key) => {
             const param = paramsDict[key];
             return <div>{this.renderParam(key, param)}</div>;
