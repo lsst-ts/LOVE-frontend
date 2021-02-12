@@ -6,6 +6,9 @@
 
 .selectContainer {
   cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-items: center;
 }
 
 .select {
@@ -40,4 +43,12 @@
 
 .markdown pre {
   white-space: pre-wrap;
+}
+
+.buttonWrapper {
+  padding-left: 0.5em;
+}
+
+.hidden {
+  visibility: hidden;
 }

@@ -3,6 +3,7 @@ import styles from './TCSCommands.module.css';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
 import { TCSCommands } from 'Config.js';
 import ManagerInterface, { parseCommanderData } from 'Utils';
 import { Remarkable } from 'remarkable';
@@ -20,6 +21,7 @@ export default class CommandPanel extends Component {
       paramValues: {},
       paramWarnings: {},
       docstrings: {},
+      isModalOpen: false,
     };
   }
 
@@ -107,6 +109,20 @@ export default class CommandPanel extends Component {
     const paramsDict = TCSCommands[this.state.selectedCommand] ?? {};
     return (
       <div className={styles.container}>
+        <Modal
+          displayTopBar={false}
+          isOpen={!!this.state.isModalOpen}
+          onRequestClose={() => this.setState({ isModalOpen: false })}
+          contentLabel="Component selection modal"
+          size={50}
+        >
+          <div
+            className={styles.markdown}
+            dangerouslySetInnerHTML={{
+              __html: md.render(this.state.docstrings[this.state.selectedCommand]),
+            }}
+          ></div>
+        </Modal>
         <div className={styles.selectContainer}>
           <Select
             controlClassName={styles.select}
@@ -115,6 +131,11 @@ export default class CommandPanel extends Component {
             placeholder="Select a command"
             onChange={(selection) => this.selectCommand(selection?.value)}
           />
+          <div className={this.state.selectedCommand ? styles.buttonWrapper : styles.hidden}>
+            <Button size="small" status="info" disabled={false} onClick={() => this.setState({ isModalOpen: true })}>
+              ?
+            </Button>
+          </div>
         </div>
         <div className={styles.commandParamsContainer}>
           {this.state.selectedCommand && (
