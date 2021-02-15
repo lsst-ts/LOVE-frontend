@@ -85,7 +85,7 @@
   margin-bottom: 1em;
   border-bottom: 1px solid var(--second-tertiary-background-color);
   resize: vertical;
-  overflow: scroll;
+  overflow-y: scroll;
   max-height: 370px;
 }
 

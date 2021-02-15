@@ -20,6 +20,7 @@ import GlobalState from './GlobalState/GlobalState';
 import Modal from '../GeneralPurpose/Modal/Modal';
 import ScriptDetails from './Scripts/ScriptDetails';
 import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
+import debounce from 'lodash.debounce';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -107,7 +108,6 @@ export default class ScriptQueue extends Component {
   componentDidUpdate = (prevProps, _prevState) => {
     if (this.state.currentScriptDetailsHeight !== _prevState.currentScriptDetailsHeight) {
       if (this.state.currentScriptDetailsHeight < 360) {
-        console.log(this.state.currentScriptDetailsHeight);
         this.setState({ resetButton: (<span>&#9660;</span>) });
       } else {
         this.setState({ resetButton: (<span>&#9650;</span>) });
@@ -157,11 +157,13 @@ export default class ScriptQueue extends Component {
   componentDidMount = () => {
     this.props.subscribeToStreams();
 
-    this.observer = new ResizeObserver((entries) => {
+    const debouncedResizeCallback = debounce((entries) => {
+      const newHeight = entries[0].contentRect.height;
       this.setState({
-        currentScriptDetailsHeight: entries[0].contentRect.height,
+        currentScriptDetailsHeight: newHeight,
       });
-    });
+    }, 100);
+    this.observer = new ResizeObserver(debouncedResizeCallback);
     if (this.currentScriptDetailsContainer.current) {
       this.observer.observe(this.currentScriptDetailsContainer.current);
     }
