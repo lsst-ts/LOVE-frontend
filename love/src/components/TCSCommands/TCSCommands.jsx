@@ -143,14 +143,14 @@ export default class CommandPanel extends Component {
           </div>
         </div>
         <div className={styles.commandParamsContainer}>
-          {Object.keys(paramsDict).map((key) => {
+          {Object.keys(paramsDict).map((key, index) => {
             const param = paramsDict[key];
-            return <div>{this.renderParam(key, param)}</div>;
+            return <div key={index}>{this.renderParam(key, param)}</div>;
           })}
         </div>
         {this.state.selectedCommand && (
           <div className={styles.sendButtonContainer}>
-            <Button status="info" disabled={false} onClick={() => console.log(this.state.paramValues)}>
+            <Button status="info" disabled={!this.props.commandExecutePermission} onClick={() => console.log(this.state.paramValues)}>
               SEND
             </Button>
           </div>

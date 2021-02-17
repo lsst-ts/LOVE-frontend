@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestSALCommand } from '../../redux/actions/ws';
+import { getPermCmdExec } from '../../redux/selectors';
 import TCSCommands from './TCSCommands';
 
 export const schema = {
@@ -22,8 +23,8 @@ export const schema = {
   },
 };
 
-const TCSCommandsContainer = ({ ...props }) => {
-  return <TCSCommands {...props} />;
+const TCSCommandsContainer = ({ commandExecutePermission, ...props }) => {
+  return <TCSCommands commandExecutePermission={commandExecutePermission} {...props} />;
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -34,4 +35,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   };
 };
 
-export default connect(() => {}, mapDispatchToProps)(TCSCommandsContainer);
+const mapStateToProps = (state) => {
+  const commandExecutePermission = getPermCmdExec(state);
+  return {
+    commandExecutePermission: commandExecutePermission,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TCSCommandsContainer);
