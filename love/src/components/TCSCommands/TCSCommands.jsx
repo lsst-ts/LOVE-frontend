@@ -138,14 +138,6 @@ export default class CommandPanel extends Component {
           </div>
         </div>
         <div className={styles.commandParamsContainer}>
-          {this.state.selectedCommand && (
-            <div
-              className={styles.markdown}
-              dangerouslySetInnerHTML={{
-                __html: md.render(this.state.docstrings[this.state.selectedCommand]),
-              }}
-            ></div>
-          )}
           {Object.keys(paramsDict).map((key) => {
             const param = paramsDict[key];
             return <div>{this.renderParam(key, param)}</div>;
