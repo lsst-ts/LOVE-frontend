@@ -117,12 +117,18 @@ export default class CommandPanel extends Component {
           contentLabel="Component selection modal"
           size={50}
         >
-          <div
+          {this.state.docstrings[this.state.selectedCommand] ? <div
             className={styles.markdown}
             dangerouslySetInnerHTML={{
               __html: md.render(this.state.docstrings[this.state.selectedCommand]),
             }}
-          ></div>
+          ></div>:
+          <div
+            className={styles.markdown}
+          >
+            No documentation available
+          </div>
+        }
         </Modal>
         <div className={styles.selectContainer}>
           <Select
