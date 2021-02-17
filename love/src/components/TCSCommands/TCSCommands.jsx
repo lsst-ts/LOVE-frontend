@@ -7,6 +7,7 @@ import Modal from 'components/GeneralPurpose/Modal/Modal';
 import { TCSCommands } from 'Config.js';
 import ManagerInterface, { parseCommanderData } from 'Utils';
 import { Remarkable } from 'remarkable';
+import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
 
 var md = new Remarkable();
 
@@ -131,10 +132,8 @@ export default class CommandPanel extends Component {
             placeholder="Select a command"
             onChange={(selection) => this.selectCommand(selection?.value)}
           />
-          <div className={this.state.selectedCommand ? styles.buttonWrapper : styles.hidden}>
-            <Button size="small" status="info" disabled={false} onClick={() => this.setState({ isModalOpen: true })}>
-              ?
-            </Button>
+          <div onClick={() => this.setState({ isModalOpen: true })} className={this.state.selectedCommand ? styles.buttonWrapper : styles.hidden}>
+            <HelpIcon></HelpIcon>
           </div>
         </div>
         <div className={styles.commandParamsContainer}>
