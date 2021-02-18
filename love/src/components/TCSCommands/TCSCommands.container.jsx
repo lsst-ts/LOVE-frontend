@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestSALCommand } from '../../redux/actions/ws';
-import { getPermCmdExec } from '../../redux/selectors';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
+import { getPermCmdExec, getScriptQueueState } from '../../redux/selectors';
 import TCSCommands from './TCSCommands';
 
 export const schema = {
@@ -23,12 +23,34 @@ export const schema = {
   },
 };
 
-const TCSCommandsContainer = ({ commandExecutePermission, ...props }) => {
-  return <TCSCommands commandExecutePermission={commandExecutePermission} {...props} />;
+const TCSCommandsContainer = ({
+  queueState,
+  commandExecutePermission,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  ...props
+}) => {
+  return (
+    <TCSCommands
+      state={queueState.state}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
+      commandExecutePermission={commandExecutePermission}
+      {...props}
+    />
+  );
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [`event-ScriptQueueState-1-stream`];
   return {
+    subscriptions,
+    subscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
+    },
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+    },
     requestSALCommand: (component, salindex, cmd) => {
       return dispatch(requestSALCommand({ ...cmd, component, salindex }));
     },
@@ -37,8 +59,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state) => {
   const commandExecutePermission = getPermCmdExec(state);
+  const queueState = getScriptQueueState(state, 1);
   return {
     commandExecutePermission: commandExecutePermission,
+    queueState: queueState,
   };
 };
 

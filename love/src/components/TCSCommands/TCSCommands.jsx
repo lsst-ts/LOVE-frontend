@@ -4,10 +4,13 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
-import { TCSCommands } from 'Config.js';
-import ManagerInterface, { parseCommanderData } from 'Utils';
-import { Remarkable } from 'remarkable';
+import ScriptQueue from 'components/ScriptQueue/ScriptQueue';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+import { TCSCommands } from 'Config.js';
+import ManagerInterface from 'Utils';
+import { Remarkable } from 'remarkable';
 
 var md = new Remarkable();
 
@@ -27,11 +30,16 @@ export default class CommandPanel extends Component {
   }
 
   componentDidMount = () => {
+    this.props.subscribeToStreams();
     ManagerInterface.getATCSDocstrings().then((data) => {
       this.setState({
         docstrings: data,
       });
     });
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams();
   };
 
   updateParamValue = (name, value, paramType) => {
@@ -44,7 +52,6 @@ export default class CommandPanel extends Component {
   };
 
   checkInvalidAngle = (name, value) => {
-    console.log(value, angleRegExp.test(value), isNaN(parseFloat(value, 10)));
     const testValue = value ?? '';
     this.setState({
       paramWarnings: {
@@ -108,8 +115,14 @@ export default class CommandPanel extends Component {
 
   render() {
     const paramsDict = TCSCommands[this.state.selectedCommand] ?? {};
+    const queueState = {
+      statusText: ScriptQueue.stateStyleDict[this.props.state],
+      name: this.props.state,
+    };
+    const isAvailable = queueState.name !== 'Running';
+    console.log(queueState);
     return (
-      <div className={styles.container}>
+      <div className={[styles.container, !isAvailable ? styles.containerExtraRow : ''].join(' ')}>
         <Modal
           displayTopBar={false}
           isOpen={!!this.state.isModalOpen}
@@ -117,19 +130,28 @@ export default class CommandPanel extends Component {
           contentLabel="Component selection modal"
           size={50}
         >
-          {this.state.docstrings[this.state.selectedCommand] ? <div
-            className={styles.markdown}
-            dangerouslySetInnerHTML={{
-              __html: md.render(this.state.docstrings[this.state.selectedCommand]),
-            }}
-          ></div>:
-          <div
-            className={styles.markdown}
-          >
-            No documentation available
-          </div>
-        }
+          {this.state.docstrings[this.state.selectedCommand] ? (
+            <div
+              className={styles.markdown}
+              dangerouslySetInnerHTML={{
+                __html: md.render(this.state.docstrings[this.state.selectedCommand]),
+              }}
+            ></div>
+          ) : (
+            <div className={styles.markdown}>No documentation available</div>
+          )}
         </Modal>
+        <div className={[styles.queueStateContainer, !isAvailable ? '' : styles.removed].join(' ')}>
+          <span className={styles.queueStateLabel}>AUX TEL QUEUE STATE</span>
+          <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
+          <span className={styles.warningText}>
+            <span className={styles.warningIcon}>
+              <WarningIcon></WarningIcon>
+            </span>
+            <span>TCS commands are not allowed while queue is running</span>
+          </span>
+        </div>
+
         <div className={styles.selectContainer}>
           <Select
             controlClassName={styles.select}
@@ -138,7 +160,10 @@ export default class CommandPanel extends Component {
             placeholder="Select a command"
             onChange={(selection) => this.selectCommand(selection?.value)}
           />
-          <div onClick={() => this.setState({ isModalOpen: true })} className={this.state.selectedCommand ? styles.buttonWrapper : styles.hidden}>
+          <div
+            onClick={() => this.setState({ isModalOpen: true })}
+            className={this.state.selectedCommand ? styles.buttonWrapper : styles.hidden}
+          >
             <HelpIcon></HelpIcon>
           </div>
         </div>
@@ -150,7 +175,11 @@ export default class CommandPanel extends Component {
         </div>
         {this.state.selectedCommand && (
           <div className={styles.sendButtonContainer}>
-            <Button status="info" disabled={!this.props.commandExecutePermission} onClick={() => console.log(this.state.paramValues)}>
+            <Button
+              status="info"
+              disabled={!this.props.commandExecutePermission || !isAvailable}
+              onClick={() => console.log(this.state.paramValues)}
+            >
               SEND
             </Button>
           </div>
