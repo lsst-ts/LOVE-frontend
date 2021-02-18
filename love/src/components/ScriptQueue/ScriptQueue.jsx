@@ -52,8 +52,12 @@ export default class ScriptQueue extends Component {
       availableScriptsExternalExpanded: true,
       availableScriptsFilter: '',
       scriptModal: null,
-      currentScriptDetailsHeight: 'initial',
-      resetButton: <span>&#9650;</span>
+      currentScriptDetailState: {
+        height: 'initial',
+        initialHeight: 9999,
+        display: 'grid',
+      },
+      resetButton: <span>&#9650;</span>,
     };
 
     this.observer = null;
@@ -106,8 +110,15 @@ export default class ScriptQueue extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
-    if (this.state.currentScriptDetailsHeight !== _prevState.currentScriptDetailsHeight) {
-      if (this.state.currentScriptDetailsHeight < 360) {
+    if (this.props.current !== prevProps.current) {
+      if (this.props.current === 'None') {
+        this.setState({ currentScriptDetailState: { ...this.state.currentScriptDetailState, display: 'none' } });
+      } else {
+        this.setState({ currentScriptDetailState: { ...this.state.currentScriptDetailState, display: 'grid' } });
+      }
+    }
+    if (this.state.currentScriptDetailState !== _prevState.currentScriptDetailState) {
+      if (this.state.currentScriptDetailState.height < this.state.currentScriptDetailState.initialHeight) {
         this.setState({ resetButton: (<span>&#9660;</span>) });
       } else {
         this.setState({ resetButton: (<span>&#9650;</span>) });
@@ -158,13 +169,40 @@ export default class ScriptQueue extends Component {
     this.props.subscribeToStreams();
 
     const debouncedResizeCallback = debounce((entries) => {
-      const newHeight = entries[0].contentRect.height;
-      this.setState({
-        currentScriptDetailsHeight: newHeight,
-      });
+      const newHeight = entries[0].target.clientHeight;
+      // console.log("New height: ", newHeight);
+      if (newHeight >= this.state.currentScriptDetailState.initialHeight) {
+        this.setState({
+          currentScriptDetailState: {
+            ...this.state.currentScriptDetailState,
+            height: this.state.currentScriptDetailState.initialHeight,
+          },
+        });
+      } else if (newHeight <= 20) {
+        this.setState({
+          currentScriptDetailState: {
+            ...this.state.currentScriptDetailState,
+            height: 0,
+          },
+        });
+      } else {
+        this.setState({
+          currentScriptDetailState: {
+            ...this.state.currentScriptDetailState,
+            height: newHeight,
+          },
+        });
+      }
     }, 100);
     this.observer = new ResizeObserver(debouncedResizeCallback);
+    console.log(this.currentScriptDetailsContainer.current);
     if (this.currentScriptDetailsContainer.current) {
+      this.setState({
+        currentScriptDetailState: {
+          ...this.state.currentScriptDetailState,
+          initialHeight: this.currentScriptDetailsContainer.current.clientHeight,
+        },
+      });
       this.observer.observe(this.currentScriptDetailsContainer.current);
     }
   };
@@ -178,12 +216,13 @@ export default class ScriptQueue extends Component {
   };
 
   handleResizeButton = () => {
-    const { currentScriptDetailsHeight } = this.state;
-    if (currentScriptDetailsHeight >= 360) {
-      this.setState({ currentScriptDetailsHeight: 0 });
-    } else {
-      this.setState({ currentScriptDetailsHeight: 'initial' });
-    }
+    const { height, initialHeight } = this.state.currentScriptDetailState;
+    this.setState({
+      currentScriptDetailState: {
+        ...this.state.currentScriptDetailState,
+        height: height >= initialHeight ? 0 : 'initial',
+      },
+    });
   }
 
   displayAvailableScripts = () => {
@@ -529,7 +568,6 @@ export default class ScriptQueue extends Component {
     const finishedScriptListClass = this.state.isFinishedScriptListListVisible ? '' : styles.collapsedScriptList;
     const availableScriptListClass = this.state.isAvailableScriptListVisible ? '' : styles.collapsedScriptList;
     const current = this.props.current === 'None' ? {} : { ...this.props.current };
-
     // const now = new Date();
     // Fix time zones for next line
     // const currentScriptElapsedTime =
@@ -627,25 +665,31 @@ export default class ScriptQueue extends Component {
           </div>
         </div>
 
-        <div style={{ height: this.state.currentScriptDetailsHeight }}
-          ref={this.currentScriptDetailsContainer} className={styles.currentScriptDetailsWrapper}>
-          { (this.state.currentScriptDetailsHeight !== 'initial') && (
-            <div
-              className={styles.currentScriptResetSizeWrapper}
-              onClick={this.handleResizeButton}>
-                {this.state.resetButton}
-            </div>
-          )}
-          <div className={styles.currentScriptDescriptionWrapper}>
-            <ScriptDetails {...current} />
+        <div className={styles.currentScriptDetailsWrapper}>
+          <div
+            className={styles.currentScriptResetSize}
+            onClick={this.handleResizeButton}>
+              {this.state.resetButton}
           </div>
-          <div className={styles.currentScriptLogsWrapper}>
-            <CSCExpandedContainer
-              group={''}
-              name={'Script'}
-              salindex={current.index ?? 0}
-              onCSCClick={(a) => console.log(a)}
-              displaySummaryState={false}/>
+          <div
+            style={{
+              height: this.state.currentScriptDetailState.height,
+              maxHeight: this.state.currentScriptDetailState.initialHeight,
+              display: this.state.currentScriptDetailState.display,
+            }}
+            className={styles.currentScriptDetails}
+            ref={this.currentScriptDetailsContainer}>
+            <div className={styles.currentScriptDescription}>
+              <ScriptDetails {...current} />
+            </div>
+            <div className={styles.currentScriptLogs}>
+              <CSCExpandedContainer
+                group={''}
+                name={'Script'}
+                salindex={current.index ?? 0}
+                onCSCClick={(a) => console.log(a)}
+                displaySummaryState={false}/>
+            </div>
           </div>
         </div>
 
