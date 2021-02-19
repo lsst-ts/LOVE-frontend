@@ -30,11 +30,13 @@ const GlobalState = ({
 }) => {
   const [contextMenuIsOpen, setContextMenuIsOpen] = React.useState(false);
   const [contextMenuData, setContextMenuData] = React.useState({});
+  const [contextMenuTarget, setContextMenuTarget] = React.useState(undefined);
 
   const onClickContextMenu = React.useCallback((event) => {
     event.stopPropagation();
     setContextMenuIsOpen((state) => !state);
-    setContextMenuData(event.target.getBoundingClientRect());
+    setContextMenuData(event.currentTarget.getBoundingClientRect());
+    setContextMenuTarget(event.currentTarget);
   }, []);
 
   React.useEffect(() => {
@@ -137,7 +139,12 @@ const GlobalState = ({
             </div>
           </div>
         </div>
-        <ContextMenu isOpen={contextMenuIsOpen} contextMenuData={contextMenuData} options={contextMenuOptions} />
+        <ContextMenu
+          isOpen={contextMenuIsOpen}
+          contextMenuData={contextMenuData}
+          options={contextMenuOptions}
+          target={contextMenuTarget}
+        />
       </div>
     </div>
   );
