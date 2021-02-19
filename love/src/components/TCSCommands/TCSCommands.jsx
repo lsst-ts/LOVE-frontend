@@ -120,7 +120,6 @@ export default class CommandPanel extends Component {
       name: this.props.state,
     };
     const isAvailable = queueState.name !== 'Running';
-    console.log(queueState);
     return (
       <div className={[styles.container, !isAvailable ? styles.containerExtraRow : ''].join(' ')}>
         <Modal
