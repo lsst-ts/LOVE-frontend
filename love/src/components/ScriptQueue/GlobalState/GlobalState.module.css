@@ -76,13 +76,6 @@
 }
 
 .pauseIconWrapper {
-  width: 1em;
-  background: var(--commandable-background);
-  border: 1px solid var(--commandable-background);
-  padding: 0.25em 0.5em;
+  width: 2em;
   border-radius: 100%;
-}
-
-.gearIcon > path {
-  fill: var(--commandable-font-color);
 }
