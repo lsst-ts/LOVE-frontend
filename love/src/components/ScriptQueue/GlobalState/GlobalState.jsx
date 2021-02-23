@@ -33,7 +33,7 @@ const GlobalState = ({
 
   const onClickContextMenu = React.useCallback((event) => {
     event.stopPropagation();
-    setContextMenuIsOpen((state) => !state);
+    setContextMenuIsOpen((contextMenuIsOpen) => !contextMenuIsOpen);
     setContextMenuData(event.target.getBoundingClientRect());
   }, []);
 

@@ -41,7 +41,7 @@
 .stateCell {
   display: grid;
   grid-template-columns: 8em 1fr;
-  align-items: baseline;
+  align-items: center;
   grid-column-gap: 0.5rem;
 }
 .stateLabel {
