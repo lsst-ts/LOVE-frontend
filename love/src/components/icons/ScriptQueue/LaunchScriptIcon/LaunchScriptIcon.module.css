@@ -1,11 +1,24 @@
-.classOne {
-  fill: none;
-  /* stroke: var(--second-base-font-color); */
-  stroke: var(--commandable-font-color);
+.svg {
+  vertical-align: middle;
+}
+
+.cls-1 {
+  fill: #122632;
+  opacity: 0.99;
+}
+
+.cls-2 {
+  fill: #1ecfe8;
+}
+
+.cls-1, .cls-2 {
+  fill-rule: evenodd;
+}
+
+.cls-3 {
+  fill: #2b414d;
+  stroke: #1ecfe8;
   stroke-linecap: round;
   stroke-linejoin: round;
-}
-.classTwo {
-  /* fill: var(--second-base-font-color); */
-  fill: var(--commandable-font-color);
+  stroke-width: 2px;
 }

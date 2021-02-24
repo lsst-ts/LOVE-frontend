@@ -1,26 +1,22 @@
-.st0 {
-  fill: none;
-  stroke: var(--second-primary-background-color);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.st1 {
-  fill: var(--second-primary-background-color);
-}
-
 .svg {
   vertical-align: middle;
 }
 
-.active {
-  stroke: var(--second-primary-background-color);
+.cls-1 {
+  fill: #122632;
+  opacity: 0.99;
 }
 
-.inactive {
-  stroke: var(--secondary-font-color);
+.cls-3 {
+  stroke: #2b414d;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.svg path {
-  stroke: var(--commandable-font-color);
+.cls-1, .cls-2 {
+  fill-rule: evenodd;
+}
+
+.cls-2, .cls-3 {
+  fill: #1ecfe8;
 }
