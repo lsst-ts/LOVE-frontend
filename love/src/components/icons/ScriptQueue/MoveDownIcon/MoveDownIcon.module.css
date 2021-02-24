@@ -1,8 +1,7 @@
-.path {
-  fill: var(--commandable-font-color);
-  stroke: var(--commandable-font-color);
-}
-
 .svg {
   vertical-align: middle;
+}
+
+.cls-1 {
+  fill: #1ecfe8;
 }

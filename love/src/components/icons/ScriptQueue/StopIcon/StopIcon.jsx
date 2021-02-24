@@ -4,13 +4,13 @@ import styles from './StopIcon.module.css';
 export default class StopIcon extends Component {
   render() {
     return (
-      <svg viewBox="1 0 23.9 23.9" className={styles.svg}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.96 37.96" className={styles.svg}>
         <title>{'Stop script'}</title>
         <path
-          className={styles.st0}
-          d="M21.6 20H5.4c-.4 0-.8-.3-.8-.7V4.2c0-.4.4-.7.8-.7h14.1c.4 0 .8.3.8.7v10.4c-.1.4-.6.7-1 .6-.3-.1-.5-.3-.6-.6V5.3H6.2v13.1h16c.4.1.7.6.6 1-.1.3-.3.5-.6.6h-.6z"
+          className={styles['cls-1']}
+          d="M19.12.47a19,19,0,1,0,19,19A19,19,0,0,0,19.12.47Zm9.42,26.29a2.12,2.12,0,0,1-2.11,2.11H11.82a2.12,2.12,0,0,1-2.11-2.11V12.15A2.13,2.13,0,0,1,11.82,10H26.37a2.13,2.13,0,0,1,2.12,2.12V26.76Z"
+          transform="translate(-0.14 -0.47)"
         />
-        <path className={styles.st0} d="M5.8 4.8h14.5v14H5.8z" />
       </svg>
     );
   }
