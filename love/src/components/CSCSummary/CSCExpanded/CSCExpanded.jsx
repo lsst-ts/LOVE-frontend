@@ -36,18 +36,6 @@ export default class CSCExpanded extends PureComponent {
     this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      messageFilters: {
-        10: { value: true, name: 'Debug' },
-        20: { value: true, name: 'Info' },
-        30: { value: true, name: 'Warning' },
-        40: { value: true, name: 'Error' },
-      },
-    };
-  }
-
   static states = {
     0: {
       name: 'UNKNOWN',
@@ -85,14 +73,6 @@ export default class CSCExpanded extends PureComponent {
       char: 'S',
       class: styles.warning,
     },
-  };
-
-  updateFilter = (key, value) => {
-    const filters = this.state.messageFilters;
-    filters[key].value = value;
-    this.setState({
-      messageFilters: { ...filters },
-    });
   };
 
   render() {
