@@ -36,6 +36,7 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
           return (
             <div key={key}>
               <label>
+                <span style={{ width: '1.5em' }}>{messageFilters[key].icon}</span>
                 <input
                   onChange={(event) => updateFilter(key, event.target.checked)}
                   type="checkbox"
