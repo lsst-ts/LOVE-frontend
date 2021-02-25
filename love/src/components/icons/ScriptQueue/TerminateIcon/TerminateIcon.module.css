@@ -1,11 +1,7 @@
-.st0 {
-  stroke-miterlimit: 10;
-}
-
 .svg {
   vertical-align: middle;
 }
 
-.svg path {
-  stroke: var(--commandable-font-color);
+.cls-1 {
+  fill: #1ecfe8;
 }
