@@ -14,6 +14,7 @@ export default class M1M3 extends Component {
       maxRadius: 0,
       colormap: () => '#fff',
       width: 500,
+      zoomLevel: 1,
     };
   }
 
@@ -23,7 +24,6 @@ export default class M1M3 extends Component {
     let yMin = Infinity;
     let xMin = Infinity;
     let maxRadius = 0;
-    console.log(M1M3ActuatorPositions);
     M1M3ActuatorPositions.forEach((act) => {
       if (xMax < act.position[0]) xMax = act.position[0];
       if (xMin > act.position[0]) xMin = act.position[0];
@@ -50,8 +50,6 @@ export default class M1M3 extends Component {
     let xRadius = this.state.xRadius;
     let yRadius = this.state.yRadius;
     let scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
-    // For semantic zoom
-    // console.log(d3.event.transform.k)
     let id = this.props.id;
     d3.event.transform.x = Math.min(
       0,
@@ -63,6 +61,9 @@ export default class M1M3 extends Component {
     );
     d3.select('#scatter-' + id).attr('transform', d3.event.transform);
     d3.select('#background-circle-' + id).attr('transform', d3.event.transform);
+    this.setState({
+      zoomLevel: d3.event.transform.k,
+    });
   };
 
   render() {
@@ -83,18 +84,29 @@ export default class M1M3 extends Component {
           />
           <g id={'scatter-' + this.props.id} className={styles.scatter}>
             {this.state.data.map((act) => {
-              console.log(act, this.state.xRadius, scale)
-            return (
-              <circle
-                cx={(act.position[0] + this.state.xRadius) * scale + margin}
-                cy={(act.position[1] + this.state.yRadius) * scale + margin}
-                key={act.id}
-                fill={this.state.colormap(
-                  Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                )}
-                r={(this.state.maxRadius * scale) / 21}
-              />
-            )})}
+              return (
+                <>
+                  <circle
+                    cx={(act.position[0] + this.state.xRadius) * scale + margin}
+                    cy={(act.position[1] + this.state.yRadius) * scale + margin}
+                    key={act.id}
+                    fill={this.state.colormap(
+                      Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
+                    )}
+                    r={(this.state.maxRadius * scale) / 21}
+                  />
+                  <text
+                    x={(act.position[0] + this.state.xRadius) * scale + margin}
+                    y={(act.position[1] + this.state.yRadius) * scale + margin}
+                    textAnchor="middle"
+                    alignmentBaseline="middle"
+                    className={this.state.zoomLevel > 2 ? '' : styles.hidden}
+                  >
+                    {act.id}
+                  </text>
+                </>
+              );
+            })}
           </g>
           <circle
             id={'circle-overlay-' + this.props.id}

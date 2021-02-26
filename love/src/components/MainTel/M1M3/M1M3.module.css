@@ -1,8 +1,21 @@
-.mirrorContainer{
+.mirrorContainer {
   height: 100%;
 }
 
 .circleOverlay {
   stroke: #2d3d4e;
   stroke-width: 10px;
+}
+
+.mirrorContainer svg text {
+  opacity: 1;
+  transition: opacity 0.35s linear;
+  font-size: 0.5em;
+  stroke: #000;
+  stroke-width: 0.2px;
+  fill: white;
+}
+
+.mirrorContainer svg text.hidden {
+  opacity: 0;
 }
