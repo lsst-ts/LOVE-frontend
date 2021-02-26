@@ -651,3 +651,11 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
   });
   return newData;
 };
+
+export function radians(degrees) {
+  return degrees * Math.PI / 180;
+};
+
+export function degrees(radians) {
+  return radians * 180 / Math.PI;
+};
