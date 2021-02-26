@@ -1,0 +1,8 @@
+.mirrorContainer{
+  height: 100%;
+}
+
+.circleOverlay {
+  stroke: #2d3d4e;
+  stroke-width: 10px;
+}

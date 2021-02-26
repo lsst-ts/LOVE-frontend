@@ -339,7 +339,18 @@ export const internalIndex = {
   },
 };
 
-export const mainIndex = {};
+export const mainIndex = {
+  M1M3: {
+    component: require('../MainTel/M1M3/M1M3.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3.container').schema.props,
+      },
+    },
+  },
+};
 
 export const indexes = [
   {
