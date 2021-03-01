@@ -36,6 +36,12 @@ export default class CSCExpanded extends PureComponent {
     this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.name !== this.props.name || prevProps.salindex !== this.props.salindex) {
+      this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    }
+  };
+
   static states = {
     0: {
       name: 'UNKNOWN',
@@ -132,7 +138,7 @@ export default class CSCExpanded extends PureComponent {
                     <span> &#62; </span>
                   </>
                 )}
-                <span>{cscText(this.props.name, this.props.salindex)}</span>
+                {!this.props.hideTitle && <span>{cscText(this.props.name, this.props.salindex)}</span>}
               </div>
               {this.props.displaySummaryState && (
                 <div className={[styles.stateContainer].join(' ')}>

@@ -61,6 +61,7 @@ const CSCExpandedContainer = ({
   subscribeToStreams,
   heartbeatData,
   displaySummaryState = true,
+  hideTitle = false,
 }) => {
   return (
     <CSCExpanded
@@ -76,6 +77,7 @@ const CSCExpandedContainer = ({
       heartbeatData={heartbeatData}
       clearCSCLogMessages={clearCSCLogMessages}
       displaySummaryState={displaySummaryState}
+      hideTitle={hideTitle}
     />
   );
 };
@@ -87,7 +89,6 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
       dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
       dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
-      dispatch(addGroup('event-Heartbeat-0-stream'));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
