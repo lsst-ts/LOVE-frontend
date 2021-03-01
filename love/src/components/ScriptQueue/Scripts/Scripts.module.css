@@ -172,6 +172,7 @@
   color: var(--highlighted-font-color);
   font-size: var(--font-size-large);
   grid-column-start: span 2;
+  text-align: left;
 }
 
 .subSectionLabel {

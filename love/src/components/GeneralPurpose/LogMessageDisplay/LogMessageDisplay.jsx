@@ -37,13 +37,13 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
             <div key={key}>
               <label>
                 <span style={{ width: '1.5em' }}>{messageFilters[key].icon}</span>
+                <span>{messageFilters[key].name}</span>
                 <input
                   onChange={(event) => updateFilter(key, event.target.checked)}
                   type="checkbox"
                   alt={`select ${key}`}
                   checked={messageFilters[key].value}
                 />
-                <span>{messageFilters[key].name}</span>
               </label>
             </div>
           );

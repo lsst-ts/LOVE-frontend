@@ -51,9 +51,9 @@ export default class ScriptQueue extends Component {
       availableScriptsFilter: '',
       currentScriptDetailState: {
         height: 'initial',
-        initialHeight: 9999,
+        initialHeight: 350,
       },
-      resetButton: <span>&#9650;</span>,
+      resetButton: <span>Hide details &#9650;</span>,
     };
 
     this.observer = null;
@@ -122,9 +122,9 @@ export default class ScriptQueue extends Component {
     }
     if (this.state.currentScriptDetailState !== _prevState.currentScriptDetailState) {
       if (this.state.currentScriptDetailState.height < this.state.currentScriptDetailState.initialHeight) {
-        this.setState({ resetButton: <span>&#9660;</span> });
+        this.setState({ resetButton: <span>Show details &#9660;</span> });
       } else {
-        this.setState({ resetButton: <span>&#9650;</span> });
+        this.setState({ resetButton: <span>Hide details &#9650;</span> });
       }
     }
 
@@ -673,9 +673,10 @@ export default class ScriptQueue extends Component {
               <CSCExpandedContainer
                 group={''}
                 name={'Script'}
-                salindex={current.index ?? 0}
+                salindex={current.index ?? 99999}
                 onCSCClick={() => null}
                 displaySummaryState={false}
+                hideTitle={true}
               />
             </div>
           </div>
@@ -884,16 +885,6 @@ export default class ScriptQueue extends Component {
             </div>
           </div>
         </div>
-
-        <Modal
-          isOpen={!!this.state.scriptModal}
-          onRequestClose={this.onScriptModalClose}
-          contentLabel="Component selection modal"
-          parentSelector={() => document.querySelector('#container')}
-          size={50}
-        >
-          <ScriptDetails {...this.state.scriptModal} />
-        </Modal>
       </div>
     );
   }
