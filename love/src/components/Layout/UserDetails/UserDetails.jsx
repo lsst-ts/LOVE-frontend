@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styles from './UserDetails.module.css';
 import UserIcon from '../../icons/UserIcon/UserIcon';
 import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
-import CodeIcon from '../../icons/CodeIcon/CodeIcon';
-import ContactIcon from '../../icons/ContactIcon/ContactIcon';
+// import CodeIcon from '../../icons/CodeIcon/CodeIcon';
+import EmergencyContactIcon from '../../icons/EmergencyContactIcon/EmergencyContactIcon';
+import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';
 
 UserDetails.propTypes = {
   /** Name of the current user */
@@ -67,22 +68,22 @@ export default function UserDetails({
           <span>Screenshot </span>
         </div>
       </div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onEmergencyContactsClick}>
+        <div className={styles.smallIconRow}>
+          <EmergencyContactIcon active={false} className={styles.paddedIcon} />
+          <span>Emergency contacts </span>
+        </div>
+      </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
         <div className={styles.smallIconRow}>
-          <CodeIcon active={false} className={styles.paddedIcon} />
+          <ScriptIcon active={false} className={styles.paddedIcon} />
           <span>XML versions </span>
         </div>
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onConfigClick}>
         <div className={styles.smallIconRow}>
-          <CodeIcon active={false} className={styles.paddedIcon} />
+          <ScriptIcon active={false} className={styles.paddedIcon} />
           <span>LOVE Config File </span>
-        </div>
-      </div>
-      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onEmergencyContactsClick}>
-        <div className={styles.smallIconRow}>
-          <ContactIcon active={false} className={styles.paddedIcon} />
-          <span>Emergency contacts </span>
         </div>
       </div>
       <div className={dividerClassName}></div>
