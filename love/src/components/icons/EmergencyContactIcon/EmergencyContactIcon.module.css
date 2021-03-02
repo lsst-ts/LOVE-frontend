@@ -1,7 +1,11 @@
 .EmergencycontactIcon {
   display: inline-block;
-  fill: var(--secondary-font-color);
 }
+
+.cls-1 {
+  fill: #798d99;
+}
+
 .cls-2 {
-  fill:#7a8c97;
+  fill: #7a8c97;
 }
