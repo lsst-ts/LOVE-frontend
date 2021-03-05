@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './UserDetails.module.css';
-// import UserIcon from '../../icons/UserIcon/UserIcon';
 import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
 import EmergencyContactIcon from '../../icons/EmergencyContactIcon/EmergencyContactIcon';
 import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';

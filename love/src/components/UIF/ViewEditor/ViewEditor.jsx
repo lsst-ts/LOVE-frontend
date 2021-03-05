@@ -15,14 +15,13 @@ import ComponentSelector from '../ComponentSelector/ComponentSelector';
 import html2canvas from 'html2canvas';
 import styles from './ViewEditor.module.css';
 import customViewStyles from '../CustomView.module.css';
-// import SaveIcon from '../../icons/SaveIcon/SaveIcon';
-import SaveIcon from '../../icons/NewSaveIcon/NewSaveIcon';
-import AddIcon from '../../icons/AddIcon/AddIcon';
-import UndoIcon from '../../icons/UndoIcon/UndoIcon';
-import RedoIcon from '../../icons/RedoIcon/RedoIcon';
-import DebugIcon from '../../icons/DebugIcon/DebugIcon';
-import ExitModeIcon from '../../icons/ExitModeIcon/ExitModeIcon';
-import ThumbnailIcon from '../../icons/ThumbnailIcon/ThumbnailIcon';
+import NewSaveIcon from '../../icons/NewSaveIcon/NewSaveIcon';
+import NewAddIcon from '../../icons/NewAddIcon/NewAddIcon';
+import NewUndoIcon from '../../icons/NewUndoIcon/NewUndoIcon';
+import NewRedoIcon from '../../icons/NewRedoIcon/NewRedoIcon';
+import NewDebugIcon from '../../icons/NewDebugIcon/NewDebugIcon';
+import NewExitModeIcon from '../../icons/NewExitModeIcon/NewExitModeIcon';
+import NewThumbnailIcon from '../../icons/NewThumbnailIcon/NewThumbnailIcon';
 import Select from '../../GeneralPurpose/Select/Select';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
@@ -470,7 +469,7 @@ class ViewEditor extends Component {
               disabled={isSaved}
               status="transparent"
             >
-              <SaveIcon className={styles.icon} />
+              <NewSaveIcon className={styles.icon} />
             </Button>
             <Button
               className={[styles.iconBtn, styles.element].join(' ')}
@@ -478,7 +477,7 @@ class ViewEditor extends Component {
               onClick={this.showSelectionModal}
               status="transparent"
             >
-              <AddIcon className={styles.icon} />
+              <NewAddIcon className={styles.icon} />
             </Button>
 
             <Button
@@ -488,7 +487,7 @@ class ViewEditor extends Component {
               disabled={this.props.undoActionsAvailable === 0}
               status="transparent"
             >
-              <UndoIcon className={styles.icon} />
+              <NewUndoIcon className={styles.icon} />
             </Button>
             <Button
               className={[styles.iconBtn, styles.element].join(' ')}
@@ -497,7 +496,7 @@ class ViewEditor extends Component {
               disabled={this.props.redoActionsAvailable === 0 || this.state.responsiveLayoutState === EDIT_CANCELED}
               status="transparent"
             >
-              <RedoIcon className={styles.icon} />
+              <NewRedoIcon className={styles.icon} />
             </Button>
             <Button
               className={[styles.iconBtn, styles.element].join(' ')}
@@ -506,7 +505,7 @@ class ViewEditor extends Component {
               disabled={this.state.editorVisible}
               status="transparent"
             >
-              <DebugIcon className={styles.icon} />
+              <NewDebugIcon className={styles.icon} />
             </Button>
             <span className={styles.divider} />
 
@@ -517,7 +516,7 @@ class ViewEditor extends Component {
               disabled={this.state.editorVisible}
               status="transparent"
             >
-              <ExitModeIcon className={styles.icon} />
+              <NewExitModeIcon className={styles.icon} />
             </Button>
           </div>
           <div className={styles.toolbar}>
@@ -528,7 +527,7 @@ class ViewEditor extends Component {
               disabled={isSaved}
               status="transparent"
             >
-              <ThumbnailIcon className={styles.icon} />
+              <NewThumbnailIcon className={styles.icon} />
               <span>Save thumbnail</span>
             </Button>
           </div>
