@@ -63,7 +63,7 @@ export default function UserDetails({
       <div className={dividerClassName}></div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={takeScreenshot}>
         <div className={styles.smallIconRow}>
-          <ScreenshotIcon />
+          <ScreenshotIcon className={styles.paddedIcon} />
           <span>Screenshot </span>
         </div>
       </div>

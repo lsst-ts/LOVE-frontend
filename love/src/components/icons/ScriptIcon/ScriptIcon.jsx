@@ -3,9 +3,10 @@ import styles from './ScriptIcon.module.css';
 
 export default class ScriptIcon extends Component {
   render() {
+    const className = [styles.svg, this.props.className].join(' ');
     const status = this.props.active !== undefined && this.props.active === false ? styles.inactive : styles.active;
     return (
-      <svg className={styles["svg"]} viewBox="0 0 42.4 53.54">
+      <svg className={className} viewBox="0 0 42.4 53.54">
         <title>{'XML version'}</title>
         <path 
           className={styles["cls-1"]} 

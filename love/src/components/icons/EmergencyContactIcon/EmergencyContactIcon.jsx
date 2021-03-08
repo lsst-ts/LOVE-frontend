@@ -3,8 +3,9 @@ import styles from './EmergencyContactIcon.module.css';
 
 export default class EmergencyContactIcon extends React.Component {
   render() {
+    const className = [styles.EmergencycontactIcon, this.props.className].join(' ');
     return (
-      <svg className={styles.EmergencycontactIcon} viewBox="0 0 47.68 45.5">
+      <svg className={className} viewBox="0 0 47.68 45.5">
         <rect className={styles["cls-1"]} y="33.93" width="8.17" height="3.41" rx="1.5" />
         <rect className={styles["cls-1"]} y="7.36" width="8.17" height="3.41" rx="1.5" />
         <rect className={styles["cls-1"]} y="20.98" width="8.17" height="3.41" rx="1.5" />

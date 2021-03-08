@@ -43,7 +43,7 @@ function ConfigPanel({ config, setConfig }) {
         <div key={index} className={styles.dropdownOption}>
           <div className={styles.dropdownOptionLeftSection}>
             <div className={styles.iconWrapper}>
-              <ScriptIcon title="Config. file"></ScriptIcon>
+              <ScriptIcon title="Config. file" className={styles.paddedIcon} ></ScriptIcon>
             </div>
           </div>
           <div className={styles.dropdownOptionRightSection}>
