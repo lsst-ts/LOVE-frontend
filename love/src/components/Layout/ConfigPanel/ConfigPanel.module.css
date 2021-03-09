@@ -88,3 +88,8 @@
 .controlClassName {
   cursor: pointer;
 }
+
+.paddedIcon {
+  width: 1.4em;
+  height: 1.4em;
+}

@@ -6,7 +6,8 @@ import 'brace/theme/solarized_dark';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import ManagerInterface, { formatTimestamp } from 'Utils';
-import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
+// import RequeueIcon from 'components/icons/ScriptQueue/RequeueIcon/RequeueIcon';
+import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';
 
 ConfigPanel.propTypes = {
   /** Current LOVE configuration */
@@ -42,7 +43,7 @@ function ConfigPanel({ config, setConfig }) {
         <div key={index} className={styles.dropdownOption}>
           <div className={styles.dropdownOptionLeftSection}>
             <div className={styles.iconWrapper}>
-              <RequeueIcon title="Config. file"></RequeueIcon>
+              <ScriptIcon title="Config. file" className={styles.paddedIcon} ></ScriptIcon>
             </div>
           </div>
           <div className={styles.dropdownOptionRightSection}>
