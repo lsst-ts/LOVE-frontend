@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import styles from './NewWindRose.module.css';
+import styles from './WindRose.module.css';
 
-export default class NewWindRose extends Component {
+export default class WindRose extends Component {
   render() {
     return (
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 47.21 61.32">

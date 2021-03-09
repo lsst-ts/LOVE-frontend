@@ -2,3 +2,6 @@
   fill: var(--secondary-font-color);
   stroke: var(--secondary-font-color);
 }
+.cls-1 {
+  fill:#798d99;
+}

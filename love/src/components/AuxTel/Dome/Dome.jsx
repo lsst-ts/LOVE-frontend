@@ -7,7 +7,7 @@ import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import NewWindRose from '../../icons/NewWindRose/NewWindRose';
+import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import ManagerInterface, { parseCommanderData } from 'Utils';
@@ -207,7 +207,7 @@ export default class Dome extends Component {
           <div className={styles.skymapGridContainer}>
             {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
             <div className={styles.windRoseContainer}>
-              <NewWindRose />
+              <WindRose />
             </div>
 
             <DomeTopView width={width} height={height} />
