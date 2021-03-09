@@ -135,13 +135,7 @@ class PlotContainer extends React.Component {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (
-      prevProps.inputs != inputs ||
-      prevProps.subscribeToStreams != subscribeToStreams ||
-      prevProps.unsubscribeToStreams != unsubscribeToStreams
-    ) {
-      unsubscribeToStreams();
-      subscribeToStreams();
+    if (prevProps.inputs != inputs) {
       const data = {};
       for (const key of Object.keys(inputs)) {
         data[key] = [];

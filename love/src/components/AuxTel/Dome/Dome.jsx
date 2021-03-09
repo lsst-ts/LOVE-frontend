@@ -41,7 +41,6 @@ export default class Dome extends Component {
   }
 
   componentDidMount = () => {
-    console.log('Dome');
     this.props.subscribeToStream();
   };
 
