@@ -162,6 +162,10 @@ class PolarPlotContainer extends React.Component {
     this.props.subscribeToStreams();
   }
 
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
     const { data } = this.state;
