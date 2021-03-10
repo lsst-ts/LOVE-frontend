@@ -195,7 +195,7 @@ export const openWebsocketConnection = () => {
         try {
           data = JSON.parse(msg.data);
         } catch (error) {
-          data = JSON.parse(msg.data.replace(/\bNaN\b/g, 'NaN'));
+          data = JSON.parse(msg.data.replace(/\bNaN\b/g, '"NaN"'));
         }
 
         if (!data.category) {
