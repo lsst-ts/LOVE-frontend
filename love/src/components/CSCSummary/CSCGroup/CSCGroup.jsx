@@ -39,6 +39,14 @@ export default class CSCGroup extends Component {
     }
   };
 
+  componentWillUnmount = () => {
+    if (this.props.csc !== undefined) {
+      this.props.cscs.forEach((csc) => {
+        this.props.unsubscribeToStreams(csc.name, csc.salindex);
+      });
+    }
+  }
+
   renderExpandedView = (selectedCSC) => {
     const groupView = selectedCSC.csc === 'all';
 

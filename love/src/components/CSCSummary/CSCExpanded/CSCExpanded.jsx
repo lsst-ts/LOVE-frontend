@@ -38,6 +38,10 @@ export default class CSCExpanded extends PureComponent {
     this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+  }
+
   constructor(props) {
     super(props);
     this.state = {

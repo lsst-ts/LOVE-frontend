@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCDetail from './CSCDetail';
-import { addGroup } from '../../../redux/actions/ws';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
 export const schema = {
@@ -67,6 +67,7 @@ const CSCDetailContainer = ({
   summaryStateData,
   onCSCClick,
   subscribeToStreams,
+  unsubscribeToStreams,
   heartbeatData,
   embedded,
 }) => {
@@ -79,6 +80,7 @@ const CSCDetailContainer = ({
       summaryStateData={summaryStateData}
       onCSCClick={onCSCClick}
       subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
       heartbeatData={heartbeatData}
       embedded={embedded}
     />
@@ -92,6 +94,12 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
       dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
       dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
+    },
+    unsubscribeToStreams: (cscName, index) => {
+      dispatch(removeGroup('event-Heartbeat-0-stream'));
+      dispatch(removeGroup(`event-${cscName}-${index}-summaryState`));
+      dispatch(removeGroup(`event-${cscName}-${index}-logMessage`));
+      dispatch(removeGroup(`event-${cscName}-${index}-errorCode`));
     },
   };
 };
