@@ -17,7 +17,6 @@ import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottom
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
-import Modal from '../GeneralPurpose/Modal/Modal';
 import ScriptDetails from './Scripts/ScriptDetails';
 import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
 import debounce from 'lodash.debounce';
@@ -223,7 +222,7 @@ export default class ScriptQueue extends Component {
   };
 
   onShowScriptDetails = (script) => {
-    console.log(script);
+    // console.log(script);
   };
 
   displayAvailableScripts = () => {
@@ -466,6 +465,7 @@ export default class ScriptQueue extends Component {
     });
   };
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
+    console.log('Click context menu');
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
     this.setState({
@@ -673,7 +673,7 @@ export default class ScriptQueue extends Component {
               <CSCExpandedContainer
                 group={''}
                 name={'Script'}
-                salindex={current.index ?? 99999}
+                salindex={current.index ?? 0}
                 onCSCClick={() => null}
                 displaySummaryState={false}
                 hideTitle={true}
@@ -799,21 +799,25 @@ export default class ScriptQueue extends Component {
                     draggingScriptInstance={this.state.draggingScriptInstance}
                     disabled={!this.props.commandExecutePermission}
                   >
-                    <WaitingScript
-                      isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
-                      path={script.path}
-                      isStandard={isStandard}
-                      estimatedTime={estimatedTime}
-                      heartbeatData={this.state.indexedHeartbeats[script.index]}
-                      stopScript={this.stopScript}
-                      moveScript={this.moveScript}
-                      onClickContextMenu={this.onClickContextMenu}
-                      moveScriptUp={this.moveScriptUp}
-                      moveScriptDown={this.moveScriptDown}
-                      commandExecutePermission={this.props.commandExecutePermission}
-                      {...script}
-                      onClick={() => this.onShowScriptDetails(script)}
-                    />
+                    <div style={{ userSelect: 'text' }}>
+                      <WaitingScript
+                        isCompact={
+                          this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
+                        }
+                        path={script.path}
+                        isStandard={isStandard}
+                        estimatedTime={estimatedTime}
+                        heartbeatData={this.state.indexedHeartbeats[script.index]}
+                        stopScript={this.stopScript}
+                        moveScript={this.moveScript}
+                        onClickContextMenu={this.onClickContextMenu}
+                        moveScriptUp={this.moveScriptUp}
+                        moveScriptDown={this.moveScriptDown}
+                        commandExecutePermission={this.props.commandExecutePermission}
+                        {...script}
+                        onClick={() => this.onShowScriptDetails(script)}
+                      />
+                    </div>
                   </DraggableScript>
                 );
               })}
@@ -864,19 +868,21 @@ export default class ScriptQueue extends Component {
                         : script.timestampProcessEnd - script.timestampRunStart;
                     return (
                       <DraggableScript key={`dragging-finished-${key}`} dragSourceList="available" disabled>
-                        <FinishedScript
-                          {...script}
-                          path={script.path}
-                          isStandard={isStandard}
-                          estimatedTime={estimatedTime}
-                          elapsedTime={elapsedTime}
-                          isCompact={
-                            this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
-                          }
-                          requeueScript={this.requeueScript}
-                          commandExecutePermission={this.props.commandExecutePermission}
-                          onClick={() => this.onShowScriptDetails(script)}
-                        />
+                        <div style={{ userSelect: 'text' }}>
+                          <FinishedScript
+                            {...script}
+                            path={script.path}
+                            isStandard={isStandard}
+                            estimatedTime={estimatedTime}
+                            elapsedTime={elapsedTime}
+                            isCompact={
+                              this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
+                            }
+                            requeueScript={this.requeueScript}
+                            commandExecutePermission={this.props.commandExecutePermission}
+                            onClick={() => this.onShowScriptDetails(script)}
+                          />
+                        </div>
                       </DraggableScript>
                     );
                   })}
