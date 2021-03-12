@@ -18,6 +18,8 @@ export default class CSCExpanded extends PureComponent {
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.array,
     errorCodeData: PropTypes.array,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
