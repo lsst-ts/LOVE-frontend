@@ -57,7 +57,7 @@ LightPathContainer.propTypes = {
   /** Wheter the component is in raw mode */
   isRaw: PropTypes.bool,
   /** List of the component's subscriptions */
-  subscriptions: PropTypes.bool,
+  subscriptions: PropTypes.array,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LightPathContainer);

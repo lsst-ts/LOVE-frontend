@@ -61,7 +61,7 @@
     "build": "npx react-scripts build",
     "test": "npx react-scripts test",
     "eject": "npx react-scripts eject",
-    "guide:start": "npx styleguidist server",
+    "guide:start": "FAST_REFRESH=false npx styleguidist server",
     "guide:build": "npx styleguidist build",
     "lint": "eslint src"
   },
@@ -90,7 +90,7 @@
     "jest-fetch-mock": "^3.0.3",
     "jest-websocket-mock": "^2.0.2",
     "mock-socket": "^9.0.3",
-    "react-dev-utils": "^10.2.0",
+    "react-dev-utils": "^11.0.4",
     "react-styleguidist": "11.0.8"
   }
 }

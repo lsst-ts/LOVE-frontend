@@ -205,7 +205,7 @@ export default class ScriptQueue extends Component {
   };
 
   componentWillUnmount = () => {
-    // this.props.unsubscribeToStreams();
+    this.props.unsubscribeToStreams();
 
     if (this.observer) {
       this.observer.unobserve(this.currentScriptDetailsContainer.current);
