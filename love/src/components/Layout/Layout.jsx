@@ -202,8 +202,8 @@ class Layout extends Component {
 
     const managerKey = HEARTBEAT_COMPONENTS?.MANAGER;
     if (this.state.heartbeatStatus?.[managerKey] === 'alert' && prevState.heartbeatStatus?.[managerKey] !== 'alert') {
-      console.log('Reseting from heartbeatStatus[managerKey]...');
-      this.props.resetSubscriptions();
+      // console.log('Reseting from heartbeatStatus[managerKey]...');
+      // this.props.resetSubscriptions();
     }
   };
 
