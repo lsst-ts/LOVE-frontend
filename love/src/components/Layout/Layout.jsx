@@ -452,6 +452,7 @@ class Layout extends Component {
       (a) =>
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification,
     );
+    console.log('Log for validation...');
     return (
       <>
         <AlarmAudioContainer />
