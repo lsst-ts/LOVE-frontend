@@ -61,15 +61,10 @@ export default class WaitingScript extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      expanded: false,
-    };
   }
 
   onClick = () => {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
+    this.props.onClick();
   };
 
   moveToFirst = (index) => {
@@ -107,8 +102,7 @@ export default class WaitingScript extends PureComponent {
     const timeDiffText =
       this.props.heartbeatData.lastHeartbeatTimestamp <= 0 || timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
 
-
-      return (
+    return (
       <div className={scriptStyles.scriptContainer}>
         <div>
           <div className={styles.waitingScriptContainer} onClick={this.onClick}>
@@ -202,7 +196,7 @@ export default class WaitingScript extends PureComponent {
                     className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
                     onClick={(e) => this.props.onClickContextMenu(e, this.props.index)}
                   >
-                    <span style={{'width': '100%'}}>&#8943;</span>
+                    <span style={{ width: '100%' }}>&#8943;</span>
                   </div>
                 </div>
               )}
@@ -227,38 +221,6 @@ export default class WaitingScript extends PureComponent {
                 </ScriptStatus>
               </div>
             </div>
-          </div>
-          <div
-            className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
-          >
-            {/* <div className={[styles.expandedSection].join(' ')}>
-              <div className={scriptStyles.expandedTopRow}>
-                <p>Script config</p>
-                {hasCommandPrivileges ? (
-                  <div className={scriptStyles.uploadButtonWrapper}>
-                    <UploadButton
-                      className={scriptStyles.uploadConfigButton}
-                      labelClassName={scriptStyles.uploadButtonLabel}
-                      iconClassName={scriptStyles.uploadIcon}
-                    />
-                  </div>
-                ) : null}
-              </div>
-              <JSONPretty
-                data={{}}
-                theme={{
-                  main:
-                    'line-height:1.3;color:#66d9ef;background:var(--secondary-background-dimmed-color);overflow:auto;',
-                  key: 'color:#f92672;',
-                  string: 'color:#fd971f;',
-                  value: 'color:#a6e22e;',
-                  boolean: 'color:#ac81fe;',
-                }}
-              />
-            </div> */}
-            {hasCommandPrivileges ? (
-              <ScriptDetails {...this.props}/>
-            ) : null}
           </div>
         </div>
       </div>

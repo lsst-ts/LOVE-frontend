@@ -17,11 +17,11 @@ export default class Summary extends Component {
             <div className={styles.summaryComponentTitle}>POSITIONS</div>
             <div className={styles.statusGroupWrapper}>
               <span className={styles.statusTextLabel}>Dome Az: </span>
-              <CurrentTargetValue currentValue={90} targetValue={80} isChanging={true}/>
+              <CurrentTargetValue currentValue={90} targetValue={80} isChanging={true} />
               <span className={styles.statusTextLabel}>Mount Az: </span>
-              <CurrentTargetValue currentValue={80} targetValue={70} isChanging={true}/>
+              <CurrentTargetValue currentValue={80} targetValue={70} isChanging={true} />
               <span className={styles.statusTextLabel}>Mount El: </span>
-              <CurrentTargetValue currentValue={0} targetValue={45} isChanging={true}/>
+              <CurrentTargetValue currentValue={0} targetValue={45} isChanging={true} />
             </div>
           </div>
         </div>

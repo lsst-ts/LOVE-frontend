@@ -51,8 +51,7 @@ export const schema = {
     },
     locale: {
       type: 'string',
-      description:
-        `Locale string used to configure how to display the UTC Offset.
+      description: `Locale string used to configure how to display the UTC Offset.
         'en-GB' by default (so it is displayed as GMT always). Null or empty to use the browser locale.
         The format for this string must be: <language (2 lowercase chars)>-<COUNTRY (2 uppercase chars)>`,
       isPrivate: false,
@@ -60,8 +59,7 @@ export const schema = {
     },
     timezone: {
       type: 'string',
-      description:
-        `Timezone string used to configure which UTC offset to use.
+      description: `Timezone string used to configure which UTC offset to use.
         'local' if current should be used. 'local' by default.
 
         The format for the timezone string can be a fixed string (for UTC or TAI); a fixed-offset string (e.g. UTC+5);
@@ -85,11 +83,7 @@ export const schema = {
 };
 
 const ClockContainer = ({ ...props }) => {
-  return (
-    <Clock
-      {...props}
-    />
-  );
+  return <Clock {...props} />;
 };
 
 const mapStateToProps = (state) => {

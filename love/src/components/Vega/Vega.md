@@ -1,5 +1,5 @@
-## Example: 
+## Example:
 
-``` jsx
-    <Vega/>
+```jsx
+<Vega />
 ```

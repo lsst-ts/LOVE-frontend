@@ -14,20 +14,11 @@ import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
+import Select from 'components/GeneralPurpose/Select/Select';
 import ManagerInterface from '../../../Utils';
+import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
-
-const requestConfigValidation = (config, schema) => {
-  return fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
-    method: 'POST',
-    headers: ManagerInterface.getHeaders(),
-    body: JSON.stringify({
-      schema,
-      config,
-    }),
-  });
-};
 
 const EMPTY = 'EMPTY';
 const VALIDATING = 'VALIDATING';
@@ -35,6 +26,13 @@ const VALID = 'VALID';
 const ERROR = 'ERROR';
 const SERVER_ERROR = 'SERVER_ERROR';
 const NEED_REVALIDATION = 'NEED_REVALIDATION';
+
+const logLevelMap = {
+  Debug: 10,
+  Info: 20,
+  Warning: 30,
+  Error: 40,
+};
 
 export default class ConfigPanel extends Component {
   static propTypes = {
@@ -66,13 +64,13 @@ export default class ConfigPanel extends Component {
       loading: false,
       pauseCheckpoint: '',
       stopCheckpoint: '',
-      logLevel: 20,
       orientation: 'stacked',
       sizeWeight: 0.5,
       resizingStart: undefined,
       configErrors: [],
       configErrorTitle: '',
       validationStatus: EMPTY,
+      logLevel: 'Warning',
     };
   }
 
@@ -97,7 +95,7 @@ export default class ConfigPanel extends Component {
 
     /** Request validation otherwise, and set state VALIDATING */
     this.setState({ validationStatus: VALIDATING });
-    requestConfigValidation(newValue, this.props.configPanel.configSchema)
+    ManagerInterface.requestConfigValidation(newValue, this.props.configPanel.configSchema)
       .then((r) => {
         /** Go to VALIDATING again and perform new request in componentDidUpdate */
         if (this.state.validationStatus === NEED_REVALIDATION) {
@@ -181,11 +179,6 @@ export default class ConfigPanel extends Component {
     });
   };
 
-  onLogLevelChange = (event) => {
-    this.setState({
-      logLevel: event.target.value,
-    });
-  };
   onResize = (event, direction, element) => {
     this.setState({
       width: parseInt(element.style.width.replace(/px/g, '')),
@@ -209,6 +202,7 @@ export default class ConfigPanel extends Component {
     });
     const script = this.props.configPanel.script;
     const isStandard = script.type === 'standard';
+    const logLevel = logLevelMap[this.state.logLevel] ?? 20;
     this.props.launchScript(
       isStandard,
       script.path,
@@ -217,7 +211,7 @@ export default class ConfigPanel extends Component {
       2,
       this.state.pauseCheckpoint,
       this.state.stopCheckpoint,
-      this.state.logLevel,
+      logLevel,
     );
   };
 
@@ -248,10 +242,31 @@ export default class ConfigPanel extends Component {
     document.onmouseup = null;
   };
 
+  onLogLevelChange = (value) => {
+    this.setState({ logLevel: value });
+  };
+
+  getDocumentationLink = (scriptPath, isStandard) => {
+    const extensionIndex = scriptPath.lastIndexOf('.');
+    const cleanPath = scriptPath.substring(0, extensionIndex);
+    const dirIndex = cleanPath.lastIndexOf('/');
+    const scriptDirectory = dirIndex > 0 ? cleanPath.substring(0, dirIndex + 1) : '';
+    const scriptName = dirIndex > 0 ? cleanPath.substring(dirIndex + 1) : cleanPath;
+    const cleanScriptName = scriptName
+      .split('_')
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join('');
+    const cleanDirectory = scriptDirectory.split('/').join('.');
+    const camelCasePath = `${cleanDirectory}${cleanScriptName}`;
+    const fullPath = `lsst.ts.standardscripts.${camelCasePath}`;
+    return `${SCRIPT_DOCUMENTATION_BASE_URL}/${fullPath}.html`;
+  };
+
   render() {
     const { orientation } = this.state;
-
     const scriptName = this.props.configPanel.name ? this.props.configPanel.name : '';
+    const scriptPath = this.props.configPanel.script ? this.props.configPanel.script?.path : '';
+    const isStandard = this.props.configPanel.script ? this.props.configPanel.script?.type === 'standard' : false;
     const sidePanelSize = {
       stacked: {
         firstWidth: `${this.state.width}px`,
@@ -304,6 +319,15 @@ export default class ConfigPanel extends Component {
               <h3>
                 SCHEMA <span className={styles.readOnly}>(Read only)</span>
               </h3>
+              {isStandard && (
+                <a
+                  className={styles.documentationLink}
+                  target="_blank"
+                  href={this.getDocumentationLink(scriptPath, isStandard)}
+                >
+                  Go to documentation
+                </a>
+              )}
 
               <AceEditor
                 mode="yaml"
@@ -389,18 +413,13 @@ export default class ConfigPanel extends Component {
               <Input className={styles.checkpointsInput} onChange={this.onCheckpointChange('stopCheckpoint')} />
 
               <span className={styles.logLevelLabel}>Log level</span>
-              <select className={styles.logLevelSelect} defaultValue={this.state.logLevel}>
-                {[
-                  { value: 10, label: 'Debug' },
-                  { value: 20, label: 'Info' },
-                  { value: 30, label: 'Warning' },
-                  { value: 40, label: 'Error' },
-                ].map(({ value, label }) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
-              </select>
+              <Select
+                className={styles.logLevelSelect}
+                options={['Debug', 'Info', 'Warning', 'Error']}
+                option={this.state.logLevel}
+                placeholder="Warning"
+                onChange={(selection) => this.onLogLevelChange(selection.value)}
+              />
             </div>
             <div className={styles.addBtnContainer}>
               <Button

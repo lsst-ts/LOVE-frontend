@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import {
   RECEIVE_GROUP_CONFIRMATION_MESSAGE,
   RECEIVE_GROUP_SUBSCRIPTION_DATA,
@@ -11,7 +12,7 @@ import {
   UPDATE_LAST_SAL_COMMAND,
   UPDATE_LAST_SAL_COMMAND_STATUS,
   SEND_ACTION,
-} from '../actions/actionTypes';
+} from './actionTypes';
 import ManagerInterface, { sockette } from '../../Utils';
 import { receiveImageSequenceData, receiveCameraStateData, receiveReadoutData } from './camera';
 import {
@@ -26,7 +27,6 @@ import { receiveServerTime } from './time';
 import { receiveObservingLog } from './observingLogs';
 import { getConnectionStatus, getTokenStatus, getToken, getSubscriptions, getSubscription } from '../selectors';
 import { tokenStates } from '../reducers/auth';
-import { DateTime } from 'luxon';
 
 /**
  * Time to wait before reseting subscriptions in miliseconds
@@ -107,10 +107,10 @@ const _receiveUnsubscriptionConfirmation = (data) => ({
 const _receiveGroupSubscriptionData = ({ category, csc, salindex, data }) => {
   return {
     type: RECEIVE_GROUP_SUBSCRIPTION_DATA,
-    category: category,
-    csc: csc,
-    salindex: salindex,
-    data: data,
+    category,
+    csc,
+    salindex,
+    data,
   };
 };
 
@@ -126,7 +126,7 @@ let resetSubsTimer = null;
  */
 export const resetSubscriptions = (subscriptions = null) => {
   return (dispatch, getState) => {
-    const subs = subscriptions ? subscriptions : getSubscriptions(getState());
+    const subs = subscriptions || getSubscriptions(getState());
     clearInterval(resetSubsTimer);
     resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
     dispatch({
@@ -168,7 +168,6 @@ export const openWebsocketConnection = () => {
     const token = getToken(getState());
 
     const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-    dispatch(_changeConnectionState(connectionStates.OPENING, socket));
 
     socket = sockette(connectionPath, {
       onopen: () => {
@@ -192,7 +191,13 @@ export const openWebsocketConnection = () => {
       onmessage: (msg) => {
         if (!msg.data) return;
 
-        const data = JSON.parse(msg.data);
+        let data = {};
+        try {
+          data = JSON.parse(msg.data);
+        } catch (error) {
+          data = JSON.parse(msg.data.replace(/\bNaN\b/g, '"NaN"'));
+        }
+
         if (!data.category) {
           if (data.time_data) {
             dispatch(receiveServerTime(data.time_data, data.request_time));
@@ -272,6 +277,7 @@ export const openWebsocketConnection = () => {
         });
       },
     });
+    dispatch(_changeConnectionState(connectionStates.OPENING, socket));
   };
 };
 
@@ -363,7 +369,7 @@ export const requestGroupRemoval = (groupName) => {
       option: 'unsubscribe',
       category,
       csc,
-      salindex: salindex,
+      salindex,
       stream,
     });
     dispatch({
@@ -474,7 +480,29 @@ export const _requestSALCommand = (data) => {
   };
 };
 
-export const sendLOVECscObservingLogs = (user, message) => {
+/**
+ * Requests the LOVE-producer to send a command to the SAL (salobj)
+ * via an HTTP request through the LOVE-manager.
+ *
+ */
+export const sendLOVECscObservingLogs = (observingLogMsg) => {
+  return (dispatch, getState) => {
+    const url = `${ManagerInterface.getApiBaseUrl()}lovecsc/observinglog`;
+
+    return fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(observingLogMsg),
+      headers: ManagerInterface.getHeaders(),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        // TODO: confirmation to the user? what kind?
+        // console.log(data);
+      });
+  };
+};
+
+export const _sendLOVECscObservingLogs = (user, message) => {
   return (dispatch, getState) => {
     const state = getState();
     const connectionStatus = getConnectionStatus(state);
@@ -487,8 +515,8 @@ export const sendLOVECscObservingLogs = (user, message) => {
       salindex: 0,
       data: {
         observingLog: {
-          user: user,
-          message: message,
+          user,
+          message,
         },
       },
     };
@@ -509,7 +537,7 @@ export const sendAction = (action) => {
       return;
     }
     socket.json({
-      action: action,
+      action,
       request_time: DateTime.utc().toSeconds(),
     });
     dispatch({

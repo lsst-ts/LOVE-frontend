@@ -9,7 +9,6 @@ export default class Skymap extends Component {
   //   prop: PropTypes
   // };
 
-
   render() {
     const width = 500;
     const height = 500;
@@ -25,16 +24,16 @@ export default class Skymap extends Component {
     return (
       <div className={styles.skymapContainer}>
         <h2>Skymap</h2>
-      <div className={styles.skymapGridContainer}>
-        <Pointing
-          width={width}
-          height={height}
-          currentPointing={currentPointing}
-          targetPointing={targetPointing}
-          isProjected={isProjected}
-        />
-        <SkymapGrid width={width} height={height} isProjected={isProjected}/>
-      </div>
+        <div className={styles.skymapGridContainer}>
+          <Pointing
+            width={width}
+            height={height}
+            currentPointing={currentPointing}
+            targetPointing={targetPointing}
+            isProjected={isProjected}
+          />
+          <SkymapGrid width={width} height={height} isProjected={isProjected} />
+        </div>
       </div>
     );
   }

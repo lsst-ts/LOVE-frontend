@@ -1,23 +1,23 @@
 .bigIconRow {
-    display: grid;
-    grid-template-columns: 2.5em max-content;
-    column-gap: 0.5em;
+  display: grid;
+  grid-template-columns: 2.5em max-content;
+  column-gap: 0.5em;
 }
 
 .menuElement {
-    line-height: 1.7em;
+  line-height: 1.7em;
 }
 
 .smallIconRow {
-    display: grid;
-    grid-template-columns: 1.5em max-content;
-    column-gap: 0.5em;
-    justify-items: center;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1.5em max-content;
+  column-gap: 0.5em;
+  justify-items: center;
+  align-items: center;
 }
 
 .iconContainer {
-    padding: 0.1em;
+  padding: 0.1em;
 }
 
 .highlight {
@@ -30,5 +30,6 @@
 }
 
 .paddedIcon {
-  width: 1.2em;
+  width: 1.4em;
+  height: 1.4em;
 }

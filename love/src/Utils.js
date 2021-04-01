@@ -1,7 +1,10 @@
+/* eslint camelcase: 0 */
+
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
-import { SALCommandStatus } from './redux/actions/ws.js';
+import { WEBSOCKET_SIMULATION } from 'Config.js';
+import { SALCommandStatus } from 'redux/actions/ws';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -87,7 +90,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   };
 
   $.open(); // init
-
+  $.ws = ws;
   return $;
 };
 
@@ -113,6 +116,8 @@ export default class ManagerInterface {
   }
 
   static getWebsocketsUrl() {
+    // Connect to a fake local ip when simulating, to avoid getting real messages
+    if (WEBSOCKET_SIMULATION) return 'ws://0.0.0.1/';
     return `ws://${window.location.host}/manager/ws/subscription?token=`;
   }
 
@@ -139,65 +144,14 @@ export default class ManagerInterface {
     localStorage.removeItem('LOVE-TOKEN');
   }
 
-  static saveToken(token) {
-    if (token === null) {
-      return false;
-    }
-    localStorage.setItem('LOVE-TOKEN', token);
-    return true;
-  }
-
-  static requestToken(username, password) {
-    const url = `${this.getApiBaseUrl()}get-token/`;
-    const data = {
-      username,
-      password,
-    };
-    return fetch(url, {
+  static requestConfigValidation(config, schema) {
+    return fetch(`${ManagerInterface.getApiBaseUrl()}validate-config-schema/`, {
       method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        const { token } = response;
-        if (token !== undefined && token !== null) {
-          ManagerInterface.saveToken(token);
-        }
-        return token;
-      });
-  }
-
-  static validateToken() {
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      // console.log('Token not found during validation');
-      return new Promise((resolve) => resolve(false));
-    }
-    const url = `${this.getApiBaseUrl()}validate-token/`;
-    return fetch(url, {
-      method: 'GET',
-      headers: this.getHeaders(),
-    }).then((response) => {
-      if (response.status >= 500) {
-        // console.error('Error communicating with the server. Logging out\n', response);
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
-        ManagerInterface.removeToken();
-        return false;
-      }
-      return response.json().then((resp) => {
-        const { detail } = resp;
-        if (detail === 'Token is valid') {
-          return true;
-        }
-        // console.log('Session expired. Logging out');
-        this.removeToken();
-        return false;
-      });
+      headers: ManagerInterface.getHeaders(),
+      body: JSON.stringify({
+        schema,
+        config,
+      }),
     });
   }
 
@@ -262,94 +216,115 @@ export default class ManagerInterface {
     });
   }
 
-  logout = () => {
-    if (this.socket) this.socket.close(4000);
-    this.socket = null;
-    this.socketPromise = null;
-  };
-
-  subscribeToStream = (category, csc, stream, callback) => {
-    this.callback = callback;
+  static getConfigFilesList() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not available or invalid, skipping connection');
-      return;
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
     }
-    this.subscriptions.push([category, csc, stream]);
-    if (this.socketPromise === null && this.socket === null) {
-      this.socketPromise = new Promise((resolve) => {
-        const connectionPath = ManagerInterface.getWebsocketsUrl() + token;
-        // eslint-disable-next-line
-        console.log('Openning websocket connection to: ', connectionPath);
-        this.socket = sockette(connectionPath, {
-          onopen: () => {
-            this.connectionIsOpen = true;
-            this.subscriptions.forEach((sub) => {
-              this.socket.json({
-                option: 'subscribe',
-                category: sub[0],
-                csc: sub[1],
-                stream: sub[2],
-              });
-            });
-            resolve();
-          },
-          onmessage: (msg) => {
-            if (this.callback) this.callback(msg);
-          },
-          onclose: () => {
-            this.connectionIsOpen = false;
-            resolve();
-          },
-          onerror: () => {
-            resolve();
-          },
-        });
+    const url = `${this.getApiBaseUrl()}configfile`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
       });
-    } else {
-      this.socketPromise.then(() => {
-        this.subscriptions.forEach((sub) => {
-          this.socket.json({
-            option: 'subscribe',
-            category: sub[0],
-            csc: sub[1],
-            stream: sub[2],
-          });
-        });
-      });
+    });
+  }
+
+  static getConfigFileContent(index) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
     }
-  };
-
-  unsubscribeToStream = (category, csc, stream, callback) => {
-    const subscriptionKeys = this.subscriptions.map(JSON.stringify);
-    const index = subscriptionKeys.indexOf(JSON.stringify([category, csc, stream]));
-    if (index > -1) this.subscriptions.splice(index, 1);
-    if (this.connectionIsOpen) {
-      this.socket.json({
-        option: 'unsubscribe',
-        category,
-        csc,
-        stream,
+    const url = `${this.getApiBaseUrl()}configfile/${index}/content`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
       });
-      this.callback = callback;
+    });
+  }
+
+  static getEmergencyContactList(/* index */) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
     }
-  };
+    const url = `${this.getApiBaseUrl()}emergencycontact`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 
-  subscribeToTelemetry = (csc, stream, callback) => {
-    this.subscribeToStream('telemetry', csc, stream, callback);
-  };
-
-  unsubscribeToTelemetry = (csc, stream, callback) => {
-    this.unsubscribeToStream('telemetry', csc, stream, callback);
-  };
-
-  subscribeToEvents = (csc, stream, callback) => {
-    this.subscribeToStream('event', csc, stream, callback);
-  };
-
-  unsubscribeToEvents = (csc, stream, callback) => {
-    this.unsubscribeToStream('event', csc, stream, callback);
-  };
+  static getEFDTimeseries(start_date, time_window, cscs, resample) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/timeseries`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        start_date,
+        time_window,
+        cscs,
+        resample,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 }
 
 /**
@@ -499,8 +474,8 @@ const watcherErrorCmds = {
 };
 
 export const getNotificationMessage = (salCommand) => {
-  const cmd = salCommand.cmd;
-  const result = salCommand.result;
+  const { cmd } = salCommand;
+  const { result } = salCommand;
   const component = salCommand.component ?? salCommand.csc;
 
   if (salCommand.status === SALCommandStatus.REQUESTED) {
@@ -511,16 +486,14 @@ export const getNotificationMessage = (salCommand) => {
     const alarm = salCommand.params.name;
     if (result === 'Done') {
       return [`Alarm '${alarm}' ${watcherSuccessfulCmds[cmd]} successfully`, result];
-    } else {
-      return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
     }
+    return [`Error ${watcherErrorCmds[cmd]} alarm '${alarm}', returned ${result}`, result];
   }
 
   if (result === 'Done') {
     return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} ran successfully`, result];
-  } else {
-    return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
   }
+  return [`Command ${salCommand.csc}.${salCommand.salindex}.${salCommand.cmd} returned ${result}`, result];
 };
 
 export const cscText = (csc, salindex) => {
@@ -531,7 +504,8 @@ export const parseTimestamp = (timestamp) => {
   if (timestamp instanceof DateTime) return timestamp;
   if (timestamp instanceof Date) return DateTime.fromJSDate(timestamp);
   if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
-  else return null;
+  if (typeof timestamp === 'string') return DateTime.fromISO(timestamp);
+  return null;
 };
 
 /**
@@ -551,7 +525,7 @@ export const formatTimestamp = (timestamp, location = 'TAI') => {
  */
 export const isoTimestamp = (timestamp, location = null) => {
   const t = parseTimestamp(timestamp);
-  return [t.toUTC().toISO(), location ? location : null].join(' ');
+  return [t.toUTC().toISO(), location || null].join(' ');
 };
 
 /**
@@ -594,4 +568,94 @@ export const takeScreenshot = (callback) => {
   }).then((canvas) => {
     callback(canvas.toDataURL('image/png'));
   });
+};
+
+/**
+ * Parse plot inputs and convert them to a format the EFD API understands.
+ * The transformation is done from:
+ * [
+ *   {name: {csc, salindex, topic, item}}
+ * ]
+ * to:
+ * {
+ *   csc: {
+ *     index: {
+ *       topic: [item]
+ *     }
+ *   }
+ * }
+ */
+export const parsePlotInputs = (inputs) => {
+  const cscs = {};
+  Object.values(inputs).forEach((input) => {
+    const cscDict = cscs?.[input.csc];
+    const indexDict = cscs?.[input.csc]?.[input.salindex];
+    const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
+    let newTopicDict = topicDict ?? [];
+    let newIndexDict = indexDict ?? {};
+    const newCSCDict = cscDict ?? {};
+    if (topicDict) {
+      newIndexDict[input.topic].push(input.item);
+      return;
+    }
+    newIndexDict[input.topic] = [input.item];
+
+    newTopicDict = newIndexDict[input.topic];
+    if (indexDict) {
+      newCSCDict[input.salindex][input.topic] = newTopicDict;
+      newIndexDict = newCSCDict[input.salindex];
+    } else {
+      newIndexDict = {
+        [input.topic]: newTopicDict,
+      };
+      newCSCDict[input.salindex] = newIndexDict;
+    }
+    if (cscDict) {
+      cscs[input.csc][input.salindex] = newIndexDict;
+    } else {
+      cscs[input.csc] = {
+        [input.salindex]: newIndexDict,
+      };
+    }
+  });
+  return cscs;
+};
+
+/**
+ * Reformat data coming from the commander, from:
+ * {
+ *   "csc-index-topic": {
+ *     "item":[{"ts":"2021-01-26 19:15:00+00:00","value":6.9}]
+ *   }
+ * }
+ * to:
+ * {
+ *   "csc-index-topic": {
+ *     "item": [{<tsLabel>:"2021-01-26 19:15:00+00:00",<valueLabel>:6.9}]
+ *   }
+ * }
+ */
+export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
+  const newData = {};
+  Object.keys(data).forEach((topicKey) => {
+    const topicData = data[topicKey];
+    const newTopicData = {};
+    Object.keys(topicData).forEach((propertyKey) => {
+      const propertyDataArray = topicData[propertyKey];
+      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
+        const tsString = dataPoint?.ts.split(' ').join('T');
+        return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
+      });
+    });
+    newData[topicKey] = newTopicData;
+  });
+  return newData;
+};
+
+export function radians(degrees) {
+  return degrees * Math.PI / 180;
+};
+
+export function degrees(radians) {
+  return radians * 180 / Math.PI;
 };

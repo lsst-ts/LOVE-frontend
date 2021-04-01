@@ -1,16 +1,16 @@
 .table {
-    height: 100%;
+  height: 100%;
 }
 
 td.statusColumn {
-    min-width: 8em;
-    text-align: center;
+  min-width: 8em;
+  text-align: center;
 }
 
 .headerRow th {
-    text-align: center;
+  text-align: center;
 }
 
 .units {
-    opacity: 0.65;
+  opacity: 0.65;
 }

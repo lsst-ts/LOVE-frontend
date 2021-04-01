@@ -1,12 +1,13 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { addGroup, removeGroup, groupStates } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { getAllTelemetries, getAllEvents, getStreamData, getSubscription } from '../selectors';
 
-let store, server;
+let store;
+let server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
@@ -32,7 +33,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
   it('When subscribed to all telemetries, then should receive all telemetries', async () => {
     // ACT
     await store.dispatch(addGroup('telemetry-all-all-all'));
-    let msg = {
+    const msg = {
       category: 'telemetry',
       data: [
         {
@@ -71,7 +72,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
     });
 
     // ACT
-    let msg = {
+    const msg = {
       category: 'telemetry',
       data: [
         {
@@ -106,7 +107,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
   it('When subscribed to all events, then should receive all events', async () => {
     // ACT
     await store.dispatch(addGroup('event-all-all-all'));
-    let msg = {
+    const msg = {
       category: 'event',
       data: [
         {
@@ -145,7 +146,7 @@ describe('Test subscription to Telemetries and Events, given the connection is o
     });
 
     // ACT
-    let msg = {
+    const msg = {
       category: 'event',
       data: [
         {

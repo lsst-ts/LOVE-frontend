@@ -1,10 +1,95 @@
 .title {
-  font-size: 1.5em;
+  font-size: var(--font-size-larger);
   text-align: center;
   margin-bottom: 1em;
+}
+
+.subTitle {
+  font-size: var(--font-size-large);
+  padding-bottom: 0.5em;
 }
 
 .rndEditor {
   border-radius: 7px;
   width: 400px;
+}
+
+.currentConfig {
+  font-size: var(--font-size-medium);
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  grid-column-gap: 1em;
+  column-gap: 1em;
+  padding-bottom: 0.5em;
+}
+
+.currentConfig .label {
+  color: var(--secondary-font-color);
+}
+
+.selectorWrapper {
+  padding-bottom: 1em;
+}
+
+.dropdownOption {
+  display: grid;
+  grid-template-columns: 2.2em 1fr;
+}
+
+.dropdownOptionLeftSection {
+  padding: 0.25em;
+}
+
+.dropdownOptionRightSection {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+}
+
+.dropdownOptionLabel {
+  font-size: var(--font-size-medium);
+  color: var(--primary-font-color);
+}
+
+.dropdownOptionDate {
+  font-size: var(--font-size-small);
+  color: var(--secondary-font-color);
+}
+
+.changeConfigButton {
+  width: max-content;
+  padding: 0 1em;
+  height: 100%;
+  background: var(--second-quaternary-background-color);
+  border: none;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+}
+
+.changeConfigButton:after {
+  content: 'Change config. file ⌄';
+}
+
+.controlClassName:hover .changeConfigButton {
+  background: var(--second-quinary-background-color);
+}
+
+.iconWrapper {
+  width: 1.4em;
+  color: var(--primary-font-color);
+}
+
+.iconWrapper svg > path {
+  stroke: var(--secondary-font-color);
+}
+
+.controlClassName {
+  cursor: pointer;
+}
+
+.paddedIcon {
+  width: 1.4em;
+  height: 1.4em;
 }

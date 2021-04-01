@@ -27,6 +27,12 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
+    controls: {
+      type: 'boolean',
+      description: "Whether to display controls to configure periods of time'",
+      default: true,
+      isPrivate: false,
+    },
   },
 };
 
@@ -39,25 +45,25 @@ const WeatherStationContainer = ({ ...props }) => {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    weather: getStreamData(state, `telemetry-Environment-${ownProps.salindex}-weather`),
-    windSpeed: getStreamData(state, `telemetry-Environment-${ownProps.salindex}-windSpeed`),
+    weather: getStreamData(state, `telemetry-WeatherStation-${ownProps.salindex}-weather`),
+    windSpeed: getStreamData(state, `telemetry-WeatherStation-${ownProps.salindex}-windSpeed`),
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   const subscriptions = [
-    `telemetry-Environment-${ownProps.salindex}-weather`,
-    `telemetry-Environment-${ownProps.salindex}-windDirection`,
-    `telemetry-Environment-${ownProps.salindex}-windGustDirection`,
-    `telemetry-Environment-${ownProps.salindex}-windSpeed`,
-    `telemetry-Environment-${ownProps.salindex}-airTemperature`,
-    `telemetry-Environment-${ownProps.salindex}-soilTemperature`,
-    `telemetry-Environment-${ownProps.salindex}-dewPoint`,
-    `telemetry-Environment-${ownProps.salindex}-relativeHumidity`,
-    `telemetry-Environment-${ownProps.salindex}-snowDepth`,
-    `telemetry-Environment-${ownProps.salindex}-precipitation`,
-    `telemetry-Environment-${ownProps.salindex}-airPressure`,
-    `telemetry-Environment-${ownProps.salindex}-solarNetRadiation`,
+    `telemetry-WeatherStation-${ownProps.salindex}-weather`,
+    `telemetry-WeatherStation-${ownProps.salindex}-windDirection`,
+    `telemetry-WeatherStation-${ownProps.salindex}-windGustDirection`,
+    `telemetry-WeatherStation-${ownProps.salindex}-windSpeed`,
+    `telemetry-WeatherStation-${ownProps.salindex}-airTemperature`,
+    `telemetry-WeatherStation-${ownProps.salindex}-soilTemperature`,
+    `telemetry-WeatherStation-${ownProps.salindex}-dewPoint`,
+    `telemetry-WeatherStation-${ownProps.salindex}-relativeHumidity`,
+    `telemetry-WeatherStation-${ownProps.salindex}-snowDepth`,
+    `telemetry-WeatherStation-${ownProps.salindex}-precipitation`,
+    `telemetry-WeatherStation-${ownProps.salindex}-airPressure`,
+    `telemetry-WeatherStation-${ownProps.salindex}-solarNetRadiation`,
   ];
   return {
     subscriptions,

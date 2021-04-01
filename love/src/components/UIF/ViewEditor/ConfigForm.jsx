@@ -14,10 +14,8 @@ import 'brace/theme/solarized_dark';
 
 const externalStepComponents = {
   HealthStatusConfig: require('../../../components/HealthStatusSummary/HealthStatusConfig/HealthStatusConfig').default,
-  TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig')
-    .default,
-  PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig')
-  .default,
+  TimeSeriesConfig: require('../../../components/GeneralPurpose/Plot/TimeSeriesConfig/TimeSeriesConfig').default,
+  PolarPlotConfig: require('../../../components/GeneralPurpose/Plot/PolarPlotConfig/PolarPlotConfig').default,
 };
 function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, onCancel, onSaveConfig }) {
   const componentDict = indexes.map((index) => index.index[componentName]).find((elem) => elem !== undefined);
@@ -104,7 +102,7 @@ function ConfigForm({ isOpen, componentIndex, componentName, componentConfig, on
           <Button status="default" onClick={onCancel}>
             Cancel
           </Button>
-          <Button status="primary" onClick={() => customSaveConfig(componentIndex, config)}>
+          <Button status="primary" onClick={() => customSaveConfig()}>
             Save
           </Button>
         </>

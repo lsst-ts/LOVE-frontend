@@ -5,9 +5,27 @@ import styles from './ContextMenu.module.css';
 
 export default class ContextMenu extends Component {
   static propTypes = {
-    contextMenuData: PropTypes.object,
+    /**Position data for the context menu.
+     * Usually from event.target.getBoundingClientRect()
+     */
+    contextMenuData: PropTypes.shape({
+      right: PropTypes.number,
+      bottom: PropTypes.number,
+    }),
     isOpen: PropTypes.bool,
-    options: PropTypes.array,
+    /** List of clickable options to be displayed */
+    options: PropTypes.arrayOf(
+      PropTypes.shape({
+        /** Text label of the button */
+        text: PropTypes.node,
+        /**SVG icon to be shown at the left of the text*/
+        icon: PropTypes.node,
+        /** Callback passed to the onClick event of each option */
+        action: PropTypes.func,
+        /** If `true` the button will be disabled*/
+        disabled: PropTypes.bool,
+      }),
+    ),
   };
 
   static defaultProps = {
@@ -26,15 +44,22 @@ export default class ContextMenu extends Component {
       this.props.isOpen && (
         <div
           className={styles.container}
-          style={{ left: this.props.contextMenuData.right, top: `calc( -3.3em + ${this.props.contextMenuData.bottom}px)` }}
+          style={{
+            left: this.props.contextMenuData.right,
+            top: `calc( -3.3em + ${this.props.contextMenuData.bottom}px)`,
+          }}
           onClick={(e) => e.stopPropagation()}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {this.props.options.map((child, index) => {
             return (
-              <div className={styles.row} key={index} onClick={child.action}>
-                <div className={styles.iconWrapper}>{child.icon}</div>
-                <div className={styles.buttonText}>{child.text}</div>
+              <div
+                className={[styles.row, child.disabled ? '' : styles.enabled].join(' ')}
+                key={index}
+                onClick={!child.disabled ? child.action : undefined}
+              >
+                <div className={[styles.iconWrapper].join(' ')}>{child.icon}</div>
+                <div className={[styles.buttonText].join(' ')}>{child.text}</div>
               </div>
             );
           })}

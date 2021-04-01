@@ -29,6 +29,7 @@ export default class LoadingBar extends Component {
 
   render() {
     const narrowClass = this.props.isNarrow ? styles.narrow : '';
+    const delayedScriptProgressClass = this.props.percentage > 100 ? styles.delayedScriptProgress : '';
     return (
       <div className={[styles.backgroundBar, this.props.backgroundClass].join(' ')} title={this.props.title}>
         <span className={[styles.percentage, this.props.percentage > 50 ? styles.dark : ''].join(' ')}>
@@ -39,7 +40,7 @@ export default class LoadingBar extends Component {
             width: `${Math.min(this.props.percentage, 100)}%`,
             animationDuration: `${this.props.animationDuration}s`,
           }}
-          className={[styles.loadedBar, narrowClass].join(' ')}
+          className={[styles.loadedBar, narrowClass, delayedScriptProgressClass].join(' ')}
         />
       </div>
     );

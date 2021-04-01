@@ -194,7 +194,7 @@ export default class TelemetrySelectionTable extends PureComponent {
   };
 
   setFilters = (filters) => {
-    Object.keys(filters).map((key) => {
+    Object.keys(filters).forEach((key) => {
       if (filters[key].type === 'regexp' && typeof filters[key].value === 'string') {
         // eslint-disable-next-line
         filters[key].value = new RegExp(filters[key].value.replace(/^\/|\/$/g, ''));

@@ -1,3 +1,6 @@
+import { createStore, applyMiddleware } from 'redux';
+import WS from 'jest-websocket-mock';
+import thunkMiddleware from 'redux-thunk';
 import {
   getStreamData,
   getTimestampedStreamData,
@@ -7,15 +10,13 @@ import {
   getSummaryStateValue,
   getMountMotorsState,
 } from './selectors';
-import { createStore, applyMiddleware } from 'redux';
 import rootReducer from './reducers';
-import WS from 'jest-websocket-mock';
 import { doReceiveToken } from './actions/auth';
-import { openWebsocketConnection, addGroup } from './actions/ws';
-import thunkMiddleware from 'redux-thunk';
+import { addGroup } from './actions/ws';
 import { cameraStates, imageStates } from '../Constants';
 
-let store, server;
+let store;
+let server;
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
   localStorage.setItem('LOVE-TOKEN', 'love-token');
@@ -58,7 +59,7 @@ it('Should extract the stream correctly with a selector', async () => {
     },
   };
   const category = 'telemetry';
-  const csc = 'Environment';
+  const csc = 'WeatherStation';
   const salindex = 1;
   const stream = 'airPressure';
   const groupName = [category, csc, salindex, stream].join('-');
@@ -110,7 +111,7 @@ it('Should extract streams correctly with a selector', async () => {
     },
   };
   const expectedData = {
-    'telemetry-Environment-1-airPressure': {
+    'telemetry-WeatherStation-1-airPressure': {
       paAvg1M: {
         value: 0.12092732556005037,
         dataType: 'Float',
@@ -128,14 +129,14 @@ it('Should extract streams correctly with a selector', async () => {
         dataType: 'String',
       },
     },
-    'telemetry-Environment-1-temperature': {
+    'telemetry-WeatherStation-1-temperature': {
       sensor1: {
         value: 69,
         dataType: 'Float',
       },
     },
   };
-  const groupNames = ['telemetry-Environment-1-airPressure', 'telemetry-Environment-1-temperature'];
+  const groupNames = ['telemetry-WeatherStation-1-airPressure', 'telemetry-WeatherStation-1-temperature'];
 
   // Act
   await store.dispatch(addGroup(groupNames[0]));
@@ -144,7 +145,7 @@ it('Should extract streams correctly with a selector', async () => {
     category: 'telemetry',
     data: [
       {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         salindex: 1,
         data: streams,
       },
@@ -178,15 +179,15 @@ it('Should extract the timestamped stream correctly with a selector', async () =
       },
     },
   };
-  const groupName = 'telemetry-Environment-1-airPressure';
-  const timestamp = new Date();
+  const groupName = 'telemetry-WeatherStation-1-airPressure';
+
   // Act
   await store.dispatch(addGroup(groupName));
   server.send({
     category: 'telemetry',
     data: [
       {
-        csc: 'Environment',
+        csc: 'WeatherStation',
         salindex: 1,
         data: streams,
       },
@@ -330,10 +331,10 @@ describe('Test camera component status data passes correctly to component', () =
     },
   ];
   [
-    ['raftsDetailedState', cameraStates['raftsDetailedState'][1]],
-    ['shutterDetailedState', cameraStates['shutterDetailedState'][1]],
-    ['imageReadinessDetailedState', cameraStates['imageReadinessDetailedState'][1]],
-    ['calibrationDetailedState', cameraStates['calibrationDetailedState'][1]],
+    ['raftsDetailedState', cameraStates.raftsDetailedState[1]],
+    ['shutterDetailedState', cameraStates.shutterDetailedState[1]],
+    ['imageReadinessDetailedState', cameraStates.imageReadinessDetailedState[1]],
+    ['calibrationDetailedState', cameraStates.calibrationDetailedState[1]],
   ].forEach((componentPair) => {
     it(`Should extract ${componentPair[0]} data from image sequence message`, async () => {
       const groupName = `event-ATCamera-1-${componentPair[0]}`;
@@ -474,7 +475,7 @@ it('Append readout parameters to image', async () => {
       {
         csc: 'ATCamera',
         salindex: 1,
-        data: data,
+        data,
       },
     ],
   });

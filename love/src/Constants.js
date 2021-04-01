@@ -29,4 +29,4 @@ export const imageStates = {
   READING_OUT: 'READING_OUT',
   END_READOUT: 'END_READOUT',
   END_TELEMETRY: 'END_TELEMETRY',
-}
+};

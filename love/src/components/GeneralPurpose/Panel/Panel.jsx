@@ -24,7 +24,7 @@ export default class Panel extends Component {
   };
 
   static defaultProps = {
-    title: '',
+    title: undefined,
     className: '',
     expandHeight: false,
     hasRawMode: false,
@@ -46,6 +46,7 @@ export default class Panel extends Component {
   render() {
     const classNames = [
       styles.panel,
+      this.props.title === undefined ? styles.noTitle : '',
       this.props.className,
       this.props.fit ? styles.fit : '',
       this.props.expandHeight ? styles.expandHeight : '',
@@ -59,31 +60,33 @@ export default class Panel extends Component {
     const hasLink = this.props.link && this.props.link !== '';
     return (
       <div className={classNames}>
-        <div className={styles.panelHeading}>
-          <h3 className={styles.panelTitle}>{this.props.title}</h3>
-          <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
-            {this.props.hasRawMode && (
-              <Button
-                title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}
-                onClick={() => this.toggleRaw()}
-                className={styles.panelButton}
-                size={'small'}
-              >
-                {this.state.isRaw ? <span> &#5176; &nbsp; back</span> : <span>raw data</span>}
-              </Button>
-            )}
-            {hasLink && (
-              <Button
-                title={`External link: ${this.props.link}`}
-                onClick={() => window.open(this.props.link, '_blank')}
-                className={styles.panelButton}
-                size={'small'}
-              >
-                <span>&#8599;</span>
-              </Button>
-            )}
+        {this.props.title !== undefined && (
+          <div className={styles.panelHeading}>
+            <h3 className={styles.panelTitle}>{this.props.title}</h3>
+            <div className={[styles.panelButtonWrapper, hasLink ? styles.panelTwoButtonsWrapper : null].join(' ')}>
+              {this.props.hasRawMode && (
+                <Button
+                  title={this.state.isRaw ? 'Regular view' : 'Raw telemetry data'}
+                  onClick={() => this.toggleRaw()}
+                  className={styles.panelButton}
+                  size={'small'}
+                >
+                  {this.state.isRaw ? <span> &#5176; &nbsp; back</span> : <span>raw data</span>}
+                </Button>
+              )}
+              {hasLink && (
+                <Button
+                  title={`External link: ${this.props.link}`}
+                  onClick={() => window.open(this.props.link, '_blank')}
+                  className={styles.panelButton}
+                  size={'small'}
+                >
+                  <span>&#8599;</span>
+                </Button>
+              )}
+            </div>
           </div>
-        </div>
+        )}
         <div className={styles.panelBody}>{children}</div>
       </div>
     );

@@ -1,8 +1,9 @@
 .timeseriesControlsContainer {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  padding: 1em;
+  margin-top: 1em;
 }
 
 .gearIconContainer {
@@ -12,7 +13,8 @@
 }
 
 .switchContainer {
-  padding: 0em 4em;
+  margin-right: 4em;
+  margin-bottom: 1em;
 }
 
 /* The switch - the box around the slider */

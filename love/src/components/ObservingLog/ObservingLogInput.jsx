@@ -36,6 +36,13 @@ export default class ObservingLogInput extends Component {
     this.props.unsubscribeToStreams();
   };
 
+  sendMessage = (username, message) => {
+    this.props.sendMessage(this.props.username, this.state.message);
+    this.setState({
+      message: '',
+    });
+  };
+
   onTextChange = (content) => {
     this.setState({
       message: content,
@@ -49,10 +56,16 @@ export default class ObservingLogInput extends Component {
       return;
     }
 
-    this.setState((state) => ({
-      ...state,
-      keysDown: [...new Set([...state.keysDown, keyDown])],
-    }));
+    this.setState(
+      (state) => ({
+        ...state,
+        keysDown: [...new Set([...state.keysDown, keyDown])],
+      }),
+      () => {
+        const keyCombinationPressed = ['Control', 'Enter'].every((key) => this.state.keysDown.includes(key));
+        if (keyCombinationPressed) this.sendMessage(this.props.username, this.state.message);
+      },
+    );
   };
 
   onKeyUp = (event) => {
@@ -64,16 +77,6 @@ export default class ObservingLogInput extends Component {
     }));
   };
 
-  componentDidUpdate = (prevState) => {
-    if (prevState.keysDown !== this.state.keysDown) {
-      const keyCombination1Pressed = ['Control', 'Enter'].every((key) => this.state.keysDown.includes(key));
-      const keyCombination2Pressed = ['Shift', 'Enter'].every((key) => this.state.keysDown.includes(key));
-      if(keyCombination1Pressed || keyCombination2Pressed){
-        this.props.sendMessage(this.props.username, this.state.message);
-      }
-    }
-  };
-
   render() {
     return (
       <div className={styles.container}>
@@ -83,9 +86,14 @@ export default class ObservingLogInput extends Component {
         </div>
         <div>
           <span className={styles.label}>Message:</span>
-          <TextArea callback={this.onTextChange} onKeyDown={this.onKeyDown} onKeyUp={this.onKeyUp}></TextArea>
+          <TextArea
+            value={this.state.message}
+            callback={this.onTextChange}
+            onKeyDown={this.onKeyDown}
+            onKeyUp={this.onKeyUp}
+          ></TextArea>
         </div>
-        <Button onClick={(e) => this.props.sendMessage(this.props.username, this.state.message)}>Save (Ctrl+Enter or Shift+Enter)</Button>
+        <Button onClick={(e) => this.sendMessage(this.props.username, this.state.message)}>Save (Ctrl+Enter)</Button>
       </div>
     );
   }

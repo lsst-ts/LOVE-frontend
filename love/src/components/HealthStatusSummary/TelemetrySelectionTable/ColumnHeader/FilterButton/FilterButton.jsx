@@ -12,7 +12,7 @@ export default class FilterButton extends Component {
     isFiltered: PropTypes.bool,
     columnOnClick: PropTypes.func,
     filterName: PropTypes.string,
-  }
+  };
 
   render() {
     const isSorted = this.props.sortDirection === 'ascending' || this.props.sortDirection === 'descending';

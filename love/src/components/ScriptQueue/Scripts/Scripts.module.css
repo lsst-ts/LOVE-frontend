@@ -151,6 +151,7 @@
 }
 
 .expandedSection {
+  padding: 1em;
 }
 
 .hidden {
@@ -158,10 +159,10 @@
 }
 
 .expandedSubSection {
-  border-top: solid var(--quaternary-background-color) 2px;
+  /* border-top: solid var(--quaternary-background-color) 2px; */
   padding: 0.75em 0;
   display: grid;
-  grid-template-columns: repeat(3, auto);
+  grid-template-columns: repeat(2, auto);
   grid-column-gap: 0.5rem;
   grid-auto-flow: row;
   justify-content: space-between;
@@ -170,7 +171,7 @@
 .subSectionTitle {
   color: var(--highlighted-font-color);
   font-size: var(--font-size-large);
-  grid-column-start: span 3;
+  grid-column-start: span 2;
 }
 
 .subSectionLabel {
@@ -182,7 +183,7 @@
 }
 
 .subSectionValueUnknown {
-  color: var(--base-font-color)
+  color: var(--base-font-color);
 }
 
 .buttonsContainer {
@@ -202,6 +203,7 @@
   height: 1.5em;
   width: 1.5em;
   display: flex;
+  justify-content: center;
 }
 
 .noBackgroundButton {
@@ -215,7 +217,7 @@
   border: 1px solid var(--commandable-background);
 }
 
-.commandButton{
+.commandButton {
   display: grid;
   /* grid-template-columns: 2em 1fr; */
   padding: 0em;

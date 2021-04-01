@@ -19,9 +19,21 @@
   position: relative;
 }
 
+:global(.react-draggable-dragging) {
+  transition: none;
+  z-index: 2;
+}
+
+:global(.react-grid-placeholder) {
+  background: var(--second-primary-background-color);
+  z-index: -1;
+}
+
 .editable {
   border: 1px dashed var(--second-quinary-background-color);
   box-shadow: 1px 5px 2px var(--box-shadow-color);
+  transition: transform 200ms ease;
+  transition-property: transform;
 }
 
 .noOverflow {
@@ -32,7 +44,7 @@
   z-index: 2;
 }
 
-.componentWrapper :global(.react-resizable-handle) {
+.editable :global(.react-resizable-handle) {
   position: absolute;
   width: 20px;
   height: 20px;
@@ -42,7 +54,7 @@
   z-index: 10;
 }
 
-.editableContainer :global(.react-resizable-handle)::after {
+.editable :global(.react-resizable-handle)::after {
   content: '';
   position: absolute;
   right: 7px;
@@ -86,14 +98,13 @@
 }
 
 .icon {
-  height: 1.0em;
-  width: 1.0em;
+  height: 1em;
+  width: 1em;
   fill: var(--base-font-color);
 }
 
 .marginComponentPanel {
-  padding-right: 1em;
-  padding-bottom: 1em;
+  padding: 0.5em;
 }
 
 .deviceOutline {

@@ -31,4 +31,11 @@ const NetworkContainer = ({ ...props }) => {
   return <Network {...props} />;
 };
 
-export default connect(() => {return {}}, () => {return {}})(NetworkContainer);
+export default connect(
+  () => {
+    return {};
+  },
+  () => {
+    return {};
+  },
+)(NetworkContainer);

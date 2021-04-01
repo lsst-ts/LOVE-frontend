@@ -55,20 +55,23 @@ export default class CurrentScript extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
       elapsedTime: 0,
     };
   }
 
   onClick = () => {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
+    this.props.onClick();
   };
 
   animateProgress = () => {
-    if (this.props.index === undefined) return;
-
+    if (this.props.index === undefined) {
+      this.setState({ elapsedTime: 0 });
+      return;
+    }
+    if (this.props.scriptState !== 'RUNNING' && this.props.processState !== 'RUNNING') {
+      requestAnimationFrame(this.animateProgress);
+      return;
+    }
     if (this.props.timestampRunStart > 0) {
       this.setState({
         elapsedTime: new Date().getTime() / 1000.0 - this.props.timestampRunStart,
@@ -111,6 +114,7 @@ export default class CurrentScript extends Component {
     const isValid = this.props.path !== 'None';
     const typeTag = this.props.isStandard ? 'STANDARD' : 'EXTERNAL';
     const visibilityClass = !isValid ? scriptStyles.hidden : '';
+    const delayedScriptProgressClass = percentage > 100 ? styles.delayedScriptProgress : '';
 
     const isHearbeatAvailable = Object.keys(this.props.heartbeatData).length > 0;
     let heartbeatStatus = 'unknown';
@@ -127,7 +131,7 @@ export default class CurrentScript extends Component {
     const isPaused = this.props.scriptState.toLowerCase() === 'paused';
 
     return (
-      <div className={[scriptStyles.scriptContainer, isValid ? '' : scriptStyles.scriptContainerOff].join(' ')}>
+      <div className={[scriptStyles.scriptContainer].join(' ')}>
         <div>
           <div className={styles.currentScriptContainer} onClick={this.onClick}>
             <div className={styles.topContainer}>
@@ -162,6 +166,21 @@ export default class CurrentScript extends Component {
                   <span className={scriptStyles.pathText}>{fileFolder}</span>
                   <span className={[scriptStyles.pathText, scriptStyles.highlighted].join(' ')}>{fileName}</span>
                   <span className={scriptStyles.pathText}>{fileExtension}</span>
+                </div>
+
+                <div className={[styles.timeContainer].join(' ')}>
+                  <div className={styles.elapsedTimeContainer}>
+                    <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
+                    <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
+                      {elapsedTime.toFixed(1)} s
+                    </span>
+                  </div>
+                  <div className={styles.estimatedTimeContainer}>
+                    <span className={styles.estimatedTimeLabel}>Estimated time: </span>
+                    <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
+                      {estimatedTime.toFixed(1)} s
+                    </span>
+                  </div>
                 </div>
               </div>
               <div className={[scriptStyles.scriptStatusContainer, visibilityClass].join(' ')}>
@@ -202,10 +221,7 @@ export default class CurrentScript extends Component {
                       className={[scriptStyles.buttonContainer, scriptStyles.noBackgroundButton].join(' ')}
                       onClick={(e) => this.props.onClickContextMenu(e, this.props.index, true)}
                     >
-                      <span>
-                        {' '}
-                        &#8943;{' '}
-                      </span>
+                      <span> &#8943; </span>
                     </div>
                   </div>
                 )}
@@ -247,32 +263,16 @@ export default class CurrentScript extends Component {
                 </div>
               </div>
             </div>
-            <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
-              <LoadingBar percentage={percentage} title={`Script completion: ${percentage}%`} />
-            </div>
 
-            <div className={[styles.timeContainer, visibilityClass].join(' ')}>
-              <div className={styles.estimatedTimeContainer}>
-                <span className={styles.estimatedTimeLabel}>Estimated time: </span>
-                <span className={[styles.estimatedTimeValue, scriptStyles.highlighted].join(' ')}>
-                  {estimatedTime.toFixed(2)} s
-                </span>
-              </div>
-              <div className={styles.elapsedTimeContainer}>
-                <span className={styles.elapsedTimeLabel}>Elapsed time: </span>
-                <span className={[styles.elapsedTimeValue, scriptStyles.highlighted].join(' ')}>
-                  {elapsedTime.toFixed(2)} s
-                </span>
-              </div>
+            <div className={[styles.loadingBarContainer, visibilityClass].join(' ')}>
+              <LoadingBar
+                className={delayedScriptProgressClass}
+                percentage={percentage}
+                title={`Script completion: ${percentage}%`}
+                displayPercentage={false}
+                isNarrow
+              />
             </div>
-          </div>
-          <div
-            className={[
-              scriptStyles.expandedSectionWrapper,
-              this.state.expanded && isValid ? '' : scriptStyles.hidden,
-            ].join(' ')}
-          >
-            {hasCommandPrivileges ? <ScriptDetails {...this.props} /> : null}
           </div>
         </div>
       </div>

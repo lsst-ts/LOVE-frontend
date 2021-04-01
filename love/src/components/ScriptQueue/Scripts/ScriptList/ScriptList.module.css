@@ -22,11 +22,12 @@
 /* width */
 ::-webkit-scrollbar {
   width: var(--scrollbar-width);
+  height: var(--scrollbar-width);
 }
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background: var(--tertiary-background-color); 
+  background: var(--tertiary-background-color);
 }
 
 /* Handle */

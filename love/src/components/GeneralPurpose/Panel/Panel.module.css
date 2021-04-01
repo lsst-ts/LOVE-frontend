@@ -11,6 +11,11 @@
   overflow: auto;
 }
 
+.noTitle {
+  grid-template-rows: minmax(1em, 1fr);
+  border: none;
+}
+
 .fit {
   width: fit-content;
   max-height: 100vh;
@@ -45,7 +50,7 @@
 .panelBody {
   border-top-left-radius: 8px;
   border-top: 1px solid var(--secondary-font-color);
-  padding: 10px 15px 10px 15px;
+  padding: 0.5em;
   margin: 0px 8px;
   color: var(--secondary-font-color);
   font-weight: 400;
@@ -53,10 +58,13 @@
   line-height: 1.4;
 }
 
+.noTitle .panelBody {
+  border: none;
+}
+
 .panelButtonWrapper {
   display: grid;
   justify-content: center;
-  padding-right: 0.5em;
   grid-template-rows: 1fr;
   grid-template-columns: 5em;
   grid-auto-flow: column;

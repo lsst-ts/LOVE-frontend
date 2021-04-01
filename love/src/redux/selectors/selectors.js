@@ -1,3 +1,4 @@
+import { createCachedSelector } from 're-reselect';
 import { flatMap } from '../../Utils';
 
 export const getToken = (state) => state.auth.token;
@@ -12,7 +13,7 @@ export const getServerTimeReceive = (state) => state.time.receive_time;
 
 export const getServerTime = (state) => ({ ...state.time.server_time });
 
-export const getConfig = (state) => (state.auth.config ? { ...state.auth.config } : null);
+export const getConfig = (state) => (state.auth.config ? state.auth.config : null);
 
 export const getCamFeeds = (state) => getConfig(state)?.camFeeds;
 
@@ -29,6 +30,8 @@ export const getTokenStatus = (state) => state.auth.status;
 export const getTokenSwapStatus = (state) => state.auth.swapStatus;
 
 export const getConnectionStatus = (state) => state.ws.connectionState;
+
+export const getWebSocket = (state) => state.ws.socket;
 
 export const getSubscriptionsStatus = (state) => state.ws.subscriptionsState;
 
@@ -59,8 +62,8 @@ export const getTimestampedStreamData = (state, groupName) => {
   const data = filteredElement ? filteredElement.data : undefined;
   const timestamp = filteredElement ? filteredElement.timestamp : undefined;
   return {
-    data: data,
-    timestamp: timestamp,
+    data,
+    timestamp,
   };
 };
 
@@ -92,13 +95,13 @@ export const getDomeState = (state) => {
   const domeData = getStreamsData(state, domeSubscriptions);
   return {
     dropoutDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']
-      ? domeData['telemetry-ATDome-0-position']['dropoutDoorOpeningPercentage']
+      ? domeData['telemetry-ATDome-0-position'].dropoutDoorOpeningPercentage
       : 0,
     mainDoorOpeningPercentage: domeData['telemetry-ATDome-0-position']
-      ? domeData['telemetry-ATDome-0-position']['mainDoorOpeningPercentage']
+      ? domeData['telemetry-ATDome-0-position'].mainDoorOpeningPercentage
       : 0,
     azimuthPosition: domeData['telemetry-ATDome-0-position']
-      ? domeData['telemetry-ATDome-0-position']['azimuthPosition']
+      ? domeData['telemetry-ATDome-0-position'].azimuthPosition
       : 0,
     azimuthState: domeData['event-ATDome-0-azimuthState'],
     azimuthCommandedState: domeData['event-ATDome-0-azimuthCommandedState'],
@@ -113,23 +116,23 @@ export const getDomeState = (state) => {
     target: domeData['event-ATMCS-0-target'],
     m3State: domeData['event-ATMCS-0-m3State'],
     positionLimits: domeData['event-ATMCS-0-positionLimits'],
-    currentTimesToLimits: domeData['currentTimesToLimits'],
+    currentTimesToLimits: domeData.currentTimesToLimits,
   };
 };
 
 export const getMountSubscriptions = (index) => {
   return [
-    //ATHexapod
+    // ATHexapod
     `event-ATHexapod-${index}-inPosition`,
     `event-ATHexapod-${index}-readyForCommand`,
     `telemetry-ATHexapod-${index}-positionStatus`,
-    //ATPneumatics
+    // ATPneumatics
     `event-ATPneumatics-${index}-m1CoverState`,
     `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
     `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
     `telemetry-ATPneumatics-${index}-loadCell`,
     `telemetry-ATPneumatics-${index}-m1AirPressure`,
-    //ATMCS
+    // ATMCS
     `event-ATMCS-${index}-m3InPosition`,
     `event-ATMCS-${index}-m3State`,
     `event-ATMCS-${index}-m3PortSelected`,
@@ -142,7 +145,7 @@ export const getMountSubscriptions = (index) => {
     `event-ATMCS-${index}-target`,
     `event-ATMCS-${index}-positionLimits`,
     `telemetry-ATMCS-${index}-mountEncoders`,
-    //ATAOS
+    // ATAOS
     `event-ATAOS-${index}-correctionOffsets`,
   ];
 };
@@ -169,50 +172,50 @@ export const getMountState = (state, index) => {
   const m1CoverLimitSwitches = mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`];
   const correctionOffsets = mountData[`event-ATAOS-${index}-correctionOffsets`];
   return {
-    //ATHexapod
-    hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1]['inPosition'].value : 0,
+    // ATHexapod
+    hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1].inPosition.value : 0,
     hexapodReadyForCommand: hexapodReadyForCommand
-      ? hexapodReadyForCommand[hexapodReadyForCommand.length - 1]['ready']
+      ? hexapodReadyForCommand[hexapodReadyForCommand.length - 1].ready
       : 0,
     hexapodReportedPosition: mountData[`telemetry-ATHexapod-${index}-positionStatus`]
-      ? mountData[`telemetry-ATHexapod-${index}-positionStatus`]['reportedPosition']
+      ? mountData[`telemetry-ATHexapod-${index}-positionStatus`].reportedPosition
       : 'Unknown',
-    //ATPneumatics
-    m1CoverState: m1CoverState ? m1CoverState[m1CoverState.length - 1]['state'].value : 0,
+    // ATPneumatics
+    m1CoverState: m1CoverState ? m1CoverState[m1CoverState.length - 1].state.value : 0,
     m1CoverLimitSwitches: m1CoverLimitSwitches ? m1CoverLimitSwitches[m1CoverLimitSwitches.length - 1] : {},
     m1VentsLimitSwitches: m1VentsLimitSwitches ? m1VentsLimitSwitches[m1VentsLimitSwitches.length - 1] : {},
     loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`]
-      ? mountData[`telemetry-ATPneumatics-${index}-loadCell`]['cellLoad']
+      ? mountData[`telemetry-ATPneumatics-${index}-loadCell`].cellLoad
       : 'Unknown',
     m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]
-      ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]['pressure']
+      ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`].pressure
       : 'Unknown',
-    //ATMCS
-    m3InPosition: m3InPosition ? m3InPosition[m3InPosition.length - 1]['inPosition'].value : 0,
+    // ATMCS
+    m3InPosition: m3InPosition ? m3InPosition[m3InPosition.length - 1].inPosition.value : 0,
     nasmyth1RotatorInPosition: nasmyth1RotatorInPosition
-      ? nasmyth1RotatorInPosition[nasmyth1RotatorInPosition.length - 1]['inPosition'].value
+      ? nasmyth1RotatorInPosition[nasmyth1RotatorInPosition.length - 1].inPosition.value
       : 0,
     nasmyth2RotatorInPosition: nasmyth2RotatorInPosition
-      ? nasmyth2RotatorInPosition[nasmyth2RotatorInPosition.length - 1]['inPosition'].value
+      ? nasmyth2RotatorInPosition[nasmyth2RotatorInPosition.length - 1].inPosition.value
       : 0,
-    m3State: m3State ? m3State[m3State.length - 1]['state'].value : 0,
-    m3PortSelected: m3PortSelected ? m3PortSelected[m3PortSelected.length - 1]['selected'].value : 0,
+    m3State: m3State ? m3State[m3State.length - 1].state.value : 0,
+    m3PortSelected: m3PortSelected ? m3PortSelected[m3PortSelected.length - 1].selected.value : 0,
     nasmyth1LimitSwitchCCW: nasmyth1LimitSwitchCCW
-      ? nasmyth1LimitSwitchCCW[nasmyth1LimitSwitchCCW.length - 1]['active'].value
+      ? nasmyth1LimitSwitchCCW[nasmyth1LimitSwitchCCW.length - 1].active.value
       : 'Unknown',
     nasmyth1LimitSwitchCW: nasmyth1LimitSwitchCW
-      ? nasmyth1LimitSwitchCW[nasmyth1LimitSwitchCW.length - 1]['active'].value
+      ? nasmyth1LimitSwitchCW[nasmyth1LimitSwitchCW.length - 1].active.value
       : 'Unknown',
     nasmyth2LimitSwitchCCW: nasmyth2LimitSwitchCCW
-      ? nasmyth2LimitSwitchCCW[nasmyth2LimitSwitchCCW.length - 1]['active'].value
+      ? nasmyth2LimitSwitchCCW[nasmyth2LimitSwitchCCW.length - 1].active.value
       : 'Unknown',
     nasmyth2LimitSwitchCW: nasmyth2LimitSwitchCW
-      ? nasmyth2LimitSwitchCW[nasmyth2LimitSwitchCW.length - 1]['active'].value
+      ? nasmyth2LimitSwitchCW[nasmyth2LimitSwitchCW.length - 1].active.value
       : 'Unknown',
     target: target ? target[target.length - 1] : {},
     positionLimits: positionLimits ? positionLimits[positionLimits.length - 1] : {},
-    mountEncoders: mountEncoders ? mountEncoders : {},
-    //ATAOS
+    mountEncoders: mountEncoders || {},
+    // ATAOS
     correctionOffsets: correctionOffsets
       ? correctionOffsets[correctionOffsets.length - 1]
       : {
@@ -305,11 +308,11 @@ export const getMountMotorsState = (state, index) => {
     nasmyth1Brake: nasmyth1Brake ? nasmyth1Brake[nasmyth1Brake.length - 1].engaged.value : 'Unknown',
     nasmyth2Brake: nasmyth2Brake ? nasmyth2Brake[nasmyth2Brake.length - 1].engaged.value : 'Unknown',
     // Motors
-    measuredMotorVelocity: measuredMotorVelocity ? measuredMotorVelocity : {},
-    measuredTorque: measuredTorque ? measuredTorque : {},
-    mountEncoders: mountEncoders ? mountEncoders : {},
-    mountMotorEncoders: mountMotorEncoders ? mountMotorEncoders : {},
-    torqueDemand: torqueDemand ? torqueDemand : {},
+    measuredMotorVelocity: measuredMotorVelocity || {},
+    measuredTorque: measuredTorque || {},
+    mountEncoders: mountEncoders || {},
+    mountMotorEncoders: mountMotorEncoders || {},
+    torqueDemand: torqueDemand || {},
   };
 };
 
@@ -343,43 +346,42 @@ export const getLATISSState = (state) => {
 
   return {
     reportedFilterPosition: reportedFilterPosition
-      ? reportedFilterPosition[reportedFilterPosition.length - 1]['position'].value
+      ? reportedFilterPosition[reportedFilterPosition.length - 1].position.value
       : 0,
     reportedFilterName: reportedFilterPosition
-      ? reportedFilterPosition[reportedFilterPosition.length - 1]['name'].value
+      ? reportedFilterPosition[reportedFilterPosition.length - 1].name.value
       : '',
     reportedDisperserPosition: reportedDisperserPosition
-      ? reportedDisperserPosition[reportedDisperserPosition.length - 1]['position'].value
+      ? reportedDisperserPosition[reportedDisperserPosition.length - 1].position.value
       : 0,
     reportedDisperserName: reportedDisperserPosition
-      ? reportedDisperserPosition[reportedDisperserPosition.length - 1]['name'].value
+      ? reportedDisperserPosition[reportedDisperserPosition.length - 1].name.value
       : '',
     reportedLinearStagePosition: reportedLinearStagePosition
-      ? reportedLinearStagePosition[reportedLinearStagePosition.length - 1]['position'].value
+      ? reportedLinearStagePosition[reportedLinearStagePosition.length - 1].position.value
       : 0,
-    lsState: lsState ? lsState[lsState.length - 1]['state'].value : 0,
-    fwState: fwState ? fwState[fwState.length - 1]['state'].value : 0,
-    gwState: gwState ? gwState[gwState.length - 1]['state'].value : 0,
+    lsState: lsState ? lsState[lsState.length - 1].state.value : 0,
+    fwState: fwState ? fwState[fwState.length - 1].state.value : 0,
+    gwState: gwState ? gwState[gwState.length - 1].state.value : 0,
     shutterDetailedState: shutterDetailedState
-      ? shutterDetailedState[shutterDetailedState.length - 1]['substate'].value
+      ? shutterDetailedState[shutterDetailedState.length - 1].substate.value
       : 0,
-    raftsDetailedState: raftsDetailedState ? raftsDetailedState[raftsDetailedState.length - 1]['substate'].value : 0,
+    raftsDetailedState: raftsDetailedState ? raftsDetailedState[raftsDetailedState.length - 1].substate.value : 0,
   };
 };
 
 export const getKey = (dict, key, def) => {
   if (dict && dict !== {} && Object.keys(dict).includes(key)) {
     return dict[key];
-  } else {
-    return def;
   }
+  return def;
 };
 
 export const getScriptQueueState = (state, salindex) => {
   const scriptQueueData = getStreamData(state, `event-ScriptQueueState-${salindex}-stream`);
-  const running_state = getKey(scriptQueueData, 'running', undefined);
+  const runningState = getKey(scriptQueueData, 'running', undefined);
   return {
-    state: running_state === undefined ? 'Unknown' : running_state ? 'Running' : 'Stopped',
+    state: runningState === undefined ? 'Unknown' : runningState ? 'Running' : 'Stopped',
     availableScriptList: getKey(scriptQueueData, 'available_scripts', undefined),
     waitingScriptList: getKey(scriptQueueData, 'waiting_scripts', undefined),
     current: getKey(scriptQueueData, 'current', 'None'),
@@ -393,13 +395,26 @@ export const getScriptQueueState = (state, salindex) => {
  * @param {obj} state
  * @param {integer} salindex
  */
-export const getScriptHeartbeats = (state, salindex) => {
-  return state.heartbeats.scripts.filter((heartbeat) => heartbeat.queueSalIndex === salindex);
-};
+const getScripts = (state) => state.heartbeats?.scripts ?? [];
+const getSalindex = (state, salindex) => salindex;
+
+export const getScriptHeartbeats = createCachedSelector(
+  // inputSelectors
+  getScripts,
+  getSalindex,
+  // resultFunc
+  (scripts, salindex) => {
+    return scripts.filter((heartbeat) => heartbeat.queueSalIndex === salindex);
+  },
+)(
+  // re-reselect keySelector (receives selectors' arguments)
+  // Use "salindex" as cacheKey
+  (_state_, salindex) => salindex,
+);
 
 export const getSummaryStateValue = (state, groupName) => {
   const summaryState = getStreamData(state, groupName);
-  let summaryStateValue = undefined;
+  let summaryStateValue;
   if (summaryState) {
     summaryStateValue = summaryState[summaryState.length - 1].summaryState.value;
   }

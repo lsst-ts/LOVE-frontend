@@ -114,9 +114,7 @@ export default class CSCDetail extends Component {
     if (summaryState.name === 'UNKNOWN') stateClass = CSCDetail.states[0].class;
     return (
       <div
-        onClick={() =>
-          this.props.onCSCClick({group: props.group, csc: props.name, salindex: props.salindex })
-        }
+        onClick={() => this.props.onCSCClick({ group: props.group, csc: props.name, salindex: props.salindex })}
         className={[styles.CSCDetailContainer, this.props.embedded ? styles.minWidth : ''].join(' ')}
       >
         <div className={[styles.summaryStateSection, summaryState.class].join(' ')}>
@@ -125,8 +123,16 @@ export default class CSCDetail extends Component {
           </span>
         </div>
         <div className={[styles.heartbeatSection, stateClass].join(' ')}>
-          <div className={[styles.heartbeatIconWrapper, heartbeatStatus === 'ok' && props.hasHeartbeat !== false ? styles.hidden : ''].join(' ')}>
-            <HeartbeatIcon status={heartbeatStatus === 'alert' || props.hasHeartbeat === false ? 'unknown' : heartbeatStatus} title={title} />
+          <div
+            className={[
+              styles.heartbeatIconWrapper,
+              heartbeatStatus === 'ok' && props.hasHeartbeat !== false ? styles.hidden : '',
+            ].join(' ')}
+          >
+            <HeartbeatIcon
+              status={heartbeatStatus === 'alert' || props.hasHeartbeat === false ? 'unknown' : heartbeatStatus}
+              title={title}
+            />
           </div>
         </div>
         <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>

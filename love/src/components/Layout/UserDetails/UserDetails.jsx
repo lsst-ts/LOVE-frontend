@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './UserDetails.module.css';
-import UserIcon from '../../icons/UserIcon/UserIcon';
 import ScreenshotIcon from '../../icons/ScreenshotIcon/ScreenshotIcon';
-import CodeIcon from '../../icons/CodeIcon/CodeIcon';
+import EmergencyContactIcon from '../../icons/EmergencyContactIcon/EmergencyContactIcon';
+import ScriptIcon from '../../icons/ScriptIcon/ScriptIcon';
+import UserIcon from '../../icons/UserIcon/UserIcon';
 
 UserDetails.propTypes = {
   /** Name of the current user */
@@ -16,8 +17,10 @@ UserDetails.propTypes = {
   dividerClassName: PropTypes.string,
   /** Callback to execute when clicking on the XML menu element */
   onXMLClick: PropTypes.func,
-  /** Callback to execute when clicking on the XML menu element */
-  onXMLConConfigClicklick: PropTypes.func,
+  /** Callback to execute when clicking on the Config file menu element */
+  onConfigClick: PropTypes.func,
+  /** Callback to execute when clicking on the Emergency contact menu element */
+  onEmergencyContactsClick: PropTypes.func,
   /** Callback to execute when clicking on the logout menu element */
   logout: PropTypes.func,
   /** Callback to execute when clicking on the user swap menu element */
@@ -34,6 +37,7 @@ export default function UserDetails({
   dividerClassName,
   onXMLClick,
   onConfigClick,
+  onEmergencyContactsClick,
   logout,
   requireUserSwap,
   takeScreenshot,
@@ -59,19 +63,25 @@ export default function UserDetails({
       <div className={dividerClassName}></div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={takeScreenshot}>
         <div className={styles.smallIconRow}>
-          <ScreenshotIcon />
+          <ScreenshotIcon className={styles.paddedIcon} />
           <span>Screenshot </span>
+        </div>
+      </div>
+      <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onEmergencyContactsClick}>
+        <div className={styles.smallIconRow}>
+          <EmergencyContactIcon active={false} className={styles.paddedIcon} />
+          <span>Emergency contacts </span>
         </div>
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onXMLClick}>
         <div className={styles.smallIconRow}>
-          <CodeIcon active={false} className={styles.paddedIcon} />
+          <ScriptIcon active={false} className={styles.paddedIcon} />
           <span>XML versions </span>
         </div>
       </div>
       <div className={[menuElementClassName, styles.menuElement].join(' ')} onClick={onConfigClick}>
         <div className={styles.smallIconRow}>
-          <CodeIcon active={false} className={styles.paddedIcon} />
+          <ScriptIcon active={false} className={styles.paddedIcon} />
           <span>LOVE Config File </span>
         </div>
       </div>

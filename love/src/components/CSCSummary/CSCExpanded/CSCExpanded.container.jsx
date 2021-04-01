@@ -60,6 +60,7 @@ const CSCExpandedContainer = ({
   errorCodeData,
   subscribeToStreams,
   heartbeatData,
+  displaySummaryState = true,
 }) => {
   return (
     <CSCExpanded
@@ -74,6 +75,7 @@ const CSCExpandedContainer = ({
       logMessageData={logMessageData}
       heartbeatData={heartbeatData}
       clearCSCLogMessages={clearCSCLogMessages}
+      displaySummaryState={displaySummaryState}
     />
   );
 };

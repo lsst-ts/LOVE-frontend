@@ -50,7 +50,7 @@ class App extends Component {
     this.props.requestViews();
   };
 
-  componentDidUpdate = (prevProps, _prevState) => {
+  componentDidUpdate = (prevProps) => {
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }
@@ -65,7 +65,7 @@ class App extends Component {
             <PrivateRoute
               token={this.props.token}
               path="/health-status-summary"
-              render={() => <HealthStatusSummaryContainer/>}
+              render={() => <HealthStatusSummaryContainer />}
             />
             <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
             <PrivateRoute
@@ -88,23 +88,21 @@ class App extends Component {
             <PrivateRoute
               token={this.props.token}
               path="/script-queue-1"
-              render={() => <ScriptQueueContainer salindex={1} fit embedded/>}
+              render={() => <ScriptQueueContainer salindex={1} fit embedded />}
             />
             <PrivateRoute
               token={this.props.token}
               path="/script-queue-2"
-              render={() => <ScriptQueueContainer salindex={2} fit embedded/>}
+              render={() => <ScriptQueueContainer salindex={2} fit embedded />}
             />
-            <PrivateRoute token={this.props.token} path="/csc-summary" render={() => <CSCSummaryContainer expandHeight />} />
-            <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
-            <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
             <PrivateRoute
               token={this.props.token}
-              path="/aux-tel-camera"
-              render={() => (
-                  <CameraContainer />
-              )}
+              path="/csc-summary"
+              render={() => <CSCSummaryContainer expandHeight />}
             />
+            <PrivateRoute token={this.props.token} path="/aux-tel" component={AuxTel} />
+            <PrivateRoute token={this.props.token} path="/auxiliary-telescope" component={AuxTel} />
+            <PrivateRoute token={this.props.token} path="/aux-tel-camera" render={() => <CameraContainer />} />
             <PrivateRoute token={this.props.token} path="/latiss" component={LATISSContainer} />
             <PrivateRoute token={this.props.token} path="/aux-tel-dome-and-mount" component={DomeAndMountView} />
             <PrivateRoute
@@ -141,8 +139,6 @@ class App extends Component {
             <PrivateRoute token={this.props.token} path="/palette" render={() => <Palette />} />
             <PrivateRoute token={this.props.token} path="/legacy-index" render={() => <ComponentIndexContainer />} />
             <PrivateRoute token={this.props.token} path="/" render={() => <ViewsIndexContainer />} />
-
-
           </Switch>
         </LayoutContainer>
       </div>

@@ -4,7 +4,6 @@
   width: 300px;
 }
 
-
 .svg {
   position: absolute;
   top: 0px;
@@ -18,7 +17,6 @@
   stroke-width: 2;
   stroke-dasharray: 10, 10;
 }
-
 
 .span {
   position: absolute;

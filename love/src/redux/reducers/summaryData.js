@@ -33,10 +33,18 @@ export default function (state = initialState, action) {
 
       const newLogMessageData = [...state.logMessageData];
       const cscData = newLogMessageData[cscDataIndex];
+      const nonDuplicates =
+        action?.messages?.filter((msg) => {
+          return (
+            cscData?.messages?.findIndex((log) => {
+              return log?.private_sndStamp?.value === msg?.private_sndStamp?.value;
+            }) === -1
+          );
+        }) ?? [];
       newLogMessageData[cscDataIndex] = {
         csc: action.csc,
         salindex: action.salindex,
-        messages: [...cscData.messages, ...action.messages],
+        messages: [...nonDuplicates, ...cscData.messages],
       };
 
       return {
@@ -84,10 +92,18 @@ export default function (state = initialState, action) {
 
       const newErrorCodeData = [...state.errorCodeData];
       const cscData = newErrorCodeData[cscDataIndex];
+      const nonDuplicates =
+        action?.errorCodeData?.filter((msg) => {
+          return (
+            cscData?.errorCodeData?.findIndex((log) => {
+              return log?.private_sndStamp?.value === msg?.private_sndStamp?.value;
+            }) === -1
+          );
+        }) ?? [];
       newErrorCodeData[cscDataIndex] = {
         csc: action.csc,
         salindex: action.salindex,
-        errorCodeData: [...cscData.errorCodeData, ...action.errorCodeData],
+        errorCodeData: [...nonDuplicates, ...cscData.errorCodeData],
       };
 
       return {

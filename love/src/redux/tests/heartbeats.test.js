@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { addGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import {
@@ -14,7 +14,8 @@ import {
 import * as mockData from './mock';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 
-let store, server;
+let store;
+let server;
 
 const heartbeatsInfo = [
   {
@@ -37,11 +38,11 @@ const heartbeatsInfo = [
 const compareSalIndex = (a, b) => {
   if (a.salindex < b.salindex) {
     return -1;
-  } else if (a.salindex > b.salindex) {
-    return 1;
-  } else {
-    return 0;
   }
+  if (a.salindex > b.salindex) {
+    return 1;
+  }
+  return 0;
 };
 
 afterEach(() => {
@@ -124,7 +125,8 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
   });
 });
 
-it('Should receive 3 sequential messages with script heartbeats (2 new and 1 update) from the server and save them on the state properly', async () => {
+it(`Should receive 3 sequential messages with script heartbeats (2 new and 1 update)
+  from the server and save them on the state properly`, async () => {
   const heartbeats = [
     {
       // New for SAL index 100017
@@ -172,7 +174,7 @@ it('Should receive 3 sequential messages with script heartbeats (2 new and 1 upd
     });
 
     // Assert:
-    let heartbeatsState = getScriptHeartbeats(store.getState(), 12);
+    const heartbeatsState = getScriptHeartbeats(store.getState(), 12);
     // We expect a list with last heartbeat for each SAL index
     expectedState = expectedState.filter((current) => current.salindex !== heartbeat.salindex);
     expectedState.push(heartbeat);
@@ -233,7 +235,7 @@ it(`GIVEN 3 script heartbeats in the State,
   server.send(mockData.ScriptQueueData);
   // Assert:
   expectedState = [mockHeartbeats[0], mockHeartbeats[2]];
-  let heartbeatsState = getScriptHeartbeats(store.getState(), 1);
+  const heartbeatsState = getScriptHeartbeats(store.getState(), 1);
   expect(JSON.stringify(heartbeatsState.sort(compareSalIndex))).toEqual(
     JSON.stringify(expectedState.sort(compareSalIndex)),
   );
@@ -245,7 +247,8 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
   salindices.forEach((salindex1) => {
     salindices.forEach((salindex2) => {
       it(`WHEN the server sends two heartbeats with salindices of these combinations
-        THEN it should receive two CSC heartbeats with these salindices and select them from the state properly`, async () => {
+        THEN it should receive two CSC heartbeats with these salindices and select them 
+        from the state properly`, async () => {
         const heartbeats = [
           {
             csc: 'ScriptQueue',
@@ -287,7 +290,8 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
       });
 
       it(`WHEN the server sends two heartbeats with salindices of these combinations
-        THEN it should receive two CSC heartbeats with these salindices and select them individually from the state`, async () => {
+        THEN it should receive two CSC heartbeats with these salindices and select them individually
+        from the state`, async () => {
         const heartbeats = [
           {
             csc: 'ScriptQueue',

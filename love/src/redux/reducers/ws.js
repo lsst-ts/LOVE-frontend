@@ -50,7 +50,7 @@ export default function (state = initialState, action) {
       ) {
         clearInterval(retryInterval);
       }
-      return { ...state, connectionState: action.connectionState, retryInterval };
+      return { ...state, connectionState: action.connectionState, retryInterval, socket: action.socket };
     }
     case ADD_GROUP: {
       const index = state.subscriptions.findIndex((subscription) => subscription.groupName === action.groupName);
@@ -66,14 +66,13 @@ export default function (state = initialState, action) {
             },
           ],
         };
-      } else {
-        const subscriptions = [...state.subscriptions];
-        subscriptions[index].counter = subscriptions[index].counter + 1;
-        return {
-          ...state,
-          subscriptions,
-        };
       }
+      const subscriptions = [...state.subscriptions];
+      subscriptions[index].counter += 1;
+      return {
+        ...state,
+        subscriptions,
+      };
     }
     case REQUEST_SUBSCRIPTIONS: {
       const subscriptions = action.subscriptions.map((subscription) => ({
@@ -167,7 +166,7 @@ export default function (state = initialState, action) {
         if (
           category !== action.category ||
           csc !== action.csc ||
-          parseInt(salindex) !== parseInt(action.salindex) ||
+          parseInt(salindex, 10) !== parseInt(action.salindex, 10) ||
           (!Object.keys(action.data).includes(stream) && stream !== 'all')
         ) {
           return subscription;
@@ -219,7 +218,7 @@ export default function (state = initialState, action) {
 
     case RECEIVE_ALARMS: {
       const latestAlarms = Array.isArray(action.alarms) ? Array.from(action.alarms) : Array.from([action.alarms]);
-      let alarms = Array.from(state.alarms);
+      const alarms = Array.from(state.alarms);
       latestAlarms.forEach((latestAlarm) => {
         if (latestAlarm === undefined) return;
         const alarmIndex = alarms.findIndex((stateAlarm) => {

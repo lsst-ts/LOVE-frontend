@@ -44,7 +44,7 @@ const message = {
             type: 'standard',
             path: 'script1',
             setup: true,
-          }
+          },
         ],
         waiting_scripts: [
           {

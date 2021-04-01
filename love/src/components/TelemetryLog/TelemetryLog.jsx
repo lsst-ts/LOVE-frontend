@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import JSONPretty from 'react-json-pretty';
-import ManagerInterface from '../../Utils';
 import 'react-json-pretty/themes/monikai.css';
 
 export default class TelemetryLog extends Component {
@@ -25,7 +24,6 @@ export default class TelemetryLog extends Component {
       cmdParams: '{"name": "test.ConfiguredSeverities.Rule1", "severity": 1, "acknowledgedBy":"test"}',
       cmdSalindex: 0,
     };
-    this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
@@ -76,11 +74,15 @@ export default class TelemetryLog extends Component {
   };
 
   subscribeToStream = () => {
-    this.props.subscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
+    this.props.subscribeToStream(
+      [this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'),
+    );
   };
 
   unsubscribeToStream = () => {
-    this.props.unsubscribeToStream([this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'));
+    this.props.unsubscribeToStream(
+      [this.state.category, this.state.csc, this.state.salindex, this.state.stream].join('-'),
+    );
   };
 
   cmdComponentChange = (e) => {
@@ -101,7 +103,7 @@ export default class TelemetryLog extends Component {
       cmd: `cmd_${this.state.command}`,
       params: JSON.parse(this.state.cmdParams),
       component: this.state.cmdComponent,
-      salindex: this.state.cmdSalindex
+      salindex: this.state.cmdSalindex,
     });
   };
 

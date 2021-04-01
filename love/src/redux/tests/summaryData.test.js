@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
-import rootReducer from '../reducers';
 import thunkMiddleware from 'redux-thunk';
+import rootReducer from '../reducers';
 import { addGroup } from '../actions/ws';
 import { doReceiveToken } from '../actions/auth';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../actions/summaryData';
@@ -14,7 +14,8 @@ import {
 import * as mockData from './mock';
 import { flatMap } from '../../Utils';
 
-let store, server;
+let store;
+let server;
 
 beforeEach(async () => {
   store = createStore(rootReducer, applyMiddleware(thunkMiddleware));
@@ -33,99 +34,102 @@ afterEach(() => {
   server.close();
 });
 
-it('It should extract the summary and log messages properly from the state with the generic reshape selector', async () => {
-  const summaryATDome = {
-    ATDomeID: { value: 1, dataType: 'Int' },
-    private_revCode: { value: 'c38fc5a2', dataType: 'String' },
-    private_sndStamp: { value: 1563885828.2869709, dataType: 'Float' },
-    private_rcvStamp: { value: 1563885828.3042052, dataType: 'Float' },
-    private_seqNum: { value: 4, dataType: 'Int' },
-    private_origin: { value: 32, dataType: 'Int' },
-    private_host: { value: 843720695, dataType: 'Int' },
-    summaryState: { value: 1, dataType: 'Int' },
-    priority: { value: 0, dataType: 'Int' },
-  };
+it(
+  'It should extract the summary and log messages properly from the state' + 'with the generic reshape selector',
+  async () => {
+    const summaryATDome = {
+      ATDomeID: { value: 1, dataType: 'Int' },
+      private_revCode: { value: 'c38fc5a2', dataType: 'String' },
+      private_sndStamp: { value: 1563885828.2869709, dataType: 'Float' },
+      private_rcvStamp: { value: 1563885828.3042052, dataType: 'Float' },
+      private_seqNum: { value: 4, dataType: 'Int' },
+      private_origin: { value: 32, dataType: 'Int' },
+      private_host: { value: 843720695, dataType: 'Int' },
+      summaryState: { value: 1, dataType: 'Int' },
+      priority: { value: 0, dataType: 'Int' },
+    };
 
-  const summaryScriptqueue = {
-    ScriptQueueID: { value: 1, dataType: 'Int' },
-    private_revCode: { value: '16ec6358', dataType: 'String' },
-    private_sndStamp: { value: 1563885938.2406523, dataType: 'Float' },
-    private_rcvStamp: { value: 1563885938.2410805, dataType: 'Float' },
-    private_seqNum: { value: 4, dataType: 'Int' },
-    private_origin: { value: 44, dataType: 'Int' },
-    private_host: { value: 619616180, dataType: 'Int' },
-    summaryState: { value: 1, dataType: 'Int' },
-    priority: { value: 0, dataType: 'Int' },
-  };
+    const summaryScriptqueue = {
+      ScriptQueueID: { value: 1, dataType: 'Int' },
+      private_revCode: { value: '16ec6358', dataType: 'String' },
+      private_sndStamp: { value: 1563885938.2406523, dataType: 'Float' },
+      private_rcvStamp: { value: 1563885938.2410805, dataType: 'Float' },
+      private_seqNum: { value: 4, dataType: 'Int' },
+      private_origin: { value: 44, dataType: 'Int' },
+      private_host: { value: 619616180, dataType: 'Int' },
+      summaryState: { value: 1, dataType: 'Int' },
+      priority: { value: 0, dataType: 'Int' },
+    };
 
-  await store.dispatch(addGroup('event-ATDome-1-summaryState'));
-  await store.dispatch(addGroup('event-ATDome-1-logMessage'));
-  await store.dispatch(addGroup('event-ScriptQueue-1-summaryState'));
+    await store.dispatch(addGroup('event-ATDome-1-summaryState'));
+    await store.dispatch(addGroup('event-ATDome-1-logMessage'));
+    await store.dispatch(addGroup('event-ScriptQueue-1-summaryState'));
 
-  server.send({
-    category: 'event',
-    data: [
-      {
-        csc: 'ATDome',
-        salindex: 1,
-        data: {
-          summaryState: [summaryATDome],
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ATDome',
+          salindex: 1,
+          data: {
+            summaryState: [summaryATDome],
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
 
-  server.send({
-    category: 'event',
-    data: [
-      {
-        csc: 'ScriptQueue',
-        salindex: 1,
-        data: {
-          summaryState: [summaryScriptqueue],
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ScriptQueue',
+          salindex: 1,
+          data: {
+            summaryState: [summaryScriptqueue],
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
 
-  server.send({
-    category: 'event',
-    data: [
-      {
-        csc: 'ATDome',
-        salindex: 1,
-        data: {
-          logMessage: mockData.ATDomeLogMessages,
+    server.send({
+      category: 'event',
+      data: [
+        {
+          csc: 'ATDome',
+          salindex: 1,
+          data: {
+            logMessage: mockData.ATDomeLogMessages,
+          },
         },
-      },
-    ],
-  });
+      ],
+    });
 
-  const cscsList = [
-    ['ATDome', 1],
-    ['ScriptQueue', 1],
-  ];
+    const cscsList = [
+      ['ATDome', 1],
+      ['ScriptQueue', 1],
+    ];
 
-  const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
+    const summariesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'summaryState', true);
 
-  const expectedSummaries = {
-    'ScriptQueue-1': summaryScriptqueue,
-    'ATDome-1': summaryATDome,
-  };
+    const expectedSummaries = {
+      'ScriptQueue-1': summaryScriptqueue,
+      'ATDome-1': summaryATDome,
+    };
 
-  expect(summariesDictionary).toEqual(expectedSummaries);
+    expect(summariesDictionary).toEqual(expectedSummaries);
 
-  /**
-   * When some cscs dont have data the keys return undefined values
-   */
-  const logMessagesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'logMessage');
+    /**
+     * When some cscs dont have data the keys return undefined values
+     */
+    const logMessagesDictionary = getAllStreamsAsDictionary(store.getState(), 'event', cscsList, 'logMessage');
 
-  const expectedLogMessages = {
-    'ATDome-1': mockData.ATDomeLogMessages,
-  };
+    const expectedLogMessages = {
+      'ATDome-1': mockData.ATDomeLogMessages,
+    };
 
-  expect(logMessagesDictionary).toEqual(expectedLogMessages);
-});
+    expect(logMessagesDictionary).toEqual(expectedLogMessages);
+  },
+);
 
 it('It should extract all received logMessages from the state for a given CSC', async () => {
   await store.dispatch(addGroup('event-ATDome-1-logMessage'));
@@ -147,7 +151,7 @@ it('It should extract all received logMessages from the state for a given CSC', 
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
     const storedMessages = getCSCLogMessages(store.getState(), 'ATDome', 1);
     expect(storedMessages).toEqual(messages);
   });
@@ -174,7 +178,7 @@ it('Should delete all logMessages of a CSC with an action ', async () => {
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
   });
   expect(getCSCLogMessages(store.getState(), 'ATDome', 1)).toEqual(messages);
 
@@ -205,7 +209,7 @@ it('It should extract all errorCode event data  from the state for a given CSC',
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
     const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
     expect(storedMessages).toEqual(messages);
   });
@@ -231,7 +235,7 @@ it('It should delete errorCode event data  from the state for a given CSC', asyn
       ],
     });
 
-    messages = [...messages, message];
+    messages = [message, ...messages];
   });
   const storedMessages = getCSCErrorCodeData(store.getState(), 'Test', 1);
   expect(storedMessages).toEqual(messages);
@@ -290,7 +294,7 @@ it('Should extract a sorted list of a subset of errorCode event data ', async ()
     };
   });
 
-  let sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
+  const sortedMessages = [...flat1, ...flat2].sort((msg1, msg2) => {
     return msg1.private_rcvStamp.value > msg2.private_rcvStamp.value ? -1 : 1;
   });
 

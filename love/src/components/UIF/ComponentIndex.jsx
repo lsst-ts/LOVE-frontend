@@ -268,16 +268,6 @@ export const utilitiesIndex = {
       },
     },
   },
-  // TimeSeriesPlot: {
-  //   component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
-  //   schema: {
-  //     ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
-  //     props: {
-  //       ...defaultSchemaProps,
-  //       ...require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema.props,
-  //     }
-  //   },
-  // },
   TimeSeriesPlot: {
     component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
     schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
@@ -349,7 +339,28 @@ export const internalIndex = {
   },
 };
 
-export const mainIndex = {};
+export const mainIndex = {
+  CableWraps: {
+    component: require('../MainTel/CableWraps/CableWraps.container').default,
+    schema: {
+      ...require('../MainTel/CableWraps/CableWraps.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CableWraps/CableWraps.container').schema.props,
+      },
+    },
+  },
+  M1M3: {
+    component: require('../MainTel/M1M3/M1M3.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3.container').schema.props,
+      },
+    },
+  },
+};
 
 export const indexes = [
   {

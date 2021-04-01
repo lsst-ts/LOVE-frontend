@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
+import TimeSeriesControls from '../../TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import styles from './Plot.module.css';
 
@@ -37,7 +38,15 @@ const Plot = ({
   units,
   marksStyles,
   legendPosition = 'right',
+  isLive,
+  setIsLive,
+  timeWindow,
+  setTimeWindow,
+  setHistoricalData,
+  controls,
 }) => {
+  const timeSeriesControlRef = React.useRef(undefined);
+
   /** Fill marksStyles to satisfy the VegaTimeseriesPlot and VegaLegend APIs */
   const completedMarksStyles = React.useMemo(() => {
     return legend.map(({ name, markType }, index) => {
@@ -71,9 +80,15 @@ const Plot = ({
     if (containerNode !== undefined) {
       const resizeObserver = new ResizeObserver((entries) => {
         const container = entries[0];
+
+        const containerHeight =
+          controls && timeSeriesControlRef?.current?.containerRef?.current?.clientHeight
+            ? container.contentRect.height - timeSeriesControlRef.current.containerRef.current.clientHeight
+            : container.contentRect.height;
+
         setContainerSize({
           width: container.contentRect.width,
-          height: container.contentRect.height,
+          height: containerHeight,
         });
       });
 
@@ -86,25 +101,31 @@ const Plot = ({
   }, [containerNode, width, height]);
 
   return (
-    <div
-      className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}
-      style={{
-        width: `${containerSize.width}px`,
-        height: `${containerSize.height}px`,
-      }}
-    >
-      <VegaTimeseriesPlot
-        layers={layers}
-        xAxisTitle={xAxisTitle}
-        yAxisTitle={yAxisTitle}
-        units={units}
-        marksStyles={completedMarksStyles}
-        temporalXAxis
-        width={legendPosition === 'right' ? containerSize.width - 150 : containerSize.width} // from the .autogrid grid-template-columns
-        height={legendPosition === 'bottom' ? containerSize.height - 25 : containerSize.height}
-        className={styles.plot}
-      />
-      <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+    <div>
+      {controls && (
+        <TimeSeriesControls
+          ref={timeSeriesControlRef}
+          setTimeWindow={setTimeWindow}
+          timeWindow={timeWindow}
+          setLiveMode={setIsLive}
+          isLive={isLive}
+          setHistoricalData={setHistoricalData}
+        />
+      )}
+      <div className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}>
+        <VegaTimeseriesPlot
+          layers={layers}
+          xAxisTitle={xAxisTitle}
+          yAxisTitle={yAxisTitle}
+          units={units}
+          marksStyles={completedMarksStyles}
+          temporalXAxis
+          width={legendPosition === 'right' ? containerSize.width - 150 : containerSize.width} // from the .autogrid grid-template-columns
+          height={legendPosition === 'bottom' ? containerSize.height - 25 : containerSize.height}
+          className={styles.plot}
+        />
+        <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
+      </div>
     </div>
   );
 };

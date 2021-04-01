@@ -1,5 +1,5 @@
-describe('Given the user just submitted its credentials', function() {
-  it('When accepted it should display the Component Index screen', function() {
+describe('Given the user just submitted its credentials', () => {
+  it('When accepted it should display the Component Index screen', () => {
     cy.visit('http://localhost');
     cy.url().should('include', '/login');
     cy.get('#id_username').type('test');
@@ -11,7 +11,7 @@ describe('Given the user just submitted its credentials', function() {
     cy.root().should('contain', 'Component index');
   });
 
-  it('When rejected it should display a warning message', async function() {
+  it('When rejected it should display a warning message', async () => {
     cy.visit('http://localhost');
     cy.url().should('include', '/login');
     cy.get('#id_username').type('asdf');
@@ -19,16 +19,16 @@ describe('Given the user just submitted its credentials', function() {
     cy.get('button')
       .contains('Login')
       .click();
-    cy.root().should('contain', "Your username and password did not match, please try again");
+    cy.root().should('contain', 'Your username and password did not match, please try again');
   });
-  it('Logout works', function() {
+  it('Logout works', () => {
     cy.visit('http://localhost');
     cy.get('#id_username').type('test');
     cy.get('#id_password').type('test');
     cy.get('button')
       .contains('Login')
       .click();
-  
+
     cy.url().should('not.include', 'login');
     cy.get('button')
       .contains('Logout')
@@ -36,11 +36,10 @@ describe('Given the user just submitted its credentials', function() {
     cy.visit('http://localhost/auxiliary-telescope');
     cy.url().should('include', '/login');
   });
-  
-  it('If the token expired before logging in it should display a warning message', function() {
+
+  it('If the token expired before logging in it should display a warning message', () => {
     localStorage.setItem('LOVE-TOKEN', 'asdf');
     cy.visit('http://localhost/auxiliary-telescope');
     cy.root().should('contain', 'Your session has expired, you have been logged out');
   });
 });
-

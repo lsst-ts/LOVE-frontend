@@ -2,8 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
 import { getStreamsData } from 'redux/selectors/selectors';
+import { getTaiToUtc } from 'redux/selectors';
 import Plot from './Plot';
-import { parseTimestamp } from 'Utils';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+
+const moment = extendMoment(Moment);
 
 export const defaultStyles = [
   {
@@ -91,117 +96,133 @@ export const schema = {
     },
     legendPosition: {
       type: 'string',
-      description: 'Whether to display the legend to the right of the plot or at the bottom. One of \'right\' or \'bottom\'',
+      description:
+        "Whether to display the legend to the right of the plot or at the bottom. One of 'right' or 'bottom'",
       default: 'right',
       isPrivate: false,
-    }
+    },
+    controls: {
+      type: 'boolean',
+      description: "Whether to display controls to configure periods of time'",
+      default: true,
+      isPrivate: false,
+    },
   },
 };
 
-const PlotContainer = function ({
-  inputs = schema.props.inputs.default,
-  streams,
-  subscribeToStreams,
-  unsubscribeToStreams,
-  containerNode,
-  width,
-  height,
-  xAxisTitle,
-  yAxisTitle,
-  legendPosition,
-}) {
-  const [data, setData] = React.useState({});
+class PlotContainer extends React.Component {
+  constructor(props) {
+    super(props);
 
-  const containerRef = React.useRef(undefined);
+    this.state = {
+      data: {},
+      isLive: true,
+      timeWindow: 60,
+      historicalData: [],
+    };
 
-  React.useEffect(() => {
-    subscribeToStreams();
-  }, [subscribeToStreams]);
+    this.containerRef = React.createRef();
+  }
 
-  /** TODO: find a way to detect "real" changes in inputs
-   * now resizing the plot also makes the inputs prop to change
-   */
-  React.useEffect(() => {
-    unsubscribeToStreams();
-    subscribeToStreams();
-    const data = {};
-    for (const key of Object.keys(inputs)) {
-      data[key] = [];
+  componentDidMount() {
+    this.props.subscribeToStreams();
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { timeSeriesControlsProps, inputs, streams } = this.props;
+    const { data } = this.state;
+    if (prevProps.timeSeriesControlsProps != timeSeriesControlsProps) {
+      this.setState({ ...timeSeriesControlsProps });
     }
-    setData(data);
-  }, [inputs, subscribeToStreams, unsubscribeToStreams]);
 
-  // console.log('inputs', inputs);
-  // console.log('Object.keys(inputs)', Object.keys(inputs));
-  // console.log('sreams', streams);
+    if (prevProps.inputs != inputs) {
+      const data = {};
+      for (const key of Object.keys(inputs)) {
+        data[key] = [];
+      }
+      this.setState({ data });
+    }
 
-  const streamsItems = React.useMemo(
-    () =>
-      Object.entries(inputs).map(([_, inputConfig]) => {
-        const { category, csc, salindex, topic, item } = inputConfig;
+    if (prevProps.inputs != inputs || prevProps.streams != streams) {
+      const newData = {};
+      for (const [inputName, inputConfig] of Object.entries(inputs)) {
+        const { category, csc, salindex, topic, item, accessor } = inputConfig;
+
+        /* eslint no-eval: 0 */
+        const accessorFunc = eval(accessor);
+        let inputData = data[inputName] || [];
+        const lastValue = inputData[inputData.length - 1];
         const streamName = `${category}-${csc}-${salindex}-${topic}`;
-        return streams[streamName]?.[item];
-      }),
-    [inputs, streams],
-  );
+        if (!streams[streamName] || !streams[streamName]?.[item]) {
+          continue;
+        }
+        const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+        const newValue = {
+          name: inputName,
+          x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+          y: accessorFunc(streamValue[item]?.value),
+        };
 
-  const units = React.useMemo(
-    () => streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units,
-    [streamsItems],
-  );
+        // TODO: use reselect to never get repeated timestamps
+        if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+          inputData.push(newValue);
+        }
 
-  React.useEffect(() => {
-    let changed = false;
-    if (data === {}) {
-      return;
+        // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
+        if (inputData.length > 1800) {
+          inputData = inputData.slice(-1800);
+        }
+        newData[inputName] = inputData;
+      }
+      this.setState({ data: newData });
     }
-    for (const [inputName, inputConfig] of Object.entries(inputs)) {
-      const { category, csc, salindex, topic, item, accessor } = inputConfig;
-      /* eslint no-eval: 0 */
-      const accessorFunc = eval(accessor);
-      let inputData = data[inputName] || [];
-      const lastValue = inputData[inputData.length - 1];
+  }
+
+  render() {
+    const {
+      inputs,
+      streams,
+      containerNode,
+      width,
+      height,
+      xAxisTitle,
+      yAxisTitle,
+      legendPosition,
+      controls,
+      timeSeriesControlsProps,
+    } = this.props;
+    const { data } = this.state;
+
+    const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
+
+    const streamsItems = Object.entries(inputs).map(([_, inputConfig]) => {
+      const { category, csc, salindex, topic, item } = inputConfig;
       const streamName = `${category}-${csc}-${salindex}-${topic}`;
-      if (!streams[streamName] || !streams[streamName]?.[item]) {
+      return streams[streamName]?.[item];
+    });
+
+    const units = streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units;
+
+    const layerTypes = ['lines', 'bars', 'pointLines'];
+    const layers = {};
+    for (const [inputName, inputConfig] of Object.entries(inputs)) {
+      const { type } = inputConfig;
+      const typeStr = type + 's';
+      if (!layerTypes.includes(typeStr)) {
         continue;
       }
-      const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-      const newValue = {
-        name: inputName,
-        x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-        y: accessorFunc(streamValue[item]?.value),
-      };
 
-      // TODO: use reselect to never get repeated timestamps
-      if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
-        changed = true;
-        inputData.push(newValue);
-      }
+      if (isLive && !data[inputName]) continue;
 
-      // TODO: change by a date range filter
-      if (inputData.length > 100) {
-        changed = true;
-        inputData = inputData.slice(-100);
-      }
-      data[inputName] = inputData;
+      let rangedInputData;
+      rangedInputData = this.getRangedData(data[inputName], timeWindow, historicalData, isLive, inputs);
+      layers[typeStr] = (layers[typeStr] ?? []).concat(rangedInputData);
     }
-    if (changed) {
-      setData(data);
-    }
-  }, [inputs, streams, data]);
-
-  const layers = { lines: [], bars: [], pointLines: [] };
-  for (const [inputName, inputConfig] of Object.entries(inputs)) {
-    const { type } = inputConfig;
-    const typeStr = type + 's';
-    if (!(typeStr in layers)) {
-      continue;
-    }
-    if (!data[inputName]) continue;
-    layers[typeStr] = layers[typeStr].concat(data[inputName]);
-  }
-  const marksStyles = React.useMemo(() => {
-    return Object.keys(inputs).map((input, index) => {
+    const marksStyles = Object.keys(inputs).map((input, index) => {
       return {
         name: input,
         ...defaultStyles[index % defaultStyles.length],
@@ -211,50 +232,96 @@ const PlotContainer = function ({
         ...(inputs[input].filled !== undefined ? { filled: inputs[input].filled } : {}),
       };
     });
-  }, [inputs]);
 
-  const legend = React.useMemo(() => {
-    return Object.keys(inputs).map((inputName, index) => {
+    const legend = Object.keys(inputs).map((inputName, index) => {
       return {
         label: inputName,
         name: inputName,
         markType: inputs[inputName].type,
       };
     });
-  }, [inputs]);
 
-  // this should be the case for a component loaded from the UI Framework
-  const plotProps = {
-    layers: layers,
-    legend: legend,
-    marksStyles: marksStyles,
-    xAxisTitle: xAxisTitle,
-    yAxisTitle: yAxisTitle,
-    units:
-      units !== undefined
-        ? {
-            y: units,
-          }
-        : undefined,
-    temporalXAxis: true,
-    width: width,
-    height: height,
-    legendPosition: legendPosition,
-  };
-  if (!width && !height && !containerNode) {
-    return (
-      <div ref={containerRef}>
-        <Plot
-          {...plotProps}
-          // containerNode={containerRef.current?.parentNode?.parentNode} // titlebar
-          containerNode={containerRef.current?.parentNode} //no titlebar
-        />
-      </div>
-    );
+    const plotProps = {
+      layers: layers,
+      legend: legend,
+      marksStyles: marksStyles,
+      xAxisTitle: xAxisTitle,
+      yAxisTitle: yAxisTitle,
+      units: units !== undefined ? { y: units } : undefined,
+      temporalXAxis: true,
+      width: width,
+      height: height,
+      legendPosition: legendPosition,
+      isLive: isLive,
+      timeWindow: timeWindow,
+      setIsLive: (isLive) => {
+        this.setState({ isLive });
+      },
+      setTimeWindow: (timeWindow) => {
+        this.setState({ timeWindow });
+      },
+      setHistoricalData: (startDate, timeWindow) => {
+        const cscs = parsePlotInputs(inputs);
+        const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+        // historicalData
+        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
+          const parsedData = parseCommanderData(data);
+          this.setState({ historicalData: parsedData });
+        });
+      },
+
+      controls: controls,
+    };
+
+    if (!width && !height && !containerNode) {
+      return (
+        <div ref={this.containerRef}>
+          <Plot {...plotProps} containerNode={this.containerRef.current?.parentNode} />
+        </div>
+      );
+    } else {
+      return <Plot {...plotProps} containerNode={containerNode} />;
+    }
   }
 
-  return <Plot {...plotProps} containerNode={containerNode} />;
-};
+  // Get pairs containing topic and item names of the form
+  // [csc-index-topic, item], based on the inputs
+  getTopicItemPair = (inputs) => {
+    const topics = {};
+    Object.keys(inputs).forEach((inputKey) => {
+      const input = inputs[inputKey];
+      topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+    });
+    return topics;
+  };
+
+  getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
+    let filteredData;
+    if (!isLive) {
+      const topics = this.getTopicItemPair(inputs);
+      const filteredData2 = Object.keys(topics).flatMap((topicKey) => {
+        const topic = topics[topicKey];
+        const [topicName, property] = topic;
+        const dataPoints = historicalData?.[topicName]?.[property] ?? [];
+        return dataPoints.map((dataPoint) => {
+          return {
+            name: topicKey,
+            ...dataPoint,
+          };
+        });
+      });
+      filteredData = filteredData2;
+    } else {
+      filteredData = data.filter((val) => {
+        const currentSeconds = new Date().getTime() / 1000;
+        const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
+        if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
+        else return false;
+      });
+    }
+    return filteredData;
+  };
+}
 
 const getGroupNames = (inputs) =>
   Object.values(inputs).map(
@@ -284,8 +351,10 @@ const mapStateToProps = (state, ownProps) => {
   const inputs = ownProps.inputs || schema.props.inputs.default;
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
+  const taiToUtc = getTaiToUtc(state);
   return {
     streams,
+    taiToUtc,
   };
 };
 

@@ -42,15 +42,10 @@ export default class FinishedScript extends PureComponent {
 
   constructor(props) {
     super(props);
-    this.state = {
-      expanded: false,
-    };
   }
 
   onClick = () => {
-    this.setState({
-      expanded: !this.state.expanded,
-    });
+    this.props.onClick();
   };
 
   render() {
@@ -130,11 +125,6 @@ export default class FinishedScript extends PureComponent {
                 </span>
               </div>
             </div>
-          </div>
-          <div
-            className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
-          >
-              <ScriptDetails {...this.props}/>                          
           </div>
         </div>
         {this.props.commandExecutePermission && (

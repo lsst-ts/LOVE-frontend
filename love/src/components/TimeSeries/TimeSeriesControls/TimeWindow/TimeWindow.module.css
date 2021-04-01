@@ -1,43 +1,45 @@
 .timeWindowOptionsContainer {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1em;
 }
 
 .timeWindowOption {
-    padding: 0 0.5em;
-    display: flex;
-    align-items: center;
+  padding: 0 0.5em;
+  display: flex;
+  align-items: center;
 }
 
 .timeWindowOption label {
-    height: 1em;
-    line-height: 1.4em;
+  height: 1em;
+  line-height: 1.4em;
 }
 
 .timeWindowOption span {
-    height: 1em;
-    line-height: 1.4em;
+  height: 1em;
+  line-height: 1.4em;
 }
 
 .timeWindowTitle {
-    font-size: var(--font-size-larger);
+  font-size: var(--font-size-larger);
 }
 
 .customTimeWindowInput {
-    width: 30px;
-    text-align: right;
-    padding: 0px 3px;
+  width: 30px;
+  text-align: right;
+  padding: 0px 3px;
 }
 
 .customTimeWindowContainer {
-    display: none;
-    padding-top: 4px;
+  display: none;
+  padding-top: 4px;
 }
 
 .customVisible {
-    display: inline-block;
+  display: inline-block;
 }
 
 .timeWindowOption label {
-    /* background: var(--tertiary-background-color); */
+  /* background: var(--tertiary-background-color); */
 }

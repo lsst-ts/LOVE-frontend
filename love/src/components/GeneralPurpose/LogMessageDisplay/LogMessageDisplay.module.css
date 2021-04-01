@@ -74,3 +74,7 @@
   padding: 0.5em 0;
   color: var(--secondary-font-color);
 }
+
+.scriptID {
+  color: var(--secondary-font-color);
+}

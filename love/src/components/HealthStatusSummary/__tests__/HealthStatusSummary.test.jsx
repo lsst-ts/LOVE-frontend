@@ -1,13 +1,8 @@
-import React from 'react';
+// import React from 'react';
 // import telemetries from './HealthStatusSummary.testdata';
-import {
-  render,
-  fireEvent,
-  cleanup,
-  waitForElement,
-} from 'react-testing-library';
-import FileSaver from 'file-saver';
-import HealthStatusSummary from '../HealthStatusSummary';
+// import { render, fireEvent, cleanup, waitForElement } from 'react-testing-library';
+// import FileSaver from 'file-saver';
+// import HealthStatusSummary from '../HealthStatusSummary';
 
 jest.mock('file-saver', () => ({ saveAs: jest.fn() }));
 
@@ -31,7 +26,6 @@ describe('GIVEN a current telemetry Health Status configuration being displayed'
     });
   });
 });
-
 
 /* Scenario: load config from file */
 

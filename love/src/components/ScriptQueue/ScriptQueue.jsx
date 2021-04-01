@@ -6,12 +6,8 @@ import AvailableScript from './Scripts/AvailableScript/AvailableScript';
 import FinishedScript from './Scripts/FinishedScript/FinishedScript';
 import DraggableScript from './Scripts/DraggableScript/DraggableScript';
 import styles from './ScriptQueue.module.css';
-import StatusText from '../GeneralPurpose/StatusText/StatusText';
 import Loader from '../GeneralPurpose/Loader/Loader';
-import ManagerInterface from '../../Utils';
 import ConfigPanel from './ConfigPanel/ConfigPanel';
-import PauseIcon from './../icons/ScriptQueue/PauseIcon/PauseIcon';
-import ResumeIcon from './../icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import ContextMenu from './Scripts/ContextMenu/ContextMenu';
 import RequeueIcon from '../icons/ScriptQueue/RequeueIcon/RequeueIcon';
 import TerminateIcon from '../icons/ScriptQueue/TerminateIcon/TerminateIcon';
@@ -20,6 +16,9 @@ import RowExpansionIcon from '../icons/RowExpansionIcon/RowExpansionIcon';
 import MoveToBottomIcon from '../icons/ScriptQueue/MoveToBottomIcon/MoveToBottomIcon';
 import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
+import GlobalState from './GlobalState/GlobalState';
+import Modal from '../GeneralPurpose/Modal/Modal';
+import ScriptDetails from './Scripts/ScriptDetails';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -50,9 +49,8 @@ export default class ScriptQueue extends Component {
       availableScriptsStandardExpanded: true,
       availableScriptsExternalExpanded: true,
       availableScriptsFilter: '',
+      scriptModal: null,
     };
-    this.lastId = 19;
-    this.managerInterface = new ManagerInterface();
   }
 
   static defaultProps = {
@@ -143,48 +141,10 @@ export default class ScriptQueue extends Component {
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
-    // const url = `${ManagerInterface.getApiBaseUrl()}validate-config-schema/`
-
-    // fetch(url,{
-    //   method: 'POST',
-    //   headers: ManagerInterface.getHeaders(),
-    //   body: JSON.stringify({
-    //     schema: `
-    //     $id: https://github.com/lsst-ts/ts_salobj/TestScript.yaml
-    //     $schema: http://json-schema.org/draft-07/schema#
-    //     additionalProperties: false
-    //     description: Configuration for TestScript
-    //     properties:
-    //       fail_cleanup:
-    //         default: false
-    //         description: If true then raise an exception in the "cleanup" method.
-    //         type: boolean
-    //       fail_run:
-    //         default: false
-    //         description: If true then raise an exception in the "run" method afer the "start"
-    //           checkpoint but before waiting.
-    //         type: boolean
-    //       wait_time:
-    //         default: 0
-    //         description: Time to wait, in seconds
-    //         minimum: 0
-    //         type: number
-    //     required:
-    //     - wait_time
-    //     - fail_run
-    //     - fail_cleanup
-    //     title: TestScript v1
-    //     type: object
-    //       `,
-    //     config: 'wait_time: 10'
-    //   })
-    // }).then(r=>r.json()).then(r=>{
-    //   debugger;
-    // })
   };
 
   componentWillUnmount = () => {
-    // this.props.unsubscribeToStreams();
+    this.props.unsubscribeToStreams();
   };
 
   displayAvailableScripts = () => {
@@ -203,6 +163,18 @@ export default class ScriptQueue extends Component {
     let list = this.props.waitingScriptList;
     for (let i = 0; i < list.length; i += 1) if (list[i].index === index) return list[i];
     return null;
+  };
+
+  onScriptModalOpen = (script) => () => {
+    this.setState({
+      scriptModal: script,
+    });
+  };
+
+  onScriptModalClose = (event) => {
+    this.setState({
+      scriptModal: null,
+    });
   };
 
   onDragStart = (e, draggingId) => {
@@ -253,7 +225,6 @@ export default class ScriptQueue extends Component {
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
-
     const waitingList = [...this.state.waitingScriptList];
     const newWaitingList = [...waitingList];
     const waitingListLength = waitingList.length;
@@ -299,7 +270,7 @@ export default class ScriptQueue extends Component {
   };
 
   launchScriptConfig = (e, script) => {
-    let { x, y, height } = e.target.getBoundingClientRect();
+    let { x } = e.target.getBoundingClientRect();
     this.setState({
       configPanel: {
         script: script,
@@ -417,6 +388,16 @@ export default class ScriptQueue extends Component {
     });
   };
 
+  summaryStateCommand = (commandName) => {
+    if (!['start', 'enable', 'disable', 'standby'].includes(commandName)) {
+      return;
+    }
+
+    this.props.requestSALCommand({
+      cmd: `cmd_${commandName}`,
+      params: {},
+    });
+  };
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
@@ -542,6 +523,7 @@ export default class ScriptQueue extends Component {
     const contextMenuOption = this.state.currentMenuSelected ? currentContextMenu : waitingContextMenu;
     return (
       <div
+        id="container"
         onClick={(e) => {
           this.setState({ isContextMenuOpen: false });
         }}
@@ -587,25 +569,23 @@ export default class ScriptQueue extends Component {
                 onClickContextMenu={this.onClickContextMenu}
                 commandExecutePermission={this.props.commandExecutePermission}
                 resumeScript={this.resumeScript}
+                onClick={this.onScriptModalOpen(current)}
               />
             </div>
           </div>
         </div>
-        <div className={styles.globalStateWrapper}>
-          <div className={styles.globalStateContainer}>
-            <div className={styles.stateContainer}>
-              CSC STATE
-              <StatusText status={ScriptQueue.summaryStates[this.props.summaryStateValue].statusText}>
-                {ScriptQueue.summaryStates[this.props.summaryStateValue].name}
-              </StatusText>
-            </div>
-            <div className={styles.stateContainer}>
-              QUEUE STATE
-              <StatusText status={ScriptQueue.stateStyleDict[this.props.state]}>{this.props.state}</StatusText>
-            </div>
-          </div>
-        </div>
 
+        <GlobalState
+          summaryState={ScriptQueue.summaryStates[this.props.summaryStateValue]}
+          queueState={{
+            statusText: ScriptQueue.stateStyleDict[this.props.state],
+            name: this.props.state,
+          }}
+          requestSummaryStateCommand={this.summaryStateCommand}
+          commandExecutePermission={this.props.commandExecutePermission}
+          resumeScriptQueue={this.resumeScriptQueue}
+          pauseScriptQueue={this.pauseScriptQueue}
+        />
         {/* LISTS BODY */}
         <div className={styles.listsBody}>
           <div className={[styles.collapsableScriptList, availableScriptListClass].join(' ')}>
@@ -633,7 +613,7 @@ export default class ScriptQueue extends Component {
                     onClick={this.closeAvailableList}
                     title="Close available script list"
                   >
-                    <span style={{'width': '100%'}}>&#8854;</span>
+                    <span style={{ width: '100%' }}>&#8854;</span>
                   </div>
                 </div>
                 <ScriptList noOverflow={true}>
@@ -703,26 +683,6 @@ export default class ScriptQueue extends Component {
                   {`${(totalWaitingSeconds - Math.trunc(totalWaitingSeconds / 60) * 60).toFixed(2)}s`}
                 </span>
               </div>
-              {this.props.state === 'Stopped' && this.props.commandExecutePermission && (
-                <>
-                  <div className={styles.pauseIconContainer} onClick={this.resumeScriptQueue}>
-                    <span>Resume</span>
-                    <div className={styles.pauseIconWrapper} title="Resume Script Queue">
-                      <ResumeIcon />
-                    </div>
-                  </div>
-                </>
-              )}
-              {this.props.state === 'Running' && this.props.commandExecutePermission && (
-                <>
-                  <div className={styles.pauseIconContainer} onClick={this.pauseScriptQueue}>
-                    <span>Pause</span>
-                    <div className={styles.pauseIconWrapper} title="Pause Script Queue">
-                      <PauseIcon />
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
             <ScriptList onDragEnter={this.onDragEnter}>
               {waitingList.map((script, listIndex) => {
@@ -756,6 +716,7 @@ export default class ScriptQueue extends Component {
                       moveScriptDown={this.moveScriptDown}
                       commandExecutePermission={this.props.commandExecutePermission}
                       {...script}
+                      onClick={this.onScriptModalOpen(script)}
                     />
                   </DraggableScript>
                 );
@@ -792,7 +753,7 @@ export default class ScriptQueue extends Component {
                     onClick={this.closeFinishedList}
                     title="Close finished script list"
                   >
-                    <span style={{'width': '100%'}}>&#8854;</span>
+                    <span style={{ width: '100%' }}>&#8854;</span>
                   </div>
                 </div>
                 <ScriptList>
@@ -818,6 +779,7 @@ export default class ScriptQueue extends Component {
                           }
                           requeueScript={this.requeueScript}
                           commandExecutePermission={this.props.commandExecutePermission}
+                          onClick={this.onScriptModalOpen(script)}
                         />
                       </DraggableScript>
                     );
@@ -827,6 +789,17 @@ export default class ScriptQueue extends Component {
             </div>
           </div>
         </div>
+
+        <Modal
+          isOpen={!!this.state.scriptModal}
+          onRequestClose={this.onScriptModalClose}
+          contentLabel="Component selection modal"
+          parentSelector={() => document.querySelector('#container')}
+          size={50}
+          /* footerChildren={} */
+        >
+          <ScriptDetails {...this.state.scriptModal} />
+        </Modal>
       </div>
     );
   }

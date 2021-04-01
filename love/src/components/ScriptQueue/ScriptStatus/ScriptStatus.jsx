@@ -25,7 +25,7 @@ export default class ScriptStatus extends Component {
     if (status === 'invalid') statusStyle = styles.invalid;
     const backgroundStyle = this.props.type === 'process' ? styles.noBackground : '';
     const type = this.props.type === 'process' ? 'Process' : 'Script';
-    const child = this.props.isCompact ? this.props.children : this.props.children;
+    const child = this.props.children;
     return (
       <>
         {!this.props.isCompact && <span>{type} state</span>}

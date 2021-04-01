@@ -29,9 +29,7 @@ export default class Network extends Component {
     return (
       <div className={styles.container}>
         {this.state.archivesMetadata.map((metadata) => {
-          return (
-            <NetworkSegment key={metadata.url} metadata={metadata} />
-          );
+          return <NetworkSegment key={metadata.url} metadata={metadata} />;
         })}
       </div>
     );

@@ -25,7 +25,7 @@ export default class UploadButton extends Component {
         <div className={classNames}>
           <input onChange={this.onChange} type="file" id="my-file" className={styles.customFileInput} />
           <label tabIndex="0" htmlFor="my-file" className={labelClassNames}>
-          <ImportIcon className={this.props.iconClassName} />
+            <ImportIcon className={this.props.iconClassName} />
             Import
           </label>
         </div>
