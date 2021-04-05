@@ -18,6 +18,11 @@
   background: var(--status-alert-dimmed-color-2);
 }
 
+.button[disabled] {
+  cursor: not-allowed;
+  background: var(--status-alert-dimmed-color-2);
+}
+
 .svg {
   height: 100px;
   width: 100px;
