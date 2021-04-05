@@ -7,8 +7,8 @@ export default class CommandPanel extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <DomeCloseButton></DomeCloseButton>
-        <StopAllTSCButton></StopAllTSCButton>
+        <DomeCloseButton {...this.props}></DomeCloseButton>
+        <StopAllTSCButton {...this.props}></StopAllTSCButton>
       </div>
     );
   }
