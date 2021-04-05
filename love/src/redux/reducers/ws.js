@@ -68,7 +68,7 @@ export default function (state = initialState, action) {
         };
       }
       const subscriptions = [...state.subscriptions];
-      subscriptions[index].counter = subscriptions[index].counter + 1;
+      subscriptions[index].counter += 1;
       return {
         ...state,
         subscriptions,
@@ -166,7 +166,7 @@ export default function (state = initialState, action) {
         if (
           category !== action.category ||
           csc !== action.csc ||
-          parseInt(salindex) !== parseInt(action.salindex) ||
+          parseInt(salindex, 10) !== parseInt(action.salindex, 10) ||
           (!Object.keys(action.data).includes(stream) && stream !== 'all')
         ) {
           return subscription;

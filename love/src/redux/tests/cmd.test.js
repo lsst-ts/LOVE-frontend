@@ -32,7 +32,7 @@ it('Should send a command to the server, save it on the state properly ', async 
   };
   const cmd_id = '10-cmd_closeShutter';
 
-  fetchMock.mock(url, (url1, opts) => {
+  fetchMock.mock(url, (/* url1, opts */) => {
     expect(getLastSALCommand(store.getState())).toEqual({
       status: SALCommandStatus.REQUESTED,
       statusCode: null,

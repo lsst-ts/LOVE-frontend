@@ -1,8 +1,10 @@
+/* eslint camelcase: 0 */
+
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
-import { SALCommandStatus } from './redux/actions/ws.js';
+import { SALCommandStatus } from 'redux/actions/ws';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -266,7 +268,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getEmergencyContactList(index) {
+  static getEmergencyContactList(/* index */) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
@@ -303,10 +305,10 @@ export default class ManagerInterface {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
-        start_date: start_date,
-        time_window: time_window,
-        cscs: cscs,
-        resample: resample,
+        start_date,
+        time_window,
+        cscs,
+        resample,
       }),
     }).then((response) => {
       if (response.status >= 500) {
@@ -647,13 +649,13 @@ export const parsePlotInputs = (inputs) => {
     const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
     let newTopicDict = topicDict ?? [];
     let newIndexDict = indexDict ?? {};
-    let newCSCDict = cscDict ?? {};
+    const newCSCDict = cscDict ?? {};
     if (topicDict) {
       newIndexDict[input.topic].push(input.item);
       return;
-    } else {
-      newIndexDict[input.topic] = [input.item];
     }
+    newIndexDict[input.topic] = [input.item];
+
     newTopicDict = newIndexDict[input.topic];
     if (indexDict) {
       newCSCDict[input.salindex][input.topic] = newTopicDict;
@@ -705,3 +707,11 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
   });
   return newData;
 };
+
+export function radians(degrees) {
+  return (degrees * Math.PI) / 180;
+}
+
+export function degrees(radians) {
+  return (radians * 180) / Math.PI;
+}

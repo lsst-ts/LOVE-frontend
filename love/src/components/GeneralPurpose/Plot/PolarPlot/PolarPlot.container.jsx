@@ -162,6 +162,10 @@ class PolarPlotContainer extends React.Component {
     this.props.subscribeToStreams();
   }
 
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
     const { data } = this.state;
@@ -296,8 +300,12 @@ class PolarPlotContainer extends React.Component {
       radialUnits: radialUnits,
       isLive: isLive,
       timeWindow: timeWindow,
-      setIsLive: isLive => { this.setState({ isLive })},
-      setTimeWindow: timeWindow => { this.setState({ timeWindow })},
+      setIsLive: (isLive) => {
+        this.setState({ isLive });
+      },
+      setTimeWindow: (timeWindow) => {
+        this.setState({ timeWindow });
+      },
       setHistoricalData: (startDate, timeWindow) => {
         const cscs = parsePlotInputs(inputs);
         const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
@@ -307,7 +315,7 @@ class PolarPlotContainer extends React.Component {
           this.setState({ historicalData: parsedData });
         });
       },
-      controls: controls
+      controls: controls,
     };
 
     return <PolarPlot {...plotProps} />;
@@ -328,17 +336,17 @@ class PolarPlotContainer extends React.Component {
     let filteredData = {};
     if (!isLive) {
       const topics = this.getTopicItemPair(inputs);
-      const filteredHistoricalData = {}
+      const filteredHistoricalData = {};
       Object.keys(topics).forEach((topicKey) => {
         const topic = topics[topicKey];
         const [topicName, property] = topic;
         const dataPoints = historicalData?.[topicName]?.[property] ?? [];
-        filteredHistoricalData[topicKey] = dataPoints
+        filteredHistoricalData[topicKey] = dataPoints;
       });
       filteredData = filteredHistoricalData;
     } else {
       for (const input in data) {
-        filteredData[input] = data[input].filter(val => {
+        filteredData[input] = data[input].filter((val) => {
           const currentSeconds = new Date().getTime() / 1000;
           const dataSeconds = val.time.toMillis() / 1000 + this.props.taiToUtc;
           if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;

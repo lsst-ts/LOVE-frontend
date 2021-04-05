@@ -50,7 +50,7 @@ class App extends Component {
     this.props.requestViews();
   };
 
-  componentDidUpdate = (prevProps, _prevState) => {
+  componentDidUpdate = (prevProps) => {
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }

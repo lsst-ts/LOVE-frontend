@@ -2,7 +2,7 @@ import * as rtl from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect';
 import WS from 'jest-websocket-mock';
-import ScriptQueue from '../ScriptQueue/ScriptQueue';
+import ScriptQueue from './ScriptQueue';
 import message from './QueueMessage';
 import * as testUtils from '../../TestUtils';
 
@@ -15,7 +15,8 @@ const findFirstParent = (element, criteria) => {
 };
 
 describe('GIVEN the ScriptQueue was loaded and rendered', () => {
-  let scriptQueue, server;
+  let scriptQueue;
+  let server;
 
   beforeEach(async () => {
     localStorage.setItem('LOVE-TOKEN', '"love-token"');
@@ -38,7 +39,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     server.close();
   });
 
-  test(`THEN it should display the list of available scripts`, async () => {
+  test('THEN it should display the list of available scripts', async () => {
     const availableListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('AVAILABLE SCRIPTS') && !el.textContent.includes('WAITING');
@@ -50,7 +51,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
       let scriptName = scriptPath.split('/');
       scriptName = scriptName[scriptName.length - 1];
       const scriptType = script.type.toLowerCase();
-      let scriptElements = await rtl.waitForElement(() => rtl.getAllByText(availableListColumn, scriptName));
+      const scriptElements = await rtl.waitForElement(() => rtl.getAllByText(availableListColumn, scriptName));
 
       const checks = scriptElements.filter((scriptElement) => {
         const parent = scriptElement.parentElement.parentElement;
@@ -61,7 +62,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     });
   });
 
-  test(`THEN it should display the list of waiting scripts`, async () => {
+  test('THEN it should display the list of waiting scripts', async () => {
     const waitingListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('WAITING') && !el.textContent.includes('AVAILABLE SCRIPTS');
@@ -69,8 +70,8 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     );
 
     message.data.ScriptQueueState.stream.waiting_scripts.forEach(async (script) => {
-      let scripIndex = '' + script.index;
-      let scriptElement = rtl.getByText(waitingListColumn, scripIndex, { exact: false });
+      const scripIndex = `${script.index}`;
+      const scriptElement = rtl.getByText(waitingListColumn, scripIndex, { exact: false });
 
       const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
         const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
@@ -86,7 +87,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     });
   });
 
-  test(`THEN it should display the list of finished scripts`, async () => {
+  test('THEN it should display the list of finished scripts', async () => {
     const waitingListColumn = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('FINISHED') && !el.textContent.includes('AVAILABLE SCRIPTS');
@@ -94,8 +95,8 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     );
 
     message.data.ScriptQueueState.stream.finished_scripts.forEach((script) => {
-      let scripIndex = '' + script.index;
-      let scriptElement = rtl.getByText(waitingListColumn, scripIndex, { exact: false });
+      const scripIndex = `${script.index}`;
+      const scriptElement = rtl.getByText(waitingListColumn, scripIndex, { exact: false });
 
       const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
         const hasType = element.textContent.includes(`${script.type}`.toUpperCase());
@@ -126,7 +127,7 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     });
   });
 
-  test(`THEN it should display the current script`, async () => {
+  test('THEN it should display the current script', async () => {
     const currentScriptElement = await rtl.waitForElement(() =>
       scriptQueue.getByText((content, el) => {
         return el.textContent.includes('CURRENT') && !el.textContent.includes('AVAILABLE SCRIPTS');
@@ -134,8 +135,8 @@ describe('GIVEN the ScriptQueue was loaded and rendered', () => {
     );
 
     const script = message.data.ScriptQueueState.stream.current;
-    let scripIndex = '' + script.index;
-    let scriptElement = rtl.getByText(currentScriptElement, scripIndex, { exact: false });
+    const scripIndex = `${script.index}`;
+    const scriptElement = rtl.getByText(currentScriptElement, scripIndex, { exact: false });
 
     const firstParentMatching = testUtils.findFirstParent(scriptElement, (element) => {
       const hasType = element.textContent.includes(`${script.type}`.toUpperCase());

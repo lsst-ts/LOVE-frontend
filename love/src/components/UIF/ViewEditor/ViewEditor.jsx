@@ -527,8 +527,8 @@ class ViewEditor extends Component {
               disabled={isSaved}
               status="transparent"
             >
-                <ThumbnailIcon className={styles.icon} />
-                <span>Save thumbnail</span>
+              <ThumbnailIcon className={styles.icon} />
+              <span>Save thumbnail</span>
             </Button>
           </div>
         </div>

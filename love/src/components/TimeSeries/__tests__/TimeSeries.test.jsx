@@ -1,4 +1,4 @@
-import { render, fireEvent, cleanup, waitForElement, wait, getByTestId } from 'react-testing-library';
+import { render, fireEvent, cleanup, waitForElement } from 'react-testing-library';
 import React from 'react';
 import 'jest-dom/extend-expect';
 import { Server } from 'mock-socket';
@@ -44,7 +44,7 @@ GIVEN the user has selected a telemetry from the table and pressed SET
   beforeAll(() => {
     process.env.REACT_APP_WEBSOCKET_HOST = 'mockhost:8000';
     const url = `ws://${process.env.REACT_APP_WEBSOCKET_HOST}/ws/subscription/`;
-    const mockServer = new Server(url);
+    mockServer = new Server(url);
     const messageObject = {
       data: {
         cameraConfig: {
@@ -105,7 +105,6 @@ GIVEN the user has selected a telemetry from the table and pressed SET
 
     const toggleButton = timeSeries.getByAltText('Live/query mode toggle');
     expect(toggleButton).toBeTruthy();
-    const a = fireEvent;
     fireEvent.click(toggleButton);
 
     await waitForElement(
@@ -169,7 +168,6 @@ GIVEN the user has selected a telemetry from the table and pressed SET
       .queryAllByText(':', { exact: false })
       .filter((el) => el.textContent.length <= 5 && el.textContent.length >= 3)
       .map((el) => el.textContent);
-    const now = new Date();
     const minAxisDate = timeAxisLabels[0].split(':').map((val) => parseFloat(val));
     const maxAxisDate = timeAxisLabels[timeAxisLabels.length - 1].split(':').map((val) => parseFloat(val));
     expect(maxAxisDate[0] * 60 + maxAxisDate[1] - (minAxisDate[0] * 60 + minAxisDate[1])).toBeGreaterThanOrEqual(10);
@@ -195,11 +193,11 @@ GIVEN the user has selected a telemetry from the table and pressed SET
     let minAxisDate = timeAxisLabels[0].split(':').map((val) => parseFloat(val));
     const maxAxisDate = timeAxisLabels[timeAxisLabels.length - 1].split(':').map((val) => parseFloat(val));
 
-    if (!isNaN(minAxisDate[0])) {
+    if (!Number.isNaN(minAxisDate[0])) {
       minAxisDate = [NaN, 0];
     }
 
-    if (!isNaN(maxAxisDate[0])) {
+    if (!Number.isNaN(maxAxisDate[0])) {
       maxAxisDate[0] = [NaN, 0];
     }
     const difference = Math.min(

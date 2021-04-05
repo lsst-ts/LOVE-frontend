@@ -233,7 +233,7 @@ export default class WeatherStation extends Component {
         }, {});
       const parsedPolarData = parseCommanderData(polarData, 'time', 'value');
       const parsedPlotData = parseCommanderData(plotData, 'x', 'y');
-      this.setState({ historicalData: {...parsedPolarData, ...parsedPlotData} });
+      this.setState({ historicalData: { ...parsedPolarData, ...parsedPlotData } });
     });
   };
 

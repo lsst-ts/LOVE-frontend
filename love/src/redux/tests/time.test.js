@@ -1,3 +1,7 @@
+/* eslint camelcase: 0 */
+/* eslint no-await-in-loop: 0 */
+/* eslint no-restricted-syntax: 0 */
+
 import { createStore, applyMiddleware } from 'redux';
 import WS from 'jest-websocket-mock';
 import thunkMiddleware from 'redux-thunk';
@@ -33,7 +37,7 @@ beforeEach(async () => {
 
 // TEST TIME INDEPENDENTLY
 describe('Given the inital state', () => {
-  const server_time = {
+  const serverTime = {
     utc: 1587747218.377,
     tai: 1587747255.377,
     mjd: 58963.70391640712,
@@ -61,21 +65,21 @@ describe('Given the inital state', () => {
     // ARRANGE
     let time = getAllTime(store.getState());
     expect(time).toEqual(initialState);
-    const request_time = DateTime.utc().toMillis() / 1000;
+    const requestTime = DateTime.utc().toMillis() / 1000;
     // ACT
-    await store.dispatch(receiveServerTime(server_time, request_time));
+    await store.dispatch(receiveServerTime(serverTime, requestTime));
     // ASSERT
     time = getAllTime(store.getState());
-    expect(time.server_time).toEqual(server_time);
-    expect(time.request_time).toEqual(request_time);
+    expect(time.server_time).toEqual(serverTime);
+    expect(time.request_time).toEqual(requestTime);
     expect(time.receive_time).toBeTruthy();
     expect(time.clock).toEqual(initialState.clock);
   });
 
   it('When the CLOCK TICKS, then the internal clock is updated', async () => {
     // ARRANGE
-    const request_time = DateTime.utc().toMillis() / 1000;
-    await store.dispatch(receiveServerTime(server_time, request_time));
+    const requestTime = DateTime.utc().toMillis() / 1000;
+    await store.dispatch(receiveServerTime(serverTime, requestTime));
     // ACT
     await store.dispatch(tick());
     // ASSERT
@@ -88,42 +92,40 @@ describe('Given the inital state', () => {
     const cases = [
       {
         // In sync
-        request_time: server_time.utc - 1,
-        receive_time: server_time.utc + 1,
+        requestTime: serverTime.utc - 1,
+        receiveTime: serverTime.utc + 1,
       },
       {
         // Local 5 minutes behind server
-        request_time: server_time.utc - 1 - 5 * 60,
-        receive_time: server_time.utc + 1 - 5 * 60,
+        requestTime: serverTime.utc - 1 - 5 * 60,
+        receiveTime: serverTime.utc + 1 - 5 * 60,
       },
       {
         // Local 5 minutes ahead of server
-        request_time: server_time.utc - 1 + 5 * 60,
-        receive_time: server_time.utc + 1 + 5 * 60,
+        requestTime: serverTime.utc - 1 + 5 * 60,
+        receiveTime: serverTime.utc + 1 + 5 * 60,
       },
     ];
     for (const element of cases) {
-      const { request_time } = element;
-      const { receive_time } = element;
-      const tick_time = receive_time + 5;
-      const diff = tick_time - (receive_time + request_time) / 2;
+      const { requestTime } = element;
+      const { receiveTime } = element;
+      const tickTime = receiveTime + 5;
+      const diff = tickTime - (receiveTime + requestTime) / 2;
       // Receive Server time
-      Settings.now = () => new Date(receive_time * 1000).valueOf();
-      await store.dispatch(receiveServerTime(server_time, request_time));
+      Settings.now = () => new Date(receiveTime * 1000).valueOf();
+      await store.dispatch(receiveServerTime(serverTime, requestTime));
       // Tick
-      Settings.now = () => new Date(tick_time * 1000).valueOf();
+      Settings.now = () => new Date(tickTime * 1000).valueOf();
       await store.dispatch(tick());
       // Assert
       const time = getAllTime(store.getState());
-      expect(time.clock.utc.toSeconds()).toEqual(server_time.utc + diff);
-      expect(time.clock.tai.toSeconds()).toEqual(server_time.tai + diff);
-      expect(time.clock.mjd).toEqual(server_time.mjd + diff / (3600 * 24));
+      expect(time.clock.utc.toSeconds()).toEqual(serverTime.utc + diff);
+      expect(time.clock.tai.toSeconds()).toEqual(serverTime.tai + diff);
+      expect(time.clock.mjd).toEqual(serverTime.mjd + diff / (3600 * 24));
       expect(time.clock.sidereal_greenwich.toSeconds()).toEqual(
-        server_time.sidereal_greenwich * 3600 + diff * siderealSecond,
+        serverTime.sidereal_greenwich * 3600 + diff * siderealSecond,
       );
-      expect(time.clock.sidereal_summit.toSeconds()).toEqual(
-        server_time.sidereal_summit * 3600 + diff * siderealSecond,
-      );
+      expect(time.clock.sidereal_summit.toSeconds()).toEqual(serverTime.sidereal_summit * 3600 + diff * siderealSecond);
     }
   });
 });

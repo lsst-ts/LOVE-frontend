@@ -1,0 +1,18 @@
+.svg {
+  vertical-align: top;
+  fill: var(--secondary-font-color);
+  stroke: var(--base-font-color);
+}
+
+.active {
+  stroke: var(--base-font-color);
+}
+
+.inactive {
+  stroke: var(--secondary-font-color);
+}
+
+.cls-1 {
+  fill:#7a8c97;
+  fill-rule:evenodd;
+}

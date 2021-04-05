@@ -125,7 +125,8 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
   });
 });
 
-it('Should receive 3 sequential messages with script heartbeats (2 new and 1 update) from the server and save them on the state properly', async () => {
+it(`Should receive 3 sequential messages with script heartbeats (2 new and 1 update)
+  from the server and save them on the state properly`, async () => {
   const heartbeats = [
     {
       // New for SAL index 100017
@@ -246,7 +247,8 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
   salindices.forEach((salindex1) => {
     salindices.forEach((salindex2) => {
       it(`WHEN the server sends two heartbeats with salindices of these combinations
-        THEN it should receive two CSC heartbeats with these salindices and select them from the state properly`, async () => {
+        THEN it should receive two CSC heartbeats with these salindices and select them 
+        from the state properly`, async () => {
         const heartbeats = [
           {
             csc: 'ScriptQueue',
@@ -288,7 +290,8 @@ describe('GIVEN 2 csc salindices in different combinations', () => {
       });
 
       it(`WHEN the server sends two heartbeats with salindices of these combinations
-        THEN it should receive two CSC heartbeats with these salindices and select them individually from the state`, async () => {
+        THEN it should receive two CSC heartbeats with these salindices and select them individually
+        from the state`, async () => {
         const heartbeats = [
           {
             csc: 'ScriptQueue',

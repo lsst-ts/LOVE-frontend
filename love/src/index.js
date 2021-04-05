@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css';
+import { Provider } from 'react-redux';
+import Simulator from 'websocket-playback';
+import { WEBSOCKET_SIMULATION, WEBSOCKET_SIMULATION_FILE } from 'Config.js';
 import AppContainer from './App.container';
 import ConfirmationModal from './components/GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import * as serviceWorker from './serviceWorker';
 import { doGetTokenFromStorage } from './redux/actions/auth';
-import { Provider } from 'react-redux';
 import store from './redux/store';
-import Simulator from 'websocket-playback';
 import { getWebSocket } from './redux/selectors';
-import { WEBSOCKET_SIMULATION, WEBSOCKET_SIMULATION_FILE } from 'Config.js';
 
 store.dispatch(doGetTokenFromStorage());
 

@@ -7,7 +7,7 @@ import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import WindRose from '../../GeneralPurpose/WindRose/WindRose';
+import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
 import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 import ManagerInterface, { parseCommanderData } from 'Utils';
@@ -41,7 +41,6 @@ export default class Dome extends Component {
   }
 
   componentDidMount = () => {
-    console.log('Dome');
     this.props.subscribeToStream();
   };
 
