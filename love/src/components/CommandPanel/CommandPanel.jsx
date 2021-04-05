@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DomeCloseButton from './DomeCloseButton/DomeCloseButton';
+import StopAllTSCButton from './StopAllTSCButton/StopAllTSCButton';
 import styles from './CommandPanel.module.css';
 
 export default class CommandPanel extends Component {
@@ -7,6 +8,7 @@ export default class CommandPanel extends Component {
     return (
       <div className={styles.container}>
         <DomeCloseButton></DomeCloseButton>
+        <StopAllTSCButton></StopAllTSCButton>
       </div>
     );
   }
