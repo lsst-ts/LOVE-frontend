@@ -338,7 +338,7 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
       body: JSON.stringify({
         command_name: commandName,
-        params: params,
+        params: params ?? {},
       }),
     }).then((response) => {
       if (response.status >= 500) {
