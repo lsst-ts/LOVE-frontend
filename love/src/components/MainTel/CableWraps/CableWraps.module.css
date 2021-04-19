@@ -19,7 +19,7 @@
 
 .rotatorDiff {
     font-size: 17px;
-    margin-bottom: 0;
+    margin-bottom: 0px;
     margin-left: 10px;
 }
 
@@ -28,13 +28,24 @@
     margin-left: 10px;
 }
 
-.camCable {
-}
-
 .cableWrapSeparator {
     height: 290px;
     width: 3px;
     margin: 50px 40px;
     border-radius: 10px;
     background: #2d3d4e;
+}
+
+.cablewrapInfo {
+    background-color: #2d3d4e;
+    /* display: inline-flex; */
+    width: 550px;
+}
+
+.cameraInfo {
+    display: inline-flex;
+}
+
+.divCameraWrap {
+    margin-top: 80px;
 }
