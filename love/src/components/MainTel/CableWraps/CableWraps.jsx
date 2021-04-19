@@ -2,7 +2,15 @@ import React, { Component } from 'react';
 import styles from './CableWraps.module.css';
 import AZCableWrap from './AZCableWrap/AZCableWrap';
 import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
+import StatusText from '../../GeneralPurpose/StatusText/StatusText';
+import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from '../../GeneralPurpose/SummaryPanel/Row';
+import Label from '../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import * as d3 from 'd3';
+import { style } from 'd3';
+// import { Title } from 'components/GeneralPurpose/CardList/CardList';
 
 class CableWraps extends Component {
   constructor(props) {
@@ -51,19 +59,19 @@ class CableWraps extends Component {
   }
 
   drawBackground(g, radio, tau, arc) {
-    g.append('circle')
+    g.append('semi-circle')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', radio - 5)
       .style('fill', '#102632');
 
-    g.append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', radio - 70)
-      .style('fill', '#33687f')
-      .style('stroke', '#233a42')
-      .style('stroke-width', '0');
+    // g.append('circle')
+    //   .attr('cx', 0)
+    //   .attr('cy', 0)
+    //   .attr('r', radio - 70)
+    //   .style('fill', '#33687f')
+    //   .style('stroke', '#233a42')
+    //   .style('stroke-width', '0');
 
     g.append('path').datum({ endAngle: tau }).style('fill', '#33687f').attr('d', arc);
   }
@@ -75,6 +83,12 @@ class CableWraps extends Component {
       .attr('width', 5)
       .attr('height', 30)
       .style('fill', '#ffffff');
+
+    g.append('text')
+    .attr('x', 10)
+    .attr('y', -145)
+    .text(0 + '°')
+    .style('fill', '#ffffff');
 
     g.append('rect')
       .attr('x', -radio - 10)
@@ -116,11 +130,11 @@ class CableWraps extends Component {
   render() {
     return (
       <div className={styles.cableWrapsContainer}>
-        <h2> Cable Wraps </h2>
+        {/* <h2> Cable Wraps </h2> */}
         <div className={styles.cableWrapsContent}>
-          <div className={styles.camCable}>
-            <h4>Camera Cable Wrap</h4>
-            {this.state.cable_wraps ? (
+          <div>
+            {/* <h4>Camera Cable Wrap</h4> */}
+            {/* {this.state.cable_wraps ? (
               <p className={styles.rotatorDiff}>
                 Rotator angle difference:
                 <span className={styles.rotatorDiffValue}>
@@ -131,17 +145,50 @@ class CableWraps extends Component {
               <p className={styles.rotatorDiff}>
                 <span className={styles.rotatorDiffValue}> </span>
               </p>
-            )}
-            <CameraCableWrap
-              height={315}
-              width={400}
-              drawBackground={this.drawBackground}
-              drawLimits={this.drawLimits}
-              arcTween={this.arcTween}
-              cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
-            />
+            )} */}
+            <div className={styles.cameraInfo}>
+              <SummaryPanel>
+                {/*Camera*/}
+                <Title>Camera Cable Wrap</Title>
+                <Value>
+                  <StatusText>UNDEFINED</StatusText>
+                </Value>
+
+                <Label>Position 1</Label>
+                <Value>Value</Value>
+
+                <Label>Position 2</Label>
+                <Value>Value</Value>
+
+                <Label>Camera Cable Wrap</Label>
+                <Value>Degrees</Value>
+              </SummaryPanel>
+              {/*Drivers*/}
+              <SummaryPanel>
+                <Title>Drivers</Title>
+                <Value>None</Value>
+                <Label>Driver 1</Label>
+                <Value>
+                  <StatusText>UNDEFINED</StatusText>
+                </Value>
+                <Label>Driver 2</Label>
+                <Value>
+                  <StatusText>UNDEFINED</StatusText>
+                </Value>
+              </SummaryPanel>
+            </div>
+            <div className={styles.divCameraWrap}>
+              <CameraCableWrap
+                height={315}
+                width={400}
+                drawBackground={this.drawBackground}
+                drawLimits={this.drawLimits}
+                arcTween={this.arcTween}
+                cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
+              />
+            </div>
           </div>
-          <div className={styles.cableWrapSeparator}></div>
+          {/* <div className={styles.cableWrapSeparator}></div>
           <div className={styles.azCable}>
             <h4>Azimuth Cable Wrap</h4>
             {this.state.cable_wraps ? (
@@ -165,7 +212,7 @@ class CableWraps extends Component {
               arcTween={this.arcTween}
               cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.az : null}
             />
-          </div>
+          </div> */}
         </div>
       </div>
     );
