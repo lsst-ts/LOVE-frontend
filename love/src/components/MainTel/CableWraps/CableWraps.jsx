@@ -131,8 +131,8 @@ class CableWraps extends Component {
     return (
       <div className={styles.cableWrapsContainer}>
         {/* <h2> Cable Wraps </h2> */}
-        <div className={styles.cableWrapsContent}>
-          <div>
+        {/* <div className={styles.cableWrapsContent}> */}
+          {/* <div> */}
             {/* <h4>Camera Cable Wrap</h4> */}
             {/* {this.state.cable_wraps ? (
               <p className={styles.rotatorDiff}>
@@ -146,7 +146,7 @@ class CableWraps extends Component {
                 <span className={styles.rotatorDiffValue}> </span>
               </p>
             )} */}
-            <div className={styles.cameraInfo}>
+            <div className={styles.cablewrapInfo}>
               <SummaryPanel>
                 {/*Camera*/}
                 <Title>Camera Cable Wrap</Title>
@@ -166,7 +166,7 @@ class CableWraps extends Component {
               {/*Drivers*/}
               <SummaryPanel>
                 <Title>Drivers</Title>
-                <Value>None</Value>
+                <Value>&nbsp;</Value>
                 <Label>Driver 1</Label>
                 <Value>
                   <StatusText>UNDEFINED</StatusText>
@@ -187,7 +187,7 @@ class CableWraps extends Component {
                 cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
               />
             </div>
-          </div>
+          {/* </div> */}
           {/* <div className={styles.cableWrapSeparator}></div>
           <div className={styles.azCable}>
             <h4>Azimuth Cable Wrap</h4>
@@ -213,7 +213,7 @@ class CableWraps extends Component {
               cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.az : null}
             />
           </div> */}
-        </div>
+        {/* </div> */}
       </div>
     );
   }
