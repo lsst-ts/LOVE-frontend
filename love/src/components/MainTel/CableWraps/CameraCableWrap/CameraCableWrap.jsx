@@ -73,7 +73,7 @@ class CameraCableWrap extends Component {
     let delta = radians(this.props.cable_wrap.rotator);
     let newRotAngle = newAngle + delta;
     this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
-    this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
+    // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
   }
 
   componentDidMount() {
