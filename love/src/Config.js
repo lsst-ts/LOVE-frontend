@@ -295,7 +295,6 @@ export const HEARTBEAT_COMPONENTS = {
   WATCHER: 'Watcher',
   // GENERICCAMERA: 'GenericCamera',
   SCRIPTQUEUE: 'ScriptQueue',
-  SCRIPT: 'Script',
   // LOVE: 'LOVE',
   WEATHERSTATION: 'WeatherStation',
 };

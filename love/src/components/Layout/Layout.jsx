@@ -116,9 +116,10 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
+    this.checkHeartbeat();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
-    }, 15000);
+    }, 10000);
   };
 
   componentWillUnmount = () => {
@@ -326,7 +327,7 @@ class Layout extends Component {
     if (!summaryHeartbeats.every((hb) => hb === undefined)) {
       summaryHeartbeatStatus = summaryHeartbeats.includes('alert') ? 'alert' : 'ok';
     }
-    console.log(this.state.heartbeatStatus);
+    
     return (
       <DropdownMenu className={styles.settingsDropdown}>
         <Button
@@ -402,14 +403,6 @@ class Layout extends Component {
               className={styles.heartbeatSubElement}
             >
               {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
-            </span>
-            <HeartbeatIcon
-              className={styles.miniIcon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.SCRIPT]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPT)}
-            />
-            <span title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.SCRIPT)} className={styles.heartbeatSubElement}>
-              {HEARTBEAT_COMPONENTS.SCRIPT}
             </span>
             {/* <HeartbeatIcon
               className={styles.miniIcon}
