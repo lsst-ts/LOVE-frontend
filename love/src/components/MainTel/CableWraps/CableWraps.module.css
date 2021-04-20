@@ -1,5 +1,5 @@
 .cableWrapsContainer {
-    display: flex;
+    display: inline-block;
     flex-direction: column;
     margin: 5px;
     height: 100%;  
@@ -7,11 +7,11 @@
 }
 
 .cableWrapsContainer .cableWrapsContent {
-    display: flex;
     color: #96a3b3;
     background: var(--theme-div-background);
     margin: 5px;
     height: 100%;
+    width: 500px;
     margin-top: 0;
     padding-right: 5px;
     padding-left: 20px;
@@ -38,8 +38,7 @@
 
 .cablewrapInfo {
     background-color: #2d3d4e;
-    /* display: inline-flex; */
-    width: 550px;
+    display: inline-flex;
 }
 
 .cameraInfo {
