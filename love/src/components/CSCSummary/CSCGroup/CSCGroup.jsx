@@ -12,17 +12,21 @@ export default class CSCGroup extends Component {
       selectedCSC: undefined,
     };
   }
+
   static propTypes = {
     name: PropTypes.string,
     cscs: PropTypes.array,
     onCSCClick: PropTypes.func,
     embedded: PropTypes.bool,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
     name: '',
     cscs: [],
     subscribeToStreams: () => 0,
+    unsubscribeToStreams: () => 0,
     selectedCSC: undefined,
     embedded: false,
   };
@@ -34,6 +38,14 @@ export default class CSCGroup extends Component {
       });
     }
   };
+
+  componentWillUnmount = () => {
+    if (this.props.csc !== undefined) {
+      this.props.cscs.forEach((csc) => {
+        this.props.unsubscribeToStreams(csc.name, csc.salindex);
+      });
+    }
+  }
 
   renderExpandedView = (selectedCSC) => {
     const groupView = selectedCSC.csc === 'all';

@@ -1,18 +1,19 @@
 import React, { useState, memo } from 'react';
 import PropTypes from 'prop-types';
-import InfoIcon from '../../icons/InfoIcon/InfoIcon';
-import WarningIcon from '../../icons/WarningIcon/WarningIcon';
-import ErrorIcon from '../../icons/ErrorIcon/ErrorIcon';
+import DebugIcon from '../../icons/CSCExpanded/DebugIcon/DebugIcon';
+import InfoIcon from '../../icons/CSCExpanded/InfoIcon/InfoIcon';
+import WarningIcon from '../../icons/CSCExpanded/WarningIcon/WarningIcon';
+import ErrorIcon from '../../icons/CSCExpanded/ErrorIcon/ErrorIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import styles from './LogMessageDisplay.module.css';
 import { formatTimestamp } from '../../../Utils';
 
 function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
   const [messageFilters, setMessageFilters] = useState({
-    10: { value: true, name: 'Debug' },
-    20: { value: true, name: 'Info' },
-    30: { value: true, name: 'Warning' },
-    40: { value: true, name: 'Error' },
+    10: { value: true, name: 'Debug', icon: <DebugIcon /> },
+    20: { value: true, name: 'Info', icon: <InfoIcon /> },
+    30: { value: true, name: 'Warning', icon: <WarningIcon /> },
+    40: { value: true, name: 'Error', icon: <ErrorIcon /> },
   });
 
   const updateFilter = (key, value) => {
@@ -35,13 +36,14 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
           return (
             <div key={key}>
               <label>
+                <span style={{ width: '1.5em' }}>{messageFilters[key].icon}</span>
+                <span>{messageFilters[key].name}</span>
                 <input
                   onChange={(event) => updateFilter(key, event.target.checked)}
                   type="checkbox"
                   alt={`select ${key}`}
                   checked={messageFilters[key].value}
                 />
-                <span>{messageFilters[key].name}</span>
               </label>
             </div>
           );

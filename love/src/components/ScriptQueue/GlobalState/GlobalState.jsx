@@ -4,7 +4,7 @@ import styles from './GlobalState.module.css';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import ResumeIcon from 'components/icons/ScriptQueue/ResumeIcon/ResumeIcon';
 import PauseIcon from 'components/icons/ScriptQueue/PauseIcon/PauseIcon';
-import GearIcon from 'components/icons/GearIcon/GearIcon.jsx';
+import GearIcon from 'components/icons/ScriptQueue/GearIcon/GearIcon.jsx';
 import ContextMenu from '../Scripts/ContextMenu/ContextMenu';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail.jsx';
 
@@ -33,7 +33,7 @@ const GlobalState = ({
 
   const onClickContextMenu = React.useCallback((event) => {
     event.stopPropagation();
-    setContextMenuIsOpen((state) => !state);
+    setContextMenuIsOpen((contextMenuIsOpen) => !contextMenuIsOpen);
     setContextMenuData(event.target.getBoundingClientRect());
   }, []);
 

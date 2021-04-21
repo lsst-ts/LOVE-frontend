@@ -75,7 +75,7 @@ class Layout extends Component {
     tokenSwapStatus: PropTypes.string,
     /** Function to be called when requiring a user swap, similar to a logout */
     requireUserSwap: PropTypes.func,
-    /** Function to call in order to rese4t subscriptions (when the manager heartbeat is missed) */
+    /** Function to call in order to reset subscriptions (when the manager heartbeat is missed) */
     resetSubscriptions: PropTypes.func,
   };
 
@@ -203,7 +203,8 @@ class Layout extends Component {
 
     const managerKey = HEARTBEAT_COMPONENTS?.MANAGER;
     if (this.state.heartbeatStatus?.[managerKey] === 'alert' && prevState.heartbeatStatus?.[managerKey] !== 'alert') {
-      this.props.resetSubscriptions();
+      // console.log('Reseting from heartbeatStatus[managerKey]...');
+      // this.props.resetSubscriptions();
     }
   };
 
@@ -470,6 +471,7 @@ class Layout extends Component {
       (a) =>
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification,
     );
+    console.log('Log for validation...');
     return (
       <>
         <AlarmAudioContainer />

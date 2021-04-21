@@ -14,6 +14,7 @@ export default class CSCDetail extends Component {
     heartbeatData: PropTypes.object,
     summaryStateData: PropTypes.object,
     subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
     embedded: PropTypes.bool,
     /* Whether the component should subscribe to streams*/
     shouldSubscribe: PropTypes.bool,
@@ -27,6 +28,7 @@ export default class CSCDetail extends Component {
     heartbeatData: null,
     summaryStateData: undefined,
     subscribeToStreams: () => {},
+    unsubscribeToStreams: () => {},
     embedded: false,
     shouldSubscribe: true,
   };
@@ -73,6 +75,10 @@ export default class CSCDetail extends Component {
   componentDidMount = () => {
     if (!this.props.shouldSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
+
+  componentWillUnmount = () => {
+    if (!this.props.shouldSubscribe) this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+  }
 
   render() {
     const { props } = this;

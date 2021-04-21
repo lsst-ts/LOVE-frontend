@@ -19,6 +19,8 @@ export default class M1M3 extends Component {
   }
 
   componentDidMount() {
+    this.props.subscribeToStreams();
+
     let yMax = -Infinity;
     let xMax = -Infinity;
     let yMin = Infinity;
@@ -40,6 +42,10 @@ export default class M1M3 extends Component {
       maxRadius: maxRadius,
       colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58) + ''),
     });
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
   }
 
   componentDidUpdate(prevProps, prevState) {
