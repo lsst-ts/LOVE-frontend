@@ -14,7 +14,7 @@ export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
-  'Aux Telescope': {
+  'Auxiliary Telescope': {
     ATTCS: [
       { name: 'ATMCS', salindex: 0 },
       { name: 'ATPtg', salindex: 0 },
@@ -23,7 +23,6 @@ export const CSCSummaryHierarchy = {
       { name: 'ATAOS', salindex: 0 },
       { name: 'ATPneumatics', salindex: 0 },
       { name: 'ATHexapod', salindex: 0 },
-      { name: 'GenericCamera', salindex: 1 },
     ],
     ATCalSys: [
       { name: 'ATMonochromator', salindex: 0 },
@@ -42,18 +41,31 @@ export const CSCSummaryHierarchy = {
     ],
   },
   'Main Telescope': {
-    'CSC Group 1': [
-      { name: 'Test', salindex: 1 },
-      { name: 'Test', salindex: 2 },
+    MTCS: [
+      { name: 'MTMount', salindex: 0 },
+      { name: 'MTPtg', salindex: 0 },
+      { name: 'MTAOS', salindex: 0 },
+      { name: 'MTM1M3', salindex: 0 },
+      { name: 'MTM2', salindex: 0 },
+      { name: 'MTHexapod', salindex: 1 },
+      { name: 'MTHexapod', salindex: 2 },
+      { name: 'MTRotator', salindex: 0 },
+      { name: 'MTDome', salindex: 0 },
+      { name: 'MTDomeTrajectory', salindex: 0 },
     ],
-    'CSC Group 2': [],
+    ComCam: [
+      { name: 'CCCamera', salindex: 0 },
+      { name: 'CCArchiver', salindex: 0 },
+      { name: 'CCHeaderService', salindex: 0 },
+    ],
   },
   Observatory: {
-    Queue: [
+    HigherLevel: [
       { name: 'ScriptQueue', salindex: 1 },
       { name: 'ScriptQueue', salindex: 2 },
+      { name: 'Watcher', salindex: 0 },
     ],
-    WeatherStation: [
+    Environment: [
       { name: 'DIMM', salindex: 1 },
       { name: 'DIMM', salindex: 2 },
       { name: 'WeatherStation', salindex: 1 },
