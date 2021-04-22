@@ -87,15 +87,6 @@ export default ({
             </div>
           );
         })}
-        <div className={scriptStyles.subSectionValue}>
-          <CSCExpandedContainer
-            group={''}
-            name={'Script'}
-            salindex={index}
-            onCSCClick={(a) => console.log(a)}
-            displaySummaryState={false}
-          />
-        </div>
       </div>
     </div>
   );

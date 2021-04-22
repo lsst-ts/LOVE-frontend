@@ -15,8 +15,10 @@ export default class CSCGroupLog extends Component {
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
     subscribeToStream: PropTypes.func,
+    unsubscribeToStream: PropTypes.func,
     errorCodeData: PropTypes.array,
     embedded: PropTypes.bool,
+    cscList: PropTypes.array,
   };
 
   static defaultProps = {
@@ -35,6 +37,12 @@ export default class CSCGroupLog extends Component {
       this.props.subscribeToStream(name, salindex);
     });
   };
+
+  componentWillUnmount = () => {
+    this.props.cscList.forEach(({ name, salindex }) => {
+      this.props.unsubscribeToStream(name, salindex);
+    });
+  }
 
   clearGroupErrorCodes = () => {
     this.props.cscList.forEach(({ name, salindex }) => {
