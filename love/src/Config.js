@@ -309,6 +309,9 @@ export const HEARTBEAT_COMPONENTS = {
   SCRIPTQUEUE: 'ScriptQueue',
   // LOVE: 'LOVE',
   WEATHERSTATION: 'WeatherStation',
+  // FOR OLD PRODUCER VERSION
+  EVENTS: 'Events',
+  TELEMETRIES: 'Telemetries',
 };
 
 export const severityToStatus = {
