@@ -126,7 +126,6 @@ let resetSubsTimer = null;
  */
 export const resetSubscriptions = (subscriptions = null) => {
   return (dispatch, getState) => {
-    console.log('RESETING SUBSCRIPTIONS...');
     const subs = subscriptions || getSubscriptions(getState());
     clearInterval(resetSubsTimer);
     resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
@@ -156,7 +155,6 @@ export const openWebsocketConnection = () => {
       const connectionStatus = getConnectionStatus(getState());
       if (connectionStatus !== connectionStates.CLOSED) {
         dispatch(_changeConnectionState(connectionStates.CLOSED, socket));
-        console.log('Reseting from nonConnectableTokenStates...');
         dispatch(resetSubscriptions(getSubscriptions(getState())));
       }
       return;
@@ -183,12 +181,10 @@ export const openWebsocketConnection = () => {
         } else {
           dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
         }
-        console.log('Reseting from onClose socket...');
         dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onerror: () => {
         dispatch(_changeConnectionState(connectionStates.RETRYING, socket));
-        console.log('Reseting from onError socket...');
         dispatch(resetSubscriptions(getSubscriptions(getState())));
       },
       onmessage: (msg) => {
@@ -289,7 +285,6 @@ export const openWebsocketConnection = () => {
  */
 export const closeWebsocketConnection = () => {
   return (dispatch, getState) => {
-    console.log('Reseting from closeWebsocketConnection...');
     dispatch(resetSubscriptions(getSubscriptions(getState())));
     if (socket && getConnectionStatus(getState()) !== connectionStates.CLOSED) {
       socket.close();
