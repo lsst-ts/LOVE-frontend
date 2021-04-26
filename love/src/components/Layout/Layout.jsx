@@ -328,7 +328,7 @@ class Layout extends Component {
     if (!summaryHeartbeats.every((hb) => hb === undefined)) {
       summaryHeartbeatStatus = summaryHeartbeats.includes('alert') ? 'alert' : 'ok';
     }
-    
+
     return (
       <DropdownMenu className={styles.settingsDropdown}>
         <Button
@@ -471,7 +471,6 @@ class Layout extends Component {
       (a) =>
         isActive(a) && !isAcknowledged(a) && !isMuted(a) && a.severity?.value >= this.state.minSeverityNotification,
     );
-    console.log('Log for validation...');
     return (
       <>
         <AlarmAudioContainer />
