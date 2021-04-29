@@ -322,8 +322,8 @@ class Layout extends Component {
 
     const summaryHeartbeats = [
       // producerHeartbeatStatus,
-      this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.Manager],
-      this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.Commander],
+      this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
+      this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
     ];
     let summaryHeartbeatStatus;
     if (!summaryHeartbeats.every((hb) => hb === undefined)) {
@@ -346,11 +346,11 @@ class Layout extends Component {
         </Button>
 
         <div className={styles.heartbeatsMenu} title="Heartbeats menu">
-          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.Manager)}>
+          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}>
             <HeartbeatIcon
               className={styles.icon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.Manager]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.Manager)}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.MANAGER)}
             />
             <span>LOVE manager</span>
           </div>
@@ -427,11 +427,11 @@ class Layout extends Component {
               {HEARTBEAT_COMPONENTS['WeatherStation:1']}
             </span>
           </div> */}
-          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.Commander)}>
+          <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}>
             <HeartbeatIcon
               className={styles.icon}
-              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.Commander]}
-              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.Commander)}
+              status={this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER]}
+              title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}
             />
             <span>LOVE commander</span>
           </div>

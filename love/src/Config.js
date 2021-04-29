@@ -300,8 +300,8 @@ export const stateToStyleMotorBrake = {
 };
 
 export const HEARTBEAT_COMPONENTS = {
-  Manager: 'Manager',
-  Commander: 'Commander',
+  MANAGER: 'Manager',
+  COMMANDER: 'Commander',
   // 'LOVE:0': 'LOVE:0',
   // 'ATDome:0': 'ATDome:0',
   // 'ATMCS:0': 'ATMCS:0',
