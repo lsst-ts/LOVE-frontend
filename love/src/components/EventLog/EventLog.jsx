@@ -17,6 +17,7 @@ export default class EventLog extends PureComponent {
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
     subscribeToStream: PropTypes.func,
+    unsubscribeToStream: PropTypes.func,
     errorCodeData: PropTypes.array,
     embedded: PropTypes.bool,
   };
@@ -56,6 +57,10 @@ export default class EventLog extends PureComponent {
 
   componentDidMount = () => {
     this.props.subscribeToStreams(this.props.cscList);
+  };
+
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams(this.props.cscList);
   };
 
   clearGroupErrorCodes = () => {

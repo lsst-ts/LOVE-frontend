@@ -61,9 +61,13 @@ export default class WaitingScript extends PureComponent {
 
   constructor(props) {
     super(props);
+    this.state = {
+      expanded: false,
+    };
   }
 
   onClick = () => {
+    this.setState((state) => ({ expanded: !state.expanded }));
     this.props.onClick();
   };
 
@@ -221,6 +225,11 @@ export default class WaitingScript extends PureComponent {
                 </ScriptStatus>
               </div>
             </div>
+          </div>
+          <div
+            className={[scriptStyles.expandedSectionWrapper, this.state.expanded ? '' : scriptStyles.hidden].join(' ')}
+          >
+            <ScriptDetails {...this.props} />
           </div>
         </div>
       </div>

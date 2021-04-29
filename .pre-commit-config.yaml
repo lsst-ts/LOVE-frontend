@@ -9,10 +9,12 @@ repos:
     rev: v2.2.1
     hooks:
       - id: prettier
+        files: \.[j]sx?$  # *.js and *.jsx
+        types: [file]
 
   - repo: https://github.com/pre-commit/mirrors-eslint
     rev: v7.19.0
     hooks:
       - id: eslint
-        files: \.[j]sx?$ # *.js, *.jsx
+        files: \.[j]sx?$  # *.js and *.jsx
         types: [file]

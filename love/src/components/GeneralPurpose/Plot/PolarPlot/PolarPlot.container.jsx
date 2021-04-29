@@ -1,13 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
+import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
 import PolarPlot from './PolarPlot';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-
-const moment = extendMoment(Moment);
 
 export const defaultStyles = [
   {
@@ -384,7 +380,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       const displayDome = ownProps.displayDome || schema.props.displayDome.default;
       const groupNames = getGroupNames(inputs, displayDome);
       groupNames.forEach((groupName) => {
-        dispatch(requestGroupRemoval(groupName));
+        dispatch(removeGroup(groupName));
       });
     },
   };

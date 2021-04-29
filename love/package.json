@@ -17,6 +17,7 @@
     "html2canvas": "^1.0.0-rc.5",
     "lodash": "^4.17.19",
     "lodash.throttle": "^4.1.1",
+    "lodash.debounce": "^4.0.8",
     "luxon": "^1.23.0",
     "ml-matrix": "^6.5.0",
     "moment-range": "^4.0.0",
