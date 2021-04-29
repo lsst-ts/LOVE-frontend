@@ -300,15 +300,15 @@ export const stateToStyleMotorBrake = {
 };
 
 export const HEARTBEAT_COMPONENTS = {
-  MANAGER: 'Manager',
-  COMMANDER: 'Commander',
-  LOVE: 'LOVE',
-  ATDOME: 'ATDome',
-  ATMCS: 'ATMCS',
-  WATCHER: 'Watcher',
-  GENERICCAMERA: 'GenericCamera',
-  'SCRIPTQUEUE-1': 'ScriptQueue-1',
-  'WEATHERSTATION-1': 'WeatherStation-1',
+  Manager: 'Manager',
+  Commander: 'Commander',
+  'LOVE:0': 'LOVE:0',
+  'ATDome:0': 'ATDome:0',
+  'ATMCS:0': 'ATMCS:0',
+  'Watcher:0': 'Watcher:0',
+  'GenericCamera:0': 'GenericCamera:0',
+  'ScriptQueue:1': 'ScriptQueue:1',
+  'WeatherStation:1': 'WeatherStation:1',
 };
 
 export const severityToStatus = {
