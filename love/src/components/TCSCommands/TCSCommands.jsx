@@ -177,7 +177,7 @@ export default class CommandPanel extends Component {
             <Button
               status="info"
               disabled={!this.props.commandExecutePermission || !isAvailable}
-              onClick={() => console.log(this.state.paramValues)}
+              onClick={() => ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)}
             >
               SEND
             </Button>
