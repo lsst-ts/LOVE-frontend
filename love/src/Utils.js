@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
+import { toast } from 'react-toastify';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 import { SALCommandStatus } from 'redux/actions/ws';
 
@@ -326,7 +327,7 @@ export default class ManagerInterface {
     });
   }
 
-  static runATCSCommand(commandName, params) {
+  static runATCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
@@ -338,19 +339,25 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
       body: JSON.stringify({
         command_name: commandName,
-        params: params ?? {},
+        params,
       }),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
+        toast.error('Error communicating with the server.');
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
+        toast.error('Session expired. Logging out.');
         ManagerInterface.removeToken();
         return false;
       }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
       return response.json().then((resp) => {
+        toast.info(resp.ack);
         return resp;
       });
     });
