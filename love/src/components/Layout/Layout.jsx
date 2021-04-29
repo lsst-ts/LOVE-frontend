@@ -306,22 +306,21 @@ class Layout extends Component {
   };
 
   renderHeartbeatsMenu = () => {
-    const producerHeartbeats = [
-      HEARTBEAT_COMPONENTS['LOVE:0'],
-      HEARTBEAT_COMPONENTS['ATDome:0'],
-      HEARTBEAT_COMPONENTS['ATMCS:0'],
-      HEARTBEAT_COMPONENTS['Watcher:0'],
-      // HEARTBEAT_COMPONENTS['GenericCamera:0'],
-      HEARTBEAT_COMPONENTS['ScriptQueue:1'],
-      HEARTBEAT_COMPONENTS['WeatherStation:1'],
-    ].map((source) => this.state.heartbeatStatus[source]);
-    let producerHeartbeatStatus;
-    if (!producerHeartbeats.every((hb) => hb === undefined)) {
-      producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
-    }
+    // const producerHeartbeats = [
+    //   HEARTBEAT_COMPONENTS['LOVE:0'],
+    //   HEARTBEAT_COMPONENTS['ATDome:0'],
+    //   HEARTBEAT_COMPONENTS['ATMCS:0'],
+    //   HEARTBEAT_COMPONENTS['Watcher:0'],
+    //   HEARTBEAT_COMPONENTS['GenericCamera:0'],
+    //   HEARTBEAT_COMPONENTS['ScriptQueue:1'],
+    //   HEARTBEAT_COMPONENTS['WeatherStation:1'],
+    // ].map((source) => this.state.heartbeatStatus[source]);
+    // let producerHeartbeatStatus;
+    // if (!producerHeartbeats.every((hb) => hb === undefined)) {
+    //   producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
+    // }
 
     const summaryHeartbeats = [
-      // Uncomment when fixing LOVE:0 heartbeats
       // producerHeartbeatStatus,
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.Manager],
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.Commander],
