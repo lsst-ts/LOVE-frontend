@@ -301,12 +301,14 @@ export const stateToStyleMotorBrake = {
 
 export const HEARTBEAT_COMPONENTS = {
   MANAGER: 'Manager',
-  EVENTS: 'Events',
-  TELEMETRIES: 'Telemetries',
-  HEARTBEATS: 'CSCHeartbeats',
-  LOVE: 'LOVE CSC',
-  SCRIPTQUEUE: 'ScriptQueue-1',
   COMMANDER: 'Commander',
+  // 'LOVE:0': 'LOVE:0',
+  // 'ATDome:0': 'ATDome:0',
+  // 'ATMCS:0': 'ATMCS:0',
+  // 'Watcher:0': 'Watcher:0',
+  // 'GenericCamera:0': 'GenericCamera:0',
+  // 'ScriptQueue:1': 'ScriptQueue:1',
+  // 'WeatherStation:1': 'WeatherStation:1',
 };
 
 export const severityToStatus = {
