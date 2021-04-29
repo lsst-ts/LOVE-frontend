@@ -172,8 +172,8 @@ export const openWebsocketConnection = () => {
       onopen: () => {
         dispatch(_changeConnectionState(connectionStates.OPEN, socket));
         dispatch(_requestSubscriptions());
-        // clearInterval(resetSubsTimer);
-        // resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
+        clearInterval(resetSubsTimer);
+        resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
       },
       onclose: (event) => {
         if (event.code === 4000 || event.code === 1000) {
