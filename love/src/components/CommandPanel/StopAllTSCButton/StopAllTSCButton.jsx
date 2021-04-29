@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './StopAllTSCButton.module.css';
 import ManagerInterface from 'Utils';
+// import { TCSCommands } from 'Config.js';
 
 export default class StopAllTSCButton extends Component {
   constructor(props) {
@@ -9,6 +10,7 @@ export default class StopAllTSCButton extends Component {
   }
 
   callTSCStopAll() {
+    // TODO: Reference command from variable
     ManagerInterface.runATCSCommand('stop_all');
   }
 
