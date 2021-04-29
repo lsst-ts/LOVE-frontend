@@ -302,16 +302,13 @@ export const stateToStyleMotorBrake = {
 export const HEARTBEAT_COMPONENTS = {
   MANAGER: 'Manager',
   COMMANDER: 'Commander',
+  LOVE: 'LOVE',
   ATDOME: 'ATDome',
   ATMCS: 'ATMCS',
   WATCHER: 'Watcher',
-  // GENERICCAMERA: 'GenericCamera',
-  SCRIPTQUEUE: 'ScriptQueue',
-  // LOVE: 'LOVE',
-  WEATHERSTATION: 'WeatherStation',
-  // FOR OLD PRODUCER VERSION
-  EVENTS: 'Events',
-  TELEMETRIES: 'Telemetries',
+  GENERICCAMERA: 'GenericCamera',
+  'SCRIPTQUEUE-1': 'ScriptQueue-1',
+  'WEATHERSTATION-1': 'WeatherStation-1',
 };
 
 export const severityToStatus = {
