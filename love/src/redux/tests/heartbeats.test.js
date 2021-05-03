@@ -20,17 +20,17 @@ let server;
 const heartbeatsInfo = [
   {
     category: 'heartbeat',
-    data: [{ csc: 'manager', salindex: 0, data: { timestamp: 1582141499.626869 } }],
+    data: [{ csc: 'Manager', salindex: 0, data: { timestamp: 1582141499.626869 } }],
     subscription: 'heartbeat',
   },
   {
     category: 'heartbeat',
-    data: [{ csc: 'manager', salindex: 0, data: { timestamp: 1692141499.626869 } }],
+    data: [{ csc: 'Manager', salindex: 0, data: { timestamp: 1692141499.626869 } }],
     subscription: 'heartbeat',
   },
   {
     category: 'heartbeat',
-    data: [{ csc: 'commander', salindex: 0, data: { timestamp: 1692141499.626869 } }],
+    data: [{ csc: 'Commander', salindex: 0, data: { timestamp: 1792141499.626869 } }],
     subscription: 'heartbeat',
   },
 ];
