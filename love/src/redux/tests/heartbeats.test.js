@@ -30,7 +30,7 @@ const heartbeatsInfo = [
   },
   {
     category: 'heartbeat',
-    data: [{ csc: HEARTBEAT_COMPONENTS.EVENTS, salindex: 0, data: { timestamp: 1992141499.626869 } }],
+    data: [{ csc: 'commander', salindex: 0, data: { timestamp: 1692141499.626869 } }],
     subscription: 'heartbeat',
   },
 ];
@@ -91,16 +91,6 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
     });
   });
 
-  describe('WHEN we receive a producer heartbeat', () => {
-    it('THEN we store it the state ', async () => {
-      // Arrange:
-      await server.send(heartbeatsInfo[2]);
-      const lastProducerHeartbeat = getLastComponentHeartbeat(store.getState(), HEARTBEAT_COMPONENTS.EVENTS);
-      // Assert:
-      expect(lastProducerHeartbeat).toEqual(heartbeatsInfo[2].data[0]);
-    });
-  });
-
   describe('WHEN we receive 2 manager heartbeats', () => {
     it('THEN we store the last one ', async () => {
       // Arrange:
@@ -109,6 +99,16 @@ describe('GIVEN we are subscribed to the manager heartbeat', () => {
       const lastManagerHeartbeat = getLastManagerHeartbeat(store.getState());
       // Assert:
       expect(lastManagerHeartbeat).toEqual(heartbeatsInfo[1].data[0]);
+    });
+  });
+
+  describe('WHEN we receive a commander heartbeat', () => {
+    it('THEN we store it the state ', async () => {
+      // Arrange:
+      await server.send(heartbeatsInfo[2]);
+      const lastProducerHeartbeat = getLastComponentHeartbeat(store.getState(), HEARTBEAT_COMPONENTS.COMMANDER);
+      // Assert:
+      expect(lastProducerHeartbeat).toEqual(heartbeatsInfo[2].data[0]);
     });
   });
 

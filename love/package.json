@@ -46,6 +46,7 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "redux-undo": "^1.0.0",
+    "remarkable": "^2.0.1",
     "reselect": "^4.0.0",
     "resize-observer-polyfill": "^1.5.1",
     "rfdc": "^1.1.4",

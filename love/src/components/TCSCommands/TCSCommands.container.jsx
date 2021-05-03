@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestSALCommand } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { getPermCmdExec, getScriptQueueState } from '../../redux/selectors';
-import CommandPanel from './CommandPanel';
+import TCSCommands from './TCSCommands';
 
 export const schema = {
   description: 'Panel containing multiple buttons that execute different commands, such as closing the dome',
@@ -12,7 +12,7 @@ export const schema = {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Command Panel',
+      default: 'TCS Commands',
     },
     hasRawMode: {
       type: 'boolean',
@@ -23,15 +23,36 @@ export const schema = {
   },
 };
 
-const CommandPanelContainer = ({ ...props }) => {
-  return <CommandPanel {...props} />;
+const TCSCommandsContainer = ({
+  queueState,
+  commandExecutePermission,
+  subscribeToStreams,
+  unsubscribeToStreams,
+  ...props
+}) => {
+  return (
+    <TCSCommands
+      state={queueState.state}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
+      commandExecutePermission={commandExecutePermission}
+      {...props}
+    />
+  );
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [`event-ScriptQueueState-1-stream`];
   return {
+    subscriptions,
+    subscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
+    },
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+    },
     requestSALCommand: (component, salindex, cmd) => {
-      return;
-      dispatch(requestSALCommand({ ...cmd, component, salindex }));
+      return dispatch(requestSALCommand({ ...cmd, component, salindex }));
     },
   };
 };
@@ -45,4 +66,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommandPanelContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(TCSCommandsContainer);
