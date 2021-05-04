@@ -320,6 +320,16 @@ export const utilitiesIndex = {
       },
     },
   },
+  TCSCommands: {
+    component: require('../TCSCommands/TCSCommands.container').default,
+    schema: {
+      ...require('../TCSCommands/TCSCommands.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../TCSCommands/TCSCommands.container').schema.props,
+      },
+    },
+  },
 };
 
 export const internalIndex = {

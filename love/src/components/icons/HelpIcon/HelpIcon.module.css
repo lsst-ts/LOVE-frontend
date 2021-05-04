@@ -1,0 +1,8 @@
+.helpIcon {
+  display: inline-block;
+  fill: var(--secondary-font-color);
+  fill-rule: evenodd;
+  width: 1em;
+  padding-right: 0.5em;
+  padding-left: 0.25em;
+}

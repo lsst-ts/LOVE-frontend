@@ -75,7 +75,7 @@ class Layout extends Component {
     tokenSwapStatus: PropTypes.string,
     /** Function to be called when requiring a user swap, similar to a logout */
     requireUserSwap: PropTypes.func,
-    /** Function to call in order to rese4t subscriptions (when the manager heartbeat is missed) */
+    /** Function to call in order to reset subscriptions (when the manager heartbeat is missed) */
     resetSubscriptions: PropTypes.func,
   };
 
@@ -116,9 +116,10 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
+    this.checkHeartbeat();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
-    }, 3000);
+    }, 10000);
   };
 
   componentWillUnmount = () => {
@@ -305,20 +306,22 @@ class Layout extends Component {
   };
 
   renderHeartbeatsMenu = () => {
-    const producerHeartbeats = [
-      HEARTBEAT_COMPONENTS.EVENTS,
-      HEARTBEAT_COMPONENTS.TELEMETRIES,
-      HEARTBEAT_COMPONENTS.HEARTBEATS,
-      HEARTBEAT_COMPONENTS.LOVE,
-      HEARTBEAT_COMPONENTS.SCRIPTQUEUE,
-    ].map((source) => this.state.heartbeatStatus[source]);
-    let producerHeartbeatStatus;
-    if (!producerHeartbeats.every((hb) => hb === undefined)) {
-      producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
-    }
+    // const producerHeartbeats = [
+    //   HEARTBEAT_COMPONENTS['LOVE:0'],
+    //   HEARTBEAT_COMPONENTS['ATDome:0'],
+    //   HEARTBEAT_COMPONENTS['ATMCS:0'],
+    //   HEARTBEAT_COMPONENTS['Watcher:0'],
+    //   HEARTBEAT_COMPONENTS['GenericCamera:0'],
+    //   HEARTBEAT_COMPONENTS['ScriptQueue:1'],
+    //   HEARTBEAT_COMPONENTS['WeatherStation:1'],
+    // ].map((source) => this.state.heartbeatStatus[source]);
+    // let producerHeartbeatStatus;
+    // if (!producerHeartbeats.every((hb) => hb === undefined)) {
+    //   producerHeartbeatStatus = producerHeartbeats.includes('alert') ? 'alert' : 'ok';
+    // }
 
     const summaryHeartbeats = [
-      producerHeartbeatStatus,
+      // producerHeartbeatStatus,
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
     ];
@@ -326,6 +329,7 @@ class Layout extends Component {
     if (!summaryHeartbeats.every((hb) => hb === undefined)) {
       summaryHeartbeatStatus = summaryHeartbeats.includes('alert') ? 'alert' : 'ok';
     }
+
     return (
       <DropdownMenu className={styles.settingsDropdown}>
         <Button
@@ -350,10 +354,11 @@ class Layout extends Component {
             />
             <span>LOVE manager</span>
           </div>
-          <div className={styles.heartbeatMenuElement}>
+          {/** Deprecated: used for old producer version */
+          /* <div className={styles.heartbeatMenuElement}>
             <HeartbeatIcon
               className={styles.icon}
-              status={producerHeartbeatStatus}
+             status={producerHeartbeatStatus}
               title={this.getHeartbeatTitle('')}
             />
             <span title={this.getHeartbeatTitle('')}>LOVE producers:</span>
@@ -406,7 +411,7 @@ class Layout extends Component {
             >
               {HEARTBEAT_COMPONENTS.SCRIPTQUEUE}
             </span>
-          </div>
+          </div> */}
           <div className={styles.heartbeatMenuElement} title={this.getHeartbeatTitle(HEARTBEAT_COMPONENTS.COMMANDER)}>
             <HeartbeatIcon
               className={styles.icon}

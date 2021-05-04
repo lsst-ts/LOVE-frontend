@@ -1,0 +1,100 @@
+.container {
+  display: grid;
+  grid-template-rows: min-content 1fr min-content;
+  row-gap: 1em;
+  height: 100%;
+}
+
+.containerExtraRow {
+  grid-template-rows: min-content min-content 1fr min-content;
+}
+
+.selectContainer {
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  align-items: center;
+}
+
+.select {
+  cursor: pointer;
+}
+
+.commandParamsContainer {
+}
+
+.paramContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  padding: 0.5em;
+  text-align: left;
+}
+
+.paramLabel {
+  padding-left: 0.5em;
+}
+
+.checkboxParam {
+  grid-template-columns: 1fr min-content;
+}
+
+.sendButtonContainer {
+  padding: 1em;
+}
+
+.markdown {
+  text-align: left;
+}
+
+.markdown pre {
+  white-space: pre-wrap;
+}
+
+.buttonWrapper {
+  padding-left: 0.5em;
+  width: 1em;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.queueStateContainer {
+  display: grid;
+  grid-template-columns: 1fr 12em;
+  border-bottom: solid var(--second-tertiary-background-color) 1px;
+  padding: 0.5em 0em;
+  align-items: center;
+}
+
+.queueStateLabel {
+  color: var(--base-font-color);
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  justify-self: left;
+}
+
+.warningText {
+  justify-self: left;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-column: 1 / span 2;
+  align-items: center;
+}
+
+.warningIcon {
+  width: 1em;
+  min-width: 1em;
+  padding: 0.5em;
+  text-align: center;
+  user-select: none;
+  vertical-align: top;
+}
+
+.warningIcon svg {
+  vertical-align: middle;
+}
+
+.removed {
+  display: none;
+}
