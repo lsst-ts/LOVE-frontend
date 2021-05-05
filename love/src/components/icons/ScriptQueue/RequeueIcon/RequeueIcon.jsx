@@ -3,35 +3,41 @@ import styles from './RequeueIcon.module.css';
 
 export default class RequeueIcon extends Component {
   render() {
-    const status = this.props.active !== undefined && this.props.active === false ? styles.inactive : styles.active;
-    const title = this.props.title ? this.props.title : 'Requeue script';
     return (
-      <svg className={[styles.svg, this.props.className].join(' ')} viewBox="0 0 22 27.25">
-        <title>{title}</title>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 27.34 36.5"
+        className={[styles.svg, this.props.className].join(' ')}
+      >
+        <title>{this.props.title}</title>
         <path
-          className={[styles.st0, status].join(' ')}
-          d="M18.36 22.49v-14L14.74 5H3a1.34 1.34 0 00-1.35 1.36v19.28A1.34 1.34 0 003 27h14a1.34 1.34 0 001.34-1.34"
-          transform="translate(-1.15 -.23)"
+          className={styles['cls-1']}
+          d="M10,.44H23.36L31.1,8.25V27.82A2.08,2.08,0,0,1,29,29.91H10A2.08,2.08,0,0,1,8,27.82V2.52A2.08,2.08,0,0,1,10,.44Z"
+          transform="translate(-7.97 -0.44)"
         />
         <path
-          className={[styles.st0, status].join(' ')}
-          d="M18.36 9.21h-2.71a1.52 1.52 0 01-1.59-1.44V5.5"
-          transform="translate(-1.15 -.23)"
+          className={styles['cls-2']}
+          d="M16.93,13.45,14,15l3,1.59v1.94c-2.29-1.17-5.21-2.74-5.22-2.75V14.26s2.93-1.58,5.22-2.75v1.94Z"
+          transform="translate(-7.97 -0.44)"
         />
         <path
-          className={styles.st1}
-          d="M7.26 14.39V15a1.21 1.21 0 01-1.2 1.21v1.2a1.2 1.2 0 011.2 1.2v.58A1.83 1.83 0 009.09 21h.1v-1.23h-.33a.39.39 0 01-.4-.39v-.81a2.4 2.4 0 00-.8-1.79 2.4 2.4 0 00.8-1.78v-.8a.4.4 0 01.4-.4h.33v-1.2h-.1a1.83 1.83 0 00-1.83 1.79zM13.34 19v-.56a1.2 1.2 0 011.2-1.2v-1.18a1.2 1.2 0 01-1.2-1.2v-.56a1.85 1.85 0 00-1.85-1.85h-.08v1.21h.31a.41.41 0 01.41.41v.79a2.42 2.42 0 00.79 1.78v.05a2.42 2.42 0 00-.79 1.78v.79a.41.41 0 01-.41.41h-.31v1.21h.08A1.85 1.85 0 0013.34 19z"
-          transform="translate(-1.15 -.23)"
+          className={styles['cls-2']}
+          d="M22.14,13.45l3,1.58-3,1.59v1.94c2.29-1.17,5.21-2.74,5.22-2.75V14.26s-2.93-1.58-5.22-2.75v1.94Z"
+          transform="translate(-7.97 -0.44)"
+        />
+        <polygon
+          className={styles['cls-2']}
+          points="13.92 10.11 11.05 19.09 9.21 19.09 12.08 10.11 13.92 10.11 13.92 10.11"
         />
         <path
-          className={[styles.st0, status].join(' ')}
-          d="M22.65 18.2v-14L19 .73H7.29A1.34 1.34 0 006 2.07v2.81"
-          transform="translate(-1.15 -.23)"
+          className={styles['cls-3']}
+          d="M14.47,27.62v-7a.66.66,0,0,1,.67-.67H28.06V18a.77.77,0,0,1,1.24-.63l4.75,3.84a.77.77,0,0,1,0,1.2L29.3,26.27a.76.76,0,0,1-1.24-.62v-2H18.18v3.88a.66.66,0,0,1-.67.67H15.14A.59.59,0,0,1,14.47,27.62Z"
+          transform="translate(-7.97 -0.44)"
         />
         <path
-          className={[styles.st0, status].join(' ')}
-          d="M22.65 4.92H20a1.52 1.52 0 01-1.59-1.44V1.2"
-          transform="translate(-1.15 -.23)"
+          className={styles['cls-3']}
+          d="M34.81,33a.65.65,0,0,1-.67.67H21.22v2a.77.77,0,0,1-1.24.62l-4.75-3.83a.77.77,0,0,1,0-1.2L20,27.4a.75.75,0,0,1,1.24.63v2H31.1V26.11a.65.65,0,0,1,.67-.67h2.37a.65.65,0,0,1,.67.67Z"
+          transform="translate(-7.97 -0.44)"
         />
       </svg>
     );

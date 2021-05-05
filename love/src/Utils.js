@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
+import { toast } from 'react-toastify';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 import { SALCommandStatus } from 'redux/actions/ws';
 
@@ -310,6 +311,68 @@ export default class ManagerInterface {
         cscs,
         resample,
       }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static runATCSCommand(commandName, params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}tcs/aux`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        command_name: commandName,
+        params,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.info(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static getATCSDocstrings() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}tcs/docstrings`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -653,9 +716,9 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
 };
 
 export function radians(degrees) {
-  return degrees * Math.PI / 180;
-};
+  return (degrees * Math.PI) / 180;
+}
 
 export function degrees(radians) {
-  return radians * 180 / Math.PI;
-};
+  return (radians * 180) / Math.PI;
+}

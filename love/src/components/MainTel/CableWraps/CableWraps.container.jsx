@@ -40,8 +40,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [
-  ];
+  const subscriptions = [];
   return {
     subscriptions,
     subscribeToStreams: () => {

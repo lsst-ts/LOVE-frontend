@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { requestSALCommand } from '../../redux/actions/ws';
+import { getPermCmdExec, getScriptQueueState } from '../../redux/selectors';
 import CommandPanel from './CommandPanel';
 
 export const schema = {
@@ -29,9 +30,19 @@ const CommandPanelContainer = ({ ...props }) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     requestSALCommand: (component, salindex, cmd) => {
-      return dispatch(requestSALCommand({ ...cmd, component, salindex }));
+      return;
+      dispatch(requestSALCommand({ ...cmd, component, salindex }));
     },
   };
 };
 
-export default connect(() => {}, mapDispatchToProps)(CommandPanelContainer);
+const mapStateToProps = (state) => {
+  const commandExecutePermission = getPermCmdExec(state);
+  const queueState = getScriptQueueState(state, 1);
+  return {
+    commandExecutePermission: commandExecutePermission,
+    queueState: queueState,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommandPanelContainer);

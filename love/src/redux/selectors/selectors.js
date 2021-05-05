@@ -445,7 +445,7 @@ export const getCSCHeartbeat = (state, csc, salindex) => {
  */
 export const getLastManagerHeartbeat = (state) => {
   if (state.heartbeats === undefined) return undefined;
-  return state.heartbeats?.lastHeartbeatInfo?.manager;
+  return state.heartbeats?.lastHeartbeatInfo?.Manager;
 };
 
 /**

@@ -1,0 +1,14 @@
+.svg {
+  vertical-align: middle;
+}
+
+.cls-1 {
+  fill: #ff6900;
+}
+
+.cls-2 {
+  fill: #2a3f4b;
+  stroke: #2a3f4b;
+  stroke-miterlimit: 10;
+  stroke-width: 2px;
+}

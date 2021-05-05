@@ -18,6 +18,8 @@ export default class CSCExpanded extends PureComponent {
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.array,
     errorCodeData: PropTypes.array,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
   };
 
   static defaultProps = {
@@ -36,17 +38,16 @@ export default class CSCExpanded extends PureComponent {
     this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      messageFilters: {
-        10: { value: true, name: 'Debug' },
-        20: { value: true, name: 'Info' },
-        30: { value: true, name: 'Warning' },
-        40: { value: true, name: 'Error' },
-      },
-    };
-  }
+  componentWillUnmount = () => {
+    this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.name !== this.props.name || prevProps.salindex !== this.props.salindex) {
+      this.props.unsubscribeToStreams(prevProps.name, prevProps.salindex);
+      this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    }
+  };
 
   static states = {
     0: {
@@ -85,14 +86,6 @@ export default class CSCExpanded extends PureComponent {
       char: 'S',
       class: styles.warning,
     },
-  };
-
-  updateFilter = (key, value) => {
-    const filters = this.state.messageFilters;
-    filters[key].value = value;
-    this.setState({
-      messageFilters: { ...filters },
-    });
   };
 
   render() {
@@ -152,7 +145,7 @@ export default class CSCExpanded extends PureComponent {
                     <span> &#62; </span>
                   </>
                 )}
-                <span>{cscText(this.props.name, this.props.salindex)}</span>
+                {!this.props.hideTitle && <span>{cscText(this.props.name, this.props.salindex)}</span>}
               </div>
               {this.props.displaySummaryState && (
                 <div className={[styles.stateContainer].join(' ')}>

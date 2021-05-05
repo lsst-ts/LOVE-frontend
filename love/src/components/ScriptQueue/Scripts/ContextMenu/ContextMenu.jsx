@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
 import styles from './ContextMenu.module.css';
 
-export default class ContextMenu extends Component {
+export default class ContextMenu extends PureComponent {
   static propTypes = {
     /**Position data for the context menu.
      * Usually from event.target.getBoundingClientRect()
@@ -26,18 +26,33 @@ export default class ContextMenu extends Component {
         disabled: PropTypes.bool,
       }),
     ),
+    /** Target element which triggered the contextmenu */
+    target: PropTypes.object,
   };
 
   static defaultProps = {
     contextMenuData: {},
     isOpen: false,
     options: [],
+    target: undefined,
   };
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      offset: 0,
+    };
   }
+
+  componentDidUpdate = (nextState, nextProps) => {
+    if (this.props.target !== nextProps.target) {
+      const parentCustomView = this.props.target ? this.props.target.closest('.react-grid-item') : undefined;
+      const offset = parentCustomView ? parentCustomView.getBoundingClientRect().x : 0;
+      this.setState({
+        offset,
+      });
+    }
+  };
 
   render() {
     return (
@@ -45,7 +60,7 @@ export default class ContextMenu extends Component {
         <div
           className={styles.container}
           style={{
-            left: this.props.contextMenuData.right,
+            left: this.props.contextMenuData.right - this.state.offset,
             top: `calc( -3.3em + ${this.props.contextMenuData.bottom}px)`,
           }}
           onClick={(e) => e.stopPropagation()}

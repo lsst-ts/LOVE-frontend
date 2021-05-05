@@ -1,9 +1,10 @@
 .scriptQueueContainer {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-  grid-template-rows: min-content 1fr;
+  grid-template-rows: min-content min-content 1fr;
   grid-template-areas:
-    'current current current current global global'
+    'global global current current current current'
+    'current-details current-details current-details current-details current-details current-details'
     'body body body body body body';
   color: var(--second-base-font-color);
   min-width: 1050px;
@@ -58,13 +59,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-right: 1px solid var(--second-tertiary-background-color);
 }
 
 .currentScriptContainer {
   grid-area: current;
   text-align: left;
-  padding: 0.5em 0.5em;
+  padding: 0.5em 1em;
 }
 
 .currentScriptWrapper {
@@ -75,6 +75,36 @@
   flex-direction: column;
   justify-content: center;
   display: flex;
+}
+
+.currentScriptDetailsWrapper {
+  grid-area: current-details;
+}
+
+.currentScriptResetSize {
+  text-align: right;
+  margin-right: 1em;
+  padding: 0.5em 0;
+}
+
+.currentScriptDetails {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  margin-bottom: 1em;
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  /* resize: vertical; */
+  /* overflow-x: hidden; */
+  overflow-y: hidden;
+  transition: all 300ms ease-in-out;
+}
+
+.currentScriptDescription {
+  background: var(--second-secondary-background-color);
+  border-right: 1px solid var(--second-tertiary-background-color);
+}
+
+.currentScriptLogs {
+  overflow-y: scroll;
 }
 
 .scriptList {

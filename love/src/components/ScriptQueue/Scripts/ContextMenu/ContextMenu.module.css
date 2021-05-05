@@ -38,11 +38,9 @@ div.buttonText {
 
 .iconWrapper {
   background: none;
-  border: 1px solid var(--commandable-font-color);
-  padding: 0.15em;
   border-radius: 100%;
   margin-right: 0.4em;
-  width: 0.8em;
+  width: 2em;
 }
 
 .enabled {
@@ -50,11 +48,6 @@ div.buttonText {
   cursor: pointer;
 }
 
-.enabled .iconWrapper {
-  border: 1px solid var(--commandable-background);
-  background: var(--commandable-background);
+.row:not(.enabled) .iconWrapper path{
+  fill: initial;
 }
-
-/* .disabled:hover > svg {
-  background: none;
-} */

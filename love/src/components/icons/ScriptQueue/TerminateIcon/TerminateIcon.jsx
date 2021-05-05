@@ -4,15 +4,12 @@ import styles from './TerminateIcon.module.css';
 export default class TerminateIcon extends Component {
   render() {
     return (
-      <svg viewBox="0 0 23.9 23.9" className={styles.svg}>
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 38" className={styles.svg}>
         <title>{'Terminate script'}</title>
         <path
-          className={styles.st0}
-          d="M19.6 18.5L6.3 4.2c-.3-.3-.9-.3-1.3 0-.3.4-.3 1 0 1.3l13.3 14.4c.3.4.9.5 1.3.2s.5-.9.2-1.3c0-.1-.1-.1-.1-.1l-.1-.2z"
-        />
-        <path
-          className={styles.st0}
-          d="M6.3 19.8c-.4.3-.9.3-1.3 0-.4-.4-.4-.9 0-1.3L18.2 4.2c.3-.4.9-.4 1.3-.1s.4.9.1 1.3L6.3 19.8z"
+          className={styles['cls-1']}
+          d="M19.29.44a19,19,0,1,0,19,19A19,19,0,0,0,19.29.44ZM29.37,27.13,27,29.52a.82.82,0,0,1-1.16,0l-5.94-5.95a.83.83,0,0,0-1.17,0l-5.94,5.95a.83.83,0,0,1-1.17,0L9.21,27.13a.83.83,0,0,1,0-1.17L15.16,20a.83.83,0,0,0,0-1.17L9.21,12.91a.82.82,0,0,1,0-1.16l2.39-2.4a.83.83,0,0,1,1.17,0l5.94,6a.83.83,0,0,0,1.17,0l5.94-6a.82.82,0,0,1,1.16,0l2.39,2.4a.8.8,0,0,1,0,1.16l-5.94,5.94a.83.83,0,0,0,0,1.17L29.37,26A.82.82,0,0,1,29.37,27.13Z"
+          transform="translate(-0.29 -0.44)"
         />
       </svg>
     );

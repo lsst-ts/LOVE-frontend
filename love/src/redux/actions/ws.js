@@ -131,13 +131,12 @@ export const resetSubscriptions = (subscriptions = null) => {
     resetSubsTimer = setInterval(() => dispatch(resetSubscriptions()), RESET_SUBS_PERIOD);
     dispatch({
       type: RESET_SUBSCRIPTIONS,
-      subscriptions: subs
-        ? subs.map((sub) => ({
-            ...sub,
-            status: groupStates.PENDING,
-            confirmationMessage: undefined,
-          }))
-        : [],
+      subscriptions:
+        subs?.map((sub) => ({
+          ...sub,
+          status: groupStates.PENDING,
+          confirmationMessage: undefined,
+        })) || [],
     });
     dispatch(_requestSubscriptions());
   };

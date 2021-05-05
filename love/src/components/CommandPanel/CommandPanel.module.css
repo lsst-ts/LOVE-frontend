@@ -2,5 +2,8 @@
   display: flex;
   /* justify-content: center;
   align-items: center; */
-  height: 100%;
+}
+
+.container div {
+  margin-right: 32px;
 }

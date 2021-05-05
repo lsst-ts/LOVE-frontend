@@ -4,10 +4,11 @@ import styles from './ResumeIcon.module.css';
 export default class ResumeIcon extends Component {
   render() {
     return (
-      <svg className={styles.svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.9 23.9">
+      <svg className={styles.svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 37.94 37.94">
         <path
-          className={styles.st0}
-          d="M6.5,20.1L5.2,21c-0.3,0.2-0.4,0.6-0.2,0.9c0.2,0.2,0.4,0.3,0.6,0.3c0.1,0,0.3-0.1,0.4-0.2l13.9-9.8	c0.2-0.1,0.3-0.3,0.3-0.5s-0.1-0.4-0.3-0.5L7.5,2.6C7.2,2.4,6.8,2.4,6.6,2.7c0,0.1-0.1,0.3-0.1,0.4v15.3"
+          className={styles['cls-1']}
+          d="M19,0A19,19,0,1,0,38,19,19,19,0,0,0,19,0Zm8.36,20.35L14.46,28.92a1.66,1.66,0,0,1-2.58-1.38V10.41A1.66,1.66,0,0,1,14.46,9l12.88,8.56A1.66,1.66,0,0,1,27.34,20.35Z"
+          transform="translate(-0.01)"
         />
       </svg>
     );

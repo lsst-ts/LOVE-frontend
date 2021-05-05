@@ -30,6 +30,7 @@ class CableWraps extends Component {
   }
 
   componentDidMount() {
+    this.props.subscribeToStreams();
     // Replace the following code with data from redux selectors
     setInterval(
       () =>
@@ -45,6 +46,10 @@ class CableWraps extends Component {
         }),
       2000,
     );
+  }
+
+  componentWillUnmount() {
+    this.props.unsubscribeToStreams();
   }
 
   receiveMsg(msg) {

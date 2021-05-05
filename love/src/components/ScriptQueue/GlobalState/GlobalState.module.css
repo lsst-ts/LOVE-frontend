@@ -7,6 +7,7 @@
   align-items: flex-start;
   padding-bottom: 1em;
   padding-left: 0.5rem;
+  border-right: 1px solid var(--second-tertiary-background-color);
 }
 
 .globalStateContainer {
@@ -15,6 +16,7 @@
   padding: 0.5em 0.5em;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .title {
@@ -39,7 +41,7 @@
 .stateCell {
   display: grid;
   grid-template-columns: 8em 1fr;
-  align-items: baseline;
+  align-items: center;
   grid-column-gap: 0.5rem;
 }
 .stateLabel {
@@ -74,13 +76,6 @@
 }
 
 .pauseIconWrapper {
-  width: 1em;
-  background: var(--commandable-background);
-  border: 1px solid var(--commandable-background);
-  padding: 0.25em 0.5em;
+  width: 2em;
   border-radius: 100%;
-}
-
-.gearIcon > path {
-  fill: var(--commandable-font-color);
 }

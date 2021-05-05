@@ -4,14 +4,11 @@ import styles from './PauseIcon.module.css';
 export default class PauseIcon extends Component {
   render() {
     return (
-      <svg className={styles.svg} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23.9 23.9">
+      <svg className={styles.pauseIcon} viewBox="0 0 37.96 37.96">
         <path
-          className={styles.st0}
-          d="M8.9,21V3C9,2.5,8.7,2.1,8.2,2c-0.5-0.1-0.9,0.3-1,0.7c0,0.1,0,0.2,0,0.2v18c-0.1,0.5,0.3,0.9,0.7,1	c0.5,0.1,0.9-0.3,1-0.7C8.9,21.1,8.9,21.1,8.9,21z"
-        />
-        <path
-          className={styles.st0}
-          d="M16.7,21V3c0-0.5-0.4-0.8-0.8-0.8c-0.5,0-0.8,0.4-0.8,0.8l0,0v18c0,0.5,0.4,0.8,0.8,0.8	C16.3,21.8,16.7,21.4,16.7,21z"
+          className={styles['cls-1']}
+          d="M19.28.47a19,19,0,1,0,19,19A19,19,0,0,0,19.28.47Zm-2.13,27.7a.73.73,0,0,1-.74.74H11.2a.73.73,0,0,1-.75-.74V10.74A.73.73,0,0,1,11.2,10h5.21a.73.73,0,0,1,.74.75Zm11,0a.73.73,0,0,1-.75.74h-5.2a.73.73,0,0,1-.75-.74V10.74a.73.73,0,0,1,.75-.75h5.2a.73.73,0,0,1,.75.75Z"
+          transform="translate(-0.29 -0.47)"
         />
       </svg>
     );

@@ -25,7 +25,6 @@ export const schema = {
 const CSCSummaryContainer = ({
   hierarchy = CSCSummaryHierarchy,
   expandHeight,
-  subscribeToStreamsWithCallback,
   ...props
 }) => {
   const [subscriptions, setSubscriptions] = useState([]);

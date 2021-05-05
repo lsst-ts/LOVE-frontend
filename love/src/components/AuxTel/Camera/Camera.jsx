@@ -15,6 +15,8 @@ export default class Camera extends Component {
     calibrationDetailedState: PropTypes.string,
     shutterDetailedState: PropTypes.string,
     imageSequence: PropTypes.object,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
   };
 
   constructor(props) {

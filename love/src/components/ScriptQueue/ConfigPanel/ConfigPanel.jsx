@@ -6,6 +6,8 @@ import YAML from 'yaml';
 
 import 'brace/mode/yaml';
 import 'brace/theme/solarized_dark';
+import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
+import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './ConfigPanel.module.css';
 import Button from '../../GeneralPurpose/Button/Button';
 import Input from '../../GeneralPurpose/Input/Input';
@@ -14,9 +16,7 @@ import RotateIcon from '../../icons/RotateIcon/RotateIcon';
 import CloseIcon from '../../icons/CloseIcon/CloseIcon';
 import Hoverable from '../../GeneralPurpose/Hoverable/Hoverable';
 import InfoPanel from '../../GeneralPurpose/InfoPanel/InfoPanel';
-import Select from 'components/GeneralPurpose/Select/Select';
 import ManagerInterface from '../../../Utils';
-import { SCRIPT_DOCUMENTATION_BASE_URL } from 'Config';
 
 const NO_SCHEMA_MESSAGE = '# ( waiting for schema . . .)';
 
