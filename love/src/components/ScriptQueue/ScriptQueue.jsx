@@ -105,20 +105,6 @@ export default class ScriptQueue extends Component {
   };
 
   componentDidUpdate = (prevProps, _prevState) => {
-    if (this.props.current !== prevProps.current) {
-      if (this.props.current === 'None') {
-        this.setState((state) => ({
-          currentScriptDetailState: { ...state.currentScriptDetailState, height: 0 },
-        }));
-      } else {
-        this.setState((state) => ({
-          currentScriptDetailState: {
-            ...state.currentScriptDetailState,
-            height: state.currentScriptDetailState.initialHeight,
-          },
-        }));
-      }
-    }
     if (this.state.currentScriptDetailState !== _prevState.currentScriptDetailState) {
       if (this.state.currentScriptDetailState.height < this.state.currentScriptDetailState.initialHeight) {
         this.setState({ resetButton: <span>Show details &#9660;</span> });
