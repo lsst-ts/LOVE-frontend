@@ -15,11 +15,17 @@ export default class StopAllTSCButton extends Component {
   }
 
   render() {
+    const isAvailable = this.props.commandExecutePermission && this.props.queueState.state !== 'Running';
     return (
       <div className={styles.buttonWrapper}>
         <button
           className={styles.button}
-          disabled={!this.props.commandExecutePermission}
+          title={
+            isAvailable
+              ? 'ATCS stop_all() implementation'
+              : "Command is not allowed while queue is running either you don't have command execution permissions"
+          }
+          disabled={!isAvailable}
           onClick={(e) => this.callTSCStopAll()}
         >
           <svg className={styles.svg} viewBox="0 0 108.5 130">
