@@ -59,7 +59,7 @@ class CameraCableWrap extends Component {
     this.innerPath = this.g
       .append('path')
       .datum({ endAngle: 0 })
-      .style('fill', '#43e0f921')
+      .style('fill', '#43e0f9')
       .attr('d', this.innerArc)
       .attr('id', 'rot_wrap');
 
@@ -76,14 +76,13 @@ class CameraCableWrap extends Component {
     let newRotAngle = newAngle + delta;
     let middleAngle = (newAngle - newRotAngle) / 2;
     let radialpoints = [
+      [0, 0],
       [newAngle, radio],
-      [newRotAngle, radio],
-      [middleAngle, radio]
+      [newRotAngle, radio]
     ];
     let radialData = radialLineGenerator(radialpoints);
-    // let radial = svg.select("path").attr("class", "radial").attr("d", radialData);
-    this.path.transition().duration(1500).attr("class", "radial").attr("d", radialData);
-    // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
+    this.innerPath.transition().duration(1500).attr("class", "radial").attr("d", radialData);
+    this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
   }
 
