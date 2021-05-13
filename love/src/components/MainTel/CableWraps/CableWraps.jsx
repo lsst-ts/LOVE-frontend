@@ -76,25 +76,7 @@ class CableWraps extends Component {
     g.append('path').datum({ endAngle: tau }).style('fill', '#33687f').attr('d', arc);
   }
 
-  drawLimits(g, radio, start, end) { //acá tendría que pasarle como atributos tb el ángulo inicial y el final del arco
-    g.append('line')
-        .attr("x1", -85)
-        .attr("y1", -85)
-        .attr("x2", -105)
-        .attr("y2", -105)
-        .attr('transform', 'rotate(30)')
-        .style("stroke", "lightgreen")
-        .style("stroke-width", 5);
-
-    g.append('line')
-        .attr("x1", -85)
-        .attr("y1", -85)
-        .attr("x2", -105)
-        .attr("y2", -105)
-        .attr('transform', 'rotate(20)')
-        .style("stroke", "lightgreen")
-        .style("stroke-width", 5);
-        
+  drawLimits(g, radio, start, end) { //acá tendría que pasarle como atributos tb el ángulo inicial y el final del arco       
     g.append('rect')
       .attr('x', 0)
       .attr('y', -radio - 10)
@@ -103,10 +85,10 @@ class CableWraps extends Component {
       .style('fill', '#ffffff');
 
     g.append('text')
-    .attr('x', 10)
-    .attr('y', -145)
-    .text(0 + '°')
-    .style('fill', '#ffffff');
+      .attr('x', 10)
+      .attr('y', -145)
+      .text(0 + '°')
+      .style('fill', '#ffffff');
 
     g.append('rect')
       .attr('x', -radio - 10)
@@ -133,6 +115,26 @@ class CableWraps extends Component {
       .attr('y', 5)
       .text(end + '°')
       .style('fill', '#ffffff');
+  }
+
+  rotatorLines(g, radio, endAngle){
+    g.append('line')
+      .attr("x1", -85)
+      .attr("y1", -85)
+      .attr("x2", -105)
+      .attr("y2", -105)
+      .attr('transform', 'rotate(endAngle)')
+      .style("stroke", "lightgreen")
+      .style("stroke-width", 5);
+
+    g.append('line')
+      .attr("x1", -85)
+      .attr("y1", -85)
+      .attr("x2", -105)
+      .attr("y2", -105)
+      .attr('transform', 'rotate(20)')
+      .style("stroke", "lightgreen")
+      .style("stroke-width", 5);
   }
 
   arcTween(newAngle, arc) {
@@ -201,6 +203,7 @@ class CableWraps extends Component {
                 width={400}
                 drawBackground={this.drawBackground}
                 drawLimits={this.drawLimits}
+                rotatorLines={this.rotatorLines}
                 arcTween={this.arcTween}
                 cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
               />
