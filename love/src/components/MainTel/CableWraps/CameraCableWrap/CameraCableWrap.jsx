@@ -65,9 +65,16 @@ class CameraCableWrap extends Component {
 
     let theta = degrees(Math.PI / 2);
     this.props.drawLimits(g, radio, -theta, theta);
+    this.props.rotatorLines(g, radio, theta)
   }
 
-  updateCameraCableWrap() {
+  updateCameraCableWrap(dom) {
+    let width = this.props.width;
+    let height = this.props.height;
+    let svg = d3.select(dom).append('svg').attr('class', 'd3').attr('width', width).attr('height', height);
+    let g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    this.g = g;
+    
     let radialLineGenerator = d3.lineRadial();
     let radio = 140;
     let tau = Math.PI / 2;
@@ -82,8 +89,10 @@ class CameraCableWrap extends Component {
     ];
     let radialData = radialLineGenerator(radialpoints);
     this.innerPath.transition().duration(1500).attr("class", "radial").attr("d", radialData);
-    this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
+    // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
+
+    this.props.rotatorLines(g, radio, newRotAngle);
   }
 
   componentDidMount() {
