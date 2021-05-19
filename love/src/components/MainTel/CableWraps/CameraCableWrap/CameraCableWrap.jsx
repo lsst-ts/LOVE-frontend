@@ -75,21 +75,21 @@ class CameraCableWrap extends Component {
     let g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
     this.g = g;
     
-    let radialLineGenerator = d3.lineRadial();
+    // let radialLineGenerator = d3.lineRadial();
     let radio = 140;
     let tau = Math.PI / 2;
     let newAngle = this.props.cable_wrap.cable * tau;
     let delta = radians(this.props.cable_wrap.rotator);
     let newRotAngle = newAngle + delta;
-    let middleAngle = (newAngle - newRotAngle) / 2;
-    let radialpoints = [
-      [0, 0],
-      [newAngle, radio],
-      [newRotAngle, radio]
-    ];
-    let radialData = radialLineGenerator(radialpoints);
-    this.innerPath.transition().duration(1500).attr("class", "radial").attr("d", radialData);
-    // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
+    // let middleAngle = (newAngle - newRotAngle) / 2;
+    // let radialpoints = [
+    //   [0, 0],
+    //   [newAngle, radio],
+    //   [newRotAngle, radio]
+    // ];
+    // let radialData = radialLineGenerator(radialpoints);
+    // this.innerPath.transition().duration(1500).attr("class", "radial").attr("d", radialData);
+    this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
 
     this.props.rotatorLines(g, radio, newRotAngle);

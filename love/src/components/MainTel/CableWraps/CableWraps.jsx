@@ -76,7 +76,7 @@ class CableWraps extends Component {
     g.append('path').datum({ endAngle: tau }).style('fill', '#33687f').attr('d', arc);
   }
 
-  drawLimits(g, radio, start, end) { //acá tendría que pasarle como atributos tb el ángulo inicial y el final del arco       
+  drawLimits(g, radio, start, end) {        
     g.append('rect')
       .attr('x', 0)
       .attr('y', -radio - 10)
@@ -123,7 +123,7 @@ class CableWraps extends Component {
       .attr("y1", -85)
       .attr("x2", -105)
       .attr("y2", -105)
-      .attr('transform', 'rotate(endAngle)')
+      .attr('transform', 'rotate('+ endAngle +')')
       .style("stroke", "lightgreen")
       .style("stroke-width", 5);
 
