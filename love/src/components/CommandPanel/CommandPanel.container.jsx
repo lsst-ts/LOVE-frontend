@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { requestSALCommand } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import { getPermCmdExec, getScriptQueueState } from '../../redux/selectors';
 import CommandPanel from './CommandPanel';
 
@@ -20,6 +20,12 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
+    scriptQueueIndex: {
+      type: 'number',
+      description: 'Salindex of the ScriptQueue to listen events',
+      isPrivate: false,
+      default: 1,
+    },
   },
 };
 
@@ -28,20 +34,27 @@ const CommandPanelContainer = ({ ...props }) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [`event-ScriptQueueState-${ownProps.scriptQueueIndex}-stream`];
   return {
+    subscriptions,
+    subscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(addGroup(stream)));
+    },
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+    },
     requestSALCommand: (component, salindex, cmd) => {
-      return;
       dispatch(requestSALCommand({ ...cmd, component, salindex }));
     },
   };
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const commandExecutePermission = getPermCmdExec(state);
-  const queueState = getScriptQueueState(state, 1);
+  const queueState = getScriptQueueState(state, ownProps.scriptQueueIndex);
   return {
-    commandExecutePermission: commandExecutePermission,
-    queueState: queueState,
+    commandExecutePermission,
+    queueState,
   };
 };
 
