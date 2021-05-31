@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
+import { getM1M3State } from '../../../redux/selectors';
 import M1M3 from './M1M3';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -25,7 +26,8 @@ const M1M3Container = ({ subscribeToStreams, unsubscribeToStreams, ...props }) =
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  const m1m3State = getM1M3State(state);
+  return m1m3State;
 };
 
 const mapDispatchToProps = (dispatch) => {
