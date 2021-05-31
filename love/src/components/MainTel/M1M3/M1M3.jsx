@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
-import { M1M3ActuatorPositions } from 'Config.js';
-import styles from './M1M3.module.css';
 import * as d3 from 'd3';
+
+import { M1M3ActuatorPositions } from 'Config.js';
+import { m1m3DetailedStateMap, m1m3BumpTestMap, m1m3HardpointActuatorMotionStateMap } from 'Config';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import styles from './M1M3.module.css';
 
 export default class M1M3 extends Component {
   constructor(props) {
@@ -89,8 +96,26 @@ export default class M1M3 extends Component {
   render() {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 50;
+
+    // Telemetry
+    // Events
+    const summaryStateValue = m1m3DetailedStateMap[this.props.summaryState];
+    const detailedStateValue = m1m3DetailedStateMap[this.props.detailedState];
+
     return (
       <div className={styles.mirrorContainer}>
+        <SummaryPanel className={styles.summaryPanelStates}>
+          <Title>STATE</Title>
+          <StatusText title={summaryStateValue} status={summaryStateValue}>
+            {summaryStateValue}
+          </StatusText>
+          <Title>DETAILED STATE</Title>
+          <StatusText title={detailedStateValue} status={detailedStateValue}>
+            {detailedStateValue}
+          </StatusText>
+        </SummaryPanel>
+        {/* <SummaryPanel className={styles.summaryPanelControls}>
+        </SummaryPanel> */}
         <svg className={styles.svgContainer} height={this.props.height + 'px'} width={this.state.width + 'px'}>
           <circle
             id={'background-circle-' + this.props.id}
