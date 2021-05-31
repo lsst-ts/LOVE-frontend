@@ -15,7 +15,21 @@ export default class M1M3 extends Component {
       colormap: () => '#fff',
       width: 500,
       zoomLevel: 1,
+      selectedActuator: null,
     };
+  }
+
+  static getActuator(id) {
+    console.log(this.props);
+    const actuator = { id };
+    // TODO: implement obtaining data from websockets
+    return actuator;
+  }
+
+  actuatorSelected(id) {
+    this.setState({
+      selectedActuator: M1M3.getActuator(id),
+    });
   }
 
   componentDidMount() {
