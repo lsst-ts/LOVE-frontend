@@ -78,6 +78,49 @@ export const getCameraState = (state) => {
 export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
 };
+
+export const getM1M3State = (state) => {
+  const subscriptions = [
+    'telemetry-MTM1M3-0-accelerometerData',
+    'telemetry-MTM1M3-0-forceActuatorData',
+    'telemetry-MTM1M3-0-forceActuatorPressure',
+    'telemetry-MTM1M3-0-gyroData',
+    'telemetry-MTM1M3-0-hardpointActuatorData',
+    'telemetry-MTM1M3-0-hardpointMonitorData',
+    'telemetry-MTM1M3-0-imsData',
+    'telemetry-MTM1M3-0-inclinometerData',
+    'event-MTM1M3-0-summaryState',
+    'event-MTM1M3-0-detailedState',
+    'event-MTM1M3-0-forceActuatorState',
+    'event-MTM1M3-0-forceActuatorInfo',
+    'event-MTM1M3-0-forceActuatorWarning',
+    'event-MTM1M3-0-hardpointActuatorState',
+    'event-MTM1M3-0-hardpointActuatorInfo',
+    'event-MTM1M3-0-hardpointActuatorWarning',
+    'event-MTM1M3-0-hardpointMonitorState',
+    'event-MTM1M3-0-hardpointMonitorInfo',
+    'event-MTM1M3-0-hardpointMonitorWarning',
+    'event-MTM1M3-0-forceSetpointWarning',
+    'event-MTM1M3-0-appliedAberrationForces',
+    'event-MTM1M3-0-appliedAccelerationForces',
+    'event-MTM1M3-0-appliedActiveOpticForces',
+    'event-MTM1M3-0-appliedAzimuthForces',
+    'event-MTM1M3-0-appliedBalanceForces',
+    'event-MTM1M3-0-appliedCylinderForces',
+    'event-MTM1M3-0-appliedElevationForces',
+    'event-MTM1M3-0-appliedForces',
+    'event-MTM1M3-0-appliedOffsetForces',
+    'event-MTM1M3-0-appliedStaticForces',
+    'event-MTM1M3-0-appliedThermalForces',
+    'event-MTM1M3-0-appliedVelocityForces',
+  ];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    summaryState: m1m3Data['event-MTM1M3-0-summaryState'] ?? 0,
+    detailedState: m1m3Data['event-MTM1M3-0-detailedState'] ?? 0,
+  };
+};
+
 export const getDomeState = (state) => {
   const domeSubscriptions = [
     'telemetry-ATDome-0-position',
