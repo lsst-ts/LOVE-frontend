@@ -197,6 +197,44 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+// M1M3
+export const m1m3DetailedStateMap = {
+  1: 'DISABLED STATE',
+  2: 'FAULT STATE',
+  3: 'OFFLINE STATE',
+  4: 'STANDBY STATE',
+  5: 'PARKED STATE',
+  6: 'RAISING STATE',
+  7: 'ACTIVE STATE',
+  8: 'LOWERING STATE',
+  9: 'PARKED ENGINEERING STATE',
+  10: 'RAISING ENGINEERING STATE',
+  11: 'ACTIVE ENGINEERING STATE',
+  12: 'LOWERING ENGINEERING STATE',
+  13: 'LOWERING FAULT STATE',
+  14: 'PROFILE HARDPOINT CORRECTION STATE',
+  0: 'UNKNOWN',
+};
+
+export const m1m3BumpTestMap = {
+  1: 'NOT TESTED',
+  2: 'TESTING POSITIVE',
+  3: 'TESTING POSITIVE WAIT',
+  4: 'TESTING NEGATIVE',
+  5: 'TESTING NEGATIVE WAIT',
+  6: 'PASSED',
+  7: 'FAILED',
+  0: 'UNKNOWN',
+};
+
+export const m1m3HardpointActuatorMotionStateMap = {
+  1: 'CHASING',
+  2: 'STEPPING',
+  3: 'QUICK POSITIONING',
+  4: 'FINE POSITIONING',
+  0: 'STANDBY',
+};
+
 // Dome and mount view
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
