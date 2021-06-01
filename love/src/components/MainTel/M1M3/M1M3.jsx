@@ -25,7 +25,7 @@ export default class M1M3 extends Component {
       yRadius: 0,
       maxRadius: 0,
       colormap: () => '#fff',
-      width: 1000,
+      width: 512,
       zoomLevel: 1,
       selectedActuator: null,
     };
@@ -125,7 +125,7 @@ export default class M1M3 extends Component {
         <SummaryPanel className={styles.summaryPanelControls}>
           <h2 className={styles.title}>Actuators</h2>
           <div className={styles.controls}>
-            <div style={{ flexGrow: 1 }}>
+            <div className={styles.control}>
               <span>Select type of input:</span>
               <Select
                 options={[1, 2, 3, 4, 5]}
@@ -133,7 +133,7 @@ export default class M1M3 extends Component {
                 onChange={(selection) => console.log(selection)}
               />
             </div>
-            <div style={{ flexGrow: 1 }}>
+            <div className={styles.control}>
               <span>Select force component:</span>
               <Select
                 options={[1, 2, 3, 4, 5]}
@@ -141,7 +141,7 @@ export default class M1M3 extends Component {
                 onChange={(selection) => console.log(selection)}
               />
             </div>
-            <div style={{ flexGrow: 1 }}>
+            <div className={styles.control}>
               <span>Show actuators ID:</span>
               <Select
                 options={['true', 'false']}
@@ -149,7 +149,7 @@ export default class M1M3 extends Component {
                 onChange={(selection) => console.log(selection)}
               />
             </div>
-            <div style={{ flexGrow: 1 }}>
+            <div className={styles.control}>
               <span>Show hardoints:</span>
               <Select
                 options={['true', 'false']}
@@ -211,9 +211,9 @@ export default class M1M3 extends Component {
 
           <div className={styles.actuatorDetails}>
             <div className={styles.forceGradient}></div>
-            <div className={styles.actuatorDetails}>
+            <SummaryPanel className={styles.actuatorInfo}>
               <h6>Actuator N</h6>
-            </div>
+            </SummaryPanel>
           </div>
         </div>
       </div>

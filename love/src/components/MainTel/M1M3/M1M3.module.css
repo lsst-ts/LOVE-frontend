@@ -24,19 +24,19 @@
 
 .state {
   display: flex;
-  margin-right: 16px;
+  margin-right: 1em;
 }
 
 .state :first-child {
-  margin-right: 8px;
+  margin-right: .5em;
 }
 
 .summaryPanelStates {
   max-width: 100%;
   display: flex;
   justify-content: flex-start;
-  padding: 16px;
-  margin-bottom: 16px;
+  padding: 1em;
+  margin-bottom: 1em;
 }
 
 .summaryPanelControls {
@@ -44,37 +44,70 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 16px;
+  padding: 1em;
 }
 
-.summaryPanelControls .title {
+.summaryPanelControls > .title {
   text-align: left;
+  margin: 0;
 }
 
-.summaryPanelControls .controls {
+.summaryPanelControls > .controls {
   width: 100%;
   display: flex;
   text-align: left;
 }
 
-.summaryPanelControls .controls div {
-  margin-right: 16px;
+.summaryPanelControls > .controls > .control{
+  flex-grow: 1;
+}
+
+.summaryPanelControls > .controls > .control > span{
+  margin-bottom: .5em;
+  display: block;
+}
+
+.summaryPanelControls > .controls > div {
+  margin-right: 1em;
 
 }
 
 .plotSection {
   height: 100%;
-  margin-top: 32px;
+  margin-top: 64px;
+  margin-left: 64px;
+  padding: 32 0 0 32;
   display: flex;
+}
+
+.svgContainer {
+  flex-grow: 2;
+  padding-right: 64px;
 }
 
 .actuatorDetails {
+  min-width: auto;
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .forceGradient {
-  height: 70%;
+  height: 60%;
   width: 10px;
   background-color: rebeccapurple;
+  margin-bottom: 32px;
+}
+
+.actuatorInfo {
+  height: fit-content;
+  width: 200px;
+  min-width: auto;
+  display: block;
+  text-align: left;
+  padding: 16
+}
+
+.actuatorInfo h6 {
+  margin: 0;
 }
