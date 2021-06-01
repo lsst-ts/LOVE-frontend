@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 
-import { M1M3ActuatorPositions } from 'Config.js';
-import { m1m3DetailedStateMap, m1m3BumpTestMap, m1m3HardpointActuatorMotionStateMap } from 'Config';
+import {
+  M1M3ActuatorPositions,
+  m1m3DetailedStateMap,
+  m1m3BumpTestMap,
+  m1m3HardpointActuatorMotionStateMap,
+  m1m3DetailedStateToStyle,
+} from 'Config';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import styles from './M1M3.module.css';
 
 export default class M1M3 extends Component {
@@ -20,7 +24,7 @@ export default class M1M3 extends Component {
       yRadius: 0,
       maxRadius: 0,
       colormap: () => '#fff',
-      width: 500,
+      width: 1000,
       zoomLevel: 1,
       selectedActuator: null,
     };
@@ -99,70 +103,86 @@ export default class M1M3 extends Component {
 
     // Telemetry
     // Events
-    const summaryStateValue = m1m3DetailedStateMap[this.props.summaryState];
+    const summaryState = CSCDetail.states[this.props.summaryState];
     const detailedStateValue = m1m3DetailedStateMap[this.props.detailedState];
 
     return (
       <div className={styles.mirrorContainer}>
         <SummaryPanel className={styles.summaryPanelStates}>
-          <Title>STATE</Title>
-          <StatusText title={summaryStateValue} status={summaryStateValue}>
-            {summaryStateValue}
-          </StatusText>
-          <Title>DETAILED STATE</Title>
-          <StatusText title={detailedStateValue} status={detailedStateValue}>
-            {detailedStateValue}
-          </StatusText>
+          <div className={styles.state}>
+            <Title>STATE</Title>
+            <span className={summaryState.class}>{summaryState.name}</span>
+          </div>
+          <div className={styles.state}>
+            <Title>DETAILED STATE</Title>
+            <StatusText title={detailedStateValue} status={m1m3DetailedStateToStyle[detailedStateValue]} small>
+              {detailedStateValue}
+            </StatusText>
+          </div>
         </SummaryPanel>
-        {/* <SummaryPanel className={styles.summaryPanelControls}>
-        </SummaryPanel> */}
-        <svg className={styles.svgContainer} height={this.props.height + 'px'} width={this.state.width + 'px'}>
-          <circle
-            id={'background-circle-' + this.props.id}
-            className={styles.circleOverlay}
-            cx={this.state.xRadius * scale + margin}
-            cy={this.state.yRadius * scale + margin}
-            key={'background'}
-            fill={'#04070a'}
-            r={this.state.maxRadius * scale * 1.15}
-            pointerEvents="all"
-          />
-          <g id={'scatter-' + this.props.id} className={styles.scatter}>
-            {this.state.data.map((act) => {
-              return (
-                <>
-                  <circle
-                    cx={(act.position[0] + this.state.xRadius) * scale + margin}
-                    cy={(act.position[1] + this.state.yRadius) * scale + margin}
-                    key={act.id}
-                    fill={this.state.colormap(
-                      Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                    )}
-                    r={(this.state.maxRadius * scale) / 21}
-                  />
-                  <text
-                    x={(act.position[0] + this.state.xRadius) * scale + margin}
-                    y={(act.position[1] + this.state.yRadius) * scale + margin}
-                    textAnchor="middle"
-                    alignmentBaseline="middle"
-                    className={this.state.zoomLevel > 2 ? '' : styles.hidden}
-                  >
-                    {act.id}
-                  </text>
-                </>
-              );
-            })}
-          </g>
-          <circle
-            id={'circle-overlay-' + this.props.id}
-            cx={this.state.xRadius * scale + margin}
-            cy={this.state.yRadius * scale + margin}
-            key={'overlay'}
-            fill={'none'}
-            r={this.state.maxRadius * scale * 1.15}
-            pointerEvents="all"
-          />
-        </svg>
+        <SummaryPanel className={styles.summaryPanelControls}>
+          <h4>Actuators</h4>
+          <div>Select type of input:</div>
+          <div>Select force component:</div>
+          <div>Show actuators ID:</div>
+          <div>Show hardoints:</div>
+        </SummaryPanel>
+        <div className={styles.plotSection}>
+          <svg className={styles.svgContainer} height={this.props.height + 'px'} width={this.state.width + 'px'}>
+            <circle
+              id={'background-circle-' + this.props.id}
+              className={styles.circleOverlay}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              key={'background'}
+              fill={'#04070a'}
+              r={this.state.maxRadius * scale * 1.15}
+              pointerEvents="all"
+            />
+            <g id={'scatter-' + this.props.id} className={styles.scatter}>
+              {this.state.data.map((act) => {
+                return (
+                  <>
+                    <circle
+                      cx={(act.position[0] + this.state.xRadius) * scale + margin}
+                      cy={(act.position[1] + this.state.yRadius) * scale + margin}
+                      key={act.id}
+                      fill={this.state.colormap(
+                        Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
+                      )}
+                      r={(this.state.maxRadius * scale) / 21}
+                    />
+                    <text
+                      x={(act.position[0] + this.state.xRadius) * scale + margin}
+                      y={(act.position[1] + this.state.yRadius) * scale + margin}
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
+                      className={this.state.zoomLevel > 2 ? '' : styles.hidden}
+                    >
+                      {act.id}
+                    </text>
+                  </>
+                );
+              })}
+            </g>
+            <circle
+              id={'circle-overlay-' + this.props.id}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              key={'overlay'}
+              fill={'none'}
+              r={this.state.maxRadius * scale * 1.15}
+              pointerEvents="all"
+            />
+          </svg>
+
+          <div className={styles.actuatorDetails}>
+            <div className={styles.forceGradient}></div>
+            <div className={styles.actuatorDetails}>
+              <h6>Actuator N</h6>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
