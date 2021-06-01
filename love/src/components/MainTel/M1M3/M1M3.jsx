@@ -29,7 +29,7 @@ export default class M1M3 extends Component {
       colormap: () => '#fff',
       width: 512,
       zoomLevel: 1,
-      selectedActuator: null,
+      selectedActuator: 0,
       showActuatorsID: true,
       showHardpoints: true,
     };
@@ -39,13 +39,6 @@ export default class M1M3 extends Component {
     if (isNaN(value)) return value;
     return Number.isInteger(value) ? value : value.toFixed(5);
   };
-
-  static getActuator(id) {
-    console.log(this.props);
-    const actuator = { id };
-    // TODO: implement obtaining data from websockets
-    return actuator;
-  }
 
   static forceTableHeaders() {
     return [
@@ -263,6 +256,12 @@ export default class M1M3 extends Component {
     });
   };
 
+  getActuator = (id) => {
+    const actuator = { id, value: 100 };
+    // TODO: implement obtaining data from websockets
+    return actuator;
+  };
+
   toggleActuatorsID = (show) => {
     this.setState({ showActuatorsID: show });
   };
@@ -329,10 +328,10 @@ export default class M1M3 extends Component {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 50;
 
-    // Telemetry
-    // Events
     const summaryState = CSCDetail.states[this.props.summaryState];
     const detailedStateValue = m1m3DetailedStateMap[this.props.detailedState];
+
+    const selectedActuator = this.getActuator(this.state.selectedActuator);
 
     const forceSimpleTableData = Object.values(this.getForceTableData());
     const mirrorPositionSimpleTableData = Object.values(this.getMirrorPositionTableData());
@@ -437,7 +436,14 @@ export default class M1M3 extends Component {
           <div className={styles.actuatorDetails}>
             <div className={styles.forceGradient}></div>
             <SummaryPanel className={styles.actuatorInfo}>
-              <h6>Actuator N</h6>
+              <div className={styles.state}>
+                <Title>Actuator ID:</Title>
+                <span>{selectedActuator.id}</span>
+              </div>
+              <div className={styles.state}>
+                <Title>Actuator value:</Title>
+                <span>{selectedActuator.value}</span>
+              </div>
             </SummaryPanel>
           </div>
         </div>
