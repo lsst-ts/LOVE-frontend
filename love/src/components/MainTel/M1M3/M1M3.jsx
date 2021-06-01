@@ -8,6 +8,7 @@ import {
   m1m3HardpointActuatorMotionStateMap,
   m1m3DetailedStateToStyle,
 } from 'Config';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
@@ -28,6 +29,8 @@ export default class M1M3 extends Component {
       width: 512,
       zoomLevel: 1,
       selectedActuator: null,
+      showActuatorsID: true,
+      showHardpoints: true,
     };
   }
 
@@ -38,11 +41,19 @@ export default class M1M3 extends Component {
     return actuator;
   }
 
-  actuatorSelected(id) {
+  actuatorSelected = (id) => {
     this.setState({
       selectedActuator: M1M3.getActuator(id),
     });
-  }
+  };
+
+  toggleActuatorsID = (show) => {
+    this.setState({ showActuatorsID: show });
+  };
+
+  toggleHardpoints = (show) => {
+    this.setState({ showHardpoints: show });
+  };
 
   componentDidMount() {
     this.props.subscribeToStreams();
@@ -143,19 +154,11 @@ export default class M1M3 extends Component {
             </div>
             <div className={styles.control}>
               <span>Show actuators ID:</span>
-              <Select
-                options={['true', 'false']}
-                option={{ label: 'true' }}
-                onChange={(selection) => console.log(selection)}
-              />
+              <Toggle hideLabels={true} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
             </div>
             <div className={styles.control}>
               <span>Show hardoints:</span>
-              <Select
-                options={['true', 'false']}
-                option={{ label: 'true' }}
-                onChange={(selection) => console.log(selection)}
-              />
+              <Toggle hideLabels={true} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
             </div>
           </div>
         </SummaryPanel>
