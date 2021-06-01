@@ -193,7 +193,7 @@ export default class M1M3 extends Component {
                       y={(act.position[1] + this.state.yRadius) * scale + margin}
                       textAnchor="middle"
                       alignmentBaseline="middle"
-                      className={this.state.zoomLevel > 2 ? '' : styles.hidden}
+                      className={this.state.zoomLevel > 1 ? '' : styles.hidden}
                     >
                       {act.id}
                     </text>
