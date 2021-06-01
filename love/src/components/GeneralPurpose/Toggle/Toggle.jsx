@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Toggle.module.css';
-const Toggle = ({ isLive, setLiveMode }) => {
+const Toggle = ({ isLive, setLiveMode, hideLabels }) => {
   const handleChangeChk = () => {
     setLiveMode(!isLive);
   };
@@ -10,7 +10,7 @@ const Toggle = ({ isLive, setLiveMode }) => {
         className={[styles.modeSelection, isLive ? styles.highlightText : ''].join(' ')}
         onClick={() => setLiveMode(true)}
       >
-        Live
+        {hideLabels || 'Live'}
       </span>
       <label className={styles.switch}>
         <input type="checkbox" alt="Live/query mode toggle" checked={!isLive} onChange={handleChangeChk} />
@@ -20,7 +20,7 @@ const Toggle = ({ isLive, setLiveMode }) => {
         className={[styles.modeSelection, !isLive ? styles.highlightText : ''].join(' ')}
         onClick={() => setLiveMode(false)}
       >
-        Query
+        {hideLabels || 'Query'}
       </span>
     </div>
   );
