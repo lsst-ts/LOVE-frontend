@@ -12,6 +12,7 @@ import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './M1M3.module.css';
@@ -34,12 +35,227 @@ export default class M1M3 extends Component {
     };
   }
 
+  static defaultFormatter = (value) => {
+    if (isNaN(value)) return value;
+    return Number.isInteger(value) ? value : value.toFixed(5);
+  };
+
   static getActuator(id) {
     console.log(this.props);
     const actuator = { id };
     // TODO: implement obtaining data from websockets
     return actuator;
   }
+
+  static forceTableHeaders() {
+    return [
+      {
+        field: 'name',
+        title: 'Forces',
+      },
+      {
+        field: 'x',
+        title: (
+          <>
+            X <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'y',
+        title: (
+          <>
+            Y <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'z',
+        title: (
+          <>
+            Z <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'mx',
+        title: (
+          <>
+            MX <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'my',
+        title: (
+          <>
+            MY <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'mz',
+        title: (
+          <>
+            MZ <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'magnitude',
+        title: (
+          <>
+            Magnitude <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+    ];
+  }
+
+  static mirrorPositionTableHeaders() {
+    return [
+      {
+        field: 'name',
+        title: 'Forces',
+      },
+      {
+        field: 'x',
+        title: (
+          <>
+            X <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'y',
+        title: (
+          <>
+            Y <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'z',
+        title: (
+          <>
+            Z <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'rx',
+        title: (
+          <>
+            RX <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'ry',
+        title: (
+          <>
+            RY <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+      {
+        field: 'rz',
+        title: (
+          <>
+            RZ <span className={styles.units}>[N]</span>
+          </>
+        ),
+        type: 'number',
+        render: M1M3.defaultFormatter,
+      },
+    ];
+  }
+
+  getForceTableData = () => {
+    console.log(this.props);
+    const data = {
+      commanded: {
+        name: 'Commanded',
+        x: 0,
+        y: 0,
+        z: 0,
+        mx: 0,
+        my: 0,
+        mz: 0,
+        magnitude: 0,
+      },
+      measured: {
+        name: 'Measured',
+        x: 0,
+        y: 0,
+        z: 0,
+        mx: 0,
+        my: 0,
+        mz: 0,
+        magnitude: 0,
+      },
+      hardpoints: {
+        name: 'Hardpoints',
+        x: 0,
+        y: 0,
+        z: 0,
+        mx: 0,
+        my: 0,
+        mz: 0,
+        magnitude: 0,
+      },
+    };
+    return data;
+  };
+
+  getMirrorPositionTableData = () => {
+    console.log(this.props);
+    const data = {
+      hardpoints: {
+        name: 'Hardpoints',
+        x: 0,
+        y: 0,
+        z: 0,
+        rx: 0,
+        ry: 0,
+        rz: 0,
+      },
+      IMS: {
+        name: 'IMS',
+        x: 0,
+        y: 0,
+        z: 0,
+        rx: 0,
+        ry: 0,
+        rz: 0,
+      },
+    };
+    return data;
+  };
 
   actuatorSelected = (id) => {
     this.setState({
@@ -118,6 +334,9 @@ export default class M1M3 extends Component {
     const summaryState = CSCDetail.states[this.props.summaryState];
     const detailedStateValue = m1m3DetailedStateMap[this.props.detailedState];
 
+    const forceSimpleTableData = Object.values(this.getForceTableData());
+    const mirrorPositionSimpleTableData = Object.values(this.getMirrorPositionTableData());
+
     return (
       <div className={styles.mirrorContainer}>
         <SummaryPanel className={styles.summaryPanelStates}>
@@ -164,7 +383,10 @@ export default class M1M3 extends Component {
         </SummaryPanel>
 
         <div className={styles.plotSection}>
-          <svg className={styles.svgContainer} height={this.props.height + 'px'} width={this.state.width + 'px'}>
+          <svg
+            className={styles.svgContainer}
+            viewBox={'0 0 ' + this.state.width.toString() + ' ' + this.state.width.toString()}
+          >
             <circle
               id={'background-circle-' + this.props.id}
               className={styles.circleOverlay}
@@ -218,6 +440,10 @@ export default class M1M3 extends Component {
               <h6>Actuator N</h6>
             </SummaryPanel>
           </div>
+        </div>
+        <div className={styles.forceSummary}>
+          <SimpleTable headers={M1M3.forceTableHeaders()} data={forceSimpleTableData} />
+          <SimpleTable headers={M1M3.mirrorPositionTableHeaders()} data={mirrorPositionSimpleTableData} />
         </div>
       </div>
     );
