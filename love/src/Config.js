@@ -144,6 +144,7 @@ export const stateToStyleLightpath = {
   'NOT READY': 'running',
   'IN POSITION': 'ok',
 };
+
 // M1M3
 export const m1m3DetailedStateMap = {
   1: 'DISABLED STATE',
@@ -180,6 +181,23 @@ export const m1m3HardpointActuatorMotionStateMap = {
   3: 'QUICK POSITIONING',
   4: 'FINE POSITIONING',
   0: 'STANDBY',
+};
+
+export const m1m3DetailedStateToStyle = {
+  'DISABLED STATE': 'warning',
+  'FAULT STATE': 'warning',
+  'OFFLINE STATE': 'warning',
+  'STANDBY STATE': 'warning',
+  'PARKED STATE': 'ok',
+  'RAISING STATE': 'running',
+  'ACTIVE STATE': 'ok',
+  'LOWERING STATE': 'running',
+  'PARKED ENGINEERING STATE': 'ok',
+  'RAISING ENGINEERING STATE': 'running',
+  'ACTIVE ENGINEERING STATE': 'ok',
+  'LOWERING ENGINEERING STATE': 'running',
+  'LOWERING FAULT STATE': 'running',
+  'PROFILE HARDPOINT CORRECTION STATE': 'ok',
 };
 
 // Dome and mount view
