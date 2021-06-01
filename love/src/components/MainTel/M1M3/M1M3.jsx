@@ -12,6 +12,7 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import Select from 'components/GeneralPurpose/Select/Select';
 import styles from './M1M3.module.css';
 
 export default class M1M3 extends Component {
@@ -120,13 +121,45 @@ export default class M1M3 extends Component {
             </StatusText>
           </div>
         </SummaryPanel>
+
         <SummaryPanel className={styles.summaryPanelControls}>
-          <h4>Actuators</h4>
-          <div>Select type of input:</div>
-          <div>Select force component:</div>
-          <div>Show actuators ID:</div>
-          <div>Show hardoints:</div>
+          <h2 className={styles.title}>Actuators</h2>
+          <div className={styles.controls}>
+            <div style={{ flexGrow: 1 }}>
+              <span>Select type of input:</span>
+              <Select
+                options={[1, 2, 3, 4, 5]}
+                option={{ label: 1 }}
+                onChange={(selection) => console.log(selection)}
+              />
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <span>Select force component:</span>
+              <Select
+                options={[1, 2, 3, 4, 5]}
+                option={{ label: 1 }}
+                onChange={(selection) => console.log(selection)}
+              />
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <span>Show actuators ID:</span>
+              <Select
+                options={['true', 'false']}
+                option={{ label: 'true' }}
+                onChange={(selection) => console.log(selection)}
+              />
+            </div>
+            <div style={{ flexGrow: 1 }}>
+              <span>Show hardoints:</span>
+              <Select
+                options={['true', 'false']}
+                option={{ label: 'true' }}
+                onChange={(selection) => console.log(selection)}
+              />
+            </div>
+          </div>
         </SummaryPanel>
+
         <div className={styles.plotSection}>
           <svg className={styles.svgContainer} height={this.props.height + 'px'} width={this.state.width + 'px'}>
             <circle
