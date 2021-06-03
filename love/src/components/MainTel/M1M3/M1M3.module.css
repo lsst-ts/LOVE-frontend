@@ -94,9 +94,33 @@
   flex-grow: 1;
 }
 
-.forceGradient {
+.forceGradientWrapper {
   height: 60%;
   margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+}
+
+.forceGradientWrapper span:first-child {
+  text-align: left;
+}
+
+.forceGradient {
+  display: flex;
+}
+
+.forceGradient > svg {
+  border-radius: 6em;
+}
+
+.forceGradientLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.forceGradientLabels > span {
+  margin-left: 1em;
 }
 
 .actuatorInfo {
@@ -125,6 +149,10 @@
 
 .filled {
   fill: url(#mainGradient);
+}
+
+.actuator {
+  cursor: pointer;
 }
 
 .actuator:hover circle {
