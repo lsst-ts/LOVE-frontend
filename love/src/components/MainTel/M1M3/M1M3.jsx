@@ -7,6 +7,7 @@ import {
   m1m3BumpTestMap,
   m1m3HardpointActuatorMotionStateMap,
   m1m3DetailedStateToStyle,
+  M1M3ActuatorForces,
 } from 'Config';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -29,6 +30,7 @@ export default class M1M3 extends Component {
       colormap: () => '#fff',
       width: 512,
       zoomLevel: 1,
+      selectedForceType: 0,
       selectedActuator: 0,
       showActuatorsID: true,
       showHardpoints: true,
@@ -188,8 +190,36 @@ export default class M1M3 extends Component {
     ];
   }
 
+  createColorScale = () => {
+    const svg = d3.select('#color-scale').append('svg').attr('width', 100).attr('height', '100%');
+    const svgDefs = svg.append('defs');
+
+    const mainGradient = svgDefs.append('linearGradient').attr('id', 'mainGradient');
+    mainGradient.attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%');
+    mainGradient.append('stop').attr('class', styles.stopLeft).attr('offset', '0');
+    mainGradient.append('stop').attr('class', styles.stopRight).attr('offset', '1');
+
+    // const colorScale = d3.scale.linear()
+    //   .domain([0, d3.max(accidents, function(d) {return d.count; })/2, d3.max(accidents, function(d) {return d.count; })])
+    //   .range(["#FFFFDD", "#3E9583", "#1F2D86"]);
+
+    // svg.append('rect')
+    //   .classed(styles.filled, true)
+    //   .attr('x', 40)
+    //   .attr('y', 20)
+    //   .attr('width', 20)
+    //   .attr('height', '100%');
+
+    svg
+      .append('rect')
+      .attr('x', 40)
+      .attr('y', 20)
+      .attr('width', 20)
+      .attr('height', '100%')
+      .style('fill', (d) => this.state.colormap(d));
+  };
+
   getForceTableData = () => {
-    console.log(this.props);
     const data = {
       commanded: {
         name: 'Commanded',
@@ -226,7 +256,6 @@ export default class M1M3 extends Component {
   };
 
   getMirrorPositionTableData = () => {
-    console.log(this.props);
     const data = {
       hardpoints: {
         name: 'Hardpoints',
@@ -250,14 +279,20 @@ export default class M1M3 extends Component {
     return data;
   };
 
+  forceTypeSelected = (id) => {
+    this.setState({
+      selectedForceType: id,
+    });
+  };
+
   actuatorSelected = (id) => {
     this.setState({
-      selectedActuator: M1M3.getActuator(id),
+      selectedActuator: id,
     });
   };
 
   getActuator = (id) => {
-    const actuator = { id, value: 100 };
+    const actuator = { id, value: 100 * id };
     // TODO: implement obtaining data from websockets
     return actuator;
   };
@@ -291,9 +326,11 @@ export default class M1M3 extends Component {
       data: M1M3ActuatorPositions,
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
-      maxRadius: maxRadius,
-      colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58) + ''),
+      colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58)),
+      maxRadius,
     });
+
+    this.createColorScale();
   }
 
   componentWillUnmount() {
@@ -341,7 +378,7 @@ export default class M1M3 extends Component {
         <SummaryPanel className={styles.summaryPanelStates}>
           <div className={styles.state}>
             <Title>STATE</Title>
-            <span className={summaryState.class}>{summaryState.name}</span>
+            <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
           </div>
           <div className={styles.state}>
             <Title>DETAILED STATE</Title>
@@ -354,13 +391,9 @@ export default class M1M3 extends Component {
         <SummaryPanel className={styles.summaryPanelControls}>
           <h2 className={styles.title}>Actuators</h2>
           <div className={styles.controls}>
-            <div className={styles.control}>
+            <div style={{ width: '12em' }} className={styles.control}>
               <span>Select type of input:</span>
-              <Select
-                options={[1, 2, 3, 4, 5]}
-                option={{ label: 1 }}
-                onChange={(selection) => console.log(selection)}
-              />
+              <Select options={M1M3ActuatorForces} option={null} onChange={(selection) => console.log(selection)} />
             </div>
             <div className={styles.control}>
               <span>Select force component:</span>
@@ -396,10 +429,19 @@ export default class M1M3 extends Component {
               r={this.state.maxRadius * scale * 1.15}
               pointerEvents="all"
             />
+            <circle
+              id={'circle-overlay-' + this.props.id}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              key={'overlay'}
+              fill={'none'}
+              r={this.state.maxRadius * scale * 1.15}
+              pointerEvents="all"
+            />
             <g id={'scatter-' + this.props.id} className={styles.scatter}>
               {this.state.data.map((act) => {
                 return (
-                  <>
+                  <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
                     <circle
                       cx={(act.position[0] + this.state.xRadius) * scale + margin}
                       cy={(act.position[1] + this.state.yRadius) * scale + margin}
@@ -418,23 +460,14 @@ export default class M1M3 extends Component {
                     >
                       {act.id}
                     </text>
-                  </>
+                  </g>
                 );
               })}
             </g>
-            <circle
-              id={'circle-overlay-' + this.props.id}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
-              key={'overlay'}
-              fill={'none'}
-              r={this.state.maxRadius * scale * 1.15}
-              pointerEvents="all"
-            />
           </svg>
 
           <div className={styles.actuatorDetails}>
-            <div className={styles.forceGradient}></div>
+            <div id="color-scale" className={styles.forceGradient}></div>
             <SummaryPanel className={styles.actuatorInfo}>
               <div className={styles.state}>
                 <Title>Actuator ID:</Title>
@@ -447,6 +480,7 @@ export default class M1M3 extends Component {
             </SummaryPanel>
           </div>
         </div>
+
         <div className={styles.forceSummary}>
           <SimpleTable headers={M1M3.forceTableHeaders()} data={forceSimpleTableData} />
           <SimpleTable headers={M1M3.mirrorPositionTableHeaders()} data={mirrorPositionSimpleTableData} />
