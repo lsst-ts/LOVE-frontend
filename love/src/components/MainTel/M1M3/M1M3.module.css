@@ -31,6 +31,13 @@
   margin-right: .5em;
 }
 
+.summaryState {
+  border-radius: .2rem;
+  font-weight: 700;
+  text-align: center;
+  width: 8em;
+}
+
 .summaryPanelStates {
   max-width: 100%;
   display: flex;
@@ -73,8 +80,7 @@
 }
 
 .plotSection {
-  margin-top: 4em;
-  margin-left: 4em;
+  margin: 4em 2em;
   display: flex;
 }
 
@@ -90,8 +96,6 @@
 
 .forceGradient {
   height: 60%;
-  width: 10px;
-  background-color: rebeccapurple;
   margin-bottom: 32px;
 }
 
@@ -109,4 +113,20 @@
 
 .forceSummary > * {
   margin-bottom: 1em;
+}
+
+.stopLeft {
+  stop-color: #3f51b5;  /* Indigo */
+}
+
+.stopRright {
+  stop-color: #009688;  /* Teal */
+}
+
+.filled {
+  fill: url(#mainGradient);
+}
+
+.actuator:hover circle {
+  stroke: white;
 }
