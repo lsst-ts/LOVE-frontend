@@ -508,6 +508,33 @@ export const ATCSCommands = {
   ...TCSCommands,
 };
 
+export const M1M3ActuatorForces = [
+  'appliedAberrationForces',
+  'appliedAccelerationForces',
+  'appliedActiveOpticForces',
+  'appliedAzimuthForces',
+  'appliedBalanceForces',
+  'appliedCylinderForces',
+  'appliedElevationForces',
+  'appliedForces',
+  'appliedOffsetForces',
+  'appliedStaticForces',
+  'appliedThermalForces',
+  'appliedVelocityForces',
+  'preclippedAberrationForces',
+  'preclippedAccelerationForces',
+  'preclippedActiveOpticForces',
+  'preclippedAzimuthForces',
+  'preclippedBalanceForces',
+  'preclippedCylinderForces',
+  'preclippedElevationForces',
+  'preclippedForces',
+  'preclippedOffsetForces',
+  'preclippedStaticForces',
+  'preclippedThermalForces',
+  'preclippedVelocityForces',
+];
+
 export const M1M3ActuatorPositions = [
   { id: 101, position: [-3.0582e1, 0.0] },
   { id: 102, position: [-5.6794e1, 0.0] },
