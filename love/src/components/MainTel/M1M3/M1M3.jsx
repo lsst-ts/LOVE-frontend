@@ -191,32 +191,54 @@ export default class M1M3 extends Component {
   }
 
   createColorScale = () => {
-    const svg = d3.select('#color-scale').append('svg').attr('width', 100).attr('height', '100%');
-    const svgDefs = svg.append('defs');
+    const height = 300,
+      width = 10;
+    const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
 
-    const mainGradient = svgDefs.append('linearGradient').attr('id', 'mainGradient');
-    mainGradient.attr('x1', '0%').attr('y1', '0%').attr('x2', '0%').attr('y2', '100%');
-    mainGradient.append('stop').attr('class', styles.stopLeft).attr('offset', '0');
-    mainGradient.append('stop').attr('class', styles.stopRight).attr('offset', '1');
+    const colorScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(this.state.data, (d) => d.id) / 2, d3.max(this.state.data, (d) => d.id)])
+      .range([this.state.colormap(0), this.state.colormap(0.5), this.state.colormap(1)]);
 
-    // const colorScale = d3.scale.linear()
-    //   .domain([0, d3.max(accidents, function(d) {return d.count; })/2, d3.max(accidents, function(d) {return d.count; })])
-    //   .range(["#FFFFDD", "#3E9583", "#1F2D86"]);
+    const countScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(this.state.data, (d) => d.id)])
+      .range([0, height]);
 
-    // svg.append('rect')
-    //   .classed(styles.filled, true)
-    //   .attr('x', 40)
-    //   .attr('y', 20)
-    //   .attr('width', 20)
-    //   .attr('height', '100%');
+    //Calculate the variables for the temp gradient
+    const numStops = 10;
+    const countRange = countScale.domain();
+    countRange[2] = countRange[1] - countRange[0];
+    const countPoint = [];
+    for (let i = 0; i < numStops; i++) {
+      countPoint.push((i * countRange[2]) / (numStops - 1) + countRange[0]);
+    }
+
+    //Create the gradient
+    svg
+      .append('defs')
+      .append('linearGradient')
+      .attr('id', 'force-gradient')
+      .attr('x1', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '0%')
+      .attr('y2', '100%')
+      .selectAll('stop')
+      .data(d3.range(numStops))
+      .enter()
+      .append('stop')
+      .attr('offset', (d, i) => countScale(countPoint[i]) / height)
+      .attr('stop-color', (d, i) => colorScale(countPoint[i]));
 
     svg
       .append('rect')
-      .attr('x', 40)
-      .attr('y', 20)
-      .attr('width', 20)
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('rx', 5)
+      .attr('ry', 5)
+      .attr('width', 10)
       .attr('height', '100%')
-      .style('fill', (d) => this.state.colormap(d));
+      .style('fill', 'url(#force-gradient)');
   };
 
   getForceTableData = () => {
@@ -318,8 +340,9 @@ export default class M1M3 extends Component {
       if (xMin > act.position[0]) xMin = act.position[0];
       if (yMax < act.position[1]) yMax = act.position[1];
       if (yMin > act.position[1]) yMin = act.position[1];
-      if (maxRadius < Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)))
+      if (maxRadius < Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2))) {
         maxRadius = Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2));
+      }
     });
 
     this.setState({
@@ -329,8 +352,6 @@ export default class M1M3 extends Component {
       colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58)),
       maxRadius,
     });
-
-    this.createColorScale();
   }
 
   componentWillUnmount() {
@@ -338,7 +359,8 @@ export default class M1M3 extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    d3.select('#circle-overlay-' + this.props.id).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select(`#circle-overlay-${this.props.id}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    this.createColorScale();
   }
 
   zoomed = () => {
@@ -354,8 +376,8 @@ export default class M1M3 extends Component {
       0,
       Math.max(d3.event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * d3.event.transform.k),
     );
-    d3.select('#scatter-' + id).attr('transform', d3.event.transform);
-    d3.select('#background-circle-' + id).attr('transform', d3.event.transform);
+    d3.select(`#scatter-${id}`).attr('transform', d3.event.transform);
+    d3.select(`#background-circle-${id}`).attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
@@ -415,12 +437,9 @@ export default class M1M3 extends Component {
         </SummaryPanel>
 
         <div className={styles.plotSection}>
-          <svg
-            className={styles.svgContainer}
-            viewBox={'0 0 ' + this.state.width.toString() + ' ' + this.state.width.toString()}
-          >
+          <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.width} ${this.state.width}`}>
             <circle
-              id={'background-circle-' + this.props.id}
+              id={`background-circle-${this.props.id}`}
               className={styles.circleOverlay}
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
@@ -430,7 +449,7 @@ export default class M1M3 extends Component {
               pointerEvents="all"
             />
             <circle
-              id={'circle-overlay-' + this.props.id}
+              id={`circle-overlay-${this.props.id}`}
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
               key={'overlay'}
@@ -438,7 +457,7 @@ export default class M1M3 extends Component {
               r={this.state.maxRadius * scale * 1.15}
               pointerEvents="all"
             />
-            <g id={'scatter-' + this.props.id} className={styles.scatter}>
+            <g id={`scatter-${this.props.id}`} className={styles.scatter}>
               {this.state.data.map((act) => {
                 return (
                   <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
@@ -467,7 +486,16 @@ export default class M1M3 extends Component {
           </svg>
 
           <div className={styles.actuatorDetails}>
-            <div id="color-scale" className={styles.forceGradient}></div>
+            <div className={styles.forceGradientWrapper}>
+              <span>Force</span>
+              <div id="color-scale" className={styles.forceGradient}>
+                <svg></svg>
+                <div className={styles.forceGradientLabels}>
+                  <span>Max</span>
+                  <span>Min</span>
+                </div>
+              </div>
+            </div>
             <SummaryPanel className={styles.actuatorInfo}>
               <div className={styles.state}>
                 <Title>Actuator ID:</Title>
