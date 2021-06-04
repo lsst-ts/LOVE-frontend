@@ -117,25 +117,25 @@ class CableWraps extends Component {
       .style('fill', '#ffffff');
   }
 
-  rotatorLines(g, radio, endAngle){
-    g.append('line')
-      .attr("x1", -85)
-      .attr("y1", -85)
-      .attr("x2", -105)
-      .attr("y2", -105)
-      .attr('transform', 'rotate('+ endAngle +')')
-      .style("stroke", "lightgreen")
-      .style("stroke-width", 5);
+  // rotatorLines(g, angle){
+  //   g.append('line')
+  //     .attr("x1", -85)
+  //     .attr("y1", -85)
+  //     .attr("x2", -105)
+  //     .attr("y2", -105)
+  //     .attr('transform', 'rotate('+ angle +')')
+  //     .style("stroke", "lightgreen")
+  //     .style("stroke-width", 5);
 
-    g.append('line')
-      .attr("x1", -85)
-      .attr("y1", -85)
-      .attr("x2", -105)
-      .attr("y2", -105)
-      .attr('transform', 'rotate(20)')
-      .style("stroke", "lightgreen")
-      .style("stroke-width", 5);
-  }
+  //   g.append('line')
+  //     .attr("x1", -85)
+  //     .attr("y1", -85)
+  //     .attr("x2", -105)
+  //     .attr("y2", -105)
+  //     .attr('transform', 'rotate('+ angle + 15 +')')
+  //     .style("stroke", "lightgreen")
+  //     .style("stroke-width", 5);
+  // }
 
   arcTween(newAngle, arc) {
     return function (d) {
@@ -203,7 +203,6 @@ class CableWraps extends Component {
                 width={400}
                 drawBackground={this.drawBackground}
                 drawLimits={this.drawLimits}
-                rotatorLines={this.rotatorLines}
                 arcTween={this.arcTween}
                 cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
               />

@@ -11,6 +11,7 @@ class CameraCableWrap extends Component {
     this.arc = null;
     this.innerPath = null;
     this.innerArc = null;
+    this.bar = null;
   }
 
   removeCameraCableWrap(dom) {
@@ -49,6 +50,14 @@ class CameraCableWrap extends Component {
       .startAngle(0);
     this.innerArc = innerArc;
 
+    let bar = d3
+      .arc()
+      .innerRadius(radio - 20)
+      .outerRadius(radio + 10)
+      .startAngle(0.610865)
+      .endAngle(0.645772);
+    this.bar = bar;
+
     this.path = this.g
       .append('path')
       .datum({ endAngle: 0 })
@@ -63,9 +72,35 @@ class CameraCableWrap extends Component {
       .attr('d', this.innerArc)
       .attr('id', 'rot_wrap');
 
+    this.bar = this.g
+      .append('path')
+      .datum({ endAngle: 0 })
+      .style('fill', 'red')
+      .attr('d', this.bar)
+      .attr('id', 'cable_wrap');
+    
+    // g.append('line')
+    //   .attr("x1", -105)
+    //   .attr("y1", -85)
+    //   .attr("x2", -125)
+    //   .attr("y2", -105)
+    //   // .attr('transform', 'rotate('+ tau + 15 +')')
+    //   .style("stroke", "blue")
+    //   .style("stroke-width", 5)
+    //   .attr('id', 'rotLine1');
+
+    // g.append('line')
+    //   .attr("x1", -85)
+    //   .attr("y1", -85)
+    //   .attr("x2", -105)
+    //   .attr("y2", -105)
+    //   // .attr('transform', 'rotate('+ tau + 45 +')')
+    //   .style("stroke", "lightgreen")
+    //   .style("stroke-width", 5)
+    //   .attr('id', 'rotLine2');
+
     let theta = degrees(Math.PI / 2);
     this.props.drawLimits(g, radio, -theta, theta);
-    this.props.rotatorLines(g, radio, theta)
   }
 
   updateCameraCableWrap(dom) {
@@ -75,33 +110,31 @@ class CameraCableWrap extends Component {
     let g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
     this.g = g;
     
-    // let radialLineGenerator = d3.lineRadial();
-    let radio = 140;
     let tau = Math.PI / 2;
     let newAngle = this.props.cable_wrap.cable * tau;
     let delta = radians(this.props.cable_wrap.rotator);
     let newRotAngle = newAngle + delta;
-    // let middleAngle = (newAngle - newRotAngle) / 2;
-    // let radialpoints = [
-    //   [0, 0],
-    //   [newAngle, radio],
-    //   [newRotAngle, radio]
-    // ];
-    // let radialData = radialLineGenerator(radialpoints);
-    // this.innerPath.transition().duration(1500).attr("class", "radial").attr("d", radialData);
+    console.log(newRotAngle);
+   
+    
+
     this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
 
-    this.props.rotatorLines(g, radio, newRotAngle);
+    // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.bar));
+
+   
   }
 
   componentDidMount() {
     var dom = ReactDOM.findDOMNode(this);
     this.createCameraCableWrap(dom);
+    console.log("holi");
   }
 
   componentDidUpdate() {
     this.updateCameraCableWrap();
+    console.log("chau");
   }
 
   render() {
