@@ -31,9 +31,10 @@ export default class M1M3 extends Component {
       width: 512,
       zoomLevel: 1,
       selectedForceType: 0,
-      selectedActuator: 0,
+      selectedForce: 0,
       showActuatorsID: true,
       showHardpoints: true,
+      selectedActuator: 0,
     };
   }
 
@@ -191,8 +192,8 @@ export default class M1M3 extends Component {
   }
 
   createColorScale = () => {
-    const height = 300,
-      width = 10;
+    const height = 300;
+    const width = 10;
     const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
 
     const colorScale = d3
@@ -390,6 +391,8 @@ export default class M1M3 extends Component {
     const summaryState = CSCDetail.states[this.props.summaryState];
     const detailedStateValue = m1m3DetailedStateMap[this.props.detailedState];
 
+    const maxForce = 1000;
+    const minForce = 0;
     const selectedActuator = this.getActuator(this.state.selectedActuator);
 
     const forceSimpleTableData = Object.values(this.getForceTableData());
@@ -491,8 +494,8 @@ export default class M1M3 extends Component {
               <div id="color-scale" className={styles.forceGradient}>
                 <svg></svg>
                 <div className={styles.forceGradientLabels}>
-                  <span>Max</span>
-                  <span>Min</span>
+                  <span>{maxForce} [N]</span>
+                  <span>{minForce} [N]</span>
                 </div>
               </div>
             </div>
