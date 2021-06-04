@@ -117,26 +117,6 @@ class CableWraps extends Component {
       .style('fill', '#ffffff');
   }
 
-  // rotatorLines(g, angle){
-  //   g.append('line')
-  //     .attr("x1", -85)
-  //     .attr("y1", -85)
-  //     .attr("x2", -105)
-  //     .attr("y2", -105)
-  //     .attr('transform', 'rotate('+ angle +')')
-  //     .style("stroke", "lightgreen")
-  //     .style("stroke-width", 5);
-
-  //   g.append('line')
-  //     .attr("x1", -85)
-  //     .attr("y1", -85)
-  //     .attr("x2", -105)
-  //     .attr("y2", -105)
-  //     .attr('transform', 'rotate('+ angle + 15 +')')
-  //     .style("stroke", "lightgreen")
-  //     .style("stroke-width", 5);
-  // }
-
   arcTween(newAngle, arc) {
     return function (d) {
       var interpolate = d3.interpolate(d.endAngle, newAngle);

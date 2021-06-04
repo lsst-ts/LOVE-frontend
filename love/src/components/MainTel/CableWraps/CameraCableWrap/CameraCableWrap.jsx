@@ -43,62 +43,59 @@ class CameraCableWrap extends Component {
       .startAngle(0);
     this.arc = arc;
 
-    let innerArc = d3
-      .arc()
-      .innerRadius(radio - 70)
-      .outerRadius(radio - 10)
-      .startAngle(0);
-    this.innerArc = innerArc;
+    // let innerArc = d3
+    //   .arc()
+    //   .innerRadius(radio - 70)
+    //   .outerRadius(radio - 10)
+    //   .startAngle(0);
+    // this.innerArc = innerArc;
 
-    let bar = d3
+    // arc with length of 2 degrees (35° - 37°) in radians
+    let barArc = d3
       .arc()
       .innerRadius(radio - 20)
       .outerRadius(radio + 10)
       .startAngle(0.610865)
       .endAngle(0.645772);
-    this.bar = bar;
+    this.barArc = barArc;
 
-    this.path = this.g
-      .append('path')
-      .datum({ endAngle: 0 })
-      .style('fill', '#43e0f9')
-      .attr('d', this.arc)
-      .attr('id', 'cable_wrap');
+    // arc with length of 2 degrees (45° - 47°) in radians
+    let barArc2 = d3
+      .arc()
+      .innerRadius(radio - 20)
+      .outerRadius(radio + 10)
+      .startAngle(0.785398)
+      .endAngle(0.820305);
+    this.barArc2 = barArc2;
 
-    this.innerPath = this.g
-      .append('path')
-      .datum({ endAngle: 0 })
-      .style('fill', '#43e0f9')
-      .attr('d', this.innerArc)
-      .attr('id', 'rot_wrap');
+    // this.path = this.g
+    //   .append('path')
+    //   .datum({ endAngle: 0 })
+    //   .style('fill', '#43e0f9')
+    //   .attr('d', this.arc)
+    //   .attr('id', 'cable_wrap');
+
+    // this.innerPath = this.g
+    //   .append('path')
+    //   .datum({ endAngle: 0 })
+    //   .style('fill', '#43e0f9')
+    //   .attr('d', this.innerArc)
+    //   .attr('id', 'rot_wrap');
 
     this.bar = this.g
       .append('path')
       .datum({ endAngle: 0 })
       .style('fill', 'red')
-      .attr('d', this.bar)
+      .attr('d', this.barArc)
       .attr('id', 'cable_wrap');
     
-    // g.append('line')
-    //   .attr("x1", -105)
-    //   .attr("y1", -85)
-    //   .attr("x2", -125)
-    //   .attr("y2", -105)
-    //   // .attr('transform', 'rotate('+ tau + 15 +')')
-    //   .style("stroke", "blue")
-    //   .style("stroke-width", 5)
-    //   .attr('id', 'rotLine1');
-
-    // g.append('line')
-    //   .attr("x1", -85)
-    //   .attr("y1", -85)
-    //   .attr("x2", -105)
-    //   .attr("y2", -105)
-    //   // .attr('transform', 'rotate('+ tau + 45 +')')
-    //   .style("stroke", "lightgreen")
-    //   .style("stroke-width", 5)
-    //   .attr('id', 'rotLine2');
-
+    this.bar2 = this.g
+      .append('path')
+      .datum({ endAngle: 0 })
+      .style('fill', 'red')
+      .attr('d', this.barArc2)
+      .attr('id', 'cable_wrap');
+    
     let theta = degrees(Math.PI / 2);
     this.props.drawLimits(g, radio, -theta, theta);
   }
@@ -114,14 +111,35 @@ class CameraCableWrap extends Component {
     let newAngle = this.props.cable_wrap.cable * tau;
     let delta = radians(this.props.cable_wrap.rotator);
     let newRotAngle = newAngle + delta;
-    console.log(newRotAngle);
    
-    
-
-    this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
+    // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
 
-    // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.bar));
+    this.bar.transition().duration(1500).attrTween('d', (d) => {
+      return (t) => {
+        const angle = d3.interpolate(d.endAngle, newAngle)(t);
+        const angle1 = 0.610865 + angle;
+        const angle2 = 0.640865 + angle;
+        if ((angle1 >= -1.578) && (angle2 <= 1.578)){
+          this.barArc.startAngle(angle1);
+          this.barArc.endAngle(angle2);
+        }
+        return this.barArc(d);
+      };
+    });
+
+    this.bar2.transition().duration(1500).attrTween('d', (d) => {
+      return (t) => {
+        const angle = d3.interpolate(d.endAngle, newAngle)(t);
+        const angle1 = 0.785398 + angle;
+        const angle2 = 0.820305 + angle;
+        if ((0.785398 + angle >= -1.578) && (0.820305 + angle <= 1.578)){
+          this.barArc2.startAngle(angle1);
+          this.barArc2.endAngle(angle2);
+        }
+        return this.barArc2(d);
+      };
+    });
 
    
   }
@@ -129,12 +147,12 @@ class CameraCableWrap extends Component {
   componentDidMount() {
     var dom = ReactDOM.findDOMNode(this);
     this.createCameraCableWrap(dom);
-    console.log("holi");
+    // console.log("holi");
   }
 
   componentDidUpdate() {
     this.updateCameraCableWrap();
-    console.log("chau");
+    // console.log("chau");
   }
 
   render() {
