@@ -50,23 +50,32 @@ class CameraCableWrap extends Component {
     //   .startAngle(0);
     // this.innerArc = innerArc;
 
-    // arc with length of 2 degrees (35° - 37°) in radians
-    let barArc = d3
+    // arc with length 2 (35° - 37°) in radians
+    let rotArc = d3
       .arc()
       .innerRadius(radio - 20)
       .outerRadius(radio + 10)
       .startAngle(0.610865)
       .endAngle(0.645772);
-    this.barArc = barArc;
+    this.rotArc = rotArc;
 
-    // arc with length of 2 degrees (45° - 47°) in radians
-    let barArc2 = d3
+    // arc with length 2 (45° - 47°) in radians
+    let rotArc2 = d3
       .arc()
       .innerRadius(radio - 20)
       .outerRadius(radio + 10)
       .startAngle(0.785398)
       .endAngle(0.820305);
-    this.barArc2 = barArc2;
+    this.rotArc2 = rotArc2;
+
+    //arc with length 2 (40° - 42°) in radians
+    let ccwArc = d3
+      .arc()
+      .innerRadius(radio - 30)
+      .outerRadius(radio + 20)
+      .startAngle(0.698132)
+      .endAngle(0.733038);
+    this.ccwArc = ccwArc;
 
     // this.path = this.g
     //   .append('path')
@@ -82,22 +91,29 @@ class CameraCableWrap extends Component {
     //   .attr('d', this.innerArc)
     //   .attr('id', 'rot_wrap');
 
-    this.bar = this.g
+    this.rot = this.g
       .append('path')
       .datum({ endAngle: 0 })
-      .style('fill', 'red')
-      .attr('d', this.barArc)
-      .attr('id', 'cable_wrap');
+      .style('fill', '#43e0f9')
+      .attr('d', this.rotArc)
+      .attr('id', 'rotator');
     
-    this.bar2 = this.g
+    this.rot2 = this.g
       .append('path')
       .datum({ endAngle: 0 })
-      .style('fill', 'red')
-      .attr('d', this.barArc2)
+      .style('fill', '#43e0f9')
+      .attr('d', this.rotArc2)
+      .attr('id', 'rotator');
+
+    this.ccw = this.g
+      .append('path')
+      .datum({endAngle: 0})
+      .style('fill', '#35667E')
+      .attr('d', this.ccwArc)
       .attr('id', 'cable_wrap');
     
     let theta = degrees(Math.PI / 2);
-    this.props.drawLimits(g, radio, -theta, theta);
+    this.props.drawLimits(g, radio, theta, -theta);
   }
 
   updateCameraCableWrap(dom) {
@@ -115,30 +131,31 @@ class CameraCableWrap extends Component {
     // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
 
-    this.bar.transition().duration(1500).attrTween('d', (d) => {
+    this.rot.transition().duration(1500).attrTween('d', (d) => {
       return (t) => {
         const angle = d3.interpolate(d.endAngle, newAngle)(t);
-        const angle1 = 0.610865 + angle;
-        const angle2 = 0.640865 + angle;
-        if ((angle1 >= -1.578) && (angle2 <= 1.578)){
-          this.barArc.startAngle(angle1);
-          this.barArc.endAngle(angle2);
-        }
-        return this.barArc(d);
+        this.rotArc.startAngle(0.610865 + angle);
+        this.rotArc.endAngle(0.640865 + angle);
+        return this.rotArc(d);
       };
     });
 
-    this.bar2.transition().duration(1500).attrTween('d', (d) => {
+    this.rot2.transition().duration(1500).attrTween('d', (d) => {
       return (t) => {
         const angle = d3.interpolate(d.endAngle, newAngle)(t);
-        const angle1 = 0.785398 + angle;
-        const angle2 = 0.820305 + angle;
-        if ((0.785398 + angle >= -1.578) && (0.820305 + angle <= 1.578)){
-          this.barArc2.startAngle(angle1);
-          this.barArc2.endAngle(angle2);
-        }
-        return this.barArc2(d);
+        this.rotArc2.startAngle(0.785398 + angle);
+        this.rotArc2.endAngle(0.820305 + angle);
+        return this.rotArc2(d);
       };
+    });
+
+    this.ccw.transition().duration(1500).attrTween('d', (d) => {
+      return (t) => {
+        const angle = d3.interpolate(d.endAngle, newRotAngle)(t);
+        this.ccwArc.startAngle(0.698132 + angle);
+        this.ccwArc.endAngle(0.733038 + angle);
+        return this.ccwArc(d);
+      }
     });
 
    
@@ -147,12 +164,10 @@ class CameraCableWrap extends Component {
   componentDidMount() {
     var dom = ReactDOM.findDOMNode(this);
     this.createCameraCableWrap(dom);
-    // console.log("holi");
   }
 
   componentDidUpdate() {
     this.updateCameraCableWrap();
-    // console.log("chau");
   }
 
   render() {
