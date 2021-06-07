@@ -63,7 +63,7 @@ class CableWraps extends Component {
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', radio - 5)
-      .style('fill', '#102632');
+      .style('fill', '#29414B');
 
     // g.append('circle')
     //   .attr('cx', 0)
@@ -73,7 +73,7 @@ class CableWraps extends Component {
     //   .style('stroke', '#233a42')
     //   .style('stroke-width', '0');
 
-    g.append('path').datum({ endAngle: tau }).style('fill', '#33687f').attr('d', arc);
+    g.append('path').datum({ endAngle: tau }).style('fill', '#29414B').attr('d', arc);
   }
 
   drawLimits(g, radio, start, end) {        
