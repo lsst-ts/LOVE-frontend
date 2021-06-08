@@ -385,6 +385,39 @@ export const internalIndex = {
   },
 };
 
+export const mainIndex = {
+  CableWraps: {
+    component: require('../MainTel/CableWraps/CableWraps.container').default,
+    schema: {
+      ...require('../MainTel/CableWraps/CableWraps.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CableWraps/CableWraps.container').schema.props,
+      },
+    },
+  },
+  M1M3: {
+    component: require('../MainTel/M1M3/M1M3.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3.container').schema.props,
+      },
+    },
+  },
+  M1M3Table: {
+    component: require('../MainTel/M1M3/M1M3Table.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3Table.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3Table.container').schema.props,
+      },
+    },
+  },
+};
+
 export const indexes = [
   {
     name: 'Observatory',
