@@ -43,154 +43,6 @@ export default class M1M3 extends Component {
     return Number.isInteger(value) ? value : value.toFixed(5);
   };
 
-  static forceTableHeaders() {
-    return [
-      {
-        field: 'name',
-        title: 'Forces',
-      },
-      {
-        field: 'x',
-        title: (
-          <>
-            X <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'y',
-        title: (
-          <>
-            Y <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'z',
-        title: (
-          <>
-            Z <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'mx',
-        title: (
-          <>
-            MX <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'my',
-        title: (
-          <>
-            MY <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'mz',
-        title: (
-          <>
-            MZ <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'magnitude',
-        title: (
-          <>
-            Magnitude <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-    ];
-  }
-
-  static mirrorPositionTableHeaders() {
-    return [
-      {
-        field: 'name',
-        title: 'Forces',
-      },
-      {
-        field: 'x',
-        title: (
-          <>
-            X <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'y',
-        title: (
-          <>
-            Y <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'z',
-        title: (
-          <>
-            Z <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'rx',
-        title: (
-          <>
-            RX <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'ry',
-        title: (
-          <>
-            RY <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-      {
-        field: 'rz',
-        title: (
-          <>
-            RZ <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: M1M3.defaultFormatter,
-      },
-    ];
-  }
-
   createColorScale = () => {
     const height = 300;
     const width = 10;
@@ -240,66 +92,6 @@ export default class M1M3 extends Component {
       .attr('width', 10)
       .attr('height', '100%')
       .style('fill', 'url(#force-gradient)');
-  };
-
-  getForceTableData = () => {
-    const data = {
-      commanded: {
-        name: 'Commanded',
-        x: 0,
-        y: 0,
-        z: 0,
-        mx: 0,
-        my: 0,
-        mz: 0,
-        magnitude: 0,
-      },
-      measured: {
-        name: 'Measured',
-        x: 0,
-        y: 0,
-        z: 0,
-        mx: 0,
-        my: 0,
-        mz: 0,
-        magnitude: 0,
-      },
-      hardpoints: {
-        name: 'Hardpoints',
-        x: 0,
-        y: 0,
-        z: 0,
-        mx: 0,
-        my: 0,
-        mz: 0,
-        magnitude: 0,
-      },
-    };
-    return data;
-  };
-
-  getMirrorPositionTableData = () => {
-    const data = {
-      hardpoints: {
-        name: 'Hardpoints',
-        x: 0,
-        y: 0,
-        z: 0,
-        rx: 0,
-        ry: 0,
-        rz: 0,
-      },
-      IMS: {
-        name: 'IMS',
-        x: 0,
-        y: 0,
-        z: 0,
-        rx: 0,
-        ry: 0,
-        rz: 0,
-      },
-    };
-    return data;
   };
 
   forceTypeSelected = (id) => {
@@ -394,9 +186,6 @@ export default class M1M3 extends Component {
     const maxForce = 1000;
     const minForce = 0;
     const selectedActuator = this.getActuator(this.state.selectedActuator);
-
-    const forceSimpleTableData = Object.values(this.getForceTableData());
-    const mirrorPositionSimpleTableData = Object.values(this.getMirrorPositionTableData());
 
     return (
       <div className={styles.mirrorContainer}>
@@ -510,11 +299,6 @@ export default class M1M3 extends Component {
               </div>
             </SummaryPanel>
           </div>
-        </div>
-
-        <div className={styles.forceSummary}>
-          <SimpleTable headers={M1M3.forceTableHeaders()} data={forceSimpleTableData} />
-          <SimpleTable headers={M1M3.mirrorPositionTableHeaders()} data={mirrorPositionSimpleTableData} />
         </div>
       </div>
     );
