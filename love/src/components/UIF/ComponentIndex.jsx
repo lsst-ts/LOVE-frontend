@@ -360,6 +360,16 @@ export const mainIndex = {
       },
     },
   },
+  M1M3Table: {
+    component: require('../MainTel/M1M3/M1M3Table.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3Table.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3Table.container').schema.props,
+      },
+    },
+  },
 };
 
 export const indexes = [

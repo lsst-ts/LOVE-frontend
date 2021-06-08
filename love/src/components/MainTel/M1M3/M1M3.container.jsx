@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import { getM1M3State } from '../../../redux/selectors';
+import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getM1M3State } from 'redux/selectors';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3 from './M1M3';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
   description: 'View of M1M3 actuators',
