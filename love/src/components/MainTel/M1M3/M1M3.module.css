@@ -87,16 +87,16 @@
 .svgContainer {
   flex-grow: 2;
   padding-right: 64px;
-  max-width: 600px;
+  width: 480px;
 }
 
 .actuatorDetails {
-  min-width: auto;
   flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .forceGradientWrapper {
-  height: 60%;
   margin-bottom: 32px;
   display: flex;
   flex-direction: column;
