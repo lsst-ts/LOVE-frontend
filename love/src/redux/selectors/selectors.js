@@ -97,7 +97,7 @@ export const getM1M3ActuatorsState = (state) => {
   ];
   const m1m3ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    forceActuatorsData: m1m3ActuatorsData['telemetry-MTM1M3-0-forceActuatorData'],
+    forceActuatorsData: m1m3ActuatorsData['telemetry-MTM1M3-0-forceActuatorData'] ?? [],
   };
 };
 
@@ -105,7 +105,7 @@ export const getM1M3HardpointsState = (state) => {
   const subscriptions = ['telemetry-MTM1M3-0-hardpointActuatorData'];
   const m1m3HardpointsData = getStreamsData(state, subscriptions);
   return {
-    hardpointsData: m1m3HardpointsData['telemetry-MTM1M3-0-hardpointActuatorData'],
+    hardpointsData: m1m3HardpointsData['telemetry-MTM1M3-0-hardpointActuatorData'] ?? [],
   };
 };
 
@@ -119,11 +119,11 @@ export const getM1M3State = (state) => {
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    forceActuatorsData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'],
-    hardpointsData: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData'],
-    imsData: m1m3Data['telemetry-MTM1M3-0-imsData'],
-    summaryState: m1m3Data['event-MTM1M3-0-summaryState'],
-    detailedState: m1m3Data['event-MTM1M3-0-detailedState'],
+    forceActuatorsData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? [],
+    hardpointsData: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData'] ?? [],
+    imsData: m1m3Data['telemetry-MTM1M3-0-imsData'] ?? [],
+    summaryState: m1m3Data['event-MTM1M3-0-summaryState'] ?? 0,
+    detailedState: m1m3Data['event-MTM1M3-0-detailedState'] ?? 0,
   };
 };
 
