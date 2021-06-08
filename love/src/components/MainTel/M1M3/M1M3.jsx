@@ -196,9 +196,10 @@ export default class M1M3 extends Component {
           </div>
           <div className={styles.state}>
             <Title>DETAILED STATE</Title>
-            <StatusText title={detailedStateValue} status={m1m3DetailedStateToStyle[detailedStateValue]} small>
+            {/* <StatusText title={detailedStateValue} status={m1m3DetailedStateToStyle[detailedStateValue]} small>
               {detailedStateValue}
-            </StatusText>
+            </StatusText> */}
+            <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
           </div>
         </SummaryPanel>
 
@@ -289,12 +290,19 @@ export default class M1M3 extends Component {
               </div>
             </div>
             <SummaryPanel className={styles.actuatorInfo}>
-              <div className={styles.state}>
-                <Title>Actuator ID:</Title>
-                <span>{selectedActuator.id}</span>
+              <div className={styles.actuatorValue}>
+                <Title>Actuator {selectedActuator.id}</Title>
               </div>
-              <div className={styles.state}>
-                <Title>Actuator value:</Title>
+              <div className={styles.actuatorValue}>
+                <span>Actuator status:</span>
+                <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
+              </div>
+              <div className={styles.actuatorValue}>
+                <span>Commanded force:</span>
+                <span>{selectedActuator.value}</span>
+              </div>
+              <div className={styles.actuatorValue}>
+                <span>Applied force:</span>
                 <span>{selectedActuator.value}</span>
               </div>
             </SummaryPanel>
