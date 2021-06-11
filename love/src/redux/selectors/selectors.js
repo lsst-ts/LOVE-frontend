@@ -316,6 +316,24 @@ export const getMountMotorsState = (state, index) => {
   };
 };
 
+export const getCCWState = (state) => {
+  const subscriptions = [
+    'telemetry-MTMount-0-cameraCableWrap',
+    'event-MTMount-0-axesState',
+    'event-MTMount-0-cameraCableWrapState',
+    'event-MTMount-0-summaryState',
+    'event-MTRotator-0-summaryState',
+  ];
+  const ccwData = getStreamData(state, subscriptions);
+  return {
+    cameraCableWrap: ccwData['telemetry-MTMount-0-cameraCableWrap'],
+    axesState: ccwData['event-MTMount-0-axesState'],
+    cameraCablaWrapState: ccwData['event-MTMount-0-cameraCableWrapState'],
+    ccwSummaryState: ccwData['event-MTMount-0-summaryState'],
+    rotatorSummaryState: ccwData['event-MTRotator-0-summaryState'],
+  };
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *

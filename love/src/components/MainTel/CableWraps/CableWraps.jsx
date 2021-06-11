@@ -4,6 +4,8 @@ import AZCableWrap from './AZCableWrap/AZCableWrap';
 import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import { degrees } from 'Utils';
 import Row from '../../GeneralPurpose/SummaryPanel/Row';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
@@ -17,15 +19,17 @@ class CableWraps extends Component {
     super(props);
     this.state = {
       cable_wraps: {
-        az: {
+        // az: {
+        //   cable: 10,
+        //   rotator: 20,
+        // },
+        camera: {
           cable: 10,
           rotator: 20,
         },
-        camera: {
-          cable: 10,
-          rotator: 200,
-        },
       },
+      colorArc: '#35667E',
+      colorCable: '#29414B',
     };
   }
 
@@ -35,12 +39,12 @@ class CableWraps extends Component {
     setInterval(
       () =>
         this.receiveMsg({
-          az: {
-            cable: Math.random() * Math.sign(Math.random() - 0.5),
-            rotator: Math.random() * Math.sign(Math.random() - 0.5),
-          },
+          // az: {
+          //   cable: Math.random() * Math.sign(Math.random() - 0.5),
+          //   rotator: Math.random() * Math.sign(Math.random() - 0.5),
+          // },
           camera: {
-            cable: Math.random() * Math.sign(Math.random() - 0.5),
+            cable: Math.random() * Math.sign(Math.random() - 0.8),
             rotator: Math.random() * Math.sign(Math.random() - 0.5),
           },
         }),
@@ -58,12 +62,17 @@ class CableWraps extends Component {
     });
   }
 
+  // changeColorWithAlert() {
+    
+  // }
+
   drawBackground(g, radio, tau, arc) {
+    const colorArc = this.state.colorArc;
     g.append('semi-circle')
       .attr('cx', 0)
       .attr('cy', 0)
       .attr('r', radio - 5)
-      .style('fill', '#29414B');
+      .style('fill', colorArc);
 
     // g.append('circle')
     //   .attr('cx', 0)
@@ -73,7 +82,7 @@ class CableWraps extends Component {
     //   .style('stroke', '#233a42')
     //   .style('stroke-width', '0');
 
-    g.append('path').datum({ endAngle: tau }).style('fill', '#29414B').attr('d', arc);
+    g.append('path').datum({ endAngle: tau }).style('fill', colorArc).attr('d', arc);
   }
 
   drawLimits(g, radio, start, end) {        
@@ -128,6 +137,9 @@ class CableWraps extends Component {
   }
 
   render() {
+
+    const summaryState = CSCDetail.states[this.props.summaryState];
+
     return (
       <div className={styles.cableWrapsContainer}>
         {/* <h2> Cable Wraps </h2> */}
@@ -149,19 +161,20 @@ class CableWraps extends Component {
             <div className={styles.cablewrapInfo}>
               <SummaryPanel>
                 {/*Camera*/}
-                <Title>Camera Cable Wrap</Title>
+                <Title>STATE</Title>
                 <Value>
                   <StatusText>UNDEFINED</StatusText>
+                  {/* <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span> */}
                 </Value>
 
                 <Label>Position 1</Label>
-                <Value>Value</Value>
+                <Value>{Math.round(degrees(this.state.cable_wraps.camera.rotator - 0.0349066))+'°'}</Value>
 
                 <Label>Position 2</Label>
-                <Value>Value</Value>
+                <Value>{Math.round(degrees(this.state.cable_wraps.camera.rotator))+'°'}</Value>
 
-                <Label>Camera Cable Wrap</Label>
-                <Value>Degrees</Value>
+                <Label>Cable Wrap</Label>
+                <Value>{Math.round(degrees(this.state.cable_wraps.camera.cable))+'°'}</Value>
               </SummaryPanel>
               {/*Drivers*/}
               <SummaryPanel>
@@ -181,10 +194,11 @@ class CableWraps extends Component {
               <CameraCableWrap
                 height={315}
                 width={400}
-                drawBackground={this.drawBackground}
+                drawBackground={(g,r,t,a) => this.drawBackground(g,r,t,a)}
                 drawLimits={this.drawLimits}
                 arcTween={this.arcTween}
                 cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
+                colorCable={this.state.colorCable}
               />
             </div>
           {/* </div> */}

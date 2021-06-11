@@ -11,7 +11,6 @@ class CameraCableWrap extends Component {
     this.arc = null;
     this.innerPath = null;
     this.innerArc = null;
-    this.bar = null;
   }
 
   removeCameraCableWrap(dom) {
@@ -108,7 +107,7 @@ class CameraCableWrap extends Component {
     this.ccw = this.g
       .append('path')
       .datum({endAngle: 0})
-      .style('fill', '#35667E')
+      .style('fill', this.props.colorCable ? this.props.colorCable : '#35667E')
       .attr('d', this.ccwArc)
       .attr('id', 'cable_wrap');
     
@@ -124,6 +123,7 @@ class CameraCableWrap extends Component {
     this.g = g;
     
     let tau = Math.PI / 2;
+    // replace that for rotator and cable values from backend
     let newAngle = this.props.cable_wrap.cable * tau;
     let delta = radians(this.props.cable_wrap.rotator);
     let newRotAngle = newAngle + delta;
