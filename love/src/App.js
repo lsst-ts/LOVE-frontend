@@ -53,15 +53,6 @@ class App extends Component {
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }
-    <PrivateRoute
-      token={this.props.token}
-      path="/time-series"
-      render={() => (
-        <div className="hs-container">
-          <TimeSeries> </TimeSeries>
-        </div>
-      )}
-    />;
   };
 
   render() {
