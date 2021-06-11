@@ -10,7 +10,6 @@ import LayoutContainer from './components/Layout/Layout.container';
 import LoginContainer from './components/Login/Login.container';
 import PrivateRoute from './components/GeneralPurpose/PrivateRoute/PrivateRoute';
 import ScriptQueueContainer from './components/ScriptQueue/ScriptQueue.container';
-import TimeSeries from './components/TimeSeries/TimeSeries';
 import Panel from './components/GeneralPurpose/Panel/Panel';
 
 import TelemetryLogContainer from './components/TelemetryLog/TelemetryLog.container';
@@ -54,6 +53,15 @@ class App extends Component {
     if (this.props.token && prevProps.location.pathname !== this.props.location.pathname) {
       this.props.validateToken();
     }
+    <PrivateRoute
+      token={this.props.token}
+      path="/time-series"
+      render={() => (
+        <div className="hs-container">
+          <TimeSeries> </TimeSeries>
+        </div>
+      )}
+    />;
   };
 
   render() {
@@ -68,15 +76,6 @@ class App extends Component {
               render={() => <HealthStatusSummaryContainer />}
             />
             <PrivateRoute token={this.props.token} path="/dm-flow" component={DataManagementFlow} />
-            <PrivateRoute
-              token={this.props.token}
-              path="/time-series"
-              render={() => (
-                <div className="hs-container">
-                  <TimeSeries> </TimeSeries>
-                </div>
-              )}
-            />
             <Route
               path="/test"
               render={() => (
