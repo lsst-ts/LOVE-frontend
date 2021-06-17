@@ -20,6 +20,12 @@ export const schema = {
       isPrivate: true,
       default: false,
     },
+    scriptQueueIndex: {
+      type: 'number',
+      description: 'Salindex of the ScriptQueue to listen events',
+      isPrivate: false,
+      default: 1,
+    },
   },
 };
 
@@ -42,7 +48,7 @@ const TCSCommandsContainer = ({
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
-  const subscriptions = [`event-ScriptQueueState-1-stream`];
+  const subscriptions = [`event-ScriptQueueState-${ownProps.scriptQueueIndex}-stream`];
   return {
     subscriptions,
     subscribeToStreams: () => {
@@ -61,8 +67,8 @@ const mapStateToProps = (state) => {
   const commandExecutePermission = getPermCmdExec(state);
   const queueState = getScriptQueueState(state, 1);
   return {
-    commandExecutePermission: commandExecutePermission,
-    queueState: queueState,
+    commandExecutePermission,
+    queueState,
   };
 };
 

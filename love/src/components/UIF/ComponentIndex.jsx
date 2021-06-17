@@ -258,20 +258,6 @@ export const utilitiesIndex = {
     component: require('../Time/Clock/Clock.container').default,
     schema: require('../Time/Clock/Clock.container').schema,
   },
-  InteractiveTimeSeries: {
-    component: require('../TimeSeries/TimeSeries.container').default,
-    schema: {
-      ...require('../TimeSeries/TimeSeries.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../TimeSeries/TimeSeries.container').schema.props,
-      },
-    },
-  },
-  TimeSeriesPlot: {
-    component: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').default,
-    schema: require('../GeneralPurpose/TimeSeriesPlot/TimeSeriesPlot.container').schema,
-  },
   VegaTimeSeriesPlot: {
     component: require('../GeneralPurpose/Plot/Plot.container').default,
     schema: require('../GeneralPurpose/Plot/Plot.container').schema,

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { relativeTime } from '../../../../Utils';
 import PropTypes from 'prop-types';
+import { relativeTime } from 'Utils';
+import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import styles from './PolarPlot.module.css';
-import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
 
 export default class PolarPlot extends Component {
   static propTypes = {

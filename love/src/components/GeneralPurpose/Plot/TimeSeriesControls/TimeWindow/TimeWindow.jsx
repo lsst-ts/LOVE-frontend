@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { UID } from 'react-uid';
+import TextField from 'components/TextField/TextField';
 import styles from './TimeWindow.module.css';
-import TextField from '../../../TextField/TextField';
 
 export default class TimeWindow extends PureComponent {
   static propTypes = {

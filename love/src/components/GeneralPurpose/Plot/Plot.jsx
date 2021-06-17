@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import VegaTimeseriesPlot from './VegaTimeSeriesPlot/VegaTimeSeriesPlot';
-import TimeSeriesControls from '../../TimeSeries/TimeSeriesControls/TimeSeriesControls';
+import TimeSeriesControls from './TimeSeriesControls/TimeSeriesControls';
 import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import styles from './Plot.module.css';
 
