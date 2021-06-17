@@ -322,7 +322,7 @@ export const getCCWState = (state) => {
     'event-MTMount-0-cameraCableWrapState',
     'event-MTMount-0-summaryState',
   ];
-  const ccwData = getStreamData(state, subscriptions);
+  const ccwData = getStreamsData(state, subscriptions);
   return {
     cameraCableWrap: ccwData['telemetry-MTMount-0-cameraCableWrap']
       ? ccwData['telemetry-MTMount-0-cameraCableWrap']
@@ -342,7 +342,7 @@ export const getRotatorPosition = (state) => {
     'event-MTRotator-0-inPosition',
     'event-MTRotator-0-summaryState',
   ];
-  const rotatorData = getStreamData(state, subscriptions);
+  const rotatorData = getStreamsData(state, subscriptions);
   return {
     rotation: rotatorData['telemetry-MTRotator-0-rotation'] 
       ? rotatorData['telemetry-MTRotator-0-rotation'].demandPosition
@@ -362,7 +362,7 @@ export const getCCWFollowingError = (state) => {
     'event-MTMount-0-cameraCableWrapFollowing',
     'event-MTRotator-0-interlock',
   ];
-  const ccwErrorData = getStreamData(state, subscriptions);
+  const ccwErrorData = getStreamsData(state, subscriptions);
   return {
     ccwFollowingError: ccwErrorData['telemetry-MTRotator-0-ccwFollowingError']
       ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError']

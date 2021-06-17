@@ -162,8 +162,7 @@ class CableWraps extends Component {
               {/*Camera*/}
               <Title>STATE</Title>
               <Value>
-                <StatusText>UNDEFINED</StatusText>
-                {/* <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span> */}
+                <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
               </Value>
 
               <Label>Rotator Position</Label>
