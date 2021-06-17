@@ -158,38 +158,20 @@ class CableWraps extends Component {
                 <span className={styles.rotatorDiffValue}> </span>
               </p>
             )} */}
-            <div className={styles.cablewrapInfo}>
-              <SummaryPanel>
-                {/*Camera*/}
-                <Title>STATE</Title>
-                <Value>
-                  <StatusText>UNDEFINED</StatusText>
-                  {/* <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span> */}
-                </Value>
+            <SummaryPanel>
+              {/*Camera*/}
+              <Title>STATE</Title>
+              <Value>
+                <StatusText>UNDEFINED</StatusText>
+                {/* <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span> */}
+              </Value>
 
-                <Label>Position 1</Label>
-                <Value>{Math.round(degrees(this.state.cable_wraps.camera.rotator - 0.0349066))+'°'}</Value>
+              <Label>Rotator Position</Label>
+              <Value>{Math.round(degrees(this.state.cable_wraps.camera.rotator))+'°'}</Value>
 
-                <Label>Position 2</Label>
-                <Value>{Math.round(degrees(this.state.cable_wraps.camera.rotator))+'°'}</Value>
-
-                <Label>Cable Wrap</Label>
-                <Value>{Math.round(degrees(this.state.cable_wraps.camera.cable))+'°'}</Value>
-              </SummaryPanel>
-              {/*Drivers*/}
-              <SummaryPanel>
-                <Title>Drivers</Title>
-                <Value>&nbsp;</Value>
-                <Label>Driver 1</Label>
-                <Value>
-                  <StatusText>UNDEFINED</StatusText>
-                </Value>
-                <Label>Driver 2</Label>
-                <Value>
-                  <StatusText>UNDEFINED</StatusText>
-                </Value>
-              </SummaryPanel>
-            </div>
+              <Label>Cable Wrap Position</Label>
+              <Value>{Math.round(degrees(this.state.cable_wraps.camera.cable))+'°'}</Value>
+            </SummaryPanel>
             <div className={styles.divCameraWrap}>
               <CameraCableWrap
                 height={315}

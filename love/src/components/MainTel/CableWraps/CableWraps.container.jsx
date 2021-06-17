@@ -12,7 +12,7 @@ export const schema = {
   props: {
     title: {
       type: 'string',
-      description: 'Name diplayed in the title bar (if visible)',
+      description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
       default: 'CableWraps',
     },
@@ -43,32 +43,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'telemetry-MTMount-0-azimuth',
-    'telemetry-MTMount-0-azimuthDrives',
     'telemetry-MTMount-0-cameraCableWrap',
-    'telemetry-MTMount-0-elevation',
-    'telemetry-MTMount-0-elevationDrives',
     'telemetry-MTRotator-0-ccwFollowingError',
-    'telemetry-MTRotator-0-motors',
     'telemetry-MTRotator-0-rotation',
-    'event-MTMount-0-axesInPosition',
-    'event-MTMount-0-axesState',
     'event-MTMount-0-cameraCableWrapFollowing',
     'event-MTMount-0-cameraCableWrapState',
     'event-MTMount-0-cameraCableWrapTarget',
-    'event-MTMount-0-connected',
-    'event-MTMount-0-error',
-    'event-MTMount-0-target',
-    'event-MTMount-0-warning',
     'event-MTMount-0-summaryState',
-    'event-MTRotator-0-logevent_commandableByDDS',
     'event-MTRotator-0-logevent_configuration',
-    'event-MTRotator-0-connected',
-    'event-MTRotator-0-controllerState',
     'event-MTRotator-0-inPosition',
     'event-MTRotator-0-interlock',
-    'event-MTRotator-0-target',
-    'event-MTRotator-0-tracking',
     'event-MTRotator-0-summaryState',
   ];
   return {
