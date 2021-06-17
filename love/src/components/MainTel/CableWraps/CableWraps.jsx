@@ -158,9 +158,9 @@ class CableWraps extends Component {
                 <span className={styles.rotatorDiffValue}> </span>
               </p>
             )} */}
-            <SummaryPanel>
+            <SummaryPanel className={styles.summaryPanelStates}>
               {/*Camera*/}
-              <Title>STATE</Title>
+              <Title>Camera Cable Wrap</Title>
               <Value>
                 <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
               </Value>

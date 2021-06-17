@@ -48,3 +48,11 @@
 .divCameraWrap {
     margin-top: 80px;
 }
+
+.summaryPanelStates {
+    max-width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 1em;
+    margin-bottom: 1em;
+  }
