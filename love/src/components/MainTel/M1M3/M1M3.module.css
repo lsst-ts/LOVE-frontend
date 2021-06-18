@@ -89,6 +89,7 @@
 .svgContainer {
   flex-grow: 2;
   max-width: 480px;
+  min-width: 300px;
 }
 
 .actuatorDetails {
