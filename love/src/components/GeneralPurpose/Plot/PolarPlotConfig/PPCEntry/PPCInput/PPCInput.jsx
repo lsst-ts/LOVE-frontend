@@ -88,6 +88,7 @@ export default class PPCInput extends PureComponent {
     return (
       <div className={styles.container}>
         <Select
+          label={"Category"}
           className={[styles.select, styles.category].join(' ')}
           options={categoryOptions}
           option={input?.category}
@@ -95,6 +96,7 @@ export default class PPCInput extends PureComponent {
           onChange={(selection) => this.onSelectChange(selection.value, 'category')}
         />
         <Select
+          label={"CSC"}
           className={styles.select}
           options={cscOptions}
           option={input?.csc}
@@ -102,6 +104,7 @@ export default class PPCInput extends PureComponent {
           onChange={(selection) => this.onSelectChange(selection.value, 'csc')}
         />
         <Input
+          label={"SAL index"}
           className={styles.input}
           type="number"
           min={0}
@@ -110,6 +113,7 @@ export default class PPCInput extends PureComponent {
           onChange={(ev) => this.onSelectChange(parseInt(ev.target.value), 'salindex')}
         />
         <Select
+          label={"Topic"}
           className={styles.select}
           options={topicOptions}
           option={input?.topic}
@@ -117,6 +121,7 @@ export default class PPCInput extends PureComponent {
           onChange={(selection) => this.onSelectChange(selection.value, 'topic')}
         />
         <Select
+          label={"Item"}
           className={styles.select}
           options={itemOptions}
           option={input?.item}

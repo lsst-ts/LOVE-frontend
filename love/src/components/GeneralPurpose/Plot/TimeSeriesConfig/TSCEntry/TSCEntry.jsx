@@ -10,6 +10,7 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Select from 'components/GeneralPurpose/Select/Select';
 import { COLORS, DASHES, SHAPES } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot.jsx';
 
+import AddIcon from 'components/icons/AddIcon/AddIcon';
 /**
  * Component to configure the Health Status Summary
  */
@@ -77,7 +78,25 @@ export default class TSCEntry extends PureComponent {
     onRemove: null,
   };
 
-  itemOptions = ['line', 'pointLine', 'bar'];
+  // itemOptions = ['line', 'pointLine', 'bar'];
+  itemOptions = [
+    {value: 'line', label: <span><AddIcon className={styles.icon}/>{'line'}</span>},
+    {value: 'pointLine', label: <span><AddIcon className={styles.icon}/>{'pointLine'}</span>}, 
+    {value: 'bar', label: <span><AddIcon className={styles.icon}/>{'bar'}</span>}
+  ];
+
+  colorOptions = COLORS.map(color => {
+    return {value: color, label: <span><div className={styles.colorIcon} style={{backgroundColor: color}}></div>{color}</span>};
+  });
+
+  dashesOptions = DASHES.map(dash => {
+    const dashString = JSON.stringify(dash);
+    return {value: dashString, label: <span><AddIcon className={styles.icon}/>{dashString}</span>};
+  });
+
+  shapesOptions = SHAPES.map(shape => {
+    return {value: shape, label: <span><AddIcon className={styles.icon}/>{shape}</span>};
+  });
 
   onNameChange = (name) => {
     this.props.onChange(name, this.props.inputs, this.props.accessor, this.props.type);
@@ -129,19 +148,13 @@ export default class TSCEntry extends PureComponent {
         <div className={styles.firstRow}>
           <div className={styles.nameMark}>
             <Input
+              label="Plot legend"
               className={styles.input}
               placeholder="Insert a name for the legend"
               value={this.props.name || ''}
               // readOnly
               // DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER
               onChange={(ev) => this.onNameChange(ev.target?.value)}
-            />
-            <Select
-              className={styles.select}
-              options={this.itemOptions}
-              option={this.props.type}
-              placeholder="Select mark"
-              onChange={(selection) => this.onTypeChange(selection.value)}
             />
           </div>
           <Button
@@ -157,8 +170,17 @@ export default class TSCEntry extends PureComponent {
 
         <div className={styles.stylesContainer}>
           <Select
+            label={"Plot type"}
             className={styles.select}
-            options={COLORS}
+            options={this.itemOptions}
+            option={this.props.type}
+            placeholder="Select mark"
+            onChange={(selection) => this.onTypeChange(selection.value)}
+          />
+          <Select
+            label={"Mark Color"}
+            className={styles.select}
+            options={this.colorOptions}
             option={input?.color}
             placeholder="Select a color"
             onChange={(selection) => this.onStyleChange('color', selection)}
@@ -166,8 +188,9 @@ export default class TSCEntry extends PureComponent {
 
           {['line', 'pointLine'].includes(this.props.type) && (
             <Select
+              label={"Dash pattern"}             
               className={styles.select}
-              options={DASHES.map((d) => JSON.stringify(d))}
+              options={this.dashesOptions}
               option={JSON.stringify(input?.dash)}
               placeholder="Select a dash pattern"
               onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
@@ -176,8 +199,9 @@ export default class TSCEntry extends PureComponent {
 
           {['pointLine'].includes(this.props.type) && (
             <Select
+              label={"Shape"}
               className={styles.select}
-              options={SHAPES}
+              options={this.shapesOptions}
               option={input?.shape}
               placeholder="Select a shape"
               onChange={(selection) => this.onStyleChange('shape', selection)}
