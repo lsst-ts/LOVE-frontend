@@ -43,45 +43,37 @@ export default class M1M3 extends Component {
     return Number.isInteger(value) ? value : value.toFixed(5);
   };
 
-  createColorScale = () => {
+  createColorScale = (values) => {
     const height = 300;
     const width = 10;
-    const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
+    const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
+    const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
+    colourRange.push(1);
 
-    const colorScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(this.state.data, (d) => d.id) / 2, d3.max(this.state.data, (d) => d.id)])
-      .range([this.state.colormap(0), this.state.colormap(0.5), this.state.colormap(1)]);
+    const colorScale = d3.scaleLinear().domain(colourRange).range(colours).interpolate(d3.interpolateHcl);
 
-    const countScale = d3
-      .scaleLinear()
-      .domain([0, d3.max(this.state.data, (d) => d.id)])
-      .range([0, height]);
+    const colorInterpolate = d3.scaleLinear().domain(d3.extent(values)).range([0, 1]);
 
-    //Calculate the variables for the temp gradient
-    const numStops = 10;
-    const countRange = countScale.domain();
-    countRange[2] = countRange[1] - countRange[0];
-    const countPoint = [];
-    for (let i = 0; i < numStops; i++) {
-      countPoint.push((i * countRange[2]) / (numStops - 1) + countRange[0]);
-    }
+    this.setState({
+      colormap: (val) => colorScale(colorInterpolate(val)),
+    });
 
     //Create the gradient
+    const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
     svg
       .append('defs')
       .append('linearGradient')
       .attr('id', 'force-gradient')
       .attr('x1', '0%')
-      .attr('y1', '0%')
+      .attr('y1', '100%')
       .attr('x2', '0%')
-      .attr('y2', '100%')
+      .attr('y2', '0%')
       .selectAll('stop')
-      .data(d3.range(numStops))
+      .data(colours)
       .enter()
       .append('stop')
-      .attr('offset', (d, i) => countScale(countPoint[i]) / height)
-      .attr('stop-color', (d, i) => colorScale(countPoint[i]));
+      .attr('offset', (d, i) => i / (colorScale.range().length - 1))
+      .attr('stop-color', (d) => d);
 
     svg
       .append('rect')
@@ -142,7 +134,7 @@ export default class M1M3 extends Component {
       data: M1M3ActuatorPositions,
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
-      colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58)),
+      // colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58)),
       maxRadius,
     });
   }
@@ -152,15 +144,20 @@ export default class M1M3 extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    d3.select(`#circle-overlay-${this.props.id}`).call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
-    this.createColorScale();
+    d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    if (this.state.data !== prevState.data) {
+      // TODO: getActuatorsData
+      const data = this.state.data.map(
+        (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
+      );
+      this.createColorScale(data);
+    }
   }
 
   zoomed = () => {
     let xRadius = this.state.xRadius;
     let yRadius = this.state.yRadius;
     let scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
-    let id = this.props.id;
     d3.event.transform.x = Math.min(
       0,
       Math.max(d3.event.transform.x, 2 * xRadius * scale - 2 * xRadius * scale * d3.event.transform.k),
@@ -169,8 +166,8 @@ export default class M1M3 extends Component {
       0,
       Math.max(d3.event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * d3.event.transform.k),
     );
-    d3.select(`#scatter-${id}`).attr('transform', d3.event.transform);
-    d3.select(`#background-circle-${id}`).attr('transform', d3.event.transform);
+    d3.select('#scatter').attr('transform', d3.event.transform);
+    d3.select('#background-circle').attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
@@ -180,8 +177,11 @@ export default class M1M3 extends Component {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 50;
 
+    const forceActuatorsData = this.props.forceActuatorsData;
+
     const summaryState = CSCDetail.states[this.props.summaryState];
-    const detailedStateValue = m1m3DetailedStateMap[this.props.detailedState];
+    // const detailedStateValue = {name: m1m3DetailedStateMap[this.props.detailedState],
+    //   class: styles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]]};
 
     const maxForce = 1000;
     const minForce = 0;
@@ -232,7 +232,7 @@ export default class M1M3 extends Component {
         <div className={styles.plotSection}>
           <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.width} ${this.state.width}`}>
             <circle
-              id={`background-circle-${this.props.id}`}
+              id={'background-circle'}
               className={styles.circleOverlay}
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
@@ -242,7 +242,7 @@ export default class M1M3 extends Component {
               pointerEvents="all"
             />
             <circle
-              id={`circle-overlay-${this.props.id}`}
+              id={'circle-overlay'}
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
               key={'overlay'}
@@ -250,7 +250,7 @@ export default class M1M3 extends Component {
               r={this.state.maxRadius * scale * 1.15}
               pointerEvents="all"
             />
-            <g id={`scatter-${this.props.id}`} className={styles.scatter}>
+            <g id={'scatter'} className={styles.scatter}>
               {this.state.data.map((act) => {
                 return (
                   <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
