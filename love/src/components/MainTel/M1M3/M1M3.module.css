@@ -177,3 +177,15 @@
 .actuator:hover circle {
   stroke: white;
 }
+
+
+/* detailed state classes */
+.ok {
+  background: var(--status-ok-color);
+  color: var(--second-tertiary-background-color);
+}
+
+.warning {
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-2);
+}
