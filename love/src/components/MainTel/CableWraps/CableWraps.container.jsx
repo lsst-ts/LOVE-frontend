@@ -3,7 +3,11 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import CableWraps from './CableWraps';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { getCCWState } from 'redux/selectors';
+import { getCCWState, 
+  getRotatorState, 
+  getCCWFollowingError, 
+  getCCWPosition,
+  getRotatorPosition} from 'redux/selectors';
 
 export const schema = {
   description:
@@ -38,7 +42,16 @@ const CableWrapsContainer = ({
 
 const mapStateToProps = (state) => {
   const ccwState = getCCWState(state);
-  return ccwState;
+  const ccwPosition = getCCWPosition(state);
+  const rotatorState = getRotatorState(state);
+  const rotatorPosition = getRotatorPosition(state);
+  const followError = getCCWFollowingError(state);
+  return {
+    ...ccwState, 
+    ...ccwPosition,
+    ...rotatorState,
+    ...rotatorPosition, 
+    ...followError};
 };
 
 const mapDispatchToProps = (dispatch) => {

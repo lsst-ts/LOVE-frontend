@@ -63,7 +63,8 @@ class CableWraps extends Component {
   }
 
   // changeColorWithAlert() {
-    
+  //   const followError = this.props.followError;
+
   // }
 
   drawBackground(g, radio, tau, arc) {
@@ -139,6 +140,10 @@ class CableWraps extends Component {
   render() {
 
     const summaryState = CSCDetail.states[this.props.summaryState];
+    const ccwState = this.props.ccwState;
+    const ccwPosition = this.props.ccwPosition;
+    const rotatorState = this.props.rotatorState;
+    const rotatorPosition = this.props.rotatorPosition;
 
     return (
       <div className={styles.cableWrapsContainer}>
