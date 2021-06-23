@@ -318,20 +318,41 @@ export const getMountMotorsState = (state, index) => {
 
 export const getCCWState = (state) => {
   const subscriptions = [
-    'telemetry-MTMount-0-cameraCableWrap',
     'event-MTMount-0-cameraCableWrapState',
     'event-MTMount-0-summaryState',
   ];
   const ccwData = getStreamsData(state, subscriptions);
   return {
-    cameraCableWrap: ccwData['telemetry-MTMount-0-cameraCableWrap']
-      ? ccwData['telemetry-MTMount-0-cameraCableWrap']
-      : 0,
     cameraCablaWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
-      ? ccwData['event-MTMount-0-cameraCableWrapState']
+      ? ccwData['event-MTMount-0-cameraCableWrapState'].state
       : 0,
     summaryState: ccwData['event-MTMount-0-summaryState']
-      ? ccwData['event-MTMount-0-summaryState']
+      ? ccwData['event-MTMount-0-summaryState'].summaryState
+      : 0,
+  };
+};
+
+export const getCCWPosition = (state) => {
+  const subscriptions = [
+    'telemetry-MTMount-0-cameraCableWrap',
+  ];
+  const ccwData = getStreamsData(state, subscriptions);
+  return {
+    cameraCableWrap: ccwData['telemetry-MTMount-0-cameraCableWrap']
+      ? ccwData['telemetry-MTMount-0-cameraCableWrap'].actualPosition
+      : 0,
+  };
+};
+
+export const getRotatorState = (state) => {
+  const subscriptions = [
+    'event-MTRotator-0-inPosition',
+    'event-MTRotator-0-summaryState',
+  ];
+  const rotatorData = getStreamsData(state, subscriptions);
+  return {
+    rotatorSummaryState: rotatorData['event-MTRotator-0-summaryState']
+      ? rotatorData['event-MTRotator-0-summaryState'].summaryState
       : 0,
   };
 };
@@ -340,7 +361,6 @@ export const getRotatorPosition = (state) => {
   const subscriptions = [
     'telemetry-MTRotator-0-rotation',
     'event-MTRotator-0-inPosition',
-    'event-MTRotator-0-summaryState',
   ];
   const rotatorData = getStreamsData(state, subscriptions);
   return {
@@ -348,10 +368,7 @@ export const getRotatorPosition = (state) => {
       ? rotatorData['telemetry-MTRotator-0-rotation'].demandPosition
       : 0,
     inPosition: rotatorData['event-MTRotator-0-inPosition']
-      ? rotatorData['event-MTRotator-0-inPosition']
-      : 0,
-    rotatorSummaryState: rotatorData['event-MTRotator-0-summaryState']
-      ? rotatorData['event-MTRotator-0-summaryState']
+      ? rotatorData['event-MTRotator-0-inPosition'].inPosition
       : 0,
   };
 };
@@ -365,13 +382,13 @@ export const getCCWFollowingError = (state) => {
   const ccwErrorData = getStreamsData(state, subscriptions);
   return {
     ccwFollowingError: ccwErrorData['telemetry-MTRotator-0-ccwFollowingError']
-      ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError']
+      ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError'].positionError
       : 0,
     cameraCableWrapFollowing: ccwErrorData['event-MTMount-0-cameraCableWrapFollowing']
-      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing']
+      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'].enabled
       : 0,
     interlock: ccwErrorData['event-MTRotator-0-interlock']
-      ? ccwErrorData['event-MTRotator-0-interlock']
+      ? ccwErrorData['event-MTRotator-0-interlock'].detail
       : 0,
   };
 };
