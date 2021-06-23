@@ -57,3 +57,10 @@
     padding: 1em;
     margin-bottom: 1em;
   }
+
+.summaryState {
+border-radius: 1rem;
+font-weight: 700;
+text-align: center;
+width: 8em;
+}

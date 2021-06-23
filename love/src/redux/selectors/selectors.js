@@ -316,6 +316,7 @@ export const getMountMotorsState = (state, index) => {
   };
 };
 
+// CCW
 export const getCCWState = (state) => {
   const subscriptions = [
     'event-MTMount-0-cameraCableWrapState',
@@ -328,7 +329,7 @@ export const getCCWState = (state) => {
       : 0,
     summaryState: ccwData['event-MTMount-0-summaryState']
       ? ccwData['event-MTMount-0-summaryState'].summaryState
-      : 0,
+      : 3,
   };
 };
 
