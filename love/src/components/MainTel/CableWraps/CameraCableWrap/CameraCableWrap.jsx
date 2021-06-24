@@ -131,7 +131,7 @@ class CameraCableWrap extends Component {
     // this.path.transition().duration(1500).attrTween('d', this.props.arcTween(newAngle, this.arc));
     // this.innerPath.transition().duration(1500).attrTween('d', this.props.arcTween(newRotAngle, this.innerArc));
 
-    this.rot.transition().duration(1500).attrTween('d', (d) => {
+    this.rot.transition().duration(2500).attrTween('d', (d) => {
       return (t) => {
         const angle = d3.interpolate(d.endAngle, newAngle)(t);
         this.rotArc.startAngle(0.610865 + angle);
@@ -140,7 +140,7 @@ class CameraCableWrap extends Component {
       };
     });
 
-    this.rot2.transition().duration(1500).attrTween('d', (d) => {
+    this.rot2.transition().duration(2500).attrTween('d', (d) => {
       return (t) => {
         const angle = d3.interpolate(d.endAngle, newAngle)(t);
         this.rotArc2.startAngle(0.785398 + angle);
@@ -149,7 +149,7 @@ class CameraCableWrap extends Component {
       };
     });
 
-    this.ccw.transition().duration(1500).attrTween('d', (d) => {
+    this.ccw.transition().duration(2500).attrTween('d', (d) => {
       return (t) => {
         const angle = d3.interpolate(d.endAngle, newRotAngle)(t);
         this.ccwArc.startAngle(0.698132 + angle);
