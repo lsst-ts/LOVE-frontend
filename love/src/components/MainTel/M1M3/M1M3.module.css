@@ -1,7 +1,4 @@
 .mirrorContainer {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
 }
 
 .circleOverlay {
@@ -90,6 +87,11 @@
   flex-grow: 2;
   max-width: 480px;
   min-width: 300px;
+  border-radius: 50%;
+}
+
+.svgContainer .axisLabel {
+  font-size: 1.2em;
 }
 
 .actuatorDetails {

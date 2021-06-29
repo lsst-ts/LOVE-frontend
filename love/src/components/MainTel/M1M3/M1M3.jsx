@@ -168,6 +168,7 @@ export default class M1M3 extends Component {
     );
     d3.select('#scatter').attr('transform', d3.event.transform);
     d3.select('#background-circle').attr('transform', d3.event.transform);
+    d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
@@ -175,7 +176,7 @@ export default class M1M3 extends Component {
 
   render() {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
-    const margin = 50;
+    const margin = 60;
 
     const forceActuatorsData = this.props.forceActuatorsData;
 
@@ -206,7 +207,10 @@ export default class M1M3 extends Component {
         <SummaryPanel className={styles.summaryPanelControls}>
           <h2 className={styles.title}>Actuators</h2>
           <div className={styles.controls}>
-            <div style={{ width: '12em' }} className={styles.control}>
+            <div
+              style={{ width: '12em', paddingRight: '1em', borderRight: '1px solid gray' }}
+              className={styles.control}
+            >
               <span>Select type of input:</span>
               <Select options={M1M3ActuatorForces} option={null} onChange={(selection) => console.log(selection)} />
             </div>
@@ -230,9 +234,52 @@ export default class M1M3 extends Component {
         </SummaryPanel>
 
         <div className={styles.plotSection}>
+          {/* <svg className={styles.svgContainer} width={this.state.width} height={this.state.width}> */}
           <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.width} ${this.state.width}`}>
+            {/* <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.xRadius * scale * 2} ${this.state.yRadius * scale * 2}`}> */}
+            {/* <text x='0' y="10">-X</text>
+            <text x="20" y="10">+X</text>
+            <text x="10" y="20">+Y</text> */}
+            <g id="plot-axis">
+              <text
+                className={styles.axisLabel}
+                x={this.state.xRadius * scale + margin - 5}
+                y={15 * scale}
+                textAnchor="middle"
+                alignmentBaseline="middle"
+              >
+                +Y
+              </text>
+              <text
+                className={styles.axisLabel}
+                x={(this.state.xRadius * 2 + 40) * scale + margin}
+                y={this.state.yRadius * scale + margin}
+                textAnchor="middle"
+                alignmentBaseline="middle"
+              >
+                +X
+              </text>
+              <text
+                className={styles.axisLabel}
+                x={this.state.xRadius * scale + margin - 5}
+                y={(this.state.yRadius * 2 + 40) * scale + margin}
+                textAnchor="middle"
+                alignmentBaseline="middle"
+              >
+                -Y
+              </text>
+              <text
+                className={styles.axisLabel}
+                x={10}
+                y={this.state.yRadius * scale + margin}
+                textAnchor="middle"
+                alignmentBaseline="middle"
+              >
+                -X
+              </text>
+            </g>
             <circle
-              id={'background-circle'}
+              id="background-circle"
               className={styles.circleOverlay}
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
@@ -242,7 +289,7 @@ export default class M1M3 extends Component {
               pointerEvents="all"
             />
             <circle
-              id={'circle-overlay'}
+              id="circle-overlay"
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
               key={'overlay'}
@@ -250,7 +297,7 @@ export default class M1M3 extends Component {
               r={this.state.maxRadius * scale * 1.15}
               pointerEvents="all"
             />
-            <g id={'scatter'} className={styles.scatter}>
+            <g id="scatter" className={styles.scatter}>
               {this.state.data.map((act) => {
                 return (
                   <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
