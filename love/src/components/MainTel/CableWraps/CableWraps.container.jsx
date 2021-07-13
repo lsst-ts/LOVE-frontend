@@ -3,15 +3,16 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import CableWraps from './CableWraps';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import { getCCWState, 
-  getRotatorState, 
-  getCCWFollowingError, 
+import {
+  getCCWState,
+  getRotatorState,
+  getCCWFollowingError,
   getCCWPosition,
-  getRotatorPosition} from 'redux/selectors';
+  getRotatorPosition,
+} from 'redux/selectors';
 
 export const schema = {
-  description:
-    'View of both MT azimuth and Camera cable wraps',
+  description: 'View of both MT azimuth and Camera cable wraps',
   defaultSize: [61, 32],
   props: {
     title: {
@@ -23,21 +24,11 @@ export const schema = {
   },
 };
 
-const CableWrapsContainer = ({
-  subscribeToStreams,
-  unsubscribeToStreams,
-  ...props
-}) => {
+const CableWrapsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return (
-    <CableWraps
-      subscribeToStreams={subscribeToStreams}
-      unsubscribeToStreams={unsubscribeToStreams}
-      {...props}
-    />
-  );
+  return <CableWraps subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />;
 };
 
 const mapStateToProps = (state) => {
@@ -47,11 +38,12 @@ const mapStateToProps = (state) => {
   const rotatorPosition = getRotatorPosition(state);
   const followError = getCCWFollowingError(state);
   return {
-    ...ccwState, 
+    ...ccwState,
     ...ccwPosition,
     ...rotatorState,
-    ...rotatorPosition, 
-    ...followError};
+    ...rotatorPosition,
+    ...followError,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -63,7 +55,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTMount-0-cameraCableWrapState',
     'event-MTMount-0-cameraCableWrapTarget',
     'event-MTMount-0-summaryState',
-    'event-MTRotator-0-logevent_configuration',
+    'event-MTRotator-0-configuration',
     'event-MTRotator-0-inPosition',
     'event-MTRotator-0-interlock',
     'event-MTRotator-0-summaryState',
