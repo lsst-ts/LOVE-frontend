@@ -318,38 +318,28 @@ export const getMountMotorsState = (state, index) => {
 
 // CCW
 export const getCCWState = (state) => {
-  const subscriptions = [
-    'event-MTMount-0-cameraCableWrapState',
-    'event-MTMount-0-summaryState',
-  ];
+  const subscriptions = ['event-MTMount-0-cameraCableWrapState', 'event-MTMount-0-summaryState'];
   const ccwData = getStreamsData(state, subscriptions);
   return {
     cameraCablaWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
       ? ccwData['event-MTMount-0-cameraCableWrapState'].state
       : 0,
-    summaryState: ccwData['event-MTMount-0-summaryState']
-      ? ccwData['event-MTMount-0-summaryState'].summaryState
-      : 3,
+    summaryState: ccwData['event-MTMount-0-summaryState'] ? ccwData['event-MTMount-0-summaryState'].summaryState : 0,
   };
 };
 
 export const getCCWPosition = (state) => {
-  const subscriptions = [
-    'telemetry-MTMount-0-cameraCableWrap',
-  ];
+  const subscriptions = ['telemetry-MTMount-0-cameraCableWrap'];
   const ccwData = getStreamsData(state, subscriptions);
   return {
-    cameraCableWrap: ccwData['telemetry-MTMount-0-cameraCableWrap']
+    ccwPosition: ccwData['telemetry-MTMount-0-cameraCableWrap']
       ? ccwData['telemetry-MTMount-0-cameraCableWrap'].actualPosition
       : 0,
   };
 };
 
 export const getRotatorState = (state) => {
-  const subscriptions = [
-    'event-MTRotator-0-inPosition',
-    'event-MTRotator-0-summaryState',
-  ];
+  const subscriptions = ['event-MTRotator-0-summaryState'];
   const rotatorData = getStreamsData(state, subscriptions);
   return {
     rotatorSummaryState: rotatorData['event-MTRotator-0-summaryState']
@@ -359,14 +349,11 @@ export const getRotatorState = (state) => {
 };
 
 export const getRotatorPosition = (state) => {
-  const subscriptions = [
-    'telemetry-MTRotator-0-rotation',
-    'event-MTRotator-0-inPosition',
-  ];
+  const subscriptions = ['telemetry-MTRotator-0-rotation', 'event-MTRotator-0-inPosition'];
   const rotatorData = getStreamsData(state, subscriptions);
   return {
-    rotation: rotatorData['telemetry-MTRotator-0-rotation'] 
-      ? rotatorData['telemetry-MTRotator-0-rotation'].demandPosition
+    rotatorPosition: rotatorData['telemetry-MTRotator-0-rotation']
+      ? rotatorData['telemetry-MTRotator-0-rotation'].actualPosition
       : 0,
     inPosition: rotatorData['event-MTRotator-0-inPosition']
       ? rotatorData['event-MTRotator-0-inPosition'].inPosition
@@ -388,9 +375,7 @@ export const getCCWFollowingError = (state) => {
     cameraCableWrapFollowing: ccwErrorData['event-MTMount-0-cameraCableWrapFollowing']
       ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'].enabled
       : 0,
-    interlock: ccwErrorData['event-MTRotator-0-interlock']
-      ? ccwErrorData['event-MTRotator-0-interlock'].detail
-      : 0,
+    interlock: ccwErrorData['event-MTRotator-0-interlock'] ? ccwErrorData['event-MTRotator-0-interlock'].detail : 0,
   };
 };
 
