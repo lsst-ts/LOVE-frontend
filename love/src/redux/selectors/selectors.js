@@ -345,28 +345,16 @@ export const getLATISSState = (state) => {
   const raftsDetailedState = latissData['event-ATCamera-0-raftsDetailedState'];
 
   return {
-    reportedFilterPosition: reportedFilterPosition
-      ? reportedFilterPosition[reportedFilterPosition.length - 1].position.value
-      : 0,
-    reportedFilterName: reportedFilterPosition
-      ? reportedFilterPosition[reportedFilterPosition.length - 1].name.value
-      : '',
-    reportedDisperserPosition: reportedDisperserPosition
-      ? reportedDisperserPosition[reportedDisperserPosition.length - 1].position.value
-      : 0,
-    reportedDisperserName: reportedDisperserPosition
-      ? reportedDisperserPosition[reportedDisperserPosition.length - 1].name.value
-      : '',
-    reportedLinearStagePosition: reportedLinearStagePosition
-      ? reportedLinearStagePosition[reportedLinearStagePosition.length - 1].position.value
-      : 0,
-    lsState: lsState ? lsState[lsState.length - 1].state.value : 0,
-    fwState: fwState ? fwState[fwState.length - 1].state.value : 0,
-    gwState: gwState ? gwState[gwState.length - 1].state.value : 0,
-    shutterDetailedState: shutterDetailedState
-      ? shutterDetailedState[shutterDetailedState.length - 1].substate.value
-      : 0,
-    raftsDetailedState: raftsDetailedState ? raftsDetailedState[raftsDetailedState.length - 1].substate.value : 0,
+    reportedFilterPosition: reportedFilterPosition ? reportedFilterPosition[0].slot.value : 0,
+    reportedFilterName: reportedFilterPosition ? reportedFilterPosition[0].name.value : '',
+    reportedDisperserPosition: reportedDisperserPosition ? reportedDisperserPosition[0].slot.value : 0,
+    reportedDisperserName: reportedDisperserPosition ? reportedDisperserPosition[0].name.value : '',
+    reportedLinearStagePosition: reportedLinearStagePosition ? reportedLinearStagePosition[0].position.value : 0,
+    lsState: lsState ? lsState[0].state.value : 0,
+    fwState: fwState ? fwState[0].state.value : 0,
+    gwState: gwState ? gwState[0].state.value : 0,
+    shutterDetailedState: shutterDetailedState ? shutterDetailedState[0].substate.value : 0,
+    raftsDetailedState: raftsDetailedState ? raftsDetailedState[0].substate.value : 0,
   };
 };
 
