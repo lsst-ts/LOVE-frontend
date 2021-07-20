@@ -220,8 +220,16 @@ export default class LATISS extends Component {
         <div className={styles.statusTextWrapper}>
           <span>CCD STATE</span> <StatusText status={stateToStyleLATISS[ccdState]}>{ccdState}</StatusText>
         </div>
-        {this.wheelSelector('FILTER POSITION', this.props.reportedFilterPosition, this.props.reportedFilterName)}
-        {this.wheelSelector('GRATING POSITION', this.props.reportedDisperserPosition, this.props.reportedDisperserName)}
+        {this.wheelSelector(
+          'FILTER POSITION',
+          parseInt(this.props.reportedFilterPosition, 10) + 1,
+          this.props.reportedFilterName,
+        )}
+        {this.wheelSelector(
+          'GRATING POSITION',
+          parseInt(this.props.reportedDisperserPosition, 10) + 1,
+          this.props.reportedDisperserName,
+        )}
         <div />
         <div />
         {/** SVGS */}
