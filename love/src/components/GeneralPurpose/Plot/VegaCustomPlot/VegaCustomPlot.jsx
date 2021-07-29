@@ -49,8 +49,8 @@ class VegaCustomPlot extends Component {
           type: 'fit',
           contains: 'padding',
         },
-        width: state.containerWidth,
-        height: state.containerHeight,
+        width: this.props.width ?? state.containerWidth,
+        height: this.props.height ?? state.containerHeight,
       },
       data: { ...this.props.schema.data },
     }));
