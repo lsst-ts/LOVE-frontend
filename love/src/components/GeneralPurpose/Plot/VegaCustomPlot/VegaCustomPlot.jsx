@@ -39,27 +39,27 @@ class VegaCustomPlot extends Component {
     };
   }
 
-  updateSchema = (customSchema) => {
-    this.setState({
+  updateSchema = () => {
+    this.setState((state) => ({
       spec: {
         mark: this.props.schema.mark,
         encoding: this.props.schema.encoding,
         data: { name: 'values' },
-        width: this.props.schema.width,
-        height: this.props.schema.height,
-        ...customSchema,
+        autosize: {
+          type: 'fit',
+          contains: 'padding',
+        },
+        width: state.containerWidth,
+        height: state.containerHeight,
       },
       data: { ...this.props.schema.data },
-    });
+    }));
   };
 
   setResizeObserver = () => {
     this.resizeObserver = new ResizeObserver((entries) => {
       const { width, height } = entries[0].contentRect;
-      this.setState({
-        containerHeight: height,
-        containerWidth: width,
-      });
+      this.setState({ containerWidth: width, containerHeight: height }, () => this.updateSchema());
     });
 
     if (this.props.containerNode.current) {
@@ -96,6 +96,7 @@ class VegaCustomPlot extends Component {
     const { spec, data } = this.state;
     return (
       <VegaLite
+        style={{ display: 'flex' }}
         renderer="svg"
         spec={spec}
         data={data}

@@ -60,7 +60,6 @@ export const schema = {
 class PlotContainer extends React.Component {
   constructor(props) {
     super(props);
-    // this.state = {};
     this.containerRef = React.createRef();
   }
 
@@ -70,7 +69,7 @@ class PlotContainer extends React.Component {
     const plotProps = { schema, width, height };
     if (!width && !height && !containerNode) {
       return (
-        <div ref={this.containerRef}>
+        <div ref={this.containerRef} style={{ height: '100%', width: '100%', overflow: 'auto' }}>
           <VegaCustomPlot {...plotProps} containerNode={this.containerRef} />
         </div>
       );
