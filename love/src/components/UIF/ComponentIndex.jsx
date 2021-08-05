@@ -258,6 +258,10 @@ export const utilitiesIndex = {
     component: require('../Time/Clock/Clock.container').default,
     schema: require('../Time/Clock/Clock.container').schema,
   },
+  VegaCustomPlot: {
+    component: require('../GeneralPurpose/Plot/VegaCustomPlot/VegaCustomPlot.container').default,
+    schema: require('../GeneralPurpose/Plot/VegaCustomPlot/VegaCustomPlot.container').schema,
+  },
   VegaTimeSeriesPlot: {
     component: require('../GeneralPurpose/Plot/Plot.container').default,
     schema: require('../GeneralPurpose/Plot/Plot.container').schema,
