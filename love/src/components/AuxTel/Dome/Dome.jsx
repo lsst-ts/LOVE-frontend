@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import styles from './Dome.module.css';
+import ManagerInterface, { parseCommanderData } from 'Utils';
 // import SkymapGrid from '../Skymap/SkymapGrid';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import DomeTopView from './DomeTopView';
 import DomePointing from './DomePointing';
 import DomeShutter from './DomeShutter';
 import MountTopView from './MountTopView';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+
 import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './DomeSummaryTable/DomeSummaryTable';
-import TimeSeriesControls from 'components/TimeSeries/TimeSeriesControls/TimeSeriesControls';
-import ManagerInterface, { parseCommanderData } from 'Utils';
+
+import styles from './Dome.module.css';
 
 export default class Dome extends Component {
   static propTypes = {
