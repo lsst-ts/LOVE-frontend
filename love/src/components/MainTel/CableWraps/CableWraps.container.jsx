@@ -53,12 +53,7 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTRotator-0-rotation',
     'event-MTMount-0-cameraCableWrapFollowing',
     'event-MTMount-0-cameraCableWrapState',
-    'event-MTMount-0-cameraCableWrapTarget',
     'event-MTMount-0-summaryState',
-    'event-MTRotator-0-configuration',
-    'event-MTRotator-0-inPosition',
-    'event-MTRotator-0-interlock',
-    'event-MTRotator-0-summaryState',
   ];
   return {
     subscriptions,

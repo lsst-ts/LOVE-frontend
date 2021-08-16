@@ -321,10 +321,10 @@ export const getCCWState = (state) => {
   const subscriptions = ['event-MTMount-0-cameraCableWrapState', 'event-MTMount-0-summaryState'];
   const ccwData = getStreamsData(state, subscriptions);
   return {
-    cameraCablaWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
-      ? ccwData['event-MTMount-0-cameraCableWrapState'].state
+    cameraCableWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
+      ? ccwData['event-MTMount-0-cameraCableWrapState'][0].state
       : 0,
-    summaryState: ccwData['event-MTMount-0-summaryState'] ? ccwData['event-MTMount-0-summaryState'].summaryState : 0,
+    summaryState: ccwData['event-MTMount-0-summaryState'] ? ccwData['event-MTMount-0-summaryState'][0].summaryState : 0,
   };
 };
 
@@ -343,7 +343,7 @@ export const getRotatorState = (state) => {
   const rotatorData = getStreamsData(state, subscriptions);
   return {
     rotatorSummaryState: rotatorData['event-MTRotator-0-summaryState']
-      ? rotatorData['event-MTRotator-0-summaryState'].summaryState
+      ? rotatorData['event-MTRotator-0-summaryState'][0].summaryState
       : 0,
   };
 };
@@ -356,7 +356,7 @@ export const getRotatorPosition = (state) => {
       ? rotatorData['telemetry-MTRotator-0-rotation'].actualPosition
       : 0,
     inPosition: rotatorData['event-MTRotator-0-inPosition']
-      ? rotatorData['event-MTRotator-0-inPosition'].inPosition
+      ? rotatorData['event-MTRotator-0-inPosition'][0].inPosition
       : 0,
   };
 };
@@ -373,9 +373,9 @@ export const getCCWFollowingError = (state) => {
       ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError'].positionError
       : 0,
     cameraCableWrapFollowing: ccwErrorData['event-MTMount-0-cameraCableWrapFollowing']
-      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'].enabled
+      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'][0].enabled
       : 0,
-    interlock: ccwErrorData['event-MTRotator-0-interlock'] ? ccwErrorData['event-MTRotator-0-interlock'].detail : 0,
+    interlock: ccwErrorData['event-MTRotator-0-interlock'] ? ccwErrorData['event-MTRotator-0-interlock'][0].detail : 0,
   };
 };
 
