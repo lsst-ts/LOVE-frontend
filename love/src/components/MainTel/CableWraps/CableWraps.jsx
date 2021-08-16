@@ -17,6 +17,7 @@ const COLOR_ARC_INITIAL = '#35667E';
 const COLOR_CABLE_INITIAL = '#29414B';
 const COLOR_ARC_ERROR = '#202424';
 const COLOR_CABLE_ERROR = '#DC5707';
+const MAX_CCW_FOLLOWING_ERROR = 2.0;
 
 class CableWraps extends Component {
   constructor(props) {
@@ -33,7 +34,7 @@ class CableWraps extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.ccwFollowingError !== this.props.ccwFollowingError) {
-      if (this.props.ccwFollowingError > 2) {
+      if (this.props.ccwFollowingError > MAX_CCW_FOLLOWING_ERROR) {
         this.setState({ colorArc: COLOR_ARC_ERROR, colorCable: COLOR_CABLE_ERROR });
       } else {
         this.setState({ colorArc: COLOR_ARC_INITIAL, colorCable: COLOR_CABLE_INITIAL });
@@ -104,7 +105,7 @@ class CableWraps extends Component {
   }
 
   render() {
-    const summaryState = CSCDetail.states[this.props.summaryState];
+    const cameraCableWrapState = CSCDetail.states[this.props.cameraCableWrapState];
     const ccwState = this.props.ccwState;
     const ccwPosition = this.props.ccwPosition;
     const rotatorState = this.props.rotatorState;
@@ -117,7 +118,9 @@ class CableWraps extends Component {
             {/*Camera*/}
             <Title>Camera Cable Wrap</Title>
             <Value>
-              <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
+              <span className={[cameraCableWrapState.class, styles.summaryState].join(' ')}>
+                {cameraCableWrapState.name}
+              </span>
             </Value>
 
             <Label>Rotator Position</Label>
