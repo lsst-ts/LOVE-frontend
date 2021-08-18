@@ -1,8 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import CableWraps from './CableWraps';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import {
   getCCWState,
   getRotatorState,
@@ -10,6 +7,9 @@ import {
   getCCWPosition,
   getRotatorPosition,
 } from 'redux/selectors';
+import { addGroup, removeGroup } from '../../../redux/actions/ws';
+import CableWraps from './CableWraps';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
   description: 'View of both MT azimuth and Camera cable wraps',

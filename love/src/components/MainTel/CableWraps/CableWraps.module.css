@@ -59,8 +59,9 @@
   }
 
 .summaryState {
-border-radius: 1rem;
-font-weight: 700;
-text-align: center;
-width: 8em;
+    border-radius: 1rem;
+    font-weight: 700;
+    text-align: center;
+    display: inline-block;
+    width: 8em;
 }

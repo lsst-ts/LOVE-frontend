@@ -322,9 +322,11 @@ export const getCCWState = (state) => {
   const ccwData = getStreamsData(state, subscriptions);
   return {
     cameraCableWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
-      ? ccwData['event-MTMount-0-cameraCableWrapState'][0].state
+      ? ccwData['event-MTMount-0-cameraCableWrapState'][0].state.value
       : 0,
-    summaryState: ccwData['event-MTMount-0-summaryState'] ? ccwData['event-MTMount-0-summaryState'][0].summaryState : 0,
+    summaryState: ccwData['event-MTMount-0-summaryState']
+      ? ccwData['event-MTMount-0-summaryState'][0].summaryState.value
+      : 0,
   };
 };
 
@@ -333,7 +335,7 @@ export const getCCWPosition = (state) => {
   const ccwData = getStreamsData(state, subscriptions);
   return {
     ccwPosition: ccwData['telemetry-MTMount-0-cameraCableWrap']
-      ? ccwData['telemetry-MTMount-0-cameraCableWrap'].actualPosition
+      ? ccwData['telemetry-MTMount-0-cameraCableWrap'].actualPosition.value
       : 0,
   };
 };
@@ -343,7 +345,7 @@ export const getRotatorState = (state) => {
   const rotatorData = getStreamsData(state, subscriptions);
   return {
     rotatorSummaryState: rotatorData['event-MTRotator-0-summaryState']
-      ? rotatorData['event-MTRotator-0-summaryState'][0].summaryState
+      ? rotatorData['event-MTRotator-0-summaryState'][0].summaryState.value
       : 0,
   };
 };
@@ -353,10 +355,10 @@ export const getRotatorPosition = (state) => {
   const rotatorData = getStreamsData(state, subscriptions);
   return {
     rotatorPosition: rotatorData['telemetry-MTRotator-0-rotation']
-      ? rotatorData['telemetry-MTRotator-0-rotation'].actualPosition
+      ? rotatorData['telemetry-MTRotator-0-rotation'].actualPosition.value
       : 0,
     inPosition: rotatorData['event-MTRotator-0-inPosition']
-      ? rotatorData['event-MTRotator-0-inPosition'][0].inPosition
+      ? rotatorData['event-MTRotator-0-inPosition'][0].inPosition.value
       : 0,
   };
 };
@@ -370,12 +372,14 @@ export const getCCWFollowingError = (state) => {
   const ccwErrorData = getStreamsData(state, subscriptions);
   return {
     ccwFollowingError: ccwErrorData['telemetry-MTRotator-0-ccwFollowingError']
-      ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError'].positionError
+      ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError'].positionError.value
       : 0,
     cameraCableWrapFollowing: ccwErrorData['event-MTMount-0-cameraCableWrapFollowing']
-      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'][0].enabled
+      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'][0].enabled.value
       : 0,
-    interlock: ccwErrorData['event-MTRotator-0-interlock'] ? ccwErrorData['event-MTRotator-0-interlock'][0].detail : 0,
+    interlock: ccwErrorData['event-MTRotator-0-interlock']
+      ? ccwErrorData['event-MTRotator-0-interlock'][0].detail.value
+      : 0,
   };
 };
 
