@@ -722,3 +722,7 @@ export function radians(degrees) {
 export function degrees(radians) {
   return (radians * 180) / Math.PI;
 }
+
+export function fixedFloat(x, points = 3) {
+  return Number.parseFloat(x).toFixed(points);
+}

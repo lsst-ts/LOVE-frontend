@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
+import { fixedFloat } from 'Utils';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import styles from './CableWraps.module.css';
 import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
@@ -9,12 +11,11 @@ import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 
-const MAX_CCW_FOLLOWING_ERROR = 4.0;
-
 class CableWraps extends Component {
   static propTypes = {
     ccwPosition: PropTypes.number,
     rotatorPosition: PropTypes.number,
+    mountSummaryState: PropTypes.number,
     cameraCableWrapState: PropTypes.number,
     ccwFollowingError: PropTypes.number,
     subscribeToStreams: PropTypes.func,
@@ -44,16 +45,6 @@ class CableWraps extends Component {
         this.setState({ ccwFollowingErrorState: false });
       }
     }
-    // For development purposes: simulators doesn't have ccwFollowingError
-    // if (prevProps.ccwPosition !== this.props.ccwPosition || prevProps.rotatorPosition !== this.props.rotatorPosition) {
-    //   console.log(Math.abs(this.props.ccwPosition - this.props.rotatorPosition));
-    //   console.log(Math.abs(this.props.ccwPosition - this.props.rotatorPosition) > MAX_CCW_FOLLOWING_ERROR);
-    //   if (Math.abs(this.props.ccwPosition - this.props.rotatorPosition) > MAX_CCW_FOLLOWING_ERROR) {
-    //     this.setState({ ccwFollowingErrorState: true });
-    //   } else {
-    //     this.setState({ ccwFollowingErrorState: false });
-    //   }
-    // }
   }
 
   static drawLimits(g, radio, start, end) {
@@ -105,14 +96,30 @@ class CableWraps extends Component {
 
   render() {
     const { ccwFollowingErrorState } = this.state;
+    const rotatorSummaryState = CSCDetail.states[this.props.rotatorSummaryState];
+    const mountSummaryState = CSCDetail.states[this.props.mountSummaryState];
     const cameraCableWrapState = CSCDetail.states[this.props.cameraCableWrapState];
-    const ccwPosition = this.props.ccwPosition ?? 0;
-    const rotatorPosition = this.props.rotatorPosition ?? 0;
+    const rotatorPosition = fixedFloat(this.props.rotatorPosition ?? 0);
+    const ccwPosition = fixedFloat(this.props.ccwPosition ?? 0);
 
     return (
       <div className={styles.cableWrapsContainer}>
         <div>
           <SummaryPanel className={styles.summaryPanelStates}>
+            {/* <Title>MTMount</Title>
+            <Value>
+              <span className={[mountSummaryState.class, styles.summaryState].join(' ')}>
+                {mountSummaryState.name}
+              </span>
+            </Value>
+
+            <Title>MTRotator</Title>
+            <Value>
+              <span className={[rotatorSummaryState.class, styles.summaryState].join(' ')}>
+                {rotatorSummaryState.name}
+              </span>
+            </Value> */}
+
             <Title>Camera Cable Wrap</Title>
             <Value>
               <span className={[cameraCableWrapState.class, styles.summaryState].join(' ')}>

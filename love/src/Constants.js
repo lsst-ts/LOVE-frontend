@@ -1,3 +1,5 @@
+export const MAX_CCW_FOLLOWING_ERROR = 2.0;
+
 export const cameraStates = {
   raftsDetailedState: {
     0: 'NEEDS_CLEAR',
