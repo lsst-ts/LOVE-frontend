@@ -3,8 +3,8 @@ import * as d3 from 'd3';
 import ReactDOM from 'react-dom';
 import { radians, degrees } from 'Utils';
 
-const MAX_CCW_FOLLOWING_ERROR = 4.0;
-const ARC_TRANSITION_DURATION = 200;
+const MAX_CCW_FOLLOWING_ERROR = 2.0;
+const ARC_TRANSITION_DURATION = 1000;
 const COLOR_CABLE_INITIAL = '#29414B';
 const COLOR_CABLE_ERROR = '#DC5707';
 const COLOR_ARC_INITIAL = '#35667E';
