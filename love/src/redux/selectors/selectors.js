@@ -324,7 +324,7 @@ export const getCCWState = (state) => {
     cameraCableWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
       ? ccwData['event-MTMount-0-cameraCableWrapState'][0].state.value
       : 0,
-    summaryState: ccwData['event-MTMount-0-summaryState']
+    mountSummaryState: ccwData['event-MTMount-0-summaryState']
       ? ccwData['event-MTMount-0-summaryState'][0].summaryState.value
       : 0,
   };

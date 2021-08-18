@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import ReactDOM from 'react-dom';
+import debounce from 'lodash.debounce';
 import { radians, degrees } from 'Utils';
+import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
 
-const MAX_CCW_FOLLOWING_ERROR = 2.0;
-const ARC_TRANSITION_DURATION = 1000;
+const ARC_TRANSITION_DURATION = 200;
 const COLOR_CABLE_INITIAL = '#29414B';
 const COLOR_CABLE_ERROR = '#DC5707';
 const COLOR_ARC_INITIAL = '#35667E';
@@ -154,10 +155,11 @@ class CameraCableWrap extends Component {
         this.ccw
           .style('fill', ccwFollowingErrorState ? COLOR_CABLE_ERROR : COLOR_CABLE_INITIAL)
           .datum({ endAngle: newCablePosition });
+        this.background.style('fill', ccwFollowingErrorState ? COLOR_ARC_ERROR : COLOR_ARC_INITIAL);
       });
-
-    this.background.style('fill', ccwFollowingErrorState ? COLOR_ARC_ERROR : COLOR_ARC_INITIAL);
   }
+
+  debouncedUpdateCameraCableWrap = debounce(() => this.updateCameraCableWrap(), ARC_TRANSITION_DURATION);
 
   componentDidMount() {
     const dom = ReactDOM.findDOMNode(this);
@@ -170,7 +172,7 @@ class CameraCableWrap extends Component {
       prevProps.rotator !== this.props.rotator ||
       prevProps.ccwFollowingErrorState !== this.props.ccwFollowingErrorState
     ) {
-      this.updateCameraCableWrap();
+      this.debouncedUpdateCameraCableWrap();
     }
   }
 
