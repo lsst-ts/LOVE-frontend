@@ -1,102 +1,101 @@
 import React, { Component } from 'react';
-import styles from './CableWraps.module.css';
-import AZCableWrap from './AZCableWrap/AZCableWrap';
-import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import PropTypes from 'prop-types';
+import * as d3 from 'd3';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import { degrees } from 'Utils';
-import Row from '../../GeneralPurpose/SummaryPanel/Row';
+import styles from './CableWraps.module.css';
+import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
+import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
-import * as d3 from 'd3';
-import { style } from 'd3';
 
-const COLOR_ARC_INITIAL = '#35667E';
-const COLOR_CABLE_INITIAL = '#29414B';
-const COLOR_ARC_ERROR = '#202424';
-const COLOR_CABLE_ERROR = '#DC5707';
-const MAX_CCW_FOLLOWING_ERROR = 2.0;
+const MAX_CCW_FOLLOWING_ERROR = 4.0;
 
 class CableWraps extends Component {
+  static propTypes = {
+    ccwPosition: PropTypes.number,
+    rotatorPosition: PropTypes.number,
+    cameraCableWrapState: PropTypes.number,
+    ccwFollowingError: PropTypes.number,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      colorArc: COLOR_ARC_INITIAL,
-      colorCable: COLOR_CABLE_INITIAL,
+      ccwFollowingErrorState: false,
     };
+  }
+
+  componentDidMount() {
+    this.props.subscribeToStreams();
   }
 
   componentWillUnmount() {
     this.props.unsubscribeToStreams();
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     if (prevProps.ccwFollowingError !== this.props.ccwFollowingError) {
       if (this.props.ccwFollowingError > MAX_CCW_FOLLOWING_ERROR) {
-        this.setState({ colorArc: COLOR_ARC_ERROR, colorCable: COLOR_CABLE_ERROR });
+        this.setState({ ccwFollowingErrorState: true });
       } else {
-        this.setState({ colorArc: COLOR_ARC_INITIAL, colorCable: COLOR_CABLE_INITIAL });
+        this.setState({ ccwFollowingErrorState: false });
       }
     }
+    // For development purposes: simulators doesn't have ccwFollowingError
+    // if (prevProps.ccwPosition !== this.props.ccwPosition || prevProps.rotatorPosition !== this.props.rotatorPosition) {
+    //   console.log(Math.abs(this.props.ccwPosition - this.props.rotatorPosition));
+    //   console.log(Math.abs(this.props.ccwPosition - this.props.rotatorPosition) > MAX_CCW_FOLLOWING_ERROR);
+    //   if (Math.abs(this.props.ccwPosition - this.props.rotatorPosition) > MAX_CCW_FOLLOWING_ERROR) {
+    //     this.setState({ ccwFollowingErrorState: true });
+    //   } else {
+    //     this.setState({ ccwFollowingErrorState: false });
+    //   }
+    // }
   }
 
-  drawBackground(g, radio, tau, arc) {
-    const colorArc = this.state.colorArc;
-    g.append('semi-circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', radio - 5)
-      .style('fill', colorArc);
-
-    g.append('path').datum({ endAngle: tau }).style('fill', colorArc).attr('d', arc);
-  }
-
-  drawLimits(g, radio, start, end) {
+  static drawLimits(g, radio, start, end) {
     g.append('rect')
-      .attr('x', 0)
+      .attr('x', -1)
       .attr('y', -radio - 10)
-      .attr('width', 5)
+      .attr('width', 2)
       .attr('height', 30)
-      .style('fill', '#ffffff');
+      .style('fill', '#fff');
 
-    g.append('text')
-      .attr('x', 10)
-      .attr('y', -145)
-      .text(0 + '°')
-      .style('fill', '#ffffff');
+    g.append('text').attr('x', 2).attr('y', -145).text('0°').style('fill', '#fff');
 
     g.append('rect')
       .attr('x', -radio - 10)
       .attr('y', 0)
       .attr('width', 30)
       .attr('height', 2)
-      .style('fill', '#ffffff');
+      .style('fill', '#fff');
 
     g.append('text')
       .attr('x', -radio - 50)
       .attr('y', 5)
-      .text(start + '°')
-      .style('fill', '#ffffff');
+      .text(`${start}°`)
+      .style('fill', '#fff');
 
     g.append('rect')
       .attr('x', radio - 20)
       .attr('y', 0)
       .attr('width', 30)
       .attr('height', 2)
-      .style('fill', '#ffffff');
+      .style('fill', '#fff');
 
     g.append('text')
       .attr('x', radio + 15)
       .attr('y', 5)
-      .text(end + '°')
-      .style('fill', '#ffffff');
+      .text(`${end}°`)
+      .style('fill', '#fff');
   }
 
-  arcTween(newAngle, arc) {
+  static arcTween(newAngle, arc) {
     return function (d) {
-      var interpolate = d3.interpolate(d.endAngle, newAngle);
+      const interpolate = d3.interpolate(d.endAngle, newAngle);
       return function (t) {
         d.endAngle = interpolate(t);
         return arc(d);
@@ -105,17 +104,15 @@ class CableWraps extends Component {
   }
 
   render() {
+    const { ccwFollowingErrorState } = this.state;
     const cameraCableWrapState = CSCDetail.states[this.props.cameraCableWrapState];
-    const ccwState = this.props.ccwState;
-    const ccwPosition = this.props.ccwPosition;
-    const rotatorState = this.props.rotatorState;
-    const rotatorPosition = this.props.rotatorPosition;
+    const ccwPosition = this.props.ccwPosition ?? 0;
+    const rotatorPosition = this.props.rotatorPosition ?? 0;
 
     return (
       <div className={styles.cableWrapsContainer}>
         <div>
           <SummaryPanel className={styles.summaryPanelStates}>
-            {/*Camera*/}
             <Title>Camera Cable Wrap</Title>
             <Value>
               <span className={[cameraCableWrapState.class, styles.summaryState].join(' ')}>
@@ -124,22 +121,22 @@ class CableWraps extends Component {
             </Value>
 
             <Label>Rotator Position</Label>
-            <Value>{rotatorPosition + '°'}</Value>
+            <Value>{`${rotatorPosition}°`}</Value>
 
             <Label>Cable Wrap Position</Label>
-            <Value>{ccwPosition + '°'}</Value>
+            <Value>{`${ccwPosition}°`}</Value>
           </SummaryPanel>
         </div>
         <div className={styles.divCameraWrap}>
           <CameraCableWrap
             height={315}
             width={400}
-            drawBackground={(g, r, t, a) => this.drawBackground(g, r, t, a)}
-            drawLimits={this.drawLimits}
-            arcTween={this.arcTween}
-            cable_wrap={ccwPosition ? ccwPosition : null}
-            rotator={rotatorPosition ? rotatorPosition : null}
-            colorCable={this.state.colorCable}
+            drawBackground={(g, t, a) => this.drawBackground(g, t, a)}
+            drawLimits={CableWraps.drawLimits}
+            arcTween={CableWraps.arcTween}
+            cableWrap={ccwPosition}
+            rotator={rotatorPosition}
+            ccwFollowingErrorState={ccwFollowingErrorState}
           />
         </div>
       </div>
