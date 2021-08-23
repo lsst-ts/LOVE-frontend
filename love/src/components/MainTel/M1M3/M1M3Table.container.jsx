@@ -1,7 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getM1M3State } from 'redux/selectors';
+import {
+  getM1M3State,
+  getM1M3HardpointActuatorData,
+  getM1M3ActuatorsData,
+  getM1M3IMSData,
+  getM1M3AppliedForces,
+} from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3Table from './M1M3Table';
 
@@ -27,7 +33,17 @@ const M1M3TableContainer = ({ ...props }) => {
 
 const mapStateToProps = (state) => {
   const m1m3State = getM1M3State(state);
-  return m1m3State;
+  const m1m3HardpointActuatorData = getM1M3HardpointActuatorData(state);
+  const m1m3ActuatorsData = getM1M3ActuatorsData(state);
+  const m1m3IMSData = getM1M3IMSData(state);
+  const m1m3AppliedForces = getM1M3AppliedForces(state);
+  return {
+    ...m1m3State,
+    ...m1m3HardpointActuatorData,
+    ...m1m3ActuatorsData,
+    ...m1m3IMSData,
+    ...m1m3AppliedForces,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -37,6 +53,7 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM1M3-0-imsData',
     'event-MTM1M3-0-summaryState',
     'event-MTM1M3-0-detailedState',
+    'event-MTM1M3-0-appliedForces',
   ];
   return {
     subscriptions,
