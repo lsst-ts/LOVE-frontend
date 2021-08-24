@@ -216,15 +216,9 @@ export const m1m3DetailedStateMap = {
   0: 'UNKNOWN',
 };
 
-export const m1m3BumpTestMap = {
-  1: 'NOT TESTED',
-  2: 'TESTING POSITIVE',
-  3: 'TESTING POSITIVE WAIT',
-  4: 'TESTING NEGATIVE',
-  5: 'TESTING NEGATIVE WAIT',
-  6: 'PASSED',
-  7: 'FAILED',
-  0: 'UNKNOWN',
+export const m1mActuatorILCStateMap = {
+  1: 'ON',
+  0: 'OFF',
 };
 
 export const m1m3HardpointActuatorMotionStateMap = {
@@ -250,6 +244,11 @@ export const m1m3DetailedStateToStyle = {
   'LOWERING ENGINEERING STATE': 'running',
   'LOWERING FAULT STATE': 'running',
   'PROFILE HARDPOINT CORRECTION STATE': 'ok',
+};
+
+export const m1m3ILCStateToStyle = {
+  ON: 'ok',
+  OFF: 'warning',
 };
 
 // Dome and mount view
@@ -508,32 +507,32 @@ export const ATCSCommands = {
   ...TCSCommands,
 };
 
-export const M1M3ActuatorForces = [
-  'appliedAberrationForces',
-  'appliedAccelerationForces',
-  'appliedActiveOpticForces',
-  'appliedAzimuthForces',
-  'appliedBalanceForces',
-  'appliedCylinderForces',
-  'appliedElevationForces',
-  'appliedForces',
-  'appliedOffsetForces',
-  'appliedStaticForces',
-  'appliedThermalForces',
-  'appliedVelocityForces',
-  'preclippedAberrationForces',
-  'preclippedAccelerationForces',
-  'preclippedActiveOpticForces',
-  'preclippedAzimuthForces',
-  'preclippedBalanceForces',
-  'preclippedCylinderForces',
-  'preclippedElevationForces',
-  'preclippedForces',
-  'preclippedOffsetForces',
-  'preclippedStaticForces',
-  'preclippedThermalForces',
-  'preclippedVelocityForces',
-];
+export const M1M3ActuatorForces = {
+  appliedAberrationForces: ['zForces'],
+  appliedAccelerationForces: ['xForces', 'yForces', 'zForces'],
+  appliedActiveOpticForces: ['zForces'],
+  appliedAzimuthForces: ['xForces', 'yForces', 'zForces'],
+  appliedBalanceForces: ['xForces', 'yForces', 'zForces'],
+  appliedCylinderForces: ['secondaryCylinderForces', 'primaryCylinderForces'],
+  appliedElevationForces: ['xForces', 'yForces', 'zForces'],
+  appliedForces: ['xForces', 'yForces', 'zForces'],
+  appliedOffsetForces: ['xForces', 'yForces', 'zForces'],
+  appliedStaticForces: ['xForces', 'yForces', 'zForces'],
+  appliedThermalForces: ['xForces', 'yForces', 'zForces'],
+  appliedVelocityForces: ['xForces', 'yForces', 'zForces'],
+  preclippedAberrationForces: ['zForces'],
+  preclippedAccelerationForces: ['xForces', 'yForces', 'zForces'],
+  preclippedActiveOpticForces: ['zForces'],
+  preclippedAzimuthForces: ['xForces', 'yForces', 'zForces'],
+  preclippedBalanceForces: ['xForces', 'yForces', 'zForces'],
+  preclippedCylinderForces: ['secondaryCylinderForces', 'primaryCylinderForces'],
+  preclippedElevationForces: ['xForces', 'yForces', 'zForces'],
+  preclippedForces: ['xForces', 'yForces', 'zForces'],
+  preclippedOffsetForces: ['xForces', 'yForces', 'zForces'],
+  preclippedStaticForces: ['xForces', 'yForces', 'zForces'],
+  preclippedThermalForces: ['xForces', 'yForces', 'zForces'],
+  preclippedVelocityForces: ['xForces', 'yForces', 'zForces'],
+};
 
 export const M1M3ActuatorPositions = [
   { id: 101, position: [-3.0582e1, 0.0] },
