@@ -186,10 +186,11 @@ export default class M1M3 extends Component {
   componentDidUpdate(prevProps, prevState) {
     d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
 
-    if (this.state.selectedForceParameter !== prevState.selectedForceParameter) {
-      // console.log(this.state.selectedForceInput, this.state.selectedForceParameter);
+    if (
+      this.state.selectedForceParameter !== prevState.selectedForceParameter ||
+      this.props[this.state.selectedForceInput] !== prevProps[this.state.selectedForceInput]
+    ) {
       const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
-      // console.log(forceData);
       this.setState({ actuatorsForce: forceData });
     }
 
