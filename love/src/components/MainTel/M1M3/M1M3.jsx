@@ -3,44 +3,59 @@ import * as d3 from 'd3';
 
 import {
   M1M3ActuatorPositions,
-  m1m3DetailedStateMap,
-  m1m3BumpTestMap,
-  m1m3HardpointActuatorMotionStateMap,
-  m1m3DetailedStateToStyle,
   M1M3ActuatorForces,
+  m1m3DetailedStateMap,
+  m1m3DetailedStateToStyle,
+  m1m3HardpointActuatorMotionStateMap,
 } from 'Config';
+import ManagerInterface from 'Utils';
+import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import Select from 'components/GeneralPurpose/Select/Select';
+import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
 import styles from './M1M3.module.css';
 
 export default class M1M3 extends Component {
   constructor(props) {
     super(props);
-    this.data = [];
     this.state = {
-      data: [],
+      actuators: [],
       xRadius: 0,
       yRadius: 0,
       maxRadius: 0,
       colormap: () => '#fff',
       width: 512,
       zoomLevel: 1,
-      selectedForceType: 0,
-      selectedForce: 0,
+      selectedForceInput: '',
+      selectedForceParameter: '',
       showActuatorsID: true,
       showHardpoints: true,
+      actuatorsForce: [],
       selectedActuator: 0,
+      optionsTree: null,
+      forceParameters: [],
     };
   }
 
-  static defaultFormatter = (value) => {
-    if (isNaN(value)) return value;
-    return Number.isInteger(value) ? value : value.toFixed(5);
+  static zip = (arrays) => {
+    return arrays[0].map((_, i) => {
+      return arrays.map((array) => {
+        return array[i];
+      });
+    });
+  };
+
+  static getActuatorsPositions = (ids, positions) => {
+    const { xPosition, yPosition, zPosition } = positions;
+    // const positionsArray = M1M3.zip([xPosition, yPosition, zPosition]);
+    const positionsArray = M1M3.zip([
+      xPosition.map((x) => x * 39),
+      yPosition.map((x) => x * 39),
+      zPosition.map((x) => x * 39),
+    ]);
+    return positionsArray.map((position, i) => ({ id: ids[i], position }));
   };
 
   createColorScale = (values) => {
@@ -86,22 +101,43 @@ export default class M1M3 extends Component {
       .style('fill', 'url(#force-gradient)');
   };
 
-  forceTypeSelected = (id) => {
-    this.setState({
-      selectedForceType: id,
-    });
-  };
-
   actuatorSelected = (id) => {
-    this.setState({
-      selectedActuator: id,
-    });
+    this.setState({ selectedActuator: id });
   };
 
   getActuator = (id) => {
-    const actuator = { id, value: 100 * id };
-    // TODO: implement obtaining data from websockets
+    if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
+    const { ilcState, referenceId } = this.props;
+    const { actuatorsForce } = this.state;
+    const actuatorIndex = referenceId.indexOf(id);
+    const actuator = {
+      id,
+      state: ilcState[actuatorIndex] ?? 'None',
+      value: actuatorsForce[actuatorIndex] ?? 'None',
+    };
+
+    actuator.state = CSCDetail.states[actuator.state];
     return actuator;
+  };
+
+  forceInputSelected = (input) => {
+    const force = input.value;
+    // Using SAL info
+    // const filteredParameters = Object.keys(this.state.optionsTree[force]).filter((x) => {
+    //   return !['timestamp', 'priority'].includes(x);
+    // });
+    const filteredParameters = M1M3ActuatorForces[force];
+    this.setState({
+      selectedForceInput: force,
+      forceParameters: filteredParameters,
+    });
+  };
+
+  forceParameterSelected = (input) => {
+    const force = input.value;
+    this.setState({
+      selectedForceParameter: force,
+    });
   };
 
   toggleActuatorsID = (show) => {
@@ -130,11 +166,15 @@ export default class M1M3 extends Component {
       }
     });
 
+    // Using SAL info
+    // ManagerInterface.getTopicData('event-telemetry').then((data) => {
+    //   this.setState({ optionsTree: data.MTM1M3.event_data });
+    // });
+
     this.setState({
-      data: M1M3ActuatorPositions,
+      actuators: M1M3ActuatorPositions,
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
-      // colormap: d3.scaleSequential((t) => d3.hsl(360, 1.0 - t * t * 0.1, 0.12 + t * t * 0.58)),
       maxRadius,
     });
   }
@@ -145,12 +185,55 @@ export default class M1M3 extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
-    if (this.state.data !== prevState.data) {
-      // TODO: getActuatorsData
-      const data = this.state.data.map(
+
+    if (this.state.selectedForceParameter !== prevState.selectedForceParameter) {
+      // console.log(this.state.selectedForceInput, this.state.selectedForceParameter);
+      const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
+      // console.log(forceData);
+      this.setState({ actuatorsForce: forceData });
+    }
+
+    if (this.state.actuators !== prevState.actuators) {
+      const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
+    }
+
+    if (this.state.actuatorsForce !== prevState.actuatorsForce) {
+      this.createColorScale(this.state.actuatorsForce);
+    }
+
+    const { xPosition, yPosition, zPosition, referenceId } = this.props;
+    if (
+      prevProps.xPosition !== xPosition ||
+      prevProps.yPosition !== yPosition ||
+      prevProps.zPosition !== zPosition ||
+      prevProps.referenceId !== referenceId
+    ) {
+      const actuators = M1M3.getActuatorsPositions(referenceId, { xPosition, yPosition, zPosition });
+      // const actuators = M1M3ActuatorPositions; // Old implementation
+
+      let yMax = -Infinity;
+      let xMax = -Infinity;
+      let yMin = Infinity;
+      let xMin = Infinity;
+      let maxRadius = 0;
+      actuators.forEach((act) => {
+        if (xMax < act.position[0]) xMax = act.position[0];
+        if (xMin > act.position[0]) xMin = act.position[0];
+        if (yMax < act.position[1]) yMax = act.position[1];
+        if (yMin > act.position[1]) yMin = act.position[1];
+        if (maxRadius < Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2))) {
+          maxRadius = Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2));
+        }
+      });
+      this.setState({
+        actuators,
+        xRadius: (xMax - xMin) / 2,
+        yRadius: (yMax - yMin) / 2,
+        maxRadius,
+      });
     }
   }
 
@@ -175,18 +258,24 @@ export default class M1M3 extends Component {
   };
 
   render() {
+    const { zoomLevel, showActuatorsID, showHardpoints, forceParameters } = this.state;
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
-    const forceActuatorsData = this.props.forceActuatorsData;
+    const { forceActuatorData } = this.props;
+    const { actuatorsForce } = this.state;
 
     const summaryState = CSCDetail.states[this.props.summaryState];
-    // const detailedStateValue = {name: m1m3DetailedStateMap[this.props.detailedState],
-    //   class: styles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]]};
+    const detailedStateValue = {
+      name: m1m3DetailedStateMap[this.props.detailedState],
+      class: CSCDetailStyles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]],
+    };
 
-    const maxForce = 1000;
-    const minForce = 0;
+    const maxForce = Math.max(...actuatorsForce);
+    const minForce = Math.min(...actuatorsForce);
+
     const selectedActuator = this.getActuator(this.state.selectedActuator);
+    const forceInputs = Object.keys(M1M3ActuatorForces);
 
     return (
       <div className={styles.mirrorContainer}>
@@ -197,10 +286,7 @@ export default class M1M3 extends Component {
           </div>
           <div className={styles.state}>
             <Title>DETAILED STATE</Title>
-            {/* <StatusText title={detailedStateValue} status={m1m3DetailedStateToStyle[detailedStateValue]} small>
-              {detailedStateValue}
-            </StatusText> */}
-            <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
+            <span className={[detailedStateValue.class, styles.summaryState].join(' ')}>{detailedStateValue.name}</span>
           </div>
         </SummaryPanel>
 
@@ -211,24 +297,36 @@ export default class M1M3 extends Component {
               style={{ width: '12em', paddingRight: '1em', borderRight: '1px solid gray' }}
               className={styles.control}
             >
-              <span>Select type of input:</span>
-              <Select options={M1M3ActuatorForces} option={null} onChange={(selection) => console.log(selection)} />
+              <span>Select force input:</span>
+              <Select
+                options={forceInputs}
+                option={null}
+                onChange={(selection) => this.forceInputSelected(selection)}
+              />
             </div>
             <div className={styles.control}>
-              <span>Select force component:</span>
+              <span>Select force parameter:</span>
               <Select
-                options={[1, 2, 3, 4, 5]}
-                option={{ label: 1 }}
-                onChange={(selection) => console.log(selection)}
+                options={forceParameters}
+                option={null}
+                onChange={(selection) => this.forceParameterSelected(selection)}
               />
             </div>
             <div className={styles.control}>
               <span>Show actuators ID:</span>
-              <Toggle hideLabels={true} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
+              <div className={styles.toggleContainer}>
+                <span>Yes</span>
+                <Toggle hideLabels={true} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
+                <span>No</span>
+              </div>
             </div>
             <div className={styles.control}>
               <span>Show hardoints:</span>
-              <Toggle hideLabels={true} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
+              <div className={styles.toggleContainer}>
+                <span>Yes</span>
+                <Toggle hideLabels={true} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
+                <span>No</span>
+              </div>
             </div>
           </div>
         </SummaryPanel>
@@ -298,16 +396,17 @@ export default class M1M3 extends Component {
               pointerEvents="all"
             />
             <g id="scatter" className={styles.scatter}>
-              {this.state.data.map((act) => {
+              {this.state.actuators.map((act, i) => {
                 return (
                   <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
                     <circle
                       cx={(act.position[0] + this.state.xRadius) * scale + margin}
                       cy={(act.position[1] + this.state.yRadius) * scale + margin}
                       key={act.id}
-                      fill={this.state.colormap(
-                        Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                      )}
+                      // fill={this.state.colormap(
+                      //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
+                      // )}
+                      fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
                       r={(this.state.maxRadius * scale) / 21}
                     />
                     <text
@@ -315,7 +414,7 @@ export default class M1M3 extends Component {
                       y={(act.position[1] + this.state.yRadius) * scale + margin}
                       textAnchor="middle"
                       alignmentBaseline="middle"
-                      className={this.state.zoomLevel > 1 ? '' : styles.hidden}
+                      className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
                     >
                       {act.id}
                     </text>
@@ -342,11 +441,9 @@ export default class M1M3 extends Component {
               </div>
               <div className={styles.actuatorValue}>
                 <span>Actuator status:</span>
-                <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Commanded force:</span>
-                <span>{selectedActuator.value}</span>
+                <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
+                  {selectedActuator.state.name}
+                </span>
               </div>
               <div className={styles.actuatorValue}>
                 <span>Applied force:</span>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getM1M3State } from 'redux/selectors';
+import { getM1M3State, getM1M3ActuatorsState, getM1M3ActuatorForces } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3 from './M1M3';
 
@@ -27,7 +27,9 @@ const M1M3Container = ({ subscribeToStreams, unsubscribeToStreams, ...props }) =
 
 const mapStateToProps = (state) => {
   const m1m3State = getM1M3State(state);
-  return m1m3State;
+  const actuatorsState = getM1M3ActuatorsState(state);
+  const actuatorsForces = getM1M3ActuatorForces(state);
+  return { ...m1m3State, ...actuatorsState, ...actuatorsForces };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -35,23 +37,17 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM1M3-0-accelerometerData',
     'telemetry-MTM1M3-0-forceActuatorData',
     'telemetry-MTM1M3-0-forceActuatorPressure',
-    'telemetry-MTM1M3-0-gyroData',
     'telemetry-MTM1M3-0-hardpointActuatorData',
     'telemetry-MTM1M3-0-hardpointMonitorData',
     'telemetry-MTM1M3-0-imsData',
-    'telemetry-MTM1M3-0-inclinometerData',
     'event-MTM1M3-0-summaryState',
     'event-MTM1M3-0-detailedState',
     'event-MTM1M3-0-forceActuatorState',
     'event-MTM1M3-0-forceActuatorInfo',
-    'event-MTM1M3-0-forceActuatorWarning',
     'event-MTM1M3-0-hardpointActuatorState',
     'event-MTM1M3-0-hardpointActuatorInfo',
-    'event-MTM1M3-0-hardpointActuatorWarning',
     'event-MTM1M3-0-hardpointMonitorState',
     'event-MTM1M3-0-hardpointMonitorInfo',
-    'event-MTM1M3-0-hardpointMonitorWarning',
-    'event-MTM1M3-0-forceSetpointWarning',
     'event-MTM1M3-0-appliedAberrationForces',
     'event-MTM1M3-0-appliedAccelerationForces',
     'event-MTM1M3-0-appliedActiveOpticForces',
@@ -64,6 +60,18 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3-0-appliedStaticForces',
     'event-MTM1M3-0-appliedThermalForces',
     'event-MTM1M3-0-appliedVelocityForces',
+    'event-MTM1M3-0-preclippedAberrationForces',
+    'event-MTM1M3-0-preclippedAccelerationForces',
+    'event-MTM1M3-0-preclippedActiveOpticForces',
+    'event-MTM1M3-0-preclippedAzimuthForces',
+    'event-MTM1M3-0-preclippedBalanceForces',
+    'event-MTM1M3-0-preclippedCylinderForces',
+    'event-MTM1M3-0-preclippedElevationForces',
+    'event-MTM1M3-0-preclippedForces',
+    'event-MTM1M3-0-preclippedOffsetForces',
+    'event-MTM1M3-0-preclippedStaticForces',
+    'event-MTM1M3-0-preclippedThermalForces',
+    'event-MTM1M3-0-preclippedVelocityForces',
   ];
   return {
     subscriptions,
