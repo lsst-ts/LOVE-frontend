@@ -136,7 +136,7 @@ class CableWraps extends Component {
         </div>
         <div className={styles.divCameraWrap}>
           <CameraCableWrap
-            height={315}
+            height={180}
             width={400}
             drawBackground={(g, t, a) => this.drawBackground(g, t, a)}
             drawLimits={CableWraps.drawLimits}

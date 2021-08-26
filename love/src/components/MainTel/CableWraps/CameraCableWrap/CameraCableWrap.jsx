@@ -40,7 +40,7 @@ class CameraCableWrap extends Component {
     const { width, height } = this.props;
 
     const svg = d3.select(dom).append('svg').attr('class', 'd3').attr('width', width).attr('height', height);
-    const g = svg.append('g').attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+    const g = svg.append('g').attr('transform', `translate(${width / 2}, 160)`);
     this.g = g;
 
     const background = d3
