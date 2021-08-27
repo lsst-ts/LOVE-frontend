@@ -55,7 +55,7 @@ class CableWraps extends Component {
       .attr('height', 30)
       .style('fill', '#fff');
 
-    g.append('text').attr('x', 2).attr('y', -145).text('0°').style('fill', '#fff');
+    g.append('text').attr('x', -4).attr('y', -155).text('0°').style('fill', '#fff');
 
     g.append('rect')
       .attr('x', -radio - 10)
@@ -136,7 +136,7 @@ class CableWraps extends Component {
         </div>
         <div className={styles.divCameraWrap}>
           <CameraCableWrap
-            height={180}
+            height={200}
             width={400}
             drawBackground={(g, t, a) => this.drawBackground(g, t, a)}
             drawLimits={CableWraps.drawLimits}

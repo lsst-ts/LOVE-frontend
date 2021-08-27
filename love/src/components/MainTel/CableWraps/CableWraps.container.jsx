@@ -32,6 +32,7 @@ const CableWrapsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...prop
 };
 
 const mapStateToProps = (state) => {
+
   const ccwState = getCCWState(state);
   const ccwPosition = getCCWPosition(state);
   const rotatorState = getRotatorState(state);
