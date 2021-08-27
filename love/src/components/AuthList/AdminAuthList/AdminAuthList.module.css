@@ -1,0 +1,29 @@
+.CSCAuthListAdminContainer {
+  background: var(--second-primary-background-color);
+  border-radius: 5px;
+}
+
+.header {
+  text-align: left;
+  font-size: var(--font-size-larger);
+  padding: 2em 1em 0.5em 1em;
+}
+
+.tableContainer {
+  padding: 1.25em;
+}
+
+.tableSelect {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0.5em 1em;
+}
+
+.tableSelect span:first-child {
+  margin-right: 1em;
+}
+
+.actionButton {
+  margin-right: 0.5em;
+}

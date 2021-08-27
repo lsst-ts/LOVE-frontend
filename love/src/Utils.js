@@ -388,6 +388,118 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static getAuthList() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}authlist/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getAuthListRequests() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}authlistrequest/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static requestAuthListAuthorization(targetCSC, username, hostname, restrictionDuration) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}authlistrequest/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        target_csc: targetCSC,
+        username,
+        hostname,
+        restriction_duration: restrictionDuration,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static setAuthListRequestStatus(authRequestId, status) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}authlistrequest/${authRequestId}/`;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        status,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
 }
 
 /**
