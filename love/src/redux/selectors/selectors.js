@@ -316,6 +316,73 @@ export const getMountMotorsState = (state, index) => {
   };
 };
 
+// CCW
+export const getCCWState = (state) => {
+  const subscriptions = ['event-MTMount-0-cameraCableWrapState', 'event-MTMount-0-summaryState'];
+  const ccwData = getStreamsData(state, subscriptions);
+  return {
+    cameraCableWrapState: ccwData['event-MTMount-0-cameraCableWrapState']
+      ? ccwData['event-MTMount-0-cameraCableWrapState'][0].state.value
+      : 0,
+    mountSummaryState: ccwData['event-MTMount-0-summaryState']
+      ? ccwData['event-MTMount-0-summaryState'][0].summaryState.value
+      : 0,
+  };
+};
+
+export const getCCWPosition = (state) => {
+  const subscriptions = ['telemetry-MTMount-0-cameraCableWrap'];
+  const ccwData = getStreamsData(state, subscriptions);
+  return {
+    ccwPosition: ccwData['telemetry-MTMount-0-cameraCableWrap']
+      ? ccwData['telemetry-MTMount-0-cameraCableWrap'].actualPosition.value
+      : 0,
+  };
+};
+
+export const getRotatorState = (state) => {
+  const subscriptions = ['event-MTRotator-0-summaryState'];
+  const rotatorData = getStreamsData(state, subscriptions);
+  return {
+    rotatorSummaryState: rotatorData['event-MTRotator-0-summaryState']
+      ? rotatorData['event-MTRotator-0-summaryState'][0].summaryState.value
+      : 0,
+  };
+};
+
+export const getRotatorPosition = (state) => {
+  const subscriptions = ['telemetry-MTRotator-0-rotation', 'event-MTRotator-0-inPosition'];
+  const rotatorData = getStreamsData(state, subscriptions);
+  return {
+    rotatorPosition: rotatorData['telemetry-MTRotator-0-rotation']
+      ? rotatorData['telemetry-MTRotator-0-rotation'].actualPosition.value
+      : 0,
+    inPosition: rotatorData['event-MTRotator-0-inPosition']
+      ? rotatorData['event-MTRotator-0-inPosition'][0].inPosition.value
+      : 0,
+  };
+};
+
+export const getCCWFollowingError = (state) => {
+  const subscriptions = [
+    'telemetry-MTRotator-0-ccwFollowingError',
+    'event-MTMount-0-cameraCableWrapFollowing',
+    'event-MTRotator-0-interlock',
+  ];
+  const ccwErrorData = getStreamsData(state, subscriptions);
+  return {
+    ccwFollowingError: ccwErrorData['telemetry-MTRotator-0-ccwFollowingError']
+      ? ccwErrorData['telemetry-MTRotator-0-ccwFollowingError'].positionError.value
+      : 0,
+    cameraCableWrapFollowing: ccwErrorData['event-MTMount-0-cameraCableWrapFollowing']
+      ? ccwErrorData['event-MTMount-0-cameraCableWrapFollowing'][0].enabled.value
+      : 0,
+    interlock: ccwErrorData['event-MTRotator-0-interlock']
+      ? ccwErrorData['event-MTRotator-0-interlock'][0].detail.value
+      : 0,
+  };
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *

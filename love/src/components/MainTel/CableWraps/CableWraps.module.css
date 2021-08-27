@@ -1,17 +1,19 @@
 .cableWrapsContainer {
-    display: flex;
+    display: inline-block;
     flex-direction: column;
     margin: 5px;
-    height: 100%;  
-    margin-top: 0;
+    height: 100%; 
+    width: 500px; 
+    margin-top: 0.5em;
+
 }
 
 .cableWrapsContainer .cableWrapsContent {
-    display: flex;
     color: #96a3b3;
     background: var(--theme-div-background);
     margin: 5px;
     height: 100%;
+    width: 500px;
     margin-top: 0;
     padding-right: 5px;
     padding-left: 20px;
@@ -19,7 +21,7 @@
 
 .rotatorDiff {
     font-size: 17px;
-    margin-bottom: 0;
+    margin-bottom: 0px;
     margin-left: 10px;
 }
 
@@ -28,13 +30,39 @@
     margin-left: 10px;
 }
 
-.camCable {
-}
-
 .cableWrapSeparator {
     height: 290px;
     width: 3px;
     margin: 50px 40px;
     border-radius: 10px;
     background: #2d3d4e;
+}
+
+.cablewrapInfo {
+    background-color: #2d3d4e;
+    display: inline-flex;
+}
+
+.cameraInfo {
+    display: inline-flex;
+}
+
+.divCameraWrap {
+    margin-top: 2em;
+}
+
+.summaryPanelStates {
+    max-width: 100%;
+    display: grid;
+    justify-content: flex-start;
+    padding: 1em;
+    margin-bottom: 1em;
+  }
+
+.summaryState {
+    border-radius: 1rem;
+    font-weight: 700;
+    text-align: center;
+    display: inline-block;
+    width: 8em;
 }
