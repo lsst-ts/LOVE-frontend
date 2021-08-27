@@ -70,10 +70,13 @@ class CameraCableWrap extends Component {
     const ccwArc = d3
       .arc()
       .innerRadius(radio - 25)
-      .outerRadius(radio + 15)
+      .outerRadius(radio + 13)
       .startAngle(ccwArcAngles.start)
       .endAngle(ccwArcAngles.end);
     this.ccwArc = ccwArc;
+
+    const theta = degrees(Math.PI / 2);
+    this.props.drawLimits(g, radio, theta, -theta);
 
     this.background = this.g
       .append('path')
@@ -102,8 +105,7 @@ class CameraCableWrap extends Component {
       .attr('d', this.ccwArc)
       .attr('id', 'cable_wrap');
 
-    const theta = degrees(Math.PI / 2);
-    this.props.drawLimits(g, radio, theta, -theta);
+
   }
 
   updateCameraCableWrap() {
