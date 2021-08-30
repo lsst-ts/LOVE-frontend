@@ -1,111 +1,92 @@
 import React, { Component } from 'react';
-import styles from './CableWraps.module.css';
-import AZCableWrap from './AZCableWrap/AZCableWrap';
-import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
+import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import { MAX_CCW_FOLLOWING_ERROR } from 'Constants';
+import { fixedFloat } from 'Utils';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import styles from './CableWraps.module.css';
+import CameraCableWrap from './CameraCableWrap/CameraCableWrap';
+import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from '../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../GeneralPurpose/SummaryPanel/Title';
 
 class CableWraps extends Component {
+  static propTypes = {
+    ccwPosition: PropTypes.number,
+    rotatorPosition: PropTypes.number,
+    mountSummaryState: PropTypes.number,
+    cameraCableWrapState: PropTypes.number,
+    ccwFollowingError: PropTypes.number,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
-      cable_wraps: {
-        az: {
-          cable: 10,
-          rotator: 20,
-        },
-        camera: {
-          cable: 10,
-          rotator: 200,
-        },
-      },
+      ccwFollowingErrorState: false,
     };
   }
 
   componentDidMount() {
     this.props.subscribeToStreams();
-    // Replace the following code with data from redux selectors
-    setInterval(
-      () =>
-        this.receiveMsg({
-          az: {
-            cable: Math.random() * Math.sign(Math.random() - 0.5),
-            rotator: Math.random() * Math.sign(Math.random() - 0.5),
-          },
-          camera: {
-            cable: Math.random() * Math.sign(Math.random() - 0.5),
-            rotator: Math.random() * Math.sign(Math.random() - 0.5),
-          },
-        }),
-      2000,
-    );
   }
 
   componentWillUnmount() {
     this.props.unsubscribeToStreams();
   }
 
-  receiveMsg(msg) {
-    this.setState({
-      cable_wraps: msg,
-    });
+  componentDidUpdate(prevProps) {
+    if (prevProps.ccwFollowingError !== this.props.ccwFollowingError) {
+      if (this.props.ccwFollowingError > MAX_CCW_FOLLOWING_ERROR) {
+        this.setState({ ccwFollowingErrorState: true });
+      } else {
+        this.setState({ ccwFollowingErrorState: false });
+      }
+    }
   }
 
-  drawBackground(g, radio, tau, arc) {
-    g.append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', radio - 5)
-      .style('fill', '#102632');
-
-    g.append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', radio - 70)
-      .style('fill', '#33687f')
-      .style('stroke', '#233a42')
-      .style('stroke-width', '0');
-
-    g.append('path').datum({ endAngle: tau }).style('fill', '#33687f').attr('d', arc);
-  }
-
-  drawLimits(g, radio, start, end) {
+  static drawLimits(g, radio, start, end) {
     g.append('rect')
-      .attr('x', 0)
+      .attr('x', -1)
       .attr('y', -radio - 10)
-      .attr('width', 5)
+      .attr('width', 2)
       .attr('height', 30)
-      .style('fill', '#ffffff');
+      .style('fill', '#fff');
+
+    g.append('text').attr('x', -4).attr('y', -155).text('0°').style('fill', '#fff');
 
     g.append('rect')
       .attr('x', -radio - 10)
       .attr('y', 0)
       .attr('width', 30)
       .attr('height', 2)
-      .style('fill', '#ffffff');
+      .style('fill', '#fff');
 
     g.append('text')
       .attr('x', -radio - 50)
       .attr('y', 5)
-      .text(start + '°')
-      .style('fill', '#ffffff');
+      .text(`${start}°`)
+      .style('fill', '#fff');
 
     g.append('rect')
       .attr('x', radio - 20)
       .attr('y', 0)
       .attr('width', 30)
       .attr('height', 2)
-      .style('fill', '#ffffff');
+      .style('fill', '#fff');
 
     g.append('text')
       .attr('x', radio + 15)
       .attr('y', 5)
-      .text(end + '°')
-      .style('fill', '#ffffff');
+      .text(`${end}°`)
+      .style('fill', '#fff');
   }
 
-  arcTween(newAngle, arc) {
+  static arcTween(newAngle, arc) {
     return function (d) {
-      var interpolate = d3.interpolate(d.endAngle, newAngle);
+      const interpolate = d3.interpolate(d.endAngle, newAngle);
       return function (t) {
         d.endAngle = interpolate(t);
         return arc(d);
@@ -114,58 +95,56 @@ class CableWraps extends Component {
   }
 
   render() {
+    const { ccwFollowingErrorState } = this.state;
+    const rotatorSummaryState = CSCDetail.states[this.props.rotatorSummaryState];
+    const mountSummaryState = CSCDetail.states[this.props.mountSummaryState];
+    const cameraCableWrapState = CSCDetail.states[this.props.cameraCableWrapState];
+    const rotatorPosition = fixedFloat(this.props.rotatorPosition ?? 0);
+    const ccwPosition = fixedFloat(this.props.ccwPosition ?? 0);
+
     return (
       <div className={styles.cableWrapsContainer}>
-        <h2> Cable Wraps </h2>
-        <div className={styles.cableWrapsContent}>
-          <div className={styles.camCable}>
-            <h4>Camera Cable Wrap</h4>
-            {this.state.cable_wraps ? (
-              <p className={styles.rotatorDiff}>
-                Rotator angle difference:
-                <span className={styles.rotatorDiffValue}>
-                  {(this.state.cable_wraps.camera.cable - this.state.cable_wraps.camera.rotator).toFixed(2) + 'º'}
-                </span>
-              </p>
-            ) : (
-              <p className={styles.rotatorDiff}>
-                <span className={styles.rotatorDiffValue}> </span>
-              </p>
-            )}
-            <CameraCableWrap
-              height={315}
-              width={400}
-              drawBackground={this.drawBackground}
-              drawLimits={this.drawLimits}
-              arcTween={this.arcTween}
-              cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.camera : null}
-            />
-          </div>
-          <div className={styles.cableWrapSeparator}></div>
-          <div className={styles.azCable}>
-            <h4>Azimuth Cable Wrap</h4>
-            {this.state.cable_wraps ? (
-              <p className={styles.rotatorDiff}>
-                Rotator angle difference:
-                <span className={styles.rotatorDiffValue}>
-                  {(this.state.cable_wraps.az.cable - this.state.cable_wraps.az.rotator).toFixed(2) + 'º'}
-                </span>
-              </p>
-            ) : (
-              // <p></p>
-              <p className={styles.rotatorDiff}>
-                <span className={styles.rotatorDiffValue}></span>
-              </p>
-            )}
-            <AZCableWrap
-              height={300}
-              width={400}
-              drawBackground={this.drawBackground}
-              drawLimits={this.drawLimits}
-              arcTween={this.arcTween}
-              cable_wrap={this.state.cable_wraps ? this.state.cable_wraps.az : null}
-            />
-          </div>
+        <div>
+          <SummaryPanel className={styles.summaryPanelStates}>
+            {/* <Title>MTMount</Title>
+            <Value>
+              <span className={[mountSummaryState.class, styles.summaryState].join(' ')}>
+                {mountSummaryState.name}
+              </span>
+            </Value>
+
+            <Title>MTRotator</Title>
+            <Value>
+              <span className={[rotatorSummaryState.class, styles.summaryState].join(' ')}>
+                {rotatorSummaryState.name}
+              </span>
+            </Value> */}
+
+            <Title>Camera Cable Wrap</Title>
+            <Value>
+              <span className={[cameraCableWrapState.class, styles.summaryState].join(' ')}>
+                {cameraCableWrapState.name}
+              </span>
+            </Value>
+
+            <Label>Rotator Position</Label>
+            <Value>{`${rotatorPosition}°`}</Value>
+
+            <Label>Cable Wrap Position</Label>
+            <Value>{`${ccwPosition}°`}</Value>
+          </SummaryPanel>
+        </div>
+        <div className={styles.divCameraWrap}>
+          <CameraCableWrap
+            height={200}
+            width={400}
+            drawBackground={(g, t, a) => this.drawBackground(g, t, a)}
+            drawLimits={CableWraps.drawLimits}
+            arcTween={CableWraps.arcTween}
+            cableWrap={ccwPosition}
+            rotator={rotatorPosition}
+            ccwFollowingErrorState={ccwFollowingErrorState}
+          />
         </div>
       </div>
     );
