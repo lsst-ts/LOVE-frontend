@@ -356,6 +356,17 @@ export default class M1M3 extends Component {
               pointerEvents="all"
             />
 
+            <circle
+              id="circle-overlay"
+              className={styles.cursorMove}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              key={'overlay'}
+              fill={'none'}
+              r={this.state.maxRadius * scale * 1.15}
+              pointerEvents="all"
+            />
+
             <g id="scatter" className={styles.scatter}>
               {this.state.actuators.map((act, i) => {
                 return (
@@ -385,17 +396,6 @@ export default class M1M3 extends Component {
             </g>
 
             <circle
-              id="circle-overlay"
-              className={styles.cursorMove}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
-              key={'overlay'}
-              fill={'none'}
-              r={this.state.maxRadius * scale * 1.15}
-              pointerEvents="all"
-            />
-
-            <circle
               className={styles.borderCircleOverlay}
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
@@ -408,7 +408,7 @@ export default class M1M3 extends Component {
               cx={this.state.xRadius * scale + margin}
               cy={this.state.yRadius * scale + margin}
               fill={'none'}
-              r={this.state.maxRadius * scale * 1.28}
+              r={(this.state.maxRadius + 2) * scale * 1.28}
             />
 
             <g id="plot-axis">
