@@ -239,20 +239,25 @@ export default class M1M3 extends Component {
   }
 
   zoomed = () => {
-    let xRadius = this.state.xRadius;
-    let yRadius = this.state.yRadius;
-    let scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
-    d3.event.transform.x = Math.min(
+    const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
+    const xRadius = this.state.xRadius + 60; // + margin of render
+    const yRadius = this.state.yRadius + 60; // + margin of render
+
+    const transformX = Math.min(
       0,
       Math.max(d3.event.transform.x, 2 * xRadius * scale - 2 * xRadius * scale * d3.event.transform.k),
     );
-    d3.event.transform.y = Math.min(
+    const transformY = Math.min(
       0,
       Math.max(d3.event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * d3.event.transform.k),
     );
+
+    d3.event.transform.x = transformX;
+    d3.event.transform.y = transformY;
+
     d3.select('#scatter').attr('transform', d3.event.transform);
-    d3.select('#background-circle').attr('transform', d3.event.transform);
-    d3.select('#plot-axis').attr('transform', d3.event.transform);
+    // d3.select('#background-circle').attr('transform', d3.event.transform);
+    // d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
@@ -339,6 +344,73 @@ export default class M1M3 extends Component {
             {/* <text x='0' y="10">-X</text>
             <text x="20" y="10">+X</text>
             <text x="10" y="20">+Y</text> */}
+
+            <circle
+              id="background-circle"
+              className={styles.circleOverlay}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              key={'background'}
+              fill={'#04070a'}
+              r={this.state.maxRadius * scale * 1.15}
+              pointerEvents="all"
+            />
+
+            <g id="scatter" className={styles.scatter}>
+              {this.state.actuators.map((act, i) => {
+                return (
+                  <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
+                    <circle
+                      cx={(act.position[0] + this.state.xRadius) * scale + margin}
+                      cy={(act.position[1] + this.state.yRadius) * scale + margin}
+                      key={act.id}
+                      // fill={this.state.colormap(
+                      //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
+                      // )}
+                      fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
+                      r={(this.state.maxRadius * scale) / 21}
+                    />
+                    <text
+                      x={(act.position[0] + this.state.xRadius) * scale + margin}
+                      y={(act.position[1] + this.state.yRadius) * scale + margin}
+                      textAnchor="middle"
+                      alignmentBaseline="middle"
+                      className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
+                    >
+                      {act.id}
+                    </text>
+                  </g>
+                );
+              })}
+            </g>
+
+            <circle
+              id="circle-overlay"
+              className={styles.cursorMove}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              key={'overlay'}
+              fill={'none'}
+              r={this.state.maxRadius * scale * 1.15}
+              pointerEvents="all"
+            />
+
+            <circle
+              className={styles.borderCircleOverlay}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              fill={'none'}
+              r={this.state.maxRadius * scale * 1.15}
+            />
+
+            <circle
+              className={styles.hiddenCircleOverlay}
+              cx={this.state.xRadius * scale + margin}
+              cy={this.state.yRadius * scale + margin}
+              fill={'none'}
+              r={this.state.maxRadius * scale * 1.28}
+            />
+
             <g id="plot-axis">
               <text
                 className={styles.axisLabel}
@@ -376,52 +448,6 @@ export default class M1M3 extends Component {
               >
                 -X
               </text>
-            </g>
-            <circle
-              id="background-circle"
-              className={styles.circleOverlay}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
-              key={'background'}
-              fill={'#04070a'}
-              r={this.state.maxRadius * scale * 1.15}
-              pointerEvents="all"
-            />
-            <circle
-              id="circle-overlay"
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
-              key={'overlay'}
-              fill={'none'}
-              r={this.state.maxRadius * scale * 1.15}
-              pointerEvents="all"
-            />
-            <g id="scatter" className={styles.scatter}>
-              {this.state.actuators.map((act, i) => {
-                return (
-                  <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
-                    <circle
-                      cx={(act.position[0] + this.state.xRadius) * scale + margin}
-                      cy={(act.position[1] + this.state.yRadius) * scale + margin}
-                      key={act.id}
-                      // fill={this.state.colormap(
-                      //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                      // )}
-                      fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
-                      r={(this.state.maxRadius * scale) / 21}
-                    />
-                    <text
-                      x={(act.position[0] + this.state.xRadius) * scale + margin}
-                      y={(act.position[1] + this.state.yRadius) * scale + margin}
-                      textAnchor="middle"
-                      alignmentBaseline="middle"
-                      className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
-                    >
-                      {act.id}
-                    </text>
-                  </g>
-                );
-              })}
             </g>
           </svg>
 
