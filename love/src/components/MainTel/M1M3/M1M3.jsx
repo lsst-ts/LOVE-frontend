@@ -26,7 +26,7 @@ export default class M1M3 extends Component {
       yRadius: 0,
       maxRadius: 0,
       colormap: () => '#fff',
-      width: 512,
+      width: 480,
       zoomLevel: 1,
       selectedForceInput: '',
       selectedForceParameter: '',
@@ -162,7 +162,7 @@ export default class M1M3 extends Component {
       if (yMax < act.position[1]) yMax = act.position[1];
       if (yMin > act.position[1]) yMin = act.position[1];
       if (maxRadius < Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2))) {
-        maxRadius = Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2));
+        maxRadius = Math.floor(Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)));
       }
     });
 
@@ -226,13 +226,13 @@ export default class M1M3 extends Component {
         if (yMax < act.position[1]) yMax = act.position[1];
         if (yMin > act.position[1]) yMin = act.position[1];
         if (maxRadius < Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2))) {
-          maxRadius = Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2));
+          maxRadius = Math.floor(Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)));
         }
       });
       this.setState({
         actuators,
-        xRadius: (xMax - xMin) / 2,
-        yRadius: (yMax - yMin) / 2,
+        xRadius: Math.floor((xMax - xMin) / 2),
+        yRadius: Math.floor((yMax - yMin) / 2),
         maxRadius,
       });
     }
@@ -252,8 +252,8 @@ export default class M1M3 extends Component {
       Math.max(d3.event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * d3.event.transform.k),
     );
 
-    d3.event.transform.x = transformX;
-    d3.event.transform.y = transformY;
+    d3.event.transform.x = Math.floor(transformX);
+    d3.event.transform.y = Math.floor(transformY);
 
     d3.select('#scatter').attr('transform', d3.event.transform);
     // d3.select('#background-circle').attr('transform', d3.event.transform);
@@ -348,22 +348,22 @@ export default class M1M3 extends Component {
             <circle
               id="background-circle"
               className={styles.circleOverlay}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
+              cx={Math.floor(this.state.xRadius * scale + margin)}
+              cy={Math.floor(this.state.yRadius * scale + margin)}
               key={'background'}
               fill={'#04070a'}
-              r={this.state.maxRadius * scale * 1.15}
+              r={Math.floor(this.state.maxRadius * scale * 1.15)}
               pointerEvents="all"
             />
 
             <circle
               id="circle-overlay"
               className={styles.cursorMove}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
+              cx={Math.floor(this.state.xRadius * scale + margin)}
+              cy={Math.floor(this.state.yRadius * scale + margin)}
               key={'overlay'}
               fill={'none'}
-              r={this.state.maxRadius * scale * 1.15}
+              r={Math.floor(this.state.maxRadius * scale * 1.15)}
               pointerEvents="all"
             />
 
@@ -397,25 +397,33 @@ export default class M1M3 extends Component {
 
             <circle
               className={styles.borderCircleOverlay}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
+              cx={Math.floor(this.state.xRadius * scale + margin)}
+              cy={Math.floor(this.state.yRadius * scale + margin)}
               fill={'none'}
-              r={this.state.maxRadius * scale * 1.15}
+              r={Math.floor(this.state.maxRadius * scale * 1.15)}
             />
 
             <circle
               className={styles.hiddenCircleOverlay}
-              cx={this.state.xRadius * scale + margin}
-              cy={this.state.yRadius * scale + margin}
+              cx={Math.floor(this.state.xRadius * scale + margin)}
+              cy={Math.floor(this.state.yRadius * scale + margin)}
               fill={'none'}
-              r={(this.state.maxRadius + 2) * scale * 1.28}
+              r={Math.floor(this.state.maxRadius * scale * 1.28)}
+            />
+
+            <circle
+              className={styles.hiddenCircleOverlay}
+              cx={Math.floor(this.state.xRadius * scale + margin)}
+              cy={Math.floor(this.state.yRadius * scale + margin)}
+              fill={'none'}
+              r={Math.floor((this.state.maxRadius + 2) * scale * 1.28)}
             />
 
             <g id="plot-axis">
               <text
                 className={styles.axisLabel}
-                x={this.state.xRadius * scale + margin - 5}
-                y={15 * scale}
+                x={Math.floor(this.state.xRadius * scale + margin - 5)}
+                y={Math.floor(15 * scale)}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
@@ -423,8 +431,8 @@ export default class M1M3 extends Component {
               </text>
               <text
                 className={styles.axisLabel}
-                x={(this.state.xRadius * 2 + 40) * scale + margin}
-                y={this.state.yRadius * scale + margin}
+                x={Math.floor((this.state.xRadius * 2 + 40) * scale + margin)}
+                y={Math.floor(this.state.yRadius * scale + margin)}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
@@ -432,8 +440,8 @@ export default class M1M3 extends Component {
               </text>
               <text
                 className={styles.axisLabel}
-                x={this.state.xRadius * scale + margin - 5}
-                y={(this.state.yRadius * 2 + 40) * scale + margin}
+                x={Math.floor(this.state.xRadius * scale + margin - 5)}
+                y={Math.floor((this.state.yRadius * 2 + 40) * scale + margin)}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
@@ -442,7 +450,7 @@ export default class M1M3 extends Component {
               <text
                 className={styles.axisLabel}
                 x={10}
-                y={this.state.yRadius * scale + margin}
+                y={Math.floor(this.state.yRadius * scale + margin)}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
