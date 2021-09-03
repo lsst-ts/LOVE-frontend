@@ -201,6 +201,11 @@
   stroke: white;
 }
 
+.actuator:hover text {
+  fill: white;
+  stroke: white;
+}
+
 
 /* detailed state classes */
 .ok {
