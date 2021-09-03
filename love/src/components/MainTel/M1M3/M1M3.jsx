@@ -361,8 +361,8 @@ export default class M1M3 extends Component {
               cx={this.state.width / 2}
               cy={this.state.width / 2}
               key={'background'}
-              fill={'#04070a'}
-              r={Math.floor(this.state.maxRadius * scale * 1.15)}
+              fill={this.state.actuators.length > 0 ? '#04070a' : '#aab1b9'}
+              r={this.state.width / 2 - 30}
               pointerEvents="all"
             />
 
@@ -373,7 +373,7 @@ export default class M1M3 extends Component {
               cy={this.state.width / 2}
               key={'overlay'}
               fill={'none'}
-              r={Math.floor(this.state.maxRadius * scale * 1.15)}
+              r={this.state.width / 2 - 30}
               pointerEvents="all"
             />
 
@@ -412,7 +412,7 @@ export default class M1M3 extends Component {
               cx={this.state.width / 2}
               cy={this.state.width / 2}
               fill={'none'}
-              r={Math.floor(this.state.maxRadius * scale * 1.15)}
+              r={this.state.width / 2 - 30}
             />
 
             <circle
