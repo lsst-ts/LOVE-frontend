@@ -18,7 +18,7 @@
 
 .hiddenCircleOverlay {
   stroke: #111F27;
-  stroke-width: 40px;
+  stroke-width: 130px;
 }
 
 .mirrorContainer svg text {
@@ -107,7 +107,7 @@
   height: 100%;
   max-width: 480px;
   min-width: 300px;
-  border-radius: 50%;
+  /*border-radius: 50%;*/
 }
 
 .svgContainer .axisLabel {

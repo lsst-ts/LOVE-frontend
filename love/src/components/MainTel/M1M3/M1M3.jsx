@@ -348,8 +348,8 @@ export default class M1M3 extends Component {
             <circle
               id="background-circle"
               className={styles.circleOverlay}
-              cx={Math.floor(this.state.xRadius * scale + margin)}
-              cy={Math.floor(this.state.yRadius * scale + margin)}
+              cx={this.state.width / 2}
+              cy={this.state.width / 2}
               key={'background'}
               fill={'#04070a'}
               r={Math.floor(this.state.maxRadius * scale * 1.15)}
@@ -359,8 +359,8 @@ export default class M1M3 extends Component {
             <circle
               id="circle-overlay"
               className={styles.cursorMove}
-              cx={Math.floor(this.state.xRadius * scale + margin)}
-              cy={Math.floor(this.state.yRadius * scale + margin)}
+              cx={this.state.width / 2}
+              cy={this.state.width / 2}
               key={'overlay'}
               fill={'none'}
               r={Math.floor(this.state.maxRadius * scale * 1.15)}
@@ -397,33 +397,25 @@ export default class M1M3 extends Component {
 
             <circle
               className={styles.borderCircleOverlay}
-              cx={Math.floor(this.state.xRadius * scale + margin)}
-              cy={Math.floor(this.state.yRadius * scale + margin)}
+              cx={this.state.width / 2}
+              cy={this.state.width / 2}
               fill={'none'}
               r={Math.floor(this.state.maxRadius * scale * 1.15)}
             />
 
             <circle
               className={styles.hiddenCircleOverlay}
-              cx={Math.floor(this.state.xRadius * scale + margin)}
-              cy={Math.floor(this.state.yRadius * scale + margin)}
+              cx={this.state.width / 2}
+              cy={this.state.width / 2}
               fill={'none'}
-              r={Math.floor(this.state.maxRadius * scale * 1.28)}
-            />
-
-            <circle
-              className={styles.hiddenCircleOverlay}
-              cx={Math.floor(this.state.xRadius * scale + margin)}
-              cy={Math.floor(this.state.yRadius * scale + margin)}
-              fill={'none'}
-              r={Math.floor((this.state.maxRadius + 2) * scale * 1.28)}
+              r={this.state.width / 2 + 35}
             />
 
             <g id="plot-axis">
               <text
                 className={styles.axisLabel}
-                x={Math.floor(this.state.xRadius * scale + margin - 5)}
-                y={Math.floor(15 * scale)}
+                x={this.state.width / 2 - 5}
+                y={margin / 2 - 12}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
@@ -431,8 +423,8 @@ export default class M1M3 extends Component {
               </text>
               <text
                 className={styles.axisLabel}
-                x={Math.floor((this.state.xRadius * 2 + 40) * scale + margin)}
-                y={Math.floor(this.state.yRadius * scale + margin)}
+                x={this.state.width - 12}
+                y={this.state.width / 2 - 5}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
@@ -440,8 +432,8 @@ export default class M1M3 extends Component {
               </text>
               <text
                 className={styles.axisLabel}
-                x={Math.floor(this.state.xRadius * scale + margin - 5)}
-                y={Math.floor((this.state.yRadius * 2 + 40) * scale + margin)}
+                x={this.state.width / 2 - 5}
+                y={this.state.width - margin / 2 + 14}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
@@ -449,8 +441,8 @@ export default class M1M3 extends Component {
               </text>
               <text
                 className={styles.axisLabel}
-                x={10}
-                y={Math.floor(this.state.yRadius * scale + margin)}
+                x={12}
+                y={this.state.width / 2 - 5}
                 textAnchor="middle"
                 alignmentBaseline="middle"
               >
