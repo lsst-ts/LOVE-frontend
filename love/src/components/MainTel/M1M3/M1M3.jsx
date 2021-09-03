@@ -105,6 +105,16 @@ export default class M1M3 extends Component {
     this.setState({ selectedActuator: id });
   };
 
+  strokeActuatorSelected = (id) => {
+    if (this.state.selectedActuator === id) return 'white';
+    else return 'none';
+  };
+
+  fillActuatorSelected = (id) => {
+    if (this.state.selectedActuator === id) return 'white';
+    else return 'black';
+  };
+
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
     const { ilcState, referenceId } = this.props;
@@ -379,6 +389,7 @@ export default class M1M3 extends Component {
                       //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
                       // )}
                       fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
+                      stroke={this.strokeActuatorSelected(act.id)}
                       r={(this.state.maxRadius * scale) / 21}
                     />
                     <text
@@ -386,6 +397,7 @@ export default class M1M3 extends Component {
                       y={(act.position[1] + this.state.yRadius) * scale + margin}
                       textAnchor="middle"
                       alignmentBaseline="middle"
+                      fill={this.fillActuatorSelected(act.id)}
                       className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
                     >
                       {act.id}
