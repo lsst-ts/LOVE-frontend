@@ -21,6 +21,16 @@
   stroke-width: 130px;
 }
 
+.circleOverlay {
+  fill: #04070a;
+}
+
+.circleOverlayDisabled {
+  fill: #04070a;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .mirrorContainer svg text {
   opacity: 1;
   transition: opacity 0.35s linear;

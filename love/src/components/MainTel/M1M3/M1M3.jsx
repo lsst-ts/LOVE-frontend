@@ -357,18 +357,17 @@ export default class M1M3 extends Component {
 
             <circle
               id="background-circle"
-              className={styles.circleOverlay}
+              className={this.state.actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
               cx={this.state.width / 2}
               cy={this.state.width / 2}
               key={'background'}
-              fill={this.state.actuators.length > 0 ? '#04070a' : '#aab1b9'}
               r={this.state.width / 2 - 30}
               pointerEvents="all"
             />
 
             <circle
               id="circle-overlay"
-              className={styles.cursorMove}
+              className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
               cx={this.state.width / 2}
               cy={this.state.width / 2}
               key={'overlay'}
