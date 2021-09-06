@@ -425,6 +425,12 @@ export const getLATISSState = (state) => {
   };
 };
 
+export const getAuthlistState = (state, subscriptions) => {
+  const authlistData = getStreamsData(state, subscriptions);
+  // console.log(authlistData);
+  return { ...authlistData };
+};
+
 export const getKey = (dict, key, def) => {
   if (dict && dict !== {} && Object.keys(dict).includes(key)) {
     return dict[key];

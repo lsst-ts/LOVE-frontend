@@ -33,69 +33,6 @@ const defaultSchemaProps = {
   },
 };
 
-export const auxtelIndex = {
-  MountSummaryPanel: {
-    component: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
-    schema: {
-      ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema.props,
-      },
-    },
-  },
-  LightPath: {
-    component: require('../AuxTel/Mount/LightPath.container').default,
-    schema: {
-      ...require('../AuxTel/Mount/LightPath.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuxTel/Mount/LightPath.container').schema.props,
-      },
-    },
-  },
-  MotorTable: {
-    component: require('../AuxTel/Mount/MotorTable/MotorTable.container').default,
-    schema: {
-      ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema.props,
-      },
-    },
-  },
-  Camera: {
-    component: require('../AuxTel/Camera/Camera.container').default,
-    schema: {
-      ...require('../AuxTel/Camera/Camera.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuxTel/Camera/Camera.container').schema.props,
-      },
-    },
-  },
-  Dome: {
-    component: require('../AuxTel/Dome/Dome.container').default,
-    schema: {
-      ...require('../AuxTel/Dome/Dome.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuxTel/Dome/Dome.container').schema.props,
-      },
-    },
-  },
-  LATISS: {
-    component: require('../AuxTel/LATISS/LATISS.container').default,
-    schema: {
-      ...require('../AuxTel/LATISS/LATISS.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../AuxTel/LATISS/LATISS.container').schema.props,
-      },
-    },
-  },
-};
-
 export const observatoryIndex = {
   ScriptQueue: {
     component: require('../ScriptQueue/ScriptQueue.container').default,
@@ -233,6 +170,105 @@ export const observatoryIndex = {
   },
 };
 
+export const auxtelIndex = {
+  MountSummaryPanel: {
+    component: require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').default,
+    schema: {
+      ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuxTel/Mount/SummaryPanel/SummaryPanel.container').schema.props,
+      },
+    },
+  },
+  LightPath: {
+    component: require('../AuxTel/Mount/LightPath.container').default,
+    schema: {
+      ...require('../AuxTel/Mount/LightPath.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuxTel/Mount/LightPath.container').schema.props,
+      },
+    },
+  },
+  MotorTable: {
+    component: require('../AuxTel/Mount/MotorTable/MotorTable.container').default,
+    schema: {
+      ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuxTel/Mount/MotorTable/MotorTable.container').schema.props,
+      },
+    },
+  },
+  Camera: {
+    component: require('../AuxTel/Camera/Camera.container').default,
+    schema: {
+      ...require('../AuxTel/Camera/Camera.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuxTel/Camera/Camera.container').schema.props,
+      },
+    },
+  },
+  Dome: {
+    component: require('../AuxTel/Dome/Dome.container').default,
+    schema: {
+      ...require('../AuxTel/Dome/Dome.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuxTel/Dome/Dome.container').schema.props,
+      },
+    },
+  },
+  LATISS: {
+    component: require('../AuxTel/LATISS/LATISS.container').default,
+    schema: {
+      ...require('../AuxTel/LATISS/LATISS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuxTel/LATISS/LATISS.container').schema.props,
+      },
+    },
+  },
+};
+
+export const mainIndex = {
+  CableWraps: {
+    component: require('../MainTel/CableWraps/CableWraps.container').default,
+    schema: {
+      ...require('../MainTel/CableWraps/CableWraps.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CableWraps/CableWraps.container').schema.props,
+      },
+    },
+  },
+  M1M3: {
+    component: require('../MainTel/M1M3/M1M3.container').default,
+    schema: {
+      ...require('../MainTel/M1M3/M1M3.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M1M3/M1M3.container').schema.props,
+      },
+    },
+  },
+};
+
+export const authlistIndex = {
+  SummaryAuthList: {
+    component: require('../AuthList/SummaryAuthList/SummaryAuthList.container').default,
+    schema: {
+      ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuthList/SummaryAuthList/SummaryAuthList.container').schema.props,
+      },
+    },
+  },
+};
+
 export const utilitiesIndex = {
   LabeledStatusText: {
     component: require('../GeneralPurpose/LabeledStatusText/LabeledStatusText.container').default,
@@ -339,29 +375,6 @@ export const internalIndex = {
   },
 };
 
-export const mainIndex = {
-  CableWraps: {
-    component: require('../MainTel/CableWraps/CableWraps.container').default,
-    schema: {
-      ...require('../MainTel/CableWraps/CableWraps.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../MainTel/CableWraps/CableWraps.container').schema.props,
-      },
-    },
-  },
-  M1M3: {
-    component: require('../MainTel/M1M3/M1M3.container').default,
-    schema: {
-      ...require('../MainTel/M1M3/M1M3.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../MainTel/M1M3/M1M3.container').schema.props,
-      },
-    },
-  },
-};
-
 export const indexes = [
   {
     name: 'Observatory',
@@ -374,6 +387,10 @@ export const indexes = [
   {
     name: 'Main Telescope',
     index: mainIndex,
+  },
+  {
+    name: 'Authlist',
+    index: authlistIndex,
   },
   {
     name: 'Utilities',
@@ -389,6 +406,7 @@ export default {
   ...observatoryIndex,
   ...auxtelIndex,
   ...mainIndex,
+  ...authlistIndex,
   ...utilitiesIndex,
   ...internalIndex,
 };
