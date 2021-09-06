@@ -12,21 +12,21 @@
 }
 
 .borderCircleOverlay {
-  stroke: #2d3d4e;
+  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
   stroke-width: 10px;
 }
 
 .hiddenCircleOverlay {
-  stroke: #111F27;
+  stroke: var(--second-primary-background-color);
   stroke-width: 130px;
 }
 
 .circleOverlay {
-  fill: #04070a;
+  fill: var(--overlay-background-color);
 }
 
 .circleOverlayDisabled {
-  fill: #04070a;
+  fill: var(--status-disabled-dimmed-color-2);
   cursor: not-allowed;
   pointer-events: none;
 }
