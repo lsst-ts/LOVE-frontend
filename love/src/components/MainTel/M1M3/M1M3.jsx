@@ -67,14 +67,12 @@ export default class M1M3 extends Component {
   }
 
   disableScroll = () => {
-    console.log('disableScroll');
     document.addEventListener('wheel', this.preventDefault, {
       passive: false,
     });
   };
 
   enableScroll = () => {
-    console.log('enableScroll');
     document.removeEventListener('wheel', this.preventDefault, false);
   };
 
