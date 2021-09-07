@@ -58,6 +58,26 @@ export default class M1M3 extends Component {
     return positionsArray.map((position, i) => ({ id: ids[i], position }));
   };
 
+  preventDefault(e) {
+    e = e || window.event;
+    if (e.preventDefault) {
+      e.preventDefault();
+    }
+    e.returnValue = false;
+  }
+
+  disableScroll = () => {
+    console.log('disableScroll');
+    document.addEventListener('wheel', this.preventDefault, {
+      passive: false,
+    });
+  };
+
+  enableScroll = () => {
+    console.log('enableScroll');
+    document.removeEventListener('wheel', this.preventDefault, false);
+  };
+
   createColorScale = (values) => {
     const height = 300;
     const width = 10;
@@ -349,7 +369,12 @@ export default class M1M3 extends Component {
 
         <div className={styles.plotSection}>
           {/* <svg className={styles.svgContainer} width={this.state.width} height={this.state.width}> */}
-          <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.width} ${this.state.width}`}>
+          <svg
+            className={styles.svgContainer}
+            viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+            onMouseEnter={this.disableScroll}
+            onMouseLeave={this.enableScroll}
+          >
             {/* <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.xRadius * scale * 2} ${this.state.yRadius * scale * 2}`}> */}
             {/* <text x='0' y="10">-X</text>
             <text x="20" y="10">+X</text>
@@ -362,7 +387,6 @@ export default class M1M3 extends Component {
               cy={this.state.width / 2}
               key={'background'}
               r={this.state.width / 2 - 30}
-              pointerEvents="all"
             />
 
             <circle
@@ -374,6 +398,8 @@ export default class M1M3 extends Component {
               fill={'none'}
               r={this.state.width / 2 - 30}
               pointerEvents="all"
+              onMouseEnter={this.enableScroll}
+              onMouseLeave={this.disableScroll}
             />
 
             <g id="scatter" className={styles.scatter}>
@@ -390,6 +416,7 @@ export default class M1M3 extends Component {
                       fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
                       stroke={this.strokeActuatorSelected(act.id)}
                       r={(this.state.maxRadius * scale) / 21}
+                      pointerEvents="all"
                     />
                     <text
                       x={(act.position[0] + this.state.xRadius) * scale + margin}
@@ -398,6 +425,7 @@ export default class M1M3 extends Component {
                       alignmentBaseline="middle"
                       fill={this.fillActuatorSelected(act.id)}
                       className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
+                      pointerEvents="none"
                     >
                       {act.id}
                     </text>
