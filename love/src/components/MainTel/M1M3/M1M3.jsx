@@ -34,6 +34,7 @@ export default class M1M3 extends Component {
       showHardpoints: true,
       actuatorsForce: [],
       selectedActuator: 0,
+      selectedHardpoint: 0,
       optionsTree: null,
       forceParameters: [],
     };
@@ -133,6 +134,20 @@ export default class M1M3 extends Component {
     else return 'black';
   };
 
+  hardpointSelected = (id) => {
+    this.setState({ selectedHardpoint: id });
+  };
+
+  strokeHardpointSelected = (id) => {
+    if (this.state.selectedHardpoint === id) return 'white';
+    else return 'none';
+  };
+
+  fillHardpointSelected = (id) => {
+    if (this.state.selectedHardpoint === id) return 'white';
+    else return 'black';
+  };
+
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
     const { ilcState, referenceId } = this.props;
@@ -146,6 +161,10 @@ export default class M1M3 extends Component {
 
     actuator.state = CSCDetail.states[actuator.state];
     return actuator;
+  };
+
+  getHardpoint = (id) => {
+    if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
   };
 
   forceInputSelected = (input) => {
@@ -309,6 +328,7 @@ export default class M1M3 extends Component {
     const minForce = Math.min(...actuatorsForce);
 
     const selectedActuator = this.getActuator(this.state.selectedActuator);
+    const selectedHardpoint = this.getHardpoint(this.state.selectedHardpoint);
     const forceInputs = Object.keys(M1M3ActuatorForces);
 
     return (
@@ -355,7 +375,7 @@ export default class M1M3 extends Component {
               </div>
             </div>
             <div className={styles.control}>
-              <span>Show hardoints:</span>
+              <span>Show hardpoints:</span>
               <div className={styles.toggleContainer}>
                 <span>Yes</span>
                 <Toggle hideLabels={true} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
@@ -367,6 +387,128 @@ export default class M1M3 extends Component {
 
         <div className={styles.plotSection}>
           {/* <svg className={styles.svgContainer} width={this.state.width} height={this.state.width}> */}
+
+          <div className={styles.hardpoints}>
+            <span>Hardpoints</span>
+            <svg width={134} height={134}>
+              <circle className={styles.borderCircleHardpoint} cx={64} cy={64} fill={'none'} r={64} />
+
+              <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(1)}>
+                <circle
+                  className={styles.circleHardpoint}
+                  cx="45.99"
+                  cy="32.53"
+                  r="14.82"
+                  pointerEvents="all"
+                  stroke={this.strokeHardpointSelected(1)}
+                />
+                <text
+                  className={styles.textHardpoint}
+                  transform="translate(39.75 39.66)"
+                  pointerEvents="none"
+                  fill={this.fillHardpointSelected(1)}
+                >
+                  1
+                </text>
+              </g>
+
+              <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(2)}>
+                <circle
+                  className={styles.circleHardpoint}
+                  cx="28.7"
+                  cy="64.05"
+                  r="14.82"
+                  pointerEvents="all"
+                  stroke={this.strokeHardpointSelected(2)}
+                />
+                <text
+                  className={styles.textHardpoint}
+                  transform="translate(22.75 70.66)"
+                  pointerEvents="none"
+                  fill={this.fillHardpointSelected(2)}
+                >
+                  2
+                </text>
+              </g>
+
+              <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(3)}>
+                <circle
+                  className={styles.circleHardpoint}
+                  cx="45.99"
+                  cy="97.21"
+                  r="14.82"
+                  pointerEvents="all"
+                  stroke={this.strokeHardpointSelected(3)}
+                />
+                <text
+                  className={styles.textHardpoint}
+                  transform="translate(39.75 103.66)"
+                  pointerEvents="none"
+                  fill={this.fillHardpointSelected(3)}
+                >
+                  3
+                </text>
+              </g>
+
+              <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(4)}>
+                <circle
+                  className={styles.circleHardpoint}
+                  cx="80.62"
+                  cy="97.21"
+                  r="14.82"
+                  pointerEvents="all"
+                  stroke={this.strokeHardpointSelected(4)}
+                />
+                <text
+                  className={styles.textHardpoint}
+                  transform="translate(73.75 103.66)"
+                  pointerEvents="none"
+                  fill={this.fillHardpointSelected(4)}
+                >
+                  4
+                </text>
+              </g>
+
+              <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(5)}>
+                <circle
+                  className={styles.circleHardpoint}
+                  cx="99.19"
+                  cy="64.05"
+                  r="14.82"
+                  pointerEvents="all"
+                  stroke={this.strokeHardpointSelected(5)}
+                />
+                <text
+                  className={styles.textHardpoint}
+                  transform="translate(93.75 70.66)"
+                  pointerEvents="none"
+                  fill={this.fillHardpointSelected(5)}
+                >
+                  5
+                </text>
+              </g>
+
+              <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(6)}>
+                <circle
+                  className={styles.circleHardpoint}
+                  cx="80.62"
+                  cy="32.53"
+                  r="14.82"
+                  pointerEvents="all"
+                  stroke={this.strokeHardpointSelected(6)}
+                />
+                <text
+                  className={styles.textHardpoint}
+                  transform="translate(75.75 39.66)"
+                  pointerEvents="none"
+                  fill={this.fillHardpointSelected(6)}
+                >
+                  6
+                </text>
+              </g>
+            </svg>
+          </div>
+
           <svg
             className={styles.svgContainer}
             viewBox={`0 0 ${this.state.width} ${this.state.width}`}
@@ -445,7 +587,7 @@ export default class M1M3 extends Component {
               cx={this.state.width / 2}
               cy={this.state.width / 2}
               fill={'none'}
-              r={this.state.width / 2 + 35}
+              r={this.state.width / 2 + 40}
             />
 
             <g id="plot-axis">
@@ -507,6 +649,22 @@ export default class M1M3 extends Component {
                 <span>Actuator status:</span>
                 <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
                   {selectedActuator.state.name}
+                </span>
+              </div>
+              <div className={styles.actuatorValue}>
+                <span>Applied force:</span>
+                <span>{selectedActuator.value}</span>
+              </div>
+            </SummaryPanel>
+
+            <SummaryPanel className={styles.actuatorInfo}>
+              <div className={styles.actuatorValue}>
+                <Title>Hardpoint {selectedHardpoint.id}</Title>
+              </div>
+              <div className={styles.actuatorValue}>
+                <span>Hardpoint status:</span>
+                <span className={[selectedHardpoint.state.class, styles.summaryState].join(' ')}>
+                  {selectedHardpoint.state.name}
                 </span>
               </div>
               <div className={styles.actuatorValue}>
