@@ -13,7 +13,13 @@
 
 .borderCircleOverlay {
   stroke: var(--tertiary-background-color); /*#2d3d4e;*/
-  stroke-width: 10px;
+  stroke-width: 5px;
+}
+
+.borderCircleHardPoints {
+  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
+  stroke-width: 3px;
+  fill: var(--overlay-background-color);
 }
 
 .hiddenCircleOverlay {
@@ -120,6 +126,54 @@
   /*border-radius: 50%;*/
 }
 
+.hardpoints {
+  /*max-width: 160px;
+  min-width: 60px;*/
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+}
+
+.hardpoints > svg {
+  width: 134px;
+  height: 134px;
+}
+
+.hardpoints > span:first-child {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+.borderCircleHardpoint {
+  opacity:0.85;
+  fill:#152f3b;
+}
+
+.textHardpoint {
+  font-size: 21px !important;
+  font-family: Helvetica !important;
+  /*fill: white !important;*/
+}
+
+.circleHardpoint {
+  fill:#8bea96;
+  stroke-width: 2px;
+  stroke: white;
+  opacity:0.61;
+  cursor: pointer;
+}
+
+.gHardpoint:hover .circleHardpoint {
+  stroke: white;
+}
+
+.gHardpoint:hover .textHardpoint {
+  fill: white;
+  stroke: white;
+}
+
+
 .svgContainer .axisLabel {
   font-size: 1.2em;
   fill: white;
@@ -167,6 +221,7 @@
   display: block;
   text-align: left;
   padding: 1em;
+  margin: 3px;
 }
 
 .actuatorInfo h6 {
