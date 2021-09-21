@@ -300,8 +300,6 @@
   background: var(--status-alert-dimmed-color-2); */
 }
 
-
-
 .ok_summary {
   background: var(--status-ok-color);
   color: var(--second-tertiary-background-color);
