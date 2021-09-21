@@ -216,6 +216,8 @@ export default class M1M3 extends Component {
     return actuator;
   };
 
+
+  
   getHardpoint = (id) => {
     if (id === 0)
       return {
