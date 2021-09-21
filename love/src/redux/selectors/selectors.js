@@ -87,8 +87,8 @@ export const getM1M3ActuatorsState = (state) => {
     xPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.xPosition?.value ?? [],
     yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
     zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
-    referenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
-    ilcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
+    actuatorReferenceId: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.referenceId?.value ?? [],
+    actuatorIlcState: m1m3Data['event-MTM1M3-0-forceActuatorState']?.[0]?.ilcState?.value ?? [],
   };
 };
 
@@ -123,6 +123,27 @@ export const getM1M3HardpointActuatorData = (state) => {
     hardpointsXRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.xRotation?.value ?? 0,
     hardpointsYRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.yRotation?.value ?? 0,
     hardpointsZRotation: m1m3Data['telemetry-MTM1M3-0-hardpointActuatorData']?.zRotation?.value ?? 0,
+  };
+};
+
+export const getM1M3HardpointActuatorState = (state) => {
+  const subscriptions = ['event-MTM1M3-0-hardpointActuatorState'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    hardpointIlcState: [0, 0, 1, 1, 1, 1], // m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
+    hardpointMotionState: [0, 1, 2, 3, 4, 1], // m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
+    hardpointReferenceId: [1, 2, 3, 4, 5, 6],
+  };
+};
+
+export const getM1M3HardpointMonitorData = (state) => {
+  const subscriptions = ['telemetry-MTM1M3-0-hardpointMonitorData'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [24.5, 10.1, -11.4, 2.5, 6.7, -18.1],
+    hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [153, 45, 36, 25, 98, 3],
+    hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [1.2, 0.3, -3.2, 0.9, 1.12, 0.75],
+    referenceHardpointId: [1, 2, 3, 4, 5, 6],
   };
 };
 
