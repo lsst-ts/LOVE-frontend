@@ -576,11 +576,11 @@ export default class M1M3 extends Component {
               {M1M3HardpointPositions.map((hardpoint) => {
                 return (
                   <circle key={hardpoint.id}
-                    className={styles.circleHardpointActuator}
+                    className={showHardpoints ? styles.circleHardpointActuator : styles.hidden}
                     cx={(hardpoint.actuator.position[0] + this.state.xRadius) * scale + margin}
                     cy={(hardpoint.actuator.position[1] + this.state.yRadius) * scale + margin}
                     fill="none"
-                    stroke={this.strokeHardpointActuatorSelected(hardpoint.id)}
+                    stroke={showHardpoints ? this.strokeHardpointActuatorSelected(hardpoint.id) : "none"}
                     r={50 * scale}
                     pointerEvents="none"
                   />
