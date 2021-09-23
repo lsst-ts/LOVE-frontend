@@ -25,6 +25,7 @@
 
 .filters .select {
     white-space: nowrap;
+    flex: 0 0 200px;
 }
 
 .identitiesCell {

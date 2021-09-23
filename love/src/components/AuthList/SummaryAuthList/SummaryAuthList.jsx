@@ -6,7 +6,6 @@ import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
-import FilterIcon from 'components/icons/FilterIcon/FilterIcon';
 import ManagerInterface from 'Utils';
 import styles from './SummaryAuthList.module.css';
 
@@ -29,17 +28,23 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText: '',
       removeIdentityRequest: null,
       userIdentity: '',
+      cscList: [],
     };
   }
 
   componentDidMount() {
     this.props.subscribeToStream();
-    const cscOptions = ['All', 'ATDome:0', 'ATMCS:0', 'MTM1M3:0'];
     const userOptions = ['All', 'saranda@inria-ThinkPad-P50-3', 'tribeiro@nb-tribeiro'];
+    this.setState({ userOptions });
 
-    this.setState({
-      cscOptions,
-      userOptions,
+    // Set CSCs list
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      const cscList = ['All'].concat(
+        Object.keys(data)
+          .map((x) => `${x}:0`)
+          .sort(),
+      );
+      this.setState({ cscOptions: cscList });
     });
   }
 
@@ -48,7 +53,13 @@ export default class SummaryAuthList extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // TODO
+    if (prevState.cscList !== this.state.cscList) {
+      const subscriptions = this.state.cscList.map((csc) => {
+        const [name, salindex] = csc.split(':');
+        return `event-${name}-${salindex}-authList`;
+      });
+      console.log(subscriptions);
+    }
   }
 
   formatList = (target, identities, type) => {
@@ -73,24 +84,35 @@ export default class SummaryAuthList extends Component {
   removeIdentity = (targetCSC, identityToRemove, type) => {
     const { userIdentity } = this.state;
     let modalText = '';
-    if (userIdentity !== identityToRemove) {
+    if (type === 'CSC') {
       modalText = (
         <span>
-          You are about to request the removal of <b>{identityToRemove}</b> from <b>{targetCSC} authorization list</b>
+          You are about to request the removal of <b>{identityToRemove}</b> from <b>{targetCSC}</b> unauthorization
+          list.
           <br></br>
           Are you sure?
         </span>
       );
-    } else {
-      modalText = (
-        <span>
-          You are about to relinquish your authorization.
-          <br></br>
-          <b>This action will be resolved automatically and won't need verification</b>
-          <br></br>
-          Are you sure?
-        </span>
-      );
+    } else if (type === 'User') {
+      if (userIdentity !== identityToRemove) {
+        modalText = (
+          <span>
+            You are about to request the removal of <b>{identityToRemove}</b> from <b>{targetCSC}</b> authorization list
+            <br></br>
+            Are you sure?
+          </span>
+        );
+      } else {
+        modalText = (
+          <span>
+            You are about to relinquish your authorization.
+            <br></br>
+            <b>This action will be resolved automatically and won't need verification</b>
+            <br></br>
+            Are you sure?
+          </span>
+        );
+      }
     }
 
     this.setState({
@@ -113,6 +135,13 @@ export default class SummaryAuthList extends Component {
     }
   };
 
+  restoreToDefault() {
+    for (let i = 0; i < arguments.length; i++) {
+      // TODO restore to default endpoint
+      console.log(`Restoring default on ${arguments[i]}`);
+    }
+  }
+
   HEADERS = [
     {
       field: 'csc',
@@ -130,6 +159,19 @@ export default class SummaryAuthList extends Component {
       title: 'Unauthorized CSCs',
       render: (cell, row) => this.formatList(row.csc, cell, 'CSC'),
       className: styles.authlistIdentityColum,
+    },
+    {
+      field: 'actions',
+      title: 'Actions',
+      render: (_, row) => (
+        <Button
+          status="default"
+          disabled={!this.props.commandExecutePermission}
+          onClick={() => this.restoreToDefault(row.csc)}
+        >
+          Restore to default
+        </Button>
+      ),
     },
   ];
 
@@ -212,7 +254,11 @@ export default class SummaryAuthList extends Component {
             className={styles.select}
           />
           <Input placeholder="Filter by keywords" onChange={(e) => this.setState({ keywords: e.target.value })} />
-          <Button status="default" disabled>
+          <Button
+            status="default"
+            disabled={!this.props.commandExecutePermission}
+            onClick={() => this.restoreToDefault(...filteredByKeywordsTableData.map((x) => x.csc))}
+          >
             Restore all CSCs to default
           </Button>
         </div>
