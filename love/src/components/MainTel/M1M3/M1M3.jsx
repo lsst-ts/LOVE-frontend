@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 
+import { defaultNumberFormatter } from 'Utils';
 import {
   M1M3ActuatorPositions,
   M1M3ActuatorForces,
@@ -667,7 +668,7 @@ export default class M1M3 extends Component {
               </div>
               <div className={styles.actuatorValue}>
                 <span>Applied force:</span>
-                <span>{selectedActuator.value}</span>
+                <span>{defaultNumberFormatter(selectedActuator.value)}</span>
               </div>
             </SummaryPanel>
             
@@ -690,19 +691,19 @@ export default class M1M3 extends Component {
               <div className={styles.actuatorValue}>
                 <span>Breakaway LVDT:</span>
                 <span>
-                  {selectedHardpoint.breakawayLVDT.value}
+                  {defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}
                 </span>
               </div>
               <div className={styles.actuatorValue}>
                 <span>Displacement LVDT:</span>
                 <span>
-                  {selectedHardpoint.displacementLVDT.value}
+                  {defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}
                 </span>
               </div>
               <div className={styles.actuatorValue}>
                 <span>Breakaway Pressure:</span>
                 <span>
-                  {selectedHardpoint.breakawayPressure.value}
+                  {defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}
                 </span>
               </div>
             </SummaryPanel>
