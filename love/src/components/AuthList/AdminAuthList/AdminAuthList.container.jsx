@@ -6,51 +6,26 @@ import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/S
 import ManagerInterface from '../../../Utils';
 
 export const schema = {
-  description: 'CSC User Authorization List Administration',
+  description: 'Authorization List for administration',
   defaultSize: [57, 35],
   props: {
     title: {
       type: 'string',
       description: 'Name diplayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Authorization List',
+      default: 'Admin Authorization List',
     },
   },
 };
 
-class AdminAuthListContainer extends Component {
-  static propTypes = {
-    isAuthListAdmin: PropTypes.bool,
-    isRaw: PropTypes.bool,
-  };
-
-  state = {
-    authListRequests: [],
-    subscriptions: [],
-  };
-
-  onChange = () => {
-    ManagerInterface.getAuthListRequests().then((res) => {
-      this.setState({
-        authListRequests: res,
-      });
-    });
-  };
-
-  componentDidMount() {
-    this.onChange();
+const AdminAuthListContainer = ({ ...props }) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={subscriptions} />;
   }
+  return <AdminAuthList {...props} />;
+};
 
-  render() {
-    const { subscriptions, authListRequests } = this.state;
-    if (this.props.isRaw) {
-      return <SubscriptionTableContainer subscriptions={subscriptions} />;
-    }
-    return <AdminAuthList authListRequests={authListRequests} onChange={this.onChange} />;
-  }
-}
-
-const mapStateToProps = (state) => {
+const mapStateToProps = () => {
   return {
     isAuthListAdmin: true,
   };

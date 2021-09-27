@@ -10,7 +10,6 @@
 }
 
 .tableContainer {
-  padding: 1.25em;
 }
 
 .tableSelect {
@@ -26,4 +25,55 @@
 
 .actionButton {
   margin-right: 0.5em;
+}
+
+.filters {
+  display: flex;
+  padding: 0.5em 0;
+  margin-bottom: 0.5em;
+}
+
+.filters > * {
+  margin-right: 0.5em;
+}
+
+.filters .label {
+  display: flex;
+  align-items: center;
+  margin-right: 0.5em;
+}
+
+.filters input {
+  line-height: 1em;
+  height: 2.5em;
+}
+
+.filters .select {
+  white-space: nowrap;
+  flex: 0 0 200px;
+}
+
+.dateTimeContainer {
+  margin-bottom: 1em;
+}
+
+.csc {
+  font-weight: bold;
+}
+
+.authlistIdentity :first-child {
+  background-color: gray;
+  color: black;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.authlistIdentity :last-child {
+  margin-left: 0.5em;
 }

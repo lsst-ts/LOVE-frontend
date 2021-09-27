@@ -1,60 +1,87 @@
 import Moment from 'moment';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import Button from '../../GeneralPurpose/Button/Button';
-import PaginatedTable from '../../GeneralPurpose/PaginatedTable/PaginatedTable';
-import Select from '../../GeneralPurpose/Select/Select';
-import ManagerInterface from '../../../Utils';
+import { DATE_TIME_FORMAT } from 'Config';
+import ManagerInterface from 'Utils';
+import PaginatedTable from 'components/GeneralPurpose/PaginatedTable/PaginatedTable';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import Button from 'components/GeneralPurpose/Button/Button';
+import Select from 'components/GeneralPurpose/Select/Select';
+import Input from 'components/GeneralPurpose/Input/Input';
 import styles from './AdminAuthList.module.css';
 
-const COMMON_HEADERS = [
-  { field: 'userhost', title: 'user@host' },
-  { field: 'target_csc', title: 'Target CSC' },
-  { field: 'requested_at', title: 'Time elapsed since request', render: (value, row) => Moment(value).fromNow() },
-  { field: 'blocked_cscs', title: 'Blocked CSCs' },
+const example = [
   {
-    field: 'restriction_duration',
-    title: 'Restriction duration',
-    render: (value, row) => {
-      if (isNaN(value) || value <= 0) {
-        return '-';
-      }
-      return Moment().subtract(value, 'seconds').fromNow(true);
-    },
+    requested_by: 'saranda@inria-ThinkPad-P50-3',
+    cscs_to_change: 'ATDome:0',
+    authorized_users: '+saranda@inria-ThinkPad-P50-3',
+    unauthorized_cscs: '+MTPtg:0',
   },
+  {
+    requested_by: 'tribeiro@nb-tribeiro',
+    cscs_to_change: 'ATDome:0',
+    authorized_users: '-saranda@inria-ThinkPad-P50-3,+tribeiro@nb-tribeiro',
+    unauthorized_cscs: '+MTPtg:0',
+  },
+  {
+    requested_by: 'tribeiro@nb-tribeiro',
+    cscs_to_change: 'ATDome:0, ATMCS:0',
+    authorized_users: '-saranda@inria-ThinkPad-P50-3,+tribeiro@nb-tribeiro',
+    unauthorized_cscs: '+MTPtg:0',
+  },
+];
+
+const formatList = (identities, type) => {
+  if (identities === '') {
+    return <span>None</span>;
+  }
+  return identities.split(',').map((v, i) => (
+    <div key={i} className={styles.authlistIdentity}>
+      <span>{v.substr(0, 1)}</span>
+      <span>{v.substr(1)}</span>
+    </div>
+  ));
+};
+
+const COMMON_HEADERS = [
+  { field: 'requested_by', title: 'Request identity' },
+  {
+    field: 'cscs_to_change',
+    title: 'CSCs to change',
+    render: (cell) => cell.split(',').map((csc) => <div className={styles.csc}>{csc}</div>),
+  },
+  {
+    field: 'authorized_users',
+    title: 'Authorized users',
+    render: (cell) => formatList(cell, 'User'),
+  },
+  {
+    field: 'unauthorized_cscs',
+    title: 'Unauthorized cscs',
+    render: (cell) => formatList(cell, 'CSC'),
+  },
+];
+
+const ACCEPTED_HEADERS = [
+  ...COMMON_HEADERS,
+  { field: 'resolved_by', title: 'Authorized by' },
+  { field: 'resolved_at', title: 'Approved date', render: (value) => Moment(value).format(DATE_TIME_FORMAT) },
+  { field: 'message', title: 'Message' },
+  { field: 'duration', title: 'Duration' },
 ];
 
 const REJECTED_HEADERS = [
   ...COMMON_HEADERS,
   { field: 'resolved_by', title: 'Rejected by' },
-  {
-    field: 'resolved_at',
-    title: 'Rejection date',
-    render: (value, row) => Moment(value).format('YYYY-MM-DD HH:mm:ss'),
-  },
-];
-
-const REVERTED_HEADERS = [
-  ...COMMON_HEADERS,
-  { field: 'resolved_by', title: 'Authorized by' },
-  { field: 'resolved_at', title: 'Approval date', render: (value, row) => Moment(value).format('YYYY-MM-DD HH:mm:ss') },
-  { field: 'reverted_by', title: 'Reverted by' },
-  { field: 'reverted_at', title: 'Reverted date', render: (value, row) => Moment(value).format('YYYY-MM-DD HH:mm:ss') },
+  { field: 'resolved_at', title: 'Rejected date', render: (value) => Moment(value).format(DATE_TIME_FORMAT) },
+  { field: 'message', title: 'Message' },
 ];
 
 const STATUS_OPTIONS = [
   { value: 'PENDING', label: 'Pending requests' },
   { value: 'ACCEPTED', label: 'Accepted requests' },
   { value: 'REJECTED', label: 'Rejected requests' },
-  { value: 'REVERTED', label: 'Reverted requests' },
 ];
-
-const FILTERS = {
-  PENDING: 'Pending',
-  ACCEPTED: 'Authorized',
-  REJECTED: 'Denied',
-  REVERTED: 'Reverted',
-};
 
 export default class AdminAuthList extends Component {
   static propTypes = {
@@ -62,9 +89,16 @@ export default class AdminAuthList extends Component {
     authListRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
-  state = {
-    showing: STATUS_OPTIONS[0],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      showing: STATUS_OPTIONS[0].value,
+      cscOptions: ['All'],
+      keywords: '',
+      selectedCSC: 'All',
+      selectedDatetime: 'All',
+    };
+  }
 
   setRequestStatus(id, status) {
     return () => {
@@ -74,13 +108,12 @@ export default class AdminAuthList extends Component {
     };
   }
 
-  pending_headers = [
+  PENDING_HEADERS = [
     ...COMMON_HEADERS,
     {
-      field: 'action',
-      title: '',
-      render: (value, row) => {
-        console.log(row);
+      field: 'actions',
+      title: 'Actions',
+      render: (_, row) => {
         return (
           <>
             <Button className={styles.actionButton} onClick={this.setRequestStatus(row.id, 'Authorized')}>
@@ -89,57 +122,77 @@ export default class AdminAuthList extends Component {
             <Button className={styles.actionButton} onClick={this.setRequestStatus(row.id, 'Denied')}>
               Reject
             </Button>
+            <Button className={styles.actionButton} onClick={this.setRequestStatus(row.id, 'More')}>
+              More
+            </Button>
           </>
         );
       },
     },
   ];
 
-  accepted_headers = [
-    ...COMMON_HEADERS,
-    { field: 'resolved_by', title: 'Authorized by' },
-    {
-      field: 'resolved_at',
-      title: 'Approval date',
-      render: (value, row) => Moment(value).format('YYYY-MM-DD HH:mm:ss'),
-    },
-    {
-      field: 'action',
-      title: '',
-      render: (value, row) => (
-        <Button className={styles.actionButton} onClick={this.setRequestStatus(row.id, 'Reverted')}>
-          Revert request
-        </Button>
-      ),
-    },
-  ];
-
-  table_headers = {
-    PENDING: this.pending_headers,
-    ACCEPTED: this.accepted_headers,
+  TABLE_HEADERS = {
+    PENDING: this.PENDING_HEADERS,
+    ACCEPTED: ACCEPTED_HEADERS,
     REJECTED: REJECTED_HEADERS,
-    REVERTED: REVERTED_HEADERS,
   };
 
-  handleChange = (option) => this.setState({ showing: option });
+  handleChange = (option) => this.setState({ showing: option.value });
+
+  handleDateTimeChange = (event, type) => console.log(event, type);
+
+  componentDidMount() {
+    ManagerInterface.getAuthListRequests().then((res) => {
+      console.log(res);
+      this.setState({
+        authListRequests: res,
+      });
+    });
+  }
 
   render() {
     const { authListRequests } = this.props;
-    const { showing } = this.state;
+    const { showing, cscOptions, selectedCSC, keywords } = this.state;
+    console.log(selectedCSC, keywords);
 
-    const filtered = (authListRequests || [])
-      .filter((req) => req.status === FILTERS[showing.value])
-      .map((req) => ({ userhost: `${req.username}@${req.hostname}`, ...req, blocked_cscs: req.blocked_cscs || '-' }));
+    // const filtered = (authListRequests || [])
+    //   .filter((req) => req.status === FILTERS[showing.value])
+    //   .map((req) => ({ userhost: `${req.username}@${req.hostname}`, ...req, blocked_cscs: req.blocked_cscs || '-' }));
+    const filteredTableData = example.filter((row) => {
+      if (selectedCSC === 'All') return true;
+      if (selectedCSC !== 'All' && row.cscs_to_change.includes(selectedCSC)) return true;
+      return false;
+    });
+
+    const filteredByKeywordsTableData = filteredTableData.filter((row) => {
+      if (keywords === '') return true;
+      if (JSON.stringify(row).includes(keywords)) return true;
+      return false;
+    });
+    // console.log(this.TABLE_HEADERS[showing]);
 
     return (
       <div className={styles.CSCAuthListAdminContainer}>
-        <div className={styles.header}>Admin Auth List</div>
         <div className={styles.tableContainer}>
           <div className={styles.tableSelect}>
             <span>Showing</span>
             <Select value={showing} onChange={this.handleChange} options={STATUS_OPTIONS} />
           </div>
-          <PaginatedTable headers={this.table_headers[showing.value]} data={filtered} />
+          <hr></hr>
+          <div className={styles.filters}>
+            <div className={styles.label}>CSC</div>
+            <Select
+              options={cscOptions}
+              option={selectedCSC}
+              onChange={({ value }) => this.setState({ selectedCSC: value })}
+              className={styles.select}
+            />
+            <Input placeholder="Filter by keywords" onChange={(e) => this.setState({ keywords: e.target.value })} />
+          </div>
+          <div className={styles.dateTimeContainer}>
+            <DateTimeRange onChange={this.handleDateTimeChange} label="Date & Time" />
+          </div>
+          <PaginatedTable headers={this.TABLE_HEADERS[showing]} data={filteredByKeywordsTableData} />
         </div>
       </div>
     );

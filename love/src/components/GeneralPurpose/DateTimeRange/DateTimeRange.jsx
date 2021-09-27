@@ -9,13 +9,15 @@ const DateTimeRange = ({ ...props }) => {
   const [dateEnd, setDateEnd] = useState(new Date());
 
   const handleChangeStart = (changeEvent) => {
-    console.log(changeEvent.format(DATE_TIME_FORMAT));
+    // console.log(changeEvent.format(DATE_TIME_FORMAT));
     setDateStart(changeEvent);
+    props.onChange(changeEvent, 'start');
   };
 
   const handleChangeEnd = (changeEvent) => {
-    console.log(changeEvent.format(DATE_TIME_FORMAT));
+    // console.log(changeEvent.format(DATE_TIME_FORMAT));
     setDateEnd(changeEvent);
+    props.onChange(changeEvent, 'end');
   };
 
   return (

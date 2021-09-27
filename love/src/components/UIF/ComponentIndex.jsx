@@ -267,6 +267,16 @@ export const authlistIndex = {
       },
     },
   },
+  AdminAuthList: {
+    component: require('../AuthList/AdminAuthList/AdminAuthList.container').default,
+    schema: {
+      ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../AuthList/AdminAuthList/AdminAuthList.container').schema.props,
+      },
+    },
+  },
 };
 
 export const utilitiesIndex = {
