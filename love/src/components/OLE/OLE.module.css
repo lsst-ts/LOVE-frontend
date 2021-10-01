@@ -1,0 +1,32 @@
+.coleContainer {
+    display: inline-block;
+    flex-direction: column;
+    margin: 5px;
+    height: 100%; 
+    width: 500px; 
+    margin-top: 0.5em;
+
+}
+
+.oleContainer .oleContent {
+    color: #96a3b3;
+    background: var(--theme-div-background);
+    margin: 5px;
+    height: 100%;
+    width: 500px;
+    margin-top: 0;
+    padding-right: 5px;
+    padding-left: 20px;
+}
+
+.summaryPanel{
+    display: block;
+}
+
+.summaryPanelLabels {
+    max-width: 100%;
+    display: inline;
+    justify-content: flex-start;
+    padding: 1em;
+    margin-bottom: 1em;
+  }
