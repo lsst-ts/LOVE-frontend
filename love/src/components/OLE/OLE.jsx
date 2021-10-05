@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import styles from './OLE.module.css';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Select from 'components/GeneralPurpose/Select/Select';
-import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
+import Input from 'components/GeneralPurpose/Input/Input';
+import Button from 'components/GeneralPurpose/Button/Button';
 
 class OLE extends Component {
   static oleTableHeaders() {
@@ -93,7 +94,7 @@ class OLE extends Component {
             </div>
 
             <div className={styles.oleTextAreaFilter}>
-              <TextArea></TextArea>
+              <Input></Input>
             </div>
           </div>
         </div>
