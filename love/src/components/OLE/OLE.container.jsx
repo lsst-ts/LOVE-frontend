@@ -6,7 +6,7 @@ import { addGroup, removeGroup } from 'redux/actions/ws';
 
 export const schema = {
   description: 'View of Exposure log service',
-  defaultSize: [61, 32],
+  defaultSize: [91, 32],
   props: {
     title: {
       type: 'string',
