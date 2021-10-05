@@ -77,3 +77,60 @@
 .authlistIdentity :last-child {
   margin-left: 0.5em;
 }
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+}
+
+.moreModal {
+  display: grid;
+  grid-template-columns: minmax(120px, auto) 1fr;
+  column-gap: 1em;
+  row-gap: 1em;
+  text-align: left;
+}
+
+.moreModal :nth-child(odd) {
+  font-weight: bold;
+}
+
+.moreModal .messageRow {
+  height: 200px;
+}
+
+.moreModal textarea {
+  height: calc(100% - 1.5em);
+}
+
+.moreModal .coloredCell {
+  background: var(--tertiary-background-color);
+  padding: 0.5em 0 0 0.5em;
+  display: flex;
+}
+
+.confirmButtons > span {
+  display: inline-block;
+}
+
+.confirmButtons > span:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+.infoIcon {
+  width: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  position: relative;
+}
+
+.hover {
+  background-color: red;
+  top: 0 !important;
+  left: 0 !important;
+  background-color: var(--second-tertiary-background-color);
+  padding: 0.5em;
+  width: 160px;
+  border-radius: 0.5em;
+}

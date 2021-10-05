@@ -441,7 +441,7 @@ export default class ManagerInterface {
     });
   }
 
-  static requestAuthListAuthorization(targetCSC, username, hostname, restrictionDuration) {
+  static requestAuthListAuthorization(cscsToChange, authorizedUsers, nonAuthorizedCSCs) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
@@ -452,10 +452,9 @@ export default class ManagerInterface {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
-        target_csc: targetCSC,
-        username,
-        hostname,
-        restriction_duration: restrictionDuration,
+        cscsToChange,
+        authorizedUsers,
+        nonAuthorizedCSCs,
       }),
     }).then((response) => {
       if (response.status >= 500) {

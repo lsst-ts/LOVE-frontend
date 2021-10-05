@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DATE_TIME_FORMAT } from 'Config';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import styles from './DateTimeRange.module.css';
 import './react-datetime.css';
 
 const DateTimeRange = ({ ...props }) => {
-  const [dateStart, setDateStart] = useState(new Date(new Date() - 24 * 60 * 60 * 1000));
-  const [dateEnd, setDateEnd] = useState(new Date());
+  const [dateStart, setDateStart] = useState(props.startDate ?? new Date(new Date() - 24 * 60 * 60 * 1000));
+  const [dateEnd, setDateEnd] = useState(props.endDate ?? new Date());
+
+  useEffect(() => {
+    props.onChange(dateStart, 'start');
+    props.onChange(dateEnd, 'end');
+  }, []);
 
   const handleChangeStart = (changeEvent) => {
     // console.log(changeEvent.format(DATE_TIME_FORMAT));
