@@ -19,28 +19,6 @@
     padding-left: 20px;
 }
 
-.oleContainer{
-    display: flex;
-    width: 100%;
-}
-
-.oleContainerItems {
-    max-width: 50%;
-    display: flex;
-    justify-content: flex-start;
-    padding: 1em;
-    margin-bottom: 1em;
-  }
-
-.oleSelect {
-    width: 25%;
-    height: 5%;
-}
-
-.oleTextAreaFilter {
-    width: 25%;
-}
-
 .oleh3 {
     align-self: flex-start;
     width: fit-content;
