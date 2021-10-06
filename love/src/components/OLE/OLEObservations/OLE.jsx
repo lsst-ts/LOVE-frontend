@@ -101,6 +101,9 @@ class OLE extends Component {
         <div>
           <SimpleTable headers={OLE.oleTableHeaders()} data={OLEData} />
         </div>
+        <div className={styles.oleNewMsgButton}>
+          <Button>+ New Message</Button>
+        </div>
       </div>
     );
   }
