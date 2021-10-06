@@ -1,0 +1,53 @@
+.coleContainer {
+    display: inline-block;
+    flex-direction: column;
+    margin: 5px;
+    height: 100%; 
+    width: 500px; 
+    margin-top: 0.5em;
+
+}
+
+.oleContainer .oleContent {
+    color: #96a3b3;
+    background: var(--theme-div-background);
+    margin: 5px;
+    height: 100%;
+    width: 500px;
+    margin-top: 0;
+    padding-right: 5px;
+    padding-left: 20px;
+}
+
+.oleContainer{
+    display: flex;
+    width: 100%;
+}
+
+.oleContainerItems {
+    max-width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 1em;
+    margin-bottom: 1em;
+  }
+
+.oleSelect {
+    width: 25%;
+    height: 5%;
+}
+
+.oleTextAreaFilter {
+    width: 25%;
+    float: right;
+}
+
+.oleh3 {
+    align-self: flex-start;
+    width: fit-content;
+}
+
+.oleNewMsgButton {
+    margin-top: 20px;
+    float: right;
+}
