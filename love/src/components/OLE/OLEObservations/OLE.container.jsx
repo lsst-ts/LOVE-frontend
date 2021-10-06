@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import OLE from './OLE';
+import OLE from '../OLEObservations/OLE';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 
 export const schema = {
   description: 'View of Exposure log service',
-  defaultSize: [91, 32],
+  defaultSize: [75, 32],
   props: {
     title: {
       type: 'string',
