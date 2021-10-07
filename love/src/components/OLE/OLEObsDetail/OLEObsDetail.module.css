@@ -1,5 +1,5 @@
-.coleContainer {
-    display: inline-block;
+.oleObsDetailContainer {
+    display: inline;
     flex-direction: column;
     margin: 5px;
     height: 100%; 
@@ -8,7 +8,7 @@
 
 }
 
-.oleContainer .oleContent {
+/* .oleObsDetailContainer {
     color: #96a3b3;
     background: var(--theme-div-background);
     margin: 5px;
@@ -17,9 +17,68 @@
     margin-top: 0;
     padding-right: 5px;
     padding-left: 20px;
-}
+} */
 
-.oleh3 {
+.oleObsDetailh3 {
     align-self: flex-start;
     width: fit-content;
+}
+
+.oleObsDetailContainerItems {
+    /* max-width: auto; */
+    display: inline-flex;
+    /* justify-content: flex-start; */
+    padding: 1em;
+    margin-bottom: 1em;
+    float: left;
+}
+
+.oleObsDetailTextAreaFilter {
+    width: 150px;
+    float: right;
+}
+
+.oleObsDetailTopContainer{
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+    border-bottom: solid var(--second-quinary-background-color) 1px;
+}
+
+.oleObsDetaildiv {
+    display: inline-block;
+    background-color: var(--second-secondary-background-color);
+}
+
+.oleObsDetailObID {
+    float: left;
+}
+
+.oleObsDetailObSt {
+    float: right;
+}
+
+.oleObsDetailReturn {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.oleObsDetailButtons {
+    display: inline-flex;
+    float: right;
+}
+
+.oleObsDetailButDraw {
+    margin-right: 10px;
+}
+
+.oleObsDetailCheckYButtons {
+    display: inline-flex;
+}
+
+.oleObsDetailAll {
+    display: inline-flex;
+    float: left;
 }
