@@ -3,6 +3,7 @@ import styles from './OLEObsDetail.module.css';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
+import { schemeOranges } from 'd3-scale-chromatic';
 
 class OLEObsDetail extends Component {
   componentDidMount() {
@@ -56,20 +57,38 @@ class OLEObsDetail extends Component {
               <Input></Input>
             </div>
 
-            <div className={styles.oleObsDetailCheckYButtons}>
-              <div className={styles.oleObsDetailAll}>
+            <div className={styles.oleObsDetailInputButtons}>
+              <div className={styles.oleObsDetailCheckAll}>
                 <Input type="checkbox"></Input>
                 <span>All messages</span>
               </div>
+
               <div className={styles.oleObsDetailButtons}>
                 <Button className={styles.oleObsDetailButDraw}>Withdraw message</Button>
                 <Button>+ New Message</Button>
               </div>
             </div>
-          </div>
 
-          <div>
-            <div></div>
+            <div className={styles.oleObsDetailMssgs}>
+              {/* here goes maybe a map function */}
+              <div className={styles.oleObsDetailInputCheck}>
+                <Input type="checkbox"></Input>
+              </div>
+              <div className={styles.oleObsDetailBoxDiv}>
+                <span className={styles.oleObsDetailSpan1}>
+                  On <strong>date</strong> at <strong>time</strong>, <strong>person-name</strong> wrote:
+                </span>
+                <box>
+                  <span>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi imperdiet molestie lectus non
+                    commodo. Curabitur libero tellus, tincidunt eu lacus quis, eleifend malesuada nisl. Cras dignissim
+                    cursus leo at pretium. Maecenas nisi neque, iaculis id placerat vel, dictum eu libero. Pellentesque
+                    pharetra eros eu dolor pulvinar fringilla. Nunc vel faucibus turpis. Mauris at dui feugiat, iaculis
+                    lectus nec, bibendum odio. Pellentesque imperdiet et ipsum sit amet interdum.
+                  </span>
+                </box>
+              </div>
+            </div>
           </div>
         </div>
       </div>
