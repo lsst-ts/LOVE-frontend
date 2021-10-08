@@ -65,20 +65,41 @@
     margin-bottom: 20px;
 }
 
-.oleObsDetailButtons {
-    display: inline-flex;
-    float: right;
-}
-
 .oleObsDetailButDraw {
     margin-right: 10px;
 }
 
-.oleObsDetailCheckYButtons {
+.oleObsDetailInputButtons {
     display: inline-flex;
 }
 
-.oleObsDetailAll {
+.oleObsDetailCheckAll {
     display: inline-flex;
+}
+
+.oleObsDetailButtons {
+    display: inline-flex;
+}
+
+.oleObsDetailMssgs {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #16303C;
+    padding: 50px;
+    margin: 50px;
+}
+
+.oleObsDetailBoxDiv {
+    display: grid;
+    text-align: justify;
+    margin-left: 150px;
+}
+
+.oleObsDetailSpan1 {
+    margin-bottom: 5px;
+}
+
+.oleObsDetailInputCheck {
     float: left;
+    width: 100px;
 }
