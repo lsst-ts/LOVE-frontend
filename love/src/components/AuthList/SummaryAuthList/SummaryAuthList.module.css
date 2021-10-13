@@ -63,3 +63,13 @@
 .borderedButton:focus {
     border: 1px solid var(--default-background-color);
 }
+
+.ButtonNewRequest {
+    width: 100%;
+    height: 60px;
+    background: var(--tertiary-background-color);
+}
+
+.TextNewRequest {
+    font-size: large;
+}

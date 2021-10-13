@@ -263,6 +263,9 @@ export default class SummaryAuthList extends Component {
           </Button>
         </div>
         <SimpleTable headers={this.HEADERS} data={filteredByKeywordsTableData} />
+        <Button className={styles.ButtonNewRequest}>
+          <span className={styles.TextNewRequest}>+ New CSC Request From</span>
+        </Button>
         <Modal
           displayTopBar={false}
           isOpen={!!removeIdentityModalShown}
