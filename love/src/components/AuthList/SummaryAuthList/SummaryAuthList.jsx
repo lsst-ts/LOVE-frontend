@@ -142,6 +142,10 @@ export default class SummaryAuthList extends Component {
     }
   }
 
+  // showNewRequestBox() {
+  
+  // }
+
   HEADERS = [
     {
       field: 'csc',
@@ -263,9 +267,37 @@ export default class SummaryAuthList extends Component {
           </Button>
         </div>
         <SimpleTable headers={this.HEADERS} data={filteredByKeywordsTableData} />
-        <Button className={styles.ButtonNewRequest}>
-          <span className={styles.TextNewRequest}>+ New CSC Request From</span>
+        <Button className={styles.buttonNewRequest}>
+          <span className={styles.textNewRequest}>+ New CSC Request From</span>
         </Button>
+        <div>
+          <Button 
+            className={styles.buttonCancelNewRequest}
+          >
+            <span className={styles.textNewRequest}>- Cancel New CSC Request From</span>
+          </Button>
+          <div className={styles.boxNewRequest}>
+            <div className={styles.itemsBoxNewRequest}>
+              <div className={styles.label2}>CSCs to change</div>
+              <div className={styles.label2}>Authorized Users</div>
+              <div className={styles.label2}>Non-Authorized CSCs</div>
+            </div>
+            <div className={styles.itemsBoxNewRequest}>
+              <div className={styles.inputNewRequest}>
+                <Input></Input>
+              </div>
+              <div className={styles.inputNewRequest}>
+                <Input></Input>
+              </div>
+              <div className={styles.inputNewRequest}>
+                <Input></Input>
+              </div>
+            </div>
+            <div className={styles.btnSend}>
+              <Button>Send Request</Button>
+            </div>
+          </div>
+        </div>
         <Modal
           displayTopBar={false}
           isOpen={!!removeIdentityModalShown}

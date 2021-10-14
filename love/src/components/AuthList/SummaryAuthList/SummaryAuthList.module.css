@@ -64,12 +64,45 @@
     border: 1px solid var(--default-background-color);
 }
 
-.ButtonNewRequest {
+.buttonNewRequest {
     width: 100%;
     height: 60px;
     background: var(--tertiary-background-color);
 }
 
-.TextNewRequest {
+.textNewRequest {
     font-size: large;
+}
+
+.buttonCancelNewRequest {
+    width: 100%;
+    height: 30px;
+    background: var(--tertiary-background-color);
+}
+
+.boxNewRequest {
+    background-color: #16303C;
+}
+
+.itemsBoxNewRequest {
+    display: inline-table;
+    margin-bottom: 20px;
+    width: 300px;
+}
+
+.inputNewRequest {
+    /* width: 80%; */
+    margin-bottom: 10px;
+    padding-bottom: 3px;
+}
+
+.label2 {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    font-size: medium;
+    padding-bottom: 12px;
+}
+
+.btnSend {
+    float: right;
 }
