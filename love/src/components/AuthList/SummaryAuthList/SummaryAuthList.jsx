@@ -142,8 +142,14 @@ export default class SummaryAuthList extends Component {
     }
   }
 
-  // showNewRequestBox() {
-  
+  // hideOrShowNewRequest() {
+  //   const idBtn = document.getElementById("NewReqBtn");
+  //   if (idBtn.style.display ==="none") {
+  //     idBtn.style.display = "block";
+  //   }
+  //   else {
+  //     idBtn.style.display = "none";
+  //   }
   // }
 
   HEADERS = [
@@ -267,30 +273,34 @@ export default class SummaryAuthList extends Component {
           </Button>
         </div>
         <SimpleTable headers={this.HEADERS} data={filteredByKeywordsTableData} />
-        <Button className={styles.buttonNewRequest}>
+        <Button
+          id="NewReqBtn"
+          className={styles.buttonNewRequest}
+          // onClick={this.hideOrShowNewRequest()}
+        >
           <span className={styles.textNewRequest}>+ New CSC Request From</span>
         </Button>
         <div>
-          <Button 
-            className={styles.buttonCancelNewRequest}
-          >
+          <Button className={styles.buttonCancelNewRequest}>
             <span className={styles.textNewRequest}>- Cancel New CSC Request From</span>
           </Button>
           <div className={styles.boxNewRequest}>
-            <div className={styles.itemsBoxNewRequest}>
-              <div className={styles.label2}>CSCs to change</div>
-              <div className={styles.label2}>Authorized Users</div>
-              <div className={styles.label2}>Non-Authorized CSCs</div>
-            </div>
-            <div className={styles.itemsBoxNewRequest}>
-              <div className={styles.inputNewRequest}>
-                <Input></Input>
+            <div className={styles.labelsInputsNewRequest}>
+              <div className={styles.itemsBoxNewRequest}>
+                <div className={styles.label2}>CSCs to change</div>
+                <div className={styles.label2}>Authorized Users</div>
+                <div className={styles.label2}>Non-Authorized CSCs</div>
               </div>
-              <div className={styles.inputNewRequest}>
-                <Input></Input>
-              </div>
-              <div className={styles.inputNewRequest}>
-                <Input></Input>
+              <div className={styles.itemsBoxNewRequest}>
+                <div className={styles.inputNewRequest}>
+                  <Input></Input>
+                </div>
+                <div className={styles.inputNewRequest}>
+                  <Input></Input>
+                </div>
+                <div className={styles.inputNewRequest}>
+                  <Input></Input>
+                </div>
               </div>
             </div>
             <div className={styles.btnSend}>
