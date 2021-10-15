@@ -107,7 +107,9 @@
     margin-bottom: 10px;
     padding-bottom: 3px;
     width: 494px;
-    background: var(--second-secondary-backgroun);
+    background-color: var(--second-tertiary-background-color);
+    border-color: inherit;
+    color: var(--base-font-color);
 }
 
 .label2 {

@@ -142,16 +142,6 @@ export default class SummaryAuthList extends Component {
     }
   }
 
-  // hideOrShowNewRequest() {
-  //   const idBtn = document.getElementById("NewReqBtn");
-  //   if (idBtn.style.display ==="none") {
-  //     idBtn.style.display = "block";
-  //   }
-  //   else {
-  //     idBtn.style.display = "none";
-  //   }
-  // }
-
   HEADERS = [
     {
       field: 'csc',
@@ -273,11 +263,7 @@ export default class SummaryAuthList extends Component {
           </Button>
         </div>
         <SimpleTable headers={this.HEADERS} data={filteredByKeywordsTableData} />
-        <Button
-          id="NewReqBtn"
-          className={styles.buttonNewRequest}
-          // onClick={this.hideOrShowNewRequest()}
-        >
+        <Button className={styles.buttonNewRequest}>
           <span className={styles.textNewRequest}>+ New CSC Request From</span>
         </Button>
         <div>
