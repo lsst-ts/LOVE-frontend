@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import _ from 'lodash';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
@@ -19,6 +20,7 @@ export default class SummaryAuthList extends Component {
 
   constructor(props) {
     super(props);
+    this.id = _.uniqueId('summary-authlist-');
     this.state = {
       selectedCSC: 'All',
       selectedUser: 'All',
@@ -267,7 +269,7 @@ export default class SummaryAuthList extends Component {
     });
 
     return (
-      <div id="container" className={styles.summaryAuthlistContainer}>
+      <div id={this.id} ref={this.container} className={styles.summaryAuthlistContainer}>
         <div className={styles.filters}>
           <div className={styles.label}>CSC</div>
           <Select
@@ -307,7 +309,7 @@ export default class SummaryAuthList extends Component {
           isOpen={!!removeIdentityModalShown}
           onRequestClose={() => this.setState({ removeIdentityModalShown: false })}
           contentLabel="Component selection modal"
-          parentSelector={() => document.querySelector('#container')}
+          parentSelector={() => document.querySelector(`#${this.id}`)}
           size={50}
         >
           {removeIdentityModalText}
