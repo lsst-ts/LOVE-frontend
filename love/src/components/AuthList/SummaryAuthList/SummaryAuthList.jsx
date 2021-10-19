@@ -8,6 +8,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import ManagerInterface from 'Utils';
 import styles from './SummaryAuthList.module.css';
+import SimplePanel from 'components/GeneralPurpose/SimplePanel/SimplePanel';
 
 export default class SummaryAuthList extends Component {
   static propTypes = {
@@ -29,6 +30,7 @@ export default class SummaryAuthList extends Component {
       removeIdentityRequest: null,
       userIdentity: '',
       cscList: [],
+      requestPanelActive: false,
     };
   }
 
@@ -193,6 +195,34 @@ export default class SummaryAuthList extends Component {
     );
   };
 
+  renderRequestPanel = () => {
+    return (
+      <div className={styles.boxNewRequest}>
+        <div className={styles.labelsInputsNewRequest}>
+          <div className={styles.itemsBoxNewRequest}>
+            <div className={styles.label2}>CSCs to change</div>
+            <div className={styles.label2}>Authorized Users</div>
+            <div className={styles.label2}>Non-Authorized CSCs</div>
+          </div>
+          <div className={styles.itemsBoxNewRequest}>
+            <div className={styles.inputNewRequest}>
+              <Input></Input>
+            </div>
+            <div className={styles.inputNewRequest}>
+              <Input></Input>
+            </div>
+            <div className={styles.inputNewRequest}>
+              <Input></Input>
+            </div>
+          </div>
+        </div>
+        <div className={styles.btnSend}>
+          <Button>Send Request</Button>
+        </div>
+      </div>
+    );
+  };
+
   render() {
     const { subscriptions } = this.props;
     const {
@@ -263,37 +293,15 @@ export default class SummaryAuthList extends Component {
           </Button>
         </div>
         <SimpleTable headers={this.HEADERS} data={filteredByKeywordsTableData} />
-        <Button className={styles.buttonNewRequest}>
-          <span className={styles.textNewRequest}>+ New CSC Request From</span>
+        <Button
+          onClick={() => this.setState((prevState) => ({ requestPanelActive: !prevState.requestPanelActive }))}
+          className={!this.state.requestPanelActive ? styles.buttonNewRequest : styles.buttonCancelNewRequest}
+        >
+          <span className={styles.textNewRequest}>
+            {!this.state.requestPanelActive ? '+ New CSC Request From' : '- Cancel New CSC Request From'}
+          </span>
         </Button>
-        <div>
-          <Button className={styles.buttonCancelNewRequest}>
-            <span className={styles.textNewRequest}>- Cancel New CSC Request From</span>
-          </Button>
-          <div className={styles.boxNewRequest}>
-            <div className={styles.labelsInputsNewRequest}>
-              <div className={styles.itemsBoxNewRequest}>
-                <div className={styles.label2}>CSCs to change</div>
-                <div className={styles.label2}>Authorized Users</div>
-                <div className={styles.label2}>Non-Authorized CSCs</div>
-              </div>
-              <div className={styles.itemsBoxNewRequest}>
-                <div className={styles.inputNewRequest}>
-                  <Input></Input>
-                </div>
-                <div className={styles.inputNewRequest}>
-                  <Input></Input>
-                </div>
-                <div className={styles.inputNewRequest}>
-                  <Input></Input>
-                </div>
-              </div>
-            </div>
-            <div className={styles.btnSend}>
-              <Button>Send Request</Button>
-            </div>
-          </div>
-        </div>
+        <SimplePanel content={this.renderRequestPanel()} maxHeight={300} isActive={this.state.requestPanelActive} />
         <Modal
           displayTopBar={false}
           isOpen={!!removeIdentityModalShown}
