@@ -208,14 +208,18 @@ export default class SummaryAuthList extends Component {
           </div>
           <div className={styles.itemsBoxNewRequest}>
             <div className={styles.inputNewRequest}>
-              <Input></Input>
+              <div className={styles.authlistNewRequest}>
+                <span className={styles.elemNewRequest}>ATMount</span>
+                <span onClick={() => this.removeIdentity('ATMount', 'ATMount', 'CSC')}>x</span>
+              </div>
             </div>
             <div className={styles.inputNewRequest}>
-              <Input></Input>
+              <div className={styles.authlistNewRequest}>
+                <span className={styles.elemNewRequest}>tribeiro@nb-tribeiro</span>
+                <span onClick={() => this.removeIdentity('ATMount', 'tribeiro@nb-tribeiro', 'User')}>x</span>
+              </div>
             </div>
-            <div className={styles.inputNewRequest}>
-              <Input></Input>
-            </div>
+            <div className={styles.inputNewRequest}></div>
           </div>
         </div>
         <div className={styles.btnSend}>

@@ -28,7 +28,12 @@ export default class Panel extends Component {
     };
 
     return (
-      <div className="panel" style={{ overflow: 'hidden' }} role="tabpanel" aria-expanded={isActive}>
+      <div
+        className="panel"
+        style={{ overflow: 'hidden', background: `${isActive ? '#16303C' : ''}` }}
+        role="tabpanel"
+        aria-expanded={isActive}
+      >
         {/* <button className='panel__label'
 					role='tab'
 					onClick={ activateTab }>

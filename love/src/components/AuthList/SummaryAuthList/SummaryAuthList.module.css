@@ -82,7 +82,7 @@
 }
 
 .boxNewRequest {
-    background-color: #16303C;
+    /* background-color: #16303C; */
     padding-top: 50px;
     flex-direction: column;
     display: flex;
@@ -107,6 +107,7 @@
     margin-bottom: 10px;
     padding-bottom: 3px;
     width: 494px;
+    height: 30px;
     background-color: var(--second-tertiary-background-color);
     border-color: inherit;
     color: var(--base-font-color);
@@ -124,4 +125,19 @@
     float: right;
     padding-right: 148px;
     padding-bottom: 10px;
+}
+
+.authlistNewRequest {
+    background-color: var(--default-background-color);
+    color: var(--default-font-color);
+    padding: 0.5em;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+    border-radius: 4px;
+    display: inline-flex;
+    float: left;
+}
+
+.elemNewRequest{
+    margin-right: 5px;
 }
