@@ -91,13 +91,12 @@ export const schema = {
 };
 
 const CSCGroupContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
-  return <CSCGroup {...props} subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams}/>;
+  return <CSCGroup {...props} subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} />;
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     subscribeToStreams: (cscName, index) => {
-      console.log(`SUBSCRIBING TO ${cscName}-${index}...`);
       dispatch(addGroup('event-Heartbeat-0-stream'));
       dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
       dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
