@@ -452,9 +452,10 @@ export default class ManagerInterface {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
-        cscsToChange,
-        authorizedUsers,
-        nonAuthorizedCSCs,
+        csc_to_change: cscsToChange,
+        authorized_users: authorizedUsers,
+        unauthorized_cscs: nonAuthorizedCSCs,
+        requested_by: 'love@love',
       }),
     }).then((response) => {
       if (response.status >= 500) {
@@ -472,7 +473,7 @@ export default class ManagerInterface {
     });
   }
 
-  static setAuthListRequestStatus(authRequestId, status) {
+  static setAuthListRequestStatus(authRequestId, status, message = null, duration = null) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
@@ -483,6 +484,8 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
       body: JSON.stringify({
         status,
+        message,
+        duration,
       }),
     }).then((response) => {
       if (response.status >= 500) {
