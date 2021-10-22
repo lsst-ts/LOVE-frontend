@@ -94,7 +94,8 @@
 }
 
 .labelsInputsNewRequest {
-    display: inline-flex;
+    display: flex;
+    justify-content: center;
 }
 
 .itemsBoxNewRequest {
@@ -104,17 +105,17 @@
 }
 
 .inputNewRequest {
-    margin-bottom: 10px;
+    margin-bottom: 25px;
     padding-bottom: 3px;
     width: 494px;
     height: 30px;
-    background-color: var(--second-tertiary-background-color);
     border-color: inherit;
     color: var(--base-font-color);
 }
 
 .label2 {
-    margin-bottom: 10px;
+    margin-bottom: 23px;
+    margin-top: 5px;
     margin-right: 25px;
     font-size: medium;
     padding-bottom: 12px;
@@ -123,7 +124,7 @@
 
 .btnSend {
     float: right;
-    padding-right: 148px;
+    padding-right: 120px;
     padding-bottom: 10px;
 }
 

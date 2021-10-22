@@ -30,7 +30,7 @@ export default class Panel extends Component {
     return (
       <div
         className="panel"
-        style={{ overflow: 'hidden', background: `${isActive ? '#16303C' : ''}` }}
+        style={{ overflow: 'hidden', background: `${isActive ? 'var(--secondary-background-color)' : ''}` }}
         role="tabpanel"
         aria-expanded={isActive}
       >

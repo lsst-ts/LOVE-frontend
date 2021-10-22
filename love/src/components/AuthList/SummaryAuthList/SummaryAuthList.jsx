@@ -33,6 +33,9 @@ export default class SummaryAuthList extends Component {
       userIdentity: '',
       cscList: [],
       requestPanelActive: false,
+      csc_to_change: '',
+      authorize_users: '',
+      unauthorize_cscs: '',
     };
   }
 
@@ -197,6 +200,13 @@ export default class SummaryAuthList extends Component {
     );
   };
 
+  formatInputText = (value) => {
+    let tokens = value.split(',');
+    tokens = tokens.map((x) => x.trim());
+    const returnValue = tokens.join(',');
+    return returnValue;
+  };
+
   renderRequestPanel = () => {
     return (
       <div className={styles.boxNewRequest}>
@@ -208,26 +218,50 @@ export default class SummaryAuthList extends Component {
           </div>
           <div className={styles.itemsBoxNewRequest}>
             <div className={styles.inputNewRequest}>
-              <div className={styles.authlistNewRequest}>
-                <span className={styles.elemNewRequest}>ATMount</span>
-                <span onClick={() => this.removeIdentity('ATMount', 'ATMount', 'CSC')}>x</span>
-              </div>
+              <Input
+                value={this.state.csc_to_change}
+                placeholder="Insert items separated by commas without space"
+                onChange={(e) => this.setState({ csc_to_change: this.formatInputText(e.target.value) })}
+              ></Input>
             </div>
             <div className={styles.inputNewRequest}>
-              <div className={styles.authlistNewRequest}>
-                <span className={styles.elemNewRequest}>tribeiro@nb-tribeiro</span>
-                <span onClick={() => this.removeIdentity('ATMount', 'tribeiro@nb-tribeiro', 'User')}>x</span>
-              </div>
+              <Input
+                value={this.state.authorize_users}
+                placeholder="Insert items separated by commas without space"
+                onChange={(e) => this.setState({ authorize_users: formatInputText(e.target.value) })}
+              ></Input>
             </div>
-            <div className={styles.inputNewRequest}></div>
+            <div className={styles.inputNewRequest}>
+              <Input
+                value={this.state.unauthorize_cscs}
+                placeholder="Insert items separated by commas without space"
+                onChange={(e) => this.setState({ unauthorize_cscs: formatInputText(e.target.value) })}
+              ></Input>
+            </div>
           </div>
         </div>
         <div className={styles.btnSend}>
-          <Button>Send Request</Button>
+          <Button onClick={() => this.sendRequest()}>Send Request</Button>
         </div>
       </div>
     );
   };
+
+  sendRequest() {
+    const csc_to_change = this.state.csc_to_change;
+    const authorize_users = this.state.authorize_users;
+    const unauthorize_cscs = this.state.unauthorize_cscs;
+
+    const passA = authorize_users.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
+    const passB = unauthorize_cscs.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
+    if (passA && passB) {
+      ManagerInterface.requestAuthListAuthorization(csc_to_change, authorize_users, unauthorize_cscs).then((res) => {
+        this.setState({ csc_to_change: '', authorize_users: '', unauthorize_cscs: '', isActive: false });
+      });
+    } else {
+      // tell user that format is wrong
+    }
+  }
 
   render() {
     const { subscriptions } = this.props;
