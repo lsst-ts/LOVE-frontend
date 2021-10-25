@@ -121,6 +121,15 @@
     padding-bottom: 12px;
     text-align: right;
 }
+.labelDuration {
+    display: flex;
+    margin-bottom: 23px;
+    margin-top: 5px;
+    margin-right: 25px;
+    font-size: medium;
+    padding-bottom: 12px;
+    text-align: right;
+}
 
 .btnSend {
     float: right;
@@ -141,4 +150,34 @@
 
 .elemNewRequest{
     margin-right: 5px;
+}
+
+.wrongInput {
+    color: red;
+    font-weight: bold;
+    font-size: x-small;
+    float: left;
+}
+
+.coloredCell {
+    background: var(--tertiary-background-color);
+    padding: 0.5em 0 0 0.5em;
+    display: flex;
+}
+
+.infoIcon {
+    width: 1em;
+    margin-left: 0.5em;
+    margin-right: 0.5em;
+    position: relative;
+}
+  
+.hover {
+background-color: red;
+top: 0 !important;
+left: 0 !important;
+background-color: var(--second-tertiary-background-color);
+padding: 0.5em;
+width: 160px;
+border-radius: 0.5em;
 }

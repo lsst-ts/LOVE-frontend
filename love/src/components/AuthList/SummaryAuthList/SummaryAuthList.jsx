@@ -10,6 +10,8 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import ManagerInterface from 'Utils';
 import styles from './SummaryAuthList.module.css';
 import SimplePanel from 'components/GeneralPurpose/SimplePanel/SimplePanel';
+import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 
 export default class SummaryAuthList extends Component {
   static propTypes = {
@@ -36,6 +38,9 @@ export default class SummaryAuthList extends Component {
       csc_to_change: '',
       authorize_users: '',
       unauthorize_cscs: '',
+      message: '',
+      duration: '',
+      wrong_input: false,
     };
   }
 
@@ -207,6 +212,20 @@ export default class SummaryAuthList extends Component {
     return returnValue;
   };
 
+  handleMessageChange = (message) => {
+    const trimmedMessage = message.substr(0, MAX_MESSAGE_LEN);
+    // console.log(trimmedMessage);
+    this.setState({ message: trimmedMessage });
+  };
+
+  handleDurationChange = (evt) => {
+    const value = evt.target.value;
+    let duration = value === '' || isNaN(value) ? 0 : parseInt(value, 10);
+    if (duration <= MIN_DURATION) duration = MIN_DURATION;
+    else if (duration >= MAX_DURATION) duration = MAX_DURATION;
+    this.setState({ duration });
+  };
+
   renderRequestPanel = () => {
     return (
       <div className={styles.boxNewRequest}>
@@ -215,28 +234,54 @@ export default class SummaryAuthList extends Component {
             <div className={styles.label2}>CSCs to change</div>
             <div className={styles.label2}>Authorized Users</div>
             <div className={styles.label2}>Non-Authorized CSCs</div>
+            <div className={styles.label2}>Message</div>
+            <div className={styles.labelDuration}>
+              <span>Duration (minutes)</span>
+              <Hoverable top={true} center={true} inside={true}>
+                <span className={styles.infoIcon}>
+                  <InfoIcon />
+                </span>
+                <div className={styles.hover}>A duration of 0 or blank equals to no limit</div>
+              </Hoverable>
+            </div>
           </div>
           <div className={styles.itemsBoxNewRequest}>
             <div className={styles.inputNewRequest}>
               <Input
                 value={this.state.csc_to_change}
-                placeholder="Insert items separated by commas without space"
+                placeholder="Insert items separated by commas"
                 onChange={(e) => this.setState({ csc_to_change: this.formatInputText(e.target.value) })}
               ></Input>
+              <div>
+                <span className={styles.wrongInput}>
+                  {this.state.wrong_input ? 'Please insert items separated by commas' : ''}
+                </span>
+              </div>
             </div>
             <div className={styles.inputNewRequest}>
               <Input
                 value={this.state.authorize_users}
-                placeholder="Insert items separated by commas without space"
-                onChange={(e) => this.setState({ authorize_users: formatInputText(e.target.value) })}
+                placeholder="Insert items separated by commas"
+                onChange={(e) => this.setState({ authorize_users: this.formatInputText(e.target.value) })}
               ></Input>
             </div>
             <div className={styles.inputNewRequest}>
               <Input
                 value={this.state.unauthorize_cscs}
-                placeholder="Insert items separated by commas without space"
-                onChange={(e) => this.setState({ unauthorize_cscs: formatInputText(e.target.value) })}
+                placeholder="Insert items separated by commas"
+                onChange={(e) => this.setState({ unauthorize_cscs: this.formatInputText(e.target.value) })}
               ></Input>
+            </div>
+            <div>
+              <TextArea
+                value={this.state.message}
+                callback={this.handleMessageChange}
+                onKeyDown={() => null}
+                onKeyUp={() => null}
+              />
+            </div>
+            <div className={styles.inputNewRequest}>
+              <Input value={this.state.duration} onChange={this.handleDurationChange} />
             </div>
           </div>
         </div>
@@ -255,11 +300,13 @@ export default class SummaryAuthList extends Component {
     const passA = authorize_users.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
     const passB = unauthorize_cscs.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
     if (passA && passB) {
+      //no es ||?
       ManagerInterface.requestAuthListAuthorization(csc_to_change, authorize_users, unauthorize_cscs).then((res) => {
         this.setState({ csc_to_change: '', authorize_users: '', unauthorize_cscs: '', isActive: false });
       });
     } else {
       // tell user that format is wrong
+      this.setState({ wrong_input: true });
     }
   }
 
@@ -341,7 +388,7 @@ export default class SummaryAuthList extends Component {
             {!this.state.requestPanelActive ? '+ New CSC Request From' : '- Cancel New CSC Request From'}
           </span>
         </Button>
-        <SimplePanel content={this.renderRequestPanel()} maxHeight={300} isActive={this.state.requestPanelActive} />
+        <SimplePanel content={this.renderRequestPanel()} maxHeight={500} isActive={this.state.requestPanelActive} />
         <Modal
           displayTopBar={false}
           isOpen={!!removeIdentityModalShown}
