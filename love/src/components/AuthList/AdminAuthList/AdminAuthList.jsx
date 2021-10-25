@@ -2,9 +2,9 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import _ from 'lodash';
+import lodash from 'lodash';
 import { DATE_TIME_FORMAT } from 'Config';
-import ManagerInterface from 'Utils';
+import ManagerInterface, { calculateTimeoutToNow, formatSecondsToDigital } from 'Utils';
 import PaginatedTable from 'components/GeneralPurpose/PaginatedTable/PaginatedTable';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -14,39 +14,22 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import { AUTHLIST_REQUEST_PENDING, AUTHLIST_REQUEST_ACCEPTED, AUTHLIST_REQUEST_DENIED } from 'Constants';
 import styles from './AdminAuthList.module.css';
 
-const example = [
-  {
-    requested_by: 'saranda@inria-ThinkPad-P50-3',
-    cscs_to_change: 'ATDome:0',
-    authorized_users: '+saranda@inria-ThinkPad-P50-3',
-    unauthorized_cscs: '+MTPtg:0',
-    requested_at: '2021-10-01T21:30:01.173329Z',
-  },
-  {
-    requested_by: 'tribeiro@nb-tribeiro',
-    cscs_to_change: 'ATDome:0',
-    authorized_users: '-saranda@inria-ThinkPad-P50-3,+tribeiro@nb-tribeiro',
-    unauthorized_cscs: '+MTPtg:0',
-    requested_at: '2021-10-01T21:30:01.173329Z',
-  },
-  {
-    requested_by: 'tribeiro@nb-tribeiro',
-    cscs_to_change: 'ATDome:0, ATMCS:0',
-    authorized_users: '-saranda@inria-ThinkPad-P50-3,+tribeiro@nb-tribeiro',
-    unauthorized_cscs: '+MTPtg:0',
-    requested_at: '2021-10-01T21:30:01.173329Z',
-  },
-];
+const moment = extendMoment(Moment);
 
 const MAX_MESSAGE_LEN = 320;
 const MAX_DURATION = 60;
 const MIN_DURATION = 0;
 
-const moment = extendMoment(Moment);
+const STATUS_OPTIONS = [
+  { value: AUTHLIST_REQUEST_PENDING, label: 'Pending requests' },
+  { value: AUTHLIST_REQUEST_ACCEPTED, label: 'Accepted requests' },
+  { value: AUTHLIST_REQUEST_DENIED, label: 'Rejected requests' },
+];
 
-const formatList = (identities, type) => {
+const formatList = (identities) => {
   if (identities === '') {
     return <span>None</span>;
   }
@@ -58,46 +41,6 @@ const formatList = (identities, type) => {
   ));
 };
 
-const COMMON_HEADERS = [
-  { field: 'requested_by', title: 'Request identity' },
-  {
-    field: 'cscs_to_change',
-    title: 'CSCs to change',
-    render: (cell) => cell.split(',').map((csc) => <div className={styles.csc}>{csc}</div>),
-  },
-  {
-    field: 'authorized_users',
-    title: 'Authorized users',
-    render: (cell) => formatList(cell, 'User'),
-  },
-  {
-    field: 'unauthorized_cscs',
-    title: 'Unauthorized cscs',
-    render: (cell) => formatList(cell, 'CSC'),
-  },
-];
-
-const ACCEPTED_HEADERS = [
-  ...COMMON_HEADERS,
-  { field: 'resolved_by', title: 'Authorized by' },
-  { field: 'resolved_at', title: 'Approved date', render: (value) => Moment(value).format(DATE_TIME_FORMAT) },
-  { field: 'message', title: 'Message' },
-  { field: 'duration', title: 'Duration' },
-];
-
-const REJECTED_HEADERS = [
-  ...COMMON_HEADERS,
-  { field: 'resolved_by', title: 'Rejected by' },
-  { field: 'resolved_at', title: 'Rejected date', render: (value) => Moment(value).format(DATE_TIME_FORMAT) },
-  { field: 'message', title: 'Message' },
-];
-
-const STATUS_OPTIONS = [
-  { value: 'PENDING', label: 'Pending requests' },
-  { value: 'ACCEPTED', label: 'Accepted requests' },
-  { value: 'REJECTED', label: 'Rejected requests' },
-];
-
 export default class AdminAuthList extends Component {
   static propTypes = {
     onChange: PropTypes.func,
@@ -106,8 +49,9 @@ export default class AdminAuthList extends Component {
 
   constructor(props) {
     super(props);
-    this.id = _.uniqueId('admin-authlist-');
+    this.id = lodash.uniqueId('admin-authlist-');
     this.state = {
+      authListRequests: [],
       showing: STATUS_OPTIONS[0].value,
       cscOptions: ['All'],
       keywords: '',
@@ -115,19 +59,13 @@ export default class AdminAuthList extends Component {
       selectedStartDate: null,
       selectedEndDate: null,
       selectedRequest: null,
+      authorizationType: null,
       confirmationModalShown: false,
       confirmationModalText: '',
       moreModalShown: false,
       message: '',
       duration: '',
-    };
-  }
-
-  setRequestStatus(id, status) {
-    return () => {
-      ManagerInterface.setAuthListRequestStatus(id, status).then((res) => {
-        this.props.onChange();
-      });
+      counter: 0,
     };
   }
 
@@ -148,18 +86,86 @@ export default class AdminAuthList extends Component {
         </span>
       );
     } else if (type === 'More') {
-      return this.setState({ moreModalShown: true, selectedRequest: row });
+      this.setState({ moreModalShown: true, selectedRequest: row });
+      return;
     }
 
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
       selectedRequest: row,
+      authorizationType: type,
     });
   }
 
+  authorizeRequest(type) {
+    const { selectedRequest, message, duration } = this.state;
+    console.log('Type:', type);
+    console.log('Selected request:', selectedRequest);
+    console.log('Message:', message);
+    console.log('Duration:', duration);
+    ManagerInterface.setAuthListRequestStatus(selectedRequest.id, 'Authorized', message, duration).then((res) => {
+      ManagerInterface.getAuthListRequests().then((res) => {
+        this.setState({
+          authListRequests: res,
+        });
+      });
+      this.setState({ confirmationModalShown: false, moreModalShown: false });
+    });
+  }
+
+  COMMON_HEADERS = [
+    { field: 'requested_by', title: 'Request identity' },
+    {
+      field: 'cscs_to_change',
+      title: 'CSCs to change',
+      render: (cell) => cell.split(',').map((csc) => <div className={styles.csc}>{csc}</div>),
+    },
+    {
+      field: 'authorized_users',
+      title: 'Authorized users',
+      render: (cell) => formatList(cell, 'User'),
+    },
+    {
+      field: 'unauthorized_cscs',
+      title: 'Unauthorized cscs',
+      render: (cell) => formatList(cell, 'CSC'),
+    },
+  ];
+
+  ACCEPTED_HEADERS = [
+    ...this.COMMON_HEADERS,
+    { field: 'resolved_by', title: 'Authorized by' },
+    {
+      field: 'resolved_at',
+      title: 'Approved date',
+      render: (value) => (value ? Moment(value).format(DATE_TIME_FORMAT) : ''),
+    },
+    { field: 'message', title: 'Message' },
+    {
+      field: 'duration',
+      title: 'Duration',
+      render: (value, row) => {
+        if (value === null) return '';
+        const secondsLeft = calculateTimeoutToNow(Moment(row.resolved_at), value * 60);
+        return formatSecondsToDigital(secondsLeft);
+      },
+    },
+  ];
+
+  REJECTED_HEADERS = [
+    ...this.COMMON_HEADERS,
+    { field: 'resolved_by', title: 'Rejected by' },
+    {
+      field: 'resolved_at',
+      title: 'Rejected date',
+      render: (value) => (value ? Moment(value).format(DATE_TIME_FORMAT) : ''),
+    },
+    { field: 'message', title: 'Message' },
+  ];
+
   PENDING_HEADERS = [
-    ...COMMON_HEADERS,
+    ...this.COMMON_HEADERS,
     {
       field: 'actions',
       title: 'Actions',
@@ -182,15 +188,14 @@ export default class AdminAuthList extends Component {
   ];
 
   TABLE_HEADERS = {
-    PENDING: this.PENDING_HEADERS,
-    ACCEPTED: ACCEPTED_HEADERS,
-    REJECTED: REJECTED_HEADERS,
+    [AUTHLIST_REQUEST_PENDING]: this.PENDING_HEADERS,
+    [AUTHLIST_REQUEST_ACCEPTED]: this.ACCEPTED_HEADERS,
+    [AUTHLIST_REQUEST_DENIED]: this.REJECTED_HEADERS,
   };
 
   handleChange = (option) => this.setState({ showing: option.value });
 
   handleDateTimeChange = (date, type) => {
-    console.log(date, type);
     if (type === 'start') {
       this.setState({ selectedStartDate: date });
     } else if (type === 'end') {
@@ -200,7 +205,6 @@ export default class AdminAuthList extends Component {
 
   handleMessageChange = (message) => {
     const trimmedMessage = message.substr(0, MAX_MESSAGE_LEN);
-    // console.log(trimmedMessage);
     this.setState({ message: trimmedMessage });
   };
 
@@ -212,16 +216,8 @@ export default class AdminAuthList extends Component {
     this.setState({ duration });
   };
 
-  authorizeRequest(type) {
-    const { selectedRequest, message } = this.state;
-    console.log(type);
-    console.log('Selected request', selectedRequest);
-    console.log('Message', message);
-    this.setState({ confirmationModalShown: false, moreModalShown: false });
-  }
-
   renderModalFooter = () => {
-    const { removeIdentityRequest } = this.state;
+    const { authorizationType } = this.state;
     return (
       <div className={styles.modalFooter}>
         <Button
@@ -229,10 +225,10 @@ export default class AdminAuthList extends Component {
           onClick={() => this.setState({ confirmationModalShown: false })}
           status="transparent"
         >
-          Cancel request
+          Go back
         </Button>
-        <Button onClick={(evt) => this.authorizeRequest(evt)} status="default">
-          Request removal
+        <Button onClick={() => this.authorizeRequest(authorizationType)} status="default">
+          Yes
         </Button>
       </div>
     );
@@ -240,15 +236,28 @@ export default class AdminAuthList extends Component {
 
   componentDidMount() {
     ManagerInterface.getAuthListRequests().then((res) => {
-      // console.log(res);
       this.setState({
         authListRequests: res,
       });
     });
+
+    ManagerInterface.getTopicData('event-telemetry').then((data) => {
+      const cscList = ['All'].concat(
+        Object.keys(data)
+          .map((x) => `${x}:0`)
+          .sort(),
+      );
+      this.setState({ cscOptions: cscList });
+    });
+
+    // Used to update Table every second and see duration animation
+    if (this.timer) clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      this.setState((prevState) => ({ counter: prevState.counter + 1 }));
+    }, 1000);
   }
 
   render() {
-    const { authListRequests } = this.props;
     const {
       showing,
       cscOptions,
@@ -261,12 +270,13 @@ export default class AdminAuthList extends Component {
       duration,
       selectedStartDate,
       selectedEndDate,
+      selectedRequest,
+      authListRequests,
     } = this.state;
 
-    // const filtered = (authListRequests || [])
-    //   .filter((req) => req.status === FILTERS[showing.value])
-    //   .map((req) => ({ userhost: `${req.username}@${req.hostname}`, ...req, blocked_cscs: req.blocked_cscs || '-' }));
-    let filteredTableData = example.filter((row) => {
+    let filteredTableData = authListRequests.filter((row) => row.status === showing);
+
+    filteredTableData = filteredTableData.filter((row) => {
       if (selectedCSC === 'All') return true;
       if (selectedCSC !== 'All' && row.cscs_to_change.includes(selectedCSC)) return true;
       return false;
@@ -277,14 +287,10 @@ export default class AdminAuthList extends Component {
       if (JSON.stringify(row).includes(keywords)) return true;
       return false;
     });
-    // console.log(this.TABLE_HEADERS[showing]);
 
     filteredTableData = filteredTableData.filter((row) => {
       const requestedDate = Moment(row.requested_at);
       const range = moment.range(selectedStartDate, selectedEndDate);
-      console.log(requestedDate);
-      console.log(range);
-      console.log(range.contains(requestedDate));
       return range.contains(requestedDate);
     });
 
@@ -313,7 +319,7 @@ export default class AdminAuthList extends Component {
               startDate={new Date() - 24 * 60 * 60 * 1000 * 5}
             />
           </div>
-          <PaginatedTable headers={this.TABLE_HEADERS[showing]} data={filteredTableData} />
+          <PaginatedTable headers={this.TABLE_HEADERS[showing]} data={filteredTableData} counter={this.state.counter} />
         </div>
         <Modal
           displayTopBar={false}
@@ -330,17 +336,16 @@ export default class AdminAuthList extends Component {
           isOpen={!!moreModalShown}
           onRequestClose={() => this.setState({ moreModalShown: false })}
           parentSelector={() => document.querySelector(`#${this.id}`)}
-          size={50}
         >
           <div className={styles.moreModal}>
             <div>Request identity</div>
-            <div>tribeiro@lsst.org</div>
+            <div>{selectedRequest?.requested_by}</div>
             <div>CSC to change</div>
-            <div>MTPtg, MTMount</div>
+            <div>{selectedRequest?.cscs_to_change}</div>
             <div>Authorized users</div>
-            <div>tribeiro@lsst.org</div>
+            <div>{selectedRequest?.authorized_users}</div>
             <div>Non authorized CSCs</div>
-            <div>MTPtg, MTMount</div>
+            <div>{selectedRequest?.unauthorized_cscs}</div>
             <div className={[styles.messageRow, styles.coloredCell].join(' ')}>Message</div>
             <TextArea value={message} callback={this.handleMessageChange} onKeyDown={() => null} onKeyUp={() => null} />
             <div className={styles.coloredCell}>
@@ -357,10 +362,10 @@ export default class AdminAuthList extends Component {
           <div className={styles.modalFooter}>
             <Button
               className={styles.borderedButton}
-              onClick={() => this.setState({ confirmationModalShown: false })}
+              onClick={() => this.setState({ moreModalShown: false })}
               status="transparent"
             >
-              Cancel request
+              Go back
             </Button>
             <div className={styles.confirmButtons}>
               <Button onClick={() => this.authorizeRequest('reject')} status="default">

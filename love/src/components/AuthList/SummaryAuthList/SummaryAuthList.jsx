@@ -348,7 +348,6 @@ export default class SummaryAuthList extends Component {
           onRequestClose={() => this.setState({ removeIdentityModalShown: false })}
           contentLabel="Component selection modal"
           parentSelector={() => document.querySelector(`#${this.id}`)}
-          size={50}
         >
           {removeIdentityModalText}
           {this.renderModalFooter()}

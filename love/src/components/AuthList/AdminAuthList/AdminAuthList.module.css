@@ -87,8 +87,8 @@
 .moreModal {
   display: grid;
   grid-template-columns: minmax(120px, auto) 1fr;
-  column-gap: 1em;
-  row-gap: 1em;
+  column-gap: .5em;
+  row-gap: .5em;
   text-align: left;
 }
 
@@ -133,4 +133,9 @@
   padding: 0.5em;
   width: 160px;
   border-radius: 0.5em;
+}
+
+.borderedButton,
+.borderedButton:focus {
+    border: 1px solid var(--default-background-color);
 }

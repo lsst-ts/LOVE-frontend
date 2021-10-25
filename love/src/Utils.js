@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
+import Moment from 'moment';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 import { SALCommandStatus } from 'redux/actions/ws';
 
@@ -717,6 +718,18 @@ export const relativeTime = (timestamp, taiToUtc) => {
   return delta;
 };
 
+/**
+ * Converts seconds to digital format as '00:00'
+ * @param {number} time, seconds to be converted
+ */
+export const formatSecondsToDigital = (time) => {
+  let seconds = time % 60;
+  let minutes = Math.floor(time / 60);
+  minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes;
+  seconds = seconds.toString().length === 1 ? `0${seconds}` : seconds;
+  return `${minutes}:${seconds}`;
+};
+
 export const getStringRegExp = (str) => {
   try {
     return new RegExp(str, 'i');
@@ -839,4 +852,17 @@ export function degrees(radians) {
 
 export function fixedFloat(x, points = 3) {
   return Number.parseFloat(x).toFixed(points);
+}
+
+/**
+ * Function used to calculate the left duration from startDate + shift to current time.
+ * If difference is negative the return value is 0
+ * @param {moment} startDate - The initial date
+ * @param {number} shift - The shift added to the startDate in seconds
+ * @returns {number} Left duration from startDate + shift to current time
+ */
+export function calculateTimeoutToNow(startDate, shift = 0) {
+  const diff = Moment.duration(Moment().diff(startDate));
+  const secondsLeft = shift - diff.asSeconds();
+  return secondsLeft > 0 ? parseInt(secondsLeft, 10) : 0;
 }
