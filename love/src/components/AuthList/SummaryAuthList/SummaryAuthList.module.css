@@ -169,8 +169,7 @@
 }
 
 .wrongInput {
-    color: red;
-    font-weight: bold;
+    color: var(--status-alert-color);
     font-size: x-small;
     float: left;
 }

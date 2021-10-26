@@ -327,7 +327,7 @@ export default class SummaryAuthList extends Component {
           </div>
         </div>
         <div className={styles.btnSend}>
-          <Button onClick={() => this.sendRequest()}>Send Request</Button>
+          <Button onClick={() => this.sendRequest()}>Commit New Authorization</Button>
         </div>
       </div>
     );
