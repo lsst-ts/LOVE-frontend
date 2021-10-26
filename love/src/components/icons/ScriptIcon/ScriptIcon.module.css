@@ -8,9 +8,11 @@
   stroke: var(--base-font-color);
 }
 
+/*
 .inactive {
   stroke: var(--secondary-font-color);
 }
+*/
 
 .cls-1 {
   fill:#7a8c97;
