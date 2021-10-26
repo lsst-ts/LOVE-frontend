@@ -1,28 +1,31 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import _ from 'lodash';
+import lodash from 'lodash';
+import ManagerInterface from 'Utils';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
-import ManagerInterface from 'Utils';
-import styles from './SummaryAuthList.module.css';
 import SimplePanel from 'components/GeneralPurpose/SimplePanel/SimplePanel';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import styles from './SummaryAuthList.module.css';
 
 export default class SummaryAuthList extends Component {
   static propTypes = {
     subscriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
     subscribeToStream: PropTypes.func,
     unsubscribeToStream: PropTypes.func,
+    authlistState: PropTypes.object,
+    user: PropTypes.string,
+    commandExecutePermission: PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
-    this.id = _.uniqueId('summary-authlist-');
+    this.id = lodash.uniqueId('summary-authlist-');
     this.state = {
       selectedCSC: 'All',
       selectedUser: 'All',
@@ -33,7 +36,6 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText: '',
       removeIdentityRequest: null,
       userIdentity: '',
-      cscList: [],
       requestPanelActive: false,
       csc_to_change: '',
       authorize_users: '',
@@ -46,31 +48,43 @@ export default class SummaryAuthList extends Component {
 
   componentDidMount() {
     this.props.subscribeToStream();
-    const userOptions = ['All', 'saranda@inria-ThinkPad-P50-3', 'tribeiro@nb-tribeiro'];
-    this.setState({ userOptions });
 
-    // Set CSCs list
-    ManagerInterface.getTopicData('event-telemetry').then((data) => {
-      const cscList = ['All'].concat(
-        Object.keys(data)
-          .map((x) => `${x}:0`)
-          .sort(),
-      );
-      this.setState({ cscOptions: cscList });
-    });
+    if (this.props.subscriptions) {
+      const subscribedCSCs = this.props.subscriptions.map((x) => {
+        const tokens = x.split('-');
+        return `${tokens[1]}:${tokens[2]}`;
+      });
+      this.setState({ cscOptions: ['All', ...subscribedCSCs] });
+    }
+
+    if (this.props.authlistState) {
+      const userOptions = new Set();
+      Object.entries(this.props.authlistState).forEach(([, val]) => {
+        val.authorizedUsers.split(',').forEach((x) => userOptions.add(x));
+      });
+      this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
+    }
   }
 
   componentWillUnmount() {
     this.props.unsubscribeToStream();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.cscList !== this.state.cscList) {
-      const subscriptions = this.state.cscList.map((csc) => {
-        const [name, salindex] = csc.split(':');
-        return `event-${name}-${salindex}-authList`;
+  componentDidUpdate(prevProps) {
+    if (prevProps.subscriptions !== this.props.subscriptions) {
+      const subscribedCSCs = this.props.subscriptions.map((x) => {
+        const tokens = x.split('-');
+        return `${tokens[1]}:${tokens[2]}`;
       });
-      console.log(subscriptions);
+      this.setState({ cscOptions: ['All', ...subscribedCSCs] });
+    }
+
+    if (JSON.stringify(prevProps.authlistState) !== JSON.stringify(this.props.authlistState)) {
+      const userOptions = new Set();
+      Object.entries(this.props.authlistState).forEach(([, val]) => {
+        val.authorizedUsers.split(',').forEach((x) => userOptions.add(x));
+      });
+      this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
   }
 
@@ -94,6 +108,7 @@ export default class SummaryAuthList extends Component {
   };
 
   removeIdentity = (targetCSC, identityToRemove, type) => {
+    const { user } = this.props;
     const { userIdentity } = this.state;
     let modalText = '';
     if (type === 'CSC') {
@@ -136,22 +151,39 @@ export default class SummaryAuthList extends Component {
       // console.log(`Remove ${type} ${identityToRemove} from ${targetCSC}`);
       this.setState({
         removeIdentityRequest: () =>
-          ManagerInterface.requestAuthListAuthorization(targetCSC, `-${identityToRemove}`, null),
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, null),
       });
     } else if (type === 'CSC') {
       // console.log(`Remove ${type} ${identityToRemove} from ${targetCSC}`);
       this.setState({
         removeIdentityRequest: () =>
-          ManagerInterface.requestAuthListAuthorization(targetCSC, null, `-${identityToRemove}`),
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, null, `-${identityToRemove}`),
       });
     }
   };
 
   restoreToDefault() {
+    const { user } = this.props;
     for (let i = 0; i < arguments.length; i++) {
-      // TODO restore to default endpoint
-      console.log(`Restoring default on ${arguments[i]}`);
+      const selectedCSC = arguments[i];
+      const authlist = this.props.authlistState.find((x) => x.csc === selectedCSC);
+      const cscsToChange = selectedCSC;
+      const authorizedUsers = authlist.authorizedUsers
+        .split(',')
+        .map((x) => `-${x}`)
+        .join(',');
+      const nonAuthorizedCSCs = authlist.nonAuthorizedCSCs
+        .split(',')
+        .map((x) => `-${x}`)
+        .join(',');
+      console.log('Request: ', cscsToChange, authorizedUsers, nonAuthorizedCSCs);
+      ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs).then(
+        (res) => {
+          console.log(res);
+        },
+      );
     }
+    alert('ok'); // change to toast notify
   }
 
   HEADERS = [
@@ -167,7 +199,7 @@ export default class SummaryAuthList extends Component {
       className: styles.authlistIdentityColum,
     },
     {
-      field: 'unauthorizeCSCs',
+      field: 'nonAuthorizedCSCs',
       title: 'Unauthorized CSCs',
       render: (cell, row) => this.formatList(row.csc, cell, 'CSC'),
       className: styles.authlistIdentityColum,
@@ -293,15 +325,14 @@ export default class SummaryAuthList extends Component {
   };
 
   sendRequest() {
-    const csc_to_change = this.state.csc_to_change;
-    const authorize_users = this.state.authorize_users;
-    const unauthorize_cscs = this.state.unauthorize_cscs;
+    const { user } = this.props;
+    const { csc_to_change, authorize_users, unauthorize_cscs } = this.state;
 
     const passA = authorize_users.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
     const passB = unauthorize_cscs.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
     if (passA && passB) {
       //no es ||?
-      ManagerInterface.requestAuthListAuthorization(csc_to_change, authorize_users, unauthorize_cscs).then((res) => {
+      ManagerInterface.requestAuthListAuthorization(user, csc_to_change, authorize_users, unauthorize_cscs).then(() => {
         this.setState({ csc_to_change: '', authorize_users: '', unauthorize_cscs: '', isActive: false });
       });
     } else {
@@ -321,24 +352,8 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalShown,
       removeIdentityModalText,
     } = this.state;
-    const tableData = subscriptions.map((sub, i) => {
-      const subParts = sub.split('-');
-      let users = '';
-      if (i == 0) {
-        users = 'tribeiro@nb-tribeiro';
-      } else if (i == 1) {
-        users = 'saranda@inria-ThinkPad-P50-3';
-      } else if (i == 2) {
-        users = 'saranda@inria-ThinkPad-P50-3,tribeiro@nb-tribeiro';
-      }
-      return {
-        csc: `${subParts[1]}:${subParts[2]}`,
-        // authorizedUsers: this.props[sub]?.[0]?.authorizedUsers?.value ?? '',
-        authorizedUsers: users,
-        // unauthorizeCSCs: this.props[sub]?.[0]?.nonAuthorizedCSCs?.value ?? '',
-        unauthorizeCSCs: 'MTPtg:1',
-      };
-    });
+
+    const tableData = [];
 
     const filteredTableData = tableData.filter((row) => {
       if (selectedCSC === 'All' && selectedUser === 'All') return true;

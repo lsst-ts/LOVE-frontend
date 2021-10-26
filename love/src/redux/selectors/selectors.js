@@ -428,7 +428,14 @@ export const getLATISSState = (state) => {
 export const getAuthlistState = (state, subscriptions) => {
   const authlistData = getStreamsData(state, subscriptions);
   // console.log(authlistData);
-  return { ...authlistData };
+  const example = {
+    'event-ATDome-0-authList': { authorizedUsers: 'tribeiro@nb-tribeiro', nonAuthorizedCSCs: 'MTPtg:1' },
+    'event-ATMCS-0-authList': {
+      authorizedUsers: 'saranda@inria-ThinkPad-P50-3,tribeiro@nb-tribeiro',
+      nonAuthorizedCSCs: 'MTPtg:1',
+    },
+  };
+  return { ...example };
 };
 
 export const getKey = (dict, key, def) => {

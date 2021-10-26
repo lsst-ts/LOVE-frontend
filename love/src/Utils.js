@@ -442,21 +442,32 @@ export default class ManagerInterface {
     });
   }
 
-  static requestAuthListAuthorization(cscsToChange, authorizedUsers, nonAuthorizedCSCs) {
+  static requestAuthListAuthorization(
+    username,
+    cscsToChange,
+    authorizedUsers,
+    nonAuthorizedCSCs,
+    message = null,
+    duration = null,
+  ) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
+
+    const { host } = window.location;
     const url = `${this.getApiBaseUrl()}authlistrequest/`;
     return fetch(url, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify({
-        csc_to_change: cscsToChange,
+        cscs_to_change: cscsToChange,
         authorized_users: authorizedUsers,
         unauthorized_cscs: nonAuthorizedCSCs,
-        requested_by: 'love@love',
+        requested_by: `${username}@${host}`,
+        message,
+        duration,
       }),
     }).then((response) => {
       if (response.status >= 500) {

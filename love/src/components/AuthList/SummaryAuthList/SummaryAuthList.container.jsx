@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getAuthlistState, getPermCmdExec } from 'redux/selectors';
+import { getAuthlistState, getPermCmdExec, getUsername } from 'redux/selectors';
 import SummaryAuthList from './SummaryAuthList';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -38,7 +38,8 @@ const mapStateToProps = (state, ownProps) => {
   });
   const commandExecutePermission = getPermCmdExec(state);
   const authlistState = getAuthlistState(state, subscriptions);
-  return { ...authlistState, commandExecutePermission };
+  const user = getUsername(state);
+  return { authlistState, commandExecutePermission, user };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
