@@ -472,14 +472,17 @@ export default class ManagerInterface {
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
+        toast.error('Error communicating with the server.');
         return false;
       }
       if (response.status === 401 || response.status === 403) {
         // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
+        toast.error('Session expired. Logging out');
         return false;
       }
       return response.json().then((resp) => {
+        toast.success('Request received');
         return resp;
       });
     });
