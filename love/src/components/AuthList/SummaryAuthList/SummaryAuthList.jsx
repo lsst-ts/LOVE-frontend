@@ -342,7 +342,7 @@ export default class SummaryAuthList extends Component {
   }
 
   render() {
-    const { subscriptions } = this.props;
+    const { subscriptions, authlistState } = this.props;
     const {
       selectedCSC,
       selectedUser,
@@ -353,7 +353,10 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText,
     } = this.state;
 
-    const tableData = [];
+    const tableData = Object.entries(authlistState).map(([key, val]) => {
+      const keyTokens = key.split('-');
+      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...val };
+    });
 
     const filteredTableData = tableData.filter((row) => {
       if (selectedCSC === 'All' && selectedUser === 'All') return true;
