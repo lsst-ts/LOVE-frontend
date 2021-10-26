@@ -13,6 +13,9 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
 import styles from './SummaryAuthList.module.css';
 
+const MAX_MESSAGE_LEN = 320;
+const MAX_DURATION = 60;
+const MIN_DURATION = 0;
 export default class SummaryAuthList extends Component {
   static propTypes = {
     subscriptions: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -42,7 +45,8 @@ export default class SummaryAuthList extends Component {
       unauthorize_cscs: '',
       message: '',
       duration: '',
-      wrong_input: false,
+      wrong_input_users: false,
+      wrong_input_cscs: false,
     };
   }
 
@@ -266,7 +270,7 @@ export default class SummaryAuthList extends Component {
             <div className={styles.label2}>CSCs to change</div>
             <div className={styles.label2}>Authorized Users</div>
             <div className={styles.label2}>Non-Authorized CSCs</div>
-            <div className={styles.label2}>Message</div>
+            <div className={styles.labelMsg}>Message</div>
             <div className={styles.labelDuration}>
               <span>Duration (minutes)</span>
               <Hoverable top={true} center={true} inside={true}>
@@ -284,11 +288,6 @@ export default class SummaryAuthList extends Component {
                 placeholder="Insert items separated by commas"
                 onChange={(e) => this.setState({ csc_to_change: this.formatInputText(e.target.value) })}
               ></Input>
-              <div>
-                <span className={styles.wrongInput}>
-                  {this.state.wrong_input ? 'Please insert items separated by commas' : ''}
-                </span>
-              </div>
             </div>
             <div className={styles.inputNewRequest}>
               <Input
@@ -296,6 +295,11 @@ export default class SummaryAuthList extends Component {
                 placeholder="Insert items separated by commas"
                 onChange={(e) => this.setState({ authorize_users: this.formatInputText(e.target.value) })}
               ></Input>
+              <div>
+                <span className={styles.wrongInput}>
+                  {this.state.wrong_input_users ? 'Please insert items separated by commas' : ''}
+                </span>
+              </div>
             </div>
             <div className={styles.inputNewRequest}>
               <Input
@@ -303,8 +307,13 @@ export default class SummaryAuthList extends Component {
                 placeholder="Insert items separated by commas"
                 onChange={(e) => this.setState({ unauthorize_cscs: this.formatInputText(e.target.value) })}
               ></Input>
+              <div>
+                <span className={styles.wrongInput}>
+                  {this.state.wrong_input_cscs ? 'Please insert items separated by commas' : ''}
+                </span>
+              </div>
             </div>
-            <div>
+            <div className={styles.textAreaNewRequest}>
               <TextArea
                 value={this.state.message}
                 callback={this.handleMessageChange}
@@ -326,18 +335,39 @@ export default class SummaryAuthList extends Component {
 
   sendRequest() {
     const { user } = this.props;
-    const { csc_to_change, authorize_users, unauthorize_cscs } = this.state;
+    const { csc_to_change, authorize_users, unauthorize_cscs, message, duration } = this.state;
+
+    this.setState({ wrong_input_users: false, wrong_input_cscs: false });
 
     const passA = authorize_users.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
     const passB = unauthorize_cscs.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
+
+    if (!passA) {
+      // send error message for authorized users
+      this.setState({ wrong_input_users: true });
+    }
+    if (!passB) {
+      // send error message for unauthorized cscs
+      this.setState({ wrong_input_cscs: true });
+    }
     if (passA && passB) {
-      //no es ||?
-      ManagerInterface.requestAuthListAuthorization(user, csc_to_change, authorize_users, unauthorize_cscs).then(() => {
-        this.setState({ csc_to_change: '', authorize_users: '', unauthorize_cscs: '', isActive: false });
+      ManagerInterface.requestAuthListAuthorization(
+        user,
+        csc_to_change,
+        authorize_users,
+        unauthorize_cscs,
+        message,
+        duration,
+      ).then(() => {
+        this.setState({
+          csc_to_change: '',
+          authorize_users: '',
+          unauthorize_cscs: '',
+          message: '',
+          duration: '',
+          isActive: false,
+        });
       });
-    } else {
-      // tell user that format is wrong
-      this.setState({ wrong_input: true });
     }
   }
 
