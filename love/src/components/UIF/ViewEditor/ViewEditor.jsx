@@ -105,6 +105,7 @@ class ViewEditor extends Component {
       device: deviceOptions[0],
       // deviceToBeConfirmed: null
       responsiveLayoutState: COLS_NOT_CHANGED,
+      isLeavingWithChanges: false,
     };
     this.toolbar = document.createElement('div');
     this.toolbar.className = styles.toolbarContainer;
@@ -301,8 +302,16 @@ class ViewEditor extends Component {
 
   exitEditMode = (e) => {
     const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-
-    this.props.history.push(`/uif/view?id=${id}`);
+    const isSaved = this.viewIsSaved();
+    if (!isSaved) {
+      this.setState({ isLeavingWithChanges: true }, () => {
+        if (id) this.props.history.push(`/uif/view?id=${id}`);
+        else this.props.history.push(`/`);
+      });
+    } else {
+      if (id) this.props.history.push(`/uif/view?id=${id}`);
+      else this.props.history.push(`/`);
+    }
   };
 
   receiveSelection = (selection) => {
@@ -376,13 +385,25 @@ class ViewEditor extends Component {
 
   saveBackendView = (thumbnail) => {
     this.props.saveEditedView(thumbnail).then((response) => {
-      const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
-      if (response?.id && Number.isNaN(id)) this.props.history.push(`?id=${response.id}`);
+      const isSaved = this.viewIsSaved(); // && this.viewWithThumbnail();
+
+      this.setState({ isLeavingWithChanges: false }, () => {
+        const id = parseInt(new URLSearchParams(this.props.location.search).get('id'), 10);
+        if (response?.id && Number.isNaN(id)) this.props.history.push(`?id=${response.id}`);
+      });
     });
   };
 
   viewIsSaved = () => {
     return this.props.editedViewStatus && this.props.editedViewStatus.code === editViewStates.SAVED;
+  };
+
+  viewWithThumbnail = () => {
+    let urlImg = false;
+    if (this.props.editedViewSaved && this.props.editedViewSaved.thumbnail) {
+      urlImg = !!this.props.editedViewSaved.thumbnail.match(/\w+\.(jpg|jpeg|gif|png|tiff|bmp)$/gi);
+    }
+    return urlImg;
   };
 
   onDeviceChange = (device) => {
@@ -444,6 +465,7 @@ class ViewEditor extends Component {
   };
   renderToolbar() {
     const isSaved = this.viewIsSaved();
+    const withThumbnails = this.viewWithThumbnail();
     const saveButtonTooltip = isSaved ? 'Nothing to save' : 'Save changes';
     return (
       <>
@@ -524,7 +546,7 @@ class ViewEditor extends Component {
               className={[styles.iconTextBtn, styles.element].join(' ')}
               title="Update view thumbnail (might take a while)"
               onClick={this.updateThumbnail}
-              disabled={isSaved}
+              disabled={withThumbnails}
               status="transparent"
             >
               <ThumbnailIcon className={styles.icon} />
@@ -588,7 +610,7 @@ class ViewEditor extends Component {
       <>
         <Loader display={this.props.editedViewStatus.code === editViewStates.SAVING} message={'Saving view'} />
         <Prompt
-          when={!this.viewIsSaved()}
+          when={this.state.isLeavingWithChanges}
           message="There are unsaved changes that will be lost. Are you sure you want to leave?"
         />
         <div className={styles.container}>
