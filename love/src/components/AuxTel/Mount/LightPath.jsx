@@ -110,7 +110,7 @@ export default class LightPath extends Component {
       cover3Status: getLimitSwitchStatus(3),
       cover4Status: getLimitSwitchStatus(4),
     };
-    const m1CoverClass = styles[stateToStyleLightpath[m1CoverState]];
+    const m1CoverClass = styles[stateToStyleLightpath[m1CoverStateText]];
 
     let mirrorCoversAngle = 0;
     if (m1CoverState === 1) mirrorCoversAngle = 0;
