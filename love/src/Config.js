@@ -195,8 +195,6 @@ export const m3PortSelectedStateMap = {
 export const m3InPositionStateMap = {
   1: 'NOT READY',
   2: 'IN POSITION',
-  false: 'NOT READY',
-  true: 'IN POSITION',
   0: 'UNKNOWN',
 };
 
