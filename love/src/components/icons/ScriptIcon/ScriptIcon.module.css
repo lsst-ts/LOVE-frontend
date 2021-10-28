@@ -1,11 +1,15 @@
 .svg {
   vertical-align: top;
   fill: var(--secondary-font-color);
+  /*
   stroke: var(--base-font-color);
+  */
 }
 
 .active {
+  /*
   stroke: var(--base-font-color);
+  */
 }
 
 /*

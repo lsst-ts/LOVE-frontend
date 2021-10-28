@@ -6,6 +6,12 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
+
+import TemperatureIcon from '../icons/TemperatureIcon/TemperatureIcon';
+import HumidityIcon from '../icons/HumidityIcon/HumidityIcon';
+import PressureIcon from '../icons/PressureIcon/PressureIcon';
+import WindIcon from '../icons/WindIcon/WindIcon';
+
 import styles from './WeatherStation.module.css';
 
 export default class WeatherStation extends Component {
@@ -257,20 +263,32 @@ export default class WeatherStation extends Component {
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Temperature</div>
+              <div className={styles.iconWrapper}>
+                <TemperatureIcon className={styles.icon}/>
+              </div>
               <div className={styles.summaryValue}>
                 {currentTemperature !== undefined ? `${currentTemperature}ºC` : '-'}
               </div>
             </div>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Humidity</div>
+              <div className={styles.iconWrapper}>
+                <HumidityIcon className={styles.icon}/>
+              </div>
               <div className={styles.summaryValue}>{currentHumidity !== undefined ? `${currentHumidity}%` : '-'}</div>
             </div>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Pressure</div>
+              <div className={styles.iconWrapper}>
+                <PressureIcon className={styles.icon}/>
+              </div>
               <div className={styles.summaryValue}>{currentPressure ? `${currentPressure} pa` : '-'}</div>
             </div>
             <div className={styles.summaryVariable}>
               <div className={styles.summaryLabel}>Wind speed</div>
+              <div className={styles.iconWrapper}>
+                <WindIcon className={styles.icon}/>
+              </div>
               <div className={styles.summaryValue}>
                 {currentWindSpeed !== undefined
                   ? `${currentWindSpeed} ${currentWindSpeedUnits !== 'unitless' ? currentWindSpeedUnits : ''}`
