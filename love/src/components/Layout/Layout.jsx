@@ -102,6 +102,8 @@ class Layout extends Component {
       isConfigModalOpen: false,
       isEmergencyContactsModalOpen: false,
       tokenSwapRequested: false,
+      isTakingScreenshot: false,
+      isLightHidden: true,
     };
 
     this.requestToastID = null;
@@ -463,6 +465,13 @@ class Layout extends Component {
           <div id="customTopbar" />
         </div>
         <div
+          className={[
+            styles.light,
+            !this.state.isTakingScreenshot ? styles.lightOff : '',
+            this.state.isLightHidden ? styles.lightHidden : '',
+          ].join(' ')}
+        ></div>
+        <div
           className={[styles.topbar, this.props.token ? null : styles.hidden].join(' ')}
           onMouseOver={() => this.setHovered(true)}
           onMouseOut={() => this.setHovered(false)}
@@ -562,17 +571,29 @@ class Layout extends Component {
                     dividerClassName={styles.divider}
                     username={this.props.user}
                     execPermission={this.props.execPermission}
-                    takeScreenshot={() =>
-                      takeScreenshot((img) => {
-                        const link = document.createElement('a');
-                        const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
-                        link.href = img;
-                        link.download = `${timestamp}.png`;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      })
-                    }
+                    takeScreenshot={() => {
+                      this.setState({ isLightHidden: false }, () => {
+                        this.setState({ isTakingScreenshot: true }, () => {
+                          setTimeout(() => {
+                            this.setState({ isTakingScreenshot: false }, () => {
+                              setTimeout(() => {
+                                this.setState({ isLightHidden: true }, () => {
+                                  takeScreenshot((img) => {
+                                    const link = document.createElement('a');
+                                    const timestamp = formatTimestamp(parseTimestamp(this.props.timeData?.clock?.tai));
+                                    link.href = img;
+                                    link.download = `${timestamp}.png`;
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                  });
+                                });
+                              }, 100);
+                            });
+                          }, 200);
+                        });
+                      });
+                    }}
                     logout={this.props.logout}
                     requireUserSwap={() => {
                       this.setState({ tokenSwapRequested: true });
