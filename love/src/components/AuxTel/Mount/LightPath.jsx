@@ -95,7 +95,7 @@ export default class LightPath extends Component {
   drawM1Cover = (props) => {
     const m1CoverState = props.m1CoverState;
     //ATPneumatics
-    const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState] || m1CoverStateStateMap[0];
+    const m1CoverStateText = m1CoverStateStateMap[props.m1CoverState];
     const m1CoverLimitSwitches = props.m1CoverLimitSwitches;
     const getLimitSwitchStatus = (number) => {
       if (!m1CoverLimitSwitches[`cover${number}ClosedActive`] && m1CoverLimitSwitches[`cover${number}OpenActive`])
@@ -113,9 +113,9 @@ export default class LightPath extends Component {
     const m1CoverClass = styles[stateToStyleLightpath[m1CoverStateText]];
 
     let mirrorCoversAngle = 0;
-    if (m1CoverState === 1) mirrorCoversAngle = 0;
-    if (m1CoverState === 2) mirrorCoversAngle = 90;
-    if (m1CoverState === 3) mirrorCoversAngle = 45;
+    if (m1CoverState === 6) mirrorCoversAngle = 0; // CLOSED
+    if (m1CoverState === 7) mirrorCoversAngle = 90; // OPENED
+    if (m1CoverState === 8) mirrorCoversAngle = 45; // IN MOTION
 
     return (
       <Hoverable>
@@ -193,7 +193,7 @@ export default class LightPath extends Component {
     const portSelected = props.m3PortSelected;
     const m3InPosition = this.props.m3InPosition;
 
-    const m3StateText = m3RotatorStateMap[m3State] || m3RotatorStateMap[0];
+    const m3StateText = m3RotatorStateMap[m3State];
     const m3PortSelectedText = m3PortSelectedStateMap[portSelected] || m3PortSelectedStateMap[0];
     let m3InPositionState = 0;
     if (m3InPosition !== 0) {
@@ -201,8 +201,7 @@ export default class LightPath extends Component {
     }
     const m3InPositionText = m3InPositionStateMap[m3InPositionState];
 
-    const m3StateValue = m3RotatorStateMap[m3State];
-    const status = stateToStyleMount[m3StateValue];
+    const status = stateToStyleMount[m3StateText];
     let m3Class = styles[status];
 
     const m3Angle = portSelected === 1 ? -45 : 45;
@@ -475,7 +474,7 @@ export default class LightPath extends Component {
     const m1Position = 230;
     const m1CoverPosition = 187;
 
-    const isM1CoverOpen = props.m1CoverState === 2;
+    const isM1CoverOpen = props.m1CoverState === 7; // OPENED
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
@@ -552,7 +551,7 @@ export default class LightPath extends Component {
   };
 
   render() {
-    const isM1CoverOpen = this.props.m1CoverState === 2;
+    const isM1CoverOpen = this.props.m1CoverState === 7; // OPENED
     const showLightPath = this.props.lightPath;
 
     return (
