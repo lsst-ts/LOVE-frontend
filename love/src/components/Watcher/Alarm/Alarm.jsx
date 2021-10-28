@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Alarm.module.css';
-import StatusText from '../../GeneralPurpose/StatusText/StatusText';
+import StatusText from '../../GeneralPurpose/AlarmLabelText/AlarmLabelText';
 import Button from '../../GeneralPurpose/Button/Button';
 import { severityToStatus } from '../../../Config';
 
