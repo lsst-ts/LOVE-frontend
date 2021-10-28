@@ -78,6 +78,7 @@ export default function (state = initialState, action) {
         status: tokenStates.RECEIVED,
         permissions: {
           cmd_exec: action.permissions.execute_commands,
+          authlist_admin: action.permissions.authlist_admin,
         },
       };
     }

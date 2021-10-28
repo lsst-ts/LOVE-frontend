@@ -23,7 +23,7 @@ export default class SummaryAuthList extends Component {
     unsubscribeToStream: PropTypes.func,
     authlistState: PropTypes.object,
     user: PropTypes.string,
-    commandExecutePermission: PropTypes.bool,
+    authlistAdminPermission: PropTypes.bool,
   };
 
   constructor(props) {
@@ -152,16 +152,20 @@ export default class SummaryAuthList extends Component {
     });
 
     if (type === 'User') {
-      // console.log(`Remove ${type} ${identityToRemove} from ${targetCSC}`);
       this.setState({
-        removeIdentityRequest: () =>
-          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, null),
+        removeIdentityRequest: () => {
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, '').then(() => {
+            this.setState({ removeIdentityModalShown: false });
+          });
+        },
       });
     } else if (type === 'CSC') {
-      // console.log(`Remove ${type} ${identityToRemove} from ${targetCSC}`);
       this.setState({
-        removeIdentityRequest: () =>
-          ManagerInterface.requestAuthListAuthorization(user, targetCSC, null, `-${identityToRemove}`),
+        removeIdentityRequest: () => {
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, '', `-${identityToRemove}`).then(() => {
+            this.setState({ removeIdentityModalShown: false });
+          });
+        },
       });
     }
   };
@@ -170,7 +174,10 @@ export default class SummaryAuthList extends Component {
     const { user } = this.props;
     for (let i = 0; i < arguments.length; i++) {
       const selectedCSC = arguments[i];
-      const authlist = this.props.authlistState.find((x) => x.csc === selectedCSC);
+      const authlist = Object.entries(this.props.authlistState).find(([key]) => {
+        const keyTokens = key.split('-');
+        return `${keyTokens[1]}:${keyTokens[2]}` === selectedCSC;
+      })[1];
       const cscsToChange = selectedCSC;
       const authorizedUsers = authlist.authorizedUsers
         .split(',')
@@ -181,13 +188,8 @@ export default class SummaryAuthList extends Component {
         .map((x) => `-${x}`)
         .join(',');
       console.log('Request: ', cscsToChange, authorizedUsers, nonAuthorizedCSCs);
-      ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs).then(
-        (res) => {
-          console.log(res);
-        },
-      );
+      ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs);
     }
-    alert('ok'); // change to toast notify
   }
 
   HEADERS = [
@@ -297,7 +299,9 @@ export default class SummaryAuthList extends Component {
               ></Input>
               <div>
                 <span className={styles.wrongInput}>
-                  {this.state.wrong_input_users ? 'Please insert items separated by commas' : ''}
+                  {this.state.wrong_input_users
+                    ? 'Please insert items separated by commas with the required format'
+                    : ''}
                 </span>
               </div>
             </div>
@@ -309,7 +313,9 @@ export default class SummaryAuthList extends Component {
               ></Input>
               <div>
                 <span className={styles.wrongInput}>
-                  {this.state.wrong_input_cscs ? 'Please insert items separated by commas' : ''}
+                  {this.state.wrong_input_cscs
+                    ? 'Please insert items separated by commas with the required format'
+                    : ''}
                 </span>
               </div>
             </div>
@@ -372,7 +378,7 @@ export default class SummaryAuthList extends Component {
   }
 
   render() {
-    const { subscriptions, authlistState } = this.props;
+    const { authlistState, authlistAdminPermission } = this.props;
     const {
       selectedCSC,
       selectedUser,
@@ -382,6 +388,8 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalShown,
       removeIdentityModalText,
     } = this.state;
+
+    // console.log(authlistAdminPermission);
 
     const tableData = Object.entries(authlistState).map(([key, val]) => {
       const keyTokens = key.split('-');

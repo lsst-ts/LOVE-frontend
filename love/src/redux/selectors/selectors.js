@@ -25,6 +25,8 @@ export const getClock = (state) => ({ ...state.time.clock });
 
 export const getPermCmdExec = (state) => state.auth.permissions.cmd_exec;
 
+export const getPermAuthlistAdministrator = (state) => state.auth.permissions.authlist_admin;
+
 export const getTokenStatus = (state) => state.auth.status;
 
 export const getTokenSwapStatus = (state) => state.auth.swapStatus;
@@ -426,16 +428,17 @@ export const getLATISSState = (state) => {
 };
 
 export const getAuthlistState = (state, subscriptions) => {
-  const authlistData = getStreamsData(state, subscriptions);
+  // const authlistData = getStreamsData(state, subscriptions);
   // console.log(authlistData);
-  const example = {
+  const authlistData = {
     'event-ATDome-0-authList': { authorizedUsers: 'tribeiro@nb-tribeiro', nonAuthorizedCSCs: 'MTPtg:1' },
+    'event-ScriptQueue-1-authList': { authorizedUsers: 'tribeiro@nb-tribeiro', nonAuthorizedCSCs: 'MTPtg:1' },
     'event-ATMCS-0-authList': {
       authorizedUsers: 'saranda@inria-ThinkPad-P50-3,tribeiro@nb-tribeiro',
       nonAuthorizedCSCs: 'MTPtg:1',
     },
   };
-  return { ...example };
+  return authlistData;
 };
 
 export const getKey = (dict, key, def) => {

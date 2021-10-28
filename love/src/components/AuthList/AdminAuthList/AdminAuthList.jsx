@@ -29,6 +29,11 @@ const STATUS_OPTIONS = [
   { value: AUTHLIST_REQUEST_DENIED, label: 'Rejected requests' },
 ];
 
+const REQUEST_TYPE_TO_STATUS_MAP = {
+  Accept: AUTHLIST_REQUEST_ACCEPTED,
+  Reject: AUTHLIST_REQUEST_DENIED,
+};
+
 const formatList = (identities) => {
   if (identities === '') {
     return <span>None</span>;
@@ -63,8 +68,8 @@ export default class AdminAuthList extends Component {
       confirmationModalShown: false,
       confirmationModalText: '',
       moreModalShown: false,
-      message: '',
-      duration: '',
+      message: null,
+      duration: null,
       counter: 0,
     };
   }
@@ -95,16 +100,23 @@ export default class AdminAuthList extends Component {
       confirmationModalText: modalText,
       selectedRequest: row,
       authorizationType: type,
+      duration: null,
+      message: null,
     });
   }
 
   authorizeRequest(type) {
     const { selectedRequest, message, duration } = this.state;
-    console.log('Type:', type);
+    console.log('Type:', REQUEST_TYPE_TO_STATUS_MAP[type]);
     console.log('Selected request:', selectedRequest);
     console.log('Message:', message);
     console.log('Duration:', duration);
-    ManagerInterface.setAuthListRequestStatus(selectedRequest.id, 'Authorized', message, duration).then((res) => {
+    ManagerInterface.setAuthListRequestStatus(
+      selectedRequest.id,
+      REQUEST_TYPE_TO_STATUS_MAP[type],
+      message,
+      duration,
+    ).then((res) => {
       ManagerInterface.getAuthListRequests().then((res) => {
         this.setState({
           authListRequests: res,
@@ -205,7 +217,7 @@ export default class AdminAuthList extends Component {
 
   handleMessageChange = (message) => {
     const trimmedMessage = message.substr(0, MAX_MESSAGE_LEN);
-    this.setState({ message: trimmedMessage });
+    this.setState({ message: trimmedMessage !== '' ? trimmedMessage : null });
   };
 
   handleDurationChange = (evt) => {
@@ -213,7 +225,7 @@ export default class AdminAuthList extends Component {
     let duration = value === '' || isNaN(value) ? 0 : parseInt(value, 10);
     if (duration <= MIN_DURATION) duration = MIN_DURATION;
     else if (duration >= MAX_DURATION) duration = MAX_DURATION;
-    this.setState({ duration });
+    this.setState({ duration: duration !== '' ? duration : null });
   };
 
   renderModalFooter = () => {
@@ -273,6 +285,8 @@ export default class AdminAuthList extends Component {
       selectedRequest,
       authListRequests,
     } = this.state;
+
+    console.log(authListRequests);
 
     let filteredTableData = authListRequests.filter((row) => row.status === showing);
 
@@ -368,10 +382,10 @@ export default class AdminAuthList extends Component {
               Go back
             </Button>
             <div className={styles.confirmButtons}>
-              <Button onClick={() => this.authorizeRequest('reject')} status="default">
+              <Button onClick={() => this.authorizeRequest('Reject')} status="default">
                 Reject request
               </Button>
-              <Button onClick={() => this.authorizeRequest('accept')} status="default">
+              <Button onClick={() => this.authorizeRequest('Accept')} status="default">
                 Accept request
               </Button>
             </div>
