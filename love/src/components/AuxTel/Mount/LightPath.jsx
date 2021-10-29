@@ -9,7 +9,6 @@ import {
   stateToStyleMount,
   m1CoverLimitSwitchesStateMap,
   stateToStyleLightpath,
-  getKeyByValue,
 } from '../../../Config';
 
 import styles from './LightPath.module.css';
