@@ -118,7 +118,7 @@ export const stateToStyleCamera = {
 };
 
 export const stateToStyleMount = {
-  'NOT READY': 'running',
+  'NOT READY': 'warning',
   'IN POSITION': 'ok',
   NASMITH1: 'ok',
   NASMITH2: 'ok',
@@ -137,7 +137,7 @@ export const stateToStyleMount = {
 
 export const stateToStyleDome = {
   'IN POSITION': 'ok',
-  'NOT IN POSITION': 'running',
+  'NOT IN POSITION': 'warning',
 };
 
 export const stateToStyleLightpath = {
@@ -151,7 +151,7 @@ export const stateToStyleLightpath = {
   OPENED: 'ok',
   'IN MOTION': 'running',
   INVALID: 'warning',
-  'NOT READY': 'running',
+  'NOT READY': 'warning',
   'IN POSITION': 'ok',
   UNKNOWN: 'invalid',
   'UNKNOWN POSITION': 'invalid',
@@ -283,19 +283,19 @@ export const stateToStyleDomeAndMount = {
   NASMITH1: 'ok',
   NASMITH2: 'ok',
   PORT3: 'ok',
-  UNKNOWN: 'warning',
+  UNKNOWN: 'invalid',
   INMOTION: 'running',
   STOPPING: 'warning',
   ENABLED: 'ok',
   DISABLED: 'warning',
-  CLOSING: 'running',
-  OPENING: 'running',
+  CLOSING: 'warning',
+  OPENING: 'warning',
   'PARTIALLY OPEN': 'warning',
   OPEN: 'ok',
   CLOSED: 'ok',
   'NOT MOVING': 'ok',
-  'MOVING CW': 'running',
-  'MOVING CCW': 'running',
+  'MOVING CW': 'warning',
+  'MOVING CCW': 'warning',
 };
 
 export const motorDriveStateMap = {

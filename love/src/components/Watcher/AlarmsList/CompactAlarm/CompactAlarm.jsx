@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '../../../GeneralPurpose/Button/Button';
 import styles from './CompactAlarm.module.css';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
+import StatusText from '../../../GeneralPurpose/AlarmLabelText/AlarmLabelText';
 import { severityToStatus } from '../../../../Config';
 
 export default function CompactAlarm({
