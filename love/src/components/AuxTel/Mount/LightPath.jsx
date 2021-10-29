@@ -114,9 +114,9 @@ export default class LightPath extends Component {
     const m1CoverClass = styles[stateToStyleLightpath[m1CoverStateText]];
 
     let mirrorCoversAngle = 0;
-    if (m1CoverState === getKeyByValue(m1CoverStateStateMap, 'CLOSED')) mirrorCoversAngle = 0;
-    if (m1CoverState === getKeyByValue(m1CoverStateStateMap, 'OPENED')) mirrorCoversAngle = 90;
-    if (m1CoverState === getKeyByValue(m1CoverStateStateMap, 'IN MOTION')) mirrorCoversAngle = 45;
+    if (m1CoverState === 0) mirrorCoversAngle = 0; // CLOSED
+    if (m1CoverState === 7) mirrorCoversAngle = 90; // OPENED
+    if (m1CoverState === 8) mirrorCoversAngle = 45; // IN MOTION
 
     return (
       <Hoverable>
@@ -196,9 +196,9 @@ export default class LightPath extends Component {
 
     const m3StateText = m3RotatorStateMap[m3State];
     const m3PortSelectedText = m3PortSelectedStateMap[portSelected] || m3PortSelectedStateMap[0];
-    let m3InPositionState = 0;
+    let m3InPositionState = 0; // UNKNOWN
     if (m3InPosition !== 0) {
-      m3InPositionState = m3InPosition ? 2 : 1;
+      m3InPositionState = m3InPosition ? 2 : 1; // IN POSITION : NOT READY
     }
     const m3InPositionText = m3InPositionStateMap[m3InPositionState];
 
@@ -257,9 +257,9 @@ export default class LightPath extends Component {
 
   drawM2 = (props) => {
     const { hexapodInPosition } = props;
-    let hexapodInPositionState = 0;
+    let hexapodInPositionState = 0; // UNKNOWN
     if (hexapodInPosition !== 0) {
-      hexapodInPositionState = hexapodInPosition ? 2 : 1;
+      hexapodInPositionState = hexapodInPosition ? 2 : 1; // IN POSITION : NOT READY
     }
     const hexapodInPositionText = hexapodInPositionStateMap[hexapodInPositionState];
     const hexapodClass = styles[stateToStyleLightpath[hexapodInPositionText]];
@@ -298,9 +298,9 @@ export default class LightPath extends Component {
   drawPort1 = (props) => {
     const m3PortSelected = props.m3PortSelected;
     const nasmyth1RotatorInPosition = props.nasmyth1RotatorInPosition;
-    let nasmyth1RotatorInPositionState = 0;
+    let nasmyth1RotatorInPositionState = 0; // UNKNOWN
     if (nasmyth1RotatorInPosition !== 0) {
-      nasmyth1RotatorInPositionState = nasmyth1RotatorInPosition ? 2 : 1;
+      nasmyth1RotatorInPositionState = nasmyth1RotatorInPosition ? 2 : 1; // IN POSITION : NOT READY
     }
     const nasmyth1RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth1RotatorInPositionState];
     let nasmyth1Class = styles[stateToStyleLightpath[nasmyth1RotatorInPositionText]];
@@ -386,9 +386,9 @@ export default class LightPath extends Component {
   drawPort2 = (props) => {
     const m3PortSelected = props.m3PortSelected;
     const nasmyth2RotatorInPosition = props.nasmyth2RotatorInPosition;
-    let nasmyth2RotatorInPositionState = 0;
+    let nasmyth2RotatorInPositionState = 0; // UNKNOWN
     if (nasmyth2RotatorInPosition !== 0) {
-      nasmyth2RotatorInPositionState = nasmyth2RotatorInPosition ? 2 : 1;
+      nasmyth2RotatorInPositionState = nasmyth2RotatorInPosition ? 2 : 1; // IN POSITION : NOT READY
     }
     const nasmyth2RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth2RotatorInPositionState];
     let nasmyth2Class = styles[stateToStyleLightpath[nasmyth2RotatorInPositionText]];
@@ -475,7 +475,7 @@ export default class LightPath extends Component {
     const m1Position = 230;
     const m1CoverPosition = 187;
 
-    const isM1CoverOpen = props.m1CoverState === getKeyByValue(m1CoverStateStateMap, 'OPENED');
+    const isM1CoverOpen = props.m1CoverState === 7; // OPENED
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
@@ -552,7 +552,7 @@ export default class LightPath extends Component {
   };
 
   render() {
-    const isM1CoverOpen = this.props.m1CoverState === getKeyByValue(m1CoverStateStateMap, 'OPENED');
+    const isM1CoverOpen = this.props.m1CoverState === 7; // OPENED
     const showLightPath = this.props.lightPath;
 
     return (
