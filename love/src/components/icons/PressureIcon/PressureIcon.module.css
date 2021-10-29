@@ -1,0 +1,10 @@
+.svg{
+  width: 100%;
+  fill:  var(--secondary-font-color);
+}
+.none{
+  fill: none;
+}
+.path{
+ fill: var(--secondary-font-color);
+}
