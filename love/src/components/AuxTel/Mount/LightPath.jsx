@@ -9,6 +9,7 @@ import {
   stateToStyleMount,
   m1CoverLimitSwitchesStateMap,
   stateToStyleLightpath,
+  getKeyByValue,
 } from '../../../Config';
 
 import styles from './LightPath.module.css';
@@ -113,9 +114,9 @@ export default class LightPath extends Component {
     const m1CoverClass = styles[stateToStyleLightpath[m1CoverStateText]];
 
     let mirrorCoversAngle = 0;
-    if (m1CoverState === 6) mirrorCoversAngle = 0; // CLOSED
-    if (m1CoverState === 7) mirrorCoversAngle = 90; // OPENED
-    if (m1CoverState === 8) mirrorCoversAngle = 45; // IN MOTION
+    if (m1CoverState === getKeyByValue(m1CoverStateStateMap, 'CLOSED')) mirrorCoversAngle = 0;
+    if (m1CoverState === getKeyByValue(m1CoverStateStateMap, 'OPENED')) mirrorCoversAngle = 90;
+    if (m1CoverState === getKeyByValue(m1CoverStateStateMap, 'IN MOTION')) mirrorCoversAngle = 45;
 
     return (
       <Hoverable>
@@ -474,7 +475,7 @@ export default class LightPath extends Component {
     const m1Position = 230;
     const m1CoverPosition = 187;
 
-    const isM1CoverOpen = props.m1CoverState === 7; // OPENED
+    const isM1CoverOpen = props.m1CoverState === getKeyByValue(m1CoverStateStateMap, 'OPENED');
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
@@ -551,7 +552,7 @@ export default class LightPath extends Component {
   };
 
   render() {
-    const isM1CoverOpen = this.props.m1CoverState === 7; // OPENED
+    const isM1CoverOpen = this.props.m1CoverState === getKeyByValue(m1CoverStateStateMap, 'OPENED');
     const showLightPath = this.props.lightPath;
 
     return (

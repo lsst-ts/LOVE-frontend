@@ -409,6 +409,10 @@ export const TCSCommands = {
   home_dome: {},
 };
 
+export function getKeyByValue(dict, value) {
+  return Object.entries(dict).find(([, name]) => value === name)[0];
+}
+
 export const ATCSCommands = {
   ...TCSCommands,
 };
