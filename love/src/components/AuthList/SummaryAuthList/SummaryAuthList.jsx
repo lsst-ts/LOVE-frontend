@@ -290,6 +290,11 @@ export default class SummaryAuthList extends Component {
                 placeholder="Insert items separated by commas"
                 onChange={(e) => this.setState({ csc_to_change: this.formatInputText(e.target.value) })}
               ></Input>
+              <div>
+                <span className={styles.wrongInput}>
+                  {this.state.csc_to_change === '' ? 'This field is required' : ''}
+                </span>
+              </div>
             </div>
             <div className={styles.inputNewRequest}>
               <Input
@@ -348,6 +353,11 @@ export default class SummaryAuthList extends Component {
     const passA = authorize_users.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
     const passB = unauthorize_cscs.split(',').every((x) => x.charAt(0) === '+' || x.charAt(0) === '-');
 
+    const emptyA = authorize_users === '';
+    const emptyB = unauthorize_cscs === '';
+
+    const passCSC = csc_to_change.length > 0;
+
     if (!passA) {
       // send error message for authorized users
       this.setState({ wrong_input_users: true });
@@ -356,7 +366,7 @@ export default class SummaryAuthList extends Component {
       // send error message for unauthorized cscs
       this.setState({ wrong_input_cscs: true });
     }
-    if (passA && passB) {
+    if (passCSC && ((passA && passB) || (passA && emptyB) || (passB && emptyA))) {
       ManagerInterface.requestAuthListAuthorization(
         user,
         csc_to_change,

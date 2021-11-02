@@ -286,7 +286,7 @@ export default class AdminAuthList extends Component {
       authListRequests,
     } = this.state;
 
-    console.log(authListRequests);
+    // console.log(authListRequests);
 
     let filteredTableData = authListRequests.filter((row) => row.status === showing);
 
