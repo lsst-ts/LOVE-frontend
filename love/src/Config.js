@@ -123,12 +123,16 @@ export const stateToStyleMount = {
   NASMITH1: 'ok',
   NASMITH2: 'ok',
   PORT3: 'ok',
-  UNKNOWN: 'invalid',
   CLOSED: 'ok',
   OPEN: 'ok',
+  OPENED: 'ok',
+  REMOTECONTROL: 'ok',
+  HANDPADDLECONTROL: 'ok',
   INVALID: 'warning',
   'IN MOTION': 'running',
-  'NOT IN POSITION': 'warning',
+  'NOT IN POSITION': 'running',
+  UNKNOWN: 'invalid',
+  'UNKNOWN POSITION': 'invalid',
 };
 
 export const stateToStyleDome = {
@@ -137,13 +141,22 @@ export const stateToStyleDome = {
 };
 
 export const stateToStyleLightpath = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  FAULT: 'warning',
+  OFFLINE: 'warning',
+  STANDBY: 'warning',
   CLOSED: 'ok',
   OPEN: 'ok',
+  OPENED: 'ok',
   'IN MOTION': 'running',
   INVALID: 'warning',
   'NOT READY': 'warning',
   'IN POSITION': 'ok',
+  UNKNOWN: 'invalid',
+  'UNKNOWN POSITION': 'invalid',
 };
+
 // Dome and mount view
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
@@ -178,10 +191,13 @@ export const mountTrackingStateMap = {
 };
 
 export const m3RotatorStateMap = {
-  1: 'NASMITH1',
-  2: 'NASMITH2',
-  3: 'PORT3',
-  4: 'IN MOTION',
+  1: 'REMOTECONTROL',
+  2: 'HANDPADDLECONTROL',
+  6: 'NASMITH1',
+  7: 'NASMITH2',
+  8: 'PORT3',
+  9: 'IN MOTION',
+  10: 'UNKNOWN POSITION',
   0: 'UNKNOWN',
 };
 
@@ -195,17 +211,20 @@ export const m3PortSelectedStateMap = {
 export const m3InPositionStateMap = {
   1: 'NOT READY',
   2: 'IN POSITION',
-  false: 'NOT READY',
-  true: 'IN POSITION',
   0: 'UNKNOWN',
 };
 
 // ATPneumatics
 export const m1CoverStateStateMap = {
-  1: 'CLOSED',
-  2: 'OPEN',
-  3: 'IN MOTION',
-  4: 'INVALID',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY',
+  6: 'CLOSED',
+  7: 'OPENED',
+  8: 'IN MOTION',
+  9: 'INVALID',
   0: 'UNKNOWN',
 };
 
