@@ -197,26 +197,6 @@ export default class AlarmsTable extends PureComponent {
     const user = this.props.user;
     const taiToUtc = this.props.taiToUtc;
 
-    data = [
-      {
-        name: { value: "name"},
-        reason: "",
-        timestampSeverityOldest: {value: 12},
-        maxSeverity: {value: 2},
-        severity : {value: 1},
-        acknowledged: {value: 1},
-        mutedSeverity: {value: 1},
-      },
-      {
-        name: { value: "name"},
-        reason: "",
-        timestampSeverityOldest: {value: 12},
-        maxSeverity: {value: 4},
-        severity : {value: 3},
-        acknowledged: {value: 1},
-        mutedSeverity: {value: 1},
-      }
-    ]
     return (
       <div className={styles.wrapper}>
         <div className={styles.controlsContainer}>
