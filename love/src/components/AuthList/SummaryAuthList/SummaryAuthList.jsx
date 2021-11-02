@@ -45,6 +45,7 @@ export default class SummaryAuthList extends Component {
       unauthorize_cscs: '',
       message: '',
       duration: '',
+      wrong_csc_to_change: false,
       wrong_input_users: false,
       wrong_input_cscs: false,
     };
@@ -294,7 +295,7 @@ export default class SummaryAuthList extends Component {
               ></Input>
               <div>
                 <span className={styles.wrongInput}>
-                  {this.state.csc_to_change === '' ? 'This field is required' : ''}
+                  {this.state.wrong_csc_to_change ? 'This field is required' : ''}
                 </span>
               </div>
             </div>
@@ -348,7 +349,7 @@ export default class SummaryAuthList extends Component {
 
   sendRequest() {
     const { user } = this.props;
-    const { csc_to_change, authorize_users, unauthorize_cscs, message, duration } = this.state;
+    const { csc_to_change, authorize_users, unauthorize_cscs, message, duration, wrong_csc_to_change } = this.state;
 
     this.setState({ wrong_input_users: false, wrong_input_cscs: false });
 
@@ -358,7 +359,11 @@ export default class SummaryAuthList extends Component {
     const emptyA = authorize_users === '';
     const emptyB = unauthorize_cscs === '';
 
-    const passCSC = csc_to_change.length > 0;
+    if (csc_to_change === '') {
+      this.setState({ wrong_csc_to_change: true });
+    } else {
+      this.setState({ wrong_csc_to_change: false });
+    }
 
     if (!passA) {
       // send error message for authorized users
@@ -368,7 +373,7 @@ export default class SummaryAuthList extends Component {
       // send error message for unauthorized cscs
       this.setState({ wrong_input_cscs: true });
     }
-    if (passCSC && ((passA && passB) || (passA && emptyB) || (passB && emptyA))) {
+    if (!(csc_to_change === '') && ((passA && passB) || (passA && emptyB) || (passB && emptyA))) {
       ManagerInterface.requestAuthListAuthorization(
         user,
         csc_to_change,
@@ -384,6 +389,9 @@ export default class SummaryAuthList extends Component {
           message: '',
           duration: '',
           isActive: false,
+          wrong_csc_to_change: false,
+          wrong_input_users: false,
+          wrong_input_cscs: false,
         });
       });
     }
