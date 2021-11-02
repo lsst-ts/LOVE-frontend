@@ -51,28 +51,36 @@ export default class DomePointing extends Component {
     const az = this.props.currentPointing.az;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-        <circle
-          className={styles.targetPointing}
-          r={16}
-          strokeWidth={2}
-          cx={zenithPixels.x}
-          cy={zenithPixels.y}
+
+          <circle
+            className={styles.targetPointing}
+            r={16}
+            strokeWidth={2}
+            cx={zenithPixels.x}
+            cy={zenithPixels.y}
+            style={{
+              transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
+              transformOrigin: `50% 50% ${280}px`,
+            }}
+          />
+
+        <g
           style={{
-            transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
+            transform: `rotateZ(${az}deg)`,
             transformOrigin: `50% 50% ${280}px`,
           }}
-        />
-        <circle
-          className={styles.currentPointing}
-          r={16}
-          strokeWidth={2}
-          cx={zenithPixels.x}
-          cy={zenithPixels.y}
-          style={{
-            transform: `rotateZ(${az}deg) rotateX(${el - 90}deg)`,
-            transformOrigin: `50% 50% ${280}px`,
-          }}
-        />
+        >
+          <circle
+            className={styles.currentPointing}
+            r={16}
+            strokeWidth={2}
+            cx={zenithPixels.x}
+            cy={zenithPixels.y}
+            style={{
+              transform: `rotateX(${el - 90}deg)`,
+            }}
+          />
+        </g>
         {/* <circle r={4} cx={targetPixels.x} cy={targetPixels.y} fill="gray" /> */}
       </svg>
     );
