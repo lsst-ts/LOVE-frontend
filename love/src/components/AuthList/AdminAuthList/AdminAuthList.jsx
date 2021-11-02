@@ -48,8 +48,8 @@ const formatList = (identities) => {
 
 export default class AdminAuthList extends Component {
   static propTypes = {
-    onChange: PropTypes.func,
     authListRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
+    authlistAdminPermission: PropTypes.bool,
   };
 
   constructor(props) {
@@ -184,13 +184,25 @@ export default class AdminAuthList extends Component {
       render: (_, row) => {
         return (
           <>
-            <Button className={styles.actionButton} onClick={() => this.setAuthorization('Accept', row)}>
+            <Button
+              disabled={!this.props.authlistAdminPermission}
+              className={styles.actionButton}
+              onClick={() => this.setAuthorization('Accept', row)}
+            >
               Accept
             </Button>
-            <Button className={styles.actionButton} onClick={() => this.setAuthorization('Reject', row)}>
+            <Button
+              disabled={!this.props.authlistAdminPermission}
+              className={styles.actionButton}
+              onClick={() => this.setAuthorization('Reject', row)}
+            >
               Reject
             </Button>
-            <Button className={styles.actionButton} onClick={() => this.setAuthorization('More', row)}>
+            <Button
+              disabled={!this.props.authlistAdminPermission}
+              className={styles.actionButton}
+              onClick={() => this.setAuthorization('More', row)}
+            >
               More
             </Button>
           </>

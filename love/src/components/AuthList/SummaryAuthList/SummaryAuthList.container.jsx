@@ -7,7 +7,7 @@ import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/S
 
 export const schema = {
   description: 'Auth list summary table',
-  defaultSize: [20, 20],
+  defaultSize: [57, 35],
   props: {
     title: {
       type: 'string',

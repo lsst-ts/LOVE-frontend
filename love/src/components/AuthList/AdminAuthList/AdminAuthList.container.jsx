@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { connect } from 'react-redux';
+import { getPermAuthlistAdministrator, getUsername } from 'redux/selectors';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import AdminAuthList from './AdminAuthList';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
-import ManagerInterface from '../../../Utils';
 
 export const schema = {
   description: 'Authorization List for administration',
@@ -25,10 +24,10 @@ const AdminAuthListContainer = ({ ...props }) => {
   return <AdminAuthList {...props} />;
 };
 
-const mapStateToProps = () => {
-  return {
-    isAuthListAdmin: true,
-  };
+const mapStateToProps = (state) => {
+  const authlistAdminPermission = getPermAuthlistAdministrator(state);
+  const user = getUsername(state);
+  return { authlistAdminPermission, user };
 };
 
 export default connect(mapStateToProps)(AdminAuthListContainer);
