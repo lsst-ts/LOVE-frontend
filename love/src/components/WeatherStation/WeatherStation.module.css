@@ -114,3 +114,11 @@
   justify-items: center;
   align-items: center;
 }
+
+.iconWrapper {
+  display: flex;
+  max-width: 42px;
+  max-height: 42px;
+  padding: 7px;
+  margin: auto;
+}

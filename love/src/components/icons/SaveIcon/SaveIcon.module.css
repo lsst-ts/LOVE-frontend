@@ -5,7 +5,7 @@
 .svg {
   vertical-align: top;
   fill: var(--secondary-font-color);
-  stroke: var(--base-font-color);
+  /*stroke: var(--base-font-color);*/
 }
 .cls-1 {
   fill:#798d99;
