@@ -466,7 +466,7 @@ export default class ManagerInterface {
         authorized_users: authorizedUsers,
         unauthorized_cscs: nonAuthorizedCSCs,
         requested_by: `${username}@${host}`,
-        username,
+        user: username,
         message,
         duration,
       }),

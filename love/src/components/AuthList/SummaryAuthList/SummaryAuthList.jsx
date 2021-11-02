@@ -170,14 +170,16 @@ export default class SummaryAuthList extends Component {
     }
   };
 
-  restoreToDefault() {
-    const { user } = this.props;
-    for (let i = 0; i < arguments.length; i++) {
-      const selectedCSC = arguments[i];
-      const authlist = Object.entries(this.props.authlistState).find(([key]) => {
+  restoreToDefault(...args) {
+    const { user, authlistState } = this.props;
+    for (let i = 0; i < args.length; i++) {
+      const selectedCSC = args[i];
+      const authlist = Object.entries(authlistState).find(([key]) => {
         const keyTokens = key.split('-');
-        return `${keyTokens[1]}:${keyTokens[2]}` === selectedCSC;
+        const csc = `${keyTokens[1]}:${keyTokens[2]}`;
+        return csc === selectedCSC;
       })[1];
+
       const cscsToChange = selectedCSC;
       const authorizedUsers = authlist.authorizedUsers
         .split(',')
@@ -188,7 +190,7 @@ export default class SummaryAuthList extends Component {
         .map((x) => `-${x}`)
         .join(',');
       console.log('Request: ', cscsToChange, authorizedUsers, nonAuthorizedCSCs);
-      ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs);
+      // ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs);
     }
   }
 
@@ -216,7 +218,7 @@ export default class SummaryAuthList extends Component {
       render: (_, row) => (
         <Button
           status="default"
-          disabled={!this.props.commandExecutePermission}
+          disabled={!this.props.authlistAdminPermission}
           onClick={() => this.restoreToDefault(row.csc)}
         >
           Restore to default
@@ -406,6 +408,8 @@ export default class SummaryAuthList extends Component {
       return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...val };
     });
 
+    const filteredByData = tableData.filter((row) => row.authorizedUsers !== '' || row.nonAuthorizedCSCs !== '');
+
     const filteredTableData = tableData.filter((row) => {
       if (selectedCSC === 'All' && selectedUser === 'All') return true;
       if (selectedCSC === 'All' && selectedUser !== 'All' && row.authorizedUsers.includes(selectedUser)) return true;
@@ -439,7 +443,7 @@ export default class SummaryAuthList extends Component {
           <Input placeholder="Filter by keywords" onChange={(e) => this.setState({ keywords: e.target.value })} />
           <Button
             status="default"
-            disabled={!this.props.commandExecutePermission}
+            disabled={!authlistAdminPermission}
             onClick={() => this.restoreToDefault(...filteredByKeywordsTableData.map((x) => x.csc))}
           >
             Restore all CSCs to default
