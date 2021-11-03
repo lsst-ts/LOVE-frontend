@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import lodash from 'lodash';
 import { DATE_TIME_FORMAT } from 'Config';
-import ManagerInterface, { calculateTimeoutToNow, formatSecondsToDigital } from 'Utils';
+import ManagerInterface, { calculateTimeoutToNow, formatSecondsToDigital, relativeTime } from 'Utils';
 import PaginatedTable from 'components/GeneralPurpose/PaginatedTable/PaginatedTable';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -178,6 +178,11 @@ export default class AdminAuthList extends Component {
 
   PENDING_HEADERS = [
     ...this.COMMON_HEADERS,
+    {
+      field: 'requested_at',
+      title: 'Time elapsed since request',
+      render: (value) => relativeTime(value),
+    },
     {
       field: 'actions',
       title: 'Actions',
