@@ -463,7 +463,7 @@ export default class SummaryAuthList extends Component {
           className={!this.state.requestPanelActive ? styles.buttonNewRequest : styles.buttonCancelNewRequest}
         >
           <span className={styles.textNewRequest}>
-            {!this.state.requestPanelActive ? '+ New CSC Request From' : '- Cancel New CSC Request From'}
+            {!this.state.requestPanelActive ? '+ New CSC Request Form' : '- Cancel New CSC Request Form'}
           </span>
         </Button>
         <SimplePanel content={this.renderRequestPanel()} maxHeight={500} isActive={this.state.requestPanelActive} />
