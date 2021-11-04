@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const cscList = Object.values(CSCSummaryHierarchy).flatMap((realm) => {
+  const cscList = Object.values(props.hierarchy).flatMap((realm) => {
     // console.log(realm);
     return Object.values(realm).flatMap((cscPairs) => {
       return cscPairs.flatMap((pair) => {
