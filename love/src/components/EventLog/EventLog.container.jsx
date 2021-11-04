@@ -28,6 +28,12 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
+    hierarchy: {
+      type: 'object',
+      description: 'Hierarchy on which to display CSC summaries',
+      isPrivate: false,
+      default: CSCSummaryHierarchy,
+    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
