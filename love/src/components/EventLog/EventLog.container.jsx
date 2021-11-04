@@ -28,6 +28,7 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
+<<<<<<< HEAD
     cscList: {
       type: 'array',
       description:
@@ -35,6 +36,8 @@ export const schema = {
       isPrivate: false,
       default: defaultCSCList,
     },
+=======
+>>>>>>> add the set of max length to the arrays logMessageData and errorCodeData, to 100 and 50 respective. Separe changes of the tickets-52
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
@@ -108,7 +111,19 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+<<<<<<< HEAD
   const cscList = ownProps.cscList;
+=======
+  const cscList = Object.values(CSCSummaryHierarchy).flatMap((realm) => {
+    //console.log(realm);
+    return Object.values(realm).flatMap((cscPairs) => {
+      return cscPairs.flatMap((pair) => {
+        // return Object.values(pair).join('-');
+        return pair;
+      });
+    });
+  });
+>>>>>>> add the set of max length to the arrays logMessageData and errorCodeData, to 100 and 50 respective. Separe changes of the tickets-52
   const errorCodeData = getGroupSortedErrorCodeData(state, cscList);
   const logMessageData = getGroupSortedLogMessageData(state, cscList);
   return {
