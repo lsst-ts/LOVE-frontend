@@ -43,7 +43,7 @@ const PaginatedTable = ({ headers, data, paginationOptions }) => {
 
   React.useEffect(() => {
     setPage(0);
-  }, [data, headers]);
+  }, [JSON.stringify(data), JSON.stringify(headers)]);
 
   const feasibleItemsPerPage = availableItemsPerPage.filter((threshold) => data.length > threshold);
   return (
