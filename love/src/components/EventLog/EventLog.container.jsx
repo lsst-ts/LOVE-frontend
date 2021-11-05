@@ -4,7 +4,7 @@ import EventLog from './EventLog';
 import { addGroup, removeGroup } from '../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../redux/actions/summaryData';
 import { getGroupSortedErrorCodeData, getGroupSortedLogMessageData } from '../../redux/selectors';
-import { CSCSummaryHierarchy } from '../../Config';
+import { defaultCSCList } from '../../Config';
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
@@ -28,11 +28,12 @@ export const schema = {
       isPrivate: false,
       default: 1,
     },
-    hierarchy: {
-      type: 'object',
-      description: 'Hierarchy on which to display CSC summaries',
+    cscList: {
+      type: 'array',
+      description:
+        'Array of the CSCs to be included in the group, as objects with the format: {name: <component-name>, salindex: <number>}',
       isPrivate: false,
-      default: CSCSummaryHierarchy,
+      default: defaultCSCList,
     },
     hasRawMode: {
       type: 'boolean',
@@ -107,15 +108,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const cscList = Object.values(props.hierarchy).flatMap((realm) => {
-    // console.log(realm);
-    return Object.values(realm).flatMap((cscPairs) => {
-      return cscPairs.flatMap((pair) => {
-        // return Object.values(pair).join('-');
-        return pair;
-      });
-    });
-  });
+  const cscList = ownProps.cscList;
   const errorCodeData = getGroupSortedErrorCodeData(state, cscList);
   const logMessageData = getGroupSortedLogMessageData(state, cscList);
   return {
