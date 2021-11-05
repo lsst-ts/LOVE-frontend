@@ -73,6 +73,46 @@ export const CSCSummaryHierarchy = {
   },
 };
 
+export const defaultCSCList = [
+  { name: 'ATMCS', salindex: 0 },
+  { name: 'ATPtg', salindex: 0 },
+  { name: 'ATDome', salindex: 0 },
+  { name: 'ATDomeTrajectory', salindex: 0 },
+  { name: 'ATAOS', salindex: 0 },
+  { name: 'ATPneumatics', salindex: 0 },
+  { name: 'ATHexapod', salindex: 0 },
+  { name: 'ATMonochromator', salindex: 0 },
+  { name: 'FiberSpectrograph', salindex: 0 },
+  { name: 'ATWhiteLight', salindex: 0 },
+  { name: 'Electrometer', salindex: 1 },
+  { name: 'Electrometer', salindex: 2 },
+  { name: 'LinearStage', salindex: 1 },
+  { name: 'LinearStage', salindex: 2 },
+  { name: 'ATCamera', salindex: 0 },
+  { name: 'ATArchiver', salindex: 0 },
+  { name: 'ATHeaderService', salindex: 0 },
+  { name: 'ATSpectrograph', salindex: 0 },
+  { name: 'MTMount', salindex: 0 },
+  { name: 'MTPtg', salindex: 0 },
+  { name: 'MTAOS', salindex: 0 },
+  { name: 'MTM1M3', salindex: 0 },
+  { name: 'MTM2', salindex: 0 },
+  { name: 'MTHexapod', salindex: 1 },
+  { name: 'MTHexapod', salindex: 2 },
+  { name: 'MTRotator', salindex: 0 },
+  { name: 'MTDome', salindex: 0 },
+  { name: 'MTDomeTrajectory', salindex: 0 },
+  { name: 'CCCamera', salindex: 0 },
+  { name: 'CCArchiver', salindex: 0 },
+  { name: 'CCHeaderService', salindex: 0 },
+  { name: 'ScriptQueue', salindex: 1 },
+  { name: 'ScriptQueue', salindex: 2 },
+  { name: 'Watcher', salindex: 0 },
+  { name: 'DIMM', salindex: 1 },
+  { name: 'DIMM', salindex: 2 },
+  { name: 'WeatherStation', salindex: 1 },
+];
+
 export const getCameraStatusStyle = (status) => {
   if (!status) return '';
   if (status.toLowerCase() === 'integrating') return 'running';

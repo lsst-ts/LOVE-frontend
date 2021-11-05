@@ -20,6 +20,7 @@ export default class EventLog extends PureComponent {
     unsubscribeToStream: PropTypes.func,
     errorCodeData: PropTypes.array,
     embedded: PropTypes.bool,
+    cscList: PropTypes.array,
   };
 
   static defaultProps = {
