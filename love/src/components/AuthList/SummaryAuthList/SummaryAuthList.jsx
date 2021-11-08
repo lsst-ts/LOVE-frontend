@@ -102,10 +102,14 @@ export default class SummaryAuthList extends Component {
         {identities.split(',').map((v, i) => (
           <div key={i} className={styles.authlistIdentity}>
             <span>{v}</span>
-            <Hoverable top={true} center={true} inside={true}>
-              <span onClick={() => this.removeIdentity(target, v, type)}>x</span>
-              <div className={styles.removalTooltip}>Request {type} removal</div>
-            </Hoverable>
+            {this.props.authlistAdminPermission ? (
+              <Hoverable top={true} center={true} inside={true}>
+                <span onClick={() => this.removeIdentity(target, v, type)}>x</span>
+                <div className={styles.removalTooltip}>Request {type} removal</div>
+              </Hoverable>
+            ) : (
+              ''
+            )}
           </div>
         ))}
       </div>
