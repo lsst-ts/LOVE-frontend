@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import CameraHexapod from '../CameraHexapod';
+import CameraHexapod from './CameraHexapod';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 
