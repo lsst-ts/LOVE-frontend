@@ -1,3 +1,23 @@
 .hexapodContainer {
     display: inline-flex;
+    background: var(--second-quaternary-background-dimmed-color);
+}
+
+.summaryPanel {
+    width: fit-content;
+    padding: 1em;
+    margin-bottom: 1em;
+  }
+
+.summaryDetail {
+    display: grid;
+}
+
+.summaryStatusDetail {
+    display: flex;
+}
+
+.divTables {
+    width: fit-content;
+    margin: 0 auto;
 }

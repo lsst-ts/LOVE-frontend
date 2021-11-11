@@ -5,6 +5,7 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 class CameraHexapod extends Component {
   componentDidMount() {
     this.props.subscribeToStreams();
@@ -87,54 +88,46 @@ class CameraHexapod extends Component {
     return (
       <div>
         <div className={styles.hexapodContainer}>
-          <SummaryPanel>
-            <Title>Hexapod Status</Title>
-
+          <SummaryPanel className={styles.summaryPanel}>
+            <Title wide>Hexapod Status</Title>
             <Label>Hexapod Status</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
-
             <Label>Compensation</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
-
             <Label>ControllerSubstate</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
-
             <Label>Interlock state</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
           </SummaryPanel>
           <SummaryPanel>
-            <Title>Readiness Summary</Title>
-
+            <Title wide>Readiness Summary</Title>
             <Label>Connected</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
-
             <Label>Commandable By DDS</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
-
             <Label>ControllerState</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
-
             <Label>Hexapod in Position</Label>
             <Value>
-              <span>value</span>
+              <StatusText>value</StatusText>
             </Value>
           </SummaryPanel>
         </div>
-        <div>
+        <div className={styles.divTables}>
           <SimpleTable headers={this.HEADERS_HEXAPOD} data={dataHexapod} />
           <SimpleTable headers={this.HEADERS_STRUT} data={dataStrut} />
         </div>
