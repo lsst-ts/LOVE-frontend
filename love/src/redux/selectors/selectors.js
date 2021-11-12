@@ -553,6 +553,114 @@ export const getCCWFollowingError = (state) => {
   };
 };
 
+// Hexapod
+export const hexapodStatus = (state, salindex) => {
+  const subscriptions = [
+    `event-MTHexapod-${salindex}-commandableByDDS`,
+    `event-MTHexapod-${salindex}-compensationMode`,
+    `event-MTHexapod-${salindex}-connected`,
+    `event-MTHexapod-${salindex}-controllerState`,
+    `event-MTHexapod-${salindex}-inPosition`,
+    `event-MTHexapod-${salindex}-interlock`,
+    `event-MTHexapod-${salindex}-summaryState`,
+  ];
+  const hexapodStatusData = getStreamsData(state, subscriptions);
+  return {
+    hexapodCommandableByDDS: hexapodStatusData[`event-MTHexapod-${salindex}-commandableByDDS`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-commandableByDDS`][0].state.value
+      : 0,
+    hexapodCompensationMode: hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`][0].enabled.value
+      : 0,
+    hexapodConnectedCommand: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].command.value
+      : 0,
+    hexapodConnectedTelemetry: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].telemetry.value
+      : 0,
+    hexapodControllerStateCommand: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].command.value
+      : 0,
+    hexapodControllerStateOfflineSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].offlineSubstate.value
+      : 0,
+    hexapodConstrollerStateEnabledSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].enabledSubstate.value
+      : 0,
+    hexapodControllerStateApplicationStatus: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].applicationStatus.value
+      : 0,
+    hexapodInPosition: hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`][0].inPosition.value
+      : 0,
+    hexapodInterlock: hexapodStatusData[`event-MTHexapod-${salindex}-interlock`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-interlock`][0].detail.value
+      : 0,
+    hexapodSummaryState: hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`][0].summaryState.value
+      : 0,
+  };
+};
+
+export const hexapodTables = (state) => {
+  const subscriptions = [
+    `telemetry-MTHexapod-${salindex}-actuators`,
+    `telemetry-MTHexapod-${salindex}-application`,
+    `event-MTHexapod-${salindex}-compensationOffset`,
+  ];
+  const hexapodTablesData = getStreamsData(state, subscriptions);
+  return {
+    hexapodActuatorsCalibrated: hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`]
+      ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`].calibrated.value
+      : 0,
+    hexapodActuatorsRaw: hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`]
+      ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`].raw.value
+      : 0,
+    hexapodActuatorsTimestamp: hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`]
+      ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`].timestamp.value
+      : 0,
+    hexapodApplicationDemand: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
+      ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].demand.value
+      : 0,
+    hexapodApplicationPosition: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
+      ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].position.value
+      : 0,
+    hexapodApplicationError: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
+      ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].error.value
+      : 0,
+    hexapodCompensationOffsetElevation: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].elevation.value
+      : 0,
+    hexapodCompensationOffsetAzimuth: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].azimuth.value
+      : 0,
+    hexapodCompensationOffsetRotation: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].rotation.value
+      : 0,
+    hexapodCompensationOffsetTemperature: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].temperature.value
+      : 0,
+    hexapodCompensationOffsetX: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].x.value
+      : 0,
+    hexapodCompensationOffsetY: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].y.value
+      : 0,
+    hexapodCompensationOffsetZ: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].z.value
+      : 0,
+    hexapodCompensationOffsetU: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].u.value
+      : 0,
+    hexapodCompensationOffsetV: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].v.value
+      : 0,
+    hexapodCompensationOffsetW: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
+      ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].w.value
+      : 0,
+  };
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *

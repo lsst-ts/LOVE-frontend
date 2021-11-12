@@ -14,6 +14,12 @@ export const schema = {
       isPrivate: false,
       default: 'Camera Hexapod',
     },
+    salindex: {
+      type: 'number',
+      description: 'Salindex of the Hexapod',
+      isPrivate: false,
+      default: 1,
+    },
   },
 };
 
@@ -27,11 +33,27 @@ const CameraHexapodContainer = ({ subscribeToStreams, unsubscribeToStreams, ...p
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  const hexapodStatus = getHexapodStatus(state);
+  const hexapodTables = getHexapodTables(state);
+  return {
+    ...hexapodStatus,
+    ...hexapodTables,
+  };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [];
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [
+    `telemetry-MTHexapod-${ownProps.salindex}-actuators`,
+    `telemetry-MTHexapod-${ownProps.salindex}-application`,
+    `event-MTHexapod-${ownProps.salindex}-commandableByDDS`,
+    `event-MTHexapod-${ownProps.salindex}-compensationMode`,
+    `event-MTHexapod-${ownProps.salindex}-compensationOffset`,
+    `event-MTHexapod-${ownProps.salindex}-connected`,
+    `event-MTHexapod-${ownProps.salindex}-controllerState`,
+    `event-MTHexapod-${ownProps.salindex}-inPosition`,
+    `event-MTHexapod-${ownProps.salindex}-interlock`,
+    `event-MTHexapod-${ownProps.salindex}-summaryState`,
+  ];
   return {
     subscriptions,
     subscribeToStreams: () => {
