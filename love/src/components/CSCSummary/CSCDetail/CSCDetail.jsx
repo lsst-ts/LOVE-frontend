@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { cscText } from 'Utils';
+import HeartbeatIcon from 'components/icons/HeartbeatIcon/HeartbeatIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import styles from './CSCDetail.module.css';
-import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
-import { cscText } from '../../../Utils';
 
 export default class CSCDetail extends Component {
   static propTypes = {
@@ -78,7 +79,7 @@ export default class CSCDetail extends Component {
 
   componentWillUnmount = () => {
     if (!this.props.shouldSubscribe) this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
-  }
+  };
 
   render() {
     const { props } = this;
@@ -141,6 +142,11 @@ export default class CSCDetail extends Component {
             />
           </div>
         </div>
+        {heartbeatStatus === 'ok' && props.withWarning && (
+          <div className={[styles.warningIcon, styles.warning].join(' ')}>
+            <WarningIcon />
+          </div>
+        )}
         <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
           {cscText(this.props.name, this.props.salindex)}
         </div>

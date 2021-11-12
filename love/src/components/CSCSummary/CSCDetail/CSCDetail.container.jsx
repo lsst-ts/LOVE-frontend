@@ -70,6 +70,7 @@ const CSCDetailContainer = ({
   unsubscribeToStreams,
   heartbeatData,
   embedded,
+  withWarning,
 }) => {
   return (
     <CSCDetail
@@ -83,6 +84,7 @@ const CSCDetailContainer = ({
       unsubscribeToStreams={unsubscribeToStreams}
       heartbeatData={heartbeatData}
       embedded={embedded}
+      withWarning={withWarning}
     />
   );
 };
@@ -105,6 +107,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const withWarning = state.summaryData.withWarning[ownProps.name];
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   if (!summaryStateData) {
@@ -114,6 +117,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     summaryStateData: summaryStateData[0],
     heartbeatData,
+    withWarning,
   };
 };
 

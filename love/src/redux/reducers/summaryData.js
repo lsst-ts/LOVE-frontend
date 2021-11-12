@@ -8,6 +8,7 @@ import {
 const initialState = {
   logMessageData: [],
   errorCodeData: [],
+  withWarning: {},
 };
 
 export default function (state = initialState, action) {
@@ -28,6 +29,7 @@ export default function (state = initialState, action) {
               messages: action.messages,
             },
           ],
+          withWarning: { ...state.withWarning, [action.csc]: true },
         };
       }
 
@@ -50,6 +52,7 @@ export default function (state = initialState, action) {
       return {
         errorCodeData: state.errorCodeData,
         logMessageData: newLogMessageData,
+        withWarning: { ...state.withWarning, [action.csc]: true },
       };
     }
     case REMOVE_CSC_LOG_MESSAGES: {
@@ -69,6 +72,7 @@ export default function (state = initialState, action) {
       return {
         errorCodeData: state.errorCodeData,
         logMessageData: newLogMessageData,
+        withWarning: { ...state.withWarning, [action.csc]: false },
       };
     }
     case UPDATE_ERROR_CODE_DATA: {

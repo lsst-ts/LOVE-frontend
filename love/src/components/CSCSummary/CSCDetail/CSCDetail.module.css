@@ -65,6 +65,13 @@
   margin: 0.2em;
 }
 
+.warningIcon {
+  height: 100%;
+  width: 16px;
+  display: flex;
+  align-items: center;
+}
+
 .alert {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
