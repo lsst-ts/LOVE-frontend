@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getStreamData, getCSCHeartbeat, getCSCWithWarning } from 'redux/selectors';
 import CSCDetail from './CSCDetail';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const withWarning = state.summaryData.withWarning[ownProps.name];
+  const withWarning = getCSCWithWarning(state, ownProps.name);
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   if (!summaryStateData) {
