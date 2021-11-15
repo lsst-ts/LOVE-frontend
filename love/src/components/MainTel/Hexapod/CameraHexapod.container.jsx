@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import CameraHexapod from './CameraHexapod';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getHexapodStatus, getHexapodTables } from 'redux/selectors';
 
 export const schema = {
   description: 'View of Camera Hexapod',

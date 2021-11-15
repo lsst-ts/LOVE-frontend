@@ -554,7 +554,7 @@ export const getCCWFollowingError = (state) => {
 };
 
 // Hexapod
-export const hexapodStatus = (state, salindex) => {
+export const getHexapodStatus = (state, salindex) => {
   const subscriptions = [
     `event-MTHexapod-${salindex}-commandableByDDS`,
     `event-MTHexapod-${salindex}-compensationMode`,
@@ -602,7 +602,7 @@ export const hexapodStatus = (state, salindex) => {
   };
 };
 
-export const hexapodTables = (state) => {
+export const getHexapodTables = (state, salindex) => {
   const subscriptions = [
     `telemetry-MTHexapod-${salindex}-actuators`,
     `telemetry-MTHexapod-${salindex}-application`,

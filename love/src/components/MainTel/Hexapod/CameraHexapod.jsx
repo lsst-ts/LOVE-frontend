@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import styles from './CameraHexapod.module.css';
-import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
-import Label from '../../../GeneralPurpose/SummaryPanel/Label';
-import Value from '../../../GeneralPurpose/SummaryPanel/Value';
-import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import Label from '../../GeneralPurpose/SummaryPanel/Label';
+import Value from '../../GeneralPurpose/SummaryPanel/Value';
+import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
+import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 class CameraHexapod extends Component {
   componentDidMount() {
     this.props.subscribeToStreams();

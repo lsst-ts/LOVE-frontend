@@ -169,12 +169,12 @@ export const observatoryIndex = {
     schema: require('../Time/TimeDisplay.container').schema,
   },
   CameraHexapod: {
-    component: require('../MainTel/Camera/CameraHexapod/CameraHexapod.container').default,
+    component: require('../MainTel/Hexapod/CameraHexapod.container').default,
     schema: {
-      ...require('../MainTel/Camera/CameraHexapod/CameraHexapod.container').schema,
+      ...require('../MainTel/Hexapod/CameraHexapod.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../MainTel/Camera/CameraHexapod/CameraHexapod.container').schema.props,
+        ...require('../MainTel/Hexapod/CameraHexapod.container').schema.props,
       },
     },
   },
