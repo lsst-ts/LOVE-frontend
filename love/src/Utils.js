@@ -328,6 +328,29 @@ export default class ManagerInterface {
     });
   }
 
+  static getEFDClients() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/efd_clients`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
   static runATCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {

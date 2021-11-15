@@ -126,6 +126,7 @@ class PlotContainer extends React.Component {
 
   componentDidMount() {
     this.props.subscribeToStreams();
+    ManagerInterface.getEFDClients().then((data) => console.log(data));
   }
 
   componentWillUnmount() {
