@@ -115,7 +115,6 @@ const mapStateToProps = (state, ownProps) => {
   const cscList = ownProps.cscList;
 =======
   const cscList = Object.values(CSCSummaryHierarchy).flatMap((realm) => {
-    //console.log(realm);
     return Object.values(realm).flatMap((cscPairs) => {
       return cscPairs.flatMap((pair) => {
         // return Object.values(pair).join('-');
