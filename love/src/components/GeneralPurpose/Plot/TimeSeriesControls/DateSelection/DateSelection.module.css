@@ -7,13 +7,13 @@
 .fromDateContainer {
   display: flex;
   padding: 0em 1em;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 
 .toDateContainer {
   display: flex;
   padding: 0em 1em;
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 
 .queryButton {
@@ -23,3 +23,6 @@
 .datetimeDescription {
   padding: 0em 0.6em;
 }
+
+/* .customTimeWindowInput {
+} */

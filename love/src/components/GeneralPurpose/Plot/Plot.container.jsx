@@ -119,6 +119,8 @@ class PlotContainer extends React.Component {
       isLive: true,
       timeWindow: 60,
       historicalData: [],
+      efdClients: [],
+      selectedEfdClient: null,
     };
 
     this.containerRef = React.createRef();
@@ -126,7 +128,7 @@ class PlotContainer extends React.Component {
 
   componentDidMount() {
     this.props.subscribeToStreams();
-    ManagerInterface.getEFDClients().then((data) => console.log(data));
+    ManagerInterface.getEFDClients().then(({ instances }) => this.setState({ efdClients: instances }));
   }
 
   componentWillUnmount() {
@@ -196,7 +198,7 @@ class PlotContainer extends React.Component {
       controls,
       timeSeriesControlsProps,
     } = this.props;
-    const { data } = this.state;
+    const { data, efdClients, selectedEfdClient } = this.state;
 
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
 
@@ -265,13 +267,18 @@ class PlotContainer extends React.Component {
         const cscs = parsePlotInputs(inputs);
         const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
         // historicalData
-        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
+        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
+          if (!data) return;
           const parsedData = parseCommanderData(data);
           this.setState({ historicalData: parsedData });
         });
       },
-
       controls: controls,
+      efdClients: efdClients,
+      selectedEfdClient: selectedEfdClient,
+      setEfdClient: (client) => {
+        this.setState({ selectedEfdClient: client });
+      },
     };
 
     if (!width && !height && !containerNode) {
