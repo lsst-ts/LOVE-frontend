@@ -17,7 +17,7 @@ class CameraHexapod extends Component {
 
   HEADERS_HEXAPOD = [
     {
-      field: 'hexapodPosition',
+      field: 'hexapodApplication',
       title: 'Hexapod Position',
     },
     {
@@ -78,10 +78,9 @@ class CameraHexapod extends Component {
   ];
 
   render() {
-    // const dataHexapod = [
-    //   { hexapodPosition: 'Commanded [um, deg]', x: -19, y: -45, z: 9, u: -0.001, v: -0.001, w: -0.001 },
-    //   { hexapodPosition: 'Actual [um, deg]', x: -19, y: -40, z: 9, u: -0.003, v: -0.001, w: -0.001 },
-    // ];
+    // const dummyApplicationCommanded = [-19, -45, 9, -0.001, -0.001, -0.001];
+    // const dummyApplicationActual = [-19, -40, 9, -0.003, -0.001, -0.001];
+    // const dummyActuators = [31, 10, 10, 4, 30, 16];
 
     // Hexapod Position Table
     const dataHexapod = [
@@ -128,7 +127,6 @@ class CameraHexapod extends Component {
     const commandableByDDS = CSCDetail.states[this.props.hexapodCommandableByDDS];
     const controllerState = CSCDetail.states[this.props.hexapodControllerStateCommand];
     const inPosition = CSCDetail.states[this.props.hexapodInPosition];
-    console.log(this.props);
 
     return (
       <div>
@@ -156,8 +154,10 @@ class CameraHexapod extends Component {
               <span className={[interlockState.class, styles.summaryState].join(' ')}>{interlockState.name}</span>
             </Value>
           </SummaryPanel>
-          <SummaryPanel>
-            <Title wide>Readiness Summary</Title>
+          <SummaryPanel className={styles.summaryPanel}>
+            <Title wide className={styles.titles}>
+              Readiness Summary
+            </Title>
             <Label>Connected</Label>
             <Value>
               <span className={[connectedStatus.class, styles.summaryState].join(' ')}>{connectedStatus.name}</span>

@@ -1,10 +1,11 @@
 .hexapodContainer {
+    width: 100%;
     display: inline-flex;
     background: var(--second-quaternary-background-dimmed-color);
 }
 
 .summaryPanel {
-    width: fit-content;
+    width: 100%;
     padding: 1em;
     margin-bottom: 1em;
   }
@@ -18,8 +19,14 @@
 }
 
 .divTables {
-    width: fit-content;
+    width: 100%;
     margin: 0 auto;
+}
+
+.titles {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
 }
 
 .summaryState {
