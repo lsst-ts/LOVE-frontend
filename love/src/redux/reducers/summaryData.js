@@ -4,6 +4,7 @@ import {
   UPDATE_ERROR_CODE_DATA,
   REMOVE_CSC_ERROR_CODE_DATA,
 } from '../actions/actionTypes';
+import { LOG_LEVELS } from 'Constants';
 
 const initialState = {
   logMessageData: [],
@@ -18,6 +19,8 @@ export default function (state = initialState, action) {
         (CSCData) => CSCData.salindex === action.salindex && CSCData.csc === action.csc,
       );
 
+      const withWarning = action.messages[0]?.level?.value >= LOG_LEVELS.warning;
+
       if (cscDataIndex === -1) {
         return {
           errorCodeData: state.errorCodeData,
@@ -29,7 +32,7 @@ export default function (state = initialState, action) {
               messages: action.messages,
             },
           ],
-          withWarning: { ...state.withWarning, [action.csc]: true },
+          withWarning: { ...state.withWarning, [action.csc]: withWarning },
         };
       }
 
@@ -52,7 +55,7 @@ export default function (state = initialState, action) {
       return {
         errorCodeData: state.errorCodeData,
         logMessageData: newLogMessageData,
-        withWarning: { ...state.withWarning, [action.csc]: true },
+        withWarning: { ...state.withWarning, [action.csc]: withWarning },
       };
     }
     case REMOVE_CSC_LOG_MESSAGES: {
