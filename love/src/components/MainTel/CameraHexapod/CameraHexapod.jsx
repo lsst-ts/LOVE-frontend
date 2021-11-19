@@ -83,10 +83,11 @@ class CameraHexapod extends Component {
     // const dummyActuators = [31, 10, 10, 4, 30, 16];
 
     // Hexapod Position Table
+    const defaultValues = { x: 0, y: 0, z: 0, u: 0, v: 0, w: 0 };
     const dataHexapod = [
-      { hexapodApplication: 'Commanded [um, deg]' },
-      { hexapodApplication: 'Actual[um, deg]' },
-      { hexapodApplication: 'Compensation Offset[um, deg]' },
+      { hexapodApplication: 'Commanded [um, deg]', ...defaultValues },
+      { hexapodApplication: 'Actual[um, deg]', ...defaultValues },
+      { hexapodApplication: 'Compensation Offset[um, deg]', ...defaultValues },
     ];
 
     for (let i = 0; i < this.props.hexapodApplicationDemand.length; i++) {
@@ -100,7 +101,7 @@ class CameraHexapod extends Component {
     }
 
     const axis = ['x', 'y', 'z', 'u', 'v', 'w'];
-    dataHexapod[2][axis[0]] = this.props.hexapodCompensationOffsetX;
+    dataHexapod[2].x = this.props.hexapodCompensationOffsetX;
     dataHexapod[2][axis[1]] = this.props.hexapodCompensationOffsetY;
     dataHexapod[2][axis[2]] = this.props.hexapodCompensationOffsetZ;
     dataHexapod[2][axis[3]] = this.props.hexapodCompensationOffsetU;
@@ -111,7 +112,8 @@ class CameraHexapod extends Component {
     const newDataHexapod = dataHexapod.filter((val, index) => index !== 2 || (index === 2 && compensation === true));
 
     // Strut Length Table
-    const dataStrut = [{ strutLength: 'Actual [um]' }];
+    const defaultsValues = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+    const dataStrut = [{ strutLength: 'Actual [um]', ...defaultsValues }];
 
     for (let i = 0; i < this.props.hexapodActuatorsCalibrated.length; i++) {
       const axis = ['1', '2', '3', '4', '5', '6'];

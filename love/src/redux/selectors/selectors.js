@@ -571,7 +571,7 @@ export const getHexapodStatus = (state, salindex) => {
       : 0,
     hexapodCompensationMode: hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`][0].enabled.value
-      : 0,
+      : 2,
     hexapodConnectedCommand: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].command.value
       : 0,

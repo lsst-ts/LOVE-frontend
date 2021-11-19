@@ -8,6 +8,7 @@
     width: 100%;
     padding: 1em;
     margin-bottom: 1em;
+    grid-template-columns: 1fr 1.2fr;
   }
 
 .summaryDetail {
@@ -27,6 +28,7 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: clip;
+    margin-bottom: 2em;
 }
 
 .summaryState {
