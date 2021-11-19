@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
-import { getStreamsData } from 'redux/selectors/selectors';
-import { getTaiToUtc } from 'redux/selectors';
-import Plot from './Plot';
+import { getStreamsData, getConfig, getTaiToUtc } from 'redux/selectors';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import Plot from './Plot';
 
 const moment = extendMoment(Moment);
 
@@ -129,6 +128,12 @@ class PlotContainer extends React.Component {
   componentDidMount() {
     this.props.subscribeToStreams();
     ManagerInterface.getEFDClients().then(({ instances }) => this.setState({ efdClients: instances }));
+    const { defaultEfdInstance } = this.props.configFile.content;
+    if (defaultEfdInstance) {
+      this.setState({ selectedEfdClient: defaultEfdInstance }, () => {
+        this.setHistoricalData(Moment().subtract(3600, 'seconds'), 60);
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -263,16 +268,7 @@ class PlotContainer extends React.Component {
       setTimeWindow: (timeWindow) => {
         this.setState({ timeWindow });
       },
-      setHistoricalData: (startDate, timeWindow) => {
-        const cscs = parsePlotInputs(inputs);
-        const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
-        // historicalData
-        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
-          if (!data) return;
-          const parsedData = parseCommanderData(data);
-          this.setState({ historicalData: parsedData });
-        });
-      },
+      setHistoricalData: this.setHistoricalData,
       controls: controls,
       efdClients: efdClients,
       selectedEfdClient: selectedEfdClient,
@@ -303,6 +299,18 @@ class PlotContainer extends React.Component {
     return topics;
   };
 
+  setHistoricalData = (startDate, timeWindow) => {
+    const { inputs } = this.props;
+    const { selectedEfdClient } = this.state;
+    const cscs = parsePlotInputs(inputs);
+    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
+      if (!data) return;
+      const parsedData = parseCommanderData(data);
+      this.setState({ historicalData: parsedData });
+    });
+  };
+
   getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
     let filteredData;
     if (!isLive) {
@@ -320,7 +328,8 @@ class PlotContainer extends React.Component {
       });
       filteredData = filteredData2;
     } else {
-      filteredData = data.filter((val) => {
+      const joinedData = historicalData.concat(data);
+      filteredData = joinedData.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;
         const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
         if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
@@ -360,9 +369,11 @@ const mapStateToProps = (state, ownProps) => {
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
   const taiToUtc = getTaiToUtc(state);
+  const configFile = getConfig(state);
   return {
     streams,
     taiToUtc,
+    configFile,
   };
 };
 
