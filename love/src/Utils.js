@@ -887,3 +887,15 @@ export function calculateTimeoutToNow(startDate, shift = 0) {
   const secondsLeft = shift - diff.asSeconds();
   return secondsLeft > 0 ? parseInt(secondsLeft, 10) : 0;
 }
+
+/**
+ * Function used to check if an entity is present in some parameter of the authlist event.
+ * @param {object} authlist - The authlist object with params: authorizedUsers & nonAuthorizedCSCs
+ * @param {entity} string - Entity to be checked on authlist, can take two formats: <user@host> or <CSC:salindex>
+ * @returns {object} Object with two boolean parameters: inAuthorizedUsers and inNonAuthorizedCSCs
+ */
+export function checkAuthlist(authlist, entity) {
+  const inAuthorizedUsers = authlist.authorizedUsers.includes(entity);
+  const inNonAuthorizedCSCs = authlist.nonAuthorizedCSCs.includes(entity);
+  return { inAuthorizedUsers, inNonAuthorizedCSCs };
+}
