@@ -107,16 +107,12 @@ export default class AdminAuthList extends Component {
 
   authorizeRequest(type) {
     const { selectedRequest, message, duration } = this.state;
-    console.log('Type:', REQUEST_TYPE_TO_STATUS_MAP[type]);
-    console.log('Selected request:', selectedRequest);
-    console.log('Message:', message);
-    console.log('Duration:', duration);
     ManagerInterface.setAuthListRequestStatus(
       selectedRequest.id,
       REQUEST_TYPE_TO_STATUS_MAP[type],
       message,
       duration,
-    ).then((res) => {
+    ).then(() => {
       ManagerInterface.getAuthListRequests().then((res) => {
         this.setState({
           authListRequests: res,
