@@ -7,7 +7,7 @@ import { getHexapodStatus, getHexapodTables } from 'redux/selectors';
 
 export const schema = {
   description: 'View of Camera Hexapod',
-  defaultSize: [40, 25],
+  defaultSize: [40, 23],
   props: {
     title: {
       type: 'string',

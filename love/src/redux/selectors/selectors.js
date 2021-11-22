@@ -568,10 +568,10 @@ export const getHexapodStatus = (state, salindex) => {
   return {
     hexapodCommandableByDDS: hexapodStatusData[`event-MTHexapod-${salindex}-commandableByDDS`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-commandableByDDS`][0].state.value
-      : 0,
+      : 1,
     hexapodCompensationMode: hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`][0].enabled.value
-      : 2,
+      : 1,
     hexapodConnectedCommand: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].command.value
       : 0,
@@ -592,10 +592,10 @@ export const getHexapodStatus = (state, salindex) => {
       : 0,
     hexapodInPosition: hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`][0].inPosition.value
-      : 0,
+      : 1,
     hexapodInterlock: hexapodStatusData[`event-MTHexapod-${salindex}-interlock`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-interlock`][0].detail.value
-      : 0,
+      : 1,
     hexapodSummaryState: hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`][0].summaryState.value
       : 0,
@@ -612,19 +612,19 @@ export const getHexapodTables = (state, salindex) => {
   return {
     hexapodActuatorsCalibrated: hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`].calibrated.value
-      : 0,
+      : [],
     hexapodActuatorsRaw: hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`].raw.value
-      : 0,
+      : [],
     hexapodActuatorsTimestamp: hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-actuators`].timestamp.value
       : 0,
     hexapodApplicationDemand: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].demand.value
-      : 0,
+      : [],
     hexapodApplicationPosition: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].position.value
-      : 0,
+      : [],
     hexapodApplicationError: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].error.value
       : 0,
