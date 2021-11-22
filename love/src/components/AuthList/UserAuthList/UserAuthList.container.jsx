@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import UserAuthList from './UserAuthList';
-import { CSCSummaryHierarchy, FRONTEND_HOST } from '../../../Config';
+import { CSCSummaryHierarchy } from '../../../Config';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ManagerInterface from '../../../Utils';
 
@@ -66,7 +66,7 @@ class UserAuthListContainer extends Component {
       return <SubscriptionTableContainer subscriptions={subscriptions} />;
     }
     const { username, hierarchy } = this.props;
-    const requests = authlistRequests.filter((req) => req.username === username && req.hostname === FRONTEND_HOST);
+    const requests = authlistRequests.filter((req) => req.username === username && req.hostname === 'love');
 
     return (
       <UserAuthList

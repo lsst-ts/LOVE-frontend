@@ -4,7 +4,6 @@ import AddIcon from '../../../icons/AddIcon/AddIcon';
 import MinusIcon from '../../../icons/MinusIcon/MinusIcon';
 import Button from '../../../GeneralPurpose/Button/Button';
 import styles from './CSCItem.module.css';
-import { FRONTEND_HOST } from '../../../../Config';
 import ManagerInterface from '../../../../Utils';
 
 const STATES = {
@@ -41,7 +40,7 @@ export default class CSCItem extends Component {
   };
 
   static defaultProps = {
-    host: FRONTEND_HOST,
+    host: 'love',
   };
 
   setHover = (value) => this.setState({ hover: value });
