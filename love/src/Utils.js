@@ -423,7 +423,6 @@ export default class ManagerInterface {
   ) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
 
