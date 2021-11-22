@@ -553,7 +553,7 @@ export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, str
  * @param {string} name
  */
 export const getCSCWithWarning = (state, name) => {
-  return state.summaryData.withWarning[name] ?? false;
+  return state.summaryData?.withWarning?.[name] ?? false;
 };
 
 export const getCSCLogMessages = (state, csc, salindex) => {
