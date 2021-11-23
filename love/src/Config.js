@@ -436,6 +436,47 @@ export const severityEnum = {
   critical: 4,
 };
 
+// Camera Hexapod
+export const hexapodCommandableByDDSStateMap = {
+  false: 'NOT COMMANDABLE',
+  true: 'COMMANDABLE',
+};
+
+export const hexapodCommandableByDDSStatetoStyle = {
+  'NOT COMMANDABLE': 'serious',
+  COMMANDABLE: 'ok',
+};
+
+export const hexapodCompensationModeStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const hexapodCompensationModeStatetoStyle = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+};
+
+// export const hexapodInPositionStateMap = {
+//   false: 'DISABLED',
+//   true: 'IN POSITION',
+// };
+
+// export const hexapodInPositionStatetoStyle = {
+//   DISABLED: 'warning',
+//   'IN POSITION': 'ok',
+// };
+
+export const hexapodInterlockStateMap = {
+  0: 'Disengaged',
+  1: 'Engaged',
+};
+
+export const hexapodInterlockStatetoStyle = {
+  Disengaged: 'warning',
+  Engaged: 'ok',
+};
+
 /**
  * Available commands in the TCS and their parameters. Each command is represented
  * as a dictionary key and their parameters as the values of said dictionary.

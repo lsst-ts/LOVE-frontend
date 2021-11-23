@@ -568,10 +568,10 @@ export const getHexapodStatus = (state, salindex) => {
   return {
     hexapodCommandableByDDS: hexapodStatusData[`event-MTHexapod-${salindex}-commandableByDDS`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-commandableByDDS`][0].state.value
-      : 1,
+      : false,
     hexapodCompensationMode: hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-compensationMode`][0].enabled.value
-      : 1,
+      : false,
     hexapodConnectedCommand: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].command.value
       : 0,
@@ -592,10 +592,10 @@ export const getHexapodStatus = (state, salindex) => {
       : 0,
     hexapodInPosition: hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`][0].inPosition.value
-      : 1,
+      : false,
     hexapodInterlock: hexapodStatusData[`event-MTHexapod-${salindex}-interlock`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-interlock`][0].detail.value
-      : 1,
+      : 0,
     hexapodSummaryState: hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`][0].summaryState.value
       : 0,
