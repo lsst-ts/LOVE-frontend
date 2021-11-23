@@ -279,16 +279,18 @@ export default class SummaryAuthList extends Component {
             <div className={styles.label2}>CSCs to change</div>
             <div className={styles.label2}>Authorized Users</div>
             <div className={styles.label2}>Non-Authorized CSCs</div>
-            <div className={styles.labelMsg}>Message</div>
-            <div className={styles.labelDuration}>
-              <span>Duration (minutes)</span>
-              <Hoverable top={true} center={true} inside={true}>
-                <span className={styles.infoIcon}>
-                  <InfoIcon />
-                </span>
-                <div className={styles.hover}>A duration of 0 or blank equals to no limit</div>
-              </Hoverable>
-            </div>
+            {this.props.authlistAdminPermission && <div className={styles.labelMsg}>Message</div>}
+            {this.props.authlistAdminPermission && (
+              <div className={styles.labelDuration}>
+                <span>Duration (minutes)</span>
+                <Hoverable top={true} center={true} inside={true}>
+                  <span className={styles.infoIcon}>
+                    <InfoIcon />
+                  </span>
+                  <div className={styles.hover}>A duration of 0 or blank equals to no limit</div>
+                </Hoverable>
+              </div>
+            )}
           </div>
           <div className={styles.itemsBoxNewRequest}>
             <div className={styles.inputNewRequest}>
@@ -331,17 +333,21 @@ export default class SummaryAuthList extends Component {
                 </span>
               </div>
             </div>
-            <div className={styles.textAreaNewRequest}>
-              <TextArea
-                value={this.state.message}
-                callback={this.handleMessageChange}
-                onKeyDown={() => null}
-                onKeyUp={() => null}
-              />
-            </div>
-            <div className={styles.inputNewRequest}>
-              <Input value={this.state.duration} onChange={this.handleDurationChange} />
-            </div>
+            {this.props.authlistAdminPermission && (
+              <div className={styles.textAreaNewRequest}>
+                <TextArea
+                  value={this.state.message}
+                  callback={this.handleMessageChange}
+                  onKeyDown={() => null}
+                  onKeyUp={() => null}
+                />
+              </div>
+            )}
+            {this.props.authlistAdminPermission && (
+              <div className={styles.inputNewRequest}>
+                <Input value={this.state.duration} onChange={this.handleDurationChange} />
+              </div>
+            )}
           </div>
         </div>
         <div className={styles.btnSend}>
