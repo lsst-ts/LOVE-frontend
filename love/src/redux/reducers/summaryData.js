@@ -20,7 +20,7 @@ export default function (state = initialState, action) {
       );
 
       const withWarning = action.messages[0]?.level?.value >= LOG_LEVELS.warning;
-
+      
       if (cscDataIndex === -1) {
         return {
           errorCodeData: state.errorCodeData,
