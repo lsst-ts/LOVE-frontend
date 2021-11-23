@@ -76,7 +76,7 @@ export default class SummaryAuthList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.subscriptions !== this.props.subscriptions) {
+    if (JSON.stringify(prevProps.subscriptions) !== JSON.stringify(this.props.subscriptions)) {
       const subscribedCSCs = this.props.subscriptions.map((x) => {
         const tokens = x.split('-');
         return `${tokens[1]}:${tokens[2]}`;
@@ -87,7 +87,7 @@ export default class SummaryAuthList extends Component {
     if (JSON.stringify(prevProps.authlistState) !== JSON.stringify(this.props.authlistState)) {
       const userOptions = new Set();
       Object.entries(this.props.authlistState).forEach(([, val]) => {
-        val.authorizedUsers.split(',').forEach((x) => userOptions.add(x));
+        val?.authorizedUsers?.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
@@ -194,8 +194,7 @@ export default class SummaryAuthList extends Component {
         .split(',')
         .map((x) => `-${x}`)
         .join(',');
-      console.log('Request: ', cscsToChange, authorizedUsers, nonAuthorizedCSCs);
-      // ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs);
+      ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs);
     }
   }
 
@@ -259,7 +258,6 @@ export default class SummaryAuthList extends Component {
 
   handleMessageChange = (message) => {
     const trimmedMessage = message.substr(0, MAX_MESSAGE_LEN);
-    // console.log(trimmedMessage);
     this.setState({ message: trimmedMessage });
   };
 
@@ -419,16 +417,17 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText,
     } = this.state;
 
-    // console.log(authlistAdminPermission);
-
     const tableData = Object.entries(authlistState).map(([key, val]) => {
       const keyTokens = key.split('-');
       return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...val };
     });
 
-    const filteredByData = tableData.filter((row) => row.authorizedUsers !== '' || row.nonAuthorizedCSCs !== '');
+    const filteredByData = tableData.filter(
+      (row) =>
+        (row.authorizedUsers && row.authorizedUsers !== '') || (row.nonAuthorizedCSCs && row.nonAuthorizedCSCs !== ''),
+    );
 
-    const filteredTableData = tableData.filter((row) => {
+    const filteredTableData = filteredByData.filter((row) => {
       if (selectedCSC === 'All' && selectedUser === 'All') return true;
       if (selectedCSC === 'All' && selectedUser !== 'All' && row.authorizedUsers.includes(selectedUser)) return true;
       if (selectedCSC !== 'All' && row.csc.includes(selectedCSC)) return true;
