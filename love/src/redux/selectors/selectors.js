@@ -574,10 +574,10 @@ export const getHexapodStatus = (state, salindex) => {
       : false,
     hexapodConnectedCommand: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].command.value
-      : 0,
+      : false,
     hexapodConnectedTelemetry: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].telemetry.value
-      : 0,
+      : false,
     hexapodControllerStateCommand: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].command.value
       : 0,

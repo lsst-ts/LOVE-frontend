@@ -6,7 +6,16 @@ import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 class CameraHexapod extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      connectedCommandEvent: false,
+      connectedTelemetryEvent: false,
+    };
+  }
+
   componentDidMount() {
     this.props.subscribeToStreams();
   }
@@ -77,6 +86,30 @@ class CameraHexapod extends Component {
     },
   ];
 
+  hoverToConnectedStatus = () => {
+    // if (this.props.hexapodConnectedCommand) {
+    //   this.setState({connectedCommandEvent: true});
+    //   return this.props.hexapodConnectedCommand.name;
+    // }
+    // if (this.props.hexapodConnectedTelemetry){
+    //   this.setState({connectedTelemetryEvent: true});
+    //   return this.props.hexapodConnectedTelemetry.name;
+    // }
+
+    if (
+      (!this.props.hexapodConnectedCommand && !this.props.hexapodConnectedTelemtry) ||
+      !this.props.hexapodConnectedCommand ||
+      !this.props.hexapodConnectedTelemtry
+    ) {
+      return 'alert'; //acá debe ir el hover
+    } else if (!this.props.hexapodConnectedCommand) {
+      //los otros casos con alert y actualizar los states y el hover
+      return 'alert';
+    } else {
+      return 'connected'; //hover
+    }
+  };
+
   render() {
     // const dummyApplicationCommanded = [-19, -45, 9, -0.001, -0.001, -0.001];
     // const dummyApplicationActual = [-19, -40, 9, -0.003, -0.001, -0.001];
@@ -102,11 +135,11 @@ class CameraHexapod extends Component {
 
     const axis = ['x', 'y', 'z', 'u', 'v', 'w'];
     dataHexapod[2].x = this.props.hexapodCompensationOffsetX;
-    dataHexapod[2][axis[1]] = this.props.hexapodCompensationOffsetY;
-    dataHexapod[2][axis[2]] = this.props.hexapodCompensationOffsetZ;
-    dataHexapod[2][axis[3]] = this.props.hexapodCompensationOffsetU;
-    dataHexapod[2][axis[4]] = this.props.hexapodCompensationOffsetV;
-    dataHexapod[2][axis[5]] = this.props.hexapodCompensationOffsetZ;
+    dataHexapod[2].y = this.props.hexapodCompensationOffsetY;
+    dataHexapod[2].z = this.props.hexapodCompensationOffsetZ;
+    dataHexapod[2].u = this.props.hexapodCompensationOffsetU;
+    dataHexapod[2].v = this.props.hexapodCompensationOffsetV;
+    dataHexapod[2].w = this.props.hexapodCompensationOffsetZ;
 
     const compensation = this.props.hexapodCompensationMode;
     const newDataHexapod = dataHexapod.filter((val, index) => index !== 2 || (index === 2 && compensation === true));
@@ -125,7 +158,8 @@ class CameraHexapod extends Component {
     const compensationStatus = CSCDetail.states[this.props.hexapodCompensationMode];
     const controllerSubstate = CSCDetail.states[this.props.hexapodConstrollerStateEnabledSubstate];
     const interlockState = CSCDetail.states[this.props.hexapodInterlock];
-    const connectedStatus = CSCDetail.states[this.props.hexapodConnectedCommand];
+    const connectedCommand = CSCDetail.states[this.props.hexapodConnectedCommand];
+    const connectedTelemetry = CSCDetail.states[this.props.hexapodConnectedTelemtry];
     const commandableByDDS = CSCDetail.states[this.props.hexapodCommandableByDDS];
     const controllerState = CSCDetail.states[this.props.hexapodControllerStateCommand];
     const inPosition = CSCDetail.states[this.props.hexapodInPosition];
@@ -162,7 +196,13 @@ class CameraHexapod extends Component {
             </Title>
             <Label>Connected</Label>
             <Value>
-              <span className={[connectedStatus.class, styles.summaryState].join(' ')}>{connectedStatus.name}</span>
+              <span className={[connectedStatus.class, styles.summaryState].join(' ')}>
+                {this.hoverToConnectedStatus()}
+                <Hoverable top={true} center={true} inside={true}>
+                  <div className={styles.hover}>Commander {this.state.connectedCommandEvent}</div>
+                  <div className={styles.hover}>Telemetry {this.state.connectedTelemetryEvent}</div>
+                </Hoverable>
+              </span>
             </Value>
             <Label>Commandable By DDS</Label>
             <Value>
