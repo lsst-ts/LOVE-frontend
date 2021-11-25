@@ -14,6 +14,12 @@ export const schema = {
       isPrivate: false,
       default: 'Admin Authorization List',
     },
+    pollingTimeout: {
+      type: 'number',
+      description: 'Timeout to poll authorization requests',
+      isPrivate: false,
+      default: 5,
+    },
   },
 };
 

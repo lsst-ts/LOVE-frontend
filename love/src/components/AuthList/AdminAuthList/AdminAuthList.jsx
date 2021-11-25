@@ -22,7 +22,7 @@ const moment = extendMoment(Moment);
 const MAX_MESSAGE_LEN = 320;
 const MAX_DURATION = 60;
 const MIN_DURATION = 0;
-const AUTHORIZATION_POLLING_TIMEOUT = 5000;
+const DEFAULT_POLLING_TIMEOUT = 5000;
 
 const STATUS_OPTIONS = [
   { value: AUTHLIST_REQUEST_PENDING, label: 'Pending requests' },
@@ -51,6 +51,7 @@ export default class AdminAuthList extends Component {
   static propTypes = {
     authListRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
     authlistAdminPermission: PropTypes.bool,
+    pollingTimeout: PropTypes.number.isRequired,
   };
 
   constructor(props) {
@@ -270,14 +271,17 @@ export default class AdminAuthList extends Component {
     });
     // Used to poll AuthlistRequests every AUTHORIZATION_POLLING_TIMEOUT miliseconds
     if (this.pollingInterval) clearInterval(this.pollingInterva);
-    this.pollingInterval = setInterval(() => {
-      ManagerInterface.getAuthListRequests().then((res) => {
-        this.setState({
-          authListRequests: res,
-          lastUpdate: Date.now(),
+    this.pollingInterval = setInterval(
+      () => {
+        ManagerInterface.getAuthListRequests().then((res) => {
+          this.setState({
+            authListRequests: res,
+            lastUpdate: Date.now(),
+          });
         });
-      });
-    }, AUTHORIZATION_POLLING_TIMEOUT);
+      },
+      this.props.pollingTimeout ? this.props.pollingTimeout * 1000 : DEFAULT_POLLING_TIMEOUT,
+    );
 
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
       const cscList = ['All'].concat(
@@ -338,7 +342,9 @@ export default class AdminAuthList extends Component {
       return range.contains(requestedDate);
     });
 
-    const nextUpdate = lastUpdate ? lastUpdate + AUTHORIZATION_POLLING_TIMEOUT : null;
+    const nextUpdate = lastUpdate
+      ? lastUpdate + (this.props.pollingTimeout ? this.props.pollingTimeout * 1000 : DEFAULT_POLLING_TIMEOUT)
+      : null;
     let leftToUpdate = nextUpdate ? Math.round(Moment(nextUpdate).diff(Date.now()) / 1000) : 'unknown';
     if (leftToUpdate <= 0) {
       leftToUpdate = '0 seconds';
