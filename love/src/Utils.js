@@ -865,8 +865,8 @@ export function calculateTimeoutToNow(startDate, shift = 0) {
  * @returns {object} Object with two boolean parameters: inAuthorizedUsers and inNonAuthorizedCSCs
  */
 export function checkAuthlist(authlist, entity) {
-  const inAuthorizedUsers = authlist.authorizedUsers.includes(entity);
-  const inNonAuthorizedCSCs = authlist.nonAuthorizedCSCs.includes(entity);
+  const inAuthorizedUsers = authlist?.authorizedUsers?.includes(entity);
+  const inNonAuthorizedCSCs = authlist?.nonAuthorizedCSCs?.includes(entity);
   return { inAuthorizedUsers, inNonAuthorizedCSCs };
 }
 
