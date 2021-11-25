@@ -14,13 +14,11 @@ const DateTimeRange = ({ ...props }) => {
   }, []);
 
   const handleChangeStart = (changeEvent) => {
-    // console.log(changeEvent.format(DATE_TIME_FORMAT));
     setDateStart(changeEvent);
     props.onChange(changeEvent, 'start');
   };
 
   const handleChangeEnd = (changeEvent) => {
-    // console.log(changeEvent.format(DATE_TIME_FORMAT));
     setDateEnd(changeEvent);
     props.onChange(changeEvent, 'end');
   };
