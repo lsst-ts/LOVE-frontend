@@ -372,6 +372,7 @@ export default class AdminAuthList extends Component {
               onChange={this.handleDateTimeChange}
               label="Date & Time"
               startDate={new Date() - 24 * 60 * 60 * 1000 * 5}
+              endDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
             />
           </div>
           <PaginatedTable headers={this.TABLE_HEADERS[showing]} data={filteredTableData} counter={this.state.counter} />
