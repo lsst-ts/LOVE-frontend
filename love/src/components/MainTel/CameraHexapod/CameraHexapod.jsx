@@ -6,7 +6,17 @@ import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import {
+  hexapodInPositionStateMap,
+  hexapodCommandableByDDSStateMap,
+  hexapodCommandableByDDSStatetoStyle,
+  hexapodCompensationModeStateMap,
+  hexapodCompensationModeStatetoStyle,
+  hexapodInterlockStateMap,
+  hexapodInterlockStatetoStyle,
+} from 'Config';
 class CameraHexapod extends Component {
   constructor(props) {
     super(props);
@@ -87,34 +97,40 @@ class CameraHexapod extends Component {
   ];
 
   hoverToConnectedStatus = () => {
-    // if (this.props.hexapodConnectedCommand) {
-    //   this.setState({connectedCommandEvent: true});
-    //   return this.props.hexapodConnectedCommand.name;
-    // }
-    // if (this.props.hexapodConnectedTelemetry){
-    //   this.setState({connectedTelemetryEvent: true});
-    //   return this.props.hexapodConnectedTelemetry.name;
-    // }
+    const command = this.state.connectedCommandEvent ? 'Connected' : 'Disconnected';
+    const telemetry = this.state.connectedTelemetryEvent ? 'Connected' : 'Disconnected';
 
-    if (
-      (!this.props.hexapodConnectedCommand && !this.props.hexapodConnectedTelemtry) ||
-      !this.props.hexapodConnectedCommand ||
-      !this.props.hexapodConnectedTelemtry
-    ) {
-      return 'alert'; //acá debe ir el hover
-    } else if (!this.props.hexapodConnectedCommand) {
-      //los otros casos con alert y actualizar los states y el hover
-      return 'alert';
-    } else {
-      return 'connected'; //hover
+    const connectedCommand = this.props.hexapodConnectedCommand;
+    const connectedTelemetry = this.props.hexapodConnectedTelemtry;
+
+    if (connectedCommand && connectedTelemetry) {
+      this.setState({ connectedCommandEvent: true, connectedTelemetryEvent: true });
+      return (
+        //'connected'
+        <div>
+          <span className={[connectedCommand.class, styles.summaryState].join(' ')}>CONNECTED</span>
+          <Hoverable top={true} center={true} inside={true}>
+            <div className={styles.hover}>Commander {command}</div>
+            <div className={styles.hover}>Telemetry {telemetry}</div>
+          </Hoverable>
+        </div>
+      );
+    }
+    if (!connectedCommand || !connectedTelemetry) {
+      return (
+        //'alert'
+        <div>
+          <span className={[connectedCommand.class, styles.summaryState].join(' ')}>ALERT</span>
+          <Hoverable top={true} center={true} inside={true}>
+            <div className={styles.hover}>Commander {command}</div>
+            <div className={styles.hover}>Telemetry {telemetry}</div>
+          </Hoverable>
+        </div>
+      );
     }
   };
 
   render() {
-    // const dummyApplicationCommanded = [-19, -45, 9, -0.001, -0.001, -0.001];
-    // const dummyApplicationActual = [-19, -40, 9, -0.003, -0.001, -0.001];
-    // const dummyActuators = [31, 10, 10, 4, 30, 16];
-
     // Hexapod Position Table
     const defaultValues = { x: 0, y: 0, z: 0, u: 0, v: 0, w: 0 };
     const dataHexapod = [
@@ -155,14 +171,42 @@ class CameraHexapod extends Component {
 
     // Hexapod status and Readiness summary
     const hexapodStatus = CSCDetail.states[this.props.hexapodSummaryState];
-    const compensationStatus = CSCDetail.states[this.props.hexapodCompensationMode];
-    const controllerSubstate = CSCDetail.states[this.props.hexapodConstrollerStateEnabledSubstate];
-    const interlockState = CSCDetail.states[this.props.hexapodInterlock];
+    // const compensationStatus = CSCDetail.states[this.props.hexapodCompensationMode];
+    const compensationStatus = {
+      name: hexapodCommandableByDDSStateMap[this.props.hexapodCompensationMode],
+      class:
+        CSCDetailStyles[
+          hexapodCommandableByDDSStatetoStyle[hexapodCommandableByDDSStateMap[this.props.hexapodCompensationMode]]
+        ],
+    };
+
+    const controllerState = CSCDetail.states[this.props.hexapodControllerStateCommand];
+
+    // const interlockState = CSCDetail.states[this.props.hexapodInterlock];
+    const interlockState = {
+      name: hexapodInterlockStateMap[this.props.hexapodInterlock],
+      class: CSCDetailStyles[hexapodInterlockStatetoStyle[hexapodInterlockStateMap[this.props.hexapodInterlock]]],
+    };
+
     const connectedCommand = CSCDetail.states[this.props.hexapodConnectedCommand];
     const connectedTelemetry = CSCDetail.states[this.props.hexapodConnectedTelemtry];
-    const commandableByDDS = CSCDetail.states[this.props.hexapodCommandableByDDS];
-    const controllerState = CSCDetail.states[this.props.hexapodControllerStateCommand];
-    const inPosition = CSCDetail.states[this.props.hexapodInPosition];
+
+    // const commandableByDDS = CSCDetail.states[this.props.hexapodCommandableByDDS];
+    const commandableByDDS = {
+      name: hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS],
+      class:
+        CSCDetailStyles[
+          hexapodCommandableByDDSStatetoStyle[hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS]]
+        ],
+    };
+    // const controllerSubState = {
+
+    //   CSCDetail.states[this.props.hexapodControllerStateCommand]
+    // };
+    const inPosition = {
+      name: hexapodInPositionStateMap[this.props.hexapodInPosition],
+      class: CSCDetailStyles[hexapodInPositionStateMap[this.props.hexapodInPosition]],
+    };
 
     return (
       <div>
@@ -181,9 +225,7 @@ class CameraHexapod extends Component {
             </Value>
             <Label>ControllerSubstate</Label>
             <Value>
-              <span className={[controllerSubstate.class, styles.summaryState].join(' ')}>
-                {controllerSubstate.name}
-              </span>
+              <span>{controllerSubstate.name}</span>
             </Value>
             <Label>Interlock state</Label>
             <Value>
@@ -195,22 +237,14 @@ class CameraHexapod extends Component {
               Readiness Summary
             </Title>
             <Label>Connected</Label>
-            <Value>
-              <span className={[connectedStatus.class, styles.summaryState].join(' ')}>
-                {this.hoverToConnectedStatus()}
-                <Hoverable top={true} center={true} inside={true}>
-                  <div className={styles.hover}>Commander {this.state.connectedCommandEvent}</div>
-                  <div className={styles.hover}>Telemetry {this.state.connectedTelemetryEvent}</div>
-                </Hoverable>
-              </span>
-            </Value>
+            <Value>{this.hoverToConnectedStatus()}</Value>
             <Label>Commandable By DDS</Label>
             <Value>
-              <span className={[commandableByDDS.class, styles.summaryState].join(' ')}>{commandableByDDS.name}</span>
+              <span className={[commandableByDDS.class, styles.summaryState].join(' ')}>commandableByDDS.name</span>
             </Value>
             <Label>ControllerState</Label>
             <Value>
-              <span className={[controllerState.class, styles.summaryState].join(' ')}>{controllerState.name}</span>
+              <span>{controllerState.name}</span>
             </Value>
             <Label>Hexapod in Position</Label>
             <Value>

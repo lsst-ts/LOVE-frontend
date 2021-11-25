@@ -457,16 +457,6 @@ export const hexapodCompensationModeStatetoStyle = {
   ENABLED: 'ok',
 };
 
-// export const hexapodInPositionStateMap = {
-//   false: 'DISABLED',
-//   true: 'IN POSITION',
-// };
-
-// export const hexapodInPositionStatetoStyle = {
-//   DISABLED: 'warning',
-//   'IN POSITION': 'ok',
-// };
-
 export const hexapodInterlockStateMap = {
   0: 'Disengaged',
   1: 'Engaged',
@@ -475,6 +465,26 @@ export const hexapodInterlockStateMap = {
 export const hexapodInterlockStatetoStyle = {
   Disengaged: 'warning',
   Engaged: 'ok',
+};
+
+export const hexapodControllerStateOfflineSubStateMap = {
+  0: 'Publish Only',
+  1: 'Available',
+};
+
+export const hexapodControllerStateOfflineSubStateToStyle = {
+  'Publish Only': 'warning',
+  Available: 'ok',
+};
+
+export const hexapodControllerStateEnabledSubstateMap = {
+  0: 'Stationary',
+  1: 'Moving Point to Point',
+  2: 'Slewing Or Tracking',
+  3: 'Controlled Stopping',
+  4: 'Initializing',
+  5: 'Relative',
+  6: 'Constant Velocity',
 };
 
 /**
