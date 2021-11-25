@@ -869,3 +869,11 @@ export function checkAuthlist(authlist, entity) {
   const inNonAuthorizedCSCs = authlist.nonAuthorizedCSCs.includes(entity);
   return { inAuthorizedUsers, inNonAuthorizedCSCs };
 }
+
+export function getUserHost(user, host) {
+  try {
+    return `${user}@${host}`;
+  } catch (e) {
+    return '';
+  }
+}

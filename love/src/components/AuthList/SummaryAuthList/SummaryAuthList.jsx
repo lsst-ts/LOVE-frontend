@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import lodash from 'lodash';
-import ManagerInterface from 'Utils';
+import ManagerInterface, { getUserHost } from 'Utils';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
@@ -38,7 +38,6 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalShown: false,
       removeIdentityModalText: '',
       removeIdentityRequest: null,
-      userIdentity: '',
       requestPanelActive: false,
       csc_to_change: '',
       authorize_users: '',
@@ -97,12 +96,16 @@ export default class SummaryAuthList extends Component {
     if (identities === '') {
       return <span>None</span>;
     }
+
+    const { host } = window.location;
+    const { user } = this.props;
+    // const selfRemove = getUserHost(user, host) == identities;}
     return (
       <div className={styles.identitiesCell}>
         {identities.split(',').map((v, i) => (
           <div key={i} className={styles.authlistIdentity}>
             <span>{v}</span>
-            {this.props.authlistAdminPermission ? (
+            {this.props.authlistAdminPermission || v === getUserHost(user, host) ? (
               <Hoverable top={true} center={true} inside={true}>
                 <span onClick={() => this.removeIdentity(target, v, type)}>x</span>
                 <div className={styles.removalTooltip}>Request {type} removal</div>
@@ -117,8 +120,9 @@ export default class SummaryAuthList extends Component {
   };
 
   removeIdentity = (targetCSC, identityToRemove, type) => {
+    const { host } = window.location;
     const { user } = this.props;
-    const { userIdentity } = this.state;
+    const userIdentity = getUserHost(user, host);
     let modalText = '';
     if (type === 'CSC') {
       modalText = (
@@ -194,7 +198,30 @@ export default class SummaryAuthList extends Component {
         .split(',')
         .map((x) => `-${x}`)
         .join(',');
-      ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs);
+
+      let modalText = '';
+      modalText = (
+        <span>
+          You are about to empty the authorization list of <b>{cscsToChange}</b>.<br></br>
+          <b>This action will be resolved automatically and won't need verification</b>
+          <br></br>
+          Are you sure?
+        </span>
+      );
+
+      this.setState({
+        removeIdentityRequest: () => {
+          ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs).then(
+            () => {
+              this.setState({ removeIdentityModalShown: false });
+            },
+          );
+        },
+      });
+      this.setState({
+        removeIdentityModalShown: true,
+        removeIdentityModalText: modalText,
+      });
     }
   }
 
