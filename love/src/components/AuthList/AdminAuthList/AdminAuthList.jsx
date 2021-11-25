@@ -22,6 +22,7 @@ const moment = extendMoment(Moment);
 const MAX_MESSAGE_LEN = 320;
 const MAX_DURATION = 60;
 const MIN_DURATION = 0;
+const AUTHORIZATION_POLLING_TIMEOUT = 5000;
 
 const STATUS_OPTIONS = [
   { value: AUTHLIST_REQUEST_PENDING, label: 'Pending requests' },
@@ -55,6 +56,7 @@ export default class AdminAuthList extends Component {
   constructor(props) {
     super(props);
     this.id = lodash.uniqueId('admin-authlist-');
+    this.pollingInterval = null;
     this.state = {
       authListRequests: [],
       showing: STATUS_OPTIONS[0].value,
@@ -263,8 +265,19 @@ export default class AdminAuthList extends Component {
     ManagerInterface.getAuthListRequests().then((res) => {
       this.setState({
         authListRequests: res,
+        lastUpdate: Date.now(),
       });
     });
+    // Used to poll AuthlistRequests every AUTHORIZATION_POLLING_TIMEOUT miliseconds
+    if (this.pollingInterval) clearInterval(this.pollingInterva);
+    this.pollingInterval = setInterval(() => {
+      ManagerInterface.getAuthListRequests().then((res) => {
+        this.setState({
+          authListRequests: res,
+          lastUpdate: Date.now(),
+        });
+      });
+    }, AUTHORIZATION_POLLING_TIMEOUT);
 
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
       const cscList = ['All'].concat(
@@ -282,6 +295,11 @@ export default class AdminAuthList extends Component {
     }, 1000);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.pollingInterval);
+    clearInterval(this.timer);
+  }
+
   render() {
     const {
       showing,
@@ -297,9 +315,8 @@ export default class AdminAuthList extends Component {
       selectedEndDate,
       selectedRequest,
       authListRequests,
+      lastUpdate,
     } = this.state;
-
-    // console.log(authListRequests);
 
     let filteredTableData = authListRequests.filter((row) => row.status === showing);
 
@@ -321,6 +338,16 @@ export default class AdminAuthList extends Component {
       return range.contains(requestedDate);
     });
 
+    const nextUpdate = lastUpdate ? lastUpdate + AUTHORIZATION_POLLING_TIMEOUT : null;
+    let leftToUpdate = nextUpdate ? Math.round(Moment(nextUpdate).diff(Date.now()) / 1000) : 'unknown';
+    if (leftToUpdate <= 0) {
+      leftToUpdate = '0 seconds';
+    } else if (leftToUpdate > 0 && leftToUpdate !== 1) {
+      leftToUpdate = `${leftToUpdate} seconds`;
+    } else if (leftToUpdate === 1) {
+      leftToUpdate = '1 second';
+    }
+
     return (
       <div id={this.id} className={styles.CSCAuthListAdminContainer}>
         <div className={styles.tableContainer}>
@@ -329,6 +356,7 @@ export default class AdminAuthList extends Component {
             <Select value={showing} onChange={this.handleChange} options={STATUS_OPTIONS} />
           </div>
           <hr></hr>
+          <p className={styles.lastUpdate}>Next update in {leftToUpdate}</p>
           <div className={styles.filters}>
             <div className={styles.label}>CSC</div>
             <Select

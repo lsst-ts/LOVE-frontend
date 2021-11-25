@@ -64,7 +64,7 @@ export default class SummaryAuthList extends Component {
     if (this.props.authlistState) {
       const userOptions = new Set();
       Object.entries(this.props.authlistState).forEach(([, val]) => {
-        val.authorizedUsers.split(',').forEach((x) => userOptions.add(x));
+        val.authorizedUsers?.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }

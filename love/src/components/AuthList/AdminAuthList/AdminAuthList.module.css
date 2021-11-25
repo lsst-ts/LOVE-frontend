@@ -139,3 +139,9 @@
 .borderedButton:focus {
     border: 1px solid var(--default-background-color);
 }
+
+.lastUpdate {
+  text-align: left;
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
