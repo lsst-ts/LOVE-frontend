@@ -1,0 +1,29 @@
+.title {
+  text-align: left;
+  padding: 0.5em 1em;
+}
+
+.list {
+  background: #2b3f4a;
+  border-radius: 4px;
+}
+
+.list > .detail:not(:last-child) {
+  border-bottom: 1px solid #798f9b33;
+}
+
+.detail {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  height: 2.75em;
+  text-align: left;
+  padding-left: 1.25em;
+}
+
+.icon {
+  padding: 0.4em 0.2em 0.2em 0em;
+  height: 1.5em;
+  width: 1.5em;
+  margin-right: 0 1em;
+}

@@ -1,5 +1,9 @@
 export const MAX_CCW_FOLLOWING_ERROR = 2.0;
 
+export const AUTHLIST_REQUEST_PENDING = 'Pending';
+export const AUTHLIST_REQUEST_ACCEPTED = 'Authorized';
+export const AUTHLIST_REQUEST_DENIED = 'Denied';
+
 export const cameraStates = {
   raftsDetailedState: {
     0: 'NEEDS_CLEAR',

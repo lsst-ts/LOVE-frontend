@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import debounce from 'lodash.debounce';
+import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
+import { checkAuthlist } from 'Utils';
 import WaitingScript from './Scripts/WaitingScript/WaitingScript';
 import ScriptList from './Scripts/ScriptList/ScriptList';
 import CurrentScript from './Scripts/CurrentScript/CurrentScript';
@@ -18,8 +21,6 @@ import { SALCommandStatus } from '../../redux/actions/ws';
 import Input from '../GeneralPurpose/Input/Input';
 import GlobalState from './GlobalState/GlobalState';
 import ScriptDetails from './Scripts/ScriptDetails';
-import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
-import debounce from 'lodash.debounce';
 
 /**
  * Display lists of scripts from the ScriptQueue SAL object. It includes: Available scripts list, Waiting scripts list and Finished scripts list.
@@ -53,6 +54,7 @@ export default class ScriptQueue extends Component {
         initialHeight: 350,
       },
       resetButton: <span>Hide details &#9650;</span>,
+      blockedByAuthlist: false,
     };
 
     this.observer = null;
@@ -151,6 +153,17 @@ export default class ScriptQueue extends Component {
         this.setState({ configPanel: { ...this.state.configPanel, configSchema: script.configSchema } });
       }
     }
+
+    /** Check if LOVE:0 is present in the ScriptQueue authList evt
+     * If it is present blockedByAuthlist state is set to true */
+    if (JSON.stringify(prevProps.authlist) !== JSON.stringify(this.props.authlist)) {
+      if (
+        checkAuthlist(this.props.authlist[`event-ScriptQueue-${this.props.salindex}-authList`], 'LOVE:0')
+          .inNonAuthorizedCSCs
+      ) {
+        this.setState({ blockedByAuthlist: true });
+      }
+    }
   };
 
   componentDidMount = () => {
@@ -158,7 +171,6 @@ export default class ScriptQueue extends Component {
 
     const debouncedResizeCallback = debounce((entries) => {
       const newHeight = entries[0].target.clientHeight;
-      // console.log("New height: ", newHeight);
       if (newHeight >= this.state.currentScriptDetailState.initialHeight) {
         this.setState((state) => ({
           currentScriptDetailState: {
@@ -186,6 +198,15 @@ export default class ScriptQueue extends Component {
         },
       }));
       this.observer.observe(this.currentScriptDetailsContainer.current);
+    }
+
+    /** Check if LOVE:0 is present in the ScriptQueue authList evt
+     * If it is present blockedByAuthlist state is set to true */
+    if (
+      checkAuthlist(this.props.authlist[`event-ScriptQueue-${this.props.salindex}-authList`], 'LOVE:0')
+        .inNonAuthorizedCSCs
+    ) {
+      this.setState({ blockedByAuthlist: true });
     }
   };
 
@@ -231,6 +252,7 @@ export default class ScriptQueue extends Component {
 
   onDragStart = (e, draggingId) => {
     if (!this.props.commandExecutePermission) return;
+    if (this.state.blockedByAuthlist) return;
     const draggingScriptInstance = this.getScriptFromId(draggingId);
     this.setState({
       draggingScriptInstance,
@@ -241,6 +263,7 @@ export default class ScriptQueue extends Component {
   // eslint-disable-next-line
   onDragEnd = (e, draggingId) => {
     if (!this.props.commandExecutePermission) return;
+    if (this.state.blockedByAuthlist) return;
     this.setState({
       draggingScriptInstance: undefined,
     });
@@ -252,6 +275,7 @@ export default class ScriptQueue extends Component {
 
   onDragEnter = () => {
     if (!this.props.commandExecutePermission) return;
+    if (this.state.blockedByAuthlist) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
 
@@ -274,6 +298,7 @@ export default class ScriptQueue extends Component {
   // eslint-disable-next-line
   onDragOver = (e, targetScriptId, source) => {
     if (!this.props.commandExecutePermission) return;
+    if (this.state.blockedByAuthlist) return;
     if (!this.state.draggingScriptInstance) return;
     const sourceScriptId = this.state.draggingScriptInstance.index;
     if (targetScriptId === sourceScriptId) return;
@@ -512,7 +537,7 @@ export default class ScriptQueue extends Component {
           isStandard={script.type ? script.type.toLowerCase() === 'standard' : true}
           launchScriptConfig={this.launchScriptConfig}
           script={script}
-          commandExecutePermission={this.props.commandExecutePermission}
+          commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
           {...script}
           isCompact={this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible}
         />
@@ -611,7 +636,7 @@ export default class ScriptQueue extends Component {
             name: this.props.state,
           }}
           requestSummaryStateCommand={this.summaryStateCommand}
-          commandExecutePermission={this.props.commandExecutePermission}
+          commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
           resumeScriptQueue={this.resumeScriptQueue}
           pauseScriptQueue={this.pauseScriptQueue}
         />
@@ -632,7 +657,7 @@ export default class ScriptQueue extends Component {
                 stopScript={this.stopScript}
                 pauseScript={this.pauseScript}
                 onClickContextMenu={this.onClickContextMenu}
-                commandExecutePermission={this.props.commandExecutePermission}
+                commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
                 resumeScript={this.resumeScript}
                 onClick={() => null}
               />
@@ -783,7 +808,7 @@ export default class ScriptQueue extends Component {
                     onDragStart={(e, id) => this.onDragStart(e, id, 'waiting')}
                     onDragEnd={(e, id) => this.onDragEnd(e, id, 'waiting')}
                     draggingScriptInstance={this.state.draggingScriptInstance}
-                    disabled={!this.props.commandExecutePermission}
+                    disabled={!this.props.commandExecutePermission || this.state.blockedByAuthlist}
                   >
                     <div style={{ userSelect: 'text' }}>
                       <WaitingScript
@@ -799,7 +824,7 @@ export default class ScriptQueue extends Component {
                         onClickContextMenu={this.onClickContextMenu}
                         moveScriptUp={this.moveScriptUp}
                         moveScriptDown={this.moveScriptDown}
-                        commandExecutePermission={this.props.commandExecutePermission}
+                        commandExecutePermission={this.props.commandExecutePermission && !this.state.blockedByAuthlist}
                         {...script}
                         onClick={() => this.onShowScriptDetails(script)}
                       />
@@ -865,7 +890,9 @@ export default class ScriptQueue extends Component {
                               this.state.isAvailableScriptListVisible && this.state.isFinishedScriptListListVisible
                             }
                             requeueScript={this.requeueScript}
-                            commandExecutePermission={this.props.commandExecutePermission}
+                            commandExecutePermission={
+                              this.props.commandExecutePermission && !this.state.blockedByAuthlist
+                            }
                             onClick={() => this.onShowScriptDetails(script)}
                           />
                         </div>
