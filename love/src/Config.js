@@ -436,7 +436,7 @@ export const severityEnum = {
   critical: 4,
 };
 
-// Camera Hexapod
+// MT Camera Hexapod
 export const hexapodCommandableByDDSStateMap = {
   false: 'NOT COMMANDABLE',
   true: 'COMMANDABLE',
@@ -453,7 +453,7 @@ export const hexapodCompensationModeStateMap = {
 };
 
 export const hexapodCompensationModeStatetoStyle = {
-  DISABLED: 'warning',
+  DISABLED: 'unknown',
   ENABLED: 'ok',
 };
 
@@ -462,19 +462,9 @@ export const hexapodInterlockStateMap = {
   1: 'Engaged',
 };
 
-export const hexapodInterlockStatetoStyle = {
-  Disengaged: 'warning',
-  Engaged: 'ok',
-};
-
 export const hexapodControllerStateOfflineSubStateMap = {
   0: 'Publish Only',
   1: 'Available',
-};
-
-export const hexapodControllerStateOfflineSubStateToStyle = {
-  'Publish Only': 'warning',
-  Available: 'ok',
 };
 
 export const hexapodControllerStateEnabledSubstateMap = {
@@ -485,6 +475,26 @@ export const hexapodControllerStateEnabledSubstateMap = {
   4: 'Initializing',
   5: 'Relative',
   6: 'Constant Velocity',
+};
+
+export const hexapodMTInPositionStateMap = {
+  false: 'NOT READY',
+  true: 'IN POSITION',
+};
+
+export const hexapodMTInPositionStatetoStyle = {
+  'NOT READY': 'warning',
+  'IN POSITION': 'ok',
+};
+
+export const hexapodConnectedStateMap = {
+  false: 'ALERT',
+  true: 'CONNECTED',
+};
+
+export const hexapodConnectedStatetoStyle = {
+  ALERT: 'alert',
+  CONNECTED: 'ok',
 };
 
 /**
