@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import html2canvas from 'html2canvas';
 import { DateTime } from 'luxon';
 import { toast } from 'react-toastify';
+import Moment from 'moment';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 import { SALCommandStatus } from 'redux/actions/ws';
 
@@ -388,6 +389,111 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static getAuthListRequests() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}authlistrequest/`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static requestAuthListAuthorization(
+    username,
+    cscsToChange,
+    authorizedUsers,
+    nonAuthorizedCSCs,
+    message = null,
+    duration = null,
+  ) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+
+    const { host } = window.location;
+    const url = `${this.getApiBaseUrl()}authlistrequest/`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        cscs_to_change: cscsToChange,
+        authorized_users: authorizedUsers,
+        unauthorized_cscs: nonAuthorizedCSCs,
+        requested_by: `${username}@${host}`,
+        message,
+        duration,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        toast.error('Session expired. Logging out.');
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Request received.');
+        return resp;
+      });
+    });
+  }
+
+  static setAuthListRequestStatus(authRequestId, status, message = null, duration = null) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}authlistrequest/${authRequestId}/`;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        status,
+        message,
+        duration,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Request updated.');
+        return resp;
+      });
+    });
+  }
 }
 
 /**
@@ -603,6 +709,18 @@ export const relativeTime = (timestamp, taiToUtc) => {
   return delta;
 };
 
+/**
+ * Converts seconds to digital format as '00:00'
+ * @param {number} time, seconds to be converted
+ */
+export const formatSecondsToDigital = (time) => {
+  let seconds = time % 60;
+  let minutes = Math.floor(time / 60);
+  minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes;
+  seconds = seconds.toString().length === 1 ? `0${seconds}` : seconds;
+  return `${minutes}:${seconds}`;
+};
+
 export const getStringRegExp = (str) => {
   try {
     return new RegExp(str, 'i');
@@ -725,4 +843,37 @@ export function degrees(radians) {
 
 export function fixedFloat(x, points = 3) {
   return Number.parseFloat(x).toFixed(points);
+}
+
+/**
+ * Function used to calculate the left duration from startDate + shift to current time.
+ * If difference is negative the return value is 0
+ * @param {moment} startDate - The initial date
+ * @param {number} shift - The shift added to the startDate in seconds
+ * @returns {number} Left duration from startDate + shift to current time
+ */
+export function calculateTimeoutToNow(startDate, shift = 0) {
+  const diff = Moment.duration(Moment().diff(startDate));
+  const secondsLeft = shift - diff.asSeconds();
+  return secondsLeft > 0 ? parseInt(secondsLeft, 10) : 0;
+}
+
+/**
+ * Function used to check if an entity is present in some parameter of the authlist event.
+ * @param {object} authlist - The authlist object with params: authorizedUsers & nonAuthorizedCSCs
+ * @param {entity} string - Entity to be checked on authlist, can take two formats: <user@host> or <CSC:salindex>
+ * @returns {object} Object with two boolean parameters: inAuthorizedUsers and inNonAuthorizedCSCs
+ */
+export function checkAuthlist(authlist, entity) {
+  const inAuthorizedUsers = authlist?.authorizedUsers?.includes(entity);
+  const inNonAuthorizedCSCs = authlist?.nonAuthorizedCSCs?.includes(entity);
+  return { inAuthorizedUsers, inNonAuthorizedCSCs };
+}
+
+export function getUserHost(user, host) {
+  try {
+    return `${user}@${host}`;
+  } catch (e) {
+    return '';
+  }
 }

@@ -1,0 +1,29 @@
+.userIcon {
+  display: inline-block;
+  max-height: 100%;
+  stroke-miterlimit: 10;
+  stroke-width: 1px;
+  fill: #798d99;
+  stroke: #395260;
+  vertical-align: middle;
+}
+
+.base {
+  stroke: none;
+}
+
+.has {
+  fill: #00a26d;
+}
+
+.no {
+  fill: #dd5602;
+}
+
+.pending1 {
+  fill: #395260;
+}
+
+.pending2 {
+  fill: #788e9b;
+}

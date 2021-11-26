@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
 import {
   getScriptQueueState,
   getScriptHeartbeats,
@@ -8,8 +8,9 @@ import {
   getPermCmdExec,
   getLastSALCommand,
   getUsername,
-} from '../../redux/selectors';
-import SubscriptionTableContainer from '../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+  getAuthlistState,
+} from 'redux/selectors';
+import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import ScriptQueue from './ScriptQueue';
 
 export const schema = {
@@ -45,6 +46,7 @@ const ScriptQueueContainer = ({
   salindex,
   fit,
   embedded,
+  authlist,
   ...props
 }) => {
   if (props.isRaw) {
@@ -69,6 +71,7 @@ const ScriptQueueContainer = ({
       fit={fit}
       embedded={embedded}
       running={queueState.running}
+      authlist={authlist}
     />
   );
 };
@@ -80,13 +83,15 @@ const mapStateToProps = (state, ownProps) => {
   const commandExecutePermission = getPermCmdExec(state);
   const lastSALCommand = getLastSALCommand(state);
   const username = getUsername(state);
+  const authlist = getAuthlistState(state, [`event-ScriptQueue-${ownProps.salindex}-authList`]);
   return {
-    queueState: queueState,
-    scriptHeartbeats: scriptHeartbeats,
-    summaryStateValue: summaryStateValue,
-    commandExecutePermission: commandExecutePermission,
-    lastSALCommand: lastSALCommand,
-    username: username,
+    queueState,
+    scriptHeartbeats,
+    summaryStateValue,
+    commandExecutePermission,
+    lastSALCommand,
+    username,
+    authlist,
   };
 };
 
@@ -95,6 +100,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     `event-ScriptQueueState-${ownProps.salindex}-stream`,
     `event-ScriptQueue-${ownProps.salindex}-summaryState`,
     `event-ScriptHeartbeats-${ownProps.salindex}-stream`,
+    `event-ScriptQueue-${ownProps.salindex}-authList`,
   ];
   return {
     subscriptions,

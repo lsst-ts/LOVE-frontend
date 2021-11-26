@@ -1,0 +1,16 @@
+.horizontalFilter {
+  display: flex;
+  flex-direction: row;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: flex-end;
+}
+
+.label {
+  margin-right: 0.5em;
+}
+
+.to {
+  margin-left: 0.25rem;
+  margin-right: 0.25rem;
+}

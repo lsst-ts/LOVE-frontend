@@ -1,0 +1,17 @@
+.CSCRealmContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  padding: 1em 0;
+  width: inherit;
+}
+
+.CSCRealmTitle {
+  font-size: var(--font-size-larger);
+  font-weight: bold;
+  color: var(--base-font-color);
+  text-transform: uppercase;
+  text-align: left;
+  padding-left: 1.5em;
+  margin-bottom: 0.75em;
+}

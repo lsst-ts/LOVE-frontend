@@ -1,0 +1,70 @@
+.CSCItemContainer {
+  display: flex;
+  flex-direction: row;
+  background: var(--second-quaternary-background-color);
+  align-items: center;
+  align-content: center;
+  color: var(--base-font-color);
+  font-weight: bold;
+  font-size: 100%;
+  border-radius: 4px;
+  cursor: pointer;
+  max-height: 100%;
+  user-select: none;
+  padding-right: 1em;
+}
+
+.CSCItemContainer:not(:last-child) {
+  margin-bottom: 1em;
+}
+
+.iconContainer {
+  position: relative;
+  display: inline-flex;
+  /* background-color: #132631; */
+  background-color: var(--second-quaternary-background-color);
+  border-right: 1px solid #132631;
+  padding: 0.4em 0.2em 0.2em 0.5em;
+  border-radius: 4px 0 0 4px;
+  height: 2em;
+  width: 2em;
+}
+
+.tooltip {
+  position: absolute;
+  min-width: none;
+  top: 2em;
+  z-index: 1;
+  background-color: #798f9b;
+  color: white;
+  padding: 0.5em 0.75em;
+  border-radius: 5px;
+}
+
+.addIcon {
+  fill: var(--status-ok-color);
+}
+
+.minusIcon {
+  fill: var(--status-alert-color);
+}
+
+.textContainer {
+  flex-grow: 1;
+  text-align: start;
+  padding-left: 1em;
+}
+
+.counter {
+  width: 5em;
+}
+
+.counter span:first-child {
+  padding-right: 0.4em;
+  color: #798d99;
+}
+
+.confirmationBox {
+  display: flex;
+  flex-direction: row;
+}
