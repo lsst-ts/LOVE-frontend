@@ -107,40 +107,23 @@ class CameraHexapod extends Component {
     const connectedCommand = this.props.hexapodConnectedCommand;
     const connectedTelemetry = this.props.hexapodConnectedTelemetry;
     const pass = connectedCommand && connectedTelemetry;
+    // console.log(pass);
+    // console.log(hexapodConnectedStateMap[pass]);
 
-    if (pass) {
-      this.setState({ connectedCommandEvent: true, connectedTelemetryEvent: true });
-    } else {
-      this.setState({ connectedCommandEvent: false, connectedTelemetryEvent: false });
-    }
     const connectedStyle = CSCDetailStyles[hexapodConnectedStatetoStyle[hexapodConnectedStateMap[pass]]];
-    // if (connectedCommand && connectedTelemetry) {
-    // return (
-    //   //'connected'
-    //   <div styles={{position: "relative"}}>
-    //     {/* <span className={[styles.ok, styles.summaryState].join(' ')}>CONNECTED</span> */}
-    //     {/* <span className={[connectedStyle, styles.summaryState].join(' ')}>{hexapodConnectedStateMap[pass]}</span> */}
-    //     <Hoverable top={true} center={true} inside={true}>
-    //       <span className={[connectedStyle, styles.summaryState].join(' ')}>{hexapodConnectedStateMap[pass]}</span>
-    //       <div className={styles.hover}><span>Telemetry {telemetry}</span><br></br><span>Commander {command}</span></div>
-    //     </Hoverable>
-    //   </div>
-    // );
-    // }
-    // if (!connectedCommand || !connectedTelemetry) {
-    //   const logic = !connectedCommand || !connectedTelemetry;
-    //   return (
-    //     //'alert'
-    //     <div style={{position: "relative"}}>
-    //       {/* <span className={[styles.alert, styles.summaryState].join(' ')}>ALERT</span> */}
-    //       <Hoverable bottom={true} center={false} inside={true}>
-    //         {/* <div className={styles.hover}>Commander {command}</div> */}
-    //         <span className={[CSCDetailStyles.styletomap.statemap[logic], styles.summaryState].join(' ')}>ALERT</span>
-    //         <div className={styles.hover}><span>Telemetry {telemetry}</span><br></br><span>Commander {command}</span></div>
-    //       </Hoverable>
-    //     </div>
-    //   );
-    // }
+
+    return (
+      <div styles={{ position: 'relative' }}>
+        <Hoverable top={true} center={true} inside={true}>
+          <span className={[connectedStyle, styles.summaryState].join(' ')}>{hexapodConnectedStateMap[pass]}</span>
+          <div className={styles.hover}>
+            <span>Telemetry {telemetry}</span>
+            <br></br>
+            <span>Commander {command}</span>
+          </div>
+        </Hoverable>
+      </div>
+    );
   };
 
   render() {
