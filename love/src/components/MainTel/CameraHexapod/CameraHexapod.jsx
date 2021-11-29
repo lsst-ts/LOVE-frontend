@@ -101,6 +101,9 @@ class CameraHexapod extends Component {
   ];
 
   hoverToConnectedStatus = () => {
+    const commandState = this.state.connectedCommandEvent;
+    const telemetryState = this.state.connectedTelemetryEvent;
+
     const command = this.state.connectedCommandEvent ? 'Connected' : 'Disconnected';
     const telemetry = this.state.connectedTelemetryEvent ? 'Connected' : 'Disconnected';
 
@@ -114,15 +117,23 @@ class CameraHexapod extends Component {
 
     return (
       <div styles={{ position: 'relative' }}>
-        <Hoverable top={true} center={true} inside={true}>
+        <Hoverable bottom={true} center={false} inside={true}>
           <span className={[connectedStyle, styles.summaryState].join(' ')}>{hexapodConnectedStateMap[pass]}</span>
           <div className={styles.hover}>
-            <span>Telemetry {telemetry}</span>
+            <span className={commandState ? styles.ok : styles.alert}>Commander {command}</span>
             <br></br>
-            <span>Commander {command}</span>
+            <span className={telemetryState ? styles.ok : styles.alert}>Telemetry {telemetry}</span>
           </div>
         </Hoverable>
       </div>
+      // <div style={{position: "relative"}}>
+      //   {/* <span className={[styles.alert, styles.summaryState].join(' ')}>ALERT</span> */}
+      //   <Hoverable bottom={true} center={false} inside={true}>
+      //     {/* <div className={styles.hover}>Commander {command}</div> */}
+      //     <span className={[styles.summaryState].join(' ')}>ALERT</span>
+      //     <div className={styles.hover}><span>Telemetry {telemetry}</span><br></br><span>Commander {command}</span></div>
+      //   </Hoverable>
+      // </div>
     );
   };
 
@@ -145,7 +156,6 @@ class CameraHexapod extends Component {
       dataHexapod[1][axis[i]] = this.props.hexapodApplicationPosition[i];
     }
 
-    const axis = ['x', 'y', 'z', 'u', 'v', 'w'];
     dataHexapod[2].x = this.props.hexapodCompensationOffsetX;
     dataHexapod[2].y = this.props.hexapodCompensationOffsetY;
     dataHexapod[2].z = this.props.hexapodCompensationOffsetZ;
@@ -186,6 +196,8 @@ class CameraHexapod extends Component {
           hexapodCommandableByDDSStatetoStyle[hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS]]
         ],
     };
+    console.log(commandableByDDS.name);
+    console.log(commandableByDDS.class);
 
     let controllerSubstate = '';
     if (controllerState.value === 1) {
@@ -240,7 +252,7 @@ class CameraHexapod extends Component {
             </Value>
             <Label>ControllerState</Label>
             <Value>
-              <span>{controllerState.name}</span>
+              <span className={[controllerState.class, styles.summaryState].join(' ')}>{controllerState.name}</span>
             </Value>
             <Label>Hexapod in Position</Label>
             <Value>

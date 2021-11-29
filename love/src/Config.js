@@ -443,7 +443,7 @@ export const hexapodCommandableByDDSStateMap = {
 };
 
 export const hexapodCommandableByDDSStatetoStyle = {
-  'NOT COMMANDABLE': 'serious',
+  'NOT COMMANDABLE': 'alert',
   COMMANDABLE: 'ok',
 };
 
