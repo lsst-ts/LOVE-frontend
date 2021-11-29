@@ -2,11 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamData, getCSCHeartbeat, getCSCWithWarning } from 'redux/selectors';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import CSCDetail from './CSCDetail';
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
-  defaultSize: [8, 2],
+  defaultSize: [12, 6],
   props: {
     titleBar: {
       type: 'boolean',
@@ -47,14 +48,20 @@ export const schema = {
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
-      isPrivate: true,
+      isPrivate: false,
       default: false,
+    },
+    subscribeToStreamCallback: {
+      type: 'function',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: '() => {}',
     },
     _functionProps: {
       type: 'array',
       description: 'Array containing the props that are functions',
       isPrivate: true,
-      default: [],
+      default: ['subscribeToStreamCallback'],
     },
   },
 };
@@ -71,7 +78,12 @@ const CSCDetailContainer = ({
   heartbeatData,
   embedded,
   withWarning,
+  isRaw,
+  subscriptions,
 }) => {
+  if (isRaw) {
+    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+  }
   return (
     <CSCDetail
       group={group}
@@ -89,19 +101,21 @@ const CSCDetailContainer = ({
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [
+    `event-${ownProps.name}-${ownProps.salindex}-summaryState`,
+    `event-${ownProps.name}-${ownProps.salindex}-logMessage`,
+    `event-${ownProps.name}-${ownProps.salindex}-errorCode`,
+    `event-Heartbeat-0-stream`,
+  ];
   return {
-    subscribeToStreams: (cscName, index) => {
-      dispatch(addGroup('event-Heartbeat-0-stream'));
-      dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
-      dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
-      dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
+    subscriptions,
+    subscribeToStreams: () => {
+      subscriptions.forEach((s) => dispatch(addGroup(s)));
+      ownProps.subscribeToStreamCallback(ownProps.name, ownProps.salindex);
     },
-    unsubscribeToStreams: (cscName, index) => {
-      dispatch(removeGroup('event-Heartbeat-0-stream'));
-      dispatch(removeGroup(`event-${cscName}-${index}-summaryState`));
-      dispatch(removeGroup(`event-${cscName}-${index}-logMessage`));
-      dispatch(removeGroup(`event-${cscName}-${index}-errorCode`));
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
   };
 };

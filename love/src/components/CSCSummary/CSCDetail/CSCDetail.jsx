@@ -19,6 +19,7 @@ export default class CSCDetail extends Component {
     embedded: PropTypes.bool,
     /* Whether the component should subscribe to streams*/
     shouldSubscribe: PropTypes.bool,
+    isRaw: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -32,6 +33,7 @@ export default class CSCDetail extends Component {
     unsubscribeToStreams: () => {},
     embedded: false,
     shouldSubscribe: true,
+    isRaw: false,
   };
 
   static states = {

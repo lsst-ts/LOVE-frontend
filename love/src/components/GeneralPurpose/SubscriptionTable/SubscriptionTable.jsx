@@ -55,7 +55,7 @@ export default class SubscriptionTable extends Component {
     if (Object.keys(this.props.accessors).includes(group)) return this.props.accessors[group];
     if (group.startsWith('event')) {
       return (data) => {
-        const datum = data ? data[data.length - 1] : {};
+        const datum = data instanceof Array ? data[data.length - 1] : typeof data === 'object' ? data : {};
         let keys = Object.keys(datum);
         keys = keys.filter((value) => !value.startsWith('private_') && value !== 'priority');
         const dict = {};
