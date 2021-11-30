@@ -196,8 +196,8 @@ class CameraHexapod extends Component {
           hexapodCommandableByDDSStatetoStyle[hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS]]
         ],
     };
-    console.log(commandableByDDS.name);
-    console.log(commandableByDDS.class);
+    // console.log(commandableByDDS.name);
+    // console.log(commandableByDDS.class);
 
     let controllerSubstate = '';
     if (controllerState.value === 1) {
@@ -248,7 +248,15 @@ class CameraHexapod extends Component {
             <Value>{this.hoverToConnectedStatus()}</Value>
             <Label>Commandable By DDS</Label>
             <Value>
-              <span className={[commandableByDDS.class, styles.summaryState].join(' ')}>{commandableByDDS.name}</span>
+              <span
+                className={
+                  commandableByDDS.name === 'COMMANDABLE'
+                    ? [commandableByDDS.class, styles.commandableText].join(' ')
+                    : [commandableByDDS.class, styles.notCommandableText].join(' ')
+                }
+              >
+                {commandableByDDS.name}
+              </span>
             </Value>
             <Label>ControllerState</Label>
             <Value>

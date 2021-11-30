@@ -65,3 +65,19 @@
 .ok {
     color: var(--secondary-font-color);
 }
+
+.notCommandableText {
+    border-radius: 1rem;
+    font-weight: 700;
+    text-align: center;
+    display: inline-block;
+    width: 11em;
+}
+
+.commandableText {
+    border-radius: 1rem;
+    font-weight: 700;
+    text-align: center;
+    display: inline-block;
+    width: 10em;
+}
