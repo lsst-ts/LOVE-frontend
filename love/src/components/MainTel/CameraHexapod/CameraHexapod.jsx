@@ -124,14 +124,6 @@ class CameraHexapod extends Component {
           </div>
         </Hoverable>
       </div>
-      // <div style={{position: "relative"}}>
-      //   {/* <span className={[styles.alert, styles.summaryState].join(' ')}>ALERT</span> */}
-      //   <Hoverable bottom={true} center={false} inside={true}>
-      //     {/* <div className={styles.hover}>Commander {command}</div> */}
-      //     <span className={[styles.summaryState].join(' ')}>ALERT</span>
-      //     <div className={styles.hover}><span>Telemetry {telemetry}</span><br></br><span>Commander {command}</span></div>
-      //   </Hoverable>
-      // </div>
     );
   };
 
