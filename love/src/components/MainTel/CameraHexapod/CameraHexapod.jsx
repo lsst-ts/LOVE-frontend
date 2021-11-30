@@ -110,14 +110,12 @@ class CameraHexapod extends Component {
     const connectedCommand = this.props.hexapodConnectedCommand;
     const connectedTelemetry = this.props.hexapodConnectedTelemetry;
     const pass = connectedCommand && connectedTelemetry;
-    // console.log(pass);
-    // console.log(hexapodConnectedStateMap[pass]);
 
     const connectedStyle = CSCDetailStyles[hexapodConnectedStatetoStyle[hexapodConnectedStateMap[pass]]];
 
     return (
       <div styles={{ position: 'relative' }}>
-        <Hoverable bottom={true} center={false} inside={true}>
+        <Hoverable top={true} bottom={true} center={true} left={true} right={true} inside={true}>
           <span className={[connectedStyle, styles.summaryState].join(' ')}>{hexapodConnectedStateMap[pass]}</span>
           <div className={styles.hover}>
             <span className={commandState ? styles.ok : styles.alert}>Commander {command}</span>
@@ -196,8 +194,6 @@ class CameraHexapod extends Component {
           hexapodCommandableByDDSStatetoStyle[hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS]]
         ],
     };
-    // console.log(commandableByDDS.name);
-    // console.log(commandableByDDS.class);
 
     let controllerSubstate = '';
     if (controllerState.value === 1) {
@@ -214,7 +210,6 @@ class CameraHexapod extends Component {
       class:
         CSCDetailStyles[hexapodMTInPositionStatetoStyle[hexapodMTInPositionStateMap[this.props.hexapodInPosition]]],
     };
-    // console.log(inPosition, this.props.hexapodInPosition, );
 
     return (
       <div>
