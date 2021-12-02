@@ -478,238 +478,248 @@ export default class M1M3 extends Component {
         <div className={styles.plotSection}>
           {/* <svg className={styles.svgContainer} width={this.state.width} height={this.state.width}> */}
 
-          <div className={styles.hardpoints}>
-            <span>Hardpoints</span>
-            <svg width={134} height={134}>
-              <circle className={styles.borderCircleHardpoint} cx={64} cy={64} fill={'none'} r={64} />
+          <div className={styles.gridHardpoint}>
+            <div className={styles.hardpoints}>
+              <span>Hardpoints</span>
+              <svg width={134} height={134}>
+                <circle className={styles.borderCircleHardpoint} cx={64} cy={64} fill={'none'} r={64} />
 
-              {M1M3HardpointPositions.map((hardpoint) => {
-                return (
-                        <g
-                          className={styles.gHardpoint}
-                          onClick={() => this.hardpointSelected(hardpoint.id)}
-                        >
-                          <circle
-                            className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
-                            cx={hardpoint.mini.position[0]}
-                            cy={hardpoint.mini.position[1]}
-                            r="14.82"
-                            pointerEvents="all"
-                            stroke={this.strokeHardpointSelected(hardpoint.id)}
-                          />
-                          <text
-                            className={styles.textHardpoint}
-                            transform={"translate(" + (hardpoint.mini.position[0] - 6.11) + " " + (hardpoint.mini.position[1] + 6.11) + ")"}
-                            pointerEvents="none"
-                            fill={this.fillHardpointSelected(hardpoint.id)}
+                {M1M3HardpointPositions.map((hardpoint) => {
+                  return (
+                          <g
+                            className={styles.gHardpoint}
+                            onClick={() => this.hardpointSelected(hardpoint.id)}
                           >
-                            {hardpoint.id}
-                          </text>
-                        </g>
-                 );})
-              }
-            </svg>
+                            <circle
+                              className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
+                              cx={hardpoint.mini.position[0]}
+                              cy={hardpoint.mini.position[1]}
+                              r="14.82"
+                              pointerEvents="all"
+                              stroke={this.strokeHardpointSelected(hardpoint.id)}
+                            />
+                            <text
+                              className={styles.textHardpoint}
+                              transform={"translate(" + (hardpoint.mini.position[0] - 6.11) + " " + (hardpoint.mini.position[1] + 6.11) + ")"}
+                              pointerEvents="none"
+                              fill={this.fillHardpointSelected(hardpoint.id)}
+                            >
+                              {hardpoint.id}
+                            </text>
+                          </g>
+                  );})
+                }
+              </svg>
+            </div>
           </div>
 
-          <svg
-            className={styles.svgContainer}
-            viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-            onMouseEnter={this.disableScroll}
-            onMouseLeave={this.enableScroll}
-          >
-            {/* <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.xRadius * scale * 2} ${this.state.yRadius * scale * 2}`}> */}
-            {/* <text x='0' y="10">-X</text>
-            <text x="20" y="10">+X</text>
-            <text x="10" y="20">+Y</text> */}
 
-            <circle
-              id="background-circle"
-              className={this.state.actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
-              cx={this.state.width / 2}
-              cy={this.state.width / 2}
-              key={'background'}
-              r={this.state.width / 2 - 30}
-            />
+          <div class={styles.gridWindowM1M3}>
+            <svg
+              className={styles.svgContainer}
+              viewBox={`0 0 ${this.state.width} ${this.state.width}`}
+              onMouseEnter={this.disableScroll}
+              onMouseLeave={this.enableScroll}
+            >
+              {/* <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.xRadius * scale * 2} ${this.state.yRadius * scale * 2}`}> */}
+              {/* <text x='0' y="10">-X</text>
+              <text x="20" y="10">+X</text>
+              <text x="10" y="20">+Y</text> */}
 
-            <circle
-              id="circle-overlay"
-              className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
-              cx={this.state.width / 2}
-              cy={this.state.width / 2}
-              key={'overlay'}
-              fill={'none'}
-              r={this.state.width / 2 - 30}
-              pointerEvents="all"
-              onMouseEnter={this.enableScroll}
-              onMouseLeave={this.disableScroll}
-            />
+              <circle
+                id="background-circle"
+                className={this.state.actuators.length > 0 ? styles.circleOverlay : styles.circleOverlayDisabled}
+                cx={this.state.width / 2}
+                cy={this.state.width / 2}
+                key={'background'}
+                r={this.state.width / 2 - 30}
+              />
 
-            <g id="scatter" className={styles.scatter}>
-              {this.state.actuators.map((act, i) => {
-                return (
-                  <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
-                    <circle
-                      cx={(act.position[0] + this.state.xRadius) * scale + margin}
-                      cy={(act.position[1] + this.state.yRadius) * scale + margin}
-                      key={act.id}
-                      // fill={this.state.colormap(
-                      //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                      // )}
-                      fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
-                      stroke={this.strokeActuatorSelected(act.id)}
-                      r={(this.state.maxRadius * scale) / 21}
-                      pointerEvents="all"
-                    />
-                    <text
-                      x={(act.position[0] + this.state.xRadius) * scale + margin}
-                      y={(act.position[1] + this.state.yRadius) * scale + margin}
-                      textAnchor="middle"
-                      alignmentBaseline="middle"
-                      fill={this.fillActuatorSelected(act.id)}
-                      className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
+              <circle
+                id="circle-overlay"
+                className={this.state.actuators.length > 0 ? styles.cursorMove : styles.circleOverlayDisabled}
+                cx={this.state.width / 2}
+                cy={this.state.width / 2}
+                key={'overlay'}
+                fill={'none'}
+                r={this.state.width / 2 - 30}
+                pointerEvents="all"
+                onMouseEnter={this.enableScroll}
+                onMouseLeave={this.disableScroll}
+              />
+
+              <g id="scatter" className={styles.scatter}>
+                {this.state.actuators.map((act, i) => {
+                  return (
+                    <g key={act.id} className={styles.actuator} onClick={() => this.actuatorSelected(act.id)}>
+                      <circle
+                        cx={(act.position[0] + this.state.xRadius) * scale + margin}
+                        cy={(act.position[1] + this.state.yRadius) * scale + margin}
+                        key={act.id}
+                        // fill={this.state.colormap(
+                        //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
+                        // )}
+                        fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
+                        stroke={this.strokeActuatorSelected(act.id)}
+                        r={(this.state.maxRadius * scale) / 21}
+                        pointerEvents="all"
+                      />
+                      <text
+                        x={(act.position[0] + this.state.xRadius) * scale + margin}
+                        y={(act.position[1] + this.state.yRadius) * scale + margin}
+                        textAnchor="middle"
+                        alignmentBaseline="middle"
+                        fill={this.fillActuatorSelected(act.id)}
+                        className={zoomLevel > 1 && showActuatorsID ? '' : styles.hidden}
+                        pointerEvents="none"
+                      >
+                        {act.id}
+                      </text>
+                    </g>
+                  );
+                })}
+                {M1M3HardpointPositions.map((hardpoint) => {
+                  return (
+                    <circle key={hardpoint.id}
+                      className={showHardpoints ? styles.circleHardpointActuator : styles.hidden}
+                      cx={(hardpoint.actuator.position[0] + this.state.xRadius) * scale + margin}
+                      cy={(hardpoint.actuator.position[1] + this.state.yRadius) * scale + margin}
+                      fill="none"
+                      stroke={showHardpoints ? this.strokeHardpointActuatorSelected(hardpoint.id) : "none"}
+                      r={50 * scale}
                       pointerEvents="none"
-                    >
-                      {act.id}
-                    </text>
-                  </g>
-                );
-              })}
-              {M1M3HardpointPositions.map((hardpoint) => {
-                return (
-                  <circle key={hardpoint.id}
-                    className={showHardpoints ? styles.circleHardpointActuator : styles.hidden}
-                    cx={(hardpoint.actuator.position[0] + this.state.xRadius) * scale + margin}
-                    cy={(hardpoint.actuator.position[1] + this.state.yRadius) * scale + margin}
-                    fill="none"
-                    stroke={showHardpoints ? this.strokeHardpointActuatorSelected(hardpoint.id) : "none"}
-                    r={50 * scale}
-                    pointerEvents="none"
-                  />
-                );
-              })}
-            </g>
+                    />
+                  );
+                })}
+              </g>
 
-            <circle
-              className={styles.borderCircleOverlay}
-              cx={this.state.width / 2}
-              cy={this.state.width / 2}
-              fill={'none'}
-              r={this.state.width / 2 - 30}
-            />
+              <circle
+                className={styles.borderCircleOverlay}
+                cx={this.state.width / 2}
+                cy={this.state.width / 2}
+                fill={'none'}
+                r={this.state.width / 2 - 30}
+              />
 
-            <circle
-              className={styles.hiddenCircleOverlay}
-              cx={this.state.width / 2}
-              cy={this.state.width / 2}
-              fill={'none'}
-              r={this.state.width / 2 + 40}
-            />
+              <circle
+                className={styles.hiddenCircleOverlay}
+                cx={this.state.width / 2}
+                cy={this.state.width / 2}
+                fill={'none'}
+                r={this.state.width / 2 + 40}
+              />
 
-            <g id="plot-axis">
-              <text
-                className={styles.axisLabel}
-                x={this.state.width / 2 - 5}
-                y={margin / 2 - 12}
-                textAnchor="middle"
-                alignmentBaseline="middle"
-              >
-                +Y
-              </text>
-              <text
-                className={styles.axisLabel}
-                x={this.state.width - 12}
-                y={this.state.width / 2 - 5}
-                textAnchor="middle"
-                alignmentBaseline="middle"
-              >
-                +X
-              </text>
-              <text
-                className={styles.axisLabel}
-                x={this.state.width / 2 - 5}
-                y={this.state.width - margin / 2 + 16}
-                textAnchor="middle"
-                alignmentBaseline="middle"
-              >
-                -Y
-              </text>
-              <text
-                className={styles.axisLabel}
-                x={12}
-                y={this.state.width / 2 - 5}
-                textAnchor="middle"
-                alignmentBaseline="middle"
-              >
-                -X
-              </text>
-            </g>
-          </svg>
-
-          <div className={styles.actuatorDetails}>
+              <g id="plot-axis">
+                <text
+                  className={styles.axisLabel}
+                  x={this.state.width / 2 - 5}
+                  y={margin / 2 - 12}
+                  textAnchor="middle"
+                  alignmentBaseline="middle"
+                >
+                  +Y
+                </text>
+                <text
+                  className={styles.axisLabel}
+                  x={this.state.width - 12}
+                  y={this.state.width / 2 - 5}
+                  textAnchor="middle"
+                  alignmentBaseline="middle"
+                >
+                  +X
+                </text>
+                <text
+                  className={styles.axisLabel}
+                  x={this.state.width / 2 - 5}
+                  y={this.state.width - margin / 2 + 16}
+                  textAnchor="middle"
+                  alignmentBaseline="middle"
+                >
+                  -Y
+                </text>
+                <text
+                  className={styles.axisLabel}
+                  x={12}
+                  y={this.state.width / 2 - 5}
+                  textAnchor="middle"
+                  alignmentBaseline="middle"
+                >
+                  -X
+                </text>
+              </g>
+            </svg>
+          </div>
+          
+          <div className={styles.gridGroupGradiantInfo}>
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
               <div id="color-scale" className={styles.forceGradient}>
-                <svg></svg>
+                <svg viewBox={`0 0 10 350`}></svg>
                 <div className={styles.forceGradientLabels}>
                   <span>{maxForce} [N]</span>
                   <span>{minForce} [N]</span>
                 </div>
               </div>
             </div>
-            <SummaryPanel className={styles.actuatorInfo}>
-              <div className={styles.actuatorValue}>
-                <Title>Actuator {selectedActuator.id}</Title>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Actuator status:</span>
-                <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
-                  {selectedActuator.state.name}
-                </span>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Applied force:</span>
-                <span>{defaultNumberFormatter(selectedActuator.value)}</span>
-              </div>
-            </SummaryPanel>
-            
-            <SummaryPanel className={styles.actuatorInfo}>
-              <div className={styles.actuatorValue}>
-                <Title>Hardpoint {selectedHardpoint.id}</Title>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>ILC status:</span>
-                <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
-                  {selectedHardpoint.ilcStatus.name}
-                </span>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Motion status:</span>
-                <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
-                  {selectedHardpoint.motionStatus.name}
-                </span>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Breakaway LVDT:</span>
-                <span>
-                  {defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}
-                </span>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Displacement LVDT:</span>
-                <span>
-                  {defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}
-                </span>
-              </div>
-              <div className={styles.actuatorValue}>
-                <span>Breakaway Pressure:</span>
-                <span>
-                  {defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}
-                </span>
-              </div>
-            </SummaryPanel>
-            
-            
+
+            <div className={styles.gridActuatorInfo}>
+              <SummaryPanel className={styles.actuatorInfo}>
+                <div className={styles.actuatorValue}>
+                  <Title>Actuator {selectedActuator.id}</Title>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>Actuator status:</span>
+                  <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
+                    {selectedActuator.state.name}
+                  </span>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>Applied force:</span>
+                  <span>{defaultNumberFormatter(selectedActuator.value)}</span>
+                </div>
+              </SummaryPanel>
+            </div>
+
+            <div class={styles.gridHardpointInfo}>
+              <SummaryPanel className={styles.actuatorInfo}>
+                <div className={styles.actuatorValue}>
+                  <Title>Hardpoint {selectedHardpoint.id}</Title>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>ILC status:</span>
+                  <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
+                    {selectedHardpoint.ilcStatus.name}
+                  </span>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>Motion status:</span>
+                  <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
+                    {selectedHardpoint.motionStatus.name}
+                  </span>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>Breakaway LVDT:</span>
+                  <span>
+                    {defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}
+                  </span>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>Displacement LVDT:</span>
+                  <span>
+                    {defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}
+                  </span>
+                </div>
+                <div className={styles.actuatorValue}>
+                  <span>Breakaway Pressure:</span>
+                  <span>
+                    {defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}
+                  </span>
+                </div>
+              </SummaryPanel>
+            </div>
           </div>
+
+
         </div>
       </div>
     );
