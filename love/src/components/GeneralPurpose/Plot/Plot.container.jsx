@@ -325,7 +325,7 @@ class PlotContainer extends React.Component {
         const currentSeconds = new Date().getTime() / 1000;
         const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
         if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
-        else return false;
+        return false;
       });
     }
     return filteredData;
