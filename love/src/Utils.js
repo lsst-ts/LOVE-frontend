@@ -712,7 +712,6 @@ export const parseTimestamp = (timestamp) => {
  * @param {number} value, number to convert
  */
 export const defaultNumberFormatter = (value) => {
-  console.log('value', value, Number.isNaN(value));
   if (Number.isNaN(value)) return value;
   return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(4);
 };
