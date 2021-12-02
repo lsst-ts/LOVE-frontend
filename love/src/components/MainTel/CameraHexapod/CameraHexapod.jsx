@@ -42,31 +42,37 @@ class CameraHexapod extends Component {
     {
       field: 'hexapodApplication',
       title: 'Hexapod Position',
-      className: styles.th,
+      className: styles.firstColumn,
     },
     {
       field: 'x',
       title: 'x',
+      className: styles.columns,
     },
     {
       field: 'y',
       title: 'y',
+      className: styles.columns,
     },
     {
       field: 'z',
       title: 'z',
+      className: styles.columns,
     },
     {
       field: 'u',
       title: 'u',
+      className: styles.columns,
     },
     {
       field: 'v',
       title: 'v',
+      className: styles.columns,
     },
     {
       field: 'w',
       title: 'w',
+      className: styles.columns,
     },
   ];
 
@@ -74,31 +80,37 @@ class CameraHexapod extends Component {
     {
       field: 'strutLength',
       title: 'Strut Length',
-      className: styles.th,
+      className: styles.firstColumn,
     },
     {
       field: '1',
       title: '1',
+      className: styles.columns,
     },
     {
       field: '2',
       title: '2',
+      className: styles.columns,
     },
     {
       field: '3',
       title: '3',
+      className: styles.columns,
     },
     {
       field: '4',
       title: '4',
+      className: styles.columns,
     },
     {
       field: '5',
       title: '5',
+      className: styles.columns,
     },
     {
       field: '6',
       title: '6',
+      className: styles.columns,
     },
   ];
 

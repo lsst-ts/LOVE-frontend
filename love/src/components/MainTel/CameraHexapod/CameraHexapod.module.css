@@ -34,8 +34,12 @@
     margin: 0 auto;
 }
 
-.th {
+.firstColumn {
    width: 200px !important;
+}
+
+.columns {
+    text-align: center !important;
 }
 
 .titles {
