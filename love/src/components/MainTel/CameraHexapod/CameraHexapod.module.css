@@ -62,6 +62,18 @@
     padding: 0.5em;
     width: 200px;
     border-radius: 0.5em;
+    margin-left: 30px;
+    margin-top: 8px;
+}
+
+.hover::before,
+.hover:after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 90px;
+    border: 15px solid transparent;
+    border-bottom-color: var(--second-tertiary-background-color);
 }
 
 .alert {
