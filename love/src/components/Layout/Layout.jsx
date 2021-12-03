@@ -86,6 +86,7 @@ class Layout extends Component {
 
   constructor(props) {
     super(props);
+    console.log('layout-constructor props', props);
     this.state = {
       minSeverityNotification: severityEnum.warning,
       collapsedLogo: false,
@@ -118,10 +119,9 @@ class Layout extends Component {
   componentDidMount = () => {
     this.moveCustomTopbar();
     this.props.subscribeToStreams();
-    this.checkHeartbeat();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
-    }, 10000);
+    }, 3000);
   };
 
   componentWillUnmount = () => {
@@ -223,14 +223,11 @@ class Layout extends Component {
       const componentHeartbeat = this.props.getLastComponentHeartbeat(heartbeatSource);
       const lastComponentHeartbeat = this.state.heartbeatInfo[heartbeatSource];
       const componentHeartbeatStatus =
-        lastComponentHeartbeat &&
-        componentHeartbeat &&
-        lastComponentHeartbeat.data.timestamp !== componentHeartbeat.data.timestamp
-          ? 'ok'
-          : 'alert';
+        lastComponentHeartbeat?.data.timestamp !== componentHeartbeat?.data.timestamp ? 'ok' : 
+        componentHeartbeat && !lastComponentHeartbeat ? 'ok' : 'alert';
 
       heartbeatInfo[heartbeatSource] = componentHeartbeat;
-      heartbeatStatus[heartbeatSource] = lastComponentHeartbeat !== undefined ? componentHeartbeatStatus : undefined;
+      heartbeatStatus[heartbeatSource] = componentHeartbeatStatus;
     });
     this.setState({
       heartbeatInfo,
