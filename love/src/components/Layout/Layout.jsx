@@ -86,7 +86,6 @@ class Layout extends Component {
 
   constructor(props) {
     super(props);
-    console.log('layout-constructor props', props);
     this.state = {
       minSeverityNotification: severityEnum.warning,
       collapsedLogo: false,
