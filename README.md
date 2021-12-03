@@ -32,6 +32,7 @@ Once inside the container you can build the documentation as follows:
 ```
 yarn guide:build
 ```
+**INFO:** if you experience problems with the previous command try deleting the `docs/` folder and then executing the command again.
 
 If rather than build you want to launch a development server for the documentation, you can do so as follows:
 ```
