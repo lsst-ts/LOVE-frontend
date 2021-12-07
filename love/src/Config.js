@@ -458,8 +458,8 @@ export const hexapodCompensationModeStatetoStyle = {
 };
 
 export const hexapodInterlockStateMap = {
-  0: 'Disengaged',
-  1: 'Engaged',
+  Disengaged: 'Disengaged',
+  Engaged: 'Engaged',
 };
 
 export const hexapodControllerStateOfflineSubStateMap = {

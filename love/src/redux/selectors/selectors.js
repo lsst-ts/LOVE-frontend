@@ -595,7 +595,7 @@ export const getHexapodStatus = (state, salindex) => {
       : false,
     hexapodInterlock: hexapodStatusData[`event-MTHexapod-${salindex}-interlock`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-interlock`][0].detail.value
-      : 0,
+      : 'Disengaged',
     hexapodSummaryState: hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`][0].summaryState.value
       : 0,
