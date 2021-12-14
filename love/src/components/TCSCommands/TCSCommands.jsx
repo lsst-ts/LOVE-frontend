@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import styles from './TCSCommands.module.css';
+import PropTypes from 'prop-types';
+import { Remarkable } from 'remarkable';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -10,7 +11,7 @@ import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import { TCSCommands } from 'Config.js';
 import ManagerInterface from 'Utils';
-import { Remarkable } from 'remarkable';
+import styles from './TCSCommands.module.css';
 
 var md = new Remarkable();
 
@@ -18,6 +19,16 @@ const angleRegExp = new RegExp(/(\d\d(:| )\d\d(:| )\d\d)+(\.\d{1,10})?$/);
 const floatRegExp = new RegExp(/^-?\d*(\.\d+)?$/);
 
 export default class CommandPanel extends Component {
+  static propTypes = {
+    title: PropTypes.string,
+    nameTCS: PropTypes.string,
+    hasRawMode: PropTypes.bool,
+    scriptQueueIndex: PropTypes.number,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
+    state: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -29,13 +40,36 @@ export default class CommandPanel extends Component {
     };
   }
 
+  isAuxTCS = () => {
+    if (this.props.nameTCS === "aux") {
+      return true;
+    }
+    return false;
+  };
+
+  isMainTCS = () => {
+    if (this.props.nameTCS === "main") {
+      return true;
+    }
+    return false;
+  };
+
   componentDidMount = () => {
     this.props.subscribeToStreams();
-    ManagerInterface.getATCSDocstrings().then((data) => {
-      this.setState({
-        docstrings: data,
+    if (this.isAuxTCS()) {
+      ManagerInterface.getATCSDocstrings().then((data) => {
+        this.setState({
+          docstrings: data,
+        });
       });
-    });
+    }
+    if (this.isMainTCS()) {
+      ManagerInterface.getMTCSDocstrings().then((data) => {
+        this.setState({
+          docstrings: data,
+        });
+      });
+    }
   };
 
   componentWillUnmount = () => {
@@ -56,7 +90,7 @@ export default class CommandPanel extends Component {
     this.setState({
       paramWarnings: {
         ...this.state.paramWarnings,
-        [name]: isNaN(parseFloat(testValue.match(floatRegExp))) && !angleRegExp.test(testValue),
+        [name]: Number.isNaN(parseFloat(testValue.match(floatRegExp))) && !angleRegExp.test(testValue),
       },
     });
   };
@@ -65,15 +99,15 @@ export default class CommandPanel extends Component {
     const [paramType, defaultValue] = param;
     const { paramValues } = this.state;
     return (
-      <div className={[styles.paramContainer, paramType == 'boolean' ? styles.checkboxParam : ''].join(' ')}>
+      <div className={[styles.paramContainer, paramType === 'boolean' ? styles.checkboxParam : ''].join(' ')}>
         <div className={styles.paramLabel}>{name}</div>
-        {paramType == 'string' && (
+        {paramType === 'string' && (
           <Input value={paramValues[name]} onChange={(e) => this.updateParamValue(name, e.target.value, paramType)} />
         )}
-        {paramType == 'number' && (
+        {paramType === 'number' && (
           <Input value={paramValues[name]} onChange={(e) => this.updateParamValue(name, e.target.value, paramType)} />
         )}
-        {paramType == 'angle' && (
+        {paramType === 'angle' && (
           <>
             <Input
               value={paramValues[name]}
@@ -87,7 +121,7 @@ export default class CommandPanel extends Component {
             )}
           </>
         )}
-        {paramType == 'boolean' && (
+        {paramType === 'boolean' && (
           <input
             type="checkbox"
             defaultChecked={defaultValue}
@@ -141,13 +175,18 @@ export default class CommandPanel extends Component {
           )}
         </Modal>
         <div className={[styles.queueStateContainer, !isAvailable ? '' : styles.removed].join(' ')}>
-          <span className={styles.queueStateLabel}>AUX TEL QUEUE STATE</span>
+          <span className={styles.queueStateLabel}>
+            {this.props.nameTCS && this.props.nameTCS.toUpperCase()} TEL QUEUE STATE
+          </span>
           <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
           <span className={styles.warningText}>
             <span className={styles.warningIcon}>
               <WarningIcon></WarningIcon>
             </span>
-            <span>TCS commands are not allowed while queue is running</span>
+            <span>
+              {this.props.nameTCS && 
+                this.props.nameTCS.toUpperCase()} TCS commands are not allowed while queue is running
+            </span>
           </span>
         </div>
 
@@ -174,13 +213,25 @@ export default class CommandPanel extends Component {
         </div>
         {this.state.selectedCommand && (
           <div className={styles.sendButtonContainer}>
-            <Button
-              status="info"
-              disabled={!this.props.commandExecutePermission || !isAvailable}
-              onClick={() => ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)}
-            >
-              SEND
-            </Button>
+            {this.isAuxTCS() && (
+              <Button
+                status="info"
+                disabled={!this.props.commandExecutePermission || !isAvailable}
+                onClick={() => ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)}
+              >
+                SEND
+              </Button>
+            )}
+            {console.log(this.state.paramValues)}
+            {this.isMainTCS() && (
+              <Button
+                status="info"
+                disabled={!this.props.commandExecutePermission || !isAvailable}
+                onClick={() => ManagerInterface.runMTCSCommand(this.state.selectedCommand, this.state.paramValues)}
+              >
+                SEND
+              </Button>
+            )}
           </div>
         )}
       </div>

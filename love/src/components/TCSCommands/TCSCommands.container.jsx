@@ -14,6 +14,12 @@ export const schema = {
       isPrivate: false,
       default: 'TCS Commands',
     },
+    nameTCS: {
+      type: 'string',
+      description: 'Name of the Telescope Control System (TCS) for the call of the commands ("aux" or "main").',
+      isPrivate: false,
+      default: 'aux',
+    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
