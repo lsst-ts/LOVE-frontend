@@ -107,7 +107,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-  const withWarning = getCSCWithWarning(state, ownProps.name);
+  const withWarning = getCSCWithWarning(state, ownProps.name, ownProps.salindex);
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
   if (!summaryStateData) {

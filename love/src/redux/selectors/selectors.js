@@ -549,11 +549,13 @@ export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, str
 
 /**
  * Returns the summaryData.withWarning state
- * @param {object} state
- * @param {string} name
+ * @param {object} state Redux state
+ * @param {string} csc CSC name
+ * @param {number} salindex CSC salindex
  */
-export const getCSCWithWarning = (state, name) => {
-  return state.summaryData?.withWarning?.[name] ?? false;
+export const getCSCWithWarning = (state, csc, salindex) => {
+  const cscRef = `${csc}:${salindex}`;
+  return state.summaryData?.withWarning[cscRef] ?? false;
 };
 
 export const getCSCLogMessages = (state, csc, salindex) => {

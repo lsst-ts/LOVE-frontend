@@ -142,23 +142,16 @@ export default class CSCDetail extends Component {
             />
           </div>
         </div>
-        
+
         <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
           {cscText(this.props.name, this.props.salindex)}
         </div>
 
         <div className={[styles.warningIconSection, stateClass].join(' ')}>
-          <div
-              className={[
-                styles.warningIconWrapper,
-                props.withWarning !== true ? styles.hidden : '',
-              ].join(' ')}
-            >
-              <WarningIcon
-                title='warning'
-              />
-            </div>
+          <div className={[styles.warningIconWrapper, props.withWarning !== true ? styles.hidden : ''].join(' ')}>
+            <WarningIcon title="warning" />
           </div>
+        </div>
       </div>
     );
   }
