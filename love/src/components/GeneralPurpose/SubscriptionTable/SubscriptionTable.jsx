@@ -53,13 +53,26 @@ export default class SubscriptionTable extends Component {
 
   getAccessor = (group) => {
     if (Object.keys(this.props.accessors).includes(group)) return this.props.accessors[group];
+    if (group.startsWith('event-Heartbeat')) {
+      return (data) => {
+        const datum = typeof data === 'object' ? data : {};
+        const keys = Object.keys(datum).filter((value) => !value.startsWith('private_') && value !== 'priority');
+        const dict = {};
+        keys.forEach((key) => {
+          dict[key] = datum[key];
+        });
+        return dict;
+      };
+    }
     if (group.startsWith('event')) {
       return (data) => {
-        const datum = data instanceof Array ? data[data.length - 1] : typeof data === 'object' ? data : {};
+        const datum = data instanceof Array ? data[data.length - 1] : {};
         let keys = Object.keys(datum);
         keys = keys.filter((value) => !value.startsWith('private_') && value !== 'priority');
         const dict = {};
-        keys.forEach((key) => (dict[key] = datum[key].value));
+        keys.forEach((key) => {
+          dict[key] = datum[key].value;
+        });
         return dict;
       };
     }
