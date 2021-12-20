@@ -104,7 +104,6 @@ export default class CSCGroup extends Component {
                   hasHeartbeat={csc.hasHeartbeat}
                   onCSCClick={this.onCSCClick}
                   embedded={true}
-                  shouldSubscribe={true}
                 />
               </div>
             );

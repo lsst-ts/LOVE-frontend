@@ -76,11 +76,11 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    if (!this.props.shouldSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   componentWillUnmount = () => {
-    if (!this.props.shouldSubscribe) this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+    this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
   };
 
   render() {
