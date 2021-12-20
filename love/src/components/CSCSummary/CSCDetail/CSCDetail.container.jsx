@@ -112,7 +112,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     subscriptions,
     subscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(addGroup(s)));
-      ownProps.subscribeToStreamCallback(ownProps.name, ownProps.salindex);
+      // ownProps.subscribeToStreamCallback(ownProps.name, ownProps.salindex);
     },
     unsubscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(removeGroup(s)));
