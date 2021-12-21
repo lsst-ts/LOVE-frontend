@@ -4,10 +4,12 @@ import {
   UPDATE_ERROR_CODE_DATA,
   REMOVE_CSC_ERROR_CODE_DATA,
 } from '../actions/actionTypes';
+import { LOG_LEVELS } from 'Constants';
 
 const initialState = {
   logMessageData: [],
   errorCodeData: [],
+  withWarning: {},
 };
 
 export default function (state = initialState, action) {
@@ -16,6 +18,8 @@ export default function (state = initialState, action) {
       const cscDataIndex = state.logMessageData.findIndex(
         (CSCData) => CSCData.salindex === action.salindex && CSCData.csc === action.csc,
       );
+
+      const withWarning = action.messages?.[0]?.level?.value >= LOG_LEVELS.warning;
 
       if (cscDataIndex === -1) {
         return {
@@ -28,6 +32,7 @@ export default function (state = initialState, action) {
               messages: action.messages,
             },
           ],
+          withWarning: { ...state.withWarning, [`${action.csc}:${action.salindex}`]: withWarning },
         };
       }
 
@@ -50,6 +55,7 @@ export default function (state = initialState, action) {
       return {
         errorCodeData: state.errorCodeData,
         logMessageData: newLogMessageData,
+        withWarning: { ...state.withWarning, [`${action.csc}:${action.salindex}`]: withWarning },
       };
     }
     case REMOVE_CSC_LOG_MESSAGES: {
@@ -69,12 +75,15 @@ export default function (state = initialState, action) {
       return {
         errorCodeData: state.errorCodeData,
         logMessageData: newLogMessageData,
+        withWarning: { ...state.withWarning, [`${action.csc}:${action.salindex}`]: false },
       };
     }
     case UPDATE_ERROR_CODE_DATA: {
       const cscDataIndex = state.errorCodeData.findIndex(
         (CSCData) => CSCData.salindex === action.salindex && CSCData.csc === action.csc,
       );
+
+      const withWarning = action.messages?.[0]?.level?.value >= LOG_LEVELS.warning;
 
       if (cscDataIndex === -1) {
         return {
@@ -87,6 +96,7 @@ export default function (state = initialState, action) {
               errorCodeData: action.errorCodeData,
             },
           ],
+          withWarning: { ...state.withWarning, [`${action.csc}:${action.salindex}`]: withWarning },
         };
       }
 
@@ -109,6 +119,7 @@ export default function (state = initialState, action) {
       return {
         logMessageData: state.logMessageData,
         errorCodeData: newErrorCodeData,
+        withWarning: { ...state.withWarning, [`${action.csc}:${action.salindex}`]: withWarning },
       };
     }
     case REMOVE_CSC_ERROR_CODE_DATA: {
@@ -128,6 +139,7 @@ export default function (state = initialState, action) {
       return {
         logMessageData: state.logMessageData,
         errorCodeData: newErrorCodeData,
+        withWarning: { ...state.withWarning, [`${action.csc}:${action.salindex}`]: false },
       };
     }
     default:

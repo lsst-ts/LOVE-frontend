@@ -547,6 +547,17 @@ export const getAllStreamsAsDictionary = (state, category, CSCsSalindexList, str
   return dictionary;
 };
 
+/**
+ * Returns the summaryData.withWarning state
+ * @param {object} state Redux state
+ * @param {string} csc CSC name
+ * @param {number} salindex CSC salindex
+ */
+export const getCSCWithWarning = (state, csc, salindex) => {
+  const cscRef = `${csc}:${salindex}`;
+  return state.summaryData?.withWarning[cscRef] ?? false;
+};
+
 export const getCSCLogMessages = (state, csc, salindex) => {
   const logMessageData = state.summaryData.logMessageData.find(
     (data) => data.csc === csc && data.salindex === salindex,
