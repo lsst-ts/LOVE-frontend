@@ -2,8 +2,8 @@
     display: inline-block;
     flex-direction: column;
     margin: 5px;
-    height: 100%; 
-    width: 100%; 
+    height: 60%; 
+    width: 60%; 
     margin-top: 0.5em;
 
 }
@@ -12,8 +12,8 @@
     color: #96a3b3;
     background: var(--theme-div-background);
     margin: 5px;
-    height: 100%;
-    width: 100%;
+    height: 60%;
+    width: 60%;
     margin-top: 0;
     padding-right: 5px;
     padding-left: 20px;
