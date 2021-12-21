@@ -3,7 +3,7 @@
     flex-direction: column;
     margin: 5px;
     height: 100%; 
-    width: 500px; 
+    width: 100%; 
     margin-top: 0.5em;
 
 }
@@ -13,7 +13,7 @@
     background: var(--theme-div-background);
     margin: 5px;
     height: 100%;
-    width: 500px;
+    width: 100%;
     margin-top: 0;
     padding-right: 5px;
     padding-left: 20px;
@@ -49,10 +49,16 @@
 
 .divCameraWrap {
     margin-top: 2em;
+    display: inline-block;
+	position: relative;
+	width: 100%;
+	vertical-align: middle; 
+	overflow: hidden;
 }
 
 .summaryPanelStates {
     max-width: 100%;
+    /* min-width: 400px; */
     display: grid;
     justify-content: flex-start;
     padding: 1em;

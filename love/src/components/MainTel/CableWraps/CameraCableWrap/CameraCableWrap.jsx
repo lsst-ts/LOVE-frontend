@@ -36,12 +36,11 @@ class CameraCableWrap extends Component {
   }
 
   createCameraCableWrap(dom) {
-
     const { width, height } = this.props;
 
     const radio = height - 60;
-
-    const svg = d3.select(dom).append('svg').attr('class', 'd3').attr('width', width).attr('height', height);
+    // .attr('width', width).attr('height', height)
+    const svg = d3.select(dom).append('svg').attr('class', 'd3').attr('viewBox', `0 0 ${width} ${height}`);
     const g = svg.append('g').attr('transform', `translate(${width / 2}, ${height - 20})`);
     this.g = g;
 
@@ -104,8 +103,6 @@ class CameraCableWrap extends Component {
       .style('fill', COLOR_CABLE_INITIAL)
       .attr('d', this.ccwArc)
       .attr('id', 'cable_wrap');
-
-
   }
 
   updateCameraCableWrap() {

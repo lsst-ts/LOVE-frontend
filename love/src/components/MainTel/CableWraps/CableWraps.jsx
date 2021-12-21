@@ -26,6 +26,8 @@ class CableWraps extends Component {
     super(props);
     this.state = {
       ccwFollowingErrorState: false,
+      width: 400,
+      height: 200,
     };
   }
 
@@ -136,8 +138,8 @@ class CableWraps extends Component {
         </div>
         <div className={styles.divCameraWrap}>
           <CameraCableWrap
-            height={200}
-            width={400}
+            height={this.state.height}
+            width={this.state.width}
             drawBackground={(g, t, a) => this.drawBackground(g, t, a)}
             drawLimits={CableWraps.drawLimits}
             arcTween={CableWraps.arcTween}
