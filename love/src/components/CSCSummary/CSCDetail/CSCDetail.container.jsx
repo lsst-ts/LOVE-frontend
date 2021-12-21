@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import { getStreamData, getCSCHeartbeat, getCSCWithWarning } from 'redux/selectors';
-import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { getStreamData, getCSCHeartbeat, getCSCWithWarning, getServerTime } from 'redux/selectors';
 import CSCDetail from './CSCDetail';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
@@ -76,6 +77,7 @@ const CSCDetailContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   heartbeatData,
+  serverTime,
   embedded,
   withWarning,
   isRaw,
@@ -97,6 +99,7 @@ const CSCDetailContainer = ({
       heartbeatData={heartbeatData}
       embedded={embedded}
       withWarning={withWarning}
+      serverTime={serverTime}
     />
   );
 };
@@ -124,6 +127,7 @@ const mapStateToProps = (state, ownProps) => {
   const withWarning = getCSCWithWarning(state, ownProps.name, ownProps.salindex);
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
+  const serverTime = getServerTime(state);
   if (!summaryStateData) {
     summaryStateData = {};
   }
@@ -132,6 +136,7 @@ const mapStateToProps = (state, ownProps) => {
     summaryStateData: summaryStateData[0],
     heartbeatData,
     withWarning,
+    serverTime,
   };
 };
 
