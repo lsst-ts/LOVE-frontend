@@ -91,8 +91,8 @@ export default class CSCDetail extends Component {
     if (this.props.heartbeatData) {
       nLost = this.props.heartbeatData.lost;
       if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
+      else if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
-      if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
     if (props.hasHeartbeat === false) {
@@ -105,7 +105,7 @@ export default class CSCDetail extends Component {
       timeDiffText = 'No heartbeat event in Remote.';
     } else if (timeDiff === -1) {
       timeDiffText = 'Never';
-    } else if (timeDiff >= 0) {
+    } else {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
