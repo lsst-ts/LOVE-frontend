@@ -106,7 +106,7 @@ class CableWraps extends Component {
 
     return (
       <div className={styles.cableWrapsContainer}>
-        <div>
+        <div className={styles.divSummaryPanel}>
           <SummaryPanel className={styles.summaryPanelStates}>
             {/* <Title>MTMount</Title>
             <Value>
