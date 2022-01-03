@@ -1,68 +1,66 @@
 .cableWrapsContainer {
-    display: inline-block;
-    flex-direction: column;
-    margin: 5px;
-    height: 100%; 
-    width: 500px; 
-    margin-top: 0.5em;
-
-}
-
-.cableWrapsContainer .cableWrapsContent {
-    color: #96a3b3;
-    background: var(--theme-div-background);
-    margin: 5px;
-    height: 100%;
-    width: 500px;
-    margin-top: 0;
-    padding-right: 5px;
-    padding-left: 20px;
+  display: inline-block;
+  flex-direction: column;
+  margin: 5px;
+  height: 100%;
+  width: 100%;
+  margin-top: 0.5em;
 }
 
 .rotatorDiff {
-    font-size: 17px;
-    margin-bottom: 0px;
-    margin-left: 10px;
+  font-size: 17px;
+  margin-bottom: 0px;
+  margin-left: 10px;
 }
 
 .rotatorDiffValue {
-    font-weight: bold;
-    margin-left: 10px;
+  font-weight: bold;
+  margin-left: 10px;
 }
 
 .cableWrapSeparator {
-    height: 290px;
-    width: 3px;
-    margin: 50px 40px;
-    border-radius: 10px;
-    background: #2d3d4e;
+  height: 290px;
+  width: 3px;
+  margin: 50px 40px;
+  border-radius: 10px;
+  background: #2d3d4e;
 }
 
 .cablewrapInfo {
-    background-color: #2d3d4e;
-    display: inline-flex;
+  background-color: #2d3d4e;
+  display: inline-flex;
 }
 
 .cameraInfo {
-    display: inline-flex;
+  display: inline-flex;
 }
 
 .divCameraWrap {
-    margin-top: 2em;
+  margin-top: 2em;
+  display: inline-block;
+  height: 70%;
+  width: 100%;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.divSummaryPanel {
+  background: var(--second-quaternary-background-dimmed-color);
 }
 
 .summaryPanelStates {
-    max-width: 100%;
-    display: grid;
-    justify-content: flex-start;
-    padding: 1em;
-    margin-bottom: 1em;
-  }
+  position: relative;
+  display: grid;
+  justify-content: flex-start;
+  padding: 1em;
+  margin-bottom: 1em;
+  grid-template-columns: 1fr 1.2fr;
+}
 
 .summaryState {
-    border-radius: 1rem;
-    font-weight: 700;
-    text-align: center;
-    display: inline-block;
-    width: 8em;
+  border-radius: 1rem;
+  font-weight: 700;
+  text-align: center;
+  display: inline-block;
+  width: 8em;
 }
