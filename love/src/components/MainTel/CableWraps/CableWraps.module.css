@@ -51,7 +51,7 @@
     margin-top: 2em;
     display: inline-block;
     height: 70%;
-    width: 70%;
+    width: 100%;
 	vertical-align: middle; 
 	overflow: hidden;
 } 
@@ -62,11 +62,11 @@
 
 .summaryPanelStates {
     position: relative;
-    margin: 0 auto;
     display: grid;
     justify-content: flex-start;
     padding: 1em;
     margin-bottom: 1em;
+    grid-template-columns: 1fr 1.2fr;
   }
 
 .summaryState {
