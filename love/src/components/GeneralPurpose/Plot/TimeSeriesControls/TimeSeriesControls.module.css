@@ -89,3 +89,14 @@ input:checked + .slider:before {
   user-select: none;
   cursor: pointer;
 }
+
+.queryInputs {
+  display: flex;
+  align-items: center;
+}
+
+.efdClients {
+  margin-bottom: 1em;
+  min-width: 180px;
+}
+

@@ -1,17 +1,16 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Datetime from 'react-datetime';
-import styles from './DateSelection.module.css';
-import './react-datetime.css';
 import moment from 'moment';
 import TextField from 'components/TextField/TextField';
-import ManagerInterface, { parseTimestamp } from 'Utils';
-// import Input from 'components/GeneralPurpose/Input/Input';
+import styles from './DateSelection.module.css';
+import './react-datetime.css';
 
 export default class DateSelection extends PureComponent {
   static propTypes = {
     setHistoricalData: PropTypes.func,
     dateSelectorDates: PropTypes.array,
+    submitDisabled: PropTypes.bool,
   };
 
   constructor() {
@@ -83,7 +82,7 @@ export default class DateSelection extends PureComponent {
             />
           </div>
         </div>
-        <button className={styles.queryButton} onClick={this.onSubmitQuery}>
+        <button disabled={this.props.submitDisabled} className={styles.queryButton} onClick={this.onSubmitQuery}>
           Submit
         </button>
       </div>

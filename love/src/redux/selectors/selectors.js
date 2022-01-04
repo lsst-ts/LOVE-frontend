@@ -19,6 +19,8 @@ export const getCamFeeds = (state) => getConfig(state)?.camFeeds;
 
 export const getAlarmConfig = (state) => getConfig(state)?.alarms;
 
+export const getEfdConfig = (state) => getConfig(state)?.content?.efd;
+
 export const getAllTime = (state) => ({ ...state.time });
 
 export const getClock = (state) => ({ ...state.time.clock });

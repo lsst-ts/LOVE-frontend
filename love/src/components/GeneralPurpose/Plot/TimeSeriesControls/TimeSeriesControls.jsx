@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
+import Select from 'components/GeneralPurpose/Select/Select';
 import DateSelection from './DateSelection/DateSelection';
 import TimeWindow from './TimeWindow/TimeWindow';
 import styles from './TimeSeriesControls.module.css';
-import moment from 'moment';
 
 export default class TimeSeriesControls extends Component {
   static propTypes = {
@@ -15,6 +16,9 @@ export default class TimeSeriesControls extends Component {
     setLiveMode: PropTypes.func,
     timeWindow: PropTypes.string,
     setHistoricalData: PropTypes.func,
+    efdClients: PropTypes.array,
+    selectedEfdClient: PropTypes.string,
+    setEfdClient: PropTypes.func,
     goBack: PropTypes.func,
   };
 
@@ -69,10 +73,20 @@ export default class TimeSeriesControls extends Component {
         {this.props.isLive ? (
           <TimeWindow setTimeWindow={this.props.setTimeWindow} timeWindow={this.props.timeWindow} />
         ) : (
-          <DateSelection
-            dateSelectorDates={this.state.dateSelectorDates}
-            setHistoricalData={this.props.setHistoricalData}
-          />
+          <div className={styles.queryInputs}>
+            <Select
+              options={this.props.efdClients}
+              option={this.props.selectedEfdClient}
+              onChange={({ value }) => this.props.setEfdClient(value)}
+              className={styles.efdClients}
+              placeholder="Select EFD Client"
+            />
+            <DateSelection
+              dateSelectorDates={this.state.dateSelectorDates}
+              setHistoricalData={this.props.setHistoricalData}
+              submitDisabled={!this.props.selectedEfdClient}
+            />
+          </div>
         )}
         {/* <div onClick={this.props.goBack} className={styles.gearIconContainer}>
           <GearIcon active />
