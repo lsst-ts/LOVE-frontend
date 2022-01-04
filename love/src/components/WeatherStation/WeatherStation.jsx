@@ -258,7 +258,7 @@ export default class WeatherStation extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.doubleSection}>
+        <div className={styles.fullSection}>
           <div className={styles.sectionTitle}>Current values</div>
           <div className={styles.summary}>
             <div className={styles.summaryVariable}>
@@ -299,7 +299,7 @@ export default class WeatherStation extends Component {
         </div>
 
         {this.props.controls && (
-          <div className={styles.doubleSection}>
+          <div className={styles.fullSection}>
             <div className={styles.sectionTitle}>Timeseries Controls</div>
             <div className={styles.timeSeriesControls}>
               <TimeSeriesControls
@@ -310,22 +310,21 @@ export default class WeatherStation extends Component {
                 setHistoricalData={this.setHistoricalData}
               />
             </div>
-          </div>
-        )}
-
-        {this.props.controls && (
-          <div className={styles.doubleSectionSimple}>
-            {this.state.isLive && (
-              <span>
-                Displaying last{' '}
-                <strong>{this.state.timeWindow != 1 ? this.state.timeWindow + ' minutes' : 'minute'}</strong> of data
-              </span>
-            )}
-            {!this.state.isLive && (
-              <span>
-                Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to{' '}
-                <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong>
-              </span>
+            {this.props.controls && (
+              <div className={styles.timeSeriesControls}>
+                {this.state.isLive && (
+                  <span>
+                    Displaying last{' '}
+                    <strong>{this.state.timeWindow != 1 ? this.state.timeWindow + ' minutes' : 'minute'}</strong> of data
+                  </span>
+                )}
+                {!this.state.isLive && (
+                  <span>
+                    Displaying data from <strong>{this.state.historicalData?.[0]?.format(DATE_TIME_FORMAT)}</strong> to{' '}
+                    <strong>{this.state.historicalData?.[1]?.format(DATE_TIME_FORMAT)}</strong>
+                  </span>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -333,11 +332,13 @@ export default class WeatherStation extends Component {
         <div className={styles.windPlotSection}>
           <div className={styles.sectionTitle}>Wind</div>
           <div ref={this.windDirectionPlotRef} className={styles.windPlotContainer}>
-            <PolarPlotContainer
-              timeSeriesControlsProps={timeSeriesControlsProps}
-              containerNode={this.windDirectionPlotRef}
-              {...this.windPlot}
-            />
+            <div className={styles.windPlotFullWidth}>
+              <PolarPlotContainer
+                timeSeriesControlsProps={timeSeriesControlsProps}
+                containerNode={this.windDirectionPlotRef}
+                {...this.windPlot}
+              />
+            </div>
           </div>
         </div>
 
