@@ -369,7 +369,7 @@ export default class WeatherStation extends Component {
           </div>
         </div>
 
-        <div className={styles.doubleSection}>
+        <div className={styles.section}>
           <div className={styles.sectionTitle}>Precipitation</div>
           <div ref={this.precipitationPlotRef} className={styles.plot}>
             <PlotContainer
@@ -381,7 +381,10 @@ export default class WeatherStation extends Component {
               legendPosition="bottom"
             />
           </div>
+        </div>
 
+        <div className={styles.section}>
+          <div className={styles.sectionTitle}>Snow Depth</div>
           <div ref={this.snowDepthPlotRef} className={styles.plot}>
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
