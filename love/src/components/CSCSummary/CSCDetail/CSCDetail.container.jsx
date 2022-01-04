@@ -5,7 +5,6 @@ import { getStreamData, getCSCHeartbeat, getCSCWithWarning, getServerTime } from
 import CSCDetail from './CSCDetail';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
-
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
   defaultSize: [12, 6],
@@ -52,17 +51,11 @@ export const schema = {
       isPrivate: false,
       default: false,
     },
-    subscribeToStreamCallback: {
-      type: 'function',
-      description: 'Whether the component has a raw mode version',
-      isPrivate: true,
-      default: '() => {}',
-    },
     _functionProps: {
       type: 'array',
       description: 'Array containing the props that are functions',
       isPrivate: true,
-      default: ['subscribeToStreamCallback'],
+      default: [],
     },
   },
 };
@@ -84,7 +77,7 @@ const CSCDetailContainer = ({
   subscriptions,
 }) => {
   if (isRaw) {
-    return <SubscriptionTableContainer subscriptions={subscriptions}></SubscriptionTableContainer>;
+    return <SubscriptionTableContainer subscriptions={subscriptions} name={name} salindex={salindex} />;
   }
   return (
     <CSCDetail
@@ -115,7 +108,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     subscriptions,
     subscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(addGroup(s)));
-      // ownProps.subscribeToStreamCallback(ownProps.name, ownProps.salindex);
     },
     unsubscribeToStreams: () => {
       subscriptions.forEach((s) => dispatch(removeGroup(s)));

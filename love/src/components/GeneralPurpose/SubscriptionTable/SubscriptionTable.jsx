@@ -26,6 +26,7 @@ export default class SubscriptionTable extends Component {
       subscriptionsDict,
       itemFilter: '',
       topicFilter: '',
+      lastHeartbeat: {},
     };
   }
 
@@ -35,6 +36,15 @@ export default class SubscriptionTable extends Component {
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams(this.props.subscriptions);
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.getStreamData !== this.props.getStreamData) {
+      const heartbeat = this.props.getStreamData('event-Heartbeat-0-stream');
+      if (heartbeat.csc === this.props.name && heartbeat.salindex === this.props.salindex) {
+        this.setState({ lastHeartbeat: heartbeat });
+      }
+    }
   };
 
   changeTopicFilter = (event) => {
@@ -54,14 +64,8 @@ export default class SubscriptionTable extends Component {
   getAccessor = (group) => {
     if (Object.keys(this.props.accessors).includes(group)) return this.props.accessors[group];
     if (group.startsWith('event-Heartbeat')) {
-      return (data) => {
-        const datum = typeof data === 'object' ? data : {};
-        const keys = Object.keys(datum).filter((value) => !value.startsWith('private_') && value !== 'priority');
-        const dict = {};
-        keys.forEach((key) => {
-          dict[key] = datum[key];
-        });
-        return dict;
+      return () => {
+        return this.state.lastHeartbeat;
       };
     }
     if (group.startsWith('event')) {
@@ -115,7 +119,9 @@ export default class SubscriptionTable extends Component {
 
                   const [type, topic] = topicKey.split('-');
                   const groupKey = [type, cscKey, topic].join('-');
+                  // console.log(groupKey);
                   const streamData = this.props.getStreamData(groupKey);
+                  // console.log(streamData);
                   const accessor = this.getAccessor(groupKey);
                   const dict = accessor(streamData);
                   const dictKeys = Object.keys(dict);
