@@ -26,6 +26,7 @@ export default class SubscriptionTable extends Component {
       subscriptionsDict,
       itemFilter: '',
       topicFilter: '',
+      lastHeartbeat: {},
     };
   }
 
@@ -35,6 +36,15 @@ export default class SubscriptionTable extends Component {
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStreams(this.props.subscriptions);
+  };
+
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.getStreamData !== this.props.getStreamData) {
+      const heartbeat = this.props.getStreamData('event-Heartbeat-0-stream');
+      if (heartbeat.csc === this.props.name && heartbeat.salindex === this.props.salindex) {
+        this.setState({ lastHeartbeat: heartbeat });
+      }
+    }
   };
 
   changeTopicFilter = (event) => {
@@ -53,13 +63,20 @@ export default class SubscriptionTable extends Component {
 
   getAccessor = (group) => {
     if (Object.keys(this.props.accessors).includes(group)) return this.props.accessors[group];
+    if (group.startsWith('event-Heartbeat')) {
+      return () => {
+        return this.state.lastHeartbeat;
+      };
+    }
     if (group.startsWith('event')) {
       return (data) => {
-        const datum = data ? data[data.length - 1] : {};
+        const datum = data instanceof Array ? data[data.length - 1] : {};
         let keys = Object.keys(datum);
         keys = keys.filter((value) => !value.startsWith('private_') && value !== 'priority');
         const dict = {};
-        keys.forEach((key) => (dict[key] = datum[key].value));
+        keys.forEach((key) => {
+          dict[key] = datum[key].value;
+        });
         return dict;
       };
     }
@@ -99,7 +116,6 @@ export default class SubscriptionTable extends Component {
                 {this.state.subscriptionsDict[cscKey].map((topicKey) => {
                   const topicFilter = this.state.topicFilter === '' || this.state.topicRegExp.test(topicKey);
                   if (!topicFilter) return null;
-
                   const [type, topic] = topicKey.split('-');
                   const groupKey = [type, cscKey, topic].join('-');
                   const streamData = this.props.getStreamData(groupKey);
