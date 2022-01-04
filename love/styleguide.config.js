@@ -66,6 +66,10 @@ module.exports = {
           name: 'Scripts config validation',
           content: 'docsrc/howitworks/05-scripts-validation.md',
         },
+        {
+          name: 'Configuration file settings',
+          content: 'docsrc/howitworks/06-config-file.md',
+        },
       ],
     },
     {
