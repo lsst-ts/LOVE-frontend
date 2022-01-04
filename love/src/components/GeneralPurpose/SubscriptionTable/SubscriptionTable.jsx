@@ -116,12 +116,9 @@ export default class SubscriptionTable extends Component {
                 {this.state.subscriptionsDict[cscKey].map((topicKey) => {
                   const topicFilter = this.state.topicFilter === '' || this.state.topicRegExp.test(topicKey);
                   if (!topicFilter) return null;
-
                   const [type, topic] = topicKey.split('-');
                   const groupKey = [type, cscKey, topic].join('-');
-                  // console.log(groupKey);
                   const streamData = this.props.getStreamData(groupKey);
-                  // console.log(streamData);
                   const accessor = this.getAccessor(groupKey);
                   const dict = accessor(streamData);
                   const dictKeys = Object.keys(dict);
