@@ -46,6 +46,7 @@ export default class DomeSummaryTable extends Component {
       target: this.props.targetPointing.el,
     };
 
+    // to do: add elevation state value
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
     const dropoutDoorStateValue = dropoutDoorStateMap[this.props.dropoutDoorState];
     const mainDoorStateValue = mainDoorStateMap[this.props.mainDoorState];
@@ -107,13 +108,19 @@ export default class DomeSummaryTable extends Component {
           <StatusText
             title={domeInPositionValue ? 'true' : 'false'}
             status={stateToStyleDome[domeInPositionLabel]}
-            small
+            medium
           >
             {domeInPositionLabel}
           </StatusText>
         </Value>
+        <Label>Mode</Label>
+        <Value>
+          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+            {azimuthStateValue}
+          </StatusText>
+        </Value>
 
-        <Label>Azimuth</Label>
+        {/* <Label>Azimuth</Label>
         <Value>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} small>
             {azimuthStateValue}
@@ -134,7 +141,7 @@ export default class DomeSummaryTable extends Component {
         <Label>Az</Label>
         <Value>
           <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
-        </Value>
+        </Value> */}
         {/* <span className={[styles.subRow, styles.wide].join(' ')} title={`Time to limit: ${2} min`}>
           <span>
             <Limits
@@ -152,7 +159,7 @@ export default class DomeSummaryTable extends Component {
           </span>
         </span> */}
         {/* Mount */}
-        <Title>Mount</Title>
+        {/* <Title>Mount</Title>
         <Value>
           <StatusText
             title={mountInPositionValue ? 'true' : 'false'}
@@ -161,22 +168,36 @@ export default class DomeSummaryTable extends Component {
           >
             {mountInPositionLabel}
           </StatusText>
-        </Value>
-        <Label>Tracking</Label>
+        </Value> */}
+        {/* <Label>Tracking</Label>
         <Value>
           <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]} small>
             {mountTrackingStateValue}
           </StatusText>
-        </Value>
-        <Label>Az</Label>
+        </Value> */}
+        <Label>Azimuth</Label>
+        {/* <CurrentTargetValue
+            currentValue={mountAz.current.toFixed(2)}
+            targetValue={mountAz.target.toFixed(2)}
+            isChanging={true}
+          /> */}
         <Value>
+          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+            {azimuthStateValue}
+          </StatusText>
+        </Value>
+        <Label>
           <CurrentTargetValue
             currentValue={mountAz.current.toFixed(2)}
             targetValue={mountAz.target.toFixed(2)}
             isChanging={true}
           />
+        </Label>
+        <Value>
+          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+            {azimuthStateValue}
+          </StatusText>
         </Value>
-
         <Row
           title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
         >
@@ -195,15 +216,32 @@ export default class DomeSummaryTable extends Component {
             <span className={styles.highlight}>{Math.round(timeToAzLimit)} min</span>
           </span>
         </Row>
-        <Label>El</Label>
-        <Value>
+        <Label>Elevation</Label>
+        {/* <Value>
           <CurrentTargetValue
             currentValue={mountEl.current.toFixed(2)}
             targetValue={mountEl.target.toFixed(2)}
             isChanging={true}
           />
+        </Value> */}
+        {/* to do: add elevation state value */}
+        <Value>
+          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+            {azimuthStateValue}
+          </StatusText>
         </Value>
-
+        <Label>
+          <CurrentTargetValue
+            currentValue={mountEl.current.toFixed(2)}
+            targetValue={mountEl.target.toFixed(2)}
+            isChanging={true}
+          />
+        </Label>
+        <Value>
+          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+            {azimuthStateValue}
+          </StatusText>
+        </Value>
         <Row
           title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
         >
@@ -218,11 +256,34 @@ export default class DomeSummaryTable extends Component {
             />
           </span>
           <span>
-            <span>{`Time to ${closestLimit}: `}</span>
+            <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
           </span>
+          {/* <span>
+            <span>{`Time to ${closestLimit}: `}</span>
+            <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
+          </span> */}
         </Row>
+        <Label>Shutters</Label>
+        <Label></Label>
         <Label>
+          <CurrentTargetValue
+            currentValue={mountAz.current.toFixed(2)}
+            targetValue={mountAz.target.toFixed(2)}
+            isChanging={true}
+          />
+        </Label>
+        <Limits height={30} />
+        {/* <Label></Label> */}
+        <Label>
+          <CurrentTargetValue
+            currentValue={mountAz.current.toFixed(2)}
+            targetValue={mountAz.target.toFixed(2)}
+            isChanging={true}
+          />
+        </Label>
+        <Limits height={30} />
+        {/* <Label>
           Nasmyth <span className={styles.highlight}>{mountRotator.name}</span>
         </Label>
         <Value>
@@ -249,7 +310,7 @@ export default class DomeSummaryTable extends Component {
             <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToRotLimit)} min</span>
           </span>
-        </Row>
+        </Row> */}
       </SummaryPanel>
     );
   }
