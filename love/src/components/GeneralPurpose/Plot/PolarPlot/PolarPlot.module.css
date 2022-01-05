@@ -5,6 +5,7 @@
 .plotContainer {
   width: 100%;
   display: flex;
+  flex-direction: column;
 }
 
 .backgroundCircle {
@@ -58,7 +59,8 @@
 
 .legend {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 .legendItem {
