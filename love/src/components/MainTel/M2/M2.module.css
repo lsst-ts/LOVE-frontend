@@ -1,0 +1,380 @@
+.cursorMove {
+  cursor: crosshair;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.borderCircleOverlay {
+  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
+  stroke-width: 5px;
+}
+
+.borderCircleHardPoints {
+  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
+  stroke-width: 3px;
+  fill: var(--overlay-background-color);
+}
+
+.hiddenCircleOverlay {
+  stroke: var(--second-primary-background-color);
+  stroke-width: 135px;
+}
+
+.circleOverlay {
+  fill: var(--overlay-background-color);
+}
+
+.circleOverlayDisabled {
+  fill: var(--status-disabled-dimmed-color-2);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.mirrorContainer svg text {
+  opacity: 1;
+  transition: opacity 0.35s linear;
+  font-size: 0.5em;
+  stroke: #000;
+  stroke-width: 0.2px;
+}
+
+.mirrorContainer svg text.hidden {
+  opacity: 0;
+}
+
+.state {
+  display: flex;
+  margin-right: 1em;
+}
+
+.state :first-child {
+  margin-right: 0.5em;
+}
+
+.summaryState {
+  border-radius: 1rem;
+  font-weight: 700;
+  text-align: center;
+  width: 8em;
+  margin-bottom: 2px;
+}
+
+.detailState {
+  font-weight: 700;
+  text-align: center;
+  width: 8em;
+  margin-bottom: 2px;
+}
+
+.summaryPanelStates {
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1em;
+  margin-bottom: 1em;
+  background: none;
+  border-bottom: 1px solid gray;
+}
+
+.summaryPanelControls {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1em;
+}
+
+.summaryPanelControls > .title {
+  text-align: left;
+  margin: 0;
+}
+
+.summaryPanelControls > .controls {
+  width: 100%;
+  display: flex;
+  text-align: left;
+}
+
+.summaryPanelControls > .controls > .control {
+  flex-grow: 1;
+}
+
+.summaryPanelControls > .controls > .control > span {
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+.summaryPanelControls > .controls > .control > .toggleContainer {
+  display: flex;
+}
+
+.summaryPanelControls > .controls > div {
+  margin-right: 1em;
+}
+
+.svgContainer {
+  flex-grow: 2;
+  width: 100%;
+  height: 100%;
+  /* max-width: 480px; */
+  min-width: 300px;
+  /*border-radius: 50%;*/
+}
+
+.hardpoints {
+  /*max-width: 160px;
+  min-width: 60px;*/
+  display: flex;
+  flex-direction: column;
+  /* align-items: left; */
+}
+
+.hardpoints > svg {
+  width: 134px;
+  height: 134px;
+}
+
+.hardpoints > span:first-child {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.borderCircleHardpoint {
+  opacity: 0.85;
+  fill: #152f3b;
+}
+
+.textHardpoint {
+  font-size: 21px !important;
+  font-family: Helvetica !important;
+  /*fill: white !important;*/
+}
+
+.circleHardpoint {
+  /*fill:#8bea96;*/
+  stroke-width: 2px;
+  /*stroke: gray;*/
+  opacity: 0.71;
+  cursor: pointer;
+}
+
+.gHardpoint:hover .circleHardpoint {
+  stroke: white;
+}
+
+.gHardpoint:hover .textHardpoint {
+  fill: white;
+  stroke: white;
+}
+
+.circleHardpointActuator {
+  fill: none;
+  stroke-width: 3px;
+  opacity: 0.61;
+}
+
+.svgContainer .axisLabel {
+  font-size: 1.2em;
+  fill: white;
+}
+
+.actuatorDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.forceGradientWrapper {
+  margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+}
+
+.forceGradientWrapper > span:first-child {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.forceGradient {
+  display: flex;
+}
+
+.forceGradient > svg {
+  border-radius: 6em;
+}
+
+.forceGradientLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.forceGradientLabels > span {
+  margin-left: 1em;
+}
+
+.actuatorInfo {
+  width: 240px;
+  min-width: auto;
+  display: block;
+  text-align: left;
+  padding: 1em;
+  margin: 3px;
+}
+
+.actuatorInfo h6 {
+  margin: 0;
+}
+
+.actuatorValue {
+  display: flex;
+  font-size: 1em;
+}
+
+.actuatorValue > :first-child {
+  flex-grow: 1;
+}
+
+.actuatorValue > .summaryState {
+  font-size: 0.8em;
+  line-height: 1.7em;
+}
+
+.forceSummary > * {
+  margin-bottom: 1em;
+}
+
+.stopLeft {
+  stop-color: #3f51b5; /* Indigo */
+}
+
+.stopRright {
+  stop-color: #009688; /* Teal */
+}
+
+.filled {
+  fill: url(#mainGradient);
+}
+
+.actuator {
+  cursor: pointer;
+}
+
+.actuator:hover circle {
+  stroke: white;
+}
+
+.actuator:hover text {
+  fill: white;
+  stroke: white;
+}
+
+.fill_ok_summary {
+  fill: var(--status-ok-color);
+}
+
+.fill_warning_summary {
+  fill: var(--status-warning-dimmed-color-2);
+}
+
+/* detailed state classes */
+.alert_summary {
+  background: var(--status-alert-color);
+  color: var(--second-tertiary-background-color);
+  /* color: var(--status-alert-color);
+  background: var(--status-alert-dimmed-color-2); */
+}
+
+.ok_summary {
+  background: var(--status-ok-color);
+  color: var(--second-tertiary-background-color);
+  /* color: var(--status-ok-color);
+  background: var(--status-ok-dimmed-color-2); */
+}
+
+.warning_summary {
+  /* background: var(--status-warning-color); */
+  /* color: var(--second-tertiary-background-color); */
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-2);
+}
+
+.unknown_summary {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--second-quinary-background-color);
+}
+
+.offline_summary {
+  background: var(--status-disabled-dimmed-color-2);
+  color: var(--secondary-font-color);
+}
+
+.disabled_summary {
+  background: var(--primary-background-color);
+  color: var(--base-font-color);
+}
+
+.ok_detail {
+  color: var(--status-ok-color);
+  background: var(--status-ok-dimmed-color-3);
+  border-left: 3px solid var(--status-ok-color);
+  border-right: 3px solid var(--status-ok-color);
+}
+
+.warning_detail {
+  color: var(--status-warning-color);
+  background: var(--status-warning-dimmed-color-3);
+  border-left: 3px solid var(--status-warning-color);
+  border-right: 3px solid var(--status-warning-color);
+}
+
+.alert_detail {
+  color: var(--status-alert-color);
+  background: var(--status-alert-dimmed-color-3);
+  border-left: 3px solid var(--status-alert-color);
+  border-right: 3px solid var(--status-alert-color);
+}
+
+.running_detail {
+  color: var(--status-running-color);
+  background: var(--status-running-dimmed-color-3);
+  border-left: 3px solid var(--status-running-color);
+  border-right: 3px solid var(--status-running-color);
+}
+
+.critical_detail {
+  color: var(--status-alert-dimmed-color-3);
+  background: var(--status-alert-color);
+  border-left: 3px solid var(--status-alert-dimmed-color-2);
+  border-right: 3px solid var(--status-alert-dimmed-color-2);
+}
+
+.plotSection {
+  margin: 4em 2em;
+  display: grid;
+  grid-template-columns: 1fr 5fr 2fr;
+  grid-auto-rows: minmax(100px, auto);
+  grid-template-areas: 'hp plot group';
+}
+
+.gridHardpoint {
+  grid-area: hp;
+}
+
+.gridWindowM1M3 {
+  grid-area: plot;
+  max-height: 630px;
+}
+
+.gridGroupGradiantInfo {
+  grid-area: group;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

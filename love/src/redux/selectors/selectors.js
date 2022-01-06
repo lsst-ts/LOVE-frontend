@@ -189,6 +189,16 @@ export const getM1M3State = (state) => {
   };
 };
 
+// MTM2 selectors
+export const getM2State = (state) => {
+  const subscriptions = ['event-MTM2-0-summaryState', 'event-MTM2-0-detailedState'];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    summaryState: m1m3Data['event-MTM2-0-summaryState']?.[0].summaryState?.value ?? 0,
+    detailedState: m1m3Data['event-MTM2-0-detailedState']?.[0].detailedState?.value ?? 0,
+  };
+};
+
 function createDataRandom() {
   const data = [];
   for (let i = 0; i < 156; i++) {
