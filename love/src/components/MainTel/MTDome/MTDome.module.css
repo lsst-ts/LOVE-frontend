@@ -25,9 +25,6 @@
   text-align: left;
 }
 
-/* .grid {
-} */
-
 .topRow {
   display: grid;
   justify-items: center;
@@ -86,9 +83,6 @@
   color: var(--base-font-color);
 }
 
-/* .azimuthSection {
-} */
-
 .azimuthValues {
   display: grid;
   grid-template-columns: max-content 8em;
@@ -101,7 +95,7 @@
   position: absolute;
   left: 3%;
   top: 1%;
-  width: 12%;
+  width: 6%;
 }
 
 .vignettingDistanceContainer {

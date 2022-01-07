@@ -8,6 +8,7 @@ import DomeTopView from './MTDomeTopView';
 import DomePointing from './MTDomePointing';
 import DomeShutter from './MTDomeShutter';
 import MountTopView from './MountTopView';
+// import SimpleTable from '.components/GeneralPurpose/SimpleTable/SimpleTable';
 
 import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
@@ -49,6 +50,73 @@ export default class Dome extends Component {
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
   };
+
+  HEADERS_AF = [
+    {
+      field: 'A1',
+      title: 'A1',
+    },
+    {
+      field: 'A2',
+      title: 'A2',
+    },
+    {
+      field: 'B1',
+      title: 'B1',
+    },
+    {
+      field: 'B2',
+      title: 'B2',
+    },
+    {
+      field: 'B3',
+      title: 'B3',
+    },
+    {
+      field: 'C1',
+      title: 'C1',
+    },
+    {
+      field: 'C2',
+      title: 'C2',
+    },
+    {
+      field: 'C3',
+      title: 'C3',
+    },
+    {
+      field: 'D1',
+      title: 'D1',
+    },
+    {
+      field: 'D2',
+      title: 'D2',
+    },
+    {
+      field: 'E1',
+      title: 'E1',
+    },
+    {
+      field: 'E2',
+      title: 'E2',
+    },
+    {
+      field: 'E3',
+      title: 'E3',
+    },
+    {
+      field: 'F1',
+      title: 'F1',
+    },
+    {
+      field: 'F2',
+      title: 'F2',
+    },
+    {
+      field: 'F3',
+      title: 'F3',
+    },
+  ];
 
   elevationPlotInputs = {
     'Mount elevation': {
@@ -205,36 +273,40 @@ export default class Dome extends Component {
       <div className={styles.domeContainer}>
         {/* <h2>TOP VIEW</h2> */}
         <div className={styles.topRow}>
+          <div className={styles.windRoseContainer}>
+            <WindRose />
+          </div>
           <div className={styles.skymapGridContainer}>
             {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
-            <div className={styles.windRoseContainer}>
+            {/* <div className={styles.windRoseContainer}>
               <WindRose />
-            </div>
+            </div> */}
 
-            <DomeTopView width={width} height={height} />
-            <MountTopView currentPointing={currentPointing} />
-            <DomeShutter
+            {/* <DomeTopView width={width} height={height} />
+            <MountTopView currentPointing={currentPointing} /> */}
+            {/* <DomeShutter
               width={width}
               height={height}
               azimuthPosition={domeAz}
               dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
               mainDoorOpeningPercentage={mainDoorOpeningPercentage}
               targetAzimuthPosition={domeTargetAz}
-            />
-            <DomePointing
+            /> */}
+
+            {/* <DomePointing
               width={width}
               height={height}
               currentPointing={currentPointing}
               targetPointing={targetPointing}
               isProjected={isProjected}
-            />
-            <div
+            /> */}
+            {/* <div
               className={styles.vignettingDistanceContainer}
               title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
             >
               <span>Vignetting distance: </span>
               <span className={styles.value}>{vignettingDistance}º</span>
-            </div>
+            </div> */}
           </div>
           <DomeSummaryTable
             currentPointing={currentPointing}
@@ -295,6 +367,8 @@ export default class Dome extends Component {
             </div>
           </div>
         </div> */}
+        {/* <SimpleTable headers={} data={}/> 
+        <SimpleTable headers={} data={}/>*/}
       </div>
     );
   }
