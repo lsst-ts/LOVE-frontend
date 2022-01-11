@@ -17,6 +17,7 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
+import Inclinometer from './Inclinometer.jsx';
 import styles from './M2.module.css';
 
 export default class M2 extends Component {
@@ -30,15 +31,11 @@ export default class M2 extends Component {
       colormap: () => '#fff',
       width: 480,
       zoomLevel: 1,
-      selectedForceInput: '',
-      selectedForceParameter: '',
       showActuatorsID: true,
-      showHardpoints: true,
+      showCommandedForce: true,
+      showMeasuredForce: true,
       actuatorsForce: [],
       selectedActuator: 0,
-      selectedHardpoint: 0,
-      optionsTree: null,
-      forceParameters: [],
     };
   }
 
@@ -126,8 +123,8 @@ export default class M2 extends Component {
   };
 
   createColorScale = (values) => {
-    const height = 300;
-    const width = 10;
+    const height = 40;
+    const width = 300;
     const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
     const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
     colourRange.push(1);
@@ -147,8 +144,8 @@ export default class M2 extends Component {
       .append('linearGradient')
       .attr('id', 'force-gradient')
       .attr('x1', '0%')
-      .attr('y1', '100%')
-      .attr('x2', '0%')
+      .attr('y1', '0%')
+      .attr('x2', '100%')
       .attr('y2', '0%')
       .selectAll('stop')
       .data(colours)
@@ -163,8 +160,8 @@ export default class M2 extends Component {
       .attr('y', 0)
       .attr('rx', 5)
       .attr('ry', 5)
-      .attr('width', 10)
-      .attr('height', '100%')
+      .attr('width', '100%')
+      .attr('height', 40)
       .style('fill', 'url(#force-gradient)');
   };
 
@@ -262,32 +259,16 @@ export default class M2 extends Component {
     return M2.statesIlc[hardpointIlcState[hardpointIndex] ?? 0].fill;
   };
 
-  forceInputSelected = (input) => {
-    const force = input.value;
-    // Using SAL info
-    // const filteredParameters = Object.keys(this.state.optionsTree[force]).filter((x) => {
-    //   return !['timestamp', 'priority'].includes(x);
-    // });
-    const filteredParameters = M1M3ActuatorForces[force];
-    this.setState({
-      selectedForceInput: force,
-      forceParameters: filteredParameters,
-    });
-  };
-
-  forceParameterSelected = (input) => {
-    const force = input.value;
-    this.setState({
-      selectedForceParameter: force,
-    });
-  };
-
   toggleActuatorsID = (show) => {
     this.setState({ showActuatorsID: show });
   };
 
-  toggleHardpoints = (show) => {
-    this.setState({ showHardpoints: show });
+  toggleCommandedForce = (show) => {
+    this.setState({ showCommandedForce: show });
+  };
+
+  toggleMeasuredForce = (show) => {
+    this.setState({ showMeasuredForce: show });
   };
 
   componentDidMount() {
@@ -406,7 +387,7 @@ export default class M2 extends Component {
   };
 
   render() {
-    const { zoomLevel, showActuatorsID, showHardpoints, forceParameters } = this.state;
+    const { zoomLevel, showActuatorsID, showCommandedForce, showMeasuredForce } = this.state;
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
@@ -414,67 +395,74 @@ export default class M2 extends Component {
     const { actuatorsForce } = this.state;
 
     const summaryState = CSCDetail.states[this.props.summaryState];
-    const detailedStateValue = {
-      name: m1m3DetailedStateMap[this.props.detailedState],
-      class: CSCDetailStyles[m1m3DetailedStateToStyle[m1m3DetailedStateMap[this.props.detailedState]]],
+    const commandableByDDS = {
+      name: this.props.commandableByDDS ? 'CSC' : 'EUI',
+      class: CSCDetailStyles[this.props.commandableByDDS ? 'ok' : 'warning'],
+    };
+    const forceBalanceSystemStatus = {
+      name: this.props.forceBalanceSystemStatus ? 'ENABLED' : 'DISABLED',
+      class: CSCDetailStyles[this.props.forceBalanceSystemStatus ? 'ok' : 'warning'],
+    };
+    const m2AssemblyInPosition = {
+      name: this.props.m2AssemblyInPosition ? 'InPosition' : 'NotInPosition',
+      class: CSCDetailStyles[this.props.m2AssemblyInPosition ? 'ok' : 'warning'],
     };
 
     const maxForce = Math.max(...actuatorsForce);
     const minForce = Math.min(...actuatorsForce);
 
     const selectedActuator = this.getActuator(this.state.selectedActuator);
-    const selectedHardpoint = this.getHardpoint(this.state.selectedHardpoint);
-    const forceInputs = Object.keys(M1M3ActuatorForces);
 
     return (
       <div className={styles.mirrorContainer}>
         <SummaryPanel className={styles.summaryPanelStates}>
           <div className={styles.state}>
-            <Title>STATE</Title>
+            <Title>M2 Status</Title>
             <span className={[summaryState.class, styles.summaryState].join(' ')}>{summaryState.name}</span>
           </div>
           <div className={styles.state}>
-            <Title>DETAILED STATE</Title>
-            <span className={[detailedStateValue.class, styles.summaryState].join(' ')}>{detailedStateValue.name}</span>
+            <Title>Command</Title>
+            <span className={[commandableByDDS.class, styles.summaryState].join(' ')}>{commandableByDDS.name}</span>
+          </div>
+          <div className={styles.state}>
+            <Title>M2 Assembly</Title>
+            <span className={[m2AssemblyInPosition.class, styles.summaryState].join(' ')}>
+              {m2AssemblyInPosition.name}
+            </span>
+          </div>
+          <div className={styles.state}>
+            <Title>Force Balance</Title>
+            <span className={[forceBalanceSystemStatus.class, styles.summaryState].join(' ')}>
+              {forceBalanceSystemStatus.name}
+            </span>
           </div>
         </SummaryPanel>
 
         <SummaryPanel className={styles.summaryPanelControls}>
           <h2 className={styles.title}>Actuators</h2>
           <div className={styles.controls}>
-            <div
-              style={{ width: '12em', paddingRight: '1em', borderRight: '1px solid gray' }}
-              className={styles.control}
-            >
-              <span>Select force input:</span>
-              <Select
-                options={forceInputs}
-                option={null}
-                onChange={(selection) => this.forceInputSelected(selection)}
-              />
-            </div>
             <div className={styles.control}>
-              <span>Select force parameter:</span>
-              <Select
-                options={forceParameters}
-                option={null}
-                onChange={(selection) => this.forceParameterSelected(selection)}
-              />
-            </div>
-            <div className={styles.control}>
-              <span>Show actuators ID:</span>
+              <span>Actuators ID:</span>
               <div className={styles.toggleContainer}>
-                <span>Yes</span>
-                <Toggle hideLabels={true} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
-                <span>No</span>
+                <span>Show</span>
+                <Toggle hideLabels={true} isLive={showActuatorsID} setLiveMode={this.toggleActuatorsID} />
+                <span>Hide</span>
               </div>
             </div>
             <div className={styles.control}>
-              <span>Show hardpoints:</span>
+              <span>Commanded Force:</span>
               <div className={styles.toggleContainer}>
-                <span>Yes</span>
-                <Toggle hideLabels={true} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
-                <span>No</span>
+                <span>Show</span>
+                <Toggle hideLabels={true} isLive={showCommandedForce} setLiveMode={this.toggleCommandedForce} />
+                <span>Hide</span>
+              </div>
+            </div>
+            <div className={styles.control}>
+              <span>Measured Force:</span>
+              <div className={styles.toggleContainer}>
+                <span>Show</span>
+                <Toggle hideLabels={true} isLive={showMeasuredForce} setLiveMode={this.toggleMeasuredForce} />
+                <span>Hide</span>
               </div>
             </div>
           </div>
@@ -596,18 +584,111 @@ export default class M2 extends Component {
                   -X
                 </text>
               </g>
+              <g
+                id="tangent-actuators"
+                style={{
+                  transform: 'translate(50%, 50%)',
+                }}
+              >
+                <rect
+                  width="50"
+                  height="20"
+                  style={{ fill: 'rgb(255,0,255)', strokeWidth: 3, stroke: 'rgb(0,0,0)' }}
+                  x={0}
+                  y={-(this.state.width - 20) / 2}
+                />
+                <rect
+                  width="50"
+                  height="20"
+                  style={{
+                    fill: 'rgb(0,0,255)',
+                    strokeWidth: 3,
+                    stroke: 'rgb(0,0,0)',
+                    transformBox: 'fill-box',
+                    transform: 'rotate(45deg)',
+                    transformOrigin: 'top left',
+                  }}
+                  x={((this.state.width - 20) / 4) * Math.sqrt(3)}
+                  y={-(this.state.width - 20) / 4}
+                />
+                <rect
+                  width="50"
+                  height="20"
+                  style={{
+                    fill: 'rgb(0,0,255)',
+                    strokeWidth: 3,
+                    stroke: 'rgb(0,0,0)',
+                    transformBox: 'fill-box',
+                    transform: 'rotate(110deg)',
+                    transformOrigin: 'top left',
+                  }}
+                  x={((this.state.width - 20) / 4) * Math.sqrt(3)}
+                  y={(this.state.width - 20) / 4}
+                />
+                <rect
+                  width="50"
+                  height="20"
+                  style={{
+                    fill: 'rgb(255,0,255)',
+                    strokeWidth: 3,
+                    stroke: 'rgb(0,0,0)',
+                    transform: 'rotateY(180deg)',
+                  }}
+                  x={0}
+                  y={(this.state.width - 20) / 2}
+                />
+                <rect
+                  width="50"
+                  height="20"
+                  style={{
+                    fill: 'rgb(0,0,255)',
+                    strokeWidth: 3,
+                    stroke: 'rgb(0,0,0)',
+                    transformBox: 'fill-box',
+                    transform: 'rotate(-130deg)',
+                    transformOrigin: 'top left',
+                  }}
+                  x={(-(this.state.width - 20) / 4) * Math.sqrt(3)}
+                  y={(this.state.width - 20) / 4}
+                />
+                <rect
+                  width="50"
+                  height="20"
+                  style={{
+                    fill: 'rgb(0,0,255)',
+                    strokeWidth: 3,
+                    stroke: 'rgb(0,0,0)',
+                    transformBox: 'fill-box',
+                    transform: 'rotate(-70deg)',
+                    transformOrigin: 'top left',
+                  }}
+                  x={(-(this.state.width - 20) / 4) * Math.sqrt(3)}
+                  y={-(this.state.width - 20) / 4}
+                />
+              </g>
             </svg>
           </div>
 
-          <div className={styles.gridGroupGradiantInfo}>
+          <div className={styles.gridGroupGradientInfo}>
+            <div className="inclinometer">
+              <p>Inclination</p>
+              <Inclinometer inclination={-45} />
+              <div>
+                <p>
+                  Inclination <span>0.00°</span>
+                </p>
+                <p>
+                  Source <span>OnBoard</span>
+                </p>
+              </div>
+            </div>
+
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
               <div id="color-scale" className={styles.forceGradient}>
-                <svg viewBox={`0 0 10 350`}></svg>
-                <div className={styles.forceGradientLabels}>
-                  <span>{maxForce} [N]</span>
-                  <span>{minForce} [N]</span>
-                </div>
+                <span>{minForce} [N]</span>
+                <svg viewBox={`0 0 350 40`}></svg>
+                <span>{maxForce} [N]</span>
               </div>
             </div>
 
@@ -629,7 +710,7 @@ export default class M2 extends Component {
               </SummaryPanel>
             </div>
 
-            <div class={styles.gridHardpointInfo}>
+            {/* <div class={styles.gridHardpointInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
                 <div className={styles.actuatorValue}>
                   <Title>Hardpoint {selectedHardpoint.id}</Title>
@@ -659,7 +740,7 @@ export default class M2 extends Component {
                   <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
                 </div>
               </SummaryPanel>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -197,6 +197,8 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+// M2
+
 // M1M3
 export const m1m3DetailedStateMap = {
   1: 'DISABLED STATE',

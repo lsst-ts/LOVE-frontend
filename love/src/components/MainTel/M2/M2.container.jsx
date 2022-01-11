@@ -32,54 +32,22 @@ const M2Container = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  const m1m3State = getM2State(state);
-  const actuatorsState = getM1M3ActuatorsState(state);
-  const actuatorsForces = getM1M3ActuatorForces(state);
-  const hardpointsMonitor = getM1M3HardpointMonitorData(state);
-  const hardpointsActuatorState = getM1M3HardpointActuatorState(state);
-  return { ...m1m3State, ...actuatorsState, ...actuatorsForces, ...hardpointsMonitor, ...hardpointsActuatorState };
+  const m2State = getM2State(state);
+  return { ...m2State };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'telemetry-MTM1M3-0-accelerometerData',
-    'telemetry-MTM1M3-0-forceActuatorData',
-    'telemetry-MTM1M3-0-forceActuatorPressure',
-    'telemetry-MTM1M3-0-hardpointActuatorData',
-    'telemetry-MTM1M3-0-hardpointMonitorData',
-    'telemetry-MTM1M3-0-imsData',
-    'event-MTM1M3-0-summaryState',
-    'event-MTM1M3-0-detailedState',
-    'event-MTM1M3-0-forceActuatorState',
-    'event-MTM1M3-0-forceActuatorInfo',
-    'event-MTM1M3-0-hardpointActuatorState',
-    'event-MTM1M3-0-hardpointActuatorInfo',
-    'event-MTM1M3-0-hardpointMonitorState',
-    'event-MTM1M3-0-hardpointMonitorInfo',
-    'event-MTM1M3-0-appliedAberrationForces',
-    'event-MTM1M3-0-appliedAccelerationForces',
-    'event-MTM1M3-0-appliedActiveOpticForces',
-    'event-MTM1M3-0-appliedAzimuthForces',
-    'event-MTM1M3-0-appliedBalanceForces',
-    'event-MTM1M3-0-appliedCylinderForces',
-    'event-MTM1M3-0-appliedElevationForces',
-    'event-MTM1M3-0-appliedForces',
-    'event-MTM1M3-0-appliedOffsetForces',
-    'event-MTM1M3-0-appliedStaticForces',
-    'event-MTM1M3-0-appliedThermalForces',
-    'event-MTM1M3-0-appliedVelocityForces',
-    'event-MTM1M3-0-preclippedAberrationForces',
-    'event-MTM1M3-0-preclippedAccelerationForces',
-    'event-MTM1M3-0-preclippedActiveOpticForces',
-    'event-MTM1M3-0-preclippedAzimuthForces',
-    'event-MTM1M3-0-preclippedBalanceForces',
-    'event-MTM1M3-0-preclippedCylinderForces',
-    'event-MTM1M3-0-preclippedElevationForces',
-    'event-MTM1M3-0-preclippedForces',
-    'event-MTM1M3-0-preclippedOffsetForces',
-    'event-MTM1M3-0-preclippedStaticForces',
-    'event-MTM1M3-0-preclippedThermalForces',
-    'event-MTM1M3-0-preclippedVelocityForces',
+    'telemetry-MTM2-0-axialActuatorSteps',
+    'telemetry-MTM2-0-axialEncoderPositions',
+    'telemetry-MTM2-0-axialForce',
+    'telemetry-MTM2-0-displacementSensors',
+    'telemetry-MTM2-0-forceBalance',
+    'telemetry-MTM2-0-ilcData',
+    'event-MTM2-0-summaryState',
+    'event-MTM2-0-commandableByDDS',
+    'event-MTM2-0-forceBalanceSystemStatus',
+    'event-MTM2-0-m2AssemblyInPosition',
   ];
   return {
     subscriptions,

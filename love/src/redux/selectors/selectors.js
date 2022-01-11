@@ -191,11 +191,18 @@ export const getM1M3State = (state) => {
 
 // MTM2 selectors
 export const getM2State = (state) => {
-  const subscriptions = ['event-MTM2-0-summaryState', 'event-MTM2-0-detailedState'];
+  const subscriptions = [
+    'event-MTM2-0-summaryState',
+    'event-MTM2-0-commandableByDDS',
+    'event-MTM2-0-forceBalanceSystemStatus',
+    'event-MTM2-0-m2AssemblyInPosition',
+  ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
     summaryState: m1m3Data['event-MTM2-0-summaryState']?.[0].summaryState?.value ?? 0,
-    detailedState: m1m3Data['event-MTM2-0-detailedState']?.[0].detailedState?.value ?? 0,
+    commandableByDDS: m1m3Data['event-MTM2-0-commandableByDDS']?.[0].state?.value,
+    forceBalanceSystemStatus: m1m3Data['event-MTM2-0-forceBalanceSystemStatus']?.[0].status?.value,
+    m2AssemblyInPosition: m1m3Data['event-MTM2-0-m2AssemblyInPosition']?.[0].state?.value,
   };
 };
 

@@ -1,0 +1,32 @@
+.cls-1 {
+  fill: #15242d;
+  stroke: #182e39;
+}
+
+.cls-1,
+.marker,
+.cls-3 {
+  stroke-miterlimit: 10;
+}
+
+.cls-1,
+.cls-3 {
+  stroke-width: 2px;
+}
+
+.marker {
+  fill: #fff;
+  fill-opacity: 0.2;
+  stroke: #fff;
+  transform-origin: 50% 99%;
+}
+
+.cls-3 {
+  fill: #27434f;
+  stroke: #27434f;
+  transform-origin: 50% 99%;
+}
+
+.svgOverlay {
+  overflow: visible;
+}

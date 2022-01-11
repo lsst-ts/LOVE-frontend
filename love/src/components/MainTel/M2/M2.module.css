@@ -9,12 +9,14 @@
 }
 
 .borderCircleOverlay {
-  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
+  stroke: var(--tertiary-background-color);
+  /*#2d3d4e;*/
   stroke-width: 5px;
 }
 
 .borderCircleHardPoints {
-  stroke: var(--tertiary-background-color); /*#2d3d4e;*/
+  stroke: var(--tertiary-background-color);
+  /*#2d3d4e;*/
   stroke-width: 3px;
   fill: var(--overlay-background-color);
 }
@@ -220,12 +222,12 @@
 }
 
 .actuatorInfo {
-  width: 240px;
+  /* width: 240px; */
   min-width: auto;
-  display: block;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
   padding: 1em;
-  margin: 3px;
+  height: 100%;
 }
 
 .actuatorInfo h6 {
@@ -251,11 +253,13 @@
 }
 
 .stopLeft {
-  stop-color: #3f51b5; /* Indigo */
+  stop-color: #3f51b5;
+  /* Indigo */
 }
 
 .stopRright {
-  stop-color: #009688; /* Teal */
+  stop-color: #009688;
+  /* Teal */
 }
 
 .filled {
@@ -284,6 +288,7 @@
 }
 
 /* detailed state classes */
+
 .alert_summary {
   background: var(--status-alert-color);
   color: var(--second-tertiary-background-color);
@@ -358,9 +363,9 @@
 .plotSection {
   margin: 4em 2em;
   display: grid;
-  grid-template-columns: 1fr 5fr 2fr;
+  grid-template-columns: 3fr 2fr;
   grid-auto-rows: minmax(100px, auto);
-  grid-template-areas: 'hp plot group';
+  grid-template-areas: 'plot group';
 }
 
 .gridHardpoint {
@@ -372,9 +377,13 @@
   max-height: 630px;
 }
 
-.gridGroupGradiantInfo {
+.gridGroupGradientInfo {
   grid-area: group;
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.gridActuatorInfo {
+  flex-grow: 1;
 }
