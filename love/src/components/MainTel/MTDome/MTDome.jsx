@@ -8,7 +8,7 @@ import DomeTopView from './MTDomeTopView';
 import DomePointing from './MTDomePointing';
 import DomeShutter from './MTDomeShutter';
 import MountTopView from './MountTopView';
-// import SimpleTable from '.components/GeneralPurpose/SimpleTable/SimpleTable';
+import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
 import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
@@ -51,7 +51,11 @@ export default class Dome extends Component {
     this.props.unsubscribeToStream();
   };
 
-  HEADERS_AF = [
+  LOUVERS_AF = [
+    {
+      field: 'Louvers',
+      title: 'Louvers',
+    },
     {
       field: 'A1',
       title: 'A1',
@@ -115,6 +119,81 @@ export default class Dome extends Component {
     {
       field: 'F3',
       title: 'F3',
+    },
+  ];
+
+  LOUVERS_GN = [
+    {
+      field: 'Louvers',
+      title: 'Louvers',
+    },
+    {
+      field: 'G1',
+      title: 'G1',
+    },
+    {
+      field: 'G2',
+      title: 'G2',
+    },
+    {
+      field: 'G3',
+      title: 'G3',
+    },
+    {
+      field: 'H1',
+      title: 'H1',
+    },
+    {
+      field: 'H2',
+      title: 'H2',
+    },
+    {
+      field: 'H3',
+      title: 'H3',
+    },
+    {
+      field: 'I1',
+      title: 'I1',
+    },
+    {
+      field: 'I2',
+      title: 'I2',
+    },
+    {
+      field: 'I3',
+      title: 'I3',
+    },
+    {
+      field: 'L1',
+      title: 'L1',
+    },
+    {
+      field: 'L2',
+      title: 'L2',
+    },
+    {
+      field: 'L3',
+      title: 'L3',
+    },
+    {
+      field: 'M1',
+      title: 'M1',
+    },
+    {
+      field: 'M2',
+      title: 'M2',
+    },
+    {
+      field: 'M3',
+      title: 'M3',
+    },
+    {
+      field: 'N1',
+      title: 'N1',
+    },
+    {
+      field: 'N2',
+      title: 'N2',
     },
   ];
 
@@ -268,6 +347,92 @@ export default class Dome extends Component {
       historicalData: this.state.historicalData,
     };
 
+    const dataLouversAF = [
+      {
+        Louvers: 'Open [%]',
+        A1: '0%',
+        A2: '0%',
+        B1: '0%',
+        B2: '0%',
+        B3: '0%',
+        C1: '0%',
+        C2: '0%',
+        C3: '0%',
+        D1: '0%',
+        D2: '0%',
+        D3: '0%',
+        E1: '0%',
+        E2: '0%',
+        E3: '0%',
+        F1: '0%',
+        F2: '0%',
+        F3: '0%',
+      },
+      {
+        Louvers: 'Cmd. [%]',
+        A1: '-',
+        A2: '-',
+        B1: '-',
+        B2: '-',
+        B3: '-',
+        C1: '-',
+        C2: '-',
+        C3: '-',
+        D1: '-',
+        D2: '-',
+        D3: '-',
+        E1: '-',
+        E2: '-',
+        E3: '-',
+        F1: '-',
+        F2: '-',
+        F3: '-',
+      },
+    ];
+
+    const dataLouversGN = [
+      {
+        Louvers: 'Open [%]',
+        G1: '0%',
+        G2: '0%',
+        G3: '0%',
+        H1: '0%',
+        H2: '0%',
+        H3: '0%',
+        I1: '0%',
+        I2: '0%',
+        I3: '0%',
+        L1: '0%',
+        L2: '0%',
+        L3: '0%',
+        E2: '0%',
+        E3: '0%',
+        F1: '0%',
+        F2: '0%',
+        F3: '0%',
+      },
+      {
+        Louvers: 'Cmd. [%]',
+        G1: '-',
+        G2: '-',
+        G3: '-',
+        H1: '-',
+        H2: '-',
+        H3: '-',
+        I1: '-',
+        I2: '-',
+        I3: '-',
+        L1: '-',
+        L2: '-',
+        L3: '-',
+        M1: '-',
+        M2: '-',
+        M3: '-',
+        N1: '-',
+        N2: '-',
+      },
+    ];
+
     // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
@@ -276,15 +441,15 @@ export default class Dome extends Component {
           <div className={styles.windRoseContainer}>
             <WindRose />
           </div>
-          <div className={styles.skymapGridContainer}>
-            {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
-            {/* <div className={styles.windRoseContainer}>
+          {/* <div className={styles.skymapGridContainer}> */}
+          {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
+          {/* <div className={styles.windRoseContainer}>
               <WindRose />
             </div> */}
 
-            {/* <DomeTopView width={width} height={height} />
+          {/* <DomeTopView width={width} height={height} />
             <MountTopView currentPointing={currentPointing} /> */}
-            {/* <DomeShutter
+          {/* <DomeShutter
               width={width}
               height={height}
               azimuthPosition={domeAz}
@@ -293,21 +458,21 @@ export default class Dome extends Component {
               targetAzimuthPosition={domeTargetAz}
             /> */}
 
-            {/* <DomePointing
+          {/* <DomePointing
               width={width}
               height={height}
               currentPointing={currentPointing}
               targetPointing={targetPointing}
               isProjected={isProjected}
             /> */}
-            {/* <div
+          {/* <div
               className={styles.vignettingDistanceContainer}
               title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
             >
               <span>Vignetting distance: </span>
               <span className={styles.value}>{vignettingDistance}º</span>
             </div> */}
-          </div>
+          {/* </div> */}
           <DomeSummaryTable
             currentPointing={currentPointing}
             targetPointing={targetPointing}
@@ -367,8 +532,8 @@ export default class Dome extends Component {
             </div>
           </div>
         </div> */}
-        {/* <SimpleTable headers={} data={}/> 
-        <SimpleTable headers={} data={}/>*/}
+        <SimpleTable headers={this.LOUVERS_AF} data={dataLouversAF} />
+        <SimpleTable headers={this.LOUVERS_GN} data={dataLouversGN} />
       </div>
     );
   }

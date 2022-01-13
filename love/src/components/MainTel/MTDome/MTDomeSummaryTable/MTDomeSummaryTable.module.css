@@ -5,3 +5,7 @@
 .summaryTable {
   align-self: center;
 }
+
+.shutters {
+  display: grid;
+}
