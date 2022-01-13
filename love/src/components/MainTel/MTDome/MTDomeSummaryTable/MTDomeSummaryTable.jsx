@@ -17,6 +17,7 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import { stateToStyleDome, stateToStyleMount } from '../../../../Config';
+import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -264,25 +265,13 @@ export default class DomeSummaryTable extends Component {
             <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
           </span> */}
         </Row>
-        <Label>Shutters</Label>
-        <Label></Label>
-        <Label>
-          <CurrentTargetValue
-            currentValue={mountAz.current.toFixed(2)}
-            targetValue={mountAz.target.toFixed(2)}
-            isChanging={true}
-          />
-        </Label>
-        <Limits height={30} />
-        {/* <Label></Label> */}
-        <Label>
-          <CurrentTargetValue
-            currentValue={mountAz.current.toFixed(2)}
-            targetValue={mountAz.target.toFixed(2)}
-            isChanging={true}
-          />
-        </Label>
-        <Limits height={30} />
+        <div className={styles.shutters}>
+          <Label>Shutters</Label>
+          <div>
+            <LoadingBar />
+            <LoadingBar />
+          </div>
+        </div>
         {/* <Label>
           Nasmyth <span className={styles.highlight}>{mountRotator.name}</span>
         </Label>

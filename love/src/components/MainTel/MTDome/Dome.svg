@@ -1,28 +1,81 @@
 <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 301.98 301.98">
     <defs>
-        <style>.cls-1{fill:none;stroke:#788e9b;stroke-dasharray:6;}.cls-1,.cls-2,.cls-4,.cls-5,.cls-6{stroke-miterlimit:10;}.cls-2{fill:#182e39;}.cls-2,.cls-4{stroke:#27434f;stroke-width:2px;}.cls-3{fill:#27434f;}.cls-4{fill:#15242d;}.cls-5{fill:#fff;fill-opacity:0.2;stroke:#fff;}.cls-6{fill:#36d0e7;fill-opacity:0.3;stroke:#36d0e7;}</style>
+        <!-- <style>.cls-1{fill:none;stroke:#788e9b;stroke-dasharray:6;}.cls-1,.cls-2,.cls-4,.cls-5,.cls-6{stroke-miterlimit:10;}.cls-2{fill:#182e39;}.cls-2,.cls-4{stroke:#27434f;stroke-width:2px;}.cls-3{fill:#27434f;}.cls-4{fill:#15242d;}.cls-5{fill:#fff;fill-opacity:0.2;stroke:#fff;}.cls-6{fill:#36d0e7;fill-opacity:0.3;stroke:#36d0e7;}</style> -->
+        <style>
+            .shutter-commanded{
+                fill:none;
+                stroke:#788e9b;
+                stroke-dasharray:6;
+            }
+            .shutter-commanded,.cls-2,.cls-4,.cls-5,.cls-6{
+                stroke-miterlimit:10;
+            }
+            .cls-2{
+                fill:#182e39;
+            }
+            .cls-2,.cls-4{
+                stroke:#27434f;
+                stroke-width:2px;
+            }
+            .cls-3{
+                fill:#27434f;
+            }
+            .cls-4{
+                fill:#15242d;
+            }
+            .shutter{
+                fill:red;
+                fill-opacity:0.2;
+                stroke:green;
+            }
+            .cls-6{
+                /*fill:#36d0e7;*/
+                fill: yellow;
+                fill-opacity:0.3;
+                stroke:#36d0e7;
+            }            
+        </style>  
     </defs>
-    <polygon class="cls-1" points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49" />
-    <rect class="cls-1" x="110.69" y="38.59" width="81.08" height="145.13" />
-    <rect class="cls-1" x="110.69" y="38.59" width="81.08" height="145.13" />
+
+    <g class="dome" style="transform-origin: 50% 50%;/*transform: rotate(45deg);*/">
+        <polygon class="shutter-commanded" points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49" />
+        <rect class="shutter-commanded" x="110.69" y="38.59" width="81.08" height="145.13" />   
+    </g>
+
     <rect class="cls-2" x="148.97" y="-50.78" width="4.05" height="173.5" transform="translate(186.96 -115.02) rotate(90)" />
     <polygon class="cls-2" points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49" />
     <rect class="cls-2" x="110.69" y="38.59" width="81.08" height="145.13" />
     <rect class="cls-3" x="110.69" y="38.59" width="81.08" height="145.13" />
     <rect class="cls-2" x="148.97" y="73.67" width="4.05" height="219.72" transform="translate(334.52 32.54) rotate(90)" />
-    <rect class="cls-4" x="110.69" y="114.81" width="81.08" height="64.86" />
     <rect class="cls-2" x="148.56" y="187.18" width="4.86" height="154.05" transform="translate(415.19 113.21) rotate(90)" />
-    <polygon class="cls-1" points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53" />
-    <polygon class="cls-1" points="200.18 72.59 151.53 72.59 151.53 28.81 196.93 28.81 200.18 72.59" />
-    <rect class="cls-1" x="151.53" y="188.53" width="50.27" height="12.97" />
-    <polygon class="cls-1" points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53" />
-    <polygon class="cls-1" points="101.81 72.59 150.45 72.59 150.45 28.81 105.05 28.81 101.81 72.59" />
-    <rect class="cls-1" x="100.19" y="188.53" width="50.27" height="12.97" />
-    <polygon class="cls-5" points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53" />
-    <polygon class="cls-5" points="200.18 72.59 151.53 72.59 151.53 28.81 196.93 28.81 200.18 72.59" />
-    <rect class="cls-5" x="151.53" y="188.53" width="50.27" height="12.97" />
-    <polygon class="cls-5" points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53" />
-    <polygon class="cls-5" points="101.81 72.59 150.45 72.59 150.45 28.81 105.05 28.81 101.81 72.59" />
-    <rect class="cls-5" x="100.19" y="188.53" width="50.27" height="12.97" />
-    <circle class="cls-6" cx="151.22" cy="147.24" r="5.68" />
+    
+    <g class="pointing" style="transform-origin: 50% 50%; transform: translate(0, -30px);">
+        <rect class="cls-4" x="110.69" y="114.81" width="81.08" height="64.86" />
+        <circle class="cls-6" cx="151.22" cy="147.24" r="5.68" />
+    </g>
+
+    <g class="shutter-commanded-right" style="display: none;">
+        <polygon class="shutter-commanded" points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53" />
+        <polygon class="shutter-commanded" points="200.18 72.59 151.53 72.59 151.53 28.81 196.93 28.81 200.18 72.59" />
+        <rect class="shutter-commanded" x="151.53" y="188.53" width="50.27" height="12.97" />
+    </g>
+
+    <g class="shutter-commanded-left" style="display: none">
+        <polygon class="shutter-commanded" points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53" />
+        <polygon class="shutter-commanded" points="101.81 72.59 150.45 72.59 150.45 28.81 105.05 28.81 101.81 72.59" />
+        <rect class="shutter-commanded" x="100.19" y="188.53" width="50.27" height="12.97" />
+    </g>
+    
+    <g class="shutter-right" style="transform-origin: 50% 50%; transform: translate(40px, 0);">
+        <polygon class="shutter" points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53" />
+        <polygon class="shutter" points="200.18 72.59 151.53 72.59 151.53 28.81 196.93 28.81 200.18 72.59" />
+        <rect class="shutter" x="151.53" y="188.53" width="50.27" height="12.97" />
+    </g>
+    <g class="shutter-left" style="">
+        <polygon class="shutter" points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53" />
+        <polygon class="shutter" points="101.81 72.59 150.45 72.59 150.45 28.81 105.05 28.81 101.81 72.59" />
+        <rect class="shutter" x="100.19" y="188.53" width="50.27" height="12.97" />
+    </g>
+    
+    
 </svg>
