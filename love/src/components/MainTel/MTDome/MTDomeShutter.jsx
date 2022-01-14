@@ -55,104 +55,90 @@ export default class DomeShutter extends Component {
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
-        <defs>
-          <mask x="0" y="0" width="596" height="596" id="domeMask">
-            <circle cx={x0} cy={y0} r={r} fill="#fff" stroke="#" strokeWidth="2" />
-          </mask>
-        </defs>
-        {/* Dome target*/}
-        <path
-          style={{ transform: `rotateZ(${270 + this.props.targetAzimuthPosition}deg)`, transformOrigin: `50% 50%` }}
-          fill="none"
-          strokeDasharray="10"
-          strokeOpacity="0.3"
-          stroke="white"
-          strokeWidth="2"
-          d={`
-          M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 + rSinAlpha}
-        L ${x0 - extraApperture} ${y0 - rSinAlpha}
-        L ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-        `}
-        />
-        <g
-          className={styles.rotatingDome}
-          style={{ transform: `rotateZ(${270 + equivalentAzimuth}deg)`, transformOrigin: `50% 50%` }}
-        >
-          {/* Dome */}
-          <path
-            className={styles.innerDome}
-            d={`
-              M ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-              A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 + rSinAlpha}
-              A ${r} ${r} 0 0 1 ${x0 - rCosAlpha} ${y0 - rSinAlpha}
-              A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-              L ${x0 - extraApperture} ${y0 - rSinAlpha}
-              L ${x0 - extraApperture} ${y0 + rSinAlpha}
-              L ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-            `}
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 301.98 301.98">
+        {/* */}
+        <g class="dome" style="transform-origin: 50% 50%;/*transform: rotate(45deg);*/">
+          <polygon
+            class="shutter-commanded"
+            points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
           />
-          <rect
-            x={x0 - rCosAlpha - 10}
-            y={y0 + rSinAlpha}
-            width={2 * r - 2}
-            height={10}
-            fill="#fff"
-            fillOpacity="0.1"
-            stroke="#152228"
-          />
-          <rect
-            x={x0 - rCosAlpha - 10}
-            y={y0 - rSinAlpha - 10}
-            width={2 * r - 2}
-            height={10}
-            fill="#fff"
-            fillOpacity="0.1"
-            stroke="#152228"
-          />
-          <rect x={0} y={0} width={4} height={4} />
-          {/* Dropout door */}
-          <g clipPath={`circle(${r}px at center)`} style={{ mask: 'url(#domeMask)' }}>
-            <circle cx={x0} cy={y0} r={r} fill="none" stroke="none" />
-            <path
-              fill="none"
-              stroke="white"
-              strokeWidth="2"
-              d={`
-            M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-            A ${r} ${r} 0 0 1 ${x0 + rCosAlpha} ${y0 + rSinAlpha}
-            M ${x0 + rCosAlpha} ${y0 - rSinAlpha}
-            `}
-            />
-            <rect
-              x={
-                x0 + mainDoorWidth - extraApperture + (dropoutDoorWidth * this.props.dropoutDoorOpeningPercentage) / 100
-              }
-              y={y0 - rSinAlpha}
-              width={r - rCosAlpha + (dropoutDoorWidth * (100 - this.props.dropoutDoorOpeningPercentage)) / 100}
-              height={2 * rSinAlpha}
-              fill="white"
-              fillOpacity={0.2 + (0.1 * this.props.dropoutDoorOpeningPercentage) / 100}
-              stroke="white"
-              strokeWidth="2"
-            />
-          </g>
-
-          {/* Main door */}
-          <rect
-            x={x0 - extraApperture - (mainDoorWidth * this.props.mainDoorOpeningPercentage) / 100}
-            y={y0 - rSinAlpha}
-            width={mainDoorWidth}
-            height={2 * rSinAlpha}
-            fill="white"
-            fillOpacity="0.2"
-            stroke="white"
-            strokeWidth="2"
-          />
-          {/* <circle cx={x0} cy={y0} r={r*0.91} fill="none" stroke="red" /> */}
+          <rect class="shutter-commanded" x="110.69" y="38.59" width="81.08" height="145.13" />
         </g>
-        {/* <style>.cls-1{fill:#152228;fill-opacity:0;}.cls-2{opacity:0.6;}.cls-3{fill:#18313d;stroke:#152228;stroke-miterlimit:10;}</style> */}
+
+        {/* rest of dome */}
+
+        <rect
+          class="cls-2"
+          x="148.97"
+          y="-50.78"
+          width="4.05"
+          height="173.5"
+          transform="translate(186.96 -115.02) rotate(90)"
+        />
+        <polygon
+          class="cls-2"
+          points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
+        />
+        <rect class="cls-2" x="110.69" y="38.59" width="81.08" height="145.13" />
+        <rect class="cls-3" x="110.69" y="38.59" width="81.08" height="145.13" />
+        <rect
+          class="cls-2"
+          x="148.97"
+          y="73.67"
+          width="4.05"
+          height="219.72"
+          transform="translate(334.52 32.54) rotate(90)"
+        />
+        <rect
+          class="cls-2"
+          x="148.56"
+          y="187.18"
+          width="4.86"
+          height="154.05"
+          transform="translate(415.19 113.21) rotate(90)"
+        />
+
+        {/* pointing */}
+        <g class="pointing" style="transform-origin: 50% 50%; transform: translate(0, -30px);">
+          <rect class="cls-4" x="110.69" y="114.81" width="81.08" height="64.86" />
+          <circle class="cls-6" cx="151.22" cy="147.24" r="5.68" />
+        </g>
+        {/* Shutter commanded right */}
+        <g class="shutter-commanded-right" style="display: none;">
+          <polygon
+            class="shutter-commanded"
+            points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53"
+          />
+          <polygon
+            class="shutter-commanded"
+            points="200.18 72.59 151.53 72.59 151.53 28.81 196.93 28.81 200.18 72.59"
+          />
+          <rect class="shutter-commanded" x="151.53" y="188.53" width="50.27" height="12.97" />
+        </g>
+        {/* Shutter commanded left */}
+        <g class="shutter-commanded-left" style="display: none">
+          <polygon
+            class="shutter-commanded"
+            points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53"
+          />
+          <polygon
+            class="shutter-commanded"
+            points="101.81 72.59 150.45 72.59 150.45 28.81 105.05 28.81 101.81 72.59"
+          />
+          <rect class="shutter-commanded" x="100.19" y="188.53" width="50.27" height="12.97" />
+        </g>
+        {/* Shutter rigth */}
+        <g class="shutter-right" style="transform-origin: 50% 50%; transform: translate(40px, 0);">
+          <polygon class="shutter" points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53" />
+          <polygon class="shutter" points="200.18 72.59 151.53 72.59 151.53 28.81 196.93 28.81 200.18 72.59" />
+          <rect class="shutter" x="151.53" y="188.53" width="50.27" height="12.97" />
+        </g>
+        {/* Shutter left */}
+        <g class="shutter-left" style="">
+          <polygon class="shutter" points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53" />
+          <polygon class="shutter" points="101.81 72.59 150.45 72.59 150.45 28.81 105.05 28.81 101.81 72.59" />
+          <rect class="shutter" x="100.19" y="188.53" width="50.27" height="12.97" />
+        </g>
       </svg>
     );
   }
