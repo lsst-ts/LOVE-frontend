@@ -6,7 +6,7 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import DomeTopView from './MTDomeTopView';
 import DomePointing from './MTDomePointing';
-import DomeShutter from './MTDomeShutter';
+import MTDomeShutter from './MTDomeShutter';
 import MountTopView from './MountTopView';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
@@ -405,11 +405,11 @@ export default class Dome extends Component {
         L1: '0%',
         L2: '0%',
         L3: '0%',
-        E2: '0%',
-        E3: '0%',
-        F1: '0%',
-        F2: '0%',
-        F3: '0%',
+        M1: '0%',
+        M2: '0%',
+        M3: '0%',
+        N1: '0%',
+        N2: '0%',
       },
       {
         Louvers: 'Cmd. [%]',
@@ -449,46 +449,50 @@ export default class Dome extends Component {
 
           {/* <DomeTopView width={width} height={height} />
             <MountTopView currentPointing={currentPointing} /> */}
-          {/* <DomeShutter
+          <div className={styles.divDome}>
+            <MTDomeShutter
               width={width}
               height={height}
               azimuthPosition={domeAz}
               dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
               mainDoorOpeningPercentage={mainDoorOpeningPercentage}
               targetAzimuthPosition={domeTargetAz}
-            /> */}
+              style={{ float: 'left', width: '50%' }}
+            />
 
-          {/* <DomePointing
-              width={width}
-              height={height}
+            {/* <DomePointing
+                width={width}
+                height={height}
+                currentPointing={currentPointing}
+                targetPointing={targetPointing}
+                isProjected={isProjected}
+              /> */}
+            {/* <div
+                className={styles.vignettingDistanceContainer}
+                title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
+              >
+                <span>Vignetting distance: </span>
+                <span className={styles.value}>{vignettingDistance}º</span>
+              </div> */}
+            {/* </div> */}
+            <DomeSummaryTable
               currentPointing={currentPointing}
               targetPointing={targetPointing}
-              isProjected={isProjected}
-            /> */}
-          {/* <div
-              className={styles.vignettingDistanceContainer}
-              title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
-            >
-              <span>Vignetting distance: </span>
-              <span className={styles.value}>{vignettingDistance}º</span>
-            </div> */}
-          {/* </div> */}
-          <DomeSummaryTable
-            currentPointing={currentPointing}
-            targetPointing={targetPointing}
-            domeAz={domeAz}
-            domeTargetAz={domeTargetAz}
-            domeInPosition={domeInPosition}
-            azimuthState={azimuthState}
-            dropoutDoorState={dropoutDoorState}
-            mainDoorState={mainDoorState}
-            mountTrackingState={mountTrackingState}
-            trackID={trackID}
-            mountInPosition={mountInPosition}
-            m3State={m3State}
-            currentTimesToLimits={currentTimesToLimits}
-            positionLimits={positionLimits}
-          />
+              domeAz={domeAz}
+              domeTargetAz={domeTargetAz}
+              domeInPosition={domeInPosition}
+              azimuthState={azimuthState}
+              dropoutDoorState={dropoutDoorState}
+              mainDoorState={mainDoorState}
+              mountTrackingState={mountTrackingState}
+              trackID={trackID}
+              mountInPosition={mountInPosition}
+              m3State={m3State}
+              currentTimesToLimits={currentTimesToLimits}
+              positionLimits={positionLimits}
+              style={{ float: 'right', width: '50%' }}
+            />
+          </div>
         </div>
         {/* {this.props.controls && (
           <div>
