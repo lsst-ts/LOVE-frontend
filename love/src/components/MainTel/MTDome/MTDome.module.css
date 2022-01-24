@@ -120,3 +120,47 @@
   stroke: var(--default-active-background-color);
   fill: var(--second-quaternary-background-dimmed-color);
 }
+
+.divDome {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.shutterCommanded {
+  fill: none;
+  stroke: #788e9b;
+  stroke-dasharray: 6;
+}
+
+.shutterCommanded,
+.cls2,
+.cls4,
+.cls5,
+.cls6 {
+  stroke-miterlimit: 10;
+}
+.cls2 {
+  fill: #182e39;
+}
+.cls2,
+.cls4 {
+  stroke: #27434f;
+  stroke-width: 2px;
+}
+.cls3 {
+  fill: #27434f;
+}
+.cls4 {
+  fill: #15242d;
+}
+.shutter {
+  fill: red;
+  fill-opacity: 0.2;
+  stroke: green;
+}
+.cls6 {
+  /*fill:#36d0e7;*/
+  fill: yellow;
+  fill-opacity: 0.3;
+  stroke: #36d0e7;
+}
