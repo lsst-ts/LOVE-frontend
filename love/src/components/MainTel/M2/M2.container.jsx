@@ -31,9 +31,34 @@ const M2Container = (props) => {
   return <M2 {...props} />;
 };
 
+const arrayRandomValues = (len, max) => {
+  const array = [];
+  for (let i = 0; i < len; i++) {
+    array.push(parseInt(Math.random() * max, 10));
+  }
+  return array;
+};
+
+const arrayReferenceId = () => {
+  const array = [];
+  for (let i = 0; i < 72; i++) {
+    array.push(i + 1);
+  }
+  return array;
+};
+
 const mapStateToProps = (state) => {
   const m2State = getM2State(state);
-  return { ...m2State };
+  const m2Telemetries = {
+    zenithAngleMeasured: 46.0,
+    axialActuatorSteps: arrayRandomValues(72, 20),
+    actuatorIlcState: arrayRandomValues(72, 5),
+    axialEncoderPositions: arrayRandomValues(72, 50),
+    axialForceApplied: arrayRandomValues(72, 2000),
+    axialForceMeasured: arrayRandomValues(72, 2000),
+  };
+  const actuatorReferenceId = arrayReferenceId();
+  return { ...m2State, ...m2Telemetries, actuatorReferenceId };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -44,6 +69,7 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTM2-0-displacementSensors',
     'telemetry-MTM2-0-forceBalance',
     'telemetry-MTM2-0-ilcData',
+    'telemetry-MTM2-0-zenithAngle',
     'event-MTM2-0-summaryState',
     'event-MTM2-0-commandableByDDS',
     'event-MTM2-0-forceBalanceSystemStatus',

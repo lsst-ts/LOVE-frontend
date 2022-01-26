@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 
-import { defaultNumberFormatter } from 'Utils';
+import { defaultNumberFormatter, fixedFloat } from 'Utils';
 import {
-  M1M3ActuatorPositions,
   M1M3ActuatorForces,
   m1m3DetailedStateMap,
   m1m3DetailedStateToStyle,
   m1m3HardpointActuatorMotionStateMap,
   m1mActuatorILCStateMap,
   M1M3HardpointPositions,
+  M2ActuatorPositions,
 } from 'Config';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
@@ -35,7 +35,7 @@ export default class M2 extends Component {
       showCommandedForce: true,
       showMeasuredForce: true,
       actuatorsForce: [],
-      selectedActuator: 0,
+      selectedActuator: null,
     };
   }
 
@@ -143,9 +143,9 @@ export default class M2 extends Component {
       .append('defs')
       .append('linearGradient')
       .attr('id', 'force-gradient')
-      .attr('x1', '0%')
+      .attr('x1', '100%')
       .attr('y1', '0%')
-      .attr('x2', '100%')
+      .attr('x2', '0%')
       .attr('y2', '0%')
       .selectAll('stop')
       .data(colours)
@@ -158,11 +158,53 @@ export default class M2 extends Component {
       .append('rect')
       .attr('x', 0)
       .attr('y', 0)
-      .attr('rx', 5)
-      .attr('ry', 5)
+      .attr('rx', 0)
+      .attr('ry', 0)
       .attr('width', '100%')
       .attr('height', 40)
       .style('fill', 'url(#force-gradient)');
+
+    const measuredForceX = 100;
+    svg
+      .append('line')
+      .attr('x1', measuredForceX)
+      .attr('y1', -10)
+      .attr('x2', measuredForceX)
+      .attr('y2', 50)
+      .style('stroke', 'white')
+      .style('stroke-width', 3);
+
+    const textMeasured = svg
+      .append('text')
+      .attr('x', measuredForceX)
+      .attr('y', -10)
+      .attr('fill', 'white')
+      .style('font-size', '1em');
+
+    textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -45).text('C03');
+    textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -30).text('Applied');
+    textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -15).text('3.646N ');
+
+    const commandedForceX = 200;
+    svg
+      .append('line')
+      .attr('x1', commandedForceX)
+      .attr('y1', -10)
+      .attr('x2', commandedForceX)
+      .attr('y2', 50)
+      .style('stroke', 'white')
+      .style('stroke-width', 3);
+
+    const textCommanded = svg
+      .append('text')
+      .attr('x', commandedForceX)
+      .attr('y', 50)
+      .attr('fill', 'white')
+      .style('font-size', '1em');
+
+    textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 60).text('C03');
+    textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 75).text('Commanded');
+    textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 90).text('3.646N ');
   };
 
   actuatorSelected = (id) => {
@@ -200,63 +242,28 @@ export default class M2 extends Component {
 
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
-    const { actuatorIlcState, actuatorReferenceId } = this.props;
+    const {
+      actuatorIlcState,
+      actuatorReferenceId,
+      axialActuatorSteps,
+      axialEncoderPositions,
+      axialForceApplied,
+      axialForceMeasured,
+    } = this.props;
     const { actuatorsForce } = this.state;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
     const actuator = {
       id,
       state: actuatorIlcState[actuatorIndex] ?? 'None',
-      value: actuatorsForce[actuatorIndex] ?? 'None',
+      // value: actuatorsForce[actuatorIndex] ?? 'None',
+      axialActuatorStep: axialActuatorSteps[actuatorIndex] ?? 0,
+      axialEncoderPosition: axialEncoderPositions[actuatorIndex] ?? 0,
+      axialForceApplied: axialForceApplied[actuatorIndex] ?? 0,
+      axialForceMeasured: axialForceMeasured[actuatorIndex] ?? 0,
     };
 
     actuator.state = CSCDetail.states[actuator.state];
     return actuator;
-  };
-
-  getHardpoint = (id) => {
-    if (id === 0)
-      return {
-        id: 'None',
-        ilcStatus: CSCDetail.states[0],
-        motionStatus: CSCDetail.states[0],
-        breakawayLVDT: { value: 'None' },
-        displacementLVDT: { value: 'None' },
-        breakawayPressure: { value: 'None' },
-      };
-    const {
-      hardpointIlcState,
-      hardpointMotionState,
-      hardpointReferenceId,
-      hardpointsBreakawayLVDT,
-      hardpointsDisplacementLVDT,
-      hardpointsBreakawayPressure,
-    } = this.props;
-    const hardpointIndex = hardpointReferenceId.indexOf(id);
-
-    const hardpoint = {
-      id,
-      ilcStatus: hardpointIlcState[hardpointIndex] ?? 'None',
-      motionStatus: hardpointMotionState[hardpointIndex] ?? 'None',
-      breakawayLVDT: { value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None' },
-      displacementLVDT: { value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None' },
-      breakawayPressure: { value: hardpointsBreakawayPressure[hardpointIndex] ?? 'None' },
-    };
-
-    hardpoint.ilcStatus = {
-      name: m1mActuatorILCStateMap[hardpoint.ilcStatus],
-      class: M2.statesIlc[hardpoint.ilcStatus].class,
-    };
-    hardpoint.motionStatus = {
-      name: m1m3HardpointActuatorMotionStateMap[hardpoint.motionStatus],
-      class: M2.statesMotion[hardpoint.motionStatus].class,
-    };
-    return hardpoint;
-  };
-
-  fillHardpoint = (id) => {
-    const { hardpointIlcState, hardpointReferenceId } = this.props;
-    const hardpointIndex = hardpointReferenceId.indexOf(id);
-    return M2.statesIlc[hardpointIlcState[hardpointIndex] ?? 0].fill;
   };
 
   toggleActuatorsID = (show) => {
@@ -279,7 +286,7 @@ export default class M2 extends Component {
     let yMin = Infinity;
     let xMin = Infinity;
     let maxRadius = 0;
-    M1M3ActuatorPositions.forEach((act) => {
+    M2ActuatorPositions.forEach((act) => {
       if (xMax < act.position[0]) xMax = act.position[0];
       if (xMin > act.position[0]) xMin = act.position[0];
       if (yMax < act.position[1]) yMax = act.position[1];
@@ -288,6 +295,13 @@ export default class M2 extends Component {
         maxRadius = Math.floor(Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)));
       }
     });
+    console.log(M2ActuatorPositions);
+    console.log(xMin, xMax, yMin, yMax, maxRadius);
+    xMin = -150;
+    xMax = 160;
+    yMin = -150;
+    yMax = 160;
+    maxRadius = 160;
 
     // Using SAL info
     // ManagerInterface.getTopicData('event-telemetry').then((data) => {
@@ -295,7 +309,7 @@ export default class M2 extends Component {
     // });
 
     this.setState({
-      actuators: M1M3ActuatorPositions,
+      actuators: M2ActuatorPositions,
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
       maxRadius,
@@ -335,8 +349,8 @@ export default class M2 extends Component {
       prevProps.zPosition !== zPosition ||
       prevProps.actuatorReferenceId !== actuatorReferenceId
     ) {
-      const actuators = M2.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
-      // const actuators = M1M3ActuatorPositions; // Old implementation
+      // const actuators = M2.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
+      const actuators = M2ActuatorPositions; // Old implementation
 
       let yMax = -Infinity;
       let xMax = -Infinity;
@@ -352,6 +366,11 @@ export default class M2 extends Component {
           maxRadius = Math.floor(Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)));
         }
       });
+      xMin = -150;
+      xMax = 160;
+      yMin = -150;
+      yMax = 160;
+      maxRadius = 160;
       this.setState({
         actuators,
         xRadius: Math.floor((xMax - xMin) / 2),
@@ -379,6 +398,7 @@ export default class M2 extends Component {
     d3.event.transform.y = Math.floor(transformY);
 
     d3.select('#scatter').attr('transform', d3.event.transform);
+    d3.select('#mirror-hole').attr('transform', d3.event.transform);
     // d3.select('#background-circle').attr('transform', d3.event.transform);
     // d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
@@ -391,7 +411,7 @@ export default class M2 extends Component {
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
-    const { forceActuatorData } = this.props;
+    const { axialActuatorSteps, zenithAngleMeasured } = this.props;
     const { actuatorsForce } = this.state;
 
     const summaryState = CSCDetail.states[this.props.summaryState];
@@ -482,7 +502,17 @@ export default class M2 extends Component {
                 cx={this.state.width / 2}
                 cy={this.state.width / 2}
                 key={'background'}
-                r={this.state.width / 2 - 30}
+                r={this.state.width / 2}
+              />
+
+              <circle
+                id="mirror-hole"
+                cx={this.state.width / 2}
+                cy={this.state.width / 2}
+                r={this.state.width / 6}
+                stroke="gray"
+                strokeWidth="3"
+                fill="#111F27"
               />
 
               <circle
@@ -492,7 +522,7 @@ export default class M2 extends Component {
                 cy={this.state.width / 2}
                 key={'overlay'}
                 fill={'none'}
-                r={this.state.width / 2 - 30}
+                r={this.state.width / 2}
                 pointerEvents="all"
                 onMouseEnter={this.enableScroll}
                 onMouseLeave={this.disableScroll}
@@ -506,12 +536,26 @@ export default class M2 extends Component {
                         cx={(act.position[0] + this.state.xRadius) * scale + margin}
                         cy={(act.position[1] + this.state.yRadius) * scale + margin}
                         key={act.id}
-                        fill={this.state.colormap(
-                          Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
-                        )}
+                        fill={
+                          showMeasuredForce
+                            ? this.state.colormap(
+                                Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) /
+                                  this.state.maxRadius,
+                              )
+                            : 'gray'
+                        }
                         // fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
-                        stroke={this.strokeActuatorSelected(act.id)}
-                        r={(this.state.maxRadius * scale) / 21}
+                        // stroke={this.strokeActuatorSelected(act.id)}
+                        stroke={
+                          showCommandedForce
+                            ? this.state.colormap(
+                                Math.sqrt(Math.pow(act.position[0] + 10, 2) + Math.pow(act.position[1] + 10, 2)) /
+                                  this.state.maxRadius,
+                              )
+                            : 'none'
+                        }
+                        stroke-width="4"
+                        r={(this.state.maxRadius * scale) / 16}
                         pointerEvents="all"
                       />
                       <text
@@ -543,7 +587,7 @@ export default class M2 extends Component {
                 cx={this.state.width / 2}
                 cy={this.state.width / 2}
                 fill={'none'}
-                r={this.state.width / 2 + 40}
+                r={this.state.width / 2 + 50}
               />
 
               <g id="plot-axis">
@@ -587,83 +631,87 @@ export default class M2 extends Component {
               <g
                 id="tangent-actuators"
                 style={{
-                  transform: 'translate(50%, 50%)',
+                  transform: `translate(50%, 50%) rotate(90deg)`,
                 }}
               >
                 <rect
                   width="50"
                   height="20"
-                  style={{ fill: 'rgb(255,0,255)', strokeWidth: 3, stroke: 'rgb(0,0,0)' }}
-                  x={0}
-                  y={-(this.state.width - 20) / 2}
-                />
-                <rect
-                  width="50"
-                  height="20"
                   style={{
-                    fill: 'rgb(0,0,255)',
+                    fill: '#D7191C',
                     strokeWidth: 3,
-                    stroke: 'rgb(0,0,0)',
-                    transformBox: 'fill-box',
-                    transform: 'rotate(45deg)',
-                    transformOrigin: 'top left',
+                    stroke: '#EC801F',
                   }}
-                  x={((this.state.width - 20) / 4) * Math.sqrt(3)}
-                  y={-(this.state.width - 20) / 4}
+                  x={5}
+                  y={-this.state.width / 2 + 5}
                 />
                 <rect
                   width="50"
                   height="20"
                   style={{
-                    fill: 'rgb(0,0,255)',
+                    fill: '#D7191C',
                     strokeWidth: 3,
-                    stroke: 'rgb(0,0,0)',
+                    stroke: '#EC801F',
                     transformBox: 'fill-box',
-                    transform: 'rotate(110deg)',
-                    transformOrigin: 'top left',
+                    transform: 'rotate(60deg)',
+                    transformOrigin: 'bottom left',
                   }}
-                  x={((this.state.width - 20) / 4) * Math.sqrt(3)}
-                  y={(this.state.width - 20) / 4}
+                  x={(this.state.width / 4) * Math.sqrt(3) - 10}
+                  y={-(this.state.width - margin) / 4}
                 />
                 <rect
                   width="50"
                   height="20"
                   style={{
-                    fill: 'rgb(255,0,255)',
+                    fill: '#D7191C',
                     strokeWidth: 3,
-                    stroke: 'rgb(0,0,0)',
+                    stroke: '#EC801F',
+                    transformBox: 'fill-box',
+                    transform: 'rotate(120deg)',
+                    transformOrigin: 'bottom left',
+                  }}
+                  x={(this.state.width / 4) * Math.sqrt(3) - 30}
+                  y={this.state.width / 4 - 10}
+                />
+                <rect
+                  width="50"
+                  height="20"
+                  style={{
+                    fill: '#D7191C',
+                    strokeWidth: 3,
+                    stroke: '#EC801F',
                     transform: 'rotateY(180deg)',
                   }}
-                  x={0}
-                  y={(this.state.width - 20) / 2}
+                  x={20}
+                  y={this.state.width / 2 - 25}
                 />
                 <rect
                   width="50"
                   height="20"
                   style={{
-                    fill: 'rgb(0,0,255)',
+                    fill: '#D7191C',
                     strokeWidth: 3,
-                    stroke: 'rgb(0,0,0)',
+                    stroke: '#EC801F',
                     transformBox: 'fill-box',
-                    transform: 'rotate(-130deg)',
-                    transformOrigin: 'top left',
+                    transform: 'rotate(240deg)',
+                    transformOrigin: 'bottom left',
                   }}
-                  x={(-(this.state.width - 20) / 4) * Math.sqrt(3)}
-                  y={(this.state.width - 20) / 4}
+                  x={(-this.state.width / 4) * Math.sqrt(3) + 30}
+                  y={this.state.width / 4 - 10}
                 />
                 <rect
                   width="50"
                   height="20"
                   style={{
-                    fill: 'rgb(0,0,255)',
+                    fill: '#D7191C',
                     strokeWidth: 3,
-                    stroke: 'rgb(0,0,0)',
+                    stroke: '#EC801F',
                     transformBox: 'fill-box',
-                    transform: 'rotate(-70deg)',
-                    transformOrigin: 'top left',
+                    transform: 'rotate(300deg)',
+                    transformOrigin: 'bottom left',
                   }}
-                  x={(-(this.state.width - 20) / 4) * Math.sqrt(3)}
-                  y={-(this.state.width - 20) / 4}
+                  x={(-(this.state.width - 30) / 4) * Math.sqrt(3) + 10}
+                  y={-this.state.width / 4 - 10}
                 />
               </g>
             </svg>
@@ -672,75 +720,63 @@ export default class M2 extends Component {
           <div className={styles.gridGroupGradientInfo}>
             <div className="inclinometer">
               <p>Inclination</p>
-              <Inclinometer inclination={-45} />
-              <div>
-                <p>
-                  Inclination <span>0.00°</span>
-                </p>
-                <p>
-                  Source <span>OnBoard</span>
-                </p>
+              <Inclinometer inclination={zenithAngleMeasured} />
+              <div className={styles.inclinometerValues}>
+                <span>Inclination</span>
+                <span className={styles.value}>{fixedFloat(zenithAngleMeasured, 2)}°</span>
+                <span>Source</span>
+                <span className={styles.value}>OnBoard</span>
               </div>
             </div>
 
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
+              {/* add uniqueid */}
               <div id="color-scale" className={styles.forceGradient}>
-                <span>{minForce} [N]</span>
-                <svg viewBox={`0 0 350 40`}></svg>
-                <span>{maxForce} [N]</span>
+                <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minForce} [N]</span>
+                <svg className={styles.colorScaleSvg} viewBox={`0 0 350 40`}></svg>
+                <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxForce} [N]</span>
               </div>
             </div>
 
             <div className={styles.gridActuatorInfo}>
               <SummaryPanel className={styles.actuatorInfo}>
-                <div className={styles.actuatorValue}>
-                  <Title>Actuator {selectedActuator.id}</Title>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Actuator status:</span>
-                  <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
-                    {selectedActuator.state.name}
-                  </span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Applied force:</span>
-                  <span>{defaultNumberFormatter(selectedActuator.value)}</span>
-                </div>
+                {this.state.selectedActuator ? (
+                  <>
+                    <div className={styles.actuatorValue}>
+                      <span className={styles.value}>Actuator {selectedActuator.id}</span>
+                      <span className={[selectedActuator.state.class, styles.summaryState].join(' ')}>
+                        {selectedActuator.state.name}
+                      </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Commanded Force:</span>
+                      <span className={styles.value}>
+                        {defaultNumberFormatter(selectedActuator.axialForceApplied)} N
+                      </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Measured Force:</span>
+                      <span className={styles.value}>
+                        {defaultNumberFormatter(selectedActuator.axialForceMeasured)} N
+                      </span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Actuator Steps:</span>
+                      <span className={styles.value}>{defaultNumberFormatter(selectedActuator.axialActuatorStep)}</span>
+                    </div>
+                    <div className={styles.actuatorValue}>
+                      <span>Position:</span>
+                      <span className={styles.value}>
+                        {defaultNumberFormatter(selectedActuator.axialEncoderPosition)}°
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <span>No actuator selected</span>
+                )}
               </SummaryPanel>
             </div>
-
-            {/* <div class={styles.gridHardpointInfo}>
-              <SummaryPanel className={styles.actuatorInfo}>
-                <div className={styles.actuatorValue}>
-                  <Title>Hardpoint {selectedHardpoint.id}</Title>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>ILC status:</span>
-                  <span className={[selectedHardpoint.ilcStatus.class, styles.summaryState].join(' ')}>
-                    {selectedHardpoint.ilcStatus.name}
-                  </span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Motion status:</span>
-                  <span className={[selectedHardpoint.motionStatus.class, styles.detailState].join(' ')}>
-                    {selectedHardpoint.motionStatus.name}
-                  </span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Breakaway LVDT:</span>
-                  <span>{defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}</span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Displacement LVDT:</span>
-                  <span>{defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}</span>
-                </div>
-                <div className={styles.actuatorValue}>
-                  <span>Breakaway Pressure:</span>
-                  <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
-                </div>
-              </SummaryPanel>
-            </div> */}
           </div>
         </div>
       </div>

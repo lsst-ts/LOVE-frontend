@@ -23,7 +23,7 @@
 
 .hiddenCircleOverlay {
   stroke: var(--second-primary-background-color);
-  stroke-width: 135px;
+  stroke-width: 156px;
 }
 
 .circleOverlay {
@@ -112,6 +112,7 @@
 
 .summaryPanelControls > .controls > .control > .toggleContainer {
   display: flex;
+  color: var(--base-font-color);
 }
 
 .summaryPanelControls > .controls > div {
@@ -191,10 +192,12 @@
 }
 
 .forceGradientWrapper {
-  margin-bottom: 32px;
+  margin-top: 40px;
+  margin-bottom: 64px;
   display: flex;
   flex-direction: column;
   /* align-items: center; */
+  position: relative;
 }
 
 .forceGradientWrapper > span:first-child {
@@ -208,7 +211,7 @@
 }
 
 .forceGradient > svg {
-  border-radius: 6em;
+  /* border-radius: 6em; */
 }
 
 .forceGradientLabels {
@@ -222,12 +225,12 @@
 }
 
 .actuatorInfo {
-  /* width: 240px; */
   min-width: auto;
   display: flex;
   flex-direction: column;
-  padding: 1em;
-  height: 100%;
+  padding: 1em 1.5em;
+  align-items: initial;
+  /* height: 100%; */
 }
 
 .actuatorInfo h6 {
@@ -236,11 +239,17 @@
 
 .actuatorValue {
   display: flex;
-  font-size: 1em;
+  /* font-size: 1em; */
 }
 
 .actuatorValue > :first-child {
   flex-grow: 1;
+  text-align: left;
+}
+
+.actuatorValue > :nth-child(2) {
+  min-width: 100px;
+  text-align: center;
 }
 
 .actuatorValue > .summaryState {
@@ -361,7 +370,6 @@
 }
 
 .plotSection {
-  margin: 4em 2em;
   display: grid;
   grid-template-columns: 3fr 2fr;
   grid-auto-rows: minmax(100px, auto);
@@ -382,8 +390,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-left: 2em;
 }
 
 .gridActuatorInfo {
+  width: 100%;
+  /* flex-grow: 1; */
+}
+
+.value {
+  color: var(--base-font-color);
+}
+
+.inclinometerValue {
+  font-size: 1em;
+}
+
+.inclinometerValue > :first-child {
+  display: inline-block;
+  width: 100px;
+  text-align: left;
+}
+
+.inclinometerValue > :nth-child(2) {
   flex-grow: 1;
+  text-align: right;
+}
+
+.inclinometerValues {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: right;
+  width: 80%;
+}
+
+.colorScaleSvg {
+  overflow: visible;
 }

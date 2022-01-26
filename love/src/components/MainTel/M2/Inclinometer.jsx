@@ -13,8 +13,8 @@ export default class DomePointing extends Component {
   };
 
   static defaultProps = {
-    width: 302,
-    height: 165.85,
+    width: 240,
+    height: 131.8,
     inclination: 0,
   };
 
