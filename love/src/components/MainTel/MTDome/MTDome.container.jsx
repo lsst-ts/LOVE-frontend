@@ -13,7 +13,7 @@ export const schema = {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Dome',
+      default: 'MTDome',
     },
     controls: {
       type: 'boolean',

@@ -24,13 +24,13 @@
                 fill:#15242d;
             }
             .shutter{
-                fill:red;
+                fill:#788e9b;
                 fill-opacity:0.2;
-                stroke:green;
+                stroke:#fff;
             }
             .cls-6{
                 /*fill:#36d0e7;*/
-                fill: yellow;
+                fill: #36d0e7;
                 fill-opacity:0.3;
                 stroke:#36d0e7;
             }            

@@ -58,7 +58,7 @@ export default class DomeShutter extends Component {
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 301.98 301.98">
         {/* */}
         {/* <g class="dome" style={{ transformOrigin: 50% 50%, transform: rotate(45deg) }}> */}
-        <g style={{ transformOrigin: `50% 50%` }}>
+        <g /*style={{ transformOrigin: `50% 50%` }}*/>
           <polygon
             className={styles.shutterCommanded}
             points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
@@ -100,12 +100,12 @@ export default class DomeShutter extends Component {
         />
 
         {/* pointing */}
-        <g className={styles.pointing} style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}>
+        <g className={styles.pointing} /*style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}*/>
           <rect className={styles.cls4} x="110.69" y="114.81" width="81.08" height="64.86" />
           <circle className={styles.cls6} cx="151.22" cy="147.24" r="5.68" />
         </g>
         {/* Shutter commanded right */}
-        <g className={styles.shutterCommandedight} style={{ display: `none` }}>
+        <g className={styles.shutterCommandedight} /*style={{ display: `none` }}*/>
           <polygon
             className={styles.shutterCommanded}
             points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53"
@@ -129,7 +129,7 @@ export default class DomeShutter extends Component {
           <rect className={styles.shutterCommanded} x="100.19" y="188.53" width="50.27" height="12.97" />
         </g>
         {/* Shutter rigth */}
-        <g className={styles.shutter} style={{ transformOrigin: `50% 50%`, transform: `translate(40px, 0)` }}>
+        <g className={styles.shutter} /*style={{ transformOrigin: `50% 50%`, transform: `translate(40px, 0)` }}*/>
           <polygon
             className={styles.shutter}
             points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53"
