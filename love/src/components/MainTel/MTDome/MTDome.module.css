@@ -26,19 +26,19 @@
 }
 
 .topRow {
-  display: grid;
-  justify-items: center;
+  /* display: grid;
+  justify-items: center; */
   row-gap: 2em;
   padding: 1em 0;
   grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
 }
 
 .svgOverlay {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 75%;
-  transform: translate(-50%, -50%);
+  position: relative;
+  left: 25%;
+  top: 25%;
+  width: 60%;
+  transform: translate(-25%, -40%) rotateZ(0deg);
 }
 
 .svgOverlay .rotatingDome {
@@ -95,7 +95,7 @@
   position: absolute;
   left: 3%;
   top: 1%;
-  width: 6%;
+  width: 4%;
 }
 
 .vignettingDistanceContainer {
@@ -126,6 +126,17 @@
   grid-template-columns: 1fr 1fr;
 }
 
+.divSummaryTable {
+  margin-left: auto;
+  margin-right: 0;
+  height: auto;
+}
+
+.divDomeLouvers {
+  margin-right: auto;
+  margin-left: 0;
+}
+
 .shutterCommanded {
   fill: none;
   stroke: #788e9b;
@@ -154,13 +165,12 @@
   fill: #15242d;
 }
 .shutter {
-  fill: red;
+  fill: #788e9b;
   fill-opacity: 0.2;
-  stroke: green;
+  stroke: #fff;
 }
 .cls6 {
-  /*fill:#36d0e7;*/
-  fill: yellow;
+  fill: #36d0e7;
   fill-opacity: 0.3;
   stroke: #36d0e7;
 }

@@ -450,15 +450,21 @@ export default class Dome extends Component {
           {/* <DomeTopView width={width} height={height} />
             <MountTopView currentPointing={currentPointing} /> */}
           <div className={styles.divDome}>
-            <MTDomeShutter
-              width={width}
-              height={height}
-              azimuthPosition={domeAz}
-              dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
-              mainDoorOpeningPercentage={mainDoorOpeningPercentage}
-              targetAzimuthPosition={domeTargetAz}
-              style={{ float: 'left', width: '50%' }}
-            />
+            <div className={styles.divDomeLouvers}>
+              <MTDomeShutter
+                width={width}
+                height={height}
+                azimuthPosition={domeAz}
+                dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
+                mainDoorOpeningPercentage={mainDoorOpeningPercentage}
+                targetAzimuthPosition={domeTargetAz}
+                // style={{ float: 'left', width: '50%' }}
+              />
+
+              {/* <div style={{ background: 'blue', width: 'auto', height: '150px' }}>
+                Louvers here
+              </div> */}
+            </div>
 
             {/* <DomePointing
                 width={width}
@@ -475,23 +481,24 @@ export default class Dome extends Component {
                 <span className={styles.value}>{vignettingDistance}º</span>
               </div> */}
             {/* </div> */}
-            <DomeSummaryTable
-              currentPointing={currentPointing}
-              targetPointing={targetPointing}
-              domeAz={domeAz}
-              domeTargetAz={domeTargetAz}
-              domeInPosition={domeInPosition}
-              azimuthState={azimuthState}
-              dropoutDoorState={dropoutDoorState}
-              mainDoorState={mainDoorState}
-              mountTrackingState={mountTrackingState}
-              trackID={trackID}
-              mountInPosition={mountInPosition}
-              m3State={m3State}
-              currentTimesToLimits={currentTimesToLimits}
-              positionLimits={positionLimits}
-              style={{ float: 'right', width: '50%' }}
-            />
+            <div className={styles.divSummaryTable}>
+              <DomeSummaryTable
+                currentPointing={currentPointing}
+                targetPointing={targetPointing}
+                domeAz={domeAz}
+                domeTargetAz={domeTargetAz}
+                domeInPosition={domeInPosition}
+                azimuthState={azimuthState}
+                dropoutDoorState={dropoutDoorState}
+                mainDoorState={mainDoorState}
+                mountTrackingState={mountTrackingState}
+                trackID={trackID}
+                mountInPosition={mountInPosition}
+                m3State={m3State}
+                currentTimesToLimits={currentTimesToLimits}
+                positionLimits={positionLimits}
+              />
+            </div>
           </div>
         </div>
         {/* {this.props.controls && (
