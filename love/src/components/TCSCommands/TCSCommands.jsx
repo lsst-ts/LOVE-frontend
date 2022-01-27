@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Remarkable } from 'remarkable';
+import AceEditor from 'react-ace';
+import 'brace/mode/json';
+import 'brace/theme/solarized_dark';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -9,14 +12,16 @@ import ScriptQueue from 'components/ScriptQueue/ScriptQueue';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
-import { TCSCommands } from 'Config.js';
+import { ATCSCommands, MTCSCommands } from 'Config.js';
 import ManagerInterface from 'Utils';
 import styles from './TCSCommands.module.css';
+import JSONPretty from 'react-json-pretty';
 
 var md = new Remarkable();
 
 const angleRegExp = new RegExp(/(\d\d(:| )\d\d(:| )\d\d)+(\.\d{1,10})?$/);
 const floatRegExp = new RegExp(/^-?\d*(\.\d+)?$/);
+const timeRegExp = new RegExp(/^(\d\d\d\d-\d\d-\d\d)(T| )(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]+(\.\d{1,10})?$/);
 
 export default class CommandPanel extends Component {
   static propTypes = {
@@ -38,6 +43,9 @@ export default class CommandPanel extends Component {
       docstrings: {},
       isModalOpen: false,
     };
+    this.TCSCommands = {};
+    if (props.nameTCS === "aux") this.TCSCommands = ATCSCommands;
+    if (props.nameTCS === "main") this.TCSCommands = MTCSCommands;    
   }
 
   isAuxTCS = () => {
@@ -95,6 +103,16 @@ export default class CommandPanel extends Component {
     });
   };
 
+  checkInvalidTime = (name, value) => {
+    const testValue = value ?? '';
+    this.setState({
+      paramWarnings: {
+        ...this.state.paramWarnings,
+        [name]: !timeRegExp.test(testValue),
+      },
+    });
+  };
+
   renderParam = (name, param) => {
     const [paramType, defaultValue] = param;
     const { paramValues } = this.state;
@@ -135,12 +153,49 @@ export default class CommandPanel extends Component {
             onChange={(selection) => this.updateParamValue(name, selection, paramType)}
           />
         )}
+        {paramType === 'time' && (
+          <>
+            <Input
+              value={paramValues[name]}
+              onChange={(e) => this.updateParamValue(name, e.target.value, paramType)}
+              onBlur={() => this.checkInvalidTime(name, paramValues[name])}
+            />
+            {this.state.paramWarnings[name] && (
+              <div className={styles.paramWarning}>
+                Time should be a string (YYYY-MM-DDTHH:MM:SS.ssss or YYYY-MM-DD HH:MM:SS.ssss)
+              </div>
+            )}
+          </>
+        )}
+        {paramType === 'dict' && (
+          <>
+            <AceEditor
+              value={paramValues[name]}
+              onChange={(val) => {
+                try {
+                  this.updateParamValue(name, val, paramType);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+              mode="json"
+              className={styles.rndEditor}
+              theme="solarized_dark"
+              name="UNIQUE_ID_OF_DIV"
+              width={'100%'}
+              height='100px'
+              editorProps={{ $blockScrolling: true }}
+              fontSize={14}
+            />
+            <JSONPretty data={paramValues[name]} />
+          </>
+        )}
       </div>
     );
   };
 
   selectCommand = (commandName) => {
-    const paramsDict = TCSCommands[commandName] ?? {};
+    const paramsDict = this.TCSCommands[commandName] ?? {};
     const paramNames = Object.keys(paramsDict);
     const paramValues = {};
     paramNames.forEach((paramName) => (paramValues[paramName] = paramsDict[paramName][1]));
@@ -148,7 +203,7 @@ export default class CommandPanel extends Component {
   };
 
   render() {
-    const paramsDict = TCSCommands[this.state.selectedCommand] ?? {};
+    const paramsDict = this.TCSCommands[this.state.selectedCommand] ?? {};
     const queueState = {
       statusText: ScriptQueue.stateStyleDict[this.props.state],
       name: this.props.state,
@@ -193,7 +248,7 @@ export default class CommandPanel extends Component {
         <div className={styles.selectContainer}>
           <Select
             controlClassName={styles.select}
-            options={Object.keys(TCSCommands)}
+            options={Object.keys(this.TCSCommands)}
             option={this.state.selectedCommand}
             placeholder="Select a command"
             onChange={(selection) => this.selectCommand(selection?.value)}
@@ -222,7 +277,6 @@ export default class CommandPanel extends Component {
                 SEND
               </Button>
             )}
-            {console.log(this.state.paramValues)}
             {this.isMainTCS() && (
               <Button
                 status="info"
