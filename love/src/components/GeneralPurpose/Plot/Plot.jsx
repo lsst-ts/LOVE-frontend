@@ -44,6 +44,9 @@ const Plot = ({
   setTimeWindow,
   setHistoricalData,
   controls,
+  efdClients,
+  selectedEfdClient,
+  setEfdClient,
 }) => {
   const timeSeriesControlRef = React.useRef(undefined);
 
@@ -110,6 +113,9 @@ const Plot = ({
           setLiveMode={setIsLive}
           isLive={isLive}
           setHistoricalData={setHistoricalData}
+          efdClients={efdClients}
+          selectedEfdClient={selectedEfdClient}
+          setEfdClient={setEfdClient}
         />
       )}
       <div className={[styles.container, legendPosition === 'bottom' ? styles.bottomLegend : ''].join(' ')}>

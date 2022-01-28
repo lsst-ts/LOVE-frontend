@@ -1,12 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { addGroup, removeGroup } from 'redux/actions/ws';
+import { getStreamData, getCSCHeartbeat, getCSCWithWarning, getServerTime } from 'redux/selectors';
 import CSCDetail from './CSCDetail';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
-import { getStreamData, getCSCHeartbeat } from '../../../redux/selectors';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
   description: 'Displays the error code and message logs for a single CSC',
-  defaultSize: [8, 2],
+  defaultSize: [12, 6],
   props: {
     titleBar: {
       type: 'boolean',
@@ -47,7 +48,7 @@ export const schema = {
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
-      isPrivate: true,
+      isPrivate: false,
       default: false,
     },
     _functionProps: {
@@ -69,8 +70,15 @@ const CSCDetailContainer = ({
   subscribeToStreams,
   unsubscribeToStreams,
   heartbeatData,
+  serverTime,
   embedded,
+  withWarning,
+  isRaw,
+  subscriptions,
 }) => {
+  if (isRaw) {
+    return <SubscriptionTableContainer subscriptions={subscriptions} name={name} salindex={salindex} />;
+  }
   return (
     <CSCDetail
       group={group}
@@ -83,30 +91,35 @@ const CSCDetailContainer = ({
       unsubscribeToStreams={unsubscribeToStreams}
       heartbeatData={heartbeatData}
       embedded={embedded}
+      withWarning={withWarning}
+      serverTime={serverTime}
     />
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const subscriptions = [
+    `event-${ownProps.name}-${ownProps.salindex}-summaryState`,
+    `event-${ownProps.name}-${ownProps.salindex}-logMessage`,
+    `event-${ownProps.name}-${ownProps.salindex}-errorCode`,
+    `event-Heartbeat-0-stream`,
+  ];
   return {
-    subscribeToStreams: (cscName, index) => {
-      dispatch(addGroup('event-Heartbeat-0-stream'));
-      dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
-      dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
-      dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
+    subscriptions,
+    subscribeToStreams: () => {
+      subscriptions.forEach((s) => dispatch(addGroup(s)));
     },
-    unsubscribeToStreams: (cscName, index) => {
-      dispatch(removeGroup('event-Heartbeat-0-stream'));
-      dispatch(removeGroup(`event-${cscName}-${index}-summaryState`));
-      dispatch(removeGroup(`event-${cscName}-${index}-logMessage`));
-      dispatch(removeGroup(`event-${cscName}-${index}-errorCode`));
+    unsubscribeToStreams: () => {
+      subscriptions.forEach((s) => dispatch(removeGroup(s)));
     },
   };
 };
 
 const mapStateToProps = (state, ownProps) => {
+  const withWarning = getCSCWithWarning(state, ownProps.name, ownProps.salindex);
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
+  const serverTime = getServerTime(state);
   if (!summaryStateData) {
     summaryStateData = {};
   }
@@ -114,6 +127,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     summaryStateData: summaryStateData[0],
     heartbeatData,
+    withWarning,
+    serverTime,
   };
 };
 

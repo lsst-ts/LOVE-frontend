@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { cscText } from 'Utils';
+import HeartbeatIcon from 'components/icons/HeartbeatIcon/HeartbeatIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import styles from './CSCDetail.module.css';
-import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
-import { cscText } from '../../../Utils';
 
 export default class CSCDetail extends Component {
   static propTypes = {
@@ -18,6 +19,7 @@ export default class CSCDetail extends Component {
     embedded: PropTypes.bool,
     /* Whether the component should subscribe to streams*/
     shouldSubscribe: PropTypes.bool,
+    isRaw: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -31,6 +33,7 @@ export default class CSCDetail extends Component {
     unsubscribeToStreams: () => {},
     embedded: false,
     shouldSubscribe: true,
+    isRaw: false,
   };
 
   static states = {
@@ -73,12 +76,12 @@ export default class CSCDetail extends Component {
   };
 
   componentDidMount = () => {
-    if (!this.props.shouldSubscribe) this.props.subscribeToStreams(this.props.name, this.props.salindex);
+    this.props.subscribeToStreams(this.props.name, this.props.salindex);
   };
 
   componentWillUnmount = () => {
-    if (!this.props.shouldSubscribe) this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
-  }
+    this.props.unsubscribeToStreams(this.props.name, this.props.salindex);
+  };
 
   render() {
     const { props } = this;
@@ -88,8 +91,8 @@ export default class CSCDetail extends Component {
     if (this.props.heartbeatData) {
       nLost = this.props.heartbeatData.lost;
       if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
-      else timeDiff = Math.ceil(new Date().getTime() / 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
-      if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
+      else if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
+      else timeDiff = Math.ceil(props.serverTime.tai * 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
     if (props.hasHeartbeat === false) {
@@ -102,7 +105,7 @@ export default class CSCDetail extends Component {
       timeDiffText = 'No heartbeat event in Remote.';
     } else if (timeDiff === -1) {
       timeDiffText = 'Never';
-    } else if (timeDiff >= 0) {
+    } else {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
 
@@ -141,8 +144,15 @@ export default class CSCDetail extends Component {
             />
           </div>
         </div>
+
         <div className={[styles.nameSection, stateClass].join(' ')} title={this.props.name + '.' + this.props.salindex}>
           {cscText(this.props.name, this.props.salindex)}
+        </div>
+
+        <div className={[styles.warningIconSection, stateClass].join(' ')}>
+          <div className={[styles.warningIconWrapper, props.withWarning !== true ? styles.hidden : ''].join(' ')}>
+            <WarningIcon title="warning" />
+          </div>
         </div>
       </div>
     );

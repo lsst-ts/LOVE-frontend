@@ -168,7 +168,6 @@ td {
   color: var(--secondary-font-color);
   padding: 0.4em 1em;
   word-wrap: break-word;
-  max-width: 0;
   border-top: 1px solid transparent;
   border-bottom: 1px solid transparent;
   border-left: 1px solid var(--base-background-color);

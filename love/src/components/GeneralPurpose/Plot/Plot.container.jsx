@@ -1,12 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, requestGroupRemoval } from 'redux/actions/ws';
-import { getStreamsData } from 'redux/selectors/selectors';
-import { getTaiToUtc } from 'redux/selectors';
-import Plot from './Plot';
+import { getStreamsData, getEfdConfig, getTaiToUtc } from 'redux/selectors';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
+import Plot from './Plot';
 
 const moment = extendMoment(Moment);
 
@@ -119,6 +118,8 @@ class PlotContainer extends React.Component {
       isLive: true,
       timeWindow: 60,
       historicalData: [],
+      efdClients: [],
+      selectedEfdClient: null,
     };
 
     this.containerRef = React.createRef();
@@ -126,6 +127,13 @@ class PlotContainer extends React.Component {
 
   componentDidMount() {
     this.props.subscribeToStreams();
+    ManagerInterface.getEFDClients().then(({ instances }) => this.setState({ efdClients: instances }));
+    const { defaultEfdInstance } = this.props.efdConfigFile ?? {};
+    if (defaultEfdInstance) {
+      this.setState({ selectedEfdClient: defaultEfdInstance }, () => {
+        this.setHistoricalData(Moment().subtract(3600, 'seconds'), 60);
+      });
+    }
   }
 
   componentWillUnmount() {
@@ -195,8 +203,7 @@ class PlotContainer extends React.Component {
       controls,
       timeSeriesControlsProps,
     } = this.props;
-    const { data } = this.state;
-
+    const { data, efdClients, selectedEfdClient } = this.state;
     const { isLive, timeWindow, historicalData } = timeSeriesControlsProps ?? this.state;
 
     const streamsItems = Object.entries(inputs).map(([_, inputConfig]) => {
@@ -260,17 +267,13 @@ class PlotContainer extends React.Component {
       setTimeWindow: (timeWindow) => {
         this.setState({ timeWindow });
       },
-      setHistoricalData: (startDate, timeWindow) => {
-        const cscs = parsePlotInputs(inputs);
-        const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
-        // historicalData
-        ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min').then((data) => {
-          const parsedData = parseCommanderData(data);
-          this.setState({ historicalData: parsedData });
-        });
-      },
-
+      setHistoricalData: this.setHistoricalData,
       controls: controls,
+      efdClients: efdClients,
+      selectedEfdClient: selectedEfdClient,
+      setEfdClient: (client) => {
+        this.setState({ selectedEfdClient: client });
+      },
     };
 
     if (!width && !height && !containerNode) {
@@ -295,28 +298,34 @@ class PlotContainer extends React.Component {
     return topics;
   };
 
+  setHistoricalData = (startDate, timeWindow) => {
+    const { inputs } = this.props;
+    const { selectedEfdClient } = this.state;
+    const cscs = parsePlotInputs(inputs);
+    const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
+    ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
+      if (!data) return;
+      const parsedData = parseCommanderData(data);
+      this.setState({ historicalData: parsedData });
+    });
+  };
+
   getRangedData = (data, timeWindow, historicalData, isLive, inputs) => {
     let filteredData;
+    const topics = this.getTopicItemPair(inputs);
+    const parsedHistoricalData = Object.keys(topics).flatMap((key) => {
+      const [topicName, property] = topics[key];
+      return (historicalData[topicName]?.[property] ?? []).map((dp) => ({ name: key, ...dp }));
+    });
     if (!isLive) {
-      const topics = this.getTopicItemPair(inputs);
-      const filteredData2 = Object.keys(topics).flatMap((topicKey) => {
-        const topic = topics[topicKey];
-        const [topicName, property] = topic;
-        const dataPoints = historicalData?.[topicName]?.[property] ?? [];
-        return dataPoints.map((dataPoint) => {
-          return {
-            name: topicKey,
-            ...dataPoint,
-          };
-        });
-      });
-      filteredData = filteredData2;
+      filteredData = parsedHistoricalData;
     } else {
-      filteredData = data.filter((val) => {
+      const joinedData = parsedHistoricalData.concat(data);
+      filteredData = joinedData.filter((val) => {
         const currentSeconds = new Date().getTime() / 1000;
         const dataSeconds = val.x.toMillis() / 1000 + this.props.taiToUtc;
         if (currentSeconds - timeWindow * 60 <= dataSeconds) return true;
-        else return false;
+        return false;
       });
     }
     return filteredData;
@@ -352,9 +361,11 @@ const mapStateToProps = (state, ownProps) => {
   const groupNames = getGroupNames(inputs);
   const streams = getStreamsData(state, groupNames);
   const taiToUtc = getTaiToUtc(state);
+  const efdConfigFile = getEfdConfig(state);
   return {
     streams,
     taiToUtc,
+    efdConfigFile,
   };
 };
 

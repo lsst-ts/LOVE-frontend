@@ -23,6 +23,7 @@
 }
 
 .sectionTitle {
+  grid-column: 1 / -1;
   color: var(--base-font-color);
   font-size: var(--font-size-large);
   padding: 0.5em;
@@ -40,6 +41,18 @@
   padding: 0.5em;
 }
 
+.fullSection {
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-column: 1 / -1;
+  width: 100%;
+  border: 2px solid var(--second-tertiary-background-color);
+  border-radius: 5px;
+  box-sizing: border-box;
+  padding: 0.5em;
+}
+
 .doubleSectionSimple {
   display: grid;
   grid-template-rows: min-content 1fr;
@@ -50,10 +63,6 @@
   box-sizing: border-box;
   padding: 0.5em;
   text-align: left;
-}
-
-.doubleSection .sectionTitle {
-  grid-column: 1 / span 2;
 }
 
 .plot {
@@ -85,8 +94,9 @@
 
 .windPlotContainer {
   display: flex;
-  width: 150%;
-  transform: translate(17.5%, 0);
+  justify-content: center;
+  align-items: center;
+  grid-column: 1 / span 2;
 }
 
 .windPlotSection {
@@ -105,6 +115,10 @@
 
 .windPlotSection .sectionTitle {
   grid-column: 1 / span 2;
+}
+
+.windPlotFullWidth {
+  flex-grow: 0.75;
 }
 
 .timeSeriesControls {

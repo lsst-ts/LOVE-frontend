@@ -296,7 +296,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getEFDTimeseries(start_date, time_window, cscs, resample) {
+  static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
@@ -311,6 +311,7 @@ export default class ManagerInterface {
         time_window,
         cscs,
         resample,
+        efd_instance,
       }),
     }).then((response) => {
       if (response.status >= 500) {
@@ -319,6 +320,35 @@ export default class ManagerInterface {
       }
       if (response.status === 401 || response.status === 403) {
         // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+          return false;
+        });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static getEFDClients() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/efd_clients`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
         ManagerInterface.removeToken();
         return false;
       }

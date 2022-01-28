@@ -99,7 +99,7 @@ export default class EventLog extends PureComponent {
       JSON.stringify(this.props.logMessageData) !== JSON.stringify(prevProps.logMessageData) ||
       JSON.stringify(this.props.errorCodeData) !== JSON.stringify(prevProps.errorCodeData)
     ) {
-      const eventData = [...this.props.logMessageData, ...this.props.errorCodeData];
+      const eventData = [...this.props.logMessageData.slice(0, 100), ...this.props.errorCodeData.slice(0, 50)];
       eventData.sort((a, b) => (a?.private_rcvStamp?.value > b?.private_rcvStamp?.value ? -1 : 1));
       if (eventData.length !== 0) {
         this.setState({

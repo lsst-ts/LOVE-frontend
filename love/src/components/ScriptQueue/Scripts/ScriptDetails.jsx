@@ -1,6 +1,5 @@
 import React from 'react';
 import scriptStyles from './Scripts.module.css';
-import CSCExpandedContainer from 'components/CSCSummary/CSCExpanded/CSCExpanded.container';
 
 const logLevelLabels = {
   '-1': '...',
