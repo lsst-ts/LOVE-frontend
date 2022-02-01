@@ -7,6 +7,7 @@ import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControl
 import DomeTopView from './MTDomeTopView';
 import DomePointing from './MTDomePointing';
 import MTDomeShutter from './MTDomeShutter';
+import MTLouvers from './MTLouvers';
 import MountTopView from './MountTopView';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
@@ -433,22 +434,13 @@ export default class Dome extends Component {
       },
     ];
 
-    // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
-        {/* <h2>TOP VIEW</h2> */}
         <div className={styles.topRow}>
           <div className={styles.windRoseContainer}>
             <WindRose />
           </div>
-          {/* <div className={styles.skymapGridContainer}> */}
-          {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
-          {/* <div className={styles.windRoseContainer}>
-              <WindRose />
-            </div> */}
 
-          {/* <DomeTopView width={width} height={height} />
-            <MountTopView currentPointing={currentPointing} /> */}
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
               <MTDomeShutter
@@ -461,26 +453,9 @@ export default class Dome extends Component {
                 // style={{ float: 'left', width: '50%' }}
               />
 
-              {/* <div style={{ background: 'blue', width: 'auto', height: '150px' }}>
-                Louvers here
-              </div> */}
+              <MTLouvers width={width} height={height} />
             </div>
 
-            {/* <DomePointing
-                width={width}
-                height={height}
-                currentPointing={currentPointing}
-                targetPointing={targetPointing}
-                isProjected={isProjected}
-              /> */}
-            {/* <div
-                className={styles.vignettingDistanceContainer}
-                title="Difference between telescope and dome azimuth, multiplied by cos(telescope altitude)"
-              >
-                <span>Vignetting distance: </span>
-                <span className={styles.value}>{vignettingDistance}º</span>
-              </div> */}
-            {/* </div> */}
             <div className={styles.divSummaryTable}>
               <DomeSummaryTable
                 currentPointing={currentPointing}
@@ -501,48 +476,7 @@ export default class Dome extends Component {
             </div>
           </div>
         </div>
-        {/* {this.props.controls && (
-          <div>
-            <TimeSeriesControls
-              setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
-              timeWindow={this.state.timeWindow}
-              setLiveMode={(isLive) => this.setState({ isLive })}
-              isLive={this.state.isLive}
-              setHistoricalData={this.setHistoricalData}
-            />
-          </div>
-        )} */}
-        {/* <div className={styles.telemetryTable}>
-          <div className={styles.azimuthSection}>
-            <h2>Azimuth</h2>
-            <div ref={this.azimuthPlotRef} className={styles.azimuthPlot}>
-              <div>
-                <PlotContainer
-                  inputs={this.azimuthPlotInputs}
-                  containerNode={this.azimuthPlotRef?.current}
-                  xAxisTitle="Time"
-                  yAxisTitle="Azimuth"
-                  timeSeriesControlsProps={timeSeriesControlsProps}
-                />
-              </div>
-            </div>
-          </div>
 
-          <div className={styles.elevationSection}>
-            <h2>Elevation</h2>
-            <div ref={this.elevationPlotRef} className={styles.elevationPlot}>
-              <div>
-                <PlotContainer
-                  inputs={this.elevationPlotInputs}
-                  containerNode={this.elevationPlotRef?.current}
-                  xAxisTitle="Time"
-                  yAxisTitle="Elevation"
-                  timeSeriesControlsProps={timeSeriesControlsProps}
-                />
-              </div>
-            </div>
-          </div>
-        </div> */}
         <SimpleTable headers={this.LOUVERS_AF} data={dataLouversAF} />
         <SimpleTable headers={this.LOUVERS_GN} data={dataLouversGN} />
       </div>
