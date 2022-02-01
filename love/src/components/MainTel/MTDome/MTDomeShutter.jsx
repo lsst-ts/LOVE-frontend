@@ -69,7 +69,7 @@ export default class DomeShutter extends Component {
         {/* rest of dome */}
 
         <rect
-          className={styles.cls2}
+          className={styles.shutter2}
           x="148.97"
           y="-50.78"
           width="4.05"
@@ -77,13 +77,13 @@ export default class DomeShutter extends Component {
           transform="translate(186.96 -115.02) rotate(90)"
         />
         <polygon
-          className={styles.cls2}
+          className={styles.shutter2}
           points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
         />
-        <rect className={styles.cls2} x="110.69" y="38.59" width="81.08" height="145.13" />
-        <rect class={styles.cls3} x="110.69" y="38.59" width="81.08" height="145.13" />
+        <rect className={styles.shutter2} x="110.69" y="38.59" width="81.08" height="145.13" />
+        <rect class={styles.shutter3} x="110.69" y="38.59" width="81.08" height="145.13" />
         <rect
-          className={styles.cls2}
+          className={styles.shutter2}
           x="148.97"
           y="73.67"
           width="4.05"
@@ -91,7 +91,7 @@ export default class DomeShutter extends Component {
           transform="translate(334.52 32.54) rotate(90)"
         />
         <rect
-          className={styles.cls2}
+          className={styles.shutter2}
           x="148.56"
           y="187.18"
           width="4.86"
@@ -101,8 +101,8 @@ export default class DomeShutter extends Component {
 
         {/* pointing */}
         <g className={styles.pointing} /*style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}*/>
-          <rect className={styles.cls4} x="110.69" y="114.81" width="81.08" height="64.86" />
-          <circle className={styles.cls6} cx="151.22" cy="147.24" r="5.68" />
+          <rect className={styles.shutter4} x="110.69" y="114.81" width="81.08" height="64.86" />
+          <circle className={styles.shutter6} cx="151.22" cy="147.24" r="5.68" />
         </g>
         {/* Shutter commanded right */}
         <g className={styles.shutterCommandedight} /*style={{ display: `none` }}*/>
