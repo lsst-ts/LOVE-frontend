@@ -55,7 +55,7 @@ export default class DomeShutter extends Component {
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
     return (
-      <svg height={height} width={width} viewBox="0 0 560 192">
+      <svg className={styles.svgLouvers} height={height} width={width} viewBox="0 0 560 192">
         {/* from left to right (1) */}
         <g>
           <polygon

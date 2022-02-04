@@ -34,10 +34,10 @@
 }
 
 .svgOverlay {
-  position: relative;
-  left: 25%;
-  top: 25%;
-  width: 60%;
+  position: absolute;
+  left: 17%;
+  top: 14%;
+  width: 29%;
   transform: translate(-25%, -40%) rotateZ(0deg);
 }
 
@@ -62,6 +62,39 @@
 }
 
 .svgOverlay rect {
+  transition: x 0.5s, width 0.5s;
+}
+
+/* ---- */
+.svgLouvers {
+  position: absolute;
+  left: 12%;
+  top: 45%;
+  width: 43%;
+  transform: translate(-25%, -40%) rotateZ(0deg);
+}
+
+.svgLouvers .rotatingDome {
+  transition: transform 1.5s linear;
+}
+
+.svgLouvers .currentPointing {
+  transition: transform 1.5s linear;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  fill-opacity: 0.3;
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
+}
+
+.svgLouvers .targetPointing {
+  fill: none;
+  stroke-dasharray: '4';
+  stroke-opacity: '0.3';
+  stroke: 'white';
+}
+
+.svgLouvers rect {
   transition: x 0.5s, width 0.5s;
 }
 
@@ -123,7 +156,8 @@
 
 .divDome {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 0.8fr;
+  padding-bottom: 50px;
 }
 
 .divSummaryTable {
