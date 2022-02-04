@@ -7,7 +7,7 @@ import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControl
 import DomeTopView from './MTDomeTopView';
 import DomePointing from './MTDomePointing';
 import MTDomeShutter from './MTDomeShutter';
-import MTLouvers from './MTLouvers';
+import MTLouvers from './MTDomeLouvers';
 import MountTopView from './MountTopView';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 
@@ -198,75 +198,6 @@ export default class Dome extends Component {
     },
   ];
 
-  elevationPlotInputs = {
-    'Mount elevation': {
-      category: 'telemetry',
-      csc: 'ATMCS',
-      salindex: '0',
-      topic: 'mount_AzEl_Encoders',
-      item: 'elevationCalculatedAngle',
-      type: 'line',
-      accessor: (x) => x[0],
-      color: 'hsl(201, 70%, 40%)',
-    },
-    'Mount target': {
-      category: 'event',
-      csc: 'ATMCS',
-      salindex: '0',
-      topic: 'target',
-      item: 'elevation',
-      type: 'line',
-      accessor: (x) => x,
-      color: 'white',
-      dash: [4, 1],
-    },
-  };
-
-  azimuthPlotInputs = {
-    'Dome Azimuth': {
-      category: 'telemetry',
-      csc: 'ATDome',
-      salindex: 0,
-      topic: 'position',
-      item: 'azimuthPosition',
-      type: 'line',
-      accessor: (x) => x,
-      color: 'hsl(201, 70%, 40%)',
-    },
-    'Dome Target Az': {
-      category: 'event',
-      csc: 'ATDome',
-      salindex: 0,
-      topic: 'azimuthCommandedState',
-      item: 'azimuth',
-      type: 'line',
-      accessor: (x) => x,
-      color: 'hsl(201, 70%, 40%)',
-      dash: [4, 1],
-    },
-    'Mount Azimuth': {
-      category: 'telemetry',
-      csc: 'ATMCS',
-      salindex: 0,
-      topic: 'mount_AzEl_Encoders',
-      item: 'azimuthCalculatedAngle',
-      type: 'line',
-      accessor: (x) => x[0],
-      color: 'hsl(160, 70%, 40%)',
-    },
-    'Mount Target': {
-      category: 'event',
-      csc: 'ATMCS',
-      salindex: 0,
-      topic: 'target',
-      item: 'azimuth',
-      type: 'line',
-      accessor: (x) => x,
-      color: 'hsl(160, 70%, 40%)',
-      dash: [4, 1],
-    },
-  };
-
   setHistoricalData = (startDate, timeWindow) => {
     const cscs = {
       ATDome: {
@@ -291,6 +222,7 @@ export default class Dome extends Component {
   };
 
   render() {
+    // Replace them for the correct subscriptions for MTDome, declared in MTDome.container.jsx
     const width = this.props.width;
     const height = this.props.height;
     const currentPointing = {
@@ -348,6 +280,7 @@ export default class Dome extends Component {
       historicalData: this.state.historicalData,
     };
 
+    // Replace them for MTDome subscriptions values
     const dataLouversAF = [
       {
         Louvers: 'Open [%]',
@@ -390,7 +323,7 @@ export default class Dome extends Component {
         F3: '-',
       },
     ];
-
+    // Replace them for MTDome subscriptions values
     const dataLouversGN = [
       {
         Louvers: 'Open [%]',
@@ -444,18 +377,14 @@ export default class Dome extends Component {
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
               <MTDomeShutter
-                width={width}
-                height={height}
                 azimuthPosition={domeAz}
                 dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
                 mainDoorOpeningPercentage={mainDoorOpeningPercentage}
                 targetAzimuthPosition={domeTargetAz}
-                // style={{ float: 'left', width: '50%' }}
               />
 
-              <MTLouvers width={width} height={height} />
+              <MTLouvers />
             </div>
-
             <div className={styles.divSummaryTable}>
               <DomeSummaryTable
                 currentPointing={currentPointing}

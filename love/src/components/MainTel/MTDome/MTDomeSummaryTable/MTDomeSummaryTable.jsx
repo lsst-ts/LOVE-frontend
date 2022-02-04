@@ -34,6 +34,7 @@ export default class DomeSummaryTable extends Component {
   static defaultProps = {};
 
   render() {
+    // Replace them for the correct MTDome subscriptions. This was added for first testing purposes only.
     const domeAz = {
       current: this.props.domeAz,
       target: this.props.domeTargetAz,
@@ -47,7 +48,7 @@ export default class DomeSummaryTable extends Component {
       target: this.props.targetPointing.el,
     };
 
-    // to do: add elevation state value
+    // Replace them for the correct MTDome subscriptions. This was added for first testing purposes only.
     const azimuthStateValue = domeAzimuthStateMap[this.props.azimuthState];
     const dropoutDoorStateValue = dropoutDoorStateMap[this.props.dropoutDoorState];
     const mainDoorStateValue = mainDoorStateMap[this.props.mainDoorState];
@@ -63,7 +64,7 @@ export default class DomeSummaryTable extends Component {
     const timeToBlindSpot = timesToLimit.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
     const closestLimit = timeToBlindSpot > timeToUnobservable && timeToBlindSpot > 0 ? 'blind spot' : 'unobservable';
     const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
-    // L1 (software) position limits, in order elevation, azimuth, Nasmyth 1, Nasmyth 2 and M3.
+
     const { maximum, minimum } = positionLimits;
     let [maxEl, maxAz, maxNas1, maxNas2, maxM3] = maximum ? maximum.value : [];
     let [minEl, minAz, minNas1, minNas2, minM3] = minimum ? minimum.value : [];

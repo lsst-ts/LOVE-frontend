@@ -6,7 +6,7 @@ import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
-  description: 'Summary view of the MTDome. Contains general information about the dome and mount state',
+  description: 'Summary view of the MTDome. Contains general information about the dome and louvers state',
   defaultSize: [51, 45],
   props: {
     title: {
@@ -24,6 +24,7 @@ export const schema = {
   },
 };
 
+// The following variables are from ATDome. It's needs replace them for MTDome
 const MTDomeContainer = ({
   dropoutDoorOpeningPercentage,
   mainDoorOpeningPercentage,
@@ -83,6 +84,7 @@ const mapStateToProps = (state) => {
   return domeState;
 };
 
+// The following subscriptions are from ATDome. It's neccesary replace them for MTDome subscriptions
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-ATDome-0-dropoutDoorOpeningPercentage',
