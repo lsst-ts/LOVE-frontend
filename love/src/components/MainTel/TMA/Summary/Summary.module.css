@@ -2,6 +2,7 @@
 .container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    background: var(--second-quaternary-background-dimmed-color);
 }
 
 .highlight {

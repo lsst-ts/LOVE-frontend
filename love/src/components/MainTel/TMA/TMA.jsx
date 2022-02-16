@@ -5,7 +5,7 @@ import styles from './TMA.module.css';
 import Summary from './Summary/Summary';
 import MirrorCovers from './MirrorCovers/MirrorCovers';
 import Elevation from './Elevation/Elevation';
-import Drivers from './Drivers/Drivers';
+import Drives from './Drives/Drives';
 
 export default class TMA extends Component {
   static propTypes = {
@@ -55,7 +55,8 @@ export default class TMA extends Component {
     const elevationLimits = this.props.elevationLimits;
     const elevationActualPosition = this.props.elevationActualPosition;
     const elevationDemandPosition = this.props.elevationDemandPosition;
-
+    const azimuthDrives = this.props.azimuthDrives;
+    const elevationDrives = this.props.elevationDrives;
     return (
           <>
             <div className={styles.summaryContainer}>
@@ -82,8 +83,11 @@ export default class TMA extends Component {
             <div className={styles.elevationContainer}>
               <Elevation />
             </div>
-            <div className={styles.driversContainer}>
-              <Drivers />
+            <div className={styles.drivesContainer}>
+              <Drives
+                azimuthDrives={azimuthDrives}
+                elevationDrives={elevationDrives}
+              />
             </div>
           </>
     );
