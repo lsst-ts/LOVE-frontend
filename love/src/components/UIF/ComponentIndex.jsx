@@ -284,6 +284,16 @@ export const mainIndex = {
       },
     },
   },
+  TMA: {
+    component: require('../MainTel/TMA/TMA.container').default,
+    schema: {
+      ...require('../MainTel/TMA/TMA.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/TMA/TMA.container').schema.props,
+      },
+    },
+  },
 };
 
 export const authlistIndex = {

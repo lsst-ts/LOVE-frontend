@@ -1,0 +1,13 @@
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.highlight {
+    color: var(--base-font-color);
+  }
+
+.pt {
+    padding: 2.15em 0em 0.1em 0em !important;
+}

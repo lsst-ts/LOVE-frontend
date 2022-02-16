@@ -408,6 +408,59 @@ export const motorDriveStateMap = {
   true: 'ENABLED',
 };
 
+// TODO: Pending Style
+export const stateToStyleMTMountCommander = {
+  'NONE': 'invalid',
+  'CSC': 'ok',
+  'EUI': 'warning',
+  'HHD': 'warning',
+};
+
+export const mtMountCommanderStateMap = {
+  0: 'NONE',
+  1: 'CSC',
+  2: 'EUI',
+  3: 'HHD',
+};
+
+// TODO: Pending Style
+export const stateToStyleMTMountPowerState = {
+  'OFF': 'warning',
+  'ON': 'ok',
+  'FAULT': 'warning',
+  'TURNING_ON': 'running',
+  'TURNING_OFF': 'warning',
+  'UNKNOWN': 'invalid',
+};
+
+export const mtMountPowerStateMap = {
+  0: 'OFF',
+  1: 'ON',
+  2: 'FAULT',
+  3: 'TURNING_ON',
+  4: 'TURNING_OFF',
+  15: 'UNKNOWN',
+};
+
+// TODO: Pending Style
+export const stateToStyleMTMountAxisMotionState = {
+  'STOPPING': 'running',
+  'STOPPED': 'ok',
+  'MOVING_POINT_TO_POINT': 'warning',
+  'JOGGING': 'warning',
+  'TRACKING': 'running',
+  'TRACKING_PAUSED': 'warning',
+};
+
+export const mtMountAxisMotionStateMap = {
+  0: 'STOPPING',
+  1: 'STOPPED',
+  2: 'MOVING_POINT_TO_POINT',
+  3: 'JOGGING',
+  4: 'TRACKING',
+  5: 'TRACKING_PAUSED',
+};
+
 export const stateToStyleMotorDrive = {
   DISABLED: 'ok',
   ENABLED: 'running',
