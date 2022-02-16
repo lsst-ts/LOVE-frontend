@@ -1,0 +1,27 @@
+.summaryContainer {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 1em;
+    border-radius: 5px;
+    /* background: #132631; svg color, slightly better contrast with background */
+    background: var(--second-secondary-background-color);
+    margin-bottom: 1em;
+}
+
+.mirrorCoversContainer {
+}
+
+.elevationContainer {
+}
+
+.driversContainer {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding: 1em;
+    border-radius: 5px;
+    /* background: #132631; svg color, slightly better contrast with background */
+    background: var(--second-secondary-background-color);
+    margin-bottom: 1em;
+}

@@ -660,3 +660,93 @@ export const getLastAlarm = (state) => {
 export const getObservingLogs = (state) => {
   return state.observingLogs.logMessages;
 };
+
+/**
+ * Selects the TMA status for summary view
+ * @param {object} state
+ */
+export const getTMASummary = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-target',
+    'event-MTMount-0-commander',
+    'event-MTMount-0-connected',
+    'event-MTMount-0-balanceSystemState'
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    trackID: summaryData['event-MTMount-0-target']
+      ? summaryData['event-MTMount-0-target'][0].trackId.value
+      : "2MJ044144",
+    commander: summaryData['event-MTMount-0-commander']
+      ? summaryData['event-MTMount-0-commander'][0].commander.value
+      : 0,
+    connected: summaryData['event-MTMount-0-connected']
+      ? summaryData['event-MTMount-0-connected'][0].command.value
+      : false,
+    balancing: summaryData['event-MTMount-0-commander']
+      ? summaryData['event-MTMount-0-balanceSystemState'][0].powerState.value
+      : 0,
+  };
+};
+
+/**
+ * Selects the Azimuth status for summary view
+ * @param {object} state
+ */
+ export const getAzimuthState = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-azimuthSystemState',
+    'event-MTMount-0-azimuthMotionState',
+    'event-MTMount-0-azimuthLimits',
+    'telemetry-MTMount-0-azimuth',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    azimuthSystem: summaryData['event-MTMount-0-azimuthSystemState']
+      ? summaryData['event-MTMount-0-azimuthSystemState'][0].motionControllerState.value
+      : 0,
+    azimuthMotion: summaryData['event-MTMount-0-azimuthMotionState']
+      ? summaryData['event-MTMount-0-azimuthMotionState'][0].state.value
+      : 0,
+    azimuthLimits: summaryData['event-MTMount-0-azimuthLimits']
+      ? summaryData['event-MTMount-0-azimuthLimits'][0].limits.value
+      : 0,
+    azimuthActualPosition: summaryData['telemetry-MTMount-0-azimuth']
+      ? summaryData['telemetry-MTMount-0-azimuth'].actualPosition.value
+      : 0,
+    azimuthDemandPosition: summaryData['telemetry-MTMount-0-azimuth']
+      ? summaryData['telemetry-MTMount-0-azimuth'].demandPosition.value
+      : 0,
+  };
+};
+
+/**
+ * Selects the Azimuth status for summary view
+ * @param {object} state
+ */
+ export const getElevationState = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-elevationSystemState',
+    'event-MTMount-0-elevationMotionState',
+    'event-MTMount-0-elevationLimits',
+    'telemetry-MTMount-0-elevation',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    elevationSystem: summaryData['event-MTMount-0-elevationSystemState']
+      ? summaryData['event-MTMount-0-elevationSystemState'][0].powerState.value
+      : 0,
+    elevationMotion: summaryData['event-MTMount-0-elevationMotionState']
+      ? summaryData['event-MTMount-0-elevationMotionState'][0].state.value
+      : 0,
+    elevationLimits: summaryData['event-MTMount-0-elevationLimits']
+      ? summaryData['event-MTMount-0-elevationLimits'][0].limits.value
+      : 0,
+    elevationActualPosition: summaryData['telemetry-MTMount-0-elevation']
+      ? summaryData['telemetry-MTMount-0-elevation'].actualPosition.value
+      : 0,
+    elevationDemandPosition: summaryData['telemetry-MTMount-0-elevation']
+      ? summaryData['telemetry-MTMount-0-elevation'].demandPosition.value
+      : 0,
+  };
+};
