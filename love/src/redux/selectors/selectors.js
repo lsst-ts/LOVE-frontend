@@ -223,13 +223,13 @@ export const getMountState = (state, index) => {
     correctionOffsets: correctionOffsets
       ? correctionOffsets[correctionOffsets.length - 1]
       : {
-          x: { value: 1.1234 },
-          y: { value: 2.1234 },
-          z: { value: 3.1234 },
-          u: { value: 4.1234 },
-          v: { value: 5.1234 },
-          w: { value: 6.1234 },
-        },
+        x: { value: 1.1234 },
+        y: { value: 2.1234 },
+        z: { value: 3.1234 },
+        u: { value: 4.1234 },
+        v: { value: 5.1234 },
+        w: { value: 6.1234 },
+      },
   };
 };
 
@@ -670,13 +670,13 @@ export const getTMASummary = (state) => {
     'event-MTMount-0-target',
     'event-MTMount-0-commander',
     'event-MTMount-0-connected',
-    'event-MTMount-0-balanceSystemState'
+    'event-MTMount-0-balanceSystemState',
   ];
   const summaryData = getStreamsData(state, subscriptions);
   return {
     trackID: summaryData['event-MTMount-0-target']
       ? summaryData['event-MTMount-0-target'][0].trackId.value
-      : "2MJ044144",
+      : '',
     commander: summaryData['event-MTMount-0-commander']
       ? summaryData['event-MTMount-0-commander'][0].commander.value
       : 0,
@@ -693,7 +693,7 @@ export const getTMASummary = (state) => {
  * Selects the Azimuth status for summary view
  * @param {object} state
  */
- export const getAzimuthState = (state) => {
+export const getAzimuthState = (state) => {
   const subscriptions = [
     'event-MTMount-0-azimuthSystemState',
     'event-MTMount-0-azimuthMotionState',
@@ -724,7 +724,7 @@ export const getTMASummary = (state) => {
  * Selects the Azimuth status for summary view
  * @param {object} state
  */
- export const getElevationState = (state) => {
+export const getElevationState = (state) => {
   const subscriptions = [
     'event-MTMount-0-elevationSystemState',
     'event-MTMount-0-elevationMotionState',
@@ -748,5 +748,25 @@ export const getTMASummary = (state) => {
     elevationDemandPosition: summaryData['telemetry-MTMount-0-elevation']
       ? summaryData['telemetry-MTMount-0-elevation'].demandPosition.value
       : 0,
+  };
+};
+
+/**
+ * Selects the data of the drives of azimuth and elevation
+ * @param {object} state
+ */
+export const getDrivesAzimuthElevationState = (state) => {
+  const subscriptions = [
+    'telemetry-MTMount-0-azimuthDrives',
+    'telemetry-MTMount-0-elevationDrives',
+  ];
+  const drivesData = getStreamsData(state, subscriptions);
+  return {
+    azimuthDrives: drivesData['telemetry-MTMount-0-azimuthDrives']
+      ? drivesData['telemetry-MTMount-0-azimuthDrives'].current.value
+      : [10, 14, 10, 14, 9, 4, 10, 14, 10, 14, 9, 4, 0, 1, 3, 6],
+    elevationDrives: drivesData['telemetry-MTMount-0-elevationDrives']
+      ? drivesData['telemetry-MTMount-0-elevationDrives'].current.value
+      : [4, 12, 32, 78, 99, 54, 25, 5, 0, 0, 9, 1],
   };
 };

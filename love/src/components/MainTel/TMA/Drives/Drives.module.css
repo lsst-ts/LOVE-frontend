@@ -1,0 +1,22 @@
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.table {
+    height: 100%;
+}
+
+th.angleColumn {
+    text-align: center;
+}
+
+.angleColumn {
+    max-width: 0.5em;
+    text-align: center;
+}
+
+.units {
+    opacity: 0.65;
+}
