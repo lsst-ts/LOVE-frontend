@@ -1,4 +1,83 @@
 
 .container {
-    
+    display: flex;
+    align-self: center;
+    flex-wrap: wrap;
+    position: relative;
+}
+
+.container svg {
+    vertical-align: top;
+    margin: auto;
+    height: auto;
+  }
+
+.windRoseContainer {
+    position: absolute;
+    left: 5%;
+    top: -10%;
+    width: 10%;
+  }
+
+.cls1 {
+    fill: #15242d;
+    stroke: #182e39;
+}
+
+.cls1,
+.cls2,
+.cls3,
+.cls6,
+.cls7,
+.cls8 {
+    stroke-miterlimit: 10;
+}
+
+.cls1,
+.cls3,
+.cls7 {
+    stroke-width: 2px;
+}
+
+.cls2,
+.cls6 {
+    fill: none;
+}
+
+.cls2 {
+    stroke: #e4e4e7;
+    stroke-width: 0.5px;
+    stroke-dasharray: 6;
+}
+
+.cls3,
+.cls8 {
+    fill: #182e39;
+}
+
+.cls3,
+.cls7,
+.cls8 {
+    stroke: #27434f;
+}
+
+.cls4 {
+    opacity: 0.3;
+}
+
+.cls5 {
+    fill: #fff;
+}
+
+.cls6 {
+    stroke: #f2f2f2;
+}
+
+.cls7 {
+    fill: #27434f;
+}
+
+.cls8 {
+    stroke-linecap: round;
+    stroke-width: 4px;
 }

@@ -9,10 +9,19 @@
     margin-bottom: 1em;
 }
 
+.mirrorAndElevationContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+    gap: 10px;
+}
+
 .mirrorCoversContainer {
+    align-self: center;
 }
 
 .elevationContainer {
+    align-self: center;
 }
 
 .drivesContainer {

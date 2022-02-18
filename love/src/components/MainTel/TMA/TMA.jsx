@@ -55,6 +55,7 @@ export default class TMA extends Component {
     const elevationLimits = this.props.elevationLimits;
     const elevationActualPosition = this.props.elevationActualPosition;
     const elevationDemandPosition = this.props.elevationDemandPosition;
+    const mirrorCovers = this.props.mirrorCovers;
     const azimuthDrives = this.props.azimuthDrives;
     const elevationDrives = this.props.elevationDrives;
     return (
@@ -77,12 +78,22 @@ export default class TMA extends Component {
                 elevationDemandPosition={elevationDemandPosition}
               />
             </div>
-            <div className={styles.mirrorCoversContainer}>
-              <MirrorCovers />
+            <div className={styles.mirrorAndElevationContainer}>
+              <div className={styles.mirrorCoversContainer}>
+                <MirrorCovers
+                  azimuthActualPosition={azimuthActualPosition}
+                  azimuthDemandPosition={azimuthDemandPosition}
+                  mirrorCovers={mirrorCovers}
+                />
+              </div>
+              <div className={styles.elevationContainer}>
+                <Elevation
+                  elevationActualPosition={elevationActualPosition}
+                  elevationDemandPosition={elevationDemandPosition}
+                />
+              </div>
             </div>
-            <div className={styles.elevationContainer}>
-              <Elevation />
-            </div>
+            
             <div className={styles.drivesContainer}>
               <Drives
                 azimuthDrives={azimuthDrives}

@@ -770,3 +770,19 @@ export const getDrivesAzimuthElevationState = (state) => {
       : [4, 12, 32, 78, 99, 54, 25, 5, 0, 0, 9, 1],
   };
 };
+
+/**
+ * Selects the Mirror Covers status for Mirror Covers view
+ * @param {object} state
+ */
+ export const getMirrorCoversMotionState = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-mirrorCoversMotionState',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    mirrorCovers: summaryData['event-MTMount-0-mirrorCoversMotionState']
+      ? summaryData['event-MTMount-0-elevationSystemState'][0].state.value
+      : 0,
+  };
+};

@@ -2,3 +2,64 @@
 .container {
     
 }
+
+.cls1,
+.cls8 {
+    fill: none;
+}
+
+.cls1 {
+    stroke: #e4e4e7;
+    stroke-width: 0.5px;
+    stroke-dasharray: 6;
+}
+
+.cls1,
+.cls2,
+.cls3,
+.cls4,
+.cls6,
+.cls8,
+.cls9 {
+    stroke-miterlimit: 10;
+}
+
+.cls2 {
+    fill: #182e39;
+}
+
+.cls2,
+.cls3,
+.cls6,
+.cls8,
+.cls9 {
+    stroke: #27434f;
+}
+
+.cls2,
+.cls3,
+.cls4,
+.cls5 {
+    stroke-width: 2px;
+}
+
+.cls3,
+.cls6,
+.cls7,
+.cls9 {
+    fill: #27434f;
+}
+
+.cls4,
+.cls5 {
+    fill: #15242d;
+    stroke: #182e39;
+}
+
+.cls5 {
+    stroke-linejoin: round;
+}
+
+.cls6 {
+    stroke-linecap: round;
+}
