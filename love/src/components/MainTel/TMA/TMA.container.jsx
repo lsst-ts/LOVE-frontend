@@ -7,6 +7,7 @@ import {
   getAzimuthState,
   getElevationState,
   getDrivesAzimuthElevationState,
+  getMirrorCoversMotionState,
 } from 'redux/selectors';
 // import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -46,11 +47,13 @@ const mapStateToProps = (state) => {
   const azimuth = getAzimuthState(state);
   const elevation = getElevationState(state);
   const drives = getDrivesAzimuthElevationState(state);
+  const mirror = getMirrorCoversMotionState(state);
   return { 
     ...tmaSummary,
     ...azimuth,
     ...elevation,
     ...drives,
+    ...mirror,
    };
 };
 

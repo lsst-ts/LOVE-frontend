@@ -461,6 +461,23 @@ export const mtMountAxisMotionStateMap = {
   5: 'TRACKING_PAUSED',
 };
 
+// TODO: Pending Style
+export const stateToStyleMTMountMirrorCoversState = {
+  'RETRACTED': 'running',
+  'DEPLOYED': 'ok',
+  'RETRACTING': 'warning',
+  'DEPLOYING': 'warning',
+  'LOST': 'unknown',
+};
+
+export const mtMountMirrorCoversStateMap = {
+  0: 'RETRACTED',
+  1: 'DEPLOYED',
+  2: 'RETRACTING',
+  3: 'DEPLOYING',
+  4: 'LOST',
+};
+
 export const stateToStyleMotorDrive = {
   DISABLED: 'ok',
   ENABLED: 'running',
