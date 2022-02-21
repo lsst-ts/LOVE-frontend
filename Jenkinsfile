@@ -34,7 +34,7 @@ pipeline {
           }
           dockerImageName = dockerImageName + image_tag
           echo "dockerImageName: ${dockerImageName}"
-          dockerImage = docker.build dockerImageName
+          dockerImage = docker.build dockerImageName "-f docker/Dockerfile"
         }
       }
     }
