@@ -18,6 +18,7 @@ pipeline {
           branch "hotfix/*"
           branch "release/*"
           branch "tickets/*"
+          branch "PR-*"
         }
       }
       steps {
@@ -47,6 +48,7 @@ pipeline {
           branch "hotfix/*"
           branch "release/*"
           branch "tickets/*"
+          branch "PR-*"
         }
       }
       steps {
