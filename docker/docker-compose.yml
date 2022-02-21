@@ -1,0 +1,20 @@
+version: "3.7"
+
+services:
+  frontend:
+    container_name: love-frontend-mount
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-dev
+    image: love-frontend-mount-image
+    ports:
+     - 3000:3000
+    volumes:
+      - ..:/usr/src/love
+      - /usr/src/love/love/node_modules
+  tests:
+    container_name: love-frontend-tests
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-test
+    image: love-frontend-tests-image
