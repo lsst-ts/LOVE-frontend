@@ -18,7 +18,6 @@ pipeline {
           branch "hotfix/*"
           branch "release/*"
           branch "tickets/*"
-          branch "PR-*"
         }
       }
       steps {
@@ -48,7 +47,6 @@ pipeline {
           branch "hotfix/*"
           branch "release/*"
           branch "tickets/*"
-          branch "PR-*"
         }
       }
       steps {
@@ -63,12 +61,18 @@ pipeline {
     stage("Run tests") {
       when {
         anyOf {
+          branch "main"
           branch "develop"
+          branch "bugfix/*"
+          branch "hotfix/*"
+          branch "release/*"
+          branch "tickets/*"
+          branch "PR-*"
         }
       }
       steps {
         script {
-          sh "docker image build -f Dockerfile-test -t love-frontend-test  ."
+          sh "docker image build -f docker/Dockerfile-test -t love-frontend-test  ."
           sh "docker run love-frontend-test"
         }
       }
