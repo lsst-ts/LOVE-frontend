@@ -18,7 +18,7 @@ Follow these instructions to run the application in a docker container and get i
 1. Launch and get into the container:
 ```
 cd docker/
-docker-compose up -d
+docker-compose up -d --build
 docker-compose exec frontend sh
 ```
 
