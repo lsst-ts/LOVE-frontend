@@ -27,6 +27,8 @@
 .cls1,
 .cls2,
 .cls3,
+.cls4,
+.cls5,
 .cls6,
 .cls7,
 .cls8 {
@@ -35,6 +37,9 @@
 
 .cls1,
 .cls3,
+.cls4,
+.cls5,
+.cls6,
 .cls7 {
     stroke-width: 2px;
 }
@@ -61,9 +66,18 @@
     stroke: #27434f;
 }
 
-.cls4 {
+.cls4, .cls5 {
+    stroke: #fff;
+}
+
+/* .cls4 {
     opacity: 0.3;
 }
+ */
+.cls4 {
+    fill: #bcd8e2;
+    fill-opacity: 0.45;
+  }
 
 .cls5 {
     fill: #fff;
