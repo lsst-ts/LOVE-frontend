@@ -72,7 +72,7 @@ pipeline {
       }
       steps {
         script {
-          sh "docker image build -f docker/Dockerfile-test -t love-frontend-test  ."
+          sh "docker build -f docker/Dockerfile-test -t love-frontend-test  ."
           sh "docker run love-frontend-test"
         }
       }

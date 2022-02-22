@@ -12,9 +12,3 @@ services:
     volumes:
       - ..:/usr/src/love
       - /usr/src/love/love/node_modules
-  tests:
-    container_name: love-frontend-tests
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile-test
-    image: love-frontend-tests-image
