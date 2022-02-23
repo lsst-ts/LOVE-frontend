@@ -14,8 +14,8 @@
 
 .windRoseContainer {
     position: absolute;
-    left: 5%;
-    top: -10%;
+    left: 10%;
+    top: 0%;
     width: 10%;
   }
 
@@ -37,7 +37,6 @@
 
 .cls1,
 .cls3,
-.cls4,
 .cls5,
 .cls6,
 .cls7 {
@@ -67,7 +66,8 @@
 }
 
 .cls4, .cls5 {
-    stroke: #fff;
+    /* stroke: #fff; */
+    stroke: none;
 }
 
 /* .cls4 {
@@ -76,7 +76,7 @@
  */
 .cls4 {
     fill: #bcd8e2;
-    fill-opacity: 0.45;
+    /* fill-opacity: 0.45; */
   }
 
 .cls5 {
