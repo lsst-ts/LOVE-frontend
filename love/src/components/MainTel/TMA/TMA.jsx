@@ -25,6 +25,9 @@ export default class TMA extends Component {
     elevationLimits: PropTypes.number,
     elevationActualPosition: PropTypes.number,
     elevationDemandPosition: PropTypes.number,
+    mirrorCovers: PropTypes.number,
+    azimuthDrives: PropTypes.array,
+    elevationDrives: PropTypes.array,
   };
 
   static defaultProps = {
@@ -41,7 +44,6 @@ export default class TMA extends Component {
   }
 
   render() {
-    console.log('TMA.render: azimuthDemandPosition:', this.props.azimuthDemandPosition);
     const trackID = this.props.trackID;
     const commander = this.props.commander;
     const connected = this.props.connected;
