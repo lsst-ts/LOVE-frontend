@@ -782,7 +782,7 @@ export const getDrivesAzimuthElevationState = (state) => {
   const summaryData = getStreamsData(state, subscriptions);
   return {
     mirrorCovers: summaryData['event-MTMount-0-mirrorCoversMotionState']
-      ? summaryData['event-MTMount-0-elevationSystemState'][0].state.value
+      ? summaryData['event-MTMount-0-mirrorCoversMotionState'][0].state.value
       : 0,
   };
 };
