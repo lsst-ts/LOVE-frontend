@@ -50,26 +50,26 @@ export default class Summary extends Component {
         const balancingValue = this.props.balancing ? mtMountPowerStateMap[this.props.balancing] : mtMountPowerStateMap[0];
 
         const azimuthSystemValue = this.props.azimuthSystem ? mtMountPowerStateMap[this.props.azimuthSystem] : mtMountPowerStateMap[0];
-        const azimuthMotionValue = this.props.azimuthMotion ? mtMountAxisMotionStateMap[this.props.azimuthMotion] : mtMountAxisMotionStateMap[2];
+        const azimuthMotionValue = this.props.azimuthMotion ? mtMountAxisMotionStateMap[this.props.azimuthMotion] : mtMountAxisMotionStateMap[0];
         const azimuthActualPosition = this.props.azimuthActualPosition ? this.props.azimuthActualPosition : 0;
         const azimuthDemandPosition = this.props.azimuthDemandPosition ? this.props.azimuthDemandPosition : 0;
         const azimuthLimits = this.azimuthLimits ? this.azimuthLimits : 0;
 
         // AzimuthLimit
         const minAzimuthPosition = 0;
-        const maxAzimuthPosition = 270;
+        const maxAzimuthPosition = 360;
         const timeToAzimuthLimit = 0;
         // const closestAzimuthLimit = 90;
 
         const elevationSystemValue = this.props.elevationSystem ? mtMountPowerStateMap[this.props.elevationSystem] : mtMountPowerStateMap[0];
         const elevationMotionValue = this.props.elevationMotion ? mtMountAxisMotionStateMap[this.props.elevationMotion] : mtMountAxisMotionStateMap[0];
         const elevationActualPosition = this.props.elevationActualPosition ? this.props.elevationActualPosition : 0;
-        const elevationDemandPosition = this.props.elevationDemandPosition ? this.props.elevationDemandPosition : 120;
+        const elevationDemandPosition = this.props.elevationDemandPosition ? this.props.elevationDemandPosition : 0;
         const elevationLimits = this.elevationLimits ? this.elevationLimits : 0;
 
         // ElevationLimit
-        const minElevationPosition = 0;
-        const maxElevationPosition = 270;
+        const minElevationPosition = -60;
+        const maxElevationPosition = 60;
         const timeToElevationLimit = 0;
         // const closestElevationLimit = 90;
 

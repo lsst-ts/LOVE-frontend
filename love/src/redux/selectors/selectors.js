@@ -1138,10 +1138,10 @@ export const getDrivesAzimuthElevationState = (state) => {
   return {
     azimuthDrives: drivesData['telemetry-MTMount-0-azimuthDrives']
       ? drivesData['telemetry-MTMount-0-azimuthDrives'].current.value
-      : [10, 14, 10, 14, 9, 4, 10, 14, 10, 14, 9, 4, 0, 1, 3, 6],
+      : [],
     elevationDrives: drivesData['telemetry-MTMount-0-elevationDrives']
       ? drivesData['telemetry-MTMount-0-elevationDrives'].current.value
-      : [4, 12, 32, 78, 99, 54, 25, 5, 0, 0, 9, 1],
+      : [],
   };
 };
 
