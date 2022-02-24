@@ -44,7 +44,6 @@ export default class TMA extends Component {
   }
 
   render() {
-    // const { width, height } = this.props;
     const trackID = this.props.trackID;
     const commander = this.props.commander;
     const connected = this.props.connected;

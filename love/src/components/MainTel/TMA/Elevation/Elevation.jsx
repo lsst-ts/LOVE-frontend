@@ -4,10 +4,6 @@ import styles from './Elevation.module.css';
 
 export default class Elevation extends Component {
   static propTypes = {
-    /** Elevation view width */
-    width: PropTypes.number,
-    /** Elevation view height */
-    height: PropTypes.number,
     /** Elevation actual position */
     elevationActualPosition: PropTypes.number,
     /** Elevation demand position */
@@ -15,9 +11,6 @@ export default class Elevation extends Component {
   };
 
   static defaultProps = {
-    azelToPixel: () => {},
-    width: 502,
-    height: 502,
     elevationActualPosition: 0,
     elevationDemandPosition: 0,
   };
@@ -49,8 +42,6 @@ export default class Elevation extends Component {
   }
 
   getSvg = (props) => {
-    const { width, height } = this.props;
-
     const equivalentElevationActual = this.closestEquivalentAngle(this.prevElevationActual, this.props.elevationActualPosition);
     const equivalentElevationDemand = this.closestEquivalentAngle(this.prevElevationDemand, this.props.elevationDemandPosition);
 
@@ -60,7 +51,6 @@ export default class Elevation extends Component {
             data-name="elevationSvg"
             xmlns="http://www.w3.org/2000/svg"
             viewBox={`0 0 502 502`}
-            {...props}
         >
           <g
             style={{

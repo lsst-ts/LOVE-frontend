@@ -3,28 +3,22 @@ import PropTypes from 'prop-types';
 
 import WindRose from '../../../icons/WindRose/WindRose';
 import {
-    mtMountMirrorCoversStateMap,
-    stateToStyleMTMountMirrorCoversState,
-  } from '../../../../Config';
+  mtMountMirrorCoversStateMap,
+  // stateToStyleMTMountMirrorCoversState,
+} from '../../../../Config';
 import styles from './MirrorCovers.module.css';
-
 
 export default class MirrorCovers extends Component {
   static propTypes = {
-    /** Mirror Covers view width */
-    width: PropTypes.number,
-    /** Mirror Covers view height */
-    height: PropTypes.number,
     /** Azimuth actual position */
     azimuthActualPosition: PropTypes.number,
     /** Azimuth demand position */
     azimuthDemandPosition: PropTypes.number,
+    /** Mirror Covers Motion State */
+    mirrorCovers: PropTypes.number,
   };
 
   static defaultProps = {
-    azelToPixel: () => {},
-    width: 385,
-    height: 385,
     azimuthActualPosition: 0,
     azimuthDemandPosition: 0,
   };
@@ -36,10 +30,22 @@ export default class MirrorCovers extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.azimuthActualPosition !== this.props.azimuthActualPosition)
-      this.prevAzimuthActual = this.closestEquivalentAngle(this.prevAzimuthActual, prevProps.azimuthActualPosition);
-    if (prevProps.azimuthDemandPosition !== this.props.azimuthDemandPosition)
-      this.prevAzimuthDemand = this.closestEquivalentAngle(this.prevAzimuthDemand, prevProps.azimuthDemandPosition);
+    if (prevProps.azimuthActualPosition !== this.props.azimuthActualPosition) {
+      this.prevAzimuthActual = this.closesEquivalentAngle(
+        prevProps.prevAzimuthActual, this.props.azimuthActualPosition
+      );
+      /* this.setState((prevState) => ({
+        prevAzimuthActual: this.closesEquivalentAngle(prevState.prevAzimuthActual, this.props.azimuthActualPosition)
+      })); */
+    }
+    if (prevProps.azimuthDemandPosition !== this.props.azimuthDemandPosition) {
+      this.prevAzimuthDemand = this.closesEquivalentAngle(
+        prevProps.prevAzimuthDemand, this.props.azimuthDemandPosition
+      );
+      /* this.setState((prevState) => ({
+        prevAzimuthDemand: this.closesEquivalentAngle(prevState.prevAzimuthDemand, this.props.azimuthDemandPosition)
+      })); */
+    }
   }
 
   closestEquivalentAngle = (from, to) => {
@@ -100,7 +106,6 @@ export default class MirrorCovers extends Component {
             data-name="mirrorCoverSvg"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 385 385"
-            {...props}
         >
           <g>
             <circle
