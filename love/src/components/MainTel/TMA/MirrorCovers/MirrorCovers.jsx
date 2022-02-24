@@ -80,7 +80,7 @@ export default class MirrorCovers extends Component {
     };
     const mirrorCoversValue = this.props.mirrorCovers ? mtMountMirrorCoversStateMap[this.props.mirrorCovers] : mtMountMirrorCoversStateMap[0];
     return stateToClosedMTMountMirrorCoversState[mirrorCoversValue];
-}
+  }
 
   getSvg = (props) => {
     const offset = 10;
@@ -95,7 +95,13 @@ export default class MirrorCovers extends Component {
     const equivalentAzimuthDemand = this.closestEquivalentAngle(this.prevAzimuthDemand, this.props.azimuthDemandPosition);
 
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 385" {...props}>
+        <svg
+            id="mirrorCoverSvg"
+            data-name="mirrorCoverSvg"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 385 385"
+            {...props}
+        >
           <g>
             <circle
                 cx={x0}
@@ -170,7 +176,6 @@ export default class MirrorCovers extends Component {
                     M ${x0} ${y0}
                     L ${x0 + rCosAlpha1} ${y0 - rSinAlpha1}
                     A ${r} ${r} 0 0 1 ${x0 - rSinAlpha2} ${y0 + rCosAlpha2}
-                    
                 `}
                 style={{ transformOrigin: `50% 50%`, transform: `translate(110px, -45px)` }}
             />
