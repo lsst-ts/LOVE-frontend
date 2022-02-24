@@ -1,7 +1,17 @@
 
 .container {
-    
+    display: flex;
+    align-self: center;
+    flex-wrap: wrap;
+    position: relative;
 }
+
+.container svg {
+    vertical-align: top;
+    margin: auto;
+    width: 85%;
+    height: auto;
+  }
 
 .cls1,
 .cls8 {

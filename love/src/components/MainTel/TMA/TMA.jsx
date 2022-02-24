@@ -31,8 +31,8 @@ export default class TMA extends Component {
   };
 
   static defaultProps = {
-    width: 500,
-    height: 500,
+    width: 1090,
+    height: 880,
   };
 
   componentDidMount() {
@@ -44,6 +44,7 @@ export default class TMA extends Component {
   }
 
   render() {
+    // const { width, height } = this.props;
     const trackID = this.props.trackID;
     const commander = this.props.commander;
     const connected = this.props.connected;
