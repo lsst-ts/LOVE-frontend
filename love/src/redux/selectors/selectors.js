@@ -1057,7 +1057,7 @@ export const getTMASummary = (state) => {
     connected: summaryData['event-MTMount-0-connected']
       ? summaryData['event-MTMount-0-connected'][0].command.value
       : false,
-    balancing: summaryData['event-MTMount-0-commander']
+    balancing: summaryData['event-MTMount-0-balanceSystemState']
       ? summaryData['event-MTMount-0-balanceSystemState'][0].powerState.value
       : 0,
   };
@@ -1149,7 +1149,7 @@ export const getDrivesAzimuthElevationState = (state) => {
  * Selects the Mirror Covers status for Mirror Covers view
  * @param {object} state
  */
- export const getMirrorCoversMotionState = (state) => {
+export const getMirrorCoversMotionState = (state) => {
   const subscriptions = [
     'event-MTMount-0-mirrorCoversMotionState',
   ];
