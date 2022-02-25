@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { relativeTime } from 'Utils';
+import {
+  relativeTime,
+  closestEquivalentAngle,
+} from 'Utils';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import styles from './PolarPlot.module.css';
 
@@ -165,15 +168,10 @@ export default class PolarPlot extends Component {
     };
   };
 
-  closestEquivalentAngle = (from, to) => {
-    const delta = ((((to - from) % 360) + 540) % 360) - 180;
-    return from + delta;
-  };
-
   componentDidUpdate(prevProps) {
     const azimuthPosition = this.props.domeAzimuth?.azimuthPosition?.value ?? 0;
     const prevAzimuth = prevProps.domeAzimuth?.azimuthPosition?.value ?? 0;
-    if (prevAzimuth !== azimuthPosition) this.prevAzimuth = this.closestEquivalentAngle(this.prevAzimuth, prevAzimuth);
+    if (prevAzimuth !== azimuthPosition) this.prevAzimuth = closestEquivalentAngle(this.prevAzimuth, prevAzimuth);
   }
 
   // zip two array into one
@@ -242,7 +240,7 @@ export default class PolarPlot extends Component {
     const rSinAlpha = r * Math.sin(alpha);
     const rCosAlpha = r * Math.cos(alpha);
     const azimuthPosition = this.props.domeAzimuth?.azimuthPosition?.value ?? 0;
-    const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, azimuthPosition);
+    const equivalentAzimuth = closestEquivalentAngle(this.prevAzimuth, azimuthPosition);
 
     const { controls, setTimeWindow, timeWindow, setIsLive, isLive, setHistoricalData } = this.props;
     return (
