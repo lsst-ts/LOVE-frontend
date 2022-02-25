@@ -133,6 +133,9 @@ export default class M2 extends Component {
 
     const colorInterpolate = d3.scaleLinear().domain(d3.extent(values)).range([0, 1]);
 
+    const selectedActuator = this.getActuator(this.state.selectedActuator);
+    console.log(selectedActuator);
+
     this.setState({
       colormap: (val) => colorScale(colorInterpolate(val)),
     });
@@ -324,21 +327,22 @@ export default class M2 extends Component {
     d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
 
     if (
-      this.state.selectedForceParameter !== prevState.selectedForceParameter ||
-      this.props[this.state.selectedForceInput] !== prevProps[this.state.selectedForceInput]
+      prevProps.axialForceApplied !==
+      this.props.axialForceApplied /* ||
+      prevProps.axialForceMeasured !== this.props.axialForceMeasured */
     ) {
-      const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
-      this.setState({ actuatorsForce: forceData });
+      this.setState({ actuatorsForce: this.props.axialForceApplied });
     }
 
     if (this.state.actuators !== prevState.actuators) {
+      // Dummy data
       const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
     }
 
-    if (this.state.actuatorsForce !== prevState.actuatorsForce) {
+    if (prevState.actuatorsForce !== this.state.actuatorsForce) {
       this.createColorScale(this.state.actuatorsForce);
     }
 
@@ -729,13 +733,15 @@ export default class M2 extends Component {
               </div>
             </div>
 
+            <span>Force</span>
             <div className={styles.forceGradientWrapper}>
-              <span>Force</span>
               {/* add uniqueid */}
               <div id="color-scale" className={styles.forceGradient}>
                 <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minForce} [N]</span>
+                <span style={{ position: 'absolute', top: '-2em', left: 0 }}>{minForce} [N]</span>
                 <svg className={styles.colorScaleSvg} viewBox={`0 0 350 40`}></svg>
                 <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxForce} [N]</span>
+                <span style={{ position: 'absolute', top: '-2em', right: 0 }}>{maxForce} [N]</span>
               </div>
             </div>
 
