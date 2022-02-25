@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { closestEquivalentAngle } from 'Utils';
 import styles from './Dome.module.css';
 
 export default class DomeShutter extends Component {
@@ -32,13 +33,8 @@ export default class DomeShutter extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.azimuthPosition !== this.props.azimuthPosition)
-      this.prevAzimuth = this.closestEquivalentAngle(this.prevAzimuth, prevProps.azimuthPosition);
+      this.prevAzimuth = closestEquivalentAngle(this.prevAzimuth, prevProps.azimuthPosition);
   }
-
-  closestEquivalentAngle = (from, to) => {
-    const delta = ((((to - from) % 360) + 540) % 360) - 180;
-    return from + delta;
-  };
 
   render() {
     const { width, height } = this.props;
@@ -53,7 +49,7 @@ export default class DomeShutter extends Component {
     const rCosAlpha = r * Math.cos(alpha);
     const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
-    const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
+    const equivalentAzimuth = closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
         <defs>

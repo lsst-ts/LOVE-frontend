@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { closestEquivalentAngle } from 'Utils';
 import styles from './Elevation.module.css';
 
 export default class Elevation extends Component {
@@ -22,16 +23,17 @@ export default class Elevation extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.elevationActualPosition !== this.props.elevationActualPosition)
-      this.prevElevationActual = this.closestEquivalentAngle(this.prevElevationActual, prevProps.elevationActualPosition);
-    if (prevProps.elevationDemandPosition !== this.props.elevationDemandPosition)
-      this.prevElevationDemand = this.closestEquivalentAngle(this.prevElevationDemand, prevProps.elevationDemandPosition);
+    if (prevProps.elevationActualPosition !== this.props.elevationActualPosition) {
+      this.setState((prevState) => ({
+        prevElevationActual: closestEquivalentAngle(prevState.prevElevationActual, this.props.elevationActualPosition)
+      }));
+    }
+    if (prevProps.elevationDemandPosition !== this.props.elevationDemandPosition) {
+      this.setState((prevState) => ({
+        prevElevationDemand: closestEquivalentAngle(prevState.prevElevationDemand, this.props.elevationDemandPosition)
+      }));
+    }
   }
-
-  closestEquivalentAngle = (from, to) => {
-    const delta = ((((to - from) % 360) + 540) % 360) - 180;
-    return from + delta;
-  };
 
   render() {
     return (
@@ -42,8 +44,8 @@ export default class Elevation extends Component {
   }
 
   getSvg = (props) => {
-    const equivalentElevationActual = this.closestEquivalentAngle(this.prevElevationActual, this.props.elevationActualPosition);
-    const equivalentElevationDemand = this.closestEquivalentAngle(this.prevElevationDemand, this.props.elevationDemandPosition);
+    const equivalentElevationActual = closestEquivalentAngle(this.prevElevationActual, this.props.elevationActualPosition);
+    const equivalentElevationDemand = closestEquivalentAngle(this.prevElevationDemand, this.props.elevationDemandPosition);
 
       return (
         <svg
