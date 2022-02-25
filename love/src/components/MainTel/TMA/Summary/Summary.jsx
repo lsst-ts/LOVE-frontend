@@ -37,12 +37,23 @@ export default class Summary extends Component {
       elevationDemandPosition: PropTypes.number,
     };
     
-    static defaultProps = {};
-
-    constructor(props) {
-        super(props);
-    }
-
+    static defaultProps = {
+      trackID: '',
+      commander: 0,
+      connected: false,
+      balancing: 0,
+      azimuthSystem: 0,
+      azimuthMotion: 0,
+      azimuthLimits: 0,
+      azimuthActualPosition: 0,
+      azimuthDemandPosition: 0,
+      elevationSystem: 0,
+      elevationMotion: 0,
+      elevationLimits: 0,
+      elevationActualPosition: 0,
+      elevationDemandPosition: 0,
+    };
+    
     render() {
         const trackID = this.props.trackID ? this.props.trackID : '' ;
         const commanderValue = this.props.commander ? mtMountCommanderStateMap[this.props.commander] : mtMountCommanderStateMap[0];

@@ -17,7 +17,7 @@
     position: absolute;
     left: 10%;
     top: 0%;
-    width: 10%;
+    width: 13%;
   }
 
 .cls1 {
@@ -67,17 +67,11 @@
 }
 
 .cls4, .cls5 {
-    /* stroke: #fff; */
     stroke: none;
 }
 
-/* .cls4 {
-    opacity: 0.3;
-}
- */
 .cls4 {
     fill: #bcd8e2;
-    /* fill-opacity: 0.45; */
   }
 
 .cls5 {

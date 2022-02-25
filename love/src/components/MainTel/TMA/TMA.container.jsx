@@ -9,12 +9,12 @@ import {
   getDrivesAzimuthElevationState,
   getMirrorCoversMotionState,
 } from 'redux/selectors';
-// import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
 export const schema = {
   description:
     'View of Telescope Mount Assembly',
-  defaultSize: [61, 32],
+  defaultSize: [109, 88],
   props: {
     title: {
       type: 'string',
@@ -30,9 +30,9 @@ const TMAContainer = ({
   unsubscribeToStreams,
   ...props
 }) => {
-  // if (props.isRaw) {
-  //   return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
-  // }
+  if (props.isRaw) {
+     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
+   }
   return (
     <TMA
       subscribeToStreams={subscribeToStreams}

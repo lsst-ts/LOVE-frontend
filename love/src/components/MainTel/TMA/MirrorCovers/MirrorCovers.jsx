@@ -21,33 +21,39 @@ export default class MirrorCovers extends Component {
   static defaultProps = {
     azimuthActualPosition: 0,
     azimuthDemandPosition: 0,
+    mirrorCovers: 0,
   };
 
   constructor(props) {
     super(props);
-    this.prevAzimuthActual = 0;
-    this.prevAzimuthDemand = 0;
+    this.state = { 
+        prevAzimuthActual: 0,
+        prevAzimuthDemand: 0,
+    }
+    
   }
 
   componentDidUpdate(prevProps) {
+      console.log('componetDidUpdate', prevProps, this.props);
     if (prevProps.azimuthActualPosition !== this.props.azimuthActualPosition) {
-      this.prevAzimuthActual = this.closesEquivalentAngle(
+      /* this.prevAzimuthActual = this.closesEquivalentAngle(
         prevProps.prevAzimuthActual, this.props.azimuthActualPosition
-      );
-      /* this.setState((prevState) => ({
+      ); */
+      this.setState((prevState) => ({
         prevAzimuthActual: this.closesEquivalentAngle(prevState.prevAzimuthActual, this.props.azimuthActualPosition)
-      })); */
+      }));
     }
     if (prevProps.azimuthDemandPosition !== this.props.azimuthDemandPosition) {
-      this.prevAzimuthDemand = this.closesEquivalentAngle(
+      /* this.prevAzimuthDemand = this.closesEquivalentAngle(
         prevProps.prevAzimuthDemand, this.props.azimuthDemandPosition
-      );
-      /* this.setState((prevState) => ({
+      ); */
+      this.setState((prevState) => ({
         prevAzimuthDemand: this.closesEquivalentAngle(prevState.prevAzimuthDemand, this.props.azimuthDemandPosition)
-      })); */
+      }));
     }
   }
 
+  // move to Utils
   closestEquivalentAngle = (from, to) => {
     const delta = ((((to - from) % 360) + 540) % 360) - 180;
     return from + delta;
@@ -97,8 +103,8 @@ export default class MirrorCovers extends Component {
     const angleClosed = this.getAngleClosedCoverMirror();
     const angleClosedBorder = this.getAngleClosedCoverMirrorBorder();
     
-    const equivalentAzimuthActual = this.closestEquivalentAngle(this.prevAzimuthActual, this.props.azimuthActualPosition);
-    const equivalentAzimuthDemand = this.closestEquivalentAngle(this.prevAzimuthDemand, this.props.azimuthDemandPosition);
+    const equivalentAzimuthActual = this.closestEquivalentAngle(this.state.prevAzimuthActual, this.props.azimuthActualPosition);
+    const equivalentAzimuthDemand = this.closestEquivalentAngle(this.state.prevAzimuthDemand, this.props.azimuthDemandPosition);
 
     return (
         <svg
