@@ -343,7 +343,6 @@ export const motorDriveStateMap = {
   true: 'ENABLED',
 };
 
-// TODO: Pending Style
 export const stateToStyleMTMountCommander = {
   'NONE': 'invalid',
   'CSC': 'ok',
@@ -358,12 +357,11 @@ export const mtMountCommanderStateMap = {
   3: 'HHD',
 };
 
-// TODO: Pending Style
 export const stateToStyleMTMountPowerState = {
-  'OFF': 'warning',
+  'OFF': 'invalid',
   'ON': 'ok',
-  'FAULT': 'warning',
-  'TURNING_ON': 'running',
+  'FAULT': 'alert',
+  'TURNING_ON': 'warning',
   'TURNING_OFF': 'warning',
   'UNKNOWN': 'invalid',
 };
@@ -377,13 +375,12 @@ export const mtMountPowerStateMap = {
   15: 'UNKNOWN',
 };
 
-// TODO: Pending Style
 export const stateToStyleMTMountAxisMotionState = {
-  'STOPPING': 'running',
+  'STOPPING': 'warning',
   'STOPPED': 'ok',
   'MOVING_POINT_TO_POINT': 'warning',
   'JOGGING': 'warning',
-  'TRACKING': 'running',
+  'TRACKING': 'warning',
   'TRACKING_PAUSED': 'warning',
 };
 
@@ -394,15 +391,6 @@ export const mtMountAxisMotionStateMap = {
   3: 'JOGGING',
   4: 'TRACKING',
   5: 'TRACKING_PAUSED',
-};
-
-// TODO: Pending Style
-export const stateToStyleMTMountMirrorCoversState = {
-  'RETRACTED': 'running',
-  'DEPLOYED': 'ok',
-  'RETRACTING': 'warning',
-  'DEPLOYING': 'warning',
-  'LOST': 'unknown',
 };
 
 export const mtMountMirrorCoversStateMap = {

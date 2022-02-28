@@ -721,7 +721,7 @@ export const getAzimuthState = (state) => {
 };
 
 /**
- * Selects the Azimuth status for summary view
+ * Selects the Elevation status for summary view
  * @param {object} state
  */
 export const getElevationState = (state) => {
