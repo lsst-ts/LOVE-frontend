@@ -10,11 +10,11 @@ import styles from './MirrorCovers.module.css';
 
 export default class MirrorCovers extends Component {
   static propTypes = {
-    /** Azimuth actual position */
+    /** Azimuth Position measured by the encoders */
     azimuthActualPosition: PropTypes.number,
-    /** Azimuth demand position */
+    /** Azimuth Position computed by the path generator. */
     azimuthDemandPosition: PropTypes.number,
-    /** Mirror Covers Motion State */
+    /** Mirror Covers Motion Deployment State */
     mirrorCovers: PropTypes.number,
   };
 

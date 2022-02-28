@@ -63,19 +63,15 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTMount-0-azimuthDrives',
     'telemetry-MTMount-0-elevation',
     'telemetry-MTMount-0-elevationDrives',
-    'event-MTMount-0-azimuthDrivesThermalSystemState',
-    'event-MTMount-0-azimuthInPosition',
     'event-MTMount-0-azimuthLimits',
     'event-MTMount-0-azimuthMotionState',
     'event-MTMount-0-azimuthSystemState',
     'event-MTMount-0-balanceSystemState',
     'event-MTMount-0-commander',
     'event-MTMount-0-connected',
-    'event-MTMount-0-elevationInPosition',
     'event-MTMount-0-elevationLimits',
     'event-MTMount-0-elevationMotionState',
     'event-MTMount-0-elevationSystemState',
-    'event-MTMount-0-mirrorCoverLocksMotionState',
     'event-MTMount-0-mirrorCoversMotionState',
     'event-MTMount-0-target',
   ];
@@ -89,4 +85,12 @@ const mapDispatchToProps = (dispatch) => {
     },
   };
 };
+
+TMAContainer.propTypes = {
+  /** Wheter the component is in raw mode */
+  isRaw: PropTypes.bool,
+  /** List of the component's subscriptions */
+  subscriptions: PropTypes.array,
+};
+
 export default connect(mapStateToProps, mapDispatchToProps)(TMAContainer);

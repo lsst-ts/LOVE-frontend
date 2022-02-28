@@ -6,6 +6,17 @@ import styles from './Drives.module.css';
 
 
 export default class Drives extends Component {
+    static propTypes = {
+        /** Array data of Drivers about the azimuth */
+        azimuthDrives: PropTypes.number,
+        /** Array data of Drivers about the elevation */
+        elevationDrivers: PropTypes.number,
+    };
+
+    static defaultProps = {
+        azimuthDrives: [],
+        elevationDrivers: [],
+    };
 
     getFieldName(num) {
         return 'angle-' + num;
