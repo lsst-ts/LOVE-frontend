@@ -21,19 +21,33 @@ import Limits from '../../../GeneralPurpose/Limits/Limits';
 
 export default class Summary extends Component {
     static propTypes = {
+      /** Unique target identifier. Echoed from the trackTarget command */
       trackID: PropTypes.string,
+      /** Who controls the low-level controller; a Commander enum. */
       commander: PropTypes.number,
+      /** Is the command (client) socket connected */
       connected: PropTypes.bool,
+      /** State of the balance system. Overall power state of the balancing system; a PowerState enum */
       balancing: PropTypes.number,
+      /** State of the azimuth axis. Power state of each motion controller; a PowerState enum. */
       azimuthSystem: PropTypes.number,
+      /** Azimuth Motion state, as an AxisMotionState enum. */
       azimuthMotion: PropTypes.number,
+      /** Azimuth Limits, as a LimitsMask enum mask. */
       azimuthLimits: PropTypes.number,
+      /** Azimuth Position measured by the encoders */
       azimuthActualPosition: PropTypes.number,
+      /** Azimuth Position computed by the path generator. */
       azimuthDemandPosition: PropTypes.number,
+      /** State of the elevation system. Power state; a PowerState enum */
       elevationSystem: PropTypes.number,
+      /** Motion state of the elevation axis */
       elevationMotion: PropTypes.number,
+      /** Elevation Limits, as a LimitsMask enum mask */
       elevationLimits: PropTypes.number,
+      /** Elevation Position measured by the encoders */
       elevationActualPosition: PropTypes.number,
+      /** Elevation Position computed by the path generator */
       elevationDemandPosition: PropTypes.number,
     };
     
