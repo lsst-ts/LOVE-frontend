@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import TMA from './TMA';
