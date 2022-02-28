@@ -50,7 +50,7 @@ export default class Summary extends Component {
       /** Elevation Position computed by the path generator */
       elevationDemandPosition: PropTypes.number,
     };
-    
+
     static defaultProps = {
       trackID: '',
       commander: 0,
@@ -71,7 +71,7 @@ export default class Summary extends Component {
     render() {
         const trackID = this.props.trackID ? this.props.trackID : '' ;
         const commanderValue = this.props.commander ? mtMountCommanderStateMap[this.props.commander] : mtMountCommanderStateMap[0];
-        const connected = this.props.connected ? true : false;
+        const connected = this.props.connected ? this.props.connected : false;
         const balancingValue = this.props.balancing ? mtMountPowerStateMap[this.props.balancing] : mtMountPowerStateMap[0];
 
         const azimuthSystemValue = this.props.azimuthSystem ? mtMountPowerStateMap[this.props.azimuthSystem] : mtMountPowerStateMap[0];
