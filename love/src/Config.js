@@ -197,6 +197,60 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+// M1M3
+export const m1m3DetailedStateMap = {
+  1: 'DISABLED STATE',
+  2: 'FAULT STATE',
+  3: 'OFFLINE STATE',
+  4: 'STANDBY STATE',
+  5: 'PARKED STATE',
+  6: 'RAISING STATE',
+  7: 'ACTIVE STATE',
+  8: 'LOWERING STATE',
+  9: 'PARKED ENGINEERING STATE',
+  10: 'RAISING ENGINEERING STATE',
+  11: 'ACTIVE ENGINEERING STATE',
+  12: 'LOWERING ENGINEERING STATE',
+  13: 'LOWERING FAULT STATE',
+  14: 'PROFILE HARDPOINT CORRECTION STATE',
+  0: 'UNKNOWN',
+};
+
+export const m1m3DetailedStateToStyle = {
+  'DISABLED STATE': 'warning',
+  'FAULT STATE': 'warning',
+  'OFFLINE STATE': 'warning',
+  'STANDBY STATE': 'warning',
+  'PARKED STATE': 'ok',
+  'RAISING STATE': 'running',
+  'ACTIVE STATE': 'ok',
+  'LOWERING STATE': 'running',
+  'PARKED ENGINEERING STATE': 'ok',
+  'RAISING ENGINEERING STATE': 'running',
+  'ACTIVE ENGINEERING STATE': 'ok',
+  'LOWERING ENGINEERING STATE': 'running',
+  'LOWERING FAULT STATE': 'running',
+  'PROFILE HARDPOINT CORRECTION STATE': 'ok',
+};
+
+export const m1mActuatorILCStateMap = {
+  1: 'ON',
+  0: 'OFF',
+};
+
+export const m1m3HardpointActuatorMotionStateMap = {
+  1: 'CHASING',
+  2: 'STEPPING',
+  3: 'QUICK POSITIONING',
+  4: 'FINE POSITIONING',
+  0: 'STANDBY',
+};
+
+export const m1m3ILCStateToStyle = {
+  ON: 'ok',
+  OFF: 'warning',
+};
+
 // Dome and mount view
 export const domeAzimuthStateMap = {
   1: 'NOT MOVING',
@@ -781,6 +835,33 @@ export const MTCSCommands = {
   },
 };
 
+export const M1M3ActuatorForces = {
+  appliedAberrationForces: ['zForces'],
+  appliedAccelerationForces: ['xForces', 'yForces', 'zForces'],
+  appliedActiveOpticForces: ['zForces'],
+  appliedAzimuthForces: ['xForces', 'yForces', 'zForces'],
+  appliedBalanceForces: ['xForces', 'yForces', 'zForces'],
+  appliedCylinderForces: ['secondaryCylinderForces', 'primaryCylinderForces'],
+  appliedElevationForces: ['xForces', 'yForces', 'zForces'],
+  appliedForces: ['xForces', 'yForces', 'zForces'],
+  appliedOffsetForces: ['xForces', 'yForces', 'zForces'],
+  appliedStaticForces: ['xForces', 'yForces', 'zForces'],
+  appliedThermalForces: ['xForces', 'yForces', 'zForces'],
+  appliedVelocityForces: ['xForces', 'yForces', 'zForces'],
+  preclippedAberrationForces: ['zForces'],
+  preclippedAccelerationForces: ['xForces', 'yForces', 'zForces'],
+  preclippedActiveOpticForces: ['zForces'],
+  preclippedAzimuthForces: ['xForces', 'yForces', 'zForces'],
+  preclippedBalanceForces: ['xForces', 'yForces', 'zForces'],
+  preclippedCylinderForces: ['secondaryCylinderForces', 'primaryCylinderForces'],
+  preclippedElevationForces: ['xForces', 'yForces', 'zForces'],
+  preclippedForces: ['xForces', 'yForces', 'zForces'],
+  preclippedOffsetForces: ['xForces', 'yForces', 'zForces'],
+  preclippedStaticForces: ['xForces', 'yForces', 'zForces'],
+  preclippedThermalForces: ['xForces', 'yForces', 'zForces'],
+  preclippedVelocityForces: ['xForces', 'yForces', 'zForces'],
+};
+
 export const M1M3ActuatorPositions = [
   { id: 101, position: [-3.0582e1, 0.0] },
   { id: 102, position: [-5.6794e1, 0.0] },
@@ -938,4 +1019,13 @@ export const M1M3ActuatorPositions = [
   { id: 441, position: [-1.4399e1, 1.57687e2] },
   { id: 442, position: [-4.272e1, 1.52471e2] },
   { id: 443, position: [-6.315e1, 1.45385e2] },
+];
+
+export const M1M3HardpointPositions = [
+  { id: 1, actuator: { position: [-5.6794e1, -9.0804e1]}, mini: {position: [45.99, 32.53]}},
+  { id: 2, actuator: { position: [-1.0922e2, 0]}, mini: {position: [28.7, 64.05]}},
+  { id: 3, actuator: { position: [-5.6794e1, 9.0804e1] }, mini: {position: [45.99, 97.21]}},
+  { id: 4, actuator: { position: [5.6794e1, 9.0804e1] }, mini: {position: [80.62, 97.21]}},
+  { id: 5, actuator: { position: [1.0922e2, 0]}, mini: {position: [99.19, 64.05]}},
+  { id: 6, actuator: { position: [5.6794e1, -9.0804e1]}, mini: {position: [80.62, 32.53]}},
 ];

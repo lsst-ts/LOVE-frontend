@@ -40,21 +40,6 @@ export default class SummaryTable extends Component {
   };
 
   render() {
-    // `event-ATHexapod-${index}-inPosition`,
-    // `event-ATHexapod-${index}-readyForCommand`,
-    // `telemetry-ATHexapod-${index}-positionStatus`,
-    // //ATPneumatics
-    // `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
-    // `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
-    // `telemetry-ATPneumatics-${index}-loadCell`,
-    // `telemetry-ATPneumatics-${index}-m1AirPressure`,
-    // //ATMCS
-    // `event-ATMCS-${index}-m3InPosition`,
-    // `event-ATMCS-${index}-m3State`,
-    // `event-ATMCS-${index}-m3PortSelected`,
-    // `event-ATMCS-${index}-nasmyth1RotatorInPosition`,
-    // `event-ATMCS-${index}-nasmyth2RotatorInPosition`,
-
     //ATMCS
     const m3State = m3RotatorStateMap[this.props.m3State] || m3RotatorStateMap[0];
     const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected] || m3PortSelectedStateMap[0];
