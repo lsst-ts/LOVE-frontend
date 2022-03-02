@@ -34,7 +34,7 @@ pipeline {
           }
           dockerImageName = dockerImageName + image_tag
           echo "dockerImageName: ${dockerImageName}"
-          dockerImage = docker.build dockerImageName
+          dockerImage = docker.build(dockerImageName, "-f docker/Dockerfile .")
         }
       }
     }
@@ -61,12 +61,18 @@ pipeline {
     stage("Run tests") {
       when {
         anyOf {
+          branch "main"
           branch "develop"
+          branch "bugfix/*"
+          branch "hotfix/*"
+          branch "release/*"
+          branch "tickets/*"
+          branch "PR-*"
         }
       }
       steps {
         script {
-          sh "docker image build -f Dockerfile-test -t love-frontend-test  ."
+          sh "docker build -f docker/Dockerfile-test -t love-frontend-test  ."
           sh "docker run love-frontend-test"
         }
       }
