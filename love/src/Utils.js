@@ -400,7 +400,69 @@ export default class ManagerInterface {
       // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}tcs/docstrings`;
+    const url = `${this.getApiBaseUrl()}tcs/aux/docstrings`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static runMTCSCommand(commandName, params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}tcs/main`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        command_name: commandName,
+        params,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.info(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static getMTCSDocstrings() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}tcs/main/docstrings`;
     return fetch(url, {
       method: 'GET',
       headers: this.getHeaders(),
@@ -705,6 +767,15 @@ export const parseTimestamp = (timestamp) => {
   if (typeof timestamp === 'number') return DateTime.fromMillis(timestamp);
   if (typeof timestamp === 'string') return DateTime.fromISO(timestamp);
   return null;
+};
+
+/**
+ * Returns value if it is integer or float fixed to 5 decimals
+ * @param {number} value, number to convert
+ */
+export const defaultNumberFormatter = (value) => {
+  if (Number.isNaN(value)) return value;
+  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(4);
 };
 
 /**

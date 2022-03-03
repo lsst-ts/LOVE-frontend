@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import styles from './TCSCommands.module.css';
+import PropTypes from 'prop-types';
+import { Remarkable } from 'remarkable';
+import AceEditor from 'react-ace';
+import 'brace/mode/json';
+import 'brace/theme/solarized_dark';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -8,16 +12,28 @@ import ScriptQueue from 'components/ScriptQueue/ScriptQueue';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText.jsx';
 import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
-import { TCSCommands } from 'Config.js';
+import { ATCSCommands, MTCSCommands } from 'Config.js';
 import ManagerInterface from 'Utils';
-import { Remarkable } from 'remarkable';
+import styles from './TCSCommands.module.css';
+import JSONPretty from 'react-json-pretty';
 
 var md = new Remarkable();
 
 const angleRegExp = new RegExp(/(\d\d(:| )\d\d(:| )\d\d)+(\.\d{1,10})?$/);
 const floatRegExp = new RegExp(/^-?\d*(\.\d+)?$/);
+const timeRegExp = new RegExp(/^(\d\d\d\d-\d\d-\d\d)(T| )(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]+(\.\d{1,10})?$/);
 
 export default class CommandPanel extends Component {
+  static propTypes = {
+    title: PropTypes.string,
+    nameTCS: PropTypes.string,
+    hasRawMode: PropTypes.bool,
+    scriptQueueIndex: PropTypes.number,
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
+    state: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,15 +43,41 @@ export default class CommandPanel extends Component {
       docstrings: {},
       isModalOpen: false,
     };
+    this.TCSCommands = {};
+    if (props.nameTCS === "aux") this.TCSCommands = ATCSCommands;
+    if (props.nameTCS === "main") this.TCSCommands = MTCSCommands;    
   }
+
+  isAuxTCS = () => {
+    if (this.props.nameTCS === "aux") {
+      return true;
+    }
+    return false;
+  };
+
+  isMainTCS = () => {
+    if (this.props.nameTCS === "main") {
+      return true;
+    }
+    return false;
+  };
 
   componentDidMount = () => {
     this.props.subscribeToStreams();
-    ManagerInterface.getATCSDocstrings().then((data) => {
-      this.setState({
-        docstrings: data,
+    if (this.isAuxTCS()) {
+      ManagerInterface.getATCSDocstrings().then((data) => {
+        this.setState({
+          docstrings: data,
+        });
       });
-    });
+    }
+    if (this.isMainTCS()) {
+      ManagerInterface.getMTCSDocstrings().then((data) => {
+        this.setState({
+          docstrings: data,
+        });
+      });
+    }
   };
 
   componentWillUnmount = () => {
@@ -56,7 +98,17 @@ export default class CommandPanel extends Component {
     this.setState({
       paramWarnings: {
         ...this.state.paramWarnings,
-        [name]: isNaN(parseFloat(testValue.match(floatRegExp))) && !angleRegExp.test(testValue),
+        [name]: Number.isNaN(parseFloat(testValue.match(floatRegExp))) && !angleRegExp.test(testValue),
+      },
+    });
+  };
+
+  checkInvalidTime = (name, value) => {
+    const testValue = value ?? '';
+    this.setState({
+      paramWarnings: {
+        ...this.state.paramWarnings,
+        [name]: !timeRegExp.test(testValue),
       },
     });
   };
@@ -65,15 +117,15 @@ export default class CommandPanel extends Component {
     const [paramType, defaultValue] = param;
     const { paramValues } = this.state;
     return (
-      <div className={[styles.paramContainer, paramType == 'boolean' ? styles.checkboxParam : ''].join(' ')}>
+      <div className={[styles.paramContainer, paramType === 'boolean' ? styles.checkboxParam : ''].join(' ')}>
         <div className={styles.paramLabel}>{name}</div>
-        {paramType == 'string' && (
+        {paramType === 'string' && (
           <Input value={paramValues[name]} onChange={(e) => this.updateParamValue(name, e.target.value, paramType)} />
         )}
-        {paramType == 'number' && (
+        {paramType === 'number' && (
           <Input value={paramValues[name]} onChange={(e) => this.updateParamValue(name, e.target.value, paramType)} />
         )}
-        {paramType == 'angle' && (
+        {paramType === 'angle' && (
           <>
             <Input
               value={paramValues[name]}
@@ -87,7 +139,7 @@ export default class CommandPanel extends Component {
             )}
           </>
         )}
-        {paramType == 'boolean' && (
+        {paramType === 'boolean' && (
           <input
             type="checkbox"
             defaultChecked={defaultValue}
@@ -101,12 +153,49 @@ export default class CommandPanel extends Component {
             onChange={(selection) => this.updateParamValue(name, selection, paramType)}
           />
         )}
+        {paramType === 'time' && (
+          <>
+            <Input
+              value={paramValues[name]}
+              onChange={(e) => this.updateParamValue(name, e.target.value, paramType)}
+              onBlur={() => this.checkInvalidTime(name, paramValues[name])}
+            />
+            {this.state.paramWarnings[name] && (
+              <div className={styles.paramWarning}>
+                Time should be a string (YYYY-MM-DDTHH:MM:SS.ssss or YYYY-MM-DD HH:MM:SS.ssss)
+              </div>
+            )}
+          </>
+        )}
+        {paramType === 'dict' && (
+          <>
+            <AceEditor
+              value={paramValues[name]}
+              onChange={(val) => {
+                try {
+                  this.updateParamValue(name, val, paramType);
+                } catch (error) {
+                  console.error(error);
+                }
+              }}
+              mode="json"
+              className={styles.rndEditor}
+              theme="solarized_dark"
+              name="UNIQUE_ID_OF_DIV"
+              width={'100%'}
+              height='100px'
+              editorProps={{ $blockScrolling: true }}
+              fontSize={14}
+            />
+            <JSONPretty data={paramValues[name]} />
+          </>
+        )}
       </div>
     );
   };
 
   selectCommand = (commandName) => {
-    const paramsDict = TCSCommands[commandName] ?? {};
+    const paramsDict = this.TCSCommands[commandName] ?? {};
     const paramNames = Object.keys(paramsDict);
     const paramValues = {};
     paramNames.forEach((paramName) => (paramValues[paramName] = paramsDict[paramName][1]));
@@ -114,7 +203,7 @@ export default class CommandPanel extends Component {
   };
 
   render() {
-    const paramsDict = TCSCommands[this.state.selectedCommand] ?? {};
+    const paramsDict = this.TCSCommands[this.state.selectedCommand] ?? {};
     const queueState = {
       statusText: ScriptQueue.stateStyleDict[this.props.state],
       name: this.props.state,
@@ -141,20 +230,25 @@ export default class CommandPanel extends Component {
           )}
         </Modal>
         <div className={[styles.queueStateContainer, !isAvailable ? '' : styles.removed].join(' ')}>
-          <span className={styles.queueStateLabel}>AUX TEL QUEUE STATE</span>
+          <span className={styles.queueStateLabel}>
+            {this.props.nameTCS && this.props.nameTCS.toUpperCase()} TEL QUEUE STATE
+          </span>
           <StatusText status={queueState.statusText}>{queueState.name}</StatusText>
           <span className={styles.warningText}>
             <span className={styles.warningIcon}>
               <WarningIcon></WarningIcon>
             </span>
-            <span>TCS commands are not allowed while queue is running</span>
+            <span>
+              {this.props.nameTCS && 
+                this.props.nameTCS.toUpperCase()} TCS commands are not allowed while queue is running
+            </span>
           </span>
         </div>
 
         <div className={styles.selectContainer}>
           <Select
             controlClassName={styles.select}
-            options={Object.keys(TCSCommands)}
+            options={Object.keys(this.TCSCommands)}
             option={this.state.selectedCommand}
             placeholder="Select a command"
             onChange={(selection) => this.selectCommand(selection?.value)}
@@ -174,13 +268,24 @@ export default class CommandPanel extends Component {
         </div>
         {this.state.selectedCommand && (
           <div className={styles.sendButtonContainer}>
-            <Button
-              status="info"
-              disabled={!this.props.commandExecutePermission || !isAvailable}
-              onClick={() => ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)}
-            >
-              SEND
-            </Button>
+            {this.isAuxTCS() && (
+              <Button
+                status="info"
+                disabled={!this.props.commandExecutePermission || !isAvailable}
+                onClick={() => ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)}
+              >
+                SEND
+              </Button>
+            )}
+            {this.isMainTCS() && (
+              <Button
+                status="info"
+                disabled={!this.props.commandExecutePermission || !isAvailable}
+                onClick={() => ManagerInterface.runMTCSCommand(this.state.selectedCommand, this.state.paramValues)}
+              >
+                SEND
+              </Button>
+            )}
           </div>
         )}
       </div>

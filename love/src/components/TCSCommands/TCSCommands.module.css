@@ -98,3 +98,8 @@
 .removed {
   display: none;
 }
+
+.rndEditor {
+  border-radius: 4px;
+  width: 400px;
+}

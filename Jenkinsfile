@@ -12,7 +12,7 @@ pipeline {
     stage("Build Docker image") {
       when {
         anyOf {
-          branch "master"
+          branch "main"
           branch "develop"
           branch "bugfix/*"
           branch "hotfix/*"
@@ -34,14 +34,14 @@ pipeline {
           }
           dockerImageName = dockerImageName + image_tag
           echo "dockerImageName: ${dockerImageName}"
-          dockerImage = docker.build dockerImageName
+          dockerImage = docker.build(dockerImageName, "-f docker/Dockerfile .")
         }
       }
     }
     stage("Push Docker image") {
       when {
         anyOf {
-          branch "master"
+          branch "main"
           branch "develop"
           branch "bugfix/*"
           branch "hotfix/*"
@@ -61,12 +61,18 @@ pipeline {
     stage("Run tests") {
       when {
         anyOf {
+          branch "main"
           branch "develop"
+          branch "bugfix/*"
+          branch "hotfix/*"
+          branch "release/*"
+          branch "tickets/*"
+          branch "PR-*"
         }
       }
       steps {
         script {
-          sh "docker image build -f Dockerfile-test -t love-frontend-test  ."
+          sh "docker build -f docker/Dockerfile-test -t love-frontend-test  ."
           sh "docker run love-frontend-test"
         }
       }
@@ -105,12 +111,12 @@ pipeline {
         build(job: '../LOVE-integration-tools/develop', wait: false)
       }
     }
-    stage("Trigger master deployment") {
+    stage("Trigger main deployment") {
       when {
-        branch "master"
+        branch "main"
       }
       steps {
-        build(job: '../LOVE-integration-tools/master', wait: false)
+        build(job: '../LOVE-integration-tools/main', wait: false)
       }
     }
 
