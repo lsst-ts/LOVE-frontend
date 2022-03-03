@@ -8,7 +8,7 @@ See the documentation here: https://lsst-ts.github.io/LOVE-frontend
 In order to use the LOVE-frontend as part of the LOVE system we recommend to use the docker-compose and configuration files provided in the [LOVE-integration-tools](https://github.com/lsst-ts/LOVE-integration-tools) repo. Please follow the instructions there.
 
 ## 2. Local load for development
-We provide a docker image and a docker-compose file in order to load the LOVE-frontend locally for development purposes, i.e. run tests and build documentation.
+We provide docker images and a docker-compose file in order to load the LOVE-frontend locally for development purposes, i.e. run tests and build documentation.
 
 This docker-compose does not copy the code into the image, but instead it mounts the repository inside the image, this way you can edit the code from outside the docker container with no need to rebuild or restart.
 
@@ -17,8 +17,9 @@ Follow these instructions to run the application in a docker container and get i
 
 1. Launch and get into the container:
 ```
-docker-compose up -d
-docker-exec frontend sh
+cd docker/
+docker-compose up -d --build
+docker-compose exec frontend sh
 ```
 
 ### 2.2 Run tests
@@ -38,6 +39,7 @@ If rather than build you want to launch a development server for the documentati
 ```
 yarn guide:start
 ```
+**INFO:** 
 
 ### Linting & Formatting
 In order to maintaing code linting and formatting we use `pre-commit` that runs **ESLint** (https://eslint.org/) and **Prettier** (https://prettier.io/) using Git Hooks. To enable this you have to:
@@ -52,5 +54,5 @@ pip install pre-commit
 pre-commit install
 ```
 
-3. Start developing! Linter and Formatter will be executed on every commit you make
+3. Start developing! Linter and Formatter will be executed on every commit you make.
 

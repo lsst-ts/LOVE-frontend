@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import AceEditor from 'react-ace';
+import 'brace/mode/json';
+import 'brace/theme/solarized_dark';
 import { Rnd } from 'react-rnd';
 import { toast } from 'react-toastify';
 import { withRouter, Prompt } from 'react-router-dom';
@@ -25,11 +27,7 @@ import ThumbnailIcon from '../../icons/ThumbnailIcon/ThumbnailIcon';
 import Select from '../../GeneralPurpose/Select/Select';
 import ConfirmationModal from '../../GeneralPurpose/ConfirmationModal/ConfirmationModal';
 import { LAYOUT_CONTAINER_ID } from '../../Layout/Layout';
-
 import { DEVICE_TO_SIZE, DEVICE_TO_COLS } from '../CustomView';
-
-import 'brace/mode/json';
-import 'brace/theme/solarized_dark';
 import ConfigForm from './ConfigForm';
 
 const deviceOptions = [
@@ -40,7 +38,6 @@ const deviceOptions = [
 ];
 
 /** RESPONSIVE LAYOUT STATES */
-
 const COLS_NOT_CHANGED = 'COLS_NOT_CHANGED';
 const COLS_DECREASED = 'COLS_DECREASED';
 const EDIT_NEEDS_CONFIRMATION = 'EDIT_NEEDS_CONFIRMATION';
@@ -232,7 +229,6 @@ class ViewEditor extends Component {
       });
       return;
     }
-
     this.setState({
       responsiveLayoutState: COLS_NOT_CHANGED,
     });
@@ -316,7 +312,6 @@ class ViewEditor extends Component {
 
   receiveSelection = (selection) => {
     this.hideSelectionModal();
-
     const parsedLayout = { ...this.getEditedViewLayout() };
     const additionalContent = {};
     let startingIndex = 0;
@@ -326,7 +321,6 @@ class ViewEditor extends Component {
       });
     }
     startingIndex += 1;
-
     selection.forEach((componentDict) => {
       const { schema } = componentDict;
       const { defaultSize } = schema;
@@ -440,11 +434,9 @@ class ViewEditor extends Component {
       });
       return;
     }
-
     if (this.state.responsiveLayoutState === EDIT_NEEDS_CONFIRMATION) {
       this.props.undo();
     }
-
     this.setState({
       responsiveLayoutState: EDIT_CANCELED,
     });
@@ -460,7 +452,6 @@ class ViewEditor extends Component {
       });
       return;
     }
-
     this.props.undo();
   };
   renderToolbar() {
