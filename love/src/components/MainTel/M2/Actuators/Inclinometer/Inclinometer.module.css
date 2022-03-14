@@ -1,0 +1,83 @@
+.cls-1 {
+  fill: #15242d;
+  stroke: #182e39;
+}
+
+.cls-1,
+.marker,
+.cls-3 {
+  stroke-miterlimit: 10;
+}
+
+.cls-1,
+.cls-3 {
+  stroke-width: 2px;
+}
+
+.marker {
+  fill: #fff;
+  fill-opacity: 0.2;
+  stroke: #fff;
+  transform-origin: 50% 99%;
+}
+
+.cls-3 {
+  fill: #27434f;
+  stroke: #27434f;
+  transform-origin: 50% 99%;
+}
+
+.svgContainer {
+  flex-grow: 1;
+  min-width: 180px;
+  width: 85%;
+  overflow: visible;
+  align-self: center;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex-wrap: wrap;
+}
+
+.title {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: var(--base-font-color);
+}
+
+.inclinometerValue {
+  font-size: 1em;
+}
+
+.value {
+  color: var(--base-font-color);
+}
+
+.inclinometerValue > :first-child {
+  display: inline-block;
+  width: 100px;
+  text-align: left;
+}
+
+.inclinometerValue > :nth-child(2) {
+  flex-grow: 1;
+  text-align: right;
+}
+
+.inclinometerValues {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  text-align: right;
+  width: 75%;
+  margin-top: 15px;
+}
+
+.axisLabel {
+  font-size: 1.2em;
+  fill: var(--secondary-font-color);
+}
