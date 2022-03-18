@@ -20,7 +20,7 @@ export default class Inclinometer extends Component {
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
     const inclinationTelemetrySourceValue = inclinationTelemetrySource ? 
               inclinationTelemetrySourceStateMap[inclinationTelemetrySource] : 
-              inclinationTelemetrySourceStateMap[1];
+              inclinationTelemetrySourceStateMap[defaultProps.inclinationTelemetrySource];
 
     return (
       <div className={styles.container}>
@@ -50,7 +50,7 @@ export default class Inclinometer extends Component {
               width="92.31"
               height="23.08"
             />
-            <text className={styles.axisLabel} x="150" y="-5">0°</text>
+            <text className={styles.axisLabel} x="146" y="-5">0°</text>
           </svg>
         <div className={styles.inclinometerValues}>
             <span>Inclination</span>

@@ -3,10 +3,9 @@ import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import {
   getM2State,
-  getM1M3ActuatorsState,
-  getM1M3ActuatorForces,
-  getM1M3HardpointMonitorData,
-  getM1M3HardpointActuatorState,
+  getM2Inclinometer,
+  getM2Actuator,
+  getM2ActuatorForce,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M2 from './M2';
@@ -24,13 +23,6 @@ export const schema = {
   },
 };
 
-const M2Container = (props) => {
-  if (props.isRaw) {
-    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
-  }
-  return <M2 {...props} />;
-};
-
 const arrayRandomValues = (len, max) => {
   const array = [];
   for (let i = 0; i < len; i++) {
@@ -39,26 +31,20 @@ const arrayRandomValues = (len, max) => {
   return array;
 };
 
-const arrayReferenceId = () => {
-  const array = [];
-  for (let i = 0; i < 72; i++) {
-    array.push(i + 1);
+const M2Container = (props) => {
+  if (props.isRaw) {
+    return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return array;
+  return <M2 {...props} />;
 };
 
 const mapStateToProps = (state) => {
   const m2State = getM2State(state);
-  const m2Telemetries = {
-    zenithAngleMeasured: 46.0,
-    axialActuatorSteps: arrayRandomValues(72, 20),
-    actuatorIlcState: arrayRandomValues(72, 5),
-    axialEncoderPositions: arrayRandomValues(72, 50),
-    axialForceApplied: arrayRandomValues(72, 2000),
-    axialForceMeasured: arrayRandomValues(72, 2000),
-  };
-  const actuatorReferenceId = arrayReferenceId();
-  return { ...m2State, ...m2Telemetries, actuatorReferenceId };
+  const inclinometerState = getM2Inclinometer(state);
+  const actuators = getM2Actuator(state);
+  const forces = getM2ActuatorForce(state);
+
+  return { ...m2State, ...inclinometerState, ...actuators, ...forces };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -74,6 +60,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM2-0-commandableByDDS',
     'event-MTM2-0-forceBalanceSystemStatus',
     'event-MTM2-0-m2AssemblyInPosition',
+    'event-MTM2-0-inclinationTelemetrySource',
   ];
   return {
     subscriptions,

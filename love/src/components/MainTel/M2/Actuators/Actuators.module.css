@@ -1,0 +1,97 @@
+.actuatorsContainer {
+  
+}
+
+.selectorAndInclinometerContainer {
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  grid-auto-rows: auto;
+  gap: 30px;
+}
+
+.inclinometerForcegradiantAndInfoContainer {
+  display: grid;
+  grid-template-rows: 3fr 2fr 2fr;
+  grid-gap: 10px;
+  grid-auto-columns: auto;
+}
+
+.selectorContainer {
+  align-self: center;
+}
+
+.item1{
+  align-self: start;
+}
+
+.item2{
+  align-self: center;
+}
+
+.item3{
+  align-self: end;
+}
+
+.summaryPanelStates {
+  max-width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 1em;
+  margin-bottom: 1em;
+  background: none;
+  border-bottom: 1px solid gray;
+}
+
+.state {
+  display: flex;
+  margin-right: 1em;
+}
+
+.state :first-child {
+  margin-right: 0.5em;
+}
+
+.summaryState {
+  border-radius: 1rem;
+  font-weight: 700;
+  text-align: center;
+  width: 8em;
+  margin-bottom: 2px;
+}
+
+.summaryPanelControls {
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1em;
+}
+
+.summaryPanelControls > .title {
+  text-align: left;
+  margin: 0;
+}
+
+.summaryPanelControls > .controls {
+  width: 100%;
+  display: flex;
+  text-align: left;
+}
+
+.summaryPanelControls > .controls > .control {
+  flex-grow: 1;
+}
+
+.summaryPanelControls > .controls > .control > span {
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+.summaryPanelControls > .controls > .control > .toggleContainer {
+  display: flex;
+  color: var(--base-font-color);
+}
+
+.summaryPanelControls > .controls > div {
+  margin-right: 1em;
+}

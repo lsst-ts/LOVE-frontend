@@ -1,0 +1,38 @@
+.title {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+  color: var(--base-font-color);
+}
+
+.forceGradientWrapper {
+  margin-bottom: 40px;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  position: relative;
+}
+
+.forceGradient {
+  display: flex;
+}
+
+.forceGradient > svg {
+  /* border-radius: 6em; */
+}
+
+.forceGradientLabels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.forceGradientLabels > span {
+  margin-left: 1em;
+}
+
+.colorScaleSvg {
+  overflow: visible;
+  width: 100%;
+}
