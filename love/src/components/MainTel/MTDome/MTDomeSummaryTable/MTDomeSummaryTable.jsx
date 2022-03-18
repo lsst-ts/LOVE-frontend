@@ -17,7 +17,7 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import { stateToStyleDome, stateToStyleMount } from '../../../../Config';
-import LoadingBar from '../../../GeneralPurpose/LoadingBar/LoadingBar';
+import ProgressBar from '../../../GeneralPurpose/ProgressBar/ProgressBar';
 
 export default class DomeSummaryTable extends Component {
   static propTypes = {
@@ -121,68 +121,7 @@ export default class DomeSummaryTable extends Component {
             {azimuthStateValue}
           </StatusText>
         </Value>
-
-        {/* <Label>Azimuth</Label>
-        <Value>
-          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} small>
-            {azimuthStateValue}
-          </StatusText>
-        </Value>
-        <Label>Dropout door</Label>
-        <Value>
-          <StatusText title={dropoutDoorStateValue} status={stateToStyleDomeAndMount[dropoutDoorStateValue]} small>
-            {dropoutDoorStateValue}
-          </StatusText>
-        </Value>
-        <Label>Main door</Label>
-        <Value>
-          <StatusText title={mainDoorStateValue} status={stateToStyleDomeAndMount[mainDoorStateValue]} small>
-            {mainDoorStateValue}
-          </StatusText>
-        </Value>
-        <Label>Az</Label>
-        <Value>
-          <CurrentTargetValue currentValue={domeAz.current} targetValue={domeAz.target} isChanging={true} />
-        </Value> */}
-        {/* <span className={[styles.subRow, styles.wide].join(' ')} title={`Time to limit: ${2} min`}>
-          <span>
-            <Limits
-              lowerLimit={0}
-              upperLimit={360}
-              currentValue={domeAz.current}
-              targetValue={domeAz.target}
-              height={30}
-              displayLabels={false}
-            />
-          </span>
-          <span>
-            <span>Time to limit: </span>
-            <span className={styles.highlight}>2 min</span>
-          </span>
-        </span> */}
-        {/* Mount */}
-        {/* <Title>Mount</Title>
-        <Value>
-          <StatusText
-            title={mountInPositionValue ? 'true' : 'false'}
-            status={stateToStyleMount[mountInPositionLabel]}
-            small
-          >
-            {mountInPositionLabel}
-          </StatusText>
-        </Value> */}
-        {/* <Label>Tracking</Label>
-        <Value>
-          <StatusText title={mountTrackingStateValue} status={stateToStyleDomeAndMount[mountTrackingStateValue]} small>
-            {mountTrackingStateValue}
-          </StatusText>
-        </Value> */}
         <Label>Azimuth</Label>
-        {/* <CurrentTargetValue
-            currentValue={mountAz.current.toFixed(2)}
-            targetValue={mountAz.target.toFixed(2)}
-            isChanging={true}
-          /> */}
         <Value>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
             {azimuthStateValue}
@@ -219,13 +158,6 @@ export default class DomeSummaryTable extends Component {
           </span>
         </Row>
         <Label>Elevation</Label>
-        {/* <Value>
-          <CurrentTargetValue
-            currentValue={mountEl.current.toFixed(2)}
-            targetValue={mountEl.target.toFixed(2)}
-            isChanging={true}
-          />
-        </Value> */}
         {/* to do: add elevation state value */}
         <Value>
           <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
@@ -261,46 +193,14 @@ export default class DomeSummaryTable extends Component {
             <span>Time to limit: </span>
             <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
           </span>
-          {/* <span>
-            <span>{`Time to ${closestLimit}: `}</span>
-            <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
-          </span> */}
         </Row>
         <div className={styles.shutters}>
           <Label>Shutters</Label>
           <div>
-            <LoadingBar />
-            <LoadingBar />
+            <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
+            <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
           </div>
         </div>
-        {/* <Label>
-          Nasmyth <span className={styles.highlight}>{mountRotator.name}</span>
-        </Label>
-        <Value>
-          <CurrentTargetValue
-            currentValue={mountRotator.current.toFixed(2)}
-            targetValue={mountRotator.target.toFixed(2)}
-            isChanging={true}
-          />
-        </Value>
-        <Row
-          title={`Current value: ${mountRotator.current}\nTarget value: ${mountRotator.target}\nLimits: [${mountRotator.minRot}º, ${mountRotator.maxRot}º]`}
-        >
-          <span>
-            <Limits
-              lowerLimit={mountRotator.minRot}
-              upperLimit={mountRotator.maxRot}
-              currentValue={mountRotator.current}
-              targetValue={mountRotator.target}
-              height={30}
-              displayLabels={false}
-            />
-          </span>
-          <span>
-            <span>Time to limit: </span>
-            <span className={styles.highlight}>{Math.round(timeToRotLimit)} min</span>
-          </span>
-        </Row> */}
       </SummaryPanel>
     );
   }
