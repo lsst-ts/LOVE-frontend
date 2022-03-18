@@ -38,7 +38,6 @@ export default class Info extends Component {
       axialForceMeasured,
     } = this.props;
 
-    const { actuatorsForce } = this.props;
     const actuatorIndex = actuatorReferenceId.indexOf(id);
 
     const actuator = {
@@ -48,13 +47,11 @@ export default class Info extends Component {
       axialForceApplied: axialForceApplied[actuatorIndex] ?? 0,
       axialForceMeasured: axialForceMeasured[actuatorIndex] ?? 0,
     };
-
     actuator.state = {
       id: actuatorIlcState[actuatorIndex] ?? 0,
       name: m2ActuatorILCStateMap[actuatorIlcState[actuatorIndex] ?? 0],
       status: m2ActuatorILCStateToStyle[m2ActuatorILCStateMap[actuatorIlcState[actuatorIndex]] ?? 0]
     };
-
     return actuator;
   };
 

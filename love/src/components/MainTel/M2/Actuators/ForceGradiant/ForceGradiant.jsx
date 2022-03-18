@@ -120,9 +120,6 @@ export default class ForceGradiant extends Component {
       .attr('height', 40)
       .style('fill', 'url(#force-gradient)');
 
-    this.setState({
-      scaleColorSvg: svg,
-    });
   };
 
   setForce = (actuator) => {

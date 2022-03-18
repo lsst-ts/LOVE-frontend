@@ -209,6 +209,7 @@ export default class Selector extends Component {
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
       maxRadius,
+      /* colormap: (val) => colorScale(colorInterpolate(val)), */
     });
   }
 
