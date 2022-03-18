@@ -386,6 +386,25 @@ export const shutterStateMap = {
   0: 'UNKNOWN',
 };
 
+export const inclinationTelemetrySourceStateMap = {
+  1: 'ONBOARD',
+  2: 'MTMOUNT',
+}
+
+/** TODO: Pending
+ ILC status.
+ The elements are the actuator Ids from 1 to 78. The value needs to be transformed from decimal to hexadecimal to understand. The details are in code 67, LTS-346.
+*/
+export const m2ActuatorILCStateMap = {
+  1: 'ENABLED',
+  0: 'DISABLED',
+};
+
+export const m2ActuatorILCStateToStyle = {
+  ENABLED: 'ok',
+  DISABLED: 'warning',
+};
+
 export const stateToStyleDomeAndMount = {
   NASMITH1: 'ok',
   NASMITH2: 'ok',
@@ -1158,6 +1177,20 @@ export const M2ActuatorPositionsAlpha = [
 export const M2ActuatorPositions = M2ActuatorPositionsAlpha.map((x) => ({
   ...x,
   position: [x.position[0] * 100, x.position[1] * 100],
+}));
+
+export const M2ActuatorTangentPositionsAlpha = [
+  { id: 1, position: [1.566014, 0.332867, 1.295237, 0.9410446] },
+  { id: 2, position: [0.8005013, 1.386507, 0.1673502, 1.592229] },
+  { id: 3, position: [-1.071278, 1.189774, -1.462585, 0.6511849] },
+  { id: 4, position: [-1.566014, -0.332867, -1.295237, -0.9410446] },
+  { id: 5, position: [-0.8005013, -1.386507, -0.1673502, -1.592229] },
+  { id: 6, position: [1.071278, -1.189774, 1.462585, -0.6511849] },
+];
+
+export const M2ActuatorTangentPositions = M2ActuatorTangentPositionsAlpha.map((x) => ({
+  ...x,
+  position: [x.position[0] * 137, x.position[1] * 137, x.position[2] * 137, x.position[3] * 137],
 }));
 
 // Louvers map for MTDome
