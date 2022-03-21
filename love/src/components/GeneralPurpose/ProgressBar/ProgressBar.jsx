@@ -3,12 +3,18 @@ import React from 'react';
 const ProgressBar = (props) => {
   const { bgcolor, completed } = props;
 
+  const parentDiv = {
+    display: 'flex',
+  };
+
   const containerStyles = {
     height: 20,
     width: '100%',
     backgroundColor: '#455a64',
     // borderRadius: 50,
-    margin: 10,
+    // margin: 10,
+    marginBottom: '5px',
+    float: 'rigth',
   };
 
   const fillerStyles = {
@@ -26,7 +32,7 @@ const ProgressBar = (props) => {
   };
 
   return (
-    <div>
+    <div style={parentDiv}>
       <div>
         <span style={labelStyles}>{`${completed}%`}</span>
       </div>
