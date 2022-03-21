@@ -251,15 +251,12 @@ export default class ForceGradiant extends Component {
     }
   }
 
-
   render() {
     const { maxForce, minForce } = this.state;
     return (
         <>
           <p className={styles.title}>Force</p>
           <div className={styles.forceGradientWrapper}>
-            
-            {/* add uniqueid */}
             <div id="color-scale" className={styles.forceGradient}>
               <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minForce} [N]</span>
               <span style={{ position: 'absolute', top: '-2em', left: 0 }}>{minForce} [N]</span>

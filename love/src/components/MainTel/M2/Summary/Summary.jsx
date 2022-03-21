@@ -11,12 +11,17 @@ import styles from './Summary.module.css';
 export default class Summary extends Component {
     static propTypes = {
         summaryState: PropTypes.number,
-        commandableByDDS: PropTypes.string,
+        commandableByDDS: PropTypes.bool,
         forceBalanceSystemStatus: PropTypes.bool,
-
+        m2AssemblyInPosition: PropTypes.bool,
     };
 
-    static defaultProps = {};
+    static defaultProps = {
+        summaryState: 0,
+        commandableByDDS: false,
+        forceBalanceSystemStatus: false,
+        m2AssemblyInPosition: false,
+    };
 
     render() {
 

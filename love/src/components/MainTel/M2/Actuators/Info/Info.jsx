@@ -16,6 +16,8 @@ import styles from './Info.module.css';
 
 export default class Info extends Component {
   static propTypes = {
+    actuatorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    actuatorTangentReferenceId: PropTypes.arrayOf(PropTypes.number),
     actuatorIlcState: PropTypes.arrayOf(PropTypes.number),
     axialActuatorSteps: PropTypes.arrayOf(PropTypes.number),
     axialEncoderPositions: PropTypes.arrayOf(PropTypes.number),
@@ -25,7 +27,25 @@ export default class Info extends Component {
     tangentEncoderPositions: PropTypes.arrayOf(PropTypes.number),
     tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
     tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    selectedActuator: PropTypes.number,
+    selectedActuatorTangent: PropTypes.number,
   }
+
+  static defaultProps = {
+    actuatorReferenceId: [],
+    actuatorTangentReferenceId: [],
+    actuatorIlcState: [],
+    axialActuatorSteps: [],
+    axialEncoderPositions: [],
+    axialForceApplied: [],
+    axialForceMeasured: [],
+    tangentActuatorSteps: [],
+    tangentEncoderPositions: [],
+    tangentForceApplied: [],
+    tangentForceMeasured: [],
+    selectedActuator: undefined,
+    selectedActuatorTangent: undefined,
+  };
 
   getActuator = (id) => {
     if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };

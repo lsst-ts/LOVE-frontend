@@ -1,16 +1,38 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import {
   M2ActuatorPositions,
   M2ActuatorTangentPositions,
 } from 'Config';
+import ForceGradiant from '../ForceGradiant/ForceGradiant';
 import styles from './Selector.module.css';
 
 export default class Selector extends Component {
-  static propTypes = {};
-  static defaultProps = {};
+  static propTypes = {
+    actuatorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    actuatorTangentReferenceId: PropTypes.arrayOf(PropTypes.number),
+    axialForceApplied: PropTypes.arrayOf(PropTypes.number),
+    axialForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
+    tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    selectedActuator: PropTypes.number,
+    selectedActuatorTangent: PropTypes.number,
+    actuatorSelect: PropTypes.func,
+    actuatorTangentSelect: PropTypes.func,
+  };
+  static defaultProps = {
+    actuatorReferenceId: [],
+    actuatorTangentReferenceId: [],
+    axialForceApplied: [],
+    axialForceMeasured: [],
+    tangentForceApplied: [],
+    tangentForceMeasured: [],
+    selectedActuator: undefined,
+    selectedActuatorTangent: undefined,
+    actuatorSelect: () => {},
+    actuatorTangentSelect: () => {},
+  };
 
   constructor(props) {
     super(props);
@@ -23,7 +45,6 @@ export default class Selector extends Component {
       colormap: () => '#fff',
       width: 480,
       zoomLevel: 1,
-      actuatorsForce: [],
     };
 
   }
@@ -54,7 +75,8 @@ export default class Selector extends Component {
     });
   };
 
-  static getActuatorsPositions = (ids, positions) => {
+  /* static getActuatorsPositions = (ids, positions) => {
+    console.log('getActuatorsPositions(', ids, positions);
     const { xPosition, yPosition, zPosition } = positions;
     // const positionsArray = M2.zip([xPosition, yPosition, zPosition]);
     const positionsArray = M2.zip([
@@ -63,7 +85,7 @@ export default class Selector extends Component {
       zPosition.map((z) => z * 39),
     ]);
     return positionsArray.map((position, i) => ({ id: ids[i], position }));
-  };
+  }; */
 
   strokeActuatorSelected = (id) => {
     if (this.props.selectedActuator === id) return 'white';
@@ -85,97 +107,7 @@ export default class Selector extends Component {
     return 'black';
   };
 
-
-  createColorScale = (values) => {
-/*     const height = 40;
-    const width = 300;
-    const colours = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
-    const colourRange = d3.range(0, 1, 1.0 / (colours.length - 1));
-    colourRange.push(1);
-
-    const colorScale = d3.scaleLinear().domain(colourRange).range(colours).interpolate(d3.interpolateHcl);
-
-    const colorInterpolate = d3.scaleLinear().domain(d3.extent(values)).range([0, 1]);
-
-
-    this.setState({
-      colormap: (val) => colorScale(colorInterpolate(val)),
-    });
-
-    //Create the gradient
-    const svg = d3.select('#color-scale svg').attr('width', width).attr('height', height);
-    svg
-      .append('defs')
-      .append('linearGradient')
-      .attr('id', 'force-gradient')
-      .attr('x1', '100%')
-      .attr('y1', '0%')
-      .attr('x2', '0%')
-      .attr('y2', '0%')
-      .selectAll('stop')
-      .data(colours)
-      .enter()
-      .append('stop')
-      .attr('offset', (d, i) => i / (colorScale.range().length - 1))
-      .attr('stop-color', (d) => d);
-
-    svg
-      .append('rect')
-      .attr('x', 0)
-      .attr('y', 0)
-      .attr('rx', 0)
-      .attr('ry', 0)
-      .attr('width', '100%')
-      .attr('height', 40)
-      .style('fill', 'url(#force-gradient)'); */
-
-/*     const measuredForceX = 100;
-    svg
-      .append('line')
-      .attr('x1', measuredForceX)
-      .attr('y1', -10)
-      .attr('x2', measuredForceX)
-      .attr('y2', 50)
-      .style('stroke', 'white')
-      .style('stroke-width', 3);
-
-    const textMeasured = svg
-      .append('text')
-      .attr('x', measuredForceX)
-      .attr('y', -10)
-      .attr('fill', 'white')
-      .style('font-size', '1em');
-
-    textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -45).text('C03');
-    textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -30).text('Applied');
-    textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -15).text('3.646N ');
-
-    const commandedForceX = 200;
-    svg
-      .append('line')
-      .attr('x1', commandedForceX)
-      .attr('y1', -10)
-      .attr('x2', commandedForceX)
-      .attr('y2', 50)
-      .style('stroke', 'white')
-      .style('stroke-width', 3);
-
-    const textCommanded = svg
-      .append('text')
-      .attr('x', commandedForceX)
-      .attr('y', 50)
-      .attr('fill', 'white')
-      .style('font-size', '1em');
-
-    textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 60).text('C03');
-    textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 75).text('Commanded');
-    textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 90).text('3.646N '); */
-  };
-
-
   componentDidMount() {
-
-
     let yMax = -Infinity;
     let xMax = -Infinity;
     let yMin = Infinity;
@@ -209,72 +141,41 @@ export default class Selector extends Component {
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
       maxRadius,
-      /* colormap: (val) => colorScale(colorInterpolate(val)), */
     });
   }
 
   componentWillUnmount() {
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps) {
     d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
 
     if (
-      prevProps.axialForceApplied !==
-      this.props.axialForceApplied /* ||
-      prevProps.axialForceMeasured !== this.props.axialForceMeasured */
+      prevProps.axialForceApplied !== this.props.axialForceApplied  ||
+      prevProps.axialForceMeasured !== this.props.axialForceMeasured  ||
+      prevProps.tangentForceApplied !== this.props.tangentForceApplied  ||
+      prevProps.tangentForceMeasured !== this.props.tangentForceMeasured
     ) {
-      this.setState({ actuatorsForce: this.props.axialForceApplied });
-    }
 
-    /* if (this.state.actuators !== prevState.actuators) {
-      // Dummy data
-      const data = this.state.actuators.map(
-        (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
-      );
-      this.createColorScale(data);
-    }
+      const actuatorsForceCommanded = [
+        ...this.props.axialForceApplied,
+        ...this.props.tangentForceApplied,
+      ];
 
-    if (prevState.actuatorsForce !== this.state.actuatorsForce) {
-      this.createColorScale(this.state.actuatorsForce);
-    } */
+      const actuatorsForceMeasured = [
+        ...this.props.axialForceMeasured,
+        ...this.props.tangentForceMeasured
+      ];
 
-    const { xPosition, yPosition, zPosition, actuatorReferenceId } = this.props;
-    if (
-      prevProps.xPosition !== xPosition ||
-      prevProps.yPosition !== yPosition ||
-      prevProps.zPosition !== zPosition ||
-      prevProps.actuatorReferenceId !== actuatorReferenceId
-    ) {
-      
-      const actuators = this.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
-      // const actuators = M2ActuatorPositions; // Old implementation
+      const maxForce = Math.max(...actuatorsForceCommanded, ...actuatorsForceMeasured);
+      const minForce = Math.min(...actuatorsForceCommanded, ...actuatorsForceMeasured);
 
-      let yMax = -Infinity;
-      let xMax = -Infinity;
-      let yMin = Infinity;
-      let xMin = Infinity;
-      let maxRadius = 0;
-      actuators.forEach((act) => {
-        if (xMax < act.position[0]) xMax = act.position[0];
-        if (xMin > act.position[0]) xMin = act.position[0];
-        if (yMax < act.position[1]) yMax = act.position[1];
-        if (yMin > act.position[1]) yMin = act.position[1];
-        if (maxRadius < Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2))) {
-          maxRadius = Math.floor(Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)));
-        }
-      });
-      xMin = -150;
-      xMax = 160;
-      yMin = -150;
-      yMax = 160;
-      maxRadius = 160;
       this.setState({
-        actuators,
-        xRadius: Math.floor((xMax - xMin) / 2),
-        yRadius: Math.floor((yMax - yMin) / 2),
-        maxRadius,
-      });
+        maxForce: maxForce,
+        minForce: minForce,
+        colormap: (val) => ForceGradiant.getGradiantColorX(val, minForce, maxForce)
+      });    
+      
     }
   }
 
@@ -317,6 +218,7 @@ export default class Selector extends Component {
     const { showActuatorsID, showCommandedForce, showMeasuredForce,
             actuatorSelect, selectedActuator,
             actuatorTangentSelect, selectedActuatorTangent } = this.props;
+    /* const { actuatorReferenceId, actuatorTangentReferenceId } = this.props; */
     
     const { zoomLevel } = this.state;
 
@@ -332,13 +234,18 @@ export default class Selector extends Component {
         >
           {this.getBackground()}
           {this.getScatter(scale, margin, showActuatorsID, showMeasuredForce, showCommandedForce, zoomLevel, actuatorSelect, selectedActuator)}
-          {this.getAxis(margin, actuatorSelect, actuatorTangentSelect)}
-          {this.getTangentActuators(showActuatorsID, actuatorTangentSelect, selectedActuatorTangent)}
+          {this.getAxis(margin, actuatorSelect)}
+          {this.getTangentActuators(showActuatorsID, showMeasuredForce, showCommandedForce, actuatorTangentSelect, selectedActuatorTangent)}
         </svg>
     );
   }
 
   getScatter(scale, margin, showActuatorsID, showMeasuredForce, showCommandedForce, zoomLevel, actuatorSelect, selectedActuator) {
+    const actuatorsForceMeasured = this.props.axialForceMeasured;
+    const actuatorsForceCommanded = this.props.axialForceApplied;
+    /* const { actuatorReferenceId } = this.props;
+    console.log('actuatorReferenceId', actuatorReferenceId); */
+
     return (
       <g id="scatter" className={styles.scatter}>
         {this.state.actuators.map((act, i) => {
@@ -351,22 +258,26 @@ export default class Selector extends Component {
                 fill={
                   showMeasuredForce
                     ? this.state.colormap(
-                        Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) /
-                          this.state.maxRadius,
+                        actuatorsForceMeasured[i] ?? this.state.minForce
                       )
                     : 'gray'
                 }
-                // fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
-                // stroke={this.strokeActuatorSelected(act.id)}
                 stroke={
-                  showCommandedForce
-                    ? this.state.colormap(
-                        Math.sqrt(Math.pow(act.position[0] + 10, 2) + Math.pow(act.position[1] + 10, 2)) /
-                          this.state.maxRadius,
-                      )
-                    : 'none'
+                  act.id === selectedActuator ?
+                    this.strokeActuatorSelected(act.id)
+                  :
+                    showCommandedForce
+                      ? this.state.colormap(
+                          actuatorsForceCommanded[i] ?? this.state.minForce
+                        )
+                      : 'none'
                 }
-                stroke-width="4"
+                strokeWidth={
+                  act.id === selectedActuator ?
+                    6
+                  :
+                    4
+                }
                 r={(this.state.maxRadius * scale) / 16}
                 pointerEvents="all"
               />
@@ -375,7 +286,6 @@ export default class Selector extends Component {
                 y={(act.position[1] + this.state.yRadius) * scale + margin}
                 textAnchor="middle"
                 alignmentBaseline="middle"
-                fill={this.fillActuatorSelected(act.id)}
                 className={zoomLevel > 1 && showActuatorsID || selectedActuator === act.id ? '' : styles.hidden}
                 pointerEvents="none"
               >
@@ -388,9 +298,13 @@ export default class Selector extends Component {
     );
   }
 
-  getTangentActuators(showActuatorsID, actuatorTangentSelect, selectedActuatorTangent) {
+  getTangentActuators(showActuatorsID, showMeasuredForce, showCommandedForce, actuatorTangentSelect, selectedActuatorTangent) {
     const x0 = this.state.width/2;
     const y0 = this.state.width/2;
+
+    const actuatorsTangentForceCommanded = this.props.tangentForceApplied;
+    const actuatorsTangentForceMeasured = this.props.tangentForceMeasured;
+    const { actuatorTangentReferenceId } = this.props;
 
     return (
       <g
@@ -433,11 +347,6 @@ export default class Selector extends Component {
               key={act.id}
               className={styles.actuatorTangent}
               onClick={() => actuatorTangentSelect(act.id)}
-              style={{
-                fill: '#D7191C',
-                strokeWidth: 3,
-                stroke: '#EC801F',
-              }}
             >
 
               <path
@@ -448,11 +357,29 @@ export default class Selector extends Component {
                   L ${x4} ${y4}
                   z
                 `}
-                style={{
-                  fill: '#D7191C',
-                  strokeWidth: 3,
-                  stroke: '#EC801F',
-                }}
+                strokeWidth={
+                  act.id === selectedActuatorTangent ?
+                    6
+                  :
+                    4
+                }
+                fill={
+                  showMeasuredForce
+                    ? this.state.colormap(
+                        actuatorsTangentForceMeasured[i] ?? this.state.minForce
+                      )
+                    : 'gray'
+                }
+                stroke={
+                  act.id === selectedActuatorTangent ?
+                    this.strokeActuatorTangentSelected(act.id)
+                  :
+                    showCommandedForce
+                      ? this.state.colormap(
+                          actuatorsTangentForceCommanded[i] ?? this.state.minForce
+                        )
+                      : 'none'
+                }
               />
 
               <text
@@ -460,7 +387,6 @@ export default class Selector extends Component {
                 y={centerY}
                 textAnchor="middle"
                 alignmentBaseline="middle"
-                fill={this.fillActuatorTangentSelected(act.id)}
                 className={showActuatorsID || selectedActuatorTangent === act.id ? '' : styles.hidden}
                 pointerEvents="none"
               >
@@ -512,7 +438,7 @@ export default class Selector extends Component {
     );
   }
 
-  getAxis(margin, actuatorSelect, actuatorTangentSelect) {
+  getAxis(margin, actuatorSelect) {
     return (
       <>
         <circle

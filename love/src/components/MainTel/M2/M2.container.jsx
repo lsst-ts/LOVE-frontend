@@ -51,16 +51,18 @@ const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-MTM2-0-axialActuatorSteps',
     'telemetry-MTM2-0-axialEncoderPositions',
+    'telemetry-MTM2-0-tangentActuatorSteps',
+    'telemetry-MTM2-0-tangentEncoderPositions',
     'telemetry-MTM2-0-axialForce',
-    'telemetry-MTM2-0-displacementSensors',
-    'telemetry-MTM2-0-forceBalance',
+    'telemetry-MTM2-0-tangentForce',
     'telemetry-MTM2-0-ilcData',
     'telemetry-MTM2-0-zenithAngle',
+    'event-MTM2-0-inclinationTelemetrySource',
     'event-MTM2-0-summaryState',
     'event-MTM2-0-commandableByDDS',
     'event-MTM2-0-forceBalanceSystemStatus',
     'event-MTM2-0-m2AssemblyInPosition',
-    'event-MTM2-0-inclinationTelemetrySource',
+  
   ];
   return {
     subscriptions,

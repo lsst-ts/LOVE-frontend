@@ -12,24 +12,39 @@ import styles from './Actuators.module.css';
 
 export default class Actuators extends Component {
     static propTypes = {
+        zenithAngleMeasured: PropTypes.number,
+        inclinationTelemetrySource: PropTypes.number,
+        actuatorIlcState: PropTypes.arrayOf(PropTypes.number),
+        axialActuatorSteps: PropTypes.arrayOf(PropTypes.number),
+        axialEncoderPositions: PropTypes.arrayOf(PropTypes.number),
+        axialForceApplied: PropTypes.arrayOf(PropTypes.number),
+        axialForceMeasured: PropTypes.arrayOf(PropTypes.number),
+        tangentActuatorSteps: PropTypes.arrayOf(PropTypes.number),
+        tangentEncoderPositions: PropTypes.arrayOf(PropTypes.number),
+        tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
+        tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
     };
 
-    static defaultProps = {};
+    static defaultProps = {
+        zenithAngleMeasured: 0,
+        inclinationTelemetrySource: 1,
+        actuatorIlcState: [],
+        axialActuatorSteps: [],
+        axialEncoderPositions: [],
+        axialForceApplied: [],
+        axialForceMeasured: [],
+        tangentActuatorSteps: [],
+        tangentEncoderPositions: [],
+        tangentForceApplied: [],
+        tangentForceMeasured: [],
+    };
 
     constructor(props) {
         super(props);
         this.state = {
-            actuators: [],
-            xRadius: 0,
-            yRadius: 0,
-            maxRadius: 0,
-            colormap: () => '#fff',
-            width: 480,
-            zoomLevel: 1,
             showActuatorsID: true,
             showCommandedForce: true,
             showMeasuredForce: true,
-            actuatorsForce: [],
             selectedActuator: null,
             selectedActuatorTangent: null,
           };
@@ -76,8 +91,6 @@ export default class Actuators extends Component {
 
         const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
 
-        const { actuators,
-                actuatorsForce } = this.state;
         const { actuatorIlcState,
                 axialActuatorSteps,
                 axialEncoderPositions,
@@ -127,11 +140,8 @@ export default class Actuators extends Component {
                 <div className={styles.selectorAndInclinometerContainer}>
                     <div className={styles.selectorContainer}>
                         <Selector
-                            actuatorIlcState={actuatorIlcState}
-                            actuatorReferenceId={actuatorReferenceId}
-                            actuatorTangentReferenceId={actuatorTangentReferenceId}
-                            axialActuatorSteps={axialActuatorSteps}
-                            axialEncoderPositions={axialEncoderPositions}
+                            /* actuatorReferenceId={actuatorReferenceId}
+                            actuatorTangentReferenceId={actuatorTangentReferenceId} */
                             axialForceApplied={axialForceApplied}
                             axialForceMeasured={axialForceMeasured}
                             showActuatorsID={showActuatorsID}
@@ -154,6 +164,8 @@ export default class Actuators extends Component {
                         </div>
                         <div className={styles.item2}>
                             <ForceGradiant
+                                actuatorReferenceId={actuatorReferenceId}
+                                actuatorTangentReferenceId={actuatorTangentReferenceId}
                                 selectedActuator={selectedActuator}
                                 selectedActuatorTangent={selectedActuatorTangent}
                                 axialForceApplied={axialForceApplied}
