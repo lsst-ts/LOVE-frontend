@@ -85,7 +85,6 @@ export default class Actuators extends Component {
     };
 
     render() {
-
         const { showActuatorsID, showCommandedForce, showMeasuredForce,
                 selectedActuator, selectedActuatorTangent } = this.state;
 
@@ -140,8 +139,8 @@ export default class Actuators extends Component {
                 <div className={styles.selectorAndInclinometerContainer}>
                     <div className={styles.selectorContainer}>
                         <Selector
-                            /* actuatorReferenceId={actuatorReferenceId}
-                            actuatorTangentReferenceId={actuatorTangentReferenceId} */
+                            actuatorReferenceId={actuatorReferenceId}
+                            actuatorTangentReferenceId={actuatorTangentReferenceId}
                             axialForceApplied={axialForceApplied}
                             axialForceMeasured={axialForceMeasured}
                             showActuatorsID={showActuatorsID}
@@ -151,6 +150,8 @@ export default class Actuators extends Component {
                             selectedActuator={selectedActuator}
                             actuatorTangentSelect={this.actuatorTangentSelect}
                             selectedActuatorTangent={selectedActuatorTangent}
+                            /* subscribeToStreams={this.props.subscribeToStreams}
+                            unsubscribeToStreams={this.props.unsubscribeToStreams} */
                             {...this.props}
                         />
                     </div>

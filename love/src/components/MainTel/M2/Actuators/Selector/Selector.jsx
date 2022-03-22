@@ -92,20 +92,58 @@ export default class Selector extends Component {
     return 'none';
   };
 
-  fillActuatorSelected = (id) => {
-    if (this.props.selectedActuator === id) return 'white';
-    return 'black';
-  };
-
   strokeActuatorTangentSelected = (id) => {
     if (this.props.selectedActuatorTangent === id) return 'white';
     return 'none';
   };
 
-  fillActuatorTangentSelected = (id) => {
-    if (this.props.selectedActuatorTangent === id) return 'white';
-    return 'black';
-  };
+  getActuator = (id) => {
+    const { colormap } = this.state;
+    if (id === 0 || id === null) return {
+      id: undefined,
+      colorForceApplied: colormap(0),
+      colorForceMeasured: colormap(0)
+    };
+    const {
+      actuatorReferenceId,
+      axialForceApplied,
+      axialForceMeasured,
+    } = this.props;
+    
+    const actuatorIndex = actuatorReferenceId.indexOf(id);
+    const actuator = {
+      id,
+      axialForceApplied: axialForceApplied[actuatorIndex] ?? 0,
+      axialForceMeasured: axialForceMeasured[actuatorIndex] ?? 0,
+      colorForceApplied: colormap(axialForceApplied[actuatorIndex] ?? 0),
+      colorForceMeasured: colormap(axialForceMeasured[actuatorIndex] ?? 0),
+    }
+    return actuator;
+  }
+
+  getActuatorTangent = (id) => {
+    const { colormap } = this.state;
+    if (id === 0 || id === null) return {
+      id: undefined,
+      colorForceApplied: colormap(0),
+      colorForceMeasured: colormap(0)
+    };
+    const {
+      actuatorTangentReferenceId,
+      tangentForceApplied,
+      tangentForceMeasured,
+    } = this.props;
+    
+    const actuatorIndex = actuatorTangentReferenceId.indexOf(id);
+    const actuator = {
+      id,
+      tangentForceApplied: tangentForceApplied[actuatorIndex] ?? 0,
+      tangentForceMeasured: tangentForceMeasured[actuatorIndex] ?? 0,
+      colorForceApplied: colormap(tangentForceApplied[actuatorIndex] ?? 0),
+      colorForceMeasured: colormap(tangentForceMeasured[actuatorIndex] ?? 0),
+    }
+    return actuator;
+  }
 
   componentDidMount() {
     let yMax = -Infinity;
@@ -218,7 +256,6 @@ export default class Selector extends Component {
     const { showActuatorsID, showCommandedForce, showMeasuredForce,
             actuatorSelect, selectedActuator,
             actuatorTangentSelect, selectedActuatorTangent } = this.props;
-    /* const { actuatorReferenceId, actuatorTangentReferenceId } = this.props; */
     
     const { zoomLevel } = this.state;
 
@@ -241,10 +278,6 @@ export default class Selector extends Component {
   }
 
   getScatter(scale, margin, showActuatorsID, showMeasuredForce, showCommandedForce, zoomLevel, actuatorSelect, selectedActuator) {
-    const actuatorsForceMeasured = this.props.axialForceMeasured;
-    const actuatorsForceCommanded = this.props.axialForceApplied;
-    /* const { actuatorReferenceId } = this.props;
-    console.log('actuatorReferenceId', actuatorReferenceId); */
 
     return (
       <g id="scatter" className={styles.scatter}>
@@ -257,9 +290,7 @@ export default class Selector extends Component {
                 key={act.id}
                 fill={
                   showMeasuredForce
-                    ? this.state.colormap(
-                        actuatorsForceMeasured[i] ?? this.state.minForce
-                      )
+                    ? this.getActuator(act.id)?.colorForceMeasured
                     : 'gray'
                 }
                 stroke={
@@ -267,9 +298,7 @@ export default class Selector extends Component {
                     this.strokeActuatorSelected(act.id)
                   :
                     showCommandedForce
-                      ? this.state.colormap(
-                          actuatorsForceCommanded[i] ?? this.state.minForce
-                        )
+                      ? this.getActuator(act.id)?.colorForceApplied
                       : 'none'
                 }
                 strokeWidth={
@@ -301,10 +330,6 @@ export default class Selector extends Component {
   getTangentActuators(showActuatorsID, showMeasuredForce, showCommandedForce, actuatorTangentSelect, selectedActuatorTangent) {
     const x0 = this.state.width/2;
     const y0 = this.state.width/2;
-
-    const actuatorsTangentForceCommanded = this.props.tangentForceApplied;
-    const actuatorsTangentForceMeasured = this.props.tangentForceMeasured;
-    const { actuatorTangentReferenceId } = this.props;
 
     return (
       <g
@@ -365,9 +390,7 @@ export default class Selector extends Component {
                 }
                 fill={
                   showMeasuredForce
-                    ? this.state.colormap(
-                        actuatorsTangentForceMeasured[i] ?? this.state.minForce
-                      )
+                    ? this.getActuatorTangent(act.id)?.colorForceMeasured
                     : 'gray'
                 }
                 stroke={
@@ -375,9 +398,7 @@ export default class Selector extends Component {
                     this.strokeActuatorTangentSelected(act.id)
                   :
                     showCommandedForce
-                      ? this.state.colormap(
-                          actuatorsTangentForceCommanded[i] ?? this.state.minForce
-                        )
+                      ? this.getActuatorTangent(act.id)?.colorForceApplied
                       : 'none'
                 }
               />

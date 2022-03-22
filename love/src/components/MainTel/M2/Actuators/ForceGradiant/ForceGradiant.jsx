@@ -111,31 +111,32 @@ export default class ForceGradiant extends Component {
     }
   }
 
-  static getGradiantColorX(value, min, max) {
-    const colourRange = d3.range(0, 1, 1.0 / (ForceGradiant.COLOURS.length - 1));
-    colourRange.push(1);
-    const colorScale = d3.scaleLinear().domain(colourRange).range(ForceGradiant.COLOURS).interpolate(d3.interpolateHcl);
-    const colorInterpolate = d3.scaleLinear().domain(d3.extent([min, max])).range([0, 1]);
-    return colorScale(colorInterpolate(value));
-  }
-
-  getColorScale = () => {
+  static getColorScale = () => {
     const colourRange = d3.range(0, 1, 1.0 / (ForceGradiant.COLOURS.length - 1));
     colourRange.push(1);
     const colorScale = d3.scaleLinear().domain(colourRange).range(ForceGradiant.COLOURS).interpolate(d3.interpolateHcl);
     return colorScale;
   }
 
+  static getGradiantColorX(value, min, max) {
+    const colorScale = ForceGradiant.getColorScale();
+    const colorInterpolate = d3.scaleLinear().domain(d3.extent([min, max])).range([0, 1]);
+    return colorScale(colorInterpolate(value));
+  }
+
+  
+
   createColorScale = () => {
     const height = 40;
     const width = this.state.width;
-    const colorScale = this.getColorScale();
-
+    
     //Create the gradient
     const svg = d3.select('#color-scale svg');
     const forceGradientRect = d3.select('#color-scale svg #force-gradient-rect');
 
     if ( forceGradientRect.empty() ) {
+      const colorScale = ForceGradiant.getColorScale();
+
       svg
       .attr('width', width)
       .attr('height', height);

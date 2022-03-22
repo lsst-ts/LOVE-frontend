@@ -20,8 +20,9 @@ export default class M2 extends Component {
   }
 
   render() {
+    console.log('this.props');
+    console.log(this.props);
     const { 
-      actuatorReferenceId,
       actuatorIlcState,
       axialActuatorSteps,
       axialEncoderPositions,
@@ -48,7 +49,6 @@ export default class M2 extends Component {
           zenithAngleMeasured={zenithAngleMeasured}
           inclinationTelemetrySource={inclinationTelemetrySource}
 
-          actuatorReferenceId={actuatorReferenceId}
           actuatorIlcState={actuatorIlcState}
           axialActuatorSteps={axialActuatorSteps}
           axialEncoderPositions={axialEncoderPositions}
@@ -58,7 +58,9 @@ export default class M2 extends Component {
           tangentEncoderPositions={tangentEncoderPositions}
           tangentForceApplied={tangentForceApplied}
           tangentForceMeasured={tangentForceMeasured}
-          {...this.props}
+          /* subscribeToStreams={this.props.subscribeToStreams}
+          unsubscribeToStreams={this.props.unsubscribeToStreams} */
+          /* {...this.props} */
         />
       </div>
     );
