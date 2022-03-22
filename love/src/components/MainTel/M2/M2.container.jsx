@@ -20,6 +20,18 @@ export const schema = {
       isPrivate: false,
       default: 'M2',
     },
+    minForceLimit: {
+      type: 'number',
+      description: 'Minimum force limit',
+      isPrivate: false,
+      default: 0,
+    },
+    maxForceLimit: {
+      type: 'number',
+      description: 'Maximum force limit',
+      isPrivate: false,
+      default: 1000,
+    },
   },
 };
 

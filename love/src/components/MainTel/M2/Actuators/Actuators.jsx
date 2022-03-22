@@ -23,6 +23,8 @@ export default class Actuators extends Component {
         tangentEncoderPositions: PropTypes.arrayOf(PropTypes.number),
         tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
         tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+        minForceLimit: PropTypes.number,
+        maxForceLimit: PropTypes.number,
     };
 
     static defaultProps = {
@@ -99,6 +101,8 @@ export default class Actuators extends Component {
                 tangentEncoderPositions,
                 tangentForceApplied,
                 tangentForceMeasured,
+                minForceLimit,
+                maxForceLimit,
         } = this.props;
 
         const actuatorReferenceId = this.arrayReferenceId().slice(0, 72);
@@ -143,16 +147,18 @@ export default class Actuators extends Component {
                             actuatorTangentReferenceId={actuatorTangentReferenceId}
                             axialForceApplied={axialForceApplied}
                             axialForceMeasured={axialForceMeasured}
+                            tangentForceApplied={tangentForceApplied}
+                            tangentForceMeasured={tangentForceMeasured}
+                            
                             showActuatorsID={showActuatorsID}
                             showCommandedForce={showCommandedForce}
                             showMeasuredForce={showMeasuredForce}
                             actuatorSelect={this.actuatorSelect}
                             selectedActuator={selectedActuator}
                             actuatorTangentSelect={this.actuatorTangentSelect}
-                            selectedActuatorTangent={selectedActuatorTangent}
-                            /* subscribeToStreams={this.props.subscribeToStreams}
-                            unsubscribeToStreams={this.props.unsubscribeToStreams} */
-                            {...this.props}
+                            selectedActuatorTangent={selectedActuatorTangent} 
+                            minForceLimit={minForceLimit}
+                            maxForceLimit={maxForceLimit}                         
                         />
                     </div>
                     
@@ -173,6 +179,8 @@ export default class Actuators extends Component {
                                 axialForceMeasured={axialForceMeasured}
                                 tangentForceApplied={tangentForceApplied}
                                 tangentForceMeasured={tangentForceMeasured}
+                                minForceLimit={minForceLimit}
+                                maxForceLimit={maxForceLimit}
                             />
                         </div>
                         <div className={styles.item3}>

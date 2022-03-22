@@ -14,6 +14,8 @@ export default class ForceGradiant extends Component {
     tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
     selectedActuator: PropTypes.number,
     selectedActuatorTangent: PropTypes.number,
+    minForceLimit: PropTypes.number,
+    maxForceLimit: PropTypes.number,
   }
   static defaultProps = {
     actuatorReferenceId: [],
@@ -24,8 +26,12 @@ export default class ForceGradiant extends Component {
     tangentForceMeasured: [],
     selectedActuator: undefined,
     selectedActuatorTangent: undefined,
+    minForceLimit: 0,
+    maxForceLimit: 1000,
   }
   static COLOURS = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
+  static COLOUR_RANGE = [...d3.range(0, 1, 1.0 / (ForceGradiant.COLOURS.length - 1)), 1];
+  static COLOR_SCALE = d3.scaleLinear().domain(ForceGradiant.COLOUR_RANGE).range(ForceGradiant.COLOURS).interpolate(d3.interpolateHcl);
 
   constructor(props) {
     super(props);
@@ -71,6 +77,7 @@ export default class ForceGradiant extends Component {
   }
 
   componentDidUpdate(prevProps) {
+
     if (
       prevProps.axialForceApplied !== this.props.axialForceApplied  ||
       prevProps.axialForceMeasured !== this.props.axialForceMeasured  ||
@@ -78,7 +85,7 @@ export default class ForceGradiant extends Component {
       prevProps.tangentForceMeasured !== this.props.tangentForceMeasured
     ) {
 
-      const actuatorsForce = [
+      /* const actuatorsForce = [
         ...this.props.axialForceApplied, ...this.props.axialForceMeasured,
         ...this.props.tangentForceApplied, ...this.props.tangentForceMeasured
       ];
@@ -88,43 +95,29 @@ export default class ForceGradiant extends Component {
       this.setState({
         maxForce: maxForce,
         minForce: minForce,
-      });    
+      }); */   
+    
       this.createColorScale();
       if (this.props.selectedActuator) {
         const actuator = this.getActuator(this.props.selectedActuator);
-        this.setForce(actuator, minForce, maxForce);
+        this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
       }
       if (this.props.selectedActuatorTangent) {
         const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
-        this.setForce(actuator, minForce, maxForce);
+        this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
       }
     }
 
     if ( prevProps.selectedActuator !== this.props.selectedActuator) {
       const actuator = this.getActuator(this.props.selectedActuator);
-      this.setForce(actuator, this.state.minForce, this.state.maxForce);
+      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
     }
 
     if ( prevProps.selectedActuatorTangent !== this.props.selectedActuatorTangent) {
       const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
-      this.setForce(actuator, this.state.minForce, this.state.maxForce);
+      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
     }
   }
-
-  static getColorScale = () => {
-    const colourRange = d3.range(0, 1, 1.0 / (ForceGradiant.COLOURS.length - 1));
-    colourRange.push(1);
-    const colorScale = d3.scaleLinear().domain(colourRange).range(ForceGradiant.COLOURS).interpolate(d3.interpolateHcl);
-    return colorScale;
-  }
-
-  static getGradiantColorX(value, min, max) {
-    const colorScale = ForceGradiant.getColorScale();
-    const colorInterpolate = d3.scaleLinear().domain(d3.extent([min, max])).range([0, 1]);
-    return colorScale(colorInterpolate(value));
-  }
-
-  
 
   createColorScale = () => {
     const height = 40;
@@ -135,7 +128,6 @@ export default class ForceGradiant extends Component {
     const forceGradientRect = d3.select('#color-scale svg #force-gradient-rect');
 
     if ( forceGradientRect.empty() ) {
-      const colorScale = ForceGradiant.getColorScale();
 
       svg
       .attr('width', width)
@@ -152,7 +144,7 @@ export default class ForceGradiant extends Component {
         .data(ForceGradiant.COLOURS)
         .enter()
         .append('stop')
-        .attr('offset', (d, i) => i / (colorScale.range().length - 1))
+        .attr('offset', (d, i) => i / (ForceGradiant.COLOR_SCALE.range().length - 1))
         .attr('stop-color', (d) => d);
 
       svg
@@ -176,11 +168,13 @@ export default class ForceGradiant extends Component {
     return range(min, max, 0, width, value);
   }
 
-  setForce = (actuator, minForce, maxForce) => {
+  setForce = (actuator) => {
+    const { minForceLimit, maxForceLimit } = this.props;
+
     const svg = d3.select('#color-scale svg');
     const measuredText = d3.select('#color-scale svg #measured-text');
     const measuredLine = d3.select('#color-scale svg #measured-line');
-    const measuredForceX = ForceGradiant.getGradiantPositionX(actuator.measured, minForce, maxForce, this.state.width);
+    const measuredForceX = ForceGradiant.getGradiantPositionX(actuator.measured, minForceLimit, maxForceLimit, this.state.width);
 
     if ( measuredText ) {
       measuredText.remove();
@@ -223,7 +217,7 @@ export default class ForceGradiant extends Component {
     }
 
     if (actuator.id !== undefined) {
-      const commandedForceX = ForceGradiant.getGradiantPositionX(actuator.commanded, minForce, maxForce, this.state.width);
+      const commandedForceX = ForceGradiant.getGradiantPositionX(actuator.commanded, minForceLimit, maxForceLimit, this.state.width);
       svg
         .append('line')
         .attr('id', 'commanded-line')
@@ -253,17 +247,17 @@ export default class ForceGradiant extends Component {
   }
 
   render() {
-    const { maxForce, minForce } = this.state;
+    const { maxForceLimit, minForceLimit } = this.props;
     return (
         <>
           <p className={styles.title}>Force</p>
           <div className={styles.forceGradientWrapper}>
             <div id="color-scale" className={styles.forceGradient}>
-              <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minForce} [N]</span>
-              <span style={{ position: 'absolute', top: '-2em', left: 0 }}>{minForce} [N]</span>
+              <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minForceLimit} [N]</span>
+              <span style={{ position: 'absolute', top: '-2em', left: 0 }}>{minForceLimit} [N]</span>
               <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
-              <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxForce} [N]</span>
-              <span style={{ position: 'absolute', top: '-2em', right: 0 }}>{maxForce} [N]</span>
+              <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxForceLimit} [N]</span>
+              <span style={{ position: 'absolute', top: '-2em', right: 0 }}>{maxForceLimit} [N]</span>
             </div>
           </div>
         </>

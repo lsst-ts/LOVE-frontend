@@ -9,6 +9,12 @@ export default class M2 extends Component {
   static propTypes = {
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
+    minForceLimit: PropTypes.number,
+    maxForceLimit: PropTypes.number,
+  }
+  static defaultProps = {
+    minForceLimit: 0,
+    maxForceLimit: 1000,
   }
 
   componentDidMount() {
@@ -20,8 +26,6 @@ export default class M2 extends Component {
   }
 
   render() {
-    console.log('this.props');
-    console.log(this.props);
     const { 
       actuatorIlcState,
       axialActuatorSteps,
@@ -32,6 +36,8 @@ export default class M2 extends Component {
       tangentEncoderPositions,
       tangentForceApplied,
       tangentForceMeasured,
+      minForceLimit,
+      maxForceLimit,
     } = this.props;
     const { summaryState, commandableByDDS, forceBalanceSystemStatus, m2AssemblyInPosition } = this.props;
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
@@ -58,8 +64,8 @@ export default class M2 extends Component {
           tangentEncoderPositions={tangentEncoderPositions}
           tangentForceApplied={tangentForceApplied}
           tangentForceMeasured={tangentForceMeasured}
-          /* subscribeToStreams={this.props.subscribeToStreams}
-          unsubscribeToStreams={this.props.unsubscribeToStreams} */
+          minForceLimit={minForceLimit}
+          maxForceLimit={maxForceLimit}
           /* {...this.props} */
         />
       </div>

@@ -20,6 +20,8 @@ export default class Selector extends Component {
     selectedActuatorTangent: PropTypes.number,
     actuatorSelect: PropTypes.func,
     actuatorTangentSelect: PropTypes.func,
+    minForceLimit: PropTypes.number,
+    maxForceLimit: PropTypes.number,
   };
   static defaultProps = {
     actuatorReferenceId: [],
@@ -97,12 +99,17 @@ export default class Selector extends Component {
     return 'none';
   };
 
+  getGradiantColorX = (value) => {
+    const { minForceLimit, maxForceLimit } = this.props;
+    const colorInterpolate = d3.scaleLinear().domain(d3.extent([minForceLimit, maxForceLimit])).range([0, 1]);
+    return ForceGradiant.COLOR_SCALE(1 - colorInterpolate(value));
+  }
+
   getActuator = (id) => {
-    const { colormap } = this.state;
     if (id === 0 || id === null) return {
       id: undefined,
-      colorForceApplied: colormap(0),
-      colorForceMeasured: colormap(0)
+      colorForceApplied: '#FFF',
+      colorForceMeasured: '#FFF',
     };
     const {
       actuatorReferenceId,
@@ -115,18 +122,17 @@ export default class Selector extends Component {
       id,
       axialForceApplied: axialForceApplied[actuatorIndex] ?? 0,
       axialForceMeasured: axialForceMeasured[actuatorIndex] ?? 0,
-      colorForceApplied: colormap(axialForceApplied[actuatorIndex] ?? 0),
-      colorForceMeasured: colormap(axialForceMeasured[actuatorIndex] ?? 0),
+      colorForceApplied: this.getGradiantColorX(axialForceApplied[actuatorIndex]),
+      colorForceMeasured: this.getGradiantColorX(axialForceMeasured[actuatorIndex]),
     }
     return actuator;
   }
 
   getActuatorTangent = (id) => {
-    const { colormap } = this.state;
     if (id === 0 || id === null) return {
       id: undefined,
-      colorForceApplied: colormap(0),
-      colorForceMeasured: colormap(0)
+      colorForceApplied: '#FFF',
+      colorForceMeasured: '#FFF',
     };
     const {
       actuatorTangentReferenceId,
@@ -139,8 +145,8 @@ export default class Selector extends Component {
       id,
       tangentForceApplied: tangentForceApplied[actuatorIndex] ?? 0,
       tangentForceMeasured: tangentForceMeasured[actuatorIndex] ?? 0,
-      colorForceApplied: colormap(tangentForceApplied[actuatorIndex] ?? 0),
-      colorForceMeasured: colormap(tangentForceMeasured[actuatorIndex] ?? 0),
+      colorForceApplied: this.getGradiantColorX(tangentForceApplied[actuatorIndex]),
+      colorForceMeasured: this.getGradiantColorX(tangentForceMeasured[actuatorIndex]),
     }
     return actuator;
   }
@@ -185,36 +191,8 @@ export default class Selector extends Component {
   componentWillUnmount() {
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate() {
     d3.select('#circle-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
-
-    if (
-      prevProps.axialForceApplied !== this.props.axialForceApplied  ||
-      prevProps.axialForceMeasured !== this.props.axialForceMeasured  ||
-      prevProps.tangentForceApplied !== this.props.tangentForceApplied  ||
-      prevProps.tangentForceMeasured !== this.props.tangentForceMeasured
-    ) {
-
-      const actuatorsForceCommanded = [
-        ...this.props.axialForceApplied,
-        ...this.props.tangentForceApplied,
-      ];
-
-      const actuatorsForceMeasured = [
-        ...this.props.axialForceMeasured,
-        ...this.props.tangentForceMeasured
-      ];
-
-      const maxForce = Math.max(...actuatorsForceCommanded, ...actuatorsForceMeasured);
-      const minForce = Math.min(...actuatorsForceCommanded, ...actuatorsForceMeasured);
-
-      this.setState({
-        maxForce: maxForce,
-        minForce: minForce,
-        colormap: (val) => ForceGradiant.getGradiantColorX(val, minForce, maxForce)
-      });    
-      
-    }
   }
 
   zoomed = () => {
