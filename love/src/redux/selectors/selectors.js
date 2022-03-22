@@ -660,6 +660,84 @@ export const getHexapodTables = (state, salindex) => {
   };
 };
 
+//MTDome
+export const getApertureShutter = (state) => {
+  const subscriptions = ['telemetry-MTDome-0-positionActual', 'telemetry-MTDome-0-positionCommanded'];
+  const apertureShutter = getStreamsData(state, subscriptions);
+  return {
+    positionActual: apertureShutter['telemetry-MTDome-0-positionActual']
+      ? apertureShutter['telemetry-MTDome-0-positionActual'].positionActual.value
+      : 0,
+    positionCommanded: apertureShutter['telemetry-MTDome-0-positionCommanded']
+      ? apertureShutter['telemetry-MTDome-0-positionCommanded'].positionCommanded.value
+      : 0,
+  };
+};
+
+export const getDomeAzimuth = (state) => {
+  const subscriptions = ['telemetry-MTDome-0-positionActual', 'telemetry-MTDome-0-positionCommanded'];
+  const domeAzimuth = getStreamsData(state, subscriptions);
+  return {
+    positionActual: domeAzimuth['telemetry-MTDome-0-positionActual']
+      ? domeAzimuth['telemetry-MTDome-0-positionActual'].positionActual.value
+      : 0,
+    positionCommanded: domeAzimuth['telemetry-MTDome-0-positionCommanded']
+      ? domeAzimuth['telemetry-MTDome-0-positionCommanded'].positionCommanded.value
+      : 0,
+  };
+};
+
+export const getLightWindScreen = (state) => {
+  const subscriptions = ['telemetry-MTDome-0-positionActual', 'telemetry-MTDome-0-positionCommanded'];
+  const ligthWindScreen = getStreamsData(state, subscriptions);
+  return {
+    positionActual: ligthWindScreen['telemetry-MTDome-0-positionActual']
+      ? ligthWindScreen['telemetry-MTDome-0-positionActual'].positionActual.value
+      : 0,
+    positionCommanded: ligthWindScreen['telemetry-MTDome-0-positionCommanded']
+      ? ligthWindScreen['telemetry-MTDome-0-positionCommanded'].positionCommanded.value
+      : 0,
+  };
+};
+//
+//louvers pending
+//
+export const getDomeStatus = (state) => {
+  const subscriptions = [
+    'event-MTDome-0-logevent_azEnabled',
+    'event-MTDome-0-logevent_azMotion',
+    'event-MTDome-0-logevent_azTarget',
+    'event-MTDome-0-logevent_elEnabled',
+    'event-MTDome-0-logevent_elMotion',
+    'event-MTDome-0-logevent_elTarget',
+    'event-MTDome-0-logevent_operationalMode',
+  ];
+  const domeStatus = getStreamsData(state, subscriptions);
+  return {
+    azimuthState: domeStatus['event-MTDome-0-logevent_azEnabled']
+      ? domeStatus['event-MTDome-0-logevent_azEnabled'].state.value
+      : 0,
+    azimuthMotion: domeStatus['event-MTDome-0-logevent_azMotion']
+      ? domeStatus['event-MTDome-0-logevent_azMotion'].state.value
+      : 0,
+    azimuthTarget: domeStatus['event-MTDome-0-logevent_azTarget']
+      ? domeStatus['event-MTDome-0-logevent_azTarget'].position.value
+      : 0,
+    elevationState: domeStatus['event-MTDome-0-logevent_elEnabled']
+      ? domeStatus['event-MTDome-0-logevent_elEnabled'].state.value
+      : 0,
+    elevationMotion: domeStatus['event-MTDome-0-logevent_elMotion']
+      ? domeStatus['event-MTDome-0-logevent_elMotion'].state.value
+      : 0,
+    elevationTarget: domeStatus['event-MTDome-0-logevent_elTarget']
+      ? domeStatus['event-MTDome-0-logevent_elTarget'].position.value
+      : 0,
+    modeStatus: domeStatus['event-MTDome-0-logevent_operationalMode']
+      ? domeStatus['event-MTDome-0-logevent_operationalMode'].operationalMode.value
+      : 0,
+  };
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *
