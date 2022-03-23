@@ -8,7 +8,7 @@ import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTa
 import M2Table from './M2Table';
 
 export const schema = {
-  description: `Table containing low level information about the MTM2 forces`,
+  description: 'Table containing low level information about the MTM2 forces',
   defaultSize: [60, 12],
   props: {
     title: {

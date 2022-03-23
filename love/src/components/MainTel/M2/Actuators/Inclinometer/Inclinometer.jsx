@@ -19,9 +19,9 @@ export default class Inclinometer extends Component {
 
   render() {
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
-    const inclinationTelemetrySourceValue = inclinationTelemetrySource ? 
-              inclinationTelemetrySourceStateMap[inclinationTelemetrySource] : 
-              inclinationTelemetrySourceStateMap[defaultProps.inclinationTelemetrySource];
+    const inclinationTelemetrySourceValue = inclinationTelemetrySource
+      ? inclinationTelemetrySourceStateMap[inclinationTelemetrySource]
+      : inclinationTelemetrySourceStateMap[Inclinometer.defaultProps.inclinationTelemetrySource];
 
     return (
       <div className={styles.container}>

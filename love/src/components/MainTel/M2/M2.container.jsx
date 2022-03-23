@@ -41,14 +41,6 @@ export const schema = {
   },
 };
 
-const arrayRandomValues = (len, max) => {
-  const array = [];
-  for (let i = 0; i < len; i++) {
-    array.push(parseInt(Math.random() * max, 10));
-  }
-  return array;
-};
-
 const M2Container = (props) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
