@@ -464,17 +464,13 @@ export default class M1M3 extends Component {
             <div className={styles.control}>
               <span>Show actuators ID:</span>
               <div className={styles.toggleContainer}>
-                <span>Yes</span>
-                <Toggle hideLabels={true} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
-                <span>No</span>
+                <Toggle labels={['Yes', 'No']} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
               </div>
             </div>
             <div className={styles.control}>
               <span>Show hardpoints:</span>
               <div className={styles.toggleContainer}>
-                <span>Yes</span>
-                <Toggle hideLabels={true} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
-                <span>No</span>
+                <Toggle labels={['Yes', 'No']} isLive={this.state.showHardpoints} setLiveMode={this.toggleHardpoints} />
               </div>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Toggle.module.css';
-const Toggle = ({ isLive, setLiveMode, hideLabels, labels }) => {
+const Toggle = ({ isLive, setLiveMode, labels }) => {
   const handleChangeChk = () => {
     setLiveMode(!isLive);
   };
@@ -10,7 +10,7 @@ const Toggle = ({ isLive, setLiveMode, hideLabels, labels }) => {
         className={[styles.modeSelection, !isLive ? styles.highlightText : ''].join(' ')}
         onClick={() => setLiveMode(false)}
       >
-        {hideLabels || labels[0] || 'Query'}
+        { labels[0] }
       </span>
       
       <label className={styles.switch}>
@@ -22,7 +22,7 @@ const Toggle = ({ isLive, setLiveMode, hideLabels, labels }) => {
         className={[styles.modeSelection, isLive ? styles.highlightText : ''].join(' ')}
         onClick={() => setLiveMode(true)}
       >
-        {hideLabels || labels[1] || 'Live'}
+        { labels[1] }
       </span>
       
     </div>
@@ -31,7 +31,7 @@ const Toggle = ({ isLive, setLiveMode, hideLabels, labels }) => {
 
 Toggle.defaultProps = {
   isLive: false,
-  labels: undefined,
+  labels: ['Query', 'Live'],
   setLiveMode: () => null,
 };
 
