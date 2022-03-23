@@ -281,10 +281,10 @@ export default class Dome extends Component {
     };
 
     // Replace them for MTDome subscriptions values
-    actualPösitionLouvers = [];
-    commandedPositionLouvers = [];
+    const actualPositionLouvers = [];
+    const commandedPositionLouvers = [];
 
-    louversMap = [
+    const louversMap = [
       'A1',
       'A2',
       'B1',

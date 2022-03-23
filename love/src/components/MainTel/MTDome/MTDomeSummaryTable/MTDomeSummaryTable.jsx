@@ -101,107 +101,111 @@ export default class DomeSummaryTable extends Component {
     const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     return (
-      <SummaryPanel className={styles.summaryTable}>
-        <Title>Track ID</Title>
-        <Value>{this.props.trackID}</Value>
-        {/* Dome */}
-        <Title>Dome</Title>
-        <Value>
-          <StatusText
-            title={domeInPositionValue ? 'true' : 'false'}
-            status={stateToStyleDome[domeInPositionLabel]}
-            medium
+      <div className={styles.divSummary}>
+        <SummaryPanel className={styles.summaryTable}>
+          <Title>Track ID</Title>
+          <Value>{this.props.trackID}</Value>
+          {/* Dome */}
+          <Title>Dome</Title>
+          <Value>
+            <StatusText
+              title={domeInPositionValue ? 'true' : 'false'}
+              status={stateToStyleDome[domeInPositionLabel]}
+              medium
+            >
+              {domeInPositionLabel}
+            </StatusText>
+          </Value>
+          <Label>Mode</Label>
+          <Value>
+            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+              {azimuthStateValue}
+            </StatusText>
+          </Value>
+          <Label>Azimuth</Label>
+          <Value>
+            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+              {azimuthStateValue}
+            </StatusText>
+          </Value>
+          <Label>
+            <CurrentTargetValue
+              currentValue={mountAz.current.toFixed(2)}
+              targetValue={mountAz.target.toFixed(2)}
+              isChanging={true}
+            />
+          </Label>
+          <Value>
+            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+              {azimuthStateValue}
+            </StatusText>
+          </Value>
+          <Row
+            title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
           >
-            {domeInPositionLabel}
-          </StatusText>
-        </Value>
-        <Label>Mode</Label>
-        <Value>
-          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-            {azimuthStateValue}
-          </StatusText>
-        </Value>
-        <Label>Azimuth</Label>
-        <Value>
-          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-            {azimuthStateValue}
-          </StatusText>
-        </Value>
-        <Label>
-          <CurrentTargetValue
-            currentValue={mountAz.current.toFixed(2)}
-            targetValue={mountAz.target.toFixed(2)}
-            isChanging={true}
-          />
-        </Label>
-        <Value>
-          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-            {azimuthStateValue}
-          </StatusText>
-        </Value>
-        <Row
-          title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
-        >
-          <span>
-            <Limits
-              lowerLimit={minAz}
-              upperLimit={maxAz}
-              currentValue={mountAz.current}
-              targetValue={mountAz.target}
-              height={30}
-              displayLabels={false}
+            <span>
+              <Limits
+                lowerLimit={minAz}
+                upperLimit={maxAz}
+                currentValue={mountAz.current}
+                targetValue={mountAz.target}
+                height={30}
+                displayLabels={false}
+              />
+            </span>
+            <span>
+              <span>Time to limit: </span>
+              <span className={styles.highlight}>{Math.round(timeToAzLimit)} min</span>
+            </span>
+          </Row>
+          <Label>Elevation</Label>
+          {/* to do: add elevation state value */}
+          <Value>
+            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+              {azimuthStateValue}
+            </StatusText>
+          </Value>
+          <Label>
+            <CurrentTargetValue
+              currentValue={mountEl.current.toFixed(2)}
+              targetValue={mountEl.target.toFixed(2)}
+              isChanging={true}
             />
-          </span>
-          <span>
-            <span>Time to limit: </span>
-            <span className={styles.highlight}>{Math.round(timeToAzLimit)} min</span>
-          </span>
-        </Row>
-        <Label>Elevation</Label>
-        {/* to do: add elevation state value */}
-        <Value>
-          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-            {azimuthStateValue}
-          </StatusText>
-        </Value>
-        <Label>
-          <CurrentTargetValue
-            currentValue={mountEl.current.toFixed(2)}
-            targetValue={mountEl.target.toFixed(2)}
-            isChanging={true}
-          />
-        </Label>
-        <Value>
-          <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-            {azimuthStateValue}
-          </StatusText>
-        </Value>
-        <Row
-          title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
-        >
-          <span>
-            <Limits
-              lowerLimit={minEl}
-              upperLimit={maxEl}
-              currentValue={mountEl.current}
-              targetValue={mountEl.target}
-              height={30}
-              displayLabels={false}
-            />
-          </span>
-          <span>
-            <span>Time to limit: </span>
-            <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
-          </span>
-        </Row>
-        <div className={styles.shutters}>
-          <Label>Shutters</Label>
-          <div>
+          </Label>
+          <Value>
+            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
+              {azimuthStateValue}
+            </StatusText>
+          </Value>
+          <Row
+            title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
+          >
+            <span>
+              <Limits
+                lowerLimit={minEl}
+                upperLimit={maxEl}
+                currentValue={mountEl.current}
+                targetValue={mountEl.target}
+                height={30}
+                displayLabels={false}
+              />
+            </span>
+            <span>
+              <span>Time to limit: </span>
+              <span className={styles.highlight}>{Math.round(timeToElLimit)} min</span>
+            </span>
+          </Row>
+        </SummaryPanel>
+        {/* completed value from subscriptions */}
+        <SummaryPanel className={styles.shutters}>
+          <Label className={styles.shutterLabel}>Shutters</Label>
+          <div className={styles.divProgressBars}>
             <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
             <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
           </div>
-        </div>
-      </SummaryPanel>
+          {/* </div> */}
+        </SummaryPanel>
+      </div>
     );
   }
 }
