@@ -699,9 +699,20 @@ export const getLightWindScreen = (state) => {
       : 0,
   };
 };
-//
-//louvers pending
-//
+
+export const getLouversStatus = (state) => {
+  const subscriptions = ['telemetry-MTDome-0-positionActual', 'telemetry-MTDome-0-positionCommanded'];
+  const louvers = getStreamsData(state, subscriptions);
+  return {
+    positionActual: louvers['telemetry-MTDome-0-positionActual']
+      ? louvers['telemetry-MTDome-0-positionActual'].positionActual.value
+      : 0,
+    positionCommanded: louvers['telemetry-MTDome-0-positionCommanded']
+      ? louvers['telemetry-MTDome-0-positionCommanded'].positionCommanded.value
+      : 0,
+  };
+};
+
 export const getDomeStatus = (state) => {
   const subscriptions = [
     'event-MTDome-0-logevent_azEnabled',
