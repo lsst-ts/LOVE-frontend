@@ -281,6 +281,54 @@ export default class Dome extends Component {
     };
 
     // Replace them for MTDome subscriptions values
+    actualPösitionLouvers = [];
+    commandedPositionLouvers = [];
+
+    louversMap = [
+      'A1',
+      'A2',
+      'B1',
+      'B2',
+      'B3',
+      'C1',
+      'C2',
+      'C3',
+      'D1',
+      'D2',
+      'D3',
+      'E1',
+      'E2',
+      'E3',
+      'F1',
+      'F2',
+      'F3',
+      'G1',
+      'G2',
+      'G3',
+      'H1',
+      'H2',
+      'H3',
+      'I1',
+      'I2',
+      'I3',
+      'L1',
+      'L2',
+      'L3',
+      'M1',
+      'M2',
+      'M3',
+      'N1',
+      'N2',
+    ];
+
+    const louversActualPosition = {};
+    const louversCommandedPosition = {};
+
+    louversMap.forEach((l, i) => {
+      louversActualPosition[l] = actualPositionLouvers[i];
+      louversCommandedPosition[l] = commandedPositionLouvers[i];
+    });
+
     const dataLouversAF = [
       {
         Louvers: 'Open [%]',
