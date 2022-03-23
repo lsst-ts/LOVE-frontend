@@ -12,18 +12,33 @@ import styles from './Actuators.module.css';
 
 export default class Actuators extends Component {
     static propTypes = {
+        /** Zenith angle is 0 degree when the telescope is at zenith. */
         zenithAngleMeasured: PropTypes.number,
+        /** The source of inclination telemetry (onboard or from main telescope mount (MTMount) control system). */
         inclinationTelemetrySource: PropTypes.number,
+        /** ILC status. The elements are the actuator Ids from 1 to 78.
+         * The value needs to be transformed from decimal to hexadecimal to understand.
+         * The details are in code 67, LTS-346. */
         actuatorIlcState: PropTypes.arrayOf(PropTypes.number),
+        /** Array of steps for each axial actuator in sequence. */
         axialActuatorSteps: PropTypes.arrayOf(PropTypes.number),
+        /** Encoder position of each axial encoder in sequence. */
         axialEncoderPositions: PropTypes.arrayOf(PropTypes.number),
+        /** Force applied by SAL command or script for each actuator in sequence. */
         axialForceApplied: PropTypes.arrayOf(PropTypes.number),
+        /** Force measurement by load cell for each actuator in sequence. */
         axialForceMeasured: PropTypes.arrayOf(PropTypes.number),
+        /** Array of steps for each actuator in sequence. */
         tangentActuatorSteps: PropTypes.arrayOf(PropTypes.number),
+        /** Encoder position of each tangent encoder in sequence. */
         tangentEncoderPositions: PropTypes.arrayOf(PropTypes.number),
+        /** Force applied by SAL command or script for each actuator in sequence. */
         tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
+        /** Force measurement by load cell for each actuator in sequence. */
         tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+        /** Number of the minimum force limit, used for the gradiant color */
         minForceLimit: PropTypes.number,
+        /** Number of the maximum force limit, used for the gradiant color */
         maxForceLimit: PropTypes.number,
     };
 

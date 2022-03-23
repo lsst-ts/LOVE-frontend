@@ -9,7 +9,7 @@ import M2Table from './M2Table';
 
 export const schema = {
   description: `Table containing low level information about the MTM2 forces`,
-  defaultSize: [55, 14],
+  defaultSize: [60, 12],
   props: {
     title: {
       type: 'string',
@@ -20,7 +20,7 @@ export const schema = {
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
-      isPrivate: true,
+      isPrivate: false,
       default: false,
     },
   },

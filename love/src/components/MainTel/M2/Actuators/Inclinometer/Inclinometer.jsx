@@ -6,8 +6,9 @@ import styles from './Inclinometer.module.css';
 
 export default class Inclinometer extends Component {
   static propTypes = {
-    /** zenithAngleMeasured */
+    /** Zenith angle is 0 degree when the telescope is at zenith. */
     zenithAngleMeasured: PropTypes.number,
+    /** The source of inclination telemetry (onboard or from main telescope mount (MTMount) control system). */
     inclinationTelemetrySource: PropTypes.number,
   };
 

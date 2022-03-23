@@ -10,17 +10,29 @@ import styles from './Selector.module.css';
 
 export default class Selector extends Component {
   static propTypes = {
+    /** Array for the identify of the position in array with an index */
     actuatorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    /** Array for the identify of the position in array with an index */
     actuatorTangentReferenceId: PropTypes.arrayOf(PropTypes.number),
-    axialForceApplied: PropTypes.arrayOf(PropTypes.number),
-    axialForceMeasured: PropTypes.arrayOf(PropTypes.number),
-    tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
-    tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    /** Id of actuator selected */
     selectedActuator: PropTypes.number,
+    /** Id of actuator tangent selected */
     selectedActuatorTangent: PropTypes.number,
+    /** Function for change the actuator selected */
     actuatorSelect: PropTypes.func,
+    /** Function for change the actuator tangent selected */
     actuatorTangentSelect: PropTypes.func,
+    /** Force applied by SAL command or script for each actuator in sequence. */
+    axialForceApplied: PropTypes.arrayOf(PropTypes.number),
+    /** Force measurement by load cell for each actuator in sequence. */
+    axialForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    /** Force applied by SAL command or script for each actuator in sequence. */
+    tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
+    /** Force measurement by load cell for each actuator in sequence. */
+    tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    /** Number of the minimum force limit, used for the gradiant color */
     minForceLimit: PropTypes.number,
+    /** Number of the maximum force limit, used for the gradiant color */
     maxForceLimit: PropTypes.number,
   };
   static defaultProps = {

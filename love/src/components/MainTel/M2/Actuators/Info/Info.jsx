@@ -16,18 +16,33 @@ import styles from './Info.module.css';
 
 export default class Info extends Component {
   static propTypes = {
+    /** Array for the identify of the position in array with an index */
     actuatorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    /** Array for the identify of the position in array with an index */
     actuatorTangentReferenceId: PropTypes.arrayOf(PropTypes.number),
+    /** ILC status. The elements are the actuator Ids from 1 to 78.
+     * The value needs to be transformed from decimal to hexadecimal to understand.
+     * The details are in code 67, LTS-346. */
     actuatorIlcState: PropTypes.arrayOf(PropTypes.number),
+    /** Array of steps for each axial actuator in sequence. */
     axialActuatorSteps: PropTypes.arrayOf(PropTypes.number),
+    /** Encoder position of each axial encoder in sequence. */
     axialEncoderPositions: PropTypes.arrayOf(PropTypes.number),
+    /** Force applied by SAL command or script for each actuator in sequence. */
     axialForceApplied: PropTypes.arrayOf(PropTypes.number),
+    /** Force measurement by load cell for each actuator in sequence. */
     axialForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    /** Array of steps for each actuator in sequence. */
     tangentActuatorSteps: PropTypes.arrayOf(PropTypes.number),
+    /** Encoder position of each tangent encoder in sequence. */
     tangentEncoderPositions: PropTypes.arrayOf(PropTypes.number),
+    /** Force applied by SAL command or script for each actuator in sequence. */
     tangentForceApplied: PropTypes.arrayOf(PropTypes.number),
+    /** Force measurement by load cell for each actuator in sequence. */
     tangentForceMeasured: PropTypes.arrayOf(PropTypes.number),
+    /** Id of actuator selected */
     selectedActuator: PropTypes.number,
+    /** Id of actuator tangent selected */
     selectedActuatorTangent: PropTypes.number,
   }
 

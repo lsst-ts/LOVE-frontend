@@ -12,7 +12,7 @@ import M2 from './M2';
 
 export const schema = {
   description: 'View of M2 actuators',
-  defaultSize: [61, 32],
+  defaultSize: [60, 47],
   props: {
     title: {
       type: 'string',
@@ -35,7 +35,7 @@ export const schema = {
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
-      isPrivate: true,
+      isPrivate: false,
       default: false,
     },
   },
