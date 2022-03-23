@@ -70,16 +70,6 @@ export default class MotorTable extends Component {
         type: 'number',
         render: defaultNumberFormatter,
       },
-      {
-        field: 'magnitude',
-        title: (
-          <>
-            Magnitude <span className={styles.units}>[N]</span>
-          </>
-        ),
-        type: 'number',
-        render: defaultNumberFormatter,
-      },
     ];
   }
 
@@ -93,7 +83,7 @@ export default class MotorTable extends Component {
         field: 'x',
         title: (
           <>
-            X <span className={styles.units}>[N]</span>
+            X <span className={styles.units}>[mt]</span>
           </>
         ),
         type: 'number',
@@ -103,7 +93,7 @@ export default class MotorTable extends Component {
         field: 'y',
         title: (
           <>
-            Y <span className={styles.units}>[N]</span>
+            Y <span className={styles.units}>[mt]</span>
           </>
         ),
         type: 'number',
@@ -113,7 +103,7 @@ export default class MotorTable extends Component {
         field: 'z',
         title: (
           <>
-            Z <span className={styles.units}>[N]</span>
+            Z <span className={styles.units}>[mt]</span>
           </>
         ),
         type: 'number',
@@ -123,7 +113,7 @@ export default class MotorTable extends Component {
         field: 'rx',
         title: (
           <>
-            RX <span className={styles.units}>[N]</span>
+            RX <span className={styles.units}>[mt]</span>
           </>
         ),
         type: 'number',
@@ -133,7 +123,7 @@ export default class MotorTable extends Component {
         field: 'ry',
         title: (
           <>
-            RY <span className={styles.units}>[N]</span>
+            RY <span className={styles.units}>[mt]</span>
           </>
         ),
         type: 'number',
@@ -143,7 +133,7 @@ export default class MotorTable extends Component {
         field: 'rz',
         title: (
           <>
-            RZ <span className={styles.units}>[N]</span>
+            RZ <span className={styles.units}>[mt]</span>
           </>
         ),
         type: 'number',
@@ -154,58 +144,37 @@ export default class MotorTable extends Component {
 
   getForceTableData = () => {
     const {
-      appliedFx,
-      appliedFy,
-      appliedFz,
-      appliedMx,
-      appliedMy,
-      appliedMz,
-      appliedForceMagnitude,
-      actuatorsFx,
-      actuatorsFy,
-      actuatorsFz,
-      actuatorsMx,
-      actuatorsMy,
-      actuatorsMz,
-      actuatorsForceMagnitude,
-      hardpointsFx,
-      hardpointsFy,
-      hardpointsFz,
-      hardpointsMx,
-      hardpointsMy,
-      hardpointsMz,
-      hardpointsForceMagnitude,
+      forceBalanceFx,
+      forceBalanceFy,
+      forceBalanceFz,
+      forceBalanceMx,
+      forceBalanceMy,
+      forceBalanceMz,
+      netForcesFx,
+      netForcesFy,
+      netForcesFz,
+      netMomentsMx,
+      netMomentsMy,
+      netMomentsMz,
     } = this.props;
     const data = {
-      commanded: {
-        name: 'Commanded',
-        x: appliedFx,
-        y: appliedFy,
-        z: appliedFz,
-        mx: appliedMx,
-        my: appliedMy,
-        mz: appliedMz,
-        magnitude: appliedForceMagnitude,
+      net: {
+        name: 'Net',
+        x: netForcesFx,
+        y: netForcesFy,
+        z: netForcesFz,
+        mx: netMomentsMx,
+        my: netMomentsMy,
+        mz: netMomentsMz,
       },
-      measured: {
-        name: 'Measured',
-        x: actuatorsFx,
-        y: actuatorsFy,
-        z: actuatorsFz,
-        mx: actuatorsMx,
-        my: actuatorsMy,
-        mz: actuatorsMz,
-        magnitude: actuatorsForceMagnitude,
-      },
-      hardpoints: {
-        name: 'Hardpoints',
-        x: hardpointsFx,
-        y: hardpointsFy,
-        z: hardpointsFz,
-        mx: hardpointsMx,
-        my: hardpointsMy,
-        mz: hardpointsMz,
-        magnitude: hardpointsForceMagnitude,
+      balanced: {
+        name: 'Balanced',
+        x: forceBalanceFx,
+        y: forceBalanceFy,
+        z: forceBalanceFz,
+        mx: forceBalanceMx,
+        my: forceBalanceMy,
+        mz: forceBalanceMz,
       },
     };
     return data;
@@ -213,38 +182,38 @@ export default class MotorTable extends Component {
 
   getMirrorPositionTableData = () => {
     const {
-      hardpointsXPosition,
-      hardpointsYPosition,
-      hardpointsZPosition,
-      hardpointsXRotation,
-      hardpointsYRotation,
-      hardpointsZRotation,
-      imsXPosition,
-      imsYPosition,
-      imsZPosition,
-      imsXRotation,
-      imsYRotation,
-      imsZRotation,
+      positionX,
+      positionY,
+      positionZ,
+      positionXRot,
+      positionYRot,
+      positionZRot,
+      positionIMSX,
+      positionIMSY,
+      positionIMSZ,
+      positionIMSXRot,
+      positionIMSYRot,
+      positionIMSZRot,
     } = this.props;
 
     const data = {
       hardpoints: {
         name: 'Hardpoints',
-        x: hardpointsXPosition,
-        y: hardpointsYPosition,
-        z: hardpointsZPosition,
-        rx: hardpointsXRotation,
-        ry: hardpointsYRotation,
-        rz: hardpointsZRotation,
+        x: positionX,
+        y: positionY,
+        z: positionZ,
+        rx: positionXRot,
+        ry: positionYRot,
+        rz: positionZRot,
       },
       IMS: {
         name: 'IMS',
-        x: imsXPosition,
-        y: imsYPosition,
-        z: imsZPosition,
-        rx: imsXRotation,
-        ry: imsYRotation,
-        rz: imsZRotation,
+        x: positionIMSX,
+        y: positionIMSY,
+        z: positionIMSZ,
+        rx: positionIMSXRot,
+        ry: positionIMSYRot,
+        rz: positionIMSZRot,
       },
     };
     return data;

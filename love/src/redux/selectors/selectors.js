@@ -197,12 +197,12 @@ export const getM2State = (state) => {
     'event-MTM2-0-forceBalanceSystemStatus',
     'event-MTM2-0-m2AssemblyInPosition',
   ];
-  const m1m3Data = getStreamsData(state, subscriptions);
+  const m2Data = getStreamsData(state, subscriptions);
   return {
-    summaryState: m1m3Data['event-MTM2-0-summaryState']?.[0].summaryState?.value ?? 0,
-    commandableByDDS: m1m3Data['event-MTM2-0-commandableByDDS']?.[0].state?.value,
-    forceBalanceSystemStatus: m1m3Data['event-MTM2-0-forceBalanceSystemStatus']?.[0].status?.value,
-    m2AssemblyInPosition: m1m3Data['event-MTM2-0-m2AssemblyInPosition']?.[0].state?.value,
+    summaryState: m2Data['event-MTM2-0-summaryState']?.[0].summaryState?.value ?? 3,
+    commandableByDDS: m2Data['event-MTM2-0-commandableByDDS']?.[0].state?.value ?? 1,
+    forceBalanceSystemStatus: m2Data['event-MTM2-0-forceBalanceSystemStatus']?.[0].status?.value ?? 0,
+    m2AssemblyInPosition: m2Data['event-MTM2-0-m2AssemblyInPosition']?.[0].state?.value ?? 0,
   };
 };
 
@@ -245,8 +245,45 @@ export const getM2ActuatorForce = (state) => {
   return {
     axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? Array(72).fill(Math.floor(Math.random() * 1000)),
     axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? Array(72).fill(Math.floor(Math.random() * 1000)),
-    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? Array(6).fill(Math.floor(Math.random() * 1000)),
-    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? Array(6).fill(Math.floor(Math.random() * 1000)),
+    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? Array(6).fill(Math.floor(Math.random() * 100 + 900)),
+    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? Array(6).fill(Math.floor(Math.random() * 100 + 900)),
+  };
+};
+
+export const getM2ActuatorTable = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-forceBalance',
+    'telemetry-MTM2-0-netForcesTotal',
+    'telemetry-MTM2-0-netMomentsTotal',
+    'telemetry-MTM2-0-position',
+    'telemetry-MTM2-0-positionIMS',
+  ];
+  const m2ActuatorsData = getStreamsData(state, subscriptions);
+  return {
+    forceBalanceFx: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.fx?.value ?? 1.00,
+    forceBalanceFy: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.fy?.value ?? 2,
+    forceBalanceFz: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.fz?.value ?? 3,
+    forceBalanceMx: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.mx?.value ?? 4,
+    forceBalanceMy: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.my?.value ?? 5,
+    forceBalanceMz: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.mz?.value ?? 6,
+    netForcesFx: m2ActuatorsData['telemetry-MTM2-0-netForcesTotal']?.fx?.value ?? 0,
+    netForcesFy: m2ActuatorsData['telemetry-MTM2-0-netForcesTotal']?.fy?.value ?? 0,
+    netForcesFz: m2ActuatorsData['telemetry-MTM2-0-netForcesTotal']?.fz?.value ?? 0,
+    netMomentsMx: m2ActuatorsData['telemetry-MTM2-0-netMomentsTotal']?.mx?.value ?? 0,
+    netMomentsMy: m2ActuatorsData['telemetry-MTM2-0-netMomentsTotal']?.my?.value ?? 0,
+    netMomentsMz: m2ActuatorsData['telemetry-MTM2-0-netMomentsTotal']?.mz?.value ?? 0,
+    positionX: m2ActuatorsData['telemetry-MTM2-0-position']?.x?.value ?? 1,
+    positionY: m2ActuatorsData['telemetry-MTM2-0-position']?.y?.value ?? 2,
+    positionZ: m2ActuatorsData['telemetry-MTM2-0-position']?.z?.value ?? 3,
+    positionXRot: m2ActuatorsData['telemetry-MTM2-0-position']?.xRot?.value ?? 4,
+    positionYRot: m2ActuatorsData['telemetry-MTM2-0-position']?.yRot?.value ?? 5,
+    positionZRot: m2ActuatorsData['telemetry-MTM2-0-position']?.zRot?.value ?? 6,
+    positionIMSX: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.x?.value ?? 7,
+    positionIMSY: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.y?.value ?? 8,
+    positionIMSZ: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.z?.value ?? 9,
+    positionIMSXRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.xRot?.value ?? 0,
+    positionIMSYRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.yRot?.value ?? 0,
+    positionIMSZRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.zRot?.value ?? 0,
   };
 };
 
@@ -256,7 +293,8 @@ function createDataRandom() {
     data.push(Math.floor(Math.random() * 1000));
   }
   return data;
-}
+};
+
 export const getM1M3ActuatorForces = (state) => {
   const subscriptions = [
     'event-MTM1M3-0-appliedAberrationForces',
