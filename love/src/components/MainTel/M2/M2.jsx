@@ -66,7 +66,6 @@ export default class M2 extends Component {
           tangentForceMeasured={tangentForceMeasured}
           minForceLimit={minForceLimit}
           maxForceLimit={maxForceLimit}
-          /* {...this.props} */
         />
       </div>
     );

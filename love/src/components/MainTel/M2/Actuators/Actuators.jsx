@@ -116,25 +116,19 @@ export default class Actuators extends Component {
                         <div className={styles.control}>
                         <span>Actuators ID:</span>
                         <div className={styles.toggleContainer}>
-                            <span>Show</span>
-                            <Toggle hideLabels={true} isLive={showActuatorsID} setLiveMode={this.toggleActuatorsID} />
-                            <span>Hide</span>
+                            <Toggle hideLabels={false} labels={['Hide','Show']} isLive={showActuatorsID} setLiveMode={this.toggleActuatorsID} />
                         </div>
                         </div>
                         <div className={styles.control}>
                         <span>Commanded Force:</span>
                         <div className={styles.toggleContainer}>
-                            <span>Show</span>
-                            <Toggle hideLabels={true} isLive={showCommandedForce} setLiveMode={this.toggleCommandedForce} />
-                            <span>Hide</span>
+                            <Toggle hideLabels={false} labels={['Hide','Show']} isLive={showCommandedForce} setLiveMode={this.toggleCommandedForce} />
                         </div>
                         </div>
                         <div className={styles.control}>
                         <span>Measured Force:</span>
                         <div className={styles.toggleContainer}>
-                            <span>Show</span>
-                            <Toggle hideLabels={true} isLive={showMeasuredForce} setLiveMode={this.toggleMeasuredForce} />
-                            <span>Hide</span>
+                            <Toggle hideLabels={false} labels={['Hide','Show']} isLive={showMeasuredForce} setLiveMode={this.toggleMeasuredForce} />
                         </div>
                         </div>
                     </div>

@@ -32,6 +32,12 @@ export const schema = {
       isPrivate: false,
       default: 1000,
     },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
+    },
   },
 };
 
@@ -74,7 +80,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM2-0-commandableByDDS',
     'event-MTM2-0-forceBalanceSystemStatus',
     'event-MTM2-0-m2AssemblyInPosition',
-  
+    'event-Heartbeat-0-stream',
   ];
   return {
     subscriptions,
