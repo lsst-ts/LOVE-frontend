@@ -198,7 +198,9 @@ export default class DomeSummaryTable extends Component {
         </SummaryPanel>
         {/* completed value from subscriptions */}
         <SummaryPanel className={styles.shutters}>
-          <Label className={styles.shutterLabel}>Shutters</Label>
+          <div className={styles.shutterLabel}>
+            <Label>Shutters</Label>
+          </div>
           <div className={styles.divProgressBars}>
             <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
             <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
