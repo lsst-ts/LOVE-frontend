@@ -1,6 +1,33 @@
 import React from 'react';
+import { isConcatSpec } from 'vega-lite/build/src/spec/concat';
 import Button from '../GeneralPurpose/Button/Button';
+
+import AddIcon from 'components/icons/AddIcon/AddIcon';
+import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
+import BackArrowIcon from 'components/icons/BackArrowIcon/BackArrowIcon';
+import CheckStatusIcon from 'components/icons/CheckStatusIcon/CheckStatusIcon';
+import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import EmergencyContactIcon from 'components/icons/EmergencyContactIcon/EmergencyContactIcon';
+import ErrorIcon from 'components/icons/ErrorIcon/ErrorIcon';
+import ExitModeIcon from 'components/icons/ExitModeIcon/ExitModeIcon';
+import ExportIcon from 'components/icons/ExportIcon/ExportIcon';
+import FilterIcon from 'components/icons/FilterIcon/FilterIcon';
+import GearIcon from 'components/icons/GearIcon/GearIcon';
+import GoBackIcon from 'components/icons/GoBackIcon/GoBackIcon';
+import IconBadge from 'components/icons/IconBadge/IconBadge';
+import ImportIcon from 'components/icons/ImportIcon/ImportIcon';
+import InfoIcon from 'components/icons/InfoIcon/InfoIcon';
+import MenuIcon from 'components/icons/MenuIcon/MenuIcon';
+import NotificationIcon from 'components/icons/NotificationIcon/NotificationIcon';
+import RedoIcon from 'components/icons/RedoIcon/RedoIcon';
+import RotateIcon from 'components/icons/RotateIcon/RotateIcon';
+import ScriptIcon from 'components/icons/ScriptIcon/ScriptIcon';
+import UndoIcon from 'components/icons/UndoIcon/UndoIcon';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
+import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+
 import styles from './Palette.module.css';
+
 
 function Palette(props) {
   const fontSizes = [
@@ -63,6 +90,33 @@ function Palette(props) {
     '--status-running-dimmed-color-2',
     '--status-running-dimmed-color-3',
   ];
+
+  const icons = [
+    <AddIcon clasName={styles.icon}/>,
+    <ArrowIcon clasName={styles.icon}/>,
+    <BackArrowIcon clasName={styles.icon}/>,
+    <CheckStatusIcon clasName={styles.icon}/>,
+    <CloseIcon clasName={styles.icon}/>,
+    <EmergencyContactIcon clasName={styles.icon}/>,
+    <ErrorIcon clasName={styles.icon}/>,
+    <ExitModeIcon clasName={styles.icon}/>,
+    <ExportIcon clasName={styles.icon}/>,
+    <FilterIcon clasName={styles.icon}/>,
+    <GearIcon clasName={styles.icon}/>,
+    <GoBackIcon clasName={styles.icon}/>,
+    <IconBadge clasName={styles.icon}/>,
+    <ImportIcon clasName={styles.icon}/>,
+    <InfoIcon clasName={styles.icon}/>,
+    <MenuIcon clasName={styles.icon}/>,
+    <NotificationIcon clasName={styles.icon}/>,
+    <RedoIcon clasName={styles.icon}/>,
+    <RotateIcon clasName={styles.icon}/>,
+    <ScriptIcon clasName={styles.icon}/>,
+    <UndoIcon clasName={styles.icon}/>,
+    <WarningIcon clasName={styles.icon}/>,
+    <AcknowledgeIcon clasName={styles.icon}/>,
+  ];
+
 
   const scriptColors = ['--script-ok-color', '--script-ok-dimmed-color'];
 
@@ -180,6 +234,14 @@ function Palette(props) {
           );
         })}
       </div>
+
+      <h1> Icons </h1>
+      <div className={styles.grid}>
+        {icons.map((icon, index) => {
+          return <Button key={index} className={styles.btn}>{icon}</Button>;
+        })}
+      </div>
+
     </div>
   );
 }
