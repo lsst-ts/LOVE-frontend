@@ -28,3 +28,9 @@
   display: block;
   text-align: center;
 }
+
+.icon {
+  fill: var(--base-font-color);
+  cursor: pointer;
+  height: 0.8em;
+}
