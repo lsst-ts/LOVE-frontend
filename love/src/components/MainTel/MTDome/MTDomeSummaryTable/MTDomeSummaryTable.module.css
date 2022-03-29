@@ -14,12 +14,7 @@
   display: block;
 }
 
-.shutterLabel {
-  float: left !important;
-  margin-bottom: 20px !important;
-}
-
 .divProgressBars {
-  width: 70%;
-  /* float: right; */
+  width: 90%;
+  padding: 10px;
 }
