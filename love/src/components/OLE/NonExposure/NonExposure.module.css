@@ -2,7 +2,49 @@
   color: white;
   font-weight: bold;
   text-align: left;
-  font-size: 16px;
+  font-size: 15px;
+}
+
+.returnToLogs {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: left;
+  padding-left: 0.5em;
+  border: 5px;
+  flex: 0;
+  min-height: 3em;
+}
+
+.header {
+  font-weight: bold;
+  text-align: left;
+  font-size: 15px;
+  margin: 7px;
+  padding-bottom: 8px;
+  height: 20px;
+  border-bottom: 2px solid var(--secondary-font-color);
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-row: auto;
+}
+
+.detail {
+
+}
+
+.description {
+  background-color: var(--second-tertiary-background-color);
+}
+
+.footer {
+  display: flex;
+  flex-flow: row;
+  align-items: left;
+  padding-left: 1em;
+  border: 5px;
 }
 
 .iconBtn {
@@ -48,4 +90,33 @@
 .filters .select {
   white-space: nowrap;
   flex: 0 0 200px;
+}
+
+.floatRight {
+  float: right;
+  /* margin: 5px; */
+}
+
+.floatLeft {
+  float: left;
+  /* position: absolute; */
+  /* left: 17px; */
+}
+
+.bold {
+  font: bold;
+}
+
+.detailContainer {
+  background-color: var(--second-tertiary-background-color);
+  color: var(--base-font-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
+  /* width: 100%; */
+  display: grid;
+  grid-template-rows: 2em minmax(1em, 1fr);
+  box-sizing: border-box;
+  /* overflow: auto; */
+  margin-left: 15px;
+  margin-right: 15px;
 }
