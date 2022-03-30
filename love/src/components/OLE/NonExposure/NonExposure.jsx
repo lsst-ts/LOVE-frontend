@@ -10,13 +10,26 @@ import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import styles from './NonExposure.module.css';
-import { style } from 'd3';
-import { stateToStyleLATISS } from 'Config';
+import NonExposureDetail from './NonExposureDetail';
 
 export default class NonExposure extends Component {
   static propTypes = {};
 
   static defaultProps = {};
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      modeEdit: false,
+    };
+  }
+
+   edit(index) {
+    console.log('edit', index);
+    if (index) {
+      this.setState({ modeEdit: true });
+    }   
+  }
 
   getHeaders = () => {
     return [
@@ -97,7 +110,7 @@ export default class NonExposure extends Component {
         field: 'action',
         title: 'Action',
         type: 'string',
-        render: () => {
+        render: (_, index) => {
           return (
             <>
               <span className={styles.margin}>
@@ -106,7 +119,9 @@ export default class NonExposure extends Component {
                 </Button>
               </span>
               <span className={styles.margin}>
-                <Button className={styles.iconBtn} title="Edit" onClick={() => {}} status="transparent">
+                <Button className={styles.iconBtn} title="Edit"
+                  onClick={() => { this.edit(index) }} status="transparent"
+                >
                   <EditIcon className={styles.icon}/>
                 </Button>
               </span>
@@ -118,7 +133,9 @@ export default class NonExposure extends Component {
   }
 
   render() {
+    const modeEdit = this.state.modeEdit;
     const headers = Object.values(this.getHeaders());
+
     const filteredData = [
       {
         id: 1,
@@ -138,18 +155,22 @@ export default class NonExposure extends Component {
     const tableData = Object.values(filteredData);
 
     return (
-      <>
-        <div className={styles.title}>
-          Filter
-        </div>
-        <div className={styles.filters}>
-          <Label>From: </Label>
-          <Value>
-            <Input/>
-          </Value>
-        </div>
-        <SimpleTable headers={headers} data={tableData} />
-      </>
+      modeEdit
+      ? <NonExposureDetail back={() => { this.setState({ modeEdit: false });}}/>
+      : (
+        <>
+          <div className={styles.title}>
+            Filter
+          </div>
+          <div className={styles.filters}>
+            <Label>From: </Label>
+            {/* <Value>
+              <Input/>
+            </Value> */}
+          </div>
+          <SimpleTable headers={headers} data={tableData} />
+        </>
+      )
     );
   }
 }
