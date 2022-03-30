@@ -16,6 +16,12 @@ export const schema = {
       isPrivate: false,
       default: 'Log Service',
     },
+    hasRawMode: {
+      type: 'boolean',
+      description: 'Whether the component has a raw mode version',
+      isPrivate: true,
+      default: false,
+    },
   },
 };
 
