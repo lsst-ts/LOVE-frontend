@@ -6,7 +6,7 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import Button from 'components/GeneralPurpose/Button/Button';
 import { Link } from 'react-router-dom';
-import ArrowIcon from 'components/icons/ArrowIcon/ArrowIcon';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import styles from './NonExposure.module.css';
@@ -20,11 +20,19 @@ export default class NonExposure extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      modeView: false,
       modeEdit: false,
     };
   }
 
-   edit(index) {
+  view(index) {
+    console.log('edit', index);
+    if (index) {
+      this.setState({ modeView: true });
+    }   
+  }
+
+  edit(index) {
     console.log('edit', index);
     if (index) {
       this.setState({ modeEdit: true });
@@ -94,7 +102,7 @@ export default class NonExposure extends Component {
             title="File"
             onClick={() => {}}
           >
-            <ArrowIcon className={styles.icon}/>
+            <DownloadIcon className={styles.icon}/>
           </Button>
         ),
       },
@@ -114,7 +122,9 @@ export default class NonExposure extends Component {
           return (
             <>
               <span className={styles.margin}>
-                <Button className={styles.iconBtn} title="View" onClick={() => {}} status="transparent">
+                <Button className={styles.iconBtn} title="View"
+                  onClick={() => { this.view(index) }} status="transparent"
+                >
                   <AcknowledgeIcon className={styles.icon} nonAcknowledge={false}/>
                 </Button>
               </span>
@@ -133,7 +143,7 @@ export default class NonExposure extends Component {
   }
 
   render() {
-    const modeEdit = this.state.modeEdit;
+    const modeView = this.state.modeView;
     const headers = Object.values(this.getHeaders());
 
     const filteredData = [
@@ -155,10 +165,10 @@ export default class NonExposure extends Component {
     const tableData = Object.values(filteredData);
 
     return (
-      modeEdit
-      ? <NonExposureDetail back={() => { this.setState({ modeEdit: false });}}/>
+      modeView
+      ? <NonExposureDetail back={() => { this.setState({ modeView: false });}}/>
       : (
-        <>
+        <div className={styles.margin10}>
           <div className={styles.title}>
             Filter
           </div>
@@ -169,7 +179,7 @@ export default class NonExposure extends Component {
             </Value> */}
           </div>
           <SimpleTable headers={headers} data={tableData} />
-        </>
+        </div>
       )
     );
   }

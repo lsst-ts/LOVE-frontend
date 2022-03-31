@@ -7,6 +7,8 @@ import Title from 'components/GeneralPurpose/SummaryPanel/Title';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import styles from './NonExposure.module.css';
+import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 
 export default class NonExposureDetail extends Component {
   static propTypes = {
@@ -25,6 +27,7 @@ export default class NonExposureDetail extends Component {
       timeIncident: '2022/03/21 16:21:33',
       subsystem: 'M. Telescope > MTDome > Azimuth',
       value: 24,
+      user: 'Mía Elbo',
       ObsTimeLoss: '02:00:00',
       jira: 'http://lsst.jira.org',
       file: {
@@ -48,34 +51,41 @@ export default class NonExposureDetail extends Component {
             <span className={styles.bold}>#{logDetail.id} - {logDetail.type}</span>
             <span><Button status="link">view Jira ticket</Button></span>
             <span className={styles.floatRight}>
-              <Button className={styles.iconBtn} title="View" onClick={() => {}} status="transparent">
+              <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
                 <DeleteIcon className={styles.icon}/>
               </Button>
             </span>
           </div>
           <div className={styles.content}>
             <div className={styles.detail}>
-              <Label>Time of Incident</Label>{/* <Value>{logDetail.timeIncident}</Value> */}
-              <Label>Subsystem Affected</Label>{/* <Value>{logDetail.subsystem}</Value> */}
-              <Label>Value</Label>{/* <Value>{logDetail.value}</Value> */}
-              <Label>Obs. Time Loss</Label>{/* <Value>{logDetail.ObsTimeLoss}</Value> */}
+              <span className={styles.label}>Time of Incident</span><span className={styles.value}>{logDetail.timeIncident}</span>
+              <span className={styles.label}>Subsystem Affected</span><span className={styles.value}>{logDetail.subsystem}</span>
+              <span className={styles.label}>Value</span><span className={styles.value}>{logDetail.value}</span>
+              <span className={styles.label}>Obs. Time Loss</span><span className={styles.value}>{logDetail.ObsTimeLoss}</span>
             </div>
             <div className={styles.description}>
-              <span>On </span>
-              <span className={styles.bold}>{logDetail.timeIncident} </span>
-              <span className={styles.bold}>{logDetail.user}</span>
-              <span>wrote:</span><br/>
-              <span>{logDetail.description}</span>
+              <div className={styles.floatLeft}>
+                <span>On </span>
+                <span className={styles.bold}>{logDetail.timeIncident} </span>
+                <span>by </span>
+                <span className={styles.bold}>{logDetail.user} </span>
+                <span>wrote:</span>
+              </div>
+              <div className={styles.floatLeft}>
+                {logDetail.description}
+              </div>
             </div>
           </div>
           <div className={styles.footer}>
-            <Label>File Attached:</Label>
-            {/* <Value>
-              {`${logDetail.file.filename} (${logDetail.file.size}) `}
-            </Value> */}
-            <Button className={styles.iconBtn} title="File" onClick={() => {}} status="transparent">
-              <ArrowIcon className={styles.icon}/>
-            </Button>
+            <span className={styles.label}>File Attached: </span>
+            <span className={styles.value}>
+              {` ${logDetail.file.filename} (${logDetail.file.size}) `}
+            </span>
+            <span className={styles.value}>
+              <Button className={styles.iconBtn} title="File" onClick={() => {}} status="transparent">
+                <DownloadIcon className={styles.icon}/>
+              </Button>
+            </span>
           </div>
         </div>
       </>
