@@ -7,12 +7,22 @@
 
 .returnToLogs {
   display: flex;
-  flex-flow: row nowrap;
-  align-items: left;
   padding-left: 0.5em;
-  border: 5px;
-  flex: 0;
-  min-height: 3em;
+  min-height: 2em;
+}
+
+.detailContainer {
+  background-color: var(--second-tertiary-background-color);
+  color: var(--base-font-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
+  /* width: 100%; */
+  display: grid;
+  grid-template-rows: 1fr 3fr 1fr;
+  box-sizing: border-box;
+  /* overflow: auto; */
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .header {
@@ -20,9 +30,9 @@
   text-align: left;
   font-size: 15px;
   margin: 7px;
-  padding-bottom: 8px;
-  height: 20px;
   border-bottom: 2px solid var(--secondary-font-color);
+  color: var(--secondary-font-color);
+  min-height: 2em;
 }
 
 .content {
@@ -32,19 +42,28 @@
 }
 
 .detail {
-
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-auto-rows: max-content;
+  grid-row-gap: 0.2em;
+  padding-top: 15px;
 }
 
 .description {
-  background-color: var(--second-tertiary-background-color);
+  background-color: var(--second-quaternary-background-color);
+  border-radius: 6px;
+  display: flexbox;
+  margin: 7px;
+  padding: 7px;
+  margin-right: 10px;
 }
 
 .footer {
   display: flex;
   flex-flow: row;
-  align-items: left;
-  padding-left: 1em;
-  border: 5px;
+  padding-top: 7px;
+  border-top: 2px solid var(--secondary-font-color);
+  margin: 7px;
 }
 
 .iconBtn {
@@ -64,6 +83,11 @@
 .margin {
   margin-left: 3px;
   margin-right: 3px;
+}
+
+.margin10 {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .filters {
@@ -94,7 +118,7 @@
 
 .floatRight {
   float: right;
-  /* margin: 5px; */
+  margin: 3px;
 }
 
 .floatLeft {
@@ -104,19 +128,19 @@
 }
 
 .bold {
-  font: bold;
+  font-weight: bold;
+  color: var(--secondary-font-color);
 }
 
-.detailContainer {
-  background-color: var(--second-tertiary-background-color);
-  color: var(--base-font-color);
-  border: 1px solid hsl(199, 43%, 16%);
-  border-radius: 6px;
-  /* width: 100%; */
-  display: grid;
-  grid-template-rows: 2em minmax(1em, 1fr);
-  box-sizing: border-box;
-  /* overflow: auto; */
+.label {
+  font-weight: bold;
+  color: var(--secondary-font-color);
+  text-align: left;
   margin-left: 15px;
-  margin-right: 15px;
 }
+
+.value {
+  text-align: left;
+  margin-left: 10px;
+}
+
