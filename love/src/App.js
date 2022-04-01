@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, withRouter } from 'react-router-dom';
+import 'styles/react-datetime.css';
 import './App.css';
 import ComponentIndexContainer from './components/ComponentIndex/ComponentIndex.container';
 import ViewsIndexContainer from './components/UIF/ViewsIndex/ViewsIndex.container';

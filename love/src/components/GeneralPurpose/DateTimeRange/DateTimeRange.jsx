@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { DATE_TIME_FORMAT } from 'Config';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import styles from './DateTimeRange.module.css';
-import './react-datetime.css';
 
 const DateTimeRange = ({ ...props }) => {
   const [dateStart, setDateStart] = useState(props.startDate ?? new Date(new Date() - 24 * 60 * 60 * 1000));
