@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
+import EFDQuery from 'components/GeneralPurpose/EFDQuery/EFDQuery';
 import styles from './EventLog.module.css';
-import { formatTimestamp, getStringRegExp } from '../../Utils';
 import InfoIcon from '../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
@@ -53,6 +54,8 @@ export default class EventLog extends PureComponent {
       messageFilters,
       typeFilters,
       eventData: [],
+      queryData: [],
+      efdEnabled: false,
     };
   }
 
@@ -229,13 +232,40 @@ export default class EventLog extends PureComponent {
               </div>
             </div>
           </div>
+          <div className={styles.efd}>
+            <div className={styles.efdSelector}>
+              <label>
+                <input
+                  onChange={(event) => this.setState({ efdEnabled: event.target.checked })}
+                  type="checkbox"
+                  alt="Enable EFD Querying"
+                  checked={this.state.efdEnabled}
+                />
+                <span>Query EFD</span>
+              </label>
+            </div>
+            {this.state.efdEnabled && (
+              <EFDQuery
+                onResponse={(data) => this.setState({ queryData: data })}
+                managerInterface={(start_date, time_window, cscs, resample, efd_instance) =>
+                  ManagerInterface.getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance)
+                }
+              />
+            )}
+          </div>
           <Separator className={styles.separator} />
 
-          {this.state.eventData.map((msg, index) => {
-            return msg.errorCode !== undefined
-              ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
-              : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
-          })}
+          {this.state.efdEnabled
+            ? this.state.queryData.map((msg, index) => {
+                return msg.errorCode !== undefined
+                  ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
+                  : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
+              })
+            : this.state.eventData.map((msg, index) => {
+                return msg.errorCode !== undefined
+                  ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
+                  : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
+              })}
         </CardList>
       </div>
     );
