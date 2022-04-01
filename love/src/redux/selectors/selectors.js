@@ -144,9 +144,30 @@ export const getM1M3HardpointMonitorData = (state) => {
   const subscriptions = ['telemetry-MTM1M3-0-hardpointMonitorData'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [24.5, 10.1, -11.4, 2.5, 6.7, -18.1],
-    hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [153, 45, 36, 25, 98, 3],
-    hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [1.2, 0.3, -3.2, 0.9, 1.12, 0.75],
+    hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [
+      24.5,
+      10.1,
+      -11.4,
+      2.5,
+      6.7,
+      -18.1,
+    ],
+    hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [
+      153,
+      45,
+      36,
+      25,
+      98,
+      3,
+    ],
+    hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [
+      1.2,
+      0.3,
+      -3.2,
+      0.9,
+      1.12,
+      0.75,
+    ],
     referenceHardpointId: [1, 2, 3, 4, 5, 6],
   };
 };
@@ -578,8 +599,8 @@ export const getHexapodStatus = (state, salindex) => {
     hexapodConnectedTelemetry: hexapodStatusData[`event-MTHexapod-${salindex}-connected`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-connected`][0].telemetry.value
       : false,
-    hexapodControllerStateCommand: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
-      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].command.value
+    hexapodControllerState: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].controllerState.value
       : 0,
     hexapodControllerStateOfflineSubstate: hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-controllerState`][0].offlineSubstate.value

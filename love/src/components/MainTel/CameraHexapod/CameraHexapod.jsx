@@ -6,7 +6,7 @@ import Value from '../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
-import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
+import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import {
   hexapodCommandableByDDSStateMap,
@@ -20,6 +20,9 @@ import {
   hexapodMTInPositionStatetoStyle,
   hexapodConnectedStateMap,
   hexapodConnectedStatetoStyle,
+  hexapodStatusStatetoStyle,
+  hexapodControllerStateMap,
+  hexapodControllerStatetoStyle,
 } from 'Config';
 class CameraHexapod extends Component {
   constructor(props) {
@@ -125,16 +128,17 @@ class CameraHexapod extends Component {
     const connectedTelemetry = this.props.hexapodConnectedTelemetry;
     const pass = connectedCommand && connectedTelemetry;
 
-    const connectedStyle = CSCDetailStyles[hexapodConnectedStatetoStyle[hexapodConnectedStateMap[pass]]];
+    // const connectedStyle = StatusTextStyles[hexapodConnectedStatetoStyle[hexapodConnectedStateMap[pass]]];
+    const connectedStyle = hexapodConnectedStateMap[pass];
 
     return (
       <div styles={{ position: 'relative' }}>
         <Hoverable top={true} bottom={true} center={true} left={true} right={true} inside={true}>
-          <span className={[connectedStyle, styles.summaryState].join(' ')}>{hexapodConnectedStateMap[pass]}</span>
+          <StatusText status={hexapodConnectedStatetoStyle[connectedStyle]}>{connectedStyle}</StatusText>
           <div className={styles.hover}>
-            <span className={commandState ? styles.ok : styles.alert}>Commander {command}</span>
+            <StatusText className={commandState ? styles.ok : styles.alert}>Commander {command}</StatusText>
             <br></br>
-            <span className={telemetryState ? styles.ok : styles.alert}>Telemetry {telemetry}</span>
+            <StatusText className={telemetryState ? styles.ok : styles.alert}>Telemetry {telemetry}</StatusText>
           </div>
         </Hoverable>
       </div>
@@ -181,25 +185,11 @@ class CameraHexapod extends Component {
 
     // Hexapod status and Readiness summary
     const hexapodStatus = CSCDetail.states[this.props.hexapodSummaryState];
-    const compensationStatus = {
-      name: hexapodCompensationModeStateMap[this.props.hexapodCompensationMode],
-      class:
-        CSCDetailStyles[
-          hexapodCompensationModeStatetoStyle[hexapodCompensationModeStateMap[this.props.hexapodCompensationMode]]
-        ],
-    };
-    const controllerState = CSCDetail.states[this.props.hexapodControllerStateCommand];
-    const interlockState = {
-      name: hexapodInterlockStateMap[this.props.hexapodInterlock],
-    };
+    const compensationStatus = hexapodCompensationModeStateMap[this.props.hexapodCompensationMode];
+    const controllerState = hexapodControllerStateMap[this.props.hexapodControllerState];
+    const interlockState = hexapodInterlockStateMap[this.props.hexapodInterlock];
 
-    const commandableByDDS = {
-      name: hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS],
-      class:
-        CSCDetailStyles[
-          hexapodCommandableByDDSStatetoStyle[hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS]]
-        ],
-    };
+    const commandableByDDS = hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS];
 
     let controllerSubstate = '';
     if (controllerState.value === 1) {
@@ -211,11 +201,7 @@ class CameraHexapod extends Component {
       controllerSubstate = 'UNKNOWN';
     }
 
-    const inPosition = {
-      name: hexapodMTInPositionStateMap[this.props.hexapodInPosition],
-      class:
-        CSCDetailStyles[hexapodMTInPositionStatetoStyle[hexapodMTInPositionStateMap[this.props.hexapodInPosition]]],
-    };
+    const inPosition = hexapodMTInPositionStateMap[this.props.hexapodInPosition];
 
     return (
       <div>
@@ -224,21 +210,22 @@ class CameraHexapod extends Component {
             <Title wide>Hexapod Status</Title>
             <Label>Hexapod Status</Label>
             <Value>
-              <span className={[hexapodStatus.class, styles.summaryState].join(' ')}>{hexapodStatus.name}</span>
+              {/* <StatusText className={[hexapodStatus.class, styles.summaryState].join(' ')}>{hexapodStatus.name}</StatusText> */}
+              <StatusText status={hexapodStatusStatetoStyle[hexapodStatus.name]}>{hexapodStatus.name}</StatusText>
             </Value>
             <Label>Compensation</Label>
             <Value>
-              <span className={[compensationStatus.class, styles.summaryState].join(' ')}>
-                {compensationStatus.name}
-              </span>
+              <StatusText status={hexapodCompensationModeStatetoStyle[compensationStatus]}>
+                {compensationStatus}
+              </StatusText>
             </Value>
             <Label>ControllerSubstate</Label>
             <Value>
-              <span>{controllerSubstate}</span>
+              <StatusText>{controllerSubstate}</StatusText>
             </Value>
             <Label>Interlock state</Label>
             <Value>
-              <span>{interlockState.name}</span>
+              <StatusText>{interlockState}</StatusText>
             </Value>
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>
@@ -249,7 +236,7 @@ class CameraHexapod extends Component {
             <Value>{this.hoverToConnectedStatus()}</Value>
             <Label>Commandable By DDS</Label>
             <Value>
-              <span
+              {/* <StatusText
                 className={
                   commandableByDDS.name === 'COMMANDABLE'
                     ? [commandableByDDS.class, styles.commandableText].join(' ')
@@ -257,15 +244,16 @@ class CameraHexapod extends Component {
                 }
               >
                 {commandableByDDS.name}
-              </span>
+              </StatusText> */}
+              <StatusText status={hexapodCommandableByDDSStatetoStyle[commandableByDDS]}>{commandableByDDS}</StatusText>
             </Value>
             <Label>ControllerState</Label>
             <Value>
-              <span className={[controllerState.class, styles.summaryState].join(' ')}>{controllerState.name}</span>
+              <StatusText status={hexapodControllerStatetoStyle[controllerState]}>{controllerState}</StatusText>
             </Value>
             <Label>Hexapod in Position</Label>
             <Value>
-              <span className={[inPosition.class, styles.summaryState].join(' ')}>{inPosition.name}</span>
+              <StatusText status={hexapodMTInPositionStatetoStyle[inPosition]}>{inPosition}</StatusText>
             </Value>
           </SummaryPanel>
         </div>
