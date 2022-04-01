@@ -33,9 +33,9 @@ const CameraHexapodContainer = ({ subscribeToStreams, unsubscribeToStreams, ...p
   );
 };
 
-const mapStateToProps = (state) => {
-  const hexapodStatus = getHexapodStatus(state);
-  const hexapodTables = getHexapodTables(state);
+const mapStateToProps = (state, ownProps) => {
+  const hexapodStatus = getHexapodStatus(state, ownProps.salindex);
+  const hexapodTables = getHexapodTables(state, ownProps.salindex);
   return {
     ...hexapodStatus,
     ...hexapodTables,
