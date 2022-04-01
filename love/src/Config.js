@@ -453,7 +453,7 @@ export const hexapodCompensationModeStateMap = {
 };
 
 export const hexapodCompensationModeStatetoStyle = {
-  DISABLED: 'unknown',
+  DISABLED: 'disabled',
   ENABLED: 'ok',
 };
 
@@ -517,9 +517,7 @@ const rotTypes = [
 ];
 
 // TODO: Pending list of types.SimpleNamespace
-const SimpleNamespace = [
-  { label: 'None', value: undefined },
-];
+const SimpleNamespace = [{ label: 'None', value: undefined }];
 
 const AzWrapStrategy = [
   { label: 'None', value: undefined },
@@ -554,8 +552,7 @@ const Planets = [
 // TODO: Pending define list of cmdAck commands names
 const cmdAck = [
   { label: 'None', value: undefined },
-  { label: 'LabelNameCommand',
-    value: 'CmdAck from the command that started the slew process' },
+  { label: 'LabelNameCommand', value: 'CmdAck from the command that started the slew process' },
 ];
 
 export const TCSCommands = {
@@ -1083,10 +1080,10 @@ export const M1M3ActuatorPositions = [
 ];
 
 export const M1M3HardpointPositions = [
-  { id: 1, actuator: { position: [-5.6794e1, -9.0804e1]}, mini: {position: [45.99, 32.53]}},
-  { id: 2, actuator: { position: [-1.0922e2, 0]}, mini: {position: [28.7, 64.05]}},
-  { id: 3, actuator: { position: [-5.6794e1, 9.0804e1] }, mini: {position: [45.99, 97.21]}},
-  { id: 4, actuator: { position: [5.6794e1, 9.0804e1] }, mini: {position: [80.62, 97.21]}},
-  { id: 5, actuator: { position: [1.0922e2, 0]}, mini: {position: [99.19, 64.05]}},
-  { id: 6, actuator: { position: [5.6794e1, -9.0804e1]}, mini: {position: [80.62, 32.53]}},
+  { id: 1, actuator: { position: [-5.6794e1, -9.0804e1] }, mini: { position: [45.99, 32.53] } },
+  { id: 2, actuator: { position: [-1.0922e2, 0] }, mini: { position: [28.7, 64.05] } },
+  { id: 3, actuator: { position: [-5.6794e1, 9.0804e1] }, mini: { position: [45.99, 97.21] } },
+  { id: 4, actuator: { position: [5.6794e1, 9.0804e1] }, mini: { position: [80.62, 97.21] } },
+  { id: 5, actuator: { position: [1.0922e2, 0] }, mini: { position: [99.19, 64.05] } },
+  { id: 6, actuator: { position: [5.6794e1, -9.0804e1] }, mini: { position: [80.62, 32.53] } },
 ];
