@@ -1,14 +1,18 @@
 FROM node:12.16.1-alpine as builder
 
-WORKDIR /usr/src/love/love
+WORKDIR /usr/src/
 
 # Install and cache app dependencies
-COPY love/package.json .
-COPY love/yarn.lock .
+COPY love/ local/
+
+WORKDIR /usr/src/local/
+
 RUN yarn install
+
+WORKDIR /usr/src/love/love/
 
 # Expose port
 EXPOSE 3000
 
 # Run development server in runtime
-CMD yarn start
+CMD cp -a /usr/src/local/* /usr/src/love/love; yarn start

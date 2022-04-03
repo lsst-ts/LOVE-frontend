@@ -163,7 +163,7 @@ export default class CSCExpanded extends PureComponent {
     if (timeDiff === -2) {
       timeDiffText = 'No heartbeat event in Remote.';
     } else if (timeDiff === -1) {
-      timeDiffText = 'Never';
+      timeDiffText = 'XXX - Never';
     } else if (timeDiff >= 0) {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
