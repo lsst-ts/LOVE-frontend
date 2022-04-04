@@ -7,7 +7,6 @@ import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import {
   hexapodCommandableByDDSStateMap,
   hexapodCommandableByDDSStatetoStyle,
@@ -117,33 +116,6 @@ class CameraHexapod extends Component {
     },
   ];
 
-  hoverToConnectedStatus = () => {
-    const commandState = this.state.connectedCommandEvent;
-    const telemetryState = this.state.connectedTelemetryEvent;
-
-    const command = this.state.connectedCommandEvent ? 'Connected' : 'Disconnected';
-    const telemetry = this.state.connectedTelemetryEvent ? 'Connected' : 'Disconnected';
-
-    const connectedCommand = this.props.hexapodConnectedCommand;
-    const connectedTelemetry = this.props.hexapodConnectedTelemetry;
-    const pass = connectedCommand && connectedTelemetry;
-
-    const connectedStyle = hexapodConnectedStateMap[pass];
-
-    return (
-      <div styles={{ position: 'relative' }}>
-        <Hoverable top={true} bottom={true} center={true} left={true} right={true} inside={true}>
-          <StatusText status={hexapodConnectedStatetoStyle[connectedStyle]}>{connectedStyle}</StatusText>
-          <div className={styles.hover}>
-            <StatusText className={commandState ? styles.ok : styles.alert}>Commander {command}</StatusText>
-            <br></br>
-            <StatusText className={telemetryState ? styles.ok : styles.alert}>Telemetry {telemetry}</StatusText>
-          </div>
-        </Hoverable>
-      </div>
-    );
-  };
-
   render() {
     // Hexapod Position Table
     const defaultValues = { x: 0, y: 0, z: 0, u: 0, v: 0, w: 0 };
@@ -192,16 +164,17 @@ class CameraHexapod extends Component {
 
     // controllerState
     let controllerSubstate = '';
-    if (controllerState.value === 3) {
+    if (controllerState === 'Offline') {
       controllerSubstate = hexapodControllerStateOfflineSubStateMap[this.props.hexapodControllerStateOfflineSubstate];
     }
-    if (controllerState.value === 2) {
+    if (controllerState === 'Enabled') {
       controllerSubstate = hexapodControllerStateEnabledSubstateMap[this.props.hexapodConstrollerStateEnabledSubstate];
     } else {
       controllerSubstate = 'Offline';
     }
 
     const inPosition = hexapodMTInPositionStateMap[this.props.hexapodInPosition];
+    const connected = hexapodConnectedStateMap[this.props.hexapodConnected];
 
     return (
       <div>
@@ -232,18 +205,11 @@ class CameraHexapod extends Component {
               Readiness Summary
             </Title>
             <Label>Connected</Label>
-            <Value>{this.hoverToConnectedStatus()}</Value>
+            <Value>
+              <StatusText status={hexapodConnectedStatetoStyle[connected]}>{connected}</StatusText>
+            </Value>
             <Label>Commandable By DDS</Label>
             <Value>
-              {/* <StatusText
-                className={
-                  commandableByDDS.name === 'COMMANDABLE'
-                    ? [commandableByDDS.class, styles.commandableText].join(' ')
-                    : [commandableByDDS.class, styles.notCommandableText].join(' ')
-                }
-              >
-                {commandableByDDS.name}
-              </StatusText> */}
               <StatusText status={hexapodCommandableByDDSStatetoStyle[commandableByDDS]}>{commandableByDDS}</StatusText>
             </Value>
             <Label>ControllerState</Label>

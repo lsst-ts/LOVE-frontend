@@ -513,12 +513,12 @@ export const hexapodMTInPositionStatetoStyle = {
 };
 
 export const hexapodConnectedStateMap = {
-  false: 'ALERT',
+  false: 'DISCONNECTED',
   true: 'CONNECTED',
 };
 
 export const hexapodConnectedStatetoStyle = {
-  ALERT: 'alert',
+  DISCONNECTED: 'alert',
   CONNECTED: 'ok',
 };
 
