@@ -335,6 +335,42 @@ export default class ManagerInterface {
     });
   }
 
+  static getEFDLogs(start_date, end_date, cscs, efd_instance) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}efd/logmessages`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        start_date,
+        end_date,
+        cscs,
+        efd_instance,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Server error.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+          return false;
+        });
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
   static getEFDClients() {
     const token = ManagerInterface.getToken();
     if (token === null) {
