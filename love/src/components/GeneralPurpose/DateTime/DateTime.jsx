@@ -11,6 +11,7 @@ const DateTime = (props) => {
   const { inputProps, ...otherProps } = props;
   return (
     <Datetime
+      utc={true}
       inputProps={{
         className: [styles.date, props.className].join(' '),
         ...props.inputProps,
