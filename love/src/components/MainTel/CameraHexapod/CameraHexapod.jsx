@@ -14,6 +14,7 @@ import {
   hexapodCompensationModeStateMap,
   hexapodCompensationModeStatetoStyle,
   hexapodInterlockStateMap,
+  hexapodControllerStateMap,
   hexapodControllerStateOfflineSubStateMap,
   hexapodControllerStateEnabledSubstateMap,
   hexapodMTInPositionStateMap,
@@ -21,7 +22,6 @@ import {
   hexapodConnectedStateMap,
   hexapodConnectedStatetoStyle,
   hexapodStatusStatetoStyle,
-  hexapodControllerStateMap,
   hexapodControllerStatetoStyle,
 } from 'Config';
 class CameraHexapod extends Component {
@@ -128,7 +128,6 @@ class CameraHexapod extends Component {
     const connectedTelemetry = this.props.hexapodConnectedTelemetry;
     const pass = connectedCommand && connectedTelemetry;
 
-    // const connectedStyle = StatusTextStyles[hexapodConnectedStatetoStyle[hexapodConnectedStateMap[pass]]];
     const connectedStyle = hexapodConnectedStateMap[pass];
 
     return (
@@ -191,14 +190,15 @@ class CameraHexapod extends Component {
 
     const commandableByDDS = hexapodCommandableByDDSStateMap[this.props.hexapodCommandableByDDS];
 
+    // controllerState
     let controllerSubstate = '';
-    if (controllerState.value === 1) {
+    if (controllerState.value === 3) {
       controllerSubstate = hexapodControllerStateOfflineSubStateMap[this.props.hexapodControllerStateOfflineSubstate];
     }
     if (controllerState.value === 2) {
       controllerSubstate = hexapodControllerStateEnabledSubstateMap[this.props.hexapodConstrollerStateEnabledSubstate];
     } else {
-      controllerSubstate = 'UNKNOWN';
+      controllerSubstate = 'Offline';
     }
 
     const inPosition = hexapodMTInPositionStateMap[this.props.hexapodInPosition];
@@ -210,7 +210,6 @@ class CameraHexapod extends Component {
             <Title wide>Hexapod Status</Title>
             <Label>Hexapod Status</Label>
             <Value>
-              {/* <StatusText className={[hexapodStatus.class, styles.summaryState].join(' ')}>{hexapodStatus.name}</StatusText> */}
               <StatusText status={hexapodStatusStatetoStyle[hexapodStatus.name]}>{hexapodStatus.name}</StatusText>
             </Value>
             <Label>Compensation</Label>
@@ -221,11 +220,11 @@ class CameraHexapod extends Component {
             </Value>
             <Label>ControllerSubstate</Label>
             <Value>
-              <StatusText>{controllerSubstate}</StatusText>
+              <span className={styles.transformText}>{controllerSubstate}</span>
             </Value>
             <Label>Interlock state</Label>
             <Value>
-              <StatusText>{interlockState}</StatusText>
+              <span className={styles.transformText}>{interlockState}</span>
             </Value>
           </SummaryPanel>
           <SummaryPanel className={styles.summaryPanel}>

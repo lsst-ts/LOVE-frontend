@@ -99,3 +99,7 @@
   display: inline-block;
   width: 11em;
 }
+
+.transformText {
+  text-transform: capitalize;
+}

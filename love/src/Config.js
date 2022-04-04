@@ -481,10 +481,10 @@ export const hexapodControllerStateMap = {
 
 export const hexapodControllerStatetoStyle = {
   Standby: 'undefined',
-  Disabled: 'disabled',
-  Enabled: 'enabled',
-  Offline: 'Offline',
-  Fault: 'fault',
+  Disabled: 'undefined',
+  Enabled: 'ok',
+  Offline: 'undefined',
+  Fault: 'warning',
 };
 
 export const hexapodControllerStateOfflineSubStateMap = {
