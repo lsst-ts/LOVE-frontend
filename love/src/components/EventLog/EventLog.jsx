@@ -67,10 +67,37 @@ export default class EventLog extends PureComponent {
     this.props.unsubscribeToStreams(this.props.cscList);
   };
 
-  clearGroupErrorCodes = () => {
-    //   this.props.cscList.forEach(({ name, salindex }) => {
-    //     this.props.clearCSCErrorCodes(name, salindex);
-    //   });
+  setEFDLogsCSCs = () => {
+    const { cscList } = this.props;
+    const cscTopicDict = {};
+    cscList.forEach((obj) => {
+      cscTopicDict[obj.name] = {};
+    });
+    cscList.forEach((obj) => {
+      cscTopicDict[obj.name][obj.salindex] = {
+        logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+      };
+    });
+    return cscTopicDict;
+  };
+
+  efdLogsResponse = (response) => {
+    const queryData = [];
+    Object.entries(response).forEach(([key, value]) => {
+      const csc = key.split('-')[0];
+      const index = key.split('-')[1];
+      value.forEach((log) =>
+        queryData.push({
+          csc,
+          salindex: index,
+          level: { value: log.level },
+          message: { value: log.message },
+          traceback: { value: log.traceback },
+          private_rcvStamp: { value: log.private_rcvStamp },
+        }),
+      );
+    });
+    this.setState({ queryData });
   };
 
   changeCSCFilter = (event) => {
@@ -246,9 +273,9 @@ export default class EventLog extends PureComponent {
             </div>
             {this.state.efdEnabled && (
               <EFDQuery
-                onResponse={(data) => this.setState({ queryData: data })}
-                managerInterface={(start_date, time_window, cscs, resample, efd_instance) =>
-                  ManagerInterface.getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance)
+                onResponse={(response) => this.efdLogsResponse(response)}
+                managerInterface={(start_date, end_date, efd_instance) =>
+                  ManagerInterface.getEFDLogs(start_date, end_date, this.setEFDLogsCSCs(), efd_instance)
                 }
               />
             )}
