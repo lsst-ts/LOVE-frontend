@@ -78,6 +78,7 @@ export default class EventLog extends PureComponent {
     cscList.forEach((obj) => {
       cscTopicDict[obj.name][obj.salindex] = {
         logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+        logevent_errorCode: ['private_rcvStamp', 'errorCode', 'errorReport', 'traceback'],
       };
     });
     return cscTopicDict;
@@ -92,8 +93,13 @@ export default class EventLog extends PureComponent {
         queryData.push({
           csc,
           salindex: index,
-          level: { value: log.level },
-          message: { value: log.message },
+          // logevent_logMessage parameters
+          level: log.level !== undefined ? { value: log.level } : undefined,
+          message: log.message !== undefined ? { value: log.message } : undefined,
+          // logevent_errorCode parameters
+          errorCode: log.errorCode !== undefined ? { value: log.errorCode } : undefined,
+          errorReport: log.errorReport !== undefined ? { value: log.errorReport } : undefined,
+          // shared parameters
           traceback: { value: log.traceback },
           private_rcvStamp: { value: log.private_rcvStamp },
         }),
