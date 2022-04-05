@@ -2,11 +2,13 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
 import EFDQuery from 'components/GeneralPurpose/EFDQuery/EFDQuery';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import { CardList, Card, Title, Separator } from 'components/GeneralPurpose/CardList/CardList';
 import styles from './EventLog.module.css';
 import InfoIcon from '../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
-import { CardList, Card, Title, Separator } from '../GeneralPurpose/CardList/CardList';
+
 import TextField from '../TextField/TextField';
 
 export default class EventLog extends PureComponent {
@@ -261,15 +263,14 @@ export default class EventLog extends PureComponent {
           </div>
           <div className={styles.efd}>
             <div className={styles.efdSelector}>
-              <label>
-                <input
-                  onChange={(event) => this.setState({ efdEnabled: event.target.checked })}
-                  type="checkbox"
-                  alt="Enable EFD Querying"
-                  checked={this.state.efdEnabled}
+              <span>Query EFD</span>
+              <div style={{ display: 'inline-block' }}>
+                <Toggle
+                  hideLabels={true}
+                  isLive={this.state.efdEnabled}
+                  setLiveMode={(event) => this.setState({ efdEnabled: event })}
                 />
-                <span>Query EFD</span>
-              </label>
+              </div>
             </div>
             {this.state.efdEnabled && (
               <EFDQuery
