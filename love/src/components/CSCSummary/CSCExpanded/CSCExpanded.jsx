@@ -18,6 +18,7 @@ export default class CSCExpanded extends PureComponent {
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.array,
     errorCodeData: PropTypes.array,
+    softwareVersions: PropTypes.object,
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
   };
@@ -30,6 +31,7 @@ export default class CSCExpanded extends PureComponent {
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
     summaryStateData: undefined,
+    softwareVersions: undefined,
     logMessageData: [],
     errorCodeData: [],
   };
@@ -90,6 +92,7 @@ export default class CSCExpanded extends PureComponent {
 
   render() {
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
+    const cscVersion = this.props.softwareVersions ? this.props.softwareVersions.cscVersion.value : "Unknown";
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
 
@@ -162,6 +165,13 @@ export default class CSCExpanded extends PureComponent {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+          <div className={styles.topBarContainerWrapper}>
+            <div className={styles.topBarContainer}>
+              <div className={styles.breadcrumContainer}>
+                <div>CSC Version: {cscVersion}</div>
+              </div>
             </div>
           </div>
           {this.props.errorCodeData.length > 0 ? (
