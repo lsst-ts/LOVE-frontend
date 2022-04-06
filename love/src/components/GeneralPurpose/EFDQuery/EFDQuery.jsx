@@ -6,7 +6,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import styles from './EFDQuery.module.css';
 
-const EFDQuery = ({ efdConfigFile, onResponse, managerInterface }) => {
+const EFDQuery = ({ efdConfigFile = null, onResponse = () => {}, managerInterface = () => Promise.resolve() }) => {
   const [efdInstances, setEFDInstance] = useState([]);
   const [selectedEFDInstance, setSelectedEFDInstance] = useState(null);
   const [startDate, setStartDate] = useState(null);
@@ -53,7 +53,7 @@ const EFDQuery = ({ efdConfigFile, onResponse, managerInterface }) => {
         />
       </div>
       <div className={styles.confirmButton}>
-        <Button className={styles.actionButton} onClick={() => queryEFD()}>
+        <Button disabled={!!selectedEFDInstance} className={styles.actionButton} onClick={() => queryEFD()}>
           Query
         </Button>
       </div>
