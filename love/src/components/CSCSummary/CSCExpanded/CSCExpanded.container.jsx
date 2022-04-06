@@ -56,6 +56,7 @@ const CSCExpandedContainer = ({
   clearCSCErrorCodes,
   clearCSCLogMessages,
   summaryStateData,
+  softwareVersions,
   logMessageData,
   errorCodeData,
   subscribeToStreams,
@@ -73,6 +74,7 @@ const CSCExpandedContainer = ({
       clearCSCErrorCodes={clearCSCErrorCodes}
       errorCodeData={errorCodeData}
       summaryStateData={summaryStateData}
+      softwareVersions={softwareVersions}
       subscribeToStreams={subscribeToStreams}
       unsubscribeToStreams={unsubscribeToStreams}
       logMessageData={logMessageData}
@@ -91,12 +93,14 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(addGroup(`event-${cscName}-${index}-summaryState`));
       dispatch(addGroup(`event-${cscName}-${index}-logMessage`));
       dispatch(addGroup(`event-${cscName}-${index}-errorCode`));
+      dispatch(addGroup(`event-${cscName}-${index}-softwareVersions`));
     },
     unsubscribeToStreams: (cscName, index) => {
       dispatch(removeGroup('event-Heartbeat-0-stream'));
       dispatch(removeGroup(`event-${cscName}-${index}-summaryState`));
       dispatch(removeGroup(`event-${cscName}-${index}-logMessage`));
       dispatch(removeGroup(`event-${cscName}-${index}-errorCode`));
+      dispatch(removeGroup(`event-${cscName}-${index}-softwareVersions`));
     },
     clearCSCLogMessages: (csc, salindex) => {
       dispatch(removeCSCLogMessages(csc, salindex));
@@ -110,6 +114,7 @@ const mapDispatchToProps = (dispatch) => {
 const mapStateToProps = (state, ownProps) => {
   let summaryStateData = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-summaryState`);
   let heartbeatData = getCSCHeartbeat(state, ownProps.name, ownProps.salindex);
+  let softwareVersions = getStreamData(state, `event-${ownProps.name}-${ownProps.salindex}-softwareVersions`);
 
   const logMessageData = getCSCLogMessages(state, ownProps.name, ownProps.salindex);
   const errorCodeData = getCSCErrorCodeData(state, ownProps.name, ownProps.salindex);
@@ -117,6 +122,7 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     summaryStateData: summaryStateData[0],
+    softwareVersions: softwareVersions ? softwareVersions[0] : undefined,
     heartbeatData,
     logMessageData,
     errorCodeData,
