@@ -27,8 +27,9 @@ export default class MirrorCovers extends Component {
   constructor(props) {
     super(props);
     this.state = { 
-        prevAzimuthActual: 0,
-        prevAzimuthDemand: 0,
+      prevAzimuthActual: 0,
+      prevAzimuthDemand: 0,
+      defaultMirror: 0,
     }
   }
 
@@ -51,7 +52,7 @@ export default class MirrorCovers extends Component {
             <div className={styles.windRoseContainer}>
                 <WindRose />
             </div>
-            { this.getSvg(this.props) }
+            { this.getSvg() }
         </div>
     );
   }
@@ -64,7 +65,7 @@ export default class MirrorCovers extends Component {
         'DEPLOYING': Math.PI / 2 - Math.PI / 6,
         'LOST': - Math.PI / 36,
       };
-      const mirrorCoversValue = this.props.mirrorCovers ? mtMountMirrorCoversStateMap[this.props.mirrorCovers] : mtMountMirrorCoversStateMap[0];
+      const mirrorCoversValue = this.props.mirrorCovers ? mtMountMirrorCoversStateMap[this.props.mirrorCovers] : mtMountMirrorCoversStateMap[this.state.defaultMirror];
       return stateToClosedMTMountMirrorCoversState[mirrorCoversValue];
   }
 
@@ -76,11 +77,11 @@ export default class MirrorCovers extends Component {
       'DEPLOYING': Math.PI + Math.PI / 6,
       'LOST': 3 * Math.PI/2 + Math.PI / 36,
     };
-    const mirrorCoversValue = this.props.mirrorCovers ? mtMountMirrorCoversStateMap[this.props.mirrorCovers] : mtMountMirrorCoversStateMap[0];
+    const mirrorCoversValue = this.props.mirrorCovers ? mtMountMirrorCoversStateMap[this.props.mirrorCovers] : mtMountMirrorCoversStateMap[this.state.defaultMirror];
     return stateToClosedMTMountMirrorCoversState[mirrorCoversValue];
   }
 
-  getSvg = (props) => {
+  getSvg = () => {
     const offset = 10;
     const viewBoxSize = 385 - 2 * offset;
     const x0 = viewBoxSize / 2 + offset;

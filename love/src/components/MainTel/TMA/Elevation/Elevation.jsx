@@ -18,8 +18,10 @@ export default class Elevation extends Component {
 
   constructor(props) {
     super(props);
-    this.prevElevationActual = 0;
-    this.prevElevationDemand = 0;
+    this.state = {
+      prevElevationActual: 0,
+      prevElevationDemand: 0,
+    }
   }
 
   componentDidUpdate(prevProps) {
@@ -37,48 +39,44 @@ export default class Elevation extends Component {
 
   render() {
     return (
-        <div className={styles.container}>    
-            { this.getSvg(this.props)}
-        </div>
+      <div className={styles.container}>    
+        { this.getSvg()}
+      </div>
     );
   }
 
-  getSvg = (props) => {
-    const equivalentElevationActual = closestEquivalentAngle(this.prevElevationActual, this.props.elevationActualPosition);
-    const equivalentElevationDemand = closestEquivalentAngle(this.prevElevationDemand, this.props.elevationDemandPosition);
-
-      return (
-        <svg
-            id="elevationSvg"
-            data-name="elevationSvg"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox={`0 0 502 502`}
+  getSvg = () => {
+    const equivalentElevationActual = closestEquivalentAngle(this.state.prevElevationActual, this.props.elevationActualPosition);
+    const equivalentElevationDemand = closestEquivalentAngle(this.state.prevElevationDemand, this.props.elevationDemandPosition);
+    return (
+      <svg
+          id="elevationSvg"
+          data-name="elevationSvg"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox={`0 0 502 502`}
+      >
+        <g
+          style={{
+            transform: `rotateZ(${equivalentElevationActual}deg)`, transformOrigin: `50% 50%`
+          }}
         >
-          <g
-            style={{
-              transform: `rotateZ(${equivalentElevationActual}deg)`, transformOrigin: `50% 50%`
-            }}
-          >
-            { this.getMount() }
-          </g>
-
-          {/** elevation Demand */}
-          <path
-            d="m417.15 218-34.72-74.46H408l-10-12h-21.16l-6-12.87-4.5-22.09V86.19l-.06-.23h38.37l-4-24h-71l-25-15.63h-3V44h-26.23V20.15h-49.54V44h-26.23v2.36h-3L171.63 62h-71l-4 24h39.76l-.06.23V96.6l-4.49 22.09-6 12.87h-21.77l-10 12h26.19L101.43 184H65.6v30.24h-1v10h26.31v50.16l20 6.84v48.12l20 59.27h240l20-59.27v-48.17l20-6.84v-43.1.05l1.68-.79a9.39 9.39 0 0 0 4.56-12.51ZM156.35 86h.23v.64h-.23V86Zm11.3 129.23-3.51-71.63h6.61l43 71.63ZM161.76 95h33.45v18.6l-10.56 18h-8l-14.26-23.8ZM199 74a9 9 0 0 1-17.95.9l13.67-8.56A9 9 0 0 1 199 74Zm8.22-15.47h1.21V62h-6.76Zm87 0 5.46 3.47h-6.76v-3.51Zm12.8 8 13.93 8.72a9 9 0 1 1-13.93-8.72Zm9.72 65.07-10.57-18V95h34.85l-.62 12.8-14.4 23.76Zm-23.82-65.15a9 9 0 0 1 0 15Zm-25.54 15.83A8.89 8.89 0 0 1 264 83a9 9 0 0 1 0-18 8.89 8.89 0 0 1 3.43.68ZM238 83a8.81 8.81 0 0 1-4-1V65.92a9 9 0 1 1 4 17Zm-29.62-16.1V81a9 9 0 0 1 0-14.12Zm18.53 148.29-43-71.63h42v43.78l1 15h47.54l1-15v-43.78h43.4l-43 71.63Zm105-71.63h6.6L335 215.19h-46.09Zm-64.53-85.07V62h-33.46v-3.51ZM118.58 184h-4.74l8.41-18Zm221.61 97.24a93.74 93.74 0 0 1-10.45 21.11H172.07a94.17 94.17 0 0 1-10.45-21.11Zm40.25-115.27 23 49.27h-13Zm.71-101c2.76 0 5 4 5 9s-2.24 9-5 9-5-4-5-9 2.24-8.97 5-8.97Zm-261 18c-2.76 0-5-4-5-9s2.24-9 5-9 5 4 5 9-2.24 9.03-5 9.03ZM372 281.19Z"
-            style={{
-                strokeMiterlimit: 10,
-                stroke: "#e4e4e7",
-                strokeWidth: ".5px",
-                strokeDasharray: 6,
-                fill: "none",
-                transform: `rotateZ(${equivalentElevationDemand}deg)`, transformOrigin: `50% 50%`
-            }}
-          />
-
-          { this.getBaseMount() }
-          
-        </svg>
-      );
+          { this.getMount() }
+        </g>
+        {/** elevation Demand */}
+        <path
+          d="m417.15 218-34.72-74.46H408l-10-12h-21.16l-6-12.87-4.5-22.09V86.19l-.06-.23h38.37l-4-24h-71l-25-15.63h-3V44h-26.23V20.15h-49.54V44h-26.23v2.36h-3L171.63 62h-71l-4 24h39.76l-.06.23V96.6l-4.49 22.09-6 12.87h-21.77l-10 12h26.19L101.43 184H65.6v30.24h-1v10h26.31v50.16l20 6.84v48.12l20 59.27h240l20-59.27v-48.17l20-6.84v-43.1.05l1.68-.79a9.39 9.39 0 0 0 4.56-12.51ZM156.35 86h.23v.64h-.23V86Zm11.3 129.23-3.51-71.63h6.61l43 71.63ZM161.76 95h33.45v18.6l-10.56 18h-8l-14.26-23.8ZM199 74a9 9 0 0 1-17.95.9l13.67-8.56A9 9 0 0 1 199 74Zm8.22-15.47h1.21V62h-6.76Zm87 0 5.46 3.47h-6.76v-3.51Zm12.8 8 13.93 8.72a9 9 0 1 1-13.93-8.72Zm9.72 65.07-10.57-18V95h34.85l-.62 12.8-14.4 23.76Zm-23.82-65.15a9 9 0 0 1 0 15Zm-25.54 15.83A8.89 8.89 0 0 1 264 83a9 9 0 0 1 0-18 8.89 8.89 0 0 1 3.43.68ZM238 83a8.81 8.81 0 0 1-4-1V65.92a9 9 0 1 1 4 17Zm-29.62-16.1V81a9 9 0 0 1 0-14.12Zm18.53 148.29-43-71.63h42v43.78l1 15h47.54l1-15v-43.78h43.4l-43 71.63Zm105-71.63h6.6L335 215.19h-46.09Zm-64.53-85.07V62h-33.46v-3.51ZM118.58 184h-4.74l8.41-18Zm221.61 97.24a93.74 93.74 0 0 1-10.45 21.11H172.07a94.17 94.17 0 0 1-10.45-21.11Zm40.25-115.27 23 49.27h-13Zm.71-101c2.76 0 5 4 5 9s-2.24 9-5 9-5-4-5-9 2.24-8.97 5-8.97Zm-261 18c-2.76 0-5-4-5-9s2.24-9 5-9 5 4 5 9-2.24 9.03-5 9.03ZM372 281.19Z"
+          style={{
+              strokeMiterlimit: 10,
+              stroke: "#e4e4e7",
+              strokeWidth: ".5px",
+              strokeDasharray: 6,
+              fill: "none",
+              transform: `rotateZ(${equivalentElevationDemand}deg)`, transformOrigin: `50% 50%`
+          }}
+        />
+        { this.getBaseMount() }
+      </svg>
+    );
   }
 
   getMount = () => {
@@ -303,5 +301,5 @@ export default class Elevation extends Component {
       </>
     );
   }
-  
+
 }
