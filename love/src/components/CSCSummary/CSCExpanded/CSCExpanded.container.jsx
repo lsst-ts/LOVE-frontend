@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import CSCExpanded from './CSCExpanded';
-import { addGroup, removeGroup } from '../../../redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from '../../../redux/actions/ws';
 import { removeCSCLogMessages, removeCSCErrorCodeData } from '../../../redux/actions/summaryData';
 import { getStreamData, getCSCHeartbeat, getCSCLogMessages, getCSCErrorCodeData } from '../../../redux/selectors';
 
@@ -55,6 +55,7 @@ const CSCExpandedContainer = ({
   onCSCClick,
   clearCSCErrorCodes,
   clearCSCLogMessages,
+  requestSALCommand,
   summaryStateData,
   softwareVersions,
   configurationsAvailable,
@@ -73,6 +74,7 @@ const CSCExpandedContainer = ({
       group={group}
       onCSCClick={onCSCClick}
       clearCSCErrorCodes={clearCSCErrorCodes}
+      requestSALCommand={requestSALCommand}
       errorCodeData={errorCodeData}
       summaryStateData={summaryStateData}
       softwareVersions={softwareVersions}
@@ -111,6 +113,15 @@ const mapDispatchToProps = (dispatch) => {
     },
     clearCSCErrorCodes: (csc, salindex) => {
       dispatch(removeCSCErrorCodeData(csc, salindex));
+    },
+    requestSALCommand: (cmd) => {
+      dispatch(
+        requestSALCommand(
+          {
+            ...cmd,
+          }
+        )
+      );
     },
   };
 };
