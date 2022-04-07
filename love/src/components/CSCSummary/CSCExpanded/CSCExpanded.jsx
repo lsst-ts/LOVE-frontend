@@ -139,6 +139,9 @@ export default class CSCExpanded extends PureComponent {
   render() {
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const cscVersion = this.props.softwareVersions ? this.props.softwareVersions.cscVersion.value : "Unknown";
+    const xmlVersion = this.props.softwareVersions ? this.props.softwareVersions.xmlVersion.value : "Unknown";
+    const salVersion = this.props.softwareVersions ? this.props.softwareVersions.salVersion.value : "Unknown";
+    const openSpliceVersion = this.props.softwareVersions ? this.props.softwareVersions.openSpliceVersion.value : "Unknown";
     const configurationsAvailable = this.props.configurationsAvailable ? this.props.configurationsAvailable.overrides.value.split(",") : null;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
@@ -219,7 +222,9 @@ export default class CSCExpanded extends PureComponent {
           <div className={styles.topBarContainerWrapper}>
             <div className={styles.topBarContainer}>
               <div className={styles.breadcrumContainer}>
-                <div>CSC Version: {cscVersion}</div>
+                <div className={styles.titlePadding}>
+                  Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice={openSpliceVersion}
+                </div>
               </div>
             </div>
           </div>
