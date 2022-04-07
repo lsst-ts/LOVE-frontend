@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
-import Dropdown from 'react-dropdown';
-import 'react-dropdown/style.css';
 import PropTypes from 'prop-types';
 import styles from './CSCExpanded.module.css';
 import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import Select from '../../GeneralPurpose/Select/Select';
 import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
@@ -231,14 +230,8 @@ export default class CSCExpanded extends PureComponent {
           <div className={styles.topBarContainerWrapper}>
             <div className={styles.topBarContainer}>
               <div className={styles.breadcrumContainer}>
-                {/* <div>Configurations Available: {configurationsAvailable}</div> */}
-                {/* <Dropdown options={configurationsAvailableMenuOptions} onChange={this._onSelect} value="" placeholder="Configurations available" /> */}
-                Summary state command:
-                <Dropdown
-                  className={styles.dropDownClassName}
-                  controlClassName={styles.dropDownControlClassName}
-                  menuClassName={styles.dropDownMenuClassName}
-                  arrowClassName={styles.arrowClassName}
+                <div className={styles.titlePadding}>Summary state command:</div>
+                <Select
                   options={["start", "enable", "disable", "standby"]}
                   onChange={(option) => this.setSummaryStateCommand(option.value)}
                   value=""
@@ -247,12 +240,8 @@ export default class CSCExpanded extends PureComponent {
               </div>
               {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" ? (
                 <div className={styles.breadcrumContainer}>
-                  Configurations available:
-                  <Dropdown
-                    className={styles.dropDownClassName}
-                    controlClassName={styles.dropDownControlClassName}
-                    menuClassName={styles.dropDownMenuClassName}
-                    arrowClassName={styles.arrowClassName}
+                  <div className={styles.titlePadding}>Configurations available:</div>
+                  <Select
                     options={configurationsAvailableMenuOptions}
                     onChange={(option) => this.setConfigurationOverride(option.value)}
                     value=""
