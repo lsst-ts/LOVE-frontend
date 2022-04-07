@@ -203,6 +203,10 @@
   color: var(--base-font-color);
 }
 
+.titlePadding {
+  padding: 0.5em;
+}
+
 .dropDownClassName {
   background-color: inherit;
   border-color: var(--primary-active-background-color);
