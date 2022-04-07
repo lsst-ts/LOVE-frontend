@@ -29,8 +29,8 @@ export default class CSCDetail extends Component {
     onCSCClick: () => 0,
     heartbeatData: null,
     summaryStateData: undefined,
-    subscribeToStreams: () => {},
-    unsubscribeToStreams: () => {},
+    subscribeToStreams: () => { },
+    unsubscribeToStreams: () => { },
     embedded: false,
     shouldSubscribe: true,
     isRaw: false,
@@ -87,11 +87,12 @@ export default class CSCDetail extends Component {
     const { props } = this;
     let heartbeatStatus = 'unknown';
     let nLost = 0;
-    let timeDiff = -1;
+    let timeDiff = null;
+    let timeDiffText = 'No heartbeat from producer.';
+
     if (this.props.heartbeatData) {
       nLost = this.props.heartbeatData.lost;
-      if (this.props.heartbeatData.last_heartbeat_timestamp === -2) timeDiff = -2;
-      else if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
+      if (this.props.heartbeatData.last_heartbeat_timestamp === -1) timeDiff = -1;
       else timeDiff = Math.ceil(props.serverTime.tai * 1000 - this.props.heartbeatData.last_heartbeat_timestamp);
       heartbeatStatus = this.props.heartbeatData.lost > 0 || timeDiff < 0 ? 'alert' : 'ok';
     }
@@ -99,22 +100,18 @@ export default class CSCDetail extends Component {
       heartbeatStatus = 'ok';
     }
 
-    let timeDiffText = 'Unknown';
-
-    if (timeDiff === -2) {
-      timeDiffText = 'No heartbeat event in Remote.';
-    } else if (timeDiff === -1) {
+    if (timeDiff === -1) {
       timeDiffText = 'Never';
-    } else {
-      timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
+    } else if (timeDiff !== null) {
+      timeDiffText = timeDiff < 0 ? 'Stale' : `${timeDiff} seconds ago`;
     }
 
     let title = `${cscText(this.props.name, this.props.salindex)} heartbeat\nLost: ${nLost}\n`;
 
-    if (timeDiff === -2) {
+    if (timeDiff === null) {
       title += `${timeDiffText}`;
     } else {
-      title += `Last seen: ${timeDiffText}`;
+      title += timeDiff < 0 ? `Last seen: ${timeDiffText}` : `${timeDiffText}`;
     }
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
     const summaryState = CSCDetail.states[summaryStateValue];
