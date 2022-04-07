@@ -137,9 +137,9 @@ const mapStateToProps = (state, ownProps) => {
   summaryStateData = summaryStateData ? summaryStateData : {};
 
   return {
-    summaryStateData: summaryStateData[0],
-    softwareVersions: softwareVersions ? softwareVersions[0] : undefined,
-    configurationsAvailable: configurationsAvailable ? configurationsAvailable[0] : undefined,
+    summaryStateData: summaryStateData ? summaryStateData?.[0] : undefined,
+    softwareVersions: softwareVersions ? softwareVersions?.[0] : undefined,
+    configurationsAvailable: configurationsAvailable ? configurationsAvailable?.[0] : undefined,
     heartbeatData,
     logMessageData,
     errorCodeData,
