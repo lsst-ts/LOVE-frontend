@@ -108,7 +108,7 @@ export default class CSCExpanded extends PureComponent {
   };
 
   setSummaryStateCommand(option) {
-    let configurationOverride = this.state.configurationOverride;
+    const { configurationOverride } = this.state;
     this.setState({
       summaryStateCommand: option,
       configurationOverride: configurationOverride,
@@ -116,7 +116,7 @@ export default class CSCExpanded extends PureComponent {
   };
 
   setConfigurationOverride(option) {
-    let summaryStateCommand = this.state.summaryStateCommand;
+    const { summaryStateCommand } = this.state;
     this.setState({
       summaryStateCommand: summaryStateCommand,
       configurationOverride: option,
