@@ -78,3 +78,7 @@
 .scriptID {
   color: var(--secondary-font-color);
 }
+
+.preText {
+  white-space: pre-wrap;
+}
