@@ -5,9 +5,19 @@ import HeartbeatIcon from '../../icons/HeartbeatIcon/HeartbeatIcon';
 import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
+import Select from '../../GeneralPurpose/Select/Select';
 import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      summaryStateCommand: null,
+      configurationOverride: "",
+    }
+  }
+
   static propTypes = {
     name: PropTypes.string,
     salindex: PropTypes.number,
@@ -15,11 +25,15 @@ export default class CSCExpanded extends PureComponent {
     onCSCClick: PropTypes.func,
     clearCSCErrorCodes: PropTypes.func,
     clearCSCLogMessages: PropTypes.func,
+    requestSALCommand: PropTypes.func,
     summaryStateData: PropTypes.object,
     logMessageData: PropTypes.array,
     errorCodeData: PropTypes.array,
+    softwareVersions: PropTypes.object,
+    configurationsAvailable: PropTypes.object,
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
+    summaryStateCommand: PropTypes.string,
   };
 
   static defaultProps = {
@@ -29,9 +43,13 @@ export default class CSCExpanded extends PureComponent {
     onCSCClick: () => 0,
     clearCSCErrorCodes: () => 0,
     clearCSCLogMessages: () => 0,
+    requestSALCommand: () => 0,
     summaryStateData: undefined,
+    softwareVersions: undefined,
+    configurationsAvailable: undefined,
     logMessageData: [],
     errorCodeData: [],
+    summaryStateCommand: undefined,
   };
 
   componentDidMount = () => {
@@ -88,10 +106,46 @@ export default class CSCExpanded extends PureComponent {
     },
   };
 
+  setSummaryStateCommand(option) {
+    const { configurationOverride } = this.state;
+    this.setState({
+      summaryStateCommand: option,
+      configurationOverride: configurationOverride,
+    });
+  };
+
+  setConfigurationOverride(option) {
+    const { summaryStateCommand } = this.state;
+    this.setState({
+      summaryStateCommand: summaryStateCommand,
+      configurationOverride: option,
+    })
+  };
+
+  sendSummaryStateCommand(event) {
+    this.props.requestSALCommand(
+      {
+        cmd: `cmd_${this.state.summaryStateCommand}`,
+        csc: this.props.name,
+        salindex: this.props.salindex,
+        params: this.state.summaryStateCommand === "start" ? {
+          configurationOverride: this.state.configurationOverride,
+        } : {},
+      }
+    );
+  };
+
   render() {
     const summaryStateValue = this.props.summaryStateData ? this.props.summaryStateData.summaryState.value : 0;
+    const cscVersion = this.props.softwareVersions ? this.props.softwareVersions.cscVersion.value : "Unknown";
+    const xmlVersion = this.props.softwareVersions ? this.props.softwareVersions.xmlVersion.value : "Unknown";
+    const salVersion = this.props.softwareVersions ? this.props.softwareVersions.salVersion.value : "Unknown";
+    const openSpliceVersion = this.props.softwareVersions ? this.props.softwareVersions.openSpliceVersion.value : "Unknown";
+    const configurationsAvailable = this.props.configurationsAvailable ? this.props.configurationsAvailable.overrides.value.split(",") : null;
     const summaryState = CSCExpanded.states[summaryStateValue];
     const { props } = this;
+
+    const configurationsAvailableMenuOptions = configurationsAvailable !== null && configurationsAvailable.length > 0 ? [...['',], ...configurationsAvailable] : null;
 
     let heartbeatStatus = 'unknown';
     let nLost = 0;
@@ -162,6 +216,55 @@ export default class CSCExpanded extends PureComponent {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+          <div className={styles.topBarContainerWrapper}>
+            <div className={styles.topBarContainer}>
+              <div className={styles.breadcrumContainer}>
+                <div className={styles.titlePadding}>
+                  Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice={openSpliceVersion}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className={styles.topBarContainerWrapper}>
+            <div className={styles.topBarContainer}>
+              <div className={styles.breadcrumContainer}>
+                <div className={styles.titlePadding}>Summary state command:</div>
+                <Select
+                  options={["start", "enable", "disable", "standby"]}
+                  onChange={(option) => this.setSummaryStateCommand(option.value)}
+                  value=""
+                  placeholder="Select state"
+                />
+              </div>
+              {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" ? (
+                <div className={styles.breadcrumContainer}>
+                  <div className={styles.titlePadding}>Configurations available:</div>
+                  <Select
+                    options={configurationsAvailableMenuOptions}
+                    onChange={(option) => this.setConfigurationOverride(option.value)}
+                    value=""
+                    placeholder="Select override"
+                  />
+                </div>
+              ) : null}
+              <div>
+                <br />
+                <Button
+                  title="set state"
+                  status="info"
+                  shape="rounder"
+                  padding='30px'
+                  disabled={this.state.summaryStateCommand === null}
+                  onClick={(event) => {
+                    this.sendSummaryStateCommand(event);
+                  }}
+                  command
+                >
+                  SET
+                </Button>
+              </div>
             </div>
           </div>
           {this.props.errorCodeData.length > 0 ? (
