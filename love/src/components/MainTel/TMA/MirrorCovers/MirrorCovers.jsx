@@ -100,49 +100,64 @@ export default class MirrorCovers extends Component {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 385 385"
         >
-          <g>
-            <circle
-                cx={x0}
-                cy={y0}
-                r={170}
-                style={{
-                    strokeWidth: 2,
-                    strokeMiterlimit: 10,
-                    fill: "#15242d",
-                    stroke: "#182e39",
-                }}
-            />
+          { this.getBase(x0, y0, equivalentAzimuthActual) }
+          
             <g
                 style={{transform: `rotateZ(${equivalentAzimuthActual}deg)`, transformOrigin: `50% 50%`}}
             >
-                <path
-                    className={styles.cls3}
-                    d="M19.95 168.14h48.69v48.71H19.95zM316.36 168.14h48.69v48.71h-48.69zM302.63 40.57H82.37L38.31 87.89l-3.25 19.02 47.31 15.66h220.26l47.31-15.66-2.44-19.02-44.87-47.32z"
-                />
-                <path
-                    className={styles.cls3}
-                    d="M323.24 97.41 289 62.6H96L61.76 97.41l-11.28 60.28v69.62l11.28 60.28L96 322.4h193l34.26-34.81 11.28-60.28v-69.62ZM192.5 298A105.54 105.54 0 1 1 298 192.5 105.52 105.52 0 0 1 192.5 298Z"
-                />
-                { this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize) }
-                { this.getMount() }
+              { this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize) }
+              { this.getMount(x0, y0) }
             </g>
-            
-            <circle className={styles.cls3} cx={x0} cy={y0} r={26} />
 
-            /** azimuth Demand */
-            <path
-                d="M365.05 168.14h-30.53v-10.45l-8-43 23.47-7.77-2.44-19-44.92-47.35H82.37L38.31 87.89l-3.25 19 23.47 7.77-8.05 43v10.45H20v48.72h30.48v10.45l11.28 60.28 6.39 6.5-.41.35L90 316.75l.19-.23L96 322.4h193l6-6.06.35.41 22.3-22.31-.59-.51 6.23-6.34 11.28-60.28v-10.45h30.53Z"
-                style={{
-                    stroke: "#e4e4e7",
-                    strokeWidth: ".5px",
-                    strokeDasharray: 6,
-                    fill: "none",
-                    strokeMiterlimit: 10,
-                    transform: `rotateZ(${equivalentAzimuthDemand}deg)`, transformOrigin: `50% 50%`
-                }}
-            />
-          </g>
+            { this.getDemand(equivalentAzimuthDemand) }
+            
         </svg>
+    );
+  }
+
+  getBase(x0, y0, equivalentAzimuthActual) {
+    return (
+      <>
+        <circle
+          cx={x0}
+          cy={y0}
+          r={170}
+          style={{
+              strokeWidth: 2,
+              strokeMiterlimit: 10,
+              fill: "#15242d",
+              stroke: "#182e39",
+          }}
+        />
+        <g
+            style={{transform: `rotateZ(${equivalentAzimuthActual}deg)`, transformOrigin: `50% 50%`}}
+        >
+            <path
+                className={styles.cls3}
+                d="M19.95 168.14h48.69v48.71H19.95zM316.36 168.14h48.69v48.71h-48.69zM302.63 40.57H82.37L38.31 87.89l-3.25 19.02 47.31 15.66h220.26l47.31-15.66-2.44-19.02-44.87-47.32z"
+            />
+            <path
+                className={styles.cls3}
+                d="M323.24 97.41 289 62.6H96L61.76 97.41l-11.28 60.28v69.62l11.28 60.28L96 322.4h193l34.26-34.81 11.28-60.28v-69.62ZM192.5 298A105.54 105.54 0 1 1 298 192.5 105.52 105.52 0 0 1 192.5 298Z"
+            />
+        </g>
+      </>
+    );
+  }
+
+  getDemand(equivalentAzimuthDemand) {
+    return (
+      <path
+        d="M365.05 168.14h-30.53v-10.45l-8-43 23.47-7.77-2.44-19-44.92-47.35H82.37L38.31 87.89l-3.25 19 23.47 7.77-8.05 43v10.45H20v48.72h30.48v10.45l11.28 60.28 6.39 6.5-.41.35L90 316.75l.19-.23L96 322.4h193l6-6.06.35.41 22.3-22.31-.59-.51 6.23-6.34 11.28-60.28v-10.45h30.53Z"
+        style={{
+          stroke: "#e4e4e7",
+          strokeWidth: ".5px",
+          strokeDasharray: 6,
+          fill: "none",
+          strokeMiterlimit: 10,
+          transform: `rotateZ(${equivalentAzimuthDemand}deg)`, transformOrigin: `50% 50%`
+        }}
+      />
     );
   }
 
@@ -256,7 +271,7 @@ export default class MirrorCovers extends Component {
     );
   }
 
-  getMount = () => {
+  getMount = (x0, y0) => {
     return (
         <>
             <rect
@@ -389,6 +404,8 @@ export default class MirrorCovers extends Component {
                 className={styles.cls8}
                 d="m337.32 118.31-9.19 1.78M340.41 134.25l-9.18 1.78M333.67 119.32l2.97 15.28M53.77 136.03l-9.18-1.78M56.87 120.09l-9.19-1.78M50.13 135.02l2.96-15.28"
             />
+
+            <circle className={styles.cls3} cx={x0} cy={y0} r={26} />
         </>
     );
   }
