@@ -227,7 +227,7 @@ describe('Test image sequence data passes correctly to component', () => {
         value: 1,
         dataType: 'Int',
       },
-      timeStamp: {
+      timestampAcquisitionStart: {
         value: 1558368052.999,
         dataType: 'Float',
       },
@@ -257,7 +257,7 @@ describe('Test image sequence data passes correctly to component', () => {
         value: 1,
         dataType: 'Int',
       },
-      timeStamp: {
+      timestampAcquisitionStart: {
         value: 1558568052.999,
         dataType: 'Float',
       },
@@ -392,7 +392,7 @@ it('Append readout parameters to image', async () => {
           value: 1,
           dataType: 'Int',
         },
-        timeStamp: {
+        timestampAcquisitionStart: {
           value: 1558368052.999,
           dataType: 'Float',
         },
