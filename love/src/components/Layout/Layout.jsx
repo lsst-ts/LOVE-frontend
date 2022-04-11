@@ -131,8 +131,8 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (this.props.config?.alarms && this.props.config.alarms !== prevProps.config?.alarms) {
-      const minSeverityNotification = this.props.config.alarms.minSeverityNotification?.trim().toLowerCase();
+    if (this.props.config?.content?.alarms !== prevProps.config?.content?.alarms) {
+      const minSeverityNotification = this.props.config.content.alarms.minSeverityNotification?.trim().toLowerCase();
       if (!minSeverityNotification || minSeverityNotification === 'mute' || minSeverityNotification === 'muted') {
         // If minSeverityNotification is null or "mute" or "muted", then do not play any sound
         this.setState({ minSeverityNotification: severityEnum.critical + 1 });
@@ -222,8 +222,11 @@ class Layout extends Component {
       const componentHeartbeat = this.props.getLastComponentHeartbeat(heartbeatSource);
       const lastComponentHeartbeat = this.state.heartbeatInfo[heartbeatSource];
       const componentHeartbeatStatus =
-        lastComponentHeartbeat?.data.timestamp !== componentHeartbeat?.data.timestamp ? 'ok' : 
-        componentHeartbeat && !lastComponentHeartbeat ? 'ok' : 'alert';
+        lastComponentHeartbeat?.data.timestamp !== componentHeartbeat?.data.timestamp
+          ? 'ok'
+          : componentHeartbeat && !lastComponentHeartbeat
+          ? 'ok'
+          : 'alert';
 
       heartbeatInfo[heartbeatSource] = componentHeartbeat;
       heartbeatStatus[heartbeatSource] = componentHeartbeatStatus;
