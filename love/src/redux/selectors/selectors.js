@@ -21,6 +21,8 @@ export const getAlarmConfig = (state) => getConfig(state)?.content?.alarms;
 
 export const getEfdConfig = (state) => getConfig(state)?.content?.efd;
 
+export const getSurveyConfig = (state) => getConfig(state)?.content?.survey;
+
 export const getAllTime = (state) => ({ ...state.time });
 
 export const getClock = (state) => ({ ...state.time.clock });

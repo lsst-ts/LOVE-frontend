@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { RECEIVE_TIME_DATA, CLOCK_START, CLOCK_STOP, CLOCK_TICK } from './actionTypes';
 import { sendAction } from './ws';
-import { getAllTime } from '../selectors';
+import { getAllTime, getSurveyConfig } from '../selectors';
 import { siderealSecond } from '../../Utils';
 
 /**
@@ -27,6 +27,8 @@ export function receiveServerTime(time_data, request_time) {
 export function tick() {
   return (dispatch, getState) => {
     const time = getAllTime(getState());
+    const surveyConfig = getSurveyConfig(getState());
+    const surveyTime = surveyConfig?.startTime ? Date.now() - surveyConfig.startTime * 1000 : 0;
     const diffLocalUtc = DateTime.utc().toSeconds() - (time.receive_time + time.request_time) / 2;
     dispatch({
       type: CLOCK_TICK,
@@ -34,6 +36,7 @@ export function tick() {
         utc: DateTime.fromSeconds(time.server_time.utc + diffLocalUtc, { zone: 'utc' }),
         tai: DateTime.fromSeconds(time.server_time.tai + diffLocalUtc, { zone: 'utc' }),
         mjd: time.server_time.mjd + diffLocalUtc / (3600 * 24),
+        survey_time: surveyTime,
         sidereal_summit: DateTime.fromSeconds(time.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc, {
           zone: 'utc',
         }),

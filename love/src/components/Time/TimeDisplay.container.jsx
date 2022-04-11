@@ -123,6 +123,13 @@ export const schema = {
               hideOffset: false,
               timezone: 'MJD',
             },
+            {
+              name: 'Survey Time',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: false,
+              timezone: 'survey-time',
+            },
           ],
         ],
       ],

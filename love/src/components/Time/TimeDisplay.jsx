@@ -8,12 +8,13 @@ export default class TimeDisplay extends React.Component {
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
-    /** 
+    /**
      * Current time clocks from the server in the following format:
      *  {
           utc: <utc time in seconds>,
           tai: <tai time in seconds>,
           mjd: <modified julian date in days>,
+          survey_time: <survey time in seconds>,
           sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
           sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
         }
@@ -22,6 +23,7 @@ export default class TimeDisplay extends React.Component {
       utc: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       tai: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       mjd: PropTypes.number,
+      survey_time: PropTypes.number,
       sidereal_summit: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       sidereal_greenwich: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     }),
@@ -61,6 +63,7 @@ export default class TimeDisplay extends React.Component {
       utc: 0,
       tai: 0,
       mjd: 0,
+      survey_time: 0,
       sidereal_summit: 0,
       sidereal_greenwich: 0,
     },
