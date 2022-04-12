@@ -28,7 +28,7 @@ export function tick() {
   return (dispatch, getState) => {
     const time = getAllTime(getState());
     const surveyConfig = getSurveyConfig(getState());
-    const surveyTime = surveyConfig?.startTime ? Date.now() - surveyConfig.startTime * 1000 : 0;
+    const surveyTime = surveyConfig?.startTime ? (Date.now() - surveyConfig.startTime) / (1000 * 3600 * 24) : 0;
     const diffLocalUtc = DateTime.utc().toSeconds() - (time.receive_time + time.request_time) / 2;
     dispatch({
       type: CLOCK_TICK,

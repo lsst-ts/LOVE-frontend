@@ -14,7 +14,7 @@ export default class TimeDisplay extends React.Component {
           utc: <utc time in seconds>,
           tai: <tai time in seconds>,
           mjd: <modified julian date in days>,
-          survey_time: <survey time in seconds>,
+          survey_time: <survey time in days>,
           sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
           sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
         }
@@ -46,7 +46,6 @@ export default class TimeDisplay extends React.Component {
         - For TAI use TAI
         - For Greenwich Sidereal Time use sidereal-greenwich
         - For Summit Sidereal Time use sidereal-summit
-        - For a fixed offset (e.g. GMT+5) use <UTC
         - For La Serena use America/Santiago (yes America, not Chile)
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago

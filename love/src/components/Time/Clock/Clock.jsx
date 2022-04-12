@@ -23,7 +23,7 @@ export default class Clock extends React.Component {
      * - For local time use local
      * - For UTC use UTC
      * - For TAI use TAI
-     * - For 'La Serena' use 'America/Santiago' (yes America, not Chile)
+     * - For 'La Serena' use 'America/Santiago'
      * - For 'Arizona' use 'America/Phoenix'
      * - For 'Illinois' use 'America/Chicago'
      */
@@ -34,7 +34,7 @@ export default class Clock extends React.Component {
           utc: <utc time in seconds>,
           tai: <tai time in seconds>,
           mjd: <modified julian date in days>,
-          survey_time: <Survey time in seconds>,
+          survey_time: <Survey time in days>,
           sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
           sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
         }
@@ -90,7 +90,6 @@ export default class Clock extends React.Component {
         timestamp = this.props.clock.survey_time;
         hideAnalog = true;
         surveyTime = true;
-        offset = 'Summit-Survey';
         hideDate = true;
       } else if (this.props.timezone === 'sidereal-summit') {
         timestamp = this.props.clock.sidereal_summit;
@@ -114,8 +113,7 @@ export default class Clock extends React.Component {
       <div className={styles.container}>
         <div className={styles.topRow}>
           {(name || offset) && <div className={styles.name}>{offset ? `${name} (${offset})` : name}</div>}
-          {mjd && <div className={styles.mjd}>{timestamp.toFixed(5)}</div>}
-          {surveyTime && <div className={styles.mjd}>{Math.floor(timestamp / 1000)}</div>}
+          {(mjd || surveyTime) && <div className={styles.mjd}>{timestamp.toFixed(5)}</div>}
           {!(mjd || surveyTime) && <DigitalClock timestamp={timestamp} hideDate={hideDate} />}
         </div>
         {!hideAnalog && (

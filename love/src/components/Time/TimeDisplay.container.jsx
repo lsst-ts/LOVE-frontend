@@ -53,7 +53,7 @@ export const schema = {
         - For TAI use TAI
         - For Greenwich Sidereal Time use sidereal-greenwich
         - For Summit Sidereal Time use sidereal-summit
-        - For a fixed offset (e.g. GMT+5) use <UTC
+        - For Survey Time use survey-time
         - For La Serena use America/Santiago (yes America, not Chile)
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago
@@ -117,14 +117,14 @@ export const schema = {
               timezone: 'TAI',
             },
             {
-              name: 'Modified Julian Date',
+              name: 'UTC',
               hideAnalog: true,
               hideDate: false,
               hideOffset: false,
               timezone: 'MJD',
             },
             {
-              name: 'Survey Time',
+              name: 'Survey Duration',
               hideAnalog: true,
               hideDate: false,
               hideOffset: false,
