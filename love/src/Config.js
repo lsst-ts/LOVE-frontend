@@ -467,39 +467,39 @@ export const hexapodCompensationModeStatetoStyle = {
 };
 
 export const hexapodInterlockStateMap = {
-  Disengaged: 'Disengaged',
-  Engaged: 'Engaged',
+  false: DISENGAGED,
+  true: ENGAGED,
 };
 
 export const hexapodControllerStateMap = {
-  0: 'Standby',
-  1: 'Disabled',
-  2: 'Enabled',
-  3: 'Offline',
-  4: 'Fault',
+  0: STANDBY,
+  1: DISABLED,
+  2: ENABLED,
+  3: OFFLINE,
+  4: FAULT,
 };
 
 export const hexapodControllerStatetoStyle = {
-  Standby: 'undefined',
-  Disabled: 'undefined',
-  Enabled: 'ok',
-  Offline: 'undefined',
-  Fault: 'warning',
+  STANDBY: 'undefined',
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  OFFLINE: 'undefined',
+  FAULT: 'warning',
 };
 
 export const hexapodControllerStateOfflineSubStateMap = {
-  0: 'Publish Only',
-  1: 'Available',
+  0: 'PUBLISH ONLY',
+  1: 'AVAILABLE',
 };
 
 export const hexapodControllerStateEnabledSubstateMap = {
-  0: 'Stationary',
-  1: 'Moving Point to Point',
-  2: 'Slewing Or Tracking',
-  3: 'Controlled Stopping',
-  4: 'Initializing',
-  5: 'Relative',
-  6: 'Constant Velocity',
+  0: 'STATIONARY',
+  1: 'MOVING POINT TO POINT',
+  2: 'SLEWING OR TRACKING',
+  3: 'CONTROLLED STOPPING',
+  4: 'INITIALIING',
+  5: 'RELATIVE',
+  6: 'CONSTANT VELOCITY',
 };
 
 export const hexapodMTInPositionStateMap = {
@@ -541,7 +541,6 @@ const rotTypes = [
   { label: 'Physical', value: 4 },
 ];
 
-// TODO: Pending list of types.SimpleNamespace
 const SimpleNamespace = [{ label: 'None', value: undefined }];
 
 const AzWrapStrategy = [
@@ -574,7 +573,6 @@ const Planets = [
   { label: 'VENUS', value: 2 },
 ];
 
-// TODO: Pending define list of cmdAck commands names
 const cmdAck = [
   { label: 'None', value: undefined },
   { label: 'LabelNameCommand', value: 'CmdAck from the command that started the slew process' },

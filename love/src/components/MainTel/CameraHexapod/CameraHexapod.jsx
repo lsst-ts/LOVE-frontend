@@ -23,6 +23,7 @@ import {
   hexapodStatusStatetoStyle,
   hexapodControllerStatetoStyle,
 } from 'Config';
+
 class CameraHexapod extends Component {
   constructor(props) {
     super(props);
