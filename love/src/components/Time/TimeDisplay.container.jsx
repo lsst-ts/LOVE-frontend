@@ -54,7 +54,8 @@ export const schema = {
         - For Greenwich Sidereal Time use sidereal-greenwich
         - For Summit Sidereal Time use sidereal-summit
         - For Survey Time use survey-time
-        - For La Serena use America/Santiago (yes America, not Chile)
+        - For Observing Day use observing-day
+        - For La Serena use America/Santiago
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago
         Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones
@@ -123,11 +124,22 @@ export const schema = {
               hideOffset: false,
               timezone: 'MJD',
             },
+          ],
+        ],
+        [
+          [
+            {
+              name: 'Observing Day',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: true,
+              timezone: 'observing-day',
+            },
             {
               name: 'Survey Duration',
               hideAnalog: true,
               hideDate: false,
-              hideOffset: false,
+              hideOffset: true,
               timezone: 'survey-time',
             },
           ],

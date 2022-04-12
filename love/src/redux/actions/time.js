@@ -37,6 +37,7 @@ export function tick() {
         tai: DateTime.fromSeconds(time.server_time.tai + diffLocalUtc, { zone: 'utc' }),
         mjd: time.server_time.mjd + diffLocalUtc / (3600 * 24),
         survey_time: surveyTime,
+        observing_day: time.server_time.observing_day,
         sidereal_summit: DateTime.fromSeconds(time.server_time.sidereal_summit * 3600 + siderealSecond * diffLocalUtc, {
           zone: 'utc',
         }),

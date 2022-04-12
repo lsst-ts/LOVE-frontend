@@ -41,6 +41,7 @@ export default function (state = initialState, action) {
           utc: action.time_data.utc,
           tai: action.time_data.tai,
           mjd: action.time_data.mjd,
+          observing_day: action.time_data.observing_day,
           sidereal_summit: action.time_data.sidereal_summit,
           sidereal_greenwich: action.time_data.sidereal_greenwich,
           tai_to_utc: action.time_data.tai_to_utc,

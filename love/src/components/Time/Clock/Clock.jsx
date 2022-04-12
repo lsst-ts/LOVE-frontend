@@ -35,6 +35,7 @@ export default class Clock extends React.Component {
           tai: <tai time in seconds>,
           mjd: <modified julian date in days>,
           survey_time: <Survey time in days>,
+          observing_day: <observing day in YYYYMMDD format>,
           sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
           sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
         }
@@ -44,6 +45,7 @@ export default class Clock extends React.Component {
       tai: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       mjd: PropTypes.number,
       survey_time: PropTypes.number,
+      observing_day: PropTypes.string,
       sidereal_summit: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       sidereal_greenwich: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     }),
@@ -61,6 +63,7 @@ export default class Clock extends React.Component {
       tai: 0,
       mjd: 0,
       survey_time: 0,
+      observing_day: '',
       sidereal_summit: 0,
       sidereal_greenwich: 0,
     },
@@ -71,6 +74,7 @@ export default class Clock extends React.Component {
     let hideDate = this.props.hideDate;
     let mjd = false;
     let surveyTime = false;
+    let observingDay = false;
     let offset = null;
     let timestamp = 0;
     if (this.props.clock.utc !== 0) {
@@ -91,6 +95,11 @@ export default class Clock extends React.Component {
         hideAnalog = true;
         surveyTime = true;
         hideDate = true;
+      } else if (this.props.timezone === 'observing-day') {
+        timestamp = this.props.clock.observing_day;
+        hideAnalog = true;
+        observingDay = true;
+        hideDate = true;
       } else if (this.props.timezone === 'sidereal-summit') {
         timestamp = this.props.clock.sidereal_summit;
         offset = 'Summit-AST';
@@ -103,7 +112,7 @@ export default class Clock extends React.Component {
         timestamp = this.props.clock.utc.setZone(this.props.timezone);
         offset = timestamp.offsetNameShort;
       }
-      if (!mjd && !surveyTime && this.props.locale) {
+      if (!(mjd || surveyTime || observingDay) && this.props.locale) {
         timestamp = timestamp.setLocale(this.props.locale);
       }
     }
@@ -114,7 +123,8 @@ export default class Clock extends React.Component {
         <div className={styles.topRow}>
           {(name || offset) && <div className={styles.name}>{offset ? `${name} (${offset})` : name}</div>}
           {(mjd || surveyTime) && <div className={styles.mjd}>{timestamp.toFixed(5)}</div>}
-          {!(mjd || surveyTime) && <DigitalClock timestamp={timestamp} hideDate={hideDate} />}
+          {observingDay && <div className={styles.mjd}>{timestamp}</div>}
+          {!(mjd || surveyTime || observingDay) && <DigitalClock timestamp={timestamp} hideDate={hideDate} />}
         </div>
         {!hideAnalog && (
           <div className={styles.analog}>
