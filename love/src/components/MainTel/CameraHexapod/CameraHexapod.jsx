@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './CameraHexapod.module.css';
 import SummaryPanel from '../../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../GeneralPurpose/SummaryPanel/Label';
@@ -25,13 +26,93 @@ import {
 } from 'Config';
 
 class CameraHexapod extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      connectedCommandEvent: false,
-      connectedTelemetryEvent: false,
-    };
-  }
+  static propTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+    /** State of if the CSC can control the MTHexapod */
+    hexapodCommandableByDDS: PropTypes.bool,
+    /** Enable or disable automatic compensation? */
+    hexapodCompensationMode: PropTypes.bool,
+    /** Is the socket connected (true=yes, false=no)? */
+    hexapodConnected: PropTypes.bool,
+    /** State reported by the controller */
+    hexapodControllerState: PropTypes.number,
+    /** Substate in OFFLINE mode, an OfflineSubstate enumeration value */
+    hexapodControllerStateOfflineSubstate: PropTypes.number,
+    /** Substate in ENABLED mode, an EnabledSubstate enumeration value */
+    hexapodConstrollerStateEnabledSubstate: PropTypes.number,
+    /** Application status. A bitmask of ApplicationStatus enumeration values */
+    hexapodControllerStateApplicationStatus: PropTypes.number,
+    /** If all actuators have reached their commanded position o not */
+    hexapodInPosition: PropTypes.bool,
+    /** Safety interlock engaged (preventing motion) or disengaged */
+    hexapodInterlock: PropTypes.bool,
+    /** High level state machine state identifier */
+    hexapodSummaryState: PropTypes.number,
+    /** Linear encoder readings from each MTHexapod actuator in microns */
+    hexapodActuatorsCalibrated: PropTypes.array,
+    /** Linear encoder readings from each MTHexapod actuator in counts */
+    hexapodActuatorsRaw: PropTypes.array,
+    /** Time at which encoders were read (TAI unix seconds) */
+    hexapodActuatorsTimestamp: PropTypes.array,
+    /** Commanded MTHexapod position in order (X, Y, Z, U, V, W) */
+    hexapodApplicationDemand: PropTypes.array,
+    /** Actual MTHexapod position, in order (X, Y, Z, U, V, W) */
+    hexapodApplicationPosition: PropTypes.array,
+    /** Position error (position - demand), in order (X, Y, Z, U, V, W) */
+    hexapodApplicationError: PropTypes.array,
+    /** Elevation on which the compensation was based */
+    hexapodCompensationOffsetElevation: PropTypes.number,
+    /** Azimuth on which the compensation was based */
+    hexapodCompensationOffsetAzimuth: PropTypes.number,
+    /** Camera rotator angle */
+    hexapodCompensationOffsetRotation: PropTypes.number,
+    /** Temperature on which the compensation was based */
+    hexapodCompensationOffsetTemperature: PropTypes.number,
+    /** compensated - uncompensated x */
+    hexapodCompensationOffsetX: PropTypes.number,
+    /** compensated - uncompensated y */
+    hexapodCompensationOffsetY: PropTypes.number,
+    /** compensated - uncompensated z */
+    hexapodCompensationOffsetZ: PropTypes.number,
+    /** compensated - uncompensated u */
+    hexapodCompensationOffsetU: PropTypes.number,
+    /** compensated - uncompensated v */
+    hexapodCompensationOffsetV: PropTypes.number,
+    /** compensated - uncompensated w */
+    hexapodCompensationOffsetW: PropTypes.number,
+  };
+
+  static defaultProps = {
+    hexapodCommandableByDDS: false,
+    hexapodCompensationMode: false,
+    hexapodConnected: false,
+    hexapodControllerState: 0,
+    hexapodControllerStateOfflineSubstate: 0,
+    hexapodConstrollerStateEnabledSubstate: 0,
+    hexapodControllerStateApplicationStatus: 0,
+    hexapodInPosition: false,
+    hexapodInterlock: false,
+    hexapodSummaryState: 0,
+    hexapodActuatorsCalibrated: [],
+    hexapodActuatorsRaw: [],
+    hexapodActuatorsTimestamp: 0,
+    hexapodApplicationDemand: [],
+    hexapodApplicationPosition: [],
+    hexapodApplicationError: [],
+    hexapodCompensationOffsetElevation: 0,
+    hexapodCompensationOffsetAzimuth: 0,
+    hexapodCompensationOffsetRotation: 0,
+    hexapodCompensationOffsetTemperature: 0,
+    hexapodCompensationOffsetX: 0,
+    hexapodCompensationOffsetY: 0,
+    hexapodCompensationOffsetZ: 0,
+    hexapodCompensationOffsetU: 0,
+    hexapodCompensationOffsetV: 0,
+    hexapodCompensationOffsetW: 0,
+  };
 
   componentDidMount() {
     this.props.subscribeToStreams();

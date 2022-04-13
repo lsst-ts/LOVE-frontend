@@ -467,16 +467,16 @@ export const hexapodCompensationModeStatetoStyle = {
 };
 
 export const hexapodInterlockStateMap = {
-  false: DISENGAGED,
-  true: ENGAGED,
+  false: 'DISENGAGED',
+  true: 'ENGAGED',
 };
 
 export const hexapodControllerStateMap = {
-  0: STANDBY,
-  1: DISABLED,
-  2: ENABLED,
-  3: OFFLINE,
-  4: FAULT,
+  0: 'STANDBY',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'OFFLINE',
+  4: 'FAULT',
 };
 
 export const hexapodControllerStatetoStyle = {

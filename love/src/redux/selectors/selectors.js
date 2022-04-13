@@ -144,30 +144,9 @@ export const getM1M3HardpointMonitorData = (state) => {
   const subscriptions = ['telemetry-MTM1M3-0-hardpointMonitorData'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [
-      24.5,
-      10.1,
-      -11.4,
-      2.5,
-      6.7,
-      -18.1,
-    ],
-    hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [
-      153,
-      45,
-      36,
-      25,
-      98,
-      3,
-    ],
-    hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [
-      1.2,
-      0.3,
-      -3.2,
-      0.9,
-      1.12,
-      0.75,
-    ],
+    hardpointsBreakawayLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayLVDT?.value ?? [],
+    hardpointsDisplacementLVDT: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.displacementLVDT?.value ?? [],
+    hardpointsBreakawayPressure: m1m3Data['telemetry-MTM1M3-0-hardpointMonitorData']?.breakawayPressure?.value ?? [],
     referenceHardpointId: [1, 2, 3, 4, 5, 6],
   };
 };
@@ -612,7 +591,7 @@ export const getHexapodStatus = (state, salindex) => {
       ? hexapodStatusData[`event-MTHexapod-${salindex}-inPosition`][0].inPosition.value
       : false,
     hexapodInterlock: hexapodStatusData[`event-MTHexapod-${salindex}-interlock`]
-      ? hexapodStatusData[`event-MTHexapod-${salindex}-interlock`][0].detail.value
+      ? hexapodStatusData[`event-MTHexapod-${salindex}-interlock`][0].engaged.value
       : false,
     hexapodSummaryState: hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`]
       ? hexapodStatusData[`event-MTHexapod-${salindex}-summaryState`][0].summaryState.value
@@ -645,7 +624,7 @@ export const getHexapodTables = (state, salindex) => {
       : [],
     hexapodApplicationError: hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`]
       ? hexapodTablesData[`telemetry-MTHexapod-${salindex}-application`].error.value
-      : 0,
+      : [],
     hexapodCompensationOffsetElevation: hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`]
       ? hexapodTablesData[`event-MTHexapod-${salindex}-compensationOffset`][0].elevation.value
       : 0,
