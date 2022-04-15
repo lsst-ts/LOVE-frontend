@@ -67,7 +67,7 @@ function LogMessageDisplay({ logMessageData, clearCSCLogMessages }) {
                     </div>
                     <div className={styles.messageText}>
                       {msg.ScriptID && <div className={styles.scriptID}>Script {msg.ScriptID?.value}</div>}
-                      <pre>{msg.message?.value}</pre>
+                      <pre className={styles.preText}>{msg.message?.value}</pre>
                     </div>
                     <div className={styles.messageTraceback}>{msg.traceback.value}</div>
                   </div>

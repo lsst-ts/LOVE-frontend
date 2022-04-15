@@ -21,12 +21,11 @@ export default function (state = initialState, action) {
         imageSequence.name = data?.imageSequenceName?.value;
         imageSequence.imagesInSequence = data?.imagesInSequence?.value;
         imageSequence.images[data?.imageName?.value] = {
-          timeStamp: data.timeStamp?.value,
+          timeStamp: data.timestampAcquisitionStart?.value,
           imageIndex: data.imageIndex?.value,
           exposureTime: data.exposureTime?.value ?? 0,
           state: action.imageState,
         };
-        imageSequence.name = data.imageSequenceName?.value;
         return { ...state, imageSequence };
       }, state);
     }
