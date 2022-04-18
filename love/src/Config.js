@@ -439,8 +439,8 @@ export const severityEnum = {
 // MT Camera Hexapod
 export const hexapodStatusStatetoStyle = {
   UNKNOWN: 'undefined',
-  ENABLED: 'enabled',
   DISABLED: 'disabled',
+  ENABLED: 'enabled',
   FAULT: 'fault',
   OFFLINE: 'offline',
   STANDBY: 'standby',
@@ -467,8 +467,8 @@ export const hexapodCompensationModeStatetoStyle = {
 };
 
 export const hexapodInterlockStateMap = {
-  false: 'DISENGAGED',
-  true: 'ENGAGED',
+  false: 'Disengaged',
+  true: 'Engaged',
 };
 
 export const hexapodControllerStateMap = {
@@ -480,11 +480,11 @@ export const hexapodControllerStateMap = {
 };
 
 export const hexapodControllerStatetoStyle = {
-  STANDBY: 'undefined',
+  STANDBY: 'ok',
   DISABLED: 'undefined',
   ENABLED: 'ok',
   OFFLINE: 'undefined',
-  FAULT: 'warning',
+  FAULT: 'alert',
 };
 
 export const hexapodControllerStateOfflineSubStateMap = {

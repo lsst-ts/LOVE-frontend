@@ -553,7 +553,7 @@ export const getCCWFollowingError = (state) => {
   };
 };
 
-// Hexapod
+// MTHexapod
 export const getHexapodStatus = (state, salindex) => {
   const subscriptions = [
     `event-MTHexapod-${salindex}-commandableByDDS`,

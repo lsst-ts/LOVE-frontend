@@ -56,7 +56,7 @@ class CameraHexapod extends Component {
     /** Linear encoder readings from each MTHexapod actuator in counts */
     hexapodActuatorsRaw: PropTypes.array,
     /** Time at which encoders were read (TAI unix seconds) */
-    hexapodActuatorsTimestamp: PropTypes.array,
+    hexapodActuatorsTimestamp: PropTypes.number,
     /** Commanded MTHexapod position in order (X, Y, Z, U, V, W) */
     hexapodApplicationDemand: PropTypes.array,
     /** Actual MTHexapod position, in order (X, Y, Z, U, V, W) */
@@ -265,7 +265,7 @@ class CameraHexapod extends Component {
             <Title wide>Hexapod Status</Title>
             <Label>Hexapod Status</Label>
             <Value>
-              <StatusText status={hexapodStatusStatetoStyle[hexapodStatus.name]}>{hexapodStatus.name}</StatusText>
+              <span className={[hexapodStatus.class, styles.summaryState].join(' ')}>{hexapodStatus.name}</span>
             </Value>
             <Label>Compensation</Label>
             <Value>

@@ -50,11 +50,16 @@
 }
 
 .summaryState {
-  border-radius: 1rem;
-  font-weight: 700;
+  width: 12em;
+  font-weight: normal !important;
+  padding: 0.2em 0.3em;
+  text-transform: uppercase;
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  border-radius: 100px;
   text-align: center;
-  display: inline-block;
-  width: 11em;
 }
 
 .hover {
