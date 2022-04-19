@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import ManagerInterface from 'Utils';
+import moment from 'moment';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
@@ -48,12 +49,14 @@ const EFDQuery = ({ efdConfigFile = null, onResponse = () => {}, managerInterfac
         <DateTimeRange
           onChange={handleDateTimeChange}
           label="From"
-          startDate={new Date() - 24 * 60 * 60 * 1000 * 5}
-          endDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
+          startDate={new Date(Date.now() - 24 * 60 * 60 * 1000)}
+          endDate={new Date()}
+          startDateProps={{ isValidDate: (current) => current.isBefore(moment()) }}
+          endDateProps={{ isValidDate: (current) => current.isBefore(moment()) }}
         />
       </div>
       <div className={styles.confirmButton}>
-        <Button disabled={!!selectedEFDInstance} className={styles.actionButton} onClick={() => queryEFD()}>
+        <Button disabled={!selectedEFDInstance} className={styles.actionButton} onClick={() => queryEFD()}>
           Query
         </Button>
       </div>

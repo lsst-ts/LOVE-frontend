@@ -33,6 +33,7 @@ const DateTimeRange = ({ ...props }) => {
         dateFormat="YYYY/MM/DD"
         timeFormat="HH:mm:ss"
         closeOnSelect={true}
+        {...props.startDateProps}
       />
       <span className={styles.to}>to</span>
       <DateTime
@@ -43,6 +44,7 @@ const DateTimeRange = ({ ...props }) => {
         dateFormat="YYYY/MM/DD"
         timeFormat="HH:mm:ss"
         closeOnSelect={true}
+        {...props.endDateProps}
       />
     </div>
   );
