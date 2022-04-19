@@ -53,8 +53,9 @@ export const schema = {
         - For TAI use TAI
         - For Greenwich Sidereal Time use sidereal-greenwich
         - For Summit Sidereal Time use sidereal-summit
-        - For a fixed offset (e.g. GMT+5) use <UTC
-        - For La Serena use America/Santiago (yes America, not Chile)
+        - For Survey Time use survey-time
+        - For Observing Day use observing-day
+        - For La Serena use America/Santiago
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago
         Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones
@@ -117,11 +118,29 @@ export const schema = {
               timezone: 'TAI',
             },
             {
-              name: 'Modified Julian Date',
+              name: 'UTC',
               hideAnalog: true,
               hideDate: false,
               hideOffset: false,
               timezone: 'MJD',
+            },
+          ],
+        ],
+        [
+          [
+            {
+              name: 'Observing Day',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: true,
+              timezone: 'observing-day',
+            },
+            {
+              name: 'Survey Duration',
+              hideAnalog: true,
+              hideDate: false,
+              hideOffset: true,
+              timezone: 'survey-time',
             },
           ],
         ],

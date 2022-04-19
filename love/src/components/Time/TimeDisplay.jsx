@@ -8,12 +8,14 @@ export default class TimeDisplay extends React.Component {
     /** Locale string used to configure how to display the UTC Offset. en-GB by default (so it is displayed as GMT always).
      * Null or empty to use the browser locale */
     locale: PropTypes.string,
-    /** 
+    /**
      * Current time clocks from the server in the following format:
      *  {
           utc: <utc time in seconds>,
           tai: <tai time in seconds>,
           mjd: <modified julian date in days>,
+          survey_time: <survey time in days>,
+          observing_day: <observing day in YYYYMMDD format>,
           sidereal_summit: <Local (summit) Apparent Sidereal Time in seconds>,
           sidereal_greenwich: <Greenwich Apparent Sidereal Time (GAST) in seconds>,
         }
@@ -22,6 +24,8 @@ export default class TimeDisplay extends React.Component {
       utc: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       tai: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       mjd: PropTypes.number,
+      survey_time: PropTypes.number,
+      observing_day: PropTypes.string,
       sidereal_summit: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
       sidereal_greenwich: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     }),
@@ -44,8 +48,9 @@ export default class TimeDisplay extends React.Component {
         - For TAI use TAI
         - For Greenwich Sidereal Time use sidereal-greenwich
         - For Summit Sidereal Time use sidereal-summit
-        - For a fixed offset (e.g. GMT+5) use <UTC
-        - For La Serena use America/Santiago (yes America, not Chile)
+        - For Survey Time use survey-time
+        - For Observing Day use observing-day
+        - For La Serena use America/Santiago
         - For Arizona use America/Phoenix
         - For Illinois use America/Chicago
         Note that not every city is available, check the IANA DB documentation for more info: https://www.iana.org/time-zones
@@ -61,6 +66,8 @@ export default class TimeDisplay extends React.Component {
       utc: 0,
       tai: 0,
       mjd: 0,
+      survey_time: 0,
+      observing_day: '',
       sidereal_summit: 0,
       sidereal_greenwich: 0,
     },
