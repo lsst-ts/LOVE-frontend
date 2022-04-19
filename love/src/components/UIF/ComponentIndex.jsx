@@ -264,6 +264,16 @@ export const mainIndex = {
       },
     },
   },
+  CameraHexapod: {
+    component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
+    schema: {
+      ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
+      },
+    },
+  },
 };
 
 export const authlistIndex = {

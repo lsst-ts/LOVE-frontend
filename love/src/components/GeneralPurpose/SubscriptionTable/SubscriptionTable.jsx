@@ -41,7 +41,7 @@ export default class SubscriptionTable extends Component {
   componentDidUpdate = (prevProps) => {
     if (prevProps.getStreamData !== this.props.getStreamData) {
       const heartbeat = this.props.getStreamData('event-Heartbeat-0-stream');
-      if (heartbeat.csc === this.props.name && heartbeat.salindex === this.props.salindex) {
+      if (heartbeat?.csc === this.props.name && heartbeat?.salindex === this.props.salindex) {
         this.setState({ lastHeartbeat: heartbeat });
       }
     }
