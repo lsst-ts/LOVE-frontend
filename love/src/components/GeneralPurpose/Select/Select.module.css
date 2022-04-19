@@ -10,6 +10,7 @@
   border-color: inherit;
   color: var(--base-font-color);
   text-align: left;
+  height: 2.4em;
 }
 
 .dropDownPlaceHolderClassName {

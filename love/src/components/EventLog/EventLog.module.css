@@ -261,3 +261,15 @@
 .title {
   padding-top: 0.5em;
 }
+
+.efdSelector {
+  margin-right: 1rem;
+}
+
+.efd > * {
+  display: inline;
+}
+
+.timeRange > div {
+  display: inline-flex;
+}
