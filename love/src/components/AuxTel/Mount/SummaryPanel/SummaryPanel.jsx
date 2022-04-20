@@ -15,6 +15,7 @@ import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
+import SimpleTable from '../../../GeneralPurpose/SimpleTable/SimpleTable';
 import styles from './SummaryPanel.module.css';
 
 export default class SummaryTable extends Component {
@@ -53,9 +54,80 @@ export default class SummaryTable extends Component {
     const offset = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
       return this.props.correctionOffsets[k] ? this.props.correctionOffsets[k].value : ' - ';
     });
+    const position = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
+      return this.props.hexapodReportedPosition[k] ? this.props.hexapodReportedPosition[k].value : ' - ';
+    });
     const hexapodPosAndOffset = Array.isArray(this.props.hexapodReportedPosition.value)
       ? this.props.hexapodReportedPosition.value.map((pos, i) => [pos, offset[i]])
       : this.props.hexapodReportedPosition;
+
+    //Hexapod Table data
+    const data = {
+      x: {
+        name: {val:'x', unit:'mm'},
+        position: position[0],
+        offset: offset[0],
+      },
+      y: {
+        name: {val:'y', unit:'mm'},
+        position: position[1],
+        offset: offset[1],
+      },
+      z: {
+        name: {val:'z', unit:'mm'},
+        position: position[2],
+        offset: offset[2],
+      },
+      u: {
+        name: {val:'u', unit:'deg'},
+        position: position[3],
+        offset: offset[3],
+      },
+      v: {
+        name: {val:'v', unit:'deg'},
+        position: position[4],
+        offset: offset[4],
+      },
+      w: {
+        name: {val:'w', unit:'deg'},
+        position: position[5],
+        offset: offset[5],
+      },
+    };
+
+    const simpleTableData = Object.values(data);
+    const defaultFormatter = (value) => {
+      if (isNaN(value)) return value;
+      return Number.isInteger(value) ? value : value.toFixed(3);
+    };
+
+    const headers = [
+      {
+        field: 'name',
+        title: '',
+        render: (value) => (`${value.val} [${value.unit}]`),
+      },
+      {
+        field: 'position',
+        title: (
+          <>
+            Position
+          </>
+        ),
+        type: 'number',
+        render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(3)}`),
+      },
+      {
+        field: 'offset',
+        title: (
+          <>
+            ATAOS Offset
+          </>
+        ),
+        type: 'number',
+        render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(3)}`),
+      },
+    ];
 
     return (
       <SummaryPanel>
@@ -105,10 +177,10 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[hexapodInPosition]}>{hexapodInPosition}</StatusText>
         </Value>
+        {/*
         <Label>
           <>
-            <span className={styles.multirowLabel}>Position value</span>
-            <span>(ATAOS offset)</span>
+            <span>Position</span>
           </>
         </Label>
         <Value>
@@ -117,14 +189,37 @@ export default class SummaryTable extends Component {
               ? hexapodPosAndOffset.map((val) => {
                   return (
                     <div key={val} className={styles.listValueItem}>
-                      <span>{val[0].toFixed ? val[0].toFixed(4) : val[0]}</span>
-                      <span className={styles.secondaryValue}> ({val[1]})</span>
+                      <span>{val[0].toFixed ? val[0].toFixed(3) : val[0]}</span>
                     </div>
                   );
                 })
               : hexapodPosAndOffset}
           </>
         </Value>
+        <Label>
+          <>
+            <span>Offset</span>
+          </>
+        </Label>
+        <Value>
+          <>
+            {Array.isArray(hexapodPosAndOffset)
+              ? hexapodPosAndOffset.map((val) => {
+                  return (
+                    <div key={val} className={styles.listValueItem}>
+                      <span>{val[1].toFixed ? val[1].toFixed(3) : val[1]}</span>
+                    </div>
+                  );
+                })
+              : hexapodPosAndOffset}
+          </>
+        </Value>
+        */}
+      {/* Table */}
+        <div style={{ gridColumnStart: '1', gridColumnEnd: '3' }} className={styles.panelTable}>
+          <SimpleTable headers={headers} data={simpleTableData} />
+        </div>
+
       </SummaryPanel>
     );
   }
