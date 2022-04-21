@@ -336,8 +336,8 @@ export const m1VentsLimitSwitchesStateMap = {
 
 // ATHexapod
 export const hexapodInPositionStateMap = {
-  1: 'NOT READY',
-  2: 'IN POSITION',
+  1: 'IN POSITION',
+  2: 'NOT READY',
   0: 'UNKNOWN',
 };
 
