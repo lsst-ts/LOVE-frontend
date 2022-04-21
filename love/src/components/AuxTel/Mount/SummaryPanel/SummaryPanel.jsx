@@ -52,7 +52,7 @@ export default class SummaryTable extends Component {
     //Hexapod
     let hexapodInPositionState = 0;
     if (this.props.hexapodInPosition !== 0) {
-      hexapodInPositionState = this.props.hexapodInPosition ? 1 : 2 ;
+      hexapodInPositionState = this.props.hexapodInPosition ? 1 : 2;
     }
     const hexapodInPosition = hexapodInPositionStateMap[hexapodInPositionState];
     const offset = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
@@ -68,32 +68,32 @@ export default class SummaryTable extends Component {
     //Hexapod Table data
     const hexapodTableData = {
       x: {
-        name: {val:'x', unit:'mm'},
+        name: { val: 'x', unit: 'mm' },
         position: position[0],
         offset: offset[0],
       },
       y: {
-        name: {val:'y', unit:'mm'},
+        name: { val: 'y', unit: 'mm' },
         position: position[1],
         offset: offset[1],
       },
       z: {
-        name: {val:'z', unit:'mm'},
+        name: { val: 'z', unit: 'mm' },
         position: position[2],
         offset: offset[2],
       },
       u: {
-        name: {val:'u', unit:'deg'},
+        name: { val: 'u', unit: 'deg' },
         position: position[3],
         offset: offset[3],
       },
       v: {
-        name: {val:'v', unit:'deg'},
+        name: { val: 'v', unit: 'deg' },
         position: position[4],
         offset: offset[4],
       },
       w: {
-        name: {val:'w', unit:'deg'},
+        name: { val: 'w', unit: 'deg' },
         position: position[5],
         offset: offset[5],
       },
@@ -109,25 +109,17 @@ export default class SummaryTable extends Component {
       {
         field: 'name',
         title: '',
-        render: (value) => (`${value.val} [${value.unit}]`),
+        render: (value) => `${value.val} [${value.unit}]`,
       },
       {
         field: 'position',
-        title: (
-          <>
-            Position
-          </>
-        ),
+        title: <>Position</>,
         type: 'number',
         render: defaultFormatter,
       },
       {
         field: 'offset',
-        title: (
-          <>
-            ATAOS Offset
-          </>
-        ),
+        title: <>ATAOS Offset</>,
         type: 'number',
         render: defaultFormatter,
       },
@@ -181,11 +173,10 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[hexapodInPosition]}>{hexapodInPosition}</StatusText>
         </Value>
-      {/* Table */}
+        {/* Table */}
         <div style={{ gridColumnStart: '1', gridColumnEnd: '3' }} className={styles.panelTable}>
           <SimpleTable headers={headers} data={simpleTableData} />
         </div>
-
       </SummaryPanel>
     );
   }
