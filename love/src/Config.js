@@ -337,8 +337,8 @@ export const m1VentsLimitSwitchesStateMap = {
 // ATHexapod
 export const hexapodInPositionStateMap = {
   1: 'IN POSITION',
-  2: 'UNKNOWN',
-  0: 'NOT READY',
+  2: 'NOT READY',
+  0: 'UNKNOWN',
 };
 
 // LATISS

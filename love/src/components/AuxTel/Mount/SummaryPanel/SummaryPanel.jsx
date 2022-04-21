@@ -50,7 +50,11 @@ export default class SummaryTable extends Component {
     //ATPneumatics
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState] || m1CoverStateStateMap[0];
     //Hexapod
-    const hexapodInPosition = hexapodInPositionStateMap[this.props.hexapodInPosition ? 1 : 0];
+    let hexapodInPositionState = 0;
+    if (this.props.hexapodInPosition !== 0) {
+      hexapodInPositionState = this.props.hexapodInPosition ? 1 : 2 ;
+    }
+    const hexapodInPosition = hexapodInPositionStateMap[hexapodInPositionState];
     const offset = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
       return this.props.correctionOffsets[k] ? this.props.correctionOffsets[k].value : ' - ';
     });
@@ -62,7 +66,7 @@ export default class SummaryTable extends Component {
       : this.props.hexapodReportedPosition;
 
     //Hexapod Table data
-    const data = {
+    const hexapodTableData = {
       x: {
         name: {val:'x', unit:'mm'},
         position: position[0],
@@ -95,7 +99,7 @@ export default class SummaryTable extends Component {
       },
     };
 
-    const simpleTableData = Object.values(data);
+    const simpleTableData = Object.values(hexapodTableData);
     const defaultFormatter = (value) => {
       if (isNaN(value)) return value;
       return Number.isInteger(value) ? value : value.toFixed(3);
@@ -115,7 +119,7 @@ export default class SummaryTable extends Component {
           </>
         ),
         type: 'number',
-        render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(3)}`),
+        render: defaultFormatter,
       },
       {
         field: 'offset',
@@ -125,7 +129,7 @@ export default class SummaryTable extends Component {
           </>
         ),
         type: 'number',
-        render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(3)}`),
+        render: defaultFormatter,
       },
     ];
 
@@ -177,44 +181,6 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[hexapodInPosition]}>{hexapodInPosition}</StatusText>
         </Value>
-        {/*
-        <Label>
-          <>
-            <span>Position</span>
-          </>
-        </Label>
-        <Value>
-          <>
-            {Array.isArray(hexapodPosAndOffset)
-              ? hexapodPosAndOffset.map((val) => {
-                  return (
-                    <div key={val} className={styles.listValueItem}>
-                      <span>{val[0].toFixed ? val[0].toFixed(3) : val[0]}</span>
-                    </div>
-                  );
-                })
-              : hexapodPosAndOffset}
-          </>
-        </Value>
-        <Label>
-          <>
-            <span>Offset</span>
-          </>
-        </Label>
-        <Value>
-          <>
-            {Array.isArray(hexapodPosAndOffset)
-              ? hexapodPosAndOffset.map((val) => {
-                  return (
-                    <div key={val} className={styles.listValueItem}>
-                      <span>{val[1].toFixed ? val[1].toFixed(3) : val[1]}</span>
-                    </div>
-                  );
-                })
-              : hexapodPosAndOffset}
-          </>
-        </Value>
-        */}
       {/* Table */}
         <div style={{ gridColumnStart: '1', gridColumnEnd: '3' }} className={styles.panelTable}>
           <SimpleTable headers={headers} data={simpleTableData} />
