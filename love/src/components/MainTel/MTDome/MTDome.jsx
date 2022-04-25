@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData } from 'Utils';
-// import SkymapGrid from '../Skymap/SkymapGrid';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
-import DomeTopView from './MTDomeTopView';
-import DomePointing from './MTDomePointing';
 import MTDomeShutter from './MTDomeShutter';
 import MTLouvers from './MTDomeLouvers';
-import MountTopView from './MountTopView';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-
 import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
-
 import styles from './MTDome.module.css';
+
+import {} from 'Config';
 
 export default class Dome extends Component {
   static propTypes = {
@@ -280,9 +274,33 @@ export default class Dome extends Component {
       historicalData: this.state.historicalData,
     };
 
+    // correct topics from SAL
+    // SummaryTable
+
+    // pending DOME and Tack ID statuses
+    const modeDomeStatus = this.props.modeDomeStatus;
+    const azimuthDomeState = this.props.azimuthDomeState;
+    const azimuthDomeTarget = this.props.azimuthDomeTarget;
+    const azimuthDomeMotion = this.props.azimuthDomeMotion;
+    const elevationDomeState = this.props.elevationDomeState;
+    const elevationDomeTarget = this.props.elevationDomeTarget;
+    const elevationDomeMotion = this.props.elevationDomeMotion;
+
+    //domeAzimuth
+    const positionActualDomeAz = this.props.positionActualDomeAz;
+    const positionCommandedDomeAz = this.props.positionCommandedDomeAz;
+
+    //lightWindScreen
+    const positionActualLightWindScreen = this.props.positionActualLightWindScreen;
+    const positionCommandedLightWindScreen = this.props.positionCommandedLightWindScreen;
+
+    //apertureShutters
+    const positionActualShutter = this.props.positionActualShutter;
+    const positionCommandedShutter = this.props.positionCommandedShutter;
+
     // Replace them for MTDome subscriptions values
-    const actualPositionLouvers = [];
-    const commandedPositionLouvers = [];
+    const actualPositionLouvers = this.props.actualPositionLouvers;
+    const commandedPositionLouvers = this.props.commandedPositionLouvers;
 
     const louversMap = [
       'A1',
