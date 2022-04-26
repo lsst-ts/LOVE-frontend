@@ -118,27 +118,22 @@ export default class DomeSummaryTable extends Component {
           </Value>
           <Label>Mode</Label>
           <Value>
-            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-              {azimuthStateValue}
-            </StatusText>
+            <StatusText medium>{this.props.modeDomeStatus}</StatusText>
           </Value>
           <Label>Azimuth</Label>
           <Value>
-            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-              {azimuthStateValue}
-            </StatusText>
+            title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]}
+            <StatusText medium>{this.props.azimuthDomeState}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
               currentValue={mountAz.current.toFixed(2)}
-              targetValue={mountAz.target.toFixed(2)}
+              targetValue={this.props.azimuthDomeTarget}
               isChanging={true}
             />
           </Label>
           <Value>
-            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-              {azimuthStateValue}
-            </StatusText>
+            <StatusText medium>{this.props.azimuthDomeMotion}</StatusText>
           </Value>
           <Row
             title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
