@@ -298,7 +298,7 @@ export default class Dome extends Component {
     const positionActualShutter = this.props.positionActualShutter;
     const positionCommandedShutter = this.props.positionCommandedShutter;
 
-    // Replace them for MTDome subscriptions values
+    // Louvers
     const actualPositionLouvers = this.props.actualPositionLouvers;
     const commandedPositionLouvers = this.props.commandedPositionLouvers;
 
@@ -453,20 +453,19 @@ export default class Dome extends Component {
             </div>
             <div className={styles.divSummaryTable}>
               <DomeSummaryTable
-                currentPointing={currentPointing}
-                targetPointing={targetPointing}
-                domeAz={domeAz}
-                domeTargetAz={domeTargetAz}
-                domeInPosition={domeInPosition}
-                azimuthState={azimuthState}
-                dropoutDoorState={dropoutDoorState}
-                mainDoorState={mainDoorState}
-                mountTrackingState={mountTrackingState}
-                trackID={trackID}
-                mountInPosition={mountInPosition}
-                m3State={m3State}
-                currentTimesToLimits={currentTimesToLimits}
-                positionLimits={positionLimits}
+                modeDomeStatus={modeDomeStatus}
+                azimuthDomeState={azimuthDomeState}
+                azimuthDomeTarget={azimuthDomeTarget}
+                azimuthDomeMotion={azimuthDomeMotion}
+                elevationDomeState={elevationDomeState}
+                elevationDomeTarget={elevationDomeTarget}
+                elevationDomeMotion={elevationDomeMotion}
+                positionActualDomeAz={positionActualDomeAz}
+                positionCommandedDomeAz={positionCommandedDomeAz}
+                positionActualLightWindScreen={positionActualLightWindScreen}
+                positionCommandedLightWindScreen={positionCommandedLightWindScreen}
+                positionActualShutter={positionActualShutter}
+                positionCommandedShutter={positionCommandedShutter}
               />
             </div>
           </div>
