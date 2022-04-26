@@ -834,6 +834,8 @@ describe('Given the CONNECTION is OPEN and there are SUBSCRIBED GROUPS, ', () =>
 
   it('RESET_SUBS_PERIOD time after resetting subscriptions the subscriptions are reset again', async () => {
     jest.useFakeTimers();
+    jest.spyOn(global, 'clearInterval');
+    jest.spyOn(global, 'setInterval');
     expect(clearInterval).toHaveBeenCalledTimes(0);
     expect(setInterval).toHaveBeenCalledTimes(0);
 
