@@ -122,12 +122,11 @@ export default class DomeSummaryTable extends Component {
           </Value>
           <Label>Azimuth</Label>
           <Value>
-            title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]}
             <StatusText medium>{this.props.azimuthDomeState}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
-              currentValue={mountAz.current.toFixed(2)}
+              currentValue={this.props.positionActualAz}
               targetValue={this.props.azimuthDomeTarget}
               isChanging={true}
             />
@@ -156,9 +155,7 @@ export default class DomeSummaryTable extends Component {
           <Label>Elevation</Label>
           {/* to do: add elevation state value */}
           <Value>
-            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-              {azimuthStateValue}
-            </StatusText>
+            <StatusText medium>{this.props.elevationDomeState}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
@@ -168,9 +165,7 @@ export default class DomeSummaryTable extends Component {
             />
           </Label>
           <Value>
-            <StatusText title={azimuthStateValue} status={stateToStyleDomeAndMount[azimuthStateValue]} medium>
-              {azimuthStateValue}
-            </StatusText>
+            <StatusText medium>{this.props.elevationDomeMotion}</StatusText>
           </Value>
           <Row
             title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
@@ -197,8 +192,14 @@ export default class DomeSummaryTable extends Component {
             <Label>Shutters</Label>
           </SummaryPanel>
           <div className={styles.divProgressBars}>
-            <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
-            <ProgressBar bgcolor={'var(--second-quaternary-background-color)'} completed={25} />
+            <ProgressBar
+              bgcolor={'var(--second-quaternary-background-color)'}
+              completed={this.props.positionActualShutter}
+            />
+            <ProgressBar
+              bgcolor={'var(--second-quaternary-background-color)'}
+              completed={this.props.positionActualShutter}
+            />
           </div>
           {/* </div> */}
         </SummaryPanel>
