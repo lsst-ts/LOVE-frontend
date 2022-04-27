@@ -4,7 +4,6 @@ import Datetime from 'react-datetime';
 import moment from 'moment';
 import TextField from 'components/TextField/TextField';
 import styles from './DateSelection.module.css';
-import './react-datetime.css';
 
 export default class DateSelection extends PureComponent {
   static propTypes = {

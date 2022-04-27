@@ -6,7 +6,22 @@
   color: var(--secondary-font-color);
 }
 
+.secondaryValue {
+  color: var(--secondary-font-color);
+}
+
+
 .multirowLabel {
   display: block;
   white-space: nowrap;
 }
+
+.panelTable{
+  padding: 1em 0 0 0.4rem;
+}
+
+.panelTable td, .panelTable th{
+ border-color:var(--second-quaternary-background-dimmed-color);
+ text-align:center;
+}
+

@@ -21,6 +21,7 @@ export const initialState = {
     utc: 0,
     tai: 0,
     mjd: 0,
+    server_time: 0,
     sidereal_summit: 0,
     sidereal_greenwich: 0,
   },
@@ -40,6 +41,7 @@ export default function (state = initialState, action) {
           utc: action.time_data.utc,
           tai: action.time_data.tai,
           mjd: action.time_data.mjd,
+          observing_day: action.time_data.observing_day,
           sidereal_summit: action.time_data.sidereal_summit,
           sidereal_greenwich: action.time_data.sidereal_greenwich,
           tai_to_utc: action.time_data.tai_to_utc,
@@ -55,13 +57,7 @@ export default function (state = initialState, action) {
     case CLOCK_TICK: {
       return {
         ...state,
-        clock: {
-          utc: action.clock.utc,
-          tai: action.clock.tai,
-          mjd: action.clock.mjd,
-          sidereal_summit: action.clock.sidereal_summit,
-          sidereal_greenwich: action.clock.sidereal_greenwich,
-        },
+        clock: { ...action.clock },
       };
     }
     default:

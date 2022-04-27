@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "/static/css/main.5d525922.chunk.css",
-    "main.js": "/build/main.c599ed7b.js",
+    "main.css": "/static/css/main.e53b445f.chunk.css",
+    "main.js": "/build/main.98bc2aa7.js",
     "runtime-main.js": "/build/bundle.d151f8d1.js",
     "static/css/2.fe708519.chunk.css": "/static/css/2.fe708519.chunk.css",
-    "build/2.00d82149.js": "/build/2.00d82149.js",
+    "build/2.10cf9884.js": "/build/2.10cf9884.js",
     "Frontend_overview.svg": "/Frontend_overview.svg",
-    "build/2.00d82149.js.LICENSE.txt": "/build/2.00d82149.js.LICENSE.txt",
+    "build/2.10cf9884.js.LICENSE.txt": "/build/2.10cf9884.js.LICENSE.txt",
     "details.svg": "/details.svg",
     "index.html": "/index.html",
     "redux-auth.drawio": "/redux-auth.drawio",
@@ -16,14 +16,14 @@
     "redux-ws-connection.svg": "/redux-ws-connection.svg",
     "responsive-grid-state-machine.svg": "/responsive-grid-state-machine.svg",
     "static/css/2.fe708519.chunk.css.map": "/static/css/2.fe708519.chunk.css.map",
-    "static/css/main.5d525922.chunk.css.map": "/static/css/main.5d525922.chunk.css.map",
+    "static/css/main.e53b445f.chunk.css.map": "/static/css/main.e53b445f.chunk.css.map",
     "static/media/index.css": "/static/media/Montserrat-ThinItalic.3096cb47.ttf"
   },
   "entrypoints": [
     "build/bundle.d151f8d1.js",
     "static/css/2.fe708519.chunk.css",
-    "build/2.00d82149.js",
-    "static/css/main.5d525922.chunk.css",
-    "build/main.c599ed7b.js"
+    "build/2.10cf9884.js",
+    "static/css/main.e53b445f.chunk.css",
+    "build/main.98bc2aa7.js"
   ]
 }

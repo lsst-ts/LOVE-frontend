@@ -336,8 +336,8 @@ export const m1VentsLimitSwitchesStateMap = {
 
 // ATHexapod
 export const hexapodInPositionStateMap = {
-  1: 'NOT READY',
-  2: 'IN POSITION',
+  1: 'IN POSITION',
+  2: 'NOT READY',
   0: 'UNKNOWN',
 };
 
@@ -436,6 +436,92 @@ export const severityEnum = {
   critical: 4,
 };
 
+// MT Camera Hexapod
+export const hexapodStatusStatetoStyle = {
+  UNKNOWN: 'undefined',
+  DISABLED: 'disabled',
+  ENABLED: 'enabled',
+  FAULT: 'fault',
+  OFFLINE: 'offline',
+  STANDBY: 'standby',
+};
+
+export const hexapodCommandableByDDSStateMap = {
+  false: 'NOT COMMANDABLE',
+  true: 'COMMANDABLE',
+};
+
+export const hexapodCommandableByDDSStatetoStyle = {
+  'NOT COMMANDABLE': 'alert',
+  COMMANDABLE: 'ok',
+};
+
+export const hexapodCompensationModeStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const hexapodCompensationModeStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+};
+
+export const hexapodInterlockStateMap = {
+  false: 'Disengaged',
+  true: 'Engaged',
+};
+
+export const hexapodControllerStateMap = {
+  0: 'STANDBY',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'OFFLINE',
+  4: 'FAULT',
+};
+
+export const hexapodControllerStatetoStyle = {
+  STANDBY: 'ok',
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  OFFLINE: 'undefined',
+  FAULT: 'alert',
+};
+
+export const hexapodControllerStateOfflineSubStateMap = {
+  0: 'PUBLISH ONLY',
+  1: 'AVAILABLE',
+};
+
+export const hexapodControllerStateEnabledSubstateMap = {
+  0: 'STATIONARY',
+  1: 'MOVING POINT TO POINT',
+  2: 'SLEWING OR TRACKING',
+  3: 'CONTROLLED STOPPING',
+  4: 'INITIALIING',
+  5: 'RELATIVE',
+  6: 'CONSTANT VELOCITY',
+};
+
+export const hexapodMTInPositionStateMap = {
+  false: 'NOT READY',
+  true: 'IN POSITION',
+};
+
+export const hexapodMTInPositionStatetoStyle = {
+  'NOT READY': 'warning',
+  'IN POSITION': 'ok',
+};
+
+export const hexapodConnectedStateMap = {
+  false: 'DISCONNECTED',
+  true: 'CONNECTED',
+};
+
+export const hexapodConnectedStatetoStyle = {
+  DISCONNECTED: 'alert',
+  CONNECTED: 'ok',
+};
+
 /**
  * Available commands in the TCS and their parameters. Each command is represented
  * as a dictionary key and their parameters as the values of said dictionary.
@@ -455,10 +541,7 @@ const rotTypes = [
   { label: 'Physical', value: 4 },
 ];
 
-// TODO: Pending list of types.SimpleNamespace
-const SimpleNamespace = [
-  { label: 'None', value: undefined },
-];
+const SimpleNamespace = [{ label: 'None', value: undefined }];
 
 const AzWrapStrategy = [
   { label: 'None', value: undefined },
@@ -490,11 +573,9 @@ const Planets = [
   { label: 'VENUS', value: 2 },
 ];
 
-// TODO: Pending define list of cmdAck commands names
 const cmdAck = [
   { label: 'None', value: undefined },
-  { label: 'LabelNameCommand',
-    value: 'CmdAck from the command that started the slew process' },
+  { label: 'LabelNameCommand', value: 'CmdAck from the command that started the slew process' },
 ];
 
 export const TCSCommands = {
@@ -1022,10 +1103,10 @@ export const M1M3ActuatorPositions = [
 ];
 
 export const M1M3HardpointPositions = [
-  { id: 1, actuator: { position: [-5.6794e1, -9.0804e1]}, mini: {position: [45.99, 32.53]}},
-  { id: 2, actuator: { position: [-1.0922e2, 0]}, mini: {position: [28.7, 64.05]}},
-  { id: 3, actuator: { position: [-5.6794e1, 9.0804e1] }, mini: {position: [45.99, 97.21]}},
-  { id: 4, actuator: { position: [5.6794e1, 9.0804e1] }, mini: {position: [80.62, 97.21]}},
-  { id: 5, actuator: { position: [1.0922e2, 0]}, mini: {position: [99.19, 64.05]}},
-  { id: 6, actuator: { position: [5.6794e1, -9.0804e1]}, mini: {position: [80.62, 32.53]}},
+  { id: 1, actuator: { position: [-5.6794e1, -9.0804e1] }, mini: { position: [45.99, 32.53] } },
+  { id: 2, actuator: { position: [-1.0922e2, 0] }, mini: { position: [28.7, 64.05] } },
+  { id: 3, actuator: { position: [-5.6794e1, 9.0804e1] }, mini: { position: [45.99, 97.21] } },
+  { id: 4, actuator: { position: [5.6794e1, 9.0804e1] }, mini: { position: [80.62, 97.21] } },
+  { id: 5, actuator: { position: [1.0922e2, 0] }, mini: { position: [99.19, 64.05] } },
+  { id: 6, actuator: { position: [5.6794e1, -9.0804e1] }, mini: { position: [80.62, 32.53] } },
 ];

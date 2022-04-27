@@ -16,18 +16,6 @@ export const schema = {
       isPrivate: false,
       default: 'Event log',
     },
-    name: {
-      type: 'string',
-      description: 'Name of the CSC to monitor',
-      isPrivate: false,
-      default: 'Test',
-    },
-    salindex: {
-      type: 'number',
-      description: 'Salindex of the CSC',
-      isPrivate: false,
-      default: 1,
-    },
     cscList: {
       type: 'array',
       description:

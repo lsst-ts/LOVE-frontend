@@ -1,0 +1,12 @@
+.queryContainer {
+  display: inline-flex !important;
+  align-items: baseline;
+}
+
+.instanceSelector {
+  margin-right: 0.5em;
+}
+
+.instanceSelector > div {
+  width: 200px;
+}

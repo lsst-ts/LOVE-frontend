@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import ManagerInterface, { formatTimestamp, getStringRegExp } from 'Utils';
+import EFDQuery from 'components/GeneralPurpose/EFDQuery/EFDQuery';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
+import { CardList, Card, Title, Separator } from 'components/GeneralPurpose/CardList/CardList';
 import styles from './EventLog.module.css';
-import { formatTimestamp, getStringRegExp } from '../../Utils';
 import InfoIcon from '../icons/InfoIcon/InfoIcon';
 import WarningIcon from '../icons/WarningIcon/WarningIcon';
 import ErrorIcon from '../icons/ErrorIcon/ErrorIcon';
-import { CardList, Card, Title, Separator } from '../GeneralPurpose/CardList/CardList';
+
 import TextField from '../TextField/TextField';
 
 export default class EventLog extends PureComponent {
@@ -53,6 +56,8 @@ export default class EventLog extends PureComponent {
       messageFilters,
       typeFilters,
       eventData: [],
+      queryData: [],
+      efdEnabled: false,
     };
   }
 
@@ -64,10 +69,43 @@ export default class EventLog extends PureComponent {
     this.props.unsubscribeToStreams(this.props.cscList);
   };
 
-  clearGroupErrorCodes = () => {
-    //   this.props.cscList.forEach(({ name, salindex }) => {
-    //     this.props.clearCSCErrorCodes(name, salindex);
-    //   });
+  setEFDLogsCSCs = () => {
+    const { cscList } = this.props;
+    const cscTopicDict = {};
+    cscList.forEach((obj) => {
+      cscTopicDict[obj.name] = {};
+    });
+    cscList.forEach((obj) => {
+      cscTopicDict[obj.name][obj.salindex] = {
+        logevent_logMessage: ['private_rcvStamp', 'level', 'message', 'traceback'],
+        logevent_errorCode: ['private_rcvStamp', 'errorCode', 'errorReport', 'traceback'],
+      };
+    });
+    return cscTopicDict;
+  };
+
+  efdLogsResponse = (response) => {
+    const queryData = [];
+    Object.entries(response).forEach(([key, value]) => {
+      const csc = key.split('-')[0];
+      const index = key.split('-')[1];
+      value.forEach((log) =>
+        queryData.push({
+          csc,
+          salindex: index,
+          // logevent_logMessage parameters
+          level: log.level !== undefined ? { value: log.level } : undefined,
+          message: log.message !== undefined ? { value: log.message } : undefined,
+          // logevent_errorCode parameters
+          errorCode: log.errorCode !== undefined ? { value: log.errorCode } : undefined,
+          errorReport: log.errorReport !== undefined ? { value: log.errorReport } : undefined,
+          // shared parameters
+          traceback: { value: log.traceback },
+          private_rcvStamp: { value: log.private_rcvStamp },
+        }),
+      );
+    });
+    this.setState({ queryData });
   };
 
   changeCSCFilter = (event) => {
@@ -229,13 +267,39 @@ export default class EventLog extends PureComponent {
               </div>
             </div>
           </div>
+          <div className={styles.efd}>
+            <div className={styles.efdSelector}>
+              <span>Query EFD</span>
+              <div style={{ display: 'inline-block' }}>
+                <Toggle
+                  hideLabels={true}
+                  isLive={this.state.efdEnabled}
+                  setLiveMode={(event) => this.setState({ efdEnabled: event })}
+                />
+              </div>
+            </div>
+            {this.state.efdEnabled && (
+              <EFDQuery
+                onResponse={(response) => this.efdLogsResponse(response)}
+                managerInterface={(start_date, end_date, efd_instance) =>
+                  ManagerInterface.getEFDLogs(start_date, end_date, this.setEFDLogsCSCs(), efd_instance)
+                }
+              />
+            )}
+          </div>
           <Separator className={styles.separator} />
 
-          {this.state.eventData.map((msg, index) => {
-            return msg.errorCode !== undefined
-              ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
-              : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
-          })}
+          {this.state.efdEnabled
+            ? this.state.queryData.map((msg, index) => {
+                return msg.errorCode !== undefined
+                  ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
+                  : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
+              })
+            : this.state.eventData.map((msg, index) => {
+                return msg.errorCode !== undefined
+                  ? this.state.typeFilters.error.value && this.renderErrorMessage(msg, index)
+                  : this.state.typeFilters.log.value && this.renderLogMessage(msg, index);
+              })}
         </CardList>
       </div>
     );
