@@ -153,14 +153,13 @@ export default class DomeSummaryTable extends Component {
             </span>
           </Row>
           <Label>Elevation</Label>
-          {/* to do: add elevation state value */}
           <Value>
             <StatusText medium>{this.props.elevationDomeState}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
-              currentValue={mountEl.current.toFixed(2)}
-              targetValue={mountEl.target.toFixed(2)}
+              currentValue={this.props.positionActualLightWindScreen}
+              targetValue={this.props.positionCommandedLightWindScreen}
               isChanging={true}
             />
           </Label>
@@ -186,7 +185,6 @@ export default class DomeSummaryTable extends Component {
             </span>
           </Row>
         </SummaryPanel>
-        {/* completed value from subscriptions */}
         <SummaryPanel className={styles.shutters}>
           <SummaryPanel>
             <Label>Shutters</Label>
@@ -201,7 +199,6 @@ export default class DomeSummaryTable extends Component {
               completed={this.props.positionActualShutter}
             />
           </div>
-          {/* </div> */}
         </SummaryPanel>
       </div>
     );
