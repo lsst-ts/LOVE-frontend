@@ -53,9 +53,9 @@
     "vega": "^5.17.3",
     "vega-embed": "^6.12.2",
     "vega-lib": "^4.4.0",
-    "vega-lite": "^4.17.0",
+    "vega-lite": "^5.2.0",
     "websocket-playback": "^1.0.0",
-    "yaml": "^1.7.2"
+    "yaml": "^2.0.1"
   },
   "scripts": {
     "start": "npx react-scripts start",
