@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine as builder
+FROM node:16.13.2-alpine as builder
 
 WORKDIR /usr/src/love
 
