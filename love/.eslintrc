@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": ["airbnb-base", "plugin:react/recommended"],
   "rules": {
     "max-len": [1, 120, 2, { "ignoreComments": true }],
