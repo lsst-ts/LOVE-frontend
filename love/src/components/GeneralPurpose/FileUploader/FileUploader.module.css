@@ -1,0 +1,51 @@
+.inputText {
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: var(--second-secondary-background-color);
+  /* color: inherit; */
+  color: var(--base-font-color);
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+  border-bottom: 1px solid var(--secondary-font-dimmed-color);
+  padding-bottom: 0.5em;
+  padding-top: 0.35em;
+  padding-left: 1em;
+  padding-right: 1em;
+  text-align: left;
+}
+
+.inputClose {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding-bottom: 0.5em;
+  padding-top: 0.35em;
+  padding-left: 0.7em;
+  padding-right: 0.7em;
+  background-color: var(--second-secondary-background-color);
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+  border-bottom: 1px solid var(--secondary-font-dimmed-color);
+  border-right: 1px solid var(--secondary-font-dimmed-color);
+  cursor: pointer;
+}
+
+.inputClose:hover {
+  font-weight: bold;
+  color: white;
+}
+
+.inputButton {
+  border-radius: unset;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  padding-bottom: 0.3em;
+  padding-top: 0.3em;
+  font-weight: bold;
+  margin-left: 0.5em;
+}
+
+.containerFileUpload {
+  display: grid;
+  grid-template-columns: 1fr 4fr auto;
+  grid-auto-rows: max-content;
+}
