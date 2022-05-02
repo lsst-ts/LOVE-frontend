@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
+import NonExposureEdit from './NonExposure/NonExposureEdit';
 import Button from 'components/GeneralPurpose/Button/Button';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import styles from './OLETabs.module.css';
@@ -20,6 +21,7 @@ export default class OLETabs extends Component {
     super(props);
     this.state = {
       selectedTab: props.tabs[0].value,
+      clickNewLog: false,
     };
   }
 
@@ -35,21 +37,37 @@ export default class OLETabs extends Component {
     this.props.unsubscribeToStreams();
   }
 
-  getComponent(tab) {
-    if (tab === 'exposure') {
-      return (
-        <Exposure props={this.props}/>
-      );
+  getComponent(clickNewLog, tab) {
+    if (clickNewLog === true) {
+      if (tab === 'exposure') {
+        return (
+          <></>
+        );
+      }
+      if (tab === 'non-exposure') {
+        return (
+          <NonExposureEdit
+            back={() => { this.setState({ clickNewLog: false });}}
+            props={this.props}
+          />
+        );
+      }
+    } else {
+      if (tab === 'exposure') {
+        return (
+          <Exposure props={this.props}/>
+        );
+      }
+      if (tab === 'non-exposure') {
+        return (
+          <NonExposure props={this.props}/>
+        );
+      }
     }
-    if (tab === 'non-exposure') {
-      return (
-        <NonExposure props={this.props}/>
-      );
-    }
+    
   }
 
   render() {
-
     const tabs = this.props.tabs;
     const selectedTab = this.state.selectedTab;
 
@@ -70,11 +88,15 @@ export default class OLETabs extends Component {
         <div className={styles.tabsRow}>
           { html }
           <div className={styles.btnNew}>
-            <Button className={styles.btn} onClick={() => this.sendRequest()}>+ New {tabs.filter((tab) => tab.value === selectedTab)[0].name }</Button>
+            <Button className={styles.btn}
+              onClick={() => this.setState((prevState) => ({clickNewLog: true}))}
+            >
+              + New {tabs.filter((tab) => tab.value === selectedTab)[0].name }
+            </Button>
           </div>
         </div>
         <div className={styles.tableWrapper}>
-          { this.getComponent(selectedTab) }
+          { this.getComponent(this.state.clickNewLog, selectedTab) }
         </div>
       </div>
     );
