@@ -13,31 +13,31 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 export default class NonExposureDetail extends Component {
   static propTypes = {
     back: PropTypes.func,
+    logDetail: PropTypes.object,
   };
 
   static defaultProps = {
     back: () => {},
+    logDetail: {
+      id: undefined,
+      type: undefined,
+      timeIncident: undefined,
+      subsystem: undefined,
+      csc: undefined,
+      cscTopic: undefined,
+      value: undefined,
+      user: undefined,
+      ObsTimeLoss: undefined,
+      jira: undefined,
+      file: undefined,
+      description: undefined,
+    },
   };
 
 
   render() {
-    const logDetail = {
-      id: 1,
-      type: 'Fault',
-      timeIncident: '2022/03/21 16:21:33',
-      subsystem: 'M. Telescope > MTDome > Azimuth',
-      value: 24,
-      user: 'Mía Elbo',
-      ObsTimeLoss: '02:00:00',
-      jira: 'http://lsst.jira.org',
-      file: {
-        name: 'AMolla_soundsleep.jpeg',
-        size: '486567',
-        src: 'http://file.org',
-      },
-      description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over.',
-    };
     const link = this.props.back;
+    const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
 
     return (
       <>
@@ -59,7 +59,8 @@ export default class NonExposureDetail extends Component {
           <div className={styles.content}>
             <div className={styles.detail}>
               <span className={styles.label}>Time of Incident</span><span className={styles.value}>{logDetail.timeIncident}</span>
-              <span className={styles.label}>Subsystem Affected</span><span className={styles.value}>{logDetail.subsystem}</span>
+              <span className={styles.label}>Subsystem Affected</span>
+              <span className={styles.value}>{logDetail.subsystem + ' > ' + logDetail.csc + ' > ' + logDetail.cscTopic}</span>
               <span className={styles.label}>Value</span><span className={styles.value}>{logDetail.value}</span>
               <span className={styles.label}>Obs. Time Loss</span><span className={styles.value}>{logDetail.ObsTimeLoss}</span>
             </div>
@@ -79,7 +80,10 @@ export default class NonExposureDetail extends Component {
           <div className={styles.footer}>
             <span className={styles.label}>File Attached: </span>
             <span className={styles.value}>
-              {` ${logDetail.file.name} (${(parseInt(logDetail.file.size) / 1024).toFixed(2)} KB) `}
+              { logDetail.file
+                ? ` ${logDetail.file.name} (${(parseInt(logDetail.file.size) / 1024).toFixed(2)} KB) `
+                : ``
+              }
             </span>
             <span className={styles.value}>
               <Button className={styles.iconBtn} title="File" onClick={() => {}} status="transparent">
