@@ -11,6 +11,7 @@ import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import styles from './NonExposure.module.css';
 import NonExposureDetail from './NonExposureDetail';
+import NonExposureEdit from './NonExposureEdit';
 
 export default class NonExposure extends Component {
   static propTypes = {};
@@ -144,6 +145,7 @@ export default class NonExposure extends Component {
 
   render() {
     const modeView = this.state.modeView;
+    const modeEdit = this.state.modeEdit;
     const headers = Object.values(this.getHeaders());
 
     const filteredData = [
@@ -165,21 +167,23 @@ export default class NonExposure extends Component {
     const tableData = Object.values(filteredData);
 
     return (
-      modeView
+      modeView && !modeEdit
       ? <NonExposureDetail back={() => { this.setState({ modeView: false });}}/>
-      : (
-        <div className={styles.margin10}>
-          <div className={styles.title}>
-            Filter
+      : modeEdit && !modeView
+        ? <NonExposureEdit back={() => { this.setState({ modeEdit: false });}}/>
+        : (
+          <div className={styles.margin10}>
+            <div className={styles.title}>
+              Filter
+            </div>
+            <div className={styles.filters}>
+              <Label>From: </Label>
+              {/* <Value>
+                <Input/>
+              </Value> */}
+            </div>
+            <SimpleTable headers={headers} data={tableData} />
           </div>
-          <div className={styles.filters}>
-            <Label>From: </Label>
-            {/* <Value>
-              <Input/>
-            </Value> */}
-          </div>
-          <SimpleTable headers={headers} data={tableData} />
-        </div>
       )
     );
   }
