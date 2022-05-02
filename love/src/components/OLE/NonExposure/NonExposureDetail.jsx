@@ -31,8 +31,8 @@ export default class NonExposureDetail extends Component {
       ObsTimeLoss: '02:00:00',
       jira: 'http://lsst.jira.org',
       file: {
-        filename: 'AMolla_soundsleep.jpeg',
-        size: '486kb',
+        name: 'AMolla_soundsleep.jpeg',
+        size: '486567',
         src: 'http://file.org',
       },
       description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over.',
@@ -79,7 +79,7 @@ export default class NonExposureDetail extends Component {
           <div className={styles.footer}>
             <span className={styles.label}>File Attached: </span>
             <span className={styles.value}>
-              {` ${logDetail.file.filename} (${logDetail.file.size}) `}
+              {` ${logDetail.file.name} (${(parseInt(logDetail.file.size) / 1024).toFixed(2)} KB) `}
             </span>
             <span className={styles.value}>
               <Button className={styles.iconBtn} title="File" onClick={() => {}} status="transparent">
