@@ -13,38 +13,38 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
+import { defaultProps } from 'react-json-pretty';
 
 
 export default class NonExposureEdit extends Component {
   static propTypes = {
     back: PropTypes.func,
+    logEdit: PropTypes.object,
   };
 
   static defaultProps = {
     back: () => {},
+    logEdit: {
+      id: undefined,
+      type: undefined,
+      timeIncident: undefined,
+      subsystem: undefined,
+      csc: undefined,
+      cscTopic: undefined,
+      value: undefined,
+      user: undefined,
+      ObsTimeLoss: undefined,
+      jira: undefined,
+      file: undefined,
+      description: undefined,
+    },
   };
 
   constructor(props) {
     super(props);
+    console.log("NonExposureEdit props", props);
     this.state = {
-      type: 'Fault',
-      logEdit: {
-        id: 1,
-        type: 'Fault',
-        timeIncident: '2022/03/21 16:21:33',
-        subsystem: 'M. Telescope > MTDome > Azimuth',
-        value: 24,
-        user: 'Mía Elbo',
-        ObsTimeLoss: '02:00:00',
-        jira: 'http://lsst.jira.org',
-        file: {
-          name: 'AMolla_soundsleep.jpeg',
-          size: '486kb',
-          src: 'http://file.org',
-        },
-        description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over.',
-      },
-      keysDown: [],
+      logEdit: props.logEdit ? props.logEdit : defaultProps.logEdit,
     };
     this.inputRef = React.createRef();
   }
