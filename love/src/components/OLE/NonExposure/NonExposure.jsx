@@ -23,20 +23,27 @@ export default class NonExposure extends Component {
     this.state = {
       modeView: false,
       modeEdit: false,
+      selected: {},
     };
   }
 
   view(index) {
-    console.log('edit', index);
+    console.log('view', index);
     if (index) {
-      this.setState({ modeView: true });
+      this.setState({
+        modeView: true,
+        selected: index,
+      });
     }   
   }
 
   edit(index) {
     console.log('edit', index);
     if (index) {
-      this.setState({ modeEdit: true });
+      this.setState({
+        modeEdit: true,
+        selected: index,
+      });
     }   
   }
 
@@ -156,21 +163,23 @@ export default class NonExposure extends Component {
         timestamp: '2022-03-21 11:24:24',
         timeIncident: '2022-03-21 12:25:25',
         type: 'Observation',
-        obsTimeLoss: '-',
+        ObsTimeLoss: '2:00:00',
         subsystem: 'M. Telescope',
         csc: 'MTHexapod',
         cscTopic: 'Actuators',
-        file: 'http://file.org',
+        file: {name: 'file.csv', size: 6078},
         jira: 'http://lsst.jira.org',
+        value: 15,
+        description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over.'
       },
     ];
     const tableData = Object.values(filteredData);
 
     return (
       modeView && !modeEdit
-      ? <NonExposureDetail back={() => { this.setState({ modeView: false });}}/>
+      ? <NonExposureDetail back={() => { this.setState({ modeView: false });}} logDetail={this.state.selected}/>
       : modeEdit && !modeView
-        ? <NonExposureEdit back={() => { this.setState({ modeEdit: false });}}/>
+        ? <NonExposureEdit back={() => { this.setState({ modeEdit: false });}} logEdit={this.state.selected}/>
         : (
           <div className={styles.margin10}>
             <div className={styles.title}>
