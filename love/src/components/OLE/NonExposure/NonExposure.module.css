@@ -236,8 +236,6 @@
 }
 
 .checkboxText {
-  float: left;
-  width: auto;
   display: grid;
   grid-template-columns: 4fr 1fr;
   margin-right: 20px;
