@@ -242,3 +242,7 @@
   grid-template-columns: 4fr 1fr;
   margin-right: 20px;
 }
+
+.checkboxText button {
+  text-align: right;
+}
