@@ -208,6 +208,16 @@ export const observatoryIndex = {
       },
     },
   },
+  CreateOLETabs: {
+    component: require('../OLE/CreateOLETabs.container').default,
+    schema: {
+      ...require('../OLE/CreateOLETabs.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../OLE/CreateOLETabs.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
