@@ -16,6 +16,9 @@ Here is an example file in `json` format:
     },
     "efd": {
         "defaultEfdInstance": "summit_efd"
+    },
+    "survey": {
+      "startTime": 1651609492989,
     }
 }
 ```
@@ -30,4 +33,4 @@ Here is an example file in `json` format:
 - **efd**:
   - **defaultEfdInstance**: default efd instance to be queried on the VegaTimeSeriesPlot component. Available values: `["summit_efd", "ncsa_teststand_efd", "ldf_stable_efd", "ldf_int_efd", "base_efd", "tucson_teststand_efd", "test_efd"]`.
 - **survey**:
-  - **startTime**: this is day/time from official start of the surve. Value must be a timestamp in miliseconds (13-digits) UTC.
+  - **startTime**: this is day/time from official start of the surve. Value must be a timestamp in miliseconds (13-digits number) UTC.
