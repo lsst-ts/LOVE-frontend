@@ -9,9 +9,9 @@ import { Link } from 'react-router-dom';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
-import styles from './NonExposure.module.css';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
+import styles from './NonExposure.module.css';
 
 export default class NonExposure extends Component {
   static propTypes = {};
