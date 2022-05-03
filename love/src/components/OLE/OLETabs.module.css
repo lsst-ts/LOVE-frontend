@@ -15,8 +15,8 @@
 }
 
 .tab {
-  display: flex;
-  flex-flow: row nowrap;
+  /* display: flex;
+  flex-flow: row nowrap; */
   justify-content: space-between;
   align-items: baseline;
   padding: 0.5em 2em;

@@ -28,7 +28,6 @@ export default class NonExposure extends Component {
   }
 
   view(index) {
-    console.log('view', index);
     if (index) {
       this.setState({
         modeView: true,
@@ -38,7 +37,6 @@ export default class NonExposure extends Component {
   }
 
   edit(index) {
-    console.log('edit', index);
     if (index) {
       this.setState({
         modeEdit: true,
