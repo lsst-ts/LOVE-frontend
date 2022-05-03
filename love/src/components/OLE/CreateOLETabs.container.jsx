@@ -2,19 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import OLETabs from './OLETabs';
+import CreateOLETabs from './CreateOLETabs';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 
 export const schema = {
-  description: 'View of Log service',
-  defaultSize: [77, 32],
+  description: 'View of Log Create Service',
+  defaultSize: [60, 23],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Log Service',
+      default: 'Log Create Service',
     },
     hasRawMode: {
       type: 'boolean',
@@ -26,17 +26,17 @@ export const schema = {
       type: 'boolean',
       description: 'if this component used for create Logs',
       isPrivate: true,
-      default: false,
+      default: true,
     },
   },
 };
 
-const OLETabsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const CreateOLETabsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <OLETabs isLogCreate={props.isLogCreate} subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
+    <CreateOLETabs isLogCreate={props.isLogCreate} subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
   );
 };
 
@@ -61,4 +61,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OLETabsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateOLETabsContainer);
