@@ -31,11 +31,10 @@ const FileUploader = props => {
       >
         {props.value}
       </span>
-      <span className={styles.inputClose}
-        onClick={handleDelete}
-      >
-        x
-      </span>
+      {props.value
+        ? <span className={styles.inputClose} onClick={handleDelete}>x</span>
+        : <span className={styles.inputClose}>  </span>
+      }
       <input type="file"
         ref={hiddenFileInput}
         onChange={handleChange}
