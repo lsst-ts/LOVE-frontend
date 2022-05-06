@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dome from './MTDome';
-import { getDomeState } from '../../../redux/selectors';
+import { getDomeState, getLouversStatus } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -47,6 +47,8 @@ const MTDomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
   controls,
+  actualPositionLouvers,
+  commandedPositionLouvers,
   ...props
 }) => {
   if (props.isRaw) {
@@ -75,13 +77,17 @@ const MTDomeContainer = ({
       currentTimesToLimits={currentTimesToLimits}
       positionLimits={positionLimits}
       controls={controls}
+      //
+      actualPositionLouvers={actualPositionLouvers}
+      commandedPositionLouvers={commandedPositionLouvers}
     />
   );
 };
 
 const mapStateToProps = (state) => {
   const domeState = getDomeState(state);
-  return domeState;
+  const louversState = getLouversStatus(state);
+  return { ...domeState, ...louversState };
 };
 
 // The following subscriptions are from ATDome. It's neccesary replace them for MTDome subscriptions
