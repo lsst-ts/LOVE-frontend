@@ -706,10 +706,10 @@ export const getLouversStatus = (state) => {
   return {
     actualPositionLouvers: louvers['telemetry-MTDome-0-positionActual']
       ? louvers['telemetry-MTDome-0-positionActual'].positionActual.value
-      : [],
+      : [0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0],
     commandedPositionLouvers: louvers['telemetry-MTDome-0-positionCommanded']
       ? louvers['telemetry-MTDome-0-positionCommanded'].positionCommanded.value
-      : [],
+      : [0, 0, 0, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0],
   };
 };
 

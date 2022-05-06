@@ -40,12 +40,12 @@ export default class DomeSummaryTable extends Component {
       target: this.props.domeTargetAz,
     };
     const mountAz = {
-      current: this.props.currentPointing.az,
-      target: this.props.targetPointing.az,
+      current: this.props.currentPointing?.az,
+      target: this.props.targetPointing?.az,
     };
     const mountEl = {
-      current: this.props.currentPointing.el,
-      target: this.props.targetPointing.el,
+      current: this.props.currentPointing?.el,
+      target: this.props.targetPointing?.el,
     };
 
     // Replace them for the correct MTDome subscriptions. This was added for first testing purposes only.
@@ -58,14 +58,14 @@ export default class DomeSummaryTable extends Component {
     const m3State = this.props.m3State;
     const { positionLimits } = this.props;
     const timesToLimit = this.props.currentTimesToLimits;
-    const timeToAzLimit = timesToLimit.timeToAzlim ? timesToLimit.timeToAzlim.value : 0;
-    const timeToRotLimit = timesToLimit.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
-    const timeToUnobservable = timesToLimit.timeToUnobservable ? timesToLimit.timeToUnobservable.value : 0;
-    const timeToBlindSpot = timesToLimit.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
+    const timeToAzLimit = timesToLimit?.timeToAzlim ? timesToLimit.timeToAzlim.value : 0;
+    const timeToRotLimit = timesToLimit?.timeToRotlim ? timesToLimit.timeToRotlim.value : 0;
+    const timeToUnobservable = timesToLimit?.timeToUnobservable ? timesToLimit.timeToUnobservable.value : 0;
+    const timeToBlindSpot = timesToLimit?.timeToBlindSpot ? timesToLimit.timeToBlindSpot.value : 0;
     const closestLimit = timeToBlindSpot > timeToUnobservable && timeToBlindSpot > 0 ? 'blind spot' : 'unobservable';
     const timeToElLimit = closestLimit === 'blind spot' ? timeToBlindSpot : timeToUnobservable;
 
-    const { maximum, minimum } = positionLimits;
+    const { maximum, minimum } = positionLimits ?? {};
     let [maxEl, maxAz, maxNas1, maxNas2, maxM3] = maximum ? maximum.value : [];
     let [minEl, minAz, minNas1, minNas2, minM3] = minimum ? minimum.value : [];
     [maxEl, maxAz, maxNas1, maxNas2, maxM3] = [
@@ -86,15 +86,15 @@ export default class DomeSummaryTable extends Component {
       m3State === 1
         ? {
             name: '(1)',
-            current: this.props.currentPointing.nasmyth1,
-            target: this.props.targetPointing.nasmyth1,
+            current: this.props.currentPointing?.nasmyth1,
+            target: this.props.targetPointing?.nasmyth1,
             minRot: minNas1,
             maxRot: maxNas1,
           }
         : {
             name: '(2)',
-            current: this.props.currentPointing.nasmyth2,
-            target: this.props.targetPointing.nasmyth2,
+            current: this.props.currentPointing?.nasmyth2,
+            target: this.props.targetPointing?.nasmyth2,
             minRot: minNas2,
             maxRot: maxNas2,
           };
@@ -104,7 +104,7 @@ export default class DomeSummaryTable extends Component {
       <div className={styles.divSummary}>
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
-          <Value>{this.props.trackID}</Value>
+          <Value>{this.props.trackID ?? 0.0}</Value>
           {/* Dome */}
           <Title>Dome</Title>
           <Value>
@@ -113,16 +113,16 @@ export default class DomeSummaryTable extends Component {
               status={stateToStyleDome[domeInPositionLabel]}
               medium
             >
-              {domeInPositionLabel}
+              {domeInPositionLabel ?? 0.0}
             </StatusText>
           </Value>
           <Label>Mode</Label>
           <Value>
-            <StatusText medium>{this.props.modeDomeStatus}</StatusText>
+            <StatusText medium>{this.props.modeDomeStatus ?? 0.0}</StatusText>
           </Value>
           <Label>Azimuth</Label>
           <Value>
-            <StatusText medium>{this.props.azimuthDomeState}</StatusText>
+            <StatusText medium>{this.props.azimuthDomeState ?? 0.0}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
@@ -132,7 +132,7 @@ export default class DomeSummaryTable extends Component {
             />
           </Label>
           <Value>
-            <StatusText medium>{this.props.azimuthDomeMotion}</StatusText>
+            <StatusText medium>{this.props.azimuthDomeMotion ?? 0.0}</StatusText>
           </Value>
           <Row
             title={`Current value: ${mountAz.current}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
@@ -154,7 +154,7 @@ export default class DomeSummaryTable extends Component {
           </Row>
           <Label>Elevation</Label>
           <Value>
-            <StatusText medium>{this.props.elevationDomeState}</StatusText>
+            <StatusText medium>{this.props.elevationDomeState ?? 0.0}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
@@ -164,7 +164,7 @@ export default class DomeSummaryTable extends Component {
             />
           </Label>
           <Value>
-            <StatusText medium>{this.props.elevationDomeMotion}</StatusText>
+            <StatusText medium>{this.props.elevationDomeMotion ?? 0.0}</StatusText>
           </Value>
           <Row
             title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}

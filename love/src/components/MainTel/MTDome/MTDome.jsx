@@ -302,7 +302,7 @@ export default class Dome extends Component {
     const actualPositionLouvers = this.props.actualPositionLouvers;
     const commandedPositionLouvers = this.props.commandedPositionLouvers;
 
-    const louversMap = [
+    const louversMapAF = [
       'A1',
       'A2',
       'B1',
@@ -320,6 +320,9 @@ export default class Dome extends Component {
       'F1',
       'F2',
       'F3',
+    ];
+
+    const louversMapGN = [
       'G1',
       'G2',
       'G3',
@@ -339,99 +342,77 @@ export default class Dome extends Component {
       'N2',
     ];
 
-    const louversActualPosition = {};
-    const louversCommandedPosition = {};
+    const defaultValuesAF = {
+      A1: '0%',
+      A2: '0%',
+      B1: '0%',
+      B2: '0%',
+      B3: '0%',
+      C1: '0%',
+      C2: '0%',
+      C3: '0%',
+      D1: '0%',
+      D2: '0%',
+      D3: '0%',
+      E1: '0%',
+      E2: '0%',
+      E3: '0%',
+      F1: '0%',
+      F2: '0%',
+      F3: '0%',
+    };
 
-    louversMap.forEach((l, i) => {
-      louversActualPosition[l] = actualPositionLouvers[i];
-      louversCommandedPosition[l] = commandedPositionLouvers[i];
-    });
+    const defaultValuesGN = {
+      G1: '0%',
+      G2: '0%',
+      G3: '0%',
+      H1: '0%',
+      H2: '0%',
+      H3: '0%',
+      I1: '0%',
+      I2: '0%',
+      I3: '0%',
+      L1: '0%',
+      L2: '0%',
+      L3: '0%',
+      M1: '0%',
+      M2: '0%',
+      M3: '0%',
+      N1: '0%',
+      N2: '0%',
+    };
 
     const dataLouversAF = [
       {
         Louvers: 'Open [%]',
-        A1: '0%',
-        A2: '0%',
-        B1: '0%',
-        B2: '0%',
-        B3: '0%',
-        C1: '0%',
-        C2: '0%',
-        C3: '0%',
-        D1: '0%',
-        D2: '0%',
-        D3: '0%',
-        E1: '0%',
-        E2: '0%',
-        E3: '0%',
-        F1: '0%',
-        F2: '0%',
-        F3: '0%',
+        ...defaultValuesAF,
       },
       {
         Louvers: 'Cmd. [%]',
-        A1: '-',
-        A2: '-',
-        B1: '-',
-        B2: '-',
-        B3: '-',
-        C1: '-',
-        C2: '-',
-        C3: '-',
-        D1: '-',
-        D2: '-',
-        D3: '-',
-        E1: '-',
-        E2: '-',
-        E3: '-',
-        F1: '-',
-        F2: '-',
-        F3: '-',
+        ...defaultValuesAF,
       },
     ];
-    // Replace them for MTDome subscriptions values
+
     const dataLouversGN = [
       {
         Louvers: 'Open [%]',
-        G1: '0%',
-        G2: '0%',
-        G3: '0%',
-        H1: '0%',
-        H2: '0%',
-        H3: '0%',
-        I1: '0%',
-        I2: '0%',
-        I3: '0%',
-        L1: '0%',
-        L2: '0%',
-        L3: '0%',
-        M1: '0%',
-        M2: '0%',
-        M3: '0%',
-        N1: '0%',
-        N2: '0%',
+        ...defaultValuesGN,
       },
       {
         Louvers: 'Cmd. [%]',
-        G1: '-',
-        G2: '-',
-        G3: '-',
-        H1: '-',
-        H2: '-',
-        H3: '-',
-        I1: '-',
-        I2: '-',
-        I3: '-',
-        L1: '-',
-        L2: '-',
-        L3: '-',
-        M1: '-',
-        M2: '-',
-        M3: '-',
-        N1: '-',
-        N2: '-',
+        ...defaultValuesGN,
       },
     ];
+
+    louversMapAF.forEach((l, i) => {
+      dataLouversAF[0][l] = `${actualPositionLouvers[i]}%`;
+      dataLouversAF[1][l] = `${commandedPositionLouvers[i]}%`;
+    });
+
+    louversMapGN.forEach((l, i) => {
+      dataLouversGN[0][l] = `${actualPositionLouvers[i + louversMapAF.length]}%`;
+      dataLouversGN[1][l] = `${commandedPositionLouvers[i + louversMapAF.length]}%`;
+    });
 
     return (
       <div className={styles.domeContainer}>
