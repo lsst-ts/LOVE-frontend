@@ -2,6 +2,117 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
 
+const actualPositionLouvers = [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  75,
+  50,
+  0,
+  0,
+];
+
+const commandedPositionLouvers = [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  75,
+  75,
+  0,
+  0,
+];
+
+const heightsLouvers = [
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  35,
+  35,
+  0,
+  0,
+];
+
 export default class DomeShutter extends Component {
   static propTypes = {
     /** Skyview width */
@@ -414,6 +525,7 @@ export default class DomeShutter extends Component {
             y="60.15"
             width="27"
             height="19"
+            style={{ fill: 'red' }}
             transform="translate(947.53 139.3) rotate(-180)"
           />
           <rect
@@ -447,7 +559,12 @@ export default class DomeShutter extends Component {
             y="89.15"
             width="27"
             height="35"
-            transform="translate(947.53 213.3) rotate(-180)"
+            // transform="translate(947.53 213.3) rotate(-180)"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `scaleY(${actualPositionLouvers[30] / 100})`,
+            }}
           />
           <rect
             className={styles.louver4}
@@ -455,12 +572,29 @@ export default class DomeShutter extends Component {
             y="134.15"
             width="27"
             height="35"
-            transform="translate(947.53 303.3) rotate(-180)"
+            // transform="translate(947.53 303.3) rotate(-180)"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `scaleY(${actualPositionLouvers[31] / 100})`,
+            }}
           />
 
           <line className={styles.louver5} x1="487.27" y1="60.15" x2="460.27" y2="60.15" />
           <line className={styles.louver5} x1="487.27" y1="89.15" x2="460.27" y2="89.15" />
-          <line className={styles.louver5} x1="487.27" y1="134.15" x2="460.27" y2="134.15" />
+          <line
+            className={styles.louver5}
+            x1="487.27"
+            y1="134.15"
+            x2="460.27"
+            y2="134.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[31] / 100) * commandedPositionLouvers[31]}px)`,
+              stroke: 'red',
+            }}
+          />
         </g>
 
         {/* from left to right (11) */}

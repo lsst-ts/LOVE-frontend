@@ -10,6 +10,86 @@ import styles from './MTDome.module.css';
 
 import {} from 'Config';
 
+const louversMapAF = [
+  'A1',
+  'A2',
+  'B1',
+  'B2',
+  'B3',
+  'C1',
+  'C2',
+  'C3',
+  'D1',
+  'D2',
+  'D3',
+  'E1',
+  'E2',
+  'E3',
+  'F1',
+  'F2',
+  'F3',
+];
+
+const louversMapGN = [
+  'G1',
+  'G2',
+  'G3',
+  'H1',
+  'H2',
+  'H3',
+  'I1',
+  'I2',
+  'I3',
+  'L1',
+  'L2',
+  'L3',
+  'M1',
+  'M2',
+  'M3',
+  'N1',
+  'N2',
+];
+
+const defaultValuesAF = {
+  A1: '0%',
+  A2: '0%',
+  B1: '0%',
+  B2: '0%',
+  B3: '0%',
+  C1: '0%',
+  C2: '0%',
+  C3: '0%',
+  D1: '0%',
+  D2: '0%',
+  D3: '0%',
+  E1: '0%',
+  E2: '0%',
+  E3: '0%',
+  F1: '0%',
+  F2: '0%',
+  F3: '0%',
+};
+
+const defaultValuesGN = {
+  G1: '0%',
+  G2: '0%',
+  G3: '0%',
+  H1: '0%',
+  H2: '0%',
+  H3: '0%',
+  I1: '0%',
+  I2: '0%',
+  I3: '0%',
+  L1: '0%',
+  L2: '0%',
+  L3: '0%',
+  M1: '0%',
+  M2: '0%',
+  M3: '0%',
+  N1: '0%',
+  N2: '0%',
+};
+
 export default class Dome extends Component {
   static propTypes = {
     // raftsDetailedState: PropTypes.string,
@@ -32,6 +112,26 @@ export default class Dome extends Component {
       timeWindow: 60,
       isLive: true,
       historicalData: [],
+      dataLouversAF: [
+        {
+          Louvers: 'Open [%]',
+          ...defaultValuesAF,
+        },
+        {
+          Louvers: 'Cmd. [%]',
+          ...defaultValuesAF,
+        },
+      ],
+      dataLouversGN: [
+        {
+          Louvers: 'Open [%]',
+          ...defaultValuesGN,
+        },
+        {
+          Louvers: 'Cmd. [%]',
+          ...defaultValuesGN,
+        },
+      ],
     };
 
     this.azimuthPlotRef = React.createRef();
@@ -44,6 +144,44 @@ export default class Dome extends Component {
 
   componentWillUnmount = () => {
     this.props.unsubscribeToStream();
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.actualPositionLouvers !== this.props.actualPositionLouvers) {
+      const dataLouversAFActual = {};
+      louversMapAF.forEach((l, i) => {
+        dataLouversAFActual[l] = `${this.props.actualPositionLouvers[i]}%`;
+      });
+      this.setState((state) => ({
+        dataLouversAF: [{ ...state.dataLouversAF[0], ...dataLouversAFActual }, { ...state.dataLouversAF[1] }],
+      }));
+
+      const dataLouversGNActual = {};
+      louversMapGN.forEach((l, i) => {
+        dataLouversGNActual[l] = `${this.props.actualPositionLouvers[i + 17]}%`;
+      });
+      this.setState((state) => ({
+        dataLouversGN: [{ ...state.dataLouversGN[0], ...dataLouversGNActual }, { ...state.dataLouversGN[1] }],
+      }));
+    }
+
+    if (prevProps.commandedPositionLouvers !== this.props.commandedPositionLouvers) {
+      const dataLouversAFCommanded = {};
+      louversMapAF.forEach((l, i) => {
+        dataLouversAFCommanded[l] = `${this.props.commandedPositionLouvers[i]}%`;
+      });
+      this.setState((state) => ({
+        dataLouversAF: [{ ...state.dataLouversAF[0] }, { ...state.dataLouversAF[1], ...dataLouversAFCommanded }],
+      }));
+
+      const dataLouversGNCommanded = {};
+      louversMapGN.forEach((l, i) => {
+        dataLouversGNCommanded[l] = `${this.props.commandedPositionLouvers[i + 17]}%`;
+      });
+      this.setState((state) => ({
+        dataLouversGN: [{ ...state.dataLouversGN[0] }, { ...state.dataLouversGN[1], ...dataLouversGNCommanded }],
+      }));
+    }
   };
 
   LOUVERS_AF = [
@@ -302,118 +440,6 @@ export default class Dome extends Component {
     const actualPositionLouvers = this.props.actualPositionLouvers;
     const commandedPositionLouvers = this.props.commandedPositionLouvers;
 
-    const louversMapAF = [
-      'A1',
-      'A2',
-      'B1',
-      'B2',
-      'B3',
-      'C1',
-      'C2',
-      'C3',
-      'D1',
-      'D2',
-      'D3',
-      'E1',
-      'E2',
-      'E3',
-      'F1',
-      'F2',
-      'F3',
-    ];
-
-    const louversMapGN = [
-      'G1',
-      'G2',
-      'G3',
-      'H1',
-      'H2',
-      'H3',
-      'I1',
-      'I2',
-      'I3',
-      'L1',
-      'L2',
-      'L3',
-      'M1',
-      'M2',
-      'M3',
-      'N1',
-      'N2',
-    ];
-
-    const defaultValuesAF = {
-      A1: '0%',
-      A2: '0%',
-      B1: '0%',
-      B2: '0%',
-      B3: '0%',
-      C1: '0%',
-      C2: '0%',
-      C3: '0%',
-      D1: '0%',
-      D2: '0%',
-      D3: '0%',
-      E1: '0%',
-      E2: '0%',
-      E3: '0%',
-      F1: '0%',
-      F2: '0%',
-      F3: '0%',
-    };
-
-    const defaultValuesGN = {
-      G1: '0%',
-      G2: '0%',
-      G3: '0%',
-      H1: '0%',
-      H2: '0%',
-      H3: '0%',
-      I1: '0%',
-      I2: '0%',
-      I3: '0%',
-      L1: '0%',
-      L2: '0%',
-      L3: '0%',
-      M1: '0%',
-      M2: '0%',
-      M3: '0%',
-      N1: '0%',
-      N2: '0%',
-    };
-
-    const dataLouversAF = [
-      {
-        Louvers: 'Open [%]',
-        ...defaultValuesAF,
-      },
-      {
-        Louvers: 'Cmd. [%]',
-        ...defaultValuesAF,
-      },
-    ];
-
-    const dataLouversGN = [
-      {
-        Louvers: 'Open [%]',
-        ...defaultValuesGN,
-      },
-      {
-        Louvers: 'Cmd. [%]',
-        ...defaultValuesGN,
-      },
-    ];
-
-    louversMapAF.forEach((l, i) => {
-      dataLouversAF[0][l] = `${actualPositionLouvers[i]}%`;
-      dataLouversAF[1][l] = `${commandedPositionLouvers[i]}%`;
-    });
-
-    louversMapGN.forEach((l, i) => {
-      dataLouversGN[0][l] = `${actualPositionLouvers[i + louversMapAF.length]}%`;
-      dataLouversGN[1][l] = `${commandedPositionLouvers[i + louversMapAF.length]}%`;
-    });
-
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
@@ -452,8 +478,8 @@ export default class Dome extends Component {
           </div>
         </div>
 
-        <SimpleTable headers={this.LOUVERS_AF} data={dataLouversAF} />
-        <SimpleTable headers={this.LOUVERS_GN} data={dataLouversGN} />
+        <SimpleTable headers={this.LOUVERS_AF} data={this.state.dataLouversAF} />
+        <SimpleTable headers={this.LOUVERS_GN} data={this.state.dataLouversGN} />
       </div>
     );
   }
