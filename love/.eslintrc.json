@@ -1,5 +1,11 @@
 {
   "parser": "@babel/eslint-parser",
+  "parserOptions": {
+    "requireConfigFile": false,
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
   "extends": ["airbnb-base", "plugin:react/recommended"],
   "rules": {
     "max-len": [1, 120, 2, { "ignoreComments": true }],
@@ -30,10 +36,7 @@
   },
   "overrides": [
     {
-      "files": [
-        "**/*.test.js",
-        "**/*.test.jsx"
-      ],
+      "files": ["**/*.test.js", "**/*.test.jsx"],
       "env": {
         "jest": true
       }

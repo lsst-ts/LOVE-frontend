@@ -82,9 +82,13 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.17.10",
+    "@babel/eslint-parser": "^7.17.0",
+    "@babel/preset-react": "^7.16.7",
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^11.2.2",
     "cypress": "^4.1.0",
+    "eslint": "^8.15.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-only-warn": "^1.0.1",
     "fetch-mock": "^9.11.0",
