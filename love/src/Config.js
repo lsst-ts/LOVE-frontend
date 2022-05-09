@@ -1110,3 +1110,44 @@ export const M1M3HardpointPositions = [
   { id: 5, actuator: { position: [1.0922e2, 0] }, mini: { position: [99.19, 64.05] } },
   { id: 6, actuator: { position: [5.6794e1, -9.0804e1] }, mini: { position: [80.62, 32.53] } },
 ];
+
+// Louvers map for MTDome
+const louversMapAF = [
+  'A1',
+  'A2',
+  'B1',
+  'B2',
+  'B3',
+  'C1',
+  'C2',
+  'C3',
+  'D1',
+  'D2',
+  'D3',
+  'E1',
+  'E2',
+  'E3',
+  'F1',
+  'F2',
+  'F3',
+];
+
+const louversMapGN = [
+  'G1',
+  'G2',
+  'G3',
+  'H1',
+  'H2',
+  'H3',
+  'I1',
+  'I2',
+  'I3',
+  'L1',
+  'L2',
+  'L3',
+  'M1',
+  'M2',
+  'M3',
+  'N1',
+  'N2',
+];
