@@ -26,27 +26,9 @@ export const schema = {
 
 // The following variables are from ATDome. It's needs replace them for MTDome
 const MTDomeContainer = ({
-  dropoutDoorOpeningPercentage,
-  mainDoorOpeningPercentage,
-  azimuthPosition,
-  azimuthState,
-  domeInPosition,
-  azimuthCommandedState,
-  dropoutDoorState,
-  mainDoorState,
-  azElMountEncoders,
-  nasmythMountEncoders,
-  detailedState,
-  atMountState,
-  target,
-  mountInPosition,
-  currentTimesToLimits,
-  positionLimits,
-  width,
-  height,
   subscribeToStream,
   unsubscribeToStream,
-  controls,
+
   actualPositionLouvers,
   commandedPositionLouvers,
   ...props
@@ -56,27 +38,6 @@ const MTDomeContainer = ({
   }
   return (
     <Dome
-      dropoutDoorOpeningPercentage={dropoutDoorOpeningPercentage}
-      mainDoorOpeningPercentage={mainDoorOpeningPercentage}
-      domeInPosition={domeInPosition}
-      azimuthPosition={azimuthPosition}
-      azimuthState={azimuthState}
-      azimuthCommandedState={azimuthCommandedState}
-      dropoutDoorState={dropoutDoorState}
-      mainDoorState={mainDoorState}
-      azElMountEncoders={azElMountEncoders}
-      nasmythMountEncoders={nasmythMountEncoders}
-      detailedState={detailedState}
-      atMountState={atMountState}
-      target={target}
-      mountInPosition={mountInPosition}
-      subscribeToStream={subscribeToStream}
-      unsubscribeToStream={unsubscribeToStream}
-      width={width}
-      height={height}
-      currentTimesToLimits={currentTimesToLimits}
-      positionLimits={positionLimits}
-      controls={controls}
       //
       actualPositionLouvers={actualPositionLouvers}
       commandedPositionLouvers={commandedPositionLouvers}
