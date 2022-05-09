@@ -38,39 +38,48 @@ const MTDomeContainer = ({
   }
   return (
     <Dome
-      //
+      positionActualShutter={positionActualShutter}
+      positionCommandedShutter={positionCommandedShutter}
+      positionActualDomeAz={positionActualDomeAz}
+      positionCommandedDomeAz={positionCommandedDomeAz}
+      positionActualLightWindScreen={positionActualLightWindScreen}
+      positionCommandedLightWindScreen={positionCommandedLightWindScreen}
       actualPositionLouvers={actualPositionLouvers}
       commandedPositionLouvers={commandedPositionLouvers}
+      azimuthDomeState={azimuthDomeState}
+      azimuthDomeMotion={azimuthDomeMotion}
+      azimuthDomeTarget={azimuthDomeTarget}
+      elevationDomeState={elevationDomeState}
+      elevationDomeMotion={elevationDomeMotion}
+      elevationDomeTarget={elevationDomeTarget}
+      modeDomeStatus={modeDomeStatus}
     />
   );
 };
 
 const mapStateToProps = (state) => {
-  const domeState = getDomeState(state);
+  const domeState = getDomeStatus(state);
   const louversState = getLouversStatus(state);
-  return { ...domeState, ...louversState };
+  const apertureShutterState = getApertureShutter(state);
+  const lightWindScreenState = getLightWindScreen(state);
+  const domeAzimuthState = getDomeAzimuth(state);
+  return { ...domeState, ...louversState, ...apertureShutterState, ...lightWindScreenState, ...domeAzimuthState };
 };
 
 // The following subscriptions are from ATDome. It's neccesary replace them for MTDome subscriptions
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
-    'telemetry-ATDome-0-dropoutDoorOpeningPercentage',
-    'telemetry-ATDome-0-mainDoorOpeningPercentage',
-    'telemetry-ATDome-0-azimuthPosition',
-    'event-ATDome-0-azimuthState',
-    'event-ATDome-0-azimuthCommandedState',
-    'event-ATDome-0-dropoutDoorState',
-    'event-ATDome-0-mainDoorState',
-    'event-ATDome-0-allAxesInPosition',
-    'telemetry-ATMCS-0-mount_AzEl_Encoders',
-    'telemetry-ATMCS-0-mount_Nasmyth_Encoders',
-    'event-ATMCS-0-detailedState',
-    'event-ATMCS-0-atMountState',
-    'event-ATMCS-0-target',
-    'event-ATMCS-0-allAxesInPosition',
-    'event-ATMCS-0-m3State',
-    'event-ATMCS-0-positionLimits',
-    'telemetry-ATPtg-1-currentTimesToLimits',
+    'telemetry-MTDome-0-apertureShutter',
+    'telemetry-MTDome-0-azimuth',
+    'telemetry-MTDome-0-lightWindScreen',
+    'telemetry-MTDome-0-louvers',
+    'event-MTDome-0-logevent_azEnabled',
+    'event-MTDome-0-logevent_azMotion',
+    'event-MTDome-0-logevent_azTarget',
+    'event-MTDome-0-logevent_elEnabled',
+    'event-MTDome-0-logevent_elMotion',
+    'event-MTDome-0-logevent_elTarget',
+    'event-MTDome-0-logevent_operationalMode',
   ];
   return {
     subscriptions,
