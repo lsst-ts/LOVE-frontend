@@ -952,7 +952,7 @@ export const M1M3HardpointPositions = [
 ];
 
 // Louvers map for MTDome
-const louversMapAF = [
+const MTDomeLouversMapAF = [
   'A1',
   'A2',
   'B1',
@@ -972,7 +972,7 @@ const louversMapAF = [
   'F3',
 ];
 
-const louversMapGN = [
+const MTDomeLouversMapGN = [
   'G1',
   'G2',
   'G3',

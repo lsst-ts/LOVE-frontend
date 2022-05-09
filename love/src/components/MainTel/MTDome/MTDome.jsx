@@ -8,7 +8,7 @@ import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
 import styles from './MTDome.module.css';
 
-import { louversMapAF, louversMapGN } from 'Config';
+import { MTDomeLouversMapAF, MTDomeLouversMapGN } from 'Config';
 
 const defaultValuesAF = {
   A1: '0%',
@@ -96,7 +96,7 @@ export default class Dome extends Component {
   componentDidUpdate = (prevProps, prevState) => {
     if (prevProps.actualPositionLouvers !== this.props.actualPositionLouvers) {
       const dataLouversAFActual = {};
-      louversMapAF.forEach((l, i) => {
+      MTDomeLouversMapAF.forEach((l, i) => {
         dataLouversAFActual[l] = `${this.props.actualPositionLouvers[i]}%`;
       });
       this.setState((state) => ({
@@ -104,7 +104,7 @@ export default class Dome extends Component {
       }));
 
       const dataLouversGNActual = {};
-      louversMapGN.forEach((l, i) => {
+      MTDomeLouversMapGN.forEach((l, i) => {
         dataLouversGNActual[l] = `${this.props.actualPositionLouvers[i + 17]}%`;
       });
       this.setState((state) => ({
@@ -114,7 +114,7 @@ export default class Dome extends Component {
 
     if (prevProps.commandedPositionLouvers !== this.props.commandedPositionLouvers) {
       const dataLouversAFCommanded = {};
-      louversMapAF.forEach((l, i) => {
+      MTDomeLouversMapAF.forEach((l, i) => {
         dataLouversAFCommanded[l] = `${this.props.commandedPositionLouvers[i]}%`;
       });
       this.setState((state) => ({
@@ -122,7 +122,7 @@ export default class Dome extends Component {
       }));
 
       const dataLouversGNCommanded = {};
-      louversMapGN.forEach((l, i) => {
+      MTDomeLouversMapGN.forEach((l, i) => {
         dataLouversGNCommanded[l] = `${this.props.commandedPositionLouvers[i + 17]}%`;
       });
       this.setState((state) => ({
