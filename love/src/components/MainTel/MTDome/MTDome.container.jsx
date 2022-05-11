@@ -28,9 +28,20 @@ export const schema = {
 const MTDomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
-
+  positionActualShutter,
+  positionCommandedShutter,
+  positionActualDomeAz,
+  positionActualLightWindScreen,
+  positionCommandedLightWindScreen,
   actualPositionLouvers,
   commandedPositionLouvers,
+  azimuthDomeState,
+  azimuthDomeMotion,
+  azimuthDomeTarget,
+  elevationDomeState,
+  elevationDomeMotion,
+  elevationDomeTarget,
+  modeDomeStatus,
   ...props
 }) => {
   if (props.isRaw) {
@@ -38,6 +49,8 @@ const MTDomeContainer = ({
   }
   return (
     <Dome
+      subscribeToStream={subscribeToStream}
+      unsubscribeToStream={unsubscribeToStream}
       positionActualShutter={positionActualShutter}
       positionCommandedShutter={positionCommandedShutter}
       positionActualDomeAz={positionActualDomeAz}
