@@ -8,7 +8,6 @@ import Title from '../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import StatusText from '../../GeneralPurpose/StatusText/StatusText';
-import { defaultNumberFormatter } from 'Utils';
 import {
   hexapodCommandableByDDSStateMap,
   hexapodCommandableByDDSStatetoStyle,
@@ -134,42 +133,42 @@ class CameraHexapod extends Component {
       title: 'x',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'y',
       title: 'y',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'z',
       title: 'z',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'u',
       title: 'u',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'v',
       title: 'v',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'w',
       title: 'w',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
   ];
 
@@ -184,42 +183,42 @@ class CameraHexapod extends Component {
       title: '1',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: '2',
       title: '2',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: '3',
       title: '3',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: '4',
       title: '4',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: '5',
       title: '5',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: '6',
       title: '6',
       className: styles.columns,
       type: 'number',
-      render: defaultNumberFormatter,
+      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
   ];
 
