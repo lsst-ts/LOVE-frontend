@@ -16,6 +16,10 @@
   margin-bottom: 0.5em;
 }
 
+.toDateContainer > span {
+  margin-left: 0.5em;
+}
+
 .queryButton {
   margin-bottom: 1em;
 }
@@ -24,5 +28,6 @@
   padding: 0em 0.6em;
 }
 
-/* .customTimeWindowInput {
-} */
+.datetimeContainer {
+  /* display: flex; */
+}

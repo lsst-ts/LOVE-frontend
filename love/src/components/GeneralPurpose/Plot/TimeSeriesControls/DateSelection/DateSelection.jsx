@@ -80,6 +80,7 @@ export default class DateSelection extends PureComponent {
               onFocus={(event) => event.target.select()}
             />
           </div>
+          <span>minutes</span>
         </div>
         <button disabled={this.props.submitDisabled} className={styles.queryButton} onClick={this.onSubmitQuery}>
           Submit
