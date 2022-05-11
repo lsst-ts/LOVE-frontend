@@ -83,7 +83,6 @@ export const ATDomeLogMessages = [
     level: { value: 20, dataType: 'Int' },
     message: { value: 'Read historical data in 5.55 sec', dataType: 'String' },
     traceback: { value: '', dataTyp: 'String' },
-    priority: { value: 0, dataType: 'Int' },
   },
   {
     ATDomeID: { value: 1, dataType: 'Int' },
@@ -99,7 +98,6 @@ export const ATDomeLogMessages = [
       dataType: 'String',
     },
     traceback: { value: '', dataTyp: 'String' },
-    priority: { value: 0, dataType: 'Int' },
   },
   {
     ATDomeID: { value: 1, dataType: 'Int' },
@@ -112,7 +110,6 @@ export const ATDomeLogMessages = [
     level: { value: 10, dataType: 'Int' },
     message: { value: 'connect', dataType: 'String' },
     traceback: { value: '', dataTyp: 'String' },
-    priority: { value: 0, dataType: 'Int' },
   },
   {
     ATDomeID: { value: 1, dataType: 'Int' },
@@ -125,7 +122,6 @@ export const ATDomeLogMessages = [
     level: { value: 10, dataType: 'Int' },
     message: { value: 'connected', dataType: 'String' },
     traceback: { value: '', dataTyp: 'String' },
-    priority: { value: 0, dataType: 'Int' },
   },
 ];
 
@@ -147,7 +143,6 @@ export const TestCSCErrorCodeData = [
       value: 'Traceback 1 for error code for Test-3',
       dataType: 'String',
     },
-    priority: { value: 0, dataType: 'Int' },
   },
   {
     TestID: { value: 3, dataType: 'Int' },
@@ -166,7 +161,6 @@ export const TestCSCErrorCodeData = [
       value: 'Traceback 2 for error code for Test-3',
       dataType: 'String',
     },
-    priority: { value: 0, dataType: 'Int' },
   },
   {
     TestID: { value: 3, dataType: 'Int' },
@@ -185,6 +179,5 @@ export const TestCSCErrorCodeData = [
       value: 'Traceback 3 for error code for Test-3',
       dataType: 'String',
     },
-    priority: { value: 0, dataType: 'Int' },
   },
 ];
