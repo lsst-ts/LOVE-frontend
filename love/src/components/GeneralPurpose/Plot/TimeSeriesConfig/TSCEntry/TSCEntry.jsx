@@ -122,8 +122,6 @@ export default class TSCEntry extends PureComponent {
     // Delete the following 2 lines and uncomment the third when going back to multiple inputs:
     const input = this.props.inputs[0];
     const index = 0;
-    // const nextIndex = this.props.inputs.length;
-
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
@@ -172,6 +170,19 @@ export default class TSCEntry extends PureComponent {
               placeholder="Select a dash pattern"
               onChange={(selection) => this.onStyleChange('dash', { ...selection, value: JSON.parse(selection.value) })}
             />
+          )}
+
+          {['line', 'pointLine'].includes(this.props.type) && (
+            <svg viewBox="0 0 20 1" xmlns="http://www.w3.org/2000/svg">
+              <line
+                stroke={input?.color}
+                x1="0"
+                y1="0"
+                x2="20"
+                y2="0"
+                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+              />
+            </svg>
           )}
 
           {['pointLine'].includes(this.props.type) && (

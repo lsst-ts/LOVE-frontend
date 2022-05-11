@@ -215,11 +215,7 @@ class VegaTimeseriesPlot extends Component {
             title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
             format: '%H:%M:%S',
           },
-          scale: this.props.xDomain
-            ? {
-                domain: this.props.xDomain,
-              }
-            : undefined,
+          scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
         },
         y: {
           field: 'y',
