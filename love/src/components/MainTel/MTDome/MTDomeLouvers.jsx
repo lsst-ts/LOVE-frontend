@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
 
-const actualPositionLouvers = this.props.actualPositionLouvers;
-
-const commandedPositionLouvers = this.props.commandedPositionLouvers;
-
 const heightsLouvers = [
   0,
   0,
@@ -43,7 +39,7 @@ const heightsLouvers = [
   0,
 ];
 
-export default class DomeShutter extends Component {
+export default class MTDomeLouvers extends Component {
   static propTypes = {
     /** Skyview width */
     width: PropTypes.number,
@@ -82,21 +78,25 @@ export default class DomeShutter extends Component {
   };
 
   render() {
-    const { width, height } = this.props;
-    const offset = 10;
-    const viewBoxSize = 596 - 2 * offset;
-    const x0 = viewBoxSize / 2 + offset;
-    const y0 = viewBoxSize / 2 + offset;
-    const r = viewBoxSize / 2;
-    const extraApperture = r / 4;
-    const alpha = Math.PI / 12;
-    const rSinAlpha = r * Math.sin(alpha);
-    const rCosAlpha = r * Math.cos(alpha);
-    const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
-    const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
-    const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
+    // const { width, height } = this.props;
+    // const offset = 10;
+    // const viewBoxSize = 596 - 2 * offset;
+    // const x0 = viewBoxSize / 2 + offset;
+    // const y0 = viewBoxSize / 2 + offset;
+    // const r = viewBoxSize / 2;
+    // const extraApperture = r / 4;
+    // const alpha = Math.PI / 12;
+    // const rSinAlpha = r * Math.sin(alpha);
+    // const rCosAlpha = r * Math.cos(alpha);
+    // const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
+    // const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
+    // const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
+
+    const actualPositionLouvers = this.props?.actualPositionLouvers;
+    const commandedPositionLouvers = this.props?.commandedPositionLouvers;
+
     return (
-      <svg className={styles.svgLouvers} height={height} width={width} viewBox="0 0 560 192">
+      <svg className={styles.svgLouvers} height={240} width={240} viewBox="0 0 560 192">
         {/* from left to right (1) */}
         <g>
           <polygon

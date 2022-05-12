@@ -55,7 +55,7 @@ export default class DomeShutter extends Component {
     const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 301.98 301.98">
+      <svg className={styles.svgOverlay} height={400} width={500} viewBox="0 0 301.98 301.98">
         {/* */}
         {/* <g class="dome" style={{ transformOrigin: 50% 50%, transform: rotate(45deg) }}> */}
         <g /*style={{ transformOrigin: `50% 50%` }}*/>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData } from 'Utils';
 import MTDomeShutter from './MTDomeShutter';
-import MTLouvers from './MTDomeLouvers';
+import MTDomeLouvers from './MTDomeLouvers';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import WindRose from '../../icons/WindRose/WindRose';
 import DomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
@@ -303,8 +303,8 @@ export default class Dome extends Component {
     const positionCommandedShutter = this.props.positionCommandedShutter;
 
     // Louvers
-    const actualPositionLouvers = this.props.actualPositionLouvers;
-    const commandedPositionLouvers = this.props.commandedPositionLouvers;
+    const actualPositionLouvers = this.props?.actualPositionLouvers;
+    const commandedPositionLouvers = this.props?.commandedPositionLouvers;
 
     return (
       <div className={styles.domeContainer}>
@@ -317,7 +317,7 @@ export default class Dome extends Component {
             <div className={styles.divDomeLouvers}>
               <MTDomeShutter />
 
-              <MTLouvers
+              <MTDomeLouvers
                 actualPositionLouvers={actualPositionLouvers}
                 commandedPositionLouvers={commandedPositionLouvers}
               />

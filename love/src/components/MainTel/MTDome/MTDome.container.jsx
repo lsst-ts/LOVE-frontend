@@ -1,7 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Dome from './MTDome';
-import { getDomeState, getLouversStatus } from '../../../redux/selectors';
+import {
+  getDomeStatus,
+  getLouversStatus,
+  getApertureShutter,
+  getDomeAzimuth,
+  getLightWindScreen,
+} from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 
@@ -31,6 +37,7 @@ const MTDomeContainer = ({
   positionActualShutter,
   positionCommandedShutter,
   positionActualDomeAz,
+  positionCommandedDomeAz,
   positionActualLightWindScreen,
   positionCommandedLightWindScreen,
   actualPositionLouvers,
