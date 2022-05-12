@@ -3,95 +3,50 @@ import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
 
 const heightsLouvers = [
+  19,
+  35,
+  19,
+  35,
+  35,
+  35,
+  35,
+  35,
+  35,
+  35,
+  35,
+  19,
+  35,
+  35,
+  19,
+  19,
+  35,
+  19,
+  19,
+  35,
+  19,
+  35,
+  35,
+  35,
+  35,
+  35,
+  35,
+  35,
   35,
   19,
   35,
   35,
   19,
   35,
-  35,
-  35,
-  35,
-  35,
-  35,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  0,
-  35,
-  35,
-  0,
-  0,
 ];
 
 export default class MTDomeLouvers extends Component {
-  static propTypes = {
-    /** Skyview width */
-    width: PropTypes.number,
-    /** Skyview height */
-    height: PropTypes.number,
-    /** Azimuth position */
-    azimuthPosition: PropTypes.number,
-    /** Main door opening percentage */
-    mainDoorOpeningPercentage: PropTypes.number,
-    /** Droupout door opening percentage */
-    dropoutDoorOpeningPercentage: PropTypes.number,
-  };
-
-  static defaultProps = {
-    azelToPixel: () => {},
-    width: 596,
-    height: 596,
-    azimuthPosition: 0,
-    mainDoorOpeningPercentage: 0,
-    dropoutDoorOpeningPercentage: 0,
-  };
-
   constructor(props) {
     super(props);
-    this.prevAzimuth = 0;
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.azimuthPosition !== this.props.azimuthPosition)
-      this.prevAzimuth = this.closestEquivalentAngle(this.prevAzimuth, prevProps.azimuthPosition);
-  }
-
-  closestEquivalentAngle = (from, to) => {
-    const delta = ((((to - from) % 360) + 540) % 360) - 180;
-    return from + delta;
-  };
+  componentDidUpdate(prevProps) {}
 
   render() {
-    // const { width, height } = this.props;
-    // const offset = 10;
-    // const viewBoxSize = 596 - 2 * offset;
-    // const x0 = viewBoxSize / 2 + offset;
-    // const y0 = viewBoxSize / 2 + offset;
-    // const r = viewBoxSize / 2;
-    // const extraApperture = r / 4;
-    // const alpha = Math.PI / 12;
-    // const rSinAlpha = r * Math.sin(alpha);
-    // const rCosAlpha = r * Math.cos(alpha);
-    // const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
-    // const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
-    // const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
-
     const actualPositionLouvers = this.props?.actualPositionLouvers;
     const commandedPositionLouvers = this.props?.commandedPositionLouvers;
 
@@ -109,8 +64,30 @@ export default class MTDomeLouvers extends Component {
           <rect className={styles.louver4} x="34.52" y="105.15" width="27" height="19" />
           <rect className={styles.louver4} x="34.52" y="134.15" width="27" height="35" />
 
-          <line className={styles.louver5} x1="34.52" y1="105.15" x2="61.52" y2="105.15" />
-          <line className={styles.louver5} x1="34.52" y1="134.15" x2="61.52" y2="134.15" />
+          <line
+            className={styles.louver5}
+            x1="34.52"
+            y1="105.15"
+            x2="61.52"
+            y2="105.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[1] / 100) * commandedPositionLouvers[1]}px)`,
+            }}
+          />
+          <line
+            className={styles.louver5}
+            x1="34.52"
+            y1="134.15"
+            x2="61.52"
+            y2="134.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[2] / 100) * commandedPositionLouvers[2]}px)`,
+            }}
+          />
         </g>
 
         {/* from left to right (2) */}
@@ -128,9 +105,42 @@ export default class MTDomeLouvers extends Component {
           <rect className={styles.louver4} x="73.27" y="89.15" width="27" height="35" />
           <rect className={styles.louver4} x="73.27" y="134.15" width="27" height="35" />
 
-          <line className={styles.louver5} x1="73.27" y1="60.15" x2="100.27" y2="60.15" />
-          <line className={styles.louver5} x1="73.27" y1="89.15" x2="100.27" y2="89.15" />
-          <line className={styles.louver5} x1="73.27" y1="134.15" x2="100.27" y2="134.15" />
+          <line
+            className={styles.louver5}
+            x1="73.27"
+            y1="60.15"
+            x2="100.27"
+            y2="60.15"
+            // style={{
+            //   transformOrigin: 'top center',
+            //   transformBox: 'fill-box',
+            //   transform: `translateY(${(heightsLouvers[3] / 100) * commandedPositionLouvers[3]}px)`,
+            // }}
+          />
+          <line
+            className={styles.louver5}
+            x1="73.27"
+            y1="89.15"
+            x2="100.27"
+            y2="89.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[4] / 100) * commandedPositionLouvers[4]}px)`,
+            }}
+          />
+          <line
+            className={styles.louver5}
+            x1="73.27"
+            y1="134.15"
+            x2="100.27"
+            y2="134.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[5] / 100) * commandedPositionLouvers[5]}px)`,
+            }}
+          />
         </g>
 
         {/* from left to right (3) */}
@@ -148,9 +158,44 @@ export default class MTDomeLouvers extends Component {
           <rect className={styles.louver4} x="112.27" y="89.15" width="27" height="35" />
           <rect className={styles.louver4} x="112.27" y="134.15" width="27" height="35" />
 
-          <line className={styles.louver5} x1="112.27" y1="44.15" x2="139.27" y2="44.15" />
-          <line className={styles.louver5} x1="112.27" y1="89.15" x2="139.27" y2="89.15" />
-          <line className={styles.louver5} x1="112.27" y1="134.15" x2="139.27" y2="134.15" />
+          <line
+            className={styles.louver5}
+            x1="112.27"
+            y1="44.15"
+            x2="139.27"
+            y2="44.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[6] / 100) * commandedPositionLouvers[6]}px)`,
+            }}
+          />
+          <line
+            className={styles.louver5}
+            x1="112.27"
+            y1="89.15"
+            x2="139.27"
+            y2="89.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[7] / 100) * commandedPositionLouvers[7]}px)`,
+              stroke: 'red',
+            }}
+          />
+          <line
+            className={styles.louver5}
+            x1="112.27"
+            y1="134.15"
+            x2="139.27"
+            y2="134.15"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `translateY(${(heightsLouvers[8] / 100) * commandedPositionLouvers[8]}px)`,
+              stroke: 'red',
+            }}
+          />
         </g>
 
         {/* from left to right (4) */}
