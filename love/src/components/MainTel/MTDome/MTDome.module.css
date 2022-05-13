@@ -6,6 +6,10 @@
   overflow: auto;
 }
 
+.columns {
+  text-align: center !important;
+}
+
 .skymapGridContainer {
   display: flex;
   align-self: center;
