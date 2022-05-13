@@ -522,6 +522,83 @@ export const hexapodConnectedStatetoStyle = {
   CONNECTED: 'ok',
 };
 
+// MTDome
+export const mtDomeModeStateMap = {
+  0: 'DEGRADED',
+  1: 'NORMAL',
+};
+
+export const mtDomeModeStatetoStyle = {
+  DEGRADED: 'warning',
+  NORMAL: 'ok',
+};
+
+export const mtDomeAzimuthEnabledStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtDomeAzimuthEnabledStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
+};
+
+export const mtdomeAzimuthMotionStateMap = {
+  0: 'CLOSED',
+  1: 'CRAWLING',
+  2: 'MOVING',
+  3: 'OPEN',
+  4: 'PARKED',
+  5: 'PARKING',
+  6: 'STOPPED',
+};
+
+// check this with Mia
+export const mtdomeAzimuthMotionStatetoStyle = {
+  CLOSED: 'undefined',
+  CRAWLING: 'undefined',
+  MOVING: 'warning',
+  OPEN: 'ok',
+  PARKED: 'warning',
+  PARKING: 'warning',
+  STOPPED: 'alert',
+};
+
+export const mtdomeElevationEnabledStateToMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtdomeElevationEnabledStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
+};
+
+export const mtdomeElevationMotionStateToMap = {
+  0: 'CLOSED',
+  1: 'CRAWLING',
+  2: 'MOVING',
+  3: 'OPEN',
+  4: 'PARKED',
+  5: 'PARKING',
+  6: 'STOPPED',
+};
+
+// check this with Mia
+export const mtdomeElevationMotionStatetoStyle = {
+  CLOSED: 'undefined',
+  CRAWLING: 'undefined',
+  MOVING: 'warning',
+  OPEN: 'ok',
+  PARKED: 'warning',
+  PARKING: 'warning',
+  STOPPED: 'alert',
+};
+
 /**
  * Available commands in the TCS and their parameters. Each command is represented
  * as a dictionary key and their parameters as the values of said dictionary.
