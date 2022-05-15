@@ -37,9 +37,12 @@ export default class DomeSummaryTable extends Component {
 
   render() {
     // Replace them for the correct MTDome subscriptions. This was added for first testing purposes only.
-    // const compensationStatus = hexapodCompensationModeStateMap[this.props.hexapodCompensationMode];
 
     const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
+    const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
+    const azimuthDomeMotion = mtdomeAzimuthMotionStateMap[this.props.azimuthDomeMotion];
+    const elevationDomeState = mtdomeElevationEnabledStateToMap[this.props.elevationDomeState];
+    const elevationDomeMotion = mtdomeElevationMotionStateToMap[this.props.elevationDomeMotion];
 
     // const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     // const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
@@ -63,11 +66,11 @@ export default class DomeSummaryTable extends Component {
 
           <Label>Mode</Label>
           <Value>
-            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatus]}>{this.props.modeDomeStatus ?? 0.0}</StatusText>
+            <StatusText status={mtDomeModeStatetoStyle[modeDomeStatus]}>{modeDomeStatus}</StatusText>
           </Value>
           <Label>Azimuth</Label>
           <Value>
-            <StatusText medium>{this.props.azimuthDomeState ?? 0.0}</StatusText>
+            <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeState]}>{azimuthDomeState}</StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
@@ -77,7 +80,7 @@ export default class DomeSummaryTable extends Component {
             />
           </Label>
           <Value>
-            <StatusText medium>{this.props.azimuthDomeMotion ?? 0.0}</StatusText>
+            <StatusText status={mtdomeAzimuthMotionStatetoStyle[azimuthDomeMotion]}>{azimuthDomeMotion}</StatusText>
           </Value>
           <Row
           // title={`Current value: ${50}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
@@ -99,7 +102,9 @@ export default class DomeSummaryTable extends Component {
           </Row>
           <Label>Elevation</Label>
           <Value>
-            <StatusText medium>{this.props.elevationDomeState ?? 0.0}</StatusText>
+            <StatusText status={mtdomeElevationEnabledStatetoStyle[elevationDomeState]}>
+              {elevationDomeState}
+            </StatusText>
           </Value>
           <Label>
             <CurrentTargetValue
@@ -109,7 +114,9 @@ export default class DomeSummaryTable extends Component {
             />
           </Label>
           <Value>
-            <StatusText medium>{this.props.elevationDomeMotion ?? 0.0}</StatusText>
+            <StatusText status={mtdomeElevationMotionStatetoStyle[elevationDomeMotion]}>
+              {elevationDomeMotion}
+            </StatusText>
           </Value>
           <Row
           // title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
