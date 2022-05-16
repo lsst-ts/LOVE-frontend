@@ -1,0 +1,97 @@
+.message {
+  background-color: var(--second-quaternary-background-color);
+  border-radius: 6px;
+  display: grid;
+  padding: 2px;
+  margin-bottom: 12px;
+  margin-top: 2px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.header {
+  font-weight: bold;
+  text-align: left;
+  font-size: 15px;
+  margin-top: 5px;
+  margin: 2px;
+  border-bottom: 1px solid var(--secondary-font-color);
+  color: var(--secondary-font-color);
+  /* min-height: 2em; */
+}
+
+.footer {
+  /* display: flex;
+  flex-flow: row; */
+  padding-top: 7px;
+  border-top: 1px solid var(--secondary-font-color);
+  margin: 2px;
+}
+
+.floatLeft {
+  float: left;
+}
+
+.floatRight {
+  float: right;
+}
+
+.margin3 {
+  margin: 3px;
+}
+
+.description {
+  margin-right: 5px;
+  margin-left: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.textDescription {
+  display: inline-block;
+  text-align: left;
+}
+
+.bold {
+  font-weight: bold;
+  color: var(--secondary-font-color);
+}
+
+.label {
+  font-weight: bold;
+  color: var(--secondary-font-color);
+  text-align: left;
+  margin-left: 5px;
+}
+
+.value {
+  text-align: left;
+  margin-left: 10px;
+}
+
+.icon {
+  fill: var(--default-font-color);
+  opacity: 1;
+}
+
+.iconBtn {
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 1.8em;
+  width: 1.8em;
+  background-color: var(--default-background-color);
+}
+
+.iconFlag {
+  padding: 0.1em;
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.title {
+  color: white;
+  font-weight: bold;
+  text-align: left;
+}

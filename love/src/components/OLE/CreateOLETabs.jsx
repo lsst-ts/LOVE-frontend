@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import ExposureEdit from './Exposure/ExposureEdit';
+import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
 import styles from './OLETabs.module.css';
 
@@ -38,7 +38,7 @@ export default class CreateOLETabs extends Component {
   getComponent(tab) {
     if (tab === 'exposure') {
       return (
-        <ExposureEdit
+        <ExposureAdd
           isLogCreate={this.props.isLogCreate}
           props={this.props}
         />
