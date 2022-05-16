@@ -414,7 +414,12 @@ export default class Dome extends Component {
 
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
-              <MTDomeShutter />
+              <MTDomeShutter
+                positionActualShutter={positionActualShutter}
+                positionCommandedShutter={positionCommandedShutter}
+                positionActualDomeAz={positionActualDomeAz}
+                positionCommandedDomeAz={positionCommandedDomeAz}
+              />
 
               <MTDomeLouvers
                 actualPositionLouvers={actualPositionLouvers}

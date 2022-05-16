@@ -18,3 +18,11 @@
   width: 90%;
   padding: 10px;
 }
+
+.actualShutter {
+  display: inline-flex;
+}
+
+.limits {
+  width: 80%;
+}
