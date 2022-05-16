@@ -223,10 +223,6 @@ describe('Test image sequence data passes correctly to component', () => {
         value: 2,
         dataType: 'Int',
       },
-      priority: {
-        value: 1,
-        dataType: 'Int',
-      },
       timestampAcquisitionStart: {
         value: 1558368052.999,
         dataType: 'Float',
@@ -251,10 +247,6 @@ describe('Test image sequence data passes correctly to component', () => {
       },
       imagesInSequence: {
         value: 2,
-        dataType: 'Int',
-      },
-      priority: {
-        value: 1,
         dataType: 'Int',
       },
       timestampAcquisitionStart: {
@@ -320,10 +312,6 @@ describe('Test image sequence data passes correctly to component', () => {
 describe('Test camera component status data passes correctly to component', () => {
   const stateData = [
     {
-      priority: {
-        value: 1,
-        dataType: 'Int',
-      },
       substate: {
         value: 1,
         dataType: 'Int',
@@ -388,10 +376,6 @@ it('Append readout parameters to image', async () => {
           value: 1,
           dataType: 'Int',
         },
-        priority: {
-          value: 1,
-          dataType: 'Int',
-        },
         timestampAcquisitionStart: {
           value: 1558368052.999,
           dataType: 'Float',
@@ -433,10 +417,6 @@ it('Append readout parameters to image', async () => {
         },
         preRows: {
           value: 0,
-          dataType: 'Int',
-        },
-        priority: {
-          value: 1,
           dataType: 'Int',
         },
         readCols: {
@@ -495,7 +475,6 @@ it('Append readout parameters to image', async () => {
       postCols: 1,
       preCols: 0,
       preRows: 0,
-      priority: 1,
       readCols: 0,
       readCols2: 0,
       readRows: 1,
@@ -659,10 +638,6 @@ it('Should extract the SummaryStateValue stream correctly with a selector', asyn
       {
         ScriptQueueID: {
           value: 1,
-          dataType: 'Int',
-        },
-        priority: {
-          value: 0,
           dataType: 'Int',
         },
         private_host: {

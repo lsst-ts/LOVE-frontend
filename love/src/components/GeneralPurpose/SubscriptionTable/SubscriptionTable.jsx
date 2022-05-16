@@ -72,7 +72,7 @@ export default class SubscriptionTable extends Component {
       return (data) => {
         const datum = data instanceof Array ? data[data.length - 1] : {};
         let keys = Object.keys(datum);
-        keys = keys.filter((value) => !value.startsWith('private_') && value !== 'priority');
+        keys = keys.filter((value) => !value.startsWith('private_'));
         const dict = {};
         keys.forEach((key) => {
           dict[key] = datum[key].value;
@@ -84,7 +84,7 @@ export default class SubscriptionTable extends Component {
       return (data) => {
         const datum = data ? data : {};
         let keys = Object.keys(datum);
-        keys = keys.filter((value) => !value.startsWith('private_') && value !== 'priority');
+        keys = keys.filter((value) => !value.startsWith('private_'));
         const dict = {};
         keys.forEach((key) => (dict[key] = datum[key].value));
         return dict;

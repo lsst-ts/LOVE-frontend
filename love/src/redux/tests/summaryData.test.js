@@ -46,7 +46,6 @@ it(
       private_origin: { value: 32, dataType: 'Int' },
       private_host: { value: 843720695, dataType: 'Int' },
       summaryState: { value: 1, dataType: 'Int' },
-      priority: { value: 0, dataType: 'Int' },
     };
 
     const summaryScriptqueue = {
@@ -58,7 +57,6 @@ it(
       private_origin: { value: 44, dataType: 'Int' },
       private_host: { value: 619616180, dataType: 'Int' },
       summaryState: { value: 1, dataType: 'Int' },
-      priority: { value: 0, dataType: 'Int' },
     };
 
     await store.dispatch(addGroup('event-ATDome-1-summaryState'));
