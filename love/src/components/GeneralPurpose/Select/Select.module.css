@@ -1,24 +1,30 @@
 .dropDownClassName {
-  background-color: inherit;
+  /* background-color: inherit; */
   border-color: var(--secondary-font-dimmed-color);
-  color: inherit;
+  /* border: 1px solid var(--secondary-font-dimmed-color); */
+  /* color: inherit; */
   /* width: 20ch; */
-}
-
-.dropDownControlClassName {
-  background-color: var(--second-secondary-background-color);
-  border-color: inherit;
-  color: var(--base-font-color);
-  text-align: left;
-  height: 2.4em;
 }
 
 .dropDownPlaceHolderClassName {
   color: var(--secondary-font-color);
 }
 
-.dropDownControlClassName:focus {
+/* .dropDownControlClassName:hover {
   border: 1px solid var(--secondary-font-color);
+} */
+
+
+.dropDownControlClassName {
+  background-color: var(--second-secondary-background-color);
+  border: inherit;
+  color: var(--base-font-color);
+  text-align: left;
+  height: 2.4em;
+}
+
+.dropDownControlClassName :global(.is-open) {
+  border: 1px solid var(--secondary-font-color) !important;
 }
 
 .small {
@@ -30,8 +36,8 @@
 
 .dropDownMenuClassName {
   background-color: var(--second-secondary-background-color);
-  border: 1px solid;
-  border-color: inherit;
+  border: 1px solid var(--secondary-font-color);
+  border-radius: 3px;
   color: var(--base-font-color);
 }
 
@@ -40,15 +46,17 @@
 }
 
 .dropDownMenuClassName :global(.Dropdown-option):hover {
-  background: var(--second-tertiary-background-color);
+  background: var(--default-background-color);
   color: var(--base-font-color);
 }
 
 .dropDownMenuClassName :global(.is-selected) {
-  background: var(--second-tertiary-background-color);
+  background: var(--default-background-color);
+  font-weight: bold;
   color: var(--highlighted-font-color);
 }
+
 .arrowClassName {
   border-color: var(--secondary-font-dimmed-color) transparent transparent;
-  color: inherit;
+  /* color: inherit; */
 }
