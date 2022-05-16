@@ -1,0 +1,27 @@
+.flagIcon {
+  display: inline-block;
+}
+
+.alert {
+  fill: var(--status-alert-color);
+}
+
+.ok {
+  fill: var(--status-ok-color);
+}
+
+.warning {
+  fill: var(--status-warning-dimmed-color-2);
+}
+
+.unknown {
+  fill: var(--status-disabled-dimmed-color-2);
+}
+
+.offline {
+  fill: var(--status-disabled-dimmed-color-2);
+}
+
+.disabled {
+  fill: var(--primary-fill-color);
+}

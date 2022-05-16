@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
-import ExposureEdit from './Exposure/ExposureEdit';
+import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './OLETabs.module.css';
@@ -41,7 +41,7 @@ export default class OLETabs extends Component {
     if (clickNewLog === true) {
       if (tab === 'exposure') {
         return (
-          <ExposureEdit
+          <ExposureAdd
             back={() => { this.setState({ clickNewLog: false });}}
             props={this.props}
           />
