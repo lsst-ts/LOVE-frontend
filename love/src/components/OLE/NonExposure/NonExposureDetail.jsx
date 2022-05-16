@@ -72,7 +72,7 @@ export default class NonExposureDetail extends Component {
                 <span className={styles.bold}>{logDetail.user} </span>
                 <span>wrote:</span>
               </div>
-              <div className={styles.floatLeft}>
+              <div className={styles.textDescription}>
                 {logDetail.description}
               </div>
             </div>
