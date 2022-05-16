@@ -667,10 +667,10 @@ export const getApertureShutter = (state) => {
   return {
     positionActualShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionActual.value
-      : 25,
+      : 75,
     positionCommandedShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionCommanded.value
-      : 0,
+      : 75,
   };
 };
 
@@ -680,7 +680,7 @@ export const getDomeAzimuth = (state) => {
   return {
     positionActualDomeAz: domeAzimuth['telemetry-MTDome-0-azimuth']
       ? domeAzimuth['telemetry-MTDome-0-azimuth'].positionActual.value
-      : 0,
+      : 25,
     positionCommandedDomeAz: domeAzimuth['telemetry-MTDome-0-azimuth']
       ? domeAzimuth['telemetry-MTDome-0-azimuth'].positionCommanded.value
       : 0,

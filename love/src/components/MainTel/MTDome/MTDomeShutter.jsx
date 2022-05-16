@@ -2,32 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
 
+const widthShutters = [-50, 50];
 export default class DomeShutter extends Component {
-  static propTypes = {
-    /** Skyview width */
-    width: PropTypes.number,
-    /** Skyview height */
-    height: PropTypes.number,
-    /** Azimuth position */
-    azimuthPosition: PropTypes.number,
-    /** Main door opening percentage */
-    mainDoorOpeningPercentage: PropTypes.number,
-    /** Droupout door opening percentage */
-    dropoutDoorOpeningPercentage: PropTypes.number,
-  };
+  static propTypes = {};
 
-  static defaultProps = {
-    azelToPixel: () => {},
-    width: 596,
-    height: 596,
-    azimuthPosition: 0,
-    mainDoorOpeningPercentage: 0,
-    dropoutDoorOpeningPercentage: 0,
-  };
+  static defaultProps = {};
 
   constructor(props) {
     super(props);
-    this.prevAzimuth = 0;
   }
 
   componentDidUpdate(prevProps) {
@@ -41,24 +23,20 @@ export default class DomeShutter extends Component {
   };
 
   render() {
-    const { width, height } = this.props;
-    const offset = 10;
-    const viewBoxSize = 596 - 2 * offset;
-    const x0 = viewBoxSize / 2 + offset;
-    const y0 = viewBoxSize / 2 + offset;
-    const r = viewBoxSize / 2;
-    const extraApperture = r / 4;
-    const alpha = Math.PI / 12;
-    const rSinAlpha = r * Math.sin(alpha);
-    const rCosAlpha = r * Math.cos(alpha);
-    const dropoutDoorWidth = (rCosAlpha + extraApperture) * 0.4;
-    const mainDoorWidth = (rCosAlpha + extraApperture) * 0.6;
     const equivalentAzimuth = this.closestEquivalentAngle(this.prevAzimuth, this.props.azimuthPosition);
+    console.log(this.props.positionActualShutter);
+    console.log(widthShutters);
     return (
-      <svg className={styles.svgOverlay} height={400} width={500} viewBox="0 0 301.98 301.98">
+      <svg
+        className={styles.svgOverlay}
+        height={400}
+        width={500}
+        viewBox="0 0 301.98 301.98"
+        style={{ transform: `translate(-25%, -40%) rotateZ(${this.props.positionActualDomeAz}deg` }}
+      >
         {/* */}
         {/* <g class="dome" style={{ transformOrigin: 50% 50%, transform: rotate(45deg) }}> */}
-        <g /*style={{ transformOrigin: `50% 50%` }}*/>
+        <g style={{ transformOrigin: `50% 50%`, transform: `rotate(90)` }}>
           <polygon
             className={styles.shutterCommanded}
             points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
@@ -105,7 +83,7 @@ export default class DomeShutter extends Component {
           <circle className={styles.shutter6} cx="151.22" cy="147.24" r="5.68" />
         </g>
         {/* Shutter commanded right */}
-        <g className={styles.shutterCommandedight} /*style={{ display: `none` }}*/>
+        <g className={styles.shutterCommanded} /*style={{ display: `none` }}*/>
           <polygon
             className={styles.shutterCommanded}
             points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53"
@@ -129,7 +107,13 @@ export default class DomeShutter extends Component {
           <rect className={styles.shutterCommanded} x="100.19" y="188.53" width="50.27" height="12.97" />
         </g>
         {/* Shutter rigth */}
-        <g className={styles.shutter} /*style={{ transformOrigin: `50% 50%`, transform: `translate(40px, 0)` }}*/>
+        <g
+          className={styles.shutter}
+          style={{
+            transformOrigin: `50% 50%`,
+            transform: `translate(${(this.props.positionActualShutter * widthShutters[1]) / 100}px, 0)`,
+          }}
+        >
           <polygon
             className={styles.shutter}
             points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53"
@@ -141,7 +125,13 @@ export default class DomeShutter extends Component {
           <rect className={styles.shutter} x="151.53" y="188.53" width="50.27" height="12.97" />
         </g>
         {/* Shutter left */}
-        <g className={styles.shutter}>
+        <g
+          className={styles.shutter}
+          style={{
+            transformOrigin: `50% 50%`,
+            transform: `translate(${(this.props.positionActualShutter * widthShutters[0]) / 100}px, 0)`,
+          }}
+        >
           <polygon
             className={styles.shutter}
             points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53"

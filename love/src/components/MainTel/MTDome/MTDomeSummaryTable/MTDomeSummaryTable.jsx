@@ -142,32 +142,38 @@ export default class DomeSummaryTable extends Component {
             <Label>Shutters</Label>
           </SummaryPanel>
           <div className={styles.divProgressBars}>
-            {/* <ProgressBar
+            <ProgressBar
+              targetValueX={this.props.positionCommandedShutter}
               completed={this.props.positionActualShutter}
             />
             <ProgressBar
+              targetValueX={this.props.positionCommandedShutter}
               completed={this.props.positionActualShutter}
-            /> */}
-            <span>{this.props.positionActualShutter}</span>
-            <Limits
-              lowerLimit={100}
-              upperLimit={0}
+            />
+            {/* <div className={styles.actualShutter}>
+              <span>{this.props.positionActualShutter}</span>
+              <div className={styles.limits}>
+                <Limits
+                  lowerLimit={0}
+                  upperLimit={100}
+                  currentValue={this.props.positionActualShutter}
+                  targetValue={this.props.positionCommandedShutter}
+                  height={30}
+                  displayLabels={false}
+                  limitWarning={0}
+                />
+              </div>
+            </div>
+            {/* <span>{this.props.positionActualShutter}</span> */}
+            {/*<Limits
+              lowerLimit={0}
+              upperLimit={100}
               currentValue={this.props.positionActualShutter}
               targetValue={this.props.positionCommandedShutter}
-              height={40}
-              displayLabels={false}
+              height={25}
+              displayLabels={true}
               limitWarning={0}
-            />
-            <span>{this.props.positionActualShutter}</span>
-            <Limits
-              lowerLimit={100}
-              upperLimit={0}
-              currentValue={this.props.positionActualShutter}
-              targetValue={this.props.positionCommandedShutter}
-              height={40}
-              displayLabels={false}
-              limitWarning={0}
-            />
+            />*/}
           </div>
         </SummaryPanel>
       </div>
