@@ -168,7 +168,7 @@ export default class NonExposure extends Component {
         file: {name: 'file.csv', size: 6078},
         jira: 'http://lsst.jira.org',
         value: 15,
-        description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over.'
+        description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over. First we have the Logs component, which will display logs created by different love-operators. This component will have two tabs, one for non-exposure logs and another for exposure logs, viewing these two types of logs is very different.'
       },
     ];
     const tableData = Object.values(filteredData);

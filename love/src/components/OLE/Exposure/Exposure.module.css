@@ -81,3 +81,59 @@
   width: 1.8em;
   background-color: var(--default-background-color);
 }
+
+.iconFlag {
+  padding: 0.2em;
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.returnToLogs {
+  display: flex;
+  padding-left: 0.5em;
+  min-height: 2em;
+}
+
+.detailContainer {
+  background-color: var(--second-tertiary-background-color);
+  color: var(--base-font-color);
+  border: 1px solid hsl(199, 43%, 16%);
+  border-radius: 6px;
+  /* width: 100%; */
+  display: grid;
+  grid-template-rows: auto minmax(180px, auto) auto;
+  box-sizing: border-box;
+  /* overflow: auto; */
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.header {
+  text-align: left;
+  font-size: 15px;
+  margin-top: 5px;
+  margin-left: 7px;
+  margin-right: 7px;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-bottom: 2px solid var(--secondary-font-color);
+  color: var(--secondary-font-color);
+  min-height: 2em;
+}
+
+.body {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-top: 4px;
+  margin-bottom: 5px;
+}
+
+.floatLeft {
+  float: left;
+}
+
+.floatRight {
+  float: right;
+  margin: 3px;
+}
+
