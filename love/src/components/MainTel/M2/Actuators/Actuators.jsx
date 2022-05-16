@@ -102,12 +102,18 @@ export default class Actuators extends Component {
   };
 
   render() {
-    const { showActuatorsID, showCommandedForce, showMeasuredForce,
-      selectedActuator, selectedActuatorTangent } = this.state;
+    const {
+      showActuatorsID,
+      showCommandedForce,
+      showMeasuredForce,
+      selectedActuator,
+      selectedActuatorTangent,
+    } = this.state;
 
     const { zenithAngleMeasured, inclinationTelemetrySource } = this.props;
 
-    const { actuatorIlcState,
+    const {
+      actuatorIlcState,
       axialActuatorSteps,
       axialEncoderPositions,
       axialForceApplied,
@@ -171,13 +177,13 @@ export default class Actuators extends Component {
           </div>
 
           <div className={styles.inclinometerForcegradiantAndInfoContainer}>
-            <div className={styles.item1}>
+            <div>
               <Inclinometer
                 zenithAngleMeasured={zenithAngleMeasured}
                 inclinationTelemetrySource={inclinationTelemetrySource}
               />
             </div>
-            <div className={styles.item2}>
+            <div>
               <ForceGradiant
                 actuatorReferenceId={actuatorReferenceId}
                 actuatorTangentReferenceId={actuatorTangentReferenceId}
@@ -191,7 +197,7 @@ export default class Actuators extends Component {
                 maxForceLimit={maxForceLimit}
               />
             </div>
-            <div className={styles.item3}>
+            <div>
               <Info
                 actuatorReferenceId={actuatorReferenceId}
                 actuatorTangentReferenceId={actuatorTangentReferenceId}
@@ -209,7 +215,6 @@ export default class Actuators extends Component {
               />
             </div>
           </div>
-
         </div>
       </div>
     );

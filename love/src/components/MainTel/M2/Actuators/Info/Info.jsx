@@ -10,6 +10,8 @@ import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import {
   m2ActuatorILCStateMap,
   m2ActuatorILCStateToStyle,
+  m2ActuatorLimitSwitchStateMap,
+  m2ActuatorLimitSwitchStateToStyle,
 } from 'Config';
 import styles from './Info.module.css';
 
@@ -43,7 +45,7 @@ export default class Info extends Component {
     selectedActuator: PropTypes.number,
     /** Id of actuator tangent selected */
     selectedActuatorTangent: PropTypes.number,
-  }
+  };
 
   static defaultProps = {
     actuatorReferenceId: [],
@@ -81,11 +83,27 @@ export default class Info extends Component {
       forceApplied: axialForceApplied[actuatorIndex] ?? 0,
       forceMeasured: axialForceMeasured[actuatorIndex] ?? 0,
     };
+
+    const ilcData = actuatorIlcState[actuatorIndex]?.toString(2) ?? '0000';
+    const ilcFaultState = m2ActuatorILCStateMap[ilcData[ilcData.length - 1]];
+    const limitSwitchCWState = m2ActuatorLimitSwitchStateMap[ilcData[ilcData.length - 3]];
+    const limitSwitchCCWState = m2ActuatorLimitSwitchStateMap[ilcData[ilcData.length - 4]];
+
     actuator.state = {
-      id: actuatorIlcState[actuatorIndex] ?? 0,
-      name: m2ActuatorILCStateMap[actuatorIlcState[actuatorIndex] ?? 0],
-      status: m2ActuatorILCStateToStyle[m2ActuatorILCStateMap[actuatorIlcState[actuatorIndex]] ?? 0],
+      ilcFault: {
+        name: ilcFaultState,
+        status: m2ActuatorILCStateToStyle[ilcFaultState ?? 0],
+      },
+      limitSwitchCW: {
+        name: limitSwitchCWState,
+        status: m2ActuatorLimitSwitchStateToStyle[limitSwitchCWState ?? 0],
+      },
+      limitSwitchCCW: {
+        name: limitSwitchCCWState,
+        status: m2ActuatorLimitSwitchStateToStyle[limitSwitchCCWState ?? 0],
+      },
     };
+
     return actuator;
   };
 
@@ -109,14 +127,28 @@ export default class Info extends Component {
       forceApplied: tangentForceApplied[actuatorIndex] ?? 0,
       forceMeasured: tangentForceMeasured[actuatorIndex] ?? 0,
     };
+
+    const ilcData = actuatorIlcState[actuatorIndex + LEN_ACTUATORS]?.toString(2) ?? '0000';
+    const ilcFaultState = m2ActuatorILCStateMap[ilcData[ilcData.length - 1]];
+    const limitSwitchCWState = m2ActuatorLimitSwitchStateMap[ilcData[ilcData.length - 3]];
+    const limitSwitchCCWState = m2ActuatorLimitSwitchStateMap[ilcData[ilcData.length - 4]];
+
     actuator.state = {
-      id: actuatorIlcState[actuatorIndex + LEN_ACTUATORS] ?? 0,
-      name: m2ActuatorILCStateMap[actuatorIlcState[actuatorIndex + LEN_ACTUATORS] ?? 0],
-      status: m2ActuatorILCStateToStyle[
-        m2ActuatorILCStateMap[actuatorIlcState[actuatorIndex + LEN_ACTUATORS]] ?? 0],
+      ilcFault: {
+        name: ilcFaultState,
+        status: m2ActuatorILCStateToStyle[ilcFaultState ?? 0],
+      },
+      limitSwitchCW: {
+        name: limitSwitchCWState,
+        status: m2ActuatorLimitSwitchStateToStyle[limitSwitchCWState ?? 0],
+      },
+      limitSwitchCCW: {
+        name: limitSwitchCCWState,
+        status: m2ActuatorLimitSwitchStateToStyle[limitSwitchCCWState ?? 0],
+      },
     };
     return actuator;
-  }
+  };
 
   render() {
     const selectedActuatorID = this.props.selectedActuator;
@@ -128,35 +160,47 @@ export default class Info extends Component {
 
     return (
       <SummaryPanel className={styles.actuatorInfo}>
-        { selectedActuatorID || selectedActuatorTangentID
-          ? (
-            <>
-              <Title>Actuator {selectedActuatorData.id}</Title>
-              <Value>
-                <StatusText
-                  title={selectedActuatorData.state.name}
-                  status={selectedActuatorData.state.status}
-                >
-                  {selectedActuatorData.state.name}
-                </StatusText>
-              </Value>
+        {selectedActuatorID || selectedActuatorTangentID ? (
+          <>
+            <Title>Actuator {selectedActuatorData.id}</Title>
+            <div></div>
 
-              <Label>Commanded Force</Label>
-              <Value>{`${defaultNumberFormatter(selectedActuatorData.forceApplied)} N`}</Value>
+            <Label>ILC Fault</Label>
+            <Value>
+              <StatusText status={selectedActuatorData.state.ilcFault.status}>
+                {selectedActuatorData.state.ilcFault.name}
+              </StatusText>
+            </Value>
 
-              <Label>Measured Force</Label>
-              <Value>{`${defaultNumberFormatter(selectedActuatorData.forceMeasured)} N`}</Value>
+            <Label>Limit Switch CW</Label>
+            <Value>
+              <StatusText status={selectedActuatorData.state.limitSwitchCW.status}>
+                {selectedActuatorData.state.limitSwitchCW.name}
+              </StatusText>
+            </Value>
 
-              <Label>Actuator Steps</Label>
-              <Value>{`${defaultNumberFormatter(selectedActuatorData.actuatorStep)} °`}</Value>
+            <Label>Limit Switch CCW</Label>
+            <Value>
+              <StatusText status={selectedActuatorData.state.limitSwitchCCW.status}>
+                {selectedActuatorData.state.limitSwitchCCW.name}
+              </StatusText>
+            </Value>
 
-              <Label>Position</Label>
-              <Value>{`${defaultNumberFormatter(selectedActuatorData.encoderPosition)} um`}</Value>
-            </>)
-          : (
-              <span>No actuator selected</span>
-          )
-        }
+            <Label>Commanded Force</Label>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.forceApplied)} N`}</Value>
+
+            <Label>Measured Force</Label>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.forceMeasured)} N`}</Value>
+
+            <Label>Actuator Steps</Label>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.actuatorStep)} °`}</Value>
+
+            <Label>Position</Label>
+            <Value>{`${defaultNumberFormatter(selectedActuatorData.encoderPosition)} um`}</Value>
+          </>
+        ) : (
+          <div className={styles.noActuator}>No actuator selected</div>
+        )}
       </SummaryPanel>
     );
   }

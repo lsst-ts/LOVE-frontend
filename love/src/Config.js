@@ -389,20 +389,26 @@ export const shutterStateMap = {
 export const inclinationTelemetrySourceStateMap = {
   1: 'ONBOARD',
   2: 'MTMOUNT',
-}
+};
 
-/** TODO: Pending
- ILC status.
- The elements are the actuator Ids from 1 to 78. The value needs to be transformed from decimal to hexadecimal to understand. The details are in code 67, LTS-346.
-*/
 export const m2ActuatorILCStateMap = {
-  1: 'ENABLED',
-  0: 'DISABLED',
+  1: 'FAULT',
+  0: 'OPERATIVE',
 };
 
 export const m2ActuatorILCStateToStyle = {
-  ENABLED: 'ok',
-  DISABLED: 'warning',
+  OPERATIVE: 'ok',
+  FAULT: 'warning',
+};
+
+export const m2ActuatorLimitSwitchStateMap = {
+  1: 'CLOSED',
+  0: 'OPEN',
+};
+
+export const m2ActuatorLimitSwitchStateToStyle = {
+  OPEN: 'ok',
+  CLOSED: 'warning',
 };
 
 export const stateToStyleDomeAndMount = {

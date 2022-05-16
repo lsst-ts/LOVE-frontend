@@ -1,5 +1,4 @@
 .actuatorsContainer {
-  
 }
 
 .selectorAndInclinometerContainer {
@@ -11,25 +10,12 @@
 
 .inclinometerForcegradiantAndInfoContainer {
   display: grid;
-  grid-template-rows: 3fr 2fr 2fr;
-  grid-gap: 10px;
+  grid-gap: 2em;
   grid-auto-columns: auto;
 }
 
 .selectorContainer {
   align-self: center;
-}
-
-.item1{
-  align-self: start;
-}
-
-.item2{
-  align-self: center;
-}
-
-.item3{
-  align-self: end;
 }
 
 .summaryPanelStates {
