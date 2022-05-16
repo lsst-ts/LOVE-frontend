@@ -667,7 +667,7 @@ export const getApertureShutter = (state) => {
   return {
     positionActualShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionActual.value
-      : 0,
+      : 25,
     positionCommandedShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionCommanded.value
       : 0,

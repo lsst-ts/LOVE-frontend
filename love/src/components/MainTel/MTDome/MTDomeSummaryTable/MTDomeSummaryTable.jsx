@@ -142,13 +142,31 @@ export default class DomeSummaryTable extends Component {
             <Label>Shutters</Label>
           </SummaryPanel>
           <div className={styles.divProgressBars}>
-            <ProgressBar
-              bgcolor={'var(--second-quaternary-background-color)'}
+            {/* <ProgressBar
               completed={this.props.positionActualShutter}
             />
             <ProgressBar
-              bgcolor={'var(--second-quaternary-background-color)'}
               completed={this.props.positionActualShutter}
+            /> */}
+            <span>{this.props.positionActualShutter}</span>
+            <Limits
+              lowerLimit={100}
+              upperLimit={0}
+              currentValue={this.props.positionActualShutter}
+              targetValue={this.props.positionCommandedShutter}
+              height={40}
+              displayLabels={false}
+              limitWarning={0}
+            />
+            <span>{this.props.positionActualShutter}</span>
+            <Limits
+              lowerLimit={100}
+              upperLimit={0}
+              currentValue={this.props.positionActualShutter}
+              targetValue={this.props.positionCommandedShutter}
+              height={40}
+              displayLabels={false}
+              limitWarning={0}
             />
           </div>
         </SummaryPanel>

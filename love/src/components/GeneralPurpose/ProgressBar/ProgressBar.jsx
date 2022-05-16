@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ProgressBar = (props) => {
-  const { bgcolor, completed } = props;
+  const { completed } = props;
 
   const parentDiv = {
     display: 'flex',
@@ -11,8 +11,6 @@ const ProgressBar = (props) => {
     height: 20,
     width: '100%',
     backgroundColor: '#455a64',
-    // borderRadius: 50,
-    // margin: 10,
     marginBottom: '5px',
     float: 'rigth',
   };
@@ -20,8 +18,7 @@ const ProgressBar = (props) => {
   const fillerStyles = {
     height: '100%',
     width: `${completed}%`,
-    backgroundColor: bgcolor,
-    // borderRadius: 'inherit',
+    backgroundColor: 'var(--second-quaternary-background-color)',
     textAlign: 'right',
   };
 
