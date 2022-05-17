@@ -545,7 +545,7 @@ export const mtDomeAzimuthEnabledStatetoStyle = {
   FAULT: 'fault',
 };
 
-export const mtdomeAzimuthMotionStateMap = {
+export const mtdomeMotionStateMap = {
   0: 'CLOSED',
   1: 'CRAWLING',
   2: 'MOVING',
@@ -554,30 +554,67 @@ export const mtdomeAzimuthMotionStateMap = {
   5: 'PARKING',
   6: 'STOPPED',
   7: 'STOPPING',
-  8: 'STOPPING_BRAKING',
-  9: 'STOPPED_BRAKED',
-  10: 'BRAKES_DISENGAGED',
-  11: 'BRAKES_ENGAGED',
-  // 12:
-  // 13:
-  // 14:
-  // 15:
-  // 16:
-  // 17:
-  // 18:
-  // 19:
-  // 20:
+  8: 'STOPPING BRAKING',
+  9: 'STOPPED BRAKED',
+  10: 'BRAKES DISENGAGED',
+  11: 'BRAKES ENGAGED',
+  12: 'DEFLATED',
+  13: 'DEFLATING',
+  14: 'DISABLING MOTOR POWER',
+  15: 'DISENGAGING BRAKES',
+  16: 'ENABLING MOTOR POWER',
+  17: 'ENGAGING BRAKES',
+  18: 'GO DEGRADED',
+  19: 'GO NORMAL',
+  20: 'GO STATIONARY',
+  21: 'INFLATED',
+  22: 'INFLATING',
+  23: 'LP DISENGAGED',
+  24: 'LP DISENGAGING',
+  25: 'LP ENGAGED',
+  26: 'LP ENGAGING',
+  27: 'MOTOR COOLING OFF',
+  28: 'MOTOR COOLING ON',
+  29: 'MOTOR POWER OFF',
+  30: 'MOTOR POWER ON',
+  31: 'STARTING MOTOR COOLING',
+  32: 'STOPPING MOTOR COOLING',
 };
 
-// check this with Mia
-export const mtdomeAzimuthMotionStatetoStyle = {
-  CLOSED: 'undefined',
-  CRAWLING: 'undefined',
+export const mtdomeMotionStatetoStyle = {
+  CLOSED: 'disabled',
+  CRAWLING: 'warning',
   MOVING: 'warning',
   OPEN: 'ok',
-  PARKED: 'warning',
+  PARKED: 'ok',
   PARKING: 'warning',
-  STOPPED: 'alert',
+  STOPPED: 'ok',
+  STOPPING: 'warning',
+  'STOPPING BRAKING': 'warning',
+  'STOPPED BRAKED': 'ok',
+  'BRAKES DISENGAGED': 'ok',
+  'BRAKES ENGAGED': 'alert',
+  DEFLATED: 'disabled',
+  DEFLATING: 'warning',
+  'DISABLING MOTOR POWER': 'warning',
+  'DISENGAGING BRAKES': 'warning',
+  'ENABLING MOTOR POWER': 'warning',
+  'ENGAGING BRAKES': 'warning',
+  'GO DEGRADED': 'warning',
+  'GO NORMAL': 'ok',
+  'GO STATIONARY': 'ok',
+  INFLATED: 'ok',
+  INFLATING: 'warning',
+  'LP DISENGAGED': 'disabled',
+  'LP DISENGAGING': 'warning',
+  'LP ENGAGED': 'ok',
+  'LP ENGAGING': 'warning',
+  'MOTOR COOLING OFF': 'disabled',
+  'MOTOR COOLING ON': 'ok',
+  'MOTOR POWER OFF': 'disabled',
+  'MOTOR POWER ON': 'ok',
+  'STARTING MOTOR COOLING': 'warning',
+  'STOPPING MOTOR COOLING': 'warning',
 };
 
 export const mtdomeElevationEnabledStateToMap = {
@@ -590,27 +627,6 @@ export const mtdomeElevationEnabledStatetoStyle = {
   DISABLED: 'undefined',
   ENABLED: 'ok',
   FAULT: 'fault',
-};
-
-export const mtdomeElevationMotionStateToMap = {
-  0: 'CLOSED',
-  1: 'CRAWLING',
-  2: 'MOVING',
-  3: 'OPEN',
-  4: 'PARKED',
-  5: 'PARKING',
-  6: 'STOPPED',
-};
-
-// check this with Mia
-export const mtdomeElevationMotionStatetoStyle = {
-  CLOSED: 'undefined',
-  CRAWLING: 'undefined',
-  MOVING: 'warning',
-  OPEN: 'ok',
-  PARKED: 'warning',
-  PARKING: 'warning',
-  STOPPED: 'alert',
 };
 
 /**
