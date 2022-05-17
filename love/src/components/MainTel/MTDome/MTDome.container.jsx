@@ -30,7 +30,6 @@ export const schema = {
   },
 };
 
-// The following variables are from ATDome. It's needs replace them for MTDome
 const MTDomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
@@ -86,7 +85,6 @@ const mapStateToProps = (state) => {
   return { ...domeState, ...louversState, ...apertureShutterState, ...lightWindScreenState, ...domeAzimuthState };
 };
 
-// The following subscriptions are from ATDome. It's neccesary replace them for MTDome subscriptions
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'telemetry-MTDome-0-apertureShutter',
