@@ -707,7 +707,6 @@ export default class MTDomeLouvers extends Component {
             height="19"
             // transform="translate(704.53 139.3) rotate(-180)"
             style={{
-              fill: 'pink',
               transformOrigin: 'top center',
               transformBox: 'fill-box',
               transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,

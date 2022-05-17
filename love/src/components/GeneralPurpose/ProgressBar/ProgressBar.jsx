@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 const ProgressBar = (props) => {
-  const { targetValueX, completed } = props;
+  const ref = useRef(null);
+  const { targetValue, completed, height = 20 } = props;
+  const padding = 4;
 
   const parentDiv = {
     display: 'flex',
@@ -13,6 +15,8 @@ const ProgressBar = (props) => {
     backgroundColor: '#455a64',
     marginBottom: '5px',
     float: 'rigth',
+    position: 'relative',
+    padding: `${padding}px`,
   };
 
   const fillerStyles = {
@@ -28,34 +32,41 @@ const ProgressBar = (props) => {
     fontWeight: 'bold',
   };
 
-  const targetValue = {
+  const targetValueLine = {
     stroke: 'white',
     strokeWidth: 1,
     strokeDasharray: 1.3,
     strokeOpacity: 0.5,
   };
 
-  const xMargin = 5;
-  const height = 60;
-  const yOffset = height / 3;
+  const progressCommandedLine = {
+    position: 'absolute',
+    top: padding,
+    right: padding,
+    bottom: padding,
+    left: padding,
+    overflow: 'visible',
+  };
+
+  const width = ref.current?.clientWidth ?? 0;
+  const targetValuePixels = ((width - 2 * padding) * targetValue) / 100;
 
   return (
     <div style={parentDiv}>
       <div>
         <span style={labelStyles}>{`${completed}%`}</span>
       </div>
-      <div style={containerStyles}>
-        <div style={fillerStyles}>
-          {/* <svg>
-            <line
-              style={targetValue}
-              x1={targetValueX + xMargin}
-              y1={height / 3 + yOffset}
-              x2={targetValueX + xMargin}
-              y2={(2 * height) / 3 + yOffset}
-            />
-          </svg> */}
-        </div>
+      <div ref={ref} style={containerStyles}>
+        <svg width={width - 2 * padding} height={height} style={progressCommandedLine}>
+          <line
+            style={targetValueLine}
+            x1={targetValuePixels}
+            y1={-padding}
+            x2={targetValuePixels}
+            y2={height + padding}
+          />
+        </svg>
+        <div style={fillerStyles}></div>
       </div>
     </div>
   );

@@ -36,7 +36,7 @@ export default class DomeShutter extends Component {
       >
         {/* */}
         {/* <g class="dome" style={{ transformOrigin: 50% 50%, transform: rotate(45deg) }}> */}
-        <g style={{ transformOrigin: `50% 50%`, transform: `rotate(90)` }}>
+        <g style={{ transformOrigin: `50% 50%`, transform: `rotate(45deg)` }}>
           <polygon
             className={styles.shutterCommanded}
             points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
