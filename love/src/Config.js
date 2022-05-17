@@ -553,6 +553,20 @@ export const mtdomeAzimuthMotionStateMap = {
   4: 'PARKED',
   5: 'PARKING',
   6: 'STOPPED',
+  7: 'STOPPING',
+  8: 'STOPPING_BRAKING',
+  9: 'STOPPED_BRAKED',
+  10: 'BRAKES_DISENGAGED',
+  11: 'BRAKES_ENGAGED',
+  // 12:
+  // 13:
+  // 14:
+  // 15:
+  // 16:
+  // 17:
+  // 18:
+  // 19:
+  // 20:
 };
 
 // check this with Mia

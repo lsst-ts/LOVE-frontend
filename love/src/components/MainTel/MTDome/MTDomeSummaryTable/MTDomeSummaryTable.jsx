@@ -143,11 +143,11 @@ export default class DomeSummaryTable extends Component {
           </SummaryPanel>
           <div className={styles.divProgressBars}>
             <ProgressBar
-              targetValueX={this.props.positionCommandedShutter}
+              targetValue={this.props.positionCommandedShutter}
               completed={this.props.positionActualShutter}
             />
             <ProgressBar
-              targetValueX={this.props.positionCommandedShutter}
+              targetValue={this.props.positionCommandedShutter}
               completed={this.props.positionActualShutter}
             />
             {/* <div className={styles.actualShutter}>

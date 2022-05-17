@@ -670,7 +670,7 @@ export const getApertureShutter = (state) => {
       : 75,
     positionCommandedShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionCommanded.value
-      : 75,
+      : 50,
   };
 };
 
