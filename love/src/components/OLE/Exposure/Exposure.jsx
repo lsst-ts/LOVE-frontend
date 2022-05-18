@@ -233,7 +233,7 @@ export default class Exposure extends Component {
       modeView && !modeAdd
       ? <ExposureDetail back={() => { this.setState({ modeView: false });}} logDetail={this.state.selected}/>
       : modeAdd && !modeView
-        ? <ExposureAdd back={() => { this.setState({ modeEdit: false });}} logEdit={this.state.selected}/>
+        ? <ExposureAdd back={() => { this.setState({ modeAdd: false });}} logEdit={this.state.selected}/>
         : (
           <div className={styles.margin10}>
             <div className={styles.title}>
