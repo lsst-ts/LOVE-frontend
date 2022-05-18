@@ -595,7 +595,6 @@ export default class MTDomeLouvers extends Component {
               transformOrigin: 'top center',
               transformBox: 'fill-box',
               transform: `translateY(${(heightsLouvers[14] / 100) * commandedPositionLouvers[14]}px)`,
-              stroke: 'violet',
             }}
           />
           {/* F2 */}
@@ -635,7 +634,6 @@ export default class MTDomeLouvers extends Component {
               transformOrigin: 'top center',
               transformBox: 'fill-box',
               transform: `translateY(${(heightsLouvers[17] / 100) * commandedPositionLouvers[17]}px)`,
-              stroke: 'green',
             }}
           />
           {/* G2 */}
@@ -706,11 +704,11 @@ export default class MTDomeLouvers extends Component {
             width="26"
             height="19"
             // transform="translate(704.53 139.3) rotate(-180)"
-            style={{
-              transformOrigin: 'top center',
-              transformBox: 'fill-box',
-              transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
-            }}
+            // style={{
+            //   transformOrigin: 'top center',
+            //   transformBox: 'fill-box',
+            //   transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
+            // }}
           />
           {/* H2 */}
           <rect
@@ -892,7 +890,6 @@ export default class MTDomeLouvers extends Component {
               transformOrigin: 'top center',
               transformBox: 'fill-box',
               transform: `translateY(${(heightsLouvers[25] / 100) * commandedPositionLouvers[25]}px)`,
-              stroke: 'yellow',
             }}
           />
         </g>
@@ -1090,7 +1087,6 @@ export default class MTDomeLouvers extends Component {
               transformOrigin: 'top center',
               transformBox: 'fill-box',
               transform: `translateY(${(heightsLouvers[29] / 100) * commandedPositionLouvers[29]}px)`,
-              stroke: 'green',
             }}
           />
           {/* M2 */}

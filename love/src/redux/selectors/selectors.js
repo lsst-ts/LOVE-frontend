@@ -715,6 +715,8 @@ export const getLouversStatus = (state) => {
 
 export const getDomeStatus = (state) => {
   const subscriptions = [
+    'event-MTMount-0-logevent_target',
+    'event-MTDome-0-summaryState',
     'event-MTDome-0-logevent_azEnabled',
     'event-MTDome-0-logevent_azMotion',
     'event-MTDome-0-logevent_azTarget',
@@ -725,6 +727,12 @@ export const getDomeStatus = (state) => {
   ];
   const domeStatus = getStreamsData(state, subscriptions);
   return {
+    trackId: domeStatus['event-MTMount-0-logevent_target']
+      ? domeStatus['event-MTMount-0-logevent_target'].trackId.value
+      : 0,
+    domeState: domeStatus['event-MTDome-0-summaryState']
+      ? domeStatus['event-MTDome-0-summaryState'].summaryState.value
+      : 0,
     azimuthDomeState: domeStatus['event-MTDome-0-logevent_azEnabled']
       ? domeStatus['event-MTDome-0-logevent_azEnabled'].state.value
       : 0,

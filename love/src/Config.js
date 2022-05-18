@@ -523,6 +523,8 @@ export const hexapodConnectedStatetoStyle = {
 };
 
 // MTDome
+export const mtdomeStateMap = {};
+
 export const mtDomeModeStateMap = {
   0: 'DEGRADED',
   1: 'NORMAL',
