@@ -11,6 +11,7 @@ import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 export default class Message extends Component {
   static propTypes = {
     message: PropTypes.object,
+    editMessage: PropTypes.func,
   };
 
   static defaultProps = {
@@ -26,6 +27,7 @@ export default class Message extends Component {
       dateAdded: undefined,
       dateInvalidated: undefined,
     },
+    editMessage: () => { console.log('defaultProps.editMessage()'); },
   };
 
   statusFlag(flag) {
@@ -39,7 +41,9 @@ export default class Message extends Component {
 
 
   render() {
-    const message = this.props.message ? this.props.message : this.defaultProps.message;
+    const message = this.props.message ? this.props.message : Message.defaultProps.message;
+    const edit = this.props.editMessage ? this.props.editMessage : Message.defaultProps.editMessage;
+    const link = () => {};
 
     return (
       <div className={styles.message}>
@@ -56,7 +60,7 @@ export default class Message extends Component {
             </Button>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Edit" onClick={() => {}} status="transparent">
+            <Button className={styles.iconBtn} title="Edit" onClick={() => { console.log('click edit'); edit(message); } } status="transparent">
               <EditIcon className={styles.icon}/>
             </Button>
           </span>

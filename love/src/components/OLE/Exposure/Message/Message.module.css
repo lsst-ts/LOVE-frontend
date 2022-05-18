@@ -103,3 +103,65 @@
 .capitalize {
   text-transform: capitalize;
 }
+
+.description textarea {
+  width: calc(100% - 2em);
+  height: 6em;
+  resize: unset;
+  background: var(--secondary-background-dimmed-color);
+  color: var(--base-font-color);
+  font-size: 1em;
+  padding: 0.5em;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  color: var(--base-font-color);
+}
+
+.description textarea:focus {
+  outline: none;
+  border: 1px solid var(--secondary-font-color);
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+  /* color: inherit; */
+  color: var(--base-font-color);
+}
+
+.select {
+  background-color: var(--second-secondary-background-color);
+  color: var(--base-font-color);
+  text-align: left;  
+}
+
+.footerRight {
+  margin-left: auto;
+  margin-right: 5px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkboxText {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  margin-right: 20px;
+}
+
+.checkboxText button {
+  text-align: right;
+}
+
