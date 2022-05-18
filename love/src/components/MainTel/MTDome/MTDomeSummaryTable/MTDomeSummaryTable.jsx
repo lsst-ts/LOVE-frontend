@@ -31,7 +31,7 @@ export default class DomeSummaryTable extends Component {
     const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
     const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
     const elevationDomeState = mtdomeElevationEnabledStateToMap[this.props.elevationDomeState];
-    const elevationDomeMotion = mtdomeMotionStateToMap[this.props.elevationDomeMotion];
+    const elevationDomeMotion = mtdomeMotionStateMap[this.props.elevationDomeMotion];
 
     // const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     // const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';

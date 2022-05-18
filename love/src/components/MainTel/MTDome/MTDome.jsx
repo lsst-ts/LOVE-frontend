@@ -11,43 +11,43 @@ import styles from './MTDome.module.css';
 import { MTDomeLouversMapAF, MTDomeLouversMapGN } from 'Config';
 
 const defaultValuesAF = {
-  A1: '0%',
-  A2: '0%',
-  B1: '0%',
-  B2: '0%',
-  B3: '0%',
-  C1: '0%',
-  C2: '0%',
-  C3: '0%',
-  D1: '0%',
-  D2: '0%',
-  D3: '0%',
-  E1: '0%',
-  E2: '0%',
-  E3: '0%',
-  F1: '0%',
-  F2: '0%',
-  F3: '0%',
+  A1: '0',
+  A2: '0',
+  B1: '0',
+  B2: '0',
+  B3: '0',
+  C1: '0',
+  C2: '0',
+  C3: '0',
+  D1: '0',
+  D2: '0',
+  D3: '0',
+  E1: '0',
+  E2: '0',
+  E3: '0',
+  F1: '0',
+  F2: '0',
+  F3: '0',
 };
 
 const defaultValuesGN = {
-  G1: '0%',
-  G2: '0%',
-  G3: '0%',
-  H1: '0%',
-  H2: '0%',
-  H3: '0%',
-  I1: '0%',
-  I2: '0%',
-  I3: '0%',
-  L1: '0%',
-  L2: '0%',
-  L3: '0%',
-  M1: '0%',
-  M2: '0%',
-  M3: '0%',
-  N1: '0%',
-  N2: '0%',
+  G1: '0',
+  G2: '0',
+  G3: '0',
+  H1: '0',
+  H2: '0',
+  H3: '0',
+  I1: '0',
+  I2: '0',
+  I3: '0',
+  L1: '0',
+  L2: '0',
+  L3: '0',
+  M1: '0',
+  M2: '0',
+  M3: '0',
+  N1: '0',
+  N2: '0',
 };
 
 export default class Dome extends Component {
@@ -97,7 +97,7 @@ export default class Dome extends Component {
     if (prevProps.actualPositionLouvers !== this.props.actualPositionLouvers) {
       const dataLouversAFActual = {};
       MTDomeLouversMapAF.forEach((l, i) => {
-        dataLouversAFActual[l] = `${this.props.actualPositionLouvers[i]}%`;
+        dataLouversAFActual[l] = `${this.props.actualPositionLouvers[i].toFixed(3)}`;
       });
       this.setState((state) => ({
         dataLouversAF: [{ ...state.dataLouversAF[0], ...dataLouversAFActual }, { ...state.dataLouversAF[1] }],
@@ -105,7 +105,7 @@ export default class Dome extends Component {
 
       const dataLouversGNActual = {};
       MTDomeLouversMapGN.forEach((l, i) => {
-        dataLouversGNActual[l] = `${this.props.actualPositionLouvers[i + 17]}%`;
+        dataLouversGNActual[l] = `${this.props.actualPositionLouvers[i + 17].toFixed(3)}`;
       });
       this.setState((state) => ({
         dataLouversGN: [{ ...state.dataLouversGN[0], ...dataLouversGNActual }, { ...state.dataLouversGN[1] }],
@@ -115,7 +115,7 @@ export default class Dome extends Component {
     if (prevProps.commandedPositionLouvers !== this.props.commandedPositionLouvers) {
       const dataLouversAFCommanded = {};
       MTDomeLouversMapAF.forEach((l, i) => {
-        dataLouversAFCommanded[l] = `${this.props.commandedPositionLouvers[i]}%`;
+        dataLouversAFCommanded[l] = `${this.props.commandedPositionLouvers[i].toFixed(3)}`;
       });
       this.setState((state) => ({
         dataLouversAF: [{ ...state.dataLouversAF[0] }, { ...state.dataLouversAF[1], ...dataLouversAFCommanded }],
@@ -123,7 +123,7 @@ export default class Dome extends Component {
 
       const dataLouversGNCommanded = {};
       MTDomeLouversMapGN.forEach((l, i) => {
-        dataLouversGNCommanded[l] = `${this.props.commandedPositionLouvers[i + 17]}%`;
+        dataLouversGNCommanded[l] = `${this.props.commandedPositionLouvers[i + 17].toFixed(3)}`;
       });
       this.setState((state) => ({
         dataLouversGN: [{ ...state.dataLouversGN[0] }, { ...state.dataLouversGN[1], ...dataLouversGNCommanded }],
@@ -141,112 +141,112 @@ export default class Dome extends Component {
       title: 'A1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'A2',
       title: 'A2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'B1',
       title: 'B1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'B2',
       title: 'B2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'B3',
       title: 'B3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'C1',
       title: 'C1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'C2',
       title: 'C2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'C3',
       title: 'C3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'D1',
       title: 'D1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'D2',
       title: 'D2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'E1',
       title: 'E1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'E2',
       title: 'E2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'E3',
       title: 'E3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'F1',
       title: 'F1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'F2',
       title: 'F2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'F3',
       title: 'F3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
   ];
 
@@ -260,119 +260,119 @@ export default class Dome extends Component {
       title: 'G1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'G2',
       title: 'G2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'G3',
       title: 'G3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'H1',
       title: 'H1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'H2',
       title: 'H2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'H3',
       title: 'H3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'I1',
       title: 'I1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'I2',
       title: 'I2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'I3',
       title: 'I3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'L1',
       title: 'L1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'L2',
       title: 'L2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'L3',
       title: 'L3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'M1',
       title: 'M1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'M2',
       title: 'M2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'M3',
       title: 'M3',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'N1',
       title: 'N1',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
     {
       field: 'N2',
       title: 'N2',
       className: styles.columns,
       type: 'number',
-      render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
+      // render: (value) => (isNaN(value) ? '-' : value.toFixed(3)),
     },
   ];
 
