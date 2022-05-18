@@ -114,6 +114,7 @@
   margin-top: 5px;
   margin-left: 7px;
   margin-right: 7px;
+  margin-bottom: 7px;
   padding-left: 3px;
   padding-right: 3px;
   border-bottom: 2px solid var(--secondary-font-color);
@@ -126,6 +127,7 @@
   padding-right: 10px;
   margin-top: 4px;
   margin-bottom: 5px;
+  display: grid;
 }
 
 .floatLeft {
@@ -136,4 +138,124 @@
   float: right;
   margin: 3px;
 }
+
+.mb1 {
+  margin-bottom: 0.5em;
+}
+
+.inline {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  row-gap: 5px;
+  grid-auto-rows: auto;
+}
+
+.input {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+  background-color: var(--second-secondary-background-color);
+  border: 1px solid var(--secondary-font-dimmed-color);
+  /* color: inherit; */
+  color: var(--base-font-color);
+}
+
+.select {
+  background-color: var(--second-secondary-background-color);
+  color: var(--base-font-color);
+  text-align: left;  
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  grid-row: auto;
+}
+
+.contentLeft {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-auto-rows: max-content;
+  grid-row-gap: 0.2em;
+  align-items: center;
+  align-content: center;
+}
+
+.contentRight {
+  margin: 7px;
+  padding: 7px;
+  margin-right: 10px;
+  align-items: center;
+  align-content: center;
+}
+
+.contentRight textarea {
+  width: calc(100% - 2em);
+  height: 12em;
+  resize: none;
+  background: var(--secondary-background-dimmed-color);
+  color: var(--base-font-color);
+  font-size: 1em;
+  padding: 0.5em;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  color: var(--base-font-color);
+}
+
+.contentRight textarea:focus {
+  outline: none;
+  border: 1px solid var(--secondary-font-color);
+}
+
+.label {
+  font-weight: bold;
+  color: var(--secondary-font-color);
+  text-align: left;
+  margin-left: 15px;
+}
+
+.value {
+  text-align: left;
+  margin-left: 10px;
+}
+
+.value input {
+  /* width: unset; */
+}
+
+.footer {
+  display: flex;
+  flex-flow: row;
+  padding-top: 7px;
+  border-top: 2px solid var(--secondary-font-color);
+  margin: 7px;
+}
+
+.footerRight {
+  margin-left: auto;
+  margin-right: 5px;
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.checkboxText {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  margin-right: 20px;
+}
+
+.checkboxText button {
+  text-align: right;
+}
+
 

@@ -12,25 +12,45 @@ export default class ExposureAdd extends Component {
   static propTypes = {
     back: PropTypes.func,
     logEdit: PropTypes.object,
+    newMessage: PropTypes.object,
     isLogCreate: PropTypes.bool,
   };
 
   static defaultProps = {
     back: () => {},
     logEdit: {
+      obsId: undefined,
+      obsStatus: undefined,
+      instrument: undefined,
+      obsType: undefined,
+      obsReason: undefined,
+      obsDay: undefined,
+      messages: [
+        {
+          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          siteId: '',
+          type: undefined,
+          user: undefined,
+          flag: undefined,
+          jira: undefined,
+          file: undefined,
+          description: undefined,
+          dateAdded: undefined,
+          dateInvalidated: undefined,
+        },
+      ],
+    },
+    newMessage: {
       id: undefined,
+      siteId: '',
       type: undefined,
-      timeIncident: undefined,
-      subsystem: undefined,
-      csc: undefined,
-      cscTopic: undefined,
-      value: undefined,
       user: undefined,
-      ObsTimeLoss: undefined,
+      flag: undefined,
       jira: undefined,
       file: undefined,
       description: undefined,
-      createTicketJira: false,
+      dateAdded: undefined,
+      dateInvalidated: undefined,
     },
     isLogCreate: false,
   };
@@ -38,7 +58,8 @@ export default class ExposureAdd extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      logEdit: props.logEdit ? props.logEdit : defaultProps.logEdit,
+      logEdit: props.logEdit ? props.logEdit : ExposureAdd.defaultProps.logEdit,
+      newMessage: ExposureAdd.defaultProps.newMessage,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -53,6 +74,8 @@ export default class ExposureAdd extends Component {
     const isLogCreate = this.props.isLogCreate;
 
     const LOG_TYPE_OPTIONS = ['Fault', 'Ok', 'Wait'];
+    const EXPOSURE_FLAG_OPTIONS = ['None', 'Junk', 'Questionary'];
+    const OBS_ID_OPTIONS = this.props.Observations ? this.props.Observations : ['AT_O_20220208_000140']
 
     return (
       <>
@@ -69,17 +92,26 @@ export default class ExposureAdd extends Component {
         <form onSubmit={this.handleSubmit}>
           <div className={styles.detailContainer}>
             <div className={styles.header}>
-              <span className={styles.bold}>#{this.state.logEdit.id}</span>
+              { this.state.logEdit.obsId
+                ? (<span>{this.state.logEdit.obsId} - {this.state.logEdit.obsType}</span>)
+                : <></>
+              }
+              
               <span className={styles.floatRight}>
                 { this.state.logEdit.id
                   ? (
-                    <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
-                      <DeleteIcon className={styles.icon}/>
-                    </Button>
+                    <span>
+                      <span className={styles.margin}>
+                      [{this.state.logEdit.obsStatus}]
+                      </span>
+                      <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+                        <DeleteIcon className={styles.icon}/>
+                      </Button>
+                    </span>
                   )
-                  : (
-                    <></>
-                  )
+                  : this.state.logEdit.obsStatus
+                    ? <span>[{this.state.logEdit.obsStatus}]</span>
+                    : <></>
                 }
               </span>
             </div>
@@ -87,66 +119,47 @@ export default class ExposureAdd extends Component {
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
-                  <Select value={this.state.logEdit.type}
-                    onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, type: event.value}}))}
+                  <Select value={this.state.newMessage.type}
+                    onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.logEdit, type: event.value}}))}
                     options={LOG_TYPE_OPTIONS}
                     className={styles.select}
                     small
                   />
                 </span>
-                <span className={styles.label}>Obs. Time Loss {this.state.logEdit.ObsTimeLoss}</span>
+                <span className={styles.label}>Exposure Flag</span>
                 <span className={styles.value}>
-                  <Input value={this.state.logEdit.ObsTimeLoss}
-                    className={styles.input}
-                    onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, ObsTimeLoss: event.value}}))}
-                  />
-                </span>
-                <span className={styles.label}>Subsystem</span>
-                <span className={styles.value}>
-                  <Select value={this.state.logEdit.subsystem}
-                    onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, subsystem: event.value}}))}
-                    options={LOG_TYPE_OPTIONS}
+                  <Select value={this.state.newMessage.flag}
+                    onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, flag: event.value}}))}
+                    options={EXPOSURE_FLAG_OPTIONS}
                     className={styles.select}
                     small
                   />
                 </span>
-                <span className={styles.label}>CSC</span>
-                <span className={styles.value}>
-                  <Select value={this.state.logEdit.csc}
-                    onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, csc: event.value}}))}
-                    options={LOG_TYPE_OPTIONS}
-                    className={styles.select}
-                    small
-                  />
-                </span>
-                <span className={styles.label}>CSC Topic</span>
-                <span className={styles.value}>
-                <Select value={this.state.logEdit.cscTopic}
-                    onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, cscTopic: event.value}}))}
-                    options={LOG_TYPE_OPTIONS}
-                    className={styles.select}
-                    
-                  />
-                </span>
-                <span className={styles.label}>Value</span>
-                <span className={styles.value}>
-                  <Input value={this.state.logEdit.value}
-                    className={styles.input}
-                    onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, value: event.value}}))}
-                  />
-                </span>
+                
+                {
+                  this.state.logEdit.obsId
+                  ? <></>
+                  : (
+                    <>
+                      <span className={styles.label}>Obs. Id</span>
+                      <span className={styles.value}>
+                        <Select value={this.state.logEdit.obsId}
+                          onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, csc: event.value}}))}
+                          options={OBS_ID_OPTIONS}
+                          className={styles.select}
+                          small
+                        />
+                      </span>
+                    </>
+                  )
+                }
+                
               </div>
               
               <div className={styles.contentRight}>
                 <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
                   <span className={styles.title}>Message</span>
-                  <span className={styles.label}>Time of Incident</span>
-                  <span className={styles.value}>
-                    <Input value={this.state.logEdit.timeIncident}
-                      className={styles.input}
-                      onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, timeIncident: event.value}}))}
-                    />
-                  </span>
+                  
                 </div>
                 <TextArea
                   value={this.state.logEdit.description}
@@ -161,24 +174,16 @@ export default class ExposureAdd extends Component {
                 handleDelete={() => this.setState((prevState) => ({logEdit: {...prevState.logEdit, file: undefined}}))}
               />
               <span className={styles.footerRight}>
-                { !this.state.logEdit.id
-                  ? (<span className={styles.checkboxText}>
-                      Create and link new Jira ticket
-                      <Input type="checkbox"
-                        checked={this.state.logEdit.createTicketJira}
-                        onChange={(event) => {
-                          this.setState((prevState) => ({logEdit: {...prevState.logEdit, createTicketJira: event.target.checked}}));
-                        }}
-                      />
-                    </span>)
-                  : (<span className={styles.checkboxText}>
-                      <Button status="link">view Jira ticket</Button>
-                      <Input value={this.state.logEdit.jira}
-                        className={styles.input}
-                        onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, jira: event.value}}))}
-                      />
-                    </span>)
-                }
+                <span className={styles.checkboxText}>
+                  Create and link new Jira ticket
+                  <Input type="checkbox"
+                    checked={this.state.logEdit.createTicketJira}
+                    onChange={(event) => {
+                      this.setState((prevState) => ({logEdit: {...prevState.logEdit, createTicketJira: event.target.checked}}));
+                    }}
+                  />
+                </span>
+                  
                 <Button type="submit">
                   <span className={styles.title}>Upload Log</span>
                 </Button>
