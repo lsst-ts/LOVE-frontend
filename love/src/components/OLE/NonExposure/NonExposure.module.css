@@ -30,10 +30,14 @@
   text-align: left;
   font-size: 15px;
   margin-top: 5px;
-  margin: 7px;
+  margin-left: 7px;
+  margin-right: 7px;
+  margin-bottom: 7px;
+  padding-left: 3px;
+  padding-right: 3px;
   border-bottom: 2px solid var(--secondary-font-color);
   color: var(--secondary-font-color);
-  min-height: 2em;
+  min-height: 1.9em;
 }
 
 .content {
@@ -159,7 +163,7 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-auto-rows: max-content;
-  grid-row-gap: 0.2em;
+  grid-row-gap: 0.5em;
 }
 
 .contentRight {
@@ -237,7 +241,7 @@
 
 .checkboxText {
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 2fr 1fr;
   margin-right: 20px;
 }
 
