@@ -69,7 +69,10 @@ export default class NonExposureEdit extends Component {
         <form onSubmit={this.handleSubmit}>
           <div className={styles.detailContainer}>
             <div className={styles.header}>
-              <span className={styles.bold}>#{this.state.logEdit.id}</span>
+              { this.state.logEdit.id
+                ? <span className={styles.bold}>#{this.state.logEdit.id}</span>
+                : <></>
+              }
               <span className={styles.floatRight}>
                 { this.state.logEdit.id
                   ? (
