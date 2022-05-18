@@ -9,6 +9,7 @@ import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Message from './Message/Message';
+import MessageEdit from './Message/MessageEdit';
 import styles from './Exposure.module.css';
 
 
@@ -44,6 +45,13 @@ export default class ExposureDetail extends Component {
     },
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedMessage: undefined,
+    };
+  }
+
 
   render() {
     const link = this.props.back;
@@ -71,7 +79,16 @@ export default class ExposureDetail extends Component {
             <div className={styles.filters}> FILTERS </div>
           
           { logDetail.messages.map((message) => {
-              return (<Message message={message}/>);
+              if (this.state.selectedMessage && this.state.selectedMessage.id === message.id) {
+                return (<MessageEdit
+                    message={this.state.selectedMessage}
+                    cancel={() => { this.setState({ selectedMessage: undefined}); }}
+                    save={(message) => { console.log('save: ', message); }}
+                  />);
+              } else {
+                return (<Message message={message} editMessage={(messageEdit) => { this.setState({ selectedMessage: messageEdit}); }}/>);
+              }
+              
             })
           }
           </div>
