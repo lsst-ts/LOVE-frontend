@@ -89,8 +89,14 @@ export default class Message extends Component {
             </span>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <FlagIcon title={message.flag} status={this.statusFlag(message.flag)}
-              className={styles.iconFlag}/>
+            <span className={[styles.margin3, styles.capitalize].join(' ')}>
+              {message.flag}
+            </span>
+            <span className={styles.vertAlign}>
+              <FlagIcon title={message.flag} status={this.statusFlag(message.flag)}
+                className={styles.iconFlag}/>
+            </span>
+
           </span>
         </div>
       </div>
