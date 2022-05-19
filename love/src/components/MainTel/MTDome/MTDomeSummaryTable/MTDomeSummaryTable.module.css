@@ -10,6 +10,14 @@
   align-self: center;
 }
 
+.summaryState {
+  border-radius: 1rem;
+  font-weight: 550;
+  text-align: center;
+  display: inline-block;
+  width: 10em;
+}
+
 .shutters {
   display: block;
 }

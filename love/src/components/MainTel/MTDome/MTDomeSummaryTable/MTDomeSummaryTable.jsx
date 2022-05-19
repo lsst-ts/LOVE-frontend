@@ -10,7 +10,9 @@ import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import ProgressBar from '../../../GeneralPurpose/ProgressBar/ProgressBar';
+import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
 import {
+  mtdomeStatusStatetoStyle,
   mtDomeModeStateMap,
   mtDomeModeStatetoStyle,
   mtDomeAzimuthEnabledStateMap,
@@ -27,23 +29,23 @@ export default class DomeSummaryTable extends Component {
   static defaultProps = {};
 
   render() {
+    const trackID = this.props.trackID;
+    const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
     const modeDomeStatus = mtDomeModeStateMap[this.props.modeDomeStatus];
     const azimuthDomeState = mtDomeAzimuthEnabledStateMap[this.props.azimuthDomeState];
     const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
     const elevationDomeState = mtdomeElevationEnabledStateToMap[this.props.elevationDomeState];
     const elevationDomeMotion = mtdomeMotionStateMap[this.props.elevationDomeMotion];
 
-    // const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
-    // const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     return (
       <div className={styles.divSummary}>
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
-          <Value>{this.props.trackID ?? 0.0}</Value>
+          <Value>{trackID}</Value>
           {/* Dome */}
           <Title>Dome</Title>
           <Value>
-            <StatusText>{'undefined'}</StatusText>
+            <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>
           </Value>
           <Label>Mode</Label>
           <Value>
@@ -63,7 +65,7 @@ export default class DomeSummaryTable extends Component {
           <Value>
             <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotion]}>{azimuthDomeMotion}</StatusText>
           </Value>
-          <Row
+          {/* <Row
           // title={`Current value: ${50}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
           >
             <span>
@@ -80,7 +82,7 @@ export default class DomeSummaryTable extends Component {
               <span>Time to limit: </span>
               <span className={styles.highlight}>{Math.round(165)} min</span>
             </span>
-          </Row>
+          </Row> */}
           <Label>Elevation</Label>
           <Value>
             <StatusText status={mtdomeElevationEnabledStatetoStyle[elevationDomeState]}>
