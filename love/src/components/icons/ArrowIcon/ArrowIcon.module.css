@@ -6,6 +6,15 @@
   vertical-align: middle;
 }
 
+.horizontalArrowIcon {
+  display: inline-block;
+  max-height: 100%;
+  stroke-miterlimit: 10;
+  stroke-width: 2px;
+  vertical-align: middle;
+  transform: rotate(90deg);
+}
+
 .active {
   fill: var(--secondary-font-color);
 }

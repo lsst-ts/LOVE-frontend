@@ -5,9 +5,10 @@ export default class ArrowIcon extends Component {
   render() {
     const status = this.props.active ? styles.active : styles.inactive;
     const up = this.props.up;
+    const horizontal = this.props.horizontal;
     return (
       <svg
-        className={[styles.arrowIcon, status, this.props.style].join(' ')}
+        className={[horizontal ? (styles.horizontalArrowIcon) : (styles.arrowIcon), status, this.props.style].join(' ')}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 18 18"
       >
