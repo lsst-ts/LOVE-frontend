@@ -245,3 +245,24 @@
 .arrowClassName {
   border-color: var(--primary-active-background-color) transparent transparent;
 }
+
+.warningText {
+  justify-self: left;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-column: 1 / span 2;
+  align-items: center;
+}
+
+.warningIcon {
+  width: 1em;
+  min-width: 1em;
+  padding: 0.5em;
+  text-align: center;
+  user-select: none;
+  vertical-align: top;
+}
+
+.warningIcon svg {
+  vertical-align: middle;
+}
