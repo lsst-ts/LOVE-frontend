@@ -232,7 +232,7 @@ export default class CSCExpanded extends PureComponent {
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
-                  <div className={styles.titlePadding}>Summary state command:</div>
+                  <div className={styles.titlePadding}>Select State transition Command:</div>
                   <Select
                     options={["start", "enable", "disable", "standby"]}
                     onChange={(option) => this.setSummaryStateCommand(option.value)}
@@ -264,7 +264,7 @@ export default class CSCExpanded extends PureComponent {
                     }}
                     command
                   >
-                    SET
+                    SEND
                   </Button>
                 </div>
               </div>
