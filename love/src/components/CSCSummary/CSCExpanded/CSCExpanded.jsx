@@ -6,6 +6,7 @@ import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 import Select from '../../GeneralPurpose/Select/Select';
+import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
@@ -104,6 +105,13 @@ export default class CSCExpanded extends PureComponent {
       char: 'S',
       class: styles.warning,
     },
+  };
+
+  static validState = {
+    start: "STANDBY",
+    enable: "DISABLED",
+    disable: "ENABLED",
+    standby: "DISABLED or FAULT",
   };
 
   setSummaryStateCommand(option) {
@@ -218,7 +226,7 @@ export default class CSCExpanded extends PureComponent {
               )}
             </div>
           </div>
-          {this.props.name != "Script" ? (
+          {this.props.name !== "Script" ? (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -228,7 +236,7 @@ export default class CSCExpanded extends PureComponent {
                 </div>
               </div>
             </div>) : null}
-          {this.props.name != "Script" ? (
+          {this.props.name !== "Script" ? (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -269,6 +277,26 @@ export default class CSCExpanded extends PureComponent {
                 </div>
               </div>
             </div>) : null}
+
+          {this.state.summaryStateCommand !== null ? (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
+                <div className={styles.breadcrumContainer}>
+                  <div className={styles.titlePadding}>
+                    <span className={styles.warningText}>
+                      <span className={styles.warningIcon}>
+                        <WarningIcon></WarningIcon>
+                      </span>
+                      <span>
+                        CSC must be in {CSCExpanded.validState[this.state.summaryStateCommand]}.
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>) : null}
+
+
           {this.props.errorCodeData.length > 0 ? (
             <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
               <div className={styles.logContainerTopBar}>
