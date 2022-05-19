@@ -523,7 +523,14 @@ export const hexapodConnectedStatetoStyle = {
 };
 
 // MTDome
-export const mtdomeStateMap = {};
+export const mtdomeStatusStatetoStyle = {
+  UNKNOWN: 'undefined',
+  DISABLED: 'disabled',
+  ENABLED: 'enabled',
+  FAULT: 'fault',
+  OFFLINE: 'offline',
+  STANDBY: 'standby',
+};
 
 export const mtDomeModeStateMap = {
   0: 'DEGRADED',
@@ -584,7 +591,7 @@ export const mtdomeMotionStateMap = {
 };
 
 export const mtdomeMotionStatetoStyle = {
-  CLOSED: 'disabled',
+  CLOSED: 'undefined',
   CRAWLING: 'warning',
   MOVING: 'warning',
   OPEN: 'ok',
@@ -596,7 +603,7 @@ export const mtdomeMotionStatetoStyle = {
   'STOPPED BRAKED': 'ok',
   'BRAKES DISENGAGED': 'ok',
   'BRAKES ENGAGED': 'alert',
-  DEFLATED: 'disabled',
+  DEFLATED: 'undefined',
   DEFLATING: 'warning',
   'DISABLING MOTOR POWER': 'warning',
   'DISENGAGING BRAKES': 'warning',
@@ -607,13 +614,13 @@ export const mtdomeMotionStatetoStyle = {
   'GO STATIONARY': 'ok',
   INFLATED: 'ok',
   INFLATING: 'warning',
-  'LP DISENGAGED': 'disabled',
+  'LP DISENGAGED': 'undefined',
   'LP DISENGAGING': 'warning',
   'LP ENGAGED': 'ok',
   'LP ENGAGING': 'warning',
-  'MOTOR COOLING OFF': 'disabled',
+  'MOTOR COOLING OFF': 'undefined',
   'MOTOR COOLING ON': 'ok',
-  'MOTOR POWER OFF': 'disabled',
+  'MOTOR POWER OFF': 'undefined',
   'MOTOR POWER ON': 'ok',
   'STARTING MOTOR COOLING': 'warning',
   'STOPPING MOTOR COOLING': 'warning',

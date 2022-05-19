@@ -33,6 +33,8 @@ export const schema = {
 const MTDomeContainer = ({
   subscribeToStream,
   unsubscribeToStream,
+  trackId,
+  mtdomeSummaryState,
   positionActualShutter,
   positionCommandedShutter,
   positionActualDomeAz,
@@ -57,6 +59,8 @@ const MTDomeContainer = ({
     <Dome
       subscribeToStream={subscribeToStream}
       unsubscribeToStream={unsubscribeToStream}
+      trackId={trackId}
+      mtdomeSummaryState={mtdomeSummaryState}
       positionActualShutter={positionActualShutter}
       positionCommandedShutter={positionCommandedShutter}
       positionActualDomeAz={positionActualDomeAz}

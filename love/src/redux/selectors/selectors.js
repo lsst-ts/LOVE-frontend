@@ -730,7 +730,7 @@ export const getDomeStatus = (state) => {
     trackId: domeStatus['event-MTMount-0-logevent_target']
       ? domeStatus['event-MTMount-0-logevent_target'].trackId.value
       : 0,
-    domeState: domeStatus['event-MTDome-0-summaryState']
+    mtdomeSummaryState: domeStatus['event-MTDome-0-summaryState']
       ? domeStatus['event-MTDome-0-summaryState'].summaryState.value
       : 0,
     azimuthDomeState: domeStatus['event-MTDome-0-logevent_azEnabled']
