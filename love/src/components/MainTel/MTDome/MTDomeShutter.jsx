@@ -20,8 +20,8 @@ export default class DomeShutter extends Component {
     return (
       <svg
         className={styles.svgOverlay}
-        height={400}
-        width={500}
+        height={350}
+        width={450}
         viewBox="0 0 301.98 301.98"
         style={{ transform: `translate(-25%, -40%)` }}
       >
@@ -90,7 +90,13 @@ export default class DomeShutter extends Component {
             <circle className={styles.shutter6} cx="151.22" cy="147.24" r="5.68" />
           </g>
           {/* Shutter commanded right */}
-          <g className={styles.shutterCommanded} /*style={{ display: `none` }}*/>
+          <g
+            className={styles.shutterCommanded}
+            style={{
+              transformOrigin: `50% 50%`,
+              transform: `translate(${(this.props.positionCommandedShutter * widthShutters[1]) / 100}px, 0)`,
+            }}
+          >
             <polygon
               className={styles.shutterCommanded}
               points="201.8 188.53 151.53 188.53 151.53 72.59 200.18 72.59 201.8 188.53"
@@ -102,7 +108,13 @@ export default class DomeShutter extends Component {
             <rect className={styles.shutterCommanded} x="151.53" y="188.53" width="50.27" height="12.97" />
           </g>
           {/* Shutter commanded left */}
-          <g className={styles.shutterCommanded} style={{ display: `none` }}>
+          <g
+            className={styles.shutterCommanded}
+            style={{
+              transformOrigin: `50% 50%`,
+              transform: `translate(${(this.props.positionCommandedShutter * widthShutters[0]) / 100}px, 0)`,
+            }}
+          >
             <polygon
               className={styles.shutterCommanded}
               points="100.19 188.53 150.45 188.53 150.45 72.59 101.81 72.59 100.19 188.53"

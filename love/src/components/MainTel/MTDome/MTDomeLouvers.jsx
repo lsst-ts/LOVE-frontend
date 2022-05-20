@@ -672,13 +672,26 @@ export default class MTDomeLouvers extends Component {
             points="376.27 173.15 328.27 173.15 328.27 53.15 376.27 35.15 376.27 173.15"
           />
 
-          <rect
+          {/* <rect
             className={styles.louver3}
             x="382.27"
             y="134.15"
             width="27"
             height="35"
             // transform="translate(791.53 303.3) rotate(-180)"
+          /> */}
+          <rect
+            className={styles.louver3}
+            x="339.27"
+            y="60.15"
+            width="26"
+            height="19"
+            // transform="translate(704.53 139.3) rotate(-180)"
+            // style={{
+            //   transformOrigin: 'top center',
+            //   transformBox: 'fill-box',
+            //   transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
+            // }}
           />
           <rect
             className={styles.louver3}
@@ -704,12 +717,25 @@ export default class MTDomeLouvers extends Component {
             width="26"
             height="19"
             // transform="translate(704.53 139.3) rotate(-180)"
+            style={{
+              transformOrigin: 'top center',
+              transformBox: 'fill-box',
+              transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
+            }}
+          />
+          {/* <rect
+            className={styles.louver3}
+            x="339.27"
+            y="60.15"
+            width="26"
+            height="19"
+            // transform="translate(704.53 139.3) rotate(-180)"
             // style={{
             //   transformOrigin: 'top center',
             //   transformBox: 'fill-box',
             //   transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
             // }}
-          />
+          /> */}
           {/* H2 */}
           <rect
             className={styles.louver4}
@@ -783,7 +809,7 @@ export default class MTDomeLouvers extends Component {
         {/* I1, I2, I3 */}
         <g>
           <polygon
-            className={styles.louver2}
+            className={styles.louver1}
             points="376.27 173.15 415.27 173.15 415.27 19.15 376.27 35.15 376.27 173.15"
           />
 
@@ -803,14 +829,15 @@ export default class MTDomeLouvers extends Component {
             height="35"
             transform="translate(791.53 213.3) rotate(-180)"
           />
-          <rect
+          {/* <rect
             className={styles.louver3}
             x="421.27"
             y="134.15"
             width="27"
             height="35"
             transform="translate(869.53 303.3) rotate(-180)"
-          />
+          /> */}
+          <rect className={styles.louver3} x="382.27" y="134.15" width="27" height="35" />
           {/* I3 */}
           <rect
             className={styles.louver4}
@@ -918,6 +945,7 @@ export default class MTDomeLouvers extends Component {
             height="35"
             transform="translate(869.53 213.3) rotate(-180)"
           />
+          <rect className={styles.louver3} x="421.27" y="134.15" width="27" height="35" />
           {/* L3 */}
           <rect
             className={styles.louver4}
@@ -1283,7 +1311,17 @@ export default class MTDomeLouvers extends Component {
             height="6"
             transform="translate(575.03 254.3) rotate(-180)"
           />
-          <rect className={styles.louver9} x="226.02" y="129.15" width="54" height="44" />
+          <rect
+            className={styles.louver9}
+            x="226.02"
+            y="129.15"
+            width="54"
+            height="44"
+            style={{
+              transformOrigin: `50% 50%`,
+              // transform: `translate(${(}px, 0)`,
+            }}
+          />
         </g>
       </svg>
     );
