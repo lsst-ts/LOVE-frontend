@@ -6,10 +6,6 @@
   overflow: auto;
 }
 
-.columns {
-  text-align: center !important;
-}
-
 .skymapGridContainer {
   display: flex;
   align-self: center;
@@ -266,4 +262,13 @@
 .louver9 {
   fill-opacity: 0.2;
   stroke: #fff;
+}
+
+.firstColumn {
+  width: 60px !important;
+}
+
+.columns {
+  text-align: center !important;
+  width: 70px;
 }
