@@ -24,9 +24,52 @@ import {
 } from '../../../../Config';
 
 export default class DomeSummaryTable extends Component {
-  static propTypes = {};
+  static propTypes = {
+    positionActualShutter,
+    /** Commanded position of the aperture shutter (percent open) */
+    positionCommandedShutter,
+    /** Measured azimuth axis position */
+    positionActualDomeAz,
+    /** Commanded azimuth position */
+    positionCommandedDomeAz,
+    /** Measured position of each louver (percent open) */
+    actualPositionLouvers,
+    /** Commanded position of each louver (percent open) */
+    commandedPositionLouvers,
+    trackId,
+    /** High level state machine state identifier */
+    mtdomeSummaryState,
+    /** Enabled state; an EnabledState enum */
+    azimuthDomeState,
+    /** The motion state; a MotionState enum */
+    azimuthDomeMotion,
+    /** Target position; nan for the crawlAz command */
+    azimuthDomeTarget,
+    /** Enabled state; an EnabledState enum */
+    elevationDomeState,
+    /** The motion state; a MotionState enum */
+    elevationDomeMotion,
+    /** Target position; nan for the crawlEl command */
+    elevationDomeTarget,
+    /** Operational mode; an OperationalMode enum */
+    modeDomeStatus,
+  };
 
-  static defaultProps = {};
+  static defaultProps = {
+    positionActualShutter: 0,
+    positionCommandedShutter: 0,
+    positionActualDomeAz: 0,
+    positionCommandedDomeAz: 0,
+    trackId: 0,
+    mtdomeSummaryState: 0,
+    azimuthDomeState: 0,
+    azimuthDomeMotion: 0,
+    azimuthDomeTarget: 0,
+    elevationDomeState: 0,
+    elevationDomeMotion: 0,
+    elevationDomeTarget: 0,
+    modeDomeStatus: 0,
+  };
 
   render() {
     const trackID = this.props.trackID;

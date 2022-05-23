@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-// import PropTypes from 'prop-types';
-import ManagerInterface, { parseCommanderData } from 'Utils';
+import PropTypes from 'prop-types';
 import MTDomeShutter from './MTDomeShutter';
 import MTDomeLouvers from './MTDomeLouvers';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -52,11 +51,64 @@ const defaultValuesGN = {
 
 export default class Dome extends Component {
   static propTypes = {
-    // raftsDetailedState: PropTypes.string,
-    // imageReadinessDetailedState: PropTypes.string,
-    // calibrationDetailedState: PropTypes.string,
-    // shutterDetailedState: PropTypes.string,
-    // imageSequence: PropTypes.object,
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+    /** Measured position of the aperture shutter (percent open) */
+    positionActualShutter: PropTypes.number,
+    /** Commanded position of the aperture shutter (percent open) */
+    positionCommandedShutter: PropTypes.number,
+    /** Measured azimuth axis position */
+    positionActualDomeAz: PropTypes.number,
+    /** Commanded azimuth position */
+    positionCommandedDomeAz: PropTypes.number,
+    /** Measured position of the light/wind screen */
+    positionActualLightWindScreen: PropTypes.number,
+    /** Commanded position of the light/wind screen */
+    positionCommandedLightWindScreen: PropTypes.number,
+    /** Measured position of each louver (percent open) */
+    actualPositionLouvers: PropTypes.array,
+    /** Commanded position of each louver (percent open) */
+    commandedPositionLouvers: PropTypes.array,
+    /** Unique target identifier. Echoed from the trackTarget command */
+    trackId: PropTypes.number,
+    /** High level state machine state identifier */
+    mtdomeSummaryState: PropTypes.number,
+    /** Enabled state; an EnabledState enum */
+    azimuthDomeState: PropTypes.number,
+    /** The motion state; a MotionState enum */
+    azimuthDomeMotion: PropTypes.number,
+    /** Target position; nan for the crawlAz command */
+    azimuthDomeTarget: PropTypes.number,
+    /** Enabled state; an EnabledState enum */
+    elevationDomeState: PropTypes.number,
+    /** The motion state; a MotionState enum */
+    elevationDomeMotion: PropTypes.number,
+    /** Target position; nan for the crawlEl command */
+    elevationDomeTarget: PropTypes.number,
+    /** Operational mode; an OperationalMode enum */
+    modeDomeStatus: PropTypes.number,
+  };
+
+  static defaultProps = {
+    positionActualShutter: 0,
+    positionCommandedShutter: 0,
+    positionActualDomeAz: 0,
+    positionCommandedDomeAz: 0,
+    positionActualLightWindScreen: 0,
+    positionCommandedLightWindScreen: 0,
+    actualPositionLouvers: [],
+    commandedPositionLouvers: [],
+    trackId: 0,
+    mtdomeSummaryState: 0,
+    azimuthDomeState: 0,
+    azimuthDomeMotion: 0,
+    azimuthDomeTarget: 0,
+    elevationDomeState: 0,
+    elevationDomeMotion: 0,
+    elevationDomeTarget: 0,
+    modeDomeStatus: 0,
   };
 
   constructor(props) {
@@ -135,6 +187,7 @@ export default class Dome extends Component {
     {
       field: 'Louvers',
       title: 'Louvers',
+      className: styles.firstColumn,
     },
     {
       field: 'A1',
@@ -238,6 +291,7 @@ export default class Dome extends Component {
     {
       field: 'Louvers',
       title: 'Louvers',
+      className: styles.firstColumn,
     },
     {
       field: 'G1',
@@ -344,10 +398,7 @@ export default class Dome extends Component {
   ];
 
   render() {
-    // correct topics from SAL
-    // SummaryTable
-
-    // pending DOME and Tack ID statuses
+    //SummaryPanel
     const trackID = this.props.trackId;
     const mtdomeSummaryState = this.props.mtdomeSummaryState;
     const modeDomeStatus = this.props.modeDomeStatus;

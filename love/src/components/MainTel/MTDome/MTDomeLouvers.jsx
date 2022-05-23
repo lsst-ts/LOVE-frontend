@@ -40,11 +40,17 @@ const heightsLouvers = [
 ];
 
 export default class MTDomeLouvers extends Component {
-  constructor(props) {
-    super(props);
-  }
+  static propTypes = {
+    /** Measured position of each louver (percent open) */
+    actualPositionLouvers,
+    /** Commanded position of each louver (percent open) */
+    commandedPositionLouvers,
+  };
 
-  componentDidUpdate(prevProps) {}
+  static defaultProps = {
+    actualPositionLouvers: [],
+    commandedPositionLouvers: [],
+  };
 
   render() {
     const actualPositionLouvers = this.props?.actualPositionLouvers;

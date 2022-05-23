@@ -4,15 +4,23 @@ import styles from './MTDome.module.css';
 
 const widthShutters = [-50, 50];
 export default class DomeShutter extends Component {
-  static propTypes = {};
+  static propTypes = {
+    /** Measured position of the aperture shutter (percent open) */
+    positionActualShutter: PropTypes.number,
+    /** Commanded position of the aperture shutter (percent open) */
+    positionCommandedShutter: PropTypes.number,
+    /** Measured azimuth axis position */
+    positionActualDomeAz: PropTypes.number,
+    /** Commanded azimuth position */
+    positionCommandedDomeAz: PropTypes.number,
+  };
 
-  static defaultProps = {};
-
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidUpdate(prevProps) {}
+  static defaultProps = {
+    positionActualShutter: 0,
+    positionCommandedShutter: 0,
+    positionActualDomeAz: 0,
+    positionCommandedDomeAz: 0,
+  };
 
   render() {
     console.log(this.props.positionActualShutter);
