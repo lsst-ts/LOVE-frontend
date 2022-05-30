@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import { getStreamsData, getTaiToUtc } from 'redux/selectors/selectors';
+import _ from 'lodash';
 import PolarPlot from './PolarPlot';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
 
@@ -166,15 +167,11 @@ class PolarPlotContainer extends React.Component {
     const { timeSeriesControlsProps, inputs, streams, subscribeToStreams, unsubscribeToStreams } = this.props;
     const { data } = this.state;
 
-    if (prevProps.timeSeriesControlsProps != timeSeriesControlsProps) {
+    if (!_.isEqual(prevProps.timeSeriesControlsProps, timeSeriesControlsProps)) {
       this.setState({ ...timeSeriesControlsProps });
     }
 
-    if (
-      prevProps.inputs != inputs ||
-      prevProps.subscribeToStreams != subscribeToStreams ||
-      prevProps.unsubscribeToStreams != unsubscribeToStreams
-    ) {
+    if (!_.isEqual(prevProps.inputs, inputs)) {
       unsubscribeToStreams();
       subscribeToStreams();
       const data = {};
@@ -184,7 +181,7 @@ class PolarPlotContainer extends React.Component {
       this.setState({ data });
     }
 
-    if (prevProps.inputs != inputs || prevProps.streams != streams) {
+    if (!_.isEqual(prevProps.inputs, inputs) || !_.isEqual(prevProps.streams, streams)) {
       const newData = {};
       for (const [inputName, inputConfig] of Object.entries(inputs)) {
         const { category, csc, salindex, topic, item, accessor } = inputConfig;
