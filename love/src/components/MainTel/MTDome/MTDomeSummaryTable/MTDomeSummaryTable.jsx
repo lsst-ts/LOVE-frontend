@@ -21,56 +21,11 @@ import {
   mtdomeElevationEnabledStatetoStyle,
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
+  MTDomeElevationLowerLimit,
+  MTDomeElevationUpperLimit,
 } from '../../../../Config';
 
 export default class DomeSummaryTable extends Component {
-  static propTypes = {
-    positionActualShutter,
-    /** Commanded position of the aperture shutter (percent open) */
-    positionCommandedShutter,
-    /** Measured azimuth axis position */
-    positionActualDomeAz,
-    /** Commanded azimuth position */
-    positionCommandedDomeAz,
-    /** Measured position of each louver (percent open) */
-    actualPositionLouvers,
-    /** Commanded position of each louver (percent open) */
-    commandedPositionLouvers,
-    trackId,
-    /** High level state machine state identifier */
-    mtdomeSummaryState,
-    /** Enabled state; an EnabledState enum */
-    azimuthDomeState,
-    /** The motion state; a MotionState enum */
-    azimuthDomeMotion,
-    /** Target position; nan for the crawlAz command */
-    azimuthDomeTarget,
-    /** Enabled state; an EnabledState enum */
-    elevationDomeState,
-    /** The motion state; a MotionState enum */
-    elevationDomeMotion,
-    /** Target position; nan for the crawlEl command */
-    elevationDomeTarget,
-    /** Operational mode; an OperationalMode enum */
-    modeDomeStatus,
-  };
-
-  static defaultProps = {
-    positionActualShutter: 0,
-    positionCommandedShutter: 0,
-    positionActualDomeAz: 0,
-    positionCommandedDomeAz: 0,
-    trackId: 0,
-    mtdomeSummaryState: 0,
-    azimuthDomeState: 0,
-    azimuthDomeMotion: 0,
-    azimuthDomeTarget: 0,
-    elevationDomeState: 0,
-    elevationDomeMotion: 0,
-    elevationDomeTarget: 0,
-    modeDomeStatus: 0,
-  };
-
   render() {
     const trackID = this.props.trackID;
     const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
@@ -108,24 +63,6 @@ export default class DomeSummaryTable extends Component {
           <Value>
             <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotion]}>{azimuthDomeMotion}</StatusText>
           </Value>
-          {/* <Row
-          // title={`Current value: ${50}\nTarget value: ${mountAz.target}\nLimits: [${minAz}º, ${maxAz}º]`}
-          >
-            <span>
-              <Limits
-                lowerLimit={50}
-                upperLimit={135}
-                currentValue={60}
-                targetValue={180}
-                height={30}
-                displayLabels={false}
-              />
-            </span>
-            <span>
-              <span>Time to limit: </span>
-              <span className={styles.highlight}>{Math.round(165)} min</span>
-            </span>
-          </Row> */}
           <Label>Elevation</Label>
           <Value>
             <StatusText status={mtdomeElevationEnabledStatetoStyle[elevationDomeState]}>
@@ -147,18 +84,19 @@ export default class DomeSummaryTable extends Component {
           >
             <span>
               <Limits
-                lowerLimit={75}
-                upperLimit={149}
-                currentValue={60}
-                targetValue={85}
+                lowerLimit={MTDomeElevationLowerLimit}
+                upperLimit={MTDomeElevationUpperLimit}
+                currentValue={this.props.positionActualLightWindScreen}
+                targetValue={this.props.positionCommandedLightWindScreen}
                 height={30}
                 displayLabels={false}
+                limitWarning={0}
               />
             </span>
-            <span>
+            {/* <span>
               <span>Time to limit: </span>
               <span className={styles.highlight}>{Math.round(130)} min</span>
-            </span>
+            </span> */}
           </Row>
         </SummaryPanel>
         <SummaryPanel className={styles.shutters}>

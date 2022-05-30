@@ -8,6 +8,8 @@
 
 .summaryTable {
   align-self: center;
+  grid-template-columns: 0.5fr 0.5fr;
+  padding: 20px;
 }
 
 .summaryState {

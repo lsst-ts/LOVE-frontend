@@ -439,6 +439,8 @@ export default class Dome extends Component {
                 positionCommandedShutter={positionCommandedShutter}
                 positionActualDomeAz={positionActualDomeAz}
                 positionCommandedDomeAz={positionCommandedDomeAz}
+                positionActualLightWindScreen={positionActualLightWindScreen}
+                positionCommandedLightWindScreen={positionCommandedLightWindScreen}
               />
 
               <MTDomeLouvers

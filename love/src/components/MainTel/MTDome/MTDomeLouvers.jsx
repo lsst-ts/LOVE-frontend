@@ -40,18 +40,6 @@ const heightsLouvers = [
 ];
 
 export default class MTDomeLouvers extends Component {
-  static propTypes = {
-    /** Measured position of each louver (percent open) */
-    actualPositionLouvers,
-    /** Commanded position of each louver (percent open) */
-    commandedPositionLouvers,
-  };
-
-  static defaultProps = {
-    actualPositionLouvers: [],
-    commandedPositionLouvers: [],
-  };
-
   render() {
     const actualPositionLouvers = this.props?.actualPositionLouvers;
     const commandedPositionLouvers = this.props?.commandedPositionLouvers;
@@ -1291,17 +1279,17 @@ export default class MTDomeLouvers extends Component {
             height="184"
             transform="translate(409.75 -151.45) rotate(90)"
           />
-          <rect className={styles.louver8} x="231.52" y="124.15" width="3" height="6" />
-          <rect className={styles.louver8} x="271.52" y="124.15" width="3" height="6" />
-          <rect
+          {/* <rect className={styles.louver8} x="231.52" y="124.15" width="3" height="6" />
+          <rect className={styles.louver8} x="271.52" y="124.15" width="3" height="6" /> */}
+          {/* <rect
             className={styles.louver9}
             x="280.52"
             y="129.15"
             width="54"
             height="44"
             transform="translate(615.03 302.3) rotate(-180)"
-          />
-          <rect
+          /> */}
+          {/* <rect
             className={styles.louver8}
             x="326.02"
             y="124.15"
@@ -1316,8 +1304,8 @@ export default class MTDomeLouvers extends Component {
             width="3"
             height="6"
             transform="translate(575.03 254.3) rotate(-180)"
-          />
-          <rect
+          /> */}
+          {/* <rect
             className={styles.louver9}
             x="226.02"
             y="129.15"
@@ -1327,7 +1315,7 @@ export default class MTDomeLouvers extends Component {
               transformOrigin: `50% 50%`,
               // transform: `translate(${(}px, 0)`,
             }}
-          />
+          /> */}
         </g>
       </svg>
     );

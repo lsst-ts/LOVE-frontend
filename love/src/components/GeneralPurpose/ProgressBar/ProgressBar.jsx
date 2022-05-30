@@ -50,11 +50,12 @@ const ProgressBar = (props) => {
 
   const width = ref.current?.clientWidth ?? 0;
   const targetValuePixels = ((width - 2 * padding) * targetValue) / 100;
+  const completedValue = completed.toFixed(3);
 
   return (
     <div style={parentDiv}>
       <div>
-        <span style={labelStyles}>{`${completed}%`}</span>
+        <span style={labelStyles}>{`${completedValue}%`}</span>
       </div>
       <div ref={ref} style={containerStyles}>
         <svg width={width - 2 * padding} height={height} style={progressCommandedLine}>

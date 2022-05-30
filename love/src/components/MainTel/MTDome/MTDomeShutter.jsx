@@ -23,8 +23,6 @@ export default class DomeShutter extends Component {
   };
 
   render() {
-    console.log(this.props.positionActualShutter);
-    console.log(widthShutters);
     return (
       <svg
         className={styles.svgOverlay}
