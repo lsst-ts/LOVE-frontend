@@ -1107,3 +1107,7 @@ export const MTDomeLouversMapGN = [
   'N1',
   'N2',
 ];
+
+export const MTDomeElevationLowerLimit = 20;
+
+export const MTDomeElevationUpperLimit = 81.5;

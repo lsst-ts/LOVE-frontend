@@ -693,10 +693,10 @@ export const getLightWindScreen = (state) => {
   return {
     positionActualLightWindScreen: ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
       ? ligthWindScreen['telemetry-MTDome-0-lightWindScreen'].positionActual.value
-      : 0,
+      : 25,
     positionCommandedLightWindScreen: ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
       ? ligthWindScreen['telemetry-MTDome-0-lightWindScreen'].positionCommanded.value
-      : 0,
+      : 80,
   };
 };
 
