@@ -13,6 +13,8 @@ export default class DomeShutter extends Component {
     positionActualDomeAz: PropTypes.number,
     /** Commanded azimuth position */
     positionCommandedDomeAz: PropTypes.number,
+    /** Measured position of the light/wind screen */
+    positionActualLightWindScreen: PropTypes.number,
   };
 
   static defaultProps = {
@@ -20,6 +22,7 @@ export default class DomeShutter extends Component {
     positionCommandedShutter: 0,
     positionActualDomeAz: 0,
     positionCommandedDomeAz: 0,
+    positionActualLightWindScreen: 0,
   };
 
   render() {
@@ -55,7 +58,7 @@ export default class DomeShutter extends Component {
         <g
           style={{
             transformOrigin: `50% 50%`,
-            transform: `rotate(${this.props.positionActualDomeAz}deg`,
+            transform: `rotateZ(${this.props.positionActualDomeAz}deg`,
             transformBox: 'fill-box',
           }}
         >
@@ -89,10 +92,21 @@ export default class DomeShutter extends Component {
             height="154.05"
             transform="translate(415.19 113.21) rotate(90)"
           />
+          {/* black hole behing the pointing */}
+          <rect
+            className={styles.shutter4}
+            x="110.69"
+            y="114.81"
+            width="81.08"
+            height="64.86"
+            style={{
+              transformOrigin: `50% 50%`,
+              transform: `rotateX(${this.props.positionActualLightWindScreen}deg`,
+            }}
+          />
 
           {/* pointing */}
           <g className={styles.pointing} /*style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}*/>
-            <rect className={styles.shutter4} x="110.69" y="114.81" width="81.08" height="64.86" />
             <circle className={styles.shutter6} cx="151.22" cy="147.24" r="5.68" />
           </g>
           {/* Shutter commanded right */}
