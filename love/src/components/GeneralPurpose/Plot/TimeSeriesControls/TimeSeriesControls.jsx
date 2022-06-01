@@ -14,7 +14,7 @@ export default class TimeSeriesControls extends Component {
     setTimeWindow: PropTypes.func.isRequired,
     isLive: PropTypes.bool,
     setLiveMode: PropTypes.func,
-    timeWindow: PropTypes.string,
+    timeWindow: PropTypes.number,
     setHistoricalData: PropTypes.func,
     efdClients: PropTypes.array,
     selectedEfdClient: PropTypes.string,

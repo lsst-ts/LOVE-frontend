@@ -61,7 +61,6 @@ it('Should get incoming observing log messages from the state', async () => {
       private_host: { value: -1407385585, dataType: 'Int' },
       message: { value: `a message ${index}`, dataType: 'String' },
       user: { value: `an user ${index}`, dataType: 'String' },
-      priority: { value: 0, dataType: 'Int' },
     };
   });
 

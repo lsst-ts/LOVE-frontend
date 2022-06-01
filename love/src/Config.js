@@ -628,41 +628,11 @@ export const TCSCommands = {
 
 const BaseTCSMethods = {
   add_point_data: {}, //
-  azel_from_radec: {
-    ra: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    dec: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    time: ['time', undefined], // astropy.time.core.Time or None
-  },
-  check_dome_following: {}, //
-  check_tracking: {
-    track_duration: ['number', undefined],
-  },
   disable_dome_following: {
     check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
   },
   enable_dome_following: {
     check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
-  },
-  find_target: {
-    az: ['number', 0.0],
-    el: ['number', 0.0],
-    mag_limit: ['number', undefined], // Minimum (brightest) V-magnitude limit.
-    mag_range: ['number', 2.0], // Magnitude range. The maximum/faintest limit is defined as mag_limit+mag_range (default=2).
-    radius: ['number', 0.5], // ? default=2 degrees or radius=0.5
-  },
-  find_target_local_catalog: {
-    az: ['number', 0.0],
-    el: ['number', 0.0],
-    mag_limit: ['number', undefined], // Minimum (brightest) V-magnitude limit.
-    mag_range: ['number', 2.0], // Magnitude range. The maximum/faintest limit is defined as mag_limit+mag_range (default=2).
-    radius: ['number', 0.5], // ? default=2 degrees or radius=0.5
-  },
-  find_target_simbad: {
-    az: ['number', 0.0],
-    el: ['number', 0.0],
-    mag_limit: ['number', undefined], // Minimum (brightest) V-magnitude limit.
-    mag_range: ['number', 2.0], // Magnitude range. The maximum/faintest limit is defined as mag_limit+mag_range (default=2).
-    radius: ['number', 0.5], // ? default=2 degrees or radius=0.5
   },
   offset_azel: {
     az: ['number', 0.0],
@@ -680,11 +650,6 @@ const BaseTCSMethods = {
     relative: ['bolean', true],
     absorb: ['boolean', false],
   },
-  parallactic_angle: {
-    ra: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    dec: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    time: ['time', undefined], // astropy.time.core.Time or None
-  },
   point_azel: {
     az: ['angle', undefined], // float, str or astropy.coordinates.Angle
     el: ['angle', undefined], // float, str or astropy.coordinates.Angle
@@ -693,40 +658,9 @@ const BaseTCSMethods = {
     wait_dome: ['boolean', false],
     slew_timeout: ['number', 1200.0], // seconds
   },
-  radec_from_azel: {
-    az: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    el: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    time: ['time', undefined], // astropy.time.core.Time or None
-  },
   reset_offsets: {
     absorbed: ['boolean', true],
     non_absorbed: ['boolean', true],
-  },
-  rotation_matrix: {
-    angle: ['number', 0.0],
-  },
-  slew: {
-    ra: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    dec: ['angle', undefined], // float, str or astropy.coordinates.Angle
-    rotPA: ['angle', 0.0], // float, str or astropy.coordinates.Angle
-    target_name: ['string', 'slew_icrs'],
-    frame: ['number', undefined],
-    epoch: ['number', 2000],
-    equinox: ['number', 2000],
-    parallax: ['number', 0.0], // arcseconds
-    pmRA: ['number', 0.0],
-    pmDec: ['number', 0.0],
-    rv: ['number', 0.0], // km/sec
-    dRA: ['number', 0.0],
-    dDec: ['number', 0.0],
-    rot_frame: [RotFrame, RotFrame[1]],
-    rot_track_frame: [RotFrame, RotFrame[1]],
-    rot_mode: [RotMode, RotMode[1]],
-    slew_timeout: ['number', 1200.0],
-    stop_before_slew: ['boolean', true],
-    wait_settle: ['boolean', true],
-    offset_x: ['number', 0.0],
-    offset_y: ['number', 0.0],
   },
   slew_icrs: {
     ra: ['angle', undefined], // float, str or astropy.coordinates.Angle
@@ -760,84 +694,33 @@ const BaseTCSMethods = {
     rot_sky: ['angle', 0.0],
     slew_timeout: ['number', 1200.0],
   },
-  standby: {},
-  stop_all: {}, //
   stop_tracking: {}, //
-  wait_for_inposition: {
-    timeout: ['number', undefined],
-    cmd_ack: [cmdAck, cmdAck[1]],
-    wait_settle: ['boolean', true],
-    check: [SimpleNamespace, SimpleNamespace[1]],
+  close_dome: {
+    force: ['boolean', false],
+  },
+  close_m1_cover: {},
+  home_dome: {},
+  open_dome_shutter: {},
+  open_m1_cover: {},
+  slew_dome_to: {
+    az: ['number', undefined], // Or str ?
+    check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
   },
 };
 
 export const ATCSCommands = {
   ...BaseTCSMethods,
-  ataos_corrections_completed: {},
-  atmcs_in_position: {},
-  assert_m1_correction_disabled: {
-    message: ['string', ''],
-  },
-  check_target_status: {},
-  close_dome: {
-    force: ['boolean', false],
-  },
-  close_m1_cover: {},
   close_m1_vent: {},
   focus_offset: {},
-  flush_offset_events: {},
-  get_bore_sight_angle: {},
-  get_selected_nasmyth_angle: {},
-  home_dome: {},
-  monitor_position: {
-    check: [SimpleNamespace, SimpleNamespace[1]],
-  },
-  offset_done: {},
-  open_dome_shutter: {},
-  open_m1_cover: {},
   open_m1_vent: {},
   open_valves: {},
   open_valve_instrument: {},
   open_valves_main: {},
-  prepare_for_onsky: {
-    settings: ['dict', '{}'],
-  },
-  prepare_for_flatfield: {
-    check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
-  },
-  set_azel_slew_checks: {
-    wait_dome: ['boolean', undefined],
-  },
-  shutdown: {},
-  slew_dome_to: {
-    az: ['number', undefined], // Or str ?
-    check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
-  },
-  wait_for_atdome_inposition: {
-    timeout: ['number', undefined],
-    cmd_ack: [cmdAck, cmdAck[1]],
-  },
-  wait_for_atdome_shutter_inposition: {},
-  wait_for_atmcs_inposition: {
-    timeout: ['number', undefined],
-    cmd_ack: [cmdAck, cmdAck[1]],
-    wait_settle: ['boolean', true],
-  },
 };
 
 export const MTCSCommands = {
   ...BaseTCSMethods,
-  abort_raise_m1m3: {},
-  assert_has_compensation_mode: {
-    component: ['string', ''], // Name of the component. Must be in `compensation_mode_components`.
-  },
-  close_dome: {
-    force: ['boolean', false],
-  },
-  close_m1_cover: {},
   disable_ccw_following: {},
-  dome_az_in_position: {},
-  dome_el_in_position: {},
   disable_compensation_mode: {
     component: ['string', ''], // Name of the component. Must be in `compensation_mode_components`.
   },
@@ -847,15 +730,7 @@ export const MTCSCommands = {
   },
   enable_m1m3_balance_system: {},
   enable_m2_balance_system: {},
-  flush_offset_events: {},
-  get_bore_sight_angle: {},
-  get_compensation_mode_camera_hexapod: {},
-  get_compensation_mode_m2_hexapod: {},
-  home_dome: {},
   lower_m1m3: {},
-  monitor_position: {
-    check: [SimpleNamespace, SimpleNamespace[1]],
-  },
   move_camera_hexapod: {
     x: ['number', 0.0],
     y: ['number', 0.0],
@@ -874,46 +749,11 @@ export const MTCSCommands = {
     w: ['number', 0.0],
     sync: ['boolean', true],
   },
-  offset_done: {},
-  open_dome_shutter: {},
-  open_m1_cover: {},
-  prepare_for_onsky: {
-    settings: ['dict', '{}'],
-  },
-  prepare_for_flatfield: {
-    check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
-  },
   raise_m1m3: {},
   reset_camera_hexapod_position: {},
   reset_m1m3_forces: {},
   reset_m2_forces: {},
   reset_m2_hexapod_position: {},
-  set_azel_slew_checks: {
-    wait_dome: ['boolean', undefined],
-  },
-  shutdown: {},
-  slew_dome_to: {
-    az: ['number', undefined], // Or str ?
-    check: [SimpleNamespace, SimpleNamespace[1]], // types.SimpleNamespace or None
-  },
-  wait_for_mtmount_inposition: {
-    timeout: ['number', undefined],
-    cmd_ack: [cmdAck, cmdAck[1]],
-    wait_settle: ['boolean', true],
-  },
-  wait_for_dome_inposition: {
-    timeout: ['number', undefined],
-    cmd_ack: [cmdAck, cmdAck[1]],
-    wait_settle: ['boolean', true],
-  },
-  wait_for_rotator_inposition: {
-    timeout: ['number', undefined],
-    cmd_ack: [cmdAck, cmdAck[1]],
-    wait_settle: ['boolean', true],
-  },
-  wait_m1m3_force_balance_system: {
-    timeout: ['number', undefined],
-  },
 };
 
 export const M1M3ActuatorForces = {

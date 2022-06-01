@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-
+import _ from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
   M1M3ActuatorPositions,
@@ -11,7 +11,6 @@ import {
   m1mActuatorILCStateMap,
   M1M3HardpointPositions,
 } from 'Config';
-import ManagerInterface from 'Utils';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -53,8 +52,8 @@ export default class M1M3 extends Component {
       name: 'OK',
       class: styles.ok_summary,
       fill: styles.fill_ok_summary,
-    }
-  }
+    },
+  };
 
   static statesMotion = {
     0: {
@@ -223,21 +222,27 @@ export default class M1M3 extends Component {
         id: 'None',
         ilcStatus: CSCDetail.states[0],
         motionStatus: CSCDetail.states[0],
-        breakawayLVDT: {value: 'None'},
-        displacementLVDT: {value: 'None'},
-        breakawayPressure: {value: 'None'},
+        breakawayLVDT: { value: 'None' },
+        displacementLVDT: { value: 'None' },
+        breakawayPressure: { value: 'None' },
       };
-    const { hardpointIlcState, hardpointMotionState, hardpointReferenceId,
-            hardpointsBreakawayLVDT, hardpointsDisplacementLVDT, hardpointsBreakawayPressure} = this.props;
+    const {
+      hardpointIlcState,
+      hardpointMotionState,
+      hardpointReferenceId,
+      hardpointsBreakawayLVDT,
+      hardpointsDisplacementLVDT,
+      hardpointsBreakawayPressure,
+    } = this.props;
     const hardpointIndex = hardpointReferenceId.indexOf(id);
 
     const hardpoint = {
       id,
       ilcStatus: hardpointIlcState[hardpointIndex] ?? 'None',
       motionStatus: hardpointMotionState[hardpointIndex] ?? 'None',
-      breakawayLVDT: {value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None'},
-      displacementLVDT: {value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None'},
-      breakawayPressure: {value: hardpointsBreakawayPressure[hardpointIndex] ?? 'None'},
+      breakawayLVDT: { value: hardpointsBreakawayLVDT[hardpointIndex] ?? 'None' },
+      displacementLVDT: { value: hardpointsDisplacementLVDT[hardpointIndex] ?? 'None' },
+      breakawayPressure: { value: hardpointsBreakawayPressure[hardpointIndex] ?? 'None' },
     };
 
     hardpoint.ilcStatus = {
@@ -252,16 +257,16 @@ export default class M1M3 extends Component {
   };
 
   fillHardpoint = (id) => {
-    const { hardpointIlcState, hardpointReferenceId} = this.props;
+    const { hardpointIlcState, hardpointReferenceId } = this.props;
     const hardpointIndex = hardpointReferenceId.indexOf(id);
     return M1M3.statesIlc[hardpointIlcState[hardpointIndex] ?? 0].fill;
-  }
+  };
 
   forceInputSelected = (input) => {
     const force = input.value;
     // Using SAL info
     // const filteredParameters = Object.keys(this.state.optionsTree[force]).filter((x) => {
-    //   return !['timestamp', 'priority'].includes(x);
+    //   return !['timestamp'].includes(x);
     // });
     const filteredParameters = M1M3ActuatorForces[force];
     this.setState({
@@ -331,14 +336,14 @@ export default class M1M3 extends Component {
       this.setState({ actuatorsForce: forceData });
     }
 
-    if (this.state.actuators !== prevState.actuators) {
+    if (!_.isEqual(this.state.actuators, prevState.actuators)) {
       const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
     }
 
-    if (this.state.actuatorsForce !== prevState.actuatorsForce) {
+    if (!_.isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
       this.createColorScale(this.state.actuatorsForce);
     }
 
@@ -347,7 +352,7 @@ export default class M1M3 extends Component {
       prevProps.xPosition !== xPosition ||
       prevProps.yPosition !== yPosition ||
       prevProps.zPosition !== zPosition ||
-      prevProps.actuatorReferenceId !== actuatorReferenceId
+      !_.isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
       // const actuators = M1M3ActuatorPositions; // Old implementation
@@ -486,33 +491,35 @@ export default class M1M3 extends Component {
 
                 {M1M3HardpointPositions.map((hardpoint) => {
                   return (
-                          <g
-                            className={styles.gHardpoint}
-                            onClick={() => this.hardpointSelected(hardpoint.id)}
-                          >
-                            <circle
-                              className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
-                              cx={hardpoint.mini.position[0]}
-                              cy={hardpoint.mini.position[1]}
-                              r="14.82"
-                              pointerEvents="all"
-                              stroke={this.strokeHardpointSelected(hardpoint.id)}
-                            />
-                            <text
-                              className={styles.textHardpoint}
-                              transform={"translate(" + (hardpoint.mini.position[0] - 6.11) + " " + (hardpoint.mini.position[1] + 6.11) + ")"}
-                              pointerEvents="none"
-                              fill={this.fillHardpointSelected(hardpoint.id)}
-                            >
-                              {hardpoint.id}
-                            </text>
-                          </g>
-                  );})
-                }
+                    <g className={styles.gHardpoint} onClick={() => this.hardpointSelected(hardpoint.id)}>
+                      <circle
+                        className={styles.circleHardpoint + ' ' + this.fillHardpoint(hardpoint.id)}
+                        cx={hardpoint.mini.position[0]}
+                        cy={hardpoint.mini.position[1]}
+                        r="14.82"
+                        pointerEvents="all"
+                        stroke={this.strokeHardpointSelected(hardpoint.id)}
+                      />
+                      <text
+                        className={styles.textHardpoint}
+                        transform={
+                          'translate(' +
+                          (hardpoint.mini.position[0] - 6.11) +
+                          ' ' +
+                          (hardpoint.mini.position[1] + 6.11) +
+                          ')'
+                        }
+                        pointerEvents="none"
+                        fill={this.fillHardpointSelected(hardpoint.id)}
+                      >
+                        {hardpoint.id}
+                      </text>
+                    </g>
+                  );
+                })}
               </svg>
             </div>
           </div>
-
 
           <div class={styles.gridWindowM1M3}>
             <svg
@@ -559,7 +566,9 @@ export default class M1M3 extends Component {
                         // fill={this.state.colormap(
                         //   Math.sqrt(Math.pow(act.position[0], 2) + Math.pow(act.position[1], 2)) / this.state.maxRadius,
                         // )}
-                        fill={actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)}
+                        fill={
+                          actuatorsForce.length > 0 ? this.state.colormap(actuatorsForce[i]) : this.state.colormap(0)
+                        }
                         stroke={this.strokeActuatorSelected(act.id)}
                         r={(this.state.maxRadius * scale) / 21}
                         pointerEvents="all"
@@ -580,12 +589,13 @@ export default class M1M3 extends Component {
                 })}
                 {M1M3HardpointPositions.map((hardpoint) => {
                   return (
-                    <circle key={hardpoint.id}
+                    <circle
+                      key={hardpoint.id}
                       className={showHardpoints ? styles.circleHardpointActuator : styles.hidden}
                       cx={(hardpoint.actuator.position[0] + this.state.xRadius) * scale + margin}
                       cy={(hardpoint.actuator.position[1] + this.state.yRadius) * scale + margin}
                       fill="none"
-                      stroke={showHardpoints ? this.strokeHardpointActuatorSelected(hardpoint.id) : "none"}
+                      stroke={showHardpoints ? this.strokeHardpointActuatorSelected(hardpoint.id) : 'none'}
                       r={50 * scale}
                       pointerEvents="none"
                     />
@@ -649,7 +659,7 @@ export default class M1M3 extends Component {
               </g>
             </svg>
           </div>
-          
+
           <div className={styles.gridGroupGradiantInfo}>
             <div className={styles.forceGradientWrapper}>
               <span>Force</span>
@@ -699,27 +709,19 @@ export default class M1M3 extends Component {
                 </div>
                 <div className={styles.actuatorValue}>
                   <span>Breakaway LVDT:</span>
-                  <span>
-                    {defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}
-                  </span>
+                  <span>{defaultNumberFormatter(selectedHardpoint.breakawayLVDT.value)}</span>
                 </div>
                 <div className={styles.actuatorValue}>
                   <span>Displacement LVDT:</span>
-                  <span>
-                    {defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}
-                  </span>
+                  <span>{defaultNumberFormatter(selectedHardpoint.displacementLVDT.value)}</span>
                 </div>
                 <div className={styles.actuatorValue}>
                   <span>Breakaway Pressure:</span>
-                  <span>
-                    {defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}
-                  </span>
+                  <span>{defaultNumberFormatter(selectedHardpoint.breakawayPressure.value)}</span>
                 </div>
               </SummaryPanel>
             </div>
           </div>
-
-
         </div>
       </div>
     );
