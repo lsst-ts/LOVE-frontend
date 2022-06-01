@@ -6,6 +6,7 @@ import BackArrowIcon from '../../icons/BackArrowIcon/BackArrowIcon';
 import Button from '../../GeneralPurpose/Button/Button';
 import LogMessageDisplay from '../../GeneralPurpose/LogMessageDisplay/LogMessageDisplay';
 import Select from '../../GeneralPurpose/Select/Select';
+import WarningIcon from '../../icons/WarningIcon/WarningIcon';
 import { cscText, formatTimestamp } from '../../../Utils';
 
 export default class CSCExpanded extends PureComponent {
@@ -106,6 +107,13 @@ export default class CSCExpanded extends PureComponent {
     },
   };
 
+  static validState = {
+    start: "STANDBY",
+    enable: "DISABLED",
+    disable: "ENABLED",
+    standby: "DISABLED or FAULT",
+  };
+
   setSummaryStateCommand(option) {
     const { configurationOverride } = this.state;
     this.setState({
@@ -163,7 +171,7 @@ export default class CSCExpanded extends PureComponent {
     if (timeDiff === -2) {
       timeDiffText = 'No heartbeat event in Remote.';
     } else if (timeDiff === -1) {
-      timeDiffText = 'Never';
+      timeDiffText = 'XXX - Never';
     } else if (timeDiff >= 0) {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
@@ -218,56 +226,79 @@ export default class CSCExpanded extends PureComponent {
               )}
             </div>
           </div>
-          <div className={styles.topBarContainerWrapper}>
-            <div className={styles.topBarContainer}>
-              <div className={styles.breadcrumContainer}>
-                <div className={styles.titlePadding}>
-                  Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice={openSpliceVersion}
+          {this.props.name !== "Script" &&
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
+                <div className={styles.breadcrumContainer}>
+                  <div className={styles.titlePadding}>
+                    Software Versions: csc={cscVersion}, xml={xmlVersion}, sal={salVersion}, openSplice={openSpliceVersion}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className={styles.topBarContainerWrapper}>
-            <div className={styles.topBarContainer}>
-              <div className={styles.breadcrumContainer}>
-                <div className={styles.titlePadding}>Summary state command:</div>
-                <Select
-                  options={["start", "enable", "disable", "standby"]}
-                  onChange={(option) => this.setSummaryStateCommand(option.value)}
-                  value=""
-                  placeholder="Select state"
-                />
-              </div>
-              {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" ? (
+          }
+          {this.props.name !== "Script" && (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
-                  <div className={styles.titlePadding}>Configurations available:</div>
+                  <div className={styles.titlePadding}>Select State transition Command:</div>
                   <Select
-                    options={configurationsAvailableMenuOptions}
-                    onChange={(option) => this.setConfigurationOverride(option.value)}
+                    options={["start", "enable", "disable", "standby"]}
+                    onChange={(option) => this.setSummaryStateCommand(option.value)}
                     value=""
-                    placeholder="Select override"
+                    placeholder="Select state"
                   />
                 </div>
-              ) : null}
-              <div>
-                <br />
-                <Button
-                  title="set state"
-                  status="info"
-                  shape="rounder"
-                  padding='30px'
-                  disabled={this.state.summaryStateCommand === null}
-                  onClick={(event) => {
-                    this.sendSummaryStateCommand(event);
-                  }}
-                  command
-                >
-                  SET
-                </Button>
+                {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" && (
+                  <div className={styles.breadcrumContainer}>
+                    <div className={styles.titlePadding}>Configurations available:</div>
+                    <Select
+                      options={configurationsAvailableMenuOptions}
+                      onChange={(option) => this.setConfigurationOverride(option.value)}
+                      value=""
+                      placeholder="Select override"
+                    />
+                  </div>
+                )}
+                <div>
+                  <br />
+                  <Button
+                    title="set state"
+                    status="info"
+                    shape="rounder"
+                    padding='30px'
+                    disabled={this.state.summaryStateCommand === null}
+                    onClick={(event) => {
+                      this.sendSummaryStateCommand(event);
+                    }}
+                    command
+                  >
+                    SEND
+                  </Button>
+                </div>
               </div>
-            </div>
-          </div>
-          {this.props.errorCodeData.length > 0 ? (
+            </div>)}
+
+          {this.state.summaryStateCommand !== null && (
+            <div className={styles.topBarContainerWrapper}>
+              <div className={styles.topBarContainer}>
+                <div className={styles.breadcrumContainer}>
+                  <div className={styles.titlePadding}>
+                    <span className={styles.warningText}>
+                      <span className={styles.warningIcon}>
+                        <WarningIcon></WarningIcon>
+                      </span>
+                      <span>
+                        CSC must be in {CSCExpanded.validState[this.state.summaryStateCommand]}.
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>)}
+
+
+          {this.props.errorCodeData.length > 0 && (
             <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
               <div className={styles.logContainerTopBar}>
                 <div>ERROR CODE</div>
@@ -299,7 +330,7 @@ export default class CSCExpanded extends PureComponent {
                 })}
               </div>
             </div>
-          ) : null}
+          )}
 
           <LogMessageDisplay
             logMessageData={this.props.logMessageData}

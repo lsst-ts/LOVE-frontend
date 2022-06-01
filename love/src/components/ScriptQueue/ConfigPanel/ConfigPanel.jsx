@@ -70,7 +70,7 @@ export default class ConfigPanel extends Component {
       configErrors: [],
       configErrorTitle: '',
       validationStatus: EMPTY,
-      logLevel: 'Warning',
+      logLevel: 'Debug',
     };
   }
 
@@ -203,10 +203,11 @@ export default class ConfigPanel extends Component {
     const { script } = this.props.configPanel ?? {};
     const isStandard = script.type === 'standard';
     const logLevel = logLevelMap[this.state.logLevel] ?? 20;
+    const config = this.state.value.replace(/^#.*\n?/gm, '');
     this.props.launchScript(
       isStandard,
       script.path,
-      this.state.value,
+      config,
       'description',
       2,
       this.state.pauseCheckpoint,
@@ -421,7 +422,7 @@ export default class ConfigPanel extends Component {
                 className={styles.logLevelSelect}
                 options={['Debug', 'Info', 'Warning', 'Error']}
                 option={this.state.logLevel}
-                placeholder="Warning"
+                placeholder="Debug"
                 onChange={(selection) => this.onLogLevelChange(selection.value)}
               />
             </div>
