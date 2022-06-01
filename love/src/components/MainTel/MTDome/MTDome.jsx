@@ -89,6 +89,10 @@ export default class Dome extends Component {
     elevationDomeTarget: PropTypes.number,
     /** Operational mode; an OperationalMode enum */
     modeDomeStatus: PropTypes.number,
+    /** Target mount azimuth at the specified time. The allowed range is 0 to 360 */
+    targetPointingAz: PropTypes.number,
+    /** Target mount elevation at the specified time */
+    targetPointingEl: PropTypes.number,
   };
 
   static defaultProps = {
@@ -109,6 +113,8 @@ export default class Dome extends Component {
     elevationDomeMotion: 0,
     elevationDomeTarget: 0,
     modeDomeStatus: 0,
+    targetPointingAz: 0,
+    targetPointingEl: 0,
   };
 
   constructor(props) {
@@ -425,6 +431,10 @@ export default class Dome extends Component {
     const actualPositionLouvers = this.props?.actualPositionLouvers;
     const commandedPositionLouvers = this.props?.commandedPositionLouvers;
 
+    // target pointing
+    const targetPointingAz = this.props.targetPointingAz;
+    const targetPointingEl = this.props.targetPointingEl;
+
     return (
       <div className={styles.domeContainer}>
         <div className={styles.topRow}>
@@ -441,6 +451,8 @@ export default class Dome extends Component {
                 positionCommandedDomeAz={positionCommandedDomeAz}
                 positionActualLightWindScreen={positionActualLightWindScreen}
                 positionCommandedLightWindScreen={positionCommandedLightWindScreen}
+                targetPointingAz={targetPointingAz}
+                targetPointingEl={targetPointingEl}
               />
 
               <MTDomeLouvers

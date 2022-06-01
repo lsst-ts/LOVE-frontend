@@ -7,6 +7,7 @@ import {
   getApertureShutter,
   getDomeAzimuth,
   getLightWindScreen,
+  getTargetPointing,
 } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
@@ -50,6 +51,8 @@ const MTDomeContainer = ({
   elevationDomeMotion,
   elevationDomeTarget,
   modeDomeStatus,
+  targetPointingAz,
+  targetPointingEl,
   ...props
 }) => {
   if (props.isRaw) {
@@ -76,6 +79,8 @@ const MTDomeContainer = ({
       elevationDomeMotion={elevationDomeMotion}
       elevationDomeTarget={elevationDomeTarget}
       modeDomeStatus={modeDomeStatus}
+      targetPointingAz={targetPointingAz}
+      targetPointingEl={targetPointingEl}
     />
   );
 };
@@ -86,7 +91,15 @@ const mapStateToProps = (state) => {
   const apertureShutterState = getApertureShutter(state);
   const lightWindScreenState = getLightWindScreen(state);
   const domeAzimuthState = getDomeAzimuth(state);
-  return { ...domeState, ...louversState, ...apertureShutterState, ...lightWindScreenState, ...domeAzimuthState };
+  const targetPointing = getTargetPointing(state);
+  return {
+    ...domeState,
+    ...louversState,
+    ...apertureShutterState,
+    ...lightWindScreenState,
+    ...domeAzimuthState,
+    ...targetPointing,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -95,13 +108,15 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTDome-0-azimuth',
     'telemetry-MTDome-0-lightWindScreen',
     'telemetry-MTDome-0-louvers',
-    'event-MTDome-0-logevent_azEnabled',
-    'event-MTDome-0-logevent_azMotion',
-    'event-MTDome-0-logevent_azTarget',
-    'event-MTDome-0-logevent_elEnabled',
-    'event-MTDome-0-logevent_elMotion',
-    'event-MTDome-0-logevent_elTarget',
-    'event-MTDome-0-logevent_operationalMode',
+    'event-MTDome-0-azEnabled',
+    'event-MTDome-0-azMotion',
+    'event-MTDome-0-azTarget',
+    'event-MTDome-0-elEnabled',
+    'event-MTDome-0-elMotion',
+    'event-MTDome-0-elTarget',
+    'event-MTDome-0-operationalMode',
+    'event-MTMount-0-target',
+    'event-MTMount-0-target',
   ];
   return {
     subscriptions,

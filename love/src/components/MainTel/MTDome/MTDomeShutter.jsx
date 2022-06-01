@@ -15,6 +15,10 @@ export default class DomeShutter extends Component {
     positionCommandedDomeAz: PropTypes.number,
     /** Measured position of the light/wind screen */
     positionActualLightWindScreen: PropTypes.number,
+    /** Target mount azimuth at the specified time. The allowed range is 0 to 360 */
+    targetPointingAz: PropTypes.number,
+    /** Target mount elevation at the specified time */
+    targetPointingEl: PropTypes.number,
   };
 
   static defaultProps = {
@@ -23,9 +27,37 @@ export default class DomeShutter extends Component {
     positionActualDomeAz: 0,
     positionCommandedDomeAz: 0,
     positionActualLightWindScreen: 0,
+    targetPointingAz: 0,
+    targetPointingEl: 0,
+    azelToPixel: () => {},
+    width: 596,
+    height: 596,
+    isProjected: true,
+  };
+
+  /** Function to convert az/el to pixels */
+  azelToPixel = (pos, isProjected) => {
+    const { az, el } = pos;
+    const width = 596;
+    const height = 596;
+    const offset = 20;
+    const center = [width / 2, height / 2];
+    let r;
+    if (isProjected) {
+      r = Math.cos((el * Math.PI) / 180) * (width / 2 - offset);
+    } else {
+      r = ((90 - el) / 90) * (width / 2 - offset);
+    }
+    const x = center[0] + r * Math.sin((az * Math.PI) / 180);
+    const y = center[1] - r * Math.cos((az * Math.PI) / 180);
+    return {
+      x,
+      y,
+    };
   };
 
   render() {
+    const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
     return (
       <svg
         className={styles.svgOverlay}
@@ -107,7 +139,18 @@ export default class DomeShutter extends Component {
 
           {/* pointing */}
           <g className={styles.pointing} /*style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}*/>
-            <circle className={styles.shutter6} cx="151.22" cy="147.24" r="5.68" />
+            <circle
+              className={styles.shutter6}
+              // cx="151.22"
+              // cy="147.24"
+              cx={zenithPixels.x}
+              cy={zenithPixels.y}
+              r="5.68"
+              style={{
+                transformOrigin: `50% 50%`,
+                transform: `rotateZ(${this.props.targetPointingAz}deg) rotateX(${this.props.targetPointingEl - 90}deg)`,
+              }}
+            />
           </g>
           {/* Shutter commanded right */}
           <g
