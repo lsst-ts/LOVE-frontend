@@ -171,7 +171,7 @@ export default class CSCExpanded extends PureComponent {
     if (timeDiff === -2) {
       timeDiffText = 'No heartbeat event in Remote.';
     } else if (timeDiff === -1) {
-      timeDiffText = 'Never';
+      timeDiffText = 'XXX - Never';
     } else if (timeDiff >= 0) {
       timeDiffText = timeDiff < 0 ? 'Never' : `${timeDiff} seconds ago`;
     }
@@ -226,7 +226,7 @@ export default class CSCExpanded extends PureComponent {
               )}
             </div>
           </div>
-          {this.props.name !== "Script" ? (
+          {this.props.name !== "Script" &&
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -235,8 +235,9 @@ export default class CSCExpanded extends PureComponent {
                   </div>
                 </div>
               </div>
-            </div>) : null}
-          {this.props.name !== "Script" ? (
+            </div>
+          }
+          {this.props.name !== "Script" && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -248,7 +249,7 @@ export default class CSCExpanded extends PureComponent {
                     placeholder="Select state"
                   />
                 </div>
-                {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" ? (
+                {configurationsAvailableMenuOptions !== null && this.state.summaryStateCommand === "start" && (
                   <div className={styles.breadcrumContainer}>
                     <div className={styles.titlePadding}>Configurations available:</div>
                     <Select
@@ -258,7 +259,7 @@ export default class CSCExpanded extends PureComponent {
                       placeholder="Select override"
                     />
                   </div>
-                ) : null}
+                )}
                 <div>
                   <br />
                   <Button
@@ -276,9 +277,9 @@ export default class CSCExpanded extends PureComponent {
                   </Button>
                 </div>
               </div>
-            </div>) : null}
+            </div>)}
 
-          {this.state.summaryStateCommand !== null ? (
+          {this.state.summaryStateCommand !== null && (
             <div className={styles.topBarContainerWrapper}>
               <div className={styles.topBarContainer}>
                 <div className={styles.breadcrumContainer}>
@@ -294,10 +295,10 @@ export default class CSCExpanded extends PureComponent {
                   </div>
                 </div>
               </div>
-            </div>) : null}
+            </div>)}
 
 
-          {this.props.errorCodeData.length > 0 ? (
+          {this.props.errorCodeData.length > 0 && (
             <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
               <div className={styles.logContainerTopBar}>
                 <div>ERROR CODE</div>
@@ -329,7 +330,7 @@ export default class CSCExpanded extends PureComponent {
                 })}
               </div>
             </div>
-          ) : null}
+          )}
 
           <LogMessageDisplay
             logMessageData={this.props.logMessageData}
