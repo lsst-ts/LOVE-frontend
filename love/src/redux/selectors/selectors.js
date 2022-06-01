@@ -700,6 +700,19 @@ export const getLightWindScreen = (state) => {
   };
 };
 
+export const getTargetPointing = (state) => {
+  const subscriptions = ['event-MTMount-0-target'];
+  const pointingState = getStreamsData(state, subscriptions);
+  return {
+    targetPointingAz: pointingState['event-MTMount-0-target']
+      ? pointingState['event-MTMount-0-target'].azimuth.value
+      : 5,
+    targetPointingEl: pointingState['event-MTMount-0-target']
+      ? pointingState['event-MTMount-0-target'].elevation.value
+      : 20,
+  };
+};
+
 export const getLouversStatus = (state) => {
   const subscriptions = ['telemetry-MTDome-0-louvers'];
   const louvers = getStreamsData(state, subscriptions);
@@ -717,13 +730,13 @@ export const getDomeStatus = (state) => {
   const subscriptions = [
     'event-MTMount-0-logevent_target',
     'event-MTDome-0-summaryState',
-    'event-MTDome-0-logevent_azEnabled',
-    'event-MTDome-0-logevent_azMotion',
-    'event-MTDome-0-logevent_azTarget',
-    'event-MTDome-0-logevent_elEnabled',
-    'event-MTDome-0-logevent_elMotion',
-    'event-MTDome-0-logevent_elTarget',
-    'event-MTDome-0-logevent_operationalMode',
+    'event-MTDome-0-azEnabled',
+    'event-MTDome-0-azMotion',
+    'event-MTDome-0-azTarget',
+    'event-MTDome-0-elEnabled',
+    'event-MTDome-0-elMotion',
+    'event-MTDome-0-elTarget',
+    'event-MTDome-0-operationalMode',
   ];
   const domeStatus = getStreamsData(state, subscriptions);
   return {
