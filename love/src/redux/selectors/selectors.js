@@ -700,16 +700,22 @@ export const getLightWindScreen = (state) => {
   };
 };
 
-export const getTargetPointing = (state) => {
-  const subscriptions = ['event-MTMount-0-target'];
-  const pointingState = getStreamsData(state, subscriptions);
+export const getPointingStatus = (state) => {
+  const subscriptions = ['telemetry-MTMount-0-azimuth', 'telemetry-MTMount-0-elevation'];
+  const pointingStatus = getStreamsData(state, subscriptions);
   return {
-    targetPointingAz: pointingState['event-MTMount-0-target']
-      ? pointingState['event-MTMount-0-target'].azimuth.value
-      : 5,
-    targetPointingEl: pointingState['event-MTMount-0-target']
-      ? pointingState['event-MTMount-0-target'].elevation.value
-      : 20,
+    currentPointingAz: pointingStatus['telemetry-MTMount-0-azimuth']
+      ? pointingStatus['telemetry-MTMount-0-azimuth'].actualPosition.value
+      : 15,
+    targetPointingAz: pointingStatus['telemetry-MTMount-0-azimuth']
+      ? pointingStatus['telemetry-MTMount-0-azimuth'].demandPosition.value
+      : 50,
+    currentPointingEl: pointingStatus['telemetry-MTMount-0-elevation']
+      ? pointingStatus['telemetry-MTMount-0-elevation'].actualPosition.value
+      : 35,
+    targetPointingEl: pointingStatus['telemetry-MTMount-0-elevation']
+      ? pointingStatus['telemetry-MTMount-0-elevation'].demandPosition.value
+      : 60,
   };
 };
 

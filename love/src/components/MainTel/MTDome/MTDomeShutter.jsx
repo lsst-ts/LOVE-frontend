@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './MTDome.module.css';
 
 const widthShutters = [-50, 50];
-export default class DomeShutter extends Component {
+export default class MTDomeShutter extends Component {
   static propTypes = {
     /** Measured position of the aperture shutter (percent open) */
     positionActualShutter: PropTypes.number,
@@ -58,6 +58,8 @@ export default class DomeShutter extends Component {
 
   render() {
     const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
+    const el = this.props.currentPointing.el;
+    const az = this.props.currentPointing.az;
     return (
       <svg
         className={styles.svgOverlay}
@@ -140,6 +142,37 @@ export default class DomeShutter extends Component {
           {/* pointing */}
           <g className={styles.pointing} /*style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}*/>
             <circle
+              className={styles.targetPointing}
+              r={16}
+              strokeWidth={2}
+              cx={zenithPixels.x}
+              cy={zenithPixels.y}
+              style={{
+                transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${
+                  this.props.targetPointing.el - 90
+                }deg)`,
+                transformOrigin: `50% 50% ${280}px`,
+              }}
+            />
+
+            <g
+              style={{
+                transform: `rotateZ(${az}deg)`,
+                transformOrigin: `50% 50% ${280}px`,
+              }}
+            >
+              <circle
+                className={styles.currentPointing}
+                r={16}
+                strokeWidth={2}
+                cx={zenithPixels.x}
+                cy={zenithPixels.y}
+                style={{
+                  transform: `rotateX(${el - 90}deg)`,
+                }}
+              />
+            </g>
+            {/* <circle
               className={styles.shutter6}
               // cx="151.22"
               // cy="147.24"
@@ -150,7 +183,7 @@ export default class DomeShutter extends Component {
                 transformOrigin: `50% 50%`,
                 transform: `rotateZ(${this.props.targetPointingAz}deg) rotateX(${this.props.targetPointingEl - 90}deg)`,
               }}
-            />
+            /> */}
           </g>
           {/* Shutter commanded right */}
           <g

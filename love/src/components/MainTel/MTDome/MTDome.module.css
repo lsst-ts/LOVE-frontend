@@ -75,7 +75,7 @@
   transition: transform 1.5s linear;
 }
 
-.svgLouvers .currentPointing {
+.svgOverlay .currentPointing {
   transition: transform 1.5s linear;
   backface-visibility: hidden;
   transform-style: preserve-3d;
@@ -84,11 +84,11 @@
   stroke: var(--status-running-color);
 }
 
-.svgLouvers .targetPointing {
+.svgOverlay .targetPointing {
   fill: none;
-  stroke-dasharray: '4';
-  stroke-opacity: '0.3';
-  stroke: 'white';
+  stroke-dasharray: 4;
+  stroke-opacity: 0.3;
+  stroke: white;
 }
 
 .svgLouvers rect {
