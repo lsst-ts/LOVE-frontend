@@ -4,7 +4,7 @@ import MTDomeShutter from './MTDomeShutter';
 import MTDomeLouvers from './MTDomeLouvers';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import WindRose from '../../icons/WindRose/WindRose';
-import DomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
+import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
 import styles from './MTDome.module.css';
 
 import { MTDomeLouversMapAF, MTDomeLouversMapGN } from 'Config';
@@ -49,7 +49,7 @@ const defaultValuesGN = {
   N2: '0',
 };
 
-export default class Dome extends Component {
+export default class MTDome extends Component {
   static propTypes = {
     /** Function to subscribe to streams to receive */
     subscribeToStreams: PropTypes.func,
@@ -89,9 +89,13 @@ export default class Dome extends Component {
     elevationDomeTarget: PropTypes.number,
     /** Operational mode; an OperationalMode enum */
     modeDomeStatus: PropTypes.number,
-    /** Target mount azimuth at the specified time. The allowed range is 0 to 360 */
+    /** Position measured by the encoders */
+    currentPointingAz: PropTypes.number,
+    /** Position computed by the path generator */
     targetPointingAz: PropTypes.number,
-    /** Target mount elevation at the specified time */
+    /** Position measured by the encoders */
+    currentPointingEl: PropTypes.number,
+    /** Position computed by the path generator */
     targetPointingEl: PropTypes.number,
   };
 
@@ -113,7 +117,9 @@ export default class Dome extends Component {
     elevationDomeMotion: 0,
     elevationDomeTarget: 0,
     modeDomeStatus: 0,
+    currentPointingAz: 0,
     targetPointingAz: 0,
+    currentPointingEl: 0,
     targetPointingEl: 0,
   };
 
@@ -431,9 +437,15 @@ export default class Dome extends Component {
     const actualPositionLouvers = this.props?.actualPositionLouvers;
     const commandedPositionLouvers = this.props?.commandedPositionLouvers;
 
-    // target pointing
-    const targetPointingAz = this.props.targetPointingAz;
-    const targetPointingEl = this.props.targetPointingEl;
+    // pointing
+    const currentPointing = {
+      az: this.props.currentPointingAz,
+      el: this.props.currentPointingEl,
+    };
+    const targetPointing = {
+      az: this.props.targetPointingAz,
+      el: this.props.targetPointingEl,
+    };
 
     return (
       <div className={styles.domeContainer}>
@@ -451,8 +463,8 @@ export default class Dome extends Component {
                 positionCommandedDomeAz={positionCommandedDomeAz}
                 positionActualLightWindScreen={positionActualLightWindScreen}
                 positionCommandedLightWindScreen={positionCommandedLightWindScreen}
-                targetPointingAz={targetPointingAz}
-                targetPointingEl={targetPointingEl}
+                currentPointing={currentPointing}
+                targetPointing={targetPointing}
               />
 
               <MTDomeLouvers
@@ -461,7 +473,7 @@ export default class Dome extends Component {
               />
             </div>
             <div className={styles.divSummaryTable}>
-              <DomeSummaryTable
+              <MTDomeSummaryTable
                 trackID={trackID}
                 mtdomeSummaryState={mtdomeSummaryState}
                 modeDomeStatus={modeDomeStatus}

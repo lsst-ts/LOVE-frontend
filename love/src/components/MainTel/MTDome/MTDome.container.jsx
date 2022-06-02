@@ -7,7 +7,7 @@ import {
   getApertureShutter,
   getDomeAzimuth,
   getLightWindScreen,
-  getTargetPointing,
+  getPointingStatus,
 } from '../../../redux/selectors';
 import { addGroup, removeGroup } from '../../../redux/actions/ws';
 import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
@@ -51,7 +51,9 @@ const MTDomeContainer = ({
   elevationDomeMotion,
   elevationDomeTarget,
   modeDomeStatus,
+  currentPointingAz,
   targetPointingAz,
+  currentPointingEl,
   targetPointingEl,
   ...props
 }) => {
@@ -79,7 +81,9 @@ const MTDomeContainer = ({
       elevationDomeMotion={elevationDomeMotion}
       elevationDomeTarget={elevationDomeTarget}
       modeDomeStatus={modeDomeStatus}
+      currentPointingAz={currentPointingAz}
       targetPointingAz={targetPointingAz}
+      currentPointingEl={currentPointingEl}
       targetPointingEl={targetPointingEl}
     />
   );
@@ -91,14 +95,14 @@ const mapStateToProps = (state) => {
   const apertureShutterState = getApertureShutter(state);
   const lightWindScreenState = getLightWindScreen(state);
   const domeAzimuthState = getDomeAzimuth(state);
-  const targetPointing = getTargetPointing(state);
+  const pointingState = getPointingStatus(state);
   return {
     ...domeState,
     ...louversState,
     ...apertureShutterState,
     ...lightWindScreenState,
     ...domeAzimuthState,
-    ...targetPointing,
+    ...pointingState,
   };
 };
 

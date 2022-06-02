@@ -25,7 +25,7 @@ import {
   MTDomeElevationUpperLimit,
 } from '../../../../Config';
 
-export default class DomeSummaryTable extends Component {
+export default class MTDomeSummaryTable extends Component {
   render() {
     const trackID = this.props.trackID;
     const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
