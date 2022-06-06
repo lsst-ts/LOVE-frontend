@@ -18,6 +18,8 @@ import IconBadge from '../icons/IconBadge/IconBadge';
 import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
+import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
+import OLEMenu from 'components/OLE/Menu/OLEMenu';
 import ClockContainer from '../Time/Clock/Clock.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
@@ -553,6 +555,18 @@ class Layout extends Component {
 
             <div className={styles.rightTopbar}>
               {this.renderHeartbeatsMenu()}
+              
+              <DropdownMenu className={styles.settingsDropdown}>
+                <Button className={styles.iconBtn} title="Exposure and Non-Exposure Logs" status="transparent">
+                  <MessageIcon className={styles.icon} />
+                </Button>
+                <div className={styles.userMenu}>
+                  <OLEMenu
+                    newNonExposureClick={() => {console.log("non-exposure click")}} 
+                    newExposureClick={() => {console.log("exposure click")}} 
+                  />
+                </div>
+              </DropdownMenu>
 
               <DropdownMenu className={styles.settingsDropdown}>
                 <Button className={styles.iconBtn} title="View notifications" onClick={() => {}} status="transparent">
