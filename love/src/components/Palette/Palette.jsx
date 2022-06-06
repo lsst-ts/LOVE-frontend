@@ -25,6 +25,9 @@ import ScriptIcon from 'components/icons/ScriptIcon/ScriptIcon';
 import UndoIcon from 'components/icons/UndoIcon/UndoIcon';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+import HelpIcon from 'components/icons/HelpIcon/HelpIcon';
+import EditIcon from 'components/icons/EditIcon/EditIcon';
+import MessageIcon from 'components/icons/MessageIcon/MessageIcon';
 
 import styles from './Palette.module.css';
 
@@ -115,6 +118,10 @@ function Palette(props) {
     <UndoIcon clasName={styles.icon}/>,
     <WarningIcon clasName={styles.icon}/>,
     <AcknowledgeIcon clasName={styles.icon}/>,
+    <GearIcon clasName={styles.icon}/>,
+    <HelpIcon clasName={styles.icon}/>,
+    <EditIcon clasName={styles.icon}/>,
+    <MessageIcon clasName={styles.icon}/>,
   ];
 
 
