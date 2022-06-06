@@ -1,7 +1,16 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import styles from './DropdownMenu.module.css';
 
 export default class DropdownMenu extends PureComponent {
+  static propTypes = {
+    disabledToggle: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    disabledToggle: false,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -24,6 +33,9 @@ export default class DropdownMenu extends PureComponent {
   };
 
   handleDocumentClick = (event) => {
+    if (this.props.disabledToggle) {
+      return;
+    }
     if (this.refButtonNode && !this.refButtonNode.contains(event.target)) {
       this.setState({
         isOpen: false,
