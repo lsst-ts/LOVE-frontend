@@ -1,0 +1,44 @@
+.menuElement {
+  line-height: 1.7em;
+  white-space: pre;
+  text-align: left;
+  
+  padding: 0.5em 0.5em;
+}
+
+.menuElement .title {
+  font-weight: bold;
+}
+
+.smallIconRow {
+  display: grid;
+  grid-template-columns: 1.5em max-content;
+  column-gap: 0.5em;
+  justify-items: center;
+  align-items: center;
+}
+
+.iconContainer {
+  padding: 0.1em;
+}
+
+.highlight:hover {
+  color: var(--highlighted-font-color);
+  font-weight: 500;
+  cursor: pointer;
+  background-color: var(--second-quaternary-background-color);
+}
+
+.secondary {
+  color: var(--secondary-font-color);
+}
+
+.addIcon {
+  width: 1.2em;
+  height: 1.2em;
+}
+
+.divider {
+  border-top: 1px solid var(--secondary-font-dimmed-color);
+}
+
