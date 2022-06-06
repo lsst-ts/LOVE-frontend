@@ -34,6 +34,8 @@ import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
 import ManagerInterface from 'Utils';
 import styles from './Layout.module.css';
+import ExposureAdd from 'components/OLE/Exposure/ExposureAdd';
+import NonExposureEdit from 'components/OLE/NonExposure/NonExposureEdit';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
@@ -109,6 +111,8 @@ class Layout extends Component {
       isLightHidden: true,
       efdStatus: {label: "EFD Healthy status Unknown", style: "invalid"},
       salStatus: {label: "SAL status Unknown", style: "invalid"},
+      isNewNonExposureOpen: false,
+      isNewExposureOpen: false,
     };
 
     this.requestToastID = null;
@@ -556,15 +560,57 @@ class Layout extends Component {
             <div className={styles.rightTopbar}>
               {this.renderHeartbeatsMenu()}
               
-              <DropdownMenu className={styles.settingsDropdown}>
+              <DropdownMenu className={styles.settingsDropdown} disabledToggle="true">
                 <Button className={styles.iconBtn} title="Exposure and Non-Exposure Logs" status="transparent">
                   <MessageIcon className={styles.icon} />
                 </Button>
                 <div className={styles.userMenu}>
-                  <OLEMenu
-                    newNonExposureClick={() => {console.log("non-exposure click")}} 
-                    newExposureClick={() => {console.log("exposure click")}} 
-                  />
+                  { !this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen
+                    ? <OLEMenu
+                        newNonExposureClick={() => { this.setState({ isNewNonExposureOpen: true })}} 
+                        newExposureClick={() => { this.setState({ isNewExposureOpen: true })}} 
+                      />
+                    : this.state.isNewNonExposureOpen
+                      ?
+                        <>
+                          <div className={styles.title}>
+                            <span className={styles.bold}>New Non-Exposure Log</span>
+                            <span className={styles.floatRight}>
+                              <Button onClick={() => { this.setState({ isNewNonExposureOpen: false });}}>
+                                {'< Back'}
+                              </Button>
+                            </span>
+                          </div>
+                          <div className={styles.divider}></div>
+                        </>
+                      : this.state.isNewExposureOpen
+                        ?
+                          <>
+                            <div className={styles.title}>
+                              <span className={styles.bold}>New Exposure Log</span>
+                              <span className={styles.floatRight}>
+                                <Button onClick={() => { this.setState({ isNewExposureOpen: false });}}>
+                                {'< Back'}
+                                </Button>
+                              </span>
+                            </div>
+                            <div className={styles.divider}></div>
+                          </>
+                        :
+                          <></>
+                  }
+                  { this.state.isNewNonExposureOpen
+                    ? <NonExposureEdit
+                        isLogCreate={true}
+                      />
+                    : <></>
+                  }
+                  { this.state.isNewExposureOpen
+                    ? <ExposureAdd
+                        isLogCreate={true}
+                      />
+                    : <></>
+                  }
                 </div>
               </DropdownMenu>
 
