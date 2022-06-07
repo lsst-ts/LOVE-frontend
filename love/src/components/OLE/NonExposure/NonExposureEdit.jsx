@@ -13,6 +13,7 @@ export default class NonExposureEdit extends Component {
     back: PropTypes.func,
     logEdit: PropTypes.object,
     isLogCreate: PropTypes.bool,
+    isMenu: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -33,6 +34,7 @@ export default class NonExposureEdit extends Component {
       createTicketJira: false,
     },
     isLogCreate: false,
+    isMenu: false,
   };
 
   constructor(props) {
@@ -51,12 +53,13 @@ export default class NonExposureEdit extends Component {
   render() {
     const link = this.props.back;
     const isLogCreate = this.props.isLogCreate;
+    const isMenu = this.props.isMenu;
 
     const LOG_TYPE_OPTIONS = ['Fault', 'Ok', 'Wait'];
 
     return (
       <>
-        { !isLogCreate
+        { !isLogCreate && !isMenu
           ? (
               <div className={styles.returnToLogs}>
                 <Button status="link" onClick={() => { link() }}>
@@ -67,26 +70,31 @@ export default class NonExposureEdit extends Component {
           : <></>
         }
         <form onSubmit={this.handleSubmit}>
-          <div className={styles.detailContainer}>
-            <div className={styles.header}>
-              { this.state.logEdit.id
-                ? <span className={styles.bold}>#{this.state.logEdit.id}</span>
-                : <></>
-              }
-              <span className={styles.floatRight}>
-                { this.state.logEdit.id
-                  ? (
-                    <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
-                      <DeleteIcon className={styles.icon}/>
-                    </Button>
-                  )
-                  : (
-                    <></>
-                  )
-                }
-              </span>
-            </div>
-            <div className={styles.content}>
+          <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
+            { isMenu 
+              ? <></>
+              :
+                <div className={styles.header}>
+                  { this.state.logEdit.id
+                    ? <span className={styles.bold}>#{this.state.logEdit.id}</span>
+                    : <></>
+                  }
+                  <span className={styles.floatRight}>
+                    { this.state.logEdit.id
+                      ? (
+                        <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+                          <DeleteIcon className={styles.icon}/>
+                        </Button>
+                      )
+                      : (
+                        <></>
+                      )
+                    }
+                  </span>
+                </div>
+            }
+            
+            <div className={ isMenu ? styles.contentMenu : styles.content }>
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
@@ -138,32 +146,50 @@ export default class NonExposureEdit extends Component {
                     onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, value: event.value}}))}
                   />
                 </span>
+                { isMenu
+                  ? <>
+                      <span className={styles.label}>Time of Incident</span>
+                      <span className={styles.value}>
+                        <Input value={this.state.logEdit.timeIncident}
+                          className={styles.input}
+                          onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, timeIncident: event.value}}))}
+                        />
+                      </span>
+                    </>
+                  : <></>
+                }
               </div>
               
               <div className={styles.contentRight}>
                 <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
                   <span className={styles.title}>Message</span>
-                  <span className={styles.label}>Time of Incident</span>
-                  <span className={styles.value}>
-                    <Input value={this.state.logEdit.timeIncident}
-                      className={styles.input}
-                      onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, timeIncident: event.value}}))}
-                    />
-                  </span>
+                  { isMenu
+                    ? <></>
+                    : <>
+                        <span className={styles.label}>Time of Incident</span>
+                        <span className={styles.value}>
+                          <Input value={this.state.logEdit.timeIncident}
+                            className={styles.input}
+                            onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, timeIncident: event.value}}))}
+                          />
+                        </span>
+                      </>
+                  }
                 </div>
                 <TextArea
                   value={this.state.logEdit.description}
                   callback={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, description: event.value}}))}
                 />
               </div>
+
             </div>
-            <div className={styles.footer}>
+            <div className={isMenu ? styles.footerMenu : styles.footer}>
               <FileUploader
                 value={this.state.logEdit.file?.name}
                 handleFile={(file) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, file: file}}))}
                 handleDelete={() => this.setState((prevState) => ({logEdit: {...prevState.logEdit, file: undefined}}))}
               />
-              <span className={styles.footerRight}>
+              <span className={ isMenu ? styles.footerRightMenu : styles.footerRight }>
                 { !this.state.logEdit.id
                   ? (<span className={styles.checkboxText}>
                       Create and link new Jira ticket
