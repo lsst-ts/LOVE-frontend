@@ -25,6 +25,10 @@
   margin-right: 15px;
 }
 
+.detailContainerMenu {
+  width: 26em;
+}
+
 .header {
   font-weight: bold;
   text-align: left;
@@ -44,6 +48,12 @@
   display: grid;
   grid-template-columns: 2fr 3fr;
   grid-row: auto;
+}
+
+.contentMenu {
+  flex-wrap: wrap;
+  margin-top: 15px;
+  margin-right: 10px;
 }
 
 .twoColumn {
@@ -72,6 +82,17 @@
 .footer {
   display: flex;
   flex-flow: row;
+  flex-direction: row;
+  padding-top: 7px;
+  border-top: 2px solid var(--secondary-font-color);
+  margin: 7px;
+}
+
+.footerMenu {
+  display: flex;
+  flex-flow: column;
+  flex-direction: column;
+  row-gap: 10px;
   padding-top: 7px;
   border-top: 2px solid var(--secondary-font-color);
   margin: 7px;
@@ -173,7 +194,7 @@
 }
 
 .contentRight textarea {
-  width: calc(100% - 2em);
+  /* width: calc(100% - 2em); */
   height: 12em;
   resize: none;
   background: var(--secondary-background-dimmed-color);
@@ -239,10 +260,17 @@
   align-items: center;
 }
 
+.footerRightMenu {
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+  align-items: end;
+}
+
 .checkboxText {
   display: grid;
-  grid-template-columns: 2fr 1fr;
-  margin-right: 20px;
+  grid-template-columns: 4fr 1fr;
+  margin-right: 5px;
 }
 
 .checkboxText button {
