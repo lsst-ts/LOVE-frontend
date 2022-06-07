@@ -576,8 +576,8 @@ class Layout extends Component {
                           <div className={styles.title}>
                             <span className={styles.bold}>New Non-Exposure Log</span>
                             <span className={styles.floatRight}>
-                              <Button onClick={() => { this.setState({ isNewNonExposureOpen: false });}}>
-                                {'< Back'}
+                              <Button status="link" onClick={() => { this.setState({ isNewNonExposureOpen: false });}}>
+                                <span className={styles.bold}>{`< Back`}</span>
                               </Button>
                             </span>
                           </div>
@@ -589,8 +589,8 @@ class Layout extends Component {
                             <div className={styles.title}>
                               <span className={styles.bold}>New Exposure Log</span>
                               <span className={styles.floatRight}>
-                                <Button onClick={() => { this.setState({ isNewExposureOpen: false });}}>
-                                {'< Back'}
+                                <Button status="link" onClick={() => { this.setState({ isNewExposureOpen: false });}}>
+                                  <span className={styles.bold}>{`< Back`}</span>
                                 </Button>
                               </span>
                             </div>
@@ -601,13 +601,13 @@ class Layout extends Component {
                   }
                   { this.state.isNewNonExposureOpen
                     ? <NonExposureEdit
-                        isLogCreate={true}
+                        isMenu={true}
                       />
                     : <></>
                   }
                   { this.state.isNewExposureOpen
                     ? <ExposureAdd
-                        isLogCreate={true}
+                        isMenu={true}
                       />
                     : <></>
                   }
