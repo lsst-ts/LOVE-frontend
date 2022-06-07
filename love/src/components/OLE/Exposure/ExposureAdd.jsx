@@ -14,6 +14,7 @@ export default class ExposureAdd extends Component {
     logEdit: PropTypes.object,
     newMessage: PropTypes.object,
     isLogCreate: PropTypes.bool,
+    isMenu: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -53,6 +54,7 @@ export default class ExposureAdd extends Component {
       dateInvalidated: undefined,
     },
     isLogCreate: false,
+    isMenu: false,
   };
 
   constructor(props) {
@@ -72,6 +74,7 @@ export default class ExposureAdd extends Component {
   render() {
     const link = this.props.back;
     const isLogCreate = this.props.isLogCreate;
+    const isMenu = this.props.isMenu;
 
     const LOG_TYPE_OPTIONS = ['Fault', 'Ok', 'Wait'];
     const EXPOSURE_FLAG_OPTIONS = ['None', 'Junk', 'Questionary'];
@@ -79,7 +82,7 @@ export default class ExposureAdd extends Component {
 
     return (
       <>
-        { !isLogCreate
+        { !isLogCreate && !isMenu
           ? (
               <div className={styles.returnToLogs}>
                 <Button status="link" onClick={() => { link() }}>
@@ -90,32 +93,36 @@ export default class ExposureAdd extends Component {
           : <></>
         }
         <form onSubmit={this.handleSubmit}>
-          <div className={styles.detailContainer}>
-            <div className={styles.header}>
-              { this.state.logEdit.obsId
-                ? (<span>{this.state.logEdit.obsId} - {this.state.logEdit.obsType}</span>)
-                : <></>
-              }
-              
-              <span className={styles.floatRight}>
-                { this.state.logEdit.id
-                  ? (
-                    <span>
-                      <span className={styles.margin}>
-                      [{this.state.logEdit.obsStatus}]
-                      </span>
-                      <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
-                        <DeleteIcon className={styles.icon}/>
-                      </Button>
-                    </span>
-                  )
-                  : this.state.logEdit.obsStatus
-                    ? <span>[{this.state.logEdit.obsStatus}]</span>
+          <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
+            { isMenu
+              ? <></>
+              : 
+                <div className={styles.header}>
+                  { this.state.logEdit.obsId
+                    ? (<span>{this.state.logEdit.obsId} - {this.state.logEdit.obsType}</span>)
                     : <></>
-                }
-              </span>
-            </div>
-            <div className={styles.content}>
+                  }
+                  
+                  <span className={styles.floatRight}>
+                    { this.state.logEdit.id
+                      ? (
+                        <span>
+                          <span className={styles.margin}>
+                          [{this.state.logEdit.obsStatus}]
+                          </span>
+                          <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+                            <DeleteIcon className={styles.icon}/>
+                          </Button>
+                        </span>
+                      )
+                      : this.state.logEdit.obsStatus
+                        ? <span>[{this.state.logEdit.obsStatus}]</span>
+                        : <></>
+                    }
+                  </span>
+                </div>
+            }
+            <div className={isMenu ? styles.contentMenu : styles.content}>
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
@@ -167,13 +174,13 @@ export default class ExposureAdd extends Component {
                 />
               </div>
             </div>
-            <div className={styles.footer}>
+            <div className={isMenu ? styles.footerMenu : styles.footer}>
               <FileUploader
                 value={this.state.logEdit.file?.name}
                 handleFile={(file) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, file: file}}))}
                 handleDelete={() => this.setState((prevState) => ({logEdit: {...prevState.logEdit, file: undefined}}))}
               />
-              <span className={styles.footerRight}>
+              <span className={ isMenu ? styles.footerRightMenu : styles.footerRight }>
                 <span className={styles.checkboxText}>
                   Create and link new Jira ticket
                   <Input type="checkbox"
@@ -182,8 +189,7 @@ export default class ExposureAdd extends Component {
                       this.setState((prevState) => ({logEdit: {...prevState.logEdit, createTicketJira: event.target.checked}}));
                     }}
                   />
-                </span>
-                  
+                </span>                  
                 <Button type="submit">
                   <span className={styles.title}>Upload Log</span>
                 </Button>
