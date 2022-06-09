@@ -26,24 +26,20 @@ function ConfigPanel({ config, setConfig }) {
     });
   }, []);
   const onConfigSelection = (selection) => {
-    const id = selection?.value?.id;
+    const id = selection.value;
     ManagerInterface.getConfigFileContent(id).then((conf) => {
-      setConfig({
-        content: conf.content,
-        filename: conf.filename,
-        update_timestamp: conf.update_timestamp,
-      });
+      setConfig(conf);
     });
   };
 
   const getConfigSelectOption = (conf, index) => {
     return {
-      value: conf,
+      value: conf.id,
       label: (
         <div key={index} className={styles.dropdownOption}>
           <div className={styles.dropdownOptionLeftSection}>
             <div className={styles.iconWrapper}>
-              <ScriptIcon title="Config. file" className={styles.paddedIcon} ></ScriptIcon>
+              <ScriptIcon title="Config. file" className={styles.paddedIcon}></ScriptIcon>
             </div>
           </div>
           <div className={styles.dropdownOptionRightSection}>
