@@ -7,6 +7,7 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import Button from 'components/GeneralPurpose/Button/Button';
+import ManagerInterface from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
@@ -22,6 +23,7 @@ export default class Exposure extends Component {
       modeView: false,
       modeAdd: false,
       selected: {},
+      exposurelogs: []
     };
   }
 
@@ -117,10 +119,17 @@ export default class Exposure extends Component {
     ];
   }
 
+  componentDidMount() {
+    console.log('componentDidMount');
+    ManagerInterface.getListExposureLogs().then(({ exposurelogs }) => this.setState({ exposurelogs: exposurelogs }));
+  }
+
   render() {
     const modeView = this.state.modeView;
     const modeAdd = this.state.modeAdd;
     const headers = Object.values(this.getHeaders());
+
+    const list = this.state.exposurelogs;
 
     const filteredData = [
       {
