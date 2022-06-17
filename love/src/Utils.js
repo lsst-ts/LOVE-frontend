@@ -653,7 +653,158 @@ export default class ManagerInterface {
       });
     });
   }
-}
+
+  // TODO: INITIAL
+  static getListExposureLogs() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures`;
+    console.log('url', url);
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static createExposureLogs(params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        params,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.info(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static getRetrieveMessageExposureLogs(msgExposeId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
+    console.log('url', url);
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static updateMessageExposureLogs(msgExposureId, data) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'PATCH',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        ...data
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Request updated.');
+        return resp;
+      });
+    });
+  }
+
+  static getListInstrumentsExposureLogs() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/instruments`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+
+} // END ManagerInterface
 
 /**
  * Creates a list of vega friendly objects with values
