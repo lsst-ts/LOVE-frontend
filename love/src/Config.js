@@ -13,6 +13,7 @@ export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 // OLE Configurations
 export const LOG_TYPE_OPTIONS = ['Fault', 'Ok', 'Wait'];
+export const EXPOSURE_FLAG_OPTIONS = ['None', 'Junk', 'Questionary'];
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
