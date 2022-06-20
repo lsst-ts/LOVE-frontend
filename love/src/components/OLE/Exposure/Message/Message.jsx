@@ -17,15 +17,16 @@ export default class Message extends Component {
   static defaultProps = {
     message: {
       id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      siteId: '',
-      type: undefined,
-      user: undefined,
+      site_id: '',
+      user_id: undefined,
       flag: 'ok',
       jira: undefined,
       file: undefined,
-      description: undefined,
-      dateAdded: undefined,
-      dateInvalidated: undefined,
+      urls: undefined,
+      message_text: undefined,
+      date_added: undefined,
+      date_invalidated: undefined,
+      tags: [],
     },
     editMessage: () => { console.log('defaultProps.editMessage()'); },
   };
@@ -39,20 +40,52 @@ export default class Message extends Component {
     return result[flag] ? result[flag] : 'unknown';
   }
 
+  getLinkJira(message) {
+    const urls = message.urls;
+    const filtered = urls.filter((url) => url.includes('jira'));
+    if ( filtered.length > 0 ) {
+      return filtered[0];
+    }
+    return undefined;
+  }
+
+  getFileURL(message) {
+    const urls = message.urls;
+    const filtered = urls.filter((url) => !url.includes('jira'));
+    if ( filtered.length > 0 ) {
+      return filtered[0];
+    }
+    return undefined;
+  }
+
+  getFilename(url) {
+    console.log('url');
+    console.log(url);
+    if ( url ) {
+      return url.substring(url.lastIndexOf('/') + 1);
+    }
+    return '';
+  }
 
   render() {
     const message = this.props.message ? this.props.message : Message.defaultProps.message;
     const edit = this.props.editMessage ? this.props.editMessage : Message.defaultProps.editMessage;
-    const link = () => {};
+
+    const linkJira = this.getLinkJira(message);
+    const fileurl = this.getFileURL(message);
 
     return (
       <div className={styles.message}>
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.title, styles.margin3].join(' ')}>
-            #{message.id} - {message.type}
-            <span>
-              <Button status="link" onClick={() => { link() }}>view Jira ticket</Button>
-              </span>
+            #{message.id}
+            { linkJira
+                ? <span>
+                    <Button status="link" onClick={() => { linkJira }}>view Jira ticket</Button>
+                  </span>
+                : <></>
+            }
+            
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
@@ -68,36 +101,42 @@ export default class Message extends Component {
         <div className={styles.description}>
           <div className={[styles.floatLeft, styles.margin3].join(' ')}>
             <span>On </span>
-            <span className={styles.bold}>{message.timeIncident} </span>
+            <span className={styles.bold}>{message.date_added} </span>
             <span>by </span>
-            <span className={styles.bold}>{message.user} </span>
+            <span className={styles.bold}>{message.user_id} </span>
             <span>wrote:</span>
           </div>
           <p className={[styles.textDescription, styles.margin3].join(' ')}>
-            {message.description}
+            {message.message_text}
           </p>
         </div>
         <div className={styles.footer}>
           <span className={[styles.floatLeft, styles.margin3].join(' ')}>
             <span className={styles.label}>
-              File Attached:
+              { fileurl
+                ? 'File Attached: '
+                : ''
+              }
             </span>
             <span className={styles.value}>
-              { message.file
-                ? ` ${message.file.name} (${(parseInt(message.file.size) / 1024).toFixed(2)} KB) `
+              { fileurl
+                ? <>
+                    <span className={styles.margin3}>{ this.getFilename(fileurl) }</span>
+                    <Button className={styles.iconBtn} title="File" onClick={() => { fileurl }} status="transparent">
+                      <DownloadIcon className={styles.icon}/>
+                    </Button>
+                  </>
                 : ``
               }
-              <Button className={styles.iconBtn} title="File" onClick={() => {}} status="transparent">
-                <DownloadIcon className={styles.icon}/>
-              </Button>
+              
             </span>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <span className={[styles.margin3, styles.capitalize].join(' ')}>
-              {message.flag}
+              {message.exposure_flag}
             </span>
             <span className={styles.vertAlign}>
-              <FlagIcon title={message.flag} status={this.statusFlag(message.flag)}
+              <FlagIcon title={message.exposure_flag} status={this.statusFlag(message.exposure_flag)}
                 className={styles.iconFlag}/>
             </span>
 

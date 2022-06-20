@@ -20,38 +20,23 @@ export default class ExposureAdd extends Component {
   static defaultProps = {
     back: () => {},
     logEdit: {
-      obsId: undefined,
-      obsStatus: undefined,
+      obs_id: undefined,
       instrument: undefined,
-      obsType: undefined,
-      obsReason: undefined,
-      obsDay: undefined,
-      messages: [
-        {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          siteId: '',
-          type: undefined,
-          user: undefined,
-          flag: undefined,
-          jira: undefined,
-          file: undefined,
-          description: undefined,
-          dateAdded: undefined,
-          dateInvalidated: undefined,
-        },
-      ],
+      observation_type: undefined,
+      observation_reason: undefined,
+      obs_day: undefined,
     },
     newMessage: {
       id: undefined,
-      siteId: '',
+      site_id: '',
       type: undefined,
       user: undefined,
       flag: undefined,
       jira: undefined,
       file: undefined,
       description: undefined,
-      dateAdded: undefined,
-      dateInvalidated: undefined,
+      date_added: undefined,
+      date_invalidated: undefined,
     },
     isLogCreate: false,
     isMenu: false,
@@ -68,6 +53,7 @@ export default class ExposureAdd extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    console.log('ExposureAdd.handleSubmit');
     console.log('Submitted: ', this.state.logEdit);
   }
 
@@ -98,8 +84,8 @@ export default class ExposureAdd extends Component {
               ? <></>
               : 
                 <div className={styles.header}>
-                  { this.state.logEdit.obsId
-                    ? (<span>{this.state.logEdit.obsId} - {this.state.logEdit.obsType}</span>)
+                  { this.state.logEdit.obs_id
+                    ? (<span>{this.state.logEdit.obs_id}</span>)
                     : <></>
                   }
                   
@@ -108,15 +94,15 @@ export default class ExposureAdd extends Component {
                       ? (
                         <span>
                           <span className={styles.margin}>
-                          [{this.state.logEdit.obsStatus}]
+                          [{this.state.logEdit.observation_type}]
                           </span>
                           <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
                             <DeleteIcon className={styles.icon}/>
                           </Button>
                         </span>
                       )
-                      : this.state.logEdit.obsStatus
-                        ? <span>[{this.state.logEdit.obsStatus}]</span>
+                      : this.state.logEdit.observation_type
+                        ? <span>[{this.state.logEdit.observation_type}]</span>
                         : <></>
                     }
                   </span>
@@ -144,13 +130,13 @@ export default class ExposureAdd extends Component {
                 </span>
                 
                 {
-                  this.state.logEdit.obsId
+                  this.state.logEdit.obs_id
                   ? <></>
                   : (
                     <>
                       <span className={styles.label}>Obs. Id</span>
                       <span className={styles.value}>
-                        <Select value={this.state.logEdit.obsId}
+                        <Select value={this.state.logEdit.obs_id}
                           onChange={(event) => this.setState((prevState) => ({logEdit: {...prevState.logEdit, csc: event.value}}))}
                           options={OBS_ID_OPTIONS}
                           className={styles.select}
