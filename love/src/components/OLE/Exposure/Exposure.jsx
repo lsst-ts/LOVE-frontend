@@ -15,152 +15,6 @@ import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
 
-const dataExposures = [
-  {
-    obs_id: 'AT_O_20220208_000140',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'extra',
-    day_obs: 20220208,
-    seq_num: 140,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278403320713,
-    tracking_dec: -26.0644886120432,
-    sky_angle: 188.807925992927,
-    timespan_begin: '2022-02-09T00:58:20.135919',
-    timespan_end: '2022-02-09T00:58:40.376000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000141',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'intra',
-    day_obs: 20220208,
-    seq_num: 141,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278442397096,
-    tracking_dec: -26.0644740430966,
-    sky_angle: 188.807774418037,
-    timespan_begin: '2022-02-09T00:59:25.629547',
-    timespan_end: '2022-02-09T00:59:45.857000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000142',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'extra',
-    day_obs: 20220208,
-    seq_num: 142,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.27839886926,
-    tracking_dec: -26.0644956930385,
-    sky_angle: 188.80796173635,
-    timespan_begin: '2022-02-09T00:59:54.046136',
-    timespan_end: '2022-02-09T01:00:14.283000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000143',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'intra',
-    day_obs: 20220208,
-    seq_num: 143,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278392749663,
-    tracking_dec: -26.0644757888448,
-    sky_angle: 188.807815914692,
-    timespan_begin: '2022-02-09T01:00:57.769401',
-    timespan_end: '2022-02-09T01:01:17.994000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000144',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'extra',
-    day_obs: 20220208,
-    seq_num: 144,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278389105931,
-    tracking_dec: -26.0645115042018,
-    sky_angle: 188.807943149402,
-    timespan_begin: '2022-02-09T01:01:25.365043',
-    timespan_end: '2022-02-09T01:01:45.600000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000145',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'intra',
-    day_obs: 20220208,
-    seq_num: 145,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278418936765,
-    tracking_dec: -26.0644835106208,
-    sky_angle: 188.807722490779,
-    timespan_begin: '2022-02-09T01:02:29.059020',
-    timespan_end: '2022-02-09T01:02:49.292000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000146',
-    instrument: 'LATISS',
-    observation_type: 'engtest',
-    observation_reason: 'extra',
-    day_obs: 20220208,
-    seq_num: 146,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278455280663,
-    tracking_dec: -26.0645015139504,
-    sky_angle: 188.80799621224,
-    timespan_begin: '2022-02-09T01:02:56.522201',
-    timespan_end: '2022-02-09T01:03:16.754000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000147',
-    instrument: 'LATISS',
-    observation_type: 'science',
-    observation_reason: 'final',
-    day_obs: 20220208,
-    seq_num: 147,
-    group_name: '2022-02-09T00:55:40.390',
-    target_name: 'HD  49790',
-    science_program: 'CWFS',
-    tracking_ra: 102.278419655072,
-    tracking_dec: -26.0644911086465,
-    sky_angle: 188.807788496204,
-    timespan_begin: '2022-02-09T01:04:02.102938',
-    timespan_end: '2022-02-09T01:04:07.331000',
-  },
-  {
-    obs_id: 'AT_O_20220208_000148',
-    instrument: 'LATISS',
-    observation_type: 'science',
-    observation_reason: 'object',
-    day_obs: 20220208,
-    seq_num: 148,
-    group_name: '2022-02-09T01:15:40.129',
-    target_name: 'HD  49790',
-    science_program: 'unknown',
-    tracking_ra: 102.278466428031,
-    tracking_dec: -26.0645025436949,
-    sky_angle: 338.983127195963,
-    timespan_begin: '2022-02-09T01:16:34.998084',
-    timespan_end: '2022-02-09T01:16:37.229000',
-  },
-];
 
 export default class Exposure extends Component {
   static propTypes = {};
@@ -173,6 +27,7 @@ export default class Exposure extends Component {
       modeView: false,
       modeAdd: false,
       selected: {},
+      selectedMessages: [],
       exposurelogs: [],
       instruments: [],
       exposureTypes: [],
@@ -180,10 +35,15 @@ export default class Exposure extends Component {
   }
 
   view(index) {
+    console.log('view', index);
     if (index) {
-      this.setState({
-        modeView: true,
-        selected: index,
+      ManagerInterface.getListMessagesExposureLogs(index['obs_id']).then((data) => {
+        console.log('getListMessagesExposureLogs(', index['obs_id'], ') => data:', data);
+        this.setState({
+          modeView: true,
+          selected: index,
+          selectedMessages: data,
+        });
       });
     }
   }
@@ -209,23 +69,23 @@ export default class Exposure extends Component {
   getHeaders = () => {
     return [
       {
-        field: 'obsStatus',
-        title: 'Obs. Status',
-        type: 'string',
-      },
-      {
-        field: 'obsId',
+        field: 'obs_id',
         title: 'Observation Id',
         type: 'string',
       },
       {
-        field: 'timestamp',
+        field: 'timespan_end',
         title: 'Date & Time (TAI)',
         type: 'timestamp',
       },
       {
         field: 'instrument',
         title: 'Instrument',
+        type: 'string',
+      },
+      {
+        field: 'observation_type',
+        title: 'Observation Type',
         type: 'string',
       },
       {
@@ -283,17 +143,29 @@ export default class Exposure extends Component {
 
   componentDidMount() {
     console.log('componentDidMount');
-    // ManagerInterface.getListExposureInstruments().then(data => console.log(data));
-    this.setState({ instruments: ['LATISS', 'COMCAM'], selectedInstrument: 'LATISS' });
+    ManagerInterface.getListExposureInstruments().then((data) => {
+      const instrumentsArray = Object.values(data).map((arr) => arr[0]);
+      this.setState({ instruments: instrumentsArray, selectedInstrument: instrumentsArray[0] });
+      console.log('instruments', instrumentsArray);
+    });
+    // 
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
       console.log('QUERY EXPOSURES...');
-      // ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then(({ exposurelogs }) => this.setState({ exposurelogs: exposurelogs }));
-      const exposureTypes = Array.from(new Set(dataExposures.map((exp) => exp.observation_type)));
-      this.setState({ exposureTypes });
-      console.log(exposureTypes);
+      ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
+        const exposures = data.map((exposure) => {
+            /* ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+              const flags = messages.map((message) => message['exposure_flag']);
+              // const flags = ["none","junk"];
+              exposure['flags'] = flags;
+              return exposure;
+            }); */
+          return exposure;
+        });
+        this.setState({ exposurelogs: exposures });
+      });
     }
   }
 
@@ -302,9 +174,7 @@ export default class Exposure extends Component {
     const modeAdd = this.state.modeAdd;
     const headers = Object.values(this.getHeaders());
 
-    const list = this.state.exposurelogs;
-
-    const filteredData = [
+    /* const filteredData = [
       {
         id: 1,
         obsStatus: 'Upcomming',
@@ -412,9 +282,9 @@ export default class Exposure extends Component {
           },
         ],
       },
-    ];
-    const tableData = Object.values(filteredData);
+    ]; */
 
+    const tableData = Object.values(this.state.exposurelogs);
     const instrumentsOptions = this.state.instruments;
     const selectedInstrument = this.state.selectedInstrument;
     const exposureTypeOptions = ['All', ...this.state.exposureTypes];
@@ -426,6 +296,7 @@ export default class Exposure extends Component {
           this.setState({ modeView: false });
         }}
         logDetail={this.state.selected}
+        logMessages={this.state.selectedMessages}
       />
     ) : modeAdd && !modeView ? (
       <ExposureAdd
