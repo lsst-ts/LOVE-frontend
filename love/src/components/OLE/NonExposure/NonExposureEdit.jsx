@@ -50,6 +50,7 @@ export default class NonExposureEdit extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    console.log('NonExposureEdit.handleSubmit');
     console.log('Submitted: ', this.state.logEdit);
   }
 

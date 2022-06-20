@@ -17,6 +17,7 @@ export default class ExposureDetail extends Component {
   static propTypes = {
     back: PropTypes.func,
     logDetail: PropTypes.object,
+    logMessages:  PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
@@ -28,21 +29,21 @@ export default class ExposureDetail extends Component {
       obsType: 'Engtest',
       obsReason: 'extra',
       obsDay: undefined,
-      messages: [
-        {
-          id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          siteId: '',
-          type: undefined,
-          user: undefined,
-          flag: undefined,
-          jira: undefined,
-          file: undefined,
-          description: undefined,
-          dateAdded: undefined,
-          dateInvalidated: undefined,
-        },
-      ]
     },
+    logMessages: [
+      {
+        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        siteId: '',
+        type: undefined,
+        user: undefined,
+        flag: undefined,
+        jira: undefined,
+        file: undefined,
+        description: undefined,
+        dateAdded: undefined,
+        dateInvalidated: undefined,
+      },
+    ]
   };
 
   constructor(props) {
@@ -52,10 +53,10 @@ export default class ExposureDetail extends Component {
     };
   }
 
-
   render() {
     const link = this.props.back;
     const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
+    const logMessages = this.props.logMessages ? this.props.logMessages : this.defaultProps.logMessages;
 
     return (
       <>
@@ -66,19 +67,19 @@ export default class ExposureDetail extends Component {
         </div>
         <div className={styles.detailContainer}>
           <div className={styles.header}>
-            <span>{logDetail.obsId} - {logDetail.obsType}</span>
+            <span>{logDetail.obs_id}</span>
             <span><Button status="link">view Jira ticket</Button></span>
             <span className={styles.floatRight}>
-              [{logDetail.obsStatus}]
+              [{logDetail.observation_type}]
             </span>
           </div>
           <div className={styles.body}>
             <div className={[styles.floatLeft, styles.title].join(' ')}>
-              Messages ({logDetail.messages ? logDetail.messages.length : 0})
+              Messages ({logMessages ? logMessages.length : 0})
             </div>
             <div className={styles.filters}> FILTERS </div>
           
-          { logDetail.messages.map((message) => {
+          { logMessages.map((message) => {
               if (this.state.selectedMessage && this.state.selectedMessage.id === message.id) {
                 return (<MessageEdit
                     message={this.state.selectedMessage}
