@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-import Input from 'components/GeneralPurpose/Input/Input';
-import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-import Button from 'components/GeneralPurpose/Button/Button';
 import { Link } from 'react-router-dom';
+import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import Button from 'components/GeneralPurpose/Button/Button';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+import Select from 'components/GeneralPurpose/Select/Select';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
+import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 
 export default class NonExposure extends Component {
   static propTypes = {};
@@ -33,7 +33,7 @@ export default class NonExposure extends Component {
         modeView: true,
         selected: index,
       });
-    }   
+    }
   }
 
   edit(index) {
@@ -42,7 +42,7 @@ export default class NonExposure extends Component {
         modeEdit: true,
         selected: index,
       });
-    }   
+    }
   }
 
   getHeaders = () => {
@@ -103,12 +103,8 @@ export default class NonExposure extends Component {
         title: 'File',
         type: 'link',
         render: (value) => (
-          <Button
-            className={styles.iconBtn}
-            title="File"
-            onClick={() => {}}
-          >
-            <DownloadIcon className={styles.icon}/>
+          <Button className={styles.iconBtn} title="File" onClick={() => {}}>
+            <DownloadIcon className={styles.icon} />
           </Button>
         ),
       },
@@ -116,9 +112,7 @@ export default class NonExposure extends Component {
         field: 'jira',
         title: 'Jira',
         type: 'link',
-        render: (value) => (
-          <Link to={value}>{value}</Link>
-        ),
+        render: (value) => <Link to={value}>{value}</Link>,
       },
       {
         field: 'action',
@@ -128,17 +122,27 @@ export default class NonExposure extends Component {
           return (
             <>
               <span className={styles.margin}>
-                <Button className={styles.iconBtn} title="View"
-                  onClick={() => { this.view(index) }} status="transparent"
+                <Button
+                  className={styles.iconBtn}
+                  title="View"
+                  onClick={() => {
+                    this.view(index);
+                  }}
+                  status="transparent"
                 >
-                  <AcknowledgeIcon className={styles.icon} nonAcknowledge={false}/>
+                  <AcknowledgeIcon className={styles.icon} nonAcknowledge={false} />
                 </Button>
               </span>
               <span className={styles.margin}>
-                <Button className={styles.iconBtn} title="Edit"
-                  onClick={() => { this.edit(index) }} status="transparent"
+                <Button
+                  className={styles.iconBtn}
+                  title="Edit"
+                  onClick={() => {
+                    this.edit(index);
+                  }}
+                  status="transparent"
                 >
-                  <EditIcon className={styles.icon}/>
+                  <EditIcon className={styles.icon} />
                 </Button>
               </span>
             </>
@@ -146,7 +150,7 @@ export default class NonExposure extends Component {
         },
       },
     ];
-  }
+  };
 
   render() {
     const modeView = this.state.modeView;
@@ -165,33 +169,62 @@ export default class NonExposure extends Component {
         subsystem: 'M. Telescope',
         csc: 'MTHexapod',
         cscTopic: 'Actuators',
-        file: {name: 'file.csv', size: 6078},
+        file: { name: 'file.csv', size: 6078 },
         jira: 'http://lsst.jira.org',
         value: 15,
-        description: 'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over. First we have the Logs component, which will display logs created by different love-operators. This component will have two tabs, one for non-exposure logs and another for exposure logs, viewing these two types of logs is very different.'
+        description:
+          'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over. First we have the Logs component, which will display logs created by different love-operators. This component will have two tabs, one for non-exposure logs and another for exposure logs, viewing these two types of logs is very different.',
       },
     ];
     const tableData = Object.values(filteredData);
 
-    return (
-      modeView && !modeEdit
-      ? <NonExposureDetail back={() => { this.setState({ modeView: false });}} logDetail={this.state.selected}/>
-      : modeEdit && !modeView
-        ? <NonExposureEdit back={() => { this.setState({ modeEdit: false });}} logEdit={this.state.selected}/>
-        : (
-          <div className={styles.margin10}>
-            <div className={styles.title}>
-              Filter
-            </div>
-            <div className={styles.filters}>
-              <Label>From: </Label>
-              {/* <Value>
-                <Input/>
-              </Value> */}
-            </div>
-            <SimpleTable headers={headers} data={tableData} />
-          </div>
-      )
+    const commentTypeOptions = ['All', ...LOG_TYPE_OPTIONS];
+    const selectedCommentType = this.state.selectedCommentType;
+
+    const subsystemOptions = ['All', ...Object.keys(CSCSummaryHierarchy)];
+    const selectedSubsystem = this.state.selectedSubsystem;
+
+    return modeView && !modeEdit ? (
+      <NonExposureDetail
+        back={() => {
+          this.setState({ modeView: false });
+        }}
+        logDetail={this.state.selected}
+      />
+    ) : modeEdit && !modeView ? (
+      <NonExposureEdit
+        back={() => {
+          this.setState({ modeEdit: false });
+        }}
+        logEdit={this.state.selected}
+      />
+    ) : (
+      <div className={styles.margin10}>
+        <div className={styles.title}>Filter</div>
+        <div className={styles.filters}>
+          <DateTimeRange
+            onChange={(params) => console.log(params)}
+            label="From:"
+            startDate={new Date() - 24 * 60 * 60 * 1000}
+            endDate={new Date(Date.now())}
+          />
+
+          <Select
+            options={commentTypeOptions}
+            option={selectedCommentType}
+            onChange={({ value }) => this.setState({ selectedCommentType: value })}
+            className={styles.select}
+          />
+
+          <Select
+            options={subsystemOptions}
+            option={selectedSubsystem}
+            onChange={({ value }) => this.setState({ selectedSubsystem: value })}
+            className={styles.select}
+          />
+        </div>
+        <SimpleTable headers={headers} data={tableData} />
+      </div>
     );
   }
 }
