@@ -655,13 +655,13 @@ export default class ManagerInterface {
   }
 
   // TODO: INITIAL
-  static getListExposureLogs() {
+  static getListExposureLogs(instrument) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2`;
     console.log('url', url);
     return fetch(url, {
       method: 'GET',
@@ -712,6 +712,34 @@ export default class ManagerInterface {
       }
       return response.json().then((resp) => {
         toast.info(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static getListMessagesExposureLogs(obsId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    // const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?obs_id=${obsId}`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages`;
+    console.log('url', url);
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
         return resp;
       });
     });
@@ -777,7 +805,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getListInstrumentsExposureLogs() {
+  static getListExposureInstruments() {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
