@@ -6,7 +6,7 @@ const ArrowIcon = ({ active, className, style, up, horizontal }) => (
     className={[
       horizontal ? styles.horizontalArrowIcon : styles.arrowIcon,
       active ? styles.active : styles.inactive,
-      style
+      style,
     ].join(' ')}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="3 3 12 12"
@@ -24,6 +24,5 @@ const ArrowIcon = ({ active, className, style, up, horizontal }) => (
     )}
   </svg>
 );
->>>>>>> little changes about icons
 
 export default ArrowIcon;
