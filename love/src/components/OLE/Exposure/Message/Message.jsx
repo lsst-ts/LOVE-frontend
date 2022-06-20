@@ -81,7 +81,7 @@ export default class Message extends Component {
             #{message.id}
             { linkJira
                 ? <span>
-                    <Button status="link" onClick={() => { linkJira }}>view Jira ticket</Button>
+                    <Button status="link" title={ linkJira } onClick={() => { linkJira }}>view Jira ticket</Button>
                   </span>
                 : <></>
             }
@@ -122,7 +122,7 @@ export default class Message extends Component {
               { fileurl
                 ? <>
                     <span className={styles.margin3}>{ this.getFilename(fileurl) }</span>
-                    <Button className={styles.iconBtn} title="File" onClick={() => { fileurl }} status="transparent">
+                    <Button className={styles.iconBtn} title={ fileurl } onClick={() => { fileurl }} status="transparent">
                       <DownloadIcon className={styles.icon}/>
                     </Button>
                   </>
