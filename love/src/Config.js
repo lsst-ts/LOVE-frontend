@@ -11,6 +11,8 @@ export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
+// OLE Configurations
+export const LOG_TYPE_OPTIONS = ['Fault', 'Ok', 'Wait'];
 
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
