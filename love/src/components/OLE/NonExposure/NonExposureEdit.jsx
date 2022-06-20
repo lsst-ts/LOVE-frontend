@@ -6,6 +6,7 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
+import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import styles from './NonExposure.module.css';
@@ -54,6 +55,18 @@ export default class NonExposureEdit extends Component {
     console.log('Submitted: ', this.state.logEdit);
   }
 
+  handleTimeOfIncident(date, type) {
+    if (type === 'start') {
+      this.setState((state) => ({
+        logEdit: { ...state.logEdit, endDate: date },
+      }));
+    } else if (type === 'end') {
+      this.setState((state) => ({
+        logEdit: { ...state.logEdit, startDate: date },
+      }));
+    }
+  }
+
   componentDidMount() {
     ManagerInterface.getTopicData('event-telemetry').then((data) => {
       this.setState({ optionsTree: data });
@@ -61,13 +74,29 @@ export default class NonExposureEdit extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    if (
+      (prevState.logEdit?.subsystem || this.state.logEdit?.subsystem) &&
+      prevState.logEdit.subsystem !== this.state.logEdit.subsystem
+    ) {
+      console.log('SUBSYSTEM SELECTED', this.state.logEdit.subsystem);
+      this.setState((state) => ({
+        logEdit: { ...state.logEdit, csc: null, cscTopic: null, cscParam: null },
+        topicOptions: [],
+        paramsOptions: [],
+      }));
+    }
+
     if ((prevState.logEdit?.csc || this.state.logEdit?.csc) && prevState.logEdit.csc !== this.state.logEdit.csc) {
       console.log('CSC SELECTED', this.state.logEdit.csc);
+      if (!this.state.logEdit?.csc) return;
       const options = [
         ...Object.keys(this.state.optionsTree[this.state.logEdit.csc].telemetry_data),
         ...Object.keys(this.state.optionsTree[this.state.logEdit.csc].event_data),
       ].sort();
-      this.setState({ topicOptions: options });
+      this.setState((state) => ({
+        topicOptions: options,
+        logEdit: { ...state.logEdit, cscTopic: null, cscParam: null },
+      }));
     }
 
     if (
@@ -75,6 +104,7 @@ export default class NonExposureEdit extends Component {
       prevState.logEdit.cscTopic !== this.state.logEdit.cscTopic
     ) {
       console.log('TOPIC SELECTED', this.state.logEdit.cscTopic);
+      if (!this.state.logEdit.csc || !this.state.logEdit?.cscTopic) return;
       const topicData = [
         ...Object.entries(this.state.optionsTree[this.state.logEdit.csc].telemetry_data),
         ...Object.entries(this.state.optionsTree[this.state.logEdit.csc].event_data),
@@ -83,7 +113,10 @@ export default class NonExposureEdit extends Component {
         return topic === this.state.logEdit.cscTopic;
       });
       const options = Object.keys(topicParams[1]).sort();
-      this.setState({ paramsOptions: options });
+      this.setState((state) => ({
+        paramsOptions: options,
+        logEdit: { ...state.logEdit, cscParam: null },
+      }));
     }
   }
 
@@ -93,7 +126,15 @@ export default class NonExposureEdit extends Component {
     const isMenu = this.props.isMenu;
 
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
-    const cscsOptions = Object.keys(this.state.optionsTree).sort();
+    const cscsOptions = this.state.logEdit?.subsystem
+      ? Array.from(
+          new Set(
+            Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem])
+              .flat()
+              .map((e) => e.name),
+          ),
+        ).sort()
+      : [];
     const topicsOptions = this.state.topicOptions;
     const paramsOptions = this.state.paramsOptions;
 
@@ -216,14 +257,10 @@ export default class NonExposureEdit extends Component {
                   <>
                     <span className={styles.label}>Time of Incident</span>
                     <span className={styles.value}>
-                      <Input
-                        value={this.state.logEdit.timeIncident}
-                        className={styles.input}
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, timeIncident: event.value },
-                          }))
-                        }
+                      <DateTimeRange
+                        onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+                        startDate={new Date() - 24 * 60 * 60 * 1000}
+                        endDate={new Date(Date.now())}
                       />
                     </span>
                   </>
@@ -241,14 +278,10 @@ export default class NonExposureEdit extends Component {
                     <>
                       <span className={styles.label}>Time of Incident</span>
                       <span className={styles.value}>
-                        <Input
-                          value={this.state.logEdit.timeIncident}
-                          className={styles.input}
-                          onChange={(event) =>
-                            this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, timeIncident: event.value },
-                            }))
-                          }
+                        <DateTimeRange
+                          onChange={(date, type) => this.handleTimeOfIncident(date, type)}
+                          startDate={new Date() - 24 * 60 * 60 * 1000}
+                          endDate={new Date(Date.now())}
                         />
                       </span>
                     </>
