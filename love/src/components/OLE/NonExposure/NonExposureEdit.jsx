@@ -192,6 +192,8 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>Obs. Time Loss {this.state.logEdit.ObsTimeLoss}</span>
                 <span className={styles.value}>
                   <Input
+                    type="number"
+                    min={0}
                     value={this.state.logEdit.ObsTimeLoss}
                     className={styles.input}
                     onChange={(event) =>
@@ -258,6 +260,7 @@ export default class NonExposureEdit extends Component {
                     <span className={styles.label}>Time of Incident</span>
                     <span className={styles.value}>
                       <DateTimeRange
+                        className={styles.dateTimeRangeStyle}
                         onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                         startDate={new Date() - 24 * 60 * 60 * 1000}
                         endDate={new Date(Date.now())}
@@ -279,6 +282,7 @@ export default class NonExposureEdit extends Component {
                       <span className={styles.label}>Time of Incident</span>
                       <span className={styles.value}>
                         <DateTimeRange
+                          className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                           startDate={new Date() - 24 * 60 * 60 * 1000}
                           endDate={new Date(Date.now())}
