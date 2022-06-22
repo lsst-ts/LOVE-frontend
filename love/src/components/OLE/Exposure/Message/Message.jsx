@@ -81,7 +81,7 @@ export default class Message extends Component {
           <span className={[styles.floatLeft, styles.title, styles.margin3].join(' ')}>
             #{message.id}
             { linkJira
-                ? <span>
+                ? <span className={styles.marginLeft}>
                     <Button status="link" title={ linkJira } onClick={() => this.openInNewTab(linkJira)}>view Jira ticket</Button>
                   </span>
                 : <></>

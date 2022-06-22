@@ -10,6 +10,7 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Message from './Message/Message';
 import MessageEdit from './Message/MessageEdit';
+import ManagerInterface from 'Utils';
 import styles from './Exposure.module.css';
 
 
@@ -23,28 +24,34 @@ export default class ExposureDetail extends Component {
   static defaultProps = {
     back: () => {},
     logDetail: {
-      obsId: 'LC20210224-1',
-      obsStatus: 'Ongoing',
+      obs_id: 'LC20210224-1',
       instrument: 'LATISS',
-      obsType: 'Engtest',
-      obsReason: 'extra',
-      obsDay: undefined,
+      observation_type: 'Engtest',
+      observation_reason: 'extra',
+      observation_day: undefined,
     },
     logMessages: [
       {
         id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        siteId: '',
+        site_id: '',
         type: undefined,
         user: undefined,
-        flag: undefined,
+        exposure_flag: undefined,
         jira: undefined,
         file: undefined,
-        description: undefined,
-        dateAdded: undefined,
-        dateInvalidated: undefined,
+        message_text: undefined,
+        date_added: undefined,
+        date_invalidated: undefined,
       },
     ]
   };
+
+  saveMessage(message) {
+    console.log('save message', message);
+    ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
+      console.log('result', response);
+    });
+  }
 
   constructor(props) {
     super(props);
@@ -84,7 +91,7 @@ export default class ExposureDetail extends Component {
                 return (<MessageEdit
                     message={this.state.selectedMessage}
                     cancel={() => { this.setState({ selectedMessage: undefined}); }}
-                    save={(message) => { console.log('save: ', message); }}
+                    save={(message) => { this.saveMessage(message); this.setState({ selectedMessage: undefined}); }}
                   />);
               } else {
                 return (<Message message={message} editMessage={(messageEdit) => { this.setState({ selectedMessage: messageEdit}); }}/>);
