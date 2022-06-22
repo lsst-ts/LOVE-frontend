@@ -16,12 +16,10 @@ export default class Message extends Component {
 
   static defaultProps = {
     message: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+      id: '',
       site_id: '',
       user_id: undefined,
-      flag: 'ok',
-      jira: undefined,
-      file: undefined,
+      exposure_flag: undefined,
       urls: undefined,
       message_text: undefined,
       date_added: undefined,
@@ -88,7 +86,6 @@ export default class Message extends Component {
                   </span>
                 : <></>
             }
-            
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
@@ -133,7 +130,6 @@ export default class Message extends Component {
                   </>
                 : <></>
               }
-              
             </span>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
