@@ -93,7 +93,7 @@ export default class MessageEdit extends Component {
     const cancel = this.props.cancel ? this.props.cancel : MessageEdit.defaultProps.cancel;
     const save = this.props.save ? this.props.save : MessageEdit.defaultProps.save;
 
-    console.log('render message', this.state.message);
+    const EXPOSURE_FLAG_OPTIONS = ['None', 'Junk', 'Questionary'];
 
     return (
       <div className={styles.message}>
@@ -136,15 +136,15 @@ export default class MessageEdit extends Component {
           />
         </div>
         <div className={styles.footer}>
-          <span className={[styles.floatLeft, styles.margin3].join(' ')}>
+          <span className={[styles.floatLeft, styles.inline].join(' ')}>
             <FileUploader
-              value={this.state.message.file}
+              value={this.state.message.file?.name}
               handleFile={(file) => this.setState((prevState) => ({message: {...prevState.message, file: file}}))}
               handleDelete={() => this.setState((prevState) => ({message: {...prevState.message, file: undefined}}))}
             />
             { this.state.message.fileurl ?
                 <>
-                  <span>{ this.state.message.filename }</span>
+                  <Button status="link" title={ this.state.message.fileurl } onClick={() => this.openInNewTab(this.state.message.fileurl)}>{ this.state.message.filename }</Button>
                   <Button className={styles.iconBtn} title={this.state.message.fileurl} onClick={() => this.openInNewTab(this.state.message.fileurl)} status="transparent">
                     <DownloadIcon className={styles.icon}/>
                   </Button>
@@ -152,15 +152,16 @@ export default class MessageEdit extends Component {
               : <></>
             }
           </span>
-          <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <span className={[styles.margin3, styles.capitalize].join(' ')}>
-              {this.state.message.exposure_flag}
+          <span className={[styles.floatRight, styles.margin3, styles.inline].join(' ')}>
+            <span className={styles.label}>Exposure Flag</span>
+            <span className={styles.value}>
+              <Select value={this.state.message.exposure_flag}
+                onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, exposure_flag: event.value}}))}
+                options={EXPOSURE_FLAG_OPTIONS}
+                className={styles.select}
+                small
+              />
             </span>
-            <span className={styles.vertAlign}>
-              <FlagIcon title={this.state.message.exposure_flag} status={this.statusFlag(this.state.message.exposure_flag)}
-                className={styles.iconFlag}/>
-            </span>
-
           </span>
         </div>
       </div>
