@@ -37,6 +37,14 @@ export default class Exposure extends Component {
   view(index) {
     console.log('view', index);
     if (index) {
+      /* ManagerInterface.getRetrieveMessageExposureLogs(index['id']).then((data) => {
+        console.log('getRetrieveMessageExposureLogs data:', data);
+        this.setState({
+          modeView: true,
+          selected: data,
+        });
+      }); */
+
       ManagerInterface.getListMessagesExposureLogs(index['obs_id']).then((data) => {
         console.log('getListMessagesExposureLogs(', index['obs_id'], ') => data:', data);
         this.setState({
