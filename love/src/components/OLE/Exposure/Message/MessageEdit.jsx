@@ -21,16 +21,19 @@ export default class MessageEdit extends Component {
 
   static defaultProps = {
     message: {
-      id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      siteId: '',
+      id: '',
+      site_id: '',
       type: undefined,
       user: undefined,
-      flag: 'ok',
-      jira: undefined,
+      flag: undefined,
+      urls: [],
       file: undefined,
-      description: undefined,
-      dateAdded: undefined,
-      dateInvalidated: undefined,
+      fileurl: undefined,
+      filename: undefined,
+      jira: undefined,
+      message_text: undefined,
+      date_added: undefined,
+      date_invalidated: undefined,
     },
     cancel: () => {console.log('defaultProps.cancel')},
     save: () => {console.log('defaultProps.save')},
@@ -45,16 +48,52 @@ export default class MessageEdit extends Component {
     return result[flag] ? result[flag] : 'unknown';
   }
 
+  getLinkJira(message) {
+    const urls = message.urls;
+    const filtered = urls.filter((url) => url.includes('jira'));
+    if ( filtered.length > 0 ) {
+      return filtered[0];
+    }
+    return undefined;
+  }
+
+  getFileURL(message) {
+    const urls = message.urls;
+    const filtered = urls.filter((url) => !url.includes('jira'));
+    if ( filtered.length > 0 ) {
+      return filtered[0];
+    }
+    return undefined;
+  }
+
+  getFilename(url) {
+    if ( url ) {
+      return url.substring(url.lastIndexOf('/') + 1);
+    }
+    return '';
+  }
+
+  openInNewTab(url) {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
+  }
+
   constructor(props) {
     super(props);
+    const message = props.message ? props.message : MessageEdit.defaultProps.message;
+    message.jira = this.getLinkJira(message);
+    message.fileurl = this.getFileURL(message);
+    message.filename = this.getFilename(this.getFileURL(message));
     this.state = {
-      message: props.message ? props.message : MessageEdit.defaultProps.message,
+      message: message,
     };
   }
 
   render() {
     const cancel = this.props.cancel ? this.props.cancel : MessageEdit.defaultProps.cancel;
     const save = this.props.save ? this.props.save : MessageEdit.defaultProps.save;
+
+    console.log('render message', this.state.message);
 
     return (
       <div className={styles.message}>
@@ -63,11 +102,17 @@ export default class MessageEdit extends Component {
             #{this.state.message.id} - {this.state.message.type}
           </span>
           <span className={[styles.checkboxText, styles.floatLeft, styles.margin3].join(' ')}>
-            <Button status="link">view Jira ticket</Button>
-            <Input value={this.state.message.jira}
-              className={styles.input}
-              onChange={(event) => this.setState((prevState) => ({message: {...prevState.message, jira: event.value}}))}
-            />
+          { this.state.message.jira ?
+              <>
+                <Button status="link" title={ this.state.message.jira } onClick={() => this.openInNewTab(this.state.message.jira)}>view Jira ticket</Button>
+                <Input value={this.state.message.jira}
+                  className={styles.input}
+                  onChange={(event) => this.setState((prevState) => ({message: {...prevState.message, jira: event.value}}))}
+                />
+              </>
+            : <></>
+          }
+            
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <Button className={styles.iconBtn} title="Exit" onClick={() => cancel()} status="transparent">
@@ -82,33 +127,37 @@ export default class MessageEdit extends Component {
 
         </div>
         <div className={styles.description}>
+          <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
+            <span className={styles.title}>Message</span>
+          </div>
           <TextArea
-            value={this.state.message.description}
-            callback={(event) => this.setState((prevState) => ({message: {...prevState.message, description: event.value}}))}
+            value={this.state.message.message_text}
+            callback={(event) => this.setState((prevState) => ({message: {...prevState.message, message_text: event.value}}))}
           />
         </div>
         <div className={styles.footer}>
-          {/* <span className={[styles.floatLeft, styles.margin3].join(' ')}>
-            <span className={styles.label}>
-              File Attached:
-            </span>
-            <span className={styles.value}>
-              <FileUploader
-                value={this.state.message.file?.name}
-                handleFile={(file) => this.setState((prevState) => ({message: {...prevState.message, file: file}}))}
-                handleDelete={() => this.setState((prevState) => ({message: {...prevState.message, file: undefined}}))}
-              />
-              <Button className={styles.iconBtn} title="File" onClick={() => {}} status="transparent">
-                <DownloadIcon className={styles.icon}/>
-              </Button>
-            </span>
-          </span> */}
+          <span className={[styles.floatLeft, styles.margin3].join(' ')}>
+            <FileUploader
+              value={this.state.message.file}
+              handleFile={(file) => this.setState((prevState) => ({message: {...prevState.message, file: file}}))}
+              handleDelete={() => this.setState((prevState) => ({message: {...prevState.message, file: undefined}}))}
+            />
+            { this.state.message.fileurl ?
+                <>
+                  <span>{ this.state.message.filename }</span>
+                  <Button className={styles.iconBtn} title={this.state.message.fileurl} onClick={() => this.openInNewTab(this.state.message.fileurl)} status="transparent">
+                    <DownloadIcon className={styles.icon}/>
+                  </Button>
+                </>
+              : <></>
+            }
+          </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <span className={[styles.margin3, styles.capitalize].join(' ')}>
-              {this.state.message.flag}
+              {this.state.message.exposure_flag}
             </span>
             <span className={styles.vertAlign}>
-              <FlagIcon title={this.state.message.flag} status={this.statusFlag(this.state.message.flag)}
+              <FlagIcon title={this.state.message.exposure_flag} status={this.statusFlag(this.state.message.exposure_flag)}
                 className={styles.iconFlag}/>
             </span>
 
