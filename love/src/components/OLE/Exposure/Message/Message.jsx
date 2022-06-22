@@ -59,12 +59,15 @@ export default class Message extends Component {
   }
 
   getFilename(url) {
-    console.log('url');
-    console.log(url);
     if ( url ) {
       return url.substring(url.lastIndexOf('/') + 1);
     }
     return '';
+  }
+
+  openInNewTab(url) {
+    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+    if (newWindow) newWindow.opener = null;
   }
 
   render() {
@@ -81,7 +84,7 @@ export default class Message extends Component {
             #{message.id}
             { linkJira
                 ? <span>
-                    <Button status="link" title={ linkJira } onClick={() => { linkJira }}>view Jira ticket</Button>
+                    <Button status="link" title={ linkJira } onClick={() => this.openInNewTab(linkJira)}>view Jira ticket</Button>
                   </span>
                 : <></>
             }
@@ -114,19 +117,21 @@ export default class Message extends Component {
           <span className={[styles.floatLeft, styles.margin3].join(' ')}>
             <span className={styles.label}>
               { fileurl
-                ? 'File Attached: '
+                ? 'File Attached:'
                 : ''
               }
             </span>
             <span className={styles.value}>
               { fileurl
                 ? <>
-                    <span className={styles.margin3}>{ this.getFilename(fileurl) }</span>
-                    <Button className={styles.iconBtn} title={ fileurl } onClick={() => { fileurl }} status="transparent">
+                    <Button status="link" title={ fileurl } onClick={() => this.openInNewTab(fileurl)}>
+                      { this.getFilename(fileurl) }
+                    </Button>
+                    <Button className={styles.iconBtn} title={ fileurl } onClick={() => this.openInNewTab(fileurl)} status="transparent">
                       <DownloadIcon className={styles.icon}/>
                     </Button>
                   </>
-                : ``
+                : <></>
               }
               
             </span>
