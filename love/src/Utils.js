@@ -870,8 +870,6 @@ export default class ManagerInterface {
       });
     });
   }
-
-
 } // END ManagerInterface
 
 /**
@@ -1102,10 +1100,12 @@ export const relativeTime = (timestamp, taiToUtc) => {
  */
 export const formatSecondsToDigital = (time) => {
   let seconds = time % 60;
-  let minutes = Math.floor(time / 60);
+  let minutes = Math.floor((time % 3600) / 60);
+  let hours = Math.floor(time / 3600);
   minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes;
   seconds = seconds.toString().length === 1 ? `0${seconds}` : seconds;
-  return `${minutes}:${seconds}`;
+  hours = hours.toString().length === 1 ? `0${hours}` : hours;
+  return `${hours}:${minutes}:${seconds}`;
 };
 
 export const getStringRegExp = (str) => {
