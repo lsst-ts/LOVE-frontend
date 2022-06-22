@@ -3,7 +3,7 @@ import { DATE_TIME_FORMAT } from 'Config';
 import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import styles from './DateTimeRange.module.css';
 
-const DateTimeRange = ({ ...props }) => {
+const DateTimeRange = (props) => {
   const [dateStart, setDateStart] = useState(props.startDate ?? new Date(new Date() - 24 * 60 * 60 * 1000));
   const [dateEnd, setDateEnd] = useState(props.endDate ?? new Date());
 
@@ -23,7 +23,7 @@ const DateTimeRange = ({ ...props }) => {
   };
 
   return (
-    <div className={styles.horizontalFilter}>
+    <div className={[styles.horizontalFilter, props.className].join(' ')}>
       {props.label !== '' && <span className={styles.label}>{props.label}</span>}
       <DateTime
         viewMode="time"
