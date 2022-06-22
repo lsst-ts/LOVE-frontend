@@ -723,8 +723,8 @@ export default class ManagerInterface {
       // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    // const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?obs_id=${obsId}`;
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?obs_id=${obsId}`;
+    // const url = `${this.getApiBaseUrl()}ole/exposurelog/messages`;
     console.log('url', url);
     return fetch(url, {
       method: 'GET',
@@ -745,7 +745,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getRetrieveMessageExposureLogs(msgExposeId) {
+  static getRetrieveMessageExposureLogs(msgExposureId) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       // console.log('Token not found during validation');
@@ -772,18 +772,23 @@ export default class ManagerInterface {
     });
   }
 
+  // TODO: Unsuported Media Type
   static updateMessageExposureLogs(msgExposureId, data) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures/messages/${msgExposureId}/`;
+    console.log('updateMessageExposureLogs', msgExposureId, data);
+    const params = data;
+
+    console.log('params', params);
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
     return fetch(url, {
-      method: 'PATCH',
+      method: 'PUT',
       headers: this.getHeaders(),
       body: JSON.stringify({
-        ...data
-      }),
+        params,
+      })
     }).then((response) => {
       if (response.status >= 500) {
         toast.error('Error communicating with the server.');

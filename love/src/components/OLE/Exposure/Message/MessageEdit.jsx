@@ -34,6 +34,7 @@ export default class MessageEdit extends Component {
       message_text: undefined,
       date_added: undefined,
       date_invalidated: undefined,
+      createTicketJira: false,
     },
     cancel: () => {console.log('defaultProps.cancel')},
     save: () => {console.log('defaultProps.save')},
@@ -84,6 +85,7 @@ export default class MessageEdit extends Component {
     message.jira = this.getLinkJira(message);
     message.fileurl = this.getFileURL(message);
     message.filename = this.getFilename(this.getFileURL(message));
+    message.createTicketJira = false;
     this.state = {
       message: message,
     };
@@ -98,20 +100,26 @@ export default class MessageEdit extends Component {
     return (
       <div className={styles.message}>
         <div className={styles.header}>
-          <span className={[styles.floatLeft, styles.title, styles.margin3].join(' ')}>
-            #{this.state.message.id} - {this.state.message.type}
-          </span>
-          <span className={[styles.checkboxText, styles.floatLeft, styles.margin3].join(' ')}>
-          { this.state.message.jira ?
-              <>
-                <Button status="link" title={ this.state.message.jira } onClick={() => this.openInNewTab(this.state.message.jira)}>view Jira ticket</Button>
-                <Input value={this.state.message.jira}
-                  className={styles.input}
-                  onChange={(event) => this.setState((prevState) => ({message: {...prevState.message, jira: event.value}}))}
-                />
-              </>
-            : <></>
-          }
+          <span className={[styles.floatLeft, styles.margin3, styles.inline].join(' ')}>
+            <span className={styles.title}>
+              #{this.state.message.id}
+            </span>
+            { this.state.message.jira ?
+                <span className={styles.marginLeft}>
+                  <Button status="link" title={ this.state.message.jira } onClick={() => this.openInNewTab(this.state.message.jira)}>
+                    view Jira ticket
+                  </Button>
+                </span>
+              : <span className={[styles.checkboxText, styles.marginLeft].join(' ')}>
+                  Create and link new Jira ticket
+                  <Input type="checkbox"
+                    checked={this.state.message.createTicketJira}
+                    onChange={(event) => {
+                      this.setState((prevState) => ({message: {...prevState.message, createTicketJira: event.target.checked}}));
+                    }}
+                  />
+                </span>
+            }
             
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
@@ -132,7 +140,7 @@ export default class MessageEdit extends Component {
           </div>
           <TextArea
             value={this.state.message.message_text}
-            callback={(event) => this.setState((prevState) => ({message: {...prevState.message, message_text: event.value}}))}
+            callback={(event) => this.setState((prevState) => ({message: {...prevState.message, message_text: event}}))}            
           />
         </div>
         <div className={styles.footer}>
@@ -153,10 +161,10 @@ export default class MessageEdit extends Component {
             }
           </span>
           <span className={[styles.floatRight, styles.margin3, styles.inline].join(' ')}>
-            <span className={styles.label}>Exposure Flag</span>
+            <span className={[styles.label,  styles.paddingTop].join(' ')}>Exposure Flag</span>
             <span className={styles.value}>
               <Select value={this.state.message.exposure_flag}
-                onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, exposure_flag: event.value}}))}
+                onChange={(event) => this.setState((prevState) => ({message: {...prevState.message, exposure_flag: event.value}}))}
                 options={EXPOSURE_FLAG_OPTIONS}
                 className={styles.select}
                 small
