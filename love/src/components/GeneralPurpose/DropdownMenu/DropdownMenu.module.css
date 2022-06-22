@@ -49,7 +49,7 @@
 }
 
 .refNode {
-  /* display: contents; */
+  display: contents;
   position: relative;
   max-height: 2em;
 }
