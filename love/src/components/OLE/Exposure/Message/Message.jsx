@@ -12,6 +12,7 @@ export default class Message extends Component {
   static propTypes = {
     message: PropTypes.object,
     editMessage: PropTypes.func,
+    deleteMessage: PropTypes.func,
   };
 
   static defaultProps = {
@@ -27,6 +28,7 @@ export default class Message extends Component {
       tags: [],
     },
     editMessage: () => { console.log('defaultProps.editMessage()'); },
+    deleteMessage: () => { console.log('defaultProps.deleteMessage()'); },
   };
 
   statusFlag(flag) {
@@ -71,6 +73,7 @@ export default class Message extends Component {
   render() {
     const message = this.props.message ? this.props.message : Message.defaultProps.message;
     const edit = this.props.editMessage ? this.props.editMessage : Message.defaultProps.editMessage;
+    const remove = this.props.deleteMessage ? this.props.deleteMessage : Message.defaultProps.deleteMessage;
 
     const linkJira = this.getLinkJira(message);
     const fileurl = this.getFileURL(message);
@@ -88,7 +91,7 @@ export default class Message extends Component {
             }
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+            <Button className={styles.iconBtn} title="Delete" onClick={() => { console.log('click delete'); remove(message); }} status="transparent">
               <DeleteIcon className={styles.icon}/>
             </Button>
           </span>
