@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import ManagerInterface from 'Utils';
+import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Message from './Message/Message';
 import MessageEdit from './Message/MessageEdit';
-import ManagerInterface from 'Utils';
 import styles from './Exposure.module.css';
-import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 
 const moment = extendMoment(Moment);
 
@@ -24,26 +24,13 @@ export default class ExposureDetail extends Component {
   static defaultProps = {
     back: () => {},
     logDetail: {
-      obs_id: 'LC20210224-1',
+      obs_id: 'string',
       instrument: 'LATISS',
       observation_type: 'Engtest',
       observation_reason: 'extra',
       observation_day: undefined,
     },
-    logMessages: [
-      {
-        id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-        site_id: '',
-        type: undefined,
-        user: undefined,
-        exposure_flag: undefined,
-        jira: undefined,
-        file: undefined,
-        message_text: undefined,
-        date_added: undefined,
-        date_invalidated: undefined,
-      },
-    ],
+    logMessages: [],
   };
 
   saveMessage(message) {
@@ -72,6 +59,13 @@ export default class ExposureDetail extends Component {
     };
   }
 
+  saveMessage(message) {
+    console.log('save message', message);
+    ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
+      console.log('result', response);
+    });
+  }
+
   handleDateTimeRange(date, type) {
     if (type === 'start') {
       this.setState({ selectedDateStart: date });
@@ -85,12 +79,18 @@ export default class ExposureDetail extends Component {
     const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
     const logMessages = this.props.logMessages ? this.props.logMessages : this.defaultProps.logMessages;
 
-    const flagsOptions = ['All', ...EXPOSURE_FLAG_OPTIONS];
+    const flagsOptions = [
+      { label: 'All exposure flags', value: 'All' },
+      ...EXPOSURE_FLAG_OPTIONS.map((flag) => ({ label: flag, value: flag })),
+    ];
     const selectedFlag = this.state.selectedFlag;
 
     let userOptions = new Set();
     logMessages.forEach((log) => userOptions.add(log.user_id));
-    userOptions = ['All', ...Array.from(userOptions)];
+    userOptions = [
+      { label: 'All users', value: 'All' },
+      ...Array.from(userOptions).map((user) => ({ label: user, value: user })),
+    ];
     const selectedUser = this.state.selectedUser;
 
     // Filter by exposure flag
@@ -125,9 +125,6 @@ export default class ExposureDetail extends Component {
         <div className={styles.detailContainer}>
           <div className={styles.header}>
             <span>{logDetail.obs_id}</span>
-            <span>
-              <Button status="link">view Jira ticket</Button>
-            </span>
             <span className={styles.floatRight}>[{logDetail.observation_type}]</span>
           </div>
           <div className={styles.body}>

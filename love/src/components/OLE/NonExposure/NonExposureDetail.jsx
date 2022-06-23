@@ -4,7 +4,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './NonExposure.module.css';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
-import { formatSecondsToDigital, openInNewTab } from 'Utils';
+import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 
 export default class NonExposureDetail extends Component {
   static propTypes = {
@@ -35,6 +35,7 @@ export default class NonExposureDetail extends Component {
     const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
     const fileUrl = logDetail.urls?.[1];
     const fileName = fileUrl ? fileUrl.substring(fileUrl.lastIndexOf('/') + 1) : null;
+    const logTagsParams = getOLEDataFromTags(logDetail.tags);
 
     return (
       <>
@@ -54,7 +55,9 @@ export default class NonExposureDetail extends Component {
               #{logDetail.id} - {logDetail.type}
             </span>
             <span>
-              <Button status="link">view Jira ticket</Button>
+              <Button status="link" onClick={() => openInNewTab(logDetail.urls[0])}>
+                view Jira ticket
+              </Button>
             </span>
             <span className={styles.floatRight}>
               <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
@@ -68,7 +71,13 @@ export default class NonExposureDetail extends Component {
               <span className={styles.value}>{logDetail.date_user_specified}</span>
               <span className={styles.label}>Subsystem Affected</span>
               <span className={styles.value}>
-                {logDetail.tags[1] + ' > ' + logDetail.tags[2] + ' > ' + logDetail.tags[3] + ' > ' + logDetail.tags[4]}
+                {logTagsParams.subsystem +
+                  ' > ' +
+                  (logTagsParams.csc ?? 'None') +
+                  ' > ' +
+                  (logTagsParams.topic ?? 'None') +
+                  ' > ' +
+                  (logTagsParams.param ?? 'None')}
               </span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost)}</span>
@@ -77,7 +86,6 @@ export default class NonExposureDetail extends Component {
               <div className={styles.floatLeft}>
                 <span>On </span>
                 <span className={styles.bold}>{logDetail.date_user_specified} </span>
-                <span>by </span>
                 <span className={styles.bold}>{logDetail.user_id} </span>
                 <span>wrote:</span>
               </div>

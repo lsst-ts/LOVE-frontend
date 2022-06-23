@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
@@ -94,26 +93,31 @@ export default class Exposure extends Component {
         field: 'obs_id',
         title: 'Observation Id',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'timespan_end',
         title: 'Date & Time (TAI)',
         type: 'timestamp',
+        className: styles.tableHead,
       },
       {
         field: 'instrument',
         title: 'Instrument',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'observation_type',
         title: 'Observation Type',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'flags',
         title: 'Flags',
         type: 'string',
+        className: styles.tableHead,
         render: (value, row) => {
           const values = String(value).split(',');
           return values.map((val) => {
@@ -129,6 +133,7 @@ export default class Exposure extends Component {
         field: 'action',
         title: 'Action',
         type: 'string',
+        className: styles.tableHead,
         render: (_, index) => {
           return (
             <>
@@ -141,7 +146,7 @@ export default class Exposure extends Component {
                   }}
                   status="transparent"
                 >
-                  <AcknowledgeIcon className={styles.icon} nonAcknowledge={false} />
+                  <AcknowledgeIcon className={styles.icon} />
                 </Button>
               </span>
               <span className={styles.margin}>
@@ -201,7 +206,10 @@ export default class Exposure extends Component {
     const tableData = this.state.exposurelogs;
     const instrumentsOptions = this.state.instruments;
     const selectedInstrument = this.state.selectedInstrument;
-    const exposureTypeOptions = ['All', ...this.state.exposureTypes];
+    const exposureTypeOptions = [
+      { label: 'All observation types', value: 'All' },
+      ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
+    ];
     const selectedExposureType = this.state.selectedExposureType;
 
     // Filter by date range
