@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
+import ManagerInterface from 'Utils';
+import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -14,8 +16,6 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
-import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
-import { formatSecondsToDigital } from 'Utils';
 
 const moment = extendMoment(Moment);
 
@@ -29,12 +29,12 @@ export default class NonExposure extends Component {
     this.state = {
       modeView: false,
       modeEdit: false,
-      selected: {},
       selectedDateStart: null,
       selectedDateEnd: null,
       selectedCommentType: 'All',
       selectedSubsystem: 'All',
       selectedObsTimeLoss: false,
+      logs: [],
     };
   }
 
@@ -69,38 +69,39 @@ export default class NonExposure extends Component {
       {
         field: 'id',
         title: 'Log Id',
-        type: 'number',
+        type: 'string',
         className: styles.tableHead,
       },
       {
-        field: 'userId',
+        field: 'user_id',
         title: 'User Id',
         type: 'string',
         className: styles.tableHead,
       },
       {
-        field: 'agent',
+        field: 'user_agent',
         title: 'Agent',
         type: 'string',
         className: styles.tableHead,
       },
       {
-        field: 'timestamp',
+        field: 'date_added',
         title: 'Timestamp',
         type: 'timestamp',
         className: styles.tableHead,
       },
       {
-        field: 'timeIncident',
+        field: 'date_user_specified',
         title: 'Time of Incident',
         type: 'string',
         className: styles.tableHead,
       },
       {
-        field: 'type',
+        field: 'tags',
         title: 'Type',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => getOLEDataFromTags(value).type,
       },
       {
         field: 'time_lost',
@@ -110,45 +111,40 @@ export default class NonExposure extends Component {
         render: (value) => formatSecondsToDigital(value),
       },
       {
-        field: 'subsystem',
+        field: 'tags',
         title: 'Subsystem',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => getOLEDataFromTags(value).subsystem,
       },
       {
-        field: 'csc',
+        field: 'tags',
         title: 'CSC',
         type: 'string',
         className: styles.tableHead,
-        render: (cell, row) => (
-          <b>
-            {cell}:{row.salindex}
-          </b>
-        ),
+        render: (value) => <b>{getOLEDataFromTags(value).csc}</b>,
       },
       {
-        field: 'cscTopic',
-        title: 'CSC Topic',
-        type: 'string',
-        className: styles.tableHead,
-      },
-      {
-        field: 'file',
+        field: 'urls',
         title: 'File',
         type: 'link',
         className: styles.tableHead,
         render: (value) => (
-          <Button className={styles.iconBtn} title="File" onClick={() => {}}>
+          <Button className={styles.iconBtn} title={value[1]} onClick={() => openInNewTab(value[1])}>
             <DownloadIcon className={styles.icon} />
           </Button>
         ),
       },
       {
-        field: 'jira',
+        field: 'urls',
         title: 'Jira',
         type: 'link',
         className: styles.tableHead,
-        render: (value) => <Link to={value}>{value}</Link>,
+        render: (value) => (
+          <a href={value[0]} target="_blank">
+            {value[0]}
+          </a>
+        ),
       },
       {
         field: 'action',
@@ -189,53 +185,38 @@ export default class NonExposure extends Component {
     ];
   };
 
+  componentDidMount() {
+    ManagerInterface.getListMessagesNarrativeLogs().then((data) => {
+      this.setState({ logs: data });
+    });
+  }
+
   render() {
     const modeView = this.state.modeView;
     const modeEdit = this.state.modeEdit;
     const headers = Object.values(this.getHeaders());
 
-    let filteredData = [
-      {
-        id: 1,
-        userId: 'MiaElbo',
-        agent: 'Lorem',
-        timestamp: '2022-03-21 11:24:24',
-        timeIncident: '2022-03-21 12:25:25',
-        type: 'Observation',
-        time_lost: 10,
-        subsystem: 'Main Telescope',
-        csc: 'MTHexapod',
-        salindex: 0,
-        cscTopic: 'Actuators',
-        cscParam: 'Test_param',
-        file: { name: 'file.csv', size: 6078 },
-        jira: 'http://lsst.jira.org',
-        description:
-          'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over. First we have the Logs component, which will display logs created by different love-operators. This component will have two tabs, one for non-exposure logs and another for exposure logs, viewing these two types of logs is very different.',
-      },
-    ];
+    let filteredData = this.state.logs;
 
     // Filter by date range
     const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
-    // console.log(this.state.selectedDateStart);
     filteredData = filteredData.filter((log) => range.contains(Moment(log.timestamp)));
 
     // Filter by type
     filteredData =
       this.state.selectedCommentType !== 'All'
-        ? filteredData.filter((log) => log.type === this.state.selectedCommentType)
+        ? filteredData.filter((log) => getOLEDataFromTags(log.tags).type === this.state.selectedCommentType)
         : filteredData;
 
     // Filter by subsystem
     filteredData =
       this.state.selectedSubsystem !== 'All'
-        ? filteredData.filter((log) => log.subsystem === this.state.selectedSubsystem)
+        ? filteredData.filter((log) => getOLEDataFromTags(log.tags).subsystem === this.state.selectedSubsystem)
         : filteredData;
 
     // Filter by obs time loss
     filteredData = this.state.selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
 
-    // const tableData = Object.values(filteredData);
     const tableData = filteredData;
 
     const commentTypeOptions = ['All', ...LOG_TYPE_OPTIONS];
@@ -267,7 +248,7 @@ export default class NonExposure extends Component {
           <DateTimeRange
             onChange={(date, type) => this.handleDateTimeRange(date, type)}
             label="From:"
-            startDate={new Date() - 24 * 60 * 60 * 1000}
+            startDate={new Date() - 24 * 30 * 60 * 60 * 1000}
             endDate={new Date(Date.now())}
           />
 
