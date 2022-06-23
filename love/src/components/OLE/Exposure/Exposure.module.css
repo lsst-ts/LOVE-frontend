@@ -39,7 +39,7 @@
 
 .filters input {
   line-height: 1em;
-  height: 2.5em;
+  height: 2em;
 }
 
 .filters .select {
@@ -347,4 +347,8 @@
 .header.inline .value {
   width: 15em;
   padding-bottom: 5px;
+}
+
+.dateRange {
+  white-space: nowrap;
 }

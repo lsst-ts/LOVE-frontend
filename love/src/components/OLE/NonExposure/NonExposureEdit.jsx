@@ -30,7 +30,7 @@ export default class NonExposureEdit extends Component {
       cscTopic: undefined,
       value: undefined,
       user: undefined,
-      ObsTimeLoss: undefined,
+      obsTimeLoss: undefined,
       jira: undefined,
       file: undefined,
       description: undefined,
@@ -78,16 +78,14 @@ export default class NonExposureEdit extends Component {
       (prevState.logEdit?.subsystem || this.state.logEdit?.subsystem) &&
       prevState.logEdit.subsystem !== this.state.logEdit.subsystem
     ) {
-      console.log('SUBSYSTEM SELECTED', this.state.logEdit.subsystem);
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, csc: null, cscTopic: null, cscParam: null },
+        logEdit: { ...state.logEdit, csc: null, salindex: 0, cscTopic: null, cscParam: null },
         topicOptions: [],
         paramsOptions: [],
       }));
     }
 
     if ((prevState.logEdit?.csc || this.state.logEdit?.csc) && prevState.logEdit.csc !== this.state.logEdit.csc) {
-      console.log('CSC SELECTED', this.state.logEdit.csc);
       if (!this.state.logEdit?.csc) return;
       const options = [
         ...Object.keys(this.state.optionsTree[this.state.logEdit.csc].telemetry_data),
@@ -95,7 +93,7 @@ export default class NonExposureEdit extends Component {
       ].sort();
       this.setState((state) => ({
         topicOptions: options,
-        logEdit: { ...state.logEdit, cscTopic: null, cscParam: null },
+        logEdit: { ...state.logEdit, salindex: 0, cscTopic: null, cscParam: null },
       }));
     }
 
@@ -103,7 +101,6 @@ export default class NonExposureEdit extends Component {
       (prevState.logEdit?.cscTopic || this.state.logEdit?.cscTopic) &&
       prevState.logEdit.cscTopic !== this.state.logEdit.cscTopic
     ) {
-      console.log('TOPIC SELECTED', this.state.logEdit.cscTopic);
       if (!this.state.logEdit.csc || !this.state.logEdit?.cscTopic) return;
       const topicData = [
         ...Object.entries(this.state.optionsTree[this.state.logEdit.csc].telemetry_data),
@@ -189,15 +186,16 @@ export default class NonExposureEdit extends Component {
                     small
                   />
                 </span>
-                <span className={styles.label}>Obs. Time Loss {this.state.logEdit.ObsTimeLoss}</span>
+                <span className={styles.label}>Obs. Time Loss {this.state.logEdit.obsTimeLoss}</span>
                 <span className={styles.value}>
                   <Input
                     type="number"
                     min={0}
-                    value={this.state.logEdit.ObsTimeLoss}
+                    defaultValue={0}
+                    value={this.state.logEdit.obsTimeLoss}
                     className={styles.input}
                     onChange={(event) =>
-                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, ObsTimeLoss: event.value } }))
+                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, obsTimeLoss: event.value } }))
                     }
                   />
                 </span>
@@ -227,6 +225,19 @@ export default class NonExposureEdit extends Component {
                     options={cscsOptions}
                     className={styles.select}
                     small
+                  />
+                </span>
+                <span className={styles.label}>Salindex</span>
+                <span className={styles.value}>
+                  <Input
+                    type="number"
+                    min={0}
+                    defaultValue={0}
+                    value={this.state.logEdit.salindex}
+                    className={styles.input}
+                    onChange={(event) =>
+                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, salindex: event.value } }))
+                    }
                   />
                 </span>
                 <span className={styles.label}>CSC Topic</span>
