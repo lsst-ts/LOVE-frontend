@@ -111,7 +111,6 @@ export default class Message extends Component {
           <div className={[styles.floatLeft, styles.margin3].join(' ')}>
             <span>On </span>
             <span className={styles.bold}>{message.date_added} </span>
-            <span>by </span>
             <span className={styles.bold}>{message.user_id} </span>
             <span>wrote:</span>
           </div>
@@ -141,7 +140,6 @@ export default class Message extends Component {
             </span>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <span className={[styles.margin3, styles.capitalize].join(' ')}>{message.exposure_flag}</span>
             <span className={styles.vertAlign}>
               <FlagIcon
                 title={message.exposure_flag}
@@ -149,6 +147,7 @@ export default class Message extends Component {
                 className={styles.iconFlag}
               />
             </span>
+            <span className={[styles.margin3, styles.capitalize].join(' ')}>{message.exposure_flag}</span>
           </span>
         </div>
       </div>
