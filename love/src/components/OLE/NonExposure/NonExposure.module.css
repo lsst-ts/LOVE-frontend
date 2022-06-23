@@ -65,7 +65,7 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-auto-rows: max-content;
-  grid-row-gap: 0.2em;
+  grid-row-gap: 1em;
   padding-top: 15px;
 }
 
@@ -74,8 +74,8 @@
   border-radius: 6px;
   display: flexbox;
   margin: 7px;
-  padding: 7px;
-  margin-right: 10px;
+  padding: var(--content-padding);
+  margin-right: 0;
 }
 
 .footer {
@@ -139,7 +139,7 @@
 
 .filters input {
   line-height: 1em;
-  height: 2.5em;
+  height: 1.5em;
 }
 
 .filters .select {
@@ -266,6 +266,7 @@
   display: grid;
   grid-template-columns: 4fr 1fr;
   margin-right: 5px;
+  align-items: center;
 }
 
 .checkboxText button {
@@ -278,4 +279,14 @@
 
 .dateTimeRangeStyle :global(.rdtPicker) {
   left: -176px;
+}
+
+th.tableHead {
+  color: var(--highlighted-font-color);
+  padding: var(--small-padding);
+  font-weight: bold;
+}
+
+.textDescription {
+  text-align: left;
 }
