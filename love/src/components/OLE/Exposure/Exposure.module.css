@@ -127,6 +127,16 @@
   min-height: 1.9em;
 }
 
+.headerMenu {
+  display: flex;
+  flex-flow: column;
+  flex-direction: column;
+  row-gap: 10px;
+  padding-bottom: 7px;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
 .body {
   padding-left: 10px;
   padding-right: 10px;
@@ -148,11 +158,16 @@
   margin-bottom: 0.5em;
 }
 
-.inline {
+/* .inline {
   display: grid;
   grid-template-columns: 2fr 1fr 1fr;
   row-gap: 5px;
   grid-auto-rows: auto;
+} */
+
+.inline {
+  display: inline-flex;
+  column-gap: 10px;
 }
 
 .input {
@@ -172,19 +187,24 @@
   background-color: var(--second-secondary-background-color);
   color: var(--base-font-color);
   text-align: left;
+  border-radius: 3px;
 }
 
 .content {
-  display: grid;
+  /* display: grid;
   grid-template-columns: 2fr 3fr;
-  grid-row: auto;
+  grid-row: auto; */
+  display: flow-root;
   padding-right: var(--content-padding);
+  padding-left: var(--content-padding);
+
 }
 
 .contentMenu {
   flex-wrap: wrap;
-  margin-top: 15px;
+  margin-top: 10px;
   margin-right: 10px;
+  margin-left: 10px;
 }
 
 .contentLeft {
@@ -202,14 +222,13 @@
   align-content: center;
 }
 
-.contentRight textarea {
+.content textarea {
   width: 100%;
-  height: 12em;
+  height: 8em;
   resize: none;
   background: var(--secondary-background-dimmed-color);
   color: var(--base-font-color);
   font-size: 1em;
-  padding: 0.5em;
   border-radius: 5px;
   box-sizing: border-box;
   border-radius: 3px;
@@ -220,10 +239,33 @@
   color: var(--base-font-color);
 }
 
-.contentRight textarea:focus {
+.content textarea:focus {
   outline: none;
   border: 1px solid var(--secondary-font-color);
 }
+
+.contentMenu textarea {
+  width: 100%;
+  height: 8em;
+  resize: none;
+  background: var(--secondary-background-dimmed-color);
+  color: var(--base-font-color);
+  font-size: 1em;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border-radius: 3px;
+  padding: 0.4em;
+  font-family: inherit;
+  font-size: inherit;
+  border: 1px solid var(--secondary-font-dimmed-color);
+  color: var(--base-font-color);
+}
+
+.contentMenu textarea:focus {
+  outline: none;
+  border: 1px solid var(--secondary-font-color);
+}
+
 
 .label {
   font-weight: bold;
@@ -284,4 +326,25 @@
 
 .checkboxText button {
   text-align: right;
+}
+
+.paddingTop {
+  padding-top: 5px;
+}
+
+.w50 {
+  width: 50%;
+}
+
+.w30 {
+  width: 30%;
+}
+
+.w20 {
+  width: 20%;
+}
+
+.header.inline .value {
+  width: 15em;
+  padding-bottom: 5px;
 }
