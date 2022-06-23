@@ -53,6 +53,13 @@ export default class ExposureDetail extends Component {
     });
   }
 
+  deleteMessage(message) {
+    console.log('deleteMessage', message);
+    ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
+      console.log('result', response);
+    });
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -94,7 +101,11 @@ export default class ExposureDetail extends Component {
                     save={(message) => { this.saveMessage(message); this.setState({ selectedMessage: undefined}); }}
                   />);
               } else {
-                return (<Message message={message} editMessage={(messageEdit) => { this.setState({ selectedMessage: messageEdit}); }}/>);
+                return (<Message
+                          message={message}
+                          editMessage={(messageEdit) => { this.setState({ selectedMessage: messageEdit}); }}
+                          deleteMessage={(mesage) => { this.deleteMessage(message); }}
+                        />);
               }
               
             })
