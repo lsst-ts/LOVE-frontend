@@ -108,8 +108,8 @@
 }
 
 .icon {
-  fill: var(--default-font-color);
-  opacity: 1;
+  fill: var(--default-font-color) !important;
+  opacity: 1 !important;
 }
 
 .margin {
@@ -290,4 +290,8 @@ th.tableHead {
 
 .textDescription {
   text-align: left;
+}
+
+.iconFill {
+  fill: var(--default-font-color);
 }
