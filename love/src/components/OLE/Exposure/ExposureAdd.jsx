@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -35,36 +36,30 @@ export default class ExposureAdd extends Component {
       tracking_dec: undefined,
       sky_angle: undefined,
       timespan_begin: undefined,
-      timespan_end: undefined
+      timespan_end: undefined,
     },
     newMessage: {
-      id: undefined,
-      site_id: undefined,
       obs_id: undefined,
       instrument: undefined,
-      day_obs: undefined,
       message_text: undefined,
-      level: undefined,
-      tags: [],
-      urls: [],
+      level: 10,
+      // tags: [],
       user_id: undefined,
       user_agent: undefined,
-      is_human: undefined,
-      is_valid: undefined,
-      exposure_flag: undefined,
-      date_added: undefined,
-      date_invalidated: undefined,
-      parent_id: undefined,
-      jira: false
+      is_human: true,
+      is_new: true,
+      exposure_flag: 'none',
+      jira: false,
     },
     isLogCreate: false,
     isMenu: false,
-    observationIds: []
+    observationIds: [],
   };
 
   constructor(props) {
     super(props);
-    const logEdit =  props.logEdit ? props.logEdit : ExposureAdd.defaultProps.logEdit;
+    const logEdit = props.logEdit;
+    console.log(logEdit);
     const newMessage = ExposureAdd.defaultProps.newMessage;
     newMessage['obs_id'] = logEdit['obs_id'];
     newMessage['instrument'] = logEdit['instrument'];
@@ -79,6 +74,7 @@ export default class ExposureAdd extends Component {
   }
 
   componentDidMount() {
+    // TODO: only when the filter is shown
     ManagerInterface.getListExposureInstruments().then((data) => {
       const instrumentsArray = Object.values(data).map((arr) => arr[0]);
       this.setState({
@@ -89,12 +85,14 @@ export default class ExposureAdd extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // TODO: only when the filter is shown
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
+      console.log('selectedInstrument');
       ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
         const observationIds = data.map((exposure) => exposure.obs_id);
         this.setState({
           observationIds,
-          newMessage: {...prevState.newMessage, obs_id: undefined}
+          newMessage: { ...prevState.newMessage, obs_id: undefined },
         });
       });
     }
@@ -102,9 +100,20 @@ export default class ExposureAdd extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log('ExposureAdd.handleSubmit');
+    // TODO: Some parameters are not being sent, check
     console.log('Submitted: ', this.state.newMessage);
-    ManagerInterface.createMessageExposureLogs(this.state.newMessage).then((response) => {
+    // ManagerInterface.createMessageExposureLogs(this.state.newMessage).then((response) => {
+    //   console.log('response', response);
+    // });
+    const fakeNewMessage = { ...this.state.newMessage };
+    fakeNewMessage['obs_id'] = 'AT_O_20220208_000140';
+    fakeNewMessage['user_id'] = 'saranda@localhost';
+    fakeNewMessage['user_agent'] = 'LOVE';
+    fakeNewMessage['files'] = [fakeNewMessage['file']];
+    delete fakeNewMessage.file;
+
+    console.log(fakeNewMessage);
+    ManagerInterface.createMessageExposureLogs(fakeNewMessage).then((response) => {
       console.log('response', response);
     });
   }
@@ -118,7 +127,6 @@ export default class ExposureAdd extends Component {
     } else {
       this.props.back();
     }
-    
   }
 
   render() {
@@ -126,132 +134,158 @@ export default class ExposureAdd extends Component {
     const isLogCreate = this.props.isLogCreate;
     const isMenu = this.props.isMenu;
 
-    const EXPOSURE_FLAG_OPTIONS = ['None', 'Junk', 'Questionary'];
+    const OBS_ID_OPTIONS = this.props.Observations ? this.props.Observations : ['AT_O_20220208_000140'];
 
     return (
       <>
-        { !isLogCreate && !isMenu
-          ? (
-              <div className={styles.returnToLogs}>
-                <Button status="link" onClick={() => { link() }}>
-                  <span className={styles.title}>{`< Return to Observations`}</span>
-                </Button>
-              </div>
-            )
-          : <></>
-        }
+        {!isLogCreate && !isMenu ? (
+          <div className={styles.returnToLogs}>
+            <Button
+              status="link"
+              onClick={() => {
+                link();
+              }}
+            >
+              <span className={styles.title}>{`< Return to Observations`}</span>
+            </Button>
+          </div>
+        ) : (
+          <></>
+        )}
         <form onSubmit={this.handleSubmit}>
           <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
-            { isMenu
-              ? <div className={isMenu ? styles.headerMenu : styles.header}>
-                  <span className={[styles.label, styles.paddingTop].join(" ")}>Instruments</span>
-                  <span className={styles.value}>
-                    <Select value={this.state.selectedInstrument}
-                      onChange={(event) => this.setState({selectedInstrument: event.value})}
-                      options={this.state.instruments}
-                      className={styles.select}
-                      small
-                    />
-                  </span>
+            {isMenu ? (
+              <div className={isMenu ? styles.headerMenu : styles.header}>
+                <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
+                <span className={styles.value}>
+                  <Select
+                    value={this.state.selectedInstrument}
+                    onChange={(event) => this.setState({ selectedInstrument: event.value })}
+                    options={this.state.instruments}
+                    className={styles.select}
+                    small
+                  />
+                </span>
 
-                  <span className={[styles.label, styles.paddingTop].join(" ")}>Obs. Id</span>
-                  <span className={styles.value}>
-                    <Select value={this.state.newMessage.obs_id}
-                      onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, obs_id: event.value}}))}
-                      options={this.state.observationIds}
-                      className={styles.select}
-                      small
-                    />
-                  </span>
-                </div>
-              : 
-                <div className={[styles.header, !this.state.logEdit.obs_id ? styles.inline : ''].join(" ")}>
-                  { this.state.logEdit.obs_id
-                    ? (<span>{this.state.logEdit.obs_id}</span>)
-                    : (
-                      <>
-                        <span className={[styles.label, styles.paddingTop].join(" ")}>Instruments</span>
-                        <span className={styles.value}>
-                          <Select value={this.state.selectedInstrument}
-                            onChange={(event) => this.setState({selectedInstrument: event.value})}
-                            options={this.state.instruments}
-                            className={styles.select}
-                            small
-                          />
-                        </span>
-      
-                        <span className={[styles.label, styles.paddingTop].join(" ")}>Obs. Id</span>
-                        <span className={styles.value}>
-                          <Select value={this.state.newMessage.obs_id}
-                            onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, obs_id: event.value}}))}
-                            options={this.state.observationIds}
-                            className={styles.select}
-                            small
-                          />
-                        </span>
-                      </>
-                      )
-                  }
-                  
-                  <span className={styles.floatRight}>
-                    { this.state.newMessage.id
-                      ? (
-                        <span>
-                          <span className={styles.margin}>
-                          [{this.state.logEdit.observation_type}]
-                          </span>
-                          <Button className={styles.iconBtn} title="Delete"
-                            onClick={() => { console.log('click delete'); this.deleteMessage()}}
-                            status="transparent"
-                          >
-                            <DeleteIcon className={styles.icon}/>
-                          </Button>
-                        </span>
-                      )
-                      : this.state.logEdit.observation_type
-                        ? <span>[{this.state.logEdit.observation_type}]</span>
-                        : <></>
+                <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                <span className={styles.value}>
+                  <Select
+                    value={this.state.newMessage.obs_id}
+                    onChange={(event) =>
+                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, obs_id: event.value } }))
                     }
-                  </span>
-                </div>
-            }
-            <div className={isMenu ? styles.contentMenu : styles.content}>
+                    options={this.state.observationIds}
+                    className={styles.select}
+                    small
+                  />
+                </span>
+              </div>
+            ) : (
+              <div className={[styles.header, !this.state.logEdit.obs_id ? styles.inline : ''].join(' ')}>
+                {this.state.logEdit.obs_id ? (
+                  <span>{this.state.logEdit.obs_id}</span>
+                ) : (
+                  <>
+                    <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
+                    <span className={styles.value}>
+                      <Select
+                        value={this.state.selectedInstrument}
+                        onChange={(event) => this.setState({ selectedInstrument: event.value })}
+                        options={this.state.instruments}
+                        className={styles.select}
+                        small
+                      />
+                    </span>
 
+                    <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                    <span className={styles.value}>
+                      <Select
+                        value={this.state.newMessage.obs_id}
+                        onChange={(event) =>
+                          this.setState((prevState) => ({
+                            newMessage: { ...prevState.newMessage, obs_id: event.value },
+                          }))
+                        }
+                        options={this.state.observationIds}
+                        className={styles.select}
+                        small
+                      />
+                    </span>
+                  </>
+                )}
+
+                <span className={styles.floatRight}>
+                  {this.state.newMessage.id ? (
+                    <span>
+                      <span className={styles.margin}>[{this.state.logEdit.observation_type}]</span>
+                      <Button
+                        className={styles.iconBtn}
+                        title="Delete"
+                        onClick={() => {
+                          console.log('click delete');
+                          this.deleteMessage();
+                        }}
+                        status="transparent"
+                      >
+                        <DeleteIcon className={styles.icon} />
+                      </Button>
+                    </span>
+                  ) : this.state.logEdit.observation_type ? (
+                    <span>[{this.state.logEdit.observation_type}]</span>
+                  ) : (
+                    <></>
+                  )}
+                </span>
+              </div>
+            )}
+            <div className={isMenu ? styles.contentMenu : styles.content}>
               <div className={[styles.mb1, styles.floatLeft, styles.inline].join(' ')}>
                 <span className={styles.title}>Message</span>
               </div>
 
               <TextArea
                 value={this.state.newMessage.message_text}
-                callback={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, message_text: event.value}}))}
+                callback={(event) =>
+                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, message_text: event } }))
+                }
               />
-
             </div>
             <div className={isMenu ? styles.footerMenu : styles.footer}>
               <FileUploader
                 value={this.state.newMessage.file?.name}
-                handleFile={(file) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, file: file}}))}
-                handleDelete={() => this.setState((prevState) => ({newMessage: {...prevState.newMessage, file: undefined}}))}
+                handleFile={(file) =>
+                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: file } }))
+                }
+                handleDelete={() =>
+                  this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, file: undefined } }))
+                }
               />
 
               <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
-                <span className={[styles.value, !isMenu ? styles.w20 : ''].join(" ")}>
-                  <Select value={this.state.newMessage.flag}
-                    onChange={(event) => this.setState((prevState) => ({newMessage: {...prevState.newMessage, exposure_flag: event.value}}))}
-                    options={EXPOSURE_FLAG_OPTIONS}
-                    className={styles.select}
-                    small
-                  />
-                </span>
+              <span className={[styles.value, !isMenu ? styles.w20 : ''].join(' ')}>
+                <Select
+                  value={this.state.newMessage.flag}
+                  onChange={(event) =>
+                    this.setState((prevState) => ({
+                      newMessage: { ...prevState.newMessage, exposure_flag: event.value },
+                    }))
+                  }
+                  options={EXPOSURE_FLAG_OPTIONS}
+                  className={styles.select}
+                  small
+                />
+              </span>
 
-              <span className={ isMenu ? styles.footerRightMenu : styles.footerRight }>
-
+              <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 <span className={styles.checkboxText}>
                   Create and link new Jira ticket
-                  <Input type="checkbox"
+                  <Input
+                    type="checkbox"
                     checked={this.state.newMessage.jira}
                     onChange={(event) => {
-                      this.setState((prevState) => ({newMessage: {...prevState.newMessage, jira: event.target.checked}}));
+                      this.setState((prevState) => ({
+                        newMessage: { ...prevState.newMessage, jira: event.target.checked },
+                      }));
                     }}
                   />
                 </span>
