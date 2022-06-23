@@ -559,58 +559,60 @@ class Layout extends Component {
 
             <div className={styles.rightTopbar}>
               {this.renderHeartbeatsMenu()}
-              
-              <DropdownMenu className={styles.settingsDropdown} disabledToggle="true">
+
+              <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
                 <Button className={styles.iconBtn} title="Exposure and Non-Exposure Logs" status="transparent">
                   <MessageIcon className={styles.icon} />
                 </Button>
                 <div className={styles.userMenu}>
-                  { !this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen
-                    ? <OLEMenu
-                        newNonExposureClick={() => { this.setState({ isNewNonExposureOpen: true })}} 
-                        newExposureClick={() => { this.setState({ isNewExposureOpen: true })}} 
-                      />
-                    : this.state.isNewNonExposureOpen
-                      ?
-                        <>
-                          <div className={styles.title}>
-                            <span className={styles.bold}>New Non-Exposure Log</span>
-                            <span className={styles.floatRight}>
-                              <Button status="link" onClick={() => { this.setState({ isNewNonExposureOpen: false });}}>
-                                <span className={styles.bold}>{`< Back`}</span>
-                              </Button>
-                            </span>
-                          </div>
-                          <div className={styles.divider}></div>
-                        </>
-                      : this.state.isNewExposureOpen
-                        ?
-                          <>
-                            <div className={styles.title}>
-                              <span className={styles.bold}>New Exposure Log</span>
-                              <span className={styles.floatRight}>
-                                <Button status="link" onClick={() => { this.setState({ isNewExposureOpen: false });}}>
-                                  <span className={styles.bold}>{`< Back`}</span>
-                                </Button>
-                              </span>
-                            </div>
-                            <div className={styles.divider}></div>
-                          </>
-                        :
-                          <></>
-                  }
-                  { this.state.isNewNonExposureOpen
-                    ? <NonExposureEdit
-                        isMenu={true}
-                      />
-                    : <></>
-                  }
-                  { this.state.isNewExposureOpen
-                    ? <ExposureAdd
-                        isMenu={true}
-                      />
-                    : <></>
-                  }
+                  {!this.state.isNewNonExposureOpen && !this.state.isNewExposureOpen ? (
+                    <OLEMenu
+                      newNonExposureClick={() => {
+                        this.setState({ isNewNonExposureOpen: true });
+                      }}
+                      newExposureClick={() => {
+                        this.setState({ isNewExposureOpen: true });
+                      }}
+                    />
+                  ) : this.state.isNewNonExposureOpen ? (
+                    <>
+                      <div className={styles.title}>
+                        <span className={styles.bold}>New Non-Exposure Log</span>
+                        <span className={styles.floatRight}>
+                          <Button
+                            status="link"
+                            onClick={() => {
+                              this.setState({ isNewNonExposureOpen: false });
+                            }}
+                          >
+                            <span className={styles.bold}>{`< Back`}</span>
+                          </Button>
+                        </span>
+                      </div>
+                      <div className={styles.divider}></div>
+                    </>
+                  ) : this.state.isNewExposureOpen ? (
+                    <>
+                      <div className={styles.title}>
+                        <span className={styles.bold}>New Exposure Log</span>
+                        <span className={styles.floatRight}>
+                          <Button
+                            status="link"
+                            onClick={() => {
+                              this.setState({ isNewExposureOpen: false });
+                            }}
+                          >
+                            <span className={styles.bold}>{`< Back`}</span>
+                          </Button>
+                        </span>
+                      </div>
+                      <div className={styles.divider}></div>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                  {this.state.isNewNonExposureOpen ? <NonExposureEdit isMenu={true} /> : <></>}
+                  {this.state.isNewExposureOpen ? <ExposureAdd isMenu={true} /> : <></>}
                 </div>
               </DropdownMenu>
 
