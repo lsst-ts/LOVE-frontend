@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
-import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
@@ -15,6 +15,7 @@ import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
 
+const moment = extendMoment(Moment);
 
 export default class Exposure extends Component {
   static propTypes = {};
@@ -28,11 +29,23 @@ export default class Exposure extends Component {
       modeAdd: false,
       selected: {},
       selectedMessages: [],
+      selectedInstrument: null,
+      selectedDateStart: null,
+      selectedDateEnd: null,
+      selectedExposureType: 'All',
       exposurelogs: [],
       instruments: [],
       exposureTypes: [],
       observationIds: [],
     };
+  }
+
+  handleDateTimeRange(date, type) {
+    if (type === 'start') {
+      this.setState({ selectedDateStart: date });
+    } else if (type === 'end') {
+      this.setState({ selectedDateEnd: date });
+    }
   }
 
   view(index) {
@@ -157,15 +170,17 @@ export default class Exposure extends Component {
       this.setState({ instruments: instrumentsArray, selectedInstrument: instrumentsArray[0] });
       console.log('instruments', instrumentsArray);
     });
-    // 
+    //
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
       console.log('QUERY EXPOSURES...');
       ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
+        const exposureTypes = new Set();
         const exposures = data.map((exposure) => {
-            /* ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+          exposureTypes.add(exposure.observation_type);
+          /* ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
               const flags = messages.map((message) => message['exposure_flag']);
               // const flags = ["none","junk"];
               exposure['flags'] = flags;
@@ -173,7 +188,7 @@ export default class Exposure extends Component {
             }); */
           return exposure;
         });
-        this.setState({ exposurelogs: exposures });
+        this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
       });
     }
   }
@@ -181,13 +196,23 @@ export default class Exposure extends Component {
   render() {
     const modeView = this.state.modeView;
     const modeAdd = this.state.modeAdd;
-    const headers = Object.values(this.getHeaders());
+    const headers = this.getHeaders();
 
-    const tableData = Object.values(this.state.exposurelogs);
+    const tableData = this.state.exposurelogs;
     const instrumentsOptions = this.state.instruments;
     const selectedInstrument = this.state.selectedInstrument;
     const exposureTypeOptions = ['All', ...this.state.exposureTypes];
     const selectedExposureType = this.state.selectedExposureType;
+
+    // Filter by date range
+    const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
+    let filteredData = tableData.filter((log) => range.contains(Moment(log.timespan_end)));
+
+    // Filter by exposure type
+    filteredData =
+      selectedExposureType !== 'All'
+        ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
+        : filteredData;
 
     return modeView && !modeAdd ? (
       <ExposureDetail
@@ -216,9 +241,9 @@ export default class Exposure extends Component {
           />
 
           <DateTimeRange
-            onChange={(params) => console.log(params)}
+            onChange={(date, type) => this.handleDateTimeRange(date, type)}
             label="Date & Time"
-            startDate={new Date() - 24 * 60 * 60 * 1000}
+            startDate={new Date() - 24 * 30 * 5 * 60 * 60 * 1000}
             endDate={new Date(Date.now())}
           />
 
@@ -229,7 +254,7 @@ export default class Exposure extends Component {
             className={styles.select}
           />
         </div>
-        <SimpleTable headers={headers} data={tableData} />
+        <SimpleTable headers={headers} data={filteredData} />
       </div>
     );
   }
