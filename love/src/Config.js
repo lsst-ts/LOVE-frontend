@@ -12,7 +12,7 @@ export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
 // OLE Configurations
-export const LOG_TYPE_OPTIONS = ['Fault', 'Ok', 'Wait'];
+export const LOG_TYPE_OPTIONS = ['fault', 'ok', 'wait'];
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionary'];
 
 // eslint-disable-next-line
