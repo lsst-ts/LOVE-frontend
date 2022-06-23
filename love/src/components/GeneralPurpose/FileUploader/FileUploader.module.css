@@ -4,7 +4,6 @@
   font-family: inherit;
   font-size: inherit;
   background-color: var(--second-secondary-background-color);
-  /* color: inherit; */
   color: var(--base-font-color);
   border-top: 1px solid var(--secondary-font-dimmed-color);
   border-bottom: 1px solid var(--secondary-font-dimmed-color);
@@ -17,6 +16,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
+  direction: rtl;
 }
 
 .inputClose {
@@ -31,7 +31,6 @@
   border-bottom: 1px solid var(--secondary-font-dimmed-color);
   border-right: 1px solid var(--secondary-font-dimmed-color);
   cursor: pointer;
-  height: 1.4em;
   width: 0.7em;
 }
 
