@@ -36,16 +36,21 @@ const OLETabsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <OLETabs isLogCreate={props.isLogCreate} subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
+    <OLETabs
+      isLogCreate={props.isLogCreate}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
+      {...props}
+    />
   );
 };
 
 const mapStateToProps = (state) => {
   const tabs = [
-    {name: 'Non-Exposure Logs', value: 'non-exposure', component: NonExposure, },
-    {name: 'Exposure Logs', value: 'exposure', component: Exposure, },
+    { name: 'Narrative Logs', value: 'non-exposure', component: NonExposure },
+    { name: 'Exposure Logs', value: 'exposure', component: Exposure },
   ];
-  return {tabs};
+  return { tabs };
 };
 
 const mapDispatchToProps = (dispatch) => {
