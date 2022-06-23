@@ -101,7 +101,7 @@ export default class NonExposure extends Component {
         title: 'Type',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getOLEDataFromTags(value).type,
+        render: (value) => getOLEDataFromTags(value).type.toUpperCase(),
       },
       {
         field: 'time_lost',
@@ -163,7 +163,7 @@ export default class NonExposure extends Component {
                   }}
                   status="transparent"
                 >
-                  <AcknowledgeIcon className={styles.icon} nonAcknowledge={false} />
+                  <AcknowledgeIcon className={styles.icon} />
                 </Button>
               </span>
               <span className={styles.margin}>
@@ -219,10 +219,13 @@ export default class NonExposure extends Component {
 
     const tableData = filteredData;
 
-    const commentTypeOptions = ['All', ...LOG_TYPE_OPTIONS];
+    const commentTypeOptions = [
+      { label: 'All comment types', value: 'All' },
+      ...LOG_TYPE_OPTIONS.map((type) => ({ label: type, value: type })),
+    ];
     const selectedCommentType = this.state.selectedCommentType;
 
-    const subsystemOptions = ['All', ...Object.keys(CSCSummaryHierarchy)];
+    const subsystemOptions = [{ label: 'All subsystems', value: 'All' }, ...Object.keys(CSCSummaryHierarchy)];
     const selectedSubsystem = this.state.selectedSubsystem;
 
     const selectedObsTimeLoss = this.state.selectedObsTimeLoss;
