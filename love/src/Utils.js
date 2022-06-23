@@ -870,6 +870,66 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static getListMessagesNarrativeLogs() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages`;
+    return fetch(url, {
+      method: 'GET',
+      headers: this.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        // console.error('Error communicating with the server.);
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        const fakeResponse = [
+          {
+            id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+            site_id: 'string',
+            message_text: 'string',
+            level: 0,
+            tags: ['fault', 'Main Telescope', 'MTDome:0', 'position', 'x'],
+            urls: ['http://jira.com', 'http://google.com/file.txt'],
+            time_lost: 360,
+            date_user_specified: '2022-06-23T16:23:33.407Z',
+            user_id: 'string',
+            user_agent: 'string',
+            is_human: true,
+            is_valid: true,
+            date_added: '2022-06-23T16:23:33.407Z',
+            date_invalidated: '2022-06-23T16:23:33.407Z',
+            parent_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          },
+          {
+            id: '3fa85f64-5717-4562-b3fc-2c963f66afa2',
+            site_id: 'string',
+            message_text: 'string',
+            level: 0,
+            tags: ['ok', 'Auxiliary Telescope', 'ATDome:0', 'position', 'x'],
+            urls: ['http://jira.com', 'http://google.com/file.txt'],
+            time_lost: 300,
+            date_user_specified: '2022-06-23T16:23:33.407Z',
+            user_id: 'string',
+            user_agent: 'string',
+            is_human: true,
+            is_valid: true,
+            date_added: '2022-06-23T16:23:33.407Z',
+            date_invalidated: '2022-06-23T16:23:33.407Z',
+            parent_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+          },
+        ];
+        return fakeResponse;
+      });
+    });
+  }
 } // END ManagerInterface
 
 /**
@@ -1279,3 +1339,28 @@ export function closestEquivalentAngle(from, to) {
   const delta = ((((to - from) % 360) + 540) % 360) - 180;
   return from + delta;
 };
+
+/*
+ * Function used to open new tabs from a url.
+ * @param {string} url - URL to point the new tab
+ */
+export function openInNewTab(url) {
+  const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+  if (newWindow) newWindow.opener = null;
+}
+
+/**
+ * Function to get OLE Narrative logs parameters from tags field.
+ * @param {string} tags - Array of tags that comes from OLE message
+ * @returns {object} Object with type, subsystem, csc, topic, param fields
+ */
+export function getOLEDataFromTags(tags) {
+  const parameters = {
+    type: tags[0],
+    subsystem: tags[1],
+    csc: tags[2],
+    topic: tags[3],
+    param: tags[4],
+  };
+  return parameters;
+}

@@ -6,7 +6,7 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Message.module.css';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
-
+import { openInNewTab } from 'Utils';
 
 export default class Message extends Component {
   static propTypes = {
@@ -35,7 +35,7 @@ export default class Message extends Component {
     const result = {
       none: 'ok',
       junk: 'warning',
-      questionable: 'alert'
+      questionable: 'alert',
     };
     return result[flag] ? result[flag] : 'unknown';
   }
@@ -43,7 +43,7 @@ export default class Message extends Component {
   getLinkJira(message) {
     const urls = message.urls;
     const filtered = urls.filter((url) => url.includes('jira'));
-    if ( filtered.length > 0 ) {
+    if (filtered.length > 0) {
       return filtered[0];
     }
     return undefined;
@@ -52,22 +52,17 @@ export default class Message extends Component {
   getFileURL(message) {
     const urls = message.urls;
     const filtered = urls.filter((url) => !url.includes('jira'));
-    if ( filtered.length > 0 ) {
+    if (filtered.length > 0) {
       return filtered[0];
     }
     return undefined;
   }
 
   getFilename(url) {
-    if ( url ) {
+    if (url) {
       return url.substring(url.lastIndexOf('/') + 1);
     }
     return '';
-  }
-
-  openInNewTab(url) {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-    if (newWindow) newWindow.opener = null;
   }
 
   render() {
@@ -83,21 +78,32 @@ export default class Message extends Component {
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.title, styles.margin3].join(' ')}>
             #{message.id}
-            { linkJira
-                ? <span className={styles.marginLeft}>
-                    <Button status="link" title={ linkJira } onClick={() => this.openInNewTab(linkJira)}>view Jira ticket</Button>
-                  </span>
-                : <></>
-            }
+            {linkJira ? (
+              <span className={styles.marginLeft}>
+                <Button status="link" title={linkJira} onClick={() => openInNewTab(linkJira)}>
+                  view Jira ticket
+                </Button>
+              </span>
+            ) : (
+              <></>
+            )}
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Delete" onClick={() => { console.log('click delete'); remove(message); }} status="transparent">
-              <DeleteIcon className={styles.icon}/>
+            <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+              <DeleteIcon className={styles.icon} />
             </Button>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Edit" onClick={() => { console.log('click edit'); edit(message); } } status="transparent">
-              <EditIcon className={styles.icon}/>
+            <Button
+              className={styles.iconBtn}
+              title="Edit"
+              onClick={() => {
+                console.log('click edit');
+                edit(message);
+              }}
+              status="transparent"
+            >
+              <EditIcon className={styles.icon} />
             </Button>
           </span>
         </div>
@@ -109,41 +115,40 @@ export default class Message extends Component {
             <span className={styles.bold}>{message.user_id} </span>
             <span>wrote:</span>
           </div>
-          <p className={[styles.textDescription, styles.margin3].join(' ')}>
-            {message.message_text}
-          </p>
+          <p className={[styles.textDescription, styles.margin3].join(' ')}>{message.message_text}</p>
         </div>
         <div className={styles.footer}>
           <span className={[styles.floatLeft, styles.margin3].join(' ')}>
-            <span className={styles.label}>
-              { fileurl
-                ? 'File Attached:'
-                : ''
-              }
-            </span>
+            <span className={styles.label}>{fileurl ? 'File Attached:' : ''}</span>
             <span className={styles.value}>
-              { fileurl
-                ? <>
-                    <Button status="link" title={ fileurl } onClick={() => this.openInNewTab(fileurl)}>
-                      { this.getFilename(fileurl) }
-                    </Button>
-                    <Button className={styles.iconBtn} title={ fileurl } onClick={() => this.openInNewTab(fileurl)} status="transparent">
-                      <DownloadIcon className={styles.icon}/>
-                    </Button>
-                  </>
-                : <></>
-              }
+              {fileurl ? (
+                <>
+                  <Button status="link" title={fileurl} onClick={() => openInNewTab(fileurl)}>
+                    {this.getFilename(fileurl)}
+                  </Button>
+                  <Button
+                    className={styles.iconBtn}
+                    title={fileurl}
+                    onClick={() => openInNewTab(fileurl)}
+                    status="transparent"
+                  >
+                    <DownloadIcon className={styles.icon} />
+                  </Button>
+                </>
+              ) : (
+                <></>
+              )}
             </span>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <span className={[styles.margin3, styles.capitalize].join(' ')}>
-              {message.exposure_flag}
-            </span>
+            <span className={[styles.margin3, styles.capitalize].join(' ')}>{message.exposure_flag}</span>
             <span className={styles.vertAlign}>
-              <FlagIcon title={message.exposure_flag} status={this.statusFlag(message.exposure_flag)}
-                className={styles.iconFlag}/>
+              <FlagIcon
+                title={message.exposure_flag}
+                status={this.statusFlag(message.exposure_flag)}
+                className={styles.iconFlag}
+              />
             </span>
-
           </span>
         </div>
       </div>
