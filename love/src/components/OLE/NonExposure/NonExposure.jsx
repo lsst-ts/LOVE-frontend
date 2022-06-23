@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
+import Input from 'components/GeneralPurpose/Input/Input';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
@@ -12,6 +15,9 @@ import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
+import { formatSecondsToDigital } from 'Utils';
+
+const moment = extendMoment(Moment);
 
 export default class NonExposure extends Component {
   static propTypes = {};
@@ -24,7 +30,20 @@ export default class NonExposure extends Component {
       modeView: false,
       modeEdit: false,
       selected: {},
+      selectedDateStart: null,
+      selectedDateEnd: null,
+      selectedCommentType: 'All',
+      selectedSubsystem: 'All',
+      selectedObsTimeLoss: false,
     };
+  }
+
+  handleDateTimeRange(date, type) {
+    if (type === 'start') {
+      this.setState({ selectedDateStart: date });
+    } else if (type === 'end') {
+      this.setState({ selectedDateEnd: date });
+    }
   }
 
   view(index) {
@@ -51,57 +70,73 @@ export default class NonExposure extends Component {
         field: 'id',
         title: 'Log Id',
         type: 'number',
+        className: styles.tableHead,
       },
       {
         field: 'userId',
         title: 'User Id',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'agent',
         title: 'Agent',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'timestamp',
         title: 'Timestamp',
         type: 'timestamp',
+        className: styles.tableHead,
       },
       {
         field: 'timeIncident',
         title: 'Time of Incident',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'type',
         title: 'Type',
         type: 'string',
+        className: styles.tableHead,
       },
       {
-        field: 'obsTimeLoss',
+        field: 'time_lost',
         title: 'Obs. Time Loss',
         type: 'string',
+        className: styles.tableHead,
+        render: (value) => formatSecondsToDigital(value),
       },
       {
         field: 'subsystem',
         title: 'Subsystem',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'csc',
         title: 'CSC',
         type: 'string',
-        render: (cell) => <b>{cell}</b>,
+        className: styles.tableHead,
+        render: (cell, row) => (
+          <b>
+            {cell}:{row.salindex}
+          </b>
+        ),
       },
       {
         field: 'cscTopic',
         title: 'CSC Topic',
         type: 'string',
+        className: styles.tableHead,
       },
       {
         field: 'file',
         title: 'File',
         type: 'link',
+        className: styles.tableHead,
         render: (value) => (
           <Button className={styles.iconBtn} title="File" onClick={() => {}}>
             <DownloadIcon className={styles.icon} />
@@ -112,12 +147,14 @@ export default class NonExposure extends Component {
         field: 'jira',
         title: 'Jira',
         type: 'link',
+        className: styles.tableHead,
         render: (value) => <Link to={value}>{value}</Link>,
       },
       {
         field: 'action',
         title: 'Action',
         type: 'string',
+        className: styles.tableHead,
         render: (_, index) => {
           return (
             <>
@@ -157,7 +194,7 @@ export default class NonExposure extends Component {
     const modeEdit = this.state.modeEdit;
     const headers = Object.values(this.getHeaders());
 
-    const filteredData = [
+    let filteredData = [
       {
         id: 1,
         userId: 'MiaElbo',
@@ -165,24 +202,49 @@ export default class NonExposure extends Component {
         timestamp: '2022-03-21 11:24:24',
         timeIncident: '2022-03-21 12:25:25',
         type: 'Observation',
-        ObsTimeLoss: '2:00:00',
-        subsystem: 'M. Telescope',
+        time_lost: 10,
+        subsystem: 'Main Telescope',
         csc: 'MTHexapod',
+        salindex: 0,
         cscTopic: 'Actuators',
+        cscParam: 'Test_param',
         file: { name: 'file.csv', size: 6078 },
         jira: 'http://lsst.jira.org',
-        value: 15,
         description:
           'Operator Andrea Molla collapse during observation Relay team will have to finish her tasks when they take over. First we have the Logs component, which will display logs created by different love-operators. This component will have two tabs, one for non-exposure logs and another for exposure logs, viewing these two types of logs is very different.',
       },
     ];
-    const tableData = Object.values(filteredData);
+
+    // Filter by date range
+    const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
+    // console.log(this.state.selectedDateStart);
+    filteredData = filteredData.filter((log) => range.contains(Moment(log.timestamp)));
+
+    // Filter by type
+    filteredData =
+      this.state.selectedCommentType !== 'All'
+        ? filteredData.filter((log) => log.type === this.state.selectedCommentType)
+        : filteredData;
+
+    // Filter by subsystem
+    filteredData =
+      this.state.selectedSubsystem !== 'All'
+        ? filteredData.filter((log) => log.subsystem === this.state.selectedSubsystem)
+        : filteredData;
+
+    // Filter by obs time loss
+    filteredData = this.state.selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
+
+    // const tableData = Object.values(filteredData);
+    const tableData = filteredData;
 
     const commentTypeOptions = ['All', ...LOG_TYPE_OPTIONS];
     const selectedCommentType = this.state.selectedCommentType;
 
     const subsystemOptions = ['All', ...Object.keys(CSCSummaryHierarchy)];
     const selectedSubsystem = this.state.selectedSubsystem;
+
+    const selectedObsTimeLoss = this.state.selectedObsTimeLoss;
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -203,7 +265,7 @@ export default class NonExposure extends Component {
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
           <DateTimeRange
-            onChange={(params) => console.log(params)}
+            onChange={(date, type) => this.handleDateTimeRange(date, type)}
             label="From:"
             startDate={new Date() - 24 * 60 * 60 * 1000}
             endDate={new Date(Date.now())}
@@ -222,6 +284,15 @@ export default class NonExposure extends Component {
             onChange={({ value }) => this.setState({ selectedSubsystem: value })}
             className={styles.select}
           />
+
+          <div className={styles.checkboxText}>
+            Show only logs with Obs. time loss
+            <Input
+              type="checkbox"
+              checked={selectedObsTimeLoss}
+              onChange={(event) => this.setState({ selectedObsTimeLoss: event.target.checked })}
+            />
+          </div>
         </div>
         <SimpleTable headers={headers} data={tableData} />
       </div>
