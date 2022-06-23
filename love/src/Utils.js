@@ -682,40 +682,6 @@ export default class ManagerInterface {
     });
   }
 
-  static createExposureLogs(params = {}) {
-    const token = ManagerInterface.getToken();
-    if (token === null) {
-      // console.log('Token not found during validation');
-      return new Promise((resolve) => resolve(false));
-    }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures`;
-    return fetch(url, {
-      method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify({
-        params,
-      }),
-    }).then((response) => {
-      if (response.status >= 500) {
-        toast.error('Error communicating with the server.');
-        return false;
-      }
-      if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
-        ManagerInterface.removeToken();
-        return false;
-      }
-      if (response.status === 400) {
-        return response.json().then((resp) => {
-          toast.error(resp.ack);
-        });
-      }
-      return response.json().then((resp) => {
-        toast.info(resp.ack);
-        return resp;
-      });
-    });
-  }
 
   static getListMessagesExposureLogs(obsId) {
     const token = ManagerInterface.getToken();
@@ -772,6 +738,43 @@ export default class ManagerInterface {
     });
   }
 
+  static createMessageExposureLogs(params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    console.log('createMessage', params);
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
+    console.log('url', url);
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        params,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.info(resp.ack);
+        return resp;
+      });
+    });
+  }
+
   // TODO: Unsuported Media Type
   static updateMessageExposureLogs(msgExposureId, data) {
     const token = ManagerInterface.getToken();
@@ -789,6 +792,38 @@ export default class ManagerInterface {
       body: JSON.stringify({
         params,
       })
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Request updated.');
+        return resp;
+      });
+    });
+  }
+
+  static deleteMessageExposureLogs(msgExposureId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    console.log('deleteMessageExposureLogs', msgExposureId);
+
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'DELETE',
+      headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         toast.error('Error communicating with the server.');
