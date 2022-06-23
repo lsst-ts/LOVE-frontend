@@ -82,6 +82,7 @@
   display: flex;
   flex-flow: row;
   flex-direction: row;
+  align-items: center;
   padding-top: 7px;
   border-top: 2px solid var(--secondary-font-color);
   margin: 7px;
