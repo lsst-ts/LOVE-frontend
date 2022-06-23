@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { openInNewTab } from 'Utils';
+import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -9,7 +11,6 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import styles from './Message.module.css';
-import { openInNewTab } from 'Utils';
 
 export default class MessageEdit extends Component {
   static propTypes = {
@@ -92,8 +93,6 @@ export default class MessageEdit extends Component {
   render() {
     const cancel = this.props.cancel ? this.props.cancel : MessageEdit.defaultProps.cancel;
     const save = this.props.save ? this.props.save : MessageEdit.defaultProps.save;
-
-    const EXPOSURE_FLAG_OPTIONS = ['None', 'Junk', 'Questionary'];
 
     return (
       <div className={styles.message}>

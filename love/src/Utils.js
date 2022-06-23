@@ -147,6 +147,16 @@ export default class ManagerInterface {
     });
   }
 
+  static getMultipartHeaders() {
+    const token = ManagerInterface.getToken();
+    if (token) {
+      return new Headers({
+        Authorization: `Token ${token}`,
+      });
+    }
+    return new Headers({});
+  }
+
   static getToken() {
     return localStorage.getItem('LOVE-TOKEN');
   }
@@ -174,7 +184,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}salinfo/metadata`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -206,7 +216,7 @@ export default class ManagerInterface {
 
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -230,7 +240,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}configfile/`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -253,7 +263,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}configfile/${index}/content`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -302,7 +312,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}emergencycontact`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -346,7 +356,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}efd/timeseries`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         start_date,
         time_window,
@@ -382,7 +392,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}efd/logmessages`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         start_date,
         end_date,
@@ -418,7 +428,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}efd/efd_clients`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -441,7 +451,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/aux`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         command_name: commandName,
         params,
@@ -476,7 +486,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/aux/docstrings`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -499,7 +509,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/main`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         command_name: commandName,
         params,
@@ -534,7 +544,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}tcs/main/docstrings`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -557,7 +567,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}authlistrequest/`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         return false;
@@ -589,7 +599,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}authlistrequest/`;
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         cscs_to_change: cscsToChange,
         authorized_users: authorizedUsers,
@@ -627,7 +637,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}authlistrequest/${authRequestId}/`;
     return fetch(url, {
       method: 'PATCH',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         status,
         message,
@@ -665,7 +675,7 @@ export default class ManagerInterface {
     console.log('url', url);
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -682,7 +692,6 @@ export default class ManagerInterface {
     });
   }
 
-
   static getListMessagesExposureLogs(obsId) {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -694,7 +703,7 @@ export default class ManagerInterface {
     console.log('url', url);
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -721,7 +730,7 @@ export default class ManagerInterface {
     console.log('url', url);
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -747,19 +756,21 @@ export default class ManagerInterface {
     console.log('createMessage', params);
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
     console.log('url', url);
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
     return fetch(url, {
       method: 'POST',
-      headers: this.getHeaders(),
-      body: JSON.stringify({
-        params,
-      }),
+      headers: ManagerInterface.getMultipartHeaders(),
+      body: formData,
     }).then((response) => {
       if (response.status >= 500) {
         toast.error('Error communicating with the server.');
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        toast.error('Session expired. Logging out.');
         ManagerInterface.removeToken();
         return false;
       }
@@ -788,7 +799,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
     return fetch(url, {
       method: 'PUT',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
       body: JSON.stringify({
         params,
       })
@@ -823,7 +834,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
     return fetch(url, {
       method: 'DELETE',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         toast.error('Error communicating with the server.');
@@ -854,7 +865,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}ole/exposurelog/instruments`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
@@ -879,7 +890,7 @@ export default class ManagerInterface {
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages`;
     return fetch(url, {
       method: 'GET',
-      headers: this.getHeaders(),
+      headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
         // console.error('Error communicating with the server.);
