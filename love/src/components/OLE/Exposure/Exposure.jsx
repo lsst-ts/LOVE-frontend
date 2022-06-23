@@ -31,6 +31,7 @@ export default class Exposure extends Component {
       exposurelogs: [],
       instruments: [],
       exposureTypes: [],
+      observationIds: [],
     };
   }
 
