@@ -13,8 +13,7 @@ export default class OLETabs extends Component {
   };
 
   static defaultProps = {
-    tabs: [
-    ],
+    tabs: [],
   };
 
   constructor(props) {
@@ -42,7 +41,9 @@ export default class OLETabs extends Component {
       if (tab === 'exposure') {
         return (
           <ExposureAdd
-            back={() => { this.setState({ clickNewLog: false });}}
+            back={() => {
+              this.setState({ clickNewLog: false });
+            }}
             props={this.props}
           />
         );
@@ -50,24 +51,21 @@ export default class OLETabs extends Component {
       if (tab === 'non-exposure') {
         return (
           <NonExposureEdit
-            back={() => { this.setState({ clickNewLog: false });}}
+            back={() => {
+              this.setState({ clickNewLog: false });
+            }}
             props={this.props}
           />
         );
       }
     } else {
       if (tab === 'exposure') {
-        return (
-          <Exposure props={this.props}/>
-        );
+        return <Exposure props={this.props} />;
       }
       if (tab === 'non-exposure') {
-        return (
-          <NonExposure props={this.props}/>
-        );
+        return <NonExposure props={this.props} />;
       }
     }
-    
   }
 
   render() {
@@ -85,22 +83,18 @@ export default class OLETabs extends Component {
         </div>
       );
     });
-    
+
     return (
       <div className={styles.tabsWrapper}>
         <div className={styles.tabsRow}>
-          { html }
+          {html}
           <div className={styles.btnNew}>
-            <Button className={styles.btn}
-              onClick={() => this.setState((prevState) => ({clickNewLog: true}))}
-            >
-              + New {tabs.filter((tab) => tab.value === selectedTab)[0].name }
+            <Button className={styles.btn} onClick={() => this.setState((prevState) => ({ clickNewLog: true }))}>
+              + New {tabs.filter((tab) => tab.value === selectedTab)[0].name.slice(0, -1)}
             </Button>
           </div>
         </div>
-        <div className={styles.tableWrapper}>
-          { this.getComponent(this.state.clickNewLog, selectedTab) }
-        </div>
+        <div className={styles.tableWrapper}>{this.getComponent(this.state.clickNewLog, selectedTab)}</div>
       </div>
     );
   }
