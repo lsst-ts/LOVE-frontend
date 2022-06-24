@@ -90,8 +90,13 @@ export default class ExposureAdd extends Component {
       console.log('selectedInstrument');
       ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
         const observationIds = data.map((exposure) => exposure.obs_id);
+        const dayObs = data.map((exposure) => ({
+            obs_id: exposure.obs_id,
+            day_obs: exposure.day_obs,
+        }));
         this.setState({
           observationIds,
+          dayObs,
           newMessage: { ...prevState.newMessage, obs_id: undefined },
         });
       });
@@ -101,20 +106,21 @@ export default class ExposureAdd extends Component {
   handleSubmit(event) {
     event.preventDefault();
     // TODO: Some parameters are not being sent, check
-    console.log('Submitted: ', this.state.newMessage);
-    // ManagerInterface.createMessageExposureLogs(this.state.newMessage).then((response) => {
-    //   console.log('response', response);
-    // });
+    console.log('Submitted: ');
+
     const fakeNewMessage = { ...this.state.newMessage };
-    fakeNewMessage['obs_id'] = 'AT_O_20220208_000140';
+    fakeNewMessage['instrument'] = this.state.selectedInstrument;
+    fakeNewMessage['day_obs'] = this.state.dayObs.find((duple) => duple.obs_id === this.state.newMessage.obs_id)?.day_obs;
     fakeNewMessage['user_id'] = 'saranda@localhost';
     fakeNewMessage['user_agent'] = 'LOVE';
-    fakeNewMessage['files'] = [fakeNewMessage['file']];
+    fakeNewMessage['files'] = fakeNewMessage['file'] ? [fakeNewMessage['file']] : [];
     delete fakeNewMessage.file;
 
-    console.log(fakeNewMessage);
-    ManagerInterface.createMessageExposureLogs(fakeNewMessage).then((response) => {
-      console.log('response', response);
+    console.log('fakeNewMessage:', fakeNewMessage);
+    ManagerInterface.createMessageExposureLogs(fakeNewMessage).then((result) => {
+      console.log('result', result);
+      console.log('this.props.back()');
+      this.props.back();
     });
   }
 
@@ -133,8 +139,6 @@ export default class ExposureAdd extends Component {
     const link = this.props.back;
     const isLogCreate = this.props.isLogCreate;
     const isMenu = this.props.isMenu;
-
-    const OBS_ID_OPTIONS = this.props.Observations ? this.props.Observations : ['AT_O_20220208_000140'];
 
     return (
       <>
@@ -172,7 +176,9 @@ export default class ExposureAdd extends Component {
                   <Select
                     value={this.state.newMessage.obs_id}
                     onChange={(event) =>
-                      this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, obs_id: event.value } }))
+                      this.setState((prevState) => ({
+                        newMessage: { ...prevState.newMessage, obs_id: event.value },
+                      }))
                     }
                     options={this.state.observationIds}
                     className={styles.select}
@@ -264,7 +270,7 @@ export default class ExposureAdd extends Component {
               <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
               <span className={[styles.value, !isMenu ? styles.w20 : ''].join(' ')}>
                 <Select
-                  value={this.state.newMessage.flag}
+                  value={this.state.newMessage.exposure_flag}
                   onChange={(event) =>
                     this.setState((prevState) => ({
                       newMessage: { ...prevState.newMessage, exposure_flag: event.value },
