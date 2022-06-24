@@ -42,7 +42,7 @@ const CreateOLETabsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...p
 
 const mapStateToProps = (state) => {
   const tabs = [
-    {name: 'Non-Exposure Logs', value: 'non-exposure', component: NonExposure, },
+    {name: 'Narrative Logs', value: 'non-exposure', component: NonExposure, },
     {name: 'Exposure Logs', value: 'exposure', component: Exposure, },
   ];
   return {tabs};
