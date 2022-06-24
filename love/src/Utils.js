@@ -787,22 +787,24 @@ export default class ManagerInterface {
   }
 
   // TODO: Unsuported Media Type
-  static updateMessageExposureLogs(msgExposureId, data) {
+  static updateMessageExposureLogs(msgExposureId, params) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    console.log('updateMessageExposureLogs', msgExposureId, data);
-    const params = data;
+    console.log('updateMessageExposureLogs', msgExposureId, params);
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
 
     console.log('params', params);
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
     return fetch(url, {
       method: 'PUT',
-      headers: ManagerInterface.getHeaders(),
-      body: JSON.stringify({
-        params,
-      })
+      headers: ManagerInterface.getMultipartHeaders(),
+      body: formData,
     }).then((response) => {
       if (response.status >= 500) {
         toast.error('Error communicating with the server.');
@@ -849,10 +851,10 @@ export default class ManagerInterface {
         toast.error('Unable to save request.');
         return false;
       }
-      return response.json().then((resp) => {
-        toast.success('Request updated.');
-        return resp;
-      });
+      if (response) {
+        toast.success('Deleted message of Exposure Logs.');
+      }
+      return response;
     });
   }
 
@@ -943,6 +945,117 @@ export default class ManagerInterface {
       });
     });
   }
+
+  static createMessageNarrativeLogs(params = {}) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      // console.log('Token not found during validation');
+      return new Promise((resolve) => resolve(false));
+    }
+    console.log('createMessage', params);
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
+    console.log('url', url);
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
+    return fetch(url, {
+      method: 'POST',
+      headers: ManagerInterface.getMultipartHeaders(),
+      body: formData,
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status === 400) {
+        return response.json().then((resp) => {
+          toast.error(resp.ack);
+        });
+      }
+      return response.json().then((resp) => {
+        toast.info(resp.ack);
+        return resp;
+      });
+    });
+  }
+
+  static updateMessageNarrativeLogs(msgNarrativeId, params) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    console.log('updateMessageNarrativeLogs', msgNarrativeId, params);
+
+    const formData = new FormData();
+    for (const param in params) {
+      formData.append(param, params[param]);
+    }
+
+    console.log('params', params);
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgNarrativeId}/`;
+    return fetch(url, {
+      method: 'PUT',
+      headers: ManagerInterface.getMultipartHeaders(),
+      body: formData,
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Request updated.');
+        return resp;
+      });
+    });
+  }
+
+  static deleteMessageNarrativeLogs(msgExposureId) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    console.log('deleteMessageExposureLogs', msgExposureId);
+
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgExposureId}/`;
+    return fetch(url, {
+      method: 'DELETE',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        toast.error('Error communicating with the server.');
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        toast.error('Session expired. Logging out.');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      if (response.status >= 400 && response.status < 500) {
+        toast.error('Unable to save request.');
+        return false;
+      }
+      return response.json().then((resp) => {
+        toast.success('Request updated.');
+        return resp;
+      });
+    });
+  }
+
 } // END ManagerInterface
 
 /**
