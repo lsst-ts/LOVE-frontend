@@ -141,9 +141,10 @@ export default class NonExposure extends Component {
         type: 'link',
         className: styles.tableHead,
         render: (value) => (
-          <a href={value[0]} target="_blank">
-            {value[0]}
-          </a>
+          <Button status="link"
+            title={value[0]}
+            onClick={() => openInNewTab(value[0])}
+          >{value[0]}</Button>
         ),
       },
       {

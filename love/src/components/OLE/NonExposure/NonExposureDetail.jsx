@@ -4,6 +4,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './NonExposure.module.css';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
+import ManagerInterface from 'Utils';
 import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 
 export default class NonExposureDetail extends Component {
@@ -29,6 +30,14 @@ export default class NonExposureDetail extends Component {
       description: undefined,
     },
   };
+
+  deleteMessage(message) {
+    console.log('deleteMessage', message);
+    ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
+      console.log('result', response);
+      this.props.back();
+    });
+  }
 
   render() {
     const link = this.props.back;
@@ -60,7 +69,7 @@ export default class NonExposureDetail extends Component {
               </Button>
             </span>
             <span className={styles.floatRight}>
-              <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+              <Button className={styles.iconBtn} title="Delete" onClick={() => this.deleteMessage(logDetail)} status="transparent">
                 <DeleteIcon className={styles.icon} />
               </Button>
             </span>
