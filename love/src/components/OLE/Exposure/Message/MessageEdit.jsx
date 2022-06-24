@@ -30,11 +30,10 @@ export default class MessageEdit extends Component {
       file: undefined,
       fileurl: undefined,
       filename: undefined,
-      jira: undefined,
+      jira: false,
       message_text: undefined,
       date_added: undefined,
       date_invalidated: undefined,
-      createTicketJira: false,
     },
     cancel: () => {
       console.log('defaultProps.cancel');
@@ -81,12 +80,12 @@ export default class MessageEdit extends Component {
   constructor(props) {
     super(props);
     const message = props.message ? props.message : MessageEdit.defaultProps.message;
-    message.jira = this.getLinkJira(message);
+    message.jiraurl = this.getLinkJira(message);
     message.fileurl = this.getFileURL(message);
     message.filename = this.getFilename(this.getFileURL(message));
-    message.createTicketJira = false;
+    message.jira = false;
     this.state = {
-      message: message,
+      message,
     };
   }
 
@@ -103,8 +102,8 @@ export default class MessageEdit extends Component {
               <span className={styles.marginLeft}>
                 <Button
                   status="link"
-                  title={this.state.message.jira}
-                  onClick={() => openInNewTab(this.state.message.jira)}
+                  title={this.state.message.jiraurl}
+                  onClick={() => openInNewTab(this.state.message.jiraurl)}
                 >
                   view Jira ticket
                 </Button>
@@ -114,10 +113,10 @@ export default class MessageEdit extends Component {
                 Create and link new Jira ticket
                 <Input
                   type="checkbox"
-                  checked={this.state.message.createTicketJira}
+                  checked={this.state.message.jira}
                   onChange={(event) => {
                     this.setState((prevState) => ({
-                      message: { ...prevState.message, createTicketJira: event.target.checked },
+                      message: { ...prevState.message, jira: event.target.checked },
                     }));
                   }}
                 />
@@ -160,7 +159,7 @@ export default class MessageEdit extends Component {
                 this.setState((prevState) => ({ message: { ...prevState.message, file: undefined } }))
               }
             />
-            {this.state.message.fileurl ? (
+            { this.state.message.fileurl ? (
               <>
                 <Button
                   status="link"

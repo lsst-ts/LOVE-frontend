@@ -185,12 +185,14 @@ export default class Exposure extends Component {
         const exposureTypes = new Set();
         const exposures = data.map((exposure) => {
           exposureTypes.add(exposure.observation_type);
-          /* ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
-              const flags = messages.map((message) => message['exposure_flag']);
-              // const flags = ["none","junk"];
+          // TODO: request for all the obs_id, all messages and only use exposure_flag PENDING: backend with query of flags without query to exposurelogs/messages
+          ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+              const flags = messages
+                .map((message) => message['exposure_flag'])
+                .reduce((acc, curr) => acc.find((f) => f === curr) ? acc : [...acc, curr], []);
               exposure['flags'] = flags;
               return exposure;
-            }); */
+            });
           return exposure;
         });
         this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
