@@ -20,7 +20,7 @@ export default function OLEMenu ({
       >
         <div className={styles.smallIconRow}>
           <AddIcon className={styles.addIcon} />
-          <span>New Non-Exposure Log</span>
+          <span>New Narrative Log</span>
         </div>
       </div>
       <div className={[styles.menuElement, styles.highlight].join(" ")}

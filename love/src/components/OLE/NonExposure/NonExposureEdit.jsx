@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -31,10 +32,12 @@ export default class NonExposureEdit extends Component {
       value: undefined,
       user: undefined,
       obsTimeLoss: undefined,
-      jira: undefined,
+      jira: false,
       file: undefined,
-      description: undefined,
-      createTicketJira: false,
+      fileurl: undefined,
+      filename: undefined,
+      urls: [],
+      message_text: undefined,
     },
     isLogCreate: false,
     isMenu: false,
@@ -42,8 +45,13 @@ export default class NonExposureEdit extends Component {
 
   constructor(props) {
     super(props);
+    const logEdit = props.logEdit ? props.logEdit : defaultProps.logEdit;
+    logEdit.jiraurl = this.getLinkJira(logEdit);
+    logEdit.fileurl = this.getFileURL(logEdit);
+    logEdit.filename = this.getFilename(this.getFileURL(logEdit));
+    logEdit.jira = false;
     this.state = {
-      logEdit: props.logEdit ? props.logEdit : defaultProps.logEdit,
+      logEdit,
       optionsTree: {},
     };
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,6 +61,26 @@ export default class NonExposureEdit extends Component {
     event.preventDefault();
     console.log('NonExposureEdit.handleSubmit');
     console.log('Submitted: ', this.state.logEdit);
+    if (this.state.logEdit.id) {
+      ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, this.state.logEdit).then((response) => {
+        console.log('result', response);
+        this.props.back();
+      });
+    } else {
+      ManagerInterface.createMessageNarrativeLogs(this.state.logEdit).then((response) => {
+        console.log('result', response);
+        this.props.back();
+      });
+    }
+    
+  }
+
+  deleteMessage(message) {
+    console.log('deleteMessage', message);
+    ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
+      console.log('result', response);
+      this.props.back();
+    });
   }
 
   handleTimeOfIncident(date, type) {
@@ -65,6 +93,31 @@ export default class NonExposureEdit extends Component {
         logEdit: { ...state.logEdit, startDate: date },
       }));
     }
+  }
+
+  getLinkJira(message) {
+    const urls = message.urls ? message.urls : [];
+    const filtered = urls.filter((url) => url.includes('jira'));
+    if (filtered.length > 0) {
+      return filtered[0];
+    }
+    return undefined;
+  }
+
+  getFileURL(message) {
+    const urls = message.urls ? message.urls : [];
+    const filtered = urls.filter((url) => !url.includes('jira'));
+    if (filtered.length > 0) {
+      return filtered[0];
+    }
+    return undefined;
+  }
+
+  getFilename(url) {
+    if (url) {
+      return url.substring(url.lastIndexOf('/') + 1);
+    }
+    return '';
   }
 
   componentDidMount() {
@@ -160,7 +213,7 @@ export default class NonExposureEdit extends Component {
                 {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
                 <span className={styles.floatRight}>
                   {this.state.logEdit.id ? (
-                    <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+                    <Button className={styles.iconBtn} title="Delete" onClick={() => { this. deleteMessage(this.state.logEdit) }} status="transparent">
                       <DeleteIcon className={styles.icon} />
                     </Button>
                   ) : (
@@ -303,9 +356,9 @@ export default class NonExposureEdit extends Component {
                   )}
                 </div>
                 <TextArea
-                  value={this.state.logEdit.description}
+                  value={this.state.logEdit.message_text}
                   callback={(event) =>
-                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, description: event.value } }))
+                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, message_text: event } }))
                   }
                 />
               </div>
@@ -318,31 +371,66 @@ export default class NonExposureEdit extends Component {
                   this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
                 }
               />
+              {this.state.logEdit.fileurl ? (
+              <>
+                <Button
+                  status="link"
+                  title={this.state.logEdit.fileurl}
+                  onClick={() => openInNewTab(this.state.logEdit.fileurl)}
+                >
+                  {this.state.logEdit.filename}
+                </Button>
+                <Button
+                  className={styles.iconBtn}
+                  title={this.state.logEdit.fileurl}
+                  onClick={() => openInNewTab(this.state.logEdit.fileurl)}
+                  status="transparent"
+                >
+                  <DownloadIcon className={styles.icon} />
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 {!this.state.logEdit.id ? (
                   <span className={styles.checkboxText}>
                     Create and link new Jira ticket
                     <Input
                       type="checkbox"
-                      checked={this.state.logEdit.createTicketJira}
+                      checked={this.state.logEdit.jira}
                       onChange={(event) => {
                         this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, createTicketJira: event.target.checked },
+                          logEdit: { ...prevState.logEdit, jira: event.target.checked },
                         }));
                       }}
                     />
                   </span>
                 ) : (
-                  <span className={styles.checkboxText}>
-                    <Button status="link">view Jira ticket</Button>
-                    <Input
-                      value={this.state.logEdit.jira}
-                      className={styles.input}
-                      onChange={(event) =>
-                        this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, jira: event.value } }))
-                      }
-                    />
-                  </span>
+                  this.state.logEdit.jiraurl ? (
+                    <span className={styles.checkboxText}>
+                      <Button
+                        status="link"
+                        title={this.state.logEdit.jiraurl}
+                        onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
+                      >
+                        view Jira ticket
+                      </Button>
+                    </span>
+                  ) : (
+                    <span className={styles.checkboxText}>
+                      Create and link new Jira ticket
+                      <Input
+                        type="checkbox"
+                        checked={this.state.logEdit.jira}
+                        onChange={(event) => {
+                          this.setState((prevState) => ({
+                            logEdit: { ...prevState.logEdit, jira: event.target.checked },
+                          }));
+                        }}
+                      />
+                    </span>
+                  )
                 )}
                 <Button type="submit">
                   <span className={styles.title}>Upload Log</span>

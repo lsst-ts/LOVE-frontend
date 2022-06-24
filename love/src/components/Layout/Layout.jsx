@@ -561,7 +561,7 @@ class Layout extends Component {
               {this.renderHeartbeatsMenu()}
 
               <DropdownMenu className={styles.settingsDropdown} disabledToggle={true}>
-                <Button className={styles.iconBtn} title="Exposure and Non-Exposure Logs" status="transparent">
+                <Button className={styles.iconBtn} title="Exposure and Narrative Logs" status="transparent">
                   <MessageIcon className={styles.icon} />
                 </Button>
                 <div className={styles.userMenu}>
@@ -577,7 +577,7 @@ class Layout extends Component {
                   ) : this.state.isNewNonExposureOpen ? (
                     <>
                       <div className={styles.title}>
-                        <span className={styles.bold}>New Non-Exposure Log</span>
+                        <span className={styles.bold}>New Narrative Log</span>
                         <span className={styles.floatRight}>
                           <Button
                             status="link"
