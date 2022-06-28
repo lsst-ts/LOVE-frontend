@@ -761,6 +761,8 @@ export default class ManagerInterface {
     for (const param in params) {
       formData.append(param, params[param]);
     }
+    formData.append('file', params['files'][0]);
+
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getMultipartHeaders(),
@@ -1055,7 +1057,6 @@ export default class ManagerInterface {
       });
     });
   }
-
 } // END ManagerInterface
 
 /**
