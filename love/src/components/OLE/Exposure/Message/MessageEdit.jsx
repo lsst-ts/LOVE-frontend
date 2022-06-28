@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { openInNewTab } from 'Utils';
+import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
 import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -31,6 +31,7 @@ export default class MessageEdit extends Component {
       fileurl: undefined,
       filename: undefined,
       jira: false,
+      jiraurl: undefined,
       message_text: undefined,
       date_added: undefined,
       date_invalidated: undefined,
@@ -52,37 +53,12 @@ export default class MessageEdit extends Component {
     return result[flag] ? result[flag] : 'unknown';
   }
 
-  getLinkJira(message) {
-    const urls = message.urls;
-    const filtered = urls.filter((url) => url.includes('jira'));
-    if (filtered.length > 0) {
-      return filtered[0];
-    }
-    return undefined;
-  }
-
-  getFileURL(message) {
-    const urls = message.urls;
-    const filtered = urls.filter((url) => !url.includes('jira'));
-    if (filtered.length > 0) {
-      return filtered[0];
-    }
-    return undefined;
-  }
-
-  getFilename(url) {
-    if (url) {
-      return url.substring(url.lastIndexOf('/') + 1);
-    }
-    return '';
-  }
-
   constructor(props) {
     super(props);
     const message = props.message ? props.message : MessageEdit.defaultProps.message;
-    message.jiraurl = this.getLinkJira(message);
-    message.fileurl = this.getFileURL(message);
-    message.filename = this.getFilename(this.getFileURL(message));
+    message.jiraurl = getLinkJira(message.urls);
+    message.fileurl = getFileURL(message.urls);
+    message.filename = getFilename(this.getFileURL(message.urls));
     message.jira = false;
     this.state = {
       message,
