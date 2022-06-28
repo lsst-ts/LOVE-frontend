@@ -878,7 +878,7 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages`;
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),

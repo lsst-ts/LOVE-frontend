@@ -59,20 +59,26 @@ export default class NonExposureEdit extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    console.log('NonExposureEdit.handleSubmit');
-    console.log('Submitted: ', this.state.logEdit);
+
+    const newFakeMessage = { ...this.state.logEdit };
+    newFakeMessage['level'] = 10;
+    newFakeMessage['user_id'] = 'saranda@localhost';
+    newFakeMessage['user_agent'] = 'LOVE';
+    newFakeMessage['is_human'] = true;
+    console.log('Submitted: ', newFakeMessage);
     if (this.state.logEdit.id) {
-      ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, this.state.logEdit).then((response) => {
+      // ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, this.state.logEdit).then((response) => {
+      ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, newFakeMessage).then((response) => {
         console.log('result', response);
         this.props.back();
       });
     } else {
-      ManagerInterface.createMessageNarrativeLogs(this.state.logEdit).then((response) => {
+      // ManagerInterface.createMessageNarrativeLogs(this.state.logEdit).then((response) => {
+      ManagerInterface.createMessageNarrativeLogs(newFakeMessage).then((response) => {
         console.log('result', response);
         this.props.back();
       });
     }
-    
   }
 
   deleteMessage(message) {
@@ -213,7 +219,14 @@ export default class NonExposureEdit extends Component {
                 {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
                 <span className={styles.floatRight}>
                   {this.state.logEdit.id ? (
-                    <Button className={styles.iconBtn} title="Delete" onClick={() => { this. deleteMessage(this.state.logEdit) }} status="transparent">
+                    <Button
+                      className={styles.iconBtn}
+                      title="Delete"
+                      onClick={() => {
+                        this.deleteMessage(this.state.logEdit);
+                      }}
+                      status="transparent"
+                    >
                       <DeleteIcon className={styles.icon} />
                     </Button>
                   ) : (
@@ -372,26 +385,26 @@ export default class NonExposureEdit extends Component {
                 }
               />
               {this.state.logEdit.fileurl ? (
-              <>
-                <Button
-                  status="link"
-                  title={this.state.logEdit.fileurl}
-                  onClick={() => openInNewTab(this.state.logEdit.fileurl)}
-                >
-                  {this.state.logEdit.filename}
-                </Button>
-                <Button
-                  className={styles.iconBtn}
-                  title={this.state.logEdit.fileurl}
-                  onClick={() => openInNewTab(this.state.logEdit.fileurl)}
-                  status="transparent"
-                >
-                  <DownloadIcon className={styles.icon} />
-                </Button>
-              </>
-            ) : (
-              <></>
-            )}
+                <>
+                  <Button
+                    status="link"
+                    title={this.state.logEdit.fileurl}
+                    onClick={() => openInNewTab(this.state.logEdit.fileurl)}
+                  >
+                    {this.state.logEdit.filename}
+                  </Button>
+                  <Button
+                    className={styles.iconBtn}
+                    title={this.state.logEdit.fileurl}
+                    onClick={() => openInNewTab(this.state.logEdit.fileurl)}
+                    status="transparent"
+                  >
+                    <DownloadIcon className={styles.icon} />
+                  </Button>
+                </>
+              ) : (
+                <></>
+              )}
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 {!this.state.logEdit.id ? (
                   <span className={styles.checkboxText}>
@@ -406,31 +419,29 @@ export default class NonExposureEdit extends Component {
                       }}
                     />
                   </span>
+                ) : this.state.logEdit.jiraurl ? (
+                  <span className={styles.checkboxText}>
+                    <Button
+                      status="link"
+                      title={this.state.logEdit.jiraurl}
+                      onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
+                    >
+                      view Jira ticket
+                    </Button>
+                  </span>
                 ) : (
-                  this.state.logEdit.jiraurl ? (
-                    <span className={styles.checkboxText}>
-                      <Button
-                        status="link"
-                        title={this.state.logEdit.jiraurl}
-                        onClick={() => openInNewTab(this.state.logEdit.jiraurl)}
-                      >
-                        view Jira ticket
-                      </Button>
-                    </span>
-                  ) : (
-                    <span className={styles.checkboxText}>
-                      Create and link new Jira ticket
-                      <Input
-                        type="checkbox"
-                        checked={this.state.logEdit.jira}
-                        onChange={(event) => {
-                          this.setState((prevState) => ({
-                            logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                          }));
-                        }}
-                      />
-                    </span>
-                  )
+                  <span className={styles.checkboxText}>
+                    Create and link new Jira ticket
+                    <Input
+                      type="checkbox"
+                      checked={this.state.logEdit.jira}
+                      onChange={(event) => {
+                        this.setState((prevState) => ({
+                          logEdit: { ...prevState.logEdit, jira: event.target.checked },
+                        }));
+                      }}
+                    />
+                  </span>
                 )}
                 <Button type="submit">
                   <span className={styles.title}>Upload Log</span>
