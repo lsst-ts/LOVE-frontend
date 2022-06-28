@@ -22,13 +22,15 @@ export default class NonExposureDetail extends Component {
       timeIncident: undefined,
       subsystem: undefined,
       csc: undefined,
-      cscTopic: undefined,
-      value: undefined,
+      topic: undefined,
+      param: undefined,
       user: undefined,
       time_lost: undefined,
       jira: undefined,
       file: undefined,
       message_text: undefined,
+      tags: [],
+      urls: [],
     },
   };
 
@@ -48,6 +50,13 @@ export default class NonExposureDetail extends Component {
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
     const logTagsParams = getOLEDataFromTags(logDetail.tags);
+    logDetail.type = logTagsParams.type;
+    logDetail.subsystem = logTagsParams.subsystem;
+    logDetail.csc = logTagsParams.csc;
+    logDetail.topic = logTagsParams.topic;
+    logDetail.param = logTagsParams.param;
+
+    console.log('logTagsParams', logTagsParams);
 
     return (
       <>
@@ -93,13 +102,13 @@ export default class NonExposureDetail extends Component {
               <span className={styles.value}>{logDetail.date_user_specified}</span>
               <span className={styles.label}>Subsystem Affected</span>
               <span className={styles.value}>
-                {(logTagsParams.subsystem ?? 'None') +
+                {(logDetail.subsystem ?? 'None') +
                   ' > ' +
-                  (logTagsParams.csc ?? 'None') +
+                  (logDetail.csc ?? 'None') +
                   ' > ' +
-                  (logTagsParams.topic ?? 'None') +
+                  (logDetail.topic ?? 'None') +
                   ' > ' +
-                  (logTagsParams.param ?? 'None')}
+                  (logDetail.param ?? 'None')}
               </span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost)}</span>
