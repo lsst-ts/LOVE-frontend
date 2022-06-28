@@ -840,10 +840,10 @@ export default class ManagerInterface {
         toast.error('Unable to save request.');
         return false;
       }
-      if (response) {
-        toast.success('Deleted message of Exposure Logs.');
-      }
-      return response;
+      return response.json().then((resp) => {
+        toast.success(resp.ack);
+        return resp;
+      });
     });
   }
 
@@ -969,7 +969,7 @@ export default class ManagerInterface {
         });
       }
       return response.json().then((resp) => {
-        toast.info(resp.ack);
+        toast.success(resp.ack);
         return resp;
       });
     });
@@ -1008,7 +1008,7 @@ export default class ManagerInterface {
         return false;
       }
       return response.json().then((resp) => {
-        toast.success('Request updated.');
+        toast.success(resp.ack);
         return resp;
       });
     });
@@ -1019,7 +1019,6 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    console.log('deleteMessageExposureLogs', msgExposureId);
 
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgExposureId}/`;
     return fetch(url, {
@@ -1040,7 +1039,7 @@ export default class ManagerInterface {
         return false;
       }
       return response.json().then((resp) => {
-        toast.success('Request updated.');
+        toast.success(resp.ack);
         return resp;
       });
     });
