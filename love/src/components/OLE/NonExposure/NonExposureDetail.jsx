@@ -69,7 +69,12 @@ export default class NonExposureDetail extends Component {
               </Button>
             </span>
             <span className={styles.floatRight}>
-              <Button className={styles.iconBtn} title="Delete" onClick={() => this.deleteMessage(logDetail)} status="transparent">
+              <Button
+                className={styles.iconBtn}
+                title="Delete"
+                onClick={() => this.deleteMessage(logDetail)}
+                status="transparent"
+              >
                 <DeleteIcon className={styles.icon} />
               </Button>
             </span>
@@ -80,7 +85,7 @@ export default class NonExposureDetail extends Component {
               <span className={styles.value}>{logDetail.date_user_specified}</span>
               <span className={styles.label}>Subsystem Affected</span>
               <span className={styles.value}>
-                {logTagsParams.subsystem +
+                {(logTagsParams.subsystem ?? 'None') +
                   ' > ' +
                   (logTagsParams.csc ?? 'None') +
                   ' > ' +
@@ -94,7 +99,7 @@ export default class NonExposureDetail extends Component {
             <div className={styles.description}>
               <div className={styles.floatLeft}>
                 <span>On </span>
-                <span className={styles.bold}>{logDetail.date_user_specified} </span>
+                <span className={styles.bold}>{logDetail.date_added} </span>
                 <span className={styles.bold}>{logDetail.user_id} </span>
                 <span>wrote:</span>
               </div>

@@ -668,21 +668,17 @@ export default class ManagerInterface {
   static getListExposureLogs(instrument) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2`;
-    console.log('url', url);
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -695,22 +691,17 @@ export default class ManagerInterface {
   static getListMessagesExposureLogs(obsId) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?obs_id=${obsId}`;
-    // const url = `${this.getApiBaseUrl()}ole/exposurelog/messages`;
-    console.log('url', url);
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -723,7 +714,6 @@ export default class ManagerInterface {
   static getRetrieveMessageExposureLogs(msgExposureId) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
@@ -733,11 +723,9 @@ export default class ManagerInterface {
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -750,7 +738,6 @@ export default class ManagerInterface {
   static createMessageExposureLogs(params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     console.log('createMessage', params);
@@ -943,7 +930,8 @@ export default class ManagerInterface {
             parent_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
           },
         ];
-        return fakeResponse;
+        // return fakeResponse;
+        return resp;
       });
     });
   }
