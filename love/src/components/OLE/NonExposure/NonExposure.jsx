@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
 import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -130,9 +131,11 @@ export default class NonExposure extends Component {
         type: 'link',
         className: styles.tableHead,
         render: (value) => (
-          <Button className={styles.iconBtn} title={value[1]} onClick={() => openInNewTab(value[1])}>
-            <DownloadIcon className={styles.icon} />
-          </Button>
+          getFileURL(value) ? 
+            <Button className={styles.iconBtn} title={getFileURL(value)} onClick={() => openInNewTab(getFileURL(value))}>
+              <DownloadIcon className={styles.icon} />
+            </Button>
+          : <></>
         ),
       },
       {
@@ -141,9 +144,11 @@ export default class NonExposure extends Component {
         type: 'link',
         className: styles.tableHead,
         render: (value) => (
-          <Button status="link" title={value[0]} onClick={() => openInNewTab(value[0])}>
-            {value[0]}
-          </Button>
+          getLinkJira(value) ? 
+            <Button status="link" title={getLinkJira(value)} onClick={() => openInNewTab(getLinkJira(value))}>
+              view Jira ticket
+            </Button>
+          : <></>
         ),
       },
       {
