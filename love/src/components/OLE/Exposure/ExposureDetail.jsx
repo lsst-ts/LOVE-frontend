@@ -60,8 +60,13 @@ export default class ExposureDetail extends Component {
   }
 
   saveMessage(message) {
-    console.log('save message', message);
     ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
+      console.log('result', response);
+    });
+  }
+
+  deleteMessage(message) {
+    ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
       console.log('result', response);
     });
   }
@@ -184,6 +189,9 @@ export default class ExposureDetail extends Component {
                     message={message}
                     editMessage={(messageEdit) => {
                       this.setState({ selectedMessage: messageEdit });
+                    }}
+                    deleteMessage={(mesage) => {
+                      this.deleteMessage(message);
                     }}
                   />
                 );

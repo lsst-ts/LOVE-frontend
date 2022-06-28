@@ -48,7 +48,6 @@ export default class Exposure extends Component {
   }
 
   view(index) {
-    console.log('view', index);
     if (index) {
       /* ManagerInterface.getRetrieveMessageExposureLogs(index['id']).then((data) => {
         console.log('getRetrieveMessageExposureLogs data:', data);
@@ -59,7 +58,6 @@ export default class Exposure extends Component {
       }); */
 
       ManagerInterface.getListMessagesExposureLogs(index['obs_id']).then((data) => {
-        console.log('getListMessagesExposureLogs(', index['obs_id'], ') => data:', data);
         this.setState({
           modeView: true,
           selected: index,
@@ -169,31 +167,27 @@ export default class Exposure extends Component {
   };
 
   componentDidMount() {
-    console.log('componentDidMount');
     ManagerInterface.getListExposureInstruments().then((data) => {
       const instrumentsArray = Object.values(data).map((arr) => arr[0]);
       this.setState({ instruments: instrumentsArray, selectedInstrument: instrumentsArray[0] });
-      console.log('instruments', instrumentsArray);
     });
-    //
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
-      console.log('QUERY EXPOSURES...');
       ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
         const exposureTypes = new Set();
         const exposures = data.map((exposure) => {
           exposureTypes.add(exposure.observation_type);
           // TODO: request for all the obs_id, all messages and only use exposure_flag PENDING: backend with query of flags without query to exposurelogs/messages
-          ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
-              const flags = messages
-                .map((message) => message['exposure_flag'])
-                .reduce((acc, curr) => acc.find((f) => f === curr) ? acc : [...acc, curr], []);
-              exposure['flags'] = flags;
-              return exposure;
-            });
-          return exposure;
+          // ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+          //   const flags = messages
+          //     .map((message) => message['exposure_flag'])
+          //     .reduce((acc, curr) => acc.find((f) => f === curr) ? acc : [...acc, curr], []);
+          //   exposure['flags'] = flags;
+          //   return exposure;
+          // });
+          return { ...exposure };
         });
         this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
       });
