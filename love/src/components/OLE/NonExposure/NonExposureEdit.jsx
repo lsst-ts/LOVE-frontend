@@ -11,6 +11,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
+import { getOLEDataFromTags } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -29,8 +30,8 @@ export default class NonExposureEdit extends Component {
       timeIncident: undefined,
       subsystem: undefined,
       csc: undefined,
-      cscTopic: undefined,
-      value: undefined,
+      topic: undefined,
+      param: undefined,
       user: undefined,
       obsTimeLoss: undefined,
       jira: false,
@@ -38,6 +39,7 @@ export default class NonExposureEdit extends Component {
       fileurl: undefined,
       filename: undefined,
       urls: [],
+      tags: [],
       message_text: undefined,
     },
     isLogCreate: false,
@@ -51,6 +53,12 @@ export default class NonExposureEdit extends Component {
     logEdit.fileurl = getFileURL(logEdit.urls);
     logEdit.filename = getFilename(getFileURL(logEdit.urls));
     logEdit.jira = false;
+    const params = getOLEDataFromTags(logEdit.tags);
+    logEdit.type = params.type;
+    logEdit.subsystem = params.subsystem;
+    logEdit.csc = params.csc;
+    logEdit.topic = params.topic;
+    logEdit.param = params.param;
     this.state = {
       logEdit,
       optionsTree: {},
@@ -68,13 +76,24 @@ export default class NonExposureEdit extends Component {
     newFakeMessage['is_human'] = true;
     console.log('Submitted: ', newFakeMessage);
     if (this.state.logEdit.id) {
+      newFakeMessage['tags'] = [];
+      newFakeMessage['urls'] = [];
       // ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, this.state.logEdit).then((response) => {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, newFakeMessage).then((response) => {
         console.log('result', response);
         this.props.back();
       });
     } else {
-      // ManagerInterface.createMessageNarrativeLogs(this.state.logEdit).then((response) => {
+      this.state.logEdit.files = newFakeMessage['file'] ? [newFakeMessage['file']] : [];
+      delete newFakeMessage.file;
+      newFakeMessage['tags'] = [
+        this.state.logEdit.type,
+        this.state.logEdit.subsystem,
+        this.state.logEdit.csc,
+        this.state.logEdit.topic,
+        this.state.logEdit.param
+      ];
+      console.log('fakemessage', newFakeMessage);
       ManagerInterface.createMessageNarrativeLogs(newFakeMessage).then((response) => {
         console.log('result', response);
         this.props.back();
@@ -114,7 +133,7 @@ export default class NonExposureEdit extends Component {
       prevState.logEdit.subsystem !== this.state.logEdit.subsystem
     ) {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, csc: null, salindex: 0, cscTopic: null, cscParam: null },
+        logEdit: { ...state.logEdit, csc: null, salindex: 0, topic: null, param: null },
         topicOptions: [],
         paramsOptions: [],
       }));
@@ -128,26 +147,26 @@ export default class NonExposureEdit extends Component {
       ].sort();
       this.setState((state) => ({
         topicOptions: options,
-        logEdit: { ...state.logEdit, salindex: 0, cscTopic: null, cscParam: null },
+        logEdit: { ...state.logEdit, salindex: 0, topic: null, param: null },
       }));
     }
 
     if (
-      (prevState.logEdit?.cscTopic || this.state.logEdit?.cscTopic) &&
-      prevState.logEdit.cscTopic !== this.state.logEdit.cscTopic
+      (prevState.logEdit?.topic || this.state.logEdit?.topic) &&
+      prevState.logEdit.topic !== this.state.logEdit.topic
     ) {
-      if (!this.state.logEdit.csc || !this.state.logEdit?.cscTopic) return;
+      if (!this.state.logEdit.csc || !this.state.logEdit?.topic) return;
       const topicData = [
         ...Object.entries(this.state.optionsTree[this.state.logEdit.csc].telemetry_data),
         ...Object.entries(this.state.optionsTree[this.state.logEdit.csc].event_data),
       ];
       const topicParams = topicData.find(([topic]) => {
-        return topic === this.state.logEdit.cscTopic;
+        return topic === this.state.logEdit.topic;
       });
-      const options = Object.keys(topicParams[1]).sort();
+      const options = Object.keys(topicParams[0]).sort();
       this.setState((state) => ({
         paramsOptions: options,
-        logEdit: { ...state.logEdit, cscParam: null },
+        logEdit: { ...state.logEdit, param: null },
       }));
     }
   }
@@ -285,10 +304,10 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>CSC Topic</span>
                 <span className={styles.value}>
                   <Select
-                    value={this.state.logEdit.cscTopic}
+                    value={this.state.logEdit.topic}
                     onChange={(event) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, cscTopic: event.value },
+                        logEdit: { ...prevState.logEdit, topic: event.value },
                       }))
                     }
                     options={topicsOptions}
@@ -298,10 +317,10 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>Param</span>
                 <span className={styles.value}>
                   <Select
-                    value={this.state.logEdit.cscParam}
+                    value={this.state.logEdit.param}
                     onChange={(event) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, cscParam: event.value },
+                        logEdit: { ...prevState.logEdit, param: event.value },
                       }))
                     }
                     options={paramsOptions}
