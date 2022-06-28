@@ -6,6 +6,7 @@ import styles from './NonExposure.module.css';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import ManagerInterface from 'Utils';
 import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { getLinkJira, getFileURL, getFilename } from 'Utils';
 
 export default class NonExposureDetail extends Component {
   static propTypes = {
@@ -27,9 +28,10 @@ export default class NonExposureDetail extends Component {
       time_lost: undefined,
       jira: undefined,
       file: undefined,
-      description: undefined,
+      message_text: undefined,
     },
   };
+
 
   deleteMessage(message) {
     console.log('deleteMessage', message);
@@ -42,8 +44,9 @@ export default class NonExposureDetail extends Component {
   render() {
     const link = this.props.back;
     const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
-    const fileUrl = logDetail.urls?.[1];
-    const fileName = fileUrl ? fileUrl.substring(fileUrl.lastIndexOf('/') + 1) : null;
+   
+    const linkJira = getLinkJira(logDetail.urls);
+    const fileurl = getFileURL(logDetail.urls);
     const logTagsParams = getOLEDataFromTags(logDetail.tags);
 
     return (
@@ -63,13 +66,16 @@ export default class NonExposureDetail extends Component {
             <span className={styles.bold}>
               #{logDetail.id} - {logDetail.type}
             </span>
-            <span>
-              <Button status="link"
-                title={logDetail.jiraurl}
-                onClick={() => openInNewTab(logDetail.urls[0])}>
-                view Jira ticket
-              </Button>
-            </span>
+            { linkJira ? 
+              <span>
+                <Button status="link"
+                  title={linkJira}
+                  onClick={() => openInNewTab(linkJira)}>
+                  view Jira ticket
+                </Button>
+              </span>
+              : <></>
+            }
             <span className={styles.floatRight}>
               <Button
                 className={styles.iconBtn}
@@ -112,18 +118,18 @@ export default class NonExposureDetail extends Component {
             </div>
           </div>
           <div className={styles.footer}>
-            {fileUrl && (
+            {fileurl && (
               <>
                 <span className={styles.label}>File Attached: </span>
                 <span className={styles.value}>
                   <div style={{ display: 'flex' }}>
-                    <Button title={fileUrl} onClick={() => openInNewTab(fileUrl)} status="link">
-                      {fileName}
+                    <Button title={fileurl} onClick={() => openInNewTab(fileurl)} status="link">
+                      {getFilename(fileurl)}
                     </Button>
                     <Button
                       className={styles.iconBtn}
-                      title={fileUrl}
-                      onClick={() => openInNewTab(fileUrl)}
+                      title={fileurl}
+                      onClick={() => openInNewTab(fileurl)}
                       status="transparent"
                     >
                       <DownloadIcon className={styles.icon} />
