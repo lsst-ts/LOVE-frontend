@@ -101,7 +101,7 @@ export default class NonExposure extends Component {
         title: 'Type',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getOLEDataFromTags(value).type.toUpperCase(),
+        render: (value) => getOLEDataFromTags(value).type?.toUpperCase(),
       },
       {
         field: 'time_lost',
@@ -141,10 +141,9 @@ export default class NonExposure extends Component {
         type: 'link',
         className: styles.tableHead,
         render: (value) => (
-          <Button status="link"
-            title={value[0]}
-            onClick={() => openInNewTab(value[0])}
-          >{value[0]}</Button>
+          <Button status="link" title={value[0]} onClick={() => openInNewTab(value[0])}>
+            {value[0]}
+          </Button>
         ),
       },
       {
@@ -201,7 +200,7 @@ export default class NonExposure extends Component {
 
     // Filter by date range
     const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
-    filteredData = filteredData.filter((log) => range.contains(Moment(log.timestamp)));
+    filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added)));
 
     // Filter by type
     filteredData =
