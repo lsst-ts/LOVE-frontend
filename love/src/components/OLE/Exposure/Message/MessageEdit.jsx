@@ -108,7 +108,7 @@ export default class MessageEdit extends Component {
                   view Jira ticket
                 </Button>
               </span>
-            ) : (
+            ) : !this.state.message.id ? (
               <span className={[styles.checkboxText, styles.marginLeft].join(' ')}>
                 Create and link new Jira ticket
                 <Input
@@ -121,7 +121,7 @@ export default class MessageEdit extends Component {
                   }}
                 />
               </span>
-            )}
+            ) : <></>}
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <Button className={styles.iconBtn} title="Exit" onClick={() => cancel()} status="transparent">
@@ -152,13 +152,17 @@ export default class MessageEdit extends Component {
         </div>
         <div className={styles.footer}>
           <span className={[styles.floatLeft, styles.inline].join(' ')}>
-            <FileUploader
-              value={this.state.message.file?.name}
-              handleFile={(file) => this.setState((prevState) => ({ message: { ...prevState.message, file: file } }))}
-              handleDelete={() =>
-                this.setState((prevState) => ({ message: { ...prevState.message, file: undefined } }))
-              }
-            />
+            { !this.state.message.id ? (
+              <FileUploader
+                value={this.state.message.file?.name}
+                handleFile={(file) => this.setState((prevState) => ({ message: { ...prevState.message, file: file } }))}
+                handleDelete={() =>
+                  this.setState((prevState) => ({ message: { ...prevState.message, file: undefined } }))
+                }
+              />
+            ) : (
+              <></>
+            )}
             { this.state.message.fileurl ? (
               <>
                 <Button
