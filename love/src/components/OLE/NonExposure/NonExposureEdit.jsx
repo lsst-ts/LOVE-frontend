@@ -377,13 +377,16 @@ export default class NonExposureEdit extends Component {
               </div>
             </div>
             <div className={isMenu ? styles.footerMenu : styles.footer}>
-              <FileUploader
-                value={this.state.logEdit.file?.name}
-                handleFile={(file) => this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: file } }))}
-                handleDelete={() =>
-                  this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
-                }
-              />
+              {!this.state.logEdit.id ? (
+                <FileUploader
+                  value={this.state.logEdit.file?.name}
+                  handleFile={(file) => this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: file } }))}
+                  handleDelete={() =>
+                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
+                  }
+                />
+                ) : <></>
+              }
               {this.state.logEdit.fileurl ? (
                 <>
                   <Button
@@ -430,18 +433,7 @@ export default class NonExposureEdit extends Component {
                     </Button>
                   </span>
                 ) : (
-                  <span className={styles.checkboxText}>
-                    Create and link new Jira ticket
-                    <Input
-                      type="checkbox"
-                      checked={this.state.logEdit.jira}
-                      onChange={(event) => {
-                        this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, jira: event.target.checked },
-                        }));
-                      }}
-                    />
-                  </span>
+                  <></>
                 )}
                 <Button type="submit">
                   <span className={styles.title}>Upload Log</span>
