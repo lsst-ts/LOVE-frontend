@@ -10,6 +10,7 @@ import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
+import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -46,9 +47,9 @@ export default class NonExposureEdit extends Component {
   constructor(props) {
     super(props);
     const logEdit = props.logEdit ? props.logEdit : defaultProps.logEdit;
-    logEdit.jiraurl = this.getLinkJira(logEdit);
-    logEdit.fileurl = this.getFileURL(logEdit);
-    logEdit.filename = this.getFilename(this.getFileURL(logEdit));
+    logEdit.jiraurl = getLinkJira(logEdit.urls);
+    logEdit.fileurl = getFileURL(logEdit.urls);
+    logEdit.filename = getFilename(getFileURL(logEdit.urls));
     logEdit.jira = false;
     this.state = {
       logEdit,
@@ -99,31 +100,6 @@ export default class NonExposureEdit extends Component {
         logEdit: { ...state.logEdit, startDate: date },
       }));
     }
-  }
-
-  getLinkJira(message) {
-    const urls = message.urls ? message.urls : [];
-    const filtered = urls.filter((url) => url.includes('jira'));
-    if (filtered.length > 0) {
-      return filtered[0];
-    }
-    return undefined;
-  }
-
-  getFileURL(message) {
-    const urls = message.urls ? message.urls : [];
-    const filtered = urls.filter((url) => !url.includes('jira'));
-    if (filtered.length > 0) {
-      return filtered[0];
-    }
-    return undefined;
-  }
-
-  getFilename(url) {
-    if (url) {
-      return url.substring(url.lastIndexOf('/') + 1);
-    }
-    return '';
   }
 
   componentDidMount() {
