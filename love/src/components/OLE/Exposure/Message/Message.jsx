@@ -27,8 +27,12 @@ export default class Message extends Component {
       date_invalidated: undefined,
       tags: [],
     },
-    editMessage: () => { console.log('defaultProps.editMessage()'); },
-    deleteMessage: () => { console.log('defaultProps.deleteMessage()'); },
+    editMessage: () => {
+      console.log('defaultProps.editMessage()');
+    },
+    deleteMessage: () => {
+      console.log('defaultProps.deleteMessage()');
+    },
   };
 
   statusFlag(flag) {
@@ -89,7 +93,7 @@ export default class Message extends Component {
             )}
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Delete" onClick={() => {}} status="transparent">
+            <Button className={styles.iconBtn} title="Delete" onClick={() => remove(message)} status="transparent">
               <DeleteIcon className={styles.icon} />
             </Button>
           </span>
