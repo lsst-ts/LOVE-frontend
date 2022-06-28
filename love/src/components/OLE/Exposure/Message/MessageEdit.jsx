@@ -98,7 +98,7 @@ export default class MessageEdit extends Component {
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.margin3, styles.inline].join(' ')}>
             <span className={styles.title}>#{this.state.message.id}</span>
-            {this.state.message.jira ? (
+            {this.state.message.jiraurl ? (
               <span className={styles.marginLeft}>
                 <Button
                   status="link"
