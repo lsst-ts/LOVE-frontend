@@ -64,7 +64,9 @@ export default class NonExposureDetail extends Component {
               #{logDetail.id} - {logDetail.type}
             </span>
             <span>
-              <Button status="link" onClick={() => openInNewTab(logDetail.urls[0])}>
+              <Button status="link"
+                title={logDetail.jiraurl}
+                onClick={() => openInNewTab(logDetail.urls[0])}>
                 view Jira ticket
               </Button>
             </span>
@@ -110,24 +112,27 @@ export default class NonExposureDetail extends Component {
             </div>
           </div>
           <div className={styles.footer}>
-            <span className={styles.label}>File Attached: </span>
-            <span className={styles.value}>
-              {fileUrl && (
-                <div style={{ display: 'flex' }}>
-                  <Button title={fileUrl} onClick={() => openInNewTab(fileUrl)} status="link">
-                    {fileName}
-                  </Button>
-                  <Button
-                    className={styles.iconBtn}
-                    title={fileUrl}
-                    onClick={() => openInNewTab(fileUrl)}
-                    status="transparent"
-                  >
-                    <DownloadIcon className={styles.icon} />
-                  </Button>
-                </div>
-              )}
-            </span>
+            {fileUrl && (
+              <>
+                <span className={styles.label}>File Attached: </span>
+                <span className={styles.value}>
+                  <div style={{ display: 'flex' }}>
+                    <Button title={fileUrl} onClick={() => openInNewTab(fileUrl)} status="link">
+                      {fileName}
+                    </Button>
+                    <Button
+                      className={styles.iconBtn}
+                      title={fileUrl}
+                      onClick={() => openInNewTab(fileUrl)}
+                      status="transparent"
+                    >
+                      <DownloadIcon className={styles.icon} />
+                    </Button>
+                  </div>
+                </span>
+              </>
+            )}
+            
           </div>
         </div>
       </>
