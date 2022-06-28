@@ -6,7 +6,7 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './Message.module.css';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
-import { openInNewTab } from 'Utils';
+import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
 
 export default class Message extends Component {
   static propTypes = {
@@ -44,38 +44,13 @@ export default class Message extends Component {
     return result[flag] ? result[flag] : 'unknown';
   }
 
-  getLinkJira(message) {
-    const urls = message.urls;
-    const filtered = urls.filter((url) => url.includes('jira'));
-    if (filtered.length > 0) {
-      return filtered[0];
-    }
-    return undefined;
-  }
-
-  getFileURL(message) {
-    const urls = message.urls;
-    const filtered = urls.filter((url) => !url.includes('jira'));
-    if (filtered.length > 0) {
-      return filtered[0];
-    }
-    return undefined;
-  }
-
-  getFilename(url) {
-    if (url) {
-      return url.substring(url.lastIndexOf('/') + 1);
-    }
-    return '';
-  }
-
   render() {
     const message = this.props.message ? this.props.message : Message.defaultProps.message;
     const edit = this.props.editMessage ? this.props.editMessage : Message.defaultProps.editMessage;
     const remove = this.props.deleteMessage ? this.props.deleteMessage : Message.defaultProps.deleteMessage;
 
-    const linkJira = this.getLinkJira(message);
-    const fileurl = this.getFileURL(message);
+    const linkJira = getLinkJira(message.urls);
+    const fileurl = getFileURL(message.urls);
 
     return (
       <div className={styles.message}>
@@ -119,7 +94,7 @@ export default class Message extends Component {
               {fileurl ? (
                 <>
                   <Button status="link" title={fileurl} onClick={() => openInNewTab(fileurl)}>
-                    {this.getFilename(fileurl)}
+                    {getFilename(fileurl)}
                   </Button>
                   <Button
                     className={styles.iconBtn}

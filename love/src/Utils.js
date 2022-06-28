@@ -1478,3 +1478,41 @@ export function getOLEDataFromTags(tags) {
   };
   return parameters;
 }
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from urls field.
+ * @param {string} urls - Array of urls that comes from OLE message
+ * @returns {string} string with first url with the condition if jira link
+ */
+export function getLinkJira(urls) {
+  const filtered = urls.filter((url) => url.includes('jira'));
+  if (filtered.length > 0) {
+    return filtered[0];
+  }
+  return undefined;
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from urls field.
+ * @param {string} urls - Array of urls that comes from OLE message
+ * @returns {string} string with first url with the condition if not jira link
+ */
+ export function getFileURL(urls) {
+  const filtered = urls.filter((url) => !url.includes('jira'));
+  if (filtered.length > 0) {
+    return filtered[0];
+  }
+  return undefined;
+}
+
+/**
+ * Function to get OLE Narrative and Exposure logs parameters from url.
+ * @param {string} url - string of url that comes from OLE message
+ * @returns {string} string parse of the filename from url parameter
+ */
+ export function getFilename(url) {
+  if (url) {
+    return url.substring(url.lastIndexOf('/') + 1);
+  }
+  return '';
+}
