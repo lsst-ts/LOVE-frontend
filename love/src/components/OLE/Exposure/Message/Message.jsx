@@ -98,15 +98,7 @@ export default class Message extends Component {
             </Button>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button
-              className={styles.iconBtn}
-              title="Edit"
-              onClick={() => {
-                console.log('click edit');
-                edit(message);
-              }}
-              status="transparent"
-            >
+            <Button className={styles.iconBtn} title="Edit" onClick={() => edit(message)} status="transparent">
               <EditIcon className={styles.icon} />
             </Button>
           </span>
