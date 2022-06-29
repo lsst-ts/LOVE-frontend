@@ -60,6 +60,7 @@ export default class Exposure extends Component {
       ManagerInterface.getListMessagesExposureLogs(index['obs_id']).then((data) => {
         this.setState({
           modeView: true,
+          modeAdd: false,
           selected: index,
           selectedMessages: data,
         });
@@ -71,6 +72,7 @@ export default class Exposure extends Component {
     if (index) {
       this.setState({
         modeAdd: true,
+        modeView: false,
         selected: index,
       });
     }
@@ -225,6 +227,7 @@ export default class Exposure extends Component {
         }}
         logDetail={this.state.selected}
         logMessages={this.state.selectedMessages}
+        edit={(isClicked) => { if(isClicked) this.add(this.state.selected) }}
       />
     ) : modeAdd && !modeView ? (
       <ExposureAdd
@@ -232,6 +235,7 @@ export default class Exposure extends Component {
           this.setState({ modeAdd: false });
         }}
         logEdit={this.state.selected}
+        view={(isClicked) => { if(isClicked) this.view(this.state.selected) }}
       />
     ) : (
       <div className={styles.margin10}>
