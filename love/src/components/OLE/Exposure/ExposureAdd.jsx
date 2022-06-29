@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { EXPOSURE_FLAG_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
+import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -18,6 +19,7 @@ export default class ExposureAdd extends Component {
     isLogCreate: PropTypes.bool,
     isMenu: PropTypes.bool,
     observationIds: PropTypes.arrayOf(PropTypes.string),
+    view: PropTypes.func,
   };
 
   static defaultProps = {
@@ -54,6 +56,7 @@ export default class ExposureAdd extends Component {
     isLogCreate: false,
     isMenu: false,
     observationIds: [],
+    view: () => {},
   };
 
   constructor(props) {
@@ -139,6 +142,7 @@ export default class ExposureAdd extends Component {
     const link = this.props.back;
     const isLogCreate = this.props.isLogCreate;
     const isMenu = this.props.isMenu;
+    const view = this.props.view ? this.props.view : ExposureAdd.defaultProps.view;
 
     return (
       <>
@@ -220,10 +224,9 @@ export default class ExposureAdd extends Component {
                   </>
                 )}
 
-                <span className={styles.floatRight}>
-                  {this.state.newMessage.id ? (
-                    <span>
-                      <span className={styles.margin}>[{this.state.logEdit.observation_type}]</span>
+                {this.state.newMessage.id ? (
+                  <>
+                    <span className={styles.floatRight}>
                       <Button
                         className={styles.iconBtn}
                         title="Delete"
@@ -236,12 +239,32 @@ export default class ExposureAdd extends Component {
                         <DeleteIcon className={styles.icon} />
                       </Button>
                     </span>
-                  ) : this.state.logEdit.observation_type ? (
-                    <span>[{this.state.logEdit.observation_type}]</span>
-                  ) : (
-                    <></>
-                  )}
-                </span>
+                    <span className={styles.floatRight}>
+                      [{this.state.logEdit.observation_type}]
+                    </span>
+                  </>
+                ) : this.state.logEdit.observation_type ? (
+                  <>
+                    <span className={styles.floatRight}>
+                      <Button
+                        className={styles.iconBtn}
+                        title="View"
+                        onClick={() => {
+                          view(true);
+                        }}
+                        status="transparent"
+                      >
+                        <CloseIcon className={styles.icon} />
+                      </Button>
+                    </span>
+                    <span className={styles.floatRight}>
+                      [{this.state.logEdit.observation_type}]
+                    </span>
+                  </>
+                ) : (
+                  <></>
+                )}
+              
               </div>
             )}
             <div className={isMenu ? styles.contentMenu : styles.content}>
