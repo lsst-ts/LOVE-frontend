@@ -4,7 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
 import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
-import { getLinkJira, getFileURL, getFilename } from 'Utils';
+import { getLinkJira, getFileURL } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -241,6 +241,7 @@ export default class NonExposure extends Component {
           this.setState({ modeView: false });
         }}
         logDetail={this.state.selected}
+        edit={ (isClicked) => { isClicked ? this.setState({ modeEdit: true, modeView: false, }) : {} }}
       />
     ) : modeEdit && !modeView ? (
       <NonExposureEdit
@@ -248,6 +249,7 @@ export default class NonExposure extends Component {
           this.setState({ modeEdit: false });
         }}
         logEdit={this.state.selected}
+        view={ (isClicked) => { isClicked ? this.setState({ modeEdit: false, modeView: true, }) : {} }}
       />
     ) : (
       <div className={styles.margin10}>

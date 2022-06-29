@@ -4,6 +4,7 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './NonExposure.module.css';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
+import EditIcon from 'components/icons/EditIcon/EditIcon';
 import ManagerInterface from 'Utils';
 import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
@@ -16,6 +17,7 @@ export default class NonExposureDetail extends Component {
 
   static defaultProps = {
     back: () => {},
+    edit: () => {},
     logDetail: {
       id: undefined,
       type: undefined,
@@ -45,7 +47,8 @@ export default class NonExposureDetail extends Component {
 
   render() {
     const link = this.props.back;
-    const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
+    const logDetail = this.props.logDetail ? this.props.logDetail : NonExposureDetail.defaultProps.logDetail;
+    const edit = this.props.edit ? this.props.edit : NonExposureDetail.defaultProps.edit;
    
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
@@ -93,6 +96,18 @@ export default class NonExposureDetail extends Component {
                 status="transparent"
               >
                 <DeleteIcon className={styles.icon} />
+              </Button>
+            </span>
+            <span className={styles.floatRight}>
+              <Button
+                className={styles.iconBtn}
+                title="Edit"
+                onClick={() => {
+                  edit(true);
+                }}
+                status="transparent"
+              >
+                <EditIcon className={styles.icon} />
               </Button>
             </span>
           </div>

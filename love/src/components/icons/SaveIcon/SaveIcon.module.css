@@ -8,6 +8,9 @@
   /*stroke: var(--base-font-color);*/
 }
 .cls-1 {
-  fill:#798d99;
+  /* fill:#798d99; */
   fill-rule:evenodd;
+  fill: var(--default-font-color);
+  opacity: 1;
 }
+
