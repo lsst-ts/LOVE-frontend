@@ -14,9 +14,11 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
+import { CSVLink, CSVDownload } from 'react-csv';
 
 const moment = extendMoment(Moment);
 
@@ -130,26 +132,32 @@ export default class NonExposure extends Component {
         title: 'File',
         type: 'link',
         className: styles.tableHead,
-        render: (value) => (
-          getFileURL(value) ? 
-            <Button className={styles.iconBtn} title={getFileURL(value)} onClick={() => openInNewTab(getFileURL(value))}>
+        render: (value) =>
+          getFileURL(value) ? (
+            <Button
+              className={styles.iconBtn}
+              title={getFileURL(value)}
+              onClick={() => openInNewTab(getFileURL(value))}
+            >
               <DownloadIcon className={styles.icon} />
             </Button>
-          : <></>
-        ),
+          ) : (
+            <></>
+          ),
       },
       {
         field: 'urls',
         title: 'Jira',
         type: 'link',
         className: styles.tableHead,
-        render: (value) => (
-          getLinkJira(value) ? 
+        render: (value) =>
+          getLinkJira(value) ? (
             <Button status="link" title={getLinkJira(value)} onClick={() => openInNewTab(getLinkJira(value))}>
               view Jira ticket
             </Button>
-          : <></>
-        ),
+          ) : (
+            <></>
+          ),
       },
       {
         field: 'action',
@@ -224,6 +232,10 @@ export default class NonExposure extends Component {
 
     const tableData = filteredData;
 
+    const logExample = this.state.logs?.[0];
+    const logExampleKeys = Object.keys(logExample ?? {});
+    const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+
     const commentTypeOptions = [
       { label: 'All comment types', value: 'All' },
       ...LOG_TYPE_OPTIONS.map((type) => ({ label: type, value: type })),
@@ -241,7 +253,9 @@ export default class NonExposure extends Component {
           this.setState({ modeView: false });
         }}
         logDetail={this.state.selected}
-        edit={ (isClicked) => { isClicked ? this.setState({ modeEdit: true, modeView: false, }) : {} }}
+        edit={(isClicked) => {
+          isClicked ? this.setState({ modeEdit: true, modeView: false }) : {};
+        }}
       />
     ) : modeEdit && !modeView ? (
       <NonExposureEdit
@@ -249,7 +263,9 @@ export default class NonExposure extends Component {
           this.setState({ modeEdit: false });
         }}
         logEdit={this.state.selected}
-        view={ (isClicked) => { isClicked ? this.setState({ modeEdit: false, modeView: true, }) : {} }}
+        view={(isClicked) => {
+          isClicked ? this.setState({ modeEdit: false, modeView: true }) : {};
+        }}
       />
     ) : (
       <div className={styles.margin10}>
@@ -283,6 +299,19 @@ export default class NonExposure extends Component {
               checked={selectedObsTimeLoss}
               onChange={(event) => this.setState({ selectedObsTimeLoss: event.target.checked })}
             />
+          </div>
+
+          <div>
+            {tableData?.length && headers?.length && (
+              <CSVLink data={tableData} headers={csvHeaders} filename="narrativeLogs.csv">
+                <Hoverable top={true} center={true} inside={true}>
+                  <span className={styles.infoIcon}>
+                    <DownloadIcon className={styles.iconCSV} />
+                  </span>
+                  <div className={styles.hover}>Download this report as csv file</div>
+                </Hoverable>
+              </CSVLink>
+            )}
           </div>
         </div>
         <SimpleTable headers={headers} data={tableData} />
