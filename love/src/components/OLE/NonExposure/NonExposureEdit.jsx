@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
+import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -44,11 +44,12 @@ export default class NonExposureEdit extends Component {
     },
     isLogCreate: false,
     isMenu: false,
+    view: () => {},
   };
 
   constructor(props) {
     super(props);
-    const logEdit = props.logEdit ? props.logEdit : defaultProps.logEdit;
+    const logEdit = props.logEdit ? props.logEdit : NonExposureEdit.defaultProps.logEdit;
     logEdit.jiraurl = getLinkJira(logEdit.urls);
     logEdit.fileurl = getFileURL(logEdit.urls);
     logEdit.filename = getFilename(getFileURL(logEdit.urls));
@@ -63,6 +64,7 @@ export default class NonExposureEdit extends Component {
       logEdit,
       optionsTree: {},
     };
+    console.log('constructor', this.state.logEdit);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -99,14 +101,6 @@ export default class NonExposureEdit extends Component {
         this.props.back();
       });
     }
-  }
-
-  deleteMessage(message) {
-    console.log('deleteMessage', message);
-    ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
-      console.log('result', response);
-      this.props.back();
-    });
   }
 
   handleTimeOfIncident(date, type) {
@@ -175,12 +169,13 @@ export default class NonExposureEdit extends Component {
     const link = this.props.back;
     const isLogCreate = this.props.isLogCreate;
     const isMenu = this.props.isMenu;
+    const view = this.props.view ? this.props.view : NonExposureEdit.defaultProps.view;
 
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
-    const cscsOptions = this.state.logEdit?.subsystem
-      ? Array.from(
+    const cscsOptions = this.state.logEdit?.subsystem ? Array.from(
           new Set(
-            Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem])
+            Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem] ?
+              CSCSummaryHierarchy[this.state.logEdit.subsystem] : '')
               .flat()
               .map((e) => e.name),
           ),
@@ -212,22 +207,24 @@ export default class NonExposureEdit extends Component {
             ) : (
               <div className={styles.header}>
                 {this.state.logEdit.id ? <span className={styles.bold}>#{this.state.logEdit.id}</span> : <></>}
-                <span className={styles.floatRight}>
-                  {this.state.logEdit.id ? (
-                    <Button
-                      className={styles.iconBtn}
-                      title="Delete"
-                      onClick={() => {
-                        this.deleteMessage(this.state.logEdit);
-                      }}
-                      status="transparent"
-                    >
-                      <DeleteIcon className={styles.icon} />
-                    </Button>
-                  ) : (
-                    <></>
-                  )}
-                </span>
+                {this.state.logEdit.id ? (
+                  <>
+                    <span className={styles.floatRight}>
+                      <Button
+                        className={styles.iconBtn}
+                        title="View"
+                        onClick={() => {
+                          view(true);
+                        }}
+                        status="transparent"
+                      >
+                        <CloseIcon className={styles.icon} />
+                      </Button>
+                    </span>                    
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>
             )}
 
