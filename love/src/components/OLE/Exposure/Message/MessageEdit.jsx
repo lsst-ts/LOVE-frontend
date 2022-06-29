@@ -58,7 +58,7 @@ export default class MessageEdit extends Component {
     const message = props.message ? props.message : MessageEdit.defaultProps.message;
     message.jiraurl = getLinkJira(message.urls);
     message.fileurl = getFileURL(message.urls);
-    message.filename = getFilename(this.getFileURL(message.urls));
+    message.filename = getFilename(getFileURL(message.urls));
     message.jira = false;
     this.state = {
       message,
