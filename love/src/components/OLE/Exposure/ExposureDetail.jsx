@@ -10,6 +10,7 @@ import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Message from './Message/Message';
 import MessageEdit from './Message/MessageEdit';
+import AddIcon from 'components/icons/AddIcon/AddIcon';
 import styles from './Exposure.module.css';
 
 const moment = extendMoment(Moment);
@@ -19,6 +20,7 @@ export default class ExposureDetail extends Component {
     back: PropTypes.func,
     logDetail: PropTypes.object,
     logMessages: PropTypes.arrayOf(PropTypes.object),
+    edit: PropTypes.func,
   };
 
   static defaultProps = {
@@ -31,6 +33,7 @@ export default class ExposureDetail extends Component {
       observation_day: undefined,
     },
     logMessages: [],
+    edit: () => {},
   };
 
   saveMessage(message) {
@@ -56,6 +59,7 @@ export default class ExposureDetail extends Component {
       selectedDateStart: null,
       selectedDateEnd: null,
       textFilter: '',
+      newMessage: undefined,
     };
   }
 
@@ -83,6 +87,7 @@ export default class ExposureDetail extends Component {
     const link = this.props.back;
     const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
     const logMessages = this.props.logMessages ? this.props.logMessages : this.defaultProps.logMessages;
+    const edit = this.props.edit ? this.props.edit : ExposureDetail.defaultProps.edit;
 
     const flagsOptions = [
       { label: 'All exposure flags', value: 'All' },
@@ -130,7 +135,19 @@ export default class ExposureDetail extends Component {
         <div className={styles.detailContainer}>
           <div className={styles.header}>
             <span>{logDetail.obs_id}</span>
-            <span className={styles.floatRight}>[{logDetail.observation_type}]</span>
+            <span className={styles.floatRight}>
+              <Button
+                className={styles.iconBtn}
+                title="Add Message"
+                onClick={() => {
+                  edit(true);
+                }}
+                status="transparent"
+              >
+                <AddIcon className={styles.icon} />
+              </Button>
+            </span>
+            <span className={styles.floatRight}>[{logDetail.observation_type}]</span>            
           </div>
           <div className={styles.body}>
             <div className={[styles.floatLeft, styles.title].join(' ')}>
@@ -190,7 +207,7 @@ export default class ExposureDetail extends Component {
                     editMessage={(messageEdit) => {
                       this.setState({ selectedMessage: messageEdit });
                     }}
-                    deleteMessage={(mesage) => {
+                    deleteMessage={(message) => {
                       this.deleteMessage(message);
                     }}
                   />
