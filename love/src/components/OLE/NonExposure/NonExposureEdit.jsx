@@ -32,8 +32,9 @@ export default class NonExposureEdit extends Component {
       csc: undefined,
       topic: undefined,
       param: undefined,
+      salindex: 0,
       user: undefined,
-      obsTimeLoss: undefined,
+      obsTimeLoss: 0,
       jira: false,
       file: undefined,
       fileurl: undefined,
@@ -76,6 +77,7 @@ export default class NonExposureEdit extends Component {
     newFakeMessage['user_id'] = 'saranda@localhost';
     newFakeMessage['user_agent'] = 'LOVE';
     newFakeMessage['is_human'] = true;
+    newFakeMessage['subsystem'] = this.state.logEdit.subsystem;
     console.log('Submitted: ', newFakeMessage);
     if (this.state.logEdit.id) {
       newFakeMessage['tags'] = [];
@@ -86,18 +88,15 @@ export default class NonExposureEdit extends Component {
         this.props.back();
       });
     } else {
-      this.state.logEdit.files = newFakeMessage['file'] ? [newFakeMessage['file']] : [];
-      delete newFakeMessage.file;
       newFakeMessage['tags'] = [
         this.state.logEdit.type,
-        this.state.logEdit.subsystem,
         this.state.logEdit.csc,
         this.state.logEdit.topic,
-        this.state.logEdit.param
+        this.state.logEdit.param,
       ];
       console.log('fakemessage', newFakeMessage);
       ManagerInterface.createMessageNarrativeLogs(newFakeMessage).then((response) => {
-        console.log('result', response);
+        this.setState({ logEdit: { obsTimeLoss: 0, salindex: 0 } });
         this.props.back();
       });
     }
@@ -157,7 +156,7 @@ export default class NonExposureEdit extends Component {
       const topicParams = topicData.find(([topic]) => {
         return topic === this.state.logEdit.topic;
       });
-      const options = Object.keys(topicParams[0]).sort();
+      const options = Object.keys(topicParams[1]).sort();
       this.setState((state) => ({
         paramsOptions: options,
         logEdit: { ...state.logEdit, param: null },
@@ -172,10 +171,14 @@ export default class NonExposureEdit extends Component {
     const view = this.props.view ? this.props.view : NonExposureEdit.defaultProps.view;
 
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
-    const cscsOptions = this.state.logEdit?.subsystem ? Array.from(
+    const cscsOptions = this.state.logEdit?.subsystem
+      ? Array.from(
           new Set(
-            Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem] ?
-              CSCSummaryHierarchy[this.state.logEdit.subsystem] : '')
+            Object.values(
+              CSCSummaryHierarchy[this.state.logEdit.subsystem]
+                ? CSCSummaryHierarchy[this.state.logEdit.subsystem]
+                : '',
+            )
               .flat()
               .map((e) => e.name),
           ),
@@ -220,7 +223,7 @@ export default class NonExposureEdit extends Component {
                       >
                         <CloseIcon className={styles.icon} />
                       </Button>
-                    </span>                    
+                    </span>
                   </>
                 ) : (
                   <></>
@@ -244,12 +247,11 @@ export default class NonExposureEdit extends Component {
                     small
                   />
                 </span>
-                <span className={styles.label}>Obs. Time Loss {this.state.logEdit.obsTimeLoss}</span>
+                <span className={styles.label}>Obs. Time Loss</span>
                 <span className={styles.value}>
                   <Input
                     type="number"
                     min={0}
-                    defaultValue={0}
                     value={this.state.logEdit.obsTimeLoss}
                     className={styles.input}
                     onChange={(event) =>
@@ -290,7 +292,6 @@ export default class NonExposureEdit extends Component {
                   <Input
                     type="number"
                     min={0}
-                    defaultValue={0}
                     value={this.state.logEdit.salindex}
                     className={styles.input}
                     onChange={(event) =>
@@ -372,13 +373,16 @@ export default class NonExposureEdit extends Component {
               {!this.state.logEdit.id ? (
                 <FileUploader
                   value={this.state.logEdit.file?.name}
-                  handleFile={(file) => this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: file } }))}
+                  handleFile={(file) =>
+                    this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: file } }))
+                  }
                   handleDelete={() =>
                     this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, file: undefined } }))
                   }
                 />
-                ) : <></>
-              }
+              ) : (
+                <></>
+              )}
               {this.state.logEdit.fileurl ? (
                 <>
                   <Button
