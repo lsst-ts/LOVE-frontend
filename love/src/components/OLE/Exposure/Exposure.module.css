@@ -180,6 +180,7 @@
   border: 1px solid var(--secondary-font-dimmed-color);
   /* color: inherit; */
   color: var(--base-font-color);
+  align-self: center;
 }
 
 .select {
@@ -196,7 +197,6 @@
   display: flow-root;
   padding-right: var(--content-padding);
   padding-left: var(--content-padding);
-
 }
 
 .contentMenu {
@@ -264,7 +264,6 @@
   outline: none;
   border: 1px solid var(--secondary-font-color);
 }
-
 
 .label {
   font-weight: bold;
@@ -356,4 +355,38 @@ th.tableHead {
   color: var(--highlighted-font-color);
   padding: var(--small-padding);
   font-weight: bold;
+}
+
+.iconCSV {
+  float: right;
+  display: inline;
+  border-radius: 50%;
+  padding: 0.3em;
+  height: 1.1em;
+  width: 1.1em;
+  background-color: var(--second-quaternary-background-color);
+  fill: var(--default-font-color) !important;
+  opacity: 1 !important;
+}
+
+.divExportBtn {
+  margin-left: auto;
+  align-self: center;
+}
+
+.infoIcon {
+  width: 1em;
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+  position: relative;
+}
+
+.hover {
+  color: var(--secondary-font-color);
+  top: 0 !important;
+  left: 0 !important;
+  background-color: var(--second-quaternary-background-color);
+  padding: 0.5em;
+  width: 160px;
+  border-radius: 0.5em;
 }
