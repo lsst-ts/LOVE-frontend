@@ -87,12 +87,11 @@ export default class ExposureAdd extends Component {
   componentDidUpdate(prevProps, prevState) {
     // TODO: only when the filter is shown
     if (prevState.selectedInstrument !== this.state.selectedInstrument) {
-      console.log('selectedInstrument');
       ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
         const observationIds = data.map((exposure) => exposure.obs_id);
         const dayObs = data.map((exposure) => ({
-            obs_id: exposure.obs_id,
-            day_obs: exposure.day_obs,
+          obs_id: exposure.obs_id,
+          day_obs: exposure.day_obs,
         }));
         this.setState({
           observationIds,
@@ -110,10 +109,11 @@ export default class ExposureAdd extends Component {
 
     const fakeNewMessage = { ...this.state.newMessage };
     fakeNewMessage['instrument'] = this.state.selectedInstrument;
-    fakeNewMessage['day_obs'] = this.state.dayObs.find((duple) => duple.obs_id === this.state.newMessage.obs_id)?.day_obs;
+    fakeNewMessage['day_obs'] = this.state.dayObs.find(
+      (duple) => duple.obs_id === this.state.newMessage.obs_id,
+    )?.day_obs;
     fakeNewMessage['user_id'] = 'saranda@localhost';
     fakeNewMessage['user_agent'] = 'LOVE';
-    fakeNewMessage['files'] = fakeNewMessage['file'] ? [fakeNewMessage['file']] : [];
     delete fakeNewMessage.file;
 
     console.log('fakeNewMessage:', fakeNewMessage);
