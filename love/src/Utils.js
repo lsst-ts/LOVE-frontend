@@ -1470,11 +1470,9 @@ export function openInNewTab(url) {
  */
 export function getOLEDataFromTags(tags) {
   const parameters = {
-    type: tags[0],
-    subsystem: tags[1],
-    csc: tags[2],
-    topic: tags[3],
-    param: tags[4],
+    csc: tags[0],
+    topic: tags[1],
+    param: tags[2],
   };
   return parameters;
 }

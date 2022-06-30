@@ -26,7 +26,7 @@ export default class NonExposureEdit extends Component {
     back: () => {},
     logEdit: {
       id: undefined,
-      type: undefined,
+      level: undefined,
       timeIncident: undefined,
       subsystem: undefined,
       csc: undefined,
@@ -34,7 +34,7 @@ export default class NonExposureEdit extends Component {
       param: undefined,
       salindex: 0,
       user: undefined,
-      obsTimeLoss: 0,
+      time_lost: 0,
       jira: false,
       file: undefined,
       fileurl: undefined,
@@ -42,6 +42,7 @@ export default class NonExposureEdit extends Component {
       urls: [],
       tags: [],
       message_text: undefined,
+      is_human: true,
     },
     isLogCreate: false,
     isMenu: false,
@@ -50,22 +51,21 @@ export default class NonExposureEdit extends Component {
 
   constructor(props) {
     super(props);
-    const logEdit = props.logEdit ? props.logEdit : NonExposureEdit.defaultProps.logEdit;
+    const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
     logEdit.jiraurl = getLinkJira(logEdit.urls);
     logEdit.fileurl = getFileURL(logEdit.urls);
     logEdit.filename = getFilename(getFileURL(logEdit.urls));
-    logEdit.jira = false;
+
     const params = getOLEDataFromTags(logEdit.tags);
-    logEdit.type = params.type;
-    logEdit.subsystem = params.subsystem;
     logEdit.csc = params.csc;
     logEdit.topic = params.topic;
     logEdit.param = params.param;
+
     this.state = {
       logEdit,
       optionsTree: {},
     };
-    console.log('constructor', this.state.logEdit);
+
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -73,30 +73,22 @@ export default class NonExposureEdit extends Component {
     event.preventDefault();
 
     const newFakeMessage = { ...this.state.logEdit };
-    newFakeMessage['level'] = 10;
+
+    // TODO: add following fields to backend
     newFakeMessage['user_id'] = 'saranda@localhost';
     newFakeMessage['user_agent'] = 'LOVE';
-    newFakeMessage['is_human'] = true;
-    newFakeMessage['subsystem'] = this.state.logEdit.subsystem;
-    console.log('Submitted: ', newFakeMessage);
+
+    newFakeMessage['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
+
     if (this.state.logEdit.id) {
-      newFakeMessage['tags'] = [];
-      newFakeMessage['urls'] = [];
-      // ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, this.state.logEdit).then((response) => {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, newFakeMessage).then((response) => {
-        console.log('result', response);
+        // TODO: add new updated log to state
         this.props.back();
       });
     } else {
-      newFakeMessage['tags'] = [
-        this.state.logEdit.type,
-        this.state.logEdit.csc,
-        this.state.logEdit.topic,
-        this.state.logEdit.param,
-      ];
-      console.log('fakemessage', newFakeMessage);
       ManagerInterface.createMessageNarrativeLogs(newFakeMessage).then((response) => {
-        this.setState({ logEdit: { obsTimeLoss: 0, salindex: 0 } });
+        // TODO: add new created log to state
+        this.setState({ logEdit: { time_lost: 0, salindex: 0 } });
         this.props.back();
       });
     }
@@ -165,20 +157,14 @@ export default class NonExposureEdit extends Component {
   }
 
   render() {
-    const link = this.props.back;
-    const isLogCreate = this.props.isLogCreate;
-    const isMenu = this.props.isMenu;
-    const view = this.props.view ? this.props.view : NonExposureEdit.defaultProps.view;
+    const { link, isLogCreate, isMenu } = this.props;
+    const view = this.props.view ?? NonExposureEdit.defaultProps.view;
 
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
     const cscsOptions = this.state.logEdit?.subsystem
       ? Array.from(
           new Set(
-            Object.values(
-              CSCSummaryHierarchy[this.state.logEdit.subsystem]
-                ? CSCSummaryHierarchy[this.state.logEdit.subsystem]
-                : '',
-            )
+            Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem] ?? {})
               .flat()
               .map((e) => e.name),
           ),
@@ -186,6 +172,10 @@ export default class NonExposureEdit extends Component {
       : [];
     const topicsOptions = this.state.topicOptions;
     const paramsOptions = this.state.paramsOptions;
+
+    const selectedCommentType = this.state.logEdit?.level
+      ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
+      : null;
 
     return (
       <>
@@ -236,10 +226,10 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
                   <Select
-                    value={this.state.logEdit.type}
-                    onChange={(event) =>
+                    option={selectedCommentType}
+                    onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, type: event.value },
+                        logEdit: { ...prevState.logEdit, level: value },
                       }))
                     }
                     options={LOG_TYPE_OPTIONS}
@@ -252,10 +242,12 @@ export default class NonExposureEdit extends Component {
                   <Input
                     type="number"
                     min={0}
-                    value={this.state.logEdit.obsTimeLoss}
+                    value={this.state.logEdit.time_lost}
                     className={styles.input}
                     onChange={(event) =>
-                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, obsTimeLoss: event.value } }))
+                      this.setState((prevState) => ({
+                        logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+                      }))
                     }
                   />
                 </span>
@@ -263,9 +255,9 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.value}>
                   <Select
                     value={this.state.logEdit.subsystem}
-                    onChange={(event) =>
+                    onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, subsystem: event.value },
+                        logEdit: { ...prevState.logEdit, subsystem: value },
                       }))
                     }
                     options={subsystemOptions}
@@ -277,9 +269,9 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.value}>
                   <Select
                     value={this.state.logEdit.csc}
-                    onChange={(event) =>
+                    onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, csc: event.value },
+                        logEdit: { ...prevState.logEdit, csc: value },
                       }))
                     }
                     options={cscsOptions}
@@ -295,7 +287,9 @@ export default class NonExposureEdit extends Component {
                     value={this.state.logEdit.salindex}
                     className={styles.input}
                     onChange={(event) =>
-                      this.setState((prevState) => ({ logEdit: { ...prevState.logEdit, salindex: event.value } }))
+                      this.setState((prevState) => ({
+                        logEdit: { ...prevState.logEdit, salindex: event.target.value },
+                      }))
                     }
                   />
                 </span>
@@ -303,9 +297,9 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.value}>
                   <Select
                     value={this.state.logEdit.topic}
-                    onChange={(event) =>
+                    onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, topic: event.value },
+                        logEdit: { ...prevState.logEdit, topic: value },
                       }))
                     }
                     options={topicsOptions}
@@ -316,9 +310,9 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.value}>
                   <Select
                     value={this.state.logEdit.param}
-                    onChange={(event) =>
+                    onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, param: event.value },
+                        logEdit: { ...prevState.logEdit, param: value },
                       }))
                     }
                     options={paramsOptions}
