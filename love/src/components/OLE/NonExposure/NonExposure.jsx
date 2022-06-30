@@ -34,7 +34,7 @@ export default class NonExposure extends Component {
       modeEdit: false,
       selectedDateStart: null,
       selectedDateEnd: null,
-      selectedCommentType: 'All',
+      selectedCommentType: { value: 'All', label: 'All comment types' },
       selectedSubsystem: 'All',
       selectedObsTimeLoss: false,
       logs: [],
@@ -100,11 +100,11 @@ export default class NonExposure extends Component {
         className: styles.tableHead,
       },
       {
-        field: 'tags',
+        field: 'level',
         title: 'Type',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getOLEDataFromTags(value).type?.toUpperCase(),
+        render: (value) => LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label,
       },
       {
         field: 'time_lost',
@@ -114,11 +114,10 @@ export default class NonExposure extends Component {
         render: (value) => formatSecondsToDigital(value),
       },
       {
-        field: 'tags',
+        field: 'subsystem',
         title: 'Subsystem',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => getOLEDataFromTags(value).subsystem,
       },
       {
         field: 'tags',
@@ -217,8 +216,8 @@ export default class NonExposure extends Component {
 
     // Filter by type
     filteredData =
-      this.state.selectedCommentType !== 'All'
-        ? filteredData.filter((log) => getOLEDataFromTags(log.tags).type === this.state.selectedCommentType)
+      this.state.selectedCommentType?.value !== 'All'
+        ? filteredData.filter((log) => log.level === this.state.selectedCommentType.value)
         : filteredData;
 
     // Filter by subsystem
@@ -236,10 +235,7 @@ export default class NonExposure extends Component {
     const logExampleKeys = Object.keys(logExample ?? {});
     const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
 
-    const commentTypeOptions = [
-      { label: 'All comment types', value: 'All' },
-      ...LOG_TYPE_OPTIONS.map((type) => ({ label: type, value: type })),
-    ];
+    const commentTypeOptions = [{ label: 'All comment types', value: 'All' }, ...LOG_TYPE_OPTIONS];
     const selectedCommentType = this.state.selectedCommentType;
 
     const subsystemOptions = [{ label: 'All subsystems', value: 'All' }, ...Object.keys(CSCSummaryHierarchy)];
@@ -260,6 +256,7 @@ export default class NonExposure extends Component {
     ) : modeEdit && !modeView ? (
       <NonExposureEdit
         back={() => {
+          // TODO: if log is created add it to state.logs
           this.setState({ modeEdit: false });
         }}
         logEdit={this.state.selected}
@@ -281,7 +278,7 @@ export default class NonExposure extends Component {
           <Select
             options={commentTypeOptions}
             option={selectedCommentType}
-            onChange={({ value }) => this.setState({ selectedCommentType: value })}
+            onChange={(value) => this.setState({ selectedCommentType: value })}
             className={styles.select}
           />
 
