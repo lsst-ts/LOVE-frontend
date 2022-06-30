@@ -298,17 +298,15 @@ export default class NonExposure extends Component {
             />
           </div>
 
-          <div>
-            {tableData?.length && headers?.length && (
-              <CSVLink data={tableData} headers={csvHeaders} filename="narrativeLogs.csv">
-                <Hoverable top={true} center={true} inside={true}>
-                  <span className={styles.infoIcon}>
-                    <DownloadIcon className={styles.iconCSV} />
-                  </span>
-                  <div className={styles.hover}>Download this report as csv file</div>
-                </Hoverable>
-              </CSVLink>
-            )}
+          <div className={styles.divExportBtn}>
+            <CSVLink data={tableData} headers={csvHeaders} filename="narrativeLogs.csv">
+              <Hoverable top={true} left={true} inside={true}>
+                <span className={styles.infoIcon}>
+                  <DownloadIcon className={styles.iconCSV} />
+                </span>
+                <div className={styles.hover}>Download this report as csv file</div>
+              </Hoverable>
+            </CSVLink>
           </div>
         </div>
         <SimpleTable headers={headers} data={tableData} />
