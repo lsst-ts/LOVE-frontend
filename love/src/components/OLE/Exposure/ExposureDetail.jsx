@@ -8,10 +8,13 @@ import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import Message from './Message/Message';
 import MessageEdit from './Message/MessageEdit';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import styles from './Exposure.module.css';
+import { CSVLink, CSVDownload } from 'react-csv';
 
 const moment = extendMoment(Moment);
 
@@ -120,6 +123,10 @@ export default class ExposureDetail extends Component {
       return log.message_text.includes(this.state.textFilter) || log.id.includes(this.state.textFilter);
     });
 
+    const logExample = filteredLogMessages?.[0];
+    const logExampleKeys = Object.keys(logExample ?? {});
+    const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+
     return (
       <>
         <div className={styles.returnToLogs}>
@@ -147,7 +154,7 @@ export default class ExposureDetail extends Component {
                 <AddIcon className={styles.icon} />
               </Button>
             </span>
-            <span className={styles.floatRight}>[{logDetail.observation_type}]</span>            
+            <span className={styles.floatRight}>[{logDetail.observation_type}]</span>
           </div>
           <div className={styles.body}>
             <div className={[styles.floatLeft, styles.title].join(' ')}>
@@ -184,6 +191,16 @@ export default class ExposureDetail extends Component {
                 onChange={(e) => this.setState({ textFilter: e.target.value })}
                 placeholder="Enter a word or phrase to find messages with that text on their id or message fields"
               />
+              <div className={styles.divExportBtn}>
+                <CSVLink data={filteredLogMessages} headers={csvHeaders} filename="exposureLogMessages.csv">
+                  <Hoverable top={true} left={true} inside={true}>
+                    <span className={styles.infoIcon}>
+                      <DownloadIcon className={styles.iconCSV} />
+                    </span>
+                    <div className={styles.hover}>Download this report as csv file</div>
+                  </Hoverable>
+                </CSVLink>
+              </div>
             </div>
 
             {filteredLogMessages.map((message) => {
