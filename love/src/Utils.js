@@ -693,7 +693,7 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?obs_id=${obsId}`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?obs_id=${obsId}&order_by=-date_added`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -748,7 +748,6 @@ export default class ManagerInterface {
     for (const param in params) {
       formData.append(param, params[param]);
     }
-    formData.append('file', params['files'][0]);
 
     return fetch(url, {
       method: 'POST',
@@ -769,7 +768,7 @@ export default class ManagerInterface {
         });
       }
       return response.json().then((resp) => {
-        toast.info(resp.ack);
+        toast.success('Log added succesfully.');
         return resp;
       });
     });
@@ -878,7 +877,7 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/?order_by=-date_added`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -950,6 +949,7 @@ export default class ManagerInterface {
     for (const param in params) {
       formData.append(param, params[param]);
     }
+
     return fetch(url, {
       method: 'POST',
       headers: ManagerInterface.getMultipartHeaders(),
@@ -969,7 +969,7 @@ export default class ManagerInterface {
         });
       }
       return response.json().then((resp) => {
-        toast.success(resp.ack);
+        toast.success('Log added succesfully.');
         return resp;
       });
     });
@@ -1497,7 +1497,7 @@ export function getLinkJira(urls) {
  * @param {string} urls - Array of urls that comes from OLE message
  * @returns {string} string with first url with the condition if not jira link
  */
- export function getFileURL(urls) {
+export function getFileURL(urls) {
   const filtered = urls.filter((url) => !url.includes('jira'));
   if (filtered.length > 0) {
     return filtered[0];
@@ -1510,7 +1510,7 @@ export function getLinkJira(urls) {
  * @param {string} url - string of url that comes from OLE message
  * @returns {string} string parse of the filename from url parameter
  */
- export function getFilename(url) {
+export function getFilename(url) {
   if (url) {
     return url.substring(url.lastIndexOf('/') + 1);
   }
