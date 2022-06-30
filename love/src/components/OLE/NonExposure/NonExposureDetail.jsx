@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ManagerInterface from 'Utils';
+import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { getLinkJira, getFileURL, getFilename } from 'Utils';
+import { LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import styles from './NonExposure.module.css';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
-import ManagerInterface from 'Utils';
-import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
-import { getLinkJira, getFileURL, getFilename } from 'Utils';
 
 export default class NonExposureDetail extends Component {
   static propTypes = {
@@ -20,7 +21,7 @@ export default class NonExposureDetail extends Component {
     edit: () => {},
     logDetail: {
       id: undefined,
-      type: undefined,
+      level: undefined,
       timeIncident: undefined,
       subsystem: undefined,
       csc: undefined,
@@ -36,7 +37,6 @@ export default class NonExposureDetail extends Component {
     },
   };
 
-
   deleteMessage(message) {
     console.log('deleteMessage', message);
     ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
@@ -47,19 +47,18 @@ export default class NonExposureDetail extends Component {
 
   render() {
     const link = this.props.back;
-    const logDetail = this.props.logDetail ? this.props.logDetail : NonExposureDetail.defaultProps.logDetail;
-    const edit = this.props.edit ? this.props.edit : NonExposureDetail.defaultProps.edit;
-   
+    const logDetail = this.props.logDetail ?? NonExposureDetail.defaultProps.logDetail;
+    const edit = this.props.edit ?? NonExposureDetail.defaultProps.edit;
+
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
+
     const logTagsParams = getOLEDataFromTags(logDetail.tags);
-    logDetail.type = logTagsParams.type;
-    logDetail.subsystem = logTagsParams.subsystem;
     logDetail.csc = logTagsParams.csc;
     logDetail.topic = logTagsParams.topic;
     logDetail.param = logTagsParams.param;
 
-    console.log('logTagsParams', logTagsParams);
+    const logLevel = LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label;
 
     return (
       <>
@@ -76,18 +75,17 @@ export default class NonExposureDetail extends Component {
         <div className={styles.detailContainer}>
           <div className={styles.header}>
             <span className={styles.bold}>
-              #{logDetail.id} - {logDetail.type}
+              #{logDetail.id} - {logLevel}
             </span>
-            { linkJira ? 
+            {linkJira ? (
               <span>
-                <Button status="link"
-                  title={linkJira}
-                  onClick={() => openInNewTab(linkJira)}>
+                <Button status="link" title={linkJira} onClick={() => openInNewTab(linkJira)}>
                   view Jira ticket
                 </Button>
               </span>
-              : <></>
-            }
+            ) : (
+              <></>
+            )}
             <span className={styles.floatRight}>
               <Button
                 className={styles.iconBtn}
@@ -162,7 +160,6 @@ export default class NonExposureDetail extends Component {
                 </span>
               </>
             )}
-            
           </div>
         </div>
       </>
