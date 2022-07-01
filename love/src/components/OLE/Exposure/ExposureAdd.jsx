@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Multiselect from 'multiselect-react-dropdown';
 import { EXPOSURE_FLAG_OPTIONS, LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -205,7 +206,7 @@ export default class ExposureAdd extends Component {
                       />
                     </span>
 
-                    <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                    {/* <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value}>
                       <Select
                         value={this.state.newMessage.obs_id}
@@ -218,7 +219,7 @@ export default class ExposureAdd extends Component {
                         className={styles.select}
                         small
                       />
-                    </span>
+                    </span> */}
 
                     <span className={styles.label}>Type of Comment</span>
                     <span className={styles.value}>
@@ -232,6 +233,47 @@ export default class ExposureAdd extends Component {
                         options={LOG_TYPE_OPTIONS}
                         className={styles.select}
                         small
+                      />
+                    </span>
+
+                    <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                    <span className={styles.value} style={{ flex: 1 }}>
+                      <Multiselect
+                        isObject={false}
+                        onKeyPressFn={function noRefCheck() {}}
+                        onRemove={function noRefCheck() {}}
+                        onSearch={function noRefCheck() {}}
+                        onSelect={(selectedOptions) => {
+                          this.setState((prevState) => ({
+                            newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
+                          }));
+                        }}
+                        options={this.state.observationIds}
+                        placeholder="Select one or several observations"
+                        selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+                        style={{
+                          // TODO: export to GeneralPurpose components
+                          chips: {
+                            'background-color': 'var(--second-senary-background-dimmed-color)',
+                          },
+                          multiselectContainer: {
+                            'background-color': 'var(--second-secondary-background-color)',
+                          },
+                          optionContainer: {
+                            'background-color': 'var(--second-secondary-background-color)',
+                          },
+                          option: {
+                            color: 'var(--highlighted-font-color)',
+                          },
+                          searchBox: {
+                            border: 'none',
+                            'border-radius': '0px',
+                          },
+                          inputField: {
+                            width: '100%',
+                            color: 'var(--base-font-color)',
+                          },
+                        }}
                       />
                     </span>
                   </>
