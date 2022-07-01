@@ -14,7 +14,7 @@ import MessageEdit from './Message/MessageEdit';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import styles from './Exposure.module.css';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 
 const moment = extendMoment(Moment);
 
@@ -88,9 +88,9 @@ export default class ExposureDetail extends Component {
 
   render() {
     const link = this.props.back;
-    const logDetail = this.props.logDetail ? this.props.logDetail : this.defaultProps.logDetail;
-    const logMessages = this.props.logMessages ? this.props.logMessages : this.defaultProps.logMessages;
-    const edit = this.props.edit ? this.props.edit : ExposureDetail.defaultProps.edit;
+    const logDetail = this.props.logDetail ?? this.defaultProps.logDetail;
+    const logMessages = this.props.logMessages ?? this.defaultProps.logMessages;
+    const edit = this.props.edit ?? ExposureDetail.defaultProps.edit;
 
     const flagsOptions = [
       { label: 'All exposure flags', value: 'All' },
