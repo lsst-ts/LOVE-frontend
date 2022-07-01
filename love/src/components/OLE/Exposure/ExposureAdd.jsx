@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { EXPOSURE_FLAG_OPTIONS } from 'Config';
+import { EXPOSURE_FLAG_OPTIONS, LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -29,14 +29,6 @@ export default class ExposureAdd extends Component {
       instrument: undefined,
       observation_type: undefined,
       observation_reason: undefined,
-      day_obs: undefined,
-      seq_num: undefined,
-      group_name: undefined,
-      target_name: undefined,
-      science_program: undefined,
-      tracking_ra: undefined,
-      tracking_dec: undefined,
-      sky_angle: undefined,
       timespan_begin: undefined,
       timespan_end: undefined,
     },
@@ -45,7 +37,6 @@ export default class ExposureAdd extends Component {
       instrument: undefined,
       message_text: undefined,
       level: 10,
-      // tags: [],
       user_id: undefined,
       user_agent: undefined,
       is_human: true,
@@ -62,7 +53,6 @@ export default class ExposureAdd extends Component {
   constructor(props) {
     super(props);
     const logEdit = props.logEdit;
-    console.log(logEdit);
     const newMessage = ExposureAdd.defaultProps.newMessage;
     newMessage['obs_id'] = logEdit['obs_id'];
     newMessage['instrument'] = logEdit['instrument'];
@@ -71,7 +61,7 @@ export default class ExposureAdd extends Component {
       logEdit,
       newMessage,
       instruments: [],
-      selectedInstrument: undefined,
+      selectedInstrument: null,
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -107,29 +97,18 @@ export default class ExposureAdd extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // TODO: Some parameters are not being sent, check
-    console.log('Submitted: ');
 
     const fakeNewMessage = { ...this.state.newMessage };
-    /* fakeNewMessage['obs_id'] = this.state.newMessage.obs_id; */
     fakeNewMessage['instrument'] = this.state.selectedInstrument;
-    fakeNewMessage['day_obs'] = this.state.dayObs.find(
-      (duple) => duple.obs_id === this.state.newMessage.obs_id,
-    )?.day_obs;
     fakeNewMessage['user_id'] = 'saranda@localhost';
     fakeNewMessage['user_agent'] = 'LOVE';
-    delete fakeNewMessage.file;
 
-    console.log('fakeNewMessage:', fakeNewMessage);
     ManagerInterface.createMessageExposureLogs(fakeNewMessage).then((result) => {
-      console.log('result', result);
-      console.log('this.props.back()');
       this.props.back();
     });
   }
 
   deleteMessage() {
-    console.log('deleteMessage id:', this.state.newMessage.id);
     if (this.state.newMessage.id) {
       ManagerInterface.deleteMessageExposureLogs(this.state.newMessage.id).then((response) => {
         console.log('response', response);
@@ -140,10 +119,13 @@ export default class ExposureAdd extends Component {
   }
 
   render() {
+    const { isLogCreate, isMenu } = this.props;
     const link = this.props.back;
-    const isLogCreate = this.props.isLogCreate;
-    const isMenu = this.props.isMenu;
-    const view = this.props.view ? this.props.view : ExposureAdd.defaultProps.view;
+    const view = this.props.view ?? ExposureAdd.defaultProps.view;
+
+    const selectedCommentType = this.state.newMessage?.level
+      ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
+      : null;
 
     return (
       <>
@@ -169,7 +151,7 @@ export default class ExposureAdd extends Component {
                 <span className={styles.value}>
                   <Select
                     value={this.state.selectedInstrument}
-                    onChange={(event) => this.setState({ selectedInstrument: event.value })}
+                    onChange={({ value }) => this.setState({ selectedInstrument: value })}
                     options={this.state.instruments}
                     className={styles.select}
                     small
@@ -180,12 +162,27 @@ export default class ExposureAdd extends Component {
                 <span className={styles.value}>
                   <Select
                     value={this.state.newMessage.obs_id}
-                    onChange={(event) =>
+                    onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, obs_id: event.value },
+                        newMessage: { ...prevState.newMessage, obs_id: value },
                       }))
                     }
                     options={this.state.observationIds}
+                    className={styles.select}
+                    small
+                  />
+                </span>
+
+                <span className={styles.label}>Type of Comment</span>
+                <span className={styles.value}>
+                  <Select
+                    option={selectedCommentType}
+                    onChange={({ value }) =>
+                      this.setState((prevState) => ({
+                        newMessage: { ...prevState.newMessage, level: value },
+                      }))
+                    }
+                    options={LOG_TYPE_OPTIONS}
                     className={styles.select}
                     small
                   />
@@ -201,7 +198,7 @@ export default class ExposureAdd extends Component {
                     <span className={styles.value}>
                       <Select
                         value={this.state.selectedInstrument}
-                        onChange={(event) => this.setState({ selectedInstrument: event.value })}
+                        onChange={({ value }) => this.setState({ selectedInstrument: value })}
                         options={this.state.instruments}
                         className={styles.select}
                         small
@@ -218,6 +215,21 @@ export default class ExposureAdd extends Component {
                           }))
                         }
                         options={this.state.observationIds}
+                        className={styles.select}
+                        small
+                      />
+                    </span>
+
+                    <span className={styles.label}>Type of Comment</span>
+                    <span className={styles.value}>
+                      <Select
+                        option={selectedCommentType}
+                        onChange={({ value }) =>
+                          this.setState((prevState) => ({
+                            newMessage: { ...prevState.newMessage, level: value },
+                          }))
+                        }
+                        options={LOG_TYPE_OPTIONS}
                         className={styles.select}
                         small
                       />
@@ -240,9 +252,7 @@ export default class ExposureAdd extends Component {
                         <DeleteIcon className={styles.icon} />
                       </Button>
                     </span>
-                    <span className={styles.floatRight}>
-                      [{this.state.logEdit.observation_type}]
-                    </span>
+                    <span className={styles.floatRight}>[{this.state.logEdit.observation_type}]</span>
                   </>
                 ) : this.state.logEdit.observation_type ? (
                   <>
@@ -258,14 +268,11 @@ export default class ExposureAdd extends Component {
                         <CloseIcon className={styles.icon} />
                       </Button>
                     </span>
-                    <span className={styles.floatRight}>
-                      [{this.state.logEdit.observation_type}]
-                    </span>
+                    <span className={styles.floatRight}>[{this.state.logEdit.observation_type}]</span>
                   </>
                 ) : (
                   <></>
                 )}
-              
               </div>
             )}
             <div className={isMenu ? styles.contentMenu : styles.content}>
