@@ -99,7 +99,7 @@ export default class ExposureAdd extends Component {
         this.setState({
           observationIds,
           dayObs,
-          newMessage: { ...prevState.newMessage, obs_id: undefined },
+          /* newMessage: { ...prevState.newMessage, obs_id: undefined }, */
         });
       });
     }
@@ -111,6 +111,7 @@ export default class ExposureAdd extends Component {
     console.log('Submitted: ');
 
     const fakeNewMessage = { ...this.state.newMessage };
+    /* fakeNewMessage['obs_id'] = this.state.newMessage.obs_id; */
     fakeNewMessage['instrument'] = this.state.selectedInstrument;
     fakeNewMessage['day_obs'] = this.state.dayObs.find(
       (duple) => duple.obs_id === this.state.newMessage.obs_id,
