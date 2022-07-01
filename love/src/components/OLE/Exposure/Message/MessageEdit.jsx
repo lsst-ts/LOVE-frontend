@@ -22,10 +22,6 @@ export default class MessageEdit extends Component {
   static defaultProps = {
     message: {
       id: '',
-      site_id: '',
-      type: undefined,
-      user: undefined,
-      flag: undefined,
       urls: [],
       file: undefined,
       fileurl: undefined,
@@ -33,15 +29,9 @@ export default class MessageEdit extends Component {
       jira: false,
       jiraurl: undefined,
       message_text: undefined,
-      date_added: undefined,
-      date_invalidated: undefined,
     },
-    cancel: () => {
-      console.log('defaultProps.cancel');
-    },
-    save: () => {
-      console.log('defaultProps.save');
-    },
+    cancel: () => {},
+    save: () => {},
   };
 
   statusFlag(flag) {
@@ -55,19 +45,27 @@ export default class MessageEdit extends Component {
 
   constructor(props) {
     super(props);
-    const message = props.message ? props.message : MessageEdit.defaultProps.message;
+    const message = props.message ?? MessageEdit.defaultProps.message;
+
     message.jiraurl = getLinkJira(message.urls);
     message.fileurl = getFileURL(message.urls);
     message.filename = getFilename(getFileURL(message.urls));
     message.jira = false;
-    this.state = {
-      message,
-    };
+
+    // Clean null and empty values to avoid API errors
+    Object.keys(message).forEach((key) => {
+      if (message[key] === null || (Array.isArray(message[key]) && message[key].length === 0)) {
+        delete message[key];
+      }
+    });
+
+    console.log(message);
+    this.state = { message };
   }
 
   render() {
-    const cancel = this.props.cancel ? this.props.cancel : MessageEdit.defaultProps.cancel;
-    const save = this.props.save ? this.props.save : MessageEdit.defaultProps.save;
+    const cancel = this.props.cancel ?? MessageEdit.defaultProps.cancel;
+    const save = this.props.save ?? MessageEdit.defaultProps.save;
 
     return (
       <div className={styles.message}>
@@ -97,7 +95,9 @@ export default class MessageEdit extends Component {
                   }}
                 />
               </span>
-            ) : <></>}
+            ) : (
+              <></>
+            )}
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
             <Button className={styles.iconBtn} title="Exit" onClick={() => cancel()} status="transparent">
@@ -128,7 +128,7 @@ export default class MessageEdit extends Component {
         </div>
         <div className={styles.footer}>
           <span className={[styles.floatLeft, styles.inline].join(' ')}>
-            { !this.state.message.id ? (
+            {!this.state.message.id && (
               <FileUploader
                 value={this.state.message.file?.name}
                 handleFile={(file) => this.setState((prevState) => ({ message: { ...prevState.message, file: file } }))}
@@ -136,10 +136,8 @@ export default class MessageEdit extends Component {
                   this.setState((prevState) => ({ message: { ...prevState.message, file: undefined } }))
                 }
               />
-            ) : (
-              <></>
             )}
-            { this.state.message.fileurl ? (
+            {this.state.message.fileurl && (
               <>
                 <Button
                   status="link"
@@ -157,8 +155,6 @@ export default class MessageEdit extends Component {
                   <DownloadIcon className={styles.icon} />
                 </Button>
               </>
-            ) : (
-              <></>
             )}
           </span>
           <span className={[styles.floatRight, styles.margin3, styles.inline].join(' ')}>
