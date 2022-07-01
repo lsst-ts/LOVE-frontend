@@ -1415,6 +1415,7 @@ export function openInNewTab(url) {
  * @returns {object} Object with type, subsystem, csc, topic, param fields
  */
 export function getOLEDataFromTags(tags) {
+  if (!tags) return {};
   const parameters = {
     csc: tags[0],
     topic: tags[1],
@@ -1429,11 +1430,12 @@ export function getOLEDataFromTags(tags) {
  * @returns {string} string with first url with the condition if jira link
  */
 export function getLinkJira(urls) {
+  if (!urls) return '';
   const filtered = urls.filter((url) => url.includes('jira'));
   if (filtered.length > 0) {
     return filtered[0];
   }
-  return undefined;
+  return '';
 }
 
 /**
@@ -1442,11 +1444,12 @@ export function getLinkJira(urls) {
  * @returns {string} string with first url with the condition if not jira link
  */
 export function getFileURL(urls) {
+  if (!urls) return '';
   const filtered = urls.filter((url) => !url.includes('jira'));
   if (filtered.length > 0) {
     return filtered[0];
   }
-  return undefined;
+  return '';
 }
 
 /**

@@ -52,6 +52,7 @@ export default class NonExposureEdit extends Component {
   constructor(props) {
     super(props);
     const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
+
     logEdit.jiraurl = getLinkJira(logEdit.urls);
     logEdit.fileurl = getFileURL(logEdit.urls);
     logEdit.filename = getFilename(getFileURL(logEdit.urls));

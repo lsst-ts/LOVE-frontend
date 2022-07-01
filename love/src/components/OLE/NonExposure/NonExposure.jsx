@@ -32,6 +32,7 @@ export default class NonExposure extends Component {
     this.state = {
       modeView: false,
       modeEdit: false,
+      selected: null,
       selectedDateStart: null,
       selectedDateEnd: null,
       selectedCommentType: { value: 'All', label: 'All comment types' },
