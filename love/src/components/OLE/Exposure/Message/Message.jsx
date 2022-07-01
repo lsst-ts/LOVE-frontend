@@ -18,21 +18,14 @@ export default class Message extends Component {
   static defaultProps = {
     message: {
       id: '',
-      site_id: '',
       user_id: undefined,
       exposure_flag: undefined,
       urls: undefined,
       message_text: undefined,
       date_added: undefined,
-      date_invalidated: undefined,
-      tags: [],
     },
-    editMessage: () => {
-      console.log('defaultProps.editMessage()');
-    },
-    deleteMessage: () => {
-      console.log('defaultProps.deleteMessage()');
-    },
+    editMessage: () => {},
+    deleteMessage: () => {},
   };
 
   statusFlag(flag) {
@@ -45,9 +38,9 @@ export default class Message extends Component {
   }
 
   render() {
-    const message = this.props.message ? this.props.message : Message.defaultProps.message;
-    const edit = this.props.editMessage ? this.props.editMessage : Message.defaultProps.editMessage;
-    const remove = this.props.deleteMessage ? this.props.deleteMessage : Message.defaultProps.deleteMessage;
+    const message = this.props.message ?? Message.defaultProps.message;
+    const edit = this.props.editMessage ?? Message.defaultProps.editMessage;
+    const remove = this.props.deleteMessage ?? Message.defaultProps.deleteMessage;
 
     const linkJira = getLinkJira(message.urls);
     const fileurl = getFileURL(message.urls);
