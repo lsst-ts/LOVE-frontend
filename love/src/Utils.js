@@ -147,7 +147,7 @@ export default class ManagerInterface {
     });
   }
 
-  static getMultipartHeaders() {
+  static getSimpleHeaders() {
     const token = ManagerInterface.getToken();
     if (token) {
       return new Headers({
@@ -348,6 +348,7 @@ export default class ManagerInterface {
     });
   }
 
+  // EFD APIs
   static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -443,6 +444,7 @@ export default class ManagerInterface {
     });
   }
 
+  // TCS APIs
   static runATCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -559,6 +561,7 @@ export default class ManagerInterface {
     });
   }
 
+  // Authlist APIs
   static getAuthListRequests() {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -664,7 +667,7 @@ export default class ManagerInterface {
     });
   }
 
-  // TODO: INITIAL
+  // OLE APIs
   static getListExposureLogs(instrument) {
     const token = ManagerInterface.getToken();
     if (token === null) {
@@ -717,7 +720,6 @@ export default class ManagerInterface {
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
-    console.log('url', url);
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
@@ -740,18 +742,16 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    console.log('createMessage', params);
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
-    console.log('url', url);
 
     const formData = new FormData();
     for (const param in params) {
       formData.append(param, params[param]);
     }
 
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/`;
     return fetch(url, {
       method: 'POST',
-      headers: ManagerInterface.getMultipartHeaders(),
+      headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
       if (response.status >= 500) {
@@ -774,24 +774,21 @@ export default class ManagerInterface {
     });
   }
 
-  // TODO: Unsuported Media Type
   static updateMessageExposureLogs(msgExposureId, params) {
     const token = ManagerInterface.getToken();
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    console.log('updateMessageExposureLogs', msgExposureId, params);
 
     const formData = new FormData();
     for (const param in params) {
       formData.append(param, params[param]);
     }
 
-    console.log('params', params);
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
     return fetch(url, {
       method: 'PUT',
-      headers: ManagerInterface.getMultipartHeaders(),
+      headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
       if (response.status >= 500) {
@@ -808,7 +805,7 @@ export default class ManagerInterface {
         return false;
       }
       return response.json().then((resp) => {
-        toast.success('Request updated.');
+        toast.success('Log edited succesfully.');
         return resp;
       });
     });
@@ -819,8 +816,6 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    console.log('deleteMessageExposureLogs', msgExposureId);
-
     const url = `${this.getApiBaseUrl()}ole/exposurelog/messages/${msgExposureId}/`;
     return fetch(url, {
       method: 'DELETE',
@@ -849,7 +844,6 @@ export default class ManagerInterface {
   static getListExposureInstruments() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}ole/exposurelog/instruments`;
@@ -858,11 +852,9 @@ export default class ManagerInterface {
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -883,7 +875,6 @@ export default class ManagerInterface {
       headers: ManagerInterface.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
@@ -891,45 +882,6 @@ export default class ManagerInterface {
         return false;
       }
       return response.json().then((resp) => {
-        const fakeResponse = [
-          {
-            id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-            site_id: 'INRIA',
-            message_text:
-              'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?',
-            level: 0,
-            tags: ['fault', 'Main Telescope', 'MTDome:0'],
-            urls: ['http://jira.com', 'http://google.com/file.txt'],
-            time_lost: 360,
-            date_user_specified: '2022-06-23T16:23:33.407Z',
-            user_id: 'saranda@localhost',
-            user_agent: 'LOVE',
-            is_human: true,
-            is_valid: true,
-            date_added: '2022-06-23T16:23:33.407Z',
-            date_invalidated: '2022-06-23T16:23:33.407Z',
-            parent_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          },
-          {
-            id: '3fa85f64-5717-4562-b3fc-2c963f66afa2',
-            site_id: 'INRIA',
-            message_text:
-              'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Molestias aut, repellat ipsum facere voluptate dicta obcaecati deserunt nobis suscipit eaque?',
-            level: 0,
-            tags: ['ok', 'Auxiliary Telescope', 'ATDome:0', 'position', 'x'],
-            urls: ['http://jira.com', 'http://google.com/file.txt'],
-            time_lost: 300,
-            date_user_specified: '2022-06-23T16:23:33.407Z',
-            user_id: 'saranda@localhost',
-            user_agent: 'LOVE',
-            is_human: true,
-            is_valid: true,
-            date_added: '2022-06-23T16:23:33.407Z',
-            date_invalidated: '2022-06-23T16:23:33.407Z',
-            parent_id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-          },
-        ];
-        // return fakeResponse;
         return resp;
       });
     });
@@ -938,21 +890,18 @@ export default class ManagerInterface {
   static createMessageNarrativeLogs(params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    console.log('createMessage', params);
-    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
-    console.log('url', url);
 
     const formData = new FormData();
     for (const param in params) {
       formData.append(param, params[param]);
     }
 
+    const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/`;
     return fetch(url, {
       method: 'POST',
-      headers: ManagerInterface.getMultipartHeaders(),
+      headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
       if (response.status >= 500) {
@@ -980,18 +929,16 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    console.log('updateMessageNarrativeLogs', msgNarrativeId, params);
 
     const formData = new FormData();
     for (const param in params) {
       formData.append(param, params[param]);
     }
 
-    console.log('params', params);
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgNarrativeId}/`;
     return fetch(url, {
       method: 'PUT',
-      headers: ManagerInterface.getMultipartHeaders(),
+      headers: ManagerInterface.getSimpleHeaders(),
       body: formData,
     }).then((response) => {
       if (response.status >= 500) {
@@ -1008,7 +955,7 @@ export default class ManagerInterface {
         return false;
       }
       return response.json().then((resp) => {
-        toast.success(resp.ack);
+        toast.success('Log edited succesfully.');
         return resp;
       });
     });
@@ -1019,7 +966,6 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-
     const url = `${this.getApiBaseUrl()}ole/narrativelog/messages/${msgExposureId}/`;
     return fetch(url, {
       method: 'DELETE',

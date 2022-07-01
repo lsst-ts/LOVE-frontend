@@ -70,9 +70,9 @@ export default class NonExposure extends Component {
   getHeaders = () => {
     return [
       {
-        field: 'id',
-        title: 'Log Id',
-        type: 'string',
+        field: 'date_added',
+        title: 'Timestamp',
+        type: 'timestamp',
         className: styles.tableHead,
       },
       {
@@ -85,12 +85,6 @@ export default class NonExposure extends Component {
         field: 'user_agent',
         title: 'Agent',
         type: 'string',
-        className: styles.tableHead,
-      },
-      {
-        field: 'date_added',
-        title: 'Timestamp',
-        type: 'timestamp',
         className: styles.tableHead,
       },
       {
