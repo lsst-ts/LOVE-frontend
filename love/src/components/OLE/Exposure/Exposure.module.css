@@ -390,3 +390,8 @@ th.tableHead {
   width: 160px;
   border-radius: 0.5em;
 }
+
+:global(.option.highlight),
+:global(li.option:hover) {
+  background-color: var(--second-senary-background-dimmed-color);
+}
