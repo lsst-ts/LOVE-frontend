@@ -61,6 +61,13 @@ export default class NonExposureEdit extends Component {
     logEdit.topic = params.topic;
     logEdit.param = params.param;
 
+    // Clean null values to avoid API errors
+    Object.keys(logEdit).forEach((key) => {
+      if (logEdit[key] === null) {
+        delete logEdit[key];
+      }
+    });
+
     this.state = {
       logEdit,
       optionsTree: {},
