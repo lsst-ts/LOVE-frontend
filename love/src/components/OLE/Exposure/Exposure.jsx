@@ -227,7 +227,7 @@ export default class Exposure extends Component {
         }}
         logDetail={this.state.selected}
         logMessages={this.state.selectedMessages}
-        edit={(isClicked) => { if(isClicked) this.add(this.state.selected) }}
+        edit={(isClicked) => { console.log('ExposeDetail.edit', this.state.selected); if(isClicked) this.add(this.state.selected) }}
       />
     ) : modeAdd && !modeView ? (
       <ExposureAdd
@@ -235,7 +235,7 @@ export default class Exposure extends Component {
           this.setState({ modeAdd: false });
         }}
         logEdit={this.state.selected}
-        view={(isClicked) => { if(isClicked) this.view(this.state.selected) }}
+        view={(isClicked) => { if(isClicked) console.log('ExposeDAdd.view', this.state.selected); this.view(this.state.selected) }}
       />
     ) : (
       <div className={styles.margin10}>
