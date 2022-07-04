@@ -31,7 +31,7 @@ export default class NonExposureEdit extends Component {
       subsystem: undefined,
       csc: undefined,
       topic: undefined,
-      param: undefined,
+      parameter: undefined,
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -80,21 +80,22 @@ export default class NonExposureEdit extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const newFakeMessage = { ...this.state.logEdit };
+    const payload = { ...this.state.logEdit };
+    payload['request_type'] = 'narrative';
+    // payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
+    payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param].filter((tag) => tag);
 
     // TODO: add following fields to backend
-    newFakeMessage['user_id'] = 'saranda@localhost';
-    newFakeMessage['user_agent'] = 'LOVE';
-
-    newFakeMessage['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
+    payload['user_id'] = 'saranda@localhost';
+    payload['user_agent'] = 'LOVE';
 
     if (this.state.logEdit.id) {
-      ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, newFakeMessage).then((response) => {
+      ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         // TODO: add new updated log to state
         this.props.back();
       });
     } else {
-      ManagerInterface.createMessageNarrativeLogs(newFakeMessage).then((response) => {
+      ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
         // TODO: add new created log to state
         this.setState({ logEdit: { time_lost: 0, salindex: 0 } });
         this.props.back();
@@ -105,11 +106,11 @@ export default class NonExposureEdit extends Component {
   handleTimeOfIncident(date, type) {
     if (type === 'start') {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, endDate: date },
+        logEdit: { ...state.logEdit, begin_date: date },
       }));
     } else if (type === 'end') {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, startDate: date },
+        logEdit: { ...state.logEdit, end_date: date },
       }));
     }
   }
@@ -126,7 +127,7 @@ export default class NonExposureEdit extends Component {
       prevState.logEdit.subsystem !== this.state.logEdit.subsystem
     ) {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, csc: null, salindex: 0, topic: null, param: null },
+        logEdit: { ...state.logEdit, csc: null, salindex: 0, topic: null, parameter: null },
         topicOptions: [],
         paramsOptions: [],
       }));
@@ -140,7 +141,7 @@ export default class NonExposureEdit extends Component {
       ].sort();
       this.setState((state) => ({
         topicOptions: options,
-        logEdit: { ...state.logEdit, salindex: 0, topic: null, param: null },
+        logEdit: { ...state.logEdit, salindex: 0, topic: null, parameter: null },
       }));
     }
 
@@ -159,7 +160,7 @@ export default class NonExposureEdit extends Component {
       const options = Object.keys(topicParams[1]).sort();
       this.setState((state) => ({
         paramsOptions: options,
-        logEdit: { ...state.logEdit, param: null },
+        logEdit: { ...state.logEdit, parameter: null },
       }));
     }
   }
@@ -320,7 +321,7 @@ export default class NonExposureEdit extends Component {
                     value={this.state.logEdit.param}
                     onChange={({ value }) =>
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, param: value },
+                        logEdit: { ...prevState.logEdit, parameter: value },
                       }))
                     }
                     options={paramsOptions}
@@ -334,8 +335,8 @@ export default class NonExposureEdit extends Component {
                       <DateTimeRange
                         className={styles.dateTimeRangeStyle}
                         onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                        startDate={new Date() - 24 * 60 * 60 * 1000}
-                        endDate={new Date(Date.now())}
+                        startDate={new Date(new Date() - 24 * 60 * 60 * 1000)}
+                        endDate={new Date()}
                       />
                     </span>
                   </>
@@ -356,8 +357,8 @@ export default class NonExposureEdit extends Component {
                         <DateTimeRange
                           className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                          startDate={new Date() - 24 * 60 * 60 * 1000}
-                          endDate={new Date(Date.now())}
+                          startDate={new Date(new Date() - 24 * 60 * 60 * 1000)}
+                          endDate={new Date()}
                         />
                       </span>
                     </>
