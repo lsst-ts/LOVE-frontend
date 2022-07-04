@@ -691,6 +691,29 @@ export default class ManagerInterface {
     });
   }
 
+  static getListAllMessagesExposureLogs() {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/messages?order_by=-date_added`;
+    return fetch(url, {
+      method: 'GET',
+      headers: ManagerInterface.getHeaders(),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
   static getListMessagesExposureLogs(obsId) {
     const token = ManagerInterface.getToken();
     if (token === null) {
