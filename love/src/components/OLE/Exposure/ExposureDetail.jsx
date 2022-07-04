@@ -192,7 +192,7 @@ export default class ExposureDetail extends Component {
                 placeholder="Enter a word or phrase to find messages with that text on their id or message fields"
               />
               <div className={styles.divExportBtn}>
-                <CSVLink data={filteredLogMessages} headers={csvHeaders} filename="exposureLogMessages.csv">
+                <CSVLink data={filteredLogMessages} headers={csvHeaders} filename="exposureDetailLogMessages.csv">
                   <Hoverable top={true} left={true} center={true} inside={true}>
                     <span className={styles.infoIcon}>
                       <DownloadIcon className={styles.iconCSV} />

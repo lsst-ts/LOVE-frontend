@@ -5,10 +5,13 @@ import { extendMoment } from 'moment-range';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
+import { CSVLink } from 'react-csv';
 import ManagerInterface from 'Utils';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
@@ -217,6 +220,11 @@ export default class Exposure extends Component {
         ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
         : filteredData;
 
+    // Obtain headers to create csv report
+    const logExample = this.state.messages?.[0];
+    const logExampleKeys = Object.keys(logExample ?? {});
+    const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
+
     return modeView && !modeAdd ? (
       <ExposureDetail
         back={() => {
@@ -264,6 +272,16 @@ export default class Exposure extends Component {
             onChange={({ value }) => this.setState({ selectedExposureType: value })}
             className={styles.select}
           />
+          <div className={styles.divExportBtn}>
+            <CSVLink data={this.state.messages} headers={csvHeaders} filename="exposureLogMessages.csv">
+              <Hoverable top={true} left={true} center={true} inside={true}>
+                <span className={styles.infoIcon}>
+                  <DownloadIcon className={styles.iconCSV} />
+                </span>
+                <div className={styles.hover}>Download this report as csv file</div>
+              </Hoverable>
+            </CSVLink>
+          </div>
         </div>
         <SimpleTable headers={headers} data={filteredData} />
       </div>
