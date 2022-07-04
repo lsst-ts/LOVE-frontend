@@ -99,12 +99,13 @@ export default class ExposureAdd extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
-    const fakeNewMessage = { ...this.state.newMessage };
-    fakeNewMessage['instrument'] = this.state.selectedInstrument;
-    fakeNewMessage['user_id'] = 'saranda@localhost';
-    fakeNewMessage['user_agent'] = 'LOVE';
+    const payload = { ...this.state.newMessage };
+    payload['request_type'] = 'exposure';
+    payload['instrument'] = this.state.selectedInstrument;
+    payload['user_id'] = 'saranda@localhost';
+    payload['user_agent'] = 'LOVE';
 
-    ManagerInterface.createMessageExposureLogs(fakeNewMessage).then((result) => {
+    ManagerInterface.createMessageExposureLogs(payload).then((result) => {
       this.props.back();
     });
   }
