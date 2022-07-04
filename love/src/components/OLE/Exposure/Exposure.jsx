@@ -278,7 +278,7 @@ export default class Exposure extends Component {
                 <span className={styles.infoIcon}>
                   <DownloadIcon className={styles.iconCSV} />
                 </span>
-                <div className={styles.hover}>Download this report as csv file</div>
+                <div className={styles.hover}>Download messages associated with the shown exposures</div>
               </Hoverable>
             </CSVLink>
           </div>
