@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Multiselect from 'multiselect-react-dropdown';
+import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import { EXPOSURE_FLAG_OPTIONS, LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
@@ -160,21 +160,6 @@ export default class ExposureAdd extends Component {
                   />
                 </span>
 
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                <span className={styles.value}>
-                  <Select
-                    value={this.state.newMessage.obs_id}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, obs_id: value },
-                      }))
-                    }
-                    options={this.state.observationIds}
-                    className={styles.select}
-                    small
-                  />
-                </span>
-
                 <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
                   <Select
@@ -187,6 +172,20 @@ export default class ExposureAdd extends Component {
                     options={LOG_TYPE_OPTIONS}
                     className={styles.select}
                     small
+                  />
+                </span>
+
+                <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
+                <span className={styles.value}>
+                  <Multiselect
+                    options={this.state.observationIds}
+                    onSelect={(selectedOptions) => {
+                      this.setState((prevState) => ({
+                        newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
+                      }));
+                    }}
+                    placeholder="Select one or several observations"
+                    selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
                   />
                 </span>
               </div>
@@ -240,41 +239,14 @@ export default class ExposureAdd extends Component {
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>
                       <Multiselect
-                        isObject={false}
-                        onKeyPressFn={function noRefCheck() {}}
-                        onRemove={function noRefCheck() {}}
-                        onSearch={function noRefCheck() {}}
+                        options={this.state.observationIds}
                         onSelect={(selectedOptions) => {
                           this.setState((prevState) => ({
                             newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
                           }));
                         }}
-                        options={this.state.observationIds}
                         placeholder="Select one or several observations"
                         selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
-                        style={{
-                          // TODO: export to GeneralPurpose components
-                          chips: {
-                            'background-color': 'var(--second-senary-background-dimmed-color)',
-                          },
-                          multiselectContainer: {
-                            'background-color': 'var(--second-secondary-background-color)',
-                          },
-                          optionContainer: {
-                            'background-color': 'var(--second-secondary-background-color)',
-                          },
-                          option: {
-                            color: 'var(--highlighted-font-color)',
-                          },
-                          searchBox: {
-                            border: 'none',
-                            'border-radius': '0px',
-                          },
-                          inputField: {
-                            width: '100%',
-                            color: 'var(--base-font-color)',
-                          },
-                        }}
                       />
                     </span>
                   </>
