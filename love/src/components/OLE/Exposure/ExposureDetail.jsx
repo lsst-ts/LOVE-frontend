@@ -193,7 +193,7 @@ export default class ExposureDetail extends Component {
               />
               <div className={styles.divExportBtn}>
                 <CSVLink data={filteredLogMessages} headers={csvHeaders} filename="exposureLogMessages.csv">
-                  <Hoverable top={true} left={true} inside={true}>
+                  <Hoverable top={true} left={true} center={true} inside={true}>
                     <span className={styles.infoIcon}>
                       <DownloadIcon className={styles.iconCSV} />
                     </span>
