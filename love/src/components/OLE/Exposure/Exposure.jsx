@@ -36,6 +36,7 @@ export default class Exposure extends Component {
       instruments: [],
       exposureTypes: [],
       observationIds: [],
+      messages: [],
     };
   }
 
@@ -49,14 +50,6 @@ export default class Exposure extends Component {
 
   view(index) {
     if (index) {
-      /* ManagerInterface.getRetrieveMessageExposureLogs(index['id']).then((data) => {
-        console.log('getRetrieveMessageExposureLogs data:', data);
-        this.setState({
-          modeView: true,
-          selected: data,
-        });
-      }); */
-
       ManagerInterface.getListMessagesExposureLogs(index['obs_id']).then((data) => {
         this.setState({
           modeView: true,
@@ -173,6 +166,10 @@ export default class Exposure extends Component {
       const instrumentsArray = Object.values(data).map((arr) => arr[0]);
       this.setState({ instruments: instrumentsArray, selectedInstrument: instrumentsArray[0] });
     });
+
+    ManagerInterface.getListAllMessagesExposureLogs().then((data) => {
+      this.setState({ messages: data });
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -227,7 +224,10 @@ export default class Exposure extends Component {
         }}
         logDetail={this.state.selected}
         logMessages={this.state.selectedMessages}
-        edit={(isClicked) => { console.log('ExposeDetail.edit', this.state.selected); if(isClicked) this.add(this.state.selected) }}
+        edit={(isClicked) => {
+          console.log('ExposeDetail.edit', this.state.selected);
+          if (isClicked) this.add(this.state.selected);
+        }}
       />
     ) : modeAdd && !modeView ? (
       <ExposureAdd
@@ -235,7 +235,10 @@ export default class Exposure extends Component {
           this.setState({ modeAdd: false });
         }}
         logEdit={this.state.selected}
-        view={(isClicked) => { if(isClicked) console.log('ExposeDAdd.view', this.state.selected); this.view(this.state.selected) }}
+        view={(isClicked) => {
+          if (isClicked) console.log('ExposeDAdd.view', this.state.selected);
+          this.view(this.state.selected);
+        }}
       />
     ) : (
       <div className={styles.margin10}>
