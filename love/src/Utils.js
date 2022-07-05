@@ -1442,7 +1442,7 @@ export function getOLEDataFromTags(tags) {
   const parameters = {
     csc: tags[0],
     topic: tags[1],
-    param: tags[2],
+    parameter: tags[2],
   };
   return parameters;
 }

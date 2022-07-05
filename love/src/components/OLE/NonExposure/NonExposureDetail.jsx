@@ -26,7 +26,7 @@ export default class NonExposureDetail extends Component {
       subsystem: undefined,
       csc: undefined,
       topic: undefined,
-      param: undefined,
+      parameter: undefined,
       user: undefined,
       time_lost: undefined,
       jira: undefined,
@@ -56,9 +56,9 @@ export default class NonExposureDetail extends Component {
     const logTagsParams = getOLEDataFromTags(logDetail.tags);
     logDetail.csc = logTagsParams.csc;
     logDetail.topic = logTagsParams.topic;
-    logDetail.param = logTagsParams.param;
+    logDetail.parameter = logTagsParams.parameter;
 
-    const logLevel = LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label;
+    const logLevel = logDetail.level ? LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label : 'None';
 
     return (
       <>
@@ -121,7 +121,7 @@ export default class NonExposureDetail extends Component {
                   ' > ' +
                   (logDetail.topic ?? 'None') +
                   ' > ' +
-                  (logDetail.param ?? 'None')}
+                  (logDetail.parameter ?? 'None')}
               </span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost)}</span>
