@@ -241,7 +241,7 @@ export default class NonExposure extends Component {
     return modeView && !modeEdit ? (
       <NonExposureDetail
         back={() => {
-          this.setState({ modeView: false });
+          this.setState({ modeView: false, modeEdit: false });
         }}
         logDetail={this.state.selected}
         edit={(isClicked) => {
@@ -252,7 +252,7 @@ export default class NonExposure extends Component {
       <NonExposureEdit
         back={() => {
           // TODO: if log is created add it to state.logs
-          this.setState({ modeEdit: false });
+          this.setState({ modeView: false, modeEdit: false });
         }}
         logEdit={this.state.selected}
         view={(isClicked) => {

@@ -46,7 +46,7 @@ export default class NonExposureDetail extends Component {
   }
 
   render() {
-    const link = this.props.back;
+    const back = this.props.back;
     const logDetail = this.props.logDetail ?? NonExposureDetail.defaultProps.logDetail;
     const edit = this.props.edit ?? NonExposureDetail.defaultProps.edit;
 
@@ -66,7 +66,7 @@ export default class NonExposureDetail extends Component {
           <Button
             status="link"
             onClick={() => {
-              link();
+              back();
             }}
           >
             <span className={styles.title}>{`< Return to Logs`}</span>
