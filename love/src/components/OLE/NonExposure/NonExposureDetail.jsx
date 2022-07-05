@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import lodash from 'lodash';
 import ManagerInterface from 'Utils';
 import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
-import styles from './NonExposure.module.css';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
+import styles from './NonExposure.module.css';
 
 export default class NonExposureDetail extends Component {
   static propTypes = {
@@ -37,6 +39,15 @@ export default class NonExposureDetail extends Component {
     },
   };
 
+  constructor(props) {
+    super(props);
+    this.id = lodash.uniqueId('nonexposure-detail-');
+    this.state = {
+      confirmationModalShown: false,
+      confirmationModalText: '',
+    };
+  }
+
   deleteMessage(message) {
     console.log('deleteMessage', message);
     ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
@@ -45,10 +56,46 @@ export default class NonExposureDetail extends Component {
     });
   }
 
+  confirmDelete() {
+    const modalText = (
+      <span>
+        You are about to <b>Delete</b> this message of Narrative Logs
+        <br/>
+        Are you sure?
+      </span>
+    );
+    
+    this.setState({
+      confirmationModalShown: true,
+      confirmationModalText: modalText,
+    });
+  }
+
+  renderModalFooter() {
+    const logDetail = this.props.logDetail ?? NonExposureDetail.defaultProps.logDetail;
+    return (
+      <div className={styles.modalFooter}>
+        <Button
+          className={styles.borderedButton}
+          onClick={() => this.setState({ confirmationModalShown: false })}
+          status="transparent"
+        >
+          Go back
+        </Button>
+        <Button onClick={() => this.deleteMessage(logDetail) } status="default">
+          Yes
+        </Button>
+      </div>
+    );
+  };
+
+
   render() {
     const back = this.props.back;
     const logDetail = this.props.logDetail ?? NonExposureDetail.defaultProps.logDetail;
     const edit = this.props.edit ?? NonExposureDetail.defaultProps.edit;
+
+    const { confirmationModalShown, confirmationModalText } = this.state;
 
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
@@ -72,7 +119,7 @@ export default class NonExposureDetail extends Component {
             <span className={styles.title}>{`< Return to Logs`}</span>
           </Button>
         </div>
-        <div className={styles.detailContainer}>
+        <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
             <span className={styles.bold}>
               #{logDetail.id} - {logLevel}
@@ -90,7 +137,7 @@ export default class NonExposureDetail extends Component {
               <Button
                 className={styles.iconBtn}
                 title="Delete"
-                onClick={() => this.deleteMessage(logDetail)}
+                onClick={() => this.confirmDelete() }
                 status="transparent"
               >
                 <DeleteIcon className={styles.icon} />
@@ -162,6 +209,16 @@ export default class NonExposureDetail extends Component {
             )}
           </div>
         </div>
+        <Modal
+          displayTopBar={false}
+          isOpen={!!confirmationModalShown}
+          onRequestClose={() => this.setState({ confirmationModalShown: false })}
+          parentSelector={() => document.querySelector(`#${this.id}`)}
+          size={50}
+        >
+          {confirmationModalText}
+          {this.renderModalFooter()}
+        </Modal>
       </>
     );
   }
