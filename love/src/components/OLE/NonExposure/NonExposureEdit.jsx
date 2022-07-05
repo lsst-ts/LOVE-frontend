@@ -60,7 +60,7 @@ export default class NonExposureEdit extends Component {
     const params = getOLEDataFromTags(logEdit.tags);
     logEdit.csc = params.csc;
     logEdit.topic = params.topic;
-    logEdit.param = params.param;
+    logEdit.parameter = params.parameter;
 
     // Clean null and empty values to avoid API errors
     Object.keys(logEdit).forEach((key) => {
@@ -83,7 +83,7 @@ export default class NonExposureEdit extends Component {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
     // payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
-    payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param].filter((tag) => tag);
+    payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.parameter].filter((tag) => tag);
 
     // TODO: add following fields to backend
     payload['user_id'] = 'saranda@localhost';
@@ -315,10 +315,10 @@ export default class NonExposureEdit extends Component {
                     className={styles.select}
                   />
                 </span>
-                <span className={styles.label}>Param</span>
+                <span className={styles.label}>Parameter</span>
                 <span className={styles.value}>
                   <Select
-                    value={this.state.logEdit.param}
+                    value={this.state.logEdit.parameter}
                     onChange={({ value }) =>
                       this.setState((prevState) => ({
                         logEdit: { ...prevState.logEdit, parameter: value },
