@@ -221,20 +221,17 @@ export default class ManagerInterface {
   static getConfigFilesList() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}configfile`;
+    const url = `${this.getApiBaseUrl()}configfile/`;
     return fetch(url, {
       method: 'GET',
       headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -247,7 +244,6 @@ export default class ManagerInterface {
   static getConfigFileContent(index) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}configfile/${index}/content`;
@@ -256,11 +252,35 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
+        ManagerInterface.removeToken();
+        return false;
+      }
+      return response.json().then((resp) => {
+        return resp;
+      });
+    });
+  }
+
+  static setSelectedConfigFile(id) {
+    const token = ManagerInterface.getToken();
+    if (token === null) {
+      return new Promise((resolve) => resolve(false));
+    }
+    const url = `${this.getApiBaseUrl()}config-set`;
+    return fetch(url, {
+      method: 'POST',
+      headers: this.getHeaders(),
+      body: JSON.stringify({
+        config_id: id,
+      }),
+    }).then((response) => {
+      if (response.status >= 500) {
+        return false;
+      }
+      if (response.status === 401 || response.status === 403) {
         ManagerInterface.removeToken();
         return false;
       }

@@ -27,7 +27,8 @@ function ConfigPanel({ config, setConfig }) {
   }, []);
   const onConfigSelection = (selection) => {
     const id = selection.value;
-    ManagerInterface.getConfigFileContent(id).then((conf) => {
+    ManagerInterface.setSelectedConfigFile(id).then((conf) => {
+      console.log(conf);
       setConfig(conf);
     });
   };
