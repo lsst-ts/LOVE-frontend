@@ -166,7 +166,7 @@ export default class NonExposureEdit extends Component {
   }
 
   render() {
-    const { link, isLogCreate, isMenu } = this.props;
+    const { back, isLogCreate, isMenu } = this.props;
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
 
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
@@ -193,7 +193,7 @@ export default class NonExposureEdit extends Component {
             <Button
               status="link"
               onClick={() => {
-                link();
+                back();
               }}
             >
               <span className={styles.title}>{`< Return to Logs`}</span>
