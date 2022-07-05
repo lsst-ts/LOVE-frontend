@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import lodash from 'lodash';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -12,6 +13,7 @@ import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { getOLEDataFromTags } from 'Utils';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
 import styles from './NonExposure.module.css';
 
 export default class NonExposureEdit extends Component {
@@ -51,6 +53,7 @@ export default class NonExposureEdit extends Component {
 
   constructor(props) {
     super(props);
+    this.id = lodash.uniqueId('nonexposure-edit-');
     const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
 
     logEdit.jiraurl = getLinkJira(logEdit.urls);
@@ -72,6 +75,8 @@ export default class NonExposureEdit extends Component {
     this.state = {
       logEdit,
       optionsTree: {},
+      confirmationModalShown: false,
+      confirmationModalText: '',
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -80,6 +85,38 @@ export default class NonExposureEdit extends Component {
   handleSubmit(event) {
     event.preventDefault();
 
+    const modalText = (
+      <span>
+        You are about to <b>Save</b> changes in this message of Narrative Logs
+        <br/>
+        Are you sure ?
+      </span>
+    );
+    
+    this.setState({
+      confirmationModalShown: true,
+      confirmationModalText: modalText,
+    });
+  }
+
+  renderModalFooter = () => {
+    return (
+      <div className={styles.modalFooter}>
+        <Button
+          className={styles.borderedButton}
+          onClick={() => this.setState({ confirmationModalShown: false })}
+          status="transparent"
+        >
+          Go back
+        </Button>
+        <Button onClick={() => this.updateOrCreateMessageNarrativeLogs() } status="default">
+          Yes
+        </Button>
+      </div>
+    );
+  };
+
+  updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
     // payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
@@ -186,6 +223,8 @@ export default class NonExposureEdit extends Component {
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
       : null;
 
+    const { confirmationModalShown, confirmationModalText } = this.state;
+
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -230,7 +269,7 @@ export default class NonExposureEdit extends Component {
               </div>
             )}
 
-            <div className={isMenu ? styles.contentMenu : styles.content}>
+            <div id={this.id} className={isMenu ? styles.contentMenu : styles.content}>
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
@@ -441,6 +480,16 @@ export default class NonExposureEdit extends Component {
             </div>
           </div>
         </form>
+        <Modal
+          displayTopBar={false}
+          isOpen={!!confirmationModalShown}
+          onRequestClose={() => this.setState({ confirmationModalShown: false })}
+          parentSelector={() => document.querySelector(`#${this.id}`)}
+          size={50}
+        >
+          {confirmationModalText}
+          {this.renderModalFooter()}
+        </Modal>
       </>
     );
   }

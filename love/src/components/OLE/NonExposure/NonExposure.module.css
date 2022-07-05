@@ -329,3 +329,9 @@ th.tableHead {
 .iconFill {
   fill: var(--default-font-color);
 }
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+}
