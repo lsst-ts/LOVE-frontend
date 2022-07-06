@@ -58,9 +58,11 @@ export default class SummaryTable extends Component {
     const offset = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
       return this.props.correctionOffsets[k] ? this.props.correctionOffsets[k].value : ' - ';
     });
-    const position = ['x', 'y', 'z', 'u', 'v', 'w'].map((k) => {
-      return this.props.hexapodReportedPosition[k] ? this.props.hexapodReportedPosition[k].value : ' - ';
-    });
+
+    const position = Array.isArray(this.props.hexapodReportedPosition.value)
+      ? this.props.hexapodReportedPosition.value
+      : ['-','-','-','-','-','-'];
+
     const hexapodPosAndOffset = Array.isArray(this.props.hexapodReportedPosition.value)
       ? this.props.hexapodReportedPosition.value.map((pos, i) => [pos, offset[i]])
       : this.props.hexapodReportedPosition;

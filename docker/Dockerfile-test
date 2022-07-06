@@ -1,4 +1,4 @@
-FROM node:12.16.1-alpine as builder
+FROM node:16.13.2-alpine as builder
 
 WORKDIR /usr/src/love
 
@@ -6,6 +6,8 @@ WORKDIR /usr/src/love
 COPY love/package.json .
 COPY love/yarn.lock .
 RUN yarn install
+
+RUN chown -R node:node node_modules
 
 COPY love .
 COPY docker/run-tests.sh .

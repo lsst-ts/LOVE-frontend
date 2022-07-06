@@ -391,12 +391,12 @@ export const getMountState = (state, index) => {
     correctionOffsets: correctionOffsets
       ? correctionOffsets[correctionOffsets.length - 1]
       : {
-          x: { value: 1.1234 },
-          y: { value: 2.1234 },
-          z: { value: 3.1234 },
-          u: { value: 4.1234 },
-          v: { value: 5.1234 },
-          w: { value: 6.1234 },
+          x: { value: '-' },
+          y: { value: '-' },
+          z: { value: '-' },
+          u: { value: '-' },
+          v: { value: '-' },
+          w: { value: '-' },
         },
   };
 };

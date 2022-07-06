@@ -14,9 +14,15 @@ repos:
         exclude: docs/
 
   - repo: https://github.com/pre-commit/mirrors-eslint
-    rev: v7.19.0
+    rev: v8.15.0
     hooks:
       - id: eslint
         files: \.[j]sx?$  # *.js and *.jsx
         types: [file]
         exclude: docs/
+        additional_dependencies:
+        - 'eslint@8.15.0'
+        - '@babel/core@^7.17.10'
+        - '@babel/eslint-parser@^7.17.0'
+        - '@babel/preset-react@^7.16.7'
+        - 'eslint-config-airbnb@^18.1.0'

@@ -69,8 +69,8 @@ describe('GIVEN the token does not exist in localStorage', () => {
 
   it('Should save the token in localstorage and the store, and set status=RECEIVED when fetched OK', async () => {
     // Arrange:
-    const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
     const newToken = 'new-token';
+    const url = `${ManagerInterface.getApiBaseUrl()}get-token/`;
     fetchMock.mock(
       url,
       {
@@ -90,6 +90,18 @@ describe('GIVEN the token does not exist in localStorage', () => {
         Authorization: `Token ${newToken}`,
       }),
     );
+
+    const urlViewsSummary = `${ManagerInterface.getUifBaseUrl()}views/summary/`;
+    fetchMock.mock(
+      urlViewsSummary,
+      {},
+      new Headers({
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Token ${newToken}`,
+      }),
+    );
+
     // Act:
     await store.dispatch(fetchToken('asdds', 'asdf'));
     // Assert:

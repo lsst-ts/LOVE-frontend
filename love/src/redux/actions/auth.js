@@ -184,14 +184,11 @@ export function fetchToken(username, password) {
       })
       .then((response) => {
         if (response) {
-          const { token } = response;
+          const { token, time_data, permissions, config } = response;
           let username = '';
           if (response.user) {
             username = response.user.username;
           }
-          const { time_data } = response;
-          const { permissions } = response;
-          const { config } = response;
           if (token !== undefined && token !== null) {
             dispatch(doReceiveToken(username, token, permissions, time_data, request_time, config));
             dispatch(requestViews());

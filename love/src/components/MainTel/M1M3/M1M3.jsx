@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-
+import _ from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
   M1M3ActuatorPositions,
@@ -11,7 +11,6 @@ import {
   m1mActuatorILCStateMap,
   M1M3HardpointPositions,
 } from 'Config';
-import ManagerInterface from 'Utils';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -337,14 +336,14 @@ export default class M1M3 extends Component {
       this.setState({ actuatorsForce: forceData });
     }
 
-    if (this.state.actuators !== prevState.actuators) {
+    if (!_.isEqual(this.state.actuators, prevState.actuators)) {
       const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
     }
 
-    if (this.state.actuatorsForce !== prevState.actuatorsForce) {
+    if (!_.isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
       this.createColorScale(this.state.actuatorsForce);
     }
 
@@ -353,7 +352,7 @@ export default class M1M3 extends Component {
       prevProps.xPosition !== xPosition ||
       prevProps.yPosition !== yPosition ||
       prevProps.zPosition !== zPosition ||
-      prevProps.actuatorReferenceId !== actuatorReferenceId
+      !_.isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
       // const actuators = M1M3ActuatorPositions; // Old implementation

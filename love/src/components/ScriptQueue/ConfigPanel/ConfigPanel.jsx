@@ -70,7 +70,7 @@ export default class ConfigPanel extends Component {
       configErrors: [],
       configErrorTitle: '',
       validationStatus: EMPTY,
-      logLevel: 'Warning',
+      logLevel: 'Debug',
     };
   }
 
@@ -79,7 +79,7 @@ export default class ConfigPanel extends Component {
     /** Do nothing if schema is not available
      * stay in EMPTY state
      */
-    let schema = this.props.configPanel.configSchema;
+    const schema = this.props.configPanel.configSchema;
     if (!schema) {
       this.setState({ validationStatus: EMPTY });
       return;
@@ -105,12 +105,12 @@ export default class ConfigPanel extends Component {
         /** Server error */
         if (!r.ok) {
           this.setState({ validationStatus: SERVER_ERROR });
-          return;
+          return false;
         }
         return r.json();
       })
       .then((r) => {
-        /** Handle SERVER_ERROR*/
+        /** Handle SERVER_ERROR */
         if (!r) return;
 
         /** Valid schema should show no message */
@@ -181,8 +181,8 @@ export default class ConfigPanel extends Component {
 
   onResize = (event, direction, element) => {
     this.setState({
-      width: parseInt(element.style.width.replace(/px/g, '')),
-      height: parseInt(element.style.height.replace(/px/g, '')),
+      width: parseInt(element.style.width.replace(/px/g, ''), 10),
+      height: parseInt(element.style.height.replace(/px/g, ''), 10),
     });
   };
 
@@ -200,13 +200,14 @@ export default class ConfigPanel extends Component {
     this.setState({
       loading: true,
     });
-    const script = this.props.configPanel.script;
+    const { script } = this.props.configPanel ?? {};
     const isStandard = script.type === 'standard';
     const logLevel = logLevelMap[this.state.logLevel] ?? 20;
+    const config = this.state.value.replace(/^#.*\n?/gm, '');
     this.props.launchScript(
       isStandard,
       script.path,
-      this.state.value,
+      config,
       'description',
       2,
       this.state.pauseCheckpoint,
@@ -218,7 +219,7 @@ export default class ConfigPanel extends Component {
   startResizingWithMouse = (ev) => {
     this.setState({ resizingStart: { x: ev.clientX, y: ev.clientY, sizeWeight: this.state.sizeWeight } });
     document.onmousemove = this.onMouseMove;
-    document.onmouseup = this.onMouseUp;
+    document.onmouseup = ConfigPanel.onMouseUp;
   };
 
   onMouseMove = (ev) => {
@@ -229,7 +230,7 @@ export default class ConfigPanel extends Component {
       const { orientation, resizingStart, width, height } = this.state;
       const displacement = orientation === 'stacked' ? currentY - resizingStart.y : currentX - resizingStart.x;
       const total = orientation === 'stacked' ? height : width;
-      const boundary = 150 / height; //150px aprox of titles and buttons
+      const boundary = 150 / height; // 150px aprox of titles and buttons
       const newWeight = Math.min(Math.max(resizingStart.sizeWeight + displacement / total, boundary), 1 - boundary);
       this.setState({
         sizeWeight: newWeight,
@@ -237,7 +238,8 @@ export default class ConfigPanel extends Component {
       ev.preventDefault();
     }
   };
-  onMouseUp = () => {
+
+  static onMouseUp = () => {
     document.onmousemove = null;
     document.onmouseup = null;
   };
@@ -246,7 +248,7 @@ export default class ConfigPanel extends Component {
     this.setState({ logLevel: value });
   };
 
-  getDocumentationLink = (scriptPath, isStandard) => {
+  static getDocumentationLink = (scriptPath) => {
     const extensionIndex = scriptPath.lastIndexOf('.');
     const cleanPath = scriptPath.substring(0, extensionIndex);
     const dirIndex = cleanPath.lastIndexOf('/');
@@ -287,6 +289,8 @@ export default class ConfigPanel extends Component {
       beside: styles.verticalDivider,
     };
 
+    const configPanelBarClassName = 'configPanelBar';
+
     return this.props.configPanel.show ? (
       <Rnd
         default={{
@@ -298,11 +302,11 @@ export default class ConfigPanel extends Component {
         style={{ zIndex: 1000, position: 'fixed' }}
         bounds={'window'}
         enableUserSelectHack={false}
-        dragHandleClassName={styles.bar}
+        dragHandleClassName={configPanelBarClassName}
         onResize={this.onResize}
       >
         <div className={[styles.configPanelContainer, 'nonDraggable'].join(' ')}>
-          <div className={[styles.topBar, styles.bar].join(' ')}>
+          <div className={[styles.topBar, configPanelBarClassName].join(' ')}>
             <span className={styles.title}>{`Configuring script: ${scriptName}`}</span>
             <div className={styles.topButtonsContainer}>
               <span className={styles.rotateButton} onClick={this.rotatePanel}>
@@ -323,7 +327,8 @@ export default class ConfigPanel extends Component {
                 <a
                   className={styles.documentationLink}
                   target="_blank"
-                  href={this.getDocumentationLink(scriptPath, isStandard)}
+                  rel="noreferrer"
+                  href={ConfigPanel.getDocumentationLink(scriptPath)}
                 >
                   Go to documentation
                 </a>
@@ -402,7 +407,7 @@ export default class ConfigPanel extends Component {
               />
             </div>
           </div>
-          <div className={[styles.bottomBar, styles.bar].join(' ')}>
+          <div className={[styles.bottomBar, configPanelBarClassName].join(' ')}>
             <div className={styles.checkpointsRegexpContainer}>
               <span>Pause checkpoints</span>
               <span>.*</span>
@@ -417,7 +422,7 @@ export default class ConfigPanel extends Component {
                 className={styles.logLevelSelect}
                 options={['Debug', 'Info', 'Warning', 'Error']}
                 option={this.state.logLevel}
-                placeholder="Warning"
+                placeholder="Debug"
                 onChange={(selection) => this.onLogLevelChange(selection.value)}
               />
             </div>

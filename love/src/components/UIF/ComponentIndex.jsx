@@ -396,6 +396,16 @@ export const utilitiesIndex = {
       },
     },
   },
+  TCSOffset: {
+    component: require('../TCSCommands/TCSOffset/TCSOffset.container').default,
+    schema: {
+      ...require('../TCSCommands/TCSOffset/TCSOffset.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../TCSCommands/TCSOffset/TCSOffset.container').schema.props,
+      },
+    },
+  },
 };
 
 export const internalIndex = {
