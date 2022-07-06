@@ -394,3 +394,9 @@ th.tableHead {
 :global(li.option:hover) {
   background-color: var(--second-senary-background-dimmed-color);
 }
+
+.modalFooter {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1em;
+}
