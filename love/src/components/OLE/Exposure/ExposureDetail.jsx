@@ -13,8 +13,8 @@ import Message from './Message/Message';
 import MessageEdit from './Message/MessageEdit';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
-import styles from './Exposure.module.css';
 import { CSVLink } from 'react-csv';
+import styles from './Exposure.module.css';
 
 const moment = extendMoment(Moment);
 
