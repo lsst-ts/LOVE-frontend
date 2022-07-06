@@ -10,6 +10,8 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import ManagerInterface from 'Utils';
+import lodash from 'lodash';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
 import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
@@ -53,6 +55,7 @@ export default class ExposureAdd extends Component {
 
   constructor(props) {
     super(props);
+    this.id = lodash.uniqueId('exposure-message-create-');
     const logEdit = props.logEdit;
     const newMessage = ExposureAdd.defaultProps.newMessage;
     newMessage['obs_id'] = logEdit['obs_id'];
@@ -63,6 +66,8 @@ export default class ExposureAdd extends Component {
       newMessage,
       instruments: [],
       selectedInstrument: null,
+      confirmationModalShown: false,
+      confirmationModalText: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -98,7 +103,10 @@ export default class ExposureAdd extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
+    this.confirmSave();
+  }
 
+  saveMessage() {
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
@@ -120,10 +128,44 @@ export default class ExposureAdd extends Component {
     }
   }
 
+  confirmSave() {
+    const modalText = (
+      <span>
+        You are about to <b>Save</b> this message of Exposure Logs
+        <br/>
+        Are you sure?
+      </span>
+    );
+    
+    this.setState({
+      confirmationModalShown: true,
+      confirmationModalText: modalText,
+    });
+  }
+
+  renderModalFooter() {
+    return (
+      <div className={styles.modalFooter}>
+        <Button
+          className={styles.borderedButton}
+          onClick={() => this.setState({ confirmationModalShown: false })}
+          status="transparent"
+        >
+          Go back
+        </Button>
+        <Button onClick={() => this.saveMessage() } status="default">
+          Yes
+        </Button>
+      </div>
+    );
+  };
+
   render() {
     const { isLogCreate, isMenu } = this.props;
-    const link = this.props.back;
+    const back = this.props.back;
     const view = this.props.view ?? ExposureAdd.defaultProps.view;
+
+    const { confirmationModalShown, confirmationModalText } = this.state;
 
     const selectedCommentType = this.state.newMessage?.level
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
@@ -136,7 +178,7 @@ export default class ExposureAdd extends Component {
             <Button
               status="link"
               onClick={() => {
-                link();
+                back();
               }}
             >
               <span className={styles.title}>{`< Return to Observations`}</span>
@@ -146,7 +188,7 @@ export default class ExposureAdd extends Component {
           <></>
         )}
         <form onSubmit={this.handleSubmit}>
-          <div className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
+          <div id={this.id} className={isMenu ? styles.detailContainerMenu : styles.detailContainer}>
             {isMenu ? (
               <div className={isMenu ? styles.headerMenu : styles.header}>
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Instruments</span>
@@ -349,6 +391,16 @@ export default class ExposureAdd extends Component {
             </div>
           </div>
         </form>
+        <Modal
+          displayTopBar={false}
+          isOpen={!!confirmationModalShown}
+          onRequestClose={() => this.setState({ confirmationModalShown: false })}
+          parentSelector={() => document.querySelector(`#${this.id}`)}
+          size={50}
+        >
+          {confirmationModalText}
+          {this.renderModalFooter()}
+        </Modal>
       </>
     );
   }
