@@ -4,9 +4,11 @@ import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
-import styles from './Message.module.css';
+import lodash from 'lodash';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
+import styles from './Message.module.css';
 
 export default class Message extends Component {
   static propTypes = {
@@ -28,6 +30,55 @@ export default class Message extends Component {
     deleteMessage: () => {},
   };
 
+  constructor(props) {
+    super(props);
+    this.id = lodash.uniqueId('exposure-message-detail-');
+    this.state = {
+      confirmationModalShown: false,
+      confirmationModalText: '',
+    };
+  }
+
+  confirmDelete() {
+    const modalText = (
+      <span>
+        You are about to <b>Delete</b> this message of Exposure Logs
+        <br/>
+        Are you sure?
+      </span>
+    );
+    
+    this.setState({
+      confirmationModalShown: true,
+      confirmationModalText: modalText,
+    });
+  }
+
+  renderModalFooter() {
+    const message = this.props.message ?? Message.defaultProps.message;
+    const remove = this.props.deleteMessage ?? Message.defaultProps.deleteMessage;
+
+    return (
+      <div className={styles.modalFooter}>
+        <Button
+          className={styles.borderedButton}
+          onClick={() => this.setState({ confirmationModalShown: false })}
+          status="transparent"
+        >
+          Go back
+        </Button>
+        <Button onClick={() => {
+            remove(message);
+            this.setState({ confirmationModalShown: false });
+          }}
+          status="default"
+        >
+          Yes
+        </Button>
+      </div>
+    );
+  };
+
   statusFlag(flag) {
     const result = {
       none: 'ok',
@@ -40,13 +91,15 @@ export default class Message extends Component {
   render() {
     const message = this.props.message ?? Message.defaultProps.message;
     const edit = this.props.editMessage ?? Message.defaultProps.editMessage;
-    const remove = this.props.deleteMessage ?? Message.defaultProps.deleteMessage;
+    
+    const { confirmationModalShown, confirmationModalText } = this.state;
 
     const linkJira = getLinkJira(message.urls);
     const fileurl = getFileURL(message.urls);
 
     return (
-      <div className={styles.message}>
+      <>
+      <div id={this.id} className={styles.message}>
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.title, styles.margin3].join(' ')}>
             #{message.id}
@@ -61,7 +114,7 @@ export default class Message extends Component {
             )}
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
-            <Button className={styles.iconBtn} title="Delete" onClick={() => remove(message)} status="transparent">
+            <Button className={styles.iconBtn} title="Delete" onClick={() => this.confirmDelete()} status="transparent">
               <DeleteIcon className={styles.icon} />
             </Button>
           </span>
@@ -115,6 +168,17 @@ export default class Message extends Component {
           </span>
         </div>
       </div>
+      <Modal
+        displayTopBar={false}
+        isOpen={!!confirmationModalShown}
+        onRequestClose={() => this.setState({ confirmationModalShown: false })}
+        parentSelector={() => document.querySelector(`#${this.id}`)}
+        size={50}
+      >
+        {confirmationModalText}
+        {this.renderModalFooter()}
+      </Modal>
+      </>
     );
   }
 }
