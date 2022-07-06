@@ -16,11 +16,13 @@ export default class NonExposureDetail extends Component {
   static propTypes = {
     back: PropTypes.func,
     logDetail: PropTypes.object,
+    remove: PropTypes.func,
   };
 
   static defaultProps = {
     back: () => {},
     edit: () => {},
+    remove: () => {},
     logDetail: {
       id: undefined,
       level: undefined,
@@ -52,7 +54,8 @@ export default class NonExposureDetail extends Component {
     console.log('deleteMessage', message);
     ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
       console.log('result', response);
-      this.props.back();
+      this.setState({ confirmationModalShown: false });
+      this.props.remove(message);
     });
   }
 

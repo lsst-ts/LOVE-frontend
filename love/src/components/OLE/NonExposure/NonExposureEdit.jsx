@@ -22,6 +22,7 @@ export default class NonExposureEdit extends Component {
     logEdit: PropTypes.object,
     isLogCreate: PropTypes.bool,
     isMenu: PropTypes.bool,
+    save: PropTypes.func,
   };
 
   static defaultProps = {
@@ -49,6 +50,7 @@ export default class NonExposureEdit extends Component {
     isLogCreate: false,
     isMenu: false,
     view: () => {},
+    save: () => {},
   };
 
   constructor(props) {
@@ -129,13 +131,14 @@ export default class NonExposureEdit extends Component {
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         // TODO: add new updated log to state
-        this.props.back();
+        this.setState({ confirmationModalShown: false });
+        this.props.save(response);
       });
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
         // TODO: add new created log to state
-        this.setState({ logEdit: { time_lost: 0, salindex: 0 } });
-        this.props.back();
+        this.setState({ logEdit: { time_lost: 0, salindex: 0 }, confirmationModalShown: false });
+        this.props.save(response);
       });
     }
   }

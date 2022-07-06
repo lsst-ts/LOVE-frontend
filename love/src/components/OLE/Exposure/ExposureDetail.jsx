@@ -63,18 +63,29 @@ export default class ExposureDetail extends Component {
       selectedDateEnd: null,
       textFilter: '',
       newMessage: undefined,
+      logMessages: props.logMessages ? props.logMessages : ExposureDetail.defaultProps.logMessages,
     };
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.logMessages !== this.state.logMessages) {
+      console.log("logMessages", this.state.logMessages);
+    }
   }
 
   saveMessage(message) {
     ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
-      console.log('result', response);
+      const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
+      lgMsgs.push(response);
+      this.setState({logMessages: lgMsgs });
     });
   }
 
   deleteMessage(message) {
     ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
-      console.log('result', response);
+      console.log('result delete->', response);
+      const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
+      this.setState({logMessages: lgMsgs });
     });
   }
 
@@ -87,9 +98,9 @@ export default class ExposureDetail extends Component {
   }
 
   render() {
-    const link = this.props.back;
+    const back = this.props.back;
     const logDetail = this.props.logDetail ?? this.defaultProps.logDetail;
-    const logMessages = this.props.logMessages ?? this.defaultProps.logMessages;
+    const logMessages = this.state.logMessages;
     const edit = this.props.edit ?? ExposureDetail.defaultProps.edit;
 
     const flagsOptions = [
@@ -133,7 +144,7 @@ export default class ExposureDetail extends Component {
           <Button
             status="link"
             onClick={() => {
-              link();
+              back();
             }}
           >
             <span className={styles.title}>{`< Return to Observations`}</span>

@@ -107,6 +107,7 @@ export default class ExposureAdd extends Component {
   }
 
   saveMessage() {
+    const { isLogCreate, isMenu } = this.props;
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
@@ -114,7 +115,14 @@ export default class ExposureAdd extends Component {
     payload['user_agent'] = 'LOVE';
 
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
-      this.props.back();
+      console.log('result createMessage', result);
+      console.log('isLogCreate', isLogCreate, 'isMenu', isMenu, 'this.state.logEdit.obs_id', this.state.logEdit.obs_id);
+      this.setState({ confirmationModalShown: false });
+      if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
+        this.props.back();
+      } else {
+        this.props.view();
+      }
     });
   }
 
