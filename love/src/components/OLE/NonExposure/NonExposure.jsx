@@ -68,6 +68,19 @@ export default class NonExposure extends Component {
     }
   }
 
+  refreshLogsRemove(nonExposure) {
+    console.log('refreshLogsRemove', nonExposure);
+    const logs = this.state.logs.filter((log) => log.id !== nonExposure.id);
+    this.setState({logs});
+  }
+
+  refreshLogs(nonExposure) {
+    console.log('refreshLogs', nonExposure);
+    const logs = this.state.logs.filter((log) => log.id !== this.state.selected.id);
+    logs.push(nonExposure);
+    this.setState({logs, selected: nonExposure});
+  }
+
   getHeaders = () => {
     return [
       {
@@ -247,6 +260,10 @@ export default class NonExposure extends Component {
         edit={(isClicked) => {
           isClicked ? this.setState({ modeEdit: true, modeView: false }) : {};
         }}
+        remove={(nonExposure) => {
+          this.refreshLogsRemove(nonExposure);
+          this.setState({ modeView: false });
+        }}
       />
     ) : modeEdit && !modeView ? (
       <NonExposureEdit
@@ -257,6 +274,10 @@ export default class NonExposure extends Component {
         logEdit={this.state.selected}
         view={(isClicked) => {
           isClicked ? this.setState({ modeEdit: false, modeView: true }) : {};
+        }}
+        save={(nonExposure) => {
+          this.refreshLogs(nonExposure);
+          this.setState({ modeEdit: false, modeView: true  });
         }}
       />
     ) : (
