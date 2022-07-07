@@ -10,8 +10,6 @@ import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
-import lodash from 'lodash';
-import Modal from 'components/GeneralPurpose/Modal/Modal';
 import styles from './Message.module.css';
 
 export default class MessageEdit extends Component {
@@ -59,61 +57,17 @@ export default class MessageEdit extends Component {
         delete message[key];
       }
     });
-
-    console.log(message);
-    this.id = lodash.uniqueId('exposure-message-edit-');
     this.state = {
       message,
-      confirmationModalShown: false,
-      confirmationModalText: '',
     };
   }
 
-  confirmSave() {
-    const modalText = (
-      <span>
-        You are about to <b>Save</b> this message of Exposure Logs
-        <br/>
-        Are you sure?
-      </span>
-    );
-    
-    this.setState({
-      confirmationModalShown: true,
-      confirmationModalText: modalText,
-    });
-  }
-
-  renderModalFooter() {
+  render() {
+    const cancel = this.props.cancel ?? MessageEdit.defaultProps.cancel;
     const save = this.props.save ?? MessageEdit.defaultProps.save;
 
     return (
-      <div className={styles.modalFooter}>
-        <Button
-          className={styles.borderedButton}
-          onClick={() => this.setState({ confirmationModalShown: false })}
-          status="transparent"
-        >
-          Go back
-        </Button>
-        <Button onClick={() => {
-            save(this.state.message)
-          }}
-          status="default"
-        >
-          Yes
-        </Button>
-      </div>
-    );
-  };
-
-  render() {
-    const cancel = this.props.cancel ?? MessageEdit.defaultProps.cancel;
-
-    const { confirmationModalShown, confirmationModalText } = this.state;
-
-    return (
-      <div id={this.id} className={styles.message}>
+      <div className={styles.message}>
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.margin3, styles.inline].join(' ')}>
             <span className={styles.title}>#{this.state.message.id}</span>
@@ -153,7 +107,7 @@ export default class MessageEdit extends Component {
             <Button
               className={styles.iconBtn}
               title="Save"
-              onClick={() => this.confirmSave()}
+              onClick={() => save(this.state.message)}
               status="transparent"
             >
               <SaveIcon className={styles.icon} />
@@ -217,16 +171,6 @@ export default class MessageEdit extends Component {
             </span>
           </span>
         </div>
-        <Modal
-          displayTopBar={false}
-          isOpen={!!confirmationModalShown}
-          onRequestClose={() => this.setState({ confirmationModalShown: false })}
-          parentSelector={() => document.querySelector(`#${this.id}`)}
-          size={50}
-        >
-          {confirmationModalText}
-          {this.renderModalFooter()}
-        </Modal>
       </div>
     );
   }
