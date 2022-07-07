@@ -21,8 +21,7 @@ import {
   mtdomeElevationEnabledStatetoStyle,
   mtdomeMotionStateMap,
   mtdomeMotionStatetoStyle,
-  MTDomeElevationLowerLimit,
-  MTDomeElevationUpperLimit,
+  MTMountLimits,
 } from '../../../../Config';
 
 export default class MTDomeSummaryTable extends Component {
@@ -34,6 +33,12 @@ export default class MTDomeSummaryTable extends Component {
     const azimuthDomeMotion = mtdomeMotionStateMap[this.props.azimuthDomeMotion];
     const elevationDomeState = mtdomeElevationEnabledStateToMap[this.props.elevationDomeState];
     const elevationDomeMotion = mtdomeMotionStateMap[this.props.elevationDomeMotion];
+
+    const domeActualAz = this.props.positionActualDomeAz;
+    const domeCommandedAz = this.props.positionCommandedDomeAz;
+
+    const { az: mountActualAz, el: mountActualEl } = this.props.currentPointing;
+    const { az: mountCommandedAz, el: mountCommandedEl } = this.props.targetPointing;
 
     return (
       <div className={styles.divSummary}>
@@ -49,50 +54,65 @@ export default class MTDomeSummaryTable extends Component {
           <Value>
             <StatusText status={mtDomeModeStatetoStyle[modeDomeStatus]}>{modeDomeStatus}</StatusText>
           </Value>
-          <Label>Azimuth</Label>
+          <Label>Az State</Label>
           <Value>
             <StatusText status={mtDomeAzimuthEnabledStatetoStyle[azimuthDomeState]}>{azimuthDomeState}</StatusText>
           </Value>
-          <Label>
-            <CurrentTargetValue
-              currentValue={this.props.positionActualAz}
-              targetValue={this.props.azimuthDomeTarget}
-              isChanging={true}
-            />
-          </Label>
+          <Label>Az Motion</Label>
           <Value>
             <StatusText status={mtdomeMotionStatetoStyle[azimuthDomeMotion]}>{azimuthDomeMotion}</StatusText>
           </Value>
-          <Label>Elevation</Label>
+          <Label>Az</Label>
           <Value>
+            <CurrentTargetValue currentValue={domeActualAz} targetValue={domeCommandedAz} isChanging={true} />
+          </Value>
+
+          <Title>Mount</Title>
+          <Value>
+            <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>
+            {/* TODO: insert mount values, same as ATDome */}
+          </Value>
+          {/* <Value>
             <StatusText status={mtdomeElevationEnabledStatetoStyle[elevationDomeState]}>
               {elevationDomeState}
             </StatusText>
-          </Value>
-          <Label>
-            <CurrentTargetValue
-              currentValue={this.props.positionActualLightWindScreen}
-              targetValue={this.props.positionCommandedLightWindScreen}
-              isChanging={true}
-            />
-          </Label>
-          <Value>
+          </Value> */}
+          {/* <Value>
             <StatusText status={mtdomeMotionStatetoStyle[elevationDomeMotion]}>{elevationDomeMotion}</StatusText>
+          </Value> */}
+          <Label>Elevation</Label>
+          <Value>
+            <CurrentTargetValue currentValue={mountActualEl} targetValue={mountCommandedEl} isChanging={true} />
           </Value>
-          <Row
-          // title={`Current value: ${mountEl.current}\nTarget value: ${mountEl.target}\nLimits: [${minEl}º, ${maxEl}º]`}
-          >
-            <span>
-              <Limits
-                lowerLimit={MTDomeElevationLowerLimit}
-                upperLimit={MTDomeElevationUpperLimit}
-                currentValue={this.props.positionActualLightWindScreen}
-                targetValue={this.props.positionCommandedLightWindScreen}
-                height={30}
-                displayLabels={false}
-                limitWarning={0}
-              />
-            </span>
+          <Row>
+            <Limits
+              lowerLimit={MTMountLimits.elevation.min}
+              upperLimit={MTMountLimits.elevation.max}
+              currentValue={mountActualEl}
+              targetValue={mountCommandedEl}
+              height={30}
+              displayLabels={false}
+              limitWarning={5}
+            />
+            {/* <span>
+              <span>Time to limit: </span>
+              <span className={styles.highlight}>{Math.round(130)} min</span>
+            </span> */}
+          </Row>
+          <Label>Azimuth</Label>
+          <Value>
+            <CurrentTargetValue currentValue={mountActualAz} targetValue={mountCommandedAz} isChanging={true} />
+          </Value>
+          <Row>
+            <Limits
+              lowerLimit={MTMountLimits.azimuth.min}
+              upperLimit={MTMountLimits.azimuth.max}
+              currentValue={mountActualAz}
+              targetValue={mountCommandedAz}
+              height={30}
+              displayLabels={false}
+              limitWarning={5}
+            />
             {/* <span>
               <span>Time to limit: </span>
               <span className={styles.highlight}>{Math.round(130)} min</span>

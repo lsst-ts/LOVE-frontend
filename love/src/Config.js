@@ -1108,6 +1108,13 @@ export const MTDomeLouversMapGN = [
   'N2',
 ];
 
-export const MTDomeElevationLowerLimit = 20;
-
-export const MTDomeElevationUpperLimit = 81.5;
+export const MTMountLimits = {
+  elevation: {
+    min: 0,
+    max: 90,
+  },
+  azimuth: {
+    min: -270,
+    max: 270,
+  },
+};

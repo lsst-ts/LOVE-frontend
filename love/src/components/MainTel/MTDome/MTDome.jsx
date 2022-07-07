@@ -510,6 +510,8 @@ export default class MTDome extends Component {
                 positionCommandedLightWindScreen={positionCommandedLightWindScreen}
                 positionActualShutter={positionActualShutter}
                 positionCommandedShutter={positionCommandedShutter}
+                currentPointing={currentPointing}
+                targetPointing={targetPointing}
               />
             </div>
           </div>
