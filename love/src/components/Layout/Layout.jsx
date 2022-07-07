@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import isEqual from 'lodash/isEqual';
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import { viewsStates, modes } from '../../redux/reducers/uif';
@@ -131,10 +132,7 @@ class Layout extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
-    if (
-      this.props.config?.content?.alarms &&
-      this.props.config?.content?.alarms !== prevProps.config?.content?.alarms
-    ) {
+    if (!isEqual(this.props.config?.content?.alarms, prevProps.config?.content?.alarms)) {
       const minSeverityNotification = this.props.config.content.alarms.minSeverityNotification?.trim().toLowerCase();
       if (!minSeverityNotification || minSeverityNotification === 'mute' || minSeverityNotification === 'muted') {
         // If minSeverityNotification is null or "mute" or "muted", then do not play any sound
