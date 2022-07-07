@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
-import styles from './OLETabs.module.css';
+import styles from './OLE.module.css';
 
-export default class CreateOLETabs extends Component {
+export default class CreateOLE extends Component {
   static propTypes = {
     tabs: PropTypes.arrayOf(PropTypes.object),
     isLogCreate: PropTypes.bool,
