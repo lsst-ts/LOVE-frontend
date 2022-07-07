@@ -1,5 +1,4 @@
 .fill {
-  /* fill:#7a8a95; */
-  fill: var(--default-font-color);
+  fill: var(--secondary-font-color);
   opacity: 1;
 }
