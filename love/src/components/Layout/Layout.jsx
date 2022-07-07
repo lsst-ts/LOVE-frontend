@@ -611,8 +611,8 @@ class Layout extends Component {
                   ) : (
                     <></>
                   )}
-                  {this.state.isNewNonExposureOpen && <NonExposureEdit isMenu={true} />}
-                  {this.state.isNewExposureOpen && <ExposureAdd isMenu={true} />}
+                  {this.state.isNewNonExposureOpen && <NonExposureEdit isMenu={true} back={() => this.setState({ isNewNonExposureOpen: false })}/>}
+                  {this.state.isNewExposureOpen && <ExposureAdd isMenu={true} back={() => this.setState({ isNewExposureOpen: false })} />}
                 </div>
               </DropdownMenu>
 
