@@ -244,7 +244,7 @@ export default class Exposure extends Component {
         }}
         logEdit={this.state.selected}
         view={(isClicked) => {
-          if (isClicked) console.log('ExposeDAdd.view', this.state.selected);
+          if (isClicked) console.log('ExposeAdd.view', this.state.selected);
           this.view(this.state.selected);
         }}
       />

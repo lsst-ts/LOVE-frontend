@@ -98,7 +98,6 @@ export default class Message extends Component {
     const fileurl = getFileURL(message.urls);
 
     return (
-      <>
       <div id={this.id} className={styles.message}>
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.title, styles.margin3].join(' ')}>
@@ -167,18 +166,20 @@ export default class Message extends Component {
             <span className={[styles.margin3, styles.capitalize].join(' ')}>{message.exposure_flag}</span>
           </span>
         </div>
+        <Modal
+          displayTopBar={false}
+          isOpen={!!confirmationModalShown}
+          onRequestClose={() => this.setState({ confirmationModalShown: false })}
+          parentSelector={() => {
+            const querySelector = document.querySelector(`#${this.id}`);
+            return querySelector;
+          }}
+          size={50}
+        >
+          {confirmationModalText}
+          {this.renderModalFooter()}
+        </Modal>
       </div>
-      <Modal
-        displayTopBar={false}
-        isOpen={!!confirmationModalShown}
-        onRequestClose={() => this.setState({ confirmationModalShown: false })}
-        parentSelector={() => document.querySelector(`#${this.id}`)}
-        size={50}
-      >
-        {confirmationModalText}
-        {this.renderModalFooter()}
-      </Modal>
-      </>
     );
   }
 }

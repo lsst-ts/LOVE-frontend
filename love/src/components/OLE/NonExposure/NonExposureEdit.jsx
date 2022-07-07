@@ -139,6 +139,7 @@ export default class NonExposureEdit extends Component {
         // TODO: add new created log to state
         this.setState({ logEdit: { time_lost: 0, salindex: 0 }, confirmationModalShown: false });
         this.props.save(response);
+        this.props.back();
       });
     }
   }
@@ -481,18 +482,18 @@ export default class NonExposureEdit extends Component {
                 </Button>
               </span>
             </div>
+            <Modal
+              displayTopBar={false}
+              isOpen={!!confirmationModalShown}
+              onRequestClose={() => this.setState({ confirmationModalShown: false })}
+              parentSelector={() => document.querySelector(`#${this.id}`)}
+              size={50}
+            >
+              {confirmationModalText}
+              {this.renderModalFooter()}
+            </Modal>
           </div>
         </form>
-        <Modal
-          displayTopBar={false}
-          isOpen={!!confirmationModalShown}
-          onRequestClose={() => this.setState({ confirmationModalShown: false })}
-          parentSelector={() => document.querySelector(`#${this.id}`)}
-          size={50}
-        >
-          {confirmationModalText}
-          {this.renderModalFooter()}
-        </Modal>
       </>
     );
   }
