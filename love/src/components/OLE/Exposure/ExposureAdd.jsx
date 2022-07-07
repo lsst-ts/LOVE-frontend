@@ -130,6 +130,7 @@ export default class ExposureAdd extends Component {
     if (this.state.newMessage.id) {
       ManagerInterface.deleteMessageExposureLogs(this.state.newMessage.id).then((response) => {
         console.log('response', response);
+        this.setState({ confirmationModalShown: false });
       });
     } else {
       this.props.back();
@@ -397,18 +398,18 @@ export default class ExposureAdd extends Component {
                 </Button>
               </span>
             </div>
+            <Modal
+              displayTopBar={false}
+              isOpen={!!confirmationModalShown}
+              onRequestClose={() => this.setState({ confirmationModalShown: false })}
+              parentSelector={() => document.querySelector(`#${this.id}`)}
+              size={50}
+            >
+              {confirmationModalText}
+              {this.renderModalFooter()}
+            </Modal>
           </div>
         </form>
-        <Modal
-          displayTopBar={false}
-          isOpen={!!confirmationModalShown}
-          onRequestClose={() => this.setState({ confirmationModalShown: false })}
-          parentSelector={() => document.querySelector(`#${this.id}`)}
-          size={50}
-        >
-          {confirmationModalText}
-          {this.renderModalFooter()}
-        </Modal>
       </>
     );
   }
