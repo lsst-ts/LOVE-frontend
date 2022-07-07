@@ -113,7 +113,6 @@ export default class MessageEdit extends Component {
     const { confirmationModalShown, confirmationModalText } = this.state;
 
     return (
-      <>
       <div id={this.id} className={styles.message}>
         <div className={styles.header}>
           <span className={[styles.floatLeft, styles.margin3, styles.inline].join(' ')}>
@@ -218,18 +217,17 @@ export default class MessageEdit extends Component {
             </span>
           </span>
         </div>
+        <Modal
+          displayTopBar={false}
+          isOpen={!!confirmationModalShown}
+          onRequestClose={() => this.setState({ confirmationModalShown: false })}
+          parentSelector={() => document.querySelector(`#${this.id}`)}
+          size={50}
+        >
+          {confirmationModalText}
+          {this.renderModalFooter()}
+        </Modal>
       </div>
-      <Modal
-        displayTopBar={false}
-        isOpen={!!confirmationModalShown}
-        onRequestClose={() => this.setState({ confirmationModalShown: false })}
-        parentSelector={() => document.querySelector(`#${this.id}`)}
-        size={50}
-      >
-        {confirmationModalText}
-        {this.renderModalFooter()}
-      </Modal>
-      </>
     );
   }
 }
