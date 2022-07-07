@@ -77,8 +77,10 @@ export default class NonExposure extends Component {
   refreshLogs(nonExposure) {
     console.log('refreshLogs', nonExposure);
     const logs = this.state.logs.filter((log) => log.id !== this.state.selected.id);
-    logs.push(nonExposure);
-    this.setState({logs, selected: nonExposure});
+    this.setState({
+      logs: [nonExposure, ...logs],
+      selected: nonExposure,
+    });
   }
 
   getHeaders = () => {

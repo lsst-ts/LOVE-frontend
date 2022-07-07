@@ -75,17 +75,19 @@ export default class ExposureDetail extends Component {
 
   saveMessage(message) {
     ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
-      const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-      lgMsgs.push(response);
-      this.setState({logMessages: lgMsgs });
+      if (response) {
+        const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
+        this.setState({logMessages: [response, ...lgMsgs] });
+      }
     });
   }
 
   deleteMessage(message) {
     ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
-      console.log('result delete->', response);
-      const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-      this.setState({logMessages: lgMsgs });
+      if (response) {
+        const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
+        this.setState({logMessages: lgMsgs });
+      }
     });
   }
 
