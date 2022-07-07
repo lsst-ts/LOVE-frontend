@@ -26,16 +26,16 @@ export default class MTDomeShutter extends Component {
     targetPointingAz: 0,
     targetPointingEl: 0,
     azelToPixel: () => {},
-    width: 596,
-    height: 596,
+    width: 300,
+    height: 300,
     isProjected: true,
   };
 
   /** Function to convert az/el to pixels */
   azelToPixel = (pos, isProjected) => {
     const { az, el } = pos;
-    const width = 596;
-    const height = 596;
+    const width = 230;
+    const height = 230;
     const offset = 20;
     const center = [width / 2, height / 2];
     let r;
@@ -59,19 +59,11 @@ export default class MTDomeShutter extends Component {
     // const el = this.props.currentPointing.el;
     // const az = this.props.currentPointing.az;
     return (
-      <svg
-        className={styles.svgOverlay}
-        height={height}
-        width={width}
-        viewBox="0 0 596 596"
-        // style={{ transform: `translate(-25%, -40%)` }}
-      >
-        {/* */}
-        {/* <g class="dome" style={{ transformOrigin: 50% 50%, transform: rotate(45deg) }}> */}
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 230 230">
         <g
           style={{
             transformOrigin: `50% 50%`,
-            transform: `translate(36px, 28px) rotate(90deg)`,
+            transform: `rotate(0deg)`,
             transformBox: 'fill-box',
           }}
         >
@@ -90,7 +82,8 @@ export default class MTDomeShutter extends Component {
         <g
           style={{
             transformOrigin: `50% 50%`,
-            transform: `rotateZ(${this.props.positionActualDomeAz}deg`,
+            // transform: `rotateZ(${this.props.positionActualDomeAz}deg)`,
+            transform: `translate(-16%, -11%) rotate(0deg)`,
             transformBox: 'fill-box',
           }}
         >

@@ -16,16 +16,16 @@ export default class MTDomePointing extends Component {
 
   static defaultProps = {
     azelToPixel: () => {},
-    width: 500,
-    height: 500,
+    width: 300,
+    height: 300,
     isProjected: true,
   };
 
   /** Function to convert az/el to pixels */
   azelToPixel = (pos, isProjected) => {
     const { az, el } = pos;
-    const width = 596;
-    const height = 596;
+    const width = 260;
+    const height = 260;
     const offset = 20;
     const center = [width / 2, height / 2];
     let r;
@@ -48,9 +48,9 @@ export default class MTDomePointing extends Component {
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 596 596">
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 260 260">
         {/* pointing */}
-        <g className={styles.pointing} /*style={{ transformOrigin: `50% 50%`, transform: `translate(0, -30px)` }}*/>
+        <g className={styles.pointing}>
           <circle
             className={styles.targetPointing}
             r={16}
@@ -59,14 +59,14 @@ export default class MTDomePointing extends Component {
             cy={zenithPixels.y}
             style={{
               transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
-              transformOrigin: `50% 50% ${280}px`,
+              transformOrigin: `50% 50%`,
             }}
           />
 
           <g
             style={{
               transform: `rotateZ(${az}deg)`,
-              transformOrigin: `50% 50% ${280}px`,
+              transformOrigin: `50% 50%`,
             }}
           >
             <circle
@@ -80,18 +80,6 @@ export default class MTDomePointing extends Component {
               }}
             />
           </g>
-          {/* <circle
-              className={styles.shutter6}
-              // cx="151.22"
-              // cy="147.24"
-              cx={zenithPixels.x}
-              cy={zenithPixels.y}
-              r="5.68"
-              style={{
-                transformOrigin: `50% 50%`,
-                transform: `rotateZ(${this.props.targetPointingAz}deg) rotateX(${this.props.targetPointingEl - 90}deg)`,
-              }}
-            /> */}
         </g>
       </svg>
     );

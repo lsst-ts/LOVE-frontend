@@ -122,8 +122,10 @@ export default class MTDome extends Component {
     targetPointingAz: 0,
     currentPointingEl: 0,
     targetPointingEl: 0,
-    width: 190,
-    height: 190,
+    width: 300,
+    height: 300,
+    widthLouvers: 300,
+    heightLouvers: 400,
     isProjected: true,
   };
 
@@ -417,6 +419,9 @@ export default class MTDome extends Component {
     const isProjected = this.props.isProjected;
     const width = this.props.width;
     const height = this.props.height;
+
+    const widthLouvers = this.props.widthLouvers;
+    const heightLouvers = this.props.heightLouvers;
 
     //SummaryPanel
     const trackID = this.props.trackId;

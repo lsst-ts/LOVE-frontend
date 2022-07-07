@@ -33,10 +33,10 @@
 
 .svgOverlay {
   position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  height: auto;
+  left: calc(50% - 150px);
+  top: 5%;
+  width: auto;
+  overflow: visible;
 }
 
 .svgOverlay .rotatingDome {
@@ -63,13 +63,11 @@
   transition: x 0.5s, width 0.5s;
 }
 
-/* ---- */
 .svgLouvers {
   position: absolute;
-  left: 20%;
-  top: 52%;
-  width: 60%;
-  transform: translate(-25%, -40%) rotateZ(0deg);
+  left: calc(50% - 350px);
+  top: 60%;
+  width: auto;
 }
 
 .svgLouvers .rotatingDome {
@@ -165,8 +163,8 @@
 }
 
 .divDomeLouvers {
-  margin-right: auto;
-  margin-left: 0;
+  position: relative;
+  width: 100%;
 }
 
 /* shutter svg styles */
