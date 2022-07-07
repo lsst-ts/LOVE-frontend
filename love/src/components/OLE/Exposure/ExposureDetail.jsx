@@ -9,7 +9,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
-import Message from './Message/Message';
+import MessageDetail from './Message/MessageDetail';
 import MessageEdit from './Message/MessageEdit';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
@@ -291,14 +291,14 @@ export default class ExposureDetail extends Component {
                 );
               } else {
                 return (
-                  <Message
+                  <MessageDetail
                     message={message}
                     editMessage={(messageEdit) => {
                       this.setState({ selectedMessage: messageEdit });
                     }}
-                    deleteMessage={(message) => {
-                      if(message) { 
-                        this.confirmDelete(message);
+                    deleteMessage={(_message) => {
+                      if(_message) { 
+                        this.confirmDelete(_message);
                       }
                     }}
                   />
