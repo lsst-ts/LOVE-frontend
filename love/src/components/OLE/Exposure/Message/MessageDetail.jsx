@@ -8,7 +8,7 @@ import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
 import styles from './Message.module.css';
 
-export default class Message extends Component {
+export default class MessageDetail extends Component {
   static propTypes = {
     message: PropTypes.object,
     editMessage: PropTypes.func,
@@ -38,9 +38,9 @@ export default class Message extends Component {
   }
 
   render() {
-    const message = this.props.message ?? Message.defaultProps.message;
-    const edit = this.props.editMessage ?? Message.defaultProps.editMessage;
-    const deleteMessage = this.props.deleteMessage ?? Message.defaultProps.deleteMessage;
+    const message = this.props.message ?? MessageDetail.defaultProps.message;
+    const edit = this.props.editMessage ?? MessageDetail.defaultProps.editMessage;
+    const deleteMessage = this.props.deleteMessage ?? MessageDetail.defaultProps.deleteMessage;
 
     const linkJira = getLinkJira(message.urls);
     const fileurl = getFileURL(message.urls);
