@@ -179,42 +179,22 @@ export const observatoryIndex = {
     },
   },
   OLE: {
-    component: require('../OLE/OLEObservations/OLE.container').default,
+    component: require('../OLE/OLE.container').default,
     schema: {
-      ...require('../OLE/OLEObservations/OLE.container').schema,
+      ...require('../OLE/OLE.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../OLE/OLEObservations/OLE.container').schema.props,
+        ...require('../OLE/OLE.container').schema.props,
       },
     },
   },
-  OLEObsDetail: {
-    component: require('../OLE/OLEObsDetail/OLEObsDetail.container').default,
+  CreateOLE: {
+    component: require('../OLE/CreateOLE.container').default,
     schema: {
-      ...require('../OLE/OLEObsDetail/OLEObsDetail.container').schema,
+      ...require('../OLE/CreateOLE.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../OLE/OLEObsDetail/OLEObsDetail.container').schema.props,
-      },
-    },
-  },
-  OLETabs: {
-    component: require('../OLE/OLETabs.container').default,
-    schema: {
-      ...require('../OLE/OLETabs.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../OLE/OLETabs.container').schema.props,
-      },
-    },
-  },
-  CreateOLETabs: {
-    component: require('../OLE/CreateOLETabs.container').default,
-    schema: {
-      ...require('../OLE/CreateOLETabs.container').schema,
-      props: {
-        ...defaultSchemaProps,
-        ...require('../OLE/CreateOLETabs.container').schema.props,
+        ...require('../OLE/CreateOLE.container').schema.props,
       },
     },
   },

@@ -2,19 +2,19 @@ import React from 'react';
 import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
-import CreateOLETabs from './CreateOLETabs';
+import OLE from './OLE';
 import Exposure from './Exposure/Exposure';
 import NonExposure from './NonExposure/NonExposure';
 
 export const schema = {
-  description: 'View of Log Create Service',
-  defaultSize: [60, 23],
+  description: 'View of Log service',
+  defaultSize: [77, 32],
   props: {
     title: {
       type: 'string',
       description: 'Name displayed in the title bar (if visible)',
       isPrivate: false,
-      default: 'Log Create Service',
+      default: 'Log Service',
     },
     hasRawMode: {
       type: 'boolean',
@@ -26,26 +26,31 @@ export const schema = {
       type: 'boolean',
       description: 'if this component used for create Logs',
       isPrivate: true,
-      default: true,
+      default: false,
     },
   },
 };
 
-const CreateOLETabsContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const OLEContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return (
-    <CreateOLETabs isLogCreate={props.isLogCreate} subscribeToStreams={subscribeToStreams} unsubscribeToStreams={unsubscribeToStreams} {...props} />
+    <OLE
+      isLogCreate={props.isLogCreate}
+      subscribeToStreams={subscribeToStreams}
+      unsubscribeToStreams={unsubscribeToStreams}
+      {...props}
+    />
   );
 };
 
 const mapStateToProps = (state) => {
   const tabs = [
-    {name: 'Narrative Logs', value: 'non-exposure', component: NonExposure, },
-    {name: 'Exposure Logs', value: 'exposure', component: Exposure, },
+    { name: 'Narrative Logs', value: 'non-exposure', component: NonExposure },
+    { name: 'Exposure Logs', value: 'exposure', component: Exposure },
   ];
-  return {tabs};
+  return { tabs };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -61,4 +66,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOLETabsContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(OLEContainer);
