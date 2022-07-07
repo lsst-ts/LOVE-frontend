@@ -5,9 +5,9 @@ import NonExposure from './NonExposure/NonExposure';
 import ExposureAdd from './Exposure/ExposureAdd';
 import NonExposureEdit from './NonExposure/NonExposureEdit';
 import Button from 'components/GeneralPurpose/Button/Button';
-import styles from './OLETabs.module.css';
+import styles from './OLE.module.css';
 
-export default class OLETabs extends Component {
+export default class OLE extends Component {
   static propTypes = {
     tabs: PropTypes.arrayOf(PropTypes.object),
   };
