@@ -61,11 +61,15 @@ export default class SummaryTable extends Component {
 
     const position = Array.isArray(this.props.hexapodReportedPosition.value)
       ? this.props.hexapodReportedPosition.value
-      : ['-','-','-','-','-','-'];
+      : ['-', '-', '-', '-', '-', '-'];
 
     const hexapodPosAndOffset = Array.isArray(this.props.hexapodReportedPosition.value)
       ? this.props.hexapodReportedPosition.value.map((pos, i) => [pos, offset[i]])
       : this.props.hexapodReportedPosition;
+
+    // ATAOS
+    const correctionEnabled = this.props.correctionEnabled;
+    console.log('correctionEnabled', correctionEnabled);
 
     //Hexapod Table data
     const hexapodTableData = {
@@ -179,6 +183,19 @@ export default class SummaryTable extends Component {
         <div style={{ gridColumnStart: '1', gridColumnEnd: '3' }} className={styles.panelTable}>
           <SimpleTable headers={headers} data={simpleTableData} />
         </div>
+        <Title wide>Corrections</Title>
+        <Label>M1</Label>
+        <Value>
+          <StatusText status="ok">{correctionEnabled.m1?.value ?? 'UNKNOWN'}</StatusText>
+        </Value>
+        <Label>Hexapod</Label>
+        <Value>
+          <StatusText status="ok">{correctionEnabled.hexapod?.value ?? 'UNKNOWN'}</StatusText>
+        </Value>
+        <Label>Spectrograph</Label>
+        <Value>
+          <StatusText status="ok">{correctionEnabled.atspectrograph?.value ?? 'UNKNOWN'}</StatusText>
+        </Value>
       </SummaryPanel>
     );
   }

@@ -319,6 +319,7 @@ export const getMountSubscriptions = (index) => {
     `telemetry-ATMCS-${index}-mountEncoders`,
     // ATAOS
     `event-ATAOS-${index}-correctionOffsets`,
+    `event-ATAOS-${index}-correctionEnabled`,
   ];
 };
 
@@ -343,6 +344,7 @@ export const getMountState = (state, index) => {
   const m1VentsLimitSwitches = mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`];
   const m1CoverLimitSwitches = mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`];
   const correctionOffsets = mountData[`event-ATAOS-${index}-correctionOffsets`];
+  const correctionEnabled = mountData[`event-ATAOS-${index}-correctionEnabled`];
   return {
     // ATHexapod
     hexapodInPosition: hexapodInPosition ? hexapodInPosition[hexapodInPosition.length - 1].inPosition.value : 0,
@@ -398,6 +400,7 @@ export const getMountState = (state, index) => {
           v: { value: '-' },
           w: { value: '-' },
         },
+    correctionEnabled: correctionEnabled ? correctionEnabled[correctionEnabled.length - 1] : {},
   };
 };
 
