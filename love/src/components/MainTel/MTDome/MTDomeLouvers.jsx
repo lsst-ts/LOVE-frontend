@@ -43,7 +43,6 @@ export default class MTDomeLouvers extends Component {
   render() {
     const actualPositionLouvers = this.props?.actualPositionLouvers;
     const commandedPositionLouvers = this.props?.commandedPositionLouvers;
-    console.log(actualPositionLouvers);
 
     return (
       <svg className={styles.svgLouvers} height={240} width={240} viewBox="0 0 560 192">

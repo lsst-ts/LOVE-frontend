@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import MTDomeShutter from './MTDomeShutter';
 import MTDomeLouvers from './MTDomeLouvers';
+import MTDomePointing from './MTDomePointing';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import WindRose from '../../icons/WindRose/WindRose';
 import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
@@ -121,6 +122,9 @@ export default class MTDome extends Component {
     targetPointingAz: 0,
     currentPointingEl: 0,
     targetPointingEl: 0,
+    width: 190,
+    height: 190,
+    isProjected: true,
   };
 
   constructor(props) {
@@ -410,6 +414,10 @@ export default class MTDome extends Component {
   ];
 
   render() {
+    const isProjected = this.props.isProjected;
+    const width = this.props.width;
+    const height = this.props.height;
+
     //SummaryPanel
     const trackID = this.props.trackId;
     const mtdomeSummaryState = this.props.mtdomeSummaryState;
@@ -457,14 +465,22 @@ export default class MTDome extends Component {
           <div className={styles.divDome}>
             <div className={styles.divDomeLouvers}>
               <MTDomeShutter
+                width={width}
+                height={height}
                 positionActualShutter={positionActualShutter}
                 positionCommandedShutter={positionCommandedShutter}
                 positionActualDomeAz={positionActualDomeAz}
                 positionCommandedDomeAz={positionCommandedDomeAz}
                 positionActualLightWindScreen={positionActualLightWindScreen}
                 positionCommandedLightWindScreen={positionCommandedLightWindScreen}
+              />
+
+              <MTDomePointing
+                width={width}
+                height={height}
                 currentPointing={currentPointing}
                 targetPointing={targetPointing}
+                isProjected={isProjected}
               />
 
               <MTDomeLouvers
