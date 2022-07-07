@@ -14,6 +14,8 @@ import MessageEdit from './Message/MessageEdit';
 import AddIcon from 'components/icons/AddIcon/AddIcon';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import { CSVLink } from 'react-csv';
+import lodash from 'lodash';
+import Modal from 'components/GeneralPurpose/Modal/Modal';
 import styles from './Exposure.module.css';
 
 const moment = extendMoment(Moment);
@@ -55,6 +57,7 @@ export default class ExposureDetail extends Component {
 
   constructor(props) {
     super(props);
+    this.id = lodash.uniqueId('exposure-detail-');
     this.state = {
       selectedMessage: undefined,
       selectedFlag: 'All',
@@ -64,6 +67,9 @@ export default class ExposureDetail extends Component {
       textFilter: '',
       newMessage: undefined,
       logMessages: props.logMessages ? props.logMessages : ExposureDetail.defaultProps.logMessages,
+      confirmationModalShown: false,
+      confirmationModalText: '',
+      actionModal: () => {},
     };
   }
 
@@ -77,7 +83,7 @@ export default class ExposureDetail extends Component {
     ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
       if (response) {
         const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({logMessages: [response, ...lgMsgs] });
+        this.setState({logMessages: [response, ...lgMsgs], confirmationModalShown: false });
       }
     });
   }
@@ -86,10 +92,61 @@ export default class ExposureDetail extends Component {
     ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
       if (response) {
         const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({logMessages: lgMsgs });
+        this.setState({logMessages: lgMsgs, confirmationModalShown: false });
       }
     });
   }
+
+  confirmSave(message) {
+    const modalText = (
+      <span>
+        You are about to <b>Save</b> this message of Exposure Logs
+        <br/>
+        Are you sure?
+      </span>
+    );
+    
+    this.setState({
+      confirmationModalShown: true,
+      confirmationModalText: modalText,
+      actionModal: () => this.saveMessage(message), 
+    });
+  }
+
+  confirmDelete(message) {
+    const modalText = (
+      <span>
+        You are about to <b>Delete</b> this message of Exposure Logs
+        <br/>
+        Are you sure?
+      </span>
+    );
+    
+    this.setState({
+      confirmationModalShown: true,
+      confirmationModalText: modalText,
+      actionModal: () => this.deleteMessage(message), 
+    });
+  }
+
+  renderModalFooter() {
+    return (
+      <div className={styles.modalFooter}>
+        <Button
+          className={styles.borderedButton}
+          onClick={() => this.setState({ confirmationModalShown: false })}
+          status="transparent"
+        >
+          Go back
+        </Button>
+        <Button onClick={() => this.state.actionModal()}
+          status="default"
+        >
+          Yes
+        </Button>
+      </div>
+    );
+  };
 
   handleDateTimeRange(date, type) {
     if (type === 'start') {
@@ -152,7 +209,7 @@ export default class ExposureDetail extends Component {
             <span className={styles.title}>{`< Return to Observations`}</span>
           </Button>
         </div>
-        <div className={styles.detailContainer}>
+        <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
             <span>{logDetail.obs_id}</span>
             <span className={styles.floatRight}>
@@ -225,8 +282,10 @@ export default class ExposureDetail extends Component {
                       this.setState({ selectedMessage: undefined });
                     }}
                     save={(message) => {
-                      this.saveMessage(message);
-                      this.setState({ selectedMessage: undefined });
+                      if(message) {
+                        this.confirmSave(message);
+                        this.setState({ selectedMessage: undefined });
+                      }
                     }}
                   />
                 );
@@ -238,13 +297,25 @@ export default class ExposureDetail extends Component {
                       this.setState({ selectedMessage: messageEdit });
                     }}
                     deleteMessage={(message) => {
-                      this.deleteMessage(message);
+                      if(message) { 
+                        this.confirmDelete(message);
+                      }
                     }}
                   />
                 );
               }
             })}
           </div>
+          <Modal
+            displayTopBar={false}
+            isOpen={!!this.state.confirmationModalShown}
+            onRequestClose={() => this.setState({ confirmationModalShown: false })}
+            parentSelector={() => document.querySelector(`#${this.id}`)}
+            size={50}
+          >
+            {this.state.confirmationModalText}
+            {this.renderModalFooter()}
+          </Modal>
         </div>
       </>
     );
