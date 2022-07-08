@@ -160,7 +160,6 @@ export default class ManagerInterface {
   static getXMLMetadata() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}salinfo/metadata`;
@@ -169,11 +168,9 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -186,7 +183,6 @@ export default class ManagerInterface {
   static getTopicData(categories = null) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     let queryParam = null;
@@ -208,7 +204,6 @@ export default class ManagerInterface {
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -293,7 +288,6 @@ export default class ManagerInterface {
   static getEmergencyContactList(/* index */) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}emergencycontact`;
@@ -302,11 +296,9 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -319,7 +311,6 @@ export default class ManagerInterface {
   static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}efd/timeseries`;
@@ -335,11 +326,9 @@ export default class ManagerInterface {
       }),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -417,7 +406,6 @@ export default class ManagerInterface {
   static runATCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}tcs/aux`;
@@ -453,7 +441,6 @@ export default class ManagerInterface {
   static getATCSDocstrings() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}tcs/aux/docstrings`;
@@ -462,11 +449,9 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -479,7 +464,6 @@ export default class ManagerInterface {
   static runMTCSCommand(commandName, params = {}) {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}tcs/main`;
@@ -515,7 +499,6 @@ export default class ManagerInterface {
   static getMTCSDocstrings() {
     const token = ManagerInterface.getToken();
     if (token === null) {
-      // console.log('Token not found during validation');
       return new Promise((resolve) => resolve(false));
     }
     const url = `${this.getApiBaseUrl()}tcs/main/docstrings`;
@@ -524,11 +507,9 @@ export default class ManagerInterface {
       headers: this.getHeaders(),
     }).then((response) => {
       if (response.status >= 500) {
-        // console.error('Error communicating with the server.);
         return false;
       }
       if (response.status === 401 || response.status === 403) {
-        // console.log('Session expired. Logging out');
         ManagerInterface.removeToken();
         return false;
       }
@@ -936,7 +917,9 @@ export const parsePlotInputs = (inputs) => {
       newIndexDict[input.topic].push(input.item);
       return;
     }
-    newIndexDict[input.topic] = [input.item];
+    // Next line was added to support EFD Querying for Array type items (influx)
+    newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
+    // newIndexDict[input.topic] = [input.item]; // Original line
 
     newTopicDict = newIndexDict[input.topic];
     if (indexDict) {
@@ -980,7 +963,9 @@ export const parseCommanderData = (data, tsLabel = 'x', valueLabel = 'y') => {
     const newTopicData = {};
     Object.keys(topicData).forEach((propertyKey) => {
       const propertyDataArray = topicData[propertyKey];
-      newTopicData[propertyKey] = propertyDataArray.map((dataPoint) => {
+      // Next line was added to support EFD Querying for Array type items (influx)
+      const formattedPropertyKey = propertyKey.replace(/[\d\.]+$/, '');
+      newTopicData[formattedPropertyKey] = propertyDataArray.map((dataPoint) => {
         const tsString = dataPoint?.ts.split(' ').join('T');
         return { [tsLabel]: parseTimestamp(tsString), [valueLabel]: dataPoint?.value };
       });
