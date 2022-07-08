@@ -24,8 +24,8 @@ export default class MTDomePointing extends Component {
   /** Function to convert az/el to pixels */
   azelToPixel = (pos, isProjected) => {
     const { az, el } = pos;
-    const width = 260;
-    const height = 260;
+    const width = 300;
+    const height = 300;
     const offset = 20;
     const center = [width / 2, height / 2];
     let r;
@@ -48,7 +48,7 @@ export default class MTDomePointing extends Component {
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 260 260">
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 300 300">
         {/* pointing */}
         <g className={styles.pointing}>
           <circle

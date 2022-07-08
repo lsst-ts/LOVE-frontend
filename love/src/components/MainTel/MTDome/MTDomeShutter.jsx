@@ -34,8 +34,8 @@ export default class MTDomeShutter extends Component {
   /** Function to convert az/el to pixels */
   azelToPixel = (pos, isProjected) => {
     const { az, el } = pos;
-    const width = 230;
-    const height = 230;
+    const width = 235;
+    const height = 235;
     const offset = 20;
     const center = [width / 2, height / 2];
     let r;
@@ -59,7 +59,7 @@ export default class MTDomeShutter extends Component {
     // const el = this.props.currentPointing.el;
     // const az = this.props.currentPointing.az;
     return (
-      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 230 230">
+      <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
         <g
           style={{
             transformOrigin: `50% 50%`,
