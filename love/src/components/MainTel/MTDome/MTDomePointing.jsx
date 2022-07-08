@@ -44,7 +44,7 @@ export default class MTDomePointing extends Component {
 
   render() {
     const { width, height } = this.props;
-    const zenithPixels = this.azelToPixel({ az: 0, el: 0 }, true);
+    const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
     const el = this.props.currentPointing.el;
     const az = this.props.currentPointing.az;
     return (
