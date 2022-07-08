@@ -33,7 +33,7 @@
 
 .svgOverlay {
   position: absolute;
-  left: calc(50% - 150px);
+  left: calc(50% - 130px);
   top: 5%;
   width: auto;
   overflow: visible;
@@ -65,7 +65,7 @@
 
 .svgLouvers {
   position: absolute;
-  left: calc(50% - 350px);
+  left: calc(50% - 330px);
   top: 60%;
   width: auto;
 }

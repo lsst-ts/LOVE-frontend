@@ -40,7 +40,15 @@ const heightsLouvers = [
 ];
 
 export default class MTDomeLouvers extends Component {
+  static propTypes = {
+    /** Measured position of each louver (percent open) */
+    actualPositionLouvers: PropTypes.array,
+    /** Commanded position of each louver (percent open) */
+    commandedPositionLouvers: PropTypes.array,
+  };
   static defaultProps = {
+    actualPositionLouvers: [],
+    commandedPositionLouvers: [],
     height: 240,
   };
 
@@ -499,7 +507,6 @@ export default class MTDomeLouvers extends Component {
             y="60.15"
             width="27"
             height="19"
-            // transform="translate(605.03 139.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -513,7 +520,6 @@ export default class MTDomeLouvers extends Component {
             y="93.15"
             width="27"
             height="19"
-            // transform="translate(605.03 205.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -527,7 +533,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(615.03 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -546,7 +551,6 @@ export default class MTDomeLouvers extends Component {
             y="60.15"
             width="27"
             height="19"
-            // transform="translate(605.03 139.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -560,7 +564,6 @@ export default class MTDomeLouvers extends Component {
             y="93.15"
             width="27"
             height="19"
-            // transform="translate(605.03 205.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -574,7 +577,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(615.03 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -669,43 +671,9 @@ export default class MTDomeLouvers extends Component {
             points="376.27 173.15 328.27 173.15 328.27 53.15 376.27 35.15 376.27 173.15"
           />
 
-          {/* <rect
-            className={styles.louver3}
-            x="382.27"
-            y="134.15"
-            width="27"
-            height="35"
-            // transform="translate(791.53 303.3) rotate(-180)"
-          /> */}
-          <rect
-            className={styles.louver3}
-            x="339.27"
-            y="60.15"
-            width="26"
-            height="19"
-            // transform="translate(704.53 139.3) rotate(-180)"
-            // style={{
-            //   transformOrigin: 'top center',
-            //   transformBox: 'fill-box',
-            //   transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
-            // }}
-          />
-          <rect
-            className={styles.louver3}
-            x="338.77"
-            y="89.15"
-            width="27"
-            height="35"
-            // transform="translate(704.53 213.3) rotate(-180)"
-          />
-          <rect
-            className={styles.louver3}
-            x="338.77"
-            y="134.15"
-            width="27"
-            height="35"
-            // transform="translate(704.53 303.3) rotate(-180)"
-          />
+          <rect className={styles.louver3} x="339.27" y="60.15" width="26" height="19" />
+          <rect className={styles.louver3} x="338.77" y="89.15" width="27" height="35" />
+          <rect className={styles.louver3} x="338.77" y="134.15" width="27" height="35" />
           {/* H3 */}
           <rect
             className={styles.louver4}
@@ -713,26 +681,12 @@ export default class MTDomeLouvers extends Component {
             y="60.15"
             width="26"
             height="19"
-            // transform="translate(704.53 139.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
               transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
             }}
           />
-          {/* <rect
-            className={styles.louver3}
-            x="339.27"
-            y="60.15"
-            width="26"
-            height="19"
-            // transform="translate(704.53 139.3) rotate(-180)"
-            // style={{
-            //   transformOrigin: 'top center',
-            //   transformBox: 'fill-box',
-            //   transform: `scaleY(${1 - actualPositionLouvers[20] / 100})`,
-            // }}
-          /> */}
           {/* H2 */}
           <rect
             className={styles.louver4}
@@ -754,7 +708,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(704.53 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -826,14 +779,6 @@ export default class MTDomeLouvers extends Component {
             height="35"
             transform="translate(791.53 213.3) rotate(-180)"
           />
-          {/* <rect
-            className={styles.louver3}
-            x="421.27"
-            y="134.15"
-            width="27"
-            height="35"
-            transform="translate(869.53 303.3) rotate(-180)"
-          /> */}
           <rect className={styles.louver3} x="382.27" y="134.15" width="27" height="35" />
           {/* I3 */}
           <rect
@@ -842,7 +787,6 @@ export default class MTDomeLouvers extends Component {
             y="44.15"
             width="27"
             height="35"
-            // transform="translate(791.53 123.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -856,7 +800,6 @@ export default class MTDomeLouvers extends Component {
             y="89.15"
             width="27"
             height="35"
-            // transform="translate(791.53 213.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -870,7 +813,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(791.53 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -950,7 +892,6 @@ export default class MTDomeLouvers extends Component {
             y="44.15"
             width="27"
             height="35"
-            // transform="translate(869.53 123.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -964,7 +905,6 @@ export default class MTDomeLouvers extends Component {
             y="89.15"
             width="27"
             height="35"
-            // transform="translate(869.53 213.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -978,7 +918,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(869.53 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -1066,7 +1005,6 @@ export default class MTDomeLouvers extends Component {
             y="60.15"
             width="27"
             height="19"
-            // transform="translate(947.53 139.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -1080,7 +1018,6 @@ export default class MTDomeLouvers extends Component {
             y="89.15"
             width="27"
             height="35"
-            // transform="translate(947.53 213.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -1094,7 +1031,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(947.53 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -1173,7 +1109,6 @@ export default class MTDomeLouvers extends Component {
             y="105.15"
             width="27"
             height="19"
-            // transform="translate(1025.03 229.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -1187,7 +1122,6 @@ export default class MTDomeLouvers extends Component {
             y="134.15"
             width="27"
             height="35"
-            // transform="translate(1025.03 303.3) rotate(-180)"
             style={{
               transformOrigin: 'top center',
               transformBox: 'fill-box',
@@ -1282,6 +1216,10 @@ export default class MTDomeLouvers extends Component {
             height="184"
             transform="translate(409.75 -151.45) rotate(90)"
           />
+          {/* ########################### */}
+          {/* DO NOT DELETE, COULD BE USED IN THE FUTURE */}
+          {/* ########################### */}
+
           {/* <rect className={styles.louver8} x="231.52" y="124.15" width="3" height="6" />
           <rect className={styles.louver8} x="271.52" y="124.15" width="3" height="6" /> */}
           {/* <rect

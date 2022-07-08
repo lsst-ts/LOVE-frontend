@@ -9,12 +9,14 @@ export default class MTDomePointing extends Component {
     /** Skyview height */
     height: PropTypes.number,
     /** Target mount azimuth at the specified time. The allowed range is 0 to 360 */
-    targetPointingAz: PropTypes.number,
+    targetPointingAz: PropTypes.object,
     /** Target mount elevation at the specified time */
-    targetPointingEl: PropTypes.number,
+    targetPointingEl: PropTypes.object,
   };
 
   static defaultProps = {
+    targetPointingAz: {},
+    targetPointingEl: {},
     azelToPixel: () => {},
     width: 300,
     height: 300,

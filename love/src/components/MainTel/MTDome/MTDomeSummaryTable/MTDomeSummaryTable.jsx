@@ -25,6 +25,51 @@ import {
 } from '../../../../Config';
 
 export default class MTDomeSummaryTable extends Component {
+  static propTypes = {
+    /** Unique target identifier. Echoed from the trackTarget command */
+    trackId: PropTypes.number,
+    /** High level state machine state identifier */
+    mtdomeSummaryState: PropTypes.number,
+    /** Enabled state; an EnabledState enum */
+    azimuthDomeState: PropTypes.number,
+    /** The motion state; a MotionState enum */
+    azimuthDomeMotion: PropTypes.number,
+    /** Target position; nan for the crawlAz command */
+    azimuthDomeTarget: PropTypes.number,
+    /** Enabled state; an EnabledState enum */
+    elevationDomeState: PropTypes.number,
+    /** The motion state; a MotionState enum */
+    elevationDomeMotion: PropTypes.number,
+    /** Target position; nan for the crawlEl command */
+    elevationDomeTarget: PropTypes.number,
+    /** Operational mode; an OperationalMode enum */
+    modeDomeStatus: PropTypes.number,
+    /** Position measured by the encoders */
+    currentPointingAz: PropTypes.number,
+    /** Position computed by the path generator */
+    targetPointingAz: PropTypes.number,
+    /** Position measured by the encoders */
+    currentPointingEl: PropTypes.number,
+    /** Position computed by the path generator */
+    targetPointingEl: PropTypes.number,
+  };
+
+  static defaultProps = {
+    trackId: 0,
+    mtdomeSummaryState: 0,
+    azimuthDomeState: 0,
+    azimuthDomeMotion: 0,
+    azimuthDomeTarget: 0,
+    elevationDomeState: 0,
+    elevationDomeMotion: 0,
+    elevationDomeTarget: 0,
+    modeDomeStatus: 0,
+    currentPointingAz: 0,
+    targetPointingAz: 0,
+    currentPointingEl: 0,
+    targetPointingEl: 0,
+  };
+
   render() {
     const trackID = this.props.trackID;
     const domeStatus = CSCDetail.states[this.props.mtdomeSummaryState];
@@ -45,7 +90,6 @@ export default class MTDomeSummaryTable extends Component {
         <SummaryPanel className={styles.summaryTable}>
           <Title>Track ID</Title>
           <Value>{trackID}</Value>
-          {/* Dome */}
           <Title>Dome</Title>
           <Value>
             <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>
@@ -72,14 +116,6 @@ export default class MTDomeSummaryTable extends Component {
             <span className={[domeStatus.class, styles.summaryState].join(' ')}>{domeStatus.name}</span>
             {/* TODO: insert mount values, same as ATDome */}
           </Value>
-          {/* <Value>
-            <StatusText status={mtdomeElevationEnabledStatetoStyle[elevationDomeState]}>
-              {elevationDomeState}
-            </StatusText>
-          </Value> */}
-          {/* <Value>
-            <StatusText status={mtdomeMotionStatetoStyle[elevationDomeMotion]}>{elevationDomeMotion}</StatusText>
-          </Value> */}
           <Label>Elevation</Label>
           <Value>
             <CurrentTargetValue currentValue={mountActualEl} targetValue={mountCommandedEl} isChanging={true} />
@@ -94,10 +130,6 @@ export default class MTDomeSummaryTable extends Component {
               displayLabels={false}
               limitWarning={5}
             />
-            {/* <span>
-              <span>Time to limit: </span>
-              <span className={styles.highlight}>{Math.round(130)} min</span>
-            </span> */}
           </Row>
           <Label>Azimuth</Label>
           <Value>
@@ -113,10 +145,6 @@ export default class MTDomeSummaryTable extends Component {
               displayLabels={false}
               limitWarning={5}
             />
-            {/* <span>
-              <span>Time to limit: </span>
-              <span className={styles.highlight}>{Math.round(130)} min</span>
-            </span> */}
           </Row>
         </SummaryPanel>
         <SummaryPanel className={styles.shutters}>

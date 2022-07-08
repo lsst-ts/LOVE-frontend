@@ -667,10 +667,10 @@ export const getApertureShutter = (state) => {
   return {
     positionActualShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionActual.value
-      : 75,
+      : 0,
     positionCommandedShutter: apertureShutter['telemetry-MTDome-0-apertureShutter']
       ? apertureShutter['telemetry-MTDome-0-apertureShutter'].positionCommanded.value
-      : 100,
+      : 0,
   };
 };
 
@@ -680,7 +680,7 @@ export const getDomeAzimuth = (state) => {
   return {
     positionActualDomeAz: domeAzimuth['telemetry-MTDome-0-azimuth']
       ? domeAzimuth['telemetry-MTDome-0-azimuth'].positionActual.value
-      : 25,
+      : 0,
     positionCommandedDomeAz: domeAzimuth['telemetry-MTDome-0-azimuth']
       ? domeAzimuth['telemetry-MTDome-0-azimuth'].positionCommanded.value
       : 0,
@@ -693,10 +693,10 @@ export const getLightWindScreen = (state) => {
   return {
     positionActualLightWindScreen: ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
       ? ligthWindScreen['telemetry-MTDome-0-lightWindScreen'].positionActual.value
-      : 25,
+      : 0,
     positionCommandedLightWindScreen: ligthWindScreen['telemetry-MTDome-0-lightWindScreen']
       ? ligthWindScreen['telemetry-MTDome-0-lightWindScreen'].positionCommanded.value
-      : 80,
+      : 0,
   };
 };
 
@@ -706,16 +706,16 @@ export const getPointingStatus = (state) => {
   return {
     currentPointingAz: pointingStatus['telemetry-MTMount-0-azimuth']
       ? pointingStatus['telemetry-MTMount-0-azimuth'].actualPosition.value
-      : 15,
+      : 0,
     targetPointingAz: pointingStatus['telemetry-MTMount-0-azimuth']
       ? pointingStatus['telemetry-MTMount-0-azimuth'].demandPosition.value
-      : 50,
+      : 0,
     currentPointingEl: pointingStatus['telemetry-MTMount-0-elevation']
       ? pointingStatus['telemetry-MTMount-0-elevation'].actualPosition.value
-      : 35,
+      : 0,
     targetPointingEl: pointingStatus['telemetry-MTMount-0-elevation']
       ? pointingStatus['telemetry-MTMount-0-elevation'].demandPosition.value
-      : 60,
+      : 0,
   };
 };
 
@@ -725,7 +725,7 @@ export const getLouversStatus = (state) => {
   return {
     actualPositionLouvers: louvers['telemetry-MTDome-0-louvers']
       ? louvers['telemetry-MTDome-0-louvers'].positionActual.value
-      : [20, 50, 0, 0, 0, 75, 0, 0, 30, 0, 0, 25, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0],
+      : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     commandedPositionLouvers: louvers['telemetry-MTDome-0-louvers']
       ? louvers['telemetry-MTDome-0-louvers'].positionCommanded.value
       : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],

@@ -55,34 +55,12 @@ export default class MTDomeShutter extends Component {
   render() {
     const width = this.props.width;
     const height = this.props.height;
-    // const zenithPixels = this.azelToPixel({ az: 0, el: 90 }, false);
-    // const el = this.props.currentPointing.el;
-    // const az = this.props.currentPointing.az;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
-        <g
-          style={{
-            transformOrigin: `50% 50%`,
-            transform: `rotate(0deg)`,
-            transformBox: 'fill-box',
-          }}
-        >
-          {/* <polygon
-            className={styles.shutterCommanded}
-            points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
-          />
-          <rect class="shutterCommanded" x="110.69" y="38.59" width="81.08" height="145.13" /> */}
-          <path
-            style={{ stroke: '#788e9b', strokeDasharray: '4 6', fill: 'none', strokeMiterlimit: 10 }}
-            d="M72.99,6.09H28.26v4.05h40.12L22.67,50.39,1.3,102.86l1.62,53.83,58.95,77.23h-23.89v4.86h27.6l1.42,1.86h96l1.42-1.86h27.6v-4.86h-23.89l58.95-77.23,1.62-53.83-21.37-52.47L161.65,10.14h40.12V6.09h-44.72l-.51-.45H73.5l-.51,.45Zm83.8,3.65V156.87H73.71V9.74h83.08Z"
-          />
-        </g>
-
         {/* rest of dome */}
         <g
           style={{
             transformOrigin: `50% 50%`,
-            // transform: `rotateZ(${this.props.positionActualDomeAz}deg)`,
             transform: `translate(-16%, -11%) rotate(0deg)`,
             transformBox: 'fill-box',
           }}
@@ -201,6 +179,19 @@ export default class MTDomeShutter extends Component {
             />
             <rect className={styles.shutter} x="100.19" y="188.53" width="50.27" height="12.97" />
           </g>
+        </g>
+
+        <g
+          style={{
+            transformOrigin: `50% 50%`,
+            transform: `rotate(0deg)`,
+            transformBox: 'fill-box',
+          }}
+        >
+          <path
+            style={{ stroke: '#788e9b', strokeDasharray: '4 6', fill: 'none', strokeMiterlimit: 10 }}
+            d="M72.99,6.09H28.26v4.05h40.12L22.67,50.39,1.3,102.86l1.62,53.83,58.95,77.23h-23.89v4.86h27.6l1.42,1.86h96l1.42-1.86h27.6v-4.86h-23.89l58.95-77.23,1.62-53.83-21.37-52.47L161.65,10.14h40.12V6.09h-44.72l-.51-.45H73.5l-.51,.45Zm83.8,3.65V156.87H73.71V9.74h83.08Z"
+          />
         </g>
       </svg>
     );
