@@ -9,6 +9,8 @@ import {
   m1CoverStateStateMap,
   nasmythRotatorInPositionStateMap,
   hexapodInPositionStateMap,
+  ataosCorrectionsStateMap,
+  ataosCorrectionsStateToStyle,
   stateToStyleMount,
 } from '../../../../Config';
 import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -68,8 +70,17 @@ export default class SummaryTable extends Component {
       : this.props.hexapodReportedPosition;
 
     // ATAOS
-    const correctionEnabled = this.props.correctionEnabled;
-    console.log('correctionEnabled', correctionEnabled);
+    const {
+      atspectrograph: atSpectrographCorrections,
+      hexapod: hexapodCorrections,
+      m1: m1Corrections,
+      m2: m2Corrections,
+    } = this.props.correctionEnabled;
+
+    const atSpectrographCorrectionsState = ataosCorrectionsStateMap[atSpectrographCorrections?.value ?? false];
+    const hexapodCorrectionsState = ataosCorrectionsStateMap[hexapodCorrections?.value ?? false];
+    const m1CorrectionsState = ataosCorrectionsStateMap[m1Corrections?.value ?? false];
+    const m2CorrectionsState = ataosCorrectionsStateMap[m2Corrections?.value ?? false];
 
     //Hexapod Table data
     const hexapodTableData = {
@@ -186,15 +197,23 @@ export default class SummaryTable extends Component {
         <Title wide>Corrections</Title>
         <Label>M1</Label>
         <Value>
-          <StatusText status="ok">{correctionEnabled.m1?.value ?? 'UNKNOWN'}</StatusText>
+          <StatusText status={ataosCorrectionsStateToStyle[m1CorrectionsState]}>{m1CorrectionsState}</StatusText>
+        </Value>
+        <Label>M2</Label>
+        <Value>
+          <StatusText status={ataosCorrectionsStateToStyle[m2CorrectionsState]}>{m2CorrectionsState}</StatusText>
         </Value>
         <Label>Hexapod</Label>
         <Value>
-          <StatusText status="ok">{correctionEnabled.hexapod?.value ?? 'UNKNOWN'}</StatusText>
+          <StatusText status={ataosCorrectionsStateToStyle[hexapodCorrectionsState]}>
+            {hexapodCorrectionsState}
+          </StatusText>
         </Value>
         <Label>Spectrograph</Label>
         <Value>
-          <StatusText status="ok">{correctionEnabled.atspectrograph?.value ?? 'UNKNOWN'}</StatusText>
+          <StatusText status={ataosCorrectionsStateToStyle[atSpectrographCorrectionsState]}>
+            {atSpectrographCorrectionsState}
+          </StatusText>
         </Value>
       </SummaryPanel>
     );
