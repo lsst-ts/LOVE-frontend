@@ -20,9 +20,30 @@ import styles from './Exposure.module.css';
 const moment = extendMoment(Moment);
 
 export default class Exposure extends Component {
-  static propTypes = {};
+  static propTypes = {
+    // Instrument Options
+    instruments: PropTypes.arrayOf(PropTypes.string),
+    selectedInstrument: PropTypes.string,
+    changeInstrumentSelect: PropTypes.func,
+    // Exposure Type Options
+    selectedExposureType: PropTypes.string,
+    // Filter date & time
+    selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    handleDateTimeRange: PropTypes.func,
+  };
 
-  static defaultProps = {};
+  static defaultProps = {
+    instruments: [],
+    selectedInstrument: null,
+    changeInstrumentSelect: () => {console.log('defaultProps.changeInstrumentSelect')},
+    selectedExposureType: null,
+    changeExposureTypeSelect: () => {console.log('defaultProps.changeExposureType')},
+    selectedExposureType: 'All',
+    selectedDateStart: null,
+    selectedDateEnd: null,
+    handleDateTimeRange: () => {console.log('defaultProps.handleDateTimeRange')},
+  };
 
   constructor(props) {
     super(props);
@@ -31,24 +52,12 @@ export default class Exposure extends Component {
       modeAdd: false,
       selected: {},
       selectedMessages: [],
-      selectedInstrument: null,
-      selectedDateStart: null,
-      selectedDateEnd: null,
-      selectedExposureType: 'All',
       exposurelogs: [],
-      instruments: [],
       exposureTypes: [],
       observationIds: [],
       messages: [],
+      range: [],
     };
-  }
-
-  handleDateTimeRange(date, type) {
-    if (type === 'start') {
-      this.setState({ selectedDateStart: date });
-    } else if (type === 'end') {
-      this.setState({ selectedDateEnd: date });
-    }
   }
 
   view(index) {
@@ -165,19 +174,36 @@ export default class Exposure extends Component {
   };
 
   componentDidMount() {
-    ManagerInterface.getListExposureInstruments().then((data) => {
-      const instrumentsArray = Object.values(data).map((arr) => arr[0]);
-      this.setState({ instruments: instrumentsArray, selectedInstrument: instrumentsArray[0] });
-    });
-
+    console.log('Exposure.componentDidMount');
     ManagerInterface.getListAllMessagesExposureLogs().then((data) => {
       this.setState({ messages: data });
+    });
+
+    this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+
+    ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
+      const exposureTypes = new Set();
+      const exposures = data.map((exposure) => {
+        exposureTypes.add(exposure.observation_type);
+        // TODO: request for all the obs_id, all messages and only use exposure_flag PENDING: backend with query of flags without query to exposurelogs/messages
+        // ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+        //   const flags = messages
+        //     .map((message) => message['exposure_flag'])
+        //     .reduce((acc, curr) => acc.find((f) => f === curr) ? acc : [...acc, curr], []);
+        //   exposure['flags'] = flags;
+        //   return exposure;
+        // });
+        return { ...exposure };
+      });
+      this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
     });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.selectedInstrument !== this.state.selectedInstrument) {
-      ManagerInterface.getListExposureLogs(this.state.selectedInstrument).then((data) => {
+    //console.log('prevProps', prevProps);
+    if (prevProps.selectedInstrument !== this.props.selectedInstrument) {
+      console.log('componentDidUpdate', this.props.selectedInstrument);
+      ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
         const exposureTypes = new Set();
         const exposures = data.map((exposure) => {
           exposureTypes.add(exposure.observation_type);
@@ -194,6 +220,12 @@ export default class Exposure extends Component {
         this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
       });
     }
+
+    if (prevProps.selectedDateStart !== this.props.selectedDateStart ||
+      prevProps.selectedDateEnd !== this.props.selectedDateEnd
+    ) {
+      this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+    }
   }
 
   render() {
@@ -202,21 +234,22 @@ export default class Exposure extends Component {
     const headers = this.getHeaders();
 
     const tableData = this.state.exposurelogs;
-    const instrumentsOptions = this.state.instruments;
-    const selectedInstrument = this.state.selectedInstrument;
+    const instrumentsOptions = this.props.instruments;
+    const selectedInstrument = this.props.selectedInstrument;
     const exposureTypeOptions = [
-      { label: 'All observation types', value: 'All' },
+      { label: 'All observation types', value: 'all' },
       ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
     ];
-    const selectedExposureType = this.state.selectedExposureType;
+    const selectedExposureType = this.props.selectedExposureType;
 
-    // Filter by date range
-    const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
+    const range = this.state.range;
+
+      // Filter by date range
     let filteredData = tableData.filter((log) => range.contains(Moment(log.timespan_end)));
 
     // Filter by exposure type
     filteredData =
-      selectedExposureType !== 'All'
+      selectedExposureType !== 'all'
         ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
         : filteredData;
 
@@ -255,21 +288,23 @@ export default class Exposure extends Component {
           <Select
             options={instrumentsOptions}
             option={selectedInstrument}
-            onChange={({ value }) => this.setState({ selectedInstrument: value })}
+            onChange={({ value }) => this.props.changeInstrumentSelect(value)}
             className={styles.select}
           />
 
           <DateTimeRange
-            onChange={(date, type) => this.handleDateTimeRange(date, type)}
+            onChange={(date, type) => {
+              this.props.handleDateTimeRange(date, type);
+            }}
             label="Date & Time"
-            startDate={new Date() - 24 * 30 * 5 * 60 * 60 * 1000}
-            endDate={new Date(Date.now())}
+            startDate={this.props.selectedDateStart}
+            endDate={this.props.selectedDateEnd}
           />
 
           <Select
             options={exposureTypeOptions}
             option={selectedExposureType}
-            onChange={({ value }) => this.setState({ selectedExposureType: value })}
+            onChange={({ value }) => this.props.changeExposureType(value)}
             className={styles.select}
           />
           <div className={styles.divExportBtn}>
