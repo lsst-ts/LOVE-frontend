@@ -130,13 +130,11 @@ export default class NonExposureEdit extends Component {
 
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
-        // TODO: add new updated log to state
         this.setState({ confirmationModalShown: false });
         this.props.save(response);
       });
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
-        // TODO: add new created log to state
         this.setState({ logEdit: { time_lost: 0, salindex: 0 }, confirmationModalShown: false });
         this.props.save(response);
         this.props.back();
