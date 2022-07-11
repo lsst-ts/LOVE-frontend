@@ -13,6 +13,7 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import { CSVLink } from 'react-csv';
 import ManagerInterface from 'Utils';
+import { exposureFlagStateToStyle } from 'Config';
 import ExposureAdd from './ExposureAdd';
 import ExposureDetail from './ExposureDetail';
 import styles from './Exposure.module.css';
@@ -39,7 +40,7 @@ export default class Exposure extends Component {
     changeInstrumentSelect: () => {console.log('defaultProps.changeInstrumentSelect')},
     selectedExposureType: null,
     changeExposureTypeSelect: () => {console.log('defaultProps.changeExposureType')},
-    selectedExposureType: 'All',
+    selectedExposureType: 'all',
     selectedDateStart: null,
     selectedDateEnd: null,
     handleDateTimeRange: () => {console.log('defaultProps.handleDateTimeRange')},
@@ -84,12 +85,7 @@ export default class Exposure extends Component {
   }
 
   statusFlag(flag) {
-    const result = {
-      none: 'ok',
-      junk: 'warning',
-      questionable: 'alert',
-    };
-    return result[flag] ? result[flag] : 'unknown';
+    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
   }
 
   getHeaders = () => {
