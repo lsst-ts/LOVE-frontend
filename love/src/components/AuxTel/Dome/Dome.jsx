@@ -103,7 +103,7 @@ export default class Dome extends Component {
       topic: 'mount_AzEl_Encoders',
       item: 'azimuthCalculatedAngle',
       type: 'line',
-      accessor: (x) => x[0],
+      accessor: (x) => (x[0] < 0 ? x[0] + 360 : x[0]),
       color: 'hsl(160, 70%, 40%)',
     },
     'Mount Target': {
