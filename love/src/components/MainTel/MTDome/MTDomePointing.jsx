@@ -17,6 +17,10 @@ export default class MTDomePointing extends Component {
   static defaultProps = {
     targetPointingAz: {},
     targetPointingEl: {},
+    currentPointing: {
+      el: 90,
+      az: 0,
+    },
     azelToPixel: () => {},
     width: 300,
     height: 300,

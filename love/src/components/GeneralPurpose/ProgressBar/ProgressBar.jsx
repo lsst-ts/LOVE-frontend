@@ -50,7 +50,7 @@ const ProgressBar = (props) => {
 
   const width = ref.current?.clientWidth ?? 0;
   const targetValuePixels = ((width - 2 * padding) * targetValue) / 100;
-  const completedValue = completed.toFixed(3);
+  const completedValue = completed.toString().padStart(3, '0');
 
   return (
     <div style={parentDiv}>

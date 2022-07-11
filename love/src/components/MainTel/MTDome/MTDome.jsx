@@ -120,7 +120,7 @@ export default class MTDome extends Component {
     modeDomeStatus: 0,
     currentPointingAz: 0,
     targetPointingAz: 0,
-    currentPointingEl: 0,
+    currentPointingEl: 90,
     targetPointingEl: 0,
     width: 300,
     height: 300,
@@ -455,6 +455,7 @@ export default class MTDome extends Component {
       az: this.props.currentPointingAz,
       el: this.props.currentPointingEl,
     };
+
     const targetPointing = {
       az: this.props.targetPointingAz,
       el: this.props.targetPointingEl,
