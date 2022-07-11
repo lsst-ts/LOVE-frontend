@@ -22,6 +22,12 @@ export const LOG_TYPE_OPTIONS = [
 ];
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 
+export const exposureFlagStateToStyle = {
+  none: 'ok',
+  junk: 'warning',
+  questionable: 'alert',
+};
+
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Auxiliary Telescope': {

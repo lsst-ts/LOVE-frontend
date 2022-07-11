@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
-import { EXPOSURE_FLAG_OPTIONS } from 'Config';
+import { EXPOSURE_FLAG_OPTIONS, exposureFlagStateToStyle } from 'Config';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
@@ -35,12 +35,7 @@ export default class MessageEdit extends Component {
   };
 
   statusFlag(flag) {
-    const result = {
-      none: 'ok',
-      junk: 'warning',
-      questionable: 'alert',
-    };
-    return result[flag] ? result[flag] : 'unknown';
+    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
   }
 
   constructor(props) {
