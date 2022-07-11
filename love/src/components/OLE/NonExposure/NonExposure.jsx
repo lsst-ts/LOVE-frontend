@@ -77,13 +77,11 @@ export default class NonExposure extends Component {
   }
 
   refreshLogsRemove(nonExposure) {
-    console.log('refreshLogsRemove', nonExposure);
     const logs = this.state.logs.filter((log) => log.id !== nonExposure.id);
     this.setState({logs});
   }
 
   refreshLogs(nonExposure) {
-    console.log('refreshLogs', nonExposure);
     const logs = this.state.logs.filter((log) => log.id !== this.state.selected.id);
     this.setState({
       logs: [nonExposure, ...logs],
