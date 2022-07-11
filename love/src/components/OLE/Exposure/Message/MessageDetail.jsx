@@ -6,6 +6,7 @@ import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import { openInNewTab, getLinkJira, getFileURL, getFilename } from 'Utils';
+import { exposureFlagStateToStyle } from 'Config';
 import styles from './Message.module.css';
 
 export default class MessageDetail extends Component {
@@ -29,12 +30,7 @@ export default class MessageDetail extends Component {
   };
 
   statusFlag(flag) {
-    const result = {
-      none: 'ok',
-      junk: 'warning',
-      questionable: 'alert',
-    };
-    return result[flag] ? result[flag] : 'unknown';
+    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
   }
 
   render() {
