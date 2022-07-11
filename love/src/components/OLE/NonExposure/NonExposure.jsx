@@ -23,9 +23,29 @@ import { CSVLink, CSVDownload } from 'react-csv';
 const moment = extendMoment(Moment);
 
 export default class NonExposure extends Component {
-  static propTypes = {};
+  static propTypes = {
+    selectedDateStart: PropTypes.string,
+    selectedDateEnd: PropTypes.string,
+    handleDateTimeRange: PropTypes.func,
+    selectedCommentType: PropTypes.object,
+    changeCommentTypeSelect: PropTypes.func,
+    selectedSubsystem: PropTypes.string,
+    changeSubsystemSelect: PropTypes.func,
+    selectedObsTimeLoss: PropTypes.boolean,
+    changeObsTimeLossSelect: PropTypes.func,
+  };
 
-  static defaultProps = {};
+  static defaultProps = {
+    selectedDateStart: null,
+    selectedDateEnd: null,
+    handleDateTimeRange: () => {console.log('defaultProps.handleDateTimeRange')},
+    selectedCommentType: 'all',
+    changeCommentTypeSelect: () => {console.log('defaultProps.changeCommentTypeSelect')},
+    selectedSubsystem: 'all',
+    changeSubsystemSelect: () => {console.log('defaultProps.changeSubsystemSelect')},
+    selectedObsTimeLoss: false,
+    changeObsTimeLossSelect: () => {console.log('defaultProps.changeObsTimeLossSelect')},
+  };
 
   constructor(props) {
     super(props);
@@ -33,21 +53,9 @@ export default class NonExposure extends Component {
       modeView: false,
       modeEdit: false,
       selected: null,
-      selectedDateStart: null,
-      selectedDateEnd: null,
-      selectedCommentType: { value: 'All', label: 'All comment types' },
-      selectedSubsystem: 'All',
-      selectedObsTimeLoss: false,
       logs: [],
+      range: [],
     };
-  }
-
-  handleDateTimeRange(date, type) {
-    if (type === 'start') {
-      this.setState({ selectedDateStart: date });
-    } else if (type === 'end') {
-      this.setState({ selectedDateEnd: date });
-    }
   }
 
   view(index) {
@@ -211,6 +219,15 @@ export default class NonExposure extends Component {
     ManagerInterface.getListMessagesNarrativeLogs().then((data) => {
       this.setState({ logs: data });
     });
+    this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.selectedDateStart !== this.props.selectedDateStart ||
+      prevProps.selectedDateEnd !== this.props.selectedDateEnd
+    ) {
+      this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+    }
   }
 
   render() {
@@ -221,23 +238,23 @@ export default class NonExposure extends Component {
     let filteredData = this.state.logs;
 
     // Filter by date range
-    const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
+    const range = this.state.range;
     filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added)));
 
     // Filter by type
     filteredData =
-      this.state.selectedCommentType?.value !== 'All'
-        ? filteredData.filter((log) => log.level === this.state.selectedCommentType.value)
+      this.props.selectedCommentType?.value !== 'all'
+        ? filteredData.filter((log) => log.level === this.props.selectedCommentType.value)
         : filteredData;
 
     // Filter by subsystem
     filteredData =
-      this.state.selectedSubsystem !== 'All'
-        ? filteredData.filter((log) => getOLEDataFromTags(log.tags).subsystem === this.state.selectedSubsystem)
+      this.props.selectedSubsystem !== 'all'
+        ? filteredData.filter((log) => getOLEDataFromTags(log.tags).subsystem === this.props.selectedSubsystem)
         : filteredData;
 
     // Filter by obs time loss
-    filteredData = this.state.selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
+    filteredData = this.props.selectedObsTimeLoss ? filteredData.filter((log) => log.time_lost > 0) : filteredData;
 
     const tableData = filteredData;
 
@@ -245,13 +262,13 @@ export default class NonExposure extends Component {
     const logExampleKeys = Object.keys(logExample ?? {});
     const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
 
-    const commentTypeOptions = [{ label: 'All comment types', value: 'All' }, ...LOG_TYPE_OPTIONS];
-    const selectedCommentType = this.state.selectedCommentType;
+    const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
+    const selectedCommentType = this.props.selectedCommentType;
 
-    const subsystemOptions = [{ label: 'All subsystems', value: 'All' }, ...Object.keys(CSCSummaryHierarchy)];
-    const selectedSubsystem = this.state.selectedSubsystem;
+    const subsystemOptions = [{ label: 'All subsystems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
+    const selectedSubsystem = this.props.selectedSubsystem;
 
-    const selectedObsTimeLoss = this.state.selectedObsTimeLoss;
+    const selectedObsTimeLoss = this.props.selectedObsTimeLoss;
 
     return modeView && !modeEdit ? (
       <NonExposureDetail
@@ -270,7 +287,6 @@ export default class NonExposure extends Component {
     ) : modeEdit && !modeView ? (
       <NonExposureEdit
         back={() => {
-          // TODO: if log is created add it to state.logs
           this.setState({ modeView: false, modeEdit: false });
         }}
         logEdit={this.state.selected}
@@ -287,23 +303,23 @@ export default class NonExposure extends Component {
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
           <DateTimeRange
-            onChange={(date, type) => this.handleDateTimeRange(date, type)}
+            onChange={(date, type) => this.props.handleDateTimeRange(date, type)}
             label="From:"
-            startDate={new Date() - 24 * 30 * 60 * 60 * 1000}
-            endDate={new Date(Date.now())}
+            startDate={this.props.selectedDateStart}
+            endDate={this.props.selectedDateEnd}
           />
 
           <Select
             options={commentTypeOptions}
             option={selectedCommentType}
-            onChange={(value) => this.setState({ selectedCommentType: value })}
+            onChange={(value) => this.props.changeCommentTypeSelect(value)}
             className={styles.select}
           />
 
           <Select
             options={subsystemOptions}
             option={selectedSubsystem}
-            onChange={({ value }) => this.setState({ selectedSubsystem: value })}
+            onChange={({ value }) => this.props.changeSubsystemSelect(value)}
             className={styles.select}
           />
 
@@ -312,7 +328,7 @@ export default class NonExposure extends Component {
             <Input
               type="checkbox"
               checked={selectedObsTimeLoss}
-              onChange={(event) => this.setState({ selectedObsTimeLoss: event.target.checked })}
+              onChange={(event) => this.props.changeObsTimeLossSelect(event.target.checked)}
             />
           </div>
 
