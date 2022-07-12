@@ -197,6 +197,8 @@ export default class ExposureDetail extends Component {
     const logExampleKeys = Object.keys(logExample ?? {});
     const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
 
+    const duration = Moment(logDetail.timespan_end).diff(Moment(logDetail.timespan_begin), 'seconds', true);
+
     return (
       <>
         <div className={styles.returnToLogs}>
@@ -211,7 +213,7 @@ export default class ExposureDetail extends Component {
         </div>
         <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
-            <span>{logDetail.obs_id}</span>
+            <span>{logDetail.obs_id} - Exp. Time: {duration}</span>
             <span className={styles.floatRight}>
               <Button
                 className={styles.iconBtn}
