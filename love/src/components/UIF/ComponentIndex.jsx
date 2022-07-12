@@ -274,6 +274,16 @@ export const mainIndex = {
       },
     },
   },
+  MTDome: {
+    component: require('../MainTel/MTDome/MTDome.container').default,
+    schema: {
+      ...require('../MainTel/MTDome/MTDome.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTDome/MTDome.container').schema.props,
+      },
+    },
+  },
 };
 
 export const authlistIndex = {

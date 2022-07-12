@@ -1,0 +1,278 @@
+.domeContainer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  overflow: auto;
+}
+
+.skymapGridContainer {
+  display: flex;
+  align-self: center;
+  flex-wrap: wrap;
+  position: relative;
+  width: 70%;
+  max-width: 700px;
+}
+
+.skymapGridContainer svg {
+  vertical-align: top;
+  margin: auto;
+  height: auto;
+}
+
+.skymapContainer h2 {
+  text-align: left;
+}
+
+.topRow {
+  row-gap: 2em;
+  padding: 1em 0;
+  grid-template-columns: minmax(0, 1fr) minmax(22em, 24em);
+}
+
+.svgOverlay {
+  position: absolute;
+  left: calc(50% - 130px);
+  top: 5%;
+  width: auto;
+  overflow: visible;
+}
+
+.svgOverlay .rotatingDome {
+  transition: transform 1.5s linear;
+}
+
+.svgOverlay .currentPointing {
+  transition: transform 1.5s linear;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  fill-opacity: 0.3;
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
+}
+
+.svgOverlay .targetPointing {
+  fill: none;
+  stroke-dasharray: '4';
+  stroke-opacity: '0.3';
+  stroke: 'white';
+}
+
+.svgOverlay rect {
+  transition: x 0.5s, width 0.5s;
+}
+
+.svgLouvers {
+  position: absolute;
+  left: calc(50% - 308px);
+  top: 60%;
+  width: auto;
+}
+
+.svgLouvers .rotatingDome {
+  transition: transform 1.5s linear;
+}
+
+.svgOverlay .currentPointing {
+  transition: transform 1.5s linear;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  fill-opacity: 0.3;
+  fill: var(--status-running-color);
+  stroke: var(--status-running-color);
+}
+
+.svgOverlay .targetPointing {
+  fill: none;
+  stroke-dasharray: 4;
+  stroke-opacity: 0.3;
+  stroke: white;
+}
+
+.svgLouvers rect {
+  transition: x 0.5s, width 0.5s;
+}
+
+.telemetryTable {
+  display: grid;
+  padding-top: 1em;
+  grid-row-gap: 0.5em;
+  width: 100%;
+  overflow: hidden;
+  grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+  grid-template-rows: max-content 1fr;
+}
+
+.telemetryTable h2 {
+  margin-bottom: 0;
+  font-size: var(--font-size-mediun);
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--base-font-color);
+}
+
+.azimuthValues {
+  display: grid;
+  grid-template-columns: max-content 8em;
+  grid-row-gap: 0.5em;
+  align-items: center;
+  justify-content: center;
+}
+
+.windRoseContainer {
+  position: absolute;
+  left: 3%;
+  top: 1%;
+  width: 4%;
+}
+
+.vignettingDistanceContainer {
+  position: absolute;
+  left: 50%;
+  bottom: 2%;
+  transform: translate(-50%, 0);
+}
+
+.vignettingDistanceContainer .value {
+  color: var(--base-font-color);
+}
+
+.innerDome {
+  fill: var(--second-tertiary-background-color);
+  fill-opacity: 0.6;
+  stroke: var(--second-primary-background-color);
+  stroke-width: 2;
+}
+
+.mountTop {
+  stroke: var(--default-active-background-color);
+  fill: var(--second-quaternary-background-dimmed-color);
+}
+
+.divDome {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  padding-bottom: 50px;
+}
+
+.divSummaryTable {
+  margin-left: auto;
+  margin-right: 0;
+  height: auto;
+}
+
+.divDomeLouvers {
+  position: relative;
+  width: 100%;
+}
+
+/* shutter svg styles */
+.shutterCommanded {
+  fill: none;
+  stroke: #788e9b;
+  stroke-dasharray: 6;
+}
+.shutterCommanded,
+.shutter2,
+.shutter4,
+.shutter5,
+.shutter6 {
+  stroke-miterlimit: 10;
+}
+.shutter2 {
+  fill: #182e39;
+}
+.shutter2,
+.shutter4 {
+  stroke: #27434f;
+  stroke-width: 2px;
+}
+.shutter3 {
+  fill: #27434f;
+}
+.shutter4 {
+  fill: #15242d;
+}
+.shutter {
+  fill: #788e9b;
+  fill-opacity: 0.2;
+  stroke: #fff;
+}
+.shutter6 {
+  fill: #36d0e7;
+  fill-opacity: 0.3;
+  stroke: #36d0e7;
+}
+
+/* louvers svg styles */
+.louver1,
+.louver2 {
+  fill: #15242d;
+  stroke: #182e39;
+}
+.louver1,
+.louver3,
+.louver4,
+.louver5,
+.louver9 {
+  stroke-miterlimit: 10;
+}
+.louver1,
+.louver2,
+.louver3,
+.louver4 {
+  stroke-width: 2px;
+}
+.louver2 {
+  stroke-linejoin: round;
+}
+.louver3 {
+  fill: #182e39;
+}
+.louver3,
+.louver4 {
+  stroke: #27434f;
+}
+.louver4 {
+  fill: #27434f;
+}
+.louver5 {
+  fill: none;
+  stroke: #788e9b;
+  stroke-dasharray: 6;
+}
+.louver6 {
+  opacity: 0.5;
+}
+.louver7 {
+  font-size: 10px;
+  fill: #788f9b;
+  font-family: Montserrat-Bold, Montserrat;
+  font-weight: 700;
+}
+.louver8,
+.louver9 {
+  fill: #fff;
+}
+.louver9 {
+  fill-opacity: 0.2;
+  stroke: #fff;
+}
+
+.firstColumn {
+  width: 60px !important;
+}
+
+.columns {
+  text-align: center !important;
+  width: 70px;
+}
+
+.plotSection {
+  grid-row-gap: 0.5em;
+  display: grid;
+  grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+  grid-template-rows: max-content 1fr;
+  margin-bottom: calc(2 * var(--content-padding));
+}

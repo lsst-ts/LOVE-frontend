@@ -533,6 +533,122 @@ export const hexapodConnectedStatetoStyle = {
   CONNECTED: 'ok',
 };
 
+// MTDome
+export const mtdomeStatusStatetoStyle = {
+  UNKNOWN: 'undefined',
+  DISABLED: 'disabled',
+  ENABLED: 'enabled',
+  FAULT: 'fault',
+  OFFLINE: 'offline',
+  STANDBY: 'standby',
+};
+
+export const mtDomeModeStateMap = {
+  0: 'DEGRADED',
+  1: 'NORMAL',
+};
+
+export const mtDomeModeStatetoStyle = {
+  DEGRADED: 'warning',
+  NORMAL: 'ok',
+};
+
+export const mtDomeAzimuthEnabledStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtDomeAzimuthEnabledStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
+};
+
+export const mtdomeMotionStateMap = {
+  0: 'CLOSED',
+  1: 'CRAWLING',
+  2: 'MOVING',
+  3: 'OPEN',
+  4: 'PARKED',
+  5: 'PARKING',
+  6: 'STOPPED',
+  7: 'STOPPING',
+  8: 'STOPPING BRAKING',
+  9: 'STOPPED BRAKED',
+  10: 'BRAKES DISENGAGED',
+  11: 'BRAKES ENGAGED',
+  12: 'DEFLATED',
+  13: 'DEFLATING',
+  14: 'DISABLING MOTOR POWER',
+  15: 'DISENGAGING BRAKES',
+  16: 'ENABLING MOTOR POWER',
+  17: 'ENGAGING BRAKES',
+  18: 'GO DEGRADED',
+  19: 'GO NORMAL',
+  20: 'GO STATIONARY',
+  21: 'INFLATED',
+  22: 'INFLATING',
+  23: 'LP DISENGAGED',
+  24: 'LP DISENGAGING',
+  25: 'LP ENGAGED',
+  26: 'LP ENGAGING',
+  27: 'MOTOR COOLING OFF',
+  28: 'MOTOR COOLING ON',
+  29: 'MOTOR POWER OFF',
+  30: 'MOTOR POWER ON',
+  31: 'STARTING MOTOR COOLING',
+  32: 'STOPPING MOTOR COOLING',
+};
+
+export const mtdomeMotionStatetoStyle = {
+  CLOSED: 'undefined',
+  CRAWLING: 'warning',
+  MOVING: 'warning',
+  OPEN: 'ok',
+  PARKED: 'ok',
+  PARKING: 'warning',
+  STOPPED: 'ok',
+  STOPPING: 'warning',
+  'STOPPING BRAKING': 'warning',
+  'STOPPED BRAKED': 'ok',
+  'BRAKES DISENGAGED': 'ok',
+  'BRAKES ENGAGED': 'alert',
+  DEFLATED: 'undefined',
+  DEFLATING: 'warning',
+  'DISABLING MOTOR POWER': 'warning',
+  'DISENGAGING BRAKES': 'warning',
+  'ENABLING MOTOR POWER': 'warning',
+  'ENGAGING BRAKES': 'warning',
+  'GO DEGRADED': 'warning',
+  'GO NORMAL': 'ok',
+  'GO STATIONARY': 'ok',
+  INFLATED: 'ok',
+  INFLATING: 'warning',
+  'LP DISENGAGED': 'undefined',
+  'LP DISENGAGING': 'warning',
+  'LP ENGAGED': 'ok',
+  'LP ENGAGING': 'warning',
+  'MOTOR COOLING OFF': 'undefined',
+  'MOTOR COOLING ON': 'ok',
+  'MOTOR POWER OFF': 'undefined',
+  'MOTOR POWER ON': 'ok',
+  'STARTING MOTOR COOLING': 'warning',
+  'STOPPING MOTOR COOLING': 'warning',
+};
+
+export const mtdomeElevationEnabledStateToMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtdomeElevationEnabledStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
+};
+
 /**
  * Available commands in the TCS and their parameters. Each command is represented
  * as a dictionary key and their parameters as the values of said dictionary.
@@ -961,3 +1077,55 @@ export const M1M3HardpointPositions = [
   { id: 5, actuator: { position: [1.0922e2, 0] }, mini: { position: [99.19, 64.05] } },
   { id: 6, actuator: { position: [5.6794e1, -9.0804e1] }, mini: { position: [80.62, 32.53] } },
 ];
+
+// Louvers map for MTDome
+export const MTDomeLouversMapAF = [
+  'A1',
+  'A2',
+  'B1',
+  'B2',
+  'B3',
+  'C1',
+  'C2',
+  'C3',
+  'D1',
+  'D2',
+  'D3',
+  'E1',
+  'E2',
+  'E3',
+  'F1',
+  'F2',
+  'F3',
+];
+
+export const MTDomeLouversMapGN = [
+  'G1',
+  'G2',
+  'G3',
+  'H1',
+  'H2',
+  'H3',
+  'I1',
+  'I2',
+  'I3',
+  'L1',
+  'L2',
+  'L3',
+  'M1',
+  'M2',
+  'M3',
+  'N1',
+  'N2',
+];
+
+export const MTMountLimits = {
+  elevation: {
+    min: 0,
+    max: 90,
+  },
+  azimuth: {
+    min: -270,
+    max: 270,
+  },
+};

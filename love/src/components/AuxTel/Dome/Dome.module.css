@@ -59,9 +59,9 @@
 
 .svgOverlay .targetPointing {
   fill: none;
-  stroke-dasharray: '4';
-  stroke-opacity: '0.3';
-  stroke: 'white';
+  stroke-dasharray: 4;
+  stroke-opacity: 0.3;
+  stroke: white;
 }
 
 .svgOverlay rect {
