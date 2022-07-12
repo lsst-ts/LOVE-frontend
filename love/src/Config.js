@@ -298,9 +298,9 @@ export const m3RotatorStateMap = {
 };
 
 export const m3PortSelectedStateMap = {
-  1: 'NASMITH1',
-  2: 'NASMITH2',
-  3: 'PORT3',
+  6: 'NASMITH1',
+  7: 'NASMITH2',
+  8: 'PORT3',
   0: 'UNKNOWN',
 };
 
