@@ -308,6 +308,17 @@ export const m3InPositionStateMap = {
   0: 'UNKNOWN',
 };
 
+// ATAOS
+export const ataosCorrectionsStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const ataosCorrectionsStateToStyle = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+};
+
 // ATPneumatics
 export const m1CoverStateStateMap = {
   1: 'DISABLED',

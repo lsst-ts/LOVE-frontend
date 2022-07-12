@@ -15,6 +15,10 @@
   margin-right: 0.5em;
 }
 
+.checkboxInput {
+  width: 5ch;
+}
+
 .select {
   width: 30ch;
   margin-right: 0.5em;
