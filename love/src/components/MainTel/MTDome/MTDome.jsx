@@ -4,6 +4,7 @@ import MTDomeShutter from './MTDomeShutter';
 import MTDomeLouvers from './MTDomeLouvers';
 import MTDomePointing from './MTDomePointing';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
+import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import WindRose from '../../icons/WindRose/WindRose';
 import MTDomeSummaryTable from './MTDomeSummaryTable/MTDomeSummaryTable';
 import styles from './MTDome.module.css';
@@ -48,6 +49,75 @@ const defaultValuesGN = {
   M3: '0',
   N1: '0',
   N2: '0',
+};
+
+const azimuthPlotInputs = {
+  'Dome Azimuth': {
+    category: 'telemetry',
+    csc: 'MTDome',
+    salindex: 0,
+    topic: 'azimuth',
+    item: 'positionActual',
+    type: 'line',
+    accessor: (x) => x,
+    color: 'hsl(201, 70%, 40%)',
+  },
+  'Dome Target Az': {
+    category: 'telemetry',
+    csc: 'MTDome',
+    salindex: 0,
+    topic: 'azimuth',
+    item: 'positionCommanded',
+    type: 'line',
+    accessor: (x) => x,
+    color: 'hsl(201, 70%, 40%)',
+    dash: [4, 1],
+  },
+  'Mount Azimuth': {
+    category: 'telemetry',
+    csc: 'MTMount',
+    salindex: 0,
+    topic: 'azimuth',
+    item: 'actualPosition',
+    type: 'line',
+    accessor: (x) => x,
+    color: 'hsl(160, 70%, 40%)',
+  },
+  'Mount Target': {
+    category: 'telemetry',
+    csc: 'MTMount',
+    salindex: 0,
+    topic: 'azimuth',
+    item: 'demandPosition',
+    type: 'line',
+    accessor: (x) => x,
+    color: 'hsl(160, 70%, 40%)',
+    dash: [4, 1],
+  },
+};
+
+const elevationPlotInputs = {
+  'Mount elevation': {
+    category: 'telemetry',
+    csc: 'MTMount',
+    salindex: '0',
+    topic: 'elevation',
+    item: 'actualPosition',
+    type: 'line',
+    accessor: (x) => x,
+    color: 'hsl(201, 70%, 40%)',
+  },
+  'Mount target': {
+    category: 'telemetry',
+    csc: 'MTMount',
+    salindex: '0',
+    topic: 'elevation',
+    item: 'demandPosition',
+    type: 'line',
+    accessor: (x) => x,
+    color: 'white',
+    dash: [4, 1],
+  },
 };
 
 export default class MTDome extends Component {
@@ -152,6 +222,8 @@ export default class MTDome extends Component {
         },
       ],
     };
+    this.azimuthPlotRef = React.createRef();
+    this.elevationPlotRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -419,9 +491,6 @@ export default class MTDome extends Component {
     const width = this.props.width;
     const height = this.props.height;
 
-    const widthLouvers = this.props.widthLouvers;
-    const heightLouvers = this.props.heightLouvers;
-
     //SummaryPanel
     const trackID = this.props.trackId;
     const mtdomeSummaryState = this.props.mtdomeSummaryState;
@@ -512,6 +581,31 @@ export default class MTDome extends Component {
                 positionCommandedShutter={positionCommandedShutter}
                 currentPointing={currentPointing}
                 targetPointing={targetPointing}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.plotSection}>
+          <div>
+            <div>Azimuth</div>
+            <div ref={this.azimuthPlotRef}>
+              <PlotContainer
+                inputs={azimuthPlotInputs}
+                containerNode={this.azimuthPlotRef?.current}
+                xAxisTitle="Time"
+                yAxisTitle="Azimuth"
+              />
+            </div>
+          </div>
+          <div>
+            <div>Elevation</div>
+            <div ref={this.elevationPlotRef}>
+              <PlotContainer
+                inputs={elevationPlotInputs}
+                containerNode={this.elevationPlotRef?.current}
+                xAxisTitle="Time"
+                yAxisTitle="Elevation"
               />
             </div>
           </div>

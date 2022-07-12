@@ -268,3 +268,11 @@
   text-align: center !important;
   width: 70px;
 }
+
+.plotSection {
+  grid-row-gap: 0.5em;
+  display: grid;
+  grid-template-columns: minmax(350px, 1fr) minmax(350px, 1fr);
+  grid-template-rows: max-content 1fr;
+  margin-bottom: calc(2 * var(--content-padding));
+}

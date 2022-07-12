@@ -112,6 +112,8 @@ const mapDispatchToProps = (dispatch) => {
     'telemetry-MTDome-0-azimuth',
     'telemetry-MTDome-0-lightWindScreen',
     'telemetry-MTDome-0-louvers',
+    'telemetry-MTMount-0-azimuth',
+    'telemetry-MTMount-0-elevation',
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
     'event-MTDome-0-azTarget',
@@ -119,7 +121,6 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTDome-0-elMotion',
     'event-MTDome-0-elTarget',
     'event-MTDome-0-operationalMode',
-    'event-MTMount-0-target',
     'event-MTMount-0-target',
   ];
   return {
