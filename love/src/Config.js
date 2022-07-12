@@ -1323,4 +1323,18 @@ export const MTMountLimits = {
   },
 };
 // GIS
-export const signals = {};
+export const signals = {
+  fireProtectionSystem: {
+    fireSignal: {
+      level: false,
+      effects: ['fireIndication'],
+    },
+  },
+};
+
+export const effects = {
+  globalInterlockSystem: {
+    level: false,
+    effets: ['fireIndication'],
+  },
+};
