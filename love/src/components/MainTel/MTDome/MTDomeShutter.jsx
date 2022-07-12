@@ -78,7 +78,7 @@ export default class MTDomeShutter extends Component {
             points="198.99 268.49 263.08 184.54 264.7 130.71 243.34 78.25 192.51 33.49 109.48 33.49 58.65 78.25 37.28 130.71 38.91 184.54 102.99 268.49 198.99 268.49"
           />
           <rect className={styles.shutter2} x="110.69" y="38.59" width="81.08" height="145.13" />
-          <rect class={styles.shutter3} x="110.69" y="38.59" width="81.08" height="145.13" />
+          <rect className={styles.shutter3} x="110.69" y="38.59" width="81.08" height="145.13" />
           <rect
             className={styles.shutter2}
             x="148.97"

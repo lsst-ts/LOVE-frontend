@@ -58,7 +58,7 @@ const ProgressBar = (props) => {
         <span style={labelStyles}>{`${completedValue}%`}</span>
       </div>
       <div ref={ref} style={containerStyles}>
-        <svg width={width - 2 * padding} height={height} style={progressCommandedLine}>
+        <svg width={width > 0 ? width - 2 * padding : 0} height={height} style={progressCommandedLine}>
           <line
             style={targetValueLine}
             x1={targetValuePixels}

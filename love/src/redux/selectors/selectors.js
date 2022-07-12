@@ -746,33 +746,15 @@ export const getDomeStatus = (state) => {
   ];
   const domeStatus = getStreamsData(state, subscriptions);
   return {
-    trackId: domeStatus['event-MTMount-0-logevent_target']
-      ? domeStatus['event-MTMount-0-logevent_target'].trackId.value
-      : 0,
-    mtdomeSummaryState: domeStatus['event-MTDome-0-summaryState']
-      ? domeStatus['event-MTDome-0-summaryState'].summaryState.value
-      : 0,
-    azimuthDomeState: domeStatus['event-MTDome-0-logevent_azEnabled']
-      ? domeStatus['event-MTDome-0-logevent_azEnabled'].state.value
-      : 0,
-    azimuthDomeMotion: domeStatus['event-MTDome-0-logevent_azMotion']
-      ? domeStatus['event-MTDome-0-logevent_azMotion'].state.value
-      : 0,
-    azimuthDomeTarget: domeStatus['event-MTDome-0-logevent_azTarget']
-      ? domeStatus['event-MTDome-0-logevent_azTarget'].position.value
-      : 0,
-    elevationDomeState: domeStatus['event-MTDome-0-logevent_elEnabled']
-      ? domeStatus['event-MTDome-0-logevent_elEnabled'].state.value
-      : 0,
-    elevationDomeMotion: domeStatus['event-MTDome-0-logevent_elMotion']
-      ? domeStatus['event-MTDome-0-logevent_elMotion'].state.value
-      : 0,
-    elevationDomeTarget: domeStatus['event-MTDome-0-logevent_elTarget']
-      ? domeStatus['event-MTDome-0-logevent_elTarget'].position.value
-      : 0,
-    modeDomeStatus: domeStatus['event-MTDome-0-logevent_operationalMode']
-      ? domeStatus['event-MTDome-0-logevent_operationalMode'].operationalMode.value
-      : 0,
+    trackId: domeStatus['event-MTMount-0-logevent_target']?.[0]?.trackId?.value ?? 0,
+    mtdomeSummaryState: domeStatus['event-MTDome-0-summaryState']?.[0]?.summaryState?.value ?? 0,
+    azimuthDomeState: domeStatus['event-MTDome-0-logevent_azEnabled']?.[0]?.state?.value ?? 0,
+    azimuthDomeMotion: domeStatus['event-MTDome-0-logevent_azMotion']?.[0]?.state?.value ?? 0,
+    azimuthDomeTarget: domeStatus['event-MTDome-0-logevent_azTarget']?.[0]?.position?.value ?? 0,
+    elevationDomeState: domeStatus['event-MTDome-0-logevent_elEnabled']?.[0]?.state?.value ?? 0,
+    elevationDomeMotion: domeStatus['event-MTDome-0-logevent_elMotion']?.[0]?.state?.value ?? 0,
+    elevationDomeTarget: domeStatus['event-MTDome-0-logevent_elTarget']?.[0]?.position?.value ?? 0,
+    modeDomeStatus: domeStatus['event-MTDome-0-logevent_operationalMode']?.[0]?.operationalMode?.value ?? 0,
   };
 };
 
