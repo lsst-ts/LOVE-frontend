@@ -1322,3 +1322,5 @@ export const MTMountLimits = {
     max: 270,
   },
 };
+// GIS
+export const signals = {};
