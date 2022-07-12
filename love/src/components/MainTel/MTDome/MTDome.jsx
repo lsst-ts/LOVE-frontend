@@ -122,9 +122,8 @@ export default class MTDome extends Component {
     targetPointingAz: 0,
     currentPointingEl: 90,
     targetPointingEl: 0,
-    width: 300,
-    height: 300,
-    widthLouvers: 300,
+    width: 350,
+    height: 350,
     heightLouvers: 400,
     isProjected: true,
   };

@@ -26,8 +26,8 @@ export default class MTDomeShutter extends Component {
     targetPointingAz: 0,
     targetPointingEl: 0,
     azelToPixel: () => {},
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
     isProjected: true,
   };
 
