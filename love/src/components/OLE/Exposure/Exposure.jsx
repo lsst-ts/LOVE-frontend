@@ -103,6 +103,18 @@ export default class Exposure extends Component {
         className: styles.tableHead,
       },
       {
+        field: 'duration',
+        title: 'Duration [sec]',
+        type: 'timestamp',
+        className: styles.tableHead,
+        render: (_, row) => {
+          const start = Moment(row['timespan_begin']);
+          const end = Moment(row['timespan_end']);
+          const duration_s = end.diff(start, 'seconds', true);
+          return duration_s;
+        }
+      },
+      {
         field: 'instrument',
         title: 'Instrument',
         type: 'string',
@@ -119,7 +131,7 @@ export default class Exposure extends Component {
         title: 'Flags',
         type: 'string',
         className: styles.tableHead,
-        render: (value, row) => {
+        render: (value, _) => {
           const values = String(value).split(',');
           return values.map((val) => {
             return (
