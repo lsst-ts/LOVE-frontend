@@ -213,7 +213,7 @@ export default class ExposureDetail extends Component {
         </div>
         <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
-            <span>{logDetail.obs_id} - Exp. Time: {duration}</span>
+            <span>{logDetail.obs_id} - Duration: {duration}</span>
             <span className={styles.floatRight}>
               <Button
                 className={styles.iconBtn}
