@@ -168,6 +168,16 @@ export const observatoryIndex = {
     component: require('../Time/TimeDisplay.container').default,
     schema: require('../Time/TimeDisplay.container').schema,
   },
+  GenericCameraControls: {
+    component: require('../GenericCamera/GenericCameraControls.container').default,
+    schema: {
+      ...require('../GenericCamera/GenericCameraControls.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../GenericCamera/GenericCameraControls.container').schema.props,
+      },
+    },
+  },
 };
 
 export const auxtelIndex = {
