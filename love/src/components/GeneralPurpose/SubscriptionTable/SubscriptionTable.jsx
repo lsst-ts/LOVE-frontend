@@ -114,7 +114,7 @@ export default class SubscriptionTable extends Component {
               <React.Fragment key={cscKey}>
                 <Title>{cscKey}</Title>
                 {this.state.subscriptionsDict[cscKey].map((topicKey) => {
-                  const topicFilter = this.state.topicFilter === '' || this.state.topicRegExp.test(topicKey);
+                  const topicFilter = this.state.topicFilter === '' || this.state.topicRegExp?.test(topicKey);
                   if (!topicFilter) return null;
                   const [type, topic] = topicKey.split('-');
                   const groupKey = [type, cscKey, topic].join('-');
@@ -130,7 +130,7 @@ export default class SubscriptionTable extends Component {
                       </SubTitle>
                       {dictKeys.length > 0
                         ? dictKeys.map((key) => {
-                            const itemFilter = this.state.itemFilter === '' || this.state.topicRegExp.test(key);
+                            const itemFilter = this.state.itemFilter === '' || this.state.itemRegExp?.test(key);
                             const emptyField = this.state.itemFilter !== '' && dict[key] === '';
                             if (!itemFilter || emptyField) return null;
                             return (
