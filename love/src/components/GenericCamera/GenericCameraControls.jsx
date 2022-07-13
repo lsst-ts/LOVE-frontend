@@ -21,6 +21,21 @@ GenericCameraControls.defaultProps = {
 export default function GenericCameraControls({ salIndex, requestSALCommand }) {
   const runCommand = (isLatched) => {
     console.log('State:', isLatched);
+    if (isLatched) {
+      requestSALCommand({
+        cmd: 'cmd_startLiveView',
+        csc: 'GenericCamera',
+        salindex: salIndex,
+        params: { expTime: 5 },
+      });
+    } else {
+      requestSALCommand({
+        cmd: 'cmd_stopLiveView',
+        csc: 'GenericCamera',
+        salindex: salIndex,
+        params: {},
+      });
+    }
   };
 
   return (
