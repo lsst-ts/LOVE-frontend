@@ -1,0 +1,40 @@
+.buttonWrapper {
+  height: 200px;
+  width: 200px;
+  text-align: center;
+}
+
+.button {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 0;
+  padding: 16px;
+  cursor: pointer;
+  background: var(--status-alert-color);
+}
+
+.button:hover {
+  background: var(--status-alert-dimmed-color-2);
+}
+
+.button[disabled] {
+  cursor: not-allowed;
+  background: var(--status-alert-dimmed-color-2);
+}
+
+.svg {
+  height: 100px;
+  width: 100px;
+}
+
+.buttonLabel {
+  display: block;
+  padding: 0.5em 1em;
+  color: white;
+  font-size: var(--font-size-large);
+}
+
+.cls-1 {
+  fill: #fbe6dd;
+}
