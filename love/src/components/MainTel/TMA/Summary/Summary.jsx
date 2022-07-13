@@ -130,8 +130,8 @@ export default class Summary extends Component {
           </Value>
           <Label>
             <CurrentTargetValue
-              currentValue={azimuthActualPosition}
-              targetValue={azimuthDemandPosition}
+              currentValue={azimuthActualPosition.toFixed(2)}
+              targetValue={azimuthDemandPosition.toFixed(2)}
               isChanging={true}
             />
           </Label>
@@ -173,8 +173,8 @@ export default class Summary extends Component {
           </Value>
           <Label>
             <CurrentTargetValue
-              currentValue={elevationActualPosition}
-              targetValue={elevationDemandPosition}
+              currentValue={elevationActualPosition.toFixed(2)}
+              targetValue={elevationDemandPosition.toFixed(2)}
               isChanging={true}
             />
           </Label>
