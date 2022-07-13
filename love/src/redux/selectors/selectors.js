@@ -189,6 +189,113 @@ export const getM1M3State = (state) => {
   };
 };
 
+// MTM2 selectors
+export const getM2State = (state) => {
+  const subscriptions = [
+    'event-MTM2-0-summaryState',
+    'event-MTM2-0-commandableByDDS',
+    'event-MTM2-0-forceBalanceSystemStatus',
+    'event-MTM2-0-m2AssemblyInPosition',
+  ];
+  const m2Data = getStreamsData(state, subscriptions);
+  return {
+    summaryState: m2Data['event-MTM2-0-summaryState']?.[0].summaryState?.value ?? 0,
+    commandableByDDS: m2Data['event-MTM2-0-commandableByDDS']?.[0].state?.value ?? false,
+    forceBalanceSystemStatus: m2Data['event-MTM2-0-forceBalanceSystemStatus']?.[0].status?.value ?? false,
+    m2AssemblyInPosition: m2Data['event-MTM2-0-m2AssemblyInPosition']?.[0].state?.value ?? false,
+  };
+};
+
+export const getM2Inclinometer = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-zenithAngle',
+    'event-MTM2-0-inclinationTelemetrySource',
+  ];
+  const m2InclinometerData = getStreamsData(state, subscriptions);
+  return {
+    zenithAngleMeasured: m2InclinometerData['telemetry-MTM2-0-zenithAngle']?.measured?.value ?? 0,
+    inclinationTelemetrySource: m2InclinometerData['event-MTM2-0-inclinationTelemetrySource']?.[0].source?.value ?? 1,
+  };
+};
+
+export const getM2Actuator = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-ilcData',
+    'telemetry-MTM2-0-axialActuatorSteps',
+    'telemetry-MTM2-0-axialEncoderPositions',
+    'telemetry-MTM2-0-tangentActuatorSteps',
+    'telemetry-MTM2-0-tangentEncoderPositions',
+  ];
+  const m2ActuatorsData = getStreamsData(state, subscriptions);
+  return {
+    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ??
+      Array(78).fill(0),
+    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ??
+      Array(72).fill(0),
+    axialEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ??
+      Array(72).fill(0),
+    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ??
+      Array(6).fill(0),
+    tangentEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ??
+      Array(6).fill(0),
+  };
+};
+
+export const getM2ActuatorForce = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-axialForce',
+    'telemetry-MTM2-0-tangentForce',
+  ];
+  const m2ActuatorsData = getStreamsData(state, subscriptions);
+  return {
+    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ??
+      Array(72).fill(0),
+    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ??
+      Array(72).fill(0),
+    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ??
+      Array(6).fill(0),
+    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ??
+      Array(6).fill(0),
+  };
+};
+
+export const getM2ActuatorTable = (state) => {
+  const subscriptions = [
+    'telemetry-MTM2-0-forceBalance',
+    'telemetry-MTM2-0-netForcesTotal',
+    'telemetry-MTM2-0-netMomentsTotal',
+    'telemetry-MTM2-0-position',
+    'telemetry-MTM2-0-positionIMS',
+  ];
+  const m2ActuatorsData = getStreamsData(state, subscriptions);
+  return {
+    forceBalanceFx: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.fx?.value ?? 0,
+    forceBalanceFy: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.fy?.value ?? 0,
+    forceBalanceFz: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.fz?.value ?? 0,
+    forceBalanceMx: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.mx?.value ?? 0,
+    forceBalanceMy: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.my?.value ?? 0,
+    forceBalanceMz: m2ActuatorsData['telemetry-MTM2-0-forceBalance']?.mz?.value ?? 0,
+    netForcesFx: m2ActuatorsData['telemetry-MTM2-0-netForcesTotal']?.fx?.value ?? 0,
+    netForcesFy: m2ActuatorsData['telemetry-MTM2-0-netForcesTotal']?.fy?.value ?? 0,
+    netForcesFz: m2ActuatorsData['telemetry-MTM2-0-netForcesTotal']?.fz?.value ?? 0,
+    netMomentsMx: m2ActuatorsData['telemetry-MTM2-0-netMomentsTotal']?.mx?.value ?? 0,
+    netMomentsMy: m2ActuatorsData['telemetry-MTM2-0-netMomentsTotal']?.my?.value ?? 0,
+    netMomentsMz: m2ActuatorsData['telemetry-MTM2-0-netMomentsTotal']?.mz?.value ?? 0,
+    positionX: m2ActuatorsData['telemetry-MTM2-0-position']?.x?.value ?? 0,
+    positionY: m2ActuatorsData['telemetry-MTM2-0-position']?.y?.value ?? 0,
+    positionZ: m2ActuatorsData['telemetry-MTM2-0-position']?.z?.value ?? 0,
+    positionXRot: m2ActuatorsData['telemetry-MTM2-0-position']?.xRot?.value ?? 0,
+    positionYRot: m2ActuatorsData['telemetry-MTM2-0-position']?.yRot?.value ?? 0,
+    positionZRot: m2ActuatorsData['telemetry-MTM2-0-position']?.zRot?.value ?? 0,
+    positionIMSX: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.x?.value ?? 0,
+    positionIMSY: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.y?.value ?? 0,
+    positionIMSZ: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.z?.value ?? 0,
+    positionIMSXRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.xRot?.value ?? 0,
+    positionIMSYRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.yRot?.value ?? 0,
+    positionIMSZRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.zRot?.value ?? 0,
+  };
+};
+
 function createDataRandom() {
   const data = [];
   for (let i = 0; i < 156; i++) {
@@ -196,6 +303,7 @@ function createDataRandom() {
   }
   return data;
 }
+
 export const getM1M3ActuatorForces = (state) => {
   const subscriptions = [
     'event-MTM1M3-0-appliedAberrationForces',
