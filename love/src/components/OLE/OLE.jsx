@@ -36,7 +36,8 @@ export default class OLE extends Component {
       selectedInstrument: null,
       instruments: [],
       selectedExposureType: 'all',
-      
+      selectedDayExposure: new Date(),
+      selectedDayOrRange: 'day',
     };
   }
 
@@ -65,11 +66,23 @@ export default class OLE extends Component {
   }
 
   changeInstrumentSelect(value) {
-    this.setState({ selectedInstrument: value })
+    this.setState({ selectedInstrument: value });
   }
 
   changeExposureType(value) {
-    this.setState({ selectedExposureType: value })
+    this.setState({ selectedExposureType: value });
+  }
+
+  changeDayExposure(day) {
+    console.log('changeDayExposure', day);
+    const dayObs = Moment(day).format('YYYYMMDD');
+    console.log('dayObs', dayObs )
+    this.setState({ selectedDayExposure: day });
+  }
+
+  changeDayOrRangeSelect(value) {
+    console.log('changeDayOrRangeSelect', value);
+    this.setState({ selectedDayOrRange: value });
   }
 
   handleDateTimeRangeNonExposure(date, type) {
@@ -126,6 +139,10 @@ export default class OLE extends Component {
           selectedDateStart={this.state.selectedDateStartExposure}
           selectedDateEnd={this.state.selectedDateEndExposure}
           handleDateTimeRange={(date, type) => this.handleDateTimeRangeExposure(date, type)}
+          selectedDayExposure={this.state.selectedDayExposure}
+          changeDayExposure={(day) => this.changeDayExposure(day)}
+          selectedDayOrRange={this.state.selectedDayOrRange}
+          changeDayOrRangeSelect={(value) => this.changeDayOrRangeSelect(value)}
         />;
       }
       if (tab === 'non-exposure') {
