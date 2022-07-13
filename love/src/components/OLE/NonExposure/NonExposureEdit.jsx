@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
+import Moment from 'moment';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -144,12 +145,18 @@ export default class NonExposureEdit extends Component {
 
   handleTimeOfIncident(date, type) {
     if (type === 'start') {
+      const start = Moment(date);
+      const end = Moment(this.state.logEdit.end_date);
+      const duration_hr = end.diff(start, 'hours', true);
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, begin_date: date },
+        logEdit: { ...state.logEdit, begin_date: date, time_lost: duration_hr.toFixed(2) },
       }));
     } else if (type === 'end') {
+      const start = Moment(this.state.logEdit.begin_date);
+      const end = Moment(date);
+      const duration_hr = end.diff(start, 'hours', true);
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, end_date: date },
+        logEdit: { ...state.logEdit, end_date: date, time_lost: duration_hr.toFixed(2) },
       }));
     }
   }
@@ -287,20 +294,6 @@ export default class NonExposureEdit extends Component {
                     small
                   />
                 </span>
-                <span className={styles.label}>Obs. Time Loss</span>
-                <span className={styles.value}>
-                  <Input
-                    type="number"
-                    min={0}
-                    value={this.state.logEdit.time_lost}
-                    className={styles.input}
-                    onChange={(event) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, time_lost: event.target.value },
-                      }))
-                    }
-                  />
-                </span>
                 <span className={styles.label}>Subsystem</span>
                 <span className={styles.value}>
                   <Select
@@ -380,6 +373,21 @@ export default class NonExposureEdit extends Component {
                         endDate={new Date()}
                       />
                     </span>
+                    <span className={styles.label}>Obs. Time Loss</span>
+                    <span className={styles.value}>
+                      <Input
+                        type="number"
+                        min={0.01}
+                        step={0.01}
+                        value={this.state.logEdit.time_lost}
+                        className={styles.input}
+                        onChange={(event) =>
+                          this.setState((prevState) => ({
+                            logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+                          }))
+                        }
+                      />
+                    </span>
                   </>
                 ) : (
                   <></>
@@ -400,6 +408,21 @@ export default class NonExposureEdit extends Component {
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
                           startDate={new Date(new Date() - 24 * 60 * 60 * 1000)}
                           endDate={new Date()}
+                        />
+                      </span>
+                      <span className={styles.label}>Obs. Time Loss</span>
+                      <span className={styles.value}>
+                        <Input
+                          type="number"
+                          min={0.01}
+                          step={0.01}
+                          value={this.state.logEdit.time_lost}
+                          className={styles.input}
+                          onChange={(event) =>
+                            this.setState((prevState) => ({
+                              logEdit: { ...prevState.logEdit, time_lost: event.target.value },
+                            }))
+                          }
                         />
                       </span>
                     </>
