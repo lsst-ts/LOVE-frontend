@@ -10,6 +10,7 @@ import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import { CSVLink } from 'react-csv';
 import ManagerInterface from 'Utils';
@@ -22,6 +23,9 @@ const moment = extendMoment(Moment);
 
 export default class Exposure extends Component {
   static propTypes = {
+    // Day Exposure
+    selectedDayExposure: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    changeDayExposure: PropTypes.func,
     // Instrument Options
     instruments: PropTypes.arrayOf(PropTypes.string),
     selectedInstrument: PropTypes.string,
@@ -32,6 +36,8 @@ export default class Exposure extends Component {
     selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     handleDateTimeRange: PropTypes.func,
+    selectedDayOrRange: PropTypes.string,
+    changeDayOrRange: PropTypes.func,
   };
 
   static defaultProps = {
@@ -44,6 +50,9 @@ export default class Exposure extends Component {
     selectedDateStart: null,
     selectedDateEnd: null,
     handleDateTimeRange: () => {console.log('defaultProps.handleDateTimeRange')},
+    selectedDayExposure: null,
+    selectedDayOrRange: null,
+    changeDayOrRangeSelect: () => {console.log('defaultProps.changeDayOrRange')},
   };
 
   constructor(props) {
@@ -58,6 +67,7 @@ export default class Exposure extends Component {
       observationIds: [],
       messages: [],
       range: [],
+      
     };
   }
 
@@ -93,6 +103,12 @@ export default class Exposure extends Component {
       {
         field: 'obs_id',
         title: 'Observation Id',
+        type: 'string',
+        className: styles.tableHead,
+      },
+      {
+        field: 'day_obs',
+        title: 'Day Observation',
         type: 'string',
         className: styles.tableHead,
       },
@@ -248,19 +264,37 @@ export default class Exposure extends Component {
       { label: 'All observation types', value: 'all' },
       ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
     ];
+    const dayOrRangeExposureOptions = [
+      { label: 'Day Observation', value: 'day'},
+      { label: 'Range', value: 'range'},
+    ];
+    const selectedDayOrRange = this.props.selectedDayOrRange;
+    const selectedDayExposure = this.props.selectedDayExposure;
+
     const selectedExposureType = this.props.selectedExposureType;
 
     const range = this.state.range;
 
       // Filter by date range
-    let filteredData = tableData.filter((log) => range.contains(Moment(log.timespan_end)));
+    let filteredData = tableData;
+    
+    if (selectedDayOrRange === 'range') {
+      filteredData = filteredData.filter((log) => range.contains(Moment(log.timespan_end)));
+    }
+
+    if (selectedDayOrRange === 'day') {
+      filteredData = filteredData.filter((log) => {
+        const format = Moment(selectedDayExposure).format('YYYYMMDD');
+        return format === String(log.day_obs);
+      })
+    }
 
     // Filter by exposure type
     filteredData =
       selectedExposureType !== 'all'
         ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
         : filteredData;
-
+    
     // Obtain headers to create csv report
     const logExample = this.state.messages?.[0];
     const logExampleKeys = Object.keys(logExample ?? {});
@@ -300,14 +334,33 @@ export default class Exposure extends Component {
             className={styles.select}
           />
 
-          <DateTimeRange
-            onChange={(date, type) => {
-              this.props.handleDateTimeRange(date, type);
-            }}
-            label="Date & Time"
-            startDate={this.props.selectedDateStart}
-            endDate={this.props.selectedDateEnd}
+          <Select
+            options={dayOrRangeExposureOptions}
+            option={selectedDayOrRange}
+            onChange={({ value }) => this.props.changeDayOrRangeSelect(value)}
+            className={styles.select}
           />
+
+          { selectedDayOrRange === 'day' ? (
+            <DateTime
+              value={this.props.selectedDayExposure}
+              onChange={(day) => this.props.changeDayExposure(day)}
+              dateFormat="YYYY/MM/DD"
+              timeFormat={false}
+              closeOnSelect={true}
+            />
+          ) : selectedDayOrRange === 'range' ? (
+            <DateTimeRange
+              onChange={(date, type) => {
+                this.props.handleDateTimeRange(date, type);
+              }}
+              label="Date & Time"
+              startDate={this.props.selectedDateStart}
+              endDate={this.props.selectedDateEnd}
+              startDateProps={{closeOnSelect: true}}
+            />
+          ) : <></>
+          }
 
           <Select
             options={exposureTypeOptions}
