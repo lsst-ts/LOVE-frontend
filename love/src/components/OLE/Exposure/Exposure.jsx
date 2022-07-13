@@ -127,7 +127,7 @@ export default class Exposure extends Component {
           const start = Moment(row['timespan_begin']);
           const end = Moment(row['timespan_end']);
           const duration_s = end.diff(start, 'seconds', true);
-          return duration_s;
+          return duration_s.toFixed(2);
         }
       },
       {
