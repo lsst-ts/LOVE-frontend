@@ -409,10 +409,10 @@ export const motorDriveStateMap = {
 };
 
 export const stateToStyleMTMountCommander = {
-  'NONE': 'invalid',
-  'CSC': 'ok',
-  'EUI': 'warning',
-  'HHD': 'warning',
+  NONE: 'invalid',
+  CSC: 'ok',
+  EUI: 'warning',
+  HHD: 'warning',
 };
 
 export const mtMountCommanderStateMap = {
@@ -422,13 +422,25 @@ export const mtMountCommanderStateMap = {
   3: 'HHD',
 };
 
+export const mtMountConnectedStateMap = {
+  undefined: 'UNKOWN',
+  false: 'DISCONNECTED',
+  true: 'CONNECTED',
+};
+
+export const stateToStyleMTMountConnected = {
+  UNKOWN: 'invalid',
+  DISCONNECTED: 'warning',
+  CONNECTED: 'ok',
+};
+
 export const stateToStyleMTMountPowerState = {
-  'OFF': 'invalid',
-  'ON': 'ok',
-  'FAULT': 'alert',
-  'TURNING_ON': 'warning',
-  'TURNING_OFF': 'warning',
-  'UNKNOWN': 'invalid',
+  OFF: 'invalid',
+  ON: 'ok',
+  FAULT: 'alert',
+  TURNING_ON: 'warning',
+  TURNING_OFF: 'warning',
+  UNKNOWN: 'invalid',
 };
 
 export const mtMountPowerStateMap = {
@@ -441,21 +453,23 @@ export const mtMountPowerStateMap = {
 };
 
 export const stateToStyleMTMountAxisMotionState = {
-  'STOPPING': 'warning',
-  'STOPPED': 'ok',
-  'MOVING_POINT_TO_POINT': 'warning',
-  'JOGGING': 'warning',
-  'TRACKING': 'warning',
-  'TRACKING_PAUSED': 'warning',
+  STOPPING: 'warning',
+  STOPPED: 'ok',
+  'MOVING POINT TO POINT': 'warning',
+  JOGGING: 'warning',
+  TRACKING: 'warning',
+  TRACKING_PAUSED: 'warning',
+  UNKNOWN: 'invalid',
 };
 
 export const mtMountAxisMotionStateMap = {
   0: 'STOPPING',
   1: 'STOPPED',
-  2: 'MOVING_POINT_TO_POINT',
+  2: 'MOVING POINT TO POINT',
   3: 'JOGGING',
   4: 'TRACKING',
   5: 'TRACKING_PAUSED',
+  undefined: 'UNKNOWN',
 };
 
 export const mtMountMirrorCoversStateMap = {

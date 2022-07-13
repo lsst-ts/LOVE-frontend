@@ -14,7 +14,7 @@ export default class TMA extends Component {
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
     /** Unique target identifier. Echoed from the trackTarget command */
-    trackID: PropTypes.string,
+    trackId: PropTypes.number,
     /** Who controls the low-level controller; a Commander enum. */
     commander: PropTypes.number,
     /** Is the command (client) socket connected */
@@ -50,7 +50,7 @@ export default class TMA extends Component {
   };
 
   static defaultProps = {
-    trackID: '',
+    trackId: '',
     commander: 0,
     connected: false,
     balancing: 0,
@@ -78,66 +78,65 @@ export default class TMA extends Component {
   }
 
   render() {
-    const trackID = this.props.trackID;
-    const commander = this.props.commander;
-    const connected = this.props.connected;
-    const balancing = this.props.balancing;
-    const azimuthSystem = this.props.azimuthSystem;
-    const azimuthMotion = this.props.azimuthMotion;
-    const azimuthLimits = this.props.azimuthLimits;
-    const azimuthActualPosition = this.props.azimuthActualPosition;
-    const azimuthDemandPosition = this.props.azimuthDemandPosition;
-    const elevationSystem = this.props.elevationSystem;
-    const elevationMotion = this.props.elevationMotion;
-    const elevationLimits = this.props.elevationLimits;
-    const elevationActualPosition = this.props.elevationActualPosition;
-    const elevationDemandPosition = this.props.elevationDemandPosition;
-    const mirrorCovers = this.props.mirrorCovers;
-    const azimuthDrives = this.props.azimuthDrives;
-    const elevationDrives = this.props.elevationDrives;
+    const {
+      trackId,
+      commander,
+      connected,
+      balancing,
+      azimuthSystem,
+      azimuthMotion,
+      azimuthLimits,
+      azimuthActualPosition,
+      azimuthDemandPosition,
+      elevationSystem,
+      elevationMotion,
+      elevationLimits,
+      elevationActualPosition,
+      elevationDemandPosition,
+      mirrorCovers,
+      azimuthDrives,
+      elevationDrives,
+    } = this.props;
     return (
-          <>
-            <div className={styles.summaryContainer}>
-              <Summary
-                trackID={trackID}
-                commander={commander}
-                connected={connected}
-                balancing={balancing}
-                azimuthSystem={azimuthSystem}
-                azimuthMotion={azimuthMotion}
-                azimuthLimits={azimuthLimits}
-                azimuthActualPosition={azimuthActualPosition}
-                azimuthDemandPosition={azimuthDemandPosition}
-                elevationSystem={elevationSystem}
-                elevationMotion={elevationMotion}
-                elevationLimits={elevationLimits}
-                elevationActualPosition={elevationActualPosition}
-                elevationDemandPosition={elevationDemandPosition}
-              />
-            </div>
-            <div className={styles.mirrorAndElevationContainer}>
-              <div className={styles.mirrorCoversContainer}>
-                <MirrorCovers
-                  azimuthActualPosition={azimuthActualPosition}
-                  azimuthDemandPosition={azimuthDemandPosition}
-                  mirrorCovers={mirrorCovers}
-                />
-              </div>
-              <div className={styles.elevationContainer}>
-                <Elevation
-                  elevationActualPosition={elevationActualPosition}
-                  elevationDemandPosition={elevationDemandPosition}
-                />
-              </div>
-            </div>
-            
-            <div className={styles.drivesContainer}>
-              <Drives
-                azimuthDrives={azimuthDrives}
-                elevationDrives={elevationDrives}
-              />
-            </div>
-          </>
+      <>
+        <div className={styles.summaryContainer}>
+          <Summary
+            trackId={trackId}
+            commander={commander}
+            connected={connected}
+            balancing={balancing}
+            azimuthSystem={azimuthSystem}
+            azimuthMotion={azimuthMotion}
+            azimuthLimits={azimuthLimits}
+            azimuthActualPosition={azimuthActualPosition}
+            azimuthDemandPosition={azimuthDemandPosition}
+            elevationSystem={elevationSystem}
+            elevationMotion={elevationMotion}
+            elevationLimits={elevationLimits}
+            elevationActualPosition={elevationActualPosition}
+            elevationDemandPosition={elevationDemandPosition}
+          />
+        </div>
+        <div className={styles.mirrorAndElevationContainer}>
+          <div className={styles.mirrorCoversContainer}>
+            <MirrorCovers
+              azimuthActualPosition={azimuthActualPosition}
+              azimuthDemandPosition={azimuthDemandPosition}
+              mirrorCovers={mirrorCovers}
+            />
+          </div>
+          <div className={styles.elevationContainer}>
+            <Elevation
+              elevationActualPosition={elevationActualPosition}
+              elevationDemandPosition={elevationDemandPosition}
+            />
+          </div>
+        </div>
+
+        <div className={styles.drivesContainer}>
+          <Drives azimuthDrives={azimuthDrives} elevationDrives={elevationDrives} />
+        </div>
+      </>
     );
   }
 }

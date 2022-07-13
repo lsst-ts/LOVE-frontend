@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import styles from './Summary.module.css';
-import { stateToStyleMTMountCommander,
+import {
+  stateToStyleMTMountCommander,
   mtMountCommanderStateMap,
+  mtMountConnectedStateMap,
   mtMountPowerStateMap,
   mtMountAxisMotionStateMap,
+  stateToStyleMTMountConnected,
   stateToStyleMTMountAxisMotionState,
   stateToStyleMTMountPowerState,
+  MTMountLimits,
 } from '../../../../Config';
 
 import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
@@ -20,217 +23,190 @@ import Row from '../../../GeneralPurpose/SummaryPanel/Row';
 import Limits from '../../../GeneralPurpose/Limits/Limits';
 
 export default class Summary extends Component {
-    static propTypes = {
-      /** Unique target identifier. Echoed from the trackTarget command */
-      trackID: PropTypes.string,
-      /** Who controls the low-level controller; a Commander enum. */
-      commander: PropTypes.number,
-      /** Is the command (client) socket connected */
-      connected: PropTypes.bool,
-      /** State of the balance system. Overall power state of the balancing system; a PowerState enum */
-      balancing: PropTypes.number,
-      /** State of the azimuth axis. Power state of each motion controller; a PowerState enum. */
-      azimuthSystem: PropTypes.number,
-      /** Azimuth Motion state, as an AxisMotionState enum. */
-      azimuthMotion: PropTypes.number,
-      /** Azimuth Limits, as a LimitsMask enum mask. */
-      azimuthLimits: PropTypes.number,
-      /** Azimuth Position measured by the encoders */
-      azimuthActualPosition: PropTypes.number,
-      /** Azimuth Position computed by the path generator. */
-      azimuthDemandPosition: PropTypes.number,
-      /** State of the elevation system. Power state; a PowerState enum */
-      elevationSystem: PropTypes.number,
-      /** Motion state of the elevation axis */
-      elevationMotion: PropTypes.number,
-      /** Elevation Limits, as a LimitsMask enum mask */
-      elevationLimits: PropTypes.number,
-      /** Elevation Position measured by the encoders */
-      elevationActualPosition: PropTypes.number,
-      /** Elevation Position computed by the path generator */
-      elevationDemandPosition: PropTypes.number,
-    };
+  static propTypes = {
+    /** Unique target identifier. Echoed from the trackTarget command */
+    trackId: PropTypes.number,
+    /** Who controls the low-level controller; a Commander enum. */
+    commander: PropTypes.number,
+    /** Is the command (client) socket connected */
+    connected: PropTypes.bool,
+    /** State of the balance system. Overall power state of the balancing system; a PowerState enum */
+    balancing: PropTypes.number,
+    /** State of the azimuth axis. Power state of each motion controller; a PowerState enum. */
+    azimuthSystem: PropTypes.number,
+    /** Azimuth Motion state, as an AxisMotionState enum. */
+    azimuthMotion: PropTypes.number,
+    /** Azimuth Limits, as a LimitsMask enum mask. */
+    azimuthLimits: PropTypes.number,
+    /** Azimuth Position measured by the encoders */
+    azimuthActualPosition: PropTypes.number,
+    /** Azimuth Position computed by the path generator. */
+    azimuthDemandPosition: PropTypes.number,
+    /** State of the elevation system. Power state; a PowerState enum */
+    elevationSystem: PropTypes.number,
+    /** Motion state of the elevation axis */
+    elevationMotion: PropTypes.number,
+    /** Elevation Limits, as a LimitsMask enum mask */
+    elevationLimits: PropTypes.number,
+    /** Elevation Position measured by the encoders */
+    elevationActualPosition: PropTypes.number,
+    /** Elevation Position computed by the path generator */
+    elevationDemandPosition: PropTypes.number,
+  };
 
-    static defaultProps = {
-      trackID: '',
-      commander: 0,
-      connected: false,
-      balancing: 0,
-      azimuthSystem: 0,
-      azimuthMotion: 0,
-      azimuthLimits: 0,
-      azimuthActualPosition: 0,
-      azimuthDemandPosition: 0,
-      elevationSystem: 0,
-      elevationMotion: 0,
-      elevationLimits: 0,
-      elevationActualPosition: 0,
-      elevationDemandPosition: 0,
-    };
-    
-    render() {
-        const trackID = this.props.trackID ? this.props.trackID : '' ;
-        const commanderValue = this.props.commander ? mtMountCommanderStateMap[this.props.commander] : mtMountCommanderStateMap[0];
-        const connected = this.props.connected ? this.props.connected : false;
-        const balancingValue = this.props.balancing ? mtMountPowerStateMap[this.props.balancing] : mtMountPowerStateMap[0];
+  static defaultProps = {
+    trackId: 0,
+    commander: 0,
+    connected: false,
+    balancing: 0,
+    azimuthSystem: 0,
+    azimuthMotion: 0,
+    azimuthLimits: 0,
+    azimuthActualPosition: 0,
+    azimuthDemandPosition: 0,
+    elevationSystem: 0,
+    elevationMotion: 0,
+    elevationLimits: 0,
+    elevationActualPosition: 0,
+    elevationDemandPosition: 0,
+  };
 
-        const azimuthSystemValue = this.props.azimuthSystem ? mtMountPowerStateMap[this.props.azimuthSystem] : mtMountPowerStateMap[0];
-        const azimuthMotionValue = this.props.azimuthMotion ? mtMountAxisMotionStateMap[this.props.azimuthMotion] : mtMountAxisMotionStateMap[0];
-        const azimuthActualPosition = this.props.azimuthActualPosition ? this.props.azimuthActualPosition : 0;
-        const azimuthDemandPosition = this.props.azimuthDemandPosition ? this.props.azimuthDemandPosition : 0;
-        const azimuthLimits = this.azimuthLimits ? this.azimuthLimits : 0;
+  render() {
+    const {
+      trackId,
+      azimuthActualPosition,
+      azimuthDemandPosition,
+      elevationActualPosition,
+      elevationDemandPosition,
+    } = this.props;
 
-        // AzimuthLimit
-        const minAzimuthPosition = 0;
-        const maxAzimuthPosition = 360;
-        const timeToAzimuthLimit = 0;
-        // const closestAzimuthLimit = 90;
+    const commanderValue = mtMountCommanderStateMap[this.props.commander];
+    const connectedValue = mtMountConnectedStateMap[this.props.connected];
+    const balancingValue = mtMountPowerStateMap[this.props.balancing];
+    const azimuthSystemValue = mtMountPowerStateMap[this.props.azimuthSystem];
+    const azimuthMotionValue = mtMountAxisMotionStateMap[this.props.azimuthMotion];
+    const elevationSystemValue = mtMountPowerStateMap[this.props.elevationSystem];
+    const elevationMotionValue = mtMountAxisMotionStateMap[this.props.elevationMotion];
 
-        const elevationSystemValue = this.props.elevationSystem ? mtMountPowerStateMap[this.props.elevationSystem] : mtMountPowerStateMap[0];
-        const elevationMotionValue = this.props.elevationMotion ? mtMountAxisMotionStateMap[this.props.elevationMotion] : mtMountAxisMotionStateMap[0];
-        const elevationActualPosition = this.props.elevationActualPosition ? this.props.elevationActualPosition : 0;
-        const elevationDemandPosition = this.props.elevationDemandPosition ? this.props.elevationDemandPosition : 0;
-        const elevationLimits = this.elevationLimits ? this.elevationLimits : 0;
+    // AzimuthLimit
+    const { min: minAzimuthPosition, max: maxAzimuthPosition } = MTMountLimits.azimuth;
+    const timeToAzimuthLimit = 0;
 
-        // ElevationLimit
-        const minElevationPosition = -60;
-        const maxElevationPosition = 60;
-        const timeToElevationLimit = 0;
-        // const closestElevationLimit = 90;
+    // ElevationLimit
+    const { min: minElevationPosition, max: maxElevationPosition } = MTMountLimits.elevation;
+    const timeToElevationLimit = 0;
 
-        return (
-            <div className={styles.container}>
-                <SummaryPanel>
-                    <Title>Track ID</Title>
-                    <Value>{trackID}</Value>
-                    <Label>Commander</Label>
-                    <Value>
-                        <StatusText
-                            title={commanderValue}
-                            status={stateToStyleMTMountCommander[commanderValue]}
-                            small
-                        >
-                            {commanderValue}
-                        </StatusText>
-                    </Value>
-                    <Label>Connected</Label>
-                    <Value>
-                        <StatusText
-                            title={connected ? 'CONNECTED' : 'DISABLED'}
-                            status={connected ? 'ok' : 'invalid'}
-                            small
-                        >
-                            {connected ? 'CONNECTED' : 'DISABLED'}
-                        </StatusText>
-                    </Value>
-                    <Label>Balancing</Label>
-                    <Value>
-                        <StatusText
-                            title={balancingValue}
-                            status={stateToStyleMTMountPowerState[balancingValue]}
-                            small
-                        >
-                            {balancingValue}
-                        </StatusText>
-                    </Value>
-                </SummaryPanel>
+    return (
+      <div className={styles.container}>
+        <SummaryPanel>
+          <Title>Track ID</Title>
+          <Value>{trackId}</Value>
+          <Label>Commander</Label>
+          <Value>
+            <StatusText title={commanderValue} status={stateToStyleMTMountCommander[commanderValue]} small>
+              {commanderValue}
+            </StatusText>
+          </Value>
+          <Label>Connected</Label>
+          <Value>
+            <StatusText title={connectedValue} status={stateToStyleMTMountConnected[connectedValue]} small>
+              {connectedValue}
+            </StatusText>
+          </Value>
+          <Label>Balancing</Label>
+          <Value>
+            <StatusText title={balancingValue} status={stateToStyleMTMountPowerState[balancingValue]} small>
+              {balancingValue}
+            </StatusText>
+          </Value>
+        </SummaryPanel>
 
-                <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
-                    <Label>Azimuth</Label>
-                    <Value>
-                        <StatusText
-                            title={azimuthSystemValue}
-                            status={stateToStyleMTMountPowerState[azimuthSystemValue]}
-                            small
-                        >
-                            {azimuthSystemValue}
-                        </StatusText>
-                    </Value>
-                    <Label>
-                        <CurrentTargetValue
-                            currentValue={azimuthActualPosition?.toFixed(2)}
-                            targetValue={azimuthDemandPosition?.toFixed(2)}
-                            isChanging={true}
-                        />
-                    </Label>
-                    <Value>
-                        <StatusText
-                            title={azimuthMotionValue}
-                            status={stateToStyleMTMountAxisMotionState[azimuthMotionValue]}
-                            small
-                        >
-                            {azimuthMotionValue}
-                        </StatusText>
-                    </Value>
-                    <Row
-                        title={`Current value: ${azimuthActualPosition}\nTarget value: ${azimuthDemandPosition}\nLimits: [${minAzimuthPosition}º, ${maxAzimuthPosition}º]`}
-                    >
-                        <span>
-                            <Limits
-                                lowerLimit={minAzimuthPosition}
-                                upperLimit={maxAzimuthPosition}
-                                currentValue={azimuthActualPosition}
-                                targetValue={azimuthDemandPosition}
-                                height={30}
-                                displayLabels={false}
-                            />
-                        </span>
-                        <span>
-                            <span>{`Time to limit: `}</span>
-                            <span className={styles.highlight}>{Math.round(timeToAzimuthLimit)} min</span>
-                        </span>
-                    </Row>
+        <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
+          <Label>Azimuth</Label>
+          <Value>
+            <StatusText title={azimuthSystemValue} status={stateToStyleMTMountPowerState[azimuthSystemValue]} small>
+              {azimuthSystemValue}
+            </StatusText>
+          </Value>
+          <Label>
+            <CurrentTargetValue
+              currentValue={azimuthActualPosition}
+              targetValue={azimuthDemandPosition}
+              isChanging={true}
+            />
+          </Label>
+          <Value>
+            <StatusText
+              title={azimuthMotionValue}
+              status={stateToStyleMTMountAxisMotionState[azimuthMotionValue]}
+              small
+            >
+              {azimuthMotionValue}
+            </StatusText>
+          </Value>
+          <Row
+            title={`Current value: ${azimuthActualPosition}\nTarget value: ${azimuthDemandPosition}\nLimits: [${minAzimuthPosition}º, ${maxAzimuthPosition}º]`}
+          >
+            <span>
+              <Limits
+                lowerLimit={minAzimuthPosition}
+                upperLimit={maxAzimuthPosition}
+                currentValue={azimuthActualPosition}
+                targetValue={azimuthDemandPosition}
+                height={30}
+                displayLabels={false}
+              />
+            </span>
+            <span>
+              <span>{`Time to limit: `}</span>
+              <span className={styles.highlight}>{Math.round(timeToAzimuthLimit)} min</span>
+            </span>
+          </Row>
+        </SummaryPanel>
 
-                </SummaryPanel>
-
-                <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
-                    <Label>Elevation</Label>
-                    <Value>
-                        <StatusText
-                            title={elevationSystemValue}
-                            status={stateToStyleMTMountPowerState[elevationSystemValue]}
-                            small
-                        >
-                            {elevationSystemValue}
-                        </StatusText>
-                    </Value>
-                    <Label>
-                        <CurrentTargetValue
-                            currentValue={elevationActualPosition?.toFixed(2)}
-                            targetValue={elevationDemandPosition?.toFixed(2)}
-                            isChanging={true}
-                        />
-                    </Label>
-                    <Value>
-                        <StatusText
-                            title={elevationMotionValue}
-                            status={stateToStyleMTMountAxisMotionState[elevationMotionValue]}
-                            small
-                        >
-                            {elevationMotionValue}
-                        </StatusText>
-                    </Value>
-                    <Row
-                        title={`Current value: ${elevationActualPosition}\nTarget value: ${elevationDemandPosition}\nLimits: [${minElevationPosition}º, ${maxElevationPosition}º]`}
-                    >
-                        <span>
-                            <Limits
-                                lowerLimit={minElevationPosition}
-                                upperLimit={maxElevationPosition}
-                                currentValue={elevationActualPosition}
-                                targetValue={elevationDemandPosition}
-                                height={30}
-                                displayLabels={false}
-                            />
-                        </span>
-                        <span>
-                            <span>{`Time to limit: `}</span>
-                            <span className={styles.highlight}>{Math.round(timeToElevationLimit)} min</span>
-                        </span>
-                    </Row>
-
-                </SummaryPanel>
-            </div>
-        );
-    }
+        <SummaryPanel className={[styles.summaryPanel, styles.pt].join(' ')}>
+          <Label>Elevation</Label>
+          <Value>
+            <StatusText title={elevationSystemValue} status={stateToStyleMTMountPowerState[elevationSystemValue]} small>
+              {elevationSystemValue}
+            </StatusText>
+          </Value>
+          <Label>
+            <CurrentTargetValue
+              currentValue={elevationActualPosition}
+              targetValue={elevationDemandPosition}
+              isChanging={true}
+            />
+          </Label>
+          <Value>
+            <StatusText
+              title={elevationMotionValue}
+              status={stateToStyleMTMountAxisMotionState[elevationMotionValue]}
+              small
+            >
+              {elevationMotionValue}
+            </StatusText>
+          </Value>
+          <Row
+            title={`Current value: ${elevationActualPosition}\nTarget value: ${elevationDemandPosition}\nLimits: [${minElevationPosition}º, ${maxElevationPosition}º]`}
+          >
+            <span>
+              <Limits
+                lowerLimit={minElevationPosition}
+                upperLimit={maxElevationPosition}
+                currentValue={elevationActualPosition}
+                targetValue={elevationDemandPosition}
+                height={30}
+                displayLabels={false}
+              />
+            </span>
+            <span>
+              <span>{`Time to limit: `}</span>
+              <span className={styles.highlight}>{Math.round(timeToElevationLimit)} min</span>
+            </span>
+          </Row>
+        </SummaryPanel>
+      </div>
+    );
+  }
 }
