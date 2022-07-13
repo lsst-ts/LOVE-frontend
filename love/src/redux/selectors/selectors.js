@@ -845,7 +845,7 @@ export const getLouversStatus = (state) => {
 
 export const getDomeStatus = (state) => {
   const subscriptions = [
-    'event-MTMount-0-logevent_target',
+    'event-MTMount-0-target',
     'event-MTDome-0-summaryState',
     'event-MTDome-0-azEnabled',
     'event-MTDome-0-azMotion',
@@ -857,15 +857,103 @@ export const getDomeStatus = (state) => {
   ];
   const domeStatus = getStreamsData(state, subscriptions);
   return {
-    trackId: domeStatus['event-MTMount-0-logevent_target']?.[0]?.trackId?.value ?? 0,
+    trackId: domeStatus['event-MTMount-0-target']?.[0]?.trackId?.value ?? 0,
     mtdomeSummaryState: domeStatus['event-MTDome-0-summaryState']?.[0]?.summaryState?.value ?? 0,
-    azimuthDomeState: domeStatus['event-MTDome-0-logevent_azEnabled']?.[0]?.state?.value ?? 0,
-    azimuthDomeMotion: domeStatus['event-MTDome-0-logevent_azMotion']?.[0]?.state?.value ?? 0,
-    azimuthDomeTarget: domeStatus['event-MTDome-0-logevent_azTarget']?.[0]?.position?.value ?? 0,
-    elevationDomeState: domeStatus['event-MTDome-0-logevent_elEnabled']?.[0]?.state?.value ?? 0,
-    elevationDomeMotion: domeStatus['event-MTDome-0-logevent_elMotion']?.[0]?.state?.value ?? 0,
-    elevationDomeTarget: domeStatus['event-MTDome-0-logevent_elTarget']?.[0]?.position?.value ?? 0,
-    modeDomeStatus: domeStatus['event-MTDome-0-logevent_operationalMode']?.[0]?.operationalMode?.value ?? 0,
+    azimuthDomeState: domeStatus['event-MTDome-0-azEnabled']?.[0]?.state?.value ?? 0,
+    azimuthDomeMotion: domeStatus['event-MTDome-0-azMotion']?.[0]?.state?.value ?? 0,
+    azimuthDomeTarget: domeStatus['event-MTDome-0-azTarget']?.[0]?.position?.value ?? 0,
+    elevationDomeState: domeStatus['event-MTDome-0-elEnabled']?.[0]?.state?.value ?? 0,
+    elevationDomeMotion: domeStatus['event-MTDome-0-elMotion']?.[0]?.state?.value ?? 0,
+    elevationDomeTarget: domeStatus['event-MTDome-0-elTarget']?.[0]?.position?.value ?? 0,
+    modeDomeStatus: domeStatus['event-MTDome-0-operationalMode']?.[0]?.operationalMode?.value ?? 0,
+  };
+};
+
+//MTMount
+/**
+ * Selects the TMA status for summary view
+ * @param {object} state
+ */
+export const getTMASummary = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-target',
+    'event-MTMount-0-commander',
+    'event-MTMount-0-connected',
+    'event-MTMount-0-balanceSystemState',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    trackId: summaryData['event-MTMount-0-target']?.[0]?.trackId.value ?? 0,
+    commander: summaryData['event-MTMount-0-commander']?.[0]?.commander.value ?? 0,
+    connected: summaryData['event-MTMount-0-connected']?.[0]?.command.value ?? undefined,
+    balancing: summaryData['event-MTMount-0-balanceSystemState']?.[0]?.powerState.value ?? 15,
+  };
+};
+
+/**
+ * Selects the Azimuth status for summary view
+ * @param {object} state
+ */
+export const getAzimuthState = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-azimuthSystemState',
+    'event-MTMount-0-azimuthMotionState',
+    'event-MTMount-0-azimuthLimits',
+    'telemetry-MTMount-0-azimuth',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    azimuthSystem: summaryData['event-MTMount-0-azimuthSystemState']?.[0]?.powerState.value ?? 15,
+    azimuthMotion: summaryData['event-MTMount-0-azimuthMotionState']?.[0]?.state.value ?? undefined,
+    azimuthLimits: summaryData['event-MTMount-0-azimuthLimits']?.[0]?.limits.value ?? 0,
+    azimuthActualPosition: summaryData['telemetry-MTMount-0-azimuth']?.actualPosition.value ?? 0.0,
+    azimuthDemandPosition: summaryData['telemetry-MTMount-0-azimuth']?.demandPosition.value ?? 0.0,
+  };
+};
+
+/**
+ * Selects the Elevation status for summary view
+ * @param {object} state
+ */
+export const getElevationState = (state) => {
+  const subscriptions = [
+    'event-MTMount-0-elevationSystemState',
+    'event-MTMount-0-elevationMotionState',
+    'event-MTMount-0-elevationLimits',
+    'telemetry-MTMount-0-elevation',
+  ];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    elevationSystem: summaryData['event-MTMount-0-elevationSystemState']?.[0]?.powerState.value ?? 15,
+    elevationMotion: summaryData['event-MTMount-0-elevationMotionState']?.[0]?.state.value ?? undefined,
+    elevationLimits: summaryData['event-MTMount-0-elevationLimits']?.[0]?.limits.value ?? 0,
+    elevationActualPosition: summaryData['telemetry-MTMount-0-elevation']?.actualPosition.value ?? 0.0,
+    elevationDemandPosition: summaryData['telemetry-MTMount-0-elevation']?.demandPosition.value ?? 0.0,
+  };
+};
+
+/**
+ * Selects the data of the drives of azimuth and elevation
+ * @param {object} state
+ */
+export const getDrivesAzimuthElevationState = (state) => {
+  const subscriptions = ['telemetry-MTMount-0-azimuthDrives', 'telemetry-MTMount-0-elevationDrives'];
+  const drivesData = getStreamsData(state, subscriptions);
+  return {
+    azimuthDrives: drivesData['telemetry-MTMount-0-azimuthDrives']?.current.value ?? [],
+    elevationDrives: drivesData['telemetry-MTMount-0-elevationDrives']?.current.value ?? [],
+  };
+};
+
+/**
+ * Selects the Mirror Covers status for Mirror Covers view
+ * @param {object} state
+ */
+export const getMirrorCoversMotionState = (state) => {
+  const subscriptions = ['event-MTMount-0-mirrorCoversMotionState'];
+  const summaryData = getStreamsData(state, subscriptions);
+  return {
+    mirrorCovers: summaryData['event-MTMount-0-mirrorCoversMotionState']?.[0]?.state.value ?? 0,
   };
 };
 

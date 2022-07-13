@@ -435,6 +435,78 @@ export const motorDriveStateMap = {
   true: 'ENABLED',
 };
 
+export const stateToStyleMTMountCommander = {
+  NONE: 'invalid',
+  CSC: 'ok',
+  EUI: 'warning',
+  HHD: 'warning',
+};
+
+export const mtMountCommanderStateMap = {
+  0: 'NONE',
+  1: 'CSC',
+  2: 'EUI',
+  3: 'HHD',
+};
+
+export const mtMountConnectedStateMap = {
+  undefined: 'UNKOWN',
+  false: 'DISCONNECTED',
+  true: 'CONNECTED',
+};
+
+export const stateToStyleMTMountConnected = {
+  UNKOWN: 'invalid',
+  DISCONNECTED: 'warning',
+  CONNECTED: 'ok',
+};
+
+export const stateToStyleMTMountPowerState = {
+  OFF: 'invalid',
+  ON: 'ok',
+  FAULT: 'alert',
+  TURNING_ON: 'warning',
+  TURNING_OFF: 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const mtMountPowerStateMap = {
+  0: 'OFF',
+  1: 'ON',
+  2: 'FAULT',
+  3: 'TURNING_ON',
+  4: 'TURNING_OFF',
+  15: 'UNKNOWN',
+};
+
+export const stateToStyleMTMountAxisMotionState = {
+  STOPPING: 'warning',
+  STOPPED: 'ok',
+  'MOVING POINT TO POINT': 'warning',
+  JOGGING: 'warning',
+  TRACKING: 'warning',
+  TRACKING_PAUSED: 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const mtMountAxisMotionStateMap = {
+  0: 'STOPPING',
+  1: 'STOPPED',
+  2: 'MOVING POINT TO POINT',
+  3: 'JOGGING',
+  4: 'TRACKING',
+  5: 'TRACKING_PAUSED',
+  undefined: 'UNKNOWN',
+};
+
+export const mtMountMirrorCoversStateMap = {
+  0: 'RETRACTED',
+  1: 'DEPLOYED',
+  2: 'RETRACTING',
+  3: 'DEPLOYING',
+  4: 'LOST',
+};
+
 export const stateToStyleMotorDrive = {
   DISABLED: 'ok',
   ENABLED: 'running',
@@ -1242,7 +1314,7 @@ export const MTDomeLouversMapGN = [
 
 export const MTMountLimits = {
   elevation: {
-    min: 0,
+    min: 5,
     max: 90,
   },
   azimuth: {

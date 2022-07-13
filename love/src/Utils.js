@@ -1019,3 +1019,14 @@ export function getUserHost(user, host) {
     return '';
   }
 }
+
+/**
+ * Function for get desplace in angle for the SVG
+ * @param {number in degree to initial} from 
+ * @param {number in degree to end} to 
+ * @returns {number to desplace}
+ */
+export function closestEquivalentAngle(from, to) {
+  const delta = ((((to - from) % 360) + 540) % 360) - 180;
+  return from + delta;
+};
