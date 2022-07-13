@@ -1193,7 +1193,7 @@ export const MTDomeLouversMapGN = [
 
 export const MTMountLimits = {
   elevation: {
-    min: 0,
+    min: 5,
     max: 90,
   },
   azimuth: {
