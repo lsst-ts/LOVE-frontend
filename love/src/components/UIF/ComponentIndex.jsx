@@ -264,6 +264,26 @@ export const mainIndex = {
       },
     },
   },
+  M2: {
+    component: require('../MainTel/M2/M2.container').default,
+    schema: {
+      ...require('../MainTel/M2/M2.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M2/M2.container').schema.props,
+      },
+    },
+  },
+  M2Table: {
+    component: require('../MainTel/M2/M2Table.container').default,
+    schema: {
+      ...require('../MainTel/M2/M2Table.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/M2/M2Table.container').schema.props,
+      },
+    },
+  },
   CameraHexapod: {
     component: require('../MainTel/CameraHexapod/CameraHexapod.container').default,
     schema: {
@@ -271,6 +291,26 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/CameraHexapod/CameraHexapod.container').schema.props,
+      },
+    },
+  },
+  MTDome: {
+    component: require('../MainTel/MTDome/MTDome.container').default,
+    schema: {
+      ...require('../MainTel/MTDome/MTDome.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTDome/MTDome.container').schema.props,
+      },
+    },
+  },
+  TMA: {
+    component: require('../MainTel/TMA/TMA.container').default,
+    schema: {
+      ...require('../MainTel/TMA/TMA.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/TMA/TMA.container').schema.props,
       },
     },
   },

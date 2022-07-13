@@ -26,8 +26,12 @@ export const getHeaderInfo = (arrayBuffer) => {
   const [START, widthString, heightString, isJPEGString, lengthString] = exposure.split('\r\n');
   // const encodedBuffer =  encoder.encode(buffer.join(''));
   // const encodedBuffer =  encoder.encode(buffer);
-  const encodedBuffer = new Uint8Array(arrayBuffer.slice(33, 33 + 1024 * 1024));
-  const remainder = new Uint8Array(arrayBuffer.slice(33 + 1024 * 1024 + 7));
+  // 10 is for the \r\n chars
+  const offset = 10 + START.length + widthString.length + heightString.length + lengthString.length + isJPEGString.length;
+  const length = parseInt(lengthString, 10);
+  const encodedBuffer = new Uint8Array(arrayBuffer.slice(offset, offset + length));
+  // 7 is the \r\n[END] size
+  const remainder = new Uint8Array(arrayBuffer.slice(offset + length + 7));
   return {
     decodedArray,
     exposure,
@@ -36,7 +40,7 @@ export const getHeaderInfo = (arrayBuffer) => {
     width: parseInt(widthString, 10),
     height: parseInt(heightString, 10),
     isJPEG: isJPEGString === '1',
-    length: parseInt(lengthString, 10),
+    length: length,
     body: encodedBuffer,
   };
 };

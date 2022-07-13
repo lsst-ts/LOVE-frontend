@@ -1,0 +1,8 @@
+.actuatorInfo {
+  min-height: 280px;
+  max-width: 100%;
+}
+
+.noActuator {
+  grid-column: 1 / span 2;
+}

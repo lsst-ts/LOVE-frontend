@@ -269,12 +269,10 @@ export default class EventLog extends PureComponent {
           </div>
           <div className={styles.efd}>
             <div className={styles.efdSelector}>
-              <span>Query EFD</span>
               <div style={{ display: 'inline-block' }}>
                 <Toggle
-                  hideLabels={true}
-                  isLive={this.state.efdEnabled}
-                  setLiveMode={(event) => this.setState({ efdEnabled: event })}
+                  isLive={!this.state.efdEnabled}
+                  setLiveMode={(event) => this.setState({ efdEnabled: !event })}
                 />
               </div>
             </div>

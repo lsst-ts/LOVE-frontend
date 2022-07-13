@@ -197,6 +197,8 @@ export const stateToStyleLightpath = {
   'UNKNOWN POSITION': 'invalid',
 };
 
+// M2
+
 // M1M3
 export const m1m3DetailedStateMap = {
   1: 'DISABLED STATE',
@@ -308,6 +310,17 @@ export const m3InPositionStateMap = {
   0: 'UNKNOWN',
 };
 
+// ATAOS
+export const ataosCorrectionsStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const ataosCorrectionsStateToStyle = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+};
+
 // ATPneumatics
 export const m1CoverStateStateMap = {
   1: 'DISABLED',
@@ -373,6 +386,31 @@ export const shutterStateMap = {
   0: 'UNKNOWN',
 };
 
+export const inclinationTelemetrySourceStateMap = {
+  1: 'ONBOARD',
+  2: 'MTMOUNT',
+};
+
+export const m2ActuatorILCStateMap = {
+  1: 'FAULT',
+  0: 'OPERATIVE',
+};
+
+export const m2ActuatorILCStateToStyle = {
+  OPERATIVE: 'ok',
+  FAULT: 'warning',
+};
+
+export const m2ActuatorLimitSwitchStateMap = {
+  1: 'CLOSED',
+  0: 'OPEN',
+};
+
+export const m2ActuatorLimitSwitchStateToStyle = {
+  OPEN: 'ok',
+  CLOSED: 'warning',
+};
+
 export const stateToStyleDomeAndMount = {
   NASMITH1: 'ok',
   NASMITH2: 'ok',
@@ -395,6 +433,78 @@ export const stateToStyleDomeAndMount = {
 export const motorDriveStateMap = {
   false: 'DISABLED',
   true: 'ENABLED',
+};
+
+export const stateToStyleMTMountCommander = {
+  NONE: 'invalid',
+  CSC: 'ok',
+  EUI: 'warning',
+  HHD: 'warning',
+};
+
+export const mtMountCommanderStateMap = {
+  0: 'NONE',
+  1: 'CSC',
+  2: 'EUI',
+  3: 'HHD',
+};
+
+export const mtMountConnectedStateMap = {
+  undefined: 'UNKOWN',
+  false: 'DISCONNECTED',
+  true: 'CONNECTED',
+};
+
+export const stateToStyleMTMountConnected = {
+  UNKOWN: 'invalid',
+  DISCONNECTED: 'warning',
+  CONNECTED: 'ok',
+};
+
+export const stateToStyleMTMountPowerState = {
+  OFF: 'invalid',
+  ON: 'ok',
+  FAULT: 'alert',
+  TURNING_ON: 'warning',
+  TURNING_OFF: 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const mtMountPowerStateMap = {
+  0: 'OFF',
+  1: 'ON',
+  2: 'FAULT',
+  3: 'TURNING_ON',
+  4: 'TURNING_OFF',
+  15: 'UNKNOWN',
+};
+
+export const stateToStyleMTMountAxisMotionState = {
+  STOPPING: 'warning',
+  STOPPED: 'ok',
+  'MOVING POINT TO POINT': 'warning',
+  JOGGING: 'warning',
+  TRACKING: 'warning',
+  TRACKING_PAUSED: 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const mtMountAxisMotionStateMap = {
+  0: 'STOPPING',
+  1: 'STOPPED',
+  2: 'MOVING POINT TO POINT',
+  3: 'JOGGING',
+  4: 'TRACKING',
+  5: 'TRACKING_PAUSED',
+  undefined: 'UNKNOWN',
+};
+
+export const mtMountMirrorCoversStateMap = {
+  0: 'RETRACTED',
+  1: 'DEPLOYED',
+  2: 'RETRACTING',
+  3: 'DEPLOYING',
+  4: 'LOST',
 };
 
 export const stateToStyleMotorDrive = {
@@ -520,6 +630,122 @@ export const hexapodConnectedStateMap = {
 export const hexapodConnectedStatetoStyle = {
   DISCONNECTED: 'alert',
   CONNECTED: 'ok',
+};
+
+// MTDome
+export const mtdomeStatusStatetoStyle = {
+  UNKNOWN: 'undefined',
+  DISABLED: 'disabled',
+  ENABLED: 'enabled',
+  FAULT: 'fault',
+  OFFLINE: 'offline',
+  STANDBY: 'standby',
+};
+
+export const mtDomeModeStateMap = {
+  0: 'DEGRADED',
+  1: 'NORMAL',
+};
+
+export const mtDomeModeStatetoStyle = {
+  DEGRADED: 'warning',
+  NORMAL: 'ok',
+};
+
+export const mtDomeAzimuthEnabledStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtDomeAzimuthEnabledStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
+};
+
+export const mtdomeMotionStateMap = {
+  0: 'CLOSED',
+  1: 'CRAWLING',
+  2: 'MOVING',
+  3: 'OPEN',
+  4: 'PARKED',
+  5: 'PARKING',
+  6: 'STOPPED',
+  7: 'STOPPING',
+  8: 'STOPPING BRAKING',
+  9: 'STOPPED BRAKED',
+  10: 'BRAKES DISENGAGED',
+  11: 'BRAKES ENGAGED',
+  12: 'DEFLATED',
+  13: 'DEFLATING',
+  14: 'DISABLING MOTOR POWER',
+  15: 'DISENGAGING BRAKES',
+  16: 'ENABLING MOTOR POWER',
+  17: 'ENGAGING BRAKES',
+  18: 'GO DEGRADED',
+  19: 'GO NORMAL',
+  20: 'GO STATIONARY',
+  21: 'INFLATED',
+  22: 'INFLATING',
+  23: 'LP DISENGAGED',
+  24: 'LP DISENGAGING',
+  25: 'LP ENGAGED',
+  26: 'LP ENGAGING',
+  27: 'MOTOR COOLING OFF',
+  28: 'MOTOR COOLING ON',
+  29: 'MOTOR POWER OFF',
+  30: 'MOTOR POWER ON',
+  31: 'STARTING MOTOR COOLING',
+  32: 'STOPPING MOTOR COOLING',
+};
+
+export const mtdomeMotionStatetoStyle = {
+  CLOSED: 'undefined',
+  CRAWLING: 'warning',
+  MOVING: 'warning',
+  OPEN: 'ok',
+  PARKED: 'ok',
+  PARKING: 'warning',
+  STOPPED: 'ok',
+  STOPPING: 'warning',
+  'STOPPING BRAKING': 'warning',
+  'STOPPED BRAKED': 'ok',
+  'BRAKES DISENGAGED': 'ok',
+  'BRAKES ENGAGED': 'alert',
+  DEFLATED: 'undefined',
+  DEFLATING: 'warning',
+  'DISABLING MOTOR POWER': 'warning',
+  'DISENGAGING BRAKES': 'warning',
+  'ENABLING MOTOR POWER': 'warning',
+  'ENGAGING BRAKES': 'warning',
+  'GO DEGRADED': 'warning',
+  'GO NORMAL': 'ok',
+  'GO STATIONARY': 'ok',
+  INFLATED: 'ok',
+  INFLATING: 'warning',
+  'LP DISENGAGED': 'undefined',
+  'LP DISENGAGING': 'warning',
+  'LP ENGAGED': 'ok',
+  'LP ENGAGING': 'warning',
+  'MOTOR COOLING OFF': 'undefined',
+  'MOTOR COOLING ON': 'ok',
+  'MOTOR POWER OFF': 'undefined',
+  'MOTOR POWER ON': 'ok',
+  'STARTING MOTOR COOLING': 'warning',
+  'STOPPING MOTOR COOLING': 'warning',
+};
+
+export const mtdomeElevationEnabledStateToMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtdomeElevationEnabledStatetoStyle = {
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
 };
 
 /**
@@ -950,3 +1176,149 @@ export const M1M3HardpointPositions = [
   { id: 5, actuator: { position: [1.0922e2, 0] }, mini: { position: [99.19, 64.05] } },
   { id: 6, actuator: { position: [5.6794e1, -9.0804e1] }, mini: { position: [80.62, 32.53] } },
 ];
+
+export const M2ActuatorPositionsAlpha = [
+  { id: 1, position: [1.601, 0] },
+  { id: 2, position: [1.566014, 0.332867] },
+  { id: 3, position: [1.462585, 0.6511849] },
+  { id: 4, position: [1.295237, 0.9410446] },
+  { id: 5, position: [1.071278, 1.189774] },
+  { id: 6, position: [0.8005013, 1.386507] },
+  { id: 7, position: [0.4947361, 1.522641] },
+  { id: 8, position: [0.1673502, 1.592229] },
+  { id: 9, position: [-0.1673502, 1.592229] },
+  { id: 10, position: [-0.4947361, 1.522641] },
+  { id: 11, position: [-0.8005013, 1.386507] },
+  { id: 12, position: [-1.071278, 1.189774] },
+  { id: 13, position: [-1.295237, 0.9410446] },
+  { id: 14, position: [-1.462585, 0.6511849] },
+  { id: 15, position: [-1.566014, 0.332867] },
+  { id: 16, position: [-1.601, 0] },
+  { id: 17, position: [-1.566014, -0.332867] },
+  { id: 18, position: [-1.462585, -0.6511849] },
+  { id: 19, position: [-1.295237, -0.9410446] },
+  { id: 20, position: [-1.071278, -1.189774] },
+  { id: 21, position: [-0.8005013, -1.386507] },
+  { id: 22, position: [-0.4947361, -1.522641] },
+  { id: 23, position: [-0.1673502, -1.592229] },
+  { id: 24, position: [0.1673502, -1.592229] },
+  { id: 25, position: [0.4947361, -1.522641] },
+  { id: 26, position: [0.8005013, -1.386507] },
+  { id: 27, position: [1.071278, -1.189774] },
+  { id: 28, position: [1.295237, -0.9410446] },
+  { id: 29, position: [1.462585, -0.6511849] },
+  { id: 30, position: [1.566014, -0.332867] },
+  { id: 31, position: [1.273, 0.1675856] },
+  { id: 32, position: [1.186249, 0.4913528] },
+  { id: 33, position: [1.018657, 0.7816342] },
+  { id: 34, position: [0.7816469, 1.018647] },
+  { id: 35, position: [0.4913655, 1.186244] },
+  { id: 36, position: [0.1676011, 1.272997] },
+  { id: 37, position: [-0.1675856, 1.273] },
+  { id: 38, position: [-0.4913528, 1.186249] },
+  { id: 39, position: [-0.7816342, 1.018657] },
+  { id: 40, position: [-1.018647, 0.7816469] },
+  { id: 41, position: [-1.186244, 0.4913655] },
+  { id: 42, position: [-1.272997, 0.1676011] },
+  { id: 43, position: [-1.273, -0.1675856] },
+  { id: 44, position: [-1.186249, -0.4913528] },
+  { id: 45, position: [-1.018657, -0.7816342] },
+  { id: 46, position: [-0.7816469, -1.018647] },
+  { id: 47, position: [-0.4913655, -1.186244] },
+  { id: 48, position: [-0.1676011, -1.272997] },
+  { id: 49, position: [0.1675856, -1.273] },
+  { id: 50, position: [0.4913528, -1.186249] },
+  { id: 51, position: [0.7816342, -1.018657] },
+  { id: 52, position: [1.018647, -0.7816469] },
+  { id: 53, position: [1.186244, -0.4913655] },
+  { id: 54, position: [1.272997, -0.1676011] },
+  { id: 55, position: [1.002, 0] },
+  { id: 56, position: [0.9415729, 0.3427044] },
+  { id: 57, position: [0.7675778, 0.6440729] },
+  { id: 58, position: [0.5009998, 0.867758] },
+  { id: 59, position: [0.1739956, 0.9867773] },
+  { id: 60, position: [-0.1739956, 0.9867773] },
+  { id: 61, position: [-0.5009998, 0.867758] },
+  { id: 62, position: [-0.7675778, 0.6440729] },
+  { id: 63, position: [-0.9415729, 0.3427044] },
+  { id: 64, position: [-1.002, 0] },
+  { id: 65, position: [-0.9415729, -0.3427044] },
+  { id: 66, position: [-0.7675778, -0.6440729] },
+  { id: 67, position: [-0.5009998, -0.867758] },
+  { id: 68, position: [-0.1739956, -0.9867773] },
+  { id: 69, position: [0.1739956, -0.9867773] },
+  { id: 70, position: [0.5009998, -0.867758] },
+  { id: 71, position: [0.7675778, -0.6440729] },
+  { id: 72, position: [0.9415729, -0.3427044] },
+];
+
+export const M2ActuatorPositions = M2ActuatorPositionsAlpha.map((x) => ({
+  ...x,
+  position: [x.position[0] * 100, x.position[1] * 100],
+}));
+
+export const M2ActuatorTangentPositionsAlpha = [
+  { id: 1, position: [1.566014, 0.332867, 1.295237, 0.9410446] },
+  { id: 2, position: [0.8005013, 1.386507, 0.1673502, 1.592229] },
+  { id: 3, position: [-1.071278, 1.189774, -1.462585, 0.6511849] },
+  { id: 4, position: [-1.566014, -0.332867, -1.295237, -0.9410446] },
+  { id: 5, position: [-0.8005013, -1.386507, -0.1673502, -1.592229] },
+  { id: 6, position: [1.071278, -1.189774, 1.462585, -0.6511849] },
+];
+
+export const M2ActuatorTangentPositions = M2ActuatorTangentPositionsAlpha.map((x) => ({
+  ...x,
+  position: [x.position[0] * 137, x.position[1] * 137, x.position[2] * 137, x.position[3] * 137],
+}));
+
+// Louvers map for MTDome
+export const MTDomeLouversMapAF = [
+  'A1',
+  'A2',
+  'B1',
+  'B2',
+  'B3',
+  'C1',
+  'C2',
+  'C3',
+  'D1',
+  'D2',
+  'D3',
+  'E1',
+  'E2',
+  'E3',
+  'F1',
+  'F2',
+  'F3',
+];
+
+export const MTDomeLouversMapGN = [
+  'G1',
+  'G2',
+  'G3',
+  'H1',
+  'H2',
+  'H3',
+  'I1',
+  'I2',
+  'I3',
+  'L1',
+  'L2',
+  'L3',
+  'M1',
+  'M2',
+  'M3',
+  'N1',
+  'N2',
+];
+
+export const MTMountLimits = {
+  elevation: {
+    min: 5,
+    max: 90,
+  },
+  azimuth: {
+    min: -270,
+    max: 270,
+  },
+};

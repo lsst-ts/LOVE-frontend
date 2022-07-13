@@ -75,6 +75,12 @@ export default class TimeSeriesConfig extends PureComponent {
       salindex: inputs?.[0]?.salindex,
       topic: inputs?.[0]?.topic,
       item: inputs?.[0]?.item,
+      isArray: inputs?.[0]?.isArray,
+      arrayIndex: inputs?.[0]?.arrayIndex,
+      color: inputs?.[0]?.color,
+      dash: inputs?.[0]?.dash,
+      shape: inputs?.[0]?.shape,
+      filled: inputs?.[0]?.filled,
       ...style,
     };
     this.setState({ entries: newEntries, changed: true });
@@ -105,7 +111,22 @@ export default class TimeSeriesConfig extends PureComponent {
         <div className={styles.content}>
           <div className={styles.list}>
             {this.state.entries.map((entry, index) => {
-              const { name, category, csc, salindex, topic, item, type, accessor, color, dash, shape, filled } = entry;
+              const {
+                name,
+                category,
+                csc,
+                salindex,
+                topic,
+                item,
+                isArray,
+                arrayIndex,
+                type,
+                accessor,
+                color,
+                dash,
+                shape,
+                filled,
+              } = entry;
               return (
                 <TSCEntry
                   key={index}
@@ -117,6 +138,8 @@ export default class TimeSeriesConfig extends PureComponent {
                       salindex: parseInt(salindex),
                       topic,
                       item,
+                      isArray,
+                      arrayIndex,
                       color: color ?? defaultStyles[index % (defaultStyles.length - 1)].color,
                       dash: dash ?? defaultStyles[index % (defaultStyles.length - 1)].dash,
                       shape: shape ?? defaultStyles[index % (defaultStyles.length - 1)].shape,

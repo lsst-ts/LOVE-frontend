@@ -123,6 +123,28 @@ export default class TSCInput extends PureComponent {
           placeholder="Select an item"
           onChange={(selection) => this.onSelectChange(selection.value, 'item')}
         />
+        <div>
+          Is Array?
+          <Input
+            className={styles.checkboxInput}
+            type="checkbox"
+            checked={input?.isArray}
+            onChange={(ev) => this.onSelectChange(ev.target.checked, 'isArray')}
+          />
+          {input?.isArray && (
+            <>
+              Index &nbsp;&nbsp;
+              <Input
+                className={styles.input}
+                type="number"
+                min={0}
+                value={input?.arrayIndex ?? 0}
+                placeholder="Array index"
+                onChange={(ev) => this.onSelectChange(parseInt(ev.target.value), 'arrayIndex')}
+              />
+            </>
+          )}
+        </div>
         {/** DO NOT DELETE THIS COMMENTED CODE, IT WILL BE USED LATER */}
         {/* <Button className={styles.button} onClick={this.props.onGetName} disabled={this.props.onGetName === null}>
           Use as Name

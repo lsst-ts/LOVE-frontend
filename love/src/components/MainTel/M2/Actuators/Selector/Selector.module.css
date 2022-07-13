@@ -1,0 +1,146 @@
+.container {
+  display: flex;
+  align-self: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.cursorMove {
+  cursor: crosshair;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* .container svg {
+  vertical-align: top;
+  margin: auto;
+  width: 70%;
+  height: auto;
+} */
+
+.svgContainer {
+  flex-grow: 2;
+  width: 100%;
+  height: 100%;
+  /* max-width: 480px; */
+  min-width: 300px;
+  /*border-radius: 50%;*/
+}
+
+.svgContainer text.hidden {
+  opacity: 0;
+}
+
+.svgContainer text {
+  opacity: 1;
+  transition: opacity 0.35s linear;
+  font-size: 0.5em;
+  stroke: #000;
+  stroke-width: 0.2px;
+};
+
+.circleOverlayDisabled {
+  fill: var(--status-disabled-dimmed-color-2);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.borderCircleOverlay {
+  stroke: var(--tertiary-background-color);
+  stroke-width: 5px;
+}
+
+.hiddenCircleOverlay {
+  stroke: var(--second-primary-background-color);
+  stroke-width: 156px;
+}
+
+.svgContainer .axisLabel {
+  font-size: 1.2em;
+  fill: white;
+}
+
+
+.hardpoints {
+  /*max-width: 160px;
+  min-width: 60px;*/
+  display: flex;
+  flex-direction: column;
+  /* align-items: left; */
+}
+
+.hardpoints > svg {
+  width: 134px;
+  height: 134px;
+}
+
+.hardpoints > span:first-child {
+  text-align: left;
+  font-weight: bold;
+  margin-bottom: 0.5em;
+}
+
+.borderCircleHardpoint {
+  opacity: 0.85;
+  fill: #152f3b;
+}
+
+.textHardpoint {
+  font-size: 21px !important;
+  font-family: Helvetica !important;
+  /*fill: white !important;*/
+}
+
+.circleHardpoint {
+  /*fill:#8bea96;*/
+  stroke-width: 2px;
+  /*stroke: gray;*/
+  opacity: 0.71;
+  cursor: pointer;
+}
+
+.gHardpoint:hover .circleHardpoint {
+  stroke: white;
+}
+
+.gHardpoint:hover .textHardpoint {
+  fill: white;
+  stroke: white;
+}
+
+.circleHardpointActuator {
+  fill: none;
+  stroke-width: 3px;
+  opacity: 0.61;
+}
+
+.actuator {
+  cursor: pointer;
+}
+
+.actuator:hover circle {
+  stroke: white !important;
+}
+
+.actuator:hover text {
+  fill: white !important;
+  stroke: white !important;
+}
+
+.actuatorTangent {
+  cursor: pointer;
+}
+
+.actuatorTangent:hover path {
+  stroke: white !important;
+}
+
+.actuatorTangent:hover text {
+  fill: white !important;
+  stroke: white !important;
+}
+
