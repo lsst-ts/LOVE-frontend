@@ -24,8 +24,8 @@ const moment = extendMoment(Moment);
 
 export default class NonExposure extends Component {
   static propTypes = {
-    selectedDateStart: PropTypes.string,
-    selectedDateEnd: PropTypes.string,
+    selectedDateStart: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+    selectedDateEnd: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
     handleDateTimeRange: PropTypes.func,
     selectedCommentType: PropTypes.object,
     changeCommentTypeSelect: PropTypes.func,

@@ -211,7 +211,7 @@ export default class ExposureAdd extends Component {
                   />
                 </span>
 
-                <span className={styles.label}>Type of Comment</span>
+                {/* <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
                   <Select
                     option={selectedCommentType}
@@ -224,7 +224,7 @@ export default class ExposureAdd extends Component {
                     className={styles.select}
                     small
                   />
-                </span>
+                </span> */}
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                 <span className={styles.value}>
@@ -272,7 +272,7 @@ export default class ExposureAdd extends Component {
                       />
                     </span> */}
 
-                    <span className={styles.label}>Type of Comment</span>
+                    {/* <span className={styles.label}>Type of Comment</span>
                     <span className={styles.value}>
                       <Select
                         option={selectedCommentType}
@@ -285,7 +285,7 @@ export default class ExposureAdd extends Component {
                         className={styles.select}
                         small
                       />
-                    </span>
+                    </span> */}
 
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>
