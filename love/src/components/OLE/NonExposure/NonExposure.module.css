@@ -258,6 +258,13 @@
   grid-auto-rows: auto;
 }
 
+.cscValue {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  column-gap: 5px;
+  grid-auto-rows: auto;
+}
+
 .input {
   width: 100%;
   box-sizing: border-box;
