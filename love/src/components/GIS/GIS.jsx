@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import styles from './GIS.module.css';
+import { signals, effects } from '../../Config';
 
 export default class GIS extends Component {
   static propTypes = {};
@@ -19,9 +21,11 @@ export default class GIS extends Component {
   };
 
   render() {
+    console.log(signals);
     return (
-      <div>
-        <span>GIS</span>
+      <div className={styles.div}>
+        <div className={styles.div2}></div>
+        <div className={styles.div2}></div>
       </div>
     );
   }

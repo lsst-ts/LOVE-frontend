@@ -23,14 +23,16 @@ export const schema = {
   },
 };
 
-const GISContainer = ({ ...props }) => {
+const GISContainer = ({ subscribeToStream, unsubscribeToStream, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
   return <GIS subscribeToStream={subscribeToStream} unsubscribeToStream={unsubscribeToStream} />;
 };
 
-const mapStateToProps = (state) => {};
+const mapStateToProps = (state) => {
+  return {};
+};
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [];

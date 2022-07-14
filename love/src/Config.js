@@ -1326,15 +1326,93 @@ export const MTMountLimits = {
 export const signals = {
   fireProtectionSystem: {
     fireSignal: {
-      level: false,
       effects: ['fireIndication'],
+    },
+  },
+  earthquakeDetectionSystem: {
+    catastrophicEarthquakeSignal: {
+      //onHover: function(setState),
+      effects: [
+        'dischargeCapacitorBanks',
+        'stoOthersDrives',
+        'stoElAndAzDrivesAndEngageTheBrakes',
+        'stoCCWDrives',
+        'stoHexapods',
+        'stoActuators',
+        'stoDrivesShutterDoorsAnsWindscreen',
+        'stoCraneDrives',
+        'stoRearDoorsDrives',
+        'stoDrivesLouversAndLockingPin',
+        'stoAzDrivesEngageBrakes',
+        'stoRotator',
+        'stoHexapods',
+        'stoPlatformLift',
+        'earthquakeStoActuators',
+        'laserCutOffShutterClosed',
+        'stoFunctionDrives',
+      ],
+    },
+  },
+  globalInterlockSystem: {
+    internalFailure: {
+      effects: [
+        'stoOthersDrives',
+        'stoElAndAzDrivesAndEngageTheBrakes',
+        'stoCCWDrives',
+        'stoHexapods',
+        'stoActuators',
+        'stoDrivesShutterDoorsAnsWindscreen',
+        'stoRearDoorsDrives',
+        'stoDrivesLouversAndLockingPin',
+        'stoRotator',
+        'stoHexapods',
+        'stoLiftAtToTopFloor',
+        'laserCutOffShutterClosed',
+        'emergencyStoActuators',
+      ],
     },
   },
 };
 
 export const effects = {
   globalInterlockSystem: {
-    level: false,
     effets: ['fireIndication'],
+  },
+  tmaInterlockSystem: {
+    effects: ['dischargeCapacitorBanks', 'stoOthersDrives', 'stoElAndAzDrivesAndEngageTheBrakes', 'stoCCWDrives'],
+  },
+  m2: {
+    level: false,
+    effects: ['stoCCWDrives', 'stoHexapods'],
+  },
+  domeInterlockSystem: {
+    level: false,
+    effects: [
+      'stoDrivesShutterDoorsAnsWindscreen',
+      'stoCraneDrives',
+      'stoRearDoorsDrives',
+      'stoDrivesLouversAndLockingPin',
+      'stoAzDrivesEngageBrakes',
+    ],
+  },
+  camera: {
+    level: false,
+    effects: ['stoRotator', 'stoHexapods'],
+  },
+  plowController: {
+    level: false,
+    effects: ['stoPlatformLift'],
+  },
+  m1m3SupportSystem: {
+    level: false,
+    effects: ['earthquakeStoActuators'],
+  },
+  laserController: {
+    level: false,
+    effects: ['laserCutOffShutterClosed'],
+  },
+  manLift: {
+    level: false,
+    effects: ['stoFunctionDrives'],
   },
 };
