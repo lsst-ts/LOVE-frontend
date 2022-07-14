@@ -3,5 +3,15 @@
 }
 
 .div2 {
+  margin-right: 50px;
+  width: 430px;
+  height: 650px;
   background-color: var(--second-quinary-background-color);
+}
+
+.separator {
+  color: red;
+  border-top: 1px solid var(--default-background-color);
+  padding: 0.3em;
+  transform: translateY(0.2em);
 }

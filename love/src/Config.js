@@ -1337,15 +1337,15 @@ export const signals = {
         'stoOthersDrives',
         'stoElAndAzDrivesAndEngageTheBrakes',
         'stoCCWDrives',
-        'stoHexapods',
-        'stoActuators',
+        'stoHexapodsM2',
+        'stoActuatorsM2',
         'stoDrivesShutterDoorsAnsWindscreen',
         'stoCraneDrives',
         'stoRearDoorsDrives',
         'stoDrivesLouversAndLockingPin',
         'stoAzDrivesEngageBrakes',
-        'stoRotator',
-        'stoHexapods',
+        'stoRotatorCam',
+        'stoHexapodsCam',
         'stoPlatformLift',
         'earthquakeStoActuators',
         'laserCutOffShutterClosed',
@@ -1359,34 +1359,127 @@ export const signals = {
         'stoOthersDrives',
         'stoElAndAzDrivesAndEngageTheBrakes',
         'stoCCWDrives',
+        'stoHexapodsM2',
+        'stoActuatorsM2',
+        'stoDrivesShutterDoorsAnsWindscreen',
+        'stoCraneDrives',
+        'stoRearDoorsDrives',
+        'stoDrivesLouversAndLockingPin',
+        'stoAzDrivesEngageBrakes',
+        'stoRotatorCam',
+        'stoHexapodsCam',
+        'stoLiftAtToTopFloor',
+        'laserCutOffShutterClosed',
+        'emergencyStoActuators',
+        'stoFunctionDrives',
+      ],
+    },
+    emergencyStop: {
+      effects: [
+        'stoOthersDrives',
+        'stoElAndAzDrivesAndEngageTheBrakes',
+        'stoCCWDrives',
         'stoHexapods',
         'stoActuators',
         'stoDrivesShutterDoorsAnsWindscreen',
         'stoRearDoorsDrives',
-        'stoDrivesLouversAndLockingPin',
-        'stoRotator',
-        'stoHexapods',
-        'stoLiftAtToTopFloor',
-        'laserCutOffShutterClosed',
-        'emergencyStoActuators',
       ],
+    },
+    ccwSafetyDevice: {
+      effects: ['stoRotatorCam'],
+    },
+    cameraRotator: {
+      effects: ['cameraRotatorPinInserted'],
+    },
+    manLiftNotParked: {
+      effects: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoCraneDrives'],
+    },
+  },
+  domeInterlockSystem: {
+    loockingPinRetractedOrRearDoorLouversNotClosed: {
+      effects: ['stoLiftAtToTopFloor'],
+    },
+    rearDoorNotClosed: {
+      effects: ['stoPlatformLift'],
+    },
+    etpbs: {
+      effects: [
+        'stoOthersDrives',
+        'stoElAndAzDrivesAndEngageTheBrakes',
+        'stoCCWDrives',
+        'stoHexapodsM2',
+        'stoActuatorsM2',
+        'stoRotatorCam',
+        'stoHexapodsCam',
+        'stoPlatformLift',
+        'earthquakeStoActuators',
+        'laserCutOffShutterClosed',
+        'stoFunctionDrives',
+      ],
+    },
+    craneBridgeLimitSwitchisReleasedFromParkedPosition: {
+      effects: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoFunctionDrives'],
+    },
+  },
+  accessControlSystem: {
+    unauthorizedPierAccess: {
+      effects: ['stoElAndAzDrivesAndEngageTheBrakes'],
+    },
+    unauthorizedDomeAccess: {
+      effects: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoAzDrivesEngageBrakes', 'laserCutOffShutterClosed'],
+    },
+  },
+  platformLift: {
+    aboveUtilityFloor: {
+      effects: ['stoDrivesLouversAndLockingPin'],
+    },
+    notParkedAtTheTelescopeLevel: {
+      effects: ['stoRearDoorsDrives'],
+    },
+  },
+  tmaInterlockSystem: {
+    breaksNotEngaged: {
+      effects: ['stoCraneDrives'],
+    },
+    etpbs: {
+      effects: [
+        'stoDrivesShutterDoorsAnsWindscreen',
+        'stoCraneDrives',
+        'stoRearDoorsDrives',
+        'stoDrivesLouversAndLockingPin',
+        'stoAzDrivesEngageBrakes',
+        'stoCCWDrivesM2',
+        'stoHexapodsM2',
+        'stoPlatformLift',
+        'emergencyStoActuators',
+        'laserCutOffShutterClosed',
+        'stoFunctionDrives',
+      ],
+    },
+  },
+  mcs: {
+    failedWatchdogOrLossCommunication: {
+      effects: ['stoRotatorCam', 'stoHexapodsCam'],
+    },
+  },
+  m1m3SupportSystem: {
+    interlock: {
+      effects: ['stoElAndAzDrivesAndEngageTheBrakes'],
     },
   },
 };
 
 export const effects = {
   globalInterlockSystem: {
-    effets: ['fireIndication'],
+    effets: ['fireIndication', 'cameraRotatorInserted'],
   },
   tmaInterlockSystem: {
     effects: ['dischargeCapacitorBanks', 'stoOthersDrives', 'stoElAndAzDrivesAndEngageTheBrakes', 'stoCCWDrives'],
   },
   m2: {
-    level: false,
-    effects: ['stoCCWDrives', 'stoHexapods'],
+    effects: ['stoHexapodsM2', 'stoActuatorsM2'],
   },
   domeInterlockSystem: {
-    level: false,
     effects: [
       'stoDrivesShutterDoorsAnsWindscreen',
       'stoCraneDrives',
@@ -1396,23 +1489,18 @@ export const effects = {
     ],
   },
   camera: {
-    level: false,
-    effects: ['stoRotator', 'stoHexapods'],
+    effects: ['stoRotatorCam', 'stoHexapodsCam'],
   },
   plowController: {
-    level: false,
-    effects: ['stoPlatformLift'],
+    effects: ['stoPlatformLift', 'stoLiftAtToTopFloor'],
   },
   m1m3SupportSystem: {
-    level: false,
-    effects: ['earthquakeStoActuators'],
+    effects: ['earthquakeStoActuators', 'emergencyStoActuators'],
   },
   laserController: {
-    level: false,
     effects: ['laserCutOffShutterClosed'],
   },
   manLift: {
-    level: false,
     effects: ['stoFunctionDrives'],
   },
 };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './GIS.module.css';
+import { CardList, Card, Title, Separator } from 'components/GeneralPurpose/CardList/CardList';
 import { signals, effects } from '../../Config';
 
 export default class GIS extends Component {
@@ -24,8 +25,9 @@ export default class GIS extends Component {
     console.log(signals);
     return (
       <div className={styles.div}>
-        <div className={styles.div2}></div>
-        <div className={styles.div2}></div>
+        <box className={styles.div2}></box>
+        {/* <Separator className={styles.separator}/> */}
+        <box className={styles.div2}></box>
       </div>
     );
   }
