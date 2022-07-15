@@ -6,7 +6,7 @@
   margin-right: 50px;
   width: 430px;
   height: 650px;
-  background-color: var(--second-quinary-background-color);
+  /* background-color: var(--second-quinary-background-color); */
 }
 
 .separator {
@@ -28,6 +28,5 @@
 }
 
 .inactive {
-  /* opacity: 0.4; */
-  background-color: black;
+  opacity: 0.4;
 }

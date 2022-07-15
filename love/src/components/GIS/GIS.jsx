@@ -35,28 +35,30 @@ export default class GIS extends Component {
 
   render() {
     const { activeEffects } = this.state;
-    console.log(signals);
     // const flattenedSignals = Object.values(signals).map((signals) => Object.values(signals)).flat();
-    const flattenedSignals = Object.values(signals);
+    const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
     console.log(flattenedSignals);
     return (
       <div className={styles.div}>
-        <box className={styles.div2}>
-          {flattenedSignals.map((signals) =>
-            Object.entries(signals).map(([signal, { effects }]) => (
-              <div
-                onMouseEnter={() => this.signalOnEnter(effects)}
-                onMouseLeave={() => this.signalOnLeave()}
-                className={styles.signal}
-              >
-                {signal}
-              </div>
-            )),
-          )}
-        </box>
+        <div className={styles.div2}>
+          {flattenedSignals.map(([system, signals]) => (
+            <div className={styles.system}>
+              <h4>{system}</h4>
+              {Object.keys(signals).map((signal) => (
+                <div
+                  onMouseEnter={() => this.signalOnEnter(signals[system][signal])}
+                  onMouseLeave={() => this.signalOnLeave()}
+                  className={styles.signal}
+                >
+                  {signal}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
         {/* <Separator className={styles.separator}/> */}
-        <box className={styles.div2}>
+        <div className={styles.div2}>
           {/* <div className={[styles.signal, activeEffects.includes("fireIndication") ? '' : styles.inactive].join(" ")}>fireIndication</div> */}
           {effectsArray.map(([system, effects]) => (
             <div className={styles.system}>
@@ -73,7 +75,7 @@ export default class GIS extends Component {
               ))}
             </div>
           ))}
-        </box>
+        </div>
       </div>
     );
   }
