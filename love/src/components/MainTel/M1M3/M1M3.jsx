@@ -330,7 +330,7 @@ export default class M1M3 extends Component {
 
     if (
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
-      this.props[this.state.selectedForceInput] !== prevProps[this.state.selectedForceInput]
+      !_.isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
     ) {
       const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
       this.setState({ actuatorsForce: forceData });
@@ -464,7 +464,11 @@ export default class M1M3 extends Component {
             <div className={styles.control}>
               <span>Show actuators ID:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Yes', 'No']} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
+                <Toggle
+                  labels={['Yes', 'No']}
+                  isLive={this.state.showActuatorsID}
+                  setLiveMode={this.toggleActuatorsID}
+                />
               </div>
             </div>
             <div className={styles.control}>
