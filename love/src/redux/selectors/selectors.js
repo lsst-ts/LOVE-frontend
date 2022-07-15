@@ -207,10 +207,7 @@ export const getM2State = (state) => {
 };
 
 export const getM2Inclinometer = (state) => {
-  const subscriptions = [
-    'telemetry-MTM2-0-zenithAngle',
-    'event-MTM2-0-inclinationTelemetrySource',
-  ];
+  const subscriptions = ['telemetry-MTM2-0-zenithAngle', 'event-MTM2-0-inclinationTelemetrySource'];
   const m2InclinometerData = getStreamsData(state, subscriptions);
   return {
     zenithAngleMeasured: m2InclinometerData['telemetry-MTM2-0-zenithAngle']?.measured?.value ?? 0,
@@ -228,34 +225,24 @@ export const getM2Actuator = (state) => {
   ];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ??
-      Array(78).fill(0),
-    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ??
-      Array(72).fill(0),
-    axialEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ??
-      Array(72).fill(0),
-    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ??
-      Array(6).fill(0),
-    tangentEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ??
-      Array(6).fill(0),
+    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ?? Array(78).fill(0),
+    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ?? Array(72).fill(0),
+    axialEncoderPositions:
+      m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ?? Array(72).fill(0),
+    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ?? Array(6).fill(0),
+    tangentEncoderPositions:
+      m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ?? Array(6).fill(0),
   };
 };
 
 export const getM2ActuatorForce = (state) => {
-  const subscriptions = [
-    'telemetry-MTM2-0-axialForce',
-    'telemetry-MTM2-0-tangentForce',
-  ];
+  const subscriptions = ['telemetry-MTM2-0-axialForce', 'telemetry-MTM2-0-tangentForce'];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ??
-      Array(72).fill(0),
-    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ??
-      Array(72).fill(0),
-    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ??
-      Array(6).fill(0),
-    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ??
-      Array(6).fill(0),
+    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? Array(72).fill(0),
+    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? Array(72).fill(0),
+    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? Array(6).fill(0),
+    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? Array(6).fill(0),
   };
 };
 
@@ -296,14 +283,6 @@ export const getM2ActuatorTable = (state) => {
   };
 };
 
-function createDataRandom() {
-  const data = [];
-  for (let i = 0; i < 156; i++) {
-    data.push(Math.floor(Math.random() * 1000));
-  }
-  return data;
-}
-
 export const getM1M3ActuatorForces = (state) => {
   const subscriptions = [
     'event-MTM1M3-0-appliedAberrationForces',
@@ -333,9 +312,7 @@ export const getM1M3ActuatorForces = (state) => {
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    appliedAberrationForces: m1m3Data['event-MTM1M3-0-appliedAberrationForces']?.[0] ?? {
-      zForces: { value: createDataRandom() },
-    },
+    appliedAberrationForces: m1m3Data['event-MTM1M3-0-appliedAberrationForces']?.[0] ?? {},
     appliedAccelerationForces: m1m3Data['event-MTM1M3-0-appliedAccelerationForces']?.[0] ?? {},
     appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
     appliedAzimuthForces: m1m3Data['event-MTM1M3-0-appliedAzimuthForces']?.[0] ?? {},
