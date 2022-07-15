@@ -1331,7 +1331,6 @@ export const signals = {
   },
   earthquakeDetectionSystem: {
     catastrophicEarthquakeSignal: {
-      //onHover: function(setState),
       effects: [
         'dischargeCapacitorBanks',
         'stoOthersDrives',
@@ -1470,37 +1469,24 @@ export const signals = {
 };
 
 export const effects = {
-  globalInterlockSystem: {
-    effets: ['fireIndication', 'cameraRotatorInserted'],
-  },
-  tmaInterlockSystem: {
-    effects: ['dischargeCapacitorBanks', 'stoOthersDrives', 'stoElAndAzDrivesAndEngageTheBrakes', 'stoCCWDrives'],
-  },
-  m2: {
-    effects: ['stoHexapodsM2', 'stoActuatorsM2'],
-  },
-  domeInterlockSystem: {
-    effects: [
-      'stoDrivesShutterDoorsAnsWindscreen',
-      'stoCraneDrives',
-      'stoRearDoorsDrives',
-      'stoDrivesLouversAndLockingPin',
-      'stoAzDrivesEngageBrakes',
-    ],
-  },
-  camera: {
-    effects: ['stoRotatorCam', 'stoHexapodsCam'],
-  },
-  plowController: {
-    effects: ['stoPlatformLift', 'stoLiftAtToTopFloor'],
-  },
-  m1m3SupportSystem: {
-    effects: ['earthquakeStoActuators', 'emergencyStoActuators'],
-  },
-  laserController: {
-    effects: ['laserCutOffShutterClosed'],
-  },
-  manLift: {
-    effects: ['stoFunctionDrives'],
-  },
+  globalInterlockSystem: ['fireIndication', 'cameraRotatorInserted'],
+  tmaInterlockSystem: [
+    'dischargeCapacitorBanks',
+    'stoOthersDrives',
+    'stoElAndAzDrivesAndEngageTheBrakes',
+    'stoCCWDrives',
+  ],
+  m2: ['stoHexapodsM2', 'stoActuatorsM2'],
+  domeInterlockSystem: [
+    'stoDrivesShutterDoorsAnsWindscreen',
+    'stoCraneDrives',
+    'stoRearDoorsDrives',
+    'stoDrivesLouversAndLockingPin',
+    'stoAzDrivesEngageBrakes',
+  ],
+  camera: ['stoRotatorCam', 'stoHexapodsCam'],
+  plowController: ['stoPlatformLift', 'stoLiftAtToTopFloor'],
+  m1m3SupportSystem: ['earthquakeStoActuators', 'emergencyStoActuators'],
+  laserController: ['laserCutOffShutterClosed'],
+  manLift: ['stoFunctionDrives'],
 };
