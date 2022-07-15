@@ -1251,21 +1251,6 @@ export const formatSecondsToDigital = (time) => {
   return `${hours}:${minutes}:${seconds}`;
 };
 
-/**
- * Converts hours to digital format as '00:00'
- * @param {number} time_hrs, hours to be converted
- */
- export const formatHoursToDigital = (time_hrs) => {
-  const time = time_hrs * 60 * 60;
-  let seconds = time % 60;
-  let minutes = Math.floor((time % 3600) / 60);
-  let hours = Math.floor(time / 3600);
-  minutes = minutes.toString().length === 1 ? `0${minutes}` : minutes;
-  seconds = seconds.toString().length === 1 ? `0${seconds}` : seconds;
-  hours = hours.toString().length === 1 ? `0${hours}` : hours;
-  return `${hours}:${minutes}:${seconds}`;
-};
-
 export const getStringRegExp = (str) => {
   try {
     return new RegExp(str, 'i');
