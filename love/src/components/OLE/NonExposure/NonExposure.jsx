@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
+import { iconLevelOLE } from 'Config';
 import { formatHoursToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
@@ -31,7 +32,7 @@ export default class NonExposure extends Component {
     changeCommentTypeSelect: PropTypes.func,
     selectedSubsystem: PropTypes.string,
     changeSubsystemSelect: PropTypes.func,
-    selectedObsTimeLoss: PropTypes.boolean,
+    selectedObsTimeLoss: PropTypes.bool,
     changeObsTimeLossSelect: PropTypes.func,
   };
 
@@ -74,6 +75,12 @@ export default class NonExposure extends Component {
         selected: index,
       });
     }
+  }
+
+  getLevel(value) {
+    const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
+    const icon = iconLevelOLE[label] ?? undefined;
+    return <><span className={styles.levelIcon}>{icon}</span> {label}</>; 
   }
 
   refreshLogsRemove(nonExposure) {
@@ -120,7 +127,7 @@ export default class NonExposure extends Component {
         title: 'Level',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label,
+        render: (value) => this.getLevel(value),
       },
       {
         field: 'time_lost',
