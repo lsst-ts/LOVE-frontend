@@ -1,0 +1,9 @@
+version: "3.7"
+
+services:
+  frontend:
+    container_name: love-frontend-mount
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: love-frontend-mount-image

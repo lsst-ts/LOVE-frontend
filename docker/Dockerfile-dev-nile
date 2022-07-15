@@ -1,0 +1,9 @@
+FROM node:12.16.1-alpine as builder
+
+# Expose port
+EXPOSE 3000
+
+WORKDIR /usr/src/LOVE-frontend/love/
+
+# Run development server in runtime
+CMD yarn install && yarn start
