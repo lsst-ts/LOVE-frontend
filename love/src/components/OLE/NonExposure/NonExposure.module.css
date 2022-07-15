@@ -342,3 +342,10 @@ th.tableHead {
   justify-content: space-between;
   margin-top: 1em;
 }
+
+.levelIcon {
+  display: inline-block; 
+  width: 18px;
+  height: 18px;
+  margin-left: 5px;
+}
