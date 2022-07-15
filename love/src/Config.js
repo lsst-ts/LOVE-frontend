@@ -1,3 +1,9 @@
+import DebugIcon from 'components/icons/CSCExpanded/DebugIcon/DebugIcon';
+import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
+import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
+import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
+
+
 export const hasFakeData = false;
 export const hasCommandPrivileges = true;
 // Whether to simulate websocket messages
@@ -26,6 +32,14 @@ export const exposureFlagStateToStyle = {
   none: 'ok',
   junk: 'warning',
   questionable: 'alert',
+};
+
+export const iconLevelOLE = {
+  debug: <DebugIcon />,
+  info: <InfoIcon />,
+  warning: <WarningIcon />,
+  error: <ErrorIcon />,
+  fatal: <ErrorIcon />,
 };
 
 // eslint-disable-next-line
