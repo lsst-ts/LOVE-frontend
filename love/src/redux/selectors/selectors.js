@@ -81,6 +81,7 @@ export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
 };
 
+// MTM1M3 selectors
 export const getM1M3ActuatorsState = (state) => {
   const subscriptions = [
     'telemetry-MTM1M3-0-forceActuatorData',
@@ -189,6 +190,54 @@ export const getM1M3State = (state) => {
   };
 };
 
+export const getM1M3ActuatorForces = (state) => {
+  const subscriptions = [
+    'event-MTM1M3-0-appliedAberrationForces',
+    'event-MTM1M3-0-appliedAccelerationForces',
+    'event-MTM1M3-0-appliedActiveOpticForces',
+    'event-MTM1M3-0-appliedAzimuthForces',
+    'event-MTM1M3-0-appliedBalanceForces',
+    'event-MTM1M3-0-appliedCylinderForces',
+    'event-MTM1M3-0-appliedElevationForces',
+    'event-MTM1M3-0-appliedForces',
+    'event-MTM1M3-0-appliedOffsetForces',
+    'event-MTM1M3-0-appliedStaticForces',
+    'event-MTM1M3-0-appliedThermalForces',
+    'event-MTM1M3-0-appliedVelocityForces',
+    'event-MTM1M3-0-preclippedAberrationForces',
+    'event-MTM1M3-0-preclippedAccelerationForces',
+    'event-MTM1M3-0-preclippedActiveOpticForces',
+    'event-MTM1M3-0-preclippedAzimuthForces',
+    'event-MTM1M3-0-preclippedBalanceForces',
+    'event-MTM1M3-0-preclippedCylinderForces',
+    'event-MTM1M3-0-preclippedElevationForces',
+    'event-MTM1M3-0-preclippedForces',
+    'event-MTM1M3-0-preclippedOffsetForces',
+    'event-MTM1M3-0-preclippedStaticForces',
+    'event-MTM1M3-0-preclippedThermalForces',
+    'event-MTM1M3-0-preclippedVelocityForces',
+  ];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    appliedAberrationForces: m1m3Data['event-MTM1M3-0-appliedAberrationForces']?.[0] ?? {},
+    appliedAccelerationForces: m1m3Data['event-MTM1M3-0-appliedAccelerationForces']?.[0] ?? {},
+    appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
+    appliedAzimuthForces: m1m3Data['event-MTM1M3-0-appliedAzimuthForces']?.[0] ?? {},
+    appliedBalanceForces: m1m3Data['event-MTM1M3-0-appliedBalanceForces']?.[0] ?? {},
+    appliedCylinderForces: m1m3Data['event-MTM1M3-0-appliedCylinderForces']?.[0] ?? {},
+    appliedElevationForces: m1m3Data['event-MTM1M3-0-appliedElevationForces']?.[0] ?? {},
+    appliedForces: m1m3Data['event-MTM1M3-0-appliedForces']?.[0] ?? {},
+    preclippedAberrationForces: m1m3Data['event-MTM1M3-0-preclippedAberrationForces']?.[0] ?? {},
+    preclippedAccelerationForces: m1m3Data['event-MTM1M3-0-preclippedAccelerationForces']?.[0] ?? {},
+    preclippedActiveOpticForces: m1m3Data['event-MTM1M3-0-preclippedActiveOpticForces']?.[0] ?? {},
+    preclippedAzimuthForces: m1m3Data['event-MTM1M3-0-preclippedAzimuthForces']?.[0] ?? {},
+    preclippedBalanceForces: m1m3Data['event-MTM1M3-0-preclippedBalanceForces']?.[0] ?? {},
+    preclippedCylinderForces: m1m3Data['event-MTM1M3-0-preclippedCylinderForces']?.[0] ?? {},
+    preclippedElevationForces: m1m3Data['event-MTM1M3-0-preclippedElevationForces']?.[0] ?? {},
+    preclippedForces: m1m3Data['event-MTM1M3-0-preclippedForces']?.[0] ?? {},
+  };
+};
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [
@@ -280,54 +329,6 @@ export const getM2ActuatorTable = (state) => {
     positionIMSXRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.xRot?.value ?? 0,
     positionIMSYRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.yRot?.value ?? 0,
     positionIMSZRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.zRot?.value ?? 0,
-  };
-};
-
-export const getM1M3ActuatorForces = (state) => {
-  const subscriptions = [
-    'event-MTM1M3-0-appliedAberrationForces',
-    'event-MTM1M3-0-appliedAccelerationForces',
-    'event-MTM1M3-0-appliedActiveOpticForces',
-    'event-MTM1M3-0-appliedAzimuthForces',
-    'event-MTM1M3-0-appliedBalanceForces',
-    'event-MTM1M3-0-appliedCylinderForces',
-    'event-MTM1M3-0-appliedElevationForces',
-    'event-MTM1M3-0-appliedForces',
-    'event-MTM1M3-0-appliedOffsetForces',
-    'event-MTM1M3-0-appliedStaticForces',
-    'event-MTM1M3-0-appliedThermalForces',
-    'event-MTM1M3-0-appliedVelocityForces',
-    'event-MTM1M3-0-preclippedAberrationForces',
-    'event-MTM1M3-0-preclippedAccelerationForces',
-    'event-MTM1M3-0-preclippedActiveOpticForces',
-    'event-MTM1M3-0-preclippedAzimuthForces',
-    'event-MTM1M3-0-preclippedBalanceForces',
-    'event-MTM1M3-0-preclippedCylinderForces',
-    'event-MTM1M3-0-preclippedElevationForces',
-    'event-MTM1M3-0-preclippedForces',
-    'event-MTM1M3-0-preclippedOffsetForces',
-    'event-MTM1M3-0-preclippedStaticForces',
-    'event-MTM1M3-0-preclippedThermalForces',
-    'event-MTM1M3-0-preclippedVelocityForces',
-  ];
-  const m1m3Data = getStreamsData(state, subscriptions);
-  return {
-    appliedAberrationForces: m1m3Data['event-MTM1M3-0-appliedAberrationForces']?.[0] ?? {},
-    appliedAccelerationForces: m1m3Data['event-MTM1M3-0-appliedAccelerationForces']?.[0] ?? {},
-    appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
-    appliedAzimuthForces: m1m3Data['event-MTM1M3-0-appliedAzimuthForces']?.[0] ?? {},
-    appliedBalanceForces: m1m3Data['event-MTM1M3-0-appliedBalanceForces']?.[0] ?? {},
-    appliedCylinderForces: m1m3Data['event-MTM1M3-0-appliedCylinderForces']?.[0] ?? {},
-    appliedElevationForces: m1m3Data['event-MTM1M3-0-appliedElevationForces']?.[0] ?? {},
-    appliedForces: m1m3Data['event-MTM1M3-0-appliedForces']?.[0] ?? {},
-    preclippedAberrationForces: m1m3Data['event-MTM1M3-0-preclippedAberrationForces']?.[0] ?? {},
-    preclippedAccelerationForces: m1m3Data['event-MTM1M3-0-preclippedAccelerationForces']?.[0] ?? {},
-    preclippedActiveOpticForces: m1m3Data['event-MTM1M3-0-preclippedActiveOpticForces']?.[0] ?? {},
-    preclippedAzimuthForces: m1m3Data['event-MTM1M3-0-preclippedAzimuthForces']?.[0] ?? {},
-    preclippedBalanceForces: m1m3Data['event-MTM1M3-0-preclippedBalanceForces']?.[0] ?? {},
-    preclippedCylinderForces: m1m3Data['event-MTM1M3-0-preclippedCylinderForces']?.[0] ?? {},
-    preclippedElevationForces: m1m3Data['event-MTM1M3-0-preclippedElevationForces']?.[0] ?? {},
-    preclippedForces: m1m3Data['event-MTM1M3-0-preclippedForces']?.[0] ?? {},
   };
 };
 
