@@ -14,6 +14,7 @@ import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { getOLEDataFromTags } from 'Utils';
+import { iconLevelOLE } from 'Config';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import styles from './NonExposure.module.css';
@@ -87,6 +88,11 @@ export default class NonExposureEdit extends Component {
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  getIconLevel(level) {
+    const icon = iconLevelOLE[level] ? iconLevelOLE[level] : undefined;
+    return icon;
   }
 
   cleanForm() {
@@ -268,7 +274,7 @@ export default class NonExposureEdit extends Component {
               <div className={styles.contentLeft}>
                 
                 <span className={styles.label}>Type of Comment</span>
-                <span className={styles.value}>
+                <span className={[styles.value, styles.cscValue].join(' ')}>
                   <Select
                     option={selectedCommentType}
                     onChange={({ value }) =>
@@ -280,6 +286,9 @@ export default class NonExposureEdit extends Component {
                     className={styles.select}
                     small
                   />
+                  <span className={styles.levelIcon}>
+                    { selectedCommentType && selectedCommentType.label ? this.getIconLevel(selectedCommentType.label) : <></>}
+                  </span>
                 </span>
                 <span className={styles.label}>System</span>
                 <span className={styles.value}>

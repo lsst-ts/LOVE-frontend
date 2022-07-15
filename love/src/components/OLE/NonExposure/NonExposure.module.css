@@ -260,7 +260,7 @@
 
 .cscValue {
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 6fr 1fr;
   column-gap: 5px;
   grid-auto-rows: auto;
 }
@@ -306,7 +306,7 @@
 
 .checkboxText {
   display: grid;
-  grid-template-columns: 4fr 1fr;
+  grid-template-columns: 5fr 1fr;
   margin-right: 5px;
   align-items: center;
 }
@@ -344,8 +344,10 @@ th.tableHead {
 }
 
 .levelIcon {
-  display: inline-block; 
-  width: 18px;
-  height: 18px;
-  margin-left: 5px;
+  /* display: inline-block;  */
+  width: 20px;
+  margin: 3px;
+  /* height: 18px; */
+  display: inline-flex;
+  vertical-align: middle;
 }
