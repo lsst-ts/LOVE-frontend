@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
-import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { formatHoursToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -117,7 +117,7 @@ export default class NonExposure extends Component {
       },
       {
         field: 'level',
-        title: 'Type',
+        title: 'Level',
         type: 'string',
         className: styles.tableHead,
         render: (value) => LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label,
@@ -127,7 +127,7 @@ export default class NonExposure extends Component {
         title: 'Obs. Time Loss',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => formatSecondsToDigital(value),
+        render: (value) => formatHoursToDigital(value),
       },
       {
         field: 'subsystem',
