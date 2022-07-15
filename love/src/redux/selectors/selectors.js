@@ -137,8 +137,8 @@ export const getM1M3HardpointActuatorState = (state) => {
   const subscriptions = ['event-MTM1M3-0-hardpointActuatorState'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    hardpointIlcState: [0, 0, 1, 1, 1, 1], // m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
-    hardpointMotionState: [0, 1, 2, 3, 4, 1], // m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
+    hardpointIlcState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
+    hardpointMotionState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
     hardpointReferenceId: [1, 2, 3, 4, 5, 6],
   };
 };
