@@ -3,6 +3,7 @@
 }
 
 .div2 {
+  /* display: flex; */
   margin-right: 50px;
   width: 430px;
   height: 650px;
@@ -11,9 +12,11 @@
 
 .separator {
   color: red;
-  border-top: 1px solid var(--default-background-color);
-  padding: 0.3em;
-  transform: translateY(0.2em);
+  /* border-top: 1px solid var(--default-background-color); */
+  padding: 2em;
+  /* transform: translateY(0.2em); */
+  border-left: 3px solid gray;
+  height: 700px;
 }
 
 .system {
@@ -25,8 +28,11 @@
   padding: 1em;
   border: 1px solid gray;
   margin-bottom: 0.5em;
+  /* flex: 1 1 50%; */
 }
 
 .inactive {
   opacity: 0.4;
+  background-color: gray;
+  border-color: gray;
 }

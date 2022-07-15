@@ -47,7 +47,7 @@ export default class GIS extends Component {
               <h4>{system}</h4>
               {Object.keys(signals).map((signal) => (
                 <div
-                  onMouseEnter={() => this.signalOnEnter(signals[system][signal])}
+                  onMouseEnter={() => this.signalOnEnter(signals[signal])}
                   onMouseLeave={() => this.signalOnLeave()}
                   className={styles.signal}
                 >
@@ -57,7 +57,7 @@ export default class GIS extends Component {
             </div>
           ))}
         </div>
-        {/* <Separator className={styles.separator}/> */}
+        <div className={styles.separator}></div>
         <div className={styles.div2}>
           {/* <div className={[styles.signal, activeEffects.includes("fireIndication") ? '' : styles.inactive].join(" ")}>fireIndication</div> */}
           {effectsArray.map(([system, effects]) => (
