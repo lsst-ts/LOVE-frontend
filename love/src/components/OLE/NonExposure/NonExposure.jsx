@@ -4,7 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
 import { iconLevelOLE } from 'Config';
-import { formatHoursToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -134,7 +134,7 @@ export default class NonExposure extends Component {
         title: 'Obs. Time Loss',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => formatHoursToDigital(value),
+        render: (value) => formatSecondsToDigital(value * 3600),
       },
       {
         field: 'subsystem',
