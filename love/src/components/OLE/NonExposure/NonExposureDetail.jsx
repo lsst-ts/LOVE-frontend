@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import ManagerInterface from 'Utils';
-import { formatHoursToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
@@ -179,7 +179,7 @@ export default class NonExposureDetail extends Component {
                   (logDetail.parameter ?? 'None')}
               </span>
               <span className={styles.label}>Obs. Time Loss</span>
-              <span className={styles.value}>{formatHoursToDigital(logDetail.time_lost)}</span>
+              <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>
