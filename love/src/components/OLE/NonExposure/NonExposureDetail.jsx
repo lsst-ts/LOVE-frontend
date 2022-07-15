@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import ManagerInterface from 'Utils';
-import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { formatHoursToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import Button from 'components/GeneralPurpose/Button/Button';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
+import { iconLevelOLE } from 'Config';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import styles from './NonExposure.module.css';
 
@@ -92,6 +93,10 @@ export default class NonExposureDetail extends Component {
     );
   };
 
+  getIconLevel(level) {
+    const icon = iconLevelOLE[level] ? iconLevelOLE[level] : undefined;
+    return icon;
+  }
 
   render() {
     const back = this.props.back;
@@ -126,6 +131,8 @@ export default class NonExposureDetail extends Component {
           <div className={styles.header}>
             <span className={styles.bold}>
               #{logDetail.id} - {logLevel}
+              <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span>
+              
             </span>
             {linkJira ? (
               <span>
@@ -174,7 +181,7 @@ export default class NonExposureDetail extends Component {
                   (logDetail.parameter ?? 'None')}
               </span>
               <span className={styles.label}>Obs. Time Loss</span>
-              <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost)}</span>
+              <span className={styles.value}>{formatHoursToDigital(logDetail.time_lost)}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>
