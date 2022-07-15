@@ -130,9 +130,7 @@ export default class NonExposureDetail extends Component {
         <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
             <span className={styles.bold}>
-              #{logDetail.id} - {logLevel}
-              <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span>
-              
+              #{logDetail.id} - <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span> {logLevel}
             </span>
             {linkJira ? (
               <span>
