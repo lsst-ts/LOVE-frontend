@@ -10,7 +10,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
-import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
+import { CSCSummaryHierarchy, defaultCSCList, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { getOLEDataFromTags } from 'Utils';
@@ -86,9 +86,9 @@ export default class NonExposureEdit extends Component {
 
     this.state = {
       logEdit,
-      optionsTree: {},
       confirmationModalShown: false,
       confirmationModalText: '',
+      imageTags: [],
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -140,8 +140,7 @@ export default class NonExposureEdit extends Component {
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
-    // payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
-    payload['tags'] = [this.state.logEdit.csc].filter((tag) => tag);
+    payload['tags'] = this.state.logEdit.csc;
 
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -173,8 +172,10 @@ export default class NonExposureEdit extends Component {
   }
 
   componentDidMount() {
-    ManagerInterface.getTopicData('event-telemetry').then((data) => {
-      this.setState({ optionsTree: data });
+    ManagerInterface.getListImageTags().then((data) => {
+      this.setState({
+        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
+      });
     });
   }
 
@@ -214,15 +215,16 @@ export default class NonExposureEdit extends Component {
 
     const systemOptions = Object.keys(CSCSummaryHierarchy);
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
-    const cscsOptions = this.state.logEdit?.subsystem
-      ? Array.from(
-          new Set(
-            Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem] ?? {})
-              .flat()
-              .map((e) => e.name),
-          ),
-        ).sort()
-      : [];
+    // const cscsOptions = this.state.logEdit?.subsystem
+    //   ? Array.from(
+    //       new Set(
+    //         Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem] ?? {})
+    //           .flat()
+    //           .map((e) => e.name),
+    //       ),
+    //     ).sort()
+    //   : [];
+    const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
 
     const selectedCommentType = this.state.logEdit?.level
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
@@ -312,45 +314,32 @@ export default class NonExposureEdit extends Component {
                 </span>
                 <span className={styles.label}>Subsystem</span>
                 <span className={styles.value}>
-                  <Select
-                    value={this.state.logEdit.subsystem}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, subsystem: value },
-                      }))
-                    }
-                    options={subsystemOptions}
+                  <Multiselect
                     className={styles.select}
-                    small
+                    options={subsystemOptions}
+                    onSelect={(selectedOptions) => {
+                      this.setState((prevState) => ({
+                        logEdit: { ...prevState.logEdit, subsystem: selectedOptions },
+                      }));
+                    }}
+                    placeholder="Select zero or several Subsystems"
+                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                   />
                 </span>
                 <span className={styles.label}>CSC</span>
-                <span className={[styles.value, styles.cscValue].join(' ')}>
-                  {/* <Select
-                    value={this.state.logEdit.csc}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, csc: value },
-                      }))
-                    }
-                    options={cscsOptions}
-                    className={styles.select}
-                    small
-                  /> */}
-
+                <span className={[styles.value /* styles.cscValue */].join(' ')}>
                   <Multiselect
                     className={styles.select}
-                    options={cscsOptions}
+                    options={cscOptions}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, csc: selectedOptions[0] },
+                        logEdit: { ...prevState.logEdit, csc: selectedOptions },
                       }));
                     }}
-                    placeholder="Select one or several CSCs"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+                    placeholder="Select zero or several CSCs"
                   />
 
-                  <Input
+                  {/* <Input
                     type="number"
                     min={0}
                     step={1}
@@ -361,20 +350,22 @@ export default class NonExposureEdit extends Component {
                         logEdit: { ...prevState.logEdit, salindex: event.target.value },
                       }))
                     }
-                  />
+                  /> */}
                 </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
                 <span className={styles.value}>
                   <Multiselect
-                    options={this.state.tagIds}
+                    options={this.state.imageTags}
+                    isObject={true}
+                    displayValue="name"
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
                         logEdit: { ...prevState.logEdit, tags: selectedOptions[0] },
                       }));
                     }}
-                    placeholder="Select one or several tags"
-                    selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+                    placeholder="Select zero or several tags"
+                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                   />
                 </span>
 
