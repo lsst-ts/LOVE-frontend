@@ -100,6 +100,9 @@ export default class MessageDetail extends Component {
             </span>
           </span>
           <span className={[styles.floatRight, styles.margin3].join(' ')}>
+            <span className={[styles.margin3, styles.capitalize].join(' ')}>
+              {message.exposure_flag}
+            </span>
             <span className={styles.vertAlign}>
               <FlagIcon
                 title={message.exposure_flag}
@@ -107,7 +110,6 @@ export default class MessageDetail extends Component {
                 className={styles.iconFlag}
               />
             </span>
-            <span className={[styles.margin3, styles.capitalize].join(' ')}>{message.exposure_flag}</span>
           </span>
         </div>
       </div>
