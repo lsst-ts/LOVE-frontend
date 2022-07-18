@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './GIS.module.css';
 import { signals, effects } from '../../Config';
+import GISContainerSignals from './GISContainerDetectionSignals';
+import GISContainerEffects from './GISContainerEffectsActuation';
 
 export default class GIS extends Component {
   static propTypes = {};
@@ -39,6 +41,18 @@ export default class GIS extends Component {
     const effectsArray = Object.entries(effects);
     console.log(flattenedSignals);
     return (
+      // <div className={styles.div}>
+      //   {flattenedSignals.map(([system, signals]) => (
+      //     <GISContainerSignals
+      //       signals={flattenedSignals}
+      //       onHoverIn={() => this.signalOnEnter(signals[signal])}
+      //       onHoverOut={() => this.signalOnLeave()}
+      //     />
+      //   ))}
+      //   {/* <div className={styles.separator}></div> */}
+      //   <GISContainerEffects effects={effectsArray}/>
+      // </div>
+
       <div className={styles.div}>
         <div className={styles.div2}>
           {flattenedSignals.map(([system, signals]) => (
