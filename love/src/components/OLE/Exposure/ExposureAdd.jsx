@@ -125,8 +125,6 @@ export default class ExposureAdd extends Component {
     const payload = { ...this.state.newMessage };
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
-    payload['user_id'] = 'saranda@localhost';
-    payload['user_agent'] = 'LOVE';
 
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
       console.log('result createMessage', result);
