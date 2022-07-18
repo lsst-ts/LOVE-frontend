@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './GIS.module.css';
-import { CardList, Card, Title, Separator } from 'components/GeneralPurpose/CardList/CardList';
 import { signals, effects } from '../../Config';
 
 export default class GIS extends Component {
