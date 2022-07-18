@@ -12,6 +12,8 @@ import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import ManagerInterface from 'Utils';
 import lodash from 'lodash';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
+import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
+import { exposureFlagStateToStyle } from 'Config';
 import styles from './Exposure.module.css';
 
 export default class ExposureAdd extends Component {
@@ -70,6 +72,10 @@ export default class ExposureAdd extends Component {
       confirmationModalText: '',
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  statusFlag(flag) {
+    return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
   }
 
   componentDidMount() {
@@ -364,19 +370,27 @@ export default class ExposureAdd extends Component {
                 }
               />
 
-              <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
-              <span className={[styles.value, !isMenu ? styles.w20 : ''].join(' ')}>
+              <span className={[styles.label, styles.paddingTop].join(' ')}>
+                Exposure Flag
+              </span>
+
+              <span className={[styles.value, styles.inline, !isMenu ? styles.w20 : ' '].join(' ')}>
                 <Select
                   value={this.state.newMessage.exposure_flag}
                   onChange={(event) =>
-                    this.setState((prevState) => ({
-                      newMessage: { ...prevState.newMessage, exposure_flag: event.value },
-                    }))
+                    this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, exposure_flag: event.value } }))
                   }
                   options={EXPOSURE_FLAG_OPTIONS}
-                  className={styles.select}
+                  className={[styles.select, styles.capitalize].join(' ')}
                   small
                 />
+                <span className={styles.margin3}>
+                  <FlagIcon
+                    title={this.state.newMessage.exposure_flag}
+                    status={this.statusFlag(this.state.newMessage.exposure_flag)}
+                    className={styles.iconFlag}
+                  />
+                </span>
               </span>
 
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
