@@ -240,7 +240,7 @@ export default class NonExposure extends Component {
     const modeEdit = this.state.modeEdit;
     const headers = Object.values(this.getHeaders());
 
-    let filteredData = this.state.logs;
+    let filteredData = this.state.logs ?? [];
 
     // Filter by date range
     const range = this.state.range;
