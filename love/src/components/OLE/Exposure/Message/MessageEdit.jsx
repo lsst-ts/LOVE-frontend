@@ -10,6 +10,7 @@ import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import SaveIcon from 'components/icons/SaveIcon/SaveIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
+import FlagIcon from 'components/icons/FlagIcon/FlagIcon';
 import styles from './Message.module.css';
 
 export default class MessageEdit extends Component {
@@ -153,16 +154,23 @@ export default class MessageEdit extends Component {
           </span>
           <span className={[styles.floatRight, styles.margin3, styles.inline].join(' ')}>
             <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
-            <span className={styles.value}>
+            <span className={[styles.value, styles.inline].join(' ')}>
               <Select
                 value={this.state.message.exposure_flag}
                 onChange={(event) =>
                   this.setState((prevState) => ({ message: { ...prevState.message, exposure_flag: event.value } }))
                 }
                 options={EXPOSURE_FLAG_OPTIONS}
-                className={styles.select}
+                className={[styles.select, styles.capitalize].join(' ')}
                 small
               />
+              <span className={styles.margin3}>
+                <FlagIcon
+                  title={this.state.message.exposure_flag}
+                  status={this.statusFlag(this.state.message.exposure_flag)}
+                  className={styles.iconFlag}
+                />
+              </span>
             </span>
           </span>
         </div>
