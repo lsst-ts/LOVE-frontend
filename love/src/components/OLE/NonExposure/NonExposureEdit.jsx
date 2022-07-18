@@ -54,8 +54,12 @@ export default class NonExposureEdit extends Component {
     },
     isLogCreate: false,
     isMenu: false,
-    view: () => { console.log('NonExposureEdit.defaultProps.view()') },
-    save: () => { console.log('NonExposureEdit.defaultProps.save()') },
+    view: () => {
+      console.log('NonExposureEdit.defaultProps.view()');
+    },
+    save: () => {
+      console.log('NonExposureEdit.defaultProps.save()');
+    },
     tagsIds: [],
   };
 
@@ -96,7 +100,7 @@ export default class NonExposureEdit extends Component {
   }
 
   cleanForm() {
-    this.setState({logEdit: NonExposureEdit.defaultProps.logEdit});
+    this.setState({ logEdit: NonExposureEdit.defaultProps.logEdit });
   }
 
   handleSubmit(event) {
@@ -105,11 +109,11 @@ export default class NonExposureEdit extends Component {
     const modalText = (
       <span>
         You are about to <b>Save</b> changes in this message of Narrative Logs
-        <br/>
+        <br />
         Are you sure ?
       </span>
     );
-    
+
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
@@ -126,7 +130,7 @@ export default class NonExposureEdit extends Component {
         >
           Go back
         </Button>
-        <Button onClick={() => this.updateOrCreateMessageNarrativeLogs() } status="default">
+        <Button onClick={() => this.updateOrCreateMessageNarrativeLogs()} status="default">
           Yes
         </Button>
       </div>
@@ -139,10 +143,6 @@ export default class NonExposureEdit extends Component {
     // payload['tags'] = [this.state.logEdit.csc, this.state.logEdit.topic, this.state.logEdit.param];
     payload['tags'] = [this.state.logEdit.csc].filter((tag) => tag);
 
-    // TODO: add following fields to backend
-    payload['user_id'] = 'saranda@localhost';
-    payload['user_agent'] = 'LOVE';
-
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({ confirmationModalShown: false });
@@ -151,7 +151,7 @@ export default class NonExposureEdit extends Component {
     } else {
       ManagerInterface.createMessageNarrativeLogs(payload).then((response) => {
         this.setState({
-          confirmationModalShown: false
+          confirmationModalShown: false,
         });
         this.props.save(response);
         this.cleanForm();
@@ -190,14 +190,14 @@ export default class NonExposureEdit extends Component {
       prevState.logEdit.subsystem !== this.state.logEdit.subsystem
     ) {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, csc: null, salindex: 0},
+        logEdit: { ...state.logEdit, csc: null, salindex: 0 },
       }));
     }
 
     if ((prevState.logEdit?.csc || this.state.logEdit?.csc) && prevState.logEdit.csc !== this.state.logEdit.csc) {
       if (!this.state.logEdit?.csc) return;
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, salindex: 0},
+        logEdit: { ...state.logEdit, salindex: 0 },
       }));
     }
   }
@@ -217,8 +217,6 @@ export default class NonExposureEdit extends Component {
           ),
         ).sort()
       : [];
-
-   
 
     const selectedCommentType = this.state.logEdit?.level
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
@@ -272,7 +270,6 @@ export default class NonExposureEdit extends Component {
 
             <div id={this.id} className={isMenu ? styles.contentMenu : styles.content}>
               <div className={styles.contentLeft}>
-                
                 <span className={styles.label}>Type of Comment</span>
                 <span className={[styles.value, styles.cscValue].join(' ')}>
                   <Select
@@ -287,7 +284,11 @@ export default class NonExposureEdit extends Component {
                     small
                   />
                   <span className={styles.levelIcon}>
-                    { selectedCommentType && selectedCommentType.label ? this.getIconLevel(selectedCommentType.label) : <></>}
+                    {selectedCommentType && selectedCommentType.label ? (
+                      this.getIconLevel(selectedCommentType.label)
+                    ) : (
+                      <></>
+                    )}
                   </span>
                 </span>
                 <span className={styles.label}>System</span>
@@ -372,7 +373,6 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
 
-                
                 {isMenu ? (
                   <>
                     <span className={styles.label}>Time of Incident</span>
