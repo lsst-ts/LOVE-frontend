@@ -70,6 +70,8 @@ export default class ExposureAdd extends Component {
       selectedInstrument: null,
       confirmationModalShown: false,
       confirmationModalText: '',
+      imageTags: [],
+      selectedTags: [],
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -85,6 +87,12 @@ export default class ExposureAdd extends Component {
       this.setState({
         instruments: instrumentsArray,
         selectedInstrument: instrumentsArray[0],
+      });
+    });
+
+    ManagerInterface.getListImageTags().then((data) => {
+      this.setState({
+        imageTags: data.map((tag) => ({ name: tag.label, id: tag.key })),
       });
     });
   }
@@ -147,11 +155,11 @@ export default class ExposureAdd extends Component {
     const modalText = (
       <span>
         You are about to <b>Save</b> this message of Exposure Logs
-        <br/>
+        <br />
         Are you sure?
       </span>
     );
-    
+
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
@@ -168,12 +176,12 @@ export default class ExposureAdd extends Component {
         >
           Go back
         </Button>
-        <Button onClick={() => this.saveMessage() } status="default">
+        <Button onClick={() => this.saveMessage()} status="default">
           Yes
         </Button>
       </div>
     );
-  };
+  }
 
   render() {
     const { isLogCreate, isMenu } = this.props;
@@ -185,7 +193,6 @@ export default class ExposureAdd extends Component {
     const selectedCommentType = this.state.newMessage?.level
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
       : null;
-
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -245,6 +252,22 @@ export default class ExposureAdd extends Component {
                     selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
                   />
                 </span>
+
+                <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
+                <span className={styles.value}>
+                  <Multiselect
+                    options={this.state.imageTags}
+                    isObject={true}
+                    displayValue="name"
+                    onSelect={(selectedOptions) => {
+                      this.setState((prevState) => ({
+                        newMessage: { ...prevState.newMessage, tags: selectedOptions.map((tag) => tag.id) },
+                      }));
+                    }}
+                    placeholder="Select one or several tags"
+                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
+                  />
+                </span>
               </div>
             ) : (
               <div className={[styles.header, !this.state.logEdit.obs_id ? styles.inline : ''].join(' ')}>
@@ -262,21 +285,6 @@ export default class ExposureAdd extends Component {
                         small
                       />
                     </span>
-
-                    {/* <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
-                    <span className={styles.value}>
-                      <Select
-                        value={this.state.newMessage.obs_id}
-                        onChange={(event) =>
-                          this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, obs_id: event.value },
-                          }))
-                        }
-                        options={this.state.observationIds}
-                        className={styles.select}
-                        small
-                      />
-                    </span> */}
 
                     {/* <span className={styles.label}>Type of Comment</span>
                     <span className={styles.value}>
@@ -304,6 +312,22 @@ export default class ExposureAdd extends Component {
                         }}
                         placeholder="Select one or several observations"
                         selectedValueDecorator={(v) => (v.length > 10 ? `...${v.slice(-10)}` : v)}
+                      />
+                    </span>
+
+                    <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
+                    <span className={styles.value} style={{ flex: 1 }}>
+                      <Multiselect
+                        options={this.state.imageTags}
+                        isObject={true}
+                        displayValue="name"
+                        onSelect={(selectedOptions) => {
+                          this.setState((prevState) => ({
+                            newMessage: { ...prevState.newMessage, tags: selectedOptions.map((tag) => tag.id) },
+                          }));
+                        }}
+                        placeholder="Select one or several tags"
+                        selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                       />
                     </span>
                   </>
@@ -370,15 +394,15 @@ export default class ExposureAdd extends Component {
                 }
               />
 
-              <span className={[styles.label, styles.paddingTop].join(' ')}>
-                Exposure Flag
-              </span>
+              <span className={[styles.label, styles.paddingTop].join(' ')}>Exposure Flag</span>
 
               <span className={[styles.value, styles.inline, !isMenu ? styles.w20 : ' '].join(' ')}>
                 <Select
                   value={this.state.newMessage.exposure_flag}
                   onChange={(event) =>
-                    this.setState((prevState) => ({ newMessage: { ...prevState.newMessage, exposure_flag: event.value } }))
+                    this.setState((prevState) => ({
+                      newMessage: { ...prevState.newMessage, exposure_flag: event.value },
+                    }))
                   }
                   options={EXPOSURE_FLAG_OPTIONS}
                   className={[styles.select, styles.capitalize].join(' ')}
