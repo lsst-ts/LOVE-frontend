@@ -162,18 +162,12 @@ export default class NonExposureEdit extends Component {
 
   handleTimeOfIncident(date, type) {
     if (type === 'start') {
-      const start = Moment(date);
-      const end = Moment(this.state.logEdit.end_date);
-      const duration_hr = end.diff(start, 'hours', true);
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, begin_date: date, time_lost: duration_hr.toFixed(2) },
+        logEdit: { ...state.logEdit, begin_date: date },
       }));
     } else if (type === 'end') {
-      const start = Moment(this.state.logEdit.begin_date);
-      const end = Moment(date);
-      const duration_hr = end.diff(start, 'hours', true);
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, end_date: date, time_lost: duration_hr.toFixed(2) },
+        logEdit: { ...state.logEdit, end_date: date },
       }));
     }
   }
@@ -200,6 +194,18 @@ export default class NonExposureEdit extends Component {
         logEdit: { ...state.logEdit, salindex: 0 },
       }));
     }
+
+    if (
+      prevState.logEdit?.begin_date !== this.state.logEdit?.begin_date ||
+      prevState.logEdit?.end_date !== this.state.logEdit?.end_date
+    ) {
+      const start = Moment(this.state.logEdit.begin_date);
+      const end = Moment(this.state.logEdit.end_date);
+      const duration_hr = end.diff(start, 'hours', true);
+      this.setState((state) => ({
+        logEdit: { ...state.logEdit, time_lost: duration_hr.toFixed(2) },
+      }));
+    }
   }
 
   render() {
@@ -223,7 +229,6 @@ export default class NonExposureEdit extends Component {
       : null;
 
     const { confirmationModalShown, confirmationModalText } = this.state;
-
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -384,7 +389,7 @@ export default class NonExposureEdit extends Component {
                         endDate={new Date()}
                       />
                     </span>
-                    <span className={styles.label}>Obs. Time Loss</span>
+                    <span className={styles.label}>Obs. Time Loss [hours]</span>
                     <span className={styles.value}>
                       <Input
                         type="number"
@@ -421,7 +426,7 @@ export default class NonExposureEdit extends Component {
                           endDate={new Date()}
                         />
                       </span>
-                      <span className={styles.label}>Obs. Time Loss</span>
+                      <span className={styles.label}>Obs. Time Loss [hours]</span>
                       <span className={styles.value}>
                         <Input
                           type="number"
