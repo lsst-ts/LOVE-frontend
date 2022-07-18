@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import Summary from'./Summary/Summary';
 import Menu from'./Menu/Menu';
 import Selector from'./Selector/Selector';
 import Mixing from'./Mixing/Mixing';
 import TemperatureGradiant from'./Temperature/TemperatureGradiant';
 import Info from'./Info/Info';
-
 import styles from './M1M3TS.module.css';
 
 
@@ -43,6 +41,7 @@ export default class M1M3TS extends Component {
     /** Number of the maximum temerature limit, used for the gradiant color */
     maxTemperatureLimit: PropTypes.number,
   }
+
   static defaultProps = {
     summaryState: 1,
     fanHeaters: false,

@@ -296,6 +296,15 @@ export const getM1M3TSWarningState = (state) => {
 
 
 
+// M1M3TS Selector
+export const getM1M3TSState = (state) => {
+  const subscriptions = ['event-MTM1M3TS-0-summaryState'];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    summaryState: m1m3tsData['event-MTM1M3TS-0-summaryState']?.[0].summaryState?.value ?? 0,
+  };
+};
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [
