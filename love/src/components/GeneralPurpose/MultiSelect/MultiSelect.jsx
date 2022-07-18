@@ -2,7 +2,7 @@ import React from 'react';
 import { Multiselect as ReactMultiselect } from 'multiselect-react-dropdown';
 import styles from './MultiSelect.module.css';
 
-const MultiSelect = ({ options = [], onChange = () => {}, selectedValueDecorator = () => {}, ...props }) => {
+const MultiSelect = ({ options = [], onChange = () => {}, ...props }) => {
   const { className: propsClassName, ...otherProps } = props;
 
   return (
@@ -11,7 +11,6 @@ const MultiSelect = ({ options = [], onChange = () => {}, selectedValueDecorator
       className={[styles.dropDownClassName, propsClassName].join(' ')}
       options={options}
       onSelect={onChange}
-      selectedValueDecorator={selectedValueDecorator}
       placeholder="Select an option"
       style={{
         chips: {
