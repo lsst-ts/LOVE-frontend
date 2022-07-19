@@ -415,3 +415,19 @@ th.tableHead {
 .margin3 {
   margin: 3px;
 }
+
+.badge {
+  border-radius: 50%;
+  background-color: var(--second-quaternary-background-color);
+  color: #fff;
+  display: inline-block;
+  padding-left: 8px;
+  padding-right: 8px;
+  text-align: center;
+  margin-right: var(--content-padding);
+}
+
+.flags {
+  display: flex;
+  align-items: center;
+}

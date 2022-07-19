@@ -43,16 +43,16 @@ export default class Exposure extends Component {
   static defaultProps = {
     instruments: [],
     selectedInstrument: null,
-    changeInstrumentSelect: () => {console.log('defaultProps.changeInstrumentSelect')},
+    changeInstrumentSelect: () => {},
     selectedExposureType: null,
-    changeExposureTypeSelect: () => {console.log('defaultProps.changeExposureType')},
+    changeExposureTypeSelect: () => {},
     selectedExposureType: 'all',
     selectedDateStart: null,
     selectedDateEnd: null,
-    handleDateTimeRange: () => {console.log('defaultProps.handleDateTimeRange')},
+    handleDateTimeRange: () => {},
     selectedDayExposure: null,
     selectedDayOrRange: null,
-    changeDayOrRangeSelect: () => {console.log('defaultProps.changeDayOrRange')},
+    changeDayOrRangeSelect: () => {},
   };
 
   constructor(props) {
@@ -67,7 +67,7 @@ export default class Exposure extends Component {
       observationIds: [],
       messages: [],
       range: [],
-      
+      exposureFlags: {},
     };
   }
 
@@ -128,7 +128,7 @@ export default class Exposure extends Component {
           const end = Moment(row['timespan_end']);
           const duration_s = end.diff(start, 'seconds', true);
           return duration_s.toFixed(2);
-        }
+        },
       },
       {
         field: 'instrument',
@@ -143,19 +143,38 @@ export default class Exposure extends Component {
         className: styles.tableHead,
       },
       {
-        field: 'flags',
+        field: 'obs_id',
         title: 'Flags',
         type: 'string',
         className: styles.tableHead,
         render: (value, _) => {
-          const values = String(value).split(',');
-          return values.map((val) => {
+          const flags = this.state.exposureFlags[value];
+          // Render object
+          if (flags) {
             return (
-              <span>
-                <FlagIcon title={val} status={this.statusFlag(val)} className={styles.iconFlag} />
-              </span>
+              <div className={styles.flags}>
+                {Object.keys(flags).map((flag) => {
+                  return (
+                    <>
+                      <FlagIcon title={flag} status={this.statusFlag(flag)} className={styles.iconFlag} />{' '}
+                      <span className={styles.badge}>{flags[flag]}</span>
+                    </>
+                  );
+                })}
+              </div>
             );
-          });
+          } else {
+            return null;
+          }
+
+          // return JSON.stringify(flags);
+          // return values.map((val) => {
+          //   return (
+          //     <span>
+          //       <FlagIcon title={val} status={this.statusFlag(val)} className={styles.iconFlag} />
+          //     </span>
+          //   );
+          // });
         },
       },
       {
@@ -198,25 +217,31 @@ export default class Exposure extends Component {
   };
 
   componentDidMount() {
-    console.log('Exposure.componentDidMount');
     ManagerInterface.getListAllMessagesExposureLogs().then((data) => {
       this.setState({ messages: data });
     });
 
-    this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+    this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
 
     ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
       const exposureTypes = new Set();
       const exposures = data.map((exposure) => {
         exposureTypes.add(exposure.observation_type);
-        // TODO: request for all the obs_id, all messages and only use exposure_flag PENDING: backend with query of flags without query to exposurelogs/messages
-        // ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
-        //   const flags = messages
-        //     .map((message) => message['exposure_flag'])
-        //     .reduce((acc, curr) => acc.find((f) => f === curr) ? acc : [...acc, curr], []);
-        //   exposure['flags'] = flags;
-        //   return exposure;
-        // });
+
+        ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+          const flags = messages
+            .map((message) => message['exposure_flag'])
+            .reduce((acc, curr) => {
+              if (curr in acc) acc[curr]++;
+              else acc[curr] = 1;
+              return acc;
+            }, {});
+
+          this.setState((prevState) => ({
+            exposureFlags: { ...prevState.exposureFlags, [exposure['obs_id']]: flags },
+          }));
+        });
+
         return { ...exposure };
       });
       this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
@@ -224,31 +249,37 @@ export default class Exposure extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    //console.log('prevProps', prevProps);
     if (prevProps.selectedInstrument !== this.props.selectedInstrument) {
-      console.log('componentDidUpdate', this.props.selectedInstrument);
       ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
         const exposureTypes = new Set();
         const exposures = data.map((exposure) => {
           exposureTypes.add(exposure.observation_type);
-          // TODO: request for all the obs_id, all messages and only use exposure_flag PENDING: backend with query of flags without query to exposurelogs/messages
-          // ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
-          //   const flags = messages
-          //     .map((message) => message['exposure_flag'])
-          //     .reduce((acc, curr) => acc.find((f) => f === curr) ? acc : [...acc, curr], []);
-          //   exposure['flags'] = flags;
-          //   return exposure;
-          // });
+
+          ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
+            const flags = messages
+              .map((message) => message['exposure_flag'])
+              .reduce((acc, curr) => {
+                if (curr in acc) acc[curr]++;
+                else acc[curr] = 1;
+                return acc;
+              }, {});
+
+            this.setState((prevState) => ({
+              exposureFlags: { ...prevState.exposureFlags, [exposure['obs_id']]: flags },
+            }));
+          });
+
           return { ...exposure };
         });
         this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
       });
     }
 
-    if (prevProps.selectedDateStart !== this.props.selectedDateStart ||
+    if (
+      prevProps.selectedDateStart !== this.props.selectedDateStart ||
       prevProps.selectedDateEnd !== this.props.selectedDateEnd
     ) {
-      this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+      this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
     }
   }
 
@@ -265,8 +296,8 @@ export default class Exposure extends Component {
       ...this.state.exposureTypes.map((type) => ({ label: type, value: type })),
     ];
     const dayOrRangeExposureOptions = [
-      { label: 'Day Observation', value: 'day'},
-      { label: 'Range', value: 'range'},
+      { label: 'Day Observation', value: 'day' },
+      { label: 'Range', value: 'range' },
     ];
     const selectedDayOrRange = this.props.selectedDayOrRange;
     const selectedDayExposure = this.props.selectedDayExposure;
@@ -275,9 +306,9 @@ export default class Exposure extends Component {
 
     const range = this.state.range;
 
-      // Filter by date range
+    // Filter by date range
     let filteredData = tableData;
-    
+
     if (selectedDayOrRange === 'range') {
       filteredData = filteredData.filter((log) => range.contains(Moment(log.timespan_end)));
     }
@@ -286,7 +317,7 @@ export default class Exposure extends Component {
       filteredData = filteredData.filter((log) => {
         const format = Moment(selectedDayExposure).format('YYYYMMDD');
         return format === String(log.day_obs);
-      })
+      });
     }
 
     // Filter by exposure type
@@ -294,7 +325,7 @@ export default class Exposure extends Component {
       selectedExposureType !== 'all'
         ? filteredData.filter((exp) => exp.observation_type === selectedExposureType)
         : filteredData;
-    
+
     // Obtain headers to create csv report
     const logExample = this.state.messages?.[0];
     const logExampleKeys = Object.keys(logExample ?? {});
@@ -308,7 +339,6 @@ export default class Exposure extends Component {
         logDetail={this.state.selected}
         logMessages={this.state.selectedMessages}
         edit={(isClicked) => {
-          console.log('ExposeDetail.edit', this.state.selected);
           if (isClicked) this.add(this.state.selected);
         }}
       />
@@ -319,7 +349,6 @@ export default class Exposure extends Component {
         }}
         logEdit={this.state.selected}
         view={(isClicked) => {
-          if (isClicked) console.log('ExposeAdd.view', this.state.selected);
           this.view(this.state.selected);
         }}
       />
@@ -341,7 +370,7 @@ export default class Exposure extends Component {
             className={styles.select}
           />
 
-          { selectedDayOrRange === 'day' ? (
+          {selectedDayOrRange === 'day' ? (
             <DateTime
               value={this.props.selectedDayExposure}
               onChange={(day) => this.props.changeDayExposure(day)}
@@ -357,10 +386,11 @@ export default class Exposure extends Component {
               label="Date & Time"
               startDate={this.props.selectedDateStart}
               endDate={this.props.selectedDateEnd}
-              startDateProps={{closeOnSelect: true}}
+              startDateProps={{ closeOnSelect: true }}
             />
-          ) : <></>
-          }
+          ) : (
+            <></>
+          )}
 
           <Select
             options={exposureTypeOptions}
