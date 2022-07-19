@@ -1,13 +1,18 @@
 .div {
   display: inline-flex;
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.h3 {
+  flex-wrap: wrap;
+  width: 100%;
+  float: left;
 }
 
 .div2 {
   display: flex;
   flex-wrap: wrap;
   margin-right: 50px;
-  width: 430px;
-  height: 650px;
   /* background-color: var(--second-quinary-background-color); */
 }
 
@@ -22,6 +27,8 @@
 .system {
   border: 1px solid gray;
   margin-bottom: 0.5em;
+  margin-right: 0.5em;
+  padding: 1.5em;
 }
 
 .signal {
@@ -29,6 +36,7 @@
   border: 1px solid gray;
   margin-bottom: 0.5em;
   flex: 1 1 50%;
+  padding-bottom: 1em;
 }
 
 .inactive {

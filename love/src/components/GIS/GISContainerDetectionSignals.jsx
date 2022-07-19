@@ -15,6 +15,8 @@ export default class GISContainerDetectionSignals extends Component {
   render() {
     return (
       <div className={styles.div2}>
+        <h3 className={styles.h3}>Detection Signals</h3>
+        {/* <h3>Detection Signals</h3> */}
         {this.props.signals.map(([system, signals]) => (
           <div className={styles.system}>
             <h3>{system}</h3>
