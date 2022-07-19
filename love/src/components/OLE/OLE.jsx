@@ -26,7 +26,7 @@ export default class OLE extends Component {
       clickNewLog: false,
       // Non Exposure filters
       selectedCommentType: { value: 'all', label: 'All comment types' },
-      selectedSubsystem: 'all',
+      selectedSystem: 'all',
       selectedObsTimeLoss: false,
       selectedDateStartNonExposure: new Date() - 24 * 30 * 60 * 60 * 1000,
       selectedDateEndNonExposure: new Date(Date.now()),
@@ -58,7 +58,7 @@ export default class OLE extends Component {
   }
 
   changeSubsystemSelect(value) {
-    this.setState({ selectedSubsystem: value });
+    this.setState({ selectedSystem: value });
   }
 
   changeObsTimeLossSelect(value) {
@@ -76,7 +76,7 @@ export default class OLE extends Component {
   changeDayExposure(day) {
     console.log('changeDayExposure', day);
     const dayObs = Moment(day).format('YYYYMMDD');
-    console.log('dayObs', dayObs )
+    console.log('dayObs', dayObs);
     this.setState({ selectedDayExposure: day });
   }
 
@@ -129,35 +129,39 @@ export default class OLE extends Component {
       }
     } else {
       if (tab === 'exposure') {
-        return <Exposure
-          props={this.props}
-          instruments={this.state.instruments}
-          selectedInstrument={this.state.selectedInstrument}
-          changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
-          selectedExposureType={this.state.selectedExposureType}
-          changeExposureType={(value) => this.changeExposureType(value)}
-          selectedDateStart={this.state.selectedDateStartExposure}
-          selectedDateEnd={this.state.selectedDateEndExposure}
-          handleDateTimeRange={(date, type) => this.handleDateTimeRangeExposure(date, type)}
-          selectedDayExposure={this.state.selectedDayExposure}
-          changeDayExposure={(day) => this.changeDayExposure(day)}
-          selectedDayOrRange={this.state.selectedDayOrRange}
-          changeDayOrRangeSelect={(value) => this.changeDayOrRangeSelect(value)}
-        />;
+        return (
+          <Exposure
+            props={this.props}
+            instruments={this.state.instruments}
+            selectedInstrument={this.state.selectedInstrument}
+            changeInstrumentSelect={(value) => this.changeInstrumentSelect(value)}
+            selectedExposureType={this.state.selectedExposureType}
+            changeExposureType={(value) => this.changeExposureType(value)}
+            selectedDateStart={this.state.selectedDateStartExposure}
+            selectedDateEnd={this.state.selectedDateEndExposure}
+            handleDateTimeRange={(date, type) => this.handleDateTimeRangeExposure(date, type)}
+            selectedDayExposure={this.state.selectedDayExposure}
+            changeDayExposure={(day) => this.changeDayExposure(day)}
+            selectedDayOrRange={this.state.selectedDayOrRange}
+            changeDayOrRangeSelect={(value) => this.changeDayOrRangeSelect(value)}
+          />
+        );
       }
       if (tab === 'non-exposure') {
-        return <NonExposure
-          props={this.props}
-          selectedDateStart={this.state.selectedDateStartNonExposure}
-          selectedDateEnd={this.state.selectedDateEndNonExposure}
-          handleDateTimeRange={(date, type) => this.handleDateTimeRangeNonExposure(date, type)}
-          selectedCommentType={this.state.selectedCommentType}
-          changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
-          selectedSubsystem={this.state.selectedSubsystem}
-          changeSubsystemSelect={(value) => this.changeSubsystemSelect(value)}
-          selectedObsTimeLoss={this.state.selectedObsTimeLoss}
-          changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
-        />;
+        return (
+          <NonExposure
+            props={this.props}
+            selectedDateStart={this.state.selectedDateStartNonExposure}
+            selectedDateEnd={this.state.selectedDateEndNonExposure}
+            handleDateTimeRange={(date, type) => this.handleDateTimeRangeNonExposure(date, type)}
+            selectedCommentType={this.state.selectedCommentType}
+            changeCommentTypeSelect={(value) => this.changeCommentTypeSelect(value)}
+            selectedSystem={this.state.selectedSystem}
+            changeSubsystemSelect={(value) => this.changeSubsystemSelect(value)}
+            selectedObsTimeLoss={this.state.selectedObsTimeLoss}
+            changeObsTimeLossSelect={(value) => this.changeObsTimeLossSelect(value)}
+          />
+        );
       }
     }
   }
