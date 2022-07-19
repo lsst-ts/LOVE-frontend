@@ -331,6 +331,7 @@ th.tableHead {
 
 .textDescription {
   text-align: left;
+  white-space: pre-wrap;
 }
 
 .iconFill {
