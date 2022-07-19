@@ -1,0 +1,8 @@
+.info {
+  min-height: 210px;
+  max-width: 100%;
+}
+
+.noSensor {
+  grid-column: 1 / span 2;
+}

@@ -53,6 +53,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
+    'event-MTM1M3TS-0-summaryState',
+    'event-MTM1M3TS-0-enabledILC',
+    'event-MTM1M3TS-0-powerStatus',
   ];
   return {
     subscriptions,

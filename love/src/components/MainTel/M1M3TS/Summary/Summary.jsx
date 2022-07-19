@@ -28,7 +28,7 @@ export default class Summary extends Component {
   };
 
   render() {
-    const summaryStateValue = CSCDetail.states[this.props.summaryState ? this.props.summaryState : 0];
+    const summaryStateValue = CSCDetail.states[this.props.summaryState ?? Summary.defaultProps.summaryState];
     const m1m3tsEnabledValue = {
       name: this.props.enabled ? 'ENABLED' : 'DISABLED',
       class: CSCDetailStyles[this.props.enabled ? 'ok' : 'warning'],

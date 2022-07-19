@@ -40,18 +40,44 @@ export default class M1M3TS extends Component {
     this.props.unsubscribeToStreams();
   }
 
+  arrayReferenceId = () => {
+    const array = [];
+    for (let i = 0; i < 78; i++) {
+      array.push(i + 1);
+    }
+    return array;
+  };
+
+
+
   render() {
+    const sensorReferenceId = this.arrayReferenceId();
+    // TODO: pending real status
+    const sensorEnabledState = Array.from({length: sensorReferenceId.length}, i => 1);
+
+    console.log('m1m3ts.render', sensorEnabledState);
+
     const { 
       minTemperatureLimit,
       maxTemperatureLimit,
     } = this.props;
-    const { summaryState} = this.props;
+    const {
+      summaryState,
+      enabled,
+      fanHeaters,
+      coolantPump,
+    } = this.props;
 
     return (
       <div className={styles.container}>
         
         <div className={styles.summaryContainer}>
-          <Summary />
+          <Summary 
+            summaryState={summaryState}
+            enabled={enabled}
+            fanHeaters={fanHeaters}
+            coolantPump={coolantPump}
+          />
         </div>
 
         <div className={styles.menuContainer}>
@@ -71,7 +97,10 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.infoContainer}>
-          <Info />
+          <Info 
+            sensorReferenceId={sensorReferenceId}
+            sensorEnabledState={sensorEnabledState}
+          />
         </div>
 
       </div>
