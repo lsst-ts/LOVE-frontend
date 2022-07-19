@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import lodash from 'lodash';
 import ManagerInterface from 'Utils';
-import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { formatSecondsToDigital, openInNewTab } from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { LOG_TYPE_OPTIONS } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
@@ -28,10 +28,9 @@ export default class NonExposureDetail extends Component {
       id: undefined,
       level: undefined,
       timeIncident: undefined,
-      subsystem: undefined,
-      csc: undefined,
-      topic: undefined,
-      parameter: undefined,
+      system: undefined,
+      subsystems: undefined,
+      cscs: undefined,
       user: undefined,
       time_lost: undefined,
       jira: undefined,
@@ -52,9 +51,7 @@ export default class NonExposureDetail extends Component {
   }
 
   deleteMessage(message) {
-    console.log('deleteMessage', message);
-    ManagerInterface.deleteMessageNarrativeLogs(message.id).then((response) => {
-      console.log('result', response);
+    ManagerInterface.deleteMessageNarrativeLogs(message.id).then(() => {
       this.setState({ confirmationModalShown: false });
       this.props.remove(message);
     });
@@ -64,11 +61,11 @@ export default class NonExposureDetail extends Component {
     const modalText = (
       <span>
         You are about to <b>Delete</b> this message of Narrative Logs
-        <br/>
+        <br />
         Are you sure?
       </span>
     );
-    
+
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
@@ -86,12 +83,12 @@ export default class NonExposureDetail extends Component {
         >
           Go back
         </Button>
-        <Button onClick={() => this.deleteMessage(logDetail) } status="default">
+        <Button onClick={() => this.deleteMessage(logDetail)} status="default">
           Yes
         </Button>
       </div>
     );
-  };
+  }
 
   getIconLevel(level) {
     const icon = iconLevelOLE[level] ? iconLevelOLE[level] : undefined;
@@ -107,11 +104,6 @@ export default class NonExposureDetail extends Component {
 
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
-
-    const logTagsParams = getOLEDataFromTags(logDetail.tags);
-    logDetail.csc = logTagsParams.csc;
-    logDetail.topic = logTagsParams.topic;
-    logDetail.parameter = logTagsParams.parameter;
 
     const logLevel = logDetail.level ? LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label : 'None';
 
@@ -145,7 +137,7 @@ export default class NonExposureDetail extends Component {
               <Button
                 className={styles.iconBtn}
                 title="Delete"
-                onClick={() => this.confirmDelete() }
+                onClick={() => this.confirmDelete()}
                 status="transparent"
               >
                 <DeleteIcon className={styles.icon} />
@@ -168,18 +160,14 @@ export default class NonExposureDetail extends Component {
             <div className={styles.detail}>
               <span className={styles.label}>Time of Incident</span>
               <span className={styles.value}>{logDetail.date_user_specified}</span>
-              <span className={styles.label}>Subsystem Affected</span>
-              <span className={styles.value}>
-                {(logDetail.subsystem ?? 'None') +
-                  ' > ' +
-                  (logDetail.csc ?? 'None') +
-                  ' > ' +
-                  (logDetail.topic ?? 'None') +
-                  ' > ' +
-                  (logDetail.parameter ?? 'None')}
-              </span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
+              <span className={styles.label}>System</span>
+              <span className={styles.value}>{logDetail.system}</span>
+              <span className={styles.label}>Subsystems</span>
+              <span className={styles.value}>{logDetail.subsystems}</span>
+              <span className={styles.label}>CSCs</span>
+              <span className={styles.value}>{logDetail.cscs}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>

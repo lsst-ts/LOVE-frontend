@@ -1456,21 +1456,6 @@ export function openInNewTab(url) {
 }
 
 /**
- * Function to get OLE Narrative logs parameters from tags field.
- * @param {string} tags - Array of tags that comes from OLE message
- * @returns {object} Object with type, subsystem, csc, topic, param fields
- */
-export function getOLEDataFromTags(tags) {
-  if (!tags) return {};
-  const parameters = {
-    csc: tags[0],
-    topic: tags[1],
-    parameter: tags[2],
-  };
-  return parameters;
-}
-
-/**
  * Function to get OLE Narrative and Exposure logs parameters from urls field.
  * @param {string} urls - Array of urls that comes from OLE message
  * @returns {string} string with first url with the condition if jira link

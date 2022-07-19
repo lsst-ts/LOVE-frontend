@@ -4,7 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
 import { iconLevelOLE } from 'Config';
-import { formatSecondsToDigital, openInNewTab, getOLEDataFromTags } from 'Utils';
+import { formatSecondsToDigital, openInNewTab } from 'Utils';
 import { getLinkJira, getFileURL } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
@@ -30,7 +30,7 @@ export default class NonExposure extends Component {
     handleDateTimeRange: PropTypes.func,
     selectedCommentType: PropTypes.object,
     changeCommentTypeSelect: PropTypes.func,
-    selectedSubsystem: PropTypes.string,
+    selectedSystem: PropTypes.string,
     changeSubsystemSelect: PropTypes.func,
     selectedObsTimeLoss: PropTypes.bool,
     changeObsTimeLossSelect: PropTypes.func,
@@ -39,13 +39,21 @@ export default class NonExposure extends Component {
   static defaultProps = {
     selectedDateStart: null,
     selectedDateEnd: null,
-    handleDateTimeRange: () => {console.log('defaultProps.handleDateTimeRange')},
+    handleDateTimeRange: () => {
+      console.log('defaultProps.handleDateTimeRange');
+    },
     selectedCommentType: 'all',
-    changeCommentTypeSelect: () => {console.log('defaultProps.changeCommentTypeSelect')},
-    selectedSubsystem: 'all',
-    changeSubsystemSelect: () => {console.log('defaultProps.changeSubsystemSelect')},
+    changeCommentTypeSelect: () => {
+      console.log('defaultProps.changeCommentTypeSelect');
+    },
+    selectedSystem: 'all',
+    changeSubsystemSelect: () => {
+      console.log('defaultProps.changeSubsystemSelect');
+    },
     selectedObsTimeLoss: false,
-    changeObsTimeLossSelect: () => {console.log('defaultProps.changeObsTimeLossSelect')},
+    changeObsTimeLossSelect: () => {
+      console.log('defaultProps.changeObsTimeLossSelect');
+    },
   };
 
   constructor(props) {
@@ -80,12 +88,16 @@ export default class NonExposure extends Component {
   getLevel(value) {
     const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
     const icon = iconLevelOLE[label] ?? undefined;
-    return <><span className={styles.levelIcon}>{icon}</span> {label}</>; 
+    return (
+      <>
+        <span className={styles.levelIcon}>{icon}</span> {label}
+      </>
+    );
   }
 
   refreshLogsRemove(nonExposure) {
     const logs = this.state.logs.filter((log) => log.id !== nonExposure.id);
-    this.setState({logs});
+    this.setState({ logs });
   }
 
   refreshLogs(nonExposure) {
@@ -117,17 +129,11 @@ export default class NonExposure extends Component {
         className: styles.tableHead,
       },
       {
-        field: 'date_user_specified',
+        field: null,
         title: 'Time of Incident',
         type: 'string',
         className: styles.tableHead,
-      },
-      {
-        field: 'level',
-        title: 'Level',
-        type: 'string',
-        className: styles.tableHead,
-        render: (value) => this.getLevel(value),
+        render: (_, row) => `${row.begin_date} - ${row.end_date}`,
       },
       {
         field: 'time_lost',
@@ -137,17 +143,17 @@ export default class NonExposure extends Component {
         render: (value) => formatSecondsToDigital(value * 3600),
       },
       {
-        field: 'subsystem',
-        title: 'Subsystem',
+        field: 'level',
+        title: 'Level',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => this.getLevel(value),
       },
       {
-        field: 'tags',
-        title: 'CSC',
+        field: 'system',
+        title: 'System',
         type: 'string',
         className: styles.tableHead,
-        render: (value) => <b>{getOLEDataFromTags(value).csc}</b>,
       },
       {
         field: 'urls',
@@ -224,14 +230,15 @@ export default class NonExposure extends Component {
     ManagerInterface.getListMessagesNarrativeLogs().then((data) => {
       this.setState({ logs: data });
     });
-    this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+    this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.selectedDateStart !== this.props.selectedDateStart ||
+    if (
+      prevProps.selectedDateStart !== this.props.selectedDateStart ||
       prevProps.selectedDateEnd !== this.props.selectedDateEnd
     ) {
-      this.setState({range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd)});
+      this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
     }
   }
 
@@ -252,10 +259,10 @@ export default class NonExposure extends Component {
         ? filteredData.filter((log) => log.level === this.props.selectedCommentType.value)
         : filteredData;
 
-    // Filter by subsystem
+    // Filter by system
     filteredData =
-      this.props.selectedSubsystem !== 'all'
-        ? filteredData.filter((log) => getOLEDataFromTags(log.tags).subsystem === this.props.selectedSubsystem)
+      this.props.selectedSystem !== 'all'
+        ? filteredData.filter((log) => log.system === this.props.selectedSystem)
         : filteredData;
 
     // Filter by obs time loss
@@ -270,8 +277,8 @@ export default class NonExposure extends Component {
     const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
     const selectedCommentType = this.props.selectedCommentType;
 
-    const subsystemOptions = [{ label: 'All subsystems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
-    const selectedSubsystem = this.props.selectedSubsystem;
+    const subsystemOptions = [{ label: 'All systems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
+    const selectedSystem = this.props.selectedSystem;
 
     const selectedObsTimeLoss = this.props.selectedObsTimeLoss;
 
@@ -300,7 +307,7 @@ export default class NonExposure extends Component {
         }}
         save={(nonExposure) => {
           this.refreshLogs(nonExposure);
-          this.setState({ modeEdit: false, modeView: true  });
+          this.setState({ modeEdit: false, modeView: true });
         }}
       />
     ) : (
@@ -323,7 +330,7 @@ export default class NonExposure extends Component {
 
           <Select
             options={subsystemOptions}
-            option={selectedSubsystem}
+            option={selectedSystem}
             onChange={({ value }) => this.props.changeSubsystemSelect(value)}
             className={styles.select}
           />
