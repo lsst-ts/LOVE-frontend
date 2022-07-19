@@ -3,7 +3,8 @@
 }
 
 .div2 {
-  /* display: flex; */
+  display: flex;
+  flex-wrap: wrap;
   margin-right: 50px;
   width: 430px;
   height: 650px;
@@ -11,12 +12,11 @@
 }
 
 .separator {
-  color: red;
-  /* border-top: 1px solid var(--default-background-color); */
-  padding: 2em;
-  /* transform: translateY(0.2em); */
-  border-left: 3px solid gray;
+  /*transform: translateY(0.2em);*/
   height: 700px;
+  padding: 2em;
+  border-left: 3px solid gray;
+  /* transform: translateY(0.2em); */
 }
 
 .system {
@@ -28,7 +28,7 @@
   padding: 1em;
   border: 1px solid gray;
   margin-bottom: 0.5em;
-  /* flex: 1 1 50%; */
+  flex: 1 1 50%;
 }
 
 .inactive {

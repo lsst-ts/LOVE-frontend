@@ -15,11 +15,15 @@ export default class GISContainerDetectionSignals extends Component {
   render() {
     return (
       <div className={styles.div2}>
-        {flattenedSignals.map(([system, signals]) => (
+        {this.props.signals.map(([system, signals]) => (
           <div className={styles.system}>
-            <h4>{system}</h4>
+            <h3>{system}</h3>
             {Object.keys(signals).map((signal) => (
-              <div onMouseEnter={this.props.onHoverIn} onMouseLeave={this.props.onHoverOut} className={styles.signal}>
+              <div
+                onMouseEnter={this.props.onHoverIn(signals[signal])}
+                onMouseLeave={this.props.onHoverOut}
+                className={styles.signal}
+              >
                 {signal}
               </div>
             ))}

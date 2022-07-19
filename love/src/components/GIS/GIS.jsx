@@ -41,55 +41,55 @@ export default class GIS extends Component {
     const effectsArray = Object.entries(effects);
     console.log(flattenedSignals);
     return (
-      // <div className={styles.div}>
-      //   {flattenedSignals.map(([system, signals]) => (
-      //     <GISContainerSignals
-      //       signals={flattenedSignals}
-      //       onHoverIn={() => this.signalOnEnter(signals[signal])}
-      //       onHoverOut={() => this.signalOnLeave()}
-      //     />
-      //   ))}
-      //   {/* <div className={styles.separator}></div> */}
-      //   <GISContainerEffects effects={effectsArray}/>
-      // </div>
-
       <div className={styles.div}>
-        <div className={styles.div2}>
-          {flattenedSignals.map(([system, signals]) => (
-            <div className={styles.system}>
-              <h4>{system}</h4>
-              {Object.keys(signals).map((signal) => (
-                <div
-                  onMouseEnter={() => this.signalOnEnter(signals[signal])}
-                  onMouseLeave={() => this.signalOnLeave()}
-                  className={styles.signal}
-                >
-                  {signal}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
-        <div className={styles.separator}></div>
-        <div className={styles.div2}>
-          {/* <div className={[styles.signal, activeEffects.includes("fireIndication") ? '' : styles.inactive].join(" ")}>fireIndication</div> */}
-          {effectsArray.map(([system, effects]) => (
-            <div className={styles.system}>
-              <h4>{system}</h4>
-              {effects.map((effect) => (
-                <div
-                  className={[
-                    styles.signal,
-                    activeEffects.includes(effect) ? '' : activeEffects.length > 0 ? styles.inactive : '',
-                  ].join(' ')}
-                >
-                  {effect}
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+        {/* {flattenedSignals.map(([system, signals]) => ( */}
+        <GISContainerSignals
+          signals={flattenedSignals}
+          onHoverIn={() => this.signalOnEnter}
+          onHoverOut={() => this.signalOnLeave()}
+        />
+        {/* ))} */}
+        {/* <div className={styles.separator}></div> */}
+        <GISContainerEffects effects={effectsArray} activeEffects={activeEffects} />
       </div>
+
+      // <div className={styles.div}>
+      //   <div className={styles.div2}>
+      //     {flattenedSignals.map(([system, signals]) => (
+      //       <div className={styles.system}>
+      //         <h3>{system}</h3>
+      //         {Object.keys(signals).map((signal) => (
+      //           <div
+      //             onMouseEnter={() => this.signalOnEnter(signals[signal])}
+      //             onMouseLeave={() => this.signalOnLeave()}
+      //             className={styles.signal}
+      //           >
+      //             {signal}
+      //           </div>
+      //         ))}
+      //       </div>
+      //     ))}
+      //   </div>
+      //   <div className={styles.separator}></div>
+      //   <div className={styles.div2}>
+      //     {/* <div className={[styles.signal, activeEffects.includes("fireIndication") ? '' : styles.inactive].join(" ")}>fireIndication</div> */}
+      //     {effectsArray.map(([system, effects]) => (
+      //       <div className={styles.system}>
+      //         <h3>{system}</h3>
+      //         {effects.map((effect) => (
+      //           <div
+      //             className={[
+      //               styles.signal,
+      //               activeEffects.includes(effect) ? '' : activeEffects.length > 0 ? styles.inactive : '',
+      //             ].join(' ')}
+      //           >
+      //             {effect}
+      //           </div>
+      //         ))}
+      //       </div>
+      //     ))}
+      //   </div>
+      // </div>
     );
   }
 }
