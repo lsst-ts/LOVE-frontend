@@ -13,7 +13,6 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import { CSCSummaryHierarchy, defaultCSCList, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
-import { getOLEDataFromTags } from 'Utils';
 import { iconLevelOLE } from 'Config';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
@@ -30,16 +29,14 @@ export default class NonExposureEdit extends Component {
   };
 
   static defaultProps = {
-    back: () => {
-      console.log('NonExposureEdit.defaultProps.back()');
-    },
+    back: () => {},
     logEdit: {
       id: undefined,
       level: undefined,
       timeIncident: undefined,
       system: undefined,
-      subsystem: undefined,
-      csc: [],
+      subsystems: undefined,
+      cscs: [],
       salindex: 0,
       user: undefined,
       time_lost: 0,
@@ -54,12 +51,8 @@ export default class NonExposureEdit extends Component {
     },
     isLogCreate: false,
     isMenu: false,
-    view: () => {
-      console.log('NonExposureEdit.defaultProps.view()');
-    },
-    save: () => {
-      console.log('NonExposureEdit.defaultProps.save()');
-    },
+    view: () => {},
+    save: () => {},
     tagsIds: [],
   };
 
@@ -71,11 +64,6 @@ export default class NonExposureEdit extends Component {
     logEdit.jiraurl = getLinkJira(logEdit.urls);
     logEdit.fileurl = getFileURL(logEdit.urls);
     logEdit.filename = getFilename(getFileURL(logEdit.urls));
-
-    const params = getOLEDataFromTags(logEdit.tags);
-    logEdit.csc = params.csc;
-    /* logEdit.topic = params.topic;
-    logEdit.parameter = params.parameter; */
 
     // Clean null and empty values to avoid API errors
     Object.keys(logEdit).forEach((key) => {
@@ -108,7 +96,7 @@ export default class NonExposureEdit extends Component {
 
     const modalText = (
       <span>
-        You are about to <b>Save</b> changes in this message of Narrative Logs
+        You are about to <b>save</b> changes in this message of Narrative Logs
         <br />
         Are you sure ?
       </span>
@@ -140,7 +128,6 @@ export default class NonExposureEdit extends Component {
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
-    payload['tags'] = this.state.logEdit.csc;
 
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -180,21 +167,18 @@ export default class NonExposureEdit extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (
-      (prevState.logEdit?.subsystem || this.state.logEdit?.subsystem) &&
-      prevState.logEdit.subsystem !== this.state.logEdit.subsystem
-    ) {
-      this.setState((state) => ({
-        logEdit: { ...state.logEdit, csc: null, salindex: 0 },
-      }));
-    }
+    // if (!lodash.isEqual(prevState.logEdit?.subsystems, this.state.logEdit?.subsystems)) {
+    //   this.setState((state) => ({
+    //     logEdit: { ...state.logEdit, csc: null, salindex: 0 },
+    //   }));
+    // }
 
-    if ((prevState.logEdit?.csc || this.state.logEdit?.csc) && prevState.logEdit.csc !== this.state.logEdit.csc) {
-      if (!this.state.logEdit?.csc) return;
-      this.setState((state) => ({
-        logEdit: { ...state.logEdit, salindex: 0 },
-      }));
-    }
+    // if ((prevState.logEdit?.csc || this.state.logEdit?.csc) && prevState.logEdit.csc !== this.state.logEdit.csc) {
+    //   if (!this.state.logEdit?.csc) return;
+    //   this.setState((state) => ({
+    //     logEdit: { ...state.logEdit, salindex: 0 },
+    //   }));
+    // }
 
     if (
       prevState.logEdit?.begin_date !== this.state.logEdit?.begin_date ||
@@ -211,8 +195,9 @@ export default class NonExposureEdit extends Component {
 
   render() {
     const { back, isLogCreate, isMenu } = this.props;
-    const view = this.props.view ?? NonExposureEdit.defaultProps.view;
+    const { confirmationModalShown, confirmationModalText } = this.state;
 
+    const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = Object.keys(CSCSummaryHierarchy);
     const subsystemOptions = Object.keys(CSCSummaryHierarchy);
     // const cscsOptions = this.state.logEdit?.subsystem
@@ -225,12 +210,10 @@ export default class NonExposureEdit extends Component {
     //     ).sort()
     //   : [];
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
-
     const selectedCommentType = this.state.logEdit?.level
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
       : null;
 
-    const { confirmationModalShown, confirmationModalText } = this.state;
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -312,28 +295,28 @@ export default class NonExposureEdit extends Component {
                     small
                   />
                 </span>
-                <span className={styles.label}>Subsystem</span>
+                <span className={styles.label}>Subsystems</span>
                 <span className={styles.value}>
                   <Multiselect
                     className={styles.select}
                     options={subsystemOptions}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, subsystem: selectedOptions },
+                        logEdit: { ...prevState.logEdit, subsystems: selectedOptions },
                       }));
                     }}
                     placeholder="Select zero or several Subsystems"
                     selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                   />
                 </span>
-                <span className={styles.label}>CSC</span>
+                <span className={styles.label}>CSCs</span>
                 <span className={[styles.value /* styles.cscValue */].join(' ')}>
                   <Multiselect
                     className={styles.select}
                     options={cscOptions}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, csc: selectedOptions },
+                        logEdit: { ...prevState.logEdit, cscs: selectedOptions },
                       }));
                     }}
                     placeholder="Select zero or several CSCs"
@@ -361,7 +344,7 @@ export default class NonExposureEdit extends Component {
                     displayValue="name"
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, tags: selectedOptions[0] },
+                        logEdit: { ...prevState.logEdit, tags: selectedOptions.map((tag) => tag.id) },
                       }));
                     }}
                     placeholder="Select zero or several tags"
