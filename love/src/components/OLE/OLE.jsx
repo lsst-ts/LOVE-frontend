@@ -74,14 +74,11 @@ export default class OLE extends Component {
   }
 
   changeDayExposure(day) {
-    console.log('changeDayExposure', day);
     const dayObs = Moment(day).format('YYYYMMDD');
-    console.log('dayObs', dayObs);
     this.setState({ selectedDayExposure: day });
   }
 
   changeDayOrRangeSelect(value) {
-    console.log('changeDayOrRangeSelect', value);
     this.setState({ selectedDayOrRange: value });
   }
 
