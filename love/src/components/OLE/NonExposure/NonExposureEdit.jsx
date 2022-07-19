@@ -129,6 +129,8 @@ export default class NonExposureEdit extends Component {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
 
+    payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
+
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({ confirmationModalShown: false });
@@ -344,7 +346,10 @@ export default class NonExposureEdit extends Component {
                     displayValue="name"
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, tags: selectedOptions.map((tag) => tag.id) },
+                        logEdit: {
+                          ...prevState.logEdit,
+                          tags: selectedOptions.map((tag) => tag.id),
+                        },
                       }));
                     }}
                     placeholder="Select zero or several tags"
