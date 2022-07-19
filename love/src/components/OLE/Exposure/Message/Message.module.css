@@ -44,7 +44,6 @@
   margin: 0.4em;
 }
 
-
 .description {
   margin-right: 5px;
   margin-left: 5px;
@@ -56,6 +55,7 @@
 .textDescription {
   display: inline-block;
   text-align: left;
+  white-space: pre-wrap;
 }
 
 .bold {
