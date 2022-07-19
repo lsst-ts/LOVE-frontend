@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
 import {
   m1m3tsSummaryStates,
   m1m3tsSummaryStateToStyle,
