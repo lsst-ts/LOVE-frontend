@@ -306,9 +306,9 @@ export const getM1M3TSState = (state) => {
   const m1m3tsData = getStreamsData(state, subscriptions);
   return {
     summaryState: m1m3tsData['event-MTM1M3TS-0-summaryState']?.[0].summaryState?.value ?? 0,
-    enabled: m1m3tsData['event-MTM1M3TS-0-enabledILC']?.[0].enabled?.value ?? false,
+    enabled: m1m3tsData['event-MTM1M3TS-0-enabledILC']?.[0].enabled?.value ?? true,
     fanHeaters: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].fanCoilsHeatersOn?.value ?? false,
-    coolantPump: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].coolantPumpOn?.value ?? false,
+    coolantPump: m1m3tsData['event-MTM1M3TS-0-powerStatus']?.[0].coolantPumpOn?.value ?? true,
   };
 };
 
