@@ -9,47 +9,6 @@ import NumericInput from '../GeneralPurpose/Input/NumericInput';
 
 const DEFAULT_URL = 'http://localhost/gencam';
 
-GenericCamera.propTypes = {
-  /**
-   * Name to identify the live view server
-   */
-  feedKey: PropTypes.string,
-
-  /**
-   * Dictionary of live feed URLs
-   */
-  camFeeds: PropTypes.object,
-
-  salIndex: PropTypes.number,
-  requestSALCommand: PropTypes.func,
-  /**
-   * List of objects describing the healpix layers
-   */
-  healpixOverlays: PropTypes.array,
-
-  /**
-   * Object describing the selected cell
-   */
-  selectedCell: PropTypes.object,
-
-  /**
-   * Callback to run when clicking on a layer
-   */
-  onLayerClick: PropTypes.func,
-
-  /**
-   * Object describing the target layer of click events
-   */
-  targetOverlay: PropTypes.object,
-};
-
-GenericCamera.defaultProps = {
-  feedKey: 'generic',
-  camFeeds: null,
-  salIndex: 1,
-  requestSALCommand: () => 0,
-};
-
 /**
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
@@ -107,10 +66,10 @@ export default function GenericCamera({
   const onCanvasRefChange = React.useCallback(
     (canvasNode) => {
       setCanvasRef(canvasNode);
-      /** Listen to size changes of the canvas parent element*/
-      if (!canvasNode) return;
-      if (error !== null) return;
-      if (!runLiveView) return;
+      /** Listen to size changes of the canvas parent element */
+      if (!canvasNode) return undefined;
+      if (error !== null) return undefined;
+      if (!runLiveView) return undefined;
       console.log('Canvas ref change');
       const observer = new ResizeObserver((entries) => {
         const container = entries[0];
@@ -131,12 +90,12 @@ export default function GenericCamera({
     /** Start the stream once and update image size on every receive
      *  Retry if connection fails
      */
-    if (!runLiveView) return;
+    if (!runLiveView) return undefined;
     let retryTimeout;
 
-    const retryFetch = (error) => {
+    const retryFetch = (e) => {
       if (retryTimeout !== undefined) clearTimeout(retryTimeout);
-      setError(error);
+      setError(e);
       setInitialLoading(false);
       retryTimeout = setTimeout(() => {
         setRetryCount((c) => c + 1);
@@ -144,12 +103,12 @@ export default function GenericCamera({
       }, 3000);
     };
 
-    const imageErrorCallback = (error) => {
-      retryFetch(error);
+    const imageErrorCallback = (e) => {
+      retryFetch(e);
     };
 
     const controller = new AbortController();
-    const signal = controller.signal;
+    const { signal } = controller;
     const fetchAndRetry = () => {
       console.log('Fetch stream');
       CameraUtils.fetchImageFromStream(
@@ -182,6 +141,7 @@ export default function GenericCamera({
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
     if (error !== null) return;
+    if (initialLoading) return;
     if (initialLoading) return;
     if (!canvasRef) return;
     console.log('Sync canvas, container and stream');
@@ -270,3 +230,51 @@ export default function GenericCamera({
     </div>
   );
 }
+
+GenericCamera.propTypes = {
+  /**
+   * Name to identify the live view server
+   */
+  feedKey: PropTypes.string,
+
+  /**
+   * Dictionary of live feed URLs
+   */
+  camFeeds: PropTypes.object,
+
+  /**
+   * Index of the GenericCamera to control
+   */
+  salIndex: PropTypes.number,
+
+  /**
+   * Function that handles calling commands on the GenericCamera
+   */
+  requestSALCommand: PropTypes.func,
+  /**
+   * List of objects describing the healpix layers
+   */
+  healpixOverlays: PropTypes.array,
+
+  /**
+   * Object describing the selected cell
+   */
+  selectedCell: PropTypes.object,
+
+  /**
+   * Callback to run when clicking on a layer
+   */
+  onLayerClick: PropTypes.func,
+
+  /**
+   * Object describing the target layer of click events
+   */
+  targetOverlay: PropTypes.object,
+};
+
+GenericCamera.defaultProps = {
+  feedKey: 'generic',
+  camFeeds: null,
+  salIndex: 1,
+  requestSALCommand: () => 0,
+};
