@@ -26,6 +26,7 @@
 
 .system {
   border: 1px solid gray;
+  border-radius: 0.5em;
   margin-bottom: 0.5em;
   margin-right: var(--content-padding);
   padding: 1.5em;
@@ -42,7 +43,7 @@
   border-radius: 0.5em;
   margin-bottom: 0.5em;
   margin-right: 0.5em;
-  background-color: var(--second-tertiary-background-color);
+  background-color: var(--second-senary-background-dimmed-color);
   box-sizing: border-box;
   flex: 1 1 auto;
   word-break: break-all;
@@ -59,5 +60,5 @@
 }
 
 .alert {
-  background-color: red;
+  background-color: var(--status-alert-dimmed-color-2);
 }

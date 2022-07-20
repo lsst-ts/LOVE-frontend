@@ -13,6 +13,8 @@ export default class GISContainerDetectionSignals extends Component {
   }
 
   render() {
+    const alertSignals = this.props.alertSignals;
+
     return (
       <div className={styles.div2}>
         <h3 className={styles.h3}>Detection Signals</h3>
@@ -24,7 +26,7 @@ export default class GISContainerDetectionSignals extends Component {
               <div
                 onMouseEnter={() => this.props.onHoverIn(signals[signal])}
                 onMouseLeave={() => this.props.onHoverOut()}
-                className={styles.signal}
+                className={[styles.signal, alertSignals.includes(signal) ? styles.alert : styles.signal].join(' ')}
               >
                 {signal}
               </div>
