@@ -34,8 +34,8 @@ export default class NonExposureEdit extends Component {
       id: undefined,
       level: undefined,
       timeIncident: undefined,
-      system: undefined,
-      subsystems: undefined,
+      systems: [],
+      subsystems: [],
       cscs: [],
       salindex: 0,
       user: undefined,
@@ -283,18 +283,18 @@ export default class NonExposureEdit extends Component {
                     )}
                   </span>
                 </span>
-                <span className={styles.label}>System</span>
+                <span className={styles.label}>Systems</span>
                 <span className={styles.value}>
-                  <Select
-                    value={this.state.logEdit.system}
-                    onChange={({ value }) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, system: value },
-                      }))
-                    }
-                    options={systemOptions}
+                  <Multiselect
                     className={styles.select}
-                    small
+                    options={systemOptions}
+                    onSelect={(selectedOptions) => {
+                      this.setState((prevState) => ({
+                        logEdit: { ...prevState.logEdit, systems: selectedOptions },
+                      }));
+                    }}
+                    placeholder="Select zero or several Systems"
+                    selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                   />
                 </span>
                 <span className={styles.label}>Subsystems</span>
@@ -323,19 +323,6 @@ export default class NonExposureEdit extends Component {
                     }}
                     placeholder="Select zero or several CSCs"
                   />
-
-                  {/* <Input
-                    type="number"
-                    min={0}
-                    step={1}
-                    value={this.state.logEdit.salindex}
-                    className={styles.input}
-                    onChange={(event) =>
-                      this.setState((prevState) => ({
-                        logEdit: { ...prevState.logEdit, salindex: event.target.value },
-                      }))
-                    }
-                  /> */}
                 </span>
 
                 <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
