@@ -127,6 +127,7 @@
 .divExportBtn {
   margin-left: auto;
   align-self: center;
+  display: flex;
 }
 
 .infoIcon {
