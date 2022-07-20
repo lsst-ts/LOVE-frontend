@@ -22,8 +22,8 @@ export default class GISContainerDetectionSignals extends Component {
             <h3>{system}</h3>
             {Object.keys(signals).map((signal) => (
               <div
-                onMouseEnter={this.props.onHoverIn(signals[signal])}
-                onMouseLeave={this.props.onHoverOut}
+                onMouseEnter={() => this.props.onHoverIn(signals[signal])}
+                onMouseLeave={() => this.props.onHoverOut()}
                 className={styles.signal}
               >
                 {signal}

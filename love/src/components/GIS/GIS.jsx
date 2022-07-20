@@ -5,6 +5,7 @@ import { signals, effects } from '../../Config';
 import GISContainerSignals from './GISContainerDetectionSignals';
 import GISContainerEffects from './GISContainerEffectsActuation';
 
+const alertSignals = ['fireSignal'];
 export default class GIS extends Component {
   static propTypes = {};
 
@@ -14,8 +15,18 @@ export default class GIS extends Component {
     super(props);
     this.state = {
       activeEffects: [],
+      redEffects: ['fireIndication'],
     };
   }
+
+  componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.alertSignals !== this.props.alertSignals) {
+      console.log('CHANGE ON ALERTSIGNALS');
+      // Armar red effects
+      const newRedEffects = [];
+      this.setState({ redEffects: newRedEffects });
+    }
+  };
 
   componentDidMount = () => {
     this.props.subscribeToStream();
@@ -35,22 +46,24 @@ export default class GIS extends Component {
   };
 
   render() {
-    const { activeEffects } = this.state;
+    const { activeEffects, redEffects } = this.state;
     // const flattenedSignals = Object.values(signals).map((signals) => Object.values(signals)).flat();
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
-    console.log(flattenedSignals);
+    // console.log(flattenedSignals);
+
+    // Armar redEffects
+
     return (
       <div className={styles.div}>
-        {/* {flattenedSignals.map(([system, signals]) => ( */}
         <GISContainerSignals
           signals={flattenedSignals}
-          onHoverIn={() => this.signalOnEnter}
+          alertSignals={alertSignals}
+          onHoverIn={(effects) => this.signalOnEnter(effects)}
           onHoverOut={() => this.signalOnLeave()}
         />
-        {/* ))} */}
         {/* <div className={styles.separator}></div> */}
-        <GISContainerEffects effects={effectsArray} activeEffects={activeEffects} />
+        <GISContainerEffects effects={effectsArray} activeEffects={activeEffects} redEffects={redEffects} />
       </div>
 
       // <div className={styles.div}>

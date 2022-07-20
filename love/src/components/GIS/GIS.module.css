@@ -1,6 +1,6 @@
 .div {
-  display: inline-flex;
-  grid-template-columns: 1fr 1.2fr;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
 }
 
 .h3 {
@@ -27,20 +27,36 @@
 .system {
   border: 1px solid gray;
   margin-bottom: 0.5em;
-  margin-right: 0.5em;
+  margin-right: var(--content-padding);
   padding: 1.5em;
+  width: calc(50% - var(--content-padding));
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .signal {
   padding: 1em;
   border: 1px solid gray;
+  border-radius: 0.5em;
   margin-bottom: 0.5em;
-  flex: 1 1 50%;
-  padding-bottom: 1em;
+  margin-right: 0.5em;
+  flex: 1 1 calc(50% - var(--content-padding));
+  background-color: var(--second-tertiary-background-color);
+  box-sizing: border-box;
+  word-break: break-all;
+}
+
+.system h3 {
+  flex: 1 1 100%;
 }
 
 .inactive {
   opacity: 0.4;
   background-color: gray;
   border-color: gray;
+}
+
+.alert {
+  background-color: red;
 }
