@@ -41,9 +41,9 @@
   border-radius: 0.5em;
   margin-bottom: 0.5em;
   margin-right: 0.5em;
-  flex: 1 1 calc(50% - var(--content-padding));
   background-color: var(--second-tertiary-background-color);
   box-sizing: border-box;
+  flex: 1 1 auto;
   word-break: break-all;
 }
 
