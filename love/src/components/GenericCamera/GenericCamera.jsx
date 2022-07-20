@@ -16,8 +16,11 @@ const DEFAULT_URL = 'http://localhost/gencam';
 export default function GenericCamera({
   feedKey,
   camFeeds,
-  salIndex,
+  salindex,
+  subscribeToStreams,
+  unsubscribeToStreams,
   requestSALCommand,
+  summaryStateData,
   healpixOverlays = [],
   selectedCell = undefined,
   onLayerClick = () => {},
@@ -33,9 +36,14 @@ export default function GenericCamera({
   const [initialLoading, setInitialLoading] = useState(true);
   const [runLiveView, setRunLiveView] = useState(false);
   const [exposureTime, changeExposureTime] = useState(5);
+  const [summaryState, setSummaryState] = useState(0);
 
   // const canvasRef = useRef(null);
   const [canvasRef, setCanvasRef] = useState(null);
+
+  const checkStateForControls = () => {
+    return summaryState !== 2;
+  };
 
   const updateExposureTime = (value) => {
     const numVal = parseFloat(value);
@@ -47,7 +55,7 @@ export default function GenericCamera({
       requestSALCommand({
         cmd: 'cmd_startLiveView',
         csc: 'GenericCamera',
-        salindex: salIndex,
+        salindex: { salindex },
         params: { expTime: exposureTime },
       });
     } else {
@@ -56,7 +64,7 @@ export default function GenericCamera({
       requestSALCommand({
         cmd: 'cmd_stopLiveView',
         csc: 'GenericCamera',
-        salindex: salIndex,
+        salindex: { salindex },
         params: {},
       });
     }
@@ -70,7 +78,7 @@ export default function GenericCamera({
       if (!canvasNode) return undefined;
       if (error !== null) return undefined;
       if (!runLiveView) return undefined;
-      console.log('Canvas ref change');
+
       const observer = new ResizeObserver((entries) => {
         const container = entries[0];
         setContainerWidth(container.contentRect.width);
@@ -85,6 +93,18 @@ export default function GenericCamera({
     },
     [runLiveView],
   );
+
+  useEffect(() => {
+    subscribeToStreams(salindex);
+    return () => {
+      unsubscribeToStreams(salindex);
+    };
+  }, [salindex]);
+
+  useEffect(() => {
+    const currentState = summaryStateData ? summaryStateData.summaryState.value : 0;
+    setSummaryState(currentState);
+  }, [summaryStateData]);
 
   useEffect(() => {
     /** Start the stream once and update image size on every receive
@@ -110,7 +130,6 @@ export default function GenericCamera({
     const controller = new AbortController();
     const { signal } = controller;
     const fetchAndRetry = () => {
-      console.log('Fetch stream');
       CameraUtils.fetchImageFromStream(
         feedUrl,
         (image) => {
@@ -144,7 +163,7 @@ export default function GenericCamera({
     if (initialLoading) return;
     if (initialLoading) return;
     if (!canvasRef) return;
-    console.log('Sync canvas, container and stream');
+
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
@@ -177,21 +196,18 @@ export default function GenericCamera({
   //   );
   // }
 
-  // if (initialLoading) {
-  //   return (
-  //     <div className={styles.errorContainer}>
-  //       <p>Fetching stream from {feedUrl}, please wait.</p>
-  //     </div>
-  //   );
-  // }
-
   const imageAspectRatio = imageWidth / imageHeight;
 
   return (
     <div>
       <div className={styles.controlsContainer}>
-        <StartStopLiveViewButton onChange={runCommand} />
-        <NumericInput step="any" onChange={(e) => updateExposureTime(e.target.value)} value={exposureTime} />
+        <StartStopLiveViewButton onChange={runCommand} disabled={checkStateForControls()} />
+        <NumericInput
+          step="any"
+          onChange={(e) => updateExposureTime(e.target.value)}
+          value={exposureTime}
+          disabled={checkStateForControls()}
+        />
         <label>seconds</label>
       </div>
       <hr />
@@ -245,12 +261,28 @@ GenericCamera.propTypes = {
   /**
    * Index of the GenericCamera to control
    */
-  salIndex: PropTypes.number,
+  salindex: PropTypes.number,
+
+  /**
+   * Function to subscribe to streams for state information
+   */
+  subscribeToStreams: PropTypes.func,
+
+  /**
+   * Function to unsubscribe from streams
+   */
+  unsubscribeToStreams: PropTypes.func,
 
   /**
    * Function that handles calling commands on the GenericCamera
    */
   requestSALCommand: PropTypes.func,
+
+  /**
+   * Topic data from SummaryState event
+   */
+  summaryStateData: PropTypes.object,
+
   /**
    * List of objects describing the healpix layers
    */
@@ -275,6 +307,6 @@ GenericCamera.propTypes = {
 GenericCamera.defaultProps = {
   feedKey: 'generic',
   camFeeds: null,
-  salIndex: 1,
+  salindex: 1,
   requestSALCommand: () => 0,
 };

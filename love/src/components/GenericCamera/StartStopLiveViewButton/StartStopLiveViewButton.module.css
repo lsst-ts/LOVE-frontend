@@ -1,5 +1,5 @@
 .buttonWrapper {
-  height: 200px;
+  height: 120px;
   width: 200px;
   text-align: center;
 }
@@ -18,9 +18,9 @@
   background: var(--status-ok-dimmed-color-2);
 }
 
-.button[disabled] {
+.button:disabled {
   cursor: not-allowed;
-  background: var(--status-ok-dimmed-color-2);
+  background: var(--status-ok-dimmed-color);
 }
 
 .buttonLatched {
@@ -37,9 +37,9 @@
   background: var(--status-running-dimmed-color-2);
 }
 
-.button-latched[disabled] {
+.buttonLatched:disabled {
   cursor: not-allowed;
-  background: var(--status-running-dimmed-color-2);
+  background: var(--status-running-dimmed-color);
 }
 
 .svg {

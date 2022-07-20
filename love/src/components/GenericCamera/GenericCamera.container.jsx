@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getCamFeeds } from '../../redux/selectors';
+import { getCamFeeds, getStreamData } from '../../redux/selectors';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import GenericCamera from './GenericCamera';
+
+const CSC_NAME = 'GenericCamera';
 
 export const schema = {
   description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
@@ -32,7 +34,7 @@ export const schema = {
       isPrivate: false,
       default: 'generic',
     },
-    salIndex: {
+    salindex: {
       type: 'integer',
       description: 'The index of the GenericCamera to control',
       isPrivate: false,
@@ -51,13 +53,20 @@ const GenericCameraContainer = ({ ...props }) => {
   return <GenericCamera {...props} />;
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state, ownProps) => {
   const camFeeds = getCamFeeds(state);
-  return { camFeeds };
+  const summaryStateData = getStreamData(state, `event-${CSC_NAME}-${ownProps.salindex}-summaryState`);
+  return { camFeeds, summaryStateData: summaryStateData ? summaryStateData?.[0] : undefined };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    subscribeToStreams: (index) => {
+      dispatch(addGroup(`event-${CSC_NAME}-${index}-summaryState`));
+    },
+    unsubscribeToStreams: (index) => {
+      dispatch(removeGroup(`event-${CSC_NAME}-${index}-summaryState`));
+    },
     requestSALCommand: (cmd) => {
       dispatch(
         requestSALCommand({

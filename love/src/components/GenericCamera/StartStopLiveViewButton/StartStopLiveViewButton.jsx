@@ -6,7 +6,7 @@ import styles from './StartStopLiveViewButton.module.css';
 /**
  * Handles starting and stopping the live view of the Generic camera
  */
-export default function StartStopLiveViewButton({ onChange }) {
+export default function StartStopLiveViewButton({ onChange, disabled }) {
   const [isLatched, setLatched] = useState(false);
 
   const triggerLatch = () => {
@@ -18,7 +18,7 @@ export default function StartStopLiveViewButton({ onChange }) {
 
   return (
     <div className={styles.buttonWrapper}>
-      <button className={isLatched ? styles.buttonLatched : styles.button} onClick={triggerLatch}>
+      <button className={isLatched ? styles.buttonLatched : styles.button} onClick={triggerLatch} disabled={disabled}>
         {isLatched ? <StopIcon /> : <ResumeIcon />}
         <span className={styles.buttonLabel}>{isLatched ? 'Stop' : 'Start'} Live View</span>
       </button>
@@ -31,6 +31,10 @@ StartStopLiveViewButton.propTypes = {
    * Callback to get state
    */
   onChange: PropTypes.func,
+  /**
+   * Disable the button
+   */
+  disabled: PropTypes.bool,
 };
 
 // StartStopLiveViewButton.defaultProps = {
