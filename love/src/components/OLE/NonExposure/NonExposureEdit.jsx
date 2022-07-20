@@ -128,8 +128,11 @@ export default class NonExposureEdit extends Component {
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
-
     payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
+
+    if ('tags' in payload) {
+      payload['tags'] = payload['tags'].map((tag) => tag.id);
+    }
 
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -288,6 +291,7 @@ export default class NonExposureEdit extends Component {
                   <Multiselect
                     className={styles.select}
                     options={systemOptions}
+                    selectedValues={this.state.logEdit.systems}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
                         logEdit: { ...prevState.logEdit, systems: selectedOptions },
@@ -302,6 +306,7 @@ export default class NonExposureEdit extends Component {
                   <Multiselect
                     className={styles.select}
                     options={subsystemOptions}
+                    selectedValues={this.state.logEdit.subsystems}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
                         logEdit: { ...prevState.logEdit, subsystems: selectedOptions },
@@ -316,6 +321,7 @@ export default class NonExposureEdit extends Component {
                   <Multiselect
                     className={styles.select}
                     options={cscOptions}
+                    selectedValues={this.state.logEdit.cscs}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
                         logEdit: { ...prevState.logEdit, cscs: selectedOptions },
@@ -329,13 +335,14 @@ export default class NonExposureEdit extends Component {
                 <span className={styles.value}>
                   <Multiselect
                     options={this.state.imageTags}
+                    selectedValues={this.state.logEdit.tags}
                     isObject={true}
                     displayValue="name"
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
                         logEdit: {
                           ...prevState.logEdit,
-                          tags: selectedOptions.map((tag) => tag.id),
+                          tags: selectedOptions,
                         },
                       }));
                     }}
