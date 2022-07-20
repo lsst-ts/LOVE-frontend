@@ -14,12 +14,13 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
+import RedoIcon from 'components/icons/RedoIcon/RedoIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import NonExposureDetail from './NonExposureDetail';
 import NonExposureEdit from './NonExposureEdit';
 import styles from './NonExposure.module.css';
-import { CSVLink, CSVDownload } from 'react-csv';
+import { CSVLink } from 'react-csv';
 
 const moment = extendMoment(Moment);
 
@@ -39,21 +40,13 @@ export default class NonExposure extends Component {
   static defaultProps = {
     selectedDateStart: null,
     selectedDateEnd: null,
-    handleDateTimeRange: () => {
-      console.log('defaultProps.handleDateTimeRange');
-    },
+    handleDateTimeRange: () => {},
     selectedCommentType: 'all',
-    changeCommentTypeSelect: () => {
-      console.log('defaultProps.changeCommentTypeSelect');
-    },
+    changeCommentTypeSelect: () => {},
     selectedSystem: 'all',
-    changeSubsystemSelect: () => {
-      console.log('defaultProps.changeSubsystemSelect');
-    },
+    changeSubsystemSelect: () => {},
     selectedObsTimeLoss: false,
-    changeObsTimeLossSelect: () => {
-      console.log('defaultProps.changeObsTimeLossSelect');
-    },
+    changeObsTimeLossSelect: () => {},
   };
 
   constructor(props) {
@@ -150,10 +143,11 @@ export default class NonExposure extends Component {
         render: (value) => this.getLevel(value),
       },
       {
-        field: 'system',
-        title: 'System',
+        field: 'systems',
+        title: 'Systems',
         type: 'string',
         className: styles.tableHead,
+        render: (value) => value.join(', '),
       },
       {
         field: 'urls',
@@ -226,10 +220,14 @@ export default class NonExposure extends Component {
     ];
   };
 
-  componentDidMount() {
+  queryNarrativeLogs() {
     ManagerInterface.getListMessagesNarrativeLogs().then((data) => {
       this.setState({ logs: data });
     });
+  }
+
+  componentDidMount() {
+    this.queryNarrativeLogs();
     this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
   }
 
@@ -262,7 +260,7 @@ export default class NonExposure extends Component {
     // Filter by system
     filteredData =
       this.props.selectedSystem !== 'all'
-        ? filteredData.filter((log) => log.system === this.props.selectedSystem)
+        ? filteredData.filter((log) => log.systems.includes(this.props.selectedSystem))
         : filteredData;
 
     // Filter by obs time loss
@@ -277,7 +275,7 @@ export default class NonExposure extends Component {
     const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
     const selectedCommentType = this.props.selectedCommentType;
 
-    const subsystemOptions = [{ label: 'All systems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
+    const systemOptions = [{ label: 'All systems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
     const selectedSystem = this.props.selectedSystem;
 
     const selectedObsTimeLoss = this.props.selectedObsTimeLoss;
@@ -329,7 +327,7 @@ export default class NonExposure extends Component {
           />
 
           <Select
-            options={subsystemOptions}
+            options={systemOptions}
             option={selectedSystem}
             onChange={({ value }) => this.props.changeSubsystemSelect(value)}
             className={styles.select}
@@ -345,6 +343,10 @@ export default class NonExposure extends Component {
           </div>
 
           <div className={styles.divExportBtn}>
+            {/* <Button className={styles.iconBtn} onClick={() => this.queryNarrativeLogs()}>
+              <RedoIcon className={styles.icon} />
+            </Button> */}
+
             <CSVLink data={tableData} headers={csvHeaders} filename="narrativeLogs.csv">
               <Hoverable top={true} left={true} inside={true}>
                 <span className={styles.infoIcon}>
