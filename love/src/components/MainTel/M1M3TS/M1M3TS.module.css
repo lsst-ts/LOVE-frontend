@@ -27,6 +27,7 @@
 
 .temperatureContainer {
   grid-area: tem;
+  margin: 15px;
 }
 
 .infoContainer {

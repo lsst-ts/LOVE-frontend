@@ -228,6 +228,31 @@ export const getM1M3ActuatorForces = (state) => {
   };
 };
 
+export const getM1M3TSThermalState = (state) => {
+  const subscriptions = [
+    // 'event-MTM1M3TS-0-enabledILC',
+    'event-MTM1M3TS-0-thermalData',
+    'event-MTM1M3TS-0-thermalSettings',
+  ];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    enabledFCU: m1m3tsData['event-MTM1M3TS-0-thermalSettings']?.[0].enabledFCU?.value ?? Array.from({length: 96}, i => false),
+    absoluteTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].absoluteTemperature ?.value ?? Array.from({length: 96}, i => 1234),
+    differentialTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].differentialTemperature ?.value ?? Array.from({length: 96}, i => 246),
+    fanRPM : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].fanRPM ?.value ?? Array.from({length: 96}, i => 2350),
+  };
+};
+
+export const getM1M3TSTemperatureState = (state) => {
+  const subscriptions = [
+    'event-MTM1M3TS-0-appliedSetpoint',
+  ];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    setpoint: m1m3tsData['event-MTM1M3TS-0-appliedSetpoint']?.[0].setpoint?.value ?? 18.34,
+  };
+};
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [

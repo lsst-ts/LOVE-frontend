@@ -42,7 +42,7 @@ export default class M1M3TS extends Component {
 
   arrayReferenceId = () => {
     const array = [];
-    for (let i = 0; i < 78; i++) {
+    for (let i = 0; i < 96; i++) {
       array.push(i + 1);
     }
     return array;
@@ -52,21 +52,31 @@ export default class M1M3TS extends Component {
 
   render() {
     const sensorReferenceId = this.arrayReferenceId();
-    // TODO: pending real status
-    const sensorEnabledState = Array.from({length: sensorReferenceId.length}, i => 1);
 
-    console.log('m1m3ts.render', sensorEnabledState);
-
-    const { 
-      minTemperatureLimit,
-      maxTemperatureLimit,
-    } = this.props;
+    // Summary
     const {
       summaryState,
-      enabled,
       fanHeaters,
       coolantPump,
     } = this.props;
+
+    // Temperature
+    const {
+      setpoint,
+      minTemperatureLimit,
+      maxTemperatureLimit,
+    } = this.props;
+
+    // Info
+    const {
+      enabledFCU,
+      absoluteTemperature,
+      differentialTemperature,
+      fanRPM,
+    } = this.props;
+
+    console.log('absolute', absoluteTemperature[0]);
+    console.log('differential', differentialTemperature[0]);
 
     return (
       <div className={styles.container}>
@@ -74,7 +84,6 @@ export default class M1M3TS extends Component {
         <div className={styles.summaryContainer}>
           <Summary 
             summaryState={summaryState}
-            enabled={enabled}
             fanHeaters={fanHeaters}
             coolantPump={coolantPump}
           />
@@ -93,13 +102,23 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.temperatureContainer}>
-          <TemperatureGradiant />
+          <TemperatureGradiant 
+            setpoint={setpoint}
+            minTemperatureLimit={minTemperatureLimit}
+            maxTemperatureLimit={maxTemperatureLimit}
+            absoluteTemperature={absoluteTemperature}
+            differentialTemperature={differentialTemperature}
+            sensorReferenceId={sensorReferenceId}
+          />
         </div>
 
         <div className={styles.infoContainer}>
           <Info 
             sensorReferenceId={sensorReferenceId}
-            sensorEnabledState={sensorEnabledState}
+            enabledFCU={enabledFCU}
+            absoluteTemperature={absoluteTemperature}
+            differentialTemperature={differentialTemperature}
+            fanRPM={fanRPM}
           />
         </div>
 

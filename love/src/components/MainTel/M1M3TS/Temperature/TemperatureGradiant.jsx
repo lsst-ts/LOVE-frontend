@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import { defaultNumberFormatter } from 'Utils';
+import Title from 'components/GeneralPurpose/SummaryPanel/Title';
+import Label from 'components/GeneralPurpose/SummaryPanel/Label';
+import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 
 import styles from './TemperatureGradiant.module.css';
 
@@ -9,13 +13,11 @@ export default class TemperatureGradiant extends Component {
     /** Array for the identify of the position in array with an index */
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
 
-    /**  */
-    termalSystemFan: PropTypes.arrayOf(PropTypes.number),
-    /**   */
-    termalSystemCoil: PropTypes.arrayOf(PropTypes.number),
-    /** Force applied by SAL command or script for each actuator in sequence. */
-    /** Id of sensor selected */
+    absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    differentialTemperature: PropTypes.arrayOf(PropTypes.number),
+
     selectedId: PropTypes.number,
+    setpoint: PropTypes.number,
 
     /** Number of the minimum force limit, used for the gradiant color */
     minTemperatureLimit: PropTypes.number,
@@ -25,17 +27,19 @@ export default class TemperatureGradiant extends Component {
 
   static defaultProps = {
     sensorReferenceId: [],
+    absoluteTemperature: [],
+    differentialTemperature: [],
 
-    termalSystemFan: [],
-    termalSystemCoil: [],
+    selectedId: 2,
 
-    selectedId: undefined,
+    setpoint: 18.9,
 
     minTemperatureLimit: 0,
     maxTemperatureLimit: 1000,
   }
 
-  static COLOURS = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
+  static COLOURS_INV = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
+  static COLOURS = ['#d7191c', '#e76818', '#f29e2e', '#f9d057', '#ffff8c', '#90eb9d', '#00ccbc', '#00a6ca', '#2c7bb6'];
 
   static COLOUR_RANGE = [...d3.range(0, 1, 1.0 / (TemperatureGradiant.COLOURS.length - 1)), 1];
 
@@ -51,69 +55,39 @@ export default class TemperatureGradiant extends Component {
     };
   }
 
-/*   getActuator = (id) => {
-    if (id === 0 || id === null) return { id: undefined };
+  getSensor = (id) => {
+    if (id === 0 || id === null || id === undefined) return { id: undefined };
     const {
-      actuatorReferenceId,
-      axialForceApplied,
-      axialForceMeasured,
+      sensorReferenceId,
+      absoluteTemperature,
+      differentialTemperature,
     } = this.props;
+    const sensorIndex = sensorReferenceId.indexOf(id);
+    console.log('sensorReferenceId',sensorReferenceId,'sensorIndex', sensorIndex);
+    console.log('absoluteTemperature[sensorIndex]', absoluteTemperature[sensorIndex]);
 
-    const actuatorIndex = actuatorReferenceId.indexOf(id);
-
-    const actuator = {
-      id: `C${String(id).padStart(2, '0')}`,
-      commanded: axialForceApplied[actuatorIndex] ?? 0,
-      measured: axialForceMeasured[actuatorIndex] ?? 0,
+    const sensor = {
+      id: `${String(id).padStart(2, '0')}`,
+      absolute: absoluteTemperature[sensorIndex] ?? 0,
+      differential: differentialTemperature[sensorIndex] ?? 0,
     };
-    return actuator;
-  };
-
-  getActuatorTangent = (id) => {
-    if (id === 0 || id === null) return { id: undefined };
-    const {
-      actuatorTangentReferenceId,
-      tangentForceApplied,
-      tangentForceMeasured,
-    } = this.props;
-
-    const actuatorIndex = actuatorTangentReferenceId.indexOf(id);
-
-    const actuator = {
-      id: `A${id}`,
-      commanded: tangentForceApplied[actuatorIndex] ?? 0,
-      measured: tangentForceMeasured[actuatorIndex] ?? 0,
-    };
-    return actuator;
-  } */
+    return sensor;
+  }
 
   componentDidUpdate(prevProps) {
-/*     if (
-      prevProps.axialForceApplied !== this.props.axialForceApplied ||
-      prevProps.axialForceMeasured !== this.props.axialForceMeasured ||
-      prevProps.tangentForceApplied !== this.props.tangentForceApplied ||
-      prevProps.tangentForceMeasured !== this.props.tangentForceMeasured
+    if (
+      prevProps.absoluteTemperature !== this.props.absoluteTemperature ||
+      prevProps.differentialTemperature !== this.props.differentialTemperature
     ) {
       this.createColorScale();
-      if (this.props.selectedActuator) {
-        const actuator = this.getActuator(this.props.selectedActuator);
-        this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
-      }
-      if (this.props.selectedActuatorTangent) {
-        const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
-        this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
-      }
+      const sensor = this.getSensor(this.props.selectedId ?? TemperatureGradiant.defaultProps.selectedId);
+      this.setTemperature(sensor, this.props.minTemperatureLimit, this.maxTemperatureLimit);
     }
 
-    if (prevProps.selectedActuator !== this.props.selectedActuator) {
-      const actuator = this.getActuator(this.props.selectedActuator);
-      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
+    if (prevProps.selectedId !== this.props.selectedId) {
+      const sensor = this.getSensor(this.props.selectedId ?? TemperatureGradiant.defaultProps.selectedId);
+      this.setTemperature(sensor, this.props.minTemperatureLimit, this.maxTemperatureLimit);
     }
-
-    if (prevProps.selectedActuatorTangent !== this.props.selectedActuatorTangent) {
-      const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
-      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
-    } */
   }
 
   createColorScale = () => {
@@ -165,92 +139,103 @@ export default class TemperatureGradiant extends Component {
   }
 
   setTemperature = (sensor) => {
-/*     const { minTemperatureLimit, maxTemperatureLimit } = this.props;
+    const { minTemperatureLimit, maxTemperatureLimit } = this.props;
 
     const svg = d3.select('#color-scale svg');
-    const measuredText = d3.select('#color-scale svg #measured-text');
-    const measuredLine = d3.select('#color-scale svg #measured-line');
-    const measuredTemperatureX = TemperatureGradiant.getGradiantPositionX(actuator.measured,
+    const absoluteText = d3.select('#color-scale svg #absolute-text');
+    const absoluteLine = d3.select('#color-scale svg #absolute-line');
+    
+    const absoluteTemperatureX = TemperatureGradiant.getGradiantPositionX(sensor.absolute,
       minTemperatureLimit, maxTemperatureLimit, this.state.width);
 
-    if (measuredText) {
-      measuredText.remove();
-      measuredLine.remove();
+    if (absoluteText) {
+      absoluteText.remove();
+      absoluteLine.remove();
     }
 
-    if (actuator.id !== undefined) {
+    if (sensor.id !== undefined) {
       svg
         .append('line')
-        .attr('id', 'measured-line')
-        .attr('x1', measuredTemperatureX)
+        .attr('id', 'absolute-line')
+        .attr('x1', absoluteTemperatureX)
         .attr('y1', -10)
-        .attr('x2', measuredTemperatureX)
+        .attr('x2', absoluteTemperatureX)
         .attr('y2', 50)
         .style('stroke', 'white')
         .style('stroke-width', 3);
 
-      const textMeasured = svg
+      const textAbsolute = svg
         .append('text')
-        .attr('id', 'measured-text')
-        .attr('x', measuredTemperatureX)
+        .attr('id', 'absolute-text')
+        .attr('x', absoluteTemperatureX)
         .attr('y', -10)
         .attr('fill', 'white')
         .style('font-size', '1em');
 
-      if (measuredTemperatureX > ((this.state.width * 3) / 4)) {
-        textMeasured.attr('text-anchor', 'end');
+      if (absoluteTemperatureX > ((this.state.width * 3) / 4)) {
+        textAbsolute.attr('text-anchor', 'end');
       }
-      textMeasured.append('tspan').attr('x', measuredTemperatureX).attr('y', -45).text(actuator.id);
-      textMeasured.append('tspan').attr('x', measuredTemperatureX).attr('y', -30).text('Measured');
-      textMeasured.append('tspan').attr('x', measuredTemperatureX).attr('y', -15)
-        .text(`${actuator.measured}N`);
+      textAbsolute.append('tspan').attr('x', absoluteTemperatureX).attr('y', -45).text(sensor.id);
+      textAbsolute.append('tspan').attr('x', absoluteTemperatureX).attr('y', -30).text('Absolute');
+      textAbsolute.append('tspan').attr('x', absoluteTemperatureX).attr('y', -15)
+        .text(`${sensor.absolute} C°`);
     }
 
-    const commandedText = d3.select('#color-scale svg #commanded-text');
-    const commandedLine = d3.select('#color-scale svg #commanded-line');
+    const differentialText = d3.select('#color-scale svg #differential-text');
+    const differentialLine = d3.select('#color-scale svg #differential-line');
 
-    if (commandedText) {
-      commandedText.remove();
-      commandedLine.remove();
+    if (differentialText) {
+      differentialText.remove();
+      differentialLine.remove();
     }
 
-    if (actuator.id !== undefined) {
-      const commandedTemperatureX = TemperatureGradiant.getGradiantPositionX(actuator.commanded,
+    if (sensor.id !== undefined) {
+      const differentialTemperatureX = TemperatureGradiant.getGradiantPositionX(sensor.differential,
         minTemperatureLimit, maxTemperatureLimit, this.state.width);
       svg
         .append('line')
-        .attr('id', 'commanded-line')
-        .attr('x1', commandedTemperatureX)
+        .attr('id', 'differential-line')
+        .attr('x1', differentialTemperatureX)
         .attr('y1', -10)
-        .attr('x2', commandedTemperatureX)
+        .attr('x2', differentialTemperatureX)
         .attr('y2', 50)
         .style('stroke', 'white')
         .style('stroke-width', 3);
 
-      const textCommanded = svg
+      const textDifferential = svg
         .append('text')
-        .attr('id', 'commanded-text')
-        .attr('x', commandedTemperatureX)
+        .attr('id', 'differential-text')
+        .attr('x', differentialTemperatureX)
         .attr('y', 50)
         .attr('fill', 'white')
         .style('font-size', '1em');
 
-      if (commandedTemperatureX > ((this.state.width * 3) / 4)) {
-        textCommanded.attr('text-anchor', 'end');
+      if (differentialTemperatureX > ((this.state.width * 3) / 4)) {
+        textDifferential.attr('text-anchor', 'end');
       }
 
-      textCommanded.append('tspan').attr('x', commandedTemperatureX).attr('y', 60).text(actuator.id);
-      textCommanded.append('tspan').attr('x', commandedTemperatureX).attr('y', 75).text('Commanded');
-      textCommanded.append('tspan').attr('x', commandedTemperatureX).attr('y', 90)
-        .text(`${actuator.commanded}N`);
-    } */
+      textDifferential.append('tspan').attr('x', differentialTemperatureX).attr('y', 60).text(sensor.id);
+      textDifferential.append('tspan').attr('x', differentialTemperatureX).attr('y', 75).text('Differential');
+      textDifferential.append('tspan').attr('x', differentialTemperatureX).attr('y', 90)
+        .text(`${sensor.differential} °C`);
+    } 
   }
 
   render() {
-    const { maxTemperatureLimit, minTemperatureLimit } = this.props;
+    const {
+      maxTemperatureLimit,
+      minTemperatureLimit,
+      setpoint,
+    } = this.props;
     return (
             <div>
-              <p className={styles.title}>Temperature</p>
+              <div className={styles.container}>
+                <span className={styles.title}>Temperature</span>
+                <span className={styles.value}></span>
+                <span className={styles.label}>Set Point</span>
+                <span className={styles.value}>{`${defaultNumberFormatter(setpoint, 1)} C°`}</span>
+              </div>
+
               <div className={styles.temperatureGradientWrapper}>
                 <div id="color-scale" className={styles.temperatureGradient}>
                   <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minTemperatureLimit} [°C]</span>

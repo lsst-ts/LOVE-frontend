@@ -36,3 +36,24 @@
   overflow: visible;
 /*   width: 100%; */
 }
+
+.label {
+  font-size: var(--font-size-medium);
+  color: var(--secondary-font-color);
+  text-align: left;
+  white-space: pre;
+}
+
+.value {
+  color: var(--base-font-color);
+  text-align: right;
+}
+
+.container {
+  position: relative;
+  display: grid;
+  justify-content: flex-start;
+  padding: 1em;
+  margin-bottom: 1em;
+  grid-template-columns: 1fr 1.2fr;
+}

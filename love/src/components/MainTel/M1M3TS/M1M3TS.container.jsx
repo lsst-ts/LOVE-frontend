@@ -2,7 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import {
-  getM1M3TSState
+  getM1M3TSState,
+  getM1M3TSThermalState,
+  getM1M3TSTemperatureState
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3TS from './M1M3TS';
@@ -17,17 +19,17 @@ export const schema = {
       isPrivate: false,
       default: 'M1M3 Thermal System',
     },
-    minForceLimit: {
+    minTemperatureLimit: {
       type: 'number',
-      description: 'Minimum force limit',
+      description: 'Minimum Temperature limit',
       isPrivate: false,
-      default: 0,
+      default: -6000,
     },
-    maxForceLimit: {
+    maxTemperatureLimit: {
       type: 'number',
-      description: 'Maximum force limit',
+      description: 'Maximum Temperature limit',
       isPrivate: false,
-      default: 1000,
+      default: 6000,
     },
     hasRawMode: {
       type: 'boolean',
@@ -47,15 +49,19 @@ const M1M3TSContainer = (props) => {
 
 const mapStateToProps = (state) => {
   const m1m3TSState = getM1M3TSState(state);
-
-  return { ...m1m3TSState };
+  const m1m3TSThermalState = getM1M3TSThermalState(state);
+  const m1m3TSTemperatureState = getM1M3TSTemperatureState(state);
+  return { ...m1m3TSState, ...m1m3TSThermalState, ...m1m3TSTemperatureState };
 };
 
 const mapDispatchToProps = (dispatch) => {
   const subscriptions = [
     'event-MTM1M3TS-0-summaryState',
-    'event-MTM1M3TS-0-enabledILC',
+    // 'event-MTM1M3TS-0-enabledILC',
     'event-MTM1M3TS-0-powerStatus',
+    'event-MTM1M3TS-0-thermalData',
+    'event-MTM1M3TS-0-thermalSettings',
+    'event-MTM1M3TS-0-appliedSetpoint',
   ];
   return {
     subscriptions,

@@ -1226,9 +1226,9 @@ export const parseTimestamp = (timestamp) => {
  * @param {number} value, number to convert
  * @returns {number|string} integer value or fixed float string of value
  */
-export const defaultNumberFormatter = (value) => {
+export const defaultNumberFormatter = (value, precision=4) => {
   if (Number.isNaN(value)) return value;
-  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(4);
+  return Number.isInteger(value) ? value : Number.parseFloat(value).toFixed(precision);
 };
 
 /**

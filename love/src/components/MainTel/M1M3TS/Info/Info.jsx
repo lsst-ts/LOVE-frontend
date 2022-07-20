@@ -14,8 +14,11 @@ import { m1m3tsEnabledStateMap, m1m3tsEnabledStateToStyle } from 'Config';
 export default class Info extends Component {
   static propTypes = {
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
-    sensorEnabledState: PropTypes.arrayOf(PropTypes.number),
     selectedSensor: PropTypes.number,
+    enabledFCU: PropTypes.arrayOf(PropTypes.bool),
+    absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    differentialTemperature: PropTypes.arrayOf(PropTypes.number),
+    fanRPM: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
@@ -29,26 +32,21 @@ export default class Info extends Component {
 
     const {
       sensorReferenceId,
-      sensorEnabledState,
+      enabledFCU,
+      absoluteTemperature,
+      differentialTemperature,
+      fanRPM,
     } = this.props;
 
-    console.log('sensorReferenceId', sensorReferenceId);
-    console.log('sensorEnabledState', sensorEnabledState);
-
     const sensorIndex = sensorReferenceId.indexOf(id);
-    console.log('index', sensorIndex);
-    const enabledData = sensorEnabledState[sensorIndex];
+    const enabledData = enabledFCU[sensorIndex] ? 1 : 0;
     const enabledState = m1m3tsEnabledStateMap[enabledData];
-
-    console.log('enabledData', enabledData);
-    console.log('enabledState', enabledState);
-
-
-    console.log('m1m3tsEnabledStateMap', m1m3tsEnabledStateMap);
-    console.log('m1m3tsEnabledStateToStyle', m1m3tsEnabledStateToStyle);
 
     const sensor = {
       id: `FCU${String(id).padStart(2, '0')}`,
+      absoluteTemperature: absoluteTemperature[sensorIndex] ?? 0,
+      differentialTemperature: differentialTemperature[sensorIndex] ?? 0,
+      fanRPM: fanRPM[sensorIndex] ?? 0,
     };
 
     sensor.state = {
@@ -56,17 +54,15 @@ export default class Info extends Component {
         name: enabledState,
         status: m1m3tsEnabledStateToStyle[enabledState ?? 0],
       }
-    }
+    };
   
     return sensor;
   }
-
 
   render() {
     const selectedSensorID = this.props.selectedSensor ?? Info.defaultProps.selectedSensor;
     let selectedSensorData = this.getSensor(selectedSensorID);
 
-    console.log('render', selectedSensorData);
     return (
       <SummaryPanel className={styles.info}>
         {selectedSensorID ? (
@@ -85,7 +81,7 @@ export default class Info extends Component {
             <Value>{`${defaultNumberFormatter(selectedSensorData.differentialTemperature)} C°`}</Value>
 
             <Label>Fan</Label>
-            <Value>{`${defaultNumberFormatter(selectedSensorData.fan)} RPM`}</Value>
+            <Value>{`${defaultNumberFormatter(selectedSensorData.fanRPM)} RPM`}</Value>
 
             <Title>Warnings</Title>
             <div>ICON</div>

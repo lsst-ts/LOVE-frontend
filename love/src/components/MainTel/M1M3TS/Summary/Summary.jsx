@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import {
+  m1m3tsSummaryStates,
+  m1m3tsSummaryStateToStyle,
+} from 'Config';
 import CSCDetailStyles from 'components/CSCSummary/CSCDetail/CSCDetail.module.css';
 
 import styles from './Summary.module.css';
@@ -13,25 +14,22 @@ export default class Summary extends Component {
     /** Current summary state of the CSC. High level state machine state identifier. */
     summaryState: PropTypes.number,
     /**  */
-    enabled: PropTypes.bool,
-    /**  */
     fanHeaters: PropTypes.bool,
     /**  */
     coolantPump: PropTypes.bool,
   };
 
   static defaultProps = {
-    summaryState: 0,
-    enabled: false,
+    summaryState: 1,
     fanHeaters: false,
     coolantPump: false,
   };
 
   render() {
-    const summaryStateValue = CSCDetail.states[this.props.summaryState ?? Summary.defaultProps.summaryState];
-    const m1m3tsEnabledValue = {
-      name: this.props.enabled ? 'ENABLED' : 'DISABLED',
-      class: CSCDetailStyles[this.props.enabled ? 'ok' : 'warning'],
+    const summaryStateName = m1m3tsSummaryStates[this.props.summaryState ?? Summary.defaultProps.summaryState];
+    const summaryStateValue = {
+      name: summaryStateName ?? 'UNKNOWN',
+      class: CSCDetailStyles[m1m3tsSummaryStateToStyle[summaryStateName] ?? 'unknown'],
     };
     const m1m3tsFanHeatersValue = {
       name: this.props.fanHeaters ? 'ENABLED' : 'DISABLED',
@@ -49,12 +47,6 @@ export default class Summary extends Component {
               <span className={styles.title}>M1M3TS</span>
               <span className={[summaryStateValue?.class, styles.summaryState].join(' ')}>
                 {summaryStateValue?.name}
-              </span>
-            </div>
-            <div className={styles.control}>
-              <span className={styles.title}>Status</span>
-              <span className={[m1m3tsEnabledValue.class, styles.summaryState].join(' ')}>
-                {m1m3tsEnabledValue.name}
               </span>
             </div>
             <div className={styles.control}>
