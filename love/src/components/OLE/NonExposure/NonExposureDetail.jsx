@@ -163,13 +163,13 @@ export default class NonExposureDetail extends Component {
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
               <span className={styles.label}>System</span>
-              <span className={styles.value}>{logDetail.systems.join(', ')}</span>
+              <span className={styles.value}>{logDetail.systems?.join(', ')}</span>
               <span className={styles.label}>Subsystems</span>
-              <span className={styles.value}>{logDetail.subsystems.join(', ')}</span>
+              <span className={styles.value}>{logDetail.subsystems?.join(', ')}</span>
               <span className={styles.label}>CSCs</span>
-              <span className={styles.value}>{logDetail.cscs.join(', ')}</span>
+              <span className={styles.value}>{logDetail.cscs?.join(', ')}</span>
               <span className={styles.label}>Tags</span>
-              <span className={styles.value}>{logDetail.tags.join(', ')}</span>
+              <span className={styles.value}>{logDetail.tags?.join(', ')}</span>
             </div>
             <div className={styles.description}>
               <div className={styles.floatLeft}>
