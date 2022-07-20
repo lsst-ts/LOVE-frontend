@@ -4,6 +4,8 @@ import * as CameraUtils from './CameraUtils';
 import styles from './GenericCamera.module.css';
 import HealpixOverlay from './HealpixOverlay';
 import TargetLayer from './TargetLayer';
+import StartStopLiveViewButton from './StartStopLiveViewButton/StartStopLiveViewButton';
+import NumericInput from '../GeneralPurpose/Input/NumericInput';
 
 const DEFAULT_URL = 'http://localhost/gencam';
 
@@ -18,6 +20,8 @@ GenericCamera.propTypes = {
    */
   camFeeds: PropTypes.object,
 
+  salIndex: PropTypes.number,
+  requestSALCommand: PropTypes.func,
   /**
    * List of objects describing the healpix layers
    */
@@ -42,6 +46,8 @@ GenericCamera.propTypes = {
 GenericCamera.defaultProps = {
   feedKey: 'generic',
   camFeeds: null,
+  salIndex: 1,
+  requestSALCommand: () => 0,
 };
 
 /**
@@ -51,6 +57,8 @@ GenericCamera.defaultProps = {
 export default function GenericCamera({
   feedKey,
   camFeeds,
+  salIndex,
+  requestSALCommand,
   healpixOverlays = [],
   selectedCell = undefined,
   onLayerClick = () => {},
@@ -64,9 +72,37 @@ export default function GenericCamera({
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [runLiveView, setRunLiveView] = useState(false);
+  const [exposureTime, changeExposureTime] = useState(5);
 
   // const canvasRef = useRef(null);
   const [canvasRef, setCanvasRef] = useState(null);
+
+  const updateExposureTime = (value) => {
+    const numVal = parseFloat(value);
+    changeExposureTime(numVal);
+  };
+
+  const runCommand = (isLatched) => {
+    if (isLatched) {
+      requestSALCommand({
+        cmd: 'cmd_startLiveView',
+        csc: 'GenericCamera',
+        salindex: salIndex,
+        params: { expTime: exposureTime },
+      });
+    } else {
+      setError(null);
+      setInitialLoading(true);
+      requestSALCommand({
+        cmd: 'cmd_stopLiveView',
+        csc: 'GenericCamera',
+        salindex: salIndex,
+        params: {},
+      });
+    }
+    setRunLiveView(isLatched);
+  };
 
   const onCanvasRefChange = React.useCallback(
     (canvasNode) => {
@@ -74,6 +110,8 @@ export default function GenericCamera({
       /** Listen to size changes of the canvas parent element*/
       if (!canvasNode) return;
       if (error !== null) return;
+      if (!runLiveView) return;
+      console.log('Canvas ref change');
       const observer = new ResizeObserver((entries) => {
         const container = entries[0];
         setContainerWidth(container.contentRect.width);
@@ -86,14 +124,14 @@ export default function GenericCamera({
         observer.disconnect();
       };
     },
-    [error],
+    [runLiveView],
   );
 
   useEffect(() => {
     /** Start the stream once and update image size on every receive
      *  Retry if connection fails
      */
-
+    if (!runLiveView) return;
     let retryTimeout;
 
     const retryFetch = (error) => {
@@ -113,6 +151,7 @@ export default function GenericCamera({
     const controller = new AbortController();
     const signal = controller.signal;
     const fetchAndRetry = () => {
+      console.log('Fetch stream');
       CameraUtils.fetchImageFromStream(
         feedUrl,
         (image) => {
@@ -138,13 +177,14 @@ export default function GenericCamera({
       controller.abort();
       clearTimeout(retryTimeout);
     };
-  }, [feedUrl, canvasRef]);
+  }, [feedUrl, canvasRef, runLiveView]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
     if (error !== null) return;
     if (initialLoading) return;
     if (!canvasRef) return;
+    console.log('Sync canvas, container and stream');
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
@@ -167,52 +207,66 @@ export default function GenericCamera({
     //
   }, [imageWidth, imageHeight, containerWidth, containerHeight, error, initialLoading, canvasRef]);
 
-  if (error !== null) {
-    return (
-      <div className={styles.errorContainer}>
-        <p>Fetching stream from {feedUrl}, please wait.</p>
-        <p>{`ERROR: ${error.message}`}</p>
-        <span>Retrying {`(${retryCount})`} </span>
-      </div>
-    );
-  }
+  // if (error !== null) {
+  //   return (
+  //     <div className={styles.errorContainer}>
+  //       <p>Fetching stream from {feedUrl}, please wait.</p>
+  //       <p>{`ERROR: ${error.message}`}</p>
+  //       <span>Retrying {`(${retryCount})`} </span>
+  //     </div>
+  //   );
+  // }
 
-  if (initialLoading) {
-    return (
-      <div className={styles.errorContainer}>
-        <p>Fetching stream from {feedUrl}, please wait.</p>
-      </div>
-    );
-  }
+  // if (initialLoading) {
+  //   return (
+  //     <div className={styles.errorContainer}>
+  //       <p>Fetching stream from {feedUrl}, please wait.</p>
+  //     </div>
+  //   );
+  // }
 
   const imageAspectRatio = imageWidth / imageHeight;
 
   return (
-    <div className={styles.cameraContainer}>
-      {healpixOverlays.map((overlay, index) => {
-        return (
-          overlay.display && (
-            <HealpixOverlay
-              key={index}
+    <div>
+      <div className={styles.controlsContainer}>
+        <StartStopLiveViewButton onChange={runCommand} />
+        <NumericInput step="any" onChange={(e) => updateExposureTime(e.target.value)} value={exposureTime} />
+        <label>seconds</label>
+      </div>
+      <hr />
+      {initialLoading ? (
+        <div className={styles.errorContainer}>
+          {runLiveView ? <p>Fetching stream from {feedUrl}, please wait.</p> : <p>Live view not started</p>}
+        </div>
+      ) : (
+        <div className={styles.cameraContainer}>
+          {healpixOverlays.map((overlay, index) => {
+            return (
+              overlay.display && (
+                <HealpixOverlay
+                  key={index}
+                  width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+                  height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+                  selectedCell={selectedCell}
+                  {...overlay}
+                  onLayerClick={onLayerClick}
+                ></HealpixOverlay>
+              )
+            );
+          })}
+          {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
+            <TargetLayer
               width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
               height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-              selectedCell={selectedCell}
-              {...overlay}
               onLayerClick={onLayerClick}
-            ></HealpixOverlay>
-          )
-        );
-      })}
-      {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
-        <TargetLayer
-          width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
-          height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-          onLayerClick={onLayerClick}
-          selectedCell={selectedCell}
-          {...targetOverlay}
-        ></TargetLayer>
+              selectedCell={selectedCell}
+              {...targetOverlay}
+            ></TargetLayer>
+          )}
+          <canvas ref={onCanvasRefChange}></canvas>
+        </div>
       )}
-      <canvas ref={onCanvasRefChange}></canvas>
     </div>
   );
 }

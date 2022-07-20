@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getCamFeeds } from '../../redux/selectors';
+import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
 import GenericCamera from './GenericCamera';
 
 export const schema = {
@@ -31,6 +32,12 @@ export const schema = {
       isPrivate: false,
       default: 'generic',
     },
+    salIndex: {
+      type: 'integer',
+      description: 'The index of the GenericCamera to control',
+      isPrivate: false,
+      default: 1,
+    },
     hasRawMode: {
       type: 'boolean',
       description: 'Whether the component has a raw mode version',
@@ -50,7 +57,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return {};
+  return {
+    requestSALCommand: (cmd) => {
+      dispatch(
+        requestSALCommand({
+          ...cmd,
+        }),
+      );
+    },
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(GenericCameraContainer);
