@@ -33,6 +33,7 @@
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .signal {
