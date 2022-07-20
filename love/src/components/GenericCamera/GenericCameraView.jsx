@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as CameraUtils from './CameraUtils';
-import styles from './GenericCamera.module.css';
+import styles from './GenericCameraView.module.css';
 import HealpixOverlay from './HealpixOverlay';
 import TargetLayer from './TargetLayer';
-import StartStopLiveViewButton from './StartStopLiveViewButton/StartStopLiveViewButton';
-import NumericInput from '../GeneralPurpose/Input/NumericInput';
 
 const DEFAULT_URL = 'http://localhost/gencam';
 
@@ -13,14 +11,9 @@ const DEFAULT_URL = 'http://localhost/gencam';
  * Draws a canvas in grayscale representing colors coming from
  * the Generic Camera images
  */
-export default function GenericCamera({
+export default function GenericCameraView({
   feedKey,
   camFeeds,
-  salindex,
-  subscribeToStreams,
-  unsubscribeToStreams,
-  requestSALCommand,
-  summaryStateData,
   healpixOverlays = [],
   selectedCell = undefined,
   onLayerClick = () => {},
@@ -34,42 +27,9 @@ export default function GenericCamera({
   const [error, setError] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
   const [initialLoading, setInitialLoading] = useState(true);
-  const [runLiveView, setRunLiveView] = useState(false);
-  const [exposureTime, changeExposureTime] = useState(5);
-  const [summaryState, setSummaryState] = useState(0);
 
   // const canvasRef = useRef(null);
   const [canvasRef, setCanvasRef] = useState(null);
-
-  const checkStateForControls = () => {
-    return summaryState !== 2;
-  };
-
-  const updateExposureTime = (value) => {
-    const numVal = parseFloat(value);
-    changeExposureTime(numVal);
-  };
-
-  const runCommand = (isLatched) => {
-    if (isLatched) {
-      requestSALCommand({
-        cmd: 'cmd_startLiveView',
-        csc: 'GenericCamera',
-        salindex: { salindex },
-        params: { expTime: exposureTime },
-      });
-    } else {
-      setError(null);
-      setInitialLoading(true);
-      requestSALCommand({
-        cmd: 'cmd_stopLiveView',
-        csc: 'GenericCamera',
-        salindex: { salindex },
-        params: {},
-      });
-    }
-    setRunLiveView(isLatched);
-  };
 
   const onCanvasRefChange = React.useCallback(
     (canvasNode) => {
@@ -77,8 +37,6 @@ export default function GenericCamera({
       /** Listen to size changes of the canvas parent element */
       if (!canvasNode) return undefined;
       if (error !== null) return undefined;
-      if (!runLiveView) return undefined;
-
       const observer = new ResizeObserver((entries) => {
         const container = entries[0];
         setContainerWidth(container.contentRect.width);
@@ -91,26 +49,14 @@ export default function GenericCamera({
         observer.disconnect();
       };
     },
-    [runLiveView],
+    [error],
   );
-
-  useEffect(() => {
-    subscribeToStreams(salindex);
-    return () => {
-      unsubscribeToStreams(salindex);
-    };
-  }, [salindex]);
-
-  useEffect(() => {
-    const currentState = summaryStateData ? summaryStateData.summaryState.value : 0;
-    setSummaryState(currentState);
-  }, [summaryStateData]);
 
   useEffect(() => {
     /** Start the stream once and update image size on every receive
      *  Retry if connection fails
      */
-    if (!runLiveView) return undefined;
+
     let retryTimeout;
 
     const retryFetch = (e) => {
@@ -128,7 +74,7 @@ export default function GenericCamera({
     };
 
     const controller = new AbortController();
-    const { signal } = controller;
+    const signal = { controller };
     const fetchAndRetry = () => {
       CameraUtils.fetchImageFromStream(
         feedUrl,
@@ -155,15 +101,13 @@ export default function GenericCamera({
       controller.abort();
       clearTimeout(retryTimeout);
     };
-  }, [feedUrl, canvasRef, runLiveView]);
+  }, [feedUrl, canvasRef]);
 
   useEffect(() => {
     /** Sync canvas size with its container and stream  */
     if (error !== null) return;
     if (initialLoading) return;
-    if (initialLoading) return;
     if (!canvasRef) return;
-
     const imageAspectRatio = imageWidth / imageHeight;
     const containerAspectRatio = containerWidth / containerHeight;
 
@@ -186,68 +130,57 @@ export default function GenericCamera({
     //
   }, [imageWidth, imageHeight, containerWidth, containerHeight, error, initialLoading, canvasRef]);
 
-  // if (error !== null) {
-  //   return (
-  //     <div className={styles.errorContainer}>
-  //       <p>Fetching stream from {feedUrl}, please wait.</p>
-  //       <p>{`ERROR: ${error.message}`}</p>
-  //       <span>Retrying {`(${retryCount})`} </span>
-  //     </div>
-  //   );
-  // }
+  if (error !== null) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>Fetching stream from {feedUrl}, please wait.</p>
+        <p>{`ERROR: ${error.message}`}</p>
+        <span>Retrying {`(${retryCount})`} </span>
+      </div>
+    );
+  }
+
+  if (initialLoading) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>Fetching stream from {feedUrl}, please wait.</p>
+      </div>
+    );
+  }
 
   const imageAspectRatio = imageWidth / imageHeight;
 
   return (
-    <div>
-      <div className={styles.controlsContainer}>
-        <StartStopLiveViewButton onChange={runCommand} disabled={checkStateForControls()} />
-        <NumericInput
-          step="any"
-          onChange={(e) => updateExposureTime(e.target.value)}
-          value={exposureTime}
-          disabled={checkStateForControls()}
-        />
-        <label>seconds</label>
-      </div>
-      <hr />
-      {initialLoading ? (
-        <div className={styles.errorContainer}>
-          {runLiveView ? <p>Fetching stream from {feedUrl}, please wait.</p> : <p>Live view not started</p>}
-        </div>
-      ) : (
-        <div className={styles.cameraContainer}>
-          {healpixOverlays.map((overlay, index) => {
-            return (
-              overlay.display && (
-                <HealpixOverlay
-                  key={index}
-                  width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
-                  height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-                  selectedCell={selectedCell}
-                  {...overlay}
-                  onLayerClick={onLayerClick}
-                ></HealpixOverlay>
-              )
-            );
-          })}
-          {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
-            <TargetLayer
+    <div className={styles.cameraContainer}>
+      {healpixOverlays.map((overlay, index) => {
+        return (
+          overlay.display && (
+            <HealpixOverlay
+              key={index}
               width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
               height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
-              onLayerClick={onLayerClick}
               selectedCell={selectedCell}
-              {...targetOverlay}
-            ></TargetLayer>
-          )}
-          <canvas ref={onCanvasRefChange}></canvas>
-        </div>
+              {...overlay}
+              onLayerClick={onLayerClick}
+            ></HealpixOverlay>
+          )
+        );
+      })}
+      {targetOverlay?.data?.length > 0 && targetOverlay?.display && (
+        <TargetLayer
+          width={Math.min(containerWidth, imageAspectRatio * containerHeight)}
+          height={Math.min(containerHeight, (1 / imageAspectRatio) * containerWidth)}
+          onLayerClick={onLayerClick}
+          selectedCell={selectedCell}
+          {...targetOverlay}
+        ></TargetLayer>
       )}
+      <canvas ref={onCanvasRefChange}></canvas>
     </div>
   );
 }
 
-GenericCamera.propTypes = {
+GenericCameraView.propTypes = {
   /**
    * Name to identify the live view server
    */
@@ -257,31 +190,6 @@ GenericCamera.propTypes = {
    * Dictionary of live feed URLs
    */
   camFeeds: PropTypes.object,
-
-  /**
-   * Index of the GenericCamera to control
-   */
-  salindex: PropTypes.number,
-
-  /**
-   * Function to subscribe to streams for state information
-   */
-  subscribeToStreams: PropTypes.func,
-
-  /**
-   * Function to unsubscribe from streams
-   */
-  unsubscribeToStreams: PropTypes.func,
-
-  /**
-   * Function that handles calling commands on the GenericCamera
-   */
-  requestSALCommand: PropTypes.func,
-
-  /**
-   * Topic data from SummaryState event
-   */
-  summaryStateData: PropTypes.object,
 
   /**
    * List of objects describing the healpix layers
@@ -304,9 +212,7 @@ GenericCamera.propTypes = {
   targetOverlay: PropTypes.object,
 };
 
-GenericCamera.defaultProps = {
+GenericCameraView.defaultProps = {
   feedKey: 'generic',
   camFeeds: null,
-  salindex: 1,
-  requestSALCommand: () => 0,
 };

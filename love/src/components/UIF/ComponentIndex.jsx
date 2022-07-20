@@ -104,13 +104,13 @@ export const observatoryIndex = {
       },
     },
   },
-  GenericCamera: {
-    component: require('../GenericCamera/GenericCamera.container').default,
+  GenericCameraView: {
+    component: require('../GenericCamera/GenericCameraView.container').default,
     schema: {
-      ...require('../GenericCamera/GenericCamera.container').schema,
+      ...require('../GenericCamera/GenericCameraView.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GenericCamera/GenericCamera.container').schema.props,
+        ...require('../GenericCamera/GenericCameraView.container').schema.props,
       },
     },
   },
