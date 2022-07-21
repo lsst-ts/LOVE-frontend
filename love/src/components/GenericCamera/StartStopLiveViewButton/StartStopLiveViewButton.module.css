@@ -1,0 +1,59 @@
+.buttonWrapper {
+  height: 120px;
+  width: 200px;
+  text-align: center;
+}
+
+.button {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 0;
+  padding: 16px;
+  cursor: pointer;
+  background: var(--status-ok-color);
+}
+
+.button:hover {
+  background: var(--status-ok-dimmed-color-2);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  background: var(--status-ok-dimmed-color);
+}
+
+.buttonLatched {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 0;
+  padding: 16px;
+  cursor: pointer;
+  background: var(--status-running-color);
+}
+
+.buttonLatched:hover {
+  background: var(--status-running-dimmed-color-2);
+}
+
+.buttonLatched:disabled {
+  cursor: not-allowed;
+  background: var(--status-running-dimmed-color);
+}
+
+.svg {
+  height: 20px;
+  width: 20px;
+}
+
+.buttonLabel {
+  display: block;
+  padding: 0.5em 1em;
+  color: white;
+  font-size: var(--font-size-large);
+}
+
+.cls-1 {
+  fill: #fbe6dd;
+}

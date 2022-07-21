@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getCamFeeds } from '../../redux/selectors';
-import GenericCamera from './GenericCamera';
+import GenericCameraView from './GenericCameraView';
 
 export const schema = {
   description: 'Renders the images streamed by the GenericCamera live view server into an HTML5 canvas',
@@ -40,8 +40,8 @@ export const schema = {
   },
 };
 
-const GenericCameraContainer = ({ ...props }) => {
-  return <GenericCamera {...props} />;
+const GenericCameraViewContainer = ({ ...props }) => {
+  return <GenericCameraView {...props} />;
 };
 
 const mapStateToProps = (state) => {
@@ -53,4 +53,4 @@ const mapDispatchToProps = (dispatch) => {
   return {};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(GenericCameraContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(GenericCameraViewContainer);

@@ -26,7 +26,7 @@ import Mount from './components/AuxTel/Mount/Mount';
 import LATISSContainer from './components/AuxTel/LATISS/LATISS.container';
 import ViewEditorContainer from './components/UIF/ViewEditor/ViewEditor.container';
 import WatcherContainer from './components/Watcher/Watcher.container';
-import GenericCamera from './components/GenericCamera/GenericCamera';
+import GenericCameraView from './components/GenericCamera/GenericCameraView';
 import CustomViewContainer from './components/UIF/CustomView.container';
 import Palette from './components/Palette/Palette';
 
@@ -132,7 +132,7 @@ class App extends Component {
               )}
             />
             <PrivateRoute token={this.props.token} path="/watcher" render={() => <WatcherContainer embedded />} />
-            <PrivateRoute token={this.props.token} path="/generic-camera" render={() => <GenericCamera />} />
+            <PrivateRoute token={this.props.token} path="/generic-camera" render={() => <GenericCameraView />} />
             <PrivateRoute token={this.props.token} path="/uif/view" component={CustomViewContainer} />
             <PrivateRoute token={this.props.token} path="/uif/view-editor" component={ViewEditorContainer} />
             <PrivateRoute token={this.props.token} path="/palette" render={() => <Palette />} />

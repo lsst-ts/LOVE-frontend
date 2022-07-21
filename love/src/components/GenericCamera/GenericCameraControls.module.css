@@ -1,0 +1,15 @@
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.cameraContainer {
+  position: relative;
+}
+
+.controlsContainer {
+  width: -moz-min-content; /* Firefox */
+  width: -webkit-min-content; /* Chrome */
+  width: min-content;
+}
