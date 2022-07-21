@@ -5,7 +5,7 @@ import styles from './GenericCameraControls.module.css';
 import HealpixOverlay from './HealpixOverlay';
 import TargetLayer from './TargetLayer';
 import StartStopLiveViewButton from './StartStopLiveViewButton/StartStopLiveViewButton';
-import NumericInput from '../GeneralPurpose/Input/NumericInput';
+import Input from '../GeneralPurpose/Input/Input';
 
 const DEFAULT_URL = 'http://localhost/gencam';
 
@@ -202,7 +202,8 @@ export default function GenericCameraControls({
     <div>
       <div className={styles.controlsContainer}>
         <StartStopLiveViewButton onChange={runCommand} disabled={checkStateForControls()} />
-        <NumericInput
+        <Input
+          type="number"
           step="any"
           onChange={(e) => updateExposureTime(e.target.value)}
           value={exposureTime}
