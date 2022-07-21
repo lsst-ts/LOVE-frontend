@@ -54,10 +54,10 @@ export default class GIS extends Component {
 
     const onlySignals = Object.values(signals);
     const redEffects = [];
-    alertSignals.forEach((as) => {
-      onlySignals.forEach((sig) => {
-        if (Object.keys(sig).includes(as)) {
-          redEffects.push(...sig[as]);
+    alertSignals.forEach((alertSignal) => {
+      onlySignals.forEach((signal) => {
+        if (Object.keys(signal).includes(alertSignal)) {
+          redEffects.push(...signal[alertSignal]);
         }
       });
     });
