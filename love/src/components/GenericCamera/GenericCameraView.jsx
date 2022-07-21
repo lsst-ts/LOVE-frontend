@@ -12,8 +12,8 @@ const DEFAULT_URL = 'http://localhost/gencam';
  * the Generic Camera images
  */
 export default function GenericCameraView({
-  feedKey,
-  camFeeds,
+  feedKey = 'generic',
+  camFeeds = null,
   healpixOverlays = [],
   selectedCell = undefined,
   onLayerClick = () => {},
@@ -210,9 +210,4 @@ GenericCameraView.propTypes = {
    * Object describing the target layer of click events
    */
   targetOverlay: PropTypes.object,
-};
-
-GenericCameraView.defaultProps = {
-  feedKey: 'generic',
-  camFeeds: null,
 };
