@@ -10,7 +10,7 @@ export default class Selector extends Component {
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
     selectedSensor: PropTypes.number,
     sensorSelect: PropTypes.func,
-    showFCUIDs: PropTypes.bool,
+    showFcuIDs: PropTypes.bool,
     showDifferencialTemp: PropTypes.bool,
     showWarning: PropTypes.bool,
   };
@@ -19,7 +19,7 @@ export default class Selector extends Component {
     sensorReferenceId: [],
     selectedSensor: undefined,
     sensorSelect: () => { console.log('Selector.defaultProps.sensorSelect()')},
-    showFCUIDs: true,
+    showFcuIDs: true,
     showDifferencialTemp: true,
     showWarning: true,
   };
@@ -172,7 +172,7 @@ export default class Selector extends Component {
   }
 
   getSvg() {
-    const { showFCUIDs, showDifferencialTemp, showWarning,
+    const { showFcuIDs, showDifferencialTemp, showWarning,
       sensorSelect, selectedSensor,
     } = this.props;
 
@@ -190,7 +190,7 @@ export default class Selector extends Component {
         >
           {this.getBackground()}
           {this.getScatter(scale, margin, zoomLevel,
-            showFCUIDs, showDifferencialTemp, showWarning,
+            showFcuIDs, showDifferencialTemp, showWarning,
             sensorSelect, selectedSensor)}
           {this.getAxis(margin, sensorSelect)}
         </svg>
@@ -199,7 +199,7 @@ export default class Selector extends Component {
 
   getScatter(
     scale, margin, zoomLevel,
-    showFCUIDs, showDifferencialTemp=false, showWarning,
+    showFcuIDs, showDifferencialTemp=false, showWarning,
     sensorSelect, selectedSensor,
   ) {
     return (
@@ -232,7 +232,7 @@ export default class Selector extends Component {
                 y={(act.position[1] + this.state.yRadius) * scale + margin}
                 textAnchor="middle"
                 alignmentBaseline="middle"
-                className={selectedSensor === act.id || (zoomLevel > 1 && showFCUIDs) ? '' : styles.hidden}
+                className={selectedSensor === act.id || (zoomLevel > 1 && showFcuIDs) ? '' : styles.hidden}
                 pointerEvents="none"
               >
                 {act.id}

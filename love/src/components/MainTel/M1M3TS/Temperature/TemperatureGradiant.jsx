@@ -64,8 +64,6 @@ export default class TemperatureGradiant extends Component {
       differentialTemperature,
     } = this.props;
     const sensorIndex = sensorReferenceId.indexOf(id);
-    console.log('sensorReferenceId',sensorReferenceId,'sensorIndex', sensorIndex);
-    console.log('absoluteTemperature[sensorIndex]', absoluteTemperature[sensorIndex]);
 
     const sensor = {
       id: `${String(id).padStart(2, '0')}`,

@@ -32,6 +32,16 @@ export default class M1M3TS extends Component {
     maxTemperatureLimit: 1000,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showFcuIDs: true,
+      showTemperature: true,
+      showWarnings: true,
+      selectedSensor: undefined,
+    };
+  }
+
   componentDidMount() {
     this.props.subscribeToStreams();
   }
@@ -80,9 +90,6 @@ export default class M1M3TS extends Component {
       valvePosition,
     } = this.props;
 
-    console.log('absolute', absoluteTemperature[0]);
-    console.log('differential', differentialTemperature[0]);
-
     return (
       <div className={styles.container}>
         
@@ -95,14 +102,22 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.menuContainer}>
-          <Menu />
+          <Menu 
+            toggleFcuIDs={(show) => this.setState({showFcuIDs: show})}
+            toggleTemperature={(show) => this.setState({showTemperature: show})}
+            toggleWarnings={(show) => this.setState({showWarnings: show})}
+          />
         </div>
 
         <div className={styles.selectorContainer}>
           <Selector
             sensorReferenceId={sensorReferenceId}
             enabledFCU={enabledFCU}
-            sensorSelect={(sensor) => { console.log('selectSensor', sensor)}}
+            showFcuIDs={this.state.showFcuIDs}
+            showTemperature={this.state.showTemperature}
+            showWarnings={this.state.showWarnings}
+            selectedSensor={this.state.selectedSensor}
+            sensorSelect={(sensor) => { this.setState({selectedSensor: sensor})}}
           />
         </div>
 
@@ -120,6 +135,7 @@ export default class M1M3TS extends Component {
             absoluteTemperature={absoluteTemperature}
             differentialTemperature={differentialTemperature}
             sensorReferenceId={sensorReferenceId}
+            selectedId={this.state.selectedSensor}
           />
         </div>
 
@@ -130,6 +146,7 @@ export default class M1M3TS extends Component {
             absoluteTemperature={absoluteTemperature}
             differentialTemperature={differentialTemperature}
             fanRPM={fanRPM}
+            selectedSensor={this.state.selectedSensor}
           />
         </div>
 
