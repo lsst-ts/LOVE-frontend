@@ -1,8 +1,9 @@
 import React, { useRef } from 'react';
+import styles from './ProgressBar.module.css';
 
 const ProgressBar = (props) => {
   const ref = useRef(null);
-  const { targetValue, completed, height = 20 } = props;
+  const { targetValue, completed, hideCompleted = false, height = 20 } = props;
   const padding = 4;
 
   const parentDiv = {
@@ -53,24 +54,38 @@ const ProgressBar = (props) => {
   const completedValue = completed.toString().padStart(3, '0');
 
   return (
-    <div style={parentDiv}>
-      <div>
-        <span style={labelStyles}>{`${completedValue}%`}</span>
-      </div>
-      <div ref={ref} style={containerStyles}>
-        <svg width={width > 0 ? width - 2 * padding : 0} height={height} style={progressCommandedLine}>
+    <div className={styles.parentDiv}>
+      { !hideCompleted ? (
+        <div>
+          <span className={styles.labelStyles}>{`${completedValue}%`}</span>
+        </div>
+        ) : <></>
+      }
+      <div ref={ref}
+        className={styles.containerStyles}
+        style={{height: `${height}px`}}
+      >
+        <svg 
+          width={width > 0 ? width - 2 * padding : 0} 
+          height={height}
+          className={styles.progressCommandedLine}
+        >
           <line
-            style={targetValueLine}
+            className={styles.targetValueLine}
             x1={targetValuePixels}
             y1={-padding}
             x2={targetValuePixels}
             y2={height + padding}
           />
         </svg>
-        <div style={fillerStyles}></div>
+        <div
+          className={styles.fillerStyles}
+          style={{width: `${completed}%`}}
+        ></div>
       </div>
     </div>
   );
+
 };
 
 export default ProgressBar;
