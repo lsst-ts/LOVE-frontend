@@ -253,6 +253,17 @@ export const getM1M3TSTemperatureState = (state) => {
   };
 };
 
+export const getM1M3TSMixingState = (state) => {
+  const subscriptions = [
+    'event-MTM1M3TS-0-mixingValve',
+  ];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    valvePosition: m1m3tsData['event-MTM1M3TS-0-mixingValve']?.[0].valvePosition?.value ?? 75.1,
+  };
+  
+}
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [

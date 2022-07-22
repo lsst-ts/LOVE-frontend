@@ -11,8 +11,8 @@ export default class Mixing extends Component {
     measured: PropTypes.number,
   };
   static defaultProps = {
-    commanded: 85.5,
-    measured: 30.6,
+    commanded: 0.5,
+    measured: 0.5,
   };
 
   render() {

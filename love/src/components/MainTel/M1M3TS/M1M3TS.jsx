@@ -75,6 +75,11 @@ export default class M1M3TS extends Component {
       fanRPM,
     } = this.props;
 
+    // Mixing
+    const {
+      valvePosition,
+    } = this.props;
+
     console.log('absolute', absoluteTemperature[0]);
     console.log('differential', differentialTemperature[0]);
 
@@ -94,11 +99,17 @@ export default class M1M3TS extends Component {
         </div>
 
         <div className={styles.selectorContainer}>
-          <Selector />
+          <Selector
+            sensorReferenceId={sensorReferenceId}
+            enabledFCU={enabledFCU}
+            sensorSelect={(sensor) => { console.log('selectSensor', sensor)}}
+          />
         </div>
 
         <div className={styles.mixingContainer}>
-          <Mixing />
+          <Mixing 
+            commanded={valvePosition}
+          />
         </div>
 
         <div className={styles.temperatureContainer}>
