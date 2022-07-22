@@ -23,15 +23,16 @@
 
 .mixingContainer {
   grid-area: mix;
+  padding-top: 15px;
 }
 
 .temperatureContainer {
   grid-area: tem;
-  margin: 15px;
+  padding-top: 15px;
 }
 
 .infoContainer {
   grid-area: inf;
-
+  padding-top: 15px;
 }
 

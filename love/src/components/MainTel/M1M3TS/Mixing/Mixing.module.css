@@ -3,25 +3,24 @@
   color: var(--secondary-font-color);
   text-align: left;
   white-space: pre;
-/*   padding-left: 0.4rem; */
 }
 
 .value {
   color: var(--base-font-color);
   text-align: right;
-  padding: 0.2em 2em;
   padding-right: 0em;
 }
 
 .containerTop {
   display: grid;
   justify-content: flex-start;
-  padding: 1em;
 }
 
 .containerBottom {
-  position: relative;
   margin-top: 8px;
+  display: grid;
+  grid-template-columns: auto auto;
+  column-gap: 30%;
 }
 
 .title {
@@ -32,10 +31,6 @@
 }
 
 .labelValue {
-  position: absolute;
-  /* bottom: -1.8em; */
-  grid-template-columns: 1fr 1.2fr;
-  /* margin-bottom: 1em; */
-  padding-left: 0.4rem;
-  padding-right: 0.4rem;
+  display: grid;
+  grid-template-columns: auto auto;
 }
