@@ -1,17 +1,16 @@
 .div {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  align-items: flex-start;
 }
 
 .h3 {
-  flex-wrap: wrap;
   width: 100%;
-  float: left;
 }
 
 .div2 {
   display: flex;
   flex-wrap: wrap;
+  /* align-items: flex-start; */
   margin-right: 50px;
   /* background-color: var(--second-quinary-background-color); */
 }
@@ -34,7 +33,7 @@
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-content: flex-start;
 }
 
 .signal {
@@ -54,7 +53,7 @@
 }
 
 .inactive {
-  opacity: 0.4;
+  opacity: 0.1;
   background-color: gray;
   border-color: gray;
 }
