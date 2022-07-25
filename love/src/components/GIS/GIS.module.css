@@ -1,6 +1,7 @@
 .div {
   display: flex;
   align-items: flex-start;
+  background-color: var(--overlay-background-color);
 }
 
 .h3 {
@@ -24,7 +25,7 @@
 }
 
 .system {
-  border: 1px solid gray;
+  border: 1px solid var(--second-senary-background-dimmed-color);
   border-radius: 0.5em;
   margin-bottom: 0.5em;
   margin-right: var(--content-padding);
@@ -34,15 +35,17 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+  background-color: var(--second-primary-background-color);
 }
 
 .signal {
   padding: 1em;
-  border: 1px solid gray;
+  border: 1px solid var(--second-senary-background-dimmed-color);
   border-radius: 0.5em;
   margin-bottom: 0.5em;
   margin-right: 0.5em;
-  background-color: var(--second-senary-background-dimmed-color);
+  /* background-color: var(--second-senary-background-dimmed-color); */
+  background-color: var(--tertiary-background-color);
   box-sizing: border-box;
   flex: 1 1 auto;
   word-break: break-all;
@@ -54,10 +57,11 @@
 
 .inactive {
   opacity: 0.1;
-  background-color: gray;
+  background-color: var(--second-quaternary-background-dimmed-color);
   border-color: gray;
 }
 
 .alert {
   background-color: var(--status-alert-dimmed-color-2);
+  border: 1px solid white;
 }
