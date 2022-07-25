@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import lodash from 'lodash';
+import isEqual from 'lodash/isEqual';
 import ManagerInterface, { getUserHost } from 'Utils';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
@@ -75,7 +76,7 @@ export default class SummaryAuthList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (JSON.stringify(prevProps.subscriptions) !== JSON.stringify(this.props.subscriptions)) {
+    if (!isEqual(prevProps.subscriptions, this.props.subscriptions)) {
       const subscribedCSCs = this.props.subscriptions.map((x) => {
         const tokens = x.split('-');
         return `${tokens[1]}:${tokens[2]}`;
@@ -83,7 +84,7 @@ export default class SummaryAuthList extends Component {
       this.setState({ cscOptions: ['All', ...subscribedCSCs] });
     }
 
-    if (JSON.stringify(prevProps.authlistState) !== JSON.stringify(this.props.authlistState)) {
+    if (!isEqual(prevProps.authlistState, this.props.authlistState)) {
       const userOptions = new Set();
       Object.entries(this.props.authlistState).forEach(([, [val]]) => {
         val?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
