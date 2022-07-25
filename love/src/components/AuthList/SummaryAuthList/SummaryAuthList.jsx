@@ -64,8 +64,8 @@ export default class SummaryAuthList extends Component {
 
     if (this.props.authlistState) {
       const userOptions = new Set();
-      Object.entries(this.props.authlistState).forEach(([, [val]]) => {
-        val?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
+      Object.entries(this.props.authlistState).forEach(([, val]) => {
+        val?.[0]?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
@@ -86,8 +86,8 @@ export default class SummaryAuthList extends Component {
 
     if (!isEqual(prevProps.authlistState, this.props.authlistState)) {
       const userOptions = new Set();
-      Object.entries(this.props.authlistState).forEach(([, [val]]) => {
-        val?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
+      Object.entries(this.props.authlistState).forEach(([, val]) => {
+        val?.[0]?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
@@ -235,20 +235,20 @@ export default class SummaryAuthList extends Component {
   restoreAllToDefault() {
     const { user, authlistState } = this.props;
     const requests = [];
-    Object.entries(authlistState).forEach(([key, [val]]) => {
+    Object.entries(authlistState).forEach(([key, val]) => {
       const keyTokens = key.split('-');
       const csc = `${keyTokens[1]}:${keyTokens[2]}`;
 
       const authorizedUsers =
-        val.authorizedUsers.value !== ''
-          ? val.authorizedUsers.value
+        val?.[0]?.authorizedUsers?.value && val[0].authorizedUsers.value !== ''
+          ? val[0].authorizedUsers.value
               .split(',')
               .map((x) => `-${x}`)
               .join(',')
           : '';
       const nonAuthorizedCSCs =
-        val.nonAuthorizedCSCs.value !== ''
-          ? val.nonAuthorizedCSCs.value
+        val?.[0]?.nonAuthorizedCSCs?.value && val[0].nonAuthorizedCSCs.value !== ''
+          ? val[0].nonAuthorizedCSCs.value
               .split(',')
               .map((x) => `-${x}`)
               .join(',')
@@ -496,9 +496,9 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText,
     } = this.state;
 
-    const tableData = Object.entries(authlistState).map(([key, [val]]) => {
+    const tableData = Object.entries(authlistState).map(([key, val]) => {
       const keyTokens = key.split('-');
-      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...(val ?? {}) };
+      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...(val?.[0] ?? {}) };
     });
 
     const filteredByData = tableData.filter(
