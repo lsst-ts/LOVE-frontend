@@ -5,43 +5,41 @@ import SummaryPanel from 'components/GeneralPurpose/SummaryPanel/SummaryPanel';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 
 export default class Menu extends Component {
-  static propTypes = {};
+  static propTypes = {
+    showFcuIDs: PropTypes.bool,
+    showDifferentialTemp: PropTypes.bool,
+    showWarnings: PropTypes.bool,
+    toggleFcuIDs: PropTypes.func,
+    toggleTemperature: PropTypes.func,
+    toggleWarnings: PropTypes.func,
+      };
   static defaultProps = {
+    showFcuIDs: true,
+    showDifferentialTemp: true,
+    showWarnings: true,
     toggleFcuIDs: (show) => { console.log('Selector.defaultProps.toggleFcuIDs(', show, ')')},
     toggleTemperature: (show) => { console.log('Selector.defaultProps.toggleTemperature(', show, ')')},
     toggleWarnings: (show) => { console.log('Selector.defaultProps.toggleWarnings(', show, ')')},
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      showFcuIDs: true,
-      showTemperature: true,
-      showWarnings: true,
-    };
-  }
-
   toggleFcuIDs = (show) => {
-    this.setState({ showFcuIDs: show });
     this.props.toggleFcuIDs(show);
   };
 
   toggleTemperature = (show) => {
-    this.setState({ showTemperature: show });
     this.props.toggleTemperature(show);
   };
 
   toggleWarnings = (show) => {
-    this.setState({ showWarnings: show });
     this.props.toggleWarnings(show);
   };
 
   render() {
     const {
       showFcuIDs,
-      showTemperature,
+      showDifferentialTemp,
       showWarnings,
-    } = this.state;
+    } = this.props;
 
     return (
       <div className={styles.menuContainer}>
@@ -56,7 +54,7 @@ export default class Menu extends Component {
             <div className={styles.control}>
               <span>Temperature:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Absolute', 'Differencial']} isLive={showTemperature} setLiveMode={this.toggleTemperature} />
+                <Toggle labels={['Absolute', 'Differential']} isLive={showDifferentialTemp} setLiveMode={this.toggleTemperature} />
               </div>
             </div>
             <div className={styles.control}>

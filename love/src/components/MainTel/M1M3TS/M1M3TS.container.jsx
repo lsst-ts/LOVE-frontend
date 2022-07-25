@@ -65,6 +65,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3TS-0-thermalSettings',
     'event-MTM1M3TS-0-appliedSetpoint',
     'event-MTM1M3TS-0-mixingValve',
+    'event-MTM1M3TS-0-appliedSetpoint',
   ];
   return {
     subscriptions,

@@ -36,7 +36,7 @@ export default class M1M3TS extends Component {
     super(props);
     this.state = {
       showFcuIDs: true,
-      showTemperature: true,
+      showDifferentialTemp: true,
       showWarnings: true,
       selectedSensor: undefined,
     };
@@ -103,8 +103,11 @@ export default class M1M3TS extends Component {
 
         <div className={styles.menuContainer}>
           <Menu 
+            showFcuIDs={this.state.showFcuIDs}
+            showDifferentialTemp={this.state.showDifferentialTemp}
+            showWarnings={this.state.showWarnings}
             toggleFcuIDs={(show) => this.setState({showFcuIDs: show})}
-            toggleTemperature={(show) => this.setState({showTemperature: show})}
+            toggleTemperature={(show) => this.setState({showDifferentialTemp: show})}
             toggleWarnings={(show) => this.setState({showWarnings: show})}
           />
         </div>
@@ -114,10 +117,14 @@ export default class M1M3TS extends Component {
             sensorReferenceId={sensorReferenceId}
             enabledFCU={enabledFCU}
             showFcuIDs={this.state.showFcuIDs}
-            showTemperature={this.state.showTemperature}
+            showDifferentialTemp={this.state.showDifferentialTemp}
             showWarnings={this.state.showWarnings}
             selectedSensor={this.state.selectedSensor}
             sensorSelect={(sensor) => { this.setState({selectedSensor: sensor})}}
+            absoluteTemperature={absoluteTemperature}
+            differentialTemperature={differentialTemperature}
+            minTemperatureLimit={minTemperatureLimit}
+            maxTemperatureLimit={maxTemperatureLimit}
           />
         </div>
 

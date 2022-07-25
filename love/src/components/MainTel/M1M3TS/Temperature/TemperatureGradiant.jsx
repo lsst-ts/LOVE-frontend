@@ -30,12 +30,12 @@ export default class TemperatureGradiant extends Component {
     absoluteTemperature: [],
     differentialTemperature: [],
 
-    selectedId: 2,
+    selectedId: undefined,
 
     setpoint: 18.9,
 
-    minTemperatureLimit: 0,
-    maxTemperatureLimit: 1000,
+    minTemperatureLimit: -6000,
+    maxTemperatureLimit: 6000,
   }
 
   static COLOURS_INV = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];

@@ -235,10 +235,13 @@ export const getM1M3TSThermalState = (state) => {
     'event-MTM1M3TS-0-thermalSettings',
   ];
   const m1m3tsData = getStreamsData(state, subscriptions);
+  const random = [53, 785, 3690, -2240, 942, 626, 182, 965, 6, 690, 1970, 149, 492, 801, 259, 383, 97, 380, 565, 272, 691, 503, 597, 262, 919, 341, -2120, 297, 689, 77, 554, 955, 41, 541, 5790, 863, 191, 303, 369, 629, 393, 148, 852, 1950, 64, -5300, 98, 276, 694, 676, 885, 920, 545, 967, 788, 941, 916, -3640, 264, 473, 82, 488, 350, 4, 542, 304, 791, 166, 311, 634, 91, 17, 524, 761, 751, -4350, 127, 4630, 521, 411, 649, 112, 55, 226, 84, 905, -2590, 903, 656, 650, 889, 294, 323, 810, 329, 4670];
+  const random2 = random.map((n) => n * 10 - 3000);
+  
   return {
     enabledFCU: m1m3tsData['event-MTM1M3TS-0-thermalSettings']?.[0].enabledFCU?.value ?? Array.from({length: 96}, i => false),
-    absoluteTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].absoluteTemperature ?.value ?? Array.from({length: 96}, i => 1234),
-    differentialTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].differentialTemperature ?.value ?? Array.from({length: 96}, i => 246),
+    absoluteTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].absoluteTemperature ?.value ?? random,
+    differentialTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].differentialTemperature ?.value ?? random2,
     fanRPM : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].fanRPM ?.value ?? Array.from({length: 96}, i => 2350),
   };
 };

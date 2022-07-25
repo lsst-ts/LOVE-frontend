@@ -11,8 +11,14 @@ export default class Selector extends Component {
     selectedSensor: PropTypes.number,
     sensorSelect: PropTypes.func,
     showFcuIDs: PropTypes.bool,
-    showDifferencialTemp: PropTypes.bool,
-    showWarning: PropTypes.bool,
+    showDifferentialTemp: PropTypes.bool,
+    showWarnings: PropTypes.bool,
+    absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    differentialTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Number of the minimum temperature limit, used for the gradiant color */
+    minTemperatureLimit: PropTypes.number,
+    /** Number of the maximum temperature limit, used for the gradiant color */
+    maxTemperatureLimit: PropTypes.number,
   };
 
   static defaultProps = {
@@ -20,8 +26,12 @@ export default class Selector extends Component {
     selectedSensor: undefined,
     sensorSelect: () => { console.log('Selector.defaultProps.sensorSelect()')},
     showFcuIDs: true,
-    showDifferencialTemp: true,
-    showWarning: true,
+    showDifferentialTemp: true,
+    showWarnings: true,
+    absoluteTemperature: [],
+    differentialTemperature: [],
+    minTemperatureLimit: 0,
+    maxTemperatureLimit: 100,
   };
 
   constructor(props) {
@@ -69,8 +79,8 @@ export default class Selector extends Component {
   };
 
   getGradiantColorX = (value) => {
-    const { minTempetureLimit, maxTempetureLimit } = this.props;
-    const colorInterpolate = d3.scaleLinear().domain(d3.extent([minTempetureLimit, maxTempetureLimit])).range([0, 1]);
+    const { minTemperatureLimit, maxTemperatureLimit } = this.props;
+    const colorInterpolate = d3.scaleLinear().domain(d3.extent([minTemperatureLimit, maxTemperatureLimit])).range([0, 1]);
     return TemperatureGradiant.COLOR_SCALE(1 - colorInterpolate(value));
   }
 
@@ -78,21 +88,23 @@ export default class Selector extends Component {
     if (id === 0 || id === null) {
       return {
         id: undefined,
-        colorTemperatureCommanded: '#FFF',
-        colorTemperatureMeasured: '#FFF',
+        colorDifferentialTemperature: '#FFF',
+        colorAbsoluteTemperature: '#FFF',
       };
     }
     const {
       sensorReferenceId,
+      differentialTemperature,
+      absoluteTemperature,
     } = this.props;
 
-    const sensorIndex = sensorReferenceId.indexOf(id);
+    const sensorIndex = sensorReferenceId.indexOf(id) >= 0 ? sensorReferenceId.indexOf(id) : undefined;
     const sensor = {
       id,
-      // axialForceCommanded: axialForceCommanded[sensorIndex] ?? 0,
-      // axialForceMeasured: axialForceMeasured[sensorIndex] ?? 0,
-      // colorTemperatureCommanded: this.getGradiantColorX(axialTemperatureCommanded[sensorIndex]),
-      // colorTemperatureMeasured: this.getGradiantColorX(axialTemperatureMeasured[sensorIndex]),
+      differentialTemperature: differentialTemperature[sensorIndex ?? 0] ?? 0,
+      absoluteTemperature: absoluteTemperature[sensorIndex ?? 0] ?? 0,
+      colorDifferentialTemperature: this.getGradiantColorX(differentialTemperature[sensorIndex ?? 0]),
+      colorAbsoluteTemperature: this.getGradiantColorX(absoluteTemperature[sensorIndex ?? 0]),
     };
     return sensor;
   }
@@ -164,19 +176,22 @@ export default class Selector extends Component {
   };
 
   render() {
-    return (
-      <div className={styles.container}>
-        {this.getSvg()}
-      </div>
-    );
-  }
-
-  getSvg() {
-    const { showFcuIDs, showDifferencialTemp, showWarning,
+    const { showFcuIDs, showDifferentialTemp, showWarnings,
       sensorSelect, selectedSensor,
     } = this.props;
 
     const { zoomLevel } = this.state;
+
+    return (
+      <div className={styles.container}>
+        {this.getSvg(showFcuIDs, showDifferentialTemp, showWarnings,
+      sensorSelect, selectedSensor, zoomLevel)}
+      </div>
+    );
+  }
+
+  getSvg(showFcuIDs, showDifferentialTemp, showWarning,
+    sensorSelect, selectedSensor, zoomLevel) {
 
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
@@ -190,7 +205,7 @@ export default class Selector extends Component {
         >
           {this.getBackground()}
           {this.getScatter(scale, margin, zoomLevel,
-            showFcuIDs, showDifferencialTemp, showWarning,
+            showFcuIDs, showDifferentialTemp, showWarning,
             sensorSelect, selectedSensor)}
           {this.getAxis(margin, sensorSelect)}
         </svg>
@@ -199,9 +214,10 @@ export default class Selector extends Component {
 
   getScatter(
     scale, margin, zoomLevel,
-    showFcuIDs, showDifferencialTemp=false, showWarning,
+    showFcuIDs, showDifferentialTemp, showWarning,
     sensorSelect, selectedSensor,
   ) {
+
     return (
       <g id="scatter" className={styles.scatter}>
         {this.state.sensors.map((act) => {
@@ -212,9 +228,9 @@ export default class Selector extends Component {
                 cy={(act.position[1] + this.state.yRadius) * scale + margin}
                 key={act.id}
                 fill={
-                  showDifferencialTemp
-                    ? ( this.getSensor(act.id)?.colorTemperatureMeasured ?? 'gray' )
-                    : ( this.getSensor(act.id)?.colorTemperatureCommanded ?? 'gray' )
+                  showDifferentialTemp
+                    ? ( this.getSensor(act.id)?.colorDifferentialTemperature ?? 'gray' )
+                    : ( this.getSensor(act.id)?.colorAbsoluteTemperature ?? 'gray' )
                 }
                 stroke={
                   selectedSensor === act.id
