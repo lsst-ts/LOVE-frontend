@@ -191,14 +191,20 @@ export default class SummaryAuthList extends Component {
       })[1][0];
 
       const cscsToChange = selectedCSC;
-      const authorizedUsers = authlist.authorizedUsers
-        .split(',')
-        .map((x) => `-${x}`)
-        .join(',');
-      const nonAuthorizedCSCs = authlist.nonAuthorizedCSCs
-        .split(',')
-        .map((x) => `-${x}`)
-        .join(',');
+      const authorizedUsers =
+        authlist.authorizedUsers.value !== ''
+          ? authlist.authorizedUsers.value
+              .split(',')
+              .map((x) => `-${x}`)
+              .join(',')
+          : '';
+      const nonAuthorizedCSCs =
+        authlist.nonAuthorizedCSCs.value !== ''
+          ? authlist.nonAuthorizedCSCs.value
+              .split(',')
+              .map((x) => `-${x}`)
+              .join(',')
+          : '';
 
       let modalText = '';
       modalText = (
@@ -224,6 +230,51 @@ export default class SummaryAuthList extends Component {
         removeIdentityModalText: modalText,
       });
     }
+  }
+
+  restoreAllToDefault() {
+    const { user, authlistState } = this.props;
+    const requests = [];
+    Object.entries(authlistState).forEach(([key, [val]]) => {
+      const keyTokens = key.split('-');
+      const csc = `${keyTokens[1]}:${keyTokens[2]}`;
+
+      const authorizedUsers =
+        val.authorizedUsers.value !== ''
+          ? val.authorizedUsers.value
+              .split(',')
+              .map((x) => `-${x}`)
+              .join(',')
+          : '';
+      const nonAuthorizedCSCs =
+        val.nonAuthorizedCSCs.value !== ''
+          ? val.nonAuthorizedCSCs.value
+              .split(',')
+              .map((x) => `-${x}`)
+              .join(',')
+          : '';
+
+      requests.push(() => ManagerInterface.requestAuthListAuthorization(user, csc, authorizedUsers, nonAuthorizedCSCs));
+    });
+
+    let modalText = '';
+    modalText = (
+      <span>
+        You are about to empty <b>all</b> the authorization lists.<br></br>
+        <b>This action will be resolved automatically and won't need verification</b>
+        <br></br>
+        Are you sure?
+      </span>
+    );
+
+    this.setState({
+      removeIdentityModalShown: true,
+      removeIdentityModalText: modalText,
+      removeIdentityRequest: () => {
+        requests.forEach((request) => request());
+        this.setState({ removeIdentityModalShown: false });
+      },
+    });
   }
 
   HEADERS = [
@@ -488,11 +539,7 @@ export default class SummaryAuthList extends Component {
             className={styles.select}
           />
           <Input placeholder="Filter by keywords" onChange={(e) => this.setState({ keywords: e.target.value })} />
-          <Button
-            status="default"
-            disabled={!authlistAdminPermission}
-            onClick={() => this.restoreToDefault(...filteredByKeywordsTableData.map((x) => x.csc))}
-          >
+          <Button status="default" disabled={!authlistAdminPermission} onClick={() => this.restoreAllToDefault()}>
             Restore all CSCs to default
           </Button>
         </div>
