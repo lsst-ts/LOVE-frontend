@@ -158,7 +158,7 @@ export default class ScriptQueue extends Component {
      * If it is present blockedByAuthlist state is set to true */
     if (JSON.stringify(prevProps.authlist) !== JSON.stringify(this.props.authlist)) {
       if (
-        checkAuthlist(this.props.authlist[`event-ScriptQueue-${this.props.salindex}-authList`], 'LOVE:0')
+        checkAuthlist(this.props.authlist[`event-ScriptQueue-${this.props.salindex}-authList`]?.[0], 'LOVE:0')
           .inNonAuthorizedCSCs
       ) {
         this.setState({ blockedByAuthlist: true });
@@ -203,7 +203,7 @@ export default class ScriptQueue extends Component {
     /** Check if LOVE:0 is present in the ScriptQueue authList evt
      * If it is present blockedByAuthlist state is set to true */
     if (
-      checkAuthlist(this.props.authlist[`event-ScriptQueue-${this.props.salindex}-authList`], 'LOVE:0')
+      checkAuthlist(this.props.authlist[`event-ScriptQueue-${this.props.salindex}-authList`]?.[0], 'LOVE:0')
         .inNonAuthorizedCSCs
     ) {
       this.setState({ blockedByAuthlist: true });

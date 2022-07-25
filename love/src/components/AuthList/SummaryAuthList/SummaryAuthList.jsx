@@ -63,8 +63,8 @@ export default class SummaryAuthList extends Component {
 
     if (this.props.authlistState) {
       const userOptions = new Set();
-      Object.entries(this.props.authlistState).forEach(([, val]) => {
-        val.authorizedUsers?.split(',').forEach((x) => userOptions.add(x));
+      Object.entries(this.props.authlistState).forEach(([, [val]]) => {
+        val?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
@@ -85,15 +85,15 @@ export default class SummaryAuthList extends Component {
 
     if (JSON.stringify(prevProps.authlistState) !== JSON.stringify(this.props.authlistState)) {
       const userOptions = new Set();
-      Object.entries(this.props.authlistState).forEach(([, val]) => {
-        val?.authorizedUsers?.split(',').forEach((x) => userOptions.add(x));
+      Object.entries(this.props.authlistState).forEach(([, [val]]) => {
+        val?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
   }
 
   formatList = (target, identities, type) => {
-    if (identities === '') {
+    if (!identities || identities === '') {
       return <span>None</span>;
     }
 
@@ -187,7 +187,7 @@ export default class SummaryAuthList extends Component {
         const keyTokens = key.split('-');
         const csc = `${keyTokens[1]}:${keyTokens[2]}`;
         return csc === selectedCSC;
-      })[1];
+      })[1][0];
 
       const cscsToChange = selectedCSC;
       const authorizedUsers = authlist.authorizedUsers
@@ -234,13 +234,13 @@ export default class SummaryAuthList extends Component {
     {
       field: 'authorizedUsers',
       title: 'Authorized users',
-      render: (cell, row) => this.formatList(row.csc, cell, 'User'),
+      render: (cell, row) => this.formatList(row.csc, cell.value, 'User'),
       className: styles.authlistIdentityColum,
     },
     {
       field: 'nonAuthorizedCSCs',
       title: 'Unauthorized CSCs',
-      render: (cell, row) => this.formatList(row.csc, cell, 'CSC'),
+      render: (cell, row) => this.formatList(row.csc, cell.value, 'CSC'),
       className: styles.authlistIdentityColum,
     },
     {
@@ -444,19 +444,21 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText,
     } = this.state;
 
-    const tableData = Object.entries(authlistState).map(([key, val]) => {
+    const tableData = Object.entries(authlistState).map(([key, [val]]) => {
       const keyTokens = key.split('-');
-      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...val };
+      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...(val ?? {}) };
     });
 
     const filteredByData = tableData.filter(
       (row) =>
-        (row.authorizedUsers && row.authorizedUsers !== '') || (row.nonAuthorizedCSCs && row.nonAuthorizedCSCs !== ''),
+        (row.authorizedUsers && row.authorizedUsers?.value !== '') ||
+        (row.nonAuthorizedCSCs && row.nonAuthorizedCSCs.value !== ''),
     );
 
     const filteredTableData = filteredByData.filter((row) => {
       if (selectedCSC === 'All' && selectedUser === 'All') return true;
-      if (selectedCSC === 'All' && selectedUser !== 'All' && row.authorizedUsers.includes(selectedUser)) return true;
+      if (selectedCSC === 'All' && selectedUser !== 'All' && row.authorizedUsers.value.includes(selectedUser))
+        return true;
       if (selectedCSC !== 'All' && row.csc.includes(selectedCSC)) return true;
       return false;
     });
