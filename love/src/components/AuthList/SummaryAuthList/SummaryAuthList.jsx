@@ -389,7 +389,7 @@ export default class SummaryAuthList extends Component {
               <div>
                 <span className={styles.wrongInput}>
                   {this.state.wrong_input_users
-                    ? 'Please insert items separated by commas with the required format'
+                    ? 'Please insert items separated by commas with the required format: +/-<user>@<host>'
                     : ''}
                 </span>
               </div>
@@ -403,7 +403,7 @@ export default class SummaryAuthList extends Component {
               <div>
                 <span className={styles.wrongInput}>
                   {this.state.wrong_input_cscs
-                    ? 'Please insert items separated by commas with the required format'
+                    ? 'Please insert items separated by commas with the required format: +/-<CSC>:<salindex>'
                     : ''}
                 </span>
               </div>
