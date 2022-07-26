@@ -180,74 +180,72 @@ export default class SummaryAuthList extends Component {
     }
   };
 
-  restoreToDefault(...args) {
+  restoreToDefault(cscToChange) {
     const { user, authlistState } = this.props;
-    for (let i = 0; i < args.length; i++) {
-      const selectedCSC = args[i];
-      const authlist = Object.entries(authlistState).find(([key]) => {
-        const keyTokens = key.split('-');
-        const csc = `${keyTokens[1]}:${keyTokens[2]}`;
-        return csc === selectedCSC;
-      })[1][0];
+    const authlist = Object.entries(authlistState).find(([key]) => {
+      const keyTokens = key.split('-');
+      const csc = `${keyTokens[1]}:${keyTokens[2]}`;
+      return csc === cscToChange;
+    })[1]?.[0];
+    if (!authlist) return;
 
-      const cscsToChange = selectedCSC;
-      const authorizedUsers =
-        authlist.authorizedUsers.value !== ''
-          ? authlist.authorizedUsers.value
-              .split(',')
-              .map((x) => `-${x}`)
-              .join(',')
-          : '';
-      const nonAuthorizedCSCs =
-        authlist.nonAuthorizedCSCs.value !== ''
-          ? authlist.nonAuthorizedCSCs.value
-              .split(',')
-              .map((x) => `-${x}`)
-              .join(',')
-          : '';
+    const authorizedUsers =
+      authlist.authorizedUsers.value !== ''
+        ? authlist.authorizedUsers.value
+            .split(',')
+            .map((x) => `-${x}`)
+            .join(',')
+        : '';
+    const nonAuthorizedCSCs =
+      authlist.nonAuthorizedCSCs.value !== ''
+        ? authlist.nonAuthorizedCSCs.value
+            .split(',')
+            .map((x) => `-${x}`)
+            .join(',')
+        : '';
 
-      let modalText = '';
-      modalText = (
-        <span>
-          You are about to empty the authorization list of <b>{cscsToChange}</b>.<br></br>
-          <b>This action will be resolved automatically and won't need verification</b>
-          <br></br>
-          Are you sure?
-        </span>
-      );
+    let modalText = '';
+    modalText = (
+      <span>
+        You are about to empty the authorization list of <b>{cscToChange}</b>.<br></br>
+        <b>This action will be resolved automatically and won't need verification</b>
+        <br></br>
+        Are you sure?
+      </span>
+    );
 
-      this.setState({
-        removeIdentityRequest: () => {
-          ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs).then(
-            () => {
-              this.setState({ removeIdentityModalShown: false });
-            },
-          );
-        },
-      });
-      this.setState({
-        removeIdentityModalShown: true,
-        removeIdentityModalText: modalText,
-      });
-    }
+    this.setState({
+      removeIdentityModalShown: true,
+      removeIdentityModalText: modalText,
+      removeIdentityRequest: () => {
+        ManagerInterface.requestAuthListAuthorization(user, cscToChange, authorizedUsers, nonAuthorizedCSCs).then(
+          () => {
+            this.setState({ removeIdentityModalShown: false });
+          },
+        );
+      },
+    });
   }
 
   restoreAllToDefault() {
     const { user, authlistState } = this.props;
     const requests = [];
     Object.entries(authlistState).forEach(([key, val]) => {
+      if (!val) return;
+
       const keyTokens = key.split('-');
       const csc = `${keyTokens[1]}:${keyTokens[2]}`;
 
       const authorizedUsers =
-        val?.[0]?.authorizedUsers?.value && val[0].authorizedUsers.value !== ''
+        val[0].authorizedUsers.value !== ''
           ? val[0].authorizedUsers.value
               .split(',')
               .map((x) => `-${x}`)
               .join(',')
           : '';
+
       const nonAuthorizedCSCs =
-        val?.[0]?.nonAuthorizedCSCs?.value && val[0].nonAuthorizedCSCs.value !== ''
+        val[0].nonAuthorizedCSCs.value !== ''
           ? val[0].nonAuthorizedCSCs.value
               .split(',')
               .map((x) => `-${x}`)
