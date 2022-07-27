@@ -33,7 +33,8 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: undefined,
-      timeIncident: undefined,
+      date_begin: undefined,
+      date_end: undefined,
       systems: [],
       subsystems: [],
       cscs: [],
@@ -130,9 +131,14 @@ export default class NonExposureEdit extends Component {
     payload['request_type'] = 'narrative';
     payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
 
-    if ('tags' in payload) {
-      payload['tags'] = payload['tags'].map((tag) => tag.id);
-    }
+    // if ('tags' in payload) {
+    //   payload['tags'] = payload['tags'].map((tag) => tag.id);
+    // }
+
+    const beginDateISO = this.state.logEdit.date_begin?.toISOString();
+    const endDateISO = this.state.logEdit.date_end?.toISOString();
+    payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
+    payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
@@ -154,11 +160,11 @@ export default class NonExposureEdit extends Component {
   handleTimeOfIncident(date, type) {
     if (type === 'start') {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, begin_date: date },
+        logEdit: { ...state.logEdit, date_begin: date },
       }));
     } else if (type === 'end') {
       this.setState((state) => ({
-        logEdit: { ...state.logEdit, end_date: date },
+        logEdit: { ...state.logEdit, date_end: date },
       }));
     }
   }
@@ -172,25 +178,12 @@ export default class NonExposureEdit extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // if (!lodash.isEqual(prevState.logEdit?.subsystems, this.state.logEdit?.subsystems)) {
-    //   this.setState((state) => ({
-    //     logEdit: { ...state.logEdit, csc: null, salindex: 0 },
-    //   }));
-    // }
-
-    // if ((prevState.logEdit?.csc || this.state.logEdit?.csc) && prevState.logEdit.csc !== this.state.logEdit.csc) {
-    //   if (!this.state.logEdit?.csc) return;
-    //   this.setState((state) => ({
-    //     logEdit: { ...state.logEdit, salindex: 0 },
-    //   }));
-    // }
-
     if (
-      prevState.logEdit?.begin_date !== this.state.logEdit?.begin_date ||
-      prevState.logEdit?.end_date !== this.state.logEdit?.end_date
+      prevState.logEdit?.date_begin !== this.state.logEdit?.date_begin ||
+      prevState.logEdit?.date_end !== this.state.logEdit?.date_end
     ) {
-      const start = Moment(this.state.logEdit.begin_date);
-      const end = Moment(this.state.logEdit.end_date);
+      const start = Moment(this.state.logEdit.date_begin);
+      const end = Moment(this.state.logEdit.date_end);
       const duration_hr = end.diff(start, 'hours', true);
       this.setState((state) => ({
         logEdit: { ...state.logEdit, time_lost: duration_hr.toFixed(2) },
@@ -331,7 +324,7 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
 
-                <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
+                {/* <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
                 <span className={styles.value}>
                   <Multiselect
                     options={this.state.imageTags}
@@ -349,7 +342,7 @@ export default class NonExposureEdit extends Component {
                     placeholder="Select zero or several tags"
                     selectedValueDecorator={(v) => (v.length > 10 ? `${v.slice(0, 10)}...` : v)}
                   />
-                </span>
+                </span> */}
 
                 {isMenu ? (
                   <>
@@ -358,8 +351,12 @@ export default class NonExposureEdit extends Component {
                       <DateTimeRange
                         className={styles.dateTimeRangeStyle}
                         onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                        startDate={new Date(new Date() - 24 * 60 * 60 * 1000)}
-                        endDate={new Date()}
+                        startDate={
+                          this.state.logEdit.date_begin
+                            ? new Date(this.state.logEdit.date_begin + 'Z')
+                            : new Date(new Date() - 24 * 60 * 60 * 1000)
+                        }
+                        endDate={this.state.logEdit.date_end ? new Date(this.state.logEdit.date_end + 'Z') : new Date()}
                       />
                     </span>
                     <span className={styles.label}>Obs. Time Loss [hours]</span>
@@ -395,8 +392,14 @@ export default class NonExposureEdit extends Component {
                         <DateTimeRange
                           className={styles.dateTimeRangeStyle}
                           onChange={(date, type) => this.handleTimeOfIncident(date, type)}
-                          startDate={new Date(new Date() - 24 * 60 * 60 * 1000)}
-                          endDate={new Date()}
+                          startDate={
+                            this.state.logEdit.date_begin
+                              ? new Date(this.state.logEdit.date_begin + 'Z')
+                              : new Date(new Date() - 24 * 60 * 60 * 1000)
+                          }
+                          endDate={
+                            this.state.logEdit.date_end ? new Date(this.state.logEdit.date_end + 'Z') : new Date()
+                          }
                         />
                       </span>
                       <span className={styles.label}>Obs. Time Loss [hours]</span>
