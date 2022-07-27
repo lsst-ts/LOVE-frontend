@@ -940,6 +940,11 @@ export default class ManagerInterface {
           toast.error(resp.ack);
         });
       }
+      if (response.status === 422) {
+        return response.json().then((resp) => {
+          toast.error(resp.detail);
+        });
+      }
       return response.json().then((resp) => {
         toast.success('Log added succesfully.');
         return resp;
