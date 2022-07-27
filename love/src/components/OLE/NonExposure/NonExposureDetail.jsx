@@ -106,7 +106,7 @@ export default class NonExposureDetail extends Component {
     const linkJira = getLinkJira(logDetail.urls);
     const fileurl = getFileURL(logDetail.urls);
 
-    const logLevel = logDetail.level ? LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label : 'None';
+    // const logLevel = logDetail.level ? LOG_TYPE_OPTIONS.find((type) => type.value === logDetail.level).label : 'None';
 
     return (
       <>
@@ -123,7 +123,8 @@ export default class NonExposureDetail extends Component {
         <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
             <span className={styles.bold}>
-              #{logDetail.id} - <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span> {logLevel}
+              {/* #{logDetail.id} - <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span> {logLevel} */}
+              #{logDetail.id} <span>{logDetail.level >= 100 ? '- URGENT' : ''}</span>
             </span>
             {linkJira ? (
               <span>
