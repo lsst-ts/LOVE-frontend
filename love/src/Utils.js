@@ -1545,3 +1545,17 @@ export const getCameraStatusStyle = (status) => {
   if (status.toLowerCase() === 'done') return 'ok';
   return '';
 };
+
+let booleanArray = undefined;
+export function arrayRandomBoolean(len, probability=0.1) {
+  if (!booleanArray) {
+    let arr = Array.from({length: len}, i => false);
+    arr = arr.map((v) => {
+      const rnd = Math.floor(Math.random() * 100);
+      if (rnd < probability * 100) return true;
+      return false;
+    });
+    booleanArray = arr;
+  }
+  return booleanArray;
+}

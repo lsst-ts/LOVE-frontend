@@ -1,5 +1,5 @@
 import { createCachedSelector } from 're-reselect';
-import { flatMap } from '../../Utils';
+import { flatMap, arrayRandomBoolean } from '../../Utils';
 
 export const getToken = (state) => state.auth.token;
 
@@ -272,7 +272,7 @@ export const getM1M3TSWarningState = (state) => {
   ];
   const m1m3tsData = getStreamsData(state, subscriptions);
   return {
-    majorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].majorFault?.value ?? Array.from({length: 96}, i => false),
+    majorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].majorFault?.value ?? arrayRandomBoolean((96)),
     minorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].minorFault?.value ?? Array.from({length: 96}, i => false),
     faultOverride: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].faultOverride?.value ?? Array.from({length: 96}, i => false),
     refResistorError: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].refResistorError?.value ?? Array.from({length: 96}, i => false),
