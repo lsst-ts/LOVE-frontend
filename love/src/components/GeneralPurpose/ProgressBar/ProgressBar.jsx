@@ -70,18 +70,27 @@ const ProgressBar = (props) => {
           height={height}
           className={styles.progressCommandedLine}
         >
-          <line
-            className={styles.targetValueLine}
-            x1={targetValuePixels}
-            y1={-padding}
-            x2={targetValuePixels}
-            y2={height + padding}
-          />
+          {
+            targetValue ? (
+              <line
+                className={styles.targetValueLine}
+                x1={targetValuePixels}
+                y1={-padding}
+                x2={targetValuePixels}
+                y2={height + padding}
+              />
+            ) : <></>
+          }
+          
         </svg>
-        <div
-          className={styles.fillerStyles}
-          style={{width: `${completed}%`}}
-        ></div>
+        { completed ? 
+          (
+            <div
+              className={styles.fillerStyles}
+              style={{width: `${completed}%`}}
+            ></div>
+          ) : <></>
+        }
       </div>
     </div>
   );

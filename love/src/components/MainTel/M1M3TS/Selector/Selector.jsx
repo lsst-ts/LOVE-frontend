@@ -332,7 +332,7 @@ export default class Selector extends Component {
           r={this.state.width / 2}
         />
 
-        <circle
+        {/* <circle
           id="mirror-hole"
           cx={this.state.width / 2}
           cy={this.state.width / 2}
@@ -340,7 +340,7 @@ export default class Selector extends Component {
           stroke="gray"
           strokeWidth="3"
           fill="#111F27"
-        />
+        /> */}
 
         <circle
           id="circle-overlay"

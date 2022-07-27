@@ -24,20 +24,22 @@ export default class Mixing extends Component {
       </div>
       <div>
         <ProgressBar
-          targetValue={commanded}
-          completed={measured}
+          /* targetValue={100} */
+          completed={commanded}
           height={36}
           hideCompleted={true}
         />
       </div>
       <div className={styles.containerBottom}>
         <span className={styles.labelValue } style={{ left: 0 }}>
-          <span className={styles.label}>Commanded </span>
+          <span className={styles.label}>Valve Position </span>
           <span className={styles.value}>{`${defaultNumberFormatter(commanded, 1)}%`}</span>
         </span>
         <span className={styles.labelValue } style={{ right: 0 }}>
+        {/*   
           <span className={styles.label}>Measured </span>
           <span className={styles.value}>{`${defaultNumberFormatter(measured, 1)}%`}</span>
+         */}
         </span>
 
       </div>
