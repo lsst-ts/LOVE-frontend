@@ -126,7 +126,7 @@ export default class NonExposure extends Component {
         title: 'Time of Incident',
         type: 'string',
         className: styles.tableHead,
-        render: (_, row) => `${row.begin_date} - ${row.end_date}`,
+        render: (_, row) => `${row.date_begin} - ${row.date_end}`,
       },
       {
         field: 'time_lost',
