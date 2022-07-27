@@ -64,10 +64,10 @@
 .alert {
   /* background-color: var(--status-alert-dimmed-color-2); */
   background-color: #3c2b20;
+  border-color: #3c2b20;
   color: red;
-  border: none;
 }
 
-.alert:hover {
+.signal:hover {
   border: 1px solid white;
 }
