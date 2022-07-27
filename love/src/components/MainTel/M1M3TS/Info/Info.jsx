@@ -20,7 +20,7 @@ export default class Info extends Component {
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
     differentialTemperature: PropTypes.arrayOf(PropTypes.number),
     fanRPM: PropTypes.arrayOf(PropTypes.number),
-    thermalWarnings: PropTypes.arrayOf(PropTypes.object),
+    thermalWarnings: PropTypes.object,
   };
 
   static defaultProps = {
@@ -118,7 +118,7 @@ export default class Info extends Component {
                 <div className={styles.warningContainer}>
                 { selectedSensorData.warnings.map((warning) => {
                     return (
-                      <span className={styles.warningText}>
+                      <span key={warning.name} className={styles.warningText}>
                         {warning.msg}
                       </span>
                     );
