@@ -85,6 +85,8 @@ export default class M1M3TS extends Component {
       fanRPM,
     } = this.props;
 
+    const thermalWarnings = this.props.thermalWarnings;
+
     // Mixing
     const {
       valvePosition,
@@ -125,6 +127,7 @@ export default class M1M3TS extends Component {
             differentialTemperature={differentialTemperature}
             minTemperatureLimit={minTemperatureLimit}
             maxTemperatureLimit={maxTemperatureLimit}
+            thermalWarnings={thermalWarnings}
           />
         </div>
 
@@ -154,6 +157,7 @@ export default class M1M3TS extends Component {
             differentialTemperature={differentialTemperature}
             fanRPM={fanRPM}
             selectedSensor={this.state.selectedSensor}
+            thermalWarnings={thermalWarnings}
           />
         </div>
 

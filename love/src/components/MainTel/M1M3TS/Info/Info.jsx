@@ -7,8 +7,9 @@ import Label from 'components/GeneralPurpose/SummaryPanel/Label';
 import Value from 'components/GeneralPurpose/SummaryPanel/Value';
 import StatusText from 'components/GeneralPurpose/StatusText/StatusText';
 import CSCDetail from 'components/CSCSummary/CSCDetail/CSCDetail';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 import styles from './Info.module.css';
-import { m1m3tsEnabledStateMap, m1m3tsEnabledStateToStyle } from 'Config';
+import { m1m3tsEnabledStateMap, m1m3tsEnabledStateToStyle, MessagesWarningM1M3ThermalSystem } from 'Config';
 
 
 export default class Info extends Component {
@@ -19,16 +20,37 @@ export default class Info extends Component {
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
     differentialTemperature: PropTypes.arrayOf(PropTypes.number),
     fanRPM: PropTypes.arrayOf(PropTypes.number),
+    thermalWarnings: PropTypes.arrayOf(PropTypes.object),
   };
 
   static defaultProps = {
     sensorReferenceId: [],
-    sensorEnabledState: [],
-    selectedSensor: 1,
+    selectedSensor: undefined,
+    enabledFCU: [],
+    absoluteTemperature: [],
+    differentialTemperature: [],
+    fanRPM: [],
+    thermalWarnings: {},
   };
 
+  getThermalWarnings = (sensorIndex) => {
+    const {
+      thermalWarnings={},
+    } = this.props;
+
+    const warnings = Object.keys(thermalWarnings).map((key, _) => {
+      const result = {
+        name: key,
+        value: thermalWarnings[key][sensorIndex],
+        msg: MessagesWarningM1M3ThermalSystem[key],
+      };
+      return result;
+    }).filter((warning) => warning.value === true);
+    return warnings;
+  }
+
   getSensor = (id) => {
-    if (id === 0) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
+    if (id === 0 || id === undefined) return { id: 'None', value: 'None', state: CSCDetail.states[0] };
 
     const {
       sensorReferenceId,
@@ -41,12 +63,15 @@ export default class Info extends Component {
     const sensorIndex = sensorReferenceId.indexOf(id);
     const enabledData = enabledFCU[sensorIndex] ? 1 : 0;
     const enabledState = m1m3tsEnabledStateMap[enabledData];
+    
+    const warnings = this.getThermalWarnings(sensorIndex);
 
     const sensor = {
       id: `FCU${String(id).padStart(2, '0')}`,
       absoluteTemperature: absoluteTemperature[sensorIndex] ?? 0,
       differentialTemperature: differentialTemperature[sensorIndex] ?? 0,
       fanRPM: fanRPM[sensorIndex] ?? 0,
+      warnings,
     };
 
     sensor.state = {
@@ -83,10 +108,26 @@ export default class Info extends Component {
             <Label>Fan</Label>
             <Value>{`${defaultNumberFormatter(selectedSensorData.fanRPM)} RPM`}</Value>
 
-            <Title>Warnings</Title>
-            <div>ICON</div>
+            {selectedSensorData.warnings.length > 0 ? 
+              <>
+                <Title>Warnings</Title>
+                <span className={styles.warningIcon}>
+                  <WarningIcon></WarningIcon>
+                </span>
 
-            <Label>Message</Label>
+                <div className={styles.warningContainer}>
+                { selectedSensorData.warnings.map((warning) => {
+                    return (
+                      <span className={styles.warningText}>
+                        {warning.msg}
+                      </span>
+                    );
+                  })
+                }
+                </div>
+              </> : <></>
+            }
+            
             <div></div>
           </>
         ) : (

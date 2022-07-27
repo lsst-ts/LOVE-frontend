@@ -264,8 +264,38 @@ export const getM1M3TSMixingState = (state) => {
   return {
     valvePosition: m1m3tsData['event-MTM1M3TS-0-mixingValve']?.[0].valvePosition?.value ?? 75.1,
   };
-  
-}
+};
+
+export const getM1M3TSWarningState = (state) => {
+  const subscriptions = [
+    'event-MTM1M3TS-0-thermalWarning',
+  ];
+  const m1m3tsData = getStreamsData(state, subscriptions);
+  return {
+    majorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].majorFault?.value ?? Array.from({length: 96}, i => true),
+    minorFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].minorFault?.value ?? Array.from({length: 96}, i => false),
+    faultOverride: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].faultOverride?.value ?? Array.from({length: 96}, i => false),
+    refResistorError: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].refResistorError?.value ?? Array.from({length: 96}, i => false),
+    rtdError: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].rtdError?.value ?? Array.from({length: 96}, i => false),
+    breakerHeater1Error: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].breakerHeater1Error?.value ?? Array.from({length: 96}, i => false),
+    breakerFan2Error: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].breakerFan2Error?.value ?? Array.from({length: 96}, i => false),
+    uniqueIdCRCError: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].uniqueIdCRCError?.value ?? Array.from({length: 96}, i => false),
+    applicationTypeMismatch: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationTypeMismatch?.value ?? Array.from({length: 96}, i => false),
+    applicationMissing: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationMissing?.value ?? Array.from({length: 96}, i => false),
+    applicationCRCMismatch: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].applicationCRCMismatch?.value ?? Array.from({length: 96}, i => false),
+    oneWireMissing: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWireMissing?.value ?? Array.from({length: 96}, i => false),
+    oneWire1Mismatch: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWire1Mismatch?.value ?? Array.from({length: 96}, i => false),
+    oneWire2Mismatch: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].oneWire2Mismatch?.value ?? Array.from({length: 96}, i => false),
+    watchdogReset: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].watchdogReset?.value ?? Array.from({length: 96}, i => false),
+    brownOut: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].brownOut?.value ?? Array.from({length: 96}, i => false),
+    eventTrapReset: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].eventTrapReset?.value ?? Array.from({length: 96}, i => false),
+    ssrPowerFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].ssrPowerFault?.value ?? Array.from({length: 96}, i => false),
+    auxPowerFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].auxPowerFault?.value ?? Array.from({length: 96}, i => false),
+    ilcFault: m1m3tsData['event-MTM1M3TS-0-thermalWarning']?.[0].ilcFault?.value ?? Array.from({length: 96}, i => false),
+  };
+};
+
+
 
 // MTM2 selectors
 export const getM2State = (state) => {

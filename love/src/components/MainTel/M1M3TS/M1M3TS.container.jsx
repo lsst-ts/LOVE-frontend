@@ -6,6 +6,7 @@ import {
   getM1M3TSThermalState,
   getM1M3TSTemperatureState,
   getM1M3TSMixingState,
+  getM1M3TSWarningState,
 } from 'redux/selectors';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import M1M3TS from './M1M3TS';
@@ -53,7 +54,10 @@ const mapStateToProps = (state) => {
   const m1m3TSThermalState = getM1M3TSThermalState(state);
   const m1m3TSTemperatureState = getM1M3TSTemperatureState(state);
   const m1m3TSMixingState = getM1M3TSMixingState(state);
-  return { ...m1m3TSState, ...m1m3TSThermalState, ...m1m3TSTemperatureState, ...m1m3TSMixingState };
+  const thermalWarnings = getM1M3TSWarningState(state);
+
+  return { ...m1m3TSState, ...m1m3TSThermalState, ...m1m3TSTemperatureState,
+    ...m1m3TSMixingState, thermalWarnings: thermalWarnings };
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -66,6 +70,7 @@ const mapDispatchToProps = (dispatch) => {
     'event-MTM1M3TS-0-appliedSetpoint',
     'event-MTM1M3TS-0-mixingValve',
     'event-MTM1M3TS-0-appliedSetpoint',
+    'event-MTM1M3TS-0-thermalWarning',
   ];
   return {
     subscriptions,

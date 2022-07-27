@@ -4,6 +4,7 @@ import * as d3 from 'd3';
 import TemperatureGradiant from '../Temperature/TemperatureGradiant';
 import { M2ActuatorPositions } from 'Config';
 import styles from './Selector.module.css';
+import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 
 export default class Selector extends Component {
   static propTypes = {
@@ -84,6 +85,53 @@ export default class Selector extends Component {
     return TemperatureGradiant.COLOR_SCALE(1 - colorInterpolate(value));
   }
 
+  getThermalWarnings = (sensorIndex) => {
+    const {
+      thermalWarnings={},
+    } = this.props;
+
+    const warnings = Object.keys(thermalWarnings).map((key, _) => {
+      const result = {
+        name: key,
+        value: thermalWarnings[key][sensorIndex],
+      };
+      return result;
+    }).some((warning) => warning.value === true);
+
+    return warnings;
+  }
+
+  getWarningIcon(id) {
+    return (
+      <>
+        <title>{id}</title>
+        <g transform-origin={`1.4% -1.4%`}
+            transform={`scale(0.035) rotate(180)`}
+        >
+          <path
+            transform-origin={`40% -45%`}
+            transform={`scale(1.25)`}
+            style={{ fill: '#231F20' }}
+            d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+    c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"
+          />
+          <path
+            style={{ fill: '#FFCC4D' }}
+            d="M24.374-357.857c-20.958,0-30.197,15.223-20.548,33.826L181.421,17.928
+    c9.648,18.603,25.463,18.603,35.123,0L394.14-324.031c9.671-18.603,0.421-33.826-20.548-33.826H24.374z"
+          />
+          <path
+            style={{ fill: '#231F20' }}
+            d="M173.605-80.922c0,14.814,10.934,23.984,25.395,23.984c14.12,0,25.407-9.512,25.407-23.984
+    V-216.75c0-14.461-11.287-23.984-25.407-23.984c-14.461,0-25.395,9.182-25.395,23.984V-80.922z M171.489-289.056
+    c0,15.167,12.345,27.511,27.511,27.511c15.167,0,27.523-12.345,27.523-27.511c0-15.178-12.356-27.523-27.523-27.523
+    C183.834-316.579,171.489-304.234,171.489-289.056"
+          />
+        </g>
+      </>
+    );
+  }
+
   getSensor = (id) => {
     if (id === 0 || id === null) {
       return {
@@ -99,12 +147,15 @@ export default class Selector extends Component {
     } = this.props;
 
     const sensorIndex = sensorReferenceId.indexOf(id) >= 0 ? sensorReferenceId.indexOf(id) : undefined;
+    const warning = this.getThermalWarnings(sensorIndex);
+
     const sensor = {
       id,
       differentialTemperature: differentialTemperature[sensorIndex ?? 0] ?? 0,
       absoluteTemperature: absoluteTemperature[sensorIndex ?? 0] ?? 0,
       colorDifferentialTemperature: this.getGradiantColorX(differentialTemperature[sensorIndex ?? 0]),
       colorAbsoluteTemperature: this.getGradiantColorX(absoluteTemperature[sensorIndex ?? 0]),
+      warning,
     };
     return sensor;
   }
@@ -251,8 +302,17 @@ export default class Selector extends Component {
                 className={selectedSensor === act.id || (zoomLevel > 1 && showFcuIDs) ? '' : styles.hidden}
                 pointerEvents="none"
               >
-                {act.id}
+                { act.id }
               </text>
+              { showWarning && this.getSensor(act.id)?.warning  ?
+                  <g
+                    transform-origin={`0% 0%`}
+                    transform={`translate(${(act.position[0] + this.state.xRadius) * scale + margin} ${(act.position[1] + this.state.yRadius) * scale + margin})`}
+                  >
+                    {this.getWarningIcon(act.id)}
+                  </g>
+                : <></>
+              }
             </g>
           );
         })}
