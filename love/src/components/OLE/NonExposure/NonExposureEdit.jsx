@@ -7,9 +7,9 @@ import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
-import Select from 'components/GeneralPurpose/Select/Select';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import { CSCSummaryHierarchy, defaultCSCList, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
@@ -33,6 +33,7 @@ export default class NonExposureEdit extends Component {
     logEdit: {
       id: undefined,
       level: undefined,
+      isUrgent: undefined,
       date_begin: undefined,
       date_end: undefined,
       systems: [],
@@ -129,7 +130,8 @@ export default class NonExposureEdit extends Component {
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
-    payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
+    // payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
+    payload['level'] = payload.isUrgent ? 100 : 0;
 
     // if ('tags' in payload) {
     //   payload['tags'] = payload['tags'].map((tag) => tag.id);
@@ -208,10 +210,9 @@ export default class NonExposureEdit extends Component {
     //     ).sort()
     //   : [];
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
-    const selectedCommentType = this.state.logEdit?.level
-      ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
-      : null;
-
+    // const selectedCommentType = this.state.logEdit?.level
+    //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
+    //   : null;
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -258,9 +259,9 @@ export default class NonExposureEdit extends Component {
 
             <div id={this.id} className={isMenu ? styles.contentMenu : styles.content}>
               <div className={styles.contentLeft}>
-                <span className={styles.label}>Type of Comment</span>
-                <span className={[styles.value, styles.cscValue].join(' ')}>
-                  <Select
+                <span className={styles.label}>Urgent?</span>
+                <span className={[styles.value].join(' ')}>
+                  {/* <Select
                     option={selectedCommentType}
                     onChange={({ value }) =>
                       this.setState((prevState) => ({
@@ -277,7 +278,20 @@ export default class NonExposureEdit extends Component {
                     ) : (
                       <></>
                     )}
-                  </span>
+                  </span>*/}
+                  <span>Yes</span>
+                  <div style={{ display: 'inline-block' }}>
+                    <Toggle
+                      hideLabels={true}
+                      isLive={this.state.logEdit.isUrgent}
+                      setLiveMode={(event) =>
+                        this.setState((prevState) => ({
+                          logEdit: { ...prevState.logEdit, isUrgent: event },
+                        }))
+                      }
+                    />
+                  </div>
+                  <span>No</span>
                 </span>
                 <span className={styles.label}>Systems</span>
                 <span className={styles.value}>
