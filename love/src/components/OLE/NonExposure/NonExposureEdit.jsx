@@ -85,7 +85,7 @@ export default class NonExposureEdit extends Component {
   }
 
   getIconLevel(level) {
-    const icon = iconLevelOLE[level] ? iconLevelOLE[level] : undefined;
+    const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
     return icon;
   }
 
@@ -131,7 +131,6 @@ export default class NonExposureEdit extends Component {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
     // payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
-    payload['level'] = payload.isUrgent ? 100 : 0;
 
     // if ('tags' in payload) {
     //   payload['tags'] = payload['tags'].map((tag) => tag.id);
@@ -283,15 +282,16 @@ export default class NonExposureEdit extends Component {
                   <div style={{ display: 'inline-block' }}>
                     <Toggle
                       hideLabels={true}
-                      isLive={this.state.logEdit.isUrgent}
+                      isLive={this.state.logEdit.level >= 100}
                       setLiveMode={(event) =>
                         this.setState((prevState) => ({
-                          logEdit: { ...prevState.logEdit, isUrgent: event },
+                          logEdit: { ...prevState.logEdit, level: event ? 100 : 0 },
                         }))
                       }
                     />
                   </div>
-                  <span>No</span>
+                  <span style={{ marginRight: '1em' }}>No</span>
+                  <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
                 </span>
                 <span className={styles.label}>Systems</span>
                 <span className={styles.value}>
