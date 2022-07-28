@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import GenericCamera from '../GenericCamera/GenericCamera';
+import GenericCameraView from '../GenericCamera/GenericCameraView';
 import { azel_sample } from '../GenericCamera/CameraUtils';
 import styles from './Scheduler.module.css';
 
@@ -141,14 +141,14 @@ export default class Scheduler extends Component {
             </>
           )}
         </div>
-        <GenericCamera
+        <GenericCameraView
           healpixOverlays={this.state.healpixOverlays}
           targetOverlay={targetOverlay}
           selectedCell={this.state.selectedCell}
           onLayerClick={this.onLayerClick}
           camFeeds={this.props.camFeeds}
           feedKey={this.props.feedKey}
-        ></GenericCamera>
+        ></GenericCameraView>
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
-import _ from 'lodash';
+import lodash from 'lodash';
 import { defaultNumberFormatter } from 'Utils';
 import {
   M1M3ActuatorPositions,
@@ -330,20 +330,20 @@ export default class M1M3 extends Component {
 
     if (
       this.state.selectedForceParameter !== prevState.selectedForceParameter ||
-      this.props[this.state.selectedForceInput] !== prevProps[this.state.selectedForceInput]
+      !lodash.isEqual(this.props[this.state.selectedForceInput], prevProps[this.state.selectedForceInput])
     ) {
       const forceData = this.props[this.state.selectedForceInput]?.[this.state.selectedForceParameter]?.value ?? [];
       this.setState({ actuatorsForce: forceData });
     }
 
-    if (!_.isEqual(this.state.actuators, prevState.actuators)) {
+    if (!lodash.isEqual(this.state.actuators, prevState.actuators)) {
       const data = this.state.actuators.map(
         (act) => Math.sqrt(act.position[0] ** 2 + act.position[1] ** 2) / this.state.maxRadius,
       );
       this.createColorScale(data);
     }
 
-    if (!_.isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
+    if (!lodash.isEqual(this.state.actuatorsForce, prevState.actuatorsForce)) {
       this.createColorScale(this.state.actuatorsForce);
     }
 
@@ -352,7 +352,7 @@ export default class M1M3 extends Component {
       prevProps.xPosition !== xPosition ||
       prevProps.yPosition !== yPosition ||
       prevProps.zPosition !== zPosition ||
-      !_.isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
+      !lodash.isEqual(prevProps.actuatorReferenceId, actuatorReferenceId)
     ) {
       const actuators = M1M3.getActuatorsPositions(actuatorReferenceId, { xPosition, yPosition, zPosition });
       // const actuators = M1M3ActuatorPositions; // Old implementation
@@ -464,7 +464,11 @@ export default class M1M3 extends Component {
             <div className={styles.control}>
               <span>Show actuators ID:</span>
               <div className={styles.toggleContainer}>
-                <Toggle labels={['Yes', 'No']} isLive={this.state.showActuatorsID} setLiveMode={this.toggleActuatorsID} />
+                <Toggle
+                  labels={['Yes', 'No']}
+                  isLive={this.state.showActuatorsID}
+                  setLiveMode={this.toggleActuatorsID}
+                />
               </div>
             </div>
             <div className={styles.control}>

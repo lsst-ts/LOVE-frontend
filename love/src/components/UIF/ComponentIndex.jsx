@@ -104,13 +104,13 @@ export const observatoryIndex = {
       },
     },
   },
-  GenericCamera: {
-    component: require('../GenericCamera/GenericCamera.container').default,
+  GenericCameraView: {
+    component: require('../GenericCamera/GenericCameraView.container').default,
     schema: {
-      ...require('../GenericCamera/GenericCamera.container').schema,
+      ...require('../GenericCamera/GenericCameraView.container').schema,
       props: {
         ...defaultSchemaProps,
-        ...require('../GenericCamera/GenericCamera.container').schema.props,
+        ...require('../GenericCamera/GenericCameraView.container').schema.props,
       },
     },
   },
@@ -167,6 +167,16 @@ export const observatoryIndex = {
   TimeDisplay: {
     component: require('../Time/TimeDisplay.container').default,
     schema: require('../Time/TimeDisplay.container').schema,
+  },
+  GenericCameraControls: {
+    component: require('../GenericCamera/GenericCameraControls.container').default,
+    schema: {
+      ...require('../GenericCamera/GenericCameraControls.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../GenericCamera/GenericCameraControls.container').schema.props,
+      },
+    },
   },
 };
 

@@ -81,6 +81,7 @@ export const getLastSALCommand = (state) => {
   return state.ws.lastSALCommand;
 };
 
+// MTM1M3 selectors
 export const getM1M3ActuatorsState = (state) => {
   const subscriptions = [
     'telemetry-MTM1M3-0-forceActuatorData',
@@ -136,8 +137,8 @@ export const getM1M3HardpointActuatorState = (state) => {
   const subscriptions = ['event-MTM1M3-0-hardpointActuatorState'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    hardpointIlcState: [0, 0, 1, 1, 1, 1], // m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
-    hardpointMotionState: [0, 1, 2, 3, 4, 1], // m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
+    hardpointIlcState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.ilcState?.value ?? [],
+    hardpointMotionState: m1m3Data['event-MTM1M3-0-hardpointActuatorState']?.[0]?.motionState?.value ?? [],
     hardpointReferenceId: [1, 2, 3, 4, 5, 6],
   };
 };
@@ -189,6 +190,54 @@ export const getM1M3State = (state) => {
   };
 };
 
+export const getM1M3ActuatorForces = (state) => {
+  const subscriptions = [
+    'event-MTM1M3-0-appliedAberrationForces',
+    'event-MTM1M3-0-appliedAccelerationForces',
+    'event-MTM1M3-0-appliedActiveOpticForces',
+    'event-MTM1M3-0-appliedAzimuthForces',
+    'event-MTM1M3-0-appliedBalanceForces',
+    'event-MTM1M3-0-appliedCylinderForces',
+    'event-MTM1M3-0-appliedElevationForces',
+    'event-MTM1M3-0-appliedForces',
+    'event-MTM1M3-0-appliedOffsetForces',
+    'event-MTM1M3-0-appliedStaticForces',
+    'event-MTM1M3-0-appliedThermalForces',
+    'event-MTM1M3-0-appliedVelocityForces',
+    'event-MTM1M3-0-preclippedAberrationForces',
+    'event-MTM1M3-0-preclippedAccelerationForces',
+    'event-MTM1M3-0-preclippedActiveOpticForces',
+    'event-MTM1M3-0-preclippedAzimuthForces',
+    'event-MTM1M3-0-preclippedBalanceForces',
+    'event-MTM1M3-0-preclippedCylinderForces',
+    'event-MTM1M3-0-preclippedElevationForces',
+    'event-MTM1M3-0-preclippedForces',
+    'event-MTM1M3-0-preclippedOffsetForces',
+    'event-MTM1M3-0-preclippedStaticForces',
+    'event-MTM1M3-0-preclippedThermalForces',
+    'event-MTM1M3-0-preclippedVelocityForces',
+  ];
+  const m1m3Data = getStreamsData(state, subscriptions);
+  return {
+    appliedAberrationForces: m1m3Data['event-MTM1M3-0-appliedAberrationForces']?.[0] ?? {},
+    appliedAccelerationForces: m1m3Data['event-MTM1M3-0-appliedAccelerationForces']?.[0] ?? {},
+    appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
+    appliedAzimuthForces: m1m3Data['event-MTM1M3-0-appliedAzimuthForces']?.[0] ?? {},
+    appliedBalanceForces: m1m3Data['event-MTM1M3-0-appliedBalanceForces']?.[0] ?? {},
+    appliedCylinderForces: m1m3Data['event-MTM1M3-0-appliedCylinderForces']?.[0] ?? {},
+    appliedElevationForces: m1m3Data['event-MTM1M3-0-appliedElevationForces']?.[0] ?? {},
+    appliedForces: m1m3Data['event-MTM1M3-0-appliedForces']?.[0] ?? {},
+    preclippedAberrationForces: m1m3Data['event-MTM1M3-0-preclippedAberrationForces']?.[0] ?? {},
+    preclippedAccelerationForces: m1m3Data['event-MTM1M3-0-preclippedAccelerationForces']?.[0] ?? {},
+    preclippedActiveOpticForces: m1m3Data['event-MTM1M3-0-preclippedActiveOpticForces']?.[0] ?? {},
+    preclippedAzimuthForces: m1m3Data['event-MTM1M3-0-preclippedAzimuthForces']?.[0] ?? {},
+    preclippedBalanceForces: m1m3Data['event-MTM1M3-0-preclippedBalanceForces']?.[0] ?? {},
+    preclippedCylinderForces: m1m3Data['event-MTM1M3-0-preclippedCylinderForces']?.[0] ?? {},
+    preclippedElevationForces: m1m3Data['event-MTM1M3-0-preclippedElevationForces']?.[0] ?? {},
+    preclippedForces: m1m3Data['event-MTM1M3-0-preclippedForces']?.[0] ?? {},
+  };
+};
+
 // MTM2 selectors
 export const getM2State = (state) => {
   const subscriptions = [
@@ -207,10 +256,7 @@ export const getM2State = (state) => {
 };
 
 export const getM2Inclinometer = (state) => {
-  const subscriptions = [
-    'telemetry-MTM2-0-zenithAngle',
-    'event-MTM2-0-inclinationTelemetrySource',
-  ];
+  const subscriptions = ['telemetry-MTM2-0-zenithAngle', 'event-MTM2-0-inclinationTelemetrySource'];
   const m2InclinometerData = getStreamsData(state, subscriptions);
   return {
     zenithAngleMeasured: m2InclinometerData['telemetry-MTM2-0-zenithAngle']?.measured?.value ?? 0,
@@ -228,34 +274,24 @@ export const getM2Actuator = (state) => {
   ];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ??
-      Array(78).fill(0),
-    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ??
-      Array(72).fill(0),
-    axialEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ??
-      Array(72).fill(0),
-    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ??
-      Array(6).fill(0),
-    tangentEncoderPositions: m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ??
-      Array(6).fill(0),
+    actuatorIlcState: m2ActuatorsData['telemetry-MTM2-0-ilcData']?.status?.value ?? Array(78).fill(0),
+    axialActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-axialActuatorSteps']?.steps?.value ?? Array(72).fill(0),
+    axialEncoderPositions:
+      m2ActuatorsData['telemetry-MTM2-0-axialEncoderPositions']?.positions?.value ?? Array(72).fill(0),
+    tangentActuatorSteps: m2ActuatorsData['telemetry-MTM2-0-tangentActuatorSteps']?.steps?.value ?? Array(6).fill(0),
+    tangentEncoderPositions:
+      m2ActuatorsData['telemetry-MTM2-0-tangentEncoderPositions']?.positions?.value ?? Array(6).fill(0),
   };
 };
 
 export const getM2ActuatorForce = (state) => {
-  const subscriptions = [
-    'telemetry-MTM2-0-axialForce',
-    'telemetry-MTM2-0-tangentForce',
-  ];
+  const subscriptions = ['telemetry-MTM2-0-axialForce', 'telemetry-MTM2-0-tangentForce'];
   const m2ActuatorsData = getStreamsData(state, subscriptions);
   return {
-    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ??
-      Array(72).fill(0),
-    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ??
-      Array(72).fill(0),
-    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ??
-      Array(6).fill(0),
-    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ??
-      Array(6).fill(0),
+    axialForceApplied: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.applied?.value ?? Array(72).fill(0),
+    axialForceMeasured: m2ActuatorsData['telemetry-MTM2-0-axialForce']?.measured?.value ?? Array(72).fill(0),
+    tangentForceApplied: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.applied?.value ?? Array(6).fill(0),
+    tangentForceMeasured: m2ActuatorsData['telemetry-MTM2-0-tangentForce']?.measured?.value ?? Array(6).fill(0),
   };
 };
 
@@ -293,64 +329,6 @@ export const getM2ActuatorTable = (state) => {
     positionIMSXRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.xRot?.value ?? 0,
     positionIMSYRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.yRot?.value ?? 0,
     positionIMSZRot: m2ActuatorsData['telemetry-MTM2-0-positionIMS']?.zRot?.value ?? 0,
-  };
-};
-
-function createDataRandom() {
-  const data = [];
-  for (let i = 0; i < 156; i++) {
-    data.push(Math.floor(Math.random() * 1000));
-  }
-  return data;
-}
-
-export const getM1M3ActuatorForces = (state) => {
-  const subscriptions = [
-    'event-MTM1M3-0-appliedAberrationForces',
-    'event-MTM1M3-0-appliedAccelerationForces',
-    'event-MTM1M3-0-appliedActiveOpticForces',
-    'event-MTM1M3-0-appliedAzimuthForces',
-    'event-MTM1M3-0-appliedBalanceForces',
-    'event-MTM1M3-0-appliedCylinderForces',
-    'event-MTM1M3-0-appliedElevationForces',
-    'event-MTM1M3-0-appliedForces',
-    'event-MTM1M3-0-appliedOffsetForces',
-    'event-MTM1M3-0-appliedStaticForces',
-    'event-MTM1M3-0-appliedThermalForces',
-    'event-MTM1M3-0-appliedVelocityForces',
-    'event-MTM1M3-0-preclippedAberrationForces',
-    'event-MTM1M3-0-preclippedAccelerationForces',
-    'event-MTM1M3-0-preclippedActiveOpticForces',
-    'event-MTM1M3-0-preclippedAzimuthForces',
-    'event-MTM1M3-0-preclippedBalanceForces',
-    'event-MTM1M3-0-preclippedCylinderForces',
-    'event-MTM1M3-0-preclippedElevationForces',
-    'event-MTM1M3-0-preclippedForces',
-    'event-MTM1M3-0-preclippedOffsetForces',
-    'event-MTM1M3-0-preclippedStaticForces',
-    'event-MTM1M3-0-preclippedThermalForces',
-    'event-MTM1M3-0-preclippedVelocityForces',
-  ];
-  const m1m3Data = getStreamsData(state, subscriptions);
-  return {
-    appliedAberrationForces: m1m3Data['event-MTM1M3-0-appliedAberrationForces']?.[0] ?? {
-      zForces: { value: createDataRandom() },
-    },
-    appliedAccelerationForces: m1m3Data['event-MTM1M3-0-appliedAccelerationForces']?.[0] ?? {},
-    appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
-    appliedAzimuthForces: m1m3Data['event-MTM1M3-0-appliedAzimuthForces']?.[0] ?? {},
-    appliedBalanceForces: m1m3Data['event-MTM1M3-0-appliedBalanceForces']?.[0] ?? {},
-    appliedCylinderForces: m1m3Data['event-MTM1M3-0-appliedCylinderForces']?.[0] ?? {},
-    appliedElevationForces: m1m3Data['event-MTM1M3-0-appliedElevationForces']?.[0] ?? {},
-    appliedForces: m1m3Data['event-MTM1M3-0-appliedForces']?.[0] ?? {},
-    preclippedAberrationForces: m1m3Data['event-MTM1M3-0-preclippedAberrationForces']?.[0] ?? {},
-    preclippedAccelerationForces: m1m3Data['event-MTM1M3-0-preclippedAccelerationForces']?.[0] ?? {},
-    preclippedActiveOpticForces: m1m3Data['event-MTM1M3-0-preclippedActiveOpticForces']?.[0] ?? {},
-    preclippedAzimuthForces: m1m3Data['event-MTM1M3-0-preclippedAzimuthForces']?.[0] ?? {},
-    preclippedBalanceForces: m1m3Data['event-MTM1M3-0-preclippedBalanceForces']?.[0] ?? {},
-    preclippedCylinderForces: m1m3Data['event-MTM1M3-0-preclippedCylinderForces']?.[0] ?? {},
-    preclippedElevationForces: m1m3Data['event-MTM1M3-0-preclippedElevationForces']?.[0] ?? {},
-    preclippedForces: m1m3Data['event-MTM1M3-0-preclippedForces']?.[0] ?? {},
   };
 };
 
