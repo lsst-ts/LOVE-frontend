@@ -673,7 +673,7 @@ export default class ManagerInterface {
     if (token === null) {
       return new Promise((resolve) => resolve(false));
     }
-    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2`;
+    const url = `${this.getApiBaseUrl()}ole/exposurelog/exposures?instrument=${instrument}&registry=2&order_by=-obs_id`;
     return fetch(url, {
       method: 'GET',
       headers: ManagerInterface.getHeaders(),
