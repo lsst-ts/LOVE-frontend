@@ -48,6 +48,7 @@ export default class ExposureAdd extends Component {
       is_new: true,
       exposure_flag: 'none',
       jira: false,
+      tags: undefined,
     },
     isLogCreate: false,
     isMenu: false,
@@ -78,6 +79,10 @@ export default class ExposureAdd extends Component {
 
   statusFlag(flag) {
     return exposureFlagStateToStyle[flag] ? exposureFlagStateToStyle[flag] : 'unknown';
+  }
+
+  cleanForm() {
+    this.setState({ newMessage: ExposureAdd.defaultProps.newMessage });
   }
 
   componentDidMount() {
@@ -126,6 +131,10 @@ export default class ExposureAdd extends Component {
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
 
+    if ('tags' in payload) {
+      payload['tags'] = payload['tags'].map((tag) => tag.id);
+    }
+
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
       this.setState({ confirmationModalShown: false });
       if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
@@ -133,13 +142,13 @@ export default class ExposureAdd extends Component {
       } else {
         this.props.view();
       }
+      this.cleanForm();
     });
   }
 
   deleteMessage() {
     if (this.state.newMessage.id) {
       ManagerInterface.deleteMessageExposureLogs(this.state.newMessage.id).then((response) => {
-        console.log('response', response);
         this.setState({ confirmationModalShown: false });
       });
     } else {
@@ -150,7 +159,7 @@ export default class ExposureAdd extends Component {
   confirmSave() {
     const modalText = (
       <span>
-        You are about to <b>Save</b> this message of Exposure Logs
+        You are about to <b>save</b> this message of Exposure Logs
         <br />
         Are you sure?
       </span>
@@ -240,6 +249,7 @@ export default class ExposureAdd extends Component {
                 <span className={styles.value}>
                   <Multiselect
                     options={this.state.observationIds}
+                    selectedValues={this.state.newMessage?.obs_id}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
                         newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
@@ -254,6 +264,7 @@ export default class ExposureAdd extends Component {
                 <span className={styles.value}>
                   <Multiselect
                     options={this.state.imageTags}
+                    selectedValues={this.state.newMessage?.tags}
                     isObject={true}
                     displayValue="name"
                     onSelect={(selectedOptions) => {
@@ -302,6 +313,7 @@ export default class ExposureAdd extends Component {
                     <span className={styles.value} style={{ flex: 1 }}>
                       <Multiselect
                         options={this.state.observationIds}
+                        selectedValues={this.state.newMessage?.obs_id}
                         onSelect={(selectedOptions) => {
                           this.setState((prevState) => ({
                             newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
@@ -316,11 +328,12 @@ export default class ExposureAdd extends Component {
                     <span className={styles.value} style={{ flex: 1 }}>
                       <Multiselect
                         options={this.state.imageTags}
+                        selectedValues={this.state.newMessage?.tags}
                         isObject={true}
                         displayValue="name"
                         onSelect={(selectedOptions) => {
                           this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, tags: selectedOptions.map((tag) => tag.id) },
+                            newMessage: { ...prevState.newMessage, tags: selectedOptions },
                           }));
                         }}
                         placeholder="Select one or several tags"
