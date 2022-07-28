@@ -79,7 +79,8 @@ export default class NonExposure extends Component {
   }
 
   getLevel(value) {
-    const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
+    // const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
+    const label = value >= 100 ? 'urgent' : 'info';
     const icon = iconLevelOLE[label] ?? undefined;
     return (
       <>
@@ -272,7 +273,12 @@ export default class NonExposure extends Component {
     const logExampleKeys = Object.keys(logExample ?? {});
     const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
 
-    const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
+    // const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
+    const commentTypeOptions = [
+      { label: 'All comment types', value: 'all' },
+      { label: 'Urgent', value: 100 },
+      { label: 'Non urgent', value: 0 },
+    ];
     const selectedCommentType = this.props.selectedCommentType;
 
     const systemOptions = [{ label: 'All systems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
