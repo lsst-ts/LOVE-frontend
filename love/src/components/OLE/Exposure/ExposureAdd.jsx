@@ -127,8 +127,6 @@ export default class ExposureAdd extends Component {
     payload['instrument'] = this.state.selectedInstrument;
 
     ManagerInterface.createMessageExposureLogs(payload).then((result) => {
-      console.log('result createMessage', result);
-      console.log('isLogCreate', isLogCreate, 'isMenu', isMenu, 'this.state.logEdit.obs_id', this.state.logEdit.obs_id);
       this.setState({ confirmationModalShown: false });
       if (isLogCreate || isMenu || !this.state.logEdit.obs_id) {
         this.props.back();
@@ -192,7 +190,6 @@ export default class ExposureAdd extends Component {
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
       : null;
 
-    const sortedObservationIds = [...(this.state.observationIds ?? [])].reverse();
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -304,10 +301,10 @@ export default class ExposureAdd extends Component {
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>
                       <Multiselect
-                        options={sortedObservationIds}
+                        options={this.state.observationIds}
                         onSelect={(selectedOptions) => {
                           this.setState((prevState) => ({
-                            newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
+                            newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
                           }));
                         }}
                         placeholder="Select one or several observations"
