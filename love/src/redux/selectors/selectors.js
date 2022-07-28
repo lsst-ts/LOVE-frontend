@@ -239,7 +239,7 @@ export const getM1M3TSThermalState = (state) => {
   const random2 = random.map((n) => n + 1000);
   
   return {
-    enabledFCU: m1m3tsData['event-MTM1M3TS-0-thermalSettings']?.[0].enabledFCU?.value ?? Array.from({length: 96}, i => false),
+    enabled: m1m3tsData['event-MTM1M3TS-0-enabledILC']?.[0].enabled?.value ?? Array.from({length: 96}, i => false),
     absoluteTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].absoluteTemperature ?.value ?? random,
     differentialTemperature : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].differentialTemperature ?.value ?? random2,
     fanRPM : m1m3tsData['event-MTM1M3TS-0-thermalData']?.[0].fanRPM ?.value ?? Array.from({length: 96}, i => 2350),

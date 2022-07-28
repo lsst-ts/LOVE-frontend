@@ -79,7 +79,7 @@ export default class M1M3TS extends Component {
 
     // Info
     const {
-      enabledFCU,
+      enabled,
       absoluteTemperature,
       differentialTemperature,
       fanRPM,
@@ -117,7 +117,7 @@ export default class M1M3TS extends Component {
         <div className={styles.selectorContainer}>
           <Selector
             sensorReferenceId={sensorReferenceId}
-            enabledFCU={enabledFCU}
+            enabled={enabled}
             showFcuIDs={this.state.showFcuIDs}
             showDifferentialTemp={this.state.showDifferentialTemp}
             showWarnings={this.state.showWarnings}
@@ -152,7 +152,7 @@ export default class M1M3TS extends Component {
         <div className={styles.infoContainer}>
           <Info 
             sensorReferenceId={sensorReferenceId}
-            enabledFCU={enabledFCU}
+            enabled={enabled}
             absoluteTemperature={absoluteTemperature}
             differentialTemperature={differentialTemperature}
             fanRPM={fanRPM}

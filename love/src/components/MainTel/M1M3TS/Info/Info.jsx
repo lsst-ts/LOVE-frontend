@@ -16,7 +16,7 @@ export default class Info extends Component {
   static propTypes = {
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
     selectedSensor: PropTypes.number,
-    enabledFCU: PropTypes.arrayOf(PropTypes.bool),
+    enabled: PropTypes.arrayOf(PropTypes.bool),
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
     differentialTemperature: PropTypes.arrayOf(PropTypes.number),
     fanRPM: PropTypes.arrayOf(PropTypes.number),
@@ -26,7 +26,7 @@ export default class Info extends Component {
   static defaultProps = {
     sensorReferenceId: [],
     selectedSensor: undefined,
-    enabledFCU: [],
+    enabled: [],
     absoluteTemperature: [],
     differentialTemperature: [],
     fanRPM: [],
@@ -54,14 +54,14 @@ export default class Info extends Component {
 
     const {
       sensorReferenceId,
-      enabledFCU,
+      enabled,
       absoluteTemperature,
       differentialTemperature,
       fanRPM,
     } = this.props;
 
     const sensorIndex = sensorReferenceId.indexOf(id);
-    const enabledData = enabledFCU[sensorIndex] ? 1 : 0;
+    const enabledData = enabled[sensorIndex] ? 1 : 0;
     const enabledState = m1m3tsEnabledStateMap[enabledData];
     
     const warnings = this.getThermalWarnings(sensorIndex);
