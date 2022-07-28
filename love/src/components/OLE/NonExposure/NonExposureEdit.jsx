@@ -278,10 +278,9 @@ export default class NonExposureEdit extends Component {
                       <></>
                     )}
                   </span>*/}
-                  <span>Yes</span>
-                  <div style={{ display: 'inline-block' }}>
+                  <div style={{ display: 'inline-block', marginRight: '0.5em' }}>
                     <Toggle
-                      hideLabels={true}
+                      labels={['No', 'Yes']}
                       isLive={this.state.logEdit.level >= 100}
                       setLiveMode={(event) =>
                         this.setState((prevState) => ({
@@ -290,7 +289,6 @@ export default class NonExposureEdit extends Component {
                       }
                     />
                   </div>
-                  <span style={{ marginRight: '1em' }}>No</span>
                   <span className={styles.levelIcon}>{this.getIconLevel(this.state.logEdit.level)}</span>
                 </span>
                 <span className={styles.label}>Systems</span>
