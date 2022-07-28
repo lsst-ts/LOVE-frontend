@@ -49,7 +49,7 @@ const formatList = (identities) => {
 
 export default class AdminAuthList extends Component {
   static propTypes = {
-    authListRequests: PropTypes.arrayOf(PropTypes.object).isRequired,
+    authListRequests: PropTypes.arrayOf(PropTypes.object),
     authlistAdminPermission: PropTypes.bool,
     pollingTimeout: PropTypes.number.isRequired,
   };
@@ -345,9 +345,9 @@ export default class AdminAuthList extends Component {
     const nextUpdate = lastUpdate
       ? lastUpdate + (this.props.pollingTimeout ? this.props.pollingTimeout * 1000 : DEFAULT_POLLING_TIMEOUT)
       : null;
-    let leftToUpdate = nextUpdate ? Math.round(Moment(nextUpdate).diff(Date.now()) / 1000) : 'unknown';
+    let leftToUpdate = nextUpdate ? Math.floor(Moment(nextUpdate).diff(Date.now()) / 1000) : 'unknown';
     if (leftToUpdate <= 0) {
-      leftToUpdate = '0 seconds';
+      leftToUpdate = `${this.props.pollingTimeout ? this.props.pollingTimeout : DEFAULT_POLLING_TIMEOUT} seconds`;
     } else if (leftToUpdate > 0 && leftToUpdate !== 1) {
       leftToUpdate = `${leftToUpdate} seconds`;
     } else if (leftToUpdate === 1) {

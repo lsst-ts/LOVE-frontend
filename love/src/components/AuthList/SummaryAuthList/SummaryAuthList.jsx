@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import lodash from 'lodash';
+import isEqual from 'lodash/isEqual';
 import ManagerInterface, { getUserHost } from 'Utils';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
@@ -64,7 +65,7 @@ export default class SummaryAuthList extends Component {
     if (this.props.authlistState) {
       const userOptions = new Set();
       Object.entries(this.props.authlistState).forEach(([, val]) => {
-        val.authorizedUsers?.split(',').forEach((x) => userOptions.add(x));
+        val?.[0]?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
@@ -75,7 +76,7 @@ export default class SummaryAuthList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (JSON.stringify(prevProps.subscriptions) !== JSON.stringify(this.props.subscriptions)) {
+    if (!isEqual(prevProps.subscriptions, this.props.subscriptions)) {
       const subscribedCSCs = this.props.subscriptions.map((x) => {
         const tokens = x.split('-');
         return `${tokens[1]}:${tokens[2]}`;
@@ -83,17 +84,17 @@ export default class SummaryAuthList extends Component {
       this.setState({ cscOptions: ['All', ...subscribedCSCs] });
     }
 
-    if (JSON.stringify(prevProps.authlistState) !== JSON.stringify(this.props.authlistState)) {
+    if (!isEqual(prevProps.authlistState, this.props.authlistState)) {
       const userOptions = new Set();
       Object.entries(this.props.authlistState).forEach(([, val]) => {
-        val?.authorizedUsers?.split(',').forEach((x) => userOptions.add(x));
+        val?.[0]?.authorizedUsers?.value.split(',').forEach((x) => userOptions.add(x));
       });
       this.setState({ userOptions: ['All', ...Array.from(userOptions)] });
     }
   }
 
   formatList = (target, identities, type) => {
-    if (identities === '') {
+    if (!identities || identities === '') {
       return <span>None</span>;
     }
 
@@ -179,50 +180,99 @@ export default class SummaryAuthList extends Component {
     }
   };
 
-  restoreToDefault(...args) {
+  restoreToDefault(cscToChange) {
     const { user, authlistState } = this.props;
-    for (let i = 0; i < args.length; i++) {
-      const selectedCSC = args[i];
-      const authlist = Object.entries(authlistState).find(([key]) => {
-        const keyTokens = key.split('-');
-        const csc = `${keyTokens[1]}:${keyTokens[2]}`;
-        return csc === selectedCSC;
-      })[1];
+    const authlist = Object.entries(authlistState).find(([key]) => {
+      const keyTokens = key.split('-');
+      const csc = `${keyTokens[1]}:${keyTokens[2]}`;
+      return csc === cscToChange;
+    })[1]?.[0];
+    if (!authlist) return;
 
-      const cscsToChange = selectedCSC;
-      const authorizedUsers = authlist.authorizedUsers
-        .split(',')
-        .map((x) => `-${x}`)
-        .join(',');
-      const nonAuthorizedCSCs = authlist.nonAuthorizedCSCs
-        .split(',')
-        .map((x) => `-${x}`)
-        .join(',');
+    const authorizedUsers =
+      authlist.authorizedUsers.value !== ''
+        ? authlist.authorizedUsers.value
+            .split(',')
+            .map((x) => `-${x}`)
+            .join(',')
+        : '';
+    const nonAuthorizedCSCs =
+      authlist.nonAuthorizedCSCs.value !== ''
+        ? authlist.nonAuthorizedCSCs.value
+            .split(',')
+            .map((x) => `-${x}`)
+            .join(',')
+        : '';
 
-      let modalText = '';
-      modalText = (
-        <span>
-          You are about to empty the authorization list of <b>{cscsToChange}</b>.<br></br>
-          <b>This action will be resolved automatically and won't need verification</b>
-          <br></br>
-          Are you sure?
-        </span>
-      );
+    let modalText = '';
+    modalText = (
+      <span>
+        You are about to empty the authorization list of <b>{cscToChange}</b>.<br></br>
+        <b>This action will be resolved automatically and won't need verification</b>
+        <br></br>
+        Are you sure?
+      </span>
+    );
 
-      this.setState({
-        removeIdentityRequest: () => {
-          ManagerInterface.requestAuthListAuthorization(user, cscsToChange, authorizedUsers, nonAuthorizedCSCs).then(
-            () => {
-              this.setState({ removeIdentityModalShown: false });
-            },
-          );
-        },
-      });
-      this.setState({
-        removeIdentityModalShown: true,
-        removeIdentityModalText: modalText,
-      });
-    }
+    this.setState({
+      removeIdentityModalShown: true,
+      removeIdentityModalText: modalText,
+      removeIdentityRequest: () => {
+        ManagerInterface.requestAuthListAuthorization(user, cscToChange, authorizedUsers, nonAuthorizedCSCs).then(
+          () => {
+            this.setState({ removeIdentityModalShown: false });
+          },
+        );
+      },
+    });
+  }
+
+  restoreAllToDefault() {
+    const { user, authlistState } = this.props;
+    const requests = [];
+    Object.entries(authlistState).forEach(([key, val]) => {
+      if (!val) return;
+
+      const keyTokens = key.split('-');
+      const csc = `${keyTokens[1]}:${keyTokens[2]}`;
+
+      const authorizedUsers =
+        val[0].authorizedUsers.value !== ''
+          ? val[0].authorizedUsers.value
+              .split(',')
+              .map((x) => `-${x}`)
+              .join(',')
+          : '';
+
+      const nonAuthorizedCSCs =
+        val[0].nonAuthorizedCSCs.value !== ''
+          ? val[0].nonAuthorizedCSCs.value
+              .split(',')
+              .map((x) => `-${x}`)
+              .join(',')
+          : '';
+
+      requests.push(() => ManagerInterface.requestAuthListAuthorization(user, csc, authorizedUsers, nonAuthorizedCSCs));
+    });
+
+    let modalText = '';
+    modalText = (
+      <span>
+        You are about to empty <b>all</b> the authorization lists.<br></br>
+        <b>This action will be resolved automatically and won't need verification</b>
+        <br></br>
+        Are you sure?
+      </span>
+    );
+
+    this.setState({
+      removeIdentityModalShown: true,
+      removeIdentityModalText: modalText,
+      removeIdentityRequest: () => {
+        requests.forEach((request) => request());
+        this.setState({ removeIdentityModalShown: false });
+      },
+    });
   }
 
   HEADERS = [
@@ -234,13 +284,13 @@ export default class SummaryAuthList extends Component {
     {
       field: 'authorizedUsers',
       title: 'Authorized users',
-      render: (cell, row) => this.formatList(row.csc, cell, 'User'),
+      render: (cell, row) => this.formatList(row.csc, cell.value, 'User'),
       className: styles.authlistIdentityColum,
     },
     {
       field: 'nonAuthorizedCSCs',
       title: 'Unauthorized CSCs',
-      render: (cell, row) => this.formatList(row.csc, cell, 'CSC'),
+      render: (cell, row) => this.formatList(row.csc, cell.value, 'CSC'),
       className: styles.authlistIdentityColum,
     },
     {
@@ -339,7 +389,7 @@ export default class SummaryAuthList extends Component {
               <div>
                 <span className={styles.wrongInput}>
                   {this.state.wrong_input_users
-                    ? 'Please insert items separated by commas with the required format'
+                    ? 'Please insert items separated by commas with the required format: +/-<user>@<host>'
                     : ''}
                 </span>
               </div>
@@ -353,7 +403,7 @@ export default class SummaryAuthList extends Component {
               <div>
                 <span className={styles.wrongInput}>
                   {this.state.wrong_input_cscs
-                    ? 'Please insert items separated by commas with the required format'
+                    ? 'Please insert items separated by commas with the required format: +/-<CSC>:<salindex>'
                     : ''}
                 </span>
               </div>
@@ -446,17 +496,19 @@ export default class SummaryAuthList extends Component {
 
     const tableData = Object.entries(authlistState).map(([key, val]) => {
       const keyTokens = key.split('-');
-      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...val };
+      return { csc: `${keyTokens[1]}:${keyTokens[2]}`, ...(val?.[0] ?? {}) };
     });
 
     const filteredByData = tableData.filter(
       (row) =>
-        (row.authorizedUsers && row.authorizedUsers !== '') || (row.nonAuthorizedCSCs && row.nonAuthorizedCSCs !== ''),
+        (row.authorizedUsers && row.authorizedUsers?.value !== '') ||
+        (row.nonAuthorizedCSCs && row.nonAuthorizedCSCs.value !== ''),
     );
 
     const filteredTableData = filteredByData.filter((row) => {
       if (selectedCSC === 'All' && selectedUser === 'All') return true;
-      if (selectedCSC === 'All' && selectedUser !== 'All' && row.authorizedUsers.includes(selectedUser)) return true;
+      if (selectedCSC === 'All' && selectedUser !== 'All' && row.authorizedUsers.value.includes(selectedUser))
+        return true;
       if (selectedCSC !== 'All' && row.csc.includes(selectedCSC)) return true;
       return false;
     });
@@ -485,11 +537,7 @@ export default class SummaryAuthList extends Component {
             className={styles.select}
           />
           <Input placeholder="Filter by keywords" onChange={(e) => this.setState({ keywords: e.target.value })} />
-          <Button
-            status="default"
-            disabled={!authlistAdminPermission}
-            onClick={() => this.restoreToDefault(...filteredByKeywordsTableData.map((x) => x.csc))}
-          >
+          <Button status="default" disabled={!authlistAdminPermission} onClick={() => this.restoreAllToDefault()}>
             Restore all CSCs to default
           </Button>
         </div>
