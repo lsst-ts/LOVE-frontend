@@ -191,6 +191,8 @@ export default class ExposureAdd extends Component {
     const selectedCommentType = this.state.newMessage?.level
       ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
       : null;
+
+    const sortedObservationIds = [...(this.state.observationIds ?? [])].reverse();
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -302,7 +304,7 @@ export default class ExposureAdd extends Component {
                     <span className={[styles.label, styles.paddingTop].join(' ')}>Obs. Id</span>
                     <span className={styles.value} style={{ flex: 1 }}>
                       <Multiselect
-                        options={this.state.observationIds}
+                        options={sortedObservationIds}
                         onSelect={(selectedOptions) => {
                           this.setState((prevState) => ({
                             newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
