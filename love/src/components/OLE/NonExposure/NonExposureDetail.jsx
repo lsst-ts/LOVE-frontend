@@ -92,7 +92,7 @@ export default class NonExposureDetail extends Component {
   }
 
   getIconLevel(level) {
-    const icon = iconLevelOLE[level] ? iconLevelOLE[level] : undefined;
+    const icon = iconLevelOLE[level >= 100 ? 'urgent' : 'info'];
     return icon;
   }
 
@@ -124,7 +124,7 @@ export default class NonExposureDetail extends Component {
           <div className={styles.header}>
             <span className={styles.bold}>
               {/* #{logDetail.id} - <span className={styles.levelIcon}>{this.getIconLevel(logLevel)}</span> {logLevel} */}
-              #{logDetail.id} <span>{logDetail.level >= 100 ? '- URGENT' : ''}</span>
+              #{logDetail.id} <span className={styles.levelIcon}>{this.getIconLevel(logDetail.level)}</span>
             </span>
             {linkJira ? (
               <span>
@@ -161,9 +161,7 @@ export default class NonExposureDetail extends Component {
           <div className={styles.content}>
             <div className={styles.detail}>
               <span className={styles.label}>Time of Incident</span>
-              <span className={styles.value}>
-                {logDetail.date_begin} - {logDetail.date_end}
-              </span>
+              <span className={styles.value}>{`${logDetail.date_begin} - ${logDetail.date_end}`}</span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
               <span className={styles.label}>System</span>
