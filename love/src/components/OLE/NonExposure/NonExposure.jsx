@@ -106,9 +106,10 @@ export default class NonExposure extends Component {
     return [
       {
         field: 'date_added',
-        title: 'Timestamp',
+        title: 'Timestamp (utc)',
         type: 'timestamp',
         className: styles.tableHead,
+        render: (value) => value.split('.')[0],
       },
       {
         field: 'user_id',
@@ -124,10 +125,10 @@ export default class NonExposure extends Component {
       },
       {
         field: null,
-        title: 'Time of Incident',
+        title: 'Time of Incident (utc)',
         type: 'string',
         className: styles.tableHead,
-        render: (_, row) => `${row.date_begin} - ${row.date_end}`,
+        render: (_, row) => `${row.date_begin?.split('.')[0]} - ${row.date_end?.split('.')[0]}`,
       },
       {
         field: 'time_lost',
@@ -229,16 +230,6 @@ export default class NonExposure extends Component {
 
   componentDidMount() {
     this.queryNarrativeLogs();
-    this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    if (
-      prevProps.selectedDateStart !== this.props.selectedDateStart ||
-      prevProps.selectedDateEnd !== this.props.selectedDateEnd
-    ) {
-      this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
-    }
   }
 
   render() {
@@ -249,8 +240,8 @@ export default class NonExposure extends Component {
     let filteredData = this.state.logs ?? [];
 
     // Filter by date range
-    const range = this.state.range;
-    filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added)));
+    const range = moment.range(this.props.selectedDateStart, this.props.selectedDateEnd);
+    filteredData = filteredData.filter((log) => range.contains(Moment(log.date_added + 'Z'))); // Need to add Z so moment identifies date as UTC
 
     // Filter by type
     filteredData =
