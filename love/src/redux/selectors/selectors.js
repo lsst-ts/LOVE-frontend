@@ -935,6 +935,17 @@ export const getMirrorCoversMotionState = (state) => {
   };
 };
 
+// GIS
+export const getRawStatus = (state) => {
+  const subscriptions = ['event-GIS-0-rawStatus'];
+  const interlocksData = getStreamsData(state, subscriptions);
+  return {
+    interlocksStatus: interlocksData['event-GIS-0-rawStatus']
+      ? interlocksData['event-GIS-0-rawStatus'][0].rawStatus.value
+      : [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  };
+};
+
 /**
  * Returns events related to the LATISS instrument in the state.
  *

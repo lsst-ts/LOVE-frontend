@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import GIS from './GIS';
 import { addGroup, removeGroup } from 'redux/actions/ws';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
+import { getRawStatus } from 'redux/selectors';
 
 export const schema = {
   description: 'Summary view of GIS. Contains general information about Global Interlock System',
@@ -31,11 +32,14 @@ const GISContainer = ({ subscribeToStream, unsubscribeToStream, ...props }) => {
 };
 
 const mapStateToProps = (state) => {
-  return {};
+  const rawStatus = getRawStatus(state);
+  return {
+    ...rawStatus,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {
-  const subscriptions = [];
+  const subscriptions = [`event-GIS-0-rawStatus`];
   return {
     subscriptions,
     subscribeToStream: () => {
