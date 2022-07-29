@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './GIS.module.css';
-import { signals, effects } from '../../Config';
+import { signals, effects, signalIndexes } from '../../Config';
 import GISContainerSignals from './GISContainerDetectionSignals';
 import GISContainerEffects from './GISContainerEffectsActuation';
 import { result } from 'lodash';
@@ -67,6 +67,7 @@ export default class GIS extends Component {
         <GISContainerSignals
           signals={flattenedSignals}
           alertSignals={alertSignals}
+          signalIndexes={signalIndexes}
           onHoverIn={(effects) => this.signalOnEnter(effects)}
           onHoverOut={() => this.signalOnLeave()}
         />

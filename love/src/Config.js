@@ -1377,13 +1377,13 @@ export const signals = {
       'stoRearDoorsDrives',
     ],
     ccwSafetyDevice: ['stoRotatorCam'],
-    cameraRotator: ['cameraRotatorPinInserted'],
+    cameraRotatorPinInserted: ['cameraRotatorPinInserted'],
     manLiftNotParked: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoCraneDrives'],
   },
   domeInterlockSystem: {
     loockingPinRetractedOrRearDoorLouversNotClosed: ['stoLiftAtToTopFloor'],
     rearDoorNotClosed: ['stoPlatformLift'],
-    etpbs: [
+    domeEtpbs: [
       'stoOthersDrives',
       'stoElAndAzDrivesAndEngageTheBrakes',
       'stoCCWDrives',
@@ -1412,7 +1412,7 @@ export const signals = {
   },
   tmaInterlockSystem: {
     breaksNotEngaged: ['stoCraneDrives'],
-    etpbs: [
+    tmaEtpbs: [
       'stoDrivesShutterDoorsAnsWindscreen',
       'stoCraneDrives',
       'stoRearDoorsDrives',
@@ -1455,4 +1455,26 @@ export const effects = {
   m1m3SupportSystem: ['earthquakeStoActuators', 'emergencyStoActuators'],
   laserController: ['laserCutOffShutterClosed'],
   manLift: ['stoFunctionDrives'],
+};
+
+export const signalIndexes = {
+  fireSignal: [23, 0],
+  catastrophicEarthquakeSignal: [23, 1],
+  internalFailure: [23, 2],
+  emergencyStop: [23, 4],
+  ccwSafetyDevice: [23, 7],
+  cameraRotatorPinInserted: [23, 13],
+  manLiftNotParked: [24, 2],
+  loockingPinRetractedOrRearDoorLouversNotClosed: [23, 9],
+  rearDoorNotClosed: [23, 10],
+  etpbs: [23, 11],
+  craneBridgeLimitSwitchisReleasedFromParkedPosition: [23, 12],
+  unauthorizedPierAccess: [23, 4],
+  unauthorizedDomeAccess: [23, 5],
+  aboveUtilityFloor: [23, 14],
+  notParkedAtTheTelescopeLevel: [23, 15],
+  breaksNotEngaged: [23, 6],
+  etpbs: [23, 8], //hay 2 con el mismo nombre D:
+  failedWatchdogOrLossCommunication: [24, 0],
+  interlock: [24, 1],
 };
