@@ -36,7 +36,7 @@
 
 .signal {
   padding: 1em;
-  border: 1px solid var(--second-senary-background-dimmed-color);
+  border: 1px solid var(--tertiary-background-color);
   border-radius: 0.5em;
   margin-bottom: 0.5em;
   margin-right: 0.5em;
@@ -59,7 +59,7 @@
 .alert {
   background-color: #3c2b20;
   border-color: #3c2b20;
-  color: red;
+  color: #dd5602;
 }
 
 .alertSystem {
