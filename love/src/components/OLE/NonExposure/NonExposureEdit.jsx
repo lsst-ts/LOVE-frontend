@@ -13,7 +13,7 @@ import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import { CSCSummaryHierarchy, defaultCSCList, LOG_TYPE_OPTIONS } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
-import { iconLevelOLE } from 'Config';
+import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
 import styles from './NonExposure.module.css';
@@ -197,8 +197,8 @@ export default class NonExposureEdit extends Component {
     const { confirmationModalShown, confirmationModalText } = this.state;
 
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
-    const systemOptions = Object.keys(CSCSummaryHierarchy);
-    const subsystemOptions = Object.keys(CSCSummaryHierarchy);
+    const systemOptions = LSST_SYSTEMS;
+    const subsystemOptions = LSST_SUBSYSTEMS;
     // const cscsOptions = this.state.logEdit?.subsystem
     //   ? Array.from(
     //       new Set(
