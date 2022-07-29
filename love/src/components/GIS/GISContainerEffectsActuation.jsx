@@ -17,9 +17,13 @@ export default class GISContainerEffectsActuation extends Component {
     return (
       <div className={styles.div2}>
         <h3 className={styles.h3}>Effects/Actuation</h3>
-        {/* <div className={[styles.signal, activeEffects.includes("fireIndication") ? '' : styles.inactive].join(" ")}>fireIndication</div> */}
         {this.props.effects.map(([system, effects]) => (
-          <div className={styles.system}>
+          <div
+            className={[
+              styles.system,
+              effects.some((effect) => redEffects.includes(effect)) ? styles.alertSystem : '',
+            ].join(' ')}
+          >
             <h3>{system}</h3>
             {effects.map((effect) => (
               <div
