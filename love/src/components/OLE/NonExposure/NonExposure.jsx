@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface from 'Utils';
-import { iconLevelOLE } from 'Config';
+import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
 import { formatSecondsToDigital, openInNewTab } from 'Utils';
 import { getLinkJira, getFileURL } from 'Utils';
 import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
@@ -106,7 +106,7 @@ export default class NonExposure extends Component {
     return [
       {
         field: 'date_added',
-        title: 'Timestamp (utc)',
+        title: 'Timestamp (UTC)',
         type: 'timestamp',
         className: styles.tableHead,
         render: (value) => value.split('.')[0],
@@ -125,7 +125,7 @@ export default class NonExposure extends Component {
       },
       {
         field: null,
-        title: 'Time of Incident (utc)',
+        title: 'Time of Incident (UTC)',
         type: 'string',
         className: styles.tableHead,
         render: (_, row) => `${row.date_begin?.split('.')[0]} - ${row.date_end?.split('.')[0]}`,
@@ -272,7 +272,7 @@ export default class NonExposure extends Component {
     ];
     const selectedCommentType = this.props.selectedCommentType;
 
-    const systemOptions = [{ label: 'All systems', value: 'all' }, ...Object.keys(CSCSummaryHierarchy)];
+    const systemOptions = [{ label: 'All systems', value: 'all' }, ...LSST_SYSTEMS];
     const selectedSystem = this.props.selectedSystem;
 
     const selectedObsTimeLoss = this.props.selectedObsTimeLoss;
