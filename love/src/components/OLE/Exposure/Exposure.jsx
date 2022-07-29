@@ -114,13 +114,14 @@ export default class Exposure extends Component {
       },
       {
         field: 'timespan_end',
-        title: 'Date & Time (TAI)',
+        title: 'Date & Time (UTC)',
         type: 'timestamp',
         className: styles.tableHead,
+        render: (value) => value.split('.')[0],
       },
       {
         field: 'duration',
-        title: 'Duration [sec]',
+        title: 'Duration (sec)',
         type: 'timestamp',
         className: styles.tableHead,
         render: (_, row) => {
