@@ -38,6 +38,38 @@ export const iconLevelOLE = {
   urgent: <ErrorIcon />,
 };
 
+export const LSST_SYSTEMS = [
+  'Auxtel',
+  'MT',
+  'ComCam',
+  'LSST Camera',
+  'LATISS',
+  'Computers and Networking',
+  'Observatory Software Tools',
+  'Observing',
+  'Site Performance and Monitoring',
+  'Support Building and Facilities',
+  'Telescope Facility',
+  'Telescope Performance and Monitoring',
+  'Other',
+];
+
+export const LSST_SUBSYSTEMS = [
+  'Hardware',
+  'Software',
+  'Network',
+  'Phone System',
+  'Mechanical',
+  'Electrical',
+  'DM',
+  'Scheduler',
+  'All-sky camera',
+  'Weather Monitor',
+  'Site cameras',
+  'LOVE',
+  'Calibration',
+];
+
 // eslint-disable-next-line
 export const CSCSummaryHierarchy = {
   'Auxiliary Telescope': {
