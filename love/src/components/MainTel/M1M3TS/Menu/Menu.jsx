@@ -6,11 +6,17 @@ import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 
 export default class Menu extends Component {
   static propTypes = {
+    /** Define wether or not the button is actived for show the ids of FCU. **/
     showFcuIDs: PropTypes.bool,
+    /** Define wether or not the button is actived for show the differential temperature or absolute. **/
     showDifferentialTemp: PropTypes.bool,
+    /** Define wether or not the button is actived for show the warnings. **/
     showWarnings: PropTypes.bool,
+    /** Function for interaction toggle of ShowFCUIDs out of component. */
     toggleFcuIDs: PropTypes.func,
+    /** Function for interaction toggle of ShowDifferentialTemp out of component. */
     toggleTemperature: PropTypes.func,
+    /** Function for interaction toggle of ShowWarnings out of component. */
     toggleWarnings: PropTypes.func,
       };
   static defaultProps = {

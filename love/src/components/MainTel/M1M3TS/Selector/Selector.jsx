@@ -8,13 +8,21 @@ import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 
 export default class Selector extends Component {
   static propTypes = {
+    /** Array for the identify of the position in array with an index */
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    /** Id of sensor selected */
     selectedSensor: PropTypes.number,
+    /** Function for the notify of select sensor. */
     sensorSelect: PropTypes.func,
+    /** Define wether or not the button is actived for show the ids of FCU. **/
     showFcuIDs: PropTypes.bool,
+    /** Define wether or not the button is actived for show the differential temperature or absolute. **/
     showDifferentialTemp: PropTypes.bool,
+    /** Define wether or not the button is actived for show the warnings. **/
     showWarnings: PropTypes.bool,
+    /** Thermal status response data. Absolute temperature. */
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data.  Differential temperature. */
     differentialTemperature: PropTypes.arrayOf(PropTypes.number),
     /** Number of the minimum temperature limit, used for the gradiant color */
     minTemperatureLimit: PropTypes.number,

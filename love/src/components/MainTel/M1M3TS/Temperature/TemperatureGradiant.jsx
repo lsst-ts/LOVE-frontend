@@ -2,27 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import { defaultNumberFormatter } from 'Utils';
-import Title from 'components/GeneralPurpose/SummaryPanel/Title';
-import Label from 'components/GeneralPurpose/SummaryPanel/Label';
-import Value from 'components/GeneralPurpose/SummaryPanel/Value';
-
 import styles from './TemperatureGradiant.module.css';
 
 export default class TemperatureGradiant extends Component {
   static propTypes = {
     /** Array for the identify of the position in array with an index */
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
-
+    /** Thermal status response data. Absolute temperature. */
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data.  Differential temperature. */
     differentialTemperature: PropTypes.arrayOf(PropTypes.number),
-
+    /** Id of sensor selected */
     selectedId: PropTypes.number,
+    /** Applied setpoint. */
     setpoint: PropTypes.number,
-
     /** Number of the minimum force limit, used for the gradiant color */
     minTemperatureLimit: PropTypes.number,
     /** Number of the maximum force limit, used for the gradiant color */
     maxTemperatureLimit: PropTypes.number,
+    /** Define wether or not the button is actived for show the differential temperature or absolute. **/
     showDifferentialTemp: PropTypes.bool,
   }
 
@@ -30,11 +28,8 @@ export default class TemperatureGradiant extends Component {
     sensorReferenceId: [],
     absoluteTemperature: [],
     differentialTemperature: [],
-
     selectedId: undefined,
-
     setpoint: 18.9,
-
     minTemperatureLimit: -6000,
     maxTemperatureLimit: 6000,
     showDifferentialTemp: true,

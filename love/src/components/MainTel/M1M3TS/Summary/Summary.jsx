@@ -13,9 +13,9 @@ export default class Summary extends Component {
   static propTypes = {
     /** Current summary state of the CSC. High level state machine state identifier. */
     summaryState: PropTypes.number,
-    /**  */
+    /** True if Fan Coils/Heaters are on. */
     fanHeaters: PropTypes.bool,
-    /**  */
+    /** True if Coolant Pump is on. */
     coolantPump: PropTypes.bool,
   };
 

@@ -14,12 +14,19 @@ import { m1m3tsEnabledStateMap, m1m3tsEnabledStateToStyle, MessagesWarningM1M3Th
 
 export default class Info extends Component {
   static propTypes = {
+    /** Array for the identify of the position in array with an index */
     sensorReferenceId: PropTypes.arrayOf(PropTypes.number),
+    /** Id of sensor selected */
     selectedSensor: PropTypes.number,
+    /** True if this fan unit is enabled. */
     enabled: PropTypes.arrayOf(PropTypes.bool),
+    /** Thermal status response data. Absolute temperature. */
     absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data.  Differential temperature. */
     differentialTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data.  Measured fan RPM-0 to 2550 RPM. */
     fanRPM: PropTypes.arrayOf(PropTypes.number),
+    /** Object with boolean arrays for indicates of warning. */
     thermalWarnings: PropTypes.object,
   };
 

@@ -7,16 +7,18 @@ import message from 'components/ScriptQueue/QueueMessage';
 
 export default class Mixing extends Component {
   static propTypes = {
-    commanded: PropTypes.number,
-    measured: PropTypes.number,
+    /** Value of valve position for see in progress bar. */
+    value: PropTypes.number,
+    /** Value of limit position for see in progress bar. (Not is using in this case). */
+    limit: PropTypes.number,
   };
   static defaultProps = {
-    commanded: 0.5,
-    measured: 0.5,
+    value: 0.5,
+    limit: 0.5,
   };
 
   render() {
-    const {commanded, measured} = this.props;
+    const {value, limit} = this.props;
     return (
       <>
       <div className={styles.containerTop}>
@@ -25,7 +27,7 @@ export default class Mixing extends Component {
       <div>
         <ProgressBar
           /* targetValue={100} */
-          completed={commanded}
+          completed={value}
           height={36}
           hideCompleted={true}
         />
@@ -33,12 +35,12 @@ export default class Mixing extends Component {
       <div className={styles.containerBottom}>
         <span className={styles.labelValue } style={{ left: 0 }}>
           <span className={styles.label}>Valve Position </span>
-          <span className={styles.value}>{`${defaultNumberFormatter(commanded, 1)}%`}</span>
+          <span className={styles.value}>{`${defaultNumberFormatter(value, 1)}%`}</span>
         </span>
         <span className={styles.labelValue } style={{ right: 0 }}>
         {/*   
           <span className={styles.label}>Measured </span>
-          <span className={styles.value}>{`${defaultNumberFormatter(measured, 1)}%`}</span>
+          <span className={styles.value}>{`${defaultNumberFormatter(limit, 1)}%`}</span>
          */}
         </span>
 

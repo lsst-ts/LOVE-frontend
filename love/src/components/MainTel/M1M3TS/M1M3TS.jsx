@@ -18,13 +18,29 @@ export default class M1M3TS extends Component {
     subscribeToStreams: PropTypes.func,
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
-
     /** Current summary state of the CSC. High level state machine state identifier. */
     summaryState: PropTypes.number,
-
-    /** Number of the minimum force limit, used for the gradiant color */
+    /** True if Fan Coils/Heaters are on. */
+    fanHeaters: PropTypes.bool,
+    /** True if Coolant Pump is on. */
+    coolantPump: PropTypes.bool,
+    /** Applied setpoint. */
+    setpoint: PropTypes.number,
+    /** True if this fan unit is enabled. */
+    enabled: PropTypes.arrayOf(PropTypes.bool),
+    /** Thermal status response data. Absolute temperature. */
+    absoluteTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data.  Differential temperature. */
+    differentialTemperature: PropTypes.arrayOf(PropTypes.number),
+    /** Thermal status response data.  Measured fan RPM-0 to 2550 RPM. */
+    fanRPM: PropTypes.arrayOf(PropTypes.number),
+    /** Object with boolean arrays for indicates of warning. */
+    thermalWarnings: PropTypes.objectOf(PropTypes.arrayOf(PropTypes.bool)),
+    /** Mixing valve measured position. */
+    valvePosition: PropTypes.number,
+    /** Number of the minimum temperature limit, used for the gradiant color */
     minTemperatureLimit: PropTypes.number,
-    /** Number of the maximum force limit, used for the gradiant color */
+    /** Number of the maximum temerature limit, used for the gradiant color */
     maxTemperatureLimit: PropTypes.number,
   }
   static defaultProps = {
@@ -133,7 +149,7 @@ export default class M1M3TS extends Component {
 
         <div className={styles.mixingContainer}>
           <Mixing 
-            commanded={valvePosition}
+            value={valvePosition}
           />
         </div>
 
