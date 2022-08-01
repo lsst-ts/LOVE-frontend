@@ -23,6 +23,7 @@ export default class TemperatureGradiant extends Component {
     minTemperatureLimit: PropTypes.number,
     /** Number of the maximum force limit, used for the gradiant color */
     maxTemperatureLimit: PropTypes.number,
+    showDifferentialTemp: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -36,6 +37,7 @@ export default class TemperatureGradiant extends Component {
 
     minTemperatureLimit: -6000,
     maxTemperatureLimit: 6000,
+    showDifferentialTemp: true,
   }
 
   static COLOURS_INV = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
@@ -138,7 +140,7 @@ export default class TemperatureGradiant extends Component {
   }
 
   setTemperature = (sensor) => {
-    const { minTemperatureLimit, maxTemperatureLimit } = this.props;
+    const { minTemperatureLimit, maxTemperatureLimit, showDifferentialTemp } = this.props;
 
     const svg = d3.select('#color-scale svg');
     const absoluteText = d3.select('#color-scale svg #absolute-text');
@@ -157,19 +159,20 @@ export default class TemperatureGradiant extends Component {
         .append('line')
         .attr('id', 'absolute-line')
         .attr('x1', absoluteTemperatureX)
-        .attr('y1', -10)
+        .attr('y1', -8)
         .attr('x2', absoluteTemperatureX)
-        .attr('y2', 50)
+        .attr('y2', 43)
         .style('stroke', 'white')
-        .style('stroke-width', 3);
+        .style('stroke-width', !showDifferentialTemp ? 5 : 3);
 
       const textAbsolute = svg
         .append('text')
         .attr('id', 'absolute-text')
         .attr('x', absoluteTemperatureX)
         .attr('y', -10)
-        .attr('fill', 'white')
-        .style('font-size', '1em');
+        .attr('fill', !showDifferentialTemp ? 'white': 'var(--base-font-color)')
+        .style('font-size', '1em')
+        /* .style('font-weight', !showDifferentialTemp ? '600' : 'normal'); */
 
       if (absoluteTemperatureX > ((this.state.width * 3) / 4)) {
         textAbsolute.attr('text-anchor', 'end');
@@ -195,19 +198,20 @@ export default class TemperatureGradiant extends Component {
         .append('line')
         .attr('id', 'differential-line')
         .attr('x1', differentialTemperatureX)
-        .attr('y1', -10)
+        .attr('y1', -3)
         .attr('x2', differentialTemperatureX)
-        .attr('y2', 50)
+        .attr('y2', 47)
         .style('stroke', 'white')
-        .style('stroke-width', 3);
+        .style('stroke-width', showDifferentialTemp ? 5 : 3);
 
       const textDifferential = svg
         .append('text')
         .attr('id', 'differential-text')
         .attr('x', differentialTemperatureX)
-        .attr('y', 50)
-        .attr('fill', 'white')
-        .style('font-size', '1em');
+        .attr('y', 52)
+        .attr('fill', showDifferentialTemp ? 'white': 'var(--base-font-color)')
+        .style('font-size', '1em')
+        /* .style('font-weight', showDifferentialTemp ? '600' : 'normal'); */
 
       if (differentialTemperatureX > ((this.state.width * 3) / 4)) {
         textDifferential.attr('text-anchor', 'end');

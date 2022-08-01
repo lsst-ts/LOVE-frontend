@@ -146,6 +146,7 @@ export default class M1M3TS extends Component {
             differentialTemperature={differentialTemperature}
             sensorReferenceId={sensorReferenceId}
             selectedId={this.state.selectedSensor}
+            showDifferentialTemp={this.state.showDifferentialTemp}
           />
         </div>
 
