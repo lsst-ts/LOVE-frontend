@@ -135,7 +135,7 @@ export default class TemperatureGradiant extends Component {
   }
 
   setTemperature = (sensor) => {
-    const { minTemperatureLimit, maxTemperatureLimit, showDifferentialTemp } = this.props;
+    const { minTemperatureLimit, maxTemperatureLimit, setpoint, showDifferentialTemp } = this.props;
 
     const svg = d3.select('#color-scale svg');
     const absoluteText = d3.select('#color-scale svg #absolute-text');
@@ -216,7 +216,29 @@ export default class TemperatureGradiant extends Component {
       textDifferential.append('tspan').attr('x', differentialTemperatureX).attr('y', 75).text('Differential');
       textDifferential.append('tspan').attr('x', differentialTemperatureX).attr('y', 90)
         .text(`${sensor.differential} °C`);
+    }
+
+    const setpointLine = d3.select('#color-scale svg #setpoint-line');
+
+    if (setpointLine) {
+      setpointLine.remove();
+    }
+
+    if (sensor.id !== undefined) {
+      const setpointTemperatureX = TemperatureGradiant.getGradiantPositionX(setpoint,
+        minTemperatureLimit, maxTemperatureLimit, this.state.width);
+      svg
+        .append('line')
+        .attr('id', 'setpoint-line')
+        .attr('x1', setpointTemperatureX)
+        .attr('y1', -5)
+        .attr('x2', setpointTemperatureX)
+        .attr('y2', 45)
+        .style('stroke', 'white')
+        .style('stroke-width', 3)
+        .style('stroke-dasharray', 4)
     } 
+
   }
 
   render() {

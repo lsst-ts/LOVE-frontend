@@ -56,3 +56,10 @@
   margin-bottom: 1em;
   grid-template-columns: 1fr 1.2fr;
 }
+
+.setpointLine {
+  stroke: white;
+  stroke-width: 2px;
+  stroke-dasharray: 4px;
+  stroke-opacity: 0.5px;
+}
