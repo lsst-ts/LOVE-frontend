@@ -28,7 +28,7 @@ const GISContainer = ({ subscribeToStream, unsubscribeToStream, ...props }) => {
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
   }
-  return <GIS subscribeToStream={subscribeToStream} unsubscribeToStream={unsubscribeToStream} />;
+  return <GIS subscribeToStream={subscribeToStream} unsubscribeToStream={unsubscribeToStream} {...props} />;
 };
 
 const mapStateToProps = (state) => {

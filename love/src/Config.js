@@ -1383,19 +1383,19 @@ export const signals = {
   domeInterlockSystem: {
     loockingPinRetractedOrRearDoorLouversNotClosed: ['stoLiftAtToTopFloor'],
     rearDoorNotClosed: ['stoPlatformLift'],
-    domeEtpbs: [
-      'stoOthersDrives',
-      'stoElAndAzDrivesAndEngageTheBrakes',
-      'stoCCWDrives',
-      'stoHexapodsM2',
-      'stoActuatorsM2',
-      'stoRotatorCam',
-      'stoHexapodsCam',
-      'stoPlatformLift',
-      'earthquakeStoActuators',
-      'laserCutOffShutterClosed',
-      'stoFunctionDrives',
-    ],
+    // etpbs: [
+    //   'stoOthersDrives',
+    //   'stoElAndAzDrivesAndEngageTheBrakes',
+    //   'stoCCWDrives',
+    //   'stoHexapodsM2',
+    //   'stoActuatorsM2',
+    //   'stoRotatorCam',
+    //   'stoHexapodsCam',
+    //   'stoPlatformLift',
+    //   'earthquakeStoActuators',
+    //   'laserCutOffShutterClosed',
+    //   'stoFunctionDrives',
+    // ],
     craneBridgeLimitSwitchisReleasedFromParkedPosition: ['stoElAndAzDrivesAndEngageTheBrakes', 'stoFunctionDrives'],
   },
   accessControlSystem: {
@@ -1412,19 +1412,19 @@ export const signals = {
   },
   tmaInterlockSystem: {
     breaksNotEngaged: ['stoCraneDrives'],
-    tmaEtpbs: [
-      'stoDrivesShutterDoorsAnsWindscreen',
-      'stoCraneDrives',
-      'stoRearDoorsDrives',
-      'stoDrivesLouversAndLockingPin',
-      'stoAzDrivesEngageBrakes',
-      'stoCCWDrivesM2',
-      'stoHexapodsM2',
-      'stoPlatformLift',
-      'emergencyStoActuators',
-      'laserCutOffShutterClosed',
-      'stoFunctionDrives',
-    ],
+    // etpbs: [
+    //   'stoDrivesShutterDoorsAnsWindscreen',
+    //   'stoCraneDrives',
+    //   'stoRearDoorsDrives',
+    //   'stoDrivesLouversAndLockingPin',
+    //   'stoAzDrivesEngageBrakes',
+    //   'stoCCWDrivesM2',
+    //   'stoHexapodsM2',
+    //   'stoPlatformLift',
+    //   'emergencyStoActuators',
+    //   'laserCutOffShutterClosed',
+    //   'stoFunctionDrives',
+    // ],
   },
   mcs: {
     failedWatchdogOrLossCommunication: ['stoRotatorCam', 'stoHexapodsCam'],
@@ -1457,7 +1457,7 @@ export const effects = {
   manLift: ['stoFunctionDrives'],
 };
 
-export const signalIndexes = {
+export const alertSignalIndexes = {
   fireSignal: [23, 0],
   catastrophicEarthquakeSignal: [23, 1],
   internalFailure: [23, 2],
@@ -1467,14 +1467,14 @@ export const signalIndexes = {
   manLiftNotParked: [24, 2],
   loockingPinRetractedOrRearDoorLouversNotClosed: [23, 9],
   rearDoorNotClosed: [23, 10],
-  etpbs: [23, 11],
+  // etpbs: [23, 11],
   craneBridgeLimitSwitchisReleasedFromParkedPosition: [23, 12],
   unauthorizedPierAccess: [23, 4],
   unauthorizedDomeAccess: [23, 5],
   aboveUtilityFloor: [23, 14],
   notParkedAtTheTelescopeLevel: [23, 15],
   breaksNotEngaged: [23, 6],
-  etpbs: [23, 8], //hay 2 con el mismo nombre D:
+  // etpbs: [23, 8], //hay 2 con el mismo nombre D:
   failedWatchdogOrLossCommunication: [24, 0],
   interlock: [24, 1],
 };
