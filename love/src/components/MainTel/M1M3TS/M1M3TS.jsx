@@ -44,6 +44,16 @@ export default class M1M3TS extends Component {
     maxTemperatureLimit: PropTypes.number,
   }
   static defaultProps = {
+    summaryState: 1,
+    fanHeaters: false,
+    coolantPump: false,
+    setpoint: 0,
+    enabled: [],
+    absoluteTemperature: [],
+    differentialTemperature: [],
+    fanRPM: [],
+    thermalWarnings: [],
+    valvePosition: 0,
     minTemperatureLimit: 0,
     maxTemperatureLimit: 1000,
   }
