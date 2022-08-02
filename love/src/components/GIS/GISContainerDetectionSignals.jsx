@@ -33,15 +33,16 @@ export default class GISContainerDetectionSignals extends Component {
             >
               <h3>{system}</h3>
               {Object.keys(signals).map((signal) => {
-                let systemIndex = alertSignalIndexes[signal][0];
-                let bitIndex = alertSignalIndexes[signal][1];
-                let bitArray = rawStatus[systemIndex].toString(2);
-                let activeAlert = bitArray[bitIndex] === '1';
+                // let systemIndex = alertSignalIndexes[signal][0];
+                // let bitIndex = alertSignalIndexes[signal][1];
+                // let bitArray = rawStatus[systemIndex].toString(2);
+                // let activeAlert = bitArray[bitIndex] === '1';
                 return (
                   <div
                     onMouseEnter={() => this.props.onHoverIn(signals[signal])}
                     onMouseLeave={() => this.props.onHoverOut()}
-                    className={[styles.signal, activeAlert ? styles.alert : styles.signal].join(' ')}
+                    // className={[styles.signal, activeAlert ? styles.alert : styles.signal].join(' ')}
+                    className={[styles.signal, alertSignals.includes(signal) ? styles.alert : styles.signal].join(' ')}
                   >
                     {signal}
                   </div>

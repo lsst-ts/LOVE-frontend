@@ -24,8 +24,6 @@ export default class GIS extends Component {
       // console.log("ENTRA!");
       const systemsSignals = Object.entries(signals);
       const rawStatus = this.props.interlocksStatus;
-
-      // Armar red effects
       const redEffects = [];
       const alertSignals = [];
       systemsSignals.forEach(([system, systemSignals]) => {
@@ -73,7 +71,8 @@ export default class GIS extends Component {
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
 
-    // console.log(alertSignals);
+    // console.log(redEffects);
+    console.log(alertSignals);
     return (
       <div className={styles.div}>
         <GISContainerSignals
