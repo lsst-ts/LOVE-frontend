@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styles from './GIS.module.css';
-import { signals, effects, alertSignalIndexes } from '../../Config';
+import { signals, effects, alertSignalIndexes, signalBypassIndexes } from '../../Config';
 import GISContainerSignals from './GISContainerDetectionSignals';
 import GISContainerEffects from './GISContainerEffectsActuation';
 import isEqual from 'lodash/isEqual';
@@ -71,14 +71,11 @@ export default class GIS extends Component {
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
 
-    // console.log(redEffects);
-    console.log(alertSignals);
     return (
       <div className={styles.div}>
         <GISContainerSignals
           signals={flattenedSignals}
-          alertSignalIndexes={alertSignalIndexes}
-          rawStatus={rawStatus}
+          signalBypassIndexes={signalBypassIndexes}
           alertSignals={alertSignals}
           onHoverIn={(effects) => this.signalOnEnter(effects)}
           onHoverOut={() => this.signalOnLeave()}
