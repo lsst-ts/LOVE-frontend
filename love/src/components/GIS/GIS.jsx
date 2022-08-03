@@ -6,9 +6,18 @@ import GISContainerSignals from './GISContainerDetectionSignals';
 import GISContainerEffects from './GISContainerEffectsActuation';
 import isEqual from 'lodash/isEqual';
 export default class GIS extends Component {
-  static propTypes = {};
+  static propTypes = {
+    /** Function to subscribe to streams to receive */
+    subscribeToStreams: PropTypes.func,
+    /** Function to unsubscribe to streams to stop receiving */
+    unsubscribeToStreams: PropTypes.func,
+    /** The raw status of the interlock */
+    interlocksData: PropTypes.array,
+  };
 
-  static defaultProps = {};
+  static defaultProps = {
+    interlocksData: [],
+  };
 
   constructor(props) {
     super(props);
