@@ -12,7 +12,7 @@ export default class GIS extends Component {
     /** Function to unsubscribe to streams to stop receiving */
     unsubscribeToStreams: PropTypes.func,
     /** The raw status of the interlock */
-    interlocksData: PropTypes.array,
+    interlocksStatus: PropTypes.array,
   };
 
   static defaultProps = {
@@ -30,7 +30,6 @@ export default class GIS extends Component {
 
   componentDidUpdate = (prevProps, prevState) => {
     if (!isEqual(prevProps.interlocksStatus, this.props.interlocksStatus)) {
-      // console.log("ENTRA!");
       const systemsSignals = Object.entries(signals);
       const rawStatus = this.props.interlocksStatus;
       const alertEffects = [];
@@ -40,12 +39,15 @@ export default class GIS extends Component {
         sSignals.forEach((signal) => {
           const effects = systemSignals[signal];
 
-          const systemIndex = alertSignalIndexes[signal][0];
-          const bitIndex = alertSignalIndexes[signal][1];
-          const bitArray = rawStatus[systemIndex].toString(2); // tema cantidad de bits !recordar
+          const [systemIndex, bitIndex] = alertSignalIndexes[signal];
+          const bitArray = rawStatus[systemIndex].toString(2).padEnd(16, '0');
           const activeAlert = bitArray[bitIndex] === '1';
 
-          if (activeAlert) {
+          const [bypassSystemIndex, bypassBitIndex] = signalBypassIndexes[signal];
+          const bypassBitArray = rawStatus[bypassSystemIndex].toString(2).padEnd(16, '0');
+          const bypassedAlert = bypassBitArray[bypassBitIndex] === '1';
+
+          if (activeAlert && !bypassedAlert) {
             alertEffects.push(...effects);
             alertSignals.push(signal);
           }
@@ -65,7 +67,6 @@ export default class GIS extends Component {
   };
 
   signalOnEnter = (effects) => {
-    // console.log(effects);
     this.setState({ activeEffects: effects });
   };
 
@@ -74,9 +75,7 @@ export default class GIS extends Component {
   };
 
   render() {
-    const rawStatus = this.props.interlocksStatus;
     const { activeEffects, alertEffects, alertSignals } = this.state;
-    // const flattenedSignals = Object.values(signals).map((signals) => Object.values(signals)).flat();
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
 
@@ -84,7 +83,6 @@ export default class GIS extends Component {
       <div className={styles.div}>
         <GISContainerSignals
           signals={flattenedSignals}
-          signalBypassIndexes={signalBypassIndexes}
           alertSignals={alertSignals}
           onHoverIn={(effects) => this.signalOnEnter(effects)}
           onHoverOut={() => this.signalOnLeave()}

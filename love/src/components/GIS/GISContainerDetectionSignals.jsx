@@ -3,8 +3,8 @@ import styles from './GIS.module.css';
 
 export default class GISContainerDetectionSignals extends Component {
   render() {
-    const { alertSignals, signalBypassIndexes } = this.props;
-    const signalBypass = Object.keys(signalBypassIndexes);
+    const { alertSignals } = this.props;
+    // const signalBypass = Object.keys(this.props.signalBypassIndexes);
     return (
       <div className={styles.div2}>
         <h3 className={styles.h3}>Detection Signals</h3>
@@ -23,11 +23,7 @@ export default class GISContainerDetectionSignals extends Component {
                   <div
                     onMouseEnter={() => this.props.onHoverIn(signals[signal])}
                     onMouseLeave={() => this.props.onHoverOut()}
-                    // className={[styles.signal, activeAlert ? styles.alert : styles.signal].join(' ')}
-                    className={[
-                      styles.signal,
-                      alertSignals.includes(signal) && signalBypass.includes(signal) ? styles.alert : styles.signal,
-                    ].join(' ')}
+                    className={[styles.signal, alertSignals.includes(signal) ? styles.alert : ''].join(' ')}
                   >
                     {signal}
                   </div>
