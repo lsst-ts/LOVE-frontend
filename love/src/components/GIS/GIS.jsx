@@ -87,7 +87,7 @@ export default class GIS extends Component {
           onHoverIn={(effects) => this.signalOnEnter(effects)}
           onHoverOut={() => this.signalOnLeave()}
         />
-        {/* <div className={styles.separator}></div> */}
+        <div className={styles.separator}></div>
         <GISContainerEffects effects={effectsArray} activeEffects={activeEffects} alertEffects={alertEffects} />
       </div>
     );

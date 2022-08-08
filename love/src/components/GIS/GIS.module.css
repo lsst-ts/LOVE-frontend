@@ -1,7 +1,7 @@
 .div {
   display: flex;
-  align-items: flex-start;
-  background-color: var(--overlay-background-color);
+  /* align-items: flex-start; */
+  background-color: var(--second-primary-background-color);
 }
 
 .h3 {
@@ -11,27 +11,30 @@
 .div2 {
   display: flex;
   flex-wrap: wrap;
-  margin-right: 50px;
+  justify-content: center;
 }
 
 .separator {
-  height: 700px;
-  padding: 2em;
-  border-left: 3px solid gray;
+  margin: 4em 2em;
+  border-left: 2px solid gray;
+  padding: 1em 0;
 }
 
 .system {
   border: 3px solid var(--second-primary-background-color);
   border-radius: 0.5em;
   margin-bottom: 0.5em;
-  margin-right: var(--content-padding);
   padding: 1.5em;
   width: calc(50% - var(--content-padding));
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
-  background-color: var(--second-primary-background-color);
+  background-color: var(--second-secondary-background-color);
+}
+
+.system:nth-child(even) {
+  margin-right: var(--content-padding);
 }
 
 .signal {
