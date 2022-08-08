@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Howl } from 'howler';
+import isEqual from 'lodash/isEqual';
 
 import { severityEnum } from '../../../Config';
 import { isAcknowledged, isMuted, isMaxCritical } from '../AlarmUtils';
@@ -44,7 +45,7 @@ export default class AlarmAudio extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      minSeveritySound: severityEnum.warning,
+      minSeveritySound: severityEnum.critical + 1,
     };
 
     this.numCriticals = 0;
@@ -152,8 +153,8 @@ export default class AlarmAudio extends Component {
     this.props.unsubscribeToStreams();
   };
 
-  componentDidUpdate = (prevProps, _prevState) => {
-    if (this.props.alarmsConfig && this.props.alarmsConfig !== prevProps.alarmsConfig) {
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.props.alarmsConfig && !isEqual(this.props.alarmsConfig, prevProps.alarmsConfig)) {
       const minSeveritySound = this.props.alarmsConfig.minSeveritySound?.trim().toLowerCase();
       if (!minSeveritySound || minSeveritySound === 'mute' || minSeveritySound === 'muted') {
         // If minSeveritySound is null or "mute" or "muted", then do not play any sound
@@ -163,7 +164,11 @@ export default class AlarmAudio extends Component {
       }
     }
 
-    if (this.props.newAlarms !== prevProps.newAlarms) {
+    if (
+      this.props.newAlarms &&
+      (!isEqual(this.props.newAlarms, prevProps.newAlarms) ||
+        this.state.minSeveritySound !== prevState.minSeveritySound)
+    ) {
       this.checkAndNotifyAlarms(this.props.newAlarms, prevProps.alarms);
     }
   };
