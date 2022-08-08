@@ -23,7 +23,7 @@ export default class GIS extends Component {
     super(props);
     this.state = {
       activeEffects: [],
-      redEffects: [],
+      alertEffects: [],
       alertSignals: [],
     };
   }
@@ -33,7 +33,7 @@ export default class GIS extends Component {
       // console.log("ENTRA!");
       const systemsSignals = Object.entries(signals);
       const rawStatus = this.props.interlocksStatus;
-      const redEffects = [];
+      const alertEffects = [];
       const alertSignals = [];
       systemsSignals.forEach(([system, systemSignals]) => {
         const sSignals = Object.keys(systemSignals);
@@ -46,13 +46,13 @@ export default class GIS extends Component {
           const activeAlert = bitArray[bitIndex] === '1';
 
           if (activeAlert) {
-            redEffects.push(...effects);
+            alertEffects.push(...effects);
             alertSignals.push(signal);
           }
         });
       });
 
-      this.setState({ redEffects, alertSignals });
+      this.setState({ alertEffects, alertSignals });
     }
   };
 
@@ -75,7 +75,7 @@ export default class GIS extends Component {
 
   render() {
     const rawStatus = this.props.interlocksStatus;
-    const { activeEffects, redEffects, alertSignals } = this.state;
+    const { activeEffects, alertEffects, alertSignals } = this.state;
     // const flattenedSignals = Object.values(signals).map((signals) => Object.values(signals)).flat();
     const flattenedSignals = Object.entries(signals);
     const effectsArray = Object.entries(effects);
@@ -90,7 +90,7 @@ export default class GIS extends Component {
           onHoverOut={() => this.signalOnLeave()}
         />
         {/* <div className={styles.separator}></div> */}
-        <GISContainerEffects effects={effectsArray} activeEffects={activeEffects} redEffects={redEffects} />
+        <GISContainerEffects effects={effectsArray} activeEffects={activeEffects} alertEffects={alertEffects} />
       </div>
     );
   }
