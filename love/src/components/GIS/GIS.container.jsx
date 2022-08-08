@@ -15,12 +15,6 @@ export const schema = {
       isPrivate: false,
       default: 'Global Interlock System',
     },
-    controls: {
-      type: 'boolean',
-      description: 'Whether to display controls to configure periods of time',
-      default: true,
-      isPrivate: false,
-    },
   },
 };
 
