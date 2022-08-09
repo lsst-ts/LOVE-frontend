@@ -2,7 +2,6 @@
   display: flex;
   align-items: flex-start;
   background-color: var(--second-primary-background-color);
-  height: 100%;
 }
 
 .h3 {
@@ -17,10 +16,10 @@
 }
 
 .separator {
+  align-self: stretch;
   margin: 4.5em 2em;
   border-left: 2px solid gray;
   padding: 1em 0;
-  height: calc(100% - 9em);
 }
 
 .system {
