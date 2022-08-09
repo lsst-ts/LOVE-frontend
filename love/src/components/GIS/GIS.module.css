@@ -13,19 +13,19 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 0.5em;
 }
 
 .separator {
-  margin: 4em 2em;
+  margin: 4.5em 2em;
   border-left: 2px solid gray;
   padding: 1em 0;
-  height: calc(100% - 8em);
+  height: calc(100% - 9em);
 }
 
 .system {
   border: 3px solid var(--second-primary-background-color);
   border-radius: 0.5em;
-  margin-bottom: 0.5em;
   padding: 1.5em;
   width: calc(50% - var(--content-padding));
   box-sizing: border-box;
@@ -33,10 +33,7 @@
   flex-wrap: wrap;
   align-content: flex-start;
   background-color: var(--second-secondary-background-color);
-}
-
-.system:nth-child(even) {
-  margin-right: var(--content-padding);
+  flex: 1 1 300px;
 }
 
 .signal {
