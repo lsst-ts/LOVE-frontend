@@ -23,12 +23,12 @@ function SimpleTable({ headers, data }) {
       <Tbody>
         {data.map((row, index) => {
           return (
-            <Tr key={index}>
+            <Tr key={`row-${index}`}>
               {headers.map((header, headerIndex) => {
                 const render = header.render || defaultRenderMethod;
                 const value = row[header.field];
                 return (
-                  <Td key={headerIndex} isNumber={header.type === 'number'} className={header.className}>
+                  <Td key={`cell-${headerIndex}`} isNumber={header.type === 'number'} className={header.className}>
                     {render(value, row)}
                   </Td>
                 );
