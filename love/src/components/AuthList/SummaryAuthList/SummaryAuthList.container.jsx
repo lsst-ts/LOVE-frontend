@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { addGroup, removeGroup } from 'redux/actions/ws';
+import { addGroup, removeGroup, requestSALCommand } from 'redux/actions/ws';
 import { getAuthlistState, getPermAuthlistAdministrator, getUsername } from 'redux/selectors';
 import { defaultCSCList } from 'Config';
 import SummaryAuthList from './SummaryAuthList';
@@ -57,6 +57,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     unsubscribeToStream: () => {
       subscriptions.forEach((stream) => dispatch(removeGroup(stream)));
+    },
+    requestAuthorizeCommand: (cmd) => {
+      dispatch(requestSALCommand({ csc: 'Authorize', salindex: 0, ...cmd }));
     },
   };
 };
