@@ -90,7 +90,7 @@ export const getM1M3ActuatorsState = (state) => {
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? [],
+    forceActuatorData: m1m3Data['telemetry-MTM1M3-0-forceActuatorData'] ?? {},
     xPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.xPosition?.value ?? [],
     yPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.yPosition?.value ?? [],
     zPosition: m1m3Data['event-MTM1M3-0-forceActuatorInfo']?.[0]?.zPosition?.value ?? [],
@@ -168,16 +168,16 @@ export const getM1M3IMSData = (state) => {
 };
 
 export const getM1M3AppliedForces = (state) => {
-  const subscriptions = ['event-MTM1M3-0-appliedForces'];
+  const subscriptions = ['telemetry-MTM1M3-0-appliedForces'];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    appliedFx: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.fx?.value ?? 0,
-    appliedFy: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.fy?.value ?? 0,
-    appliedFz: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.fz?.value ?? 0,
-    appliedMx: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.mx?.value ?? 0,
-    appliedMy: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.my?.value ?? 0,
-    appliedMz: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.mz?.value ?? 0,
-    appliedForceMagnitude: m1m3Data['event-MTM1M3-0-appliedForces']?.[0]?.forceMagnitude?.value ?? 0,
+    appliedFx: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.fx?.value ?? 0,
+    appliedFy: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.fy?.value ?? 0,
+    appliedFz: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.fz?.value ?? 0,
+    appliedMx: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.mx?.value ?? 0,
+    appliedMy: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.my?.value ?? 0,
+    appliedMz: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.mz?.value ?? 0,
+    appliedForceMagnitude: m1m3Data['telemetry-MTM1M3-0-appliedForces']?.forceMagnitude?.value ?? 0,
   };
 };
 
@@ -192,27 +192,31 @@ export const getM1M3State = (state) => {
 
 export const getM1M3ActuatorForces = (state) => {
   const subscriptions = [
-    'event-MTM1M3-0-appliedAccelerationForces',
+    'telemetry-MTM1M3-0-appliedForces',
+    'telemetry-MTM1M3-0-appliedAccelerationForces',
+    'telemetry-MTM1M3-0-appliedAzimuthForces',
+    'telemetry-MTM1M3-0-appliedBalanceForces',
+    'telemetry-MTM1M3-0-appliedCylinderForces',
+    'telemetry-MTM1M3-0-appliedElevationForces',
+    'telemetry-MTM1M3-0-appliedThermalForces',
+    'telemetry-MTM1M3-0-appliedVelocityForces',
     'event-MTM1M3-0-appliedActiveOpticForces',
-    'event-MTM1M3-0-appliedAzimuthForces',
-    'event-MTM1M3-0-appliedBalanceForces',
-    'event-MTM1M3-0-appliedCylinderForces',
-    'event-MTM1M3-0-appliedElevationForces',
-    'event-MTM1M3-0-appliedForces',
     'event-MTM1M3-0-appliedOffsetForces',
     'event-MTM1M3-0-appliedStaticForces',
-    'event-MTM1M3-0-appliedThermalForces',
-    'event-MTM1M3-0-appliedVelocityForces',
   ];
   const m1m3Data = getStreamsData(state, subscriptions);
   return {
-    appliedAccelerationForces: m1m3Data['event-MTM1M3-0-appliedAccelerationForces']?.[0] ?? {},
+    appliedForces: m1m3Data['telemetry-MTM1M3-0-appliedForces'] ?? {},
+    appliedAccelerationForces: m1m3Data['telemetry-MTM1M3-0-appliedAccelerationForce'] ?? {},
+    appliedAzimuthForces: m1m3Data['telemetry-MTM1M3-0-appliedAzimuthForces'] ?? {},
+    appliedBalanceForces: m1m3Data['telemetry-MTM1M3-0-appliedBalanceForces'] ?? {},
+    appliedCylinderForces: m1m3Data['telemetry-MTM1M3-0-appliedCylinderForces'] ?? {},
+    appliedElevationForces: m1m3Data['telemetry-MTM1M3-0-appliedElevationForces'] ?? {},
+    appliedThermalForces: m1m3Data['telemetry-MTM1M3-0-appliedThermalForces'] ?? {},
+    appliedVelocityForces: m1m3Data['telemetry-MTM1M3-0-appliedVelocityForces'] ?? {},
     appliedActiveOpticForces: m1m3Data['event-MTM1M3-0-appliedActiveOpticForces']?.[0] ?? {},
-    appliedAzimuthForces: m1m3Data['event-MTM1M3-0-appliedAzimuthForces']?.[0] ?? {},
-    appliedBalanceForces: m1m3Data['event-MTM1M3-0-appliedBalanceForces']?.[0] ?? {},
-    appliedCylinderForces: m1m3Data['event-MTM1M3-0-appliedCylinderForces']?.[0] ?? {},
-    appliedElevationForces: m1m3Data['event-MTM1M3-0-appliedElevationForces']?.[0] ?? {},
-    appliedForces: m1m3Data['event-MTM1M3-0-appliedForces']?.[0] ?? {},
+    appliedOffsetForces: m1m3Data['event-MTM1M3-0-appliedOffsetForces']?.[0] ?? {},
+    appliedStaticForces: m1m3Data['event-MTM1M3-0-appliedStaticForces']?.[0] ?? {},
   };
 };
 
