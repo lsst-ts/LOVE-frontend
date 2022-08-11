@@ -128,6 +128,10 @@ export default class M1M3TS extends Component {
           />
         </div>
 
+        <div className={styles.separatorContainer}>
+          <div className={styles.separator}></div>
+        </div>
+
         <div className={styles.menuContainer}>
           <Menu 
             showFcuIDs={this.state.showFcuIDs}

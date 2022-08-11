@@ -49,13 +49,13 @@ export default class Summary extends Component {
               </span>
             </div>
             <div className={styles.control}>
-              <span className={styles.title}>Fan Heaters</span>
+              <span >Fan Heaters</span>
               <span className={[m1m3tsFanHeatersValue.class, styles.summaryState].join(' ')}>
                 {m1m3tsFanHeatersValue.name}
               </span>
             </div>
             <div className={styles.control}>
-              <span className={styles.title}>Coolant Pump</span>
+              <span >Coolant Pump</span>
               <span className={[m1m3tsCoolantPumpValue.class, styles.summaryState].join(' ')}>
                 {m1m3tsCoolantPumpValue.name}
               </span>

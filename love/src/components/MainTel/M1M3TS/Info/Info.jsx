@@ -115,7 +115,9 @@ export default class Info extends Component {
             <Label>Fan</Label>
             <Value>{`${defaultNumberFormatter(selectedSensorData.fanRPM)} RPM`}</Value>
 
-            {selectedSensorData.warnings.length > 0 ? 
+            <div className={styles.separator}></div>
+
+            {selectedSensorData.warnings.length > 0 && 
               <>
                 <Title>Warnings</Title>
                 <span className={styles.warningIcon}>
@@ -132,10 +134,8 @@ export default class Info extends Component {
                   })
                 }
                 </div>
-              </> : <></>
+              </>
             }
-            
-            <div></div>
           </>
         ) : (
           <div className={styles.noSensor}>No FCU selected</div>

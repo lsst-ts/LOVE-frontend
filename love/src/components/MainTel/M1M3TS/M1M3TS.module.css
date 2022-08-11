@@ -2,6 +2,7 @@
   display: grid;
   grid-template-areas:
     "sum sum sum sum"
+    "sep sep sep sep"
     "men men men men"
     "sel sel sel mix"
     "sel sel sel tem"
@@ -35,5 +36,16 @@
 .infoContainer {
   grid-area: inf;
   padding-top: 15px;
+}
+
+.separatorContainer {
+  grid-area: sep;
+  background: var(--second-quaternary-background-dimmed-color);
+}
+
+.separator {
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+  width: 99%;
+  margin: 0 auto;
 }
 

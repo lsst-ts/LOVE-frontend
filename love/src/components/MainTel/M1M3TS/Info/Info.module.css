@@ -31,3 +31,8 @@
   vertical-align: middle;
   width: 20px;
 }
+
+.separator {
+  grid-column: 1 / span 2;
+  border-bottom: 1px solid var(--second-tertiary-background-color);
+}
