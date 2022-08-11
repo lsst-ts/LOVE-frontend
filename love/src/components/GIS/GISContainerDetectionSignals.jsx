@@ -12,6 +12,7 @@ export default class GISContainerDetectionSignals extends Component {
           const systemSignals = Object.keys(signals);
           return (
             <div
+              key={`system-${system}`}
               className={[
                 styles.system,
                 systemSignals.some((signal) => alertSignals.includes(signal)) ? styles.alertSystem : '',
@@ -21,6 +22,7 @@ export default class GISContainerDetectionSignals extends Component {
               {Object.keys(signals).map((signal) => {
                 return (
                   <div
+                    key={`signal-${signal}`}
                     onMouseEnter={() => this.props.onHoverIn(signals[signal])}
                     onMouseLeave={() => this.props.onHoverOut()}
                     className={[styles.signal, alertSignals.includes(signal) ? styles.alert : ''].join(' ')}
