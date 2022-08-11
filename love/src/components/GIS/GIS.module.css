@@ -17,7 +17,7 @@
 
 .separator {
   align-self: stretch;
-  margin: 4.5em 2em;
+  margin: 4.5em 2em 0 2em;
   border-left: 2px solid gray;
   padding: 1em 0;
 }
