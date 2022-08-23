@@ -2,9 +2,20 @@ import React, { Component } from 'react';
 import styles from './GIS.module.css';
 
 export default class GISContainerDetectionSignals extends Component {
+  static propTypes = {
+    /** Array of signals to be rendered */
+    signals: PropTypes.array,
+    /** Array of triggered signals (alarms) */
+    alertSignals: PropTypes.array,
+    /** Callback for hover on specific signal */
+    onHoverIn: PropTypes.func,
+    /** Callback for hover out of any signal */
+    onHoverOut: PropTypes.func,
+  };
+
   render() {
     const { alertSignals } = this.props;
-    // const signalBypass = Object.keys(this.props.signalBypassIndexes);
+
     return (
       <div className={styles.div2}>
         <h3 className={styles.h3}>Detection Signals</h3>

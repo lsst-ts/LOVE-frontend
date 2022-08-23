@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import styles from './GIS.module.css';
 
 export default class GISContainerEffectsActuation extends Component {
+  static propTypes = {
+    /** Array of effects to be rendered */
+    effects: PropTypes.array,
+    /** Array of effects to be highlighted */
+    activeEffects: PropTypes.array,
+    /** Array of triggered effects */
+    alertEffects: PropTypes.array,
+  };
+
   render() {
     const { activeEffects, alertEffects } = this.props;
     return (
