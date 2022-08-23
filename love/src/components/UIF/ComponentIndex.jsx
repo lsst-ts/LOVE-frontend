@@ -321,6 +321,9 @@ export const mainIndex = {
       props: {
         ...defaultSchemaProps,
         ...require('../MainTel/TMA/TMA.container').schema.props,
+      },
+    },
+  },
   GIS: {
     component: require('../GIS/GIS.container').default,
     schema: {
