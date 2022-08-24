@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
 import TemperatureGradiant from '../Temperature/TemperatureGradiant';
-import { M2ActuatorPositions } from 'Config';
+import { M1M3TSFanCoilPositions } from 'Config';
 import styles from './Selector.module.css';
 import WarningIcon from 'components/icons/WarningIcon/WarningIcon';
 
@@ -174,7 +174,7 @@ export default class Selector extends Component {
     let yMin = Infinity;
     let xMin = Infinity;
     let maxRadius = 0;
-    M2ActuatorPositions.forEach((act) => {
+    M1M3TSFanCoilPositions.forEach((act) => {
       if (xMax < act.position[0]) xMax = act.position[0];
       if (xMin > act.position[0]) xMin = act.position[0];
       if (yMax < act.position[1]) yMax = act.position[1];
@@ -183,21 +183,16 @@ export default class Selector extends Component {
         maxRadius = Math.floor(Math.sqrt(act.position[0] * act.position[0] + act.position[1] * act.position[1]));
       }
     });
-    /* console.log(M2ActuatorPositions);
-    console.log(xMin, xMax, yMin, yMax, maxRadius); */
-    xMin = -150;
-    xMax = 160;
-    yMin = -150;
-    yMax = 160;
-    maxRadius = 160;
-
-    // Using SAL info
-    // ManagerInterface.getTopicData('event-telemetry').then((data) => {
-    //   this.setState({ optionsTree: data.MTM1M3.event_data });
-    // });
+    
+    const margin = 6;
+    xMin += margin;
+    xMax -= margin;
+    yMin -= margin;
+    yMax += margin;
+    // console.log(xMin, xMax, yMin, yMax, maxRadius);
 
     this.setState({
-      sensors: M2ActuatorPositions,
+      sensors: M1M3TSFanCoilPositions,
       xRadius: (xMax - xMin) / 2,
       yRadius: (yMax - yMin) / 2,
       maxRadius,
@@ -227,8 +222,6 @@ export default class Selector extends Component {
 
     d3.select('#scatter').attr('transform', d3.event.transform);
     d3.select('#mirror-hole').attr('transform', d3.event.transform);
-    // d3.select('#background-circle').attr('transform', d3.event.transform);
-    // d3.select('#plot-axis').attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
