@@ -166,7 +166,6 @@ export default class SummaryAuthList extends Component {
       this.setState({
         removeIdentityRequest: () => {
           ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, '').then((response) => {
-            this.sendAuthorizeCommands(response);
             this.setState({ removeIdentityModalShown: false });
           });
         },
@@ -175,7 +174,6 @@ export default class SummaryAuthList extends Component {
       this.setState({
         removeIdentityRequest: () => {
           ManagerInterface.requestAuthListAuthorization(user, targetCSC, '', `-${identityToRemove}`).then((response) => {
-            this.sendAuthorizeCommands(response);
             this.setState({ removeIdentityModalShown: false });
           });
         },
@@ -223,7 +221,6 @@ export default class SummaryAuthList extends Component {
       removeIdentityRequest: () => {
         ManagerInterface.requestAuthListAuthorization(user, cscToChange, authorizedUsers, nonAuthorizedCSCs).then(
           (response) => {
-            this.sendAuthorizeCommands(response);
             this.setState({ removeIdentityModalShown: false });
           },
         );
@@ -259,9 +256,7 @@ export default class SummaryAuthList extends Component {
               .join(',')
           : '';
 
-      requests.push(() => ManagerInterface.requestAuthListAuthorization(user, csc, authorizedUsers, nonAuthorizedCSCs).then((response) => {
-        this.sendAuthorizeCommands(response);
-      }));
+      requests.push(() => ManagerInterface.requestAuthListAuthorization(user, csc, authorizedUsers, nonAuthorizedCSCs));
     });
 
     let modalText = '';
@@ -441,22 +436,6 @@ export default class SummaryAuthList extends Component {
     );
   };
 
-  sendAuthorizeCommands(responses) {
-    responses.forEach((resp) => {
-      if (resp.status === AUTHLIST_REQUEST_ACCEPTED) {
-        const cmdPayload = {
-          cmd: 'cmd_requestAuthorization',
-          params: {
-            cscsToChange: resp.cscs_to_change,
-            authorizedUsers: resp.authorized_users,
-            nonAuthorizedCSCs: resp.unauthorized_cscs,
-          }
-        };
-        this.props.requestAuthorizeCommand(cmdPayload);
-      }
-    });
-  }
-
   sendRequest() {
     const { user } = this.props;
     const { csc_to_change, authorize_users, unauthorize_cscs, message, duration, wrong_csc_to_change } = this.state;
@@ -492,7 +471,6 @@ export default class SummaryAuthList extends Component {
         message,
         duration,
       ).then((response) => {
-        this.sendAuthorizeCommands(response);
         this.setState({
           csc_to_change: '',
           authorize_users: '',
