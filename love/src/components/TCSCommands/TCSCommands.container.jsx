@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
+import { requestDEMOCommand } from '../../redux/actions/time';
 import { getPermCmdExec, getScriptQueueState } from '../../redux/selectors';
 import TCSCommands from './TCSCommands';
 
@@ -65,6 +66,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
     requestSALCommand: (component, salindex, cmd) => {
       return dispatch(requestSALCommand({ ...cmd, component, salindex }));
+    },
+    requestDemoCommand: (payload) => {
+      return dispatch(requestDEMOCommand(payload));
     },
   };
 };
