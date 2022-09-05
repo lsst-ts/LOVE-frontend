@@ -530,7 +530,7 @@ export const _sendLOVECscObservingLogs = (user, message) => {
 /**
  * Request an action to the server
  */
-export const sendAction = (action) => {
+export const sendAction = (action, payload = {}) => {
   return (dispatch, getState) => {
     if (getConnectionStatus(getState()) !== connectionStates.OPEN) {
       return;
@@ -538,6 +538,7 @@ export const sendAction = (action) => {
     socket.json({
       action,
       request_time: DateTime.utc().toSeconds(),
+      ...payload,
     });
     dispatch({
       type: SEND_ACTION,

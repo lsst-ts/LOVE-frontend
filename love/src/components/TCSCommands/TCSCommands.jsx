@@ -272,7 +272,13 @@ export default class CommandPanel extends Component {
               <Button
                 status="info"
                 disabled={!this.props.commandExecutePermission || !isAvailable}
-                onClick={() => ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)}
+                onClick={() => {
+                  if (this.state.selectedCommand !== "point_azel")
+                    ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)
+                  else
+                    console.log("DEMO COMMAND!", this.state.paramValues);
+                    this.props.requestDemoCommand(this.state.paramValues);
+                }}
               >
                 SEND
               </Button>

@@ -60,6 +60,15 @@ export function requestServerTime() {
 }
 
 /**
+ * Send a websockets message to the server requesting changes for the DEMO
+ */
+ export function requestDEMOCommand(payload) {
+  return (dispatch) => {
+    dispatch(sendAction('change_demo_data', payload));
+  };
+}
+
+/**
  * Reference to the timer used to tick the clock
  */
 let tickTimer = null;
