@@ -275,9 +275,10 @@ export default class CommandPanel extends Component {
                 onClick={() => {
                   if (this.state.selectedCommand !== "point_azel")
                     ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)
-                  else
+                  else {
                     console.log("DEMO COMMAND!", this.state.paramValues);
                     this.props.requestDemoCommand(this.state.paramValues);
+                  }
                 }}
               >
                 SEND
@@ -287,7 +288,14 @@ export default class CommandPanel extends Component {
               <Button
                 status="info"
                 disabled={!this.props.commandExecutePermission || !isAvailable}
-                onClick={() => ManagerInterface.runMTCSCommand(this.state.selectedCommand, this.state.paramValues)}
+                onClick={() => {
+                  if (this.state.selectedCommand !== "point_azel")
+                    ManagerInterface.runMTCSCommand(this.state.selectedCommand, this.state.paramValues)
+                  else {
+                    console.log("DEMO COMMAND!", this.state.paramValues);
+                    this.props.requestDemoCommand(this.state.paramValues);
+                  }
+                }}
               >
                 SEND
               </Button>

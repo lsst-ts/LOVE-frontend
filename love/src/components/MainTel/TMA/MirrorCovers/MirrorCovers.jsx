@@ -152,6 +152,7 @@ export default class MirrorCovers extends Component {
           strokeMiterlimit: 10,
           transform: `rotateZ(${equivalentAzimuthDemand}deg)`,
           transformOrigin: `50% 50%`,
+          visibility: 'hidden',
         }}
       />
     );

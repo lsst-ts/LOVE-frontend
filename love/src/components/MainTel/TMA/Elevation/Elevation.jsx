@@ -58,6 +58,7 @@ export default class Elevation extends Component {
         
         <g
           style={{
+            transition: 'transform 1.5s linear 0s',
             transform: `rotateZ(${equivalentElevationActual}deg)`, transformOrigin: `50% 50%`
           }}
         >
@@ -81,7 +82,8 @@ export default class Elevation extends Component {
               strokeWidth: ".5px",
               strokeDasharray: 6,
               fill: "none",
-              transform: `rotateZ(${equivalentElevationDemand}deg)`, transformOrigin: `50% 50%`
+              transform: `rotateZ(${equivalentElevationDemand}deg)`, transformOrigin: `50% 50%`,
+              visibility: 'hidden',
           }}
         />
     );
