@@ -59,6 +59,7 @@ export default class MTDomeShutter extends Component {
         {/* Dome, actual position */}
         <g
           style={{
+            transition: 'transform 1.5s linear 0s',
             transformOrigin: `50% 50%`,
             transition: 'transform 1.5s linear 0s',
             transform: `translate(-16%, -11%) rotate(${this.props.positionActualDomeAz}deg)`,
@@ -114,6 +115,7 @@ export default class MTDomeShutter extends Component {
             style={{
               transformOrigin: `50% 50%`,
               transform: `translate(${(this.props.positionCommandedShutter * widthShutters[1]) / 100}px, 0)`,
+              visibility: 'hidden',
             }}
           >
             <polygon
@@ -132,6 +134,7 @@ export default class MTDomeShutter extends Component {
             style={{
               transformOrigin: `50% 50%`,
               transform: `translate(${(this.props.positionCommandedShutter * widthShutters[0]) / 100}px, 0)`,
+              visibility: 'hidden',
             }}
           >
             <polygon

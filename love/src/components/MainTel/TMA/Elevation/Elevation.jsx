@@ -83,7 +83,8 @@ export default class Elevation extends Component {
               strokeDasharray: 6,
               fill: "none",
               transition: 'transform 1.5s linear 0s',
-              transform: `rotateZ(${equivalentElevationDemand}deg)`, transformOrigin: `50% 50%`
+              transform: `rotateZ(${equivalentElevationDemand}deg)`, transformOrigin: `50% 50%`,
+              visibility: 'hidden',
           }}
         />
     );
