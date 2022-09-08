@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import styles from './GIS.module.css';
 
 export default class GISContainerEffectsActuation extends Component {
