@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import { defaultNumberFormatter } from 'Utils';
 
 import styles from './ForceGradiant.module.css';
 
@@ -209,7 +210,7 @@ export default class ForceGradiant extends Component {
       textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -45).text(actuator.id);
       textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -30).text('Measured');
       textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -15)
-        .text(`${actuator.measured}N`);
+        .text(`${defaultNumberFormatter(actuator.measured)} N`);
     }
 
     const commandedText = d3.select('#color-scale svg #commanded-text');
@@ -248,7 +249,7 @@ export default class ForceGradiant extends Component {
       textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 60).text(actuator.id);
       textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 75).text('Commanded');
       textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 90)
-        .text(`${actuator.commanded}N`);
+        .text(`${defaultNumberFormatter(actuator.commanded)} N`);
     }
   }
 
