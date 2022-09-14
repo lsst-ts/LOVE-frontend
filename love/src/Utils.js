@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import Moment from 'moment';
 import { WEBSOCKET_SIMULATION } from 'Config.js';
 import { SALCommandStatus } from 'redux/actions/ws';
+import { getEfdConfig } from 'redux/selectors';
 
 /* Backwards compatibility of Array.flat */
 if (Array.prototype.flat === undefined) {
@@ -308,8 +309,9 @@ export default class ManagerInterface {
     });
   }
 
-  static getEDFStatus() {
-    const url = `https://summit-lsp.lsst.codes/influxdb/health`;
+  static getEFDStatus() {
+    const url = getEfdConfig?.urlStatus;
+    // const url = `https://summit-lsp.lsst.codes/influxdb/health`;
     return fetch(url, {
       method: 'GET',
     }).then((response) => {

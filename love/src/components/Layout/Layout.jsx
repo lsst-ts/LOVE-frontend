@@ -19,9 +19,6 @@ import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import ClockContainer from '../Time/Clock/Clock.container';
-import styles from './Layout.module.css';
-import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
-import LabeledStatusText from '../GeneralPurpose/LabeledStatusText/LabeledStatusText';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
 import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
@@ -34,7 +31,7 @@ import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
 import ManagerInterface from 'Utils';
-import { style } from 'd3';
+import styles from './Layout.module.css';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
@@ -245,7 +242,7 @@ class Layout extends Component {
   };
 
   checkEfdStatus = () => {
-    ManagerInterface.getEDFStatus().then((result) => {
+    ManagerInterface.getEFDStatus().then((result) => {
       this.setState({
         efdStatus: result,
       });
