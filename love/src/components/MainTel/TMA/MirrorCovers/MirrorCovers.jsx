@@ -102,7 +102,7 @@ export default class MirrorCovers extends Component {
       <svg id="mirrorCoverSvg" data-name="mirrorCoverSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 385 385">
         {this.getBase(x0, y0, equivalentAzimuthActual)}
 
-        <g style={{ transform: `rotateZ(${equivalentAzimuthActual}deg)`, transformOrigin: `50% 50%` }}>
+        <g style={{ transform: `rotateZ(${equivalentAzimuthActual}deg)`, transformOrigin: `50% 50%`, transition: 'transform 1.5s linear 0s' }}>
           {this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize)}
           {this.getMount(x0, y0)}
         </g>
