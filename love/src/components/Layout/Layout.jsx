@@ -242,7 +242,9 @@ class Layout extends Component {
   };
 
   checkEfdStatus = () => {
-    ManagerInterface.getEFDStatus().then((result) => {
+    const url = this.props.efdConfigFile.urlStatus;
+    const status = ManagerInterface.getEFDStatus(url);
+    status.then((result) => {
       this.setState({
         efdStatus: result,
       });

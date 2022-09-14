@@ -309,22 +309,27 @@ export default class ManagerInterface {
     });
   }
 
-  static getEFDStatus() {
-    const url = getEfdConfig?.urlStatus;
-    // const url = `https://summit-lsp.lsst.codes/influxdb/health`;
-    return fetch(url, {
-      method: 'GET',
-    }).then((response) => {
-      if (response.status == 200) {
-        return {label: "EFD Healthy Status Pass", style: "ok"};
-      }
-      if (response.status === 503) {
-        return {label: "EFD Healthy Status Fail", style: "alert"};
-      }
-      response.json().then((resp) => {
-        return {label: "EFD Healthy Status Unknown", style: "invalid", resp: resp};
+  static getEFDStatus(url) {
+    if (url) {
+      return fetch(url, {
+        method: 'GET',
+      }).then((response) => {
+        if (response.status == 200) {
+          return {label: "EFD Healthy Status Pass", style: "ok"};
+        }
+        if (response.status === 503) {
+          return {label: "EFD Healthy Status Fail", style: "alert"};
+        }
+        response.json().then((resp) => {
+          return {label: "EFD Healthy Status Unknown", style: "alert", resp: resp};
+        });
       });
-    });
+    } else {
+      return new Promise(function(resolve, reject) {
+        resolve({label: "EFD Status URL is not present in LOVE Configuration File", style: "invalid"});
+      });
+    }
+    
   }
 
   static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
