@@ -13,11 +13,15 @@ export default class LabeledStatusText extends Component {
   };
 
   componentDidMount = () => {
-    this.props.subscribeToStream(this.props.groupName);
+    if (this.props.groupName) {
+      this.props.subscribeToStream(this.props.groupName);
+    }
   };
 
   componentWillUnmount = () => {
-    this.props.unsubscribeToStream(this.props.groupName);
+    if (this.props.groupName) {
+      this.props.unsubscribeToStream(this.props.groupName);
+    }
   };
 
   render() {

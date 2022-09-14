@@ -308,6 +308,23 @@ export default class ManagerInterface {
     });
   }
 
+  static getEDFStatus() {
+    const url = `https://summit-lsp.lsst.codes/influxdb/health`;
+    return fetch(url, {
+      method: 'GET',
+    }).then((response) => {
+      if (response.status == 200) {
+        return {label: "EFD Healthy Status Pass", style: "ok"};
+      }
+      if (response.status === 503) {
+        return {label: "EFD Healthy Status Fail", style: "alert"};
+      }
+      response.json().then((resp) => {
+        return {label: "EFD Healthy Status Unknown", style: "invalid", resp: resp};
+      });
+    });
+  }
+
   static getEFDTimeseries(start_date, time_window, cscs, resample, efd_instance) {
     const token = ManagerInterface.getToken();
     if (token === null) {
