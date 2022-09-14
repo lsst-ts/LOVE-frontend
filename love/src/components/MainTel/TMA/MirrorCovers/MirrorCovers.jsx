@@ -117,10 +117,8 @@ export default class MirrorCovers extends Component {
               { this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize) }
               { this.getMount(x0, y0) }
             </g>
-
-            { equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand) }
-            
-        </svg>
+          { equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand) }
+      </svg>
     );
   };
 

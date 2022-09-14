@@ -192,13 +192,17 @@ export default class LATISS extends Component {
     const shutterState = shutterStateMap[this.props.shutterDetailedState];
     const ccdState = raftsStateMap[this.props.raftsDetailedState];
 
-    const isFilterMoving = filterWheelState === 'MOVING' || filterWheelState === 'HOMING';
+    // const isFilterMoving = filterWheelState === 'MOVING' || filterWheelState === 'HOMING';
+    const isFilterMoving = false;
     const isLinearStageMoving = linearStageState === 'MOVING' || linearStageState === 'HOMING';
     const isGratingMoving = gratingWheelState === 'MOVING' || gratingWheelState === 'HOMING';
 
-    const isFilterBlocking = filterWheelState !== 'STATIONARY';
-    const isGratingBlocking = gratingWheelState !== 'STATIONARY';
-    const isShutterBlocking = shutterState === 'CLOSED' || shutterState === 'OPENING';
+    // const isFilterBlocking = filterWheelState !== 'STATIONARY';
+    const isFilterBlocking = false;
+    // const isGratingBlocking = gratingWheelState !== 'STATIONARY';
+    const isGratingBlocking = false;
+    // const isShutterBlocking = shutterState === 'CLOSED' || shutterState === 'OPENING';
+    const isShutterBlocking = false;
 
     return (
       <div className={styles.latissContainer}>
