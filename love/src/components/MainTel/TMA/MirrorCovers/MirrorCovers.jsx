@@ -103,13 +103,17 @@ export default class MirrorCovers extends Component {
           { this.getBase(x0, y0, equivalentAzimuthActual) }
           
             <g
-                style={{transform: `rotateZ(${equivalentAzimuthActual}deg)`, transformOrigin: `50% 50%`}}
+                style={{
+                  transition: 'transform 1.5s linear 0s',
+                  transform: `rotateZ(${equivalentAzimuthActual}deg)`,
+                  transformOrigin: `50% 50%`
+                }}
             >
               { this.getMirrorCover(angleClosed, angleClosedBorder, viewBoxSize) }
               { this.getMount(x0, y0) }
             </g>
 
-            { this.getDemand(equivalentAzimuthDemand) }
+            { equivalentAzimuthDemand !== equivalentAzimuthActual ?? this.getDemand(equivalentAzimuthDemand) }
             
         </svg>
     );
@@ -130,7 +134,11 @@ export default class MirrorCovers extends Component {
           }}
         />
         <g
-            style={{transform: `rotateZ(${equivalentAzimuthActual}deg)`, transformOrigin: `50% 50%`}}
+            style={{
+              transition: 'transform 1.5s linear 0s',
+              transform: `rotateZ(${equivalentAzimuthActual}deg)`,
+              transformOrigin: `50% 50%`
+            }}
         >
             <path
                 className={styles.cls3}
@@ -155,6 +163,7 @@ export default class MirrorCovers extends Component {
           strokeDasharray: 6,
           fill: "none",
           strokeMiterlimit: 10,
+          transition: 'transform 1.5s linear 0s',
           transform: `rotateZ(${equivalentAzimuthDemand}deg)`, transformOrigin: `50% 50%`
         }}
       />

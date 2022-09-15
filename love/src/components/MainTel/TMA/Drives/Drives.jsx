@@ -9,9 +9,9 @@ import styles from './Drives.module.css';
 export default class Drives extends Component {
     static propTypes = {
         /** Array data of Drivers about the azimuth */
-        azimuthDrives: PropTypes.number,
+        azimuthDrives: PropTypes.arrayOf(PropTypes.number),
         /** Array data of Drivers about the elevation */
-        elevationDrivers: PropTypes.number,
+        elevationDrivers: PropTypes.arrayOf(PropTypes.number),
     };
 
     static defaultProps = {
