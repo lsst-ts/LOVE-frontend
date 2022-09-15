@@ -44,9 +44,9 @@ export default class TMA extends Component {
     /** Mirror Covers Motion Deployment State */
     mirrorCovers: PropTypes.number,
     /** Array data of Drivers about the azimuth */
-    azimuthDrives: PropTypes.array,
+    azimuthDrives: PropTypes.arrayOf(PropTypes.number),
     /** Array data of Drivers about the elevation */
-    elevationDrives: PropTypes.array,
+    elevationDrives: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {

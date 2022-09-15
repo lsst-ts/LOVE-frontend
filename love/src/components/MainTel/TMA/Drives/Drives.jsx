@@ -8,9 +8,9 @@ import styles from './Drives.module.css';
 export default class Drives extends Component {
   static propTypes = {
     /** Array data of Drivers about the azimuth */
-    azimuthDrives: PropTypes.array,
+    azimuthDrives: PropTypes.arrayOf(PropTypes.number),
     /** Array data of Drivers about the elevation */
-    elevationDrivers: PropTypes.array,
+    elevationDrivers: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
@@ -28,6 +28,7 @@ export default class Drives extends Component {
       type: 'number',
       className: styles.angleColumn,
       render: (value) => (isNaN(value) || Number.isInteger(value) ? value : `${value.toFixed(2)}º`),
+
     };
   }
 

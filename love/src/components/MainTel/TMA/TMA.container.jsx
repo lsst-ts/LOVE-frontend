@@ -15,7 +15,7 @@ import SubscriptionTableContainer from '../../GeneralPurpose/SubscriptionTable/S
 export const schema = {
   description:
     'View of Telescope Mount Assembly',
-  defaultSize: [109, 88],
+  defaultSize: [90, 53],
   props: {
     title: {
       type: 'string',
