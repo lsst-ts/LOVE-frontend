@@ -266,3 +266,7 @@
 .warningIcon svg {
   vertical-align: middle;
 }
+
+.preText {
+  white-space: pre-wrap;
+}
