@@ -446,18 +446,6 @@ class Layout extends Component {
             />
             <span>SAL status</span>
           </div>
-          {/* <div className={styles.statusMenuElement} title="SAL status">
-            <LabeledStatusTextContainer
-              label={'SAL status'}
-              groupName={'event-ATMCS-0-m3State'}
-              stateToLabelMap={{
-                0: this.state.salStatus.label,
-              }}
-              stateToStyleMap={{
-                0: this.state.salStatus.style,
-              }}
-            />
-          </div> */}
           <div className={styles.divider}></div>
           <div className={styles.heartbeatMenuElement} title={this.state.efdStatus.label}>
             <HeartbeatIcon
