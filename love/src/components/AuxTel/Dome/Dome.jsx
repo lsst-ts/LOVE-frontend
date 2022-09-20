@@ -200,10 +200,8 @@ export default class Dome extends Component {
       historicalData: this.state.historicalData,
     };
 
-    // console.log(currentPointing)
     return (
       <div className={styles.domeContainer}>
-        {/* <h2>TOP VIEW</h2> */}
         <div className={styles.topRow}>
           <div className={styles.skymapGridContainer}>
             {/* <SkymapGrid width={width} height={height} isProjected={isProjected} /> */}
