@@ -70,7 +70,7 @@ export default class Summary extends Component {
               </div>
               <span className={styles.statusTextLabel}>M3 Port: </span>
               <div className={styles.statusTextWrapper}>
-                <StatusText status={'ok'}>Nasmith1</StatusText>
+                <StatusText status={'ok'}>Nasmyth1</StatusText>
               </div>
               {/* <span className={styles.statusTextLabel}>Az: </span>
               <span className={styles.statusTextWrapper}>
@@ -120,7 +120,7 @@ export default class Summary extends Component {
               </div>
               <span className={styles.statusTextLabel}>Disperser position: </span>
               <div className={styles.statusTextWrapper}>
-                <StatusText status={'ok'}>Nasmith1</StatusText>
+                <StatusText status={'ok'}>Nasmyth1</StatusText>
               </div>
             </div>
           </div>
