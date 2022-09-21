@@ -206,8 +206,8 @@ export default class EventLog extends PureComponent {
               </div>
             </div>
             <Separator className={styles.innerSeparator} />
-            <div className={styles.messageText}>{msg.message.value}</div>
-            <div className={styles.messageTraceback}>{msg.traceback.value}</div>
+            <pre className={styles.preText}>{msg.message.value}</pre>
+            <pre className={styles.preText}>{msg.traceback.value}</pre>
           </div>
         </Card>
       )
