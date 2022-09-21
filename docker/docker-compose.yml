@@ -11,4 +11,5 @@ services:
      - 3000:3000
     volumes:
       - ../love:/usr/src/love
+      - ../docs:/usr/src/docs
       - /usr/src/love/node_modules
