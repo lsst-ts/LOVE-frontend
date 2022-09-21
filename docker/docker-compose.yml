@@ -10,5 +10,5 @@ services:
     ports:
      - 3000:3000
     volumes:
-      - ..:/usr/src/love
-      - /usr/src/love/love/node_modules
+      - ../love:/usr/src/love
+      - /usr/src/love/node_modules
