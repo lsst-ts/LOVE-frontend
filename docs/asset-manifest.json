@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.js": "/build/bundle.f4512d6b.js",
+    "main.js": "/build/bundle.b9c3e68a.js",
     "main.css": "/static/css/main.259b8404.css",
     "responsive-grid-state-machine.svg": "/responsive-grid-state-machine.svg",
     "Montserrat-BlackItalic.ttf": "/4404f7c61ef37bcfd52a.ttf",
@@ -31,7 +31,7 @@
     "index.html": "/index.html"
   },
   "entrypoints": [
-    "build/bundle.f4512d6b.js",
+    "build/bundle.b9c3e68a.js",
     "static/css/main.259b8404.css"
   ]
 }
