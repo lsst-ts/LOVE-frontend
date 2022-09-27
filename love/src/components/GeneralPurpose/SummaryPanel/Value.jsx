@@ -43,7 +43,7 @@ const Value = ({
         {parsedChild.map((c) => {
           return (
             <span key={c} className={styles.value}>
-              {c.toFixed ? c.toFixed(4) : c}
+              {c.toFixed ? c.toFixed(3) : c}
             </span>
           );
         })}
@@ -51,7 +51,7 @@ const Value = ({
     );
   }
   /** Display strings and numbers. Truncate to 4 decimal places in the case of numbers */
-  return <span className={styles.value}>{parsedChild.toFixed ? parsedChild.toFixed(4) : parsedChild}</span>;
+  return <span className={styles.value}>{parsedChild.toFixed ? parsedChild.toFixed(3) : parsedChild}</span>;
 };
 
 export default Value;

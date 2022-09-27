@@ -15,6 +15,7 @@ import {
   getPermCmdExec,
   getTokenSwapStatus,
   getConfig,
+  getEfdConfig,
 } from '../../redux/selectors';
 import { logout, receiveConfig } from '../../redux/actions/auth';
 import { addGroup, removeGroup, requestSALCommand, resetSubscriptions } from '../../redux/actions/ws';
@@ -42,6 +43,7 @@ const mapStateToProps = (state) => {
   const execPermission = getPermCmdExec(state);
   const getExecPermission = () => getPermCmdExec(state);
   const tokenSwapStatus = getTokenSwapStatus(state);
+  const efdConfigFile = getEfdConfig(state);
   return {
     user,
     config,
@@ -58,6 +60,7 @@ const mapStateToProps = (state) => {
     execPermission,
     getExecPermission,
     tokenSwapStatus,
+    efdConfigFile,
   };
 };
 

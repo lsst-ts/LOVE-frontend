@@ -322,8 +322,8 @@ export default class CSCExpanded extends PureComponent {
                         <div className={styles.timestamp} title="private_rcvStamp">
                           {formatTimestamp(msg.private_rcvStamp.value * 1000)}
                         </div>
-                        <div className={styles.messageText}>{msg.errorReport.value}</div>
-                        <div className={styles.messageTraceback}>{msg.traceback.value}</div>
+                        <pre className={styles.preText}>{msg.errorReport.value}</pre>
+                        <pre className={styles.preText}>{msg.traceback.value}</pre>
                       </div>
                     </div>
                   );

@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import lodash from 'lodash';
 import isEqual from 'lodash/isEqual';
 import ManagerInterface, { getUserHost } from 'Utils';
+import { AUTHLIST_REQUEST_ACCEPTED } from 'Constants';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import Modal from 'components/GeneralPurpose/Modal/Modal';
@@ -164,7 +165,7 @@ export default class SummaryAuthList extends Component {
     if (type === 'User') {
       this.setState({
         removeIdentityRequest: () => {
-          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, '').then(() => {
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, `-${identityToRemove}`, '').then((response) => {
             this.setState({ removeIdentityModalShown: false });
           });
         },
@@ -172,7 +173,7 @@ export default class SummaryAuthList extends Component {
     } else if (type === 'CSC') {
       this.setState({
         removeIdentityRequest: () => {
-          ManagerInterface.requestAuthListAuthorization(user, targetCSC, '', `-${identityToRemove}`).then(() => {
+          ManagerInterface.requestAuthListAuthorization(user, targetCSC, '', `-${identityToRemove}`).then((response) => {
             this.setState({ removeIdentityModalShown: false });
           });
         },
@@ -219,7 +220,7 @@ export default class SummaryAuthList extends Component {
       removeIdentityModalText: modalText,
       removeIdentityRequest: () => {
         ManagerInterface.requestAuthListAuthorization(user, cscToChange, authorizedUsers, nonAuthorizedCSCs).then(
-          () => {
+          (response) => {
             this.setState({ removeIdentityModalShown: false });
           },
         );
@@ -231,7 +232,10 @@ export default class SummaryAuthList extends Component {
     const { user, authlistState } = this.props;
     const requests = [];
     Object.entries(authlistState).forEach(([key, val]) => {
-      if (!val) return;
+      if (
+        !val
+        || (val[0].authorizedUsers.value === '' && val[0].nonAuthorizedCSCs.value === '')
+      ) return;
 
       const keyTokens = key.split('-');
       const csc = `${keyTokens[1]}:${keyTokens[2]}`;
@@ -466,7 +470,7 @@ export default class SummaryAuthList extends Component {
         unauthorize_cscs,
         message,
         duration,
-      ).then(() => {
+      ).then((response) => {
         this.setState({
           csc_to_change: '',
           authorize_users: '',

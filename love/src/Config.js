@@ -160,8 +160,8 @@ export const stateToStyleCamera = {
 export const stateToStyleMount = {
   'NOT READY': 'warning',
   'IN POSITION': 'ok',
-  NASMITH1: 'ok',
-  NASMITH2: 'ok',
+  NASMYTH1: 'ok',
+  NASMYTH2: 'ok',
   PORT3: 'ok',
   CLOSED: 'ok',
   OPEN: 'ok',
@@ -289,8 +289,8 @@ export const mountTrackingStateMap = {
 export const m3RotatorStateMap = {
   1: 'REMOTECONTROL',
   2: 'HANDPADDLECONTROL',
-  6: 'NASMITH1',
-  7: 'NASMITH2',
+  6: 'NASMYTH1',
+  7: 'NASMYTH2',
   8: 'PORT3',
   9: 'IN MOTION',
   10: 'UNKNOWN POSITION',
@@ -298,8 +298,8 @@ export const m3RotatorStateMap = {
 };
 
 export const m3PortSelectedStateMap = {
-  6: 'NASMITH1',
-  7: 'NASMITH2',
+  6: 'NASMYTH1',
+  7: 'NASMYTH2',
   8: 'PORT3',
   0: 'UNKNOWN',
 };
@@ -412,8 +412,8 @@ export const m2ActuatorLimitSwitchStateToStyle = {
 };
 
 export const stateToStyleDomeAndMount = {
-  NASMITH1: 'ok',
-  NASMITH2: 'ok',
+  NASMYTH1: 'ok',
+  NASMYTH2: 'ok',
   PORT3: 'ok',
   UNKNOWN: 'invalid',
   INMOTION: 'running',

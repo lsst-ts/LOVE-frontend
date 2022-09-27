@@ -96,6 +96,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
   return $;
 };
 
+function fetchWithTimeout(url, options={}, timeout=2000) {
+  return Promise.race([
+    fetch(url, options),
+    new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('timeout')), timeout)
+    })
+  ]);
+}
+
 export default class ManagerInterface {
   constructor() {
     this.callback = null;
@@ -305,6 +314,27 @@ export default class ManagerInterface {
       return response.json().then((resp) => {
         return resp;
       });
+    });
+  }
+
+  static getEFDStatus(url) {
+    if (!url) {
+      return new Promise(function(resolve, _) {
+        resolve({label: "EFD Status URL is not present in LOVE Configuration File", style: "invalid"});
+      });
+    }
+    return fetchWithTimeout(url, {method: 'GET'}).then(result => {
+      if (result.status == 200) {
+        return {label: "EFD Healthy Status Pass", style: "ok"};
+      }
+      if (result.status === 503) {
+        return {label: "EFD Healthy Status Fail", style: "alert"};
+      }
+      result.json().then((resp) => {
+        return {label: "EFD Healthy Status Unknown", style: "alert", response: resp};
+      });
+    }).catch(err => {
+      return {label: "EFD Healthy Status Fail", style: "alert", error: err};
     });
   }
 

@@ -132,13 +132,8 @@
   user-select: none;
 }
 
-.messageText {
-  padding-bottom: 0.5em;
-  word-break: break-all;
-}
-
-.messageTraceback {
-  word-break: break-all;
+.preText {
+  white-space: pre-wrap;
 }
 
 .errorCodeContainer {

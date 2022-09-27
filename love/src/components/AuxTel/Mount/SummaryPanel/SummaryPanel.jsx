@@ -46,9 +46,15 @@ export default class SummaryTable extends Component {
     //ATMCS
     const m3State = m3RotatorStateMap[this.props.m3State] || m3RotatorStateMap[0];
     const m3PortSelected = m3PortSelectedStateMap[this.props.m3PortSelected] || m3PortSelectedStateMap[0];
-    const m3InPosition = m3InPositionStateMap[this.props.m3InPosition ? 1 : 0];
     const nasmyth1RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth1RotatorInPosition];
     const nasmyth2RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth2RotatorInPosition];
+
+    let m3InPositionState = 0; // UNKNOWN
+    if (this.props.m3InPositionn !== 0) {
+      m3InPositionState = this.props.m3InPosition ? 2 : 1; // IN POSITION : NOT READY
+    }
+    const m3InPositionText = m3InPositionStateMap[m3InPositionState];
+
     //ATPneumatics
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState] || m1CoverStateStateMap[0];
     //Hexapod
@@ -156,7 +162,7 @@ export default class SummaryTable extends Component {
         </Value>
         <Label>M3 position</Label>
         <Value>
-          <StatusText status={stateToStyleMount[m3InPosition]}>{m3InPosition}</StatusText>
+          <StatusText status={stateToStyleMount[m3InPositionText]}>{m3InPositionText}</StatusText>
         </Value>
         {this.props.m3PortSelected === 1 ? (
           <>

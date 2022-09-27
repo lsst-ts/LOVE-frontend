@@ -22,8 +22,8 @@ import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 import Limits from '../../GeneralPurpose/Limits/Limits';
 
-const M3PORTNASMITH1 = 6;
-const M3PORTNASMITH2 = 7;
+const M3PORTNASMYTH1 = 6;
+const M3PORTNASMYTH2 = 7;
 
 export default class LightPath extends Component {
   componentDidMount = () => {
@@ -306,7 +306,7 @@ export default class LightPath extends Component {
     }
     const nasmyth1RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth1RotatorInPositionState];
     let nasmyth1Class = styles[stateToStyleLightpath[nasmyth1RotatorInPositionText]];
-    if (m3PortSelected !== M3PORTNASMITH1) nasmyth1Class = styles.disabled;
+    if (m3PortSelected !== M3PORTNASMYTH1) nasmyth1Class = styles.disabled;
     const mountEncoders = props.mountEncoders;
     const target = props.target;
     const mountRotator = {
@@ -394,7 +394,7 @@ export default class LightPath extends Component {
     }
     const nasmyth2RotatorInPositionText = nasmythRotatorInPositionStateMap[nasmyth2RotatorInPositionState];
     let nasmyth2Class = styles[stateToStyleLightpath[nasmyth2RotatorInPositionText]];
-    if (m3PortSelected !== M3PORTNASMITH2) nasmyth2Class = styles.disabled;
+    if (m3PortSelected !== M3PORTNASMYTH2) nasmyth2Class = styles.disabled;
     const mountEncoders = props.mountEncoders;
     const target = props.target;
     const mountRotator = {
@@ -522,8 +522,8 @@ export default class LightPath extends Component {
         <path
           className={styles.lightpath}
           d={`M 40 24
-            L 45 ${portSelected === M3PORTNASMITH2 ? higherHeight : lowerHeight}
-            L 55 ${portSelected === M3PORTNASMITH1 ? higherHeight : lowerHeight}
+            L 45 ${portSelected === M3PORTNASMYTH2 ? higherHeight : lowerHeight}
+            L 55 ${portSelected === M3PORTNASMYTH1 ? higherHeight : lowerHeight}
             L 60 24
             L 40 24`}
         ></path>
@@ -538,16 +538,16 @@ export default class LightPath extends Component {
     const lowerPort = 208;
     const higherPort = 204;
 
-    if (portSelected !== M3PORTNASMITH1 && portSelected !== M3PORTNASMITH2) return null;
+    if (portSelected !== M3PORTNASMYTH1 && portSelected !== M3PORTNASMYTH2) return null;
     return (
       <svg viewBox="0 0 100 10" x={121.5 - 140 / 2} y={0} width={140} height={15}>
         <path
           className={styles.lightpath}
-          d={`M 45 ${portSelected === M3PORTNASMITH2 ? higherHeight : lowerHeight}
-            L 55 ${portSelected === M3PORTNASMITH1 ? higherHeight : lowerHeight}
-            L ${portSelected === M3PORTNASMITH1 ? -11 : 111} ${portSelected === M3PORTNASMITH1 ? higherPort : lowerPort}
-            L ${portSelected === M3PORTNASMITH1 ? -11 : 111} ${portSelected === M3PORTNASMITH2 ? higherPort : lowerPort}
-            L 45 ${portSelected === M3PORTNASMITH2 ? higherHeight : lowerHeight}`}
+          d={`M 45 ${portSelected === M3PORTNASMYTH2 ? higherHeight : lowerHeight}
+            L 55 ${portSelected === M3PORTNASMYTH1 ? higherHeight : lowerHeight}
+            L ${portSelected === M3PORTNASMYTH1 ? -11 : 111} ${portSelected === M3PORTNASMYTH1 ? higherPort : lowerPort}
+            L ${portSelected === M3PORTNASMYTH1 ? -11 : 111} ${portSelected === M3PORTNASMYTH2 ? higherPort : lowerPort}
+            L 45 ${portSelected === M3PORTNASMYTH2 ? higherHeight : lowerHeight}`}
         ></path>
       </svg>
     );
