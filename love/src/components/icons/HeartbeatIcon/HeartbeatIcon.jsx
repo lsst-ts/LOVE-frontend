@@ -5,7 +5,7 @@ import styles from './HeartbeatIcon.module.css';
 export default class HeartbeatIcon extends Component {
   static propTypes = {
     /** SAL property: Index of Script SAL component */
-    status: PropTypes.oneOf(['ok', 'alert', 'unknown']),
+    status: PropTypes.oneOf(['ok', 'alert', 'unknown', 'invalid']),
     title: PropTypes.string,
   };
 

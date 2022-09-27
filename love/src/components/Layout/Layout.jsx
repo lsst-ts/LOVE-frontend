@@ -19,8 +19,6 @@ import HeartbeatIcon from '../icons/HeartbeatIcon/HeartbeatIcon';
 import NotchCurve from './NotchCurve/NotchCurve';
 import EditIcon from '../icons/EditIcon/EditIcon';
 import ClockContainer from '../Time/Clock/Clock.container';
-import styles from './Layout.module.css';
-import LabeledStatusTextContainer from '../GeneralPurpose/LabeledStatusText/LabeledStatusText.container';
 import { HEARTBEAT_COMPONENTS } from '../../Config';
 import AlarmAudioContainer from '../Watcher/AlarmAudio/AlarmAudio.container';
 import AlarmsList from '../Watcher/AlarmsList/AlarmsList';
@@ -32,6 +30,8 @@ import EmergencyContactsPanel from './EmergencyContactsPanel/EmergencyContactsPa
 import UserDetails from './UserDetails/UserDetails';
 import UserSwapContainer from '../Login/UserSwap.container';
 import { severityEnum } from '../../Config';
+import ManagerInterface from 'Utils';
+import styles from './Layout.module.css';
 
 export const LAYOUT_CONTAINER_ID = 'layoutContainer';
 const BREAK_1 = 865;
@@ -105,6 +105,8 @@ class Layout extends Component {
       tokenSwapRequested: false,
       isTakingScreenshot: false,
       isLightHidden: true,
+      efdStatus: {label: "EFD Healthy status Unknown", style: "invalid"},
+      salStatus: {label: "SAL status Unknown", style: "invalid"},
     };
 
     this.requestToastID = null;
@@ -121,6 +123,7 @@ class Layout extends Component {
     this.props.subscribeToStreams();
     this.heartbeatInterval = setInterval(() => {
       this.checkHeartbeat();
+      this.checkEfdStatus();
     }, 3000);
   };
 
@@ -238,6 +241,16 @@ class Layout extends Component {
     });
   };
 
+  checkEfdStatus = () => {
+    const url = this.props.efdConfigFile?.urlStatus;
+    const status = ManagerInterface.getEFDStatus(url);
+    status.then(result => {
+      this.setState({
+        efdStatus: result,
+      });
+    });
+  }
+
   getHeartbeatTitle = (component) => {
     if (component === '') return '';
     const heartbeatSource = HEARTBEAT_COMPONENTS[component];
@@ -326,6 +339,8 @@ class Layout extends Component {
       // producerHeartbeatStatus,
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.MANAGER],
       this.state.heartbeatStatus[HEARTBEAT_COMPONENTS.COMMANDER],
+      this.state.efdStatus.style,
+      this.state.salStatus.style,
     ];
     let summaryHeartbeatStatus;
     if (!summaryHeartbeats.every((hb) => hb === undefined)) {
@@ -423,30 +438,22 @@ class Layout extends Component {
             <span>LOVE commander</span>
           </div>
           <div className={styles.divider}></div>
-          <div className={styles.statusMenuElement} title="SAL status">
-            <LabeledStatusTextContainer
-              label={'SAL status'}
-              groupName={'event-ATMCS-0-m3State'}
-              stateToLabelMap={{
-                0: 'UNKNOWN',
-              }}
-              stateToStyleMap={{
-                0: 'unknown',
-              }}
+          <div className={styles.heartbeatMenuElement} title={this.state.salStatus.label}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={this.state.salStatus.style}
+              title={this.state.salStatus.label}
             />
+            <span>SAL status</span>
           </div>
           <div className={styles.divider}></div>
-          <div className={styles.statusMenuElement} title="EFD status">
-            <LabeledStatusTextContainer
-              label={'EFD status'}
-              groupName={'event-ATMCS-0-m3State'}
-              stateToLabelMap={{
-                0: 'UNKNOWN',
-              }}
-              stateToStyleMap={{
-                0: 'unknown',
-              }}
+          <div className={styles.heartbeatMenuElement} title={this.state.efdStatus.label}>
+            <HeartbeatIcon
+              className={styles.icon}
+              status={this.state.efdStatus.style}
+              title={this.state.efdStatus.label}
             />
+            <span>EFD status</span>
           </div>
         </div>
       </DropdownMenu>
