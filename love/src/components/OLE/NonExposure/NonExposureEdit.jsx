@@ -62,6 +62,7 @@ export default class NonExposureEdit extends Component {
     super(props);
     this.id = lodash.uniqueId('nonexposure-edit-');
     const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
+    
 
     logEdit.jiraurl = getLinkJira(logEdit.urls);
     logEdit.fileurl = getFileURL(logEdit.urls);
@@ -141,6 +142,10 @@ export default class NonExposureEdit extends Component {
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
+    payload['jira'] = true;
+    payload['jira_comment'] = true;
+    payload['issue_id'] = 'LOVE-112';
+
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({ confirmationModalShown: false });
@@ -212,6 +217,7 @@ export default class NonExposureEdit extends Component {
     // const selectedCommentType = this.state.logEdit?.level
     //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
     //   : null;
+
     return (
       <>
         {!isLogCreate && !isMenu ? (
@@ -478,7 +484,7 @@ export default class NonExposureEdit extends Component {
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 {!this.state.logEdit.id ? (
                   <span className={styles.checkboxText}>
-                    Create and link new Jira ticket
+                    <span>link Jira ticket</span>
                     <Input
                       type="checkbox"
                       checked={this.state.logEdit.jira}
@@ -488,6 +494,28 @@ export default class NonExposureEdit extends Component {
                         }));
                       }}
                     />
+                    {this.state.logEdit.jira &&
+                      <>
+                        <Toggle
+                          labels={['New', 'Existent']}
+                          isLive={this.state.logEdit.jira_comment}
+                          setLiveMode={(event) =>
+                            this.setState((prevState) => ({
+                              logEdit: { ...prevState.logEdit, jira_comment: event},
+                            }))
+                          }
+                        />
+                        {this.state.logEdit.jira_comment &&
+                          <input
+                            className={styles.issueIdInput}
+                            placeholder="Jira ticket id"
+                            onChange={(event) => this.setState((prevState) => ({
+                              logEdit: {...prevState.logEdit, issue_id: event.target.value},
+                            }))}
+                          />
+                        }
+                      </>
+                    }
                   </span>
                 ) : this.state.logEdit.jiraurl ? (
                   <span className={styles.checkboxText}>
