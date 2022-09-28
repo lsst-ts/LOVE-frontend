@@ -308,14 +308,26 @@
 }
 
 .checkboxText {
-  display: grid;
-  grid-template-columns: 5fr 1fr;
+  display: flex;
   margin-right: 5px;
   align-items: center;
+  flex-wrap: wrap;
 }
 
-.checkboxText button {
+.checkboxText > *:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+.checkboxText > input:first-of-type{
+  width: auto;
+}
+
+.checkboxText > button {
   text-align: right;
+}
+
+.issueIdInput {
+  width: 80px;
 }
 
 .dateTimeRangeStyle {
