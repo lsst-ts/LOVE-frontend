@@ -8,6 +8,7 @@ import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
 import Input from 'components/GeneralPurpose/Input/Input';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Select from 'components/GeneralPurpose/Select/Select';
+import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import ManagerInterface from 'Utils';
 import lodash from 'lodash';
@@ -429,7 +430,7 @@ export default class ExposureAdd extends Component {
 
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 <span className={styles.checkboxText}>
-                  Create and link new Jira ticket
+                <span>link Jira ticket</span>
                   <Input
                     type="checkbox"
                     checked={this.state.newMessage.jira}
@@ -439,6 +440,28 @@ export default class ExposureAdd extends Component {
                       }));
                     }}
                   />
+                  {this.state.newMessage.jira &&
+                      <>
+                        <Toggle
+                          labels={['New', 'Existent']}
+                          isLive={this.state.newMessage.jira_comment}
+                          setLiveMode={(event) =>
+                            this.setState((prevState) => ({
+                              newMessage: { ...prevState.newMessage, jira_comment: event},
+                            }))
+                          }
+                        />
+                        {this.state.newMessage.jira_comment &&
+                          <input
+                            className={styles.issueIdInput}
+                            placeholder="Jira ticket id"
+                            onChange={(event) => this.setState((prevState) => ({
+                              newMessage: {...prevState.newMessage, issue_id: event.target.value},
+                            }))}
+                          />
+                        }
+                      </>
+                    }
                 </span>
 
                 <Button type="submit">
