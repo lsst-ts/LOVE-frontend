@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Multiselect from 'components/GeneralPurpose/MultiSelect/MultiSelect';
-import { EXPOSURE_FLAG_OPTIONS, LOG_TYPE_OPTIONS } from 'Config';
+import { EXPOSURE_FLAG_OPTIONS /* LOG_TYPE_OPTIONS */ } from 'Config';
 import DeleteIcon from 'components/icons/DeleteIcon/DeleteIcon';
 import CloseIcon from 'components/icons/CloseIcon/CloseIcon';
 import TextArea from 'components/GeneralPurpose/TextArea/TextArea';
@@ -115,7 +115,6 @@ export default class ExposureAdd extends Component {
         this.setState({
           observationIds,
           dayObs,
-          /* newMessage: { ...prevState.newMessage, obs_id: undefined }, */
         });
       });
     }
@@ -196,9 +195,10 @@ export default class ExposureAdd extends Component {
 
     const { confirmationModalShown, confirmationModalText } = this.state;
 
-    const selectedCommentType = this.state.newMessage?.level
-      ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
-      : null;
+    // Uncomment next code block to use several level options
+    // const selectedCommentType = this.state.newMessage?.level
+    //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.newMessage.level)
+    //   : null;
 
     return (
       <>
@@ -230,7 +230,7 @@ export default class ExposureAdd extends Component {
                     small
                   />
                 </span>
-
+                {/* Uncomment next code block to use several level options */}
                 {/* <span className={styles.label}>Type of Comment</span>
                 <span className={styles.value}>
                   <Select
@@ -294,7 +294,7 @@ export default class ExposureAdd extends Component {
                         small
                       />
                     </span>
-
+                    {/* Uncomment next code block to use several level options */}
                     {/* <span className={styles.label}>Type of Comment</span>
                     <span className={styles.value}>
                       <Select
@@ -430,7 +430,7 @@ export default class ExposureAdd extends Component {
 
               <span className={isMenu ? styles.footerRightMenu : styles.footerRight}>
                 <span className={styles.checkboxText}>
-                <span>link Jira ticket</span>
+                  <span>link Jira ticket</span>
                   <Input
                     type="checkbox"
                     checked={this.state.newMessage.jira}
@@ -440,28 +440,30 @@ export default class ExposureAdd extends Component {
                       }));
                     }}
                   />
-                  {this.state.newMessage.jira &&
-                      <>
-                        <Toggle
-                          labels={['New', 'Existent']}
-                          isLive={this.state.newMessage.jira_comment}
-                          setLiveMode={(event) =>
+                  {this.state.newMessage.jira && (
+                    <>
+                      <Toggle
+                        labels={['New', 'Existent']}
+                        isLive={this.state.newMessage.jira_comment}
+                        setLiveMode={(event) =>
+                          this.setState((prevState) => ({
+                            newMessage: { ...prevState.newMessage, jira_comment: event },
+                          }))
+                        }
+                      />
+                      {this.state.newMessage.jira_comment && (
+                        <input
+                          className={styles.issueIdInput}
+                          placeholder="Jira ticket id"
+                          onChange={(event) =>
                             this.setState((prevState) => ({
-                              newMessage: { ...prevState.newMessage, jira_comment: event},
+                              newMessage: { ...prevState.newMessage, issue_id: event.target.value },
                             }))
                           }
                         />
-                        {this.state.newMessage.jira_comment &&
-                          <input
-                            className={styles.issueIdInput}
-                            placeholder="Jira ticket id"
-                            onChange={(event) => this.setState((prevState) => ({
-                              newMessage: {...prevState.newMessage, issue_id: event.target.value},
-                            }))}
-                          />
-                        }
-                      </>
-                    }
+                      )}
+                    </>
+                  )}
                 </span>
 
                 <Button type="submit">

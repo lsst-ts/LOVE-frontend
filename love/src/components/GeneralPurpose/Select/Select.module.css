@@ -1,19 +1,10 @@
 .dropDownClassName {
-  /* background-color: inherit; */
   border-color: var(--secondary-font-dimmed-color);
-  /* border: 1px solid var(--secondary-font-dimmed-color); */
-  /* color: inherit; */
-  /* width: 20ch; */
 }
 
 .dropDownPlaceHolderClassName {
   color: var(--secondary-font-color);
 }
-
-/* .dropDownControlClassName:hover {
-  border: 1px solid var(--secondary-font-color);
-} */
-
 
 .dropDownControlClassName {
   background-color: var(--second-secondary-background-color);
@@ -58,5 +49,4 @@
 
 .arrowClassName {
   border-color: var(--secondary-font-dimmed-color) transparent transparent;
-  /* color: inherit; */
 }

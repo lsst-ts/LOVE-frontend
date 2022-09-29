@@ -167,15 +167,6 @@ export default class Exposure extends Component {
           } else {
             return null;
           }
-
-          // return JSON.stringify(flags);
-          // return values.map((val) => {
-          //   return (
-          //     <span>
-          //       <FlagIcon title={val} status={this.statusFlag(val)} className={styles.iconFlag} />
-          //     </span>
-          //   );
-          // });
         },
       },
       {
