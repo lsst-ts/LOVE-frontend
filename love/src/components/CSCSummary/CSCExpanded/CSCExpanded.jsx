@@ -35,6 +35,7 @@ export default class CSCExpanded extends PureComponent {
     subscribeToStreams: PropTypes.func,
     unsubscribeToStreams: PropTypes.func,
     summaryStateCommand: PropTypes.string,
+    cscLogLevelData: PropTypes.number,
   };
 
   static defaultProps = {
@@ -51,6 +52,7 @@ export default class CSCExpanded extends PureComponent {
     logMessageData: [],
     errorCodeData: [],
     summaryStateCommand: undefined,
+    cscLogLevelData: undefined,
   };
 
   componentDidMount = () => {
@@ -151,6 +153,7 @@ export default class CSCExpanded extends PureComponent {
     const openSpliceVersion = this.props.softwareVersions ? this.props.softwareVersions.openSpliceVersion.value : "Unknown";
     const configurationsAvailable = this.props.configurationsAvailable ? this.props.configurationsAvailable.overrides.value.split(",") : null;
     const summaryState = CSCExpanded.states[summaryStateValue];
+    const cscLogLevel = this.props.cscLogLevelData ? this.props.cscLogLevelData.level.value : null
     const { props } = this;
 
     const configurationsAvailableMenuOptions = configurationsAvailable !== null && configurationsAvailable.length > 0 ? [...['',], ...configurationsAvailable] : null;
