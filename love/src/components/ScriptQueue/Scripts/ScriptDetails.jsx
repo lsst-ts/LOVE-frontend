@@ -3,10 +3,11 @@ import scriptStyles from './Scripts.module.css';
 
 const logLevelLabels = {
   '-1': '...',
-  10: 'Info',
-  20: 'Warning',
-  30: 'Debug',
+  10: 'Debug',
+  20: 'Info',
+  30: 'Warning',
   40: 'Error',
+  50: 'Critical',
 };
 
 export default ({
