@@ -1,596 +1,46 @@
-import DebugIcon from 'components/icons/CSCExpanded/DebugIcon/DebugIcon';
 import InfoIcon from 'components/icons/CSCExpanded/InfoIcon/InfoIcon';
-import WarningIcon from 'components/icons/CSCExpanded/WarningIcon/WarningIcon';
 import ErrorIcon from 'components/icons/CSCExpanded/ErrorIcon/ErrorIcon';
 
-export const hasFakeData = false;
+// Commands Configurations
 export const hasCommandPrivileges = true;
+const cmdAck = [
+  { label: 'None', value: undefined },
+  { label: 'LabelNameCommand', value: 'CmdAck from the command that started the slew process' },
+];
+
+// LOVE components to monitor heartbeats
+export const HEARTBEAT_COMPONENTS = {
+  MANAGER: 'Manager',
+  COMMANDER: 'Commander',
+};
+
 // Whether to simulate websocket messages
 export const WEBSOCKET_SIMULATION = false;
 // File located in public/websocket-simulations containing a
 // set of websocket messages
 export const WEBSOCKET_SIMULATION_FILE = 'test.json';
+
 // Base URL for ScriptQueue scripts' documentation
 export const SCRIPT_DOCUMENTATION_BASE_URL = 'https://ts-standardscripts.lsst.io/py-api';
+
 // Moment formats
 export const ISO_DATE_FORMAT = 'YYYY/MM/DD';
 export const TIME_FORMAT = 'HH:mm:ss';
 export const DATE_TIME_FORMAT = 'YYYY/MM/DD, HH:mm:ss';
-// OLE Configurations
-// export const LOG_TYPE_OPTIONS = ['fault', 'ok', 'wait'];
-export const LOG_TYPE_OPTIONS = [
-  { label: 'debug', value: 10 },
-  { label: 'info', value: 20 },
-  { label: 'warning', value: 30 },
-  { label: 'error', value: 40 },
-  { label: 'fatal', value: 50 },
-];
-export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 
-export const exposureFlagStateToStyle = {
-  none: 'ok',
-  junk: 'warning',
-  questionable: 'alert',
-};
-
-export const iconLevelOLE = {
-  info: <InfoIcon />,
-  urgent: <ErrorIcon />,
-};
-
-export const LSST_SYSTEMS = [
-  'Auxtel',
-  'MT',
-  'ComCam',
-  'LSST Camera',
-  'LATISS',
-  'Computers and Networking',
-  'Observatory Software Tools',
-  'Observing',
-  'Site Performance and Monitoring',
-  'Support Building and Facilities',
-  'Telescope Facility',
-  'Telescope Performance and Monitoring',
-  'Other',
-];
-
-export const LSST_SUBSYSTEMS = [
-  'Hardware',
-  'Software',
-  'Network',
-  'Phone System',
-  'Mechanical',
-  'Electrical',
-  'DM',
-  'Scheduler',
-  'All-sky camera',
-  'Weather Monitor',
-  'Site cameras',
-  'LOVE',
-  'Calibration',
-];
-
-// eslint-disable-next-line
-export const CSCSummaryHierarchy = {
-  'Auxiliary Telescope': {
-    ATTCS: [
-      { name: 'ATMCS', salindex: 0 },
-      { name: 'ATPtg', salindex: 0 },
-      { name: 'ATDome', salindex: 0 },
-      { name: 'ATDomeTrajectory', salindex: 0 },
-      { name: 'ATAOS', salindex: 0 },
-      { name: 'ATPneumatics', salindex: 0 },
-      { name: 'ATHexapod', salindex: 0 },
-    ],
-    ATCalSys: [
-      { name: 'ATMonochromator', salindex: 0 },
-      { name: 'FiberSpectrograph', salindex: 0 },
-      { name: 'ATWhiteLight', salindex: 0 },
-      { name: 'Electrometer', salindex: 1 },
-      { name: 'Electrometer', salindex: 2 },
-      { name: 'LinearStage', salindex: 1 },
-      { name: 'LinearStage', salindex: 2 },
-    ],
-    LATISS: [
-      { name: 'ATCamera', salindex: 0 },
-      { name: 'ATArchiver', salindex: 0 },
-      { name: 'ATHeaderService', salindex: 0 },
-      { name: 'ATSpectrograph', salindex: 0 },
-    ],
+// Limits Configurations
+export const MTMountLimits = {
+  elevation: {
+    min: 5,
+    max: 90,
   },
-  'Main Telescope': {
-    MTCS: [
-      { name: 'MTMount', salindex: 0 },
-      { name: 'MTPtg', salindex: 0 },
-      { name: 'MTAOS', salindex: 0 },
-      { name: 'MTM1M3', salindex: 0 },
-      { name: 'MTM2', salindex: 0 },
-      { name: 'MTHexapod', salindex: 1 },
-      { name: 'MTHexapod', salindex: 2 },
-      { name: 'MTRotator', salindex: 0 },
-      { name: 'MTDome', salindex: 0 },
-      { name: 'MTDomeTrajectory', salindex: 0 },
-    ],
-    ComCam: [
-      { name: 'CCCamera', salindex: 0 },
-      { name: 'CCArchiver', salindex: 0 },
-      { name: 'CCHeaderService', salindex: 0 },
-    ],
-  },
-  Observatory: {
-    HigherLevel: [
-      { name: 'ScriptQueue', salindex: 1 },
-      { name: 'ScriptQueue', salindex: 2 },
-      { name: 'Watcher', salindex: 0 },
-    ],
-    Environment: [
-      { name: 'DIMM', salindex: 1 },
-      { name: 'DIMM', salindex: 2 },
-      { name: 'WeatherStation', salindex: 1 },
-    ],
+  azimuth: {
+    min: -270,
+    max: 270,
   },
 };
 
-export const defaultCSCList = [
-  { name: 'ATMCS', salindex: 0 },
-  { name: 'ATPtg', salindex: 0 },
-  { name: 'ATDome', salindex: 0 },
-  { name: 'ATDomeTrajectory', salindex: 0 },
-  { name: 'ATAOS', salindex: 0 },
-  { name: 'ATPneumatics', salindex: 0 },
-  { name: 'ATHexapod', salindex: 0 },
-  { name: 'ATMonochromator', salindex: 0 },
-  { name: 'FiberSpectrograph', salindex: 0 },
-  { name: 'ATWhiteLight', salindex: 0 },
-  { name: 'Electrometer', salindex: 1 },
-  { name: 'Electrometer', salindex: 2 },
-  { name: 'LinearStage', salindex: 1 },
-  { name: 'LinearStage', salindex: 2 },
-  { name: 'ATCamera', salindex: 0 },
-  { name: 'ATArchiver', salindex: 0 },
-  { name: 'ATHeaderService', salindex: 0 },
-  { name: 'ATSpectrograph', salindex: 0 },
-  { name: 'MTMount', salindex: 0 },
-  { name: 'MTPtg', salindex: 0 },
-  { name: 'MTAOS', salindex: 0 },
-  { name: 'MTM1M3', salindex: 0 },
-  { name: 'MTM2', salindex: 0 },
-  { name: 'MTHexapod', salindex: 1 },
-  { name: 'MTHexapod', salindex: 2 },
-  { name: 'MTRotator', salindex: 0 },
-  { name: 'MTDome', salindex: 0 },
-  { name: 'MTDomeTrajectory', salindex: 0 },
-  { name: 'CCCamera', salindex: 0 },
-  { name: 'CCArchiver', salindex: 0 },
-  { name: 'CCHeaderService', salindex: 0 },
-  { name: 'ScriptQueue', salindex: 1 },
-  { name: 'ScriptQueue', salindex: 2 },
-  { name: 'Watcher', salindex: 0 },
-  { name: 'DIMM', salindex: 1 },
-  { name: 'DIMM', salindex: 2 },
-  { name: 'WeatherStation', salindex: 1 },
-];
-
-export const getCameraStatusStyle = (status) => {
-  if (!status) return '';
-  if (status.toLowerCase() === 'integrating') return 'running';
-  if (status.toLowerCase() === 'reading_out') return 'running';
-  if (status.toLowerCase() === 'ready') return 'ok';
-  if (status.toLowerCase() === 'done') return 'ok';
-  return '';
-};
-
-export const stateToStyleLATISS = {
-  HOMING: 'running',
-  MOVING: 'running',
-  STATIONARY: 'ok',
-  NOTINPOSITION: 'warning',
-  NEEDS_CLEAR: 'ok',
-  CLEARING: 'running',
-  INTEGRATING: 'running',
-  READING_OUT: 'running',
-  QUIESCENT: 'ok',
-  CLOSED: 'ok',
-  OPEN: 'ok',
-  CLOSING: 'running',
-  OPENING: 'running',
-};
-
-export const stateToStyleCamera = {
-  NEEDS_CLEAR: 'ok',
-  CLEARING: 'running',
-  INTEGRATING: 'running',
-  READING_OUT: 'running',
-  QUIESCENT: 'ok',
-  READY: 'ok',
-  NOT_READY: 'warning',
-  GETTING_READY: 'running',
-  DISABLED: 'warning',
-  ENABLED: 'ok',
-  CLOSED: 'ok',
-  OPEN: 'ok',
-  CLOSING: 'running',
-  OPENING: 'running',
-  END_READOUT: 'ok',
-  END_TELEMETRY: 'ok',
-};
-
-export const stateToStyleMount = {
-  'NOT READY': 'warning',
-  'IN POSITION': 'ok',
-  NASMYTH1: 'ok',
-  NASMYTH2: 'ok',
-  PORT3: 'ok',
-  CLOSED: 'ok',
-  OPEN: 'ok',
-  OPENED: 'ok',
-  REMOTECONTROL: 'ok',
-  HANDPADDLECONTROL: 'ok',
-  INVALID: 'warning',
-  'IN MOTION': 'running',
-  'NOT IN POSITION': 'warning',
-  UNKNOWN: 'invalid',
-  'UNKNOWN POSITION': 'invalid',
-};
-
-export const stateToStyleDome = {
-  'IN POSITION': 'ok',
-  'NOT IN POSITION': 'warning',
-  UNKNOWN: 'invalid',
-};
-
-export const stateToStyleLightpath = {
-  DISABLED: 'warning',
-  ENABLED: 'ok',
-  FAULT: 'warning',
-  OFFLINE: 'warning',
-  STANDBY: 'warning',
-  CLOSED: 'ok',
-  OPEN: 'ok',
-  OPENED: 'ok',
-  'IN MOTION': 'running',
-  INVALID: 'warning',
-  'NOT READY': 'warning',
-  'IN POSITION': 'ok',
-  UNKNOWN: 'invalid',
-  'UNKNOWN POSITION': 'invalid',
-};
-
-// M2
-
-// M1M3
-export const m1m3DetailedStateMap = {
-  1: 'DISABLED STATE',
-  2: 'FAULT STATE',
-  3: 'OFFLINE STATE',
-  4: 'STANDBY STATE',
-  5: 'PARKED STATE',
-  6: 'RAISING STATE',
-  7: 'ACTIVE STATE',
-  8: 'LOWERING STATE',
-  9: 'PARKED ENGINEERING STATE',
-  10: 'RAISING ENGINEERING STATE',
-  11: 'ACTIVE ENGINEERING STATE',
-  12: 'LOWERING ENGINEERING STATE',
-  13: 'LOWERING FAULT STATE',
-  14: 'PROFILE HARDPOINT CORRECTION STATE',
-  0: 'UNKNOWN',
-};
-
-export const m1m3DetailedStateToStyle = {
-  'DISABLED STATE': 'warning',
-  'FAULT STATE': 'warning',
-  'OFFLINE STATE': 'warning',
-  'STANDBY STATE': 'warning',
-  'PARKED STATE': 'ok',
-  'RAISING STATE': 'running',
-  'ACTIVE STATE': 'ok',
-  'LOWERING STATE': 'running',
-  'PARKED ENGINEERING STATE': 'ok',
-  'RAISING ENGINEERING STATE': 'running',
-  'ACTIVE ENGINEERING STATE': 'ok',
-  'LOWERING ENGINEERING STATE': 'running',
-  'LOWERING FAULT STATE': 'running',
-  'PROFILE HARDPOINT CORRECTION STATE': 'ok',
-};
-
-export const m1mActuatorILCStateMap = {
-  1: 'ON',
-  0: 'OFF',
-};
-
-export const m1m3HardpointActuatorMotionStateMap = {
-  1: 'CHASING',
-  2: 'STEPPING',
-  3: 'QUICK POSITIONING',
-  4: 'FINE POSITIONING',
-  0: 'STANDBY',
-};
-
-export const m1m3ILCStateToStyle = {
-  ON: 'ok',
-  OFF: 'warning',
-};
-
-// Dome and mount view
-export const domeAzimuthStateMap = {
-  1: 'NOT MOVING',
-  2: 'MOVING CW',
-  3: 'MOVING CCW',
-  0: 'UNKNOWN',
-};
-
-export const dropoutDoorStateMap = {
-  1: 'CLOSED',
-  2: 'OPEN',
-  3: 'PARTIALLY OPEN',
-  4: 'OPENING',
-  5: 'CLOSING',
-  0: 'UNKNOWN',
-};
-
-export const mainDoorStateMap = {
-  1: 'CLOSED',
-  2: 'OPEN',
-  3: 'PARTIALLY OPEN',
-  4: 'OPENING',
-  5: 'CLOSING',
-  0: 'UNKNOWN',
-};
-
-export const mountTrackingStateMap = {
-  1: 'DISABLED',
-  2: 'ENABLED',
-  3: 'STOPPING',
-  0: 'UNKNOWN',
-};
-
-export const m3RotatorStateMap = {
-  1: 'REMOTECONTROL',
-  2: 'HANDPADDLECONTROL',
-  6: 'NASMYTH1',
-  7: 'NASMYTH2',
-  8: 'PORT3',
-  9: 'IN MOTION',
-  10: 'UNKNOWN POSITION',
-  0: 'UNKNOWN',
-};
-
-export const m3PortSelectedStateMap = {
-  6: 'NASMYTH1',
-  7: 'NASMYTH2',
-  8: 'PORT3',
-  0: 'UNKNOWN',
-};
-
-export const m3InPositionStateMap = {
-  1: 'NOT READY',
-  2: 'IN POSITION',
-  0: 'UNKNOWN',
-};
-
-// ATAOS
-export const ataosCorrectionsStateMap = {
-  false: 'DISABLED',
-  true: 'ENABLED',
-  undefined: 'UNKNOWN',
-};
-
-export const ataosCorrectionsStateToStyle = {
-  DISABLED: 'warning',
-  ENABLED: 'ok',
-  UNKNOWN: 'invalid',
-};
-
-// ATPneumatics
-export const m1CoverStateStateMap = {
-  1: 'DISABLED',
-  2: 'ENABLED',
-  3: 'FAULT',
-  4: 'OFFLINE',
-  5: 'STANDBY',
-  6: 'CLOSED',
-  7: 'OPENED',
-  8: 'IN MOTION',
-  9: 'INVALID',
-  0: 'UNKNOWN',
-};
-
-export const m1CoverLimitSwitchesStateMap = {
-  1: 'OPEN',
-  2: 'CLOSED',
-  0: 'UNKNOWN',
-};
-
-export const m1VentsLimitSwitchesStateMap = {
-  1: 'NOT READY',
-  2: 'IN POSITION',
-  0: 'UNKNOWN',
-};
-
-// ATHexapod
-export const hexapodInPositionStateMap = {
-  1: 'IN POSITION',
-  2: 'NOT READY',
-  0: 'UNKNOWN',
-};
-
-// LATISS
-export const movingElementStateMap = {
-  1: 'HOMING',
-  2: 'MOVING',
-  3: 'STATIONARY',
-  4: 'NOTINPOSITION',
-  0: 'UNKNOWN',
-};
-
-export const nasmythRotatorInPositionStateMap = {
-  1: 'NOT READY',
-  2: 'IN POSITION',
-  0: 'UNKNOWN',
-};
-
-export const raftsStateMap = {
-  1: 'NEEDS_CLEAR',
-  2: 'CLEARING',
-  3: 'INTEGRATING',
-  4: 'READING_OUT',
-  5: 'QUIESCENT',
-  0: 'UNKNOWN',
-};
-
-export const shutterStateMap = {
-  1: 'CLOSED',
-  2: 'OPEN',
-  3: 'CLOSING',
-  4: 'OPENING',
-  0: 'UNKNOWN',
-};
-
-export const inclinationTelemetrySourceStateMap = {
-  1: 'ONBOARD',
-  2: 'MTMOUNT',
-};
-
-export const m2ActuatorILCStateMap = {
-  1: 'FAULT',
-  0: 'OPERATIVE',
-};
-
-export const m2ActuatorILCStateToStyle = {
-  OPERATIVE: 'ok',
-  FAULT: 'warning',
-};
-
-export const m2ActuatorLimitSwitchStateMap = {
-  1: 'CLOSED',
-  0: 'OPEN',
-};
-
-export const m2ActuatorLimitSwitchStateToStyle = {
-  OPEN: 'ok',
-  CLOSED: 'warning',
-};
-
-export const stateToStyleDomeAndMount = {
-  NASMYTH1: 'ok',
-  NASMYTH2: 'ok',
-  PORT3: 'ok',
-  UNKNOWN: 'invalid',
-  INMOTION: 'running',
-  STOPPING: 'warning',
-  ENABLED: 'ok',
-  DISABLED: 'warning',
-  CLOSING: 'warning',
-  OPENING: 'warning',
-  'PARTIALLY OPEN': 'warning',
-  OPEN: 'ok',
-  CLOSED: 'ok',
-  'NOT MOVING': 'ok',
-  'MOVING CW': 'warning',
-  'MOVING CCW': 'warning',
-};
-
-export const motorDriveStateMap = {
-  false: 'DISABLED',
-  true: 'ENABLED',
-};
-
-export const stateToStyleMTMountCommander = {
-  NONE: 'invalid',
-  CSC: 'ok',
-  EUI: 'warning',
-  HHD: 'warning',
-};
-
-export const mtMountCommanderStateMap = {
-  0: 'NONE',
-  1: 'CSC',
-  2: 'EUI',
-  3: 'HHD',
-};
-
-export const mtMountConnectedStateMap = {
-  undefined: 'UNKOWN',
-  false: 'DISCONNECTED',
-  true: 'CONNECTED',
-};
-
-export const stateToStyleMTMountConnected = {
-  UNKOWN: 'invalid',
-  DISCONNECTED: 'warning',
-  CONNECTED: 'ok',
-};
-
-export const stateToStyleMTMountPowerState = {
-  OFF: 'invalid',
-  ON: 'ok',
-  FAULT: 'alert',
-  TURNING_ON: 'warning',
-  TURNING_OFF: 'warning',
-  UNKNOWN: 'invalid',
-};
-
-export const mtMountPowerStateMap = {
-  0: 'OFF',
-  1: 'ON',
-  2: 'FAULT',
-  3: 'TURNING_ON',
-  4: 'TURNING_OFF',
-  15: 'UNKNOWN',
-};
-
-export const stateToStyleMTMountAxisMotionState = {
-  STOPPING: 'warning',
-  STOPPED: 'ok',
-  'MOVING POINT TO POINT': 'warning',
-  JOGGING: 'warning',
-  TRACKING: 'warning',
-  TRACKING_PAUSED: 'warning',
-  UNKNOWN: 'invalid',
-};
-
-export const mtMountAxisMotionStateMap = {
-  0: 'STOPPING',
-  1: 'STOPPED',
-  2: 'MOVING POINT TO POINT',
-  3: 'JOGGING',
-  4: 'TRACKING',
-  5: 'TRACKING_PAUSED',
-  undefined: 'UNKNOWN',
-};
-
-export const mtMountMirrorCoversStateMap = {
-  0: 'RETRACTED',
-  1: 'DEPLOYED',
-  2: 'RETRACTING',
-  3: 'DEPLOYING',
-  4: 'LOST',
-};
-
-export const stateToStyleMotorDrive = {
-  DISABLED: 'ok',
-  ENABLED: 'running',
-};
-
-export const motorBrakeStateMap = {
-  false: 'DISENGAGED',
-  true: 'ENGAGED',
-};
-
-export const stateToStyleMotorBrake = {
-  DISENGAGED: 'running',
-  ENGAGED: 'ok',
-};
-
-export const HEARTBEAT_COMPONENTS = {
-  MANAGER: 'Manager',
-  COMMANDER: 'Commander',
-  /** Deprecated: used for old producer version */
-  /* EVENTS: 'Events',
-  TELEMETRIES: 'Telemetries', */
-};
-
+// Watcher Configurations
 export const severityToStatus = {
   0: 'unknown',
   1: 'ok',
@@ -607,219 +57,7 @@ export const severityEnum = {
   critical: 4,
 };
 
-// MT Camera Hexapod
-export const hexapodStatusStatetoStyle = {
-  UNKNOWN: 'undefined',
-  DISABLED: 'disabled',
-  ENABLED: 'enabled',
-  FAULT: 'fault',
-  OFFLINE: 'offline',
-  STANDBY: 'standby',
-};
-
-export const hexapodCommandableByDDSStateMap = {
-  false: 'NOT COMMANDABLE',
-  true: 'COMMANDABLE',
-};
-
-export const hexapodCommandableByDDSStatetoStyle = {
-  'NOT COMMANDABLE': 'alert',
-  COMMANDABLE: 'ok',
-};
-
-export const hexapodCompensationModeStateMap = {
-  false: 'DISABLED',
-  true: 'ENABLED',
-};
-
-export const hexapodCompensationModeStatetoStyle = {
-  DISABLED: 'undefined',
-  ENABLED: 'ok',
-};
-
-export const hexapodInterlockStateMap = {
-  false: 'Disengaged',
-  true: 'Engaged',
-};
-
-export const hexapodControllerStateMap = {
-  0: 'STANDBY',
-  1: 'DISABLED',
-  2: 'ENABLED',
-  3: 'OFFLINE',
-  4: 'FAULT',
-};
-
-export const hexapodControllerStatetoStyle = {
-  STANDBY: 'ok',
-  DISABLED: 'undefined',
-  ENABLED: 'ok',
-  OFFLINE: 'undefined',
-  FAULT: 'alert',
-};
-
-export const hexapodControllerStateOfflineSubStateMap = {
-  0: 'PUBLISH ONLY',
-  1: 'AVAILABLE',
-};
-
-export const hexapodControllerStateEnabledSubstateMap = {
-  0: 'STATIONARY',
-  1: 'MOVING POINT TO POINT',
-  2: 'SLEWING OR TRACKING',
-  3: 'CONTROLLED STOPPING',
-  4: 'INITIALIING',
-  5: 'RELATIVE',
-  6: 'CONSTANT VELOCITY',
-};
-
-export const hexapodMTInPositionStateMap = {
-  false: 'NOT READY',
-  true: 'IN POSITION',
-};
-
-export const hexapodMTInPositionStatetoStyle = {
-  'NOT READY': 'warning',
-  'IN POSITION': 'ok',
-};
-
-export const hexapodConnectedStateMap = {
-  false: 'DISCONNECTED',
-  true: 'CONNECTED',
-};
-
-export const hexapodConnectedStatetoStyle = {
-  DISCONNECTED: 'alert',
-  CONNECTED: 'ok',
-};
-
-// MTDome
-export const mtdomeStatusStatetoStyle = {
-  UNKNOWN: 'undefined',
-  DISABLED: 'disabled',
-  ENABLED: 'enabled',
-  FAULT: 'fault',
-  OFFLINE: 'offline',
-  STANDBY: 'standby',
-};
-
-export const mtDomeModeStateMap = {
-  0: 'DEGRADED',
-  1: 'NORMAL',
-};
-
-export const mtDomeModeStatetoStyle = {
-  DEGRADED: 'warning',
-  NORMAL: 'ok',
-};
-
-export const mtDomeAzimuthEnabledStateMap = {
-  0: 'DISABLED',
-  1: 'ENABLED',
-  2: 'FAULT',
-};
-
-export const mtDomeAzimuthEnabledStatetoStyle = {
-  DISABLED: 'undefined',
-  ENABLED: 'ok',
-  FAULT: 'fault',
-};
-
-export const mtdomeMotionStateMap = {
-  0: 'CLOSED',
-  1: 'CRAWLING',
-  2: 'MOVING',
-  3: 'OPEN',
-  4: 'PARKED',
-  5: 'PARKING',
-  6: 'STOPPED',
-  7: 'STOPPING',
-  8: 'STOPPING BRAKING',
-  9: 'STOPPED BRAKED',
-  10: 'BRAKES DISENGAGED',
-  11: 'BRAKES ENGAGED',
-  12: 'DEFLATED',
-  13: 'DEFLATING',
-  14: 'DISABLING MOTOR POWER',
-  15: 'DISENGAGING BRAKES',
-  16: 'ENABLING MOTOR POWER',
-  17: 'ENGAGING BRAKES',
-  18: 'GO DEGRADED',
-  19: 'GO NORMAL',
-  20: 'GO STATIONARY',
-  21: 'INFLATED',
-  22: 'INFLATING',
-  23: 'LP DISENGAGED',
-  24: 'LP DISENGAGING',
-  25: 'LP ENGAGED',
-  26: 'LP ENGAGING',
-  27: 'MOTOR COOLING OFF',
-  28: 'MOTOR COOLING ON',
-  29: 'MOTOR POWER OFF',
-  30: 'MOTOR POWER ON',
-  31: 'STARTING MOTOR COOLING',
-  32: 'STOPPING MOTOR COOLING',
-};
-
-export const mtdomeMotionStatetoStyle = {
-  CLOSED: 'undefined',
-  CRAWLING: 'warning',
-  MOVING: 'warning',
-  OPEN: 'ok',
-  PARKED: 'ok',
-  PARKING: 'warning',
-  STOPPED: 'ok',
-  STOPPING: 'warning',
-  'STOPPING BRAKING': 'warning',
-  'STOPPED BRAKED': 'ok',
-  'BRAKES DISENGAGED': 'ok',
-  'BRAKES ENGAGED': 'alert',
-  DEFLATED: 'undefined',
-  DEFLATING: 'warning',
-  'DISABLING MOTOR POWER': 'warning',
-  'DISENGAGING BRAKES': 'warning',
-  'ENABLING MOTOR POWER': 'warning',
-  'ENGAGING BRAKES': 'warning',
-  'GO DEGRADED': 'warning',
-  'GO NORMAL': 'ok',
-  'GO STATIONARY': 'ok',
-  INFLATED: 'ok',
-  INFLATING: 'warning',
-  'LP DISENGAGED': 'undefined',
-  'LP DISENGAGING': 'warning',
-  'LP ENGAGED': 'ok',
-  'LP ENGAGING': 'warning',
-  'MOTOR COOLING OFF': 'undefined',
-  'MOTOR COOLING ON': 'ok',
-  'MOTOR POWER OFF': 'undefined',
-  'MOTOR POWER ON': 'ok',
-  'STARTING MOTOR COOLING': 'warning',
-  'STOPPING MOTOR COOLING': 'warning',
-};
-
-export const mtdomeElevationEnabledStateToMap = {
-  0: 'DISABLED',
-  1: 'ENABLED',
-  2: 'FAULT',
-};
-
-export const mtdomeElevationEnabledStatetoStyle = {
-  DISABLED: 'undefined',
-  ENABLED: 'ok',
-  FAULT: 'fault',
-};
-
-/**
- * Available commands in the TCS and their parameters. Each command is represented
- * as a dictionary key and their parameters as the values of said dictionary.
- * Within each dictionary value, each parameter is represented in a separate dictionary.
- * Each key in this new dictionary contains the parameter name and each corresponding
- * value contains a 2 item array with its first element being the param type, e.g.
- * 'string', 'angle', 'number', 'boolean', 'time', 'dict'. The second element contains the default
- * value.
- *
- */
-
+// TCS Configurations
 const rotTypes = [
   { label: 'Sky', value: 0 },
   { label: 'SkyAuto', value: 1 },
@@ -860,11 +98,16 @@ const Planets = [
   { label: 'VENUS', value: 2 },
 ];
 
-const cmdAck = [
-  { label: 'None', value: undefined },
-  { label: 'LabelNameCommand', value: 'CmdAck from the command that started the slew process' },
-];
-
+/**
+ * Available commands in the TCS and their parameters. Each command is represented
+ * as a dictionary key and their parameters as the values of said dictionary.
+ * Within each dictionary value, each parameter is represented in a separate dictionary.
+ * Each key in this new dictionary contains the parameter name and each corresponding
+ * value contains a 2 item array with its first element being the param type, e.g.
+ * 'string', 'angle', 'number', 'boolean', 'time', 'dict'. The second element contains the default
+ * value.
+ *
+ */
 export const TCSCommands = {
   slew_object: {
     name: ['string', undefined],
@@ -1043,6 +286,764 @@ export const MTCSCommands = {
   reset_m2_hexapod_position: {},
 };
 
+// OLE Configurations
+export const LOG_TYPE_OPTIONS = [
+  { label: 'debug', value: 10 },
+  { label: 'info', value: 20 },
+  { label: 'warning', value: 30 },
+  { label: 'error', value: 40 },
+  { label: 'fatal', value: 50 },
+];
+export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
+export const exposureFlagStateToStyle = {
+  none: 'ok',
+  junk: 'warning',
+  questionable: 'alert',
+};
+export const iconLevelOLE = {
+  info: <InfoIcon />,
+  urgent: <ErrorIcon />,
+};
+export const LSST_SYSTEMS = [
+  'Auxtel',
+  'MT',
+  'ComCam',
+  'LSST Camera',
+  'LATISS',
+  'Computers and Networking',
+  'Observatory Software Tools',
+  'Observing',
+  'Site Performance and Monitoring',
+  'Support Building and Facilities',
+  'Telescope Facility',
+  'Telescope Performance and Monitoring',
+  'Other',
+];
+export const LSST_SUBSYSTEMS = [
+  'Hardware',
+  'Software',
+  'Network',
+  'Phone System',
+  'Mechanical',
+  'Electrical',
+  'DM',
+  'Scheduler',
+  'All-sky camera',
+  'Weather Monitor',
+  'Site cameras',
+  'LOVE',
+  'Calibration',
+];
+
+// LSST Systems and Subsystems
+export const CSCSummaryHierarchy = {
+  'Auxiliary Telescope': {
+    ATTCS: [
+      { name: 'ATMCS', salindex: 0 },
+      { name: 'ATPtg', salindex: 0 },
+      { name: 'ATDome', salindex: 0 },
+      { name: 'ATDomeTrajectory', salindex: 0 },
+      { name: 'ATAOS', salindex: 0 },
+      { name: 'ATPneumatics', salindex: 0 },
+      { name: 'ATHexapod', salindex: 0 },
+    ],
+    ATCalSys: [
+      { name: 'ATMonochromator', salindex: 0 },
+      { name: 'FiberSpectrograph', salindex: 0 },
+      { name: 'ATWhiteLight', salindex: 0 },
+      { name: 'Electrometer', salindex: 1 },
+      { name: 'Electrometer', salindex: 2 },
+      { name: 'LinearStage', salindex: 1 },
+      { name: 'LinearStage', salindex: 2 },
+    ],
+    LATISS: [
+      { name: 'ATCamera', salindex: 0 },
+      { name: 'ATArchiver', salindex: 0 },
+      { name: 'ATHeaderService', salindex: 0 },
+      { name: 'ATSpectrograph', salindex: 0 },
+    ],
+  },
+  'Main Telescope': {
+    MTCS: [
+      { name: 'MTMount', salindex: 0 },
+      { name: 'MTPtg', salindex: 0 },
+      { name: 'MTAOS', salindex: 0 },
+      { name: 'MTM1M3', salindex: 0 },
+      { name: 'MTM2', salindex: 0 },
+      { name: 'MTHexapod', salindex: 1 },
+      { name: 'MTHexapod', salindex: 2 },
+      { name: 'MTRotator', salindex: 0 },
+      { name: 'MTDome', salindex: 0 },
+      { name: 'MTDomeTrajectory', salindex: 0 },
+    ],
+    ComCam: [
+      { name: 'CCCamera', salindex: 0 },
+      { name: 'CCArchiver', salindex: 0 },
+      { name: 'CCHeaderService', salindex: 0 },
+    ],
+  },
+  Observatory: {
+    HigherLevel: [
+      { name: 'ScriptQueue', salindex: 1 },
+      { name: 'ScriptQueue', salindex: 2 },
+      { name: 'Watcher', salindex: 0 },
+    ],
+    Environment: [
+      { name: 'DIMM', salindex: 1 },
+      { name: 'DIMM', salindex: 2 },
+      { name: 'WeatherStation', salindex: 1 },
+    ],
+  },
+};
+
+export const defaultCSCList = [
+  { name: 'ATMCS', salindex: 0 },
+  { name: 'ATPtg', salindex: 0 },
+  { name: 'ATDome', salindex: 0 },
+  { name: 'ATDomeTrajectory', salindex: 0 },
+  { name: 'ATAOS', salindex: 0 },
+  { name: 'ATPneumatics', salindex: 0 },
+  { name: 'ATHexapod', salindex: 0 },
+  { name: 'ATMonochromator', salindex: 0 },
+  { name: 'FiberSpectrograph', salindex: 0 },
+  { name: 'ATWhiteLight', salindex: 0 },
+  { name: 'Electrometer', salindex: 1 },
+  { name: 'Electrometer', salindex: 2 },
+  { name: 'LinearStage', salindex: 1 },
+  { name: 'LinearStage', salindex: 2 },
+  { name: 'ATCamera', salindex: 0 },
+  { name: 'ATArchiver', salindex: 0 },
+  { name: 'ATHeaderService', salindex: 0 },
+  { name: 'ATSpectrograph', salindex: 0 },
+  { name: 'MTMount', salindex: 0 },
+  { name: 'MTPtg', salindex: 0 },
+  { name: 'MTAOS', salindex: 0 },
+  { name: 'MTM1M3', salindex: 0 },
+  { name: 'MTM2', salindex: 0 },
+  { name: 'MTHexapod', salindex: 1 },
+  { name: 'MTHexapod', salindex: 2 },
+  { name: 'MTRotator', salindex: 0 },
+  { name: 'MTDome', salindex: 0 },
+  { name: 'MTDomeTrajectory', salindex: 0 },
+  { name: 'CCCamera', salindex: 0 },
+  { name: 'CCArchiver', salindex: 0 },
+  { name: 'CCHeaderService', salindex: 0 },
+  { name: 'ScriptQueue', salindex: 1 },
+  { name: 'ScriptQueue', salindex: 2 },
+  { name: 'Watcher', salindex: 0 },
+  { name: 'DIMM', salindex: 1 },
+  { name: 'DIMM', salindex: 2 },
+  { name: 'WeatherStation', salindex: 1 },
+];
+
+export const getCameraStatusStyle = (status) => {
+  if (!status) return '';
+  if (status.toLowerCase() === 'integrating') return 'running';
+  if (status.toLowerCase() === 'reading_out') return 'running';
+  if (status.toLowerCase() === 'ready') return 'ok';
+  if (status.toLowerCase() === 'done') return 'ok';
+  return '';
+};
+
+// State to styles mappings
+export const stateToStyleLATISS = {
+  'HOMING': 'running',
+  'MOVING': 'running',
+  'STATIONARY': 'ok',
+  'NOTINPOSITION': 'warning',
+  'NEEDS_CLEAR': 'ok',
+  'CLEARING': 'running',
+  'INTEGRATING': 'running',
+  'READING_OUT': 'running',
+  'QUIESCENT': 'ok',
+  'CLOSED': 'ok',
+  'OPEN': 'ok',
+  'CLOSING': 'running',
+  'OPENING': 'running',
+};
+
+export const stateToStyleCamera = {
+  'NEEDS_CLEAR': 'ok',
+  'CLEARING': 'running',
+  'INTEGRATING': 'running',
+  'READING_OUT': 'running',
+  'QUIESCENT': 'ok',
+  'READY': 'ok',
+  'NOT_READY': 'warning',
+  'GETTING_READY': 'running',
+  'DISABLED': 'warning',
+  'ENABLED': 'ok',
+  'CLOSED': 'ok',
+  'OPEN': 'ok',
+  'CLOSING': 'running',
+  'OPENING': 'running',
+  'END_READOUT': 'ok',
+  'END_TELEMETRY': 'ok',
+};
+
+export const stateToStyleMount = {
+  'NOT READY': 'warning',
+  'IN POSITION': 'ok',
+  'NASMYTH1': 'ok',
+  'NASMYTH2': 'ok',
+  'PORT3': 'ok',
+  'CLOSED': 'ok',
+  'OPEN': 'ok',
+  'OPENED': 'ok',
+  'REMOTECONTROL': 'ok',
+  'HANDPADDLECONTROL': 'ok',
+  'INVALID': 'warning',
+  'IN MOTION': 'running',
+  'NOT IN POSITION': 'warning',
+  UNKNOWN: 'invalid',
+  'UNKNOWN POSITION': 'invalid',
+};
+
+export const stateToStyleDome = {
+  'IN POSITION': 'ok',
+  'NOT IN POSITION': 'warning',
+  UNKNOWN: 'invalid',
+};
+
+export const stateToStyleLightpath = {
+  'DISABLED': 'warning',
+  'ENABLED': 'ok',
+  'FAULT': 'warning',
+  'OFFLINE': 'warning',
+  'STANDBY': 'warning',
+  'CLOSED': 'ok',
+  'OPEN': 'ok',
+  'OPENED': 'ok',
+  'IN MOTION': 'running',
+  'INVALID': 'warning',
+  'NOT READY': 'warning',
+  'IN POSITION': 'ok',
+  'UNKNOWN': 'invalid',
+  'UNKNOWN POSITION': 'invalid',
+};
+
+export const m1m3DetailedStateToStyle = {
+  'DISABLED STATE': 'warning',
+  'FAULT STATE': 'warning',
+  'OFFLINE STATE': 'warning',
+  'STANDBY STATE': 'warning',
+  'PARKED STATE': 'ok',
+  'RAISING STATE': 'running',
+  'ACTIVE STATE': 'ok',
+  'LOWERING STATE': 'running',
+  'PARKED ENGINEERING STATE': 'ok',
+  'RAISING ENGINEERING STATE': 'running',
+  'ACTIVE ENGINEERING STATE': 'ok',
+  'LOWERING ENGINEERING STATE': 'running',
+  'LOWERING FAULT STATE': 'running',
+  'PROFILE HARDPOINT CORRECTION STATE': 'ok',
+};
+
+export const m1m3ILCStateToStyle = {
+  'ON': 'ok',
+  'OFF': 'warning',
+};
+
+export const m2ActuatorILCStateToStyle = {
+  'OPERATIVE': 'ok',
+  'FAULT': 'warning',
+};
+
+export const m2ActuatorLimitSwitchStateToStyle = {
+  'OPEN': 'ok',
+  'CLOSED': 'warning',
+};
+
+export const stateToStyleDomeAndMount = {
+  'NASMYTH1': 'ok',
+  'NASMYTH2': 'ok',
+  'PORT3': 'ok',
+  'UNKNOWN': 'invalid',
+  'INMOTION': 'running',
+  'STOPPING': 'warning',
+  'ENABLED': 'ok',
+  'DISABLED': 'warning',
+  'CLOSING': 'warning',
+  'OPENING': 'warning',
+  'PARTIALLY OPEN': 'warning',
+  'OPEN': 'ok',
+  'CLOSED': 'ok',
+  'NOT MOVING': 'ok',
+  'MOVING CW': 'warning',
+  'MOVING CCW': 'warning',
+};
+
+export const stateToStyleMTMountCommander = {
+  'NONE': 'invalid',
+  'CSC': 'ok',
+  'EUI': 'warning',
+  'HHD': 'warning',
+};
+
+export const stateToStyleMTMountConnected = {
+  'UNKOWN': 'invalid',
+  'DISCONNECTED': 'warning',
+  'CONNECTED': 'ok',
+};
+
+export const stateToStyleMTMountPowerState = {
+  'OFF': 'invalid',
+  'ON': 'ok',
+  'FAULT': 'alert',
+  'TURNING_ON': 'warning',
+  'TURNING_OFF': 'warning',
+  'UNKNOWN': 'invalid',
+};
+
+export const stateToStyleMTMountAxisMotionState = {
+  'STOPPING': 'warning',
+  'STOPPED': 'ok',
+  'MOVING POINT TO POINT': 'warning',
+  'JOGGING': 'warning',
+  'TRACKING': 'warning',
+  'TRACKING_PAUSED': 'warning',
+  'UNKNOWN': 'invalid',
+};
+
+export const stateToStyleMotorDrive = {
+  'DISABLED': 'ok',
+  'ENABLED': 'running',
+};
+
+export const stateToStyleMotorBrake = {
+  'DISENGAGED': 'running',
+  'ENGAGED': 'ok',
+};
+
+export const hexapodStatusStatetoStyle = {
+  'UNKNOWN': 'undefined',
+  'DISABLED': 'disabled',
+  'ENABLED': 'enabled',
+  'FAULT': 'fault',
+  'OFFLINE': 'offline',
+  'STANDBY': 'standby',
+};
+
+export const hexapodCommandableByDDSStatetoStyle = {
+  'NOT COMMANDABLE': 'alert',
+  'COMMANDABLE': 'ok',
+};
+
+export const hexapodCompensationModeStatetoStyle = {
+  'DISABLED': 'undefined',
+  'ENABLED': 'ok',
+};
+
+export const hexapodControllerStatetoStyle = {
+  'STANDBY': 'ok',
+  'DISABLED': 'undefined',
+  'ENABLED': 'ok',
+  'OFFLINE': 'undefined',
+  'FAULT': 'alert',
+};
+
+export const hexapodMTInPositionStatetoStyle = {
+  'NOT READY': 'warning',
+  'IN POSITION': 'ok',
+};
+
+export const hexapodConnectedStatetoStyle = {
+  'DISCONNECTED': 'alert',
+  'CONNECTED': 'ok',
+};
+
+export const mtdomeStatusStatetoStyle = {
+  'UNKNOWN': 'undefined',
+  'DISABLED': 'disabled',
+  'ENABLED': 'enabled',
+  'FAULT': 'fault',
+  'OFFLINE': 'offline',
+  'STANDBY': 'standby',
+};
+
+export const mtDomeModeStatetoStyle = {
+  'DEGRADED': 'warning',
+  'NORMAL': 'ok',
+};
+
+export const mtDomeAzimuthEnabledStatetoStyle = {
+  'DISABLED': 'undefined',
+  'ENABLED': 'ok',
+  'FAULT': 'fault',
+};
+
+export const mtdomeMotionStatetoStyle = {
+  'CLOSED': 'undefined',
+  'CRAWLING': 'warning',
+  'MOVING': 'warning',
+  'OPEN': 'ok',
+  'PARKED': 'ok',
+  'PARKING': 'warning',
+  'STOPPED': 'ok',
+  'STOPPING': 'warning',
+  'STOPPING BRAKING': 'warning',
+  'STOPPED BRAKED': 'ok',
+  'BRAKES DISENGAGED': 'ok',
+  'BRAKES ENGAGED': 'alert',
+  'DEFLATED': 'undefined',
+  'DEFLATING': 'warning',
+  'DISABLING MOTOR POWER': 'warning',
+  'DISENGAGING BRAKES': 'warning',
+  'ENABLING MOTOR POWER': 'warning',
+  'ENGAGING BRAKES': 'warning',
+  'GO DEGRADED': 'warning',
+  'GO NORMAL': 'ok',
+  'GO STATIONARY': 'ok',
+  'INFLATED': 'ok',
+  'INFLATING': 'warning',
+  'LP DISENGAGED': 'undefined',
+  'LP DISENGAGING': 'warning',
+  'LP ENGAGED': 'ok',
+  'LP ENGAGING': 'warning',
+  'MOTOR COOLING OFF': 'undefined',
+  'MOTOR COOLING ON': 'ok',
+  'MOTOR POWER OFF': 'undefined',
+  'MOTOR POWER ON': 'ok',
+  'STARTING MOTOR COOLING': 'warning',
+  'STOPPING MOTOR COOLING': 'warning',
+};
+
+export const mtdomeElevationEnabledStatetoStyle = {
+  'DISABLED': 'undefined',
+  'ENABLED': 'ok',
+  'FAULT': 'fault',
+};
+
+// State to text mappings
+export const m1m3DetailedStateMap = {
+  1: 'DISABLED STATE',
+  2: 'FAULT STATE',
+  3: 'OFFLINE STATE',
+  4: 'STANDBY STATE',
+  5: 'PARKED STATE',
+  6: 'RAISING STATE',
+  7: 'ACTIVE STATE',
+  8: 'LOWERING STATE',
+  9: 'PARKED ENGINEERING STATE',
+  10: 'RAISING ENGINEERING STATE',
+  11: 'ACTIVE ENGINEERING STATE',
+  12: 'LOWERING ENGINEERING STATE',
+  13: 'LOWERING FAULT STATE',
+  14: 'PROFILE HARDPOINT CORRECTION STATE',
+  0: 'UNKNOWN',
+};
+
+export const m1mActuatorILCStateMap = {
+  1: 'ON',
+  0: 'OFF',
+};
+
+export const m1m3HardpointActuatorMotionStateMap = {
+  1: 'CHASING',
+  2: 'STEPPING',
+  3: 'QUICK POSITIONING',
+  4: 'FINE POSITIONING',
+  0: 'STANDBY',
+};
+
+export const domeAzimuthStateMap = {
+  1: 'NOT MOVING',
+  2: 'MOVING CW',
+  3: 'MOVING CCW',
+  0: 'UNKNOWN',
+};
+
+export const dropoutDoorStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'PARTIALLY OPEN',
+  4: 'OPENING',
+  5: 'CLOSING',
+  0: 'UNKNOWN',
+};
+
+export const mainDoorStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'PARTIALLY OPEN',
+  4: 'OPENING',
+  5: 'CLOSING',
+  0: 'UNKNOWN',
+};
+
+export const mountTrackingStateMap = {
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'STOPPING',
+  0: 'UNKNOWN',
+};
+
+export const m3RotatorStateMap = {
+  1: 'REMOTECONTROL',
+  2: 'HANDPADDLECONTROL',
+  6: 'NASMYTH1',
+  7: 'NASMYTH2',
+  8: 'PORT3',
+  9: 'IN MOTION',
+  10: 'UNKNOWN POSITION',
+  0: 'UNKNOWN',
+};
+
+export const m3PortSelectedStateMap = {
+  6: 'NASMYTH1',
+  7: 'NASMYTH2',
+  8: 'PORT3',
+  0: 'UNKNOWN',
+};
+
+export const m3InPositionStateMap = {
+  1: 'NOT READY',
+  2: 'IN POSITION',
+  0: 'UNKNOWN',
+};
+
+export const ataosCorrectionsStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+  undefined: 'UNKNOWN',
+};
+
+export const ataosCorrectionsStateToStyle = {
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  UNKNOWN: 'invalid',
+};
+
+// ATPneumatics
+export const m1CoverStateStateMap = {
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'FAULT',
+  4: 'OFFLINE',
+  5: 'STANDBY',
+  6: 'CLOSED',
+  7: 'OPENED',
+  8: 'IN MOTION',
+  9: 'INVALID',
+  0: 'UNKNOWN',
+};
+
+export const m1CoverLimitSwitchesStateMap = {
+  1: 'OPEN',
+  2: 'CLOSED',
+  0: 'UNKNOWN',
+};
+
+export const m1VentsLimitSwitchesStateMap = {
+  1: 'NOT READY',
+  2: 'IN POSITION',
+  0: 'UNKNOWN',
+};
+
+export const hexapodInPositionStateMap = {
+  1: 'IN POSITION',
+  2: 'NOT READY',
+  0: 'UNKNOWN',
+};
+
+export const movingElementStateMap = {
+  1: 'HOMING',
+  2: 'MOVING',
+  3: 'STATIONARY',
+  4: 'NOTINPOSITION',
+  0: 'UNKNOWN',
+};
+
+export const nasmythRotatorInPositionStateMap = {
+  1: 'NOT READY',
+  2: 'IN POSITION',
+  0: 'UNKNOWN',
+};
+
+export const raftsStateMap = {
+  1: 'NEEDS_CLEAR',
+  2: 'CLEARING',
+  3: 'INTEGRATING',
+  4: 'READING_OUT',
+  5: 'QUIESCENT',
+  0: 'UNKNOWN',
+};
+
+export const shutterStateMap = {
+  1: 'CLOSED',
+  2: 'OPEN',
+  3: 'CLOSING',
+  4: 'OPENING',
+  0: 'UNKNOWN',
+};
+
+export const inclinationTelemetrySourceStateMap = {
+  1: 'ONBOARD',
+  2: 'MTMOUNT',
+};
+
+export const m2ActuatorILCStateMap = {
+  1: 'FAULT',
+  0: 'OPERATIVE',
+};
+
+export const m2ActuatorLimitSwitchStateMap = {
+  1: 'CLOSED',
+  0: 'OPEN',
+};
+
+export const motorDriveStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const mtMountCommanderStateMap = {
+  0: 'NONE',
+  1: 'CSC',
+  2: 'EUI',
+  3: 'HHD',
+};
+
+export const mtMountConnectedStateMap = {
+  undefined: 'UNKOWN',
+  false: 'DISCONNECTED',
+  true: 'CONNECTED',
+};
+
+export const mtMountPowerStateMap = {
+  0: 'OFF',
+  1: 'ON',
+  2: 'FAULT',
+  3: 'TURNING_ON',
+  4: 'TURNING_OFF',
+  15: 'UNKNOWN',
+};
+
+export const mtMountAxisMotionStateMap = {
+  0: 'STOPPING',
+  1: 'STOPPED',
+  2: 'MOVING POINT TO POINT',
+  3: 'JOGGING',
+  4: 'TRACKING',
+  5: 'TRACKING_PAUSED',
+  undefined: 'UNKNOWN',
+};
+
+export const mtMountMirrorCoversStateMap = {
+  0: 'RETRACTED',
+  1: 'DEPLOYED',
+  2: 'RETRACTING',
+  3: 'DEPLOYING',
+  4: 'LOST',
+};
+
+export const motorBrakeStateMap = {
+  false: 'DISENGAGED',
+  true: 'ENGAGED',
+};
+
+export const hexapodCommandableByDDSStateMap = {
+  false: 'NOT COMMANDABLE',
+  true: 'COMMANDABLE',
+};
+
+export const hexapodCompensationModeStateMap = {
+  false: 'DISABLED',
+  true: 'ENABLED',
+};
+
+export const hexapodInterlockStateMap = {
+  false: 'Disengaged',
+  true: 'Engaged',
+};
+
+export const hexapodControllerStateMap = {
+  0: 'STANDBY',
+  1: 'DISABLED',
+  2: 'ENABLED',
+  3: 'OFFLINE',
+  4: 'FAULT',
+};
+
+export const hexapodControllerStateOfflineSubStateMap = {
+  0: 'PUBLISH ONLY',
+  1: 'AVAILABLE',
+};
+
+export const hexapodControllerStateEnabledSubstateMap = {
+  0: 'STATIONARY',
+  1: 'MOVING POINT TO POINT',
+  2: 'SLEWING OR TRACKING',
+  3: 'CONTROLLED STOPPING',
+  4: 'INITIALIING',
+  5: 'RELATIVE',
+  6: 'CONSTANT VELOCITY',
+};
+
+export const hexapodMTInPositionStateMap = {
+  false: 'NOT READY',
+  true: 'IN POSITION',
+};
+
+export const hexapodConnectedStateMap = {
+  false: 'DISCONNECTED',
+  true: 'CONNECTED',
+};
+
+export const mtDomeModeStateMap = {
+  0: 'DEGRADED',
+  1: 'NORMAL',
+};
+
+export const mtDomeAzimuthEnabledStateMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+export const mtdomeMotionStateMap = {
+  0: 'CLOSED',
+  1: 'CRAWLING',
+  2: 'MOVING',
+  3: 'OPEN',
+  4: 'PARKED',
+  5: 'PARKING',
+  6: 'STOPPED',
+  7: 'STOPPING',
+  8: 'STOPPING BRAKING',
+  9: 'STOPPED BRAKED',
+  10: 'BRAKES DISENGAGED',
+  11: 'BRAKES ENGAGED',
+  12: 'DEFLATED',
+  13: 'DEFLATING',
+  14: 'DISABLING MOTOR POWER',
+  15: 'DISENGAGING BRAKES',
+  16: 'ENABLING MOTOR POWER',
+  17: 'ENGAGING BRAKES',
+  18: 'GO DEGRADED',
+  19: 'GO NORMAL',
+  20: 'GO STATIONARY',
+  21: 'INFLATED',
+  22: 'INFLATING',
+  23: 'LP DISENGAGED',
+  24: 'LP DISENGAGING',
+  25: 'LP ENGAGED',
+  26: 'LP ENGAGING',
+  27: 'MOTOR COOLING OFF',
+  28: 'MOTOR COOLING ON',
+  29: 'MOTOR POWER OFF',
+  30: 'MOTOR POWER ON',
+  31: 'STARTING MOTOR COOLING',
+  32: 'STOPPING MOTOR COOLING',
+};
+
+export const mtdomeElevationEnabledStateToMap = {
+  0: 'DISABLED',
+  1: 'ENABLED',
+  2: 'FAULT',
+};
+
+// Components configurations
 export const M1M3ActuatorForces = {
   appliedAberrationForces: ['zForces'],
   appliedAccelerationForces: ['xForces', 'yForces', 'zForces'],
@@ -1361,16 +1362,6 @@ export const MTDomeLouversMapGN = [
   'N2',
 ];
 
-export const MTMountLimits = {
-  elevation: {
-    min: 5,
-    max: 90,
-  },
-  azimuth: {
-    min: -270,
-    max: 270,
-  },
-};
 // GIS
 export const signals = {
   fireProtectionSystem: {
