@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import TelemetryLog from './TelemetryLog';
 import { addGroup, removeGroup, requestSALCommand } from '../../redux/actions/ws';
-import { saveGroupSubscriptions } from '../../Utils';
 
 export const schema = {
   description: 'Internal use',
@@ -28,6 +27,31 @@ export const schema = {
     },
   },
 };
+
+export const saveGroupSubscriptions = (Component) => {
+  return () => {
+    const [subscriptionsList, setSubscriptionsList] = useState([]);
+
+    const saveSubscriptionLocally = (groupName) => {
+      if (!subscriptionsList.includes(groupName)) {
+        setSubscriptionsList([...subscriptionsList, groupName]);
+      }
+    };
+
+    const removeSubscriptionLocally = (groupName) => {
+      setSubscriptionsList(subscriptionsList.filter((name) => name !== groupName));
+    };
+
+    return (
+      <Component
+        subscriptionsList={subscriptionsList}
+        saveSubscriptionLocally={saveSubscriptionLocally}
+        removeSubscriptionLocally={removeSubscriptionLocally}
+      />
+    );
+  };
+};
+
 const TelemetryLogContainer = ({
   streams,
   subscriptionsList,
