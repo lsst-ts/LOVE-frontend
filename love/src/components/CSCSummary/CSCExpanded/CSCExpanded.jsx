@@ -16,6 +16,7 @@ export default class CSCExpanded extends PureComponent {
     this.state = {
       summaryStateCommand: null,
       configurationOverride: "",
+      logLevel: 20,
     }
   }
 
@@ -109,6 +110,22 @@ export default class CSCExpanded extends PureComponent {
     },
   };
 
+  static validLogLevel = {
+    "DEBUG": 10,
+    "INFO": 20,
+    "WARNING": 30,
+    "ERROR": 40,
+    "CRITICAL": 50,
+  }
+
+  static logLevelNames = {
+    10: "DEBUG",
+    20: "INFO",
+    30: "WARNING",
+    40: "ERROR",
+    50: "CRITICAL",
+  }
+
   static validState = {
     start: "STANDBY",
     enable: "DISABLED",
@@ -121,6 +138,12 @@ export default class CSCExpanded extends PureComponent {
     this.setState({
       summaryStateCommand: option,
       configurationOverride: configurationOverride,
+    });
+  };
+
+  setLogLevel(option) {
+    this.setState({
+      logLevel: CSCExpanded.validLogLevel[option],
     });
   };
 
@@ -141,6 +164,19 @@ export default class CSCExpanded extends PureComponent {
         params: this.state.summaryStateCommand === "start" ? {
           configurationOverride: this.state.configurationOverride,
         } : {},
+      }
+    );
+  };
+
+  sendSetLogLevel(event) {
+    this.props.requestSALCommand(
+      {
+        cmd: "cmd_setLogLevel",
+        csc: this.props.name,
+        salindex: this.props.salindex,
+        params: {
+          level: this.state.logLevel,
+        },
       }
     );
   };
@@ -300,6 +336,38 @@ export default class CSCExpanded extends PureComponent {
               </div>
             </div>)}
 
+          {(cscLogLevel !== null || this.props.name === "Script") && (<div className={styles.topBarContainerWrapper}>
+            <div className={styles.topBarContainer}>
+              <div className={styles.breadcrumContainer}>
+                <div className={styles.titlePadding}>Set Log Level:</div>
+                <Select
+                  options={["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"]}
+                  onChange={(option) => this.setLogLevel(option.value)}
+                  value={cscLogLevel ? CSCExpanded.logLevelNames[cscLogLevel] : "INFO"}
+                  placeholder="Select log Level"
+                />
+              </div>{cscLogLevel !== null && (
+                <div className={styles.breadcrumContainer}>
+                  <div className={styles.titlePadding}>Current log level:  {CSCExpanded.logLevelNames[cscLogLevel]}</div>
+                </div>)}
+              <div>
+                <br />
+                <Button
+                  title="set log level"
+                  status="info"
+                  shape="rounder"
+                  padding='30px'
+                  disabled={false}
+                  onClick={(event) => {
+                    this.sendSetLogLevel(event);
+                  }}
+                  command
+                >
+                  SEND
+                </Button>
+              </div>
+            </div>
+          </div>)}
 
           {this.props.errorCodeData.length > 0 && (
             <div className={[styles.logContainer, styles.errorCodeContainer].join(' ')}>
