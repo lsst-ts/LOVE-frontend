@@ -10,7 +10,7 @@ import Button from 'components/GeneralPurpose/Button/Button';
 import FileUploader from 'components/GeneralPurpose/FileUploader/FileUploader';
 import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange';
 import Toggle from 'components/GeneralPurpose/Toggle/Toggle';
-import { CSCSummaryHierarchy, defaultCSCList, LOG_TYPE_OPTIONS } from 'Config';
+import { defaultCSCList /* LOG_TYPE_OPTIONS */ } from 'Config';
 import ManagerInterface from 'Utils';
 import { getLinkJira, getFileURL, getFilename } from 'Utils';
 import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
@@ -62,7 +62,6 @@ export default class NonExposureEdit extends Component {
     super(props);
     this.id = lodash.uniqueId('nonexposure-edit-');
     const logEdit = props.logEdit ?? NonExposureEdit.defaultProps.logEdit;
-    
 
     logEdit.jiraurl = getLinkJira(logEdit.urls);
     logEdit.fileurl = getFileURL(logEdit.urls);
@@ -131,11 +130,6 @@ export default class NonExposureEdit extends Component {
   updateOrCreateMessageNarrativeLogs() {
     const payload = { ...this.state.logEdit };
     payload['request_type'] = 'narrative';
-    // payload['level_label'] = LOG_TYPE_OPTIONS.find((type) => type.value === payload['level']).label;
-
-    // if ('tags' in payload) {
-    //   payload['tags'] = payload['tags'].map((tag) => tag.id);
-    // }
 
     const beginDateISO = this.state.logEdit.date_begin?.toISOString();
     const endDateISO = this.state.logEdit.date_end?.toISOString();
@@ -204,16 +198,8 @@ export default class NonExposureEdit extends Component {
     const view = this.props.view ?? NonExposureEdit.defaultProps.view;
     const systemOptions = LSST_SYSTEMS;
     const subsystemOptions = LSST_SUBSYSTEMS;
-    // const cscsOptions = this.state.logEdit?.subsystem
-    //   ? Array.from(
-    //       new Set(
-    //         Object.values(CSCSummaryHierarchy[this.state.logEdit.subsystem] ?? {})
-    //           .flat()
-    //           .map((e) => e.name),
-    //       ),
-    //     ).sort()
-    //   : [];
     const cscOptions = defaultCSCList.map((csc) => `${csc.name}:${csc.salindex}`);
+    // Uncomment next code block to use several level options
     // const selectedCommentType = this.state.logEdit?.level
     //   ? LOG_TYPE_OPTIONS.find((type) => type.value === this.state.logEdit.level)
     //   : null;
@@ -266,6 +252,7 @@ export default class NonExposureEdit extends Component {
               <div className={styles.contentLeft}>
                 <span className={styles.label}>Urgent?</span>
                 <span className={[styles.value].join(' ')}>
+                  {/* Uncomment next code block to use several level options */}
                   {/* <Select
                     option={selectedCommentType}
                     onChange={({ value }) =>
@@ -328,7 +315,7 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
                 <span className={styles.label}>CSCs</span>
-                <span className={[styles.value /* styles.cscValue */].join(' ')}>
+                <span className={[styles.value].join(' ')}>
                   <Multiselect
                     className={styles.select}
                     options={cscOptions}
@@ -342,6 +329,7 @@ export default class NonExposureEdit extends Component {
                   />
                 </span>
 
+                {/* Uncomment next code block to use several level options */}
                 {/* <span className={[styles.label, styles.paddingTop].join(' ')}>Tags</span>
                 <span className={styles.value}>
                   <Multiselect
@@ -494,28 +482,30 @@ export default class NonExposureEdit extends Component {
                         }));
                       }}
                     />
-                    {this.state.logEdit.jira &&
+                    {this.state.logEdit.jira && (
                       <>
                         <Toggle
                           labels={['New', 'Existent']}
                           isLive={this.state.logEdit.jira_comment}
                           setLiveMode={(event) =>
                             this.setState((prevState) => ({
-                              logEdit: { ...prevState.logEdit, jira_comment: event},
+                              logEdit: { ...prevState.logEdit, jira_comment: event },
                             }))
                           }
                         />
-                        {this.state.logEdit.jira_comment &&
+                        {this.state.logEdit.jira_comment && (
                           <input
                             className={styles.issueIdInput}
                             placeholder="Jira ticket id"
-                            onChange={(event) => this.setState((prevState) => ({
-                              logEdit: {...prevState.logEdit, issue_id: event.target.value},
-                            }))}
+                            onChange={(event) =>
+                              this.setState((prevState) => ({
+                                logEdit: { ...prevState.logEdit, issue_id: event.target.value },
+                              }))
+                            }
                           />
-                        }
+                        )}
                       </>
-                    }
+                    )}
                   </span>
                 ) : this.state.logEdit.jiraurl ? (
                   <span className={styles.checkboxText}>
