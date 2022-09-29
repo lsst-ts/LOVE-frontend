@@ -1,7 +1,15 @@
 import React from 'react';
 import styles from './Input.module.css';
 
-export default function Input({ defaultValue, value, onChange, onClick, className, type, ...props }) {
+export default function Input({
+  defaultValue,
+  value,
+  onChange = () => {},
+  onClick = () => {},
+  className = '',
+  type = 'text',
+  ...props
+}) {
   return (
     <input
       type={type}
@@ -14,9 +22,3 @@ export default function Input({ defaultValue, value, onChange, onClick, classNam
     />
   );
 }
-
-Input.defaultProps = {
-  type: 'text',
-  onChange: () => {},
-  onClick: () => {},
-};
