@@ -6,7 +6,7 @@ import ManagerInterface from 'Utils';
 import { LSST_SYSTEMS, LSST_SUBSYSTEMS, iconLevelOLE } from 'Config';
 import { formatSecondsToDigital, openInNewTab } from 'Utils';
 import { getLinkJira, getFileURL } from 'Utils';
-import { CSCSummaryHierarchy, LOG_TYPE_OPTIONS } from 'Config';
+// import { LOG_TYPE_OPTIONS } from 'Config';
 import SimpleTable from 'components/GeneralPurpose/SimpleTable/SimpleTable';
 import Button from 'components/GeneralPurpose/Button/Button';
 import Input from 'components/GeneralPurpose/Input/Input';
@@ -14,7 +14,6 @@ import DateTimeRange from 'components/GeneralPurpose/DateTimeRange/DateTimeRange
 import DownloadIcon from 'components/icons/DownloadIcon/DownloadIcon';
 import EditIcon from 'components/icons/EditIcon/EditIcon';
 import AcknowledgeIcon from 'components/icons/Watcher/AcknowledgeIcon/AcknowledgeIcon';
-import RedoIcon from 'components/icons/RedoIcon/RedoIcon';
 import Select from 'components/GeneralPurpose/Select/Select';
 import Hoverable from 'components/GeneralPurpose/Hoverable/Hoverable';
 import NonExposureDetail from './NonExposureDetail';
@@ -79,6 +78,7 @@ export default class NonExposure extends Component {
   }
 
   getLevel(value) {
+    // Uncomment next code line to use several level options
     // const label = LOG_TYPE_OPTIONS.find((type) => type.value === value)?.label;
     const label = value >= 100 ? 'urgent' : 'info';
     const icon = iconLevelOLE[label] ?? undefined;
@@ -264,6 +264,7 @@ export default class NonExposure extends Component {
     const logExampleKeys = Object.keys(logExample ?? {});
     const csvHeaders = logExampleKeys.map((key) => ({ label: key, key }));
 
+    // Uncomment next code block to use several level options
     // const commentTypeOptions = [{ label: 'All comment types', value: 'all' }, ...LOG_TYPE_OPTIONS];
     const commentTypeOptions = [
       { label: 'All comment types', value: 'all' },
