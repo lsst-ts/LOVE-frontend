@@ -324,6 +324,16 @@ export const mainIndex = {
       },
     },
   },
+  GIS: {
+    component: require('../GIS/GIS.container').default,
+    schema: {
+      ...require('../GIS/GIS.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../GIS/GIS.container').schema.props,
+      },
+    },
+  },
 };
 
 export const authlistIndex = {

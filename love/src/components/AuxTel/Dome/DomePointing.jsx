@@ -60,7 +60,7 @@ export default class DomePointing extends Component {
             cy={zenithPixels.y}
             style={{
               transform: `rotateZ(${this.props.targetPointing.az}deg) rotateX(${this.props.targetPointing.el - 90}deg)`,
-              transformOrigin: '50% 50% 140px',
+              transformOrigin: '50% 50% 298px',
             }}
           />
 
@@ -78,6 +78,7 @@ export default class DomePointing extends Component {
             cy={zenithPixels.y}
             style={{
               transform: `rotateX(${el - 90}deg)`,
+              transformOrigin: '50% 50% 298px',
             }}
           />
         </g>
