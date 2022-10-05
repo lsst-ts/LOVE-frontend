@@ -84,7 +84,7 @@ export default class Info extends Component {
       forceMeasured: axialForceMeasured[actuatorIndex] ?? 0,
     };
 
-    const ilcData = actuatorIlcState[actuatorIndex]?.toString(2) ?? '0000';
+    const ilcData = actuatorIlcState[actuatorIndex]?.toString(2).padEnd(4, '0') ?? '0000';
     const ilcFaultState = m2ActuatorILCStateMap[ilcData[ilcData.length - 1]];
     const limitSwitchCWState = m2ActuatorLimitSwitchStateMap[ilcData[ilcData.length - 3]];
     const limitSwitchCCWState = m2ActuatorLimitSwitchStateMap[ilcData[ilcData.length - 4]];
