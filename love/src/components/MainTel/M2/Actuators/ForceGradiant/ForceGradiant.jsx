@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import * as d3 from 'd3';
+import isEqual from 'lodash/isEqual';
 import { defaultNumberFormatter } from 'Utils';
 
 import styles from './ForceGradiant.module.css';
@@ -27,7 +28,7 @@ export default class ForceGradiant extends Component {
     minForceLimit: PropTypes.number,
     /** Number of the maximum force limit, used for the gradiant color */
     maxForceLimit: PropTypes.number,
-  }
+  };
 
   static defaultProps = {
     actuatorReferenceId: [],
@@ -40,13 +41,14 @@ export default class ForceGradiant extends Component {
     selectedActuatorTangent: undefined,
     minForceLimit: 0,
     maxForceLimit: 1000,
-  }
+  };
 
   static COLOURS = ['#2c7bb6', '#00a6ca', '#00ccbc', '#90eb9d', '#ffff8c', '#f9d057', '#f29e2e', '#e76818', '#d7191c'];
 
   static COLOUR_RANGE = [...d3.range(0, 1, 1.0 / (ForceGradiant.COLOURS.length - 1)), 1];
 
-  static COLOR_SCALE = d3.scaleLinear()
+  static COLOR_SCALE = d3
+    .scaleLinear()
     .domain(ForceGradiant.COLOUR_RANGE)
     .range(ForceGradiant.COLOURS)
     .interpolate(d3.interpolateHcl);
@@ -60,11 +62,7 @@ export default class ForceGradiant extends Component {
 
   getActuator = (id) => {
     if (id === 0 || id === null) return { id: undefined };
-    const {
-      actuatorReferenceId,
-      axialForceApplied,
-      axialForceMeasured,
-    } = this.props;
+    const { actuatorReferenceId, axialForceApplied, axialForceMeasured } = this.props;
 
     const actuatorIndex = actuatorReferenceId.indexOf(id);
 
@@ -78,11 +76,7 @@ export default class ForceGradiant extends Component {
 
   getActuatorTangent = (id) => {
     if (id === 0 || id === null) return { id: undefined };
-    const {
-      actuatorTangentReferenceId,
-      tangentForceApplied,
-      tangentForceMeasured,
-    } = this.props;
+    const { actuatorTangentReferenceId, tangentForceApplied, tangentForceMeasured } = this.props;
 
     const actuatorIndex = actuatorTangentReferenceId.indexOf(id);
 
@@ -92,14 +86,28 @@ export default class ForceGradiant extends Component {
       measured: tangentForceMeasured[actuatorIndex] ?? 0,
     };
     return actuator;
+  };
+
+  componentDidMount() {
+    this.createColorScale();
+    if (this.props.selectedActuator) {
+      const actuator = this.getActuator(this.props.selectedActuator);
+      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
+    }
+    if (this.props.selectedActuatorTangent) {
+      const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
+      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
+    }
   }
 
   componentDidUpdate(prevProps) {
     if (
-      prevProps.axialForceApplied !== this.props.axialForceApplied ||
-      prevProps.axialForceMeasured !== this.props.axialForceMeasured ||
-      prevProps.tangentForceApplied !== this.props.tangentForceApplied ||
-      prevProps.tangentForceMeasured !== this.props.tangentForceMeasured
+      !isEqual(prevProps.axialForceApplied, this.props.axialForceApplied) ||
+      !isEqual(prevProps.axialForceMeasured, this.props.axialForceMeasured) ||
+      !isEqual(prevProps.tangentForceApplied, this.props.tangentForceApplied) ||
+      !isEqual(prevProps.tangentForceMeasured, this.props.tangentForceMeasured) ||
+      prevProps.selectedActuator !== this.props.selectedActuator ||
+      prevProps.selectedActuatorTangent !== this.props.selectedActuatorTangent
     ) {
       this.createColorScale();
       if (this.props.selectedActuator) {
@@ -110,16 +118,6 @@ export default class ForceGradiant extends Component {
         const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
         this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
       }
-    }
-
-    if (prevProps.selectedActuator !== this.props.selectedActuator) {
-      const actuator = this.getActuator(this.props.selectedActuator);
-      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
-    }
-
-    if (prevProps.selectedActuatorTangent !== this.props.selectedActuatorTangent) {
-      const actuator = this.getActuatorTangent(this.props.selectedActuatorTangent);
-      this.setForce(actuator, this.props.minForceLimit, this.props.maxForceLimit);
     }
   }
 
@@ -132,9 +130,7 @@ export default class ForceGradiant extends Component {
     const forceGradientRect = d3.select('#color-scale svg #force-gradient-rect');
 
     if (forceGradientRect.empty()) {
-      svg
-        .attr('width', width)
-        .attr('height', height);
+      svg.attr('width', width).attr('height', height);
       svg
         .append('defs')
         .append('linearGradient')
@@ -175,10 +171,15 @@ export default class ForceGradiant extends Component {
     const { minForceLimit, maxForceLimit } = this.props;
 
     const svg = d3.select('#color-scale svg');
+    svg.style('z-index', 999);
     const measuredText = d3.select('#color-scale svg #measured-text');
     const measuredLine = d3.select('#color-scale svg #measured-line');
-    const measuredForceX = ForceGradiant.getGradiantPositionX(actuator.measured,
-      minForceLimit, maxForceLimit, this.state.width);
+    const measuredForceX = ForceGradiant.getGradiantPositionX(
+      actuator.measured,
+      minForceLimit,
+      maxForceLimit,
+      this.state.width,
+    );
 
     if (measuredText) {
       measuredText.remove();
@@ -196,6 +197,14 @@ export default class ForceGradiant extends Component {
         .style('stroke', 'white')
         .style('stroke-width', 3);
 
+      svg
+        .append('rect')
+        .attr('width', 100)
+        .attr('height', 60)
+        .attr('fill', 'var(--second-primary-background-color)')
+        .attr('x', measuredForceX - 5)
+        .attr('y', -65);
+
       const textMeasured = svg
         .append('text')
         .attr('id', 'measured-text')
@@ -204,12 +213,15 @@ export default class ForceGradiant extends Component {
         .attr('fill', 'white')
         .style('font-size', '1em');
 
-      if (measuredForceX > ((this.state.width * 3) / 4)) {
+      if (measuredForceX > (this.state.width * 3) / 4) {
         textMeasured.attr('text-anchor', 'end');
       }
       textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -45).text(actuator.id);
       textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -30).text('Measured');
-      textMeasured.append('tspan').attr('x', measuredForceX).attr('y', -15)
+      textMeasured
+        .append('tspan')
+        .attr('x', measuredForceX)
+        .attr('y', -15)
         .text(`${defaultNumberFormatter(actuator.measured)} N`);
     }
 
@@ -222,8 +234,12 @@ export default class ForceGradiant extends Component {
     }
 
     if (actuator.id !== undefined) {
-      const commandedForceX = ForceGradiant.getGradiantPositionX(actuator.commanded,
-        minForceLimit, maxForceLimit, this.state.width);
+      const commandedForceX = ForceGradiant.getGradiantPositionX(
+        actuator.commanded,
+        minForceLimit,
+        maxForceLimit,
+        this.state.width,
+      );
       svg
         .append('line')
         .attr('id', 'commanded-line')
@@ -234,6 +250,14 @@ export default class ForceGradiant extends Component {
         .style('stroke', 'white')
         .style('stroke-width', 3);
 
+      svg
+        .append('rect')
+        .attr('width', 100)
+        .attr('height', 60)
+        .attr('fill', 'var(--second-primary-background-color)')
+        .attr('x', commandedForceX - 5)
+        .attr('y', 45);
+
       const textCommanded = svg
         .append('text')
         .attr('id', 'commanded-text')
@@ -242,32 +266,37 @@ export default class ForceGradiant extends Component {
         .attr('fill', 'white')
         .style('font-size', '1em');
 
-      if (commandedForceX > ((this.state.width * 3) / 4)) {
+      if (commandedForceX > (this.state.width * 3) / 4) {
         textCommanded.attr('text-anchor', 'end');
       }
 
       textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 60).text(actuator.id);
       textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 75).text('Commanded');
-      textCommanded.append('tspan').attr('x', commandedForceX).attr('y', 90)
+      textCommanded
+        .append('tspan')
+        .attr('x', commandedForceX)
+        .attr('y', 90)
         .text(`${defaultNumberFormatter(actuator.commanded)} N`);
     }
-  }
+  };
 
   render() {
     const { maxForceLimit, minForceLimit } = this.props;
     return (
-        <>
-          <p className={styles.title}>Force</p>
-          <div className={styles.forceGradientWrapper}>
-            <div id="color-scale" className={styles.forceGradient}>
-              <span style={{ position: 'absolute', bottom: '-2em', left: 0 }}>{minForceLimit} [N]</span>
-              <span style={{ position: 'absolute', top: '-2em', left: 0 }}>{minForceLimit} [N]</span>
-              <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
-              <span style={{ position: 'absolute', bottom: '-2em', right: 0 }}>{maxForceLimit} [N]</span>
-              <span style={{ position: 'absolute', top: '-2em', right: 0 }}>{maxForceLimit} [N]</span>
-            </div>
+      <>
+        <p className={styles.title}>Force</p>
+        <div id="color-scale" className={styles.forceGradient}>
+          <div style={{ width: this.state.width, marginBottom: '0.5em' }}>
+            <span style={{ float: 'left' }}>{minForceLimit} [N]</span>
+            <span style={{ float: 'right' }}>{maxForceLimit} [N]</span>
           </div>
-        </>
+          <svg className={styles.colorScaleSvg} viewBox={`0 0 ${this.state.width} 40`}></svg>
+          <div style={{ width: this.state.width, marginTop: '0.5em' }}>
+            <span style={{ float: 'left' }}>{minForceLimit} [N]</span>
+            <span style={{ float: 'right' }}>{maxForceLimit} [N]</span>
+          </div>
+        </div>
+      </>
     );
   }
 }
