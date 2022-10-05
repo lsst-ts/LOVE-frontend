@@ -942,38 +942,7 @@ export const getRawStatus = (state) => {
   return {
     interlocksStatus: interlocksData['event-GIS-0-rawStatus']
       ? interlocksData['event-GIS-0-rawStatus'][0].rawStatus.value
-      : [
-          0,
-          100,
-          0,
-          0,
-          0,
-          30,
-          65,
-          2,
-          0,
-          0,
-          0,
-          0,
-          0,
-          94,
-          0,
-          0,
-          0,
-          0,
-          0,
-          0,
-          38,
-          0,
-          255,
-          255,
-          0,
-          0,
-          0,
-          0,
-          0,
-          Math.random() * 255,
-        ],
+      : Array(30).fill(0),
   };
 };
 
