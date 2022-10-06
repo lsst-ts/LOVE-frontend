@@ -2,8 +2,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-  margin-top: 1em;
+  justify-content: left;
+  margin-top: 1.5em;
 }
 
 .gearIconContainer {
@@ -13,27 +13,28 @@
 }
 
 .switchContainer {
+  margin-left: 4em;
   margin-right: 4em;
   margin-bottom: 1em;
 }
 
 /* The switch - the box around the slider */
-.switch {
+/* .switch {
   position: relative;
   display: inline-block;
   width: 60px;
   height: 14px;
   vertical-align: middle;
   margin: 0px 10px;
-}
+} */
 
 /* Hide default HTML checkbox */
-.switch input {
+/* .switch input {
   display: none;
-}
+} */
 
 /* The slider */
-.slider {
+/* .slider {
   position: absolute;
   cursor: pointer;
   top: 0;
@@ -56,7 +57,7 @@
   border: 5px solid white;
   -webkit-transition: 0.4s;
   transition: 0.4s;
-}
+} */
 
 input:checked + .slider {
   background-color: #aab1b9;
