@@ -136,10 +136,6 @@ export default class NonExposureEdit extends Component {
     payload['date_begin'] = beginDateISO.substring(0, beginDateISO.length - 1); // remove Zone due to backend standard
     payload['date_end'] = endDateISO.substring(0, endDateISO.length - 1); // remove Zone due to backend standard
 
-    payload['jira'] = true;
-    payload['jira_comment'] = true;
-    payload['issue_id'] = 'LOVE-112';
-
     if (this.state.logEdit.id) {
       ManagerInterface.updateMessageNarrativeLogs(this.state.logEdit.id, payload).then((response) => {
         this.setState({ confirmationModalShown: false });
