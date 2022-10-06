@@ -70,28 +70,6 @@
   overflow: hidden;
 }
 
-.summary {
-  border-radius: 0px;
-  grid-column: 1 / span 2;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  justify-items: center;
-  align-items: center;
-}
-
-.summaryVariable {
-  border-radius: 0px;
-}
-
-.summaryLabel {
-  font-size: var(--font-size-large);
-}
-
-.summaryValue {
-  color: var(--base-font-color);
-  font-size: var(--font-size-larger);
-}
-
 .windPlotContainer {
   display: flex;
   justify-content: center;
@@ -125,8 +103,8 @@
   border-radius: 0px;
   grid-column: 1 / span 2;
   display: grid;
-  justify-items: center;
-  align-items: center;
+  justify-items: left;
+  align-items: left;
 }
 
 .iconWrapper {
