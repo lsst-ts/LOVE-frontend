@@ -6,12 +6,7 @@ import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
 import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
 import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
-
-import TemperatureIcon from '../icons/TemperatureIcon/TemperatureIcon';
-import HumidityIcon from '../icons/HumidityIcon/HumidityIcon';
-import PressureIcon from '../icons/PressureIcon/PressureIcon';
-import WindIcon from '../icons/WindIcon/WindIcon';
-
+import CurrentValues from './CurrentValues/CurrentValues';
 import styles from './WeatherStation.module.css';
 
 export default class WeatherStation extends Component {
@@ -244,9 +239,11 @@ export default class WeatherStation extends Component {
   };
 
   render() {
+
+    console.log('weather', this.props.weather);
     const currentTemperature = this.props.weather?.ambient_temp?.value;
     const currentHumidity = this.props.weather?.humidity?.value;
-    const currentPressure = Math.round(this.props.weather?.pressure?.value * 100) / 100;
+    const currentPressure = this.props.weather?.pressure?.value; // Math.round(this.props.weather?.pressure?.value * 100) / 100;
     const currentWindSpeed = this.props.windSpeed?.value?.value;
     const currentWindSpeedUnits = this.props.windSpeed?.value?.units;
 
@@ -258,45 +255,13 @@ export default class WeatherStation extends Component {
 
     return (
       <div className={styles.container}>
-        <div className={styles.fullSection}>
-          <div className={styles.sectionTitle}>Current values</div>
-          <div className={styles.summary}>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Temperature</div>
-              <div className={styles.iconWrapper}>
-                <TemperatureIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>
-                {currentTemperature !== undefined ? `${currentTemperature}ºC` : '-'}
-              </div>
-            </div>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Humidity</div>
-              <div className={styles.iconWrapper}>
-                <HumidityIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>{currentHumidity !== undefined ? `${currentHumidity}%` : '-'}</div>
-            </div>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Pressure</div>
-              <div className={styles.iconWrapper}>
-                <PressureIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>{currentPressure ? `${currentPressure} pa` : '-'}</div>
-            </div>
-            <div className={styles.summaryVariable}>
-              <div className={styles.summaryLabel}>Wind speed</div>
-              <div className={styles.iconWrapper}>
-                <WindIcon className={styles.icon}/>
-              </div>
-              <div className={styles.summaryValue}>
-                {currentWindSpeed !== undefined
-                  ? `${currentWindSpeed} ${currentWindSpeedUnits !== 'unitless' ? currentWindSpeedUnits : ''}`
-                  : '-'}
-              </div>
-            </div>
-          </div>
-        </div>
+        <CurrentValues 
+          currentTemperature={currentTemperature}
+          currentHumidity={currentHumidity}
+          currentPressure={currentPressure}
+          currentWindSpeed={currentWindSpeed}
+          currentWindSpeedUnits={currentWindSpeedUnits}
+        />
 
         {this.props.controls && (
           <div className={styles.fullSection}>
