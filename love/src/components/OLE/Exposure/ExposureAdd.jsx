@@ -131,7 +131,7 @@ export default class ExposureAdd extends Component {
     payload['request_type'] = 'exposure';
     payload['instrument'] = this.state.selectedInstrument;
 
-    if ('tags' in payload) {
+    if (payload['tags']) {
       payload['tags'] = payload['tags'].map((tag) => tag.id);
     }
 
