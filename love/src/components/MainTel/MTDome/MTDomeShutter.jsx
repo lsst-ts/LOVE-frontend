@@ -53,10 +53,7 @@ export default class MTDomeShutter extends Component {
   };
 
   render() {
-    const width = this.props.width;
-    const height = this.props.height;
-    const positionActualDomeAz = this.props.positionActualDomeAz;
-    const positionCommandedDomeAz = this.props.positionCommandedDomeAz;
+    const { width, height, positionActualDomeAz, positionCommandedDomeAz } = this.props;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
         {/* Dome, actual position */}
@@ -108,7 +105,7 @@ export default class MTDomeShutter extends Component {
             style={{
               transformOrigin: `50% 50%`,
               transition: 'transform 1.5s linear 0s',
-              transform: `rotateX(${this.props.positionActualLightWindScreen}deg`,
+              transform: `rotate(${this.props.positionActualLightWindScreen}deg`,
             }}
           />
           {/* Shutter commanded right */}
@@ -186,7 +183,7 @@ export default class MTDomeShutter extends Component {
         </g>
 
         {/* Dome, commanded position */}
-        {positionCommandedDomeAz != positionActualDomeAz && (
+        {positionCommandedDomeAz !== positionActualDomeAz && (
           <g
             style={{
               transformOrigin: `50% 50%`,
