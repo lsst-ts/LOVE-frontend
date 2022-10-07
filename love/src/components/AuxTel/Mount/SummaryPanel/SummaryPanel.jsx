@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import styles from './SummaryTable.module.css';
 import StatusText from '../../../GeneralPurpose/StatusText/StatusText';
 import PropTypes from 'prop-types';
 import {
@@ -19,6 +18,9 @@ import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from '../../../GeneralPurpose/SimpleTable/SimpleTable';
 import styles from './SummaryPanel.module.css';
+
+const M3PORTNASMYTH1 = 1;
+const M3PORTNASMYTH2 = 2;
 
 export default class SummaryTable extends Component {
   static propTypes = {
@@ -50,7 +52,7 @@ export default class SummaryTable extends Component {
     const nasmyth2RotatorInPosition = nasmythRotatorInPositionStateMap[this.props.nasmyth2RotatorInPosition];
 
     let m3InPositionState = 0; // UNKNOWN
-    if (this.props.m3InPositionn !== 0) {
+    if (this.props.m3InPosition !== 0) {
       m3InPositionState = this.props.m3InPosition ? 2 : 1; // IN POSITION : NOT READY
     }
     const m3InPositionText = m3InPositionStateMap[m3InPositionState];
@@ -83,10 +85,10 @@ export default class SummaryTable extends Component {
       m2: m2Corrections,
     } = this.props.correctionEnabled;
 
-    const atSpectrographCorrectionsState = ataosCorrectionsStateMap[atSpectrographCorrections?.value ?? false];
-    const hexapodCorrectionsState = ataosCorrectionsStateMap[hexapodCorrections?.value ?? false];
-    const m1CorrectionsState = ataosCorrectionsStateMap[m1Corrections?.value ?? false];
-    const m2CorrectionsState = ataosCorrectionsStateMap[m2Corrections?.value ?? false];
+    const atSpectrographCorrectionsState = ataosCorrectionsStateMap[atSpectrographCorrections?.value];
+    const hexapodCorrectionsState = ataosCorrectionsStateMap[hexapodCorrections?.value];
+    const m1CorrectionsState = ataosCorrectionsStateMap[m1Corrections?.value];
+    const m2CorrectionsState = ataosCorrectionsStateMap[m2Corrections?.value];
 
     //Hexapod Table data
     const hexapodTableData = {
@@ -164,7 +166,7 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[m3InPositionText]}>{m3InPositionText}</StatusText>
         </Value>
-        {this.props.m3PortSelected === 1 ? (
+        {this.props.m3PortSelected === M3PORTNASMYTH1 ? (
           <>
             <Label>Nasmyth 1 pos.</Label>
             <Value>
@@ -172,7 +174,7 @@ export default class SummaryTable extends Component {
             </Value>
           </>
         ) : null}
-        {this.props.m3PortSelected === 2 ? (
+        {this.props.m3PortSelected === M3PORTNASMYTH2 ? (
           <>
             <Label>Nasmyth 2 pos.</Label>
             <Value>

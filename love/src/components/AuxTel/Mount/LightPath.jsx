@@ -22,8 +22,8 @@ import StatusText from '../../GeneralPurpose/StatusText/StatusText';
 import CurrentTargetValue from '../../GeneralPurpose/CurrentTargetValue/CurrentTargetValue';
 import Limits from '../../GeneralPurpose/Limits/Limits';
 
-const M3PORTNASMYTH1 = 6;
-const M3PORTNASMYTH2 = 7;
+const M3PORTNASMYTH1 = 1;
+const M3PORTNASMYTH2 = 2;
 
 export default class LightPath extends Component {
   componentDidMount = () => {
