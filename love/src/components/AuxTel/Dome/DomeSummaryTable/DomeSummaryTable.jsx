@@ -95,8 +95,11 @@ export default class DomeSummaryTable extends Component {
             minRot: minNas2,
             maxRot: maxNas2,
           };
-    const domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
-    const mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
+
+    let domeInPositionLabel = 'UNKNOWN';
+    if (domeInPositionValue !== 0) domeInPositionLabel = domeInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
+    let mountInPositionLabel = 'UNKNOWN';
+    if (mountInPositionValue !== 0) mountInPositionLabel = mountInPositionValue ? 'IN POSITION' : 'NOT IN POSITION';
     return (
       <SummaryPanel className={styles.summaryTable}>
         <Title>Track ID</Title>
@@ -104,11 +107,7 @@ export default class DomeSummaryTable extends Component {
         {/* Dome */}
         <Title>Dome</Title>
         <Value>
-          <StatusText
-            title={domeInPositionValue ? 'true' : 'false'}
-            status={stateToStyleDome[domeInPositionLabel]}
-            small
-          >
+          <StatusText title={domeInPositionValue} status={stateToStyleDome[domeInPositionLabel]} small>
             {domeInPositionLabel}
           </StatusText>
         </Value>
@@ -154,11 +153,7 @@ export default class DomeSummaryTable extends Component {
         {/* Mount */}
         <Title>Mount</Title>
         <Value>
-          <StatusText
-            title={mountInPositionValue ? 'true' : 'false'}
-            status={stateToStyleMount[mountInPositionLabel]}
-            small
-          >
+          <StatusText title={mountInPositionValue} status={stateToStyleMount[mountInPositionLabel]} small>
             {mountInPositionLabel}
           </StatusText>
         </Value>

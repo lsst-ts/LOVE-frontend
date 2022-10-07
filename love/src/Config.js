@@ -170,7 +170,7 @@ export const stateToStyleMount = {
   HANDPADDLECONTROL: 'ok',
   INVALID: 'warning',
   'IN MOTION': 'running',
-  'NOT IN POSITION': 'running',
+  'NOT IN POSITION': 'warning',
   UNKNOWN: 'invalid',
   'UNKNOWN POSITION': 'invalid',
 };
@@ -178,6 +178,7 @@ export const stateToStyleMount = {
 export const stateToStyleDome = {
   'IN POSITION': 'ok',
   'NOT IN POSITION': 'warning',
+  UNKNOWN: 'invalid',
 };
 
 export const stateToStyleLightpath = {
@@ -314,11 +315,13 @@ export const m3InPositionStateMap = {
 export const ataosCorrectionsStateMap = {
   false: 'DISABLED',
   true: 'ENABLED',
+  undefined: 'UNKNOWN',
 };
 
 export const ataosCorrectionsStateToStyle = {
   DISABLED: 'warning',
   ENABLED: 'ok',
+  UNKNOWN: 'invalid',
 };
 
 // ATPneumatics
