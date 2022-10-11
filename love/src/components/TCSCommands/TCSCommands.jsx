@@ -44,19 +44,19 @@ export default class CommandPanel extends Component {
       isModalOpen: false,
     };
     this.TCSCommands = {};
-    if (props.nameTCS === "aux") this.TCSCommands = ATCSCommands;
-    if (props.nameTCS === "main") this.TCSCommands = MTCSCommands;    
+    if (props.nameTCS === 'aux') this.TCSCommands = ATCSCommands;
+    if (props.nameTCS === 'main') this.TCSCommands = MTCSCommands;
   }
 
   isAuxTCS = () => {
-    if (this.props.nameTCS === "aux") {
+    if (this.props.nameTCS === 'aux') {
       return true;
     }
     return false;
   };
 
   isMainTCS = () => {
-    if (this.props.nameTCS === "main") {
+    if (this.props.nameTCS === 'main') {
       return true;
     }
     return false;
@@ -183,7 +183,7 @@ export default class CommandPanel extends Component {
               theme="solarized_dark"
               name="UNIQUE_ID_OF_DIV"
               width={'100%'}
-              height='100px'
+              height="100px"
               editorProps={{ $blockScrolling: true }}
               fontSize={14}
             />
@@ -239,8 +239,8 @@ export default class CommandPanel extends Component {
               <WarningIcon></WarningIcon>
             </span>
             <span>
-              {this.props.nameTCS && 
-                this.props.nameTCS.toUpperCase()} TCS commands are not allowed while queue is running
+              {this.props.nameTCS && this.props.nameTCS.toUpperCase()} TCS commands are not allowed while queue is
+              running
             </span>
           </span>
         </div>
@@ -273,11 +273,27 @@ export default class CommandPanel extends Component {
                 status="info"
                 disabled={!this.props.commandExecutePermission || !isAvailable}
                 onClick={() => {
-                  if (this.state.selectedCommand !== "point_azel")
-                    ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues)
+                  if (this.state.selectedCommand !== 'point_azel' && this.state.selectedCommand !== 'slew_object')
+                    ManagerInterface.runATCSCommand(this.state.selectedCommand, this.state.paramValues);
                   else {
-                    console.log("DEMO COMMAND!", this.state.paramValues);
-                    this.props.requestDemoCommand(this.state.paramValues);
+                    console.log('DEMO COMMAND!', this.state.paramValues);
+                    if (this.state.selectedCommand === 'slew_object') {
+                      setInterval(() => {
+                        const randomAz = Math.floor(Math.random() * 120);
+                        const randomEl = Math.floor(Math.random() * 90);
+                        const newParamValues = {
+                          rot_tel: 0,
+                          slew_timeout: 1200,
+                          target_name: 'azel_target',
+                          wait_dome: false,
+                          az: randomAz,
+                          el: randomEl,
+                        };
+                        this.props.requestDemoCommand(newParamValues);
+                      }, 5000);
+                    } else if (this.state.selectedCommand === 'point_azel') {
+                      this.props.requestDemoCommand(this.state.paramValues);
+                    }
                   }
                 }}
               >
@@ -289,10 +305,10 @@ export default class CommandPanel extends Component {
                 status="info"
                 disabled={!this.props.commandExecutePermission || !isAvailable}
                 onClick={() => {
-                  if (this.state.selectedCommand !== "point_azel")
-                    ManagerInterface.runMTCSCommand(this.state.selectedCommand, this.state.paramValues)
+                  if (this.state.selectedCommand !== 'point_azel')
+                    ManagerInterface.runMTCSCommand(this.state.selectedCommand, this.state.paramValues);
                   else {
-                    console.log("DEMO COMMAND!", this.state.paramValues);
+                    console.log('DEMO COMMAND!', this.state.paramValues);
                     this.props.requestDemoCommand(this.state.paramValues);
                   }
                 }}
