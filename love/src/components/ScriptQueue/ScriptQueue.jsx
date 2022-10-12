@@ -229,9 +229,7 @@ export default class ScriptQueue extends Component {
     }));
   };
 
-  onShowScriptDetails = (script) => {
-    // console.log(script);
-  };
+  onShowScriptDetails = (script) => {};
 
   displayAvailableScripts = () => {
     this.setState({
@@ -392,7 +390,6 @@ export default class ScriptQueue extends Component {
   };
 
   stopScript = (scriptIndex, terminate = false) => {
-    console.log('Stopping script', scriptIndex);
     const array = new Array(400).fill(0);
     array[0] = scriptIndex;
     this.props.requestSALCommand({
@@ -429,7 +426,6 @@ export default class ScriptQueue extends Component {
   };
 
   moveScript = (scriptIndex, position, offset = true) => {
-    console.log(`Move script ${scriptIndex} to ${position}`);
     let location = 3; //Before reference script
     let locationSalIndex = 0;
     const offsetValue = offset || position <= 0 ? 1 : 0;
@@ -450,7 +446,6 @@ export default class ScriptQueue extends Component {
   };
 
   pauseScriptQueue = () => {
-    console.log('Pausing queue');
     this.props.requestSALCommand({
       cmd: 'cmd_pause',
       params: {},
@@ -458,7 +453,6 @@ export default class ScriptQueue extends Component {
   };
 
   resumeScriptQueue = () => {
-    console.log('Resuming queue');
     this.props.requestSALCommand({
       cmd: 'cmd_resume',
       params: {},
@@ -476,7 +470,6 @@ export default class ScriptQueue extends Component {
     });
   };
   onClickContextMenu = (event, index, currentMenuSelected = false) => {
-    console.log('Click context menu');
     event.stopPropagation();
     this.setState({ isContextMenuOpen: !this.state.isContextMenuOpen });
     this.setState({
