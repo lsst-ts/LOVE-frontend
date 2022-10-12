@@ -409,9 +409,7 @@ export default class ScriptQueue extends Component {
       csc: 'Script',
       salindex: 0,
       cmd: 'cmd_resume',
-      params: {
-        ScriptID: scriptIndex,
-      },
+      params: {},
     });
   };
 
