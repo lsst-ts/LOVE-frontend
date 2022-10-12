@@ -419,11 +419,10 @@ export default class ScriptQueue extends Component {
   };
 
   requeueScript = (scriptIndex) => {
-    console.log('Requeueing script', scriptIndex);
     this.props.requestSALCommand({
       cmd: 'cmd_requeue',
       params: {
-        salIndex: scriptIndex,
+        scriptSalIndex: scriptIndex,
         location: 2,
       },
     });
