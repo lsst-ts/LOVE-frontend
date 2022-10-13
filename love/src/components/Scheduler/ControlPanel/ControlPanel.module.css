@@ -1,0 +1,169 @@
+.container {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 1fr;
+}
+
+.selectorTitle {
+    font-size: var(--font-size-large);
+    color: var(--primary-font-color);
+    padding-top: 0.5em;
+}
+
+.selectorContainer {
+    padding: 0 1em;
+    text-align: left;
+    border: solid var(--second-tertiary-background-color) 2px;
+    border-radius: 5px;
+}
+
+.timelineContainer {
+    padding: 0 1em;
+    text-align: left;
+    border: solid var(--second-tertiary-background-color) 2px;
+    border-radius: 5px;
+}
+
+.value {
+    color: var(--primary-font-color);
+}
+
+.targetData {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    padding-left: 0.5em;
+    grid-column-gap: 0.5em;
+    grid-row-gap: 0.1em;
+    padding-top: 0.1em;
+}
+
+.stateCell {
+    display: grid;
+    grid-template-columns: 8em 1fr;
+    align-items: center;
+    grid-column-gap: 0.5rem;
+    padding-bottom: 2px;
+    width: 250px;
+}
+
+.infoCell {
+    display: grid;
+    grid-template-columns: 8em 1fr;
+    align-items: center;
+    text-align: left;
+    grid-column-gap: 0.5rem;
+    padding-bottom: 2px;
+}
+
+.stateLabel {
+    margin-bottom: auto;
+    margin-top: auto;
+    /* text-align: center; */
+}
+
+.controlContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0.5em;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    /* background: var(); */
+    background: var(--second-secondary-background-color);
+    border: solid var(--second-tertiary-background-color) 2px;
+    border-radius: 5px;
+}
+
+.stateContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0.5em;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    /* background: var(); */
+    background: var(--second-secondary-background-color);
+    border: solid var(--second-tertiary-background-color) 2px;
+    border-radius: 5px;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5em 0.5em;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+    /* background: var(); */
+    background: var(--second-secondary-background-color);
+    border: solid var(--second-tertiary-background-color) 2px;
+    border-radius: 5px;
+}
+
+.pauseIconContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0.5em 0.5em;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    max-width: 50px;
+}
+
+.pauseIconContainer:hover {
+    border: 1px solid var(--second-quaternary-background-color);
+}
+
+.pauseIconContainer:hover .pauseIconWrapper {
+    background: var(--commandable-background-hover);
+}
+
+.pauseIconContainer>span {
+    padding-right: 0.5em;
+}
+
+.pauseIconWrapper {
+    align-items: center;
+    width: 2em;
+    border-radius: 100%;
+}
+
+.summaryState {
+    border-radius: 0.2rem;
+    font-weight: 700;
+}
+
+.row {
+    display: contents;
+}
+
+.skyMap {
+    border: solid var(--second-tertiary-background-color) 2px;
+    border-radius: 5px;
+}
+
+.loadSnapshotContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    min-width: 250px;
+}
+
+.controlIconsPanel {
+    display: grid;
+    grid: 50px / 50px 50px 50px;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
