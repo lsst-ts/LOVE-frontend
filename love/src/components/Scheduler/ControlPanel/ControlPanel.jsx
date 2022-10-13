@@ -272,17 +272,7 @@ export default class ControlPanel extends Component {
 
                     <div className={styles.row}>
                         <div className={styles.loadSnapshotContainer}>
-                            <Button
-                                title="Click to copy latest snapshot to clipboard"
-                                status="info"
-                                shape="rounder"
-                                padding='30px'
-                                disabled={latestSnapshot === null}
-                                onClick={() => navigator.clipboard.writeText(latestSnapshot)}
-                                command
-                            >
-                                SNAPSHOT
-                            </Button>
+                            Latest snapshot: {latestSnapshot}
                         </div>
                     </div>
 
