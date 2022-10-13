@@ -144,6 +144,16 @@ export const observatoryIndex = {
       },
     },
   },
+  SchedulerControlPanel: {
+    component: require('../Scheduler/ControlPanel/ControlPanel.container').default,
+    schema: {
+      ...require('../Scheduler/ControlPanel/ControlPanel.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../Scheduler/ControlPanel/ControlPanel.container').schema.props,
+      },
+    },
+  },
   Network: {
     component: require('../Network/Network.container').default,
     schema: {
