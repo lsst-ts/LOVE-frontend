@@ -9,6 +9,7 @@ import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData }
 import { defaultStyles } from './Plot.container';
 import isEqual from 'lodash/isEqual';
 import styles from './Plot.module.css';
+import { CONTINUOUS_DOMAIN_SCALES } from 'vega-lite/build/src/scale';
 
 const moment = extendMoment(Moment);
 
@@ -57,6 +58,7 @@ export default class Plot extends Component {
       containerHeight: undefined,
     };
     this.timeSeriesControlRef = React.createRef();
+    this.resizeObserver = undefined;
   }
 
   /* setIsLive = (isLive) => {
@@ -139,16 +141,14 @@ export default class Plot extends Component {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
           this.setState({
-            containerHeight: container.contentRect.height - 100,
+            containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
           });
         });
-        // this.resizeObserver.observe(this.props.containerNode);
-
         if (!(this.props.containerNode instanceof Element)) return;
-        resizeObserver.observe(this.props.containerNode);
+        this.resizeObserver.observe(this.props.containerNode);
         return () => {
-          resizeObserver.disconnect();
+          this.resizeObserver.disconnect();
         };
 
       }
@@ -217,14 +217,14 @@ export default class Plot extends Component {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
           this.setState({
-            containerHeight: container.contentRect.height - 100,
+            containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
           });
         });
         if (!(this.props.containerNode instanceof Element)) return;
-        resizeObserver.observe(this.props.containerNode);
+        this.resizeObserver.observe(this.props.containerNode);
         return () => {
-          resizeObserver.disconnect();
+          this.resizeObserver.disconnect();
         };
       }
     }
@@ -255,7 +255,7 @@ export default class Plot extends Component {
 
     const units = {y: streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units};
 
-    const layerTypes = ['lines', 'bars', 'pointLines'];
+    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;
@@ -306,10 +306,11 @@ export default class Plot extends Component {
         };
       });
 
-
+    //console.log('Plot.render() containerWidth', containerWidth, 'width', this.props.width);
     return (
-      <div ref={this.timeSeriesControlRef}>
-        {controls && (
+      <>
+      {controls && (
+        <div ref={this.timeSeriesControlRef}>
           <TimeSeriesControls
             // ref={this.timeSeriesControlRef}
             setTimeWindow={(timeWindow) => this.setState({ timeWindow })}
@@ -321,7 +322,8 @@ export default class Plot extends Component {
             selectedEfdClient={(client) => this.setState({ selectedEfdClient: client })}
             setEfdClient={this.setEfdClient}
           />
-        )}
+        </div>
+      )}
         <div className={[styles.container].join(' ')}>
           <VegaTimeseriesPlot
             layers={layers}
@@ -343,7 +345,7 @@ export default class Plot extends Component {
             <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
           </div>
         )}
-      </div>
+      </>
     );
   }
 
