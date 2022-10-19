@@ -17,7 +17,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   static propTypes = {
-    markType: PropTypes.oneOf(['line', 'pointLine', 'bar']),
+    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow']),
     /** (All layers) hex color */
     color: PropTypes.string,
     /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
@@ -31,7 +31,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   lineSpec = (markType) => {
-    if (markType !== 'line' && markType !== 'pointLine') {
+    if (markType !== 'line' && markType !== 'pointLine' ) {
       return {};
     }
     return {
@@ -83,17 +83,17 @@ class VegaLegendMiniPlot extends React.PureComponent {
       return {};
     }
     return {
-      data: { values: [{ a: 0, b: 0.5 }] },
+      data: { values: [{ a: -2, b: 4 },{ a: 1, b: 6 },{ a: 4, b: 3}] },
       mark: {
         type: 'bar',
         color: this.props.color,
-        clip: true,
+        /* clip: true, */
       },
       encoding: {
         x: {
           field: 'a',
           type: 'quantitative',
-          scale: { domain: [-0.5, 0.5] },
+          scale: { domain: [0, 6] },
           axis: { title: null },
         },
         y: {
@@ -101,29 +101,165 @@ class VegaLegendMiniPlot extends React.PureComponent {
           type: 'quantitative',
           axis: { title: null },
         },
+        opacity: {
+          value: 0.9
+        }
       },
       config: {
         background: null,
         axis: false,
         bar: {
-          continuousBandSize: 15,
+          continuousBandSize: 5,
         },
       },
     };
   };
+
+  areaSpec = (markType) => {
+    if (markType !== 'area' ) {
+      return {};
+    }
+    return {
+      data: {
+        values: [{ a: -10, b: 19, c: 11}, { a: 0,  b: 34, c: 8 }, { a: 10, b: 27, c: 18 }, {a: 25, b: 29, c: 12}],
+      },
+      mark: {
+        type: 'area',
+        color: this.props.color,
+      },
+      encoding: {
+        x: {
+          field: 'a',
+          type: 'quantitative',
+          scale: {
+            domain: [0, 25],
+          },
+          axis: {
+            title: null,
+          },
+        },
+        y: {
+          field: 'b',
+          aggregate: 'max',
+          axis: { title: null },
+        },
+        y2: {
+          field: 'c',
+          aggregate: 'min',
+          axis: { title: null },
+        },
+        opacity: {
+          value: 0.8
+        }
+      },
+      config: {
+        background: null,
+        axis: false,
+      },
+    };
+  };
+
+  arrowSpec = (markType) => {
+    if (markType !== 'arrow' ) {
+      return {};
+    }
+    return {
+      data: {
+        values: [
+          {x: -2, y: 0.5, angle: 0}, {x: 0, y: 2, angle: -45}, {x: 2, y: 1, angle: -260}
+        ]
+      },
+      layer: [
+        {
+          mark: {
+            type: 'line',
+            color: this.props.color,
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: 'quantitative',
+              scale: {
+                domain: [-2, 3],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: { title: null },
+              scale: {
+                domain: [0, 2.5],
+              },
+            },
+            opacity: {
+              value: 0.8
+            }
+          },
+        },
+        {
+          mark: {
+            type: 'text',
+            dx: 0,
+            fontSize: 13,
+            color: '#d3e1eb',
+          },
+          encoding: {
+            text: {
+              value: '➟'
+            },
+            x: {
+              field: 'x',
+              type: 'quantitative',
+              scale: {
+                domain: [-2, 3],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: { title: null },
+              scale: {
+                domain: [0, 2.5],
+              },
+            },
+            angle: {
+              field: 'angle',
+              type: 'nominal',
+            }
+          }
+        },
+      ],
+      config: {
+        background: null,
+        axis: false,
+      },
+    }
+  }
+
   render() {
     const lineSpec = this.lineSpec(this.props.markType);
     const barSpec = this.barSpec(this.props.markType);
+    const areaSpec = this.areaSpec(this.props.markType);
+    const arrowSpec = this.arrowSpec(this.props.markType);
     const spec = {
-      schema: 'https://vega.github.io/schema/vega-lite/v4.json',
-      width: 32,
-      height: 24,
+      schema: 'https://vega.github.io/schema/vega-lite/v5.json',
+      width: 24,
+      height: 23,
       padding: 0,
       view: {
         stroke: null,
       },
       ...lineSpec,
       ...barSpec,
+      ...arrowSpec,
+      ...areaSpec,
+      
     };
 
     return <VegaLite renderer="svg" spec={spec} actions={false} />;

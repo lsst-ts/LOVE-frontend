@@ -77,7 +77,7 @@ export default class TSCEntry extends PureComponent {
     onRemove: null,
   };
 
-  itemOptions = ['line', 'pointLine', 'bar'];
+  itemOptions = ['line', 'pointLine', 'bar', 'arrow', 'area'];
 
   onNameChange = (name) => {
     this.props.onChange(name, this.props.inputs, this.props.accessor, this.props.type);
@@ -122,6 +122,7 @@ export default class TSCEntry extends PureComponent {
     // Delete the following 2 lines and uncomment the third when going back to multiple inputs:
     const input = this.props.inputs[0];
     const index = 0;
+    const nextIndex = 1;
     return (
       <div className={styles.container}>
         <div className={styles.firstRow}>
@@ -162,7 +163,7 @@ export default class TSCEntry extends PureComponent {
             onChange={(selection) => this.onStyleChange('color', selection)}
           />
 
-          {['line', 'pointLine'].includes(this.props.type) && (
+          {['line', 'pointLine', 'arrow'].includes(this.props.type) && (
             <Select
               className={styles.select}
               options={DASHES.map((d) => JSON.stringify(d))}
@@ -173,13 +174,74 @@ export default class TSCEntry extends PureComponent {
           )}
 
           {['line', 'pointLine'].includes(this.props.type) && (
-            <svg viewBox="0 0 20 1" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 20 4" xmlns="http://www.w3.org/2000/svg">
+              <line
+                stroke={input?.color}
+                x1="2"
+                y1="2"
+                x2="20"
+                y2="2"
+                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+              />
+            </svg>
+          )}
+
+          {['arrow'].includes(this.props.type) && (
+            <svg viewBox="0 0 20 4" xmlns="http://www.w3.org/2000/svg">
               <line
                 stroke={input?.color}
                 x1="0"
-                y1="0"
+                y1="2"
                 x2="20"
+                y2="2"
+                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+              />
+              <text
+                role="graphics-symbol"
+                aria-roledescription="text mark"
+                text-anchor="start"
+                transform="translate(9,5) rotate(-30)"
+                font-family="sans-serif"
+                font-size="6px"
+                font-style="normal"
+                font-weight="normal"
+                fill="white">➟</text>
+            </svg>
+          )}
+
+          {['area'].includes(this.props.type) && (
+            <svg viewBox="0 0 870 190" xmlns="http://www.w3.org/2000/svg">
+              <path aria-label="u: 1; v: 28" role="graphics-symbol" aria-roledescription="area mark"
+                d="M0,98.18181818181819L60,0L120,47.272727272727266L180,76.36363636363637L240,69.0909090909091L300,25.454545454545464L300,200L240,200L180,200L120,200L60,200L0,200Z"
+                fill={input?.color}>
+              </path>
+            </svg>
+          )}
+
+          {['bar'].includes(this.props.type) && (
+            <svg viewBox="1 0 16 4" xmlns="http://www.w3.org/2000/svg">
+              <line
+                stroke={input?.color}
+                x1="1.5"
+                y1="4"
+                x2="1.5"
+                y2="2"
+                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+              />
+              <line
+                stroke={input?.color}
+                x1="3"
+                y1="4"
+                x2="3"
                 y2="0"
+                strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
+              />
+              <line
+                stroke={input?.color}
+                x1="4.5"
+                y1="4"
+                x2="4.5"
+                y2="1"
                 strokeDasharray={`${input?.dash[0]} ${input?.dash[1]}`}
               />
             </svg>

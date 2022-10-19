@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { VegaLite } from 'react-vega';
 import styles from './VegaTimeSeriesPlot.module.css';
 import PropTypes from 'prop-types';
+import { style } from 'd3';
 
 export const SHAPES = [
   'circle',
@@ -72,6 +73,18 @@ class VegaTimeseriesPlot extends Component {
        *  - x,y are the plot-axis coordinates of a point in that line
        */
       bars: PropTypes.arrayOf(PropTypes.object),
+      /**
+       * List of `{name, x, y, angle}` of line plot with arrow direction to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,y are the plot-axis coordinates of a point in that line
+       */
+      arrows: PropTypes.arrayOf(PropTypes.object),
+      /**
+       * List of `{name, x, y, y2}` of area plot to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,y,y2 are the plot-axis coordinates of a point in that area
+       */
+       areas: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
 
     /**
@@ -131,9 +144,48 @@ class VegaTimeseriesPlot extends Component {
     super(props);
     this.resizeObserver = undefined;
     this.state = {
-      containerWidth: 500,
-      containerHeight: 200,
-      spec: {},
+      containerWidth: props.width ?? 400,
+      containerHeight: props.height ?? 240,
+      spec: {
+        width:
+          props.width !== undefined && props.height !== undefined
+            ? props.width
+            : 500,
+        height:
+          this.props.width !== undefined && this.props.height !== undefined
+            ? props.height
+            : 240,
+        autosize: {
+          type: 'fit',
+          contains: 'padding',
+        },
+        config: {
+          background: null,
+          title: { color: '#ddd' },
+          style: {
+            'guide-label': {
+              fill: '#ddd',
+            },
+            'guide-title': {
+              fill: '#ddd',
+            },
+          },
+          axis: {
+            domainColor: '#626262',
+            gridColor: '#424242',
+            tickColor: null,
+          },
+          axisX: {
+            titlePadding: 16,
+            titleFontWeight: 750,
+            // labelAngle: -45,
+            labelFontWeight: 750,
+            tickCount: 5,
+          },
+        },
+        layer: [
+        ],
+      },
     };
   }
 
@@ -280,15 +332,191 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
+  makeArrowLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+    return {
+      data: { name: dataName },
+      layer: [
+        {
+          mark: {
+            type: 'line',
+            clip: true,
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            color: styleEncoding.color,
+            strokeDash: styleEncoding.strokeDash,
+          },
+        },
+        {
+          mark: {
+            type: 'text',
+            dx: 0,
+            fontSize: 24,
+            "color": "#d3e1eb"
+          },
+          encoding: {
+            text: {
+              value: '➟'
+            },
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            angle: {
+              field: 'angle',
+              type: 'nominal',
+            },
+          },
+        }
+      ]
+    };
+  };
+
+  makeAreaLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+    return {
+      data: { name: dataName },
+      transform: [
+        {
+          calculate: '(datum.y - datum.y)',
+          as: 'y2'
+        },
+      ],
+      layer: [
+        {
+          mark: {
+            type: 'line',
+            clip: true,
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            color: styleEncoding.color,
+            strokeDash: styleEncoding.strokeDash,
+          },
+        },
+        {
+          mark: {
+            type: 'line',
+            clip: true,
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y2',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            color: styleEncoding.color,
+            strokeDash: styleEncoding.strokeDash,
+          },
+        },
+        {
+          mark: {
+            type: 'area',
+            clip: true
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y',
+              aggregate: 'max',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+              scale: {
+                domainMax: 100,
+                domainMin: 0
+              }
+            },
+            y2: {
+              field: 'y2',
+              aggregate: 'min',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            color: styleEncoding.color,
+            opacity: {
+              value: 0.6
+            }
+          }
+        }
+      ]
+    };
+  };
+
   updateSpec = () => {
     this.setState({
       spec: {
         width:
-          this.props.width !== undefined && this.props.height !== undefined
+          this.props.width !== undefined && this.props.width !== null
             ? this.props.width
             : this.state.containerWidth,
         height:
-          this.props.width !== undefined && this.props.height !== undefined
+          this.props.height !== undefined && this.props.height !== null
             ? this.props.height
             : this.state.containerHeight,
         autosize: {
@@ -324,12 +552,29 @@ class VegaTimeseriesPlot extends Component {
           this.makeLineLayer('lines'),
           this.makeLineLayer('pointLines'),
           this.makePointsLayer('pointLines'),
+          this.makeArrowLayer('arrows'),
+          this.makeAreaLayer('areas')
         ],
       },
     });
   };
 
   componentDidMount = () => {
+    if (
+      this.props.width === undefined && // width/height have more priority
+      this.props.height === undefined
+    ) {
+      if (this.props.containerNode) {
+        this.resizeObserver = new ResizeObserver((entries) => {
+          const container = entries[0];
+          this.setState({
+            containerHeight: container.contentRect.height,
+            containerWidth: container.contentRect.width,
+          });
+        });
+        this.resizeObserver.observe(this.props.containerNode);
+      }
+    }
     this.updateSpec();
   };
 
