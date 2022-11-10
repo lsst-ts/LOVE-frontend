@@ -53,15 +53,15 @@ export default class MTDomeShutter extends Component {
   };
 
   render() {
-    const width = this.props.width;
-    const height = this.props.height;
+    const { width, height, positionActualDomeAz, positionCommandedDomeAz } = this.props;
     return (
       <svg className={styles.svgOverlay} height={height} width={width} viewBox="0 0 235 235">
-        {/* rest of dome */}
+        {/* Dome, actual position */}
         <g
           style={{
             transformOrigin: `50% 50%`,
-            transform: `translate(-16%, -11%) rotate(0deg)`,
+            transition: 'transform 1.5s linear 0s',
+            transform: `translate(-16%, -11%) rotate(${this.props.positionActualDomeAz}deg)`,
             transformBox: 'fill-box',
           }}
         >
@@ -104,7 +104,8 @@ export default class MTDomeShutter extends Component {
             height="64.86"
             style={{
               transformOrigin: `50% 50%`,
-              transform: `rotateX(${this.props.positionActualLightWindScreen}deg`,
+              transition: 'transform 1.5s linear 0s',
+              transform: `rotate(${this.props.positionActualLightWindScreen}deg`,
             }}
           />
           {/* Shutter commanded right */}
@@ -181,18 +182,22 @@ export default class MTDomeShutter extends Component {
           </g>
         </g>
 
-        <g
-          style={{
-            transformOrigin: `50% 50%`,
-            transform: `rotate(0deg)`,
-            transformBox: 'fill-box',
-          }}
-        >
-          <path
-            style={{ stroke: '#788e9b', strokeDasharray: '4 6', fill: 'none', strokeMiterlimit: 10 }}
-            d="M72.99,6.09H28.26v4.05h40.12L22.67,50.39,1.3,102.86l1.62,53.83,58.95,77.23h-23.89v4.86h27.6l1.42,1.86h96l1.42-1.86h27.6v-4.86h-23.89l58.95-77.23,1.62-53.83-21.37-52.47L161.65,10.14h40.12V6.09h-44.72l-.51-.45H73.5l-.51,.45Zm83.8,3.65V156.87H73.71V9.74h83.08Z"
-          />
-        </g>
+        {/* Dome, commanded position */}
+        {positionCommandedDomeAz !== positionActualDomeAz && (
+          <g
+            style={{
+              transformOrigin: `50% 50%`,
+              transition: 'transform 1.5s linear 0s',
+              transform: `rotate(${this.props.positionCommandedDomeAz}deg)`,
+              transformBox: 'fill-box',
+            }}
+          >
+            <path
+              style={{ stroke: '#788e9b', strokeDasharray: '4 6', fill: 'none', strokeMiterlimit: 10 }}
+              d="M72.99,6.09H28.26v4.05h40.12L22.67,50.39,1.3,102.86l1.62,53.83,58.95,77.23h-23.89v4.86h27.6l1.42,1.86h96l1.42-1.86h27.6v-4.86h-23.89l58.95-77.23,1.62-53.83-21.37-52.47L161.65,10.14h40.12V6.09h-44.72l-.51-.45H73.5l-.51,.45Zm83.8,3.65V156.87H73.71V9.74h83.08Z"
+            />
+          </g>
+        )}
       </svg>
     );
   }
