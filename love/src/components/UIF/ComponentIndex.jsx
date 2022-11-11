@@ -529,6 +529,16 @@ export const mainIndex = {
       },
     },
   },
+  MTCamera: {
+    component: require('../MainTel/MTCamera/MTCamera.container').default,
+    schema: {
+      ...require('../MainTel/MTCamera/MTCamera.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../MainTel/MTCamera/MTCamera.container').schema.props,
+      },
+    },
+  },
 };
 
 const environmentIndex = {
