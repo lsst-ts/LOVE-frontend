@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import SubscriptionTableContainer from 'components/GeneralPurpose/SubscriptionTable/SubscriptionTable.container';
 import { addGroup, removeGroup } from 'redux/actions/ws';
+import MTCamera from './MTCamera';
 
 export const schema = {
   description: 'View of MTCamera',
@@ -37,7 +39,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    subscriptions,
+    // subscriptions,
     subscribeToStream: () => {
       subscriptions.forEach((stream) => dispatch(addGroup(stream)));
     },

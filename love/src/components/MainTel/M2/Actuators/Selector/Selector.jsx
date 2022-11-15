@@ -255,6 +255,7 @@ export default class Selector extends Component {
     } = this.props;
 
     const { zoomLevel } = this.state;
+    console.log(zoomLevel);
 
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
@@ -466,14 +467,14 @@ export default class Selector extends Component {
           r={this.state.width / 2 - 30}
         />
 
-        <circle
+        {/* <circle
           className={styles.hiddenCircleOverlay}
           cx={this.state.width / 2}
           cy={this.state.width / 2}
           fill={'none'}
           r={this.state.width / 2 + 50}
           onClick={() => actuatorSelect(null)}
-        />
+        /> */}
 
         <g id="plot-axis">
           <text

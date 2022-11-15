@@ -1,0 +1,12 @@
+.svgContainer {
+  flex-grow: 2;
+  width: 100%;
+  height: 100%;
+  /* max-width: 480px; */
+  min-width: 300px;
+  /*border-radius: 50%;*/
+}
+
+.svgContainer text.hidden {
+  opacity: 0;
+}
