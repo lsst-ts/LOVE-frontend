@@ -998,18 +998,6 @@ export const M1M3ActuatorForces = {
   appliedStaticForces: ['xForces', 'yForces', 'zForces'],
   appliedThermalForces: ['xForces', 'yForces', 'zForces'],
   appliedVelocityForces: ['xForces', 'yForces', 'zForces'],
-  preclippedAberrationForces: ['zForces'],
-  preclippedAccelerationForces: ['xForces', 'yForces', 'zForces'],
-  preclippedActiveOpticForces: ['zForces'],
-  preclippedAzimuthForces: ['xForces', 'yForces', 'zForces'],
-  preclippedBalanceForces: ['xForces', 'yForces', 'zForces'],
-  preclippedCylinderForces: ['secondaryCylinderForces', 'primaryCylinderForces'],
-  preclippedElevationForces: ['xForces', 'yForces', 'zForces'],
-  preclippedForces: ['xForces', 'yForces', 'zForces'],
-  preclippedOffsetForces: ['xForces', 'yForces', 'zForces'],
-  preclippedStaticForces: ['xForces', 'yForces', 'zForces'],
-  preclippedThermalForces: ['xForces', 'yForces', 'zForces'],
-  preclippedVelocityForces: ['xForces', 'yForces', 'zForces'],
 };
 
 export const M1M3ActuatorPositions = [
