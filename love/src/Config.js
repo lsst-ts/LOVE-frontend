@@ -297,8 +297,8 @@ export const LOG_TYPE_OPTIONS = [
 export const EXPOSURE_FLAG_OPTIONS = ['none', 'junk', 'questionable'];
 export const exposureFlagStateToStyle = {
   none: 'ok',
-  junk: 'warning',
-  questionable: 'alert',
+  junk: 'alert',
+  questionable: 'warning',
 };
 export const iconLevelOLE = {
   info: <InfoIcon />,
@@ -447,52 +447,52 @@ export const getCameraStatusStyle = (status) => {
 
 // State to styles mappings
 export const stateToStyleLATISS = {
-  'HOMING': 'running',
-  'MOVING': 'running',
-  'STATIONARY': 'ok',
-  'NOTINPOSITION': 'warning',
-  'NEEDS_CLEAR': 'ok',
-  'CLEARING': 'running',
-  'INTEGRATING': 'running',
-  'READING_OUT': 'running',
-  'QUIESCENT': 'ok',
-  'CLOSED': 'ok',
-  'OPEN': 'ok',
-  'CLOSING': 'running',
-  'OPENING': 'running',
+  HOMING: 'running',
+  MOVING: 'running',
+  STATIONARY: 'ok',
+  NOTINPOSITION: 'warning',
+  NEEDS_CLEAR: 'ok',
+  CLEARING: 'running',
+  INTEGRATING: 'running',
+  READING_OUT: 'running',
+  QUIESCENT: 'ok',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  CLOSING: 'running',
+  OPENING: 'running',
 };
 
 export const stateToStyleCamera = {
-  'NEEDS_CLEAR': 'ok',
-  'CLEARING': 'running',
-  'INTEGRATING': 'running',
-  'READING_OUT': 'running',
-  'QUIESCENT': 'ok',
-  'READY': 'ok',
-  'NOT_READY': 'warning',
-  'GETTING_READY': 'running',
-  'DISABLED': 'warning',
-  'ENABLED': 'ok',
-  'CLOSED': 'ok',
-  'OPEN': 'ok',
-  'CLOSING': 'running',
-  'OPENING': 'running',
-  'END_READOUT': 'ok',
-  'END_TELEMETRY': 'ok',
+  NEEDS_CLEAR: 'ok',
+  CLEARING: 'running',
+  INTEGRATING: 'running',
+  READING_OUT: 'running',
+  QUIESCENT: 'ok',
+  READY: 'ok',
+  NOT_READY: 'warning',
+  GETTING_READY: 'running',
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  CLOSING: 'running',
+  OPENING: 'running',
+  END_READOUT: 'ok',
+  END_TELEMETRY: 'ok',
 };
 
 export const stateToStyleMount = {
   'NOT READY': 'warning',
   'IN POSITION': 'ok',
-  'NASMYTH1': 'ok',
-  'NASMYTH2': 'ok',
-  'PORT3': 'ok',
-  'CLOSED': 'ok',
-  'OPEN': 'ok',
-  'OPENED': 'ok',
-  'REMOTECONTROL': 'ok',
-  'HANDPADDLECONTROL': 'ok',
-  'INVALID': 'warning',
+  NASMYTH1: 'ok',
+  NASMYTH2: 'ok',
+  PORT3: 'ok',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  OPENED: 'ok',
+  REMOTECONTROL: 'ok',
+  HANDPADDLECONTROL: 'ok',
+  INVALID: 'warning',
   'IN MOTION': 'running',
   'NOT IN POSITION': 'warning',
   UNKNOWN: 'invalid',
@@ -506,19 +506,19 @@ export const stateToStyleDome = {
 };
 
 export const stateToStyleLightpath = {
-  'DISABLED': 'warning',
-  'ENABLED': 'ok',
-  'FAULT': 'warning',
-  'OFFLINE': 'warning',
-  'STANDBY': 'warning',
-  'CLOSED': 'ok',
-  'OPEN': 'ok',
-  'OPENED': 'ok',
+  DISABLED: 'warning',
+  ENABLED: 'ok',
+  FAULT: 'warning',
+  OFFLINE: 'warning',
+  STANDBY: 'warning',
+  CLOSED: 'ok',
+  OPEN: 'ok',
+  OPENED: 'ok',
   'IN MOTION': 'running',
-  'INVALID': 'warning',
+  INVALID: 'warning',
   'NOT READY': 'warning',
   'IN POSITION': 'ok',
-  'UNKNOWN': 'invalid',
+  UNKNOWN: 'invalid',
   'UNKNOWN POSITION': 'invalid',
 };
 
@@ -540,106 +540,106 @@ export const m1m3DetailedStateToStyle = {
 };
 
 export const m1m3ILCStateToStyle = {
-  'ON': 'ok',
-  'OFF': 'warning',
+  ON: 'ok',
+  OFF: 'warning',
 };
 
 export const m2ActuatorILCStateToStyle = {
-  'OPERATIVE': 'ok',
-  'FAULT': 'warning',
+  OPERATIVE: 'ok',
+  FAULT: 'warning',
 };
 
 export const m2ActuatorLimitSwitchStateToStyle = {
-  'OPEN': 'ok',
-  'CLOSED': 'warning',
+  OPEN: 'ok',
+  CLOSED: 'warning',
 };
 
 export const stateToStyleDomeAndMount = {
-  'NASMYTH1': 'ok',
-  'NASMYTH2': 'ok',
-  'PORT3': 'ok',
-  'UNKNOWN': 'invalid',
-  'INMOTION': 'running',
-  'STOPPING': 'warning',
-  'ENABLED': 'ok',
-  'DISABLED': 'warning',
-  'CLOSING': 'warning',
-  'OPENING': 'warning',
+  NASMYTH1: 'ok',
+  NASMYTH2: 'ok',
+  PORT3: 'ok',
+  UNKNOWN: 'invalid',
+  INMOTION: 'running',
+  STOPPING: 'warning',
+  ENABLED: 'ok',
+  DISABLED: 'warning',
+  CLOSING: 'warning',
+  OPENING: 'warning',
   'PARTIALLY OPEN': 'warning',
-  'OPEN': 'ok',
-  'CLOSED': 'ok',
+  OPEN: 'ok',
+  CLOSED: 'ok',
   'NOT MOVING': 'ok',
   'MOVING CW': 'warning',
   'MOVING CCW': 'warning',
 };
 
 export const stateToStyleMTMountCommander = {
-  'NONE': 'invalid',
-  'CSC': 'ok',
-  'EUI': 'warning',
-  'HHD': 'warning',
+  NONE: 'invalid',
+  CSC: 'ok',
+  EUI: 'warning',
+  HHD: 'warning',
 };
 
 export const stateToStyleMTMountConnected = {
-  'UNKOWN': 'invalid',
-  'DISCONNECTED': 'warning',
-  'CONNECTED': 'ok',
+  UNKOWN: 'invalid',
+  DISCONNECTED: 'warning',
+  CONNECTED: 'ok',
 };
 
 export const stateToStyleMTMountPowerState = {
-  'OFF': 'invalid',
-  'ON': 'ok',
-  'FAULT': 'alert',
-  'TURNING_ON': 'warning',
-  'TURNING_OFF': 'warning',
-  'UNKNOWN': 'invalid',
+  OFF: 'invalid',
+  ON: 'ok',
+  FAULT: 'alert',
+  TURNING_ON: 'warning',
+  TURNING_OFF: 'warning',
+  UNKNOWN: 'invalid',
 };
 
 export const stateToStyleMTMountAxisMotionState = {
-  'STOPPING': 'warning',
-  'STOPPED': 'ok',
+  STOPPING: 'warning',
+  STOPPED: 'ok',
   'MOVING POINT TO POINT': 'warning',
-  'JOGGING': 'warning',
-  'TRACKING': 'warning',
-  'TRACKING_PAUSED': 'warning',
-  'UNKNOWN': 'invalid',
+  JOGGING: 'warning',
+  TRACKING: 'warning',
+  TRACKING_PAUSED: 'warning',
+  UNKNOWN: 'invalid',
 };
 
 export const stateToStyleMotorDrive = {
-  'DISABLED': 'ok',
-  'ENABLED': 'running',
+  DISABLED: 'ok',
+  ENABLED: 'running',
 };
 
 export const stateToStyleMotorBrake = {
-  'DISENGAGED': 'running',
-  'ENGAGED': 'ok',
+  DISENGAGED: 'running',
+  ENGAGED: 'ok',
 };
 
 export const hexapodStatusStatetoStyle = {
-  'UNKNOWN': 'undefined',
-  'DISABLED': 'disabled',
-  'ENABLED': 'enabled',
-  'FAULT': 'fault',
-  'OFFLINE': 'offline',
-  'STANDBY': 'standby',
+  UNKNOWN: 'undefined',
+  DISABLED: 'disabled',
+  ENABLED: 'enabled',
+  FAULT: 'fault',
+  OFFLINE: 'offline',
+  STANDBY: 'standby',
 };
 
 export const hexapodCommandableByDDSStatetoStyle = {
   'NOT COMMANDABLE': 'alert',
-  'COMMANDABLE': 'ok',
+  COMMANDABLE: 'ok',
 };
 
 export const hexapodCompensationModeStatetoStyle = {
-  'DISABLED': 'undefined',
-  'ENABLED': 'ok',
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
 };
 
 export const hexapodControllerStatetoStyle = {
-  'STANDBY': 'ok',
-  'DISABLED': 'undefined',
-  'ENABLED': 'ok',
-  'OFFLINE': 'undefined',
-  'FAULT': 'alert',
+  STANDBY: 'ok',
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  OFFLINE: 'undefined',
+  FAULT: 'alert',
 };
 
 export const hexapodMTInPositionStatetoStyle = {
@@ -648,45 +648,45 @@ export const hexapodMTInPositionStatetoStyle = {
 };
 
 export const hexapodConnectedStatetoStyle = {
-  'DISCONNECTED': 'alert',
-  'CONNECTED': 'ok',
+  DISCONNECTED: 'alert',
+  CONNECTED: 'ok',
 };
 
 export const mtdomeStatusStatetoStyle = {
-  'UNKNOWN': 'undefined',
-  'DISABLED': 'disabled',
-  'ENABLED': 'enabled',
-  'FAULT': 'fault',
-  'OFFLINE': 'offline',
-  'STANDBY': 'standby',
+  UNKNOWN: 'undefined',
+  DISABLED: 'disabled',
+  ENABLED: 'enabled',
+  FAULT: 'fault',
+  OFFLINE: 'offline',
+  STANDBY: 'standby',
 };
 
 export const mtDomeModeStatetoStyle = {
-  'DEGRADED': 'warning',
-  'NORMAL': 'ok',
+  DEGRADED: 'warning',
+  NORMAL: 'ok',
 };
 
 export const mtDomeAzimuthEnabledStatetoStyle = {
-  'DISABLED': 'undefined',
-  'ENABLED': 'ok',
-  'FAULT': 'fault',
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
 };
 
 export const mtdomeMotionStatetoStyle = {
-  'CLOSED': 'undefined',
-  'CRAWLING': 'warning',
-  'MOVING': 'warning',
-  'OPEN': 'ok',
-  'PARKED': 'ok',
-  'PARKING': 'warning',
-  'STOPPED': 'ok',
-  'STOPPING': 'warning',
+  CLOSED: 'undefined',
+  CRAWLING: 'warning',
+  MOVING: 'warning',
+  OPEN: 'ok',
+  PARKED: 'ok',
+  PARKING: 'warning',
+  STOPPED: 'ok',
+  STOPPING: 'warning',
   'STOPPING BRAKING': 'warning',
   'STOPPED BRAKED': 'ok',
   'BRAKES DISENGAGED': 'ok',
   'BRAKES ENGAGED': 'alert',
-  'DEFLATED': 'undefined',
-  'DEFLATING': 'warning',
+  DEFLATED: 'undefined',
+  DEFLATING: 'warning',
   'DISABLING MOTOR POWER': 'warning',
   'DISENGAGING BRAKES': 'warning',
   'ENABLING MOTOR POWER': 'warning',
@@ -694,8 +694,8 @@ export const mtdomeMotionStatetoStyle = {
   'GO DEGRADED': 'warning',
   'GO NORMAL': 'ok',
   'GO STATIONARY': 'ok',
-  'INFLATED': 'ok',
-  'INFLATING': 'warning',
+  INFLATED: 'ok',
+  INFLATING: 'warning',
   'LP DISENGAGED': 'undefined',
   'LP DISENGAGING': 'warning',
   'LP ENGAGED': 'ok',
@@ -709,9 +709,9 @@ export const mtdomeMotionStatetoStyle = {
 };
 
 export const mtdomeElevationEnabledStatetoStyle = {
-  'DISABLED': 'undefined',
-  'ENABLED': 'ok',
-  'FAULT': 'fault',
+  DISABLED: 'undefined',
+  ENABLED: 'ok',
+  FAULT: 'fault',
 };
 
 // State to text mappings
