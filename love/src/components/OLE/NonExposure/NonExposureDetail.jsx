@@ -163,7 +163,9 @@ export default class NonExposureDetail extends Component {
           <div className={styles.content}>
             <div className={styles.detail}>
               <span className={styles.label}>Time of Incident</span>
-              <span className={styles.value}>{`${logDetail.date_begin} - ${logDetail.date_end}`}</span>
+              <span className={styles.value}>{`${logDetail.date_begin.split('.')[0]} - ${
+                logDetail.date_end.split('.')[0]
+              }`}</span>
               <span className={styles.label}>Obs. Time Loss</span>
               <span className={styles.value}>{formatSecondsToDigital(logDetail.time_lost * 3600)}</span>
               <span className={styles.label}>System</span>
