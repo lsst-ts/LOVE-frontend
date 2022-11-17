@@ -28,10 +28,10 @@ export default class OLE extends Component {
       selectedCommentType: { value: 'all', label: 'All comment types' },
       selectedSystem: 'all',
       selectedObsTimeLoss: false,
-      selectedDateStartNonExposure: new Date() - 24 * 30 * 60 * 60 * 1000,
+      selectedDateStartNonExposure: new Date() - 24 * 60 * 60 * 1000,
       selectedDateEndNonExposure: new Date(Date.now() + 37 * 1000), // Add 37 seconds to comply with TAI
       // Exposure filters
-      selectedDateStartExposure: new Date() - 24 * 30 * 60 * 60 * 1000,
+      selectedDateStartExposure: new Date() - 24 * 60 * 60 * 1000,
       selectedDateEndExposure: new Date(Date.now() + 37 * 1000), // Add 37 seconds to comply with TAI
       selectedInstrument: null,
       instruments: [],
