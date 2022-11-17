@@ -365,7 +365,7 @@ export default class NonExposureEdit extends Component {
                     <span className={styles.value}>
                       <Input
                         type="number"
-                        min={0.01}
+                        min={0.0}
                         step={0.01}
                         value={this.state.logEdit.time_lost}
                         className={styles.input}
@@ -408,7 +408,7 @@ export default class NonExposureEdit extends Component {
                       <span className={styles.value}>
                         <Input
                           type="number"
-                          min={0.01}
+                          min={0.0}
                           step={0.01}
                           value={this.state.logEdit.time_lost}
                           className={styles.input}
