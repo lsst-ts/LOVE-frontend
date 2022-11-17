@@ -29,10 +29,10 @@ export default class OLE extends Component {
       selectedSystem: 'all',
       selectedObsTimeLoss: false,
       selectedDateStartNonExposure: new Date() - 24 * 30 * 60 * 60 * 1000,
-      selectedDateEndNonExposure: new Date(Date.now()),
+      selectedDateEndNonExposure: new Date(Date.now() + 37 * 1000), // Add 37 seconds to comply with TAI
       // Exposure filters
       selectedDateStartExposure: new Date() - 24 * 30 * 60 * 60 * 1000,
-      selectedDateEndExposure: new Date(Date.now()),
+      selectedDateEndExposure: new Date(Date.now() + 37 * 1000), // Add 37 seconds to comply with TAI
       selectedInstrument: null,
       instruments: [],
       selectedExposureType: 'all',
