@@ -4,8 +4,8 @@ import DateTime from 'components/GeneralPurpose/DateTime/DateTime';
 import styles from './DateTimeRange.module.css';
 
 const DateTimeRange = (props) => {
-  const [dateStart, setDateStart] = useState(props.startDate ?? new Date(new Date() - 24 * 60 * 60 * 1000));
-  const [dateEnd, setDateEnd] = useState(props.endDate ?? new Date());
+  const [dateStart, setDateStart] = useState(props.startDate ?? new Date(Date.now() - 24 * 60 * 60 * 1000));
+  const [dateEnd, setDateEnd] = useState(props.endDate ?? new Date(Date.now() + 37 * 1000)); // Add 37 seconds to comply with TAI
 
   useEffect(() => {
     props.onChange(dateStart, 'start');
