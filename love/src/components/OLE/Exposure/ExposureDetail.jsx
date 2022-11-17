@@ -75,7 +75,7 @@ export default class ExposureDetail extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.logMessages !== this.state.logMessages) {
-      console.log("logMessages", this.state.logMessages);
+      console.log('logMessages', this.state.logMessages);
     }
   }
 
@@ -83,7 +83,7 @@ export default class ExposureDetail extends Component {
     ManagerInterface.updateMessageExposureLogs(message.id, message).then((response) => {
       if (response) {
         const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({logMessages: [response, ...lgMsgs], confirmationModalShown: false });
+        this.setState({ logMessages: [response, ...lgMsgs], confirmationModalShown: false });
       }
     });
   }
@@ -92,7 +92,7 @@ export default class ExposureDetail extends Component {
     ManagerInterface.deleteMessageExposureLogs(message.id).then((response) => {
       if (response) {
         const lgMsgs = this.state.logMessages.filter((msg) => message.id !== msg.id);
-        this.setState({logMessages: lgMsgs, confirmationModalShown: false });
+        this.setState({ logMessages: lgMsgs, confirmationModalShown: false });
       }
     });
   }
@@ -101,15 +101,15 @@ export default class ExposureDetail extends Component {
     const modalText = (
       <span>
         You are about to <b>Save</b> this message of Exposure Logs
-        <br/>
+        <br />
         Are you sure?
       </span>
     );
-    
+
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
-      actionModal: () => this.saveMessage(message), 
+      actionModal: () => this.saveMessage(message),
     });
   }
 
@@ -117,15 +117,15 @@ export default class ExposureDetail extends Component {
     const modalText = (
       <span>
         You are about to <b>Delete</b> this message of Exposure Logs
-        <br/>
+        <br />
         Are you sure?
       </span>
     );
-    
+
     this.setState({
       confirmationModalShown: true,
       confirmationModalText: modalText,
-      actionModal: () => this.deleteMessage(message), 
+      actionModal: () => this.deleteMessage(message),
     });
   }
 
@@ -139,14 +139,12 @@ export default class ExposureDetail extends Component {
         >
           Go back
         </Button>
-        <Button onClick={() => this.state.actionModal()}
-          status="default"
-        >
+        <Button onClick={() => this.state.actionModal()} status="default">
           Yes
         </Button>
       </div>
     );
-  };
+  }
 
   handleDateTimeRange(date, type) {
     if (type === 'start') {
@@ -185,8 +183,8 @@ export default class ExposureDetail extends Component {
       selectedUser !== 'All' ? logMessages.filter((log) => log.user_id === selectedUser) : filteredLogMessages;
 
     // Filter by date range
-    const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
-    filteredLogMessages = filteredLogMessages.filter((log) => range.contains(Moment(log.date_added)));
+    // const range = moment.range(this.state.selectedDateStart, this.state.selectedDateEnd);
+    // filteredLogMessages = filteredLogMessages.filter((log) => range.contains(Moment(log.date_added)));
 
     // Filter by text
     filteredLogMessages = filteredLogMessages.filter((log) => {
@@ -213,7 +211,9 @@ export default class ExposureDetail extends Component {
         </div>
         <div id={this.id} className={styles.detailContainer}>
           <div className={styles.header}>
-            <span>{logDetail.obs_id} - Duration: {duration}</span>
+            <span>
+              {logDetail.obs_id} - Duration: {duration}
+            </span>
             <span className={styles.floatRight}>
               <Button
                 className={styles.iconBtn}
@@ -248,13 +248,13 @@ export default class ExposureDetail extends Component {
                 className={styles.select}
               />
 
-              <DateTimeRange
+              {/* <DateTimeRange
                 className={styles.dateRange}
                 onChange={(date, type) => this.handleDateTimeRange(date, type)}
                 label="Date & Time"
-                startDate={new Date() - 24 * 30 * 5 * 60 * 60 * 1000}
-                endDate={new Date(Date.now())}
-              />
+                startDate={new Date() - 24 * 60 * 60 * 1000}
+                endDate={new Date(Date.now() + 37 * 1000)}
+              /> */}
 
               <Input
                 type="text"
@@ -284,7 +284,7 @@ export default class ExposureDetail extends Component {
                       this.setState({ selectedMessage: undefined });
                     }}
                     save={(message) => {
-                      if(message) {
+                      if (message) {
                         this.confirmSave(message);
                         this.setState({ selectedMessage: undefined });
                       }
@@ -299,7 +299,7 @@ export default class ExposureDetail extends Component {
                       this.setState({ selectedMessage: messageEdit });
                     }}
                     deleteMessage={(_message) => {
-                      if(_message) { 
+                      if (_message) {
                         this.confirmDelete(_message);
                       }
                     }}
