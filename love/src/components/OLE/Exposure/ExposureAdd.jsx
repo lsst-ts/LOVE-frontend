@@ -253,7 +253,7 @@ export default class ExposureAdd extends Component {
                     selectedValues={this.state.newMessage?.obs_id}
                     onSelect={(selectedOptions) => {
                       this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, obs_id: selectedOptions[0] },
+                        newMessage: { ...prevState.newMessage, obs_id: selectedOptions },
                       }));
                     }}
                     placeholder="Select one or several observations"
@@ -269,8 +269,9 @@ export default class ExposureAdd extends Component {
                     isObject={true}
                     displayValue="name"
                     onSelect={(selectedOptions) => {
+                      console.log(selectedOptions);
                       this.setState((prevState) => ({
-                        newMessage: { ...prevState.newMessage, tags: selectedOptions.map((tag) => tag.id) },
+                        newMessage: { ...prevState.newMessage, tags: selectedOptions },
                       }));
                     }}
                     placeholder="Select one or several tags"
