@@ -32,8 +32,7 @@ export default class NonExposureEdit extends Component {
     back: () => {},
     logEdit: {
       id: undefined,
-      level: undefined,
-      isUrgent: undefined,
+      level: 0,
       date_begin: undefined,
       date_end: undefined,
       systems: [],
