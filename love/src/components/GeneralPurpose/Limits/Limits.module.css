@@ -50,3 +50,9 @@
 .bottom {
   dominant-baseline: text-before-edge;
 }
+.bottomLeft {
+  text-anchor: start;
+}
+.bottomRight {
+  text-anchor: end;
+}
