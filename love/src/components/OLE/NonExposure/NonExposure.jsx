@@ -315,6 +315,12 @@ export default class NonExposure extends Component {
             label="From:"
             startDate={this.props.selectedDateStart}
             endDate={this.props.selectedDateEnd}
+            startDateProps={{
+              maxDate: this.props.selectedDateEnd,
+            }}
+            endDateProps={{
+              minDate: this.props.selectedDateStart,
+            }}
           />
 
           <Select
