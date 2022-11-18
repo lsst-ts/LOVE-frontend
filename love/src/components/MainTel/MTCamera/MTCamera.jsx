@@ -74,15 +74,23 @@ class MTCamera extends Component {
       Math.max(d3.event.transform.y, 2 * yRadius * scale - 2 * yRadius * scale * d3.event.transform.k),
     );
 
-    d3.event.transform.x = Math.floor(transformX);
-    d3.event.transform.y = Math.floor(transformY);
+    // d3.event.transform.x = Math.floor(transformX);
+    // d3.event.transform.y = Math.floor(transformY);
+
+    const raftTransform = d3.zoomIdentity
+      .translate(d3.event.transform.x + 100, d3.event.transform.y + 100)
+      .scale(d3.event.transform.k - 1);
+    // const raftTransform = d3.zoomIdentity.translate(d3.event.transform.x, d3.event.transform.y).scale(d3.event.transform.k-2);
+    console.log(d3.event.transform, raftTransform);
 
     // d3.select('#scatter').attr('transform', d3.event.transform);
     // d3.select('#mirror-hole').attr('transform', d3.event.transform);
     // d3.select('#background-circle').attr('transform', d3.event.transform);
     // d3.select('#plot-axis').attr('transform', d3.event.transform);
     d3.select('#mtcamera').attr('transform', d3.event.transform);
-    d3.select('#raftDetail').attr('transform', d3.event.transform);
+    d3.select('#raftDetail').attr('transform', raftTransform);
+    // d3.event.transform.k = d3.event.transform.k - 2;
+    // d3.select('#raftDetail').attr('transform', d3.event.transform);
     this.setState({
       zoomLevel: d3.event.transform.k,
     });
@@ -103,12 +111,38 @@ class MTCamera extends Component {
       <svg
         className={styles.svgContainer}
         viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-        onMouseEnter={this.disableScroll}
-        onMouseLeave={this.enableScroll}
+        // onMouseEnter={this.disableScroll}
+        // onMouseLeave={this.enableScroll}
       >
-        {this.getMTCamera()}
-        {zoomLevel > 1 && zoomLevel < 2 && this.getRaftDetail()}
+        {zoomLevel >= 1 && zoomLevel < 2 && this.getMTCamera()}
+        {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftDetail()}
+        {this.getBackground()}
+
+        {/* {zoomLevel > 2 && zoomLevel < 3 && (
+          <foreignObject x="50" y="50" width="160" height="160">
+            <div style={{ backgroundColor: 'red', height: '100%', width: '100%' }}>Hola 2</div>
+          </foreignObject>
+        )} */}
       </svg>
+    );
+  }
+
+  getBackground() {
+    return (
+      <>
+        <rect
+          id="rect-overlay"
+          x={0}
+          y={0}
+          width={this.state.width}
+          height={this.state.width}
+          key={'overlay'}
+          fill={'none'}
+          pointerEvents="all"
+          // onMouseEnter={this.enableScroll}
+          // onMouseLeave={this.disableScroll}
+        />
+      </>
     );
   }
 
@@ -116,7 +150,17 @@ class MTCamera extends Component {
     return (
       <g id="mtcamera">
         <foreignObject x="0" y="0" width={this.state.width} height={this.state.width}>
-          <div style={{ backgroundColor: 'darkgray', borderColor: 'red', height: '100%', width: '100%' }}>
+          <div
+            style={{
+              backgroundColor: 'darkgray',
+              borderColor: 'red',
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
             <span>MTCamera component</span>
           </div>
         </foreignObject>
