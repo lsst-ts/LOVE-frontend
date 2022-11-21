@@ -54,6 +54,7 @@ export default class NonExposure extends Component {
       modeView: false,
       modeEdit: false,
       selected: null,
+      updatingLogs: false,
       logs: [],
       range: [],
     };
@@ -222,9 +223,10 @@ export default class NonExposure extends Component {
     ];
   };
 
-  queryNarrativeLogs() {
+  queryNarrativeLogs(callback) {
     ManagerInterface.getListMessagesNarrativeLogs().then((data) => {
       this.setState({ logs: data });
+      if (callback) callback();
     });
   }
 
@@ -310,6 +312,18 @@ export default class NonExposure extends Component {
       <div className={styles.margin10}>
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
+          <Button
+            disabled={this.state.updatingLogs}
+            onClick={() => {
+              this.setState({ updatingLogs: true });
+              this.queryNarrativeLogs(() => {
+                this.setState({ updatingLogs: false });
+              });
+            }}
+          >
+            Refresh data
+          </Button>
+
           <DateTimeRange
             onChange={(date, type) => this.props.handleDateTimeRange(date, type)}
             label="From:"
@@ -347,10 +361,6 @@ export default class NonExposure extends Component {
           </div>
 
           <div className={styles.divExportBtn}>
-            {/* <Button className={styles.iconBtn} onClick={() => this.queryNarrativeLogs()}>
-              <RedoIcon className={styles.icon} />
-            </Button> */}
-
             <CSVLink data={tableData} headers={csvHeaders} filename="narrativeLogs.csv">
               <Hoverable top={true} left={true} inside={true}>
                 <span className={styles.infoIcon}>
