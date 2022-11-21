@@ -60,6 +60,7 @@ export default class Exposure extends Component {
     this.state = {
       modeView: false,
       modeAdd: false,
+      updatingLogs: false,
       selected: {},
       selectedMessages: [],
       exposurelogs: [],
@@ -208,13 +209,7 @@ export default class Exposure extends Component {
     ];
   };
 
-  componentDidMount() {
-    ManagerInterface.getListAllMessagesExposureLogs().then((data) => {
-      this.setState({ messages: data });
-    });
-
-    this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
-
+  queryExposures(callback) {
     ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
       const exposureTypes = new Set();
       const exposures = data.map((exposure) => {
@@ -237,34 +232,21 @@ export default class Exposure extends Component {
         return { ...exposure };
       });
       this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
+      if (callback) callback();
     });
+  }
+
+  componentDidMount() {
+    ManagerInterface.getListAllMessagesExposureLogs().then((data) => {
+      this.setState({ messages: data });
+    });
+    this.setState({ range: moment.range(this.props.selectedDateStart, this.props.selectedDateEnd) });
+    this.queryExposures();
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.selectedInstrument !== this.props.selectedInstrument) {
-      ManagerInterface.getListExposureLogs(this.props.selectedInstrument).then((data) => {
-        const exposureTypes = new Set();
-        const exposures = data.map((exposure) => {
-          exposureTypes.add(exposure.observation_type);
-
-          ManagerInterface.getListMessagesExposureLogs(exposure['obs_id']).then((messages) => {
-            const flags = messages
-              .map((message) => message['exposure_flag'])
-              .reduce((acc, curr) => {
-                if (curr in acc) acc[curr]++;
-                else acc[curr] = 1;
-                return acc;
-              }, {});
-
-            this.setState((prevState) => ({
-              exposureFlags: { ...prevState.exposureFlags, [exposure['obs_id']]: flags },
-            }));
-          });
-
-          return { ...exposure };
-        });
-        this.setState({ exposurelogs: exposures, exposureTypes: Array.from(exposureTypes) });
-      });
+      this.queryExposures();
     }
 
     if (
@@ -348,6 +330,17 @@ export default class Exposure extends Component {
       <div className={styles.margin10}>
         <div className={styles.title}>Filter</div>
         <div className={styles.filters}>
+          <Button
+            disabled={this.state.updatingLogs}
+            onClick={() => {
+              this.setState({ updatingLogs: true });
+              this.queryExposures(() => {
+                this.setState({ updatingLogs: false });
+              });
+            }}
+          >
+            Refresh data
+          </Button>
           <Select
             options={instrumentsOptions}
             option={selectedInstrument}
