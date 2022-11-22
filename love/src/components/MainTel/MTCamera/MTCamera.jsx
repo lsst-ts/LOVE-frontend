@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import * as d3 from 'd3';
 import RaftDetail from './RaftDetail/RaftDetail';
 import RebsDetail from './RebsDetail/RebsDetail';
+import FocalPlane from './FocalPlane/FocalPlane';
 import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
 
@@ -58,6 +59,7 @@ class MTCamera extends Component {
 
   componentDidUpdate() {
     d3.select('#rect-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select('#mtcamera').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
   }
 
   zoomed = () => {
@@ -114,9 +116,10 @@ class MTCamera extends Component {
         // onMouseEnter={this.disableScroll}
         // onMouseLeave={this.enableScroll}
       >
-        {zoomLevel >= 1 && zoomLevel < 2 && this.getMTCamera()}
-        {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftDetail()}
-        {this.getBackground()}
+        {this.getMTCamera()}
+        {/* {zoomLevel >= 1 && zoomLevel < 2 && this.getMTCamera()} */}
+        {/* {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftDetail()} */}
+        {/* {this.getBackground()} */}
 
         {/* {zoomLevel > 2 && zoomLevel < 3 && (
           <foreignObject x="50" y="50" width="160" height="160">
@@ -148,21 +151,9 @@ class MTCamera extends Component {
 
   getMTCamera() {
     return (
-      <g id="mtcamera">
+      <g id="mtcamera" pointerEvents="all">
         <foreignObject x="0" y="0" width={this.state.width} height={this.state.width}>
-          <div
-            style={{
-              backgroundColor: 'darkgray',
-              borderColor: 'red',
-              height: '100%',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <span>MTCamera component</span>
-          </div>
+          <FocalPlane />
         </foreignObject>
       </g>
     );

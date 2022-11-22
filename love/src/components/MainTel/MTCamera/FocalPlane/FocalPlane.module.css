@@ -1,0 +1,14 @@
+.raftsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+}
+
+.raftContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  border: 2px solid black;
+}
+
+.ccdContainer {
+  border: 1px solid white;
+}

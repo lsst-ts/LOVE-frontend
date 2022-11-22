@@ -847,7 +847,6 @@ export const mtm1m3tsHeaterDisabledStateToStyle = {
 };
 
 //MTM1M3TS Glycol Loop
-
 export const stateToStyleGlycolLoopPumpStateMap = {
   UNKNOWN: 'invalid',
   FAULT: 'fault',
@@ -890,6 +889,14 @@ export const stateToStyleGlycolLoopSpeedStateMap = {
   UNKNOWN: 'invalid',
   ACCELERATING: 'ok',
   DECELERATING: 'ok',
+};
+
+// MTCamera
+export const mtCameraRaftDetailedStateToStyle = {
+  GOOD: 'ok',
+  REGULAR: 'warning',
+  BAD: 'alert',
+  UNKNOWN: 'invalid',
 };
 
 // Aircraft tracker
@@ -1081,6 +1088,14 @@ export const ataosCorrectionsStateMap = {
   false: 'DISABLED',
   true: 'ENABLED',
   undefined: 'UNKNOWN',
+};
+
+// MTCamera
+export const mtCameraRaftDetailedStateMap = {
+  1: 'GOOD',
+  2: 'REGULAR',
+  3: 'BAD',
+  0: 'UNKNOWN',
 };
 
 // ATPneumatics

@@ -1,0 +1,17 @@
+.container {
+}
+
+.ccdsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.rebsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.plot {
+  width: 100%;
+  overflow: hidden;
+}
