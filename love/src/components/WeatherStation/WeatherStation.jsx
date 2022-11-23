@@ -300,7 +300,7 @@ export default class WeatherStation extends Component {
             <div className={styles.windPlotFullWidth}>
               <PolarPlotContainer
                 timeSeriesControlsProps={timeSeriesControlsProps}
-                containerNode={this.windDirectionPlotRef}
+                containerNode={this.windDirectionPlotRef.current?.parentNode}
                 {...this.windPlot}
               />
             </div>
@@ -313,10 +313,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.temperaturePlot}
-              containerNode={this.temperaturePlotRef}
+              containerNode={this.temperaturePlotRef.current?.parentNode}
               xAxisTitle="Time"
               yAxisTitle="Temperature"
               legendPosition="bottom"
+              maxHeight={220}
             />
           </div>
         </div>
@@ -326,10 +327,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.humidityPlot}
-              containerNode={this.humidityPlotRef}
+              containerNode={this.humidityPlotRef.current?.parentNode}
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
               legendPosition="bottom"
+              maxHeight={220}
             />
           </div>
         </div>
@@ -340,10 +342,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.precipitationPlot}
-              containerNode={this.precipitationPlotRef}
+              containerNode={this.precipitationPlotRef.current?.parentNode}
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
               legendPosition="bottom"
+              maxHeight={220}
             />
           </div>
         </div>
@@ -354,10 +357,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.snowDepthPlot}
-              containerNode={this.snowDepthPlotRef}
+              containerNode={this.snowDepthPlotRef.current?.parentNode}
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
               legendPosition="bottom"
+              maxHeight={220}
             />
           </div>
         </div>
@@ -368,10 +372,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.solarPlot}
-              containerNode={this.solarPlotRef}
+              containerNode={this.solarPlotRef.current?.parentNode}
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
               legendPosition="bottom"
+              maxHeight={220}
             />
           </div>
         </div>
@@ -382,10 +387,11 @@ export default class WeatherStation extends Component {
             <PlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
               inputs={this.pressurePlot}
-              containerNode={this.pressurePlotRef}
+              containerNode={this.pressurePlotRef.current?.parentNode}
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
               legendPosition="bottom"
+              maxHeight={220}
             />
           </div>
         </div>
