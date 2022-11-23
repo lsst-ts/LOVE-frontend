@@ -9,7 +9,7 @@ export default class TimeWindow extends PureComponent {
     /** Function to be called when changing the time window */
     setTimeWindow: PropTypes.func.isRequired,
     /** Time window in minutes */
-    timeWindow: PropTypes.string,
+    timeWindow: PropTypes.number,// PropTypes.string,
   };
 
   static defaultProps = {
