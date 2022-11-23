@@ -253,6 +253,8 @@ export default class WeatherStation extends Component {
       historicalData: this.state.historicalData,
     };
 
+    const maxHeightPlot = 220;
+
     return (
       <div className={styles.container}>
         <CurrentValues 
@@ -317,7 +319,7 @@ export default class WeatherStation extends Component {
               xAxisTitle="Time"
               yAxisTitle="Temperature"
               legendPosition="bottom"
-              maxHeight={220}
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -331,7 +333,7 @@ export default class WeatherStation extends Component {
               xAxisTitle="Time"
               yAxisTitle="Relative humidity"
               legendPosition="bottom"
-              maxHeight={220}
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -346,7 +348,7 @@ export default class WeatherStation extends Component {
               xAxisTitle="Time"
               yAxisTitle="Precipitation"
               legendPosition="bottom"
-              maxHeight={220}
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -361,7 +363,7 @@ export default class WeatherStation extends Component {
               xAxisTitle="Time"
               yAxisTitle="Snow depth"
               legendPosition="bottom"
-              maxHeight={220}
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -376,7 +378,7 @@ export default class WeatherStation extends Component {
               xAxisTitle="Time"
               yAxisTitle="Solar radiation"
               legendPosition="bottom"
-              maxHeight={220}
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
@@ -391,7 +393,7 @@ export default class WeatherStation extends Component {
               xAxisTitle="Time"
               yAxisTitle="Air pressure"
               legendPosition="bottom"
-              maxHeight={220}
+              maxHeight={maxHeightPlot}
             />
           </div>
         </div>
