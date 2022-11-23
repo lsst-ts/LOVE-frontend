@@ -164,6 +164,16 @@ export const observatoryIndex = {
       },
     },
   },
+  WeatherForecast: {
+    component: require('../WeatherForecast/WeatherForecast.container').default,
+    schema: {
+      ...require('../WeatherForecast/WeatherForecast.container').schema,
+      props: {
+        ...defaultSchemaProps,
+        ...require('../WeatherForecast/WeatherForecast.container').schema.props,
+      },
+    },
+  },
   TimeDisplay: {
     component: require('../Time/TimeDisplay.container').default,
     schema: require('../Time/TimeDisplay.container').schema,
