@@ -10,3 +10,7 @@
 .svgContainer text.hidden {
   opacity: 0;
 }
+
+.foreignObjectSvg {
+  /* overflow-y: scroll; */
+}

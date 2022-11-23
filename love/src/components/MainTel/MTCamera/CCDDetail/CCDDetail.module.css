@@ -1,0 +1,15 @@
+.container {
+  position: relative;
+}
+
+.plotsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(3, 136px);
+  gap: 1em;
+  border: 1px solid gray;
+}
+
+.plot {
+  overflow: hidden;
+}

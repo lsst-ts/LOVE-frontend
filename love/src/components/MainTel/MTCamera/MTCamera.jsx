@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import RaftDetail from './RaftDetail/RaftDetail';
 import RebsDetail from './RebsDetail/RebsDetail';
 import FocalPlane from './FocalPlane/FocalPlane';
+import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
 
@@ -16,6 +17,8 @@ class MTCamera extends Component {
       colormap: () => '#fff',
       width: 480,
       zoomLevel: 1,
+      activeViewId: 'ccdDetail',
+      selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
     };
   }
 
@@ -35,6 +38,18 @@ class MTCamera extends Component {
 
   enableScroll = () => {
     document.removeEventListener('wheel', this.preventDefault, false);
+  };
+
+  findCCDById(id) {
+    return { id, top: 100, right: 101, bottom: 102, left: 103 };
+  }
+
+  selectNeighboorCCD = (direction) => {
+    const { selectedCCD } = this.state;
+    const nextCCDId = selectedCCD[direction];
+    const nextCCD = this.findCCDById(nextCCDId);
+    console.log(selectedCCD, direction, nextCCDId, nextCCD);
+    this.setState({ selectedCCD: nextCCD });
   };
 
   componentDidMount() {
@@ -61,12 +76,13 @@ class MTCamera extends Component {
     // d3.select('#rect-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
     d3.select('#mtcamera').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
     d3.select('#raftDetail').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select('#ccdDetail').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
   }
 
   zoomed = () => {
     let baseK = 0;
-    const targetId = d3.event.sourceEvent.path[4].getAttribute('id');
-    console.log(targetId);
+    // const targetId = d3.event.sourceEvent.path[8].getAttribute('id');
+    const targetId = this.state.activeViewId;
     if (targetId == null) return;
     if (targetId === 'mtcamera') baseK = 0;
     else if (targetId === 'raftDetail') baseK = 2;
@@ -83,6 +99,7 @@ class MTCamera extends Component {
 
     if (targetId === 'mtcamera') d3.select('#mtcamera').attr('transform', d3.event.transform);
     else if (targetId === 'raftDetail') d3.select('#raftDetail').attr('transform', d3.event.transform);
+    else if (targetId === 'ccdDetail') d3.select('#ccdDetail').attr('transform', d3.event.transform);
 
     this.setState({
       zoomLevel: d3.event.transform.k,
@@ -107,8 +124,9 @@ class MTCamera extends Component {
         // onMouseEnter={this.disableScroll}
         // onMouseLeave={this.enableScroll}
       >
-        {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftDetail()}
-        {zoomLevel >= 1 && zoomLevel < 2 && this.getMTCamera()}
+        {/* {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftDetail()}
+        {zoomLevel >= 1 && zoomLevel < 2 && this.getMTCamera()} */}
+        {this.getCCDDetail()}
         {/* {this.getBackground()} */}
 
         {/* {zoomLevel > 2 && zoomLevel < 3 && (
@@ -142,7 +160,13 @@ class MTCamera extends Component {
   getMTCamera() {
     return (
       <g id="mtcamera" pointerEvents="all">
-        <foreignObject x="0" y="0" width={this.state.width} height={this.state.width}>
+        <foreignObject
+          className={styles.foreignObjectSvg}
+          x="0"
+          y="0"
+          width={this.state.width}
+          height={this.state.width}
+        >
           <FocalPlane />
         </foreignObject>
       </g>
@@ -152,8 +176,31 @@ class MTCamera extends Component {
   getRaftDetail() {
     return (
       <g id="raftDetail">
-        <foreignObject x="0" y="0" width={this.state.width} height={this.state.width}>
+        <foreignObject
+          className={styles.foreignObjectSvg}
+          x="0"
+          y="0"
+          width={this.state.width}
+          height={this.state.width}
+        >
           <RaftDetail />
+        </foreignObject>
+      </g>
+    );
+  }
+
+  getCCDDetail() {
+    const { selectedCCD } = this.state;
+    return (
+      <g id="ccdDetail">
+        <foreignObject
+          className={styles.foreignObjectSvg}
+          x="0"
+          y="0"
+          width={this.state.width}
+          height={this.state.width}
+        >
+          <CCDDetail ccd={selectedCCD} selectNeighboorCCD={this.selectNeighboorCCD} />
         </foreignObject>
       </g>
     );
