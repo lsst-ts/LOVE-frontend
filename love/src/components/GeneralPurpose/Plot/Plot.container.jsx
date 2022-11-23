@@ -48,29 +48,58 @@ export const schema = {
       default: false,
     },
     inputs: {
-      externalStep: 'TimeSeriesConfig',
+      // externalStep: 'TimeSeriesConfig',
+      externalStep: 'TimeSeriesConfigure',
       type: 'object',
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        Elevation: {
-          category: 'telemetry',
-          csc: 'ATMCS',
-          salindex: '0',
-          topic: 'mount_AzEl_Encoders',
-          item: 'elevationCalculatedAngle',
-          type: 'line',
-          accessor: '(x) => x[0]',
+        'ATMCS Elevation': {
+          type: 'area',
           ...defaultStyles[0],
+          values: [
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: '0',
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0] - 30',
+            },
+            {
+              variable: 'y2',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: '0',
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0]',
+            }
+          ],
         },
-        'ATDome azimuth': {
-          category: 'telemetry',
-          csc: 'ATDome',
-          salindex: '0',
-          topic: 'position',
-          item: 'azimuthPosition',
-          type: 'line',
-          accessor: '(x) => x',
+        'ATMCS Azimuth': {
+          type: 'arrow',
+          values: [
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: '0',
+              topic: 'mount_AzEl_Encoders',
+              item: 'azimuthCalculatedAngle',
+              accessor: '(x) => x[0] + 10',
+            },
+            {
+              variable: 'angle',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: '0',
+              topic: 'mount_AzEl_Encoders',
+              item: 'azimuthCalculatedAngle',
+              accessor: '(x) => x[0] + 90',
+            }
+          ],
           ...defaultStyles[1],
         },
       },
@@ -141,10 +170,21 @@ const PlotContainer = ({
   }
 };
 
-const getGroupNames = (inputs) =>
-  Object.values(inputs).map(
-    (inputConfig) => `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`,
+const getGroupNames = (inputs) => {
+  const inputsMap = Object.values(inputs).map(
+    (inputConfig) => {
+      if (inputConfig.values) {
+        const values = Object.values(inputConfig.values).map((value) => {
+          return `${value?.category}-${value?.csc}-${value?.salindex}-${value?.topic}`;
+        });
+        return values;
+      } else {
+        return `${inputConfig?.category}-${inputConfig?.csc}-${inputConfig?.salindex}-${inputConfig?.topic}`;
+      }
+    },
   );
+  return inputsMap.flat();
+}
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {

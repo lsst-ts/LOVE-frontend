@@ -336,6 +336,12 @@ class VegaTimeseriesPlot extends Component {
     const styleEncoding = this.makeStyleEncoding();
     return {
       data: { name: dataName },
+      /* transform: [
+        {
+          calculate: '90',
+          as: 'angle'
+        },
+      ], */
       layer: [
         {
           mark: {
@@ -367,8 +373,9 @@ class VegaTimeseriesPlot extends Component {
           mark: {
             type: 'text',
             dx: 0,
+            dy: 0,
             fontSize: 24,
-            "color": "#d3e1eb"
+            color: "#d3e1eb"
           },
           encoding: {
             text: {
@@ -392,8 +399,9 @@ class VegaTimeseriesPlot extends Component {
             },
             angle: {
               field: 'angle',
-              type: 'nominal',
-            },
+              type: 'quantitative',
+              scale: {domain: [360, 0]}
+            }
           },
         }
       ]
@@ -404,12 +412,12 @@ class VegaTimeseriesPlot extends Component {
     const styleEncoding = this.makeStyleEncoding();
     return {
       data: { name: dataName },
-      transform: [
+      /* transform: [
         {
-          calculate: '(datum.y - datum.y)',
+          calculate: '(datum.y2 - datum.y)',
           as: 'y2'
         },
-      ],
+      ], */
       layer: [
         {
           mark: {

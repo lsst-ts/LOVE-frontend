@@ -9,7 +9,7 @@ import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData }
 import { defaultStyles } from './Plot.container';
 import isEqual from 'lodash/isEqual';
 import styles from './Plot.module.css';
-import { CONTINUOUS_DOMAIN_SCALES } from 'vega-lite/build/src/scale';
+
 
 const moment = extendMoment(Moment);
 
@@ -39,9 +39,11 @@ export default class Plot extends Component {
     containerNode: PropTypes.node,
     timeSeriesControlsProps: PropTypes.object,
     efdConfigFile: PropTypes.object,
+    maxHeight: PropTypes.number,
   };
 
   static defaultProps = {
+    maxHeight: undefined,
   };
 
 
@@ -56,22 +58,12 @@ export default class Plot extends Component {
       selectedEfdClient: null,
       containerWidth: undefined, 
       containerHeight: undefined,
+      resizeObserverListener: false,
     };
     this.timeSeriesControlRef = React.createRef();
+    this.legendRef = React.createRef();
     this.resizeObserver = undefined;
   }
-
-  /* setIsLive = (isLive) => {
-    this.setState({ isLive: isLive });
-  }
-
-  setTimeWindow = (timeWindow) => {
-    this.setState({ timeWindow: timeWindow });
-  } */
-
-  /* setEfdClient = (client) => {
-    this.setState({ selectedEfdClient: client });
-  } */
 
   setHistoricalData = (startDate, timeWindow) => {
     const { inputs } = this.props;
@@ -143,6 +135,7 @@ export default class Plot extends Component {
           this.setState({
             containerHeight: container.contentRect.height,
             containerWidth: container.contentRect.width,
+            resizeObserverListener: true,
           });
         });
         if (!(this.props.containerNode instanceof Element)) return;
@@ -150,7 +143,6 @@ export default class Plot extends Component {
         return () => {
           this.resizeObserver.disconnect();
         };
-
       }
     }
   }
@@ -177,47 +169,84 @@ export default class Plot extends Component {
     if (prevProps.inputs !== inputs || prevProps.streams !== streams) {
       const newData = {};
       for (const [inputName, inputConfig] of Object.entries(inputs)) {
-        const { category, csc, salindex, topic, item, accessor } = inputConfig;
+        if (inputConfig.values) {
+          let inputData = data[inputName] || [];
+          const lastValue = inputData[inputData.length - 1];
+          const newValue = {
+            name: inputName,
+          };
 
-        /* eslint no-eval: 0 */
-        const accessorFunc = eval(accessor);
-        let inputData = data[inputName] || [];
-        const lastValue = inputData[inputData.length - 1];
-        const streamName = `${category}-${csc}-${salindex}-${topic}`;
-        if (!streams[streamName] || !streams[streamName]?.[item]) {
-          continue;
-        }
-        const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
-        const newValue = {
-          name: inputName,
-          x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
-          y: accessorFunc(streamValue[item]?.value),
-        };
+          for (const value of Object.values(inputConfig.values)) {
+            const { category, csc, salindex, topic, item, accessor, variable } = value;
+            /* eslint no-eval: 0 */
+            const accessorFunc = eval(accessor);
+            
+            const streamName = `${category}-${csc}-${salindex}-${topic}`;
+            if (!streams[streamName] || !streams[streamName]?.[item]) {
+              continue;
+            }
+            const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+            newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+            newValue[variable] = accessorFunc(streamValue[item]?.value);
 
-        // TODO: use reselect to never get repeated timestamps
-        if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
-          inputData.push(newValue);
-        }
+          }
 
-        // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
-        if (inputData.length > 1800) {
-          inputData = inputData.slice(-1800);
+          // TODO: use reselect to never get repeated timestamps
+          if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+            inputData.push(newValue);
+          }
+
+          // Slice inputData array if it has more than 900 datapoints (corresponding to one hour if telemetry is received every two seconds)
+          if (inputData.length > 900) {
+            inputData = inputData.slice(-900);
+          }
+          newData[inputName] = inputData;
+          
+        } else {
+          const { category, csc, salindex, topic, item, accessor} = inputConfig;
+            /* eslint no-eval: 0 */
+            const accessorFunc = eval(accessor);
+            let inputData = data[inputName] || [];
+            const lastValue = inputData[inputData.length - 1];
+            const streamName = `${category}-${csc}-${salindex}-${topic}`;
+            if (!streams[streamName] || !streams[streamName]?.[item]) {
+              continue;
+            }
+            const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
+            const newValue = {
+              name: inputName,
+              x: parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
+              y: accessorFunc(streamValue[item]?.value),
+            };
+
+            // TODO: use reselect to never get repeated timestamps
+            if ((!lastValue || lastValue.x?.ts !== newValue.x?.ts) && newValue.x) {
+              inputData.push(newValue);
+            }
+
+            // Slice inputData array if it has more than 900 datapoints (corresponding to one hour if telemetry is received every two seconds)
+            if (inputData.length > 900) {
+              inputData = inputData.slice(-900);
+            }
+            newData[inputName] = inputData;
         }
-        newData[inputName] = inputData;
       }
       this.setState({ data: newData });
     }
 
     if (
       !isEqual(prevProps.containerNode, this.props.containerNode) &&
+      // this.resizeObserver === undefined &&
       this.props.width === undefined && // width/height have more priority
       this.props.height === undefined
     ) {
-      if (this.props.containerNode) {
+      if (this.props.containerNode && !this.state.resizeObserverListener) {
         this.resizeObserver = new ResizeObserver((entries) => {
           const container = entries[0];
+          const diffControl = this.timeSeriesControlRef && this.timeSeriesControlRef.current ? this.timeSeriesControlRef.current.offsetHeight + 19 : 0;
+          const diffLegend = this.props.legendPosition === 'bottom' && this.legendRef.current ? this.legendRef.current.offsetHeight : 0;
           this.setState({
-            containerHeight: container.contentRect.height,
+            containerHeight: container.contentRect.height - diffControl - diffLegend,
             containerWidth: container.contentRect.width,
           });
         });
@@ -248,9 +277,17 @@ export default class Plot extends Component {
     const { streams } = this.props;
 
     const streamsItems = Object.entries(inputs).map(([_, inputConfig]) => {
-      const { category, csc, salindex, topic, item } = inputConfig;
-      const streamName = `${category}-${csc}-${salindex}-${topic}`;
-      return streams[streamName]?.[item];
+      if (inputConfig.values) {
+        for (const value of Object.values(inputConfig.values)) {
+          const { category, csc, salindex, topic, item } = value;
+          const streamName = `${category}-${csc}-${salindex}-${topic}`;
+          return streams[streamName]?.[item];
+        }
+      } else {
+        const { category, csc, salindex, topic, item } = inputConfig;
+        const streamName = `${category}-${csc}-${salindex}-${topic}`;
+        return streams[streamName]?.[item];
+      }
     });
 
     const units = {y: streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units};
@@ -306,7 +343,6 @@ export default class Plot extends Component {
         };
       });
 
-    //console.log('Plot.render() containerWidth', containerWidth, 'width', this.props.width);
     return (
       <>
       {controls && (
@@ -319,12 +355,13 @@ export default class Plot extends Component {
             isLive={this.state.isLive}
             setHistoricalData={this.setHistoricalData}
             efdClients={efdClients}
-            selectedEfdClient={(client) => this.setState({ selectedEfdClient: client })}
-            setEfdClient={this.setEfdClient}
+            selectedEfdClient={this.state.selectedEfdClient}
+            setEfdClient={(client) => this.setState({ selectedEfdClient: client })}
           />
         </div>
       )}
-        <div className={[styles.container].join(' ')}>
+      { legendPosition === 'right' ? (
+        <div className={[styles.containerFlexRow].join(' ')}>
           <VegaTimeseriesPlot
             layers={layers}
             xAxisTitle={xAxisTitle}
@@ -332,19 +369,32 @@ export default class Plot extends Component {
             units={units}
             marksStyles={completedMarksStyles}
             temporalXAxis
-            width={legendPosition === 'right' ? containerWidth - 160 : containerWidth - 30} // from the .autogrid grid-template-columns
+            width={containerWidth - 160} // from the .autogrid grid-template-columns
             height={containerHeight}
             className={styles.plot}
           />
-          {legendPosition === 'right' && (
-            <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
-          )}
+          <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
         </div>
-        {legendPosition === 'bottom' && (
-          <div className={styles.marginLegend}>
+      ) : (
+        <div className={[styles.containerFlexCol].join(' ')} style={this.props.maxHeight ? {"maxHeight": this.props.maxHeight} : {}}>
+          <div>
+            <VegaTimeseriesPlot
+              layers={layers}
+              xAxisTitle={xAxisTitle}
+              yAxisTitle={yAxisTitle}
+              units={units}
+              marksStyles={completedMarksStyles}
+              temporalXAxis
+              width={containerWidth - 30} // from the .autogrid grid-template-columns
+              height={containerHeight}
+              className={styles.plot}
+            />
+          </div>
+          <div ref={this.legendRef} className={styles.marginLegend}>
             <VegaLegend listData={legend} marksStyles={completedMarksStyles} />
           </div>
-        )}
+        </div>
+      )}
       </>
     );
   }
