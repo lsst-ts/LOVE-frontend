@@ -4,6 +4,19 @@
   overflow: hidden;
 }
 
+.containerFlexRow {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.containerFlexCol{
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* max-height: 500px; */
+}
+
 .bottomLegend {
   flex-direction: column;
 }
@@ -14,5 +27,5 @@
 
 .marginLegend {
   margin-left: 4rem;
-  margin-bottom: 2rem;
+  /* margin-bottom: 2rem; */
 }

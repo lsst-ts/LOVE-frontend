@@ -70,13 +70,11 @@ export default class StreamInput extends Component {
        });
     });
 
-    if (this.state.accessor !== this.props.accessor) {
+    if (this.state.accessor !== this.props.accessor && this.props.accessor) {
       this.setState({
         accessor: this.props.accessor,
       });
     }
-
-    
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -102,7 +100,7 @@ export default class StreamInput extends Component {
       });
     }
 
-    if (prevProps.accessor !== this.props.accessor) {
+    if (prevProps.accessor !== this.props.accessor && this.props.accessor) {
       this.setState({
         accessor: this.props.accessor
       });
@@ -127,11 +125,12 @@ export default class StreamInput extends Component {
   render() {
     const {categoryOptions, cscOptions, topicOptions, itemOptions} = this.state;
     const {category, csc, salindex, topic, item, isArray, arrayIndex, accessor} = this.state;
-    const {streamInputId} = this.props;
+    const {streamInputId, variable} = this.props;
 
     return (
       <>
       <div className={styles.container}>
+        <span className={styles.title}>{variable} :</span>
         <Select
           className={[styles.select, styles.category].join(' ')}
           options={categoryOptions}
@@ -192,7 +191,7 @@ export default class StreamInput extends Component {
         </div>
       </div>
       <div className={styles.container}>
-        <div>Accessor ({streamInputId}): </div>
+        <div>Accessor: </div>
           <AceEditor
             mode="javascript"
             className={styles.editor}
