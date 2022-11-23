@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import styles from './RaftDetail.module.css';
 
 class RaftDetail extends Component {
   renderCCDsPlots() {
