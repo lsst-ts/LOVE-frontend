@@ -1,11 +1,14 @@
 .container {
   position: relative;
+  box-sizing: border-box;
+  height: 100%;
 }
 
 .plotsContainer {
   display: grid;
+  height: 100%;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 136px);
+  grid-template-rows: repeat(3, 1fr);
   gap: 1em;
   border: 1px solid gray;
 }

@@ -79,12 +79,12 @@ class CCDDetail extends Component {
       },
     ];
     const refs = [
+      /* React.createRef(),
       React.createRef(),
       React.createRef(),
       React.createRef(),
       React.createRef(),
-      React.createRef(),
-      React.createRef(),
+      React.createRef(), */
     ];
     return (
       <div className={styles.plotsContainer}>
@@ -95,7 +95,7 @@ class CCDDetail extends Component {
               containerNode={refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
-              // legendPosition="bottom"
+              legendPosition="bottom"
             />
           </div>
         ))}
@@ -130,7 +130,7 @@ class CCDDetail extends Component {
             height: barHeight,
             backgroundColor: 'rgb(255,50,0,.5)',
             transformOrigin: 'center',
-            transform: 'rotate(90deg) translate(50%, -230px)',
+            transform: 'translate(calc(50% - 10px), calc(240px - 10px)) rotate(90deg)',
           }}
           onClick={() => selectNeighboorCCD('right')}
         >
@@ -157,8 +157,8 @@ class CCDDetail extends Component {
             right: 0,
             height: barHeight,
             backgroundColor: 'rgb(50,255,50,.5)',
-            transformOrigin: 'center',
-            transform: 'rotate(90deg) translate(50%, 230px)',
+            // transform: 'rotate(90deg) translate(-90%, 0)',
+            transform: 'translate(calc(-50% + 10px), calc(240px - 10px)) rotate(90deg)',
           }}
           onClick={() => selectNeighboorCCD('left')}
         >

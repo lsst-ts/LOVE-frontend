@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import RaftDetail from './RaftDetail/RaftDetail';
-import RebsDetail from './RebsDetail/RebsDetail';
+import RebDetail from './RebDetail/RebDetail';
 import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
