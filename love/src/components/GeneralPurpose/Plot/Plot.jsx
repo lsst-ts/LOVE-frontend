@@ -188,7 +188,6 @@ export default class Plot extends Component {
             const streamValue = Array.isArray(streams[streamName]) ? streams[streamName][0] : streams[streamName];
             newValue['x'] = parseTimestamp(streamValue.private_rcvStamp?.value * 1000),
             newValue[variable] = accessorFunc(streamValue[item]?.value);
-
           }
 
           // TODO: use reselect to never get repeated timestamps
@@ -196,9 +195,9 @@ export default class Plot extends Component {
             inputData.push(newValue);
           }
 
-          // Slice inputData array if it has more than 900 datapoints (corresponding to one hour if telemetry is received every two seconds)
-          if (inputData.length > 900) {
-            inputData = inputData.slice(-900);
+          // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
+          if (inputData.length > 1800) {
+            inputData = inputData.slice(-1800);
           }
           newData[inputName] = inputData;
           
@@ -224,9 +223,9 @@ export default class Plot extends Component {
               inputData.push(newValue);
             }
 
-            // Slice inputData array if it has more than 900 datapoints (corresponding to one hour if telemetry is received every two seconds)
-            if (inputData.length > 900) {
-              inputData = inputData.slice(-900);
+            // Slice inputData array if it has more than 1800 datapoints (corresponding to one hour if telemetry is received every two seconds)
+            if (inputData.length > 1800) {
+              inputData = inputData.slice(-1800);
             }
             newData[inputName] = inputData;
         }
