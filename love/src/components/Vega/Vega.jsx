@@ -34,7 +34,7 @@ export default class Vega extends Component {
 
   static defaultProps = {
     spec: {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json',
+      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: 'A simple bar chart with embedded data.',
       data: {
         values: [
@@ -126,7 +126,7 @@ export default class Vega extends Component {
   changeSpec = (data, name) => {
     const dataType = this.getSpecDataType(this.props.dataType);
     return {
-      $schema: 'https://vega.github.io/schema/vega-lite/v3.0.0-rc12.json',
+      $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       description: "Google's stock price over time.",
       data: {
         values: data,
