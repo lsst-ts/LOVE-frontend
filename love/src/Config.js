@@ -338,6 +338,29 @@ export const m1CoverStateStateMap = {
   0: 'UNKNOWN',
 };
 
+export const mainValveStateMap = {
+  1: 'OPEN',
+  2: 'CLOSED',
+  0: 'UNKNOWN',
+};
+
+export const instrumentStateMap = {
+  1: 'OPEN',
+  2: 'CLOSED',
+  0: 'UNKNOWN',
+};
+
+export const ATPneumaticsLimits = {
+  cellLoad: {
+    min: 3.83,
+    max: 117.80,
+  },
+  pressure: {
+    min: 47160.14,
+    max: 182159.49,
+  },
+};
+
 export const m1CoverLimitSwitchesStateMap = {
   1: 'OPEN',
   2: 'CLOSED',

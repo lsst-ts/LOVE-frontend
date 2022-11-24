@@ -368,6 +368,9 @@ export const getMountSubscriptions = (index) => {
     `telemetry-ATHexapod-${index}-positionStatus`,
     // ATPneumatics
     `event-ATPneumatics-${index}-m1CoverState`,
+    `event-ATPneumatics-${index}-m1SetPressure`,
+    `event-ATPneumatics-${index}-mainValveState`,
+    `event-ATPneumatics-${index}-instrumentState`,
     `event-ATPneumatics-${index}-m1CoverLimitSwitches`,
     `event-ATPneumatics-${index}-m1VentsLimitSwitches`,
     `telemetry-ATPneumatics-${index}-loadCell`,
@@ -408,6 +411,9 @@ export const getMountState = (state, index) => {
   const mountEncoders = mountData[`telemetry-ATMCS-${index}-mountEncoders`];
   const hexapodInPosition = mountData[`event-ATHexapod-${index}-inPosition`];
   const m1CoverState = mountData[`event-ATPneumatics-${index}-m1CoverState`];
+  const m1SetPressure = mountData[`event-ATPneumatics-${index}-m1SetPressure`];
+  const mainValveState = mountData[`event-ATPneumatics-${index}-mainValveState`];
+  const instrumentState = mountData[`event-ATPneumatics-${index}-instrumentState`];
   const hexapodReadyForCommand = mountData[`event-ATPneumatics-${index}-readyForCommand`];
   const m1VentsLimitSwitches = mountData[`event-ATPneumatics-${index}-m1VentsLimitSwitches`];
   const m1CoverLimitSwitches = mountData[`event-ATPneumatics-${index}-m1CoverLimitSwitches`];
@@ -424,6 +430,13 @@ export const getMountState = (state, index) => {
       : 'Unknown',
     // ATPneumatics
     m1CoverState: m1CoverState ? m1CoverState[m1CoverState.length - 1].state.value : 0,
+
+    m1SetPressure: mountData[`event-ATPneumatics-${index}-m1SetPressure`]
+      ? mountData[`event-ATPneumatics-${index}-m1SetPressure`][0].pressure.value
+      : 'Unknown',
+
+    mainValveState: mainValveState ? mainValveState[mainValveState.length - 1].state.value : 0,
+    instrumentState: instrumentState ? instrumentState[instrumentState.length - 1].state.value : 0,
     m1CoverLimitSwitches: m1CoverLimitSwitches ? m1CoverLimitSwitches[m1CoverLimitSwitches.length - 1] : {},
     m1VentsLimitSwitches: m1VentsLimitSwitches ? m1VentsLimitSwitches[m1VentsLimitSwitches.length - 1] : {},
     loadCell: mountData[`telemetry-ATPneumatics-${index}-loadCell`]
@@ -431,7 +444,7 @@ export const getMountState = (state, index) => {
       : 'Unknown',
     m1AirPressure: mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`]
       ? mountData[`telemetry-ATPneumatics-${index}-m1AirPressure`].pressure
-      : 'Unknown',
+      : 'Unknown', 
     // ATMCS
     m3InPosition: m3InPosition ? m3InPosition[m3InPosition.length - 1].inPosition.value : 0,
     nasmyth1RotatorInPosition: nasmyth1RotatorInPosition

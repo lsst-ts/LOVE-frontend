@@ -6,17 +6,22 @@ import {
   m3PortSelectedStateMap,
   m3InPositionStateMap,
   m1CoverStateStateMap,
+  mainValveStateMap,
+  instrumentStateMap,
   nasmythRotatorInPositionStateMap,
   hexapodInPositionStateMap,
   ataosCorrectionsStateMap,
   ataosCorrectionsStateToStyle,
   stateToStyleMount,
+  ATPneumaticsLimits,
 } from '../../../../Config';
 import SummaryPanel from '../../../GeneralPurpose/SummaryPanel/SummaryPanel';
+import Row from '../../../GeneralPurpose/SummaryPanel/Row';
 import Label from '../../../GeneralPurpose/SummaryPanel/Label';
 import Value from '../../../GeneralPurpose/SummaryPanel/Value';
 import Title from '../../../GeneralPurpose/SummaryPanel/Title';
 import SimpleTable from '../../../GeneralPurpose/SimpleTable/SimpleTable';
+import Limits from '../../../GeneralPurpose/Limits/Limits';
 import styles from './SummaryPanel.module.css';
 
 const M3PORTNASMYTH1 = 1;
@@ -59,6 +64,9 @@ export default class SummaryTable extends Component {
 
     //ATPneumatics
     const m1CoverState = m1CoverStateStateMap[this.props.m1CoverState] || m1CoverStateStateMap[0];
+    const mainValveState = mainValveStateMap[this.props.mainValveStateMap] || mainValveStateMap[0];
+    const instrumentState = instrumentStateMap[this.props.instrumentStateMap] || instrumentStateMap[0];
+
     //Hexapod
     let hexapodInPositionState = 0;
     if (this.props.hexapodInPosition !== 0) {
@@ -188,12 +196,48 @@ export default class SummaryTable extends Component {
         <Value>
           <StatusText status={stateToStyleMount[m1CoverState]}>{m1CoverState}</StatusText>
         </Value>
+        <Label>Main Air Valve</Label>
+        <Value>
+          <StatusText status={stateToStyleMount[mainValveState]}>{mainValveState}</StatusText>
+        </Value>
+        <Label>Instrument Valve</Label>
+        <Value>
+          <StatusText status={stateToStyleMount[instrumentState]}>{instrumentState}</StatusText>
+        </Value>
+
         <Label>Cell load</Label>
-        <Value>{this.props.loadCell}</Value>
+        <Value>{this.props.loadCell === "Unknown" ? (this.props.loadCell) : (this.props.loadCell).toFixed(2) + ' kg' }</Value> 
+        <Row>
+            <Limits
+              lowerLimit={ATPneumaticsLimits.cellLoad.min}
+              upperLimit={ATPneumaticsLimits.cellLoad.max}
+              currentValue={this.props.loadCell}
+              targetValue="Unknown"
+              height={30}
+              displayLabels={true}
+              displayLabelsUnit=" kg"
+              limitWarning={4.2}
+            />
+        </Row>
+
         <Label>M1 Air pressure</Label>
-        <Value>{this.props.m1AirPressure}</Value>
+        <Value>{this.props.m1AirPressure === "Unknown" ? (this.props.m1AirPressure) : (this.props.m1AirPressure).toFixed(2) + ' Pa' }</Value>
+        <Row>
+            <Limits
+              lowerLimit={ATPneumaticsLimits.pressure.min}
+              upperLimit={ATPneumaticsLimits.pressure.max}
+              currentValue={this.props.m1AirPressure}
+              targetValue={this.props.m1SetPressure}
+              height={30}
+              displayLabels={true}
+
+              displayLabelsUnit=" Pa"
+              limitWarning={5000}
+            />
+        </Row>
+
         {/* Hexapod */}
-        <Title wide>Hexapod</Title>
+        <Title wide>ATHexapod</Title>
         <Label>Position state</Label>
         <Value>
           <StatusText status={stateToStyleMount[hexapodInPosition]}>{hexapodInPosition}</StatusText>
@@ -202,7 +246,7 @@ export default class SummaryTable extends Component {
         <div style={{ gridColumnStart: '1', gridColumnEnd: '3' }} className={styles.panelTable}>
           <SimpleTable headers={headers} data={simpleTableData} />
         </div>
-        <Title wide>Corrections</Title>
+        <Title wide>ATCorrections</Title>
         <Label>M1</Label>
         <Value>
           <StatusText status={ataosCorrectionsStateToStyle[m1CorrectionsState]}>{m1CorrectionsState}</StatusText>
