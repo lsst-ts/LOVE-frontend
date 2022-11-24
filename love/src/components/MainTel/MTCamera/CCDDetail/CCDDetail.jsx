@@ -7,6 +7,14 @@ import { rgb } from 'd3';
 class CCDDetail extends Component {
   constructor() {
     super();
+    this.refs = [
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+      React.createRef(),
+    ];
     this.state = {};
   }
   renderPlots() {
@@ -78,21 +86,14 @@ class CCDDetail extends Component {
         },
       },
     ];
-    const refs = [
-      /* React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(),
-      React.createRef(), */
-    ];
+
     return (
       <div className={styles.plotsContainer}>
         {plots.map((p, i) => (
-          <div ref={refs[i]} className={styles.plot}>
+          <div ref={this.refs[i]} className={styles.plot}>
             <PlotContainer
               inputs={p}
-              containerNode={refs[i]}
+              containerNode={this.refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="bottom"

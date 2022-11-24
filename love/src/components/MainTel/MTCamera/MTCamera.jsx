@@ -107,7 +107,9 @@ class MTCamera extends Component {
   };
 
   render() {
+    const { selectedCCD } = this.state;
     return <div className={styles.container}>{this.getSvg()}</div>;
+    // return <div style={{height: 480, width: 480}}><CCDDetail ccd={selectedCCD} selectNeighboorCCD={this.selectNeighboorCCD} /></div>
   }
 
   getSvg() {

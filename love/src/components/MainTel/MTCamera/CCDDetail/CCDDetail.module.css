@@ -7,12 +7,15 @@
 .plotsContainer {
   display: grid;
   height: 100%;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, 1fr);
+  width: 100%;
+  grid-template-columns: 2fr 2fr;
+  grid-template-rows: auto;
   gap: 1em;
+  overflow: hidden;
   border: 1px solid gray;
 }
 
 .plot {
+  width: 100%;
   overflow: hidden;
 }
