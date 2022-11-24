@@ -141,10 +141,10 @@ class MTCamera extends Component {
         // onMouseEnter={this.disableScroll}
         // onMouseLeave={this.enableScroll}
       >
-        {zoomLevel >= 3 && zoomLevel < 5 && this.getRaftDetail()}
-        {zoomLevel >= 1 && zoomLevel < 3 && this.getMTCamera()}
+        {/* {zoomLevel >= 3 && zoomLevel < 5 && this.getRaftDetail()} */}
+        {/* {zoomLevel >= 1 && zoomLevel < 3 && this.getMTCamera()} */}
         {/* {this.getRaftDetail()} */}
-        {/* {this.getCCDDetail()} */}
+        {this.getCCDDetail()}
         {/* {this.getBackground()} */}
 
         {/* {zoomLevel > 2 && zoomLevel < 3 && (
@@ -222,7 +222,7 @@ class MTCamera extends Component {
           width={this.state.width}
           height={this.state.width}
         >
-          <CCDDetail ccd={selectedCCD} selectNeighboorCCD={this.selectNeighboorCCD} />
+          <CCDDetail ccd={selectedCCD} showNeighboors={true} selectNeighboorCCD={this.selectNeighboorCCD} />
         </foreignObject>
       </g>
     );

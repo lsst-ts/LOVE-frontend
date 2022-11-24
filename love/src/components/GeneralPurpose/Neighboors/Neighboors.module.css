@@ -1,0 +1,6 @@
+.container {
+  position: relative;
+  box-sizing: border-box;
+  height: calc(100% - 42px);
+  margin: 20px;
+}

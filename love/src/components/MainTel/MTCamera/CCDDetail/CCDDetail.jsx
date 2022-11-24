@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import Neighboors from 'components/GeneralPurpose/Neighboors/Neighboors';
 import styles from './CCDDetail.module.css';
-import { rgb } from 'd3';
 
 class CCDDetail extends Component {
   constructor() {
@@ -105,68 +105,12 @@ class CCDDetail extends Component {
   }
 
   render() {
-    const { ccd, selectNeighboorCCD } = this.props;
+    const { ccd, showNeighboors, selectNeighboorCCD } = this.props;
     const barHeight = 20;
-    return (
-      <div className={styles.container} style={{ padding: barHeight }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(255,0,0,.5)',
-          }}
-          onClick={() => selectNeighboorCCD('top')}
-        >
-          UP
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(255,50,0,.5)',
-            transformOrigin: 'center',
-            transform: 'translate(calc(50% - 10px), calc(240px - 10px)) rotate(90deg)',
-          }}
-          onClick={() => selectNeighboorCCD('right')}
-        >
-          RIGHT
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(255,150,50,.5)',
-          }}
-          onClick={() => selectNeighboorCCD('bottom')}
-        >
-          BOTTOM
-        </div>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: barHeight,
-            backgroundColor: 'rgb(50,255,50,.5)',
-            // transform: 'rotate(90deg) translate(-90%, 0)',
-            transform: 'translate(calc(-50% + 10px), calc(240px - 10px)) rotate(90deg)',
-          }}
-          onClick={() => selectNeighboorCCD('left')}
-        >
-          LEFT
-        </div>
-        {this.renderPlots()}
-      </div>
+    return showNeighboors ? (
+      <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
+    ) : (
+      this.renderPlots()
     );
   }
 }
