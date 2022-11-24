@@ -6,24 +6,18 @@ import styles from './FocalPlane.module.css';
 class FocalPlane extends Component {
   constructor() {
     super();
-    this.state = {
-      selectedRaft: null,
-    };
-  }
-
-  selectRaft(id) {
-    console.log(id);
-    this.setState({ selectedRaft: id });
+    this.state = {};
   }
 
   renderRaft({ id, status, ccds }) {
-    const { selectedRaft } = this.state;
+    const { selectedRaft, setHoveredRaft, setSelectedRaft } = this.props;
     const borderColor = this.getColors(mtCameraRaftDetailedStateToStyle[mtCameraRaftDetailedStateMap[status]]);
     return (
       <div
         style={{ border: selectedRaft === id ? '2px solid white' : `2px solid ${borderColor}` }}
         className={styles.raftContainer}
-        onClick={() => this.selectRaft(id)}
+        onClick={() => setSelectedRaft(id)}
+        onMouseOver={() => setHoveredRaft(id)}
       >
         {ccds.map((ccd) => this.renderCCD(ccd))}
       </div>

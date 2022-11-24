@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import RaftDetail from './RaftDetail/RaftDetail';
-import RebDetail from './RebDetail/RebDetail';
+// import RebDetail from './RebDetail/RebDetail';
 import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
@@ -18,9 +18,21 @@ class MTCamera extends Component {
       width: 480,
       zoomLevel: 1,
       activeViewId: 'ccdDetail',
+      selectedRaft: null,
       selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
+      hoveredRaft: null,
+      hoveredCCD: null,
+      hoveredReb: null,
     };
   }
+
+  setSelectedRaft = (id) => {
+    this.setState({ selectedRaft: id });
+  };
+
+  setHoveredRaft = (id) => {
+    this.setState({ hoveredRaft: id });
+  };
 
   preventDefault(e) {
     e = e || window.event;
@@ -95,6 +107,7 @@ class MTCamera extends Component {
     if (k >= 3 && k < 5) {
       d3.select('#mtcamera').attr('visibility', 'hidden');
       d3.select('#raftDetail').attr('visibility', 'visible');
+      this.setState((prevState) => ({ selectedRaft: prevState.hoveredRaft }));
     }
 
     if (targetId === 'mtcamera') d3.select('#mtcamera').attr('transform', d3.event.transform);
@@ -107,7 +120,9 @@ class MTCamera extends Component {
   };
 
   render() {
-    const { selectedCCD } = this.state;
+    const { selectedCCD, hoveredRaft, selectedRaft } = this.state;
+    console.log('Selected', selectedRaft);
+    console.log('Hovered', hoveredRaft);
     return <div className={styles.container}>{this.getSvg()}</div>;
     // return <div style={{height: 480, width: 480}}><CCDDetail ccd={selectedCCD} selectNeighboorCCD={this.selectNeighboorCCD} /></div>
   }
@@ -126,9 +141,10 @@ class MTCamera extends Component {
         // onMouseEnter={this.disableScroll}
         // onMouseLeave={this.enableScroll}
       >
-        {/* {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftDetail()}
-        {zoomLevel >= 1 && zoomLevel < 2 && this.getMTCamera()} */}
-        {this.getCCDDetail()}
+        {zoomLevel >= 3 && zoomLevel < 5 && this.getRaftDetail()}
+        {zoomLevel >= 1 && zoomLevel < 3 && this.getMTCamera()}
+        {/* {this.getRaftDetail()} */}
+        {/* {this.getCCDDetail()} */}
         {/* {this.getBackground()} */}
 
         {/* {zoomLevel > 2 && zoomLevel < 3 && (
@@ -169,7 +185,11 @@ class MTCamera extends Component {
           width={this.state.width}
           height={this.state.width}
         >
-          <FocalPlane />
+          <FocalPlane
+            selectedRaft={this.state.selectedRaft}
+            setSelectedRaft={this.setSelectedRaft}
+            setHoveredRaft={this.setHoveredRaft}
+          />
         </foreignObject>
       </g>
     );
