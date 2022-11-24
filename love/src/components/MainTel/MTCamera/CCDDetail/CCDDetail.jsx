@@ -110,7 +110,7 @@ class CCDDetail extends Component {
     return showNeighboors ? (
       <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
     ) : (
-      this.renderPlots()
+      <div style={{ height: '100%' }}>{this.renderPlots()}</div>
     );
   }
 }

@@ -17,7 +17,7 @@ class MTCamera extends Component {
       colormap: () => '#fff',
       width: 480,
       zoomLevel: 1,
-      activeViewId: 'ccdDetail',
+      activeViewId: 'mtcamera',
       selectedRaft: null,
       selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
       hoveredRaft: null,
@@ -86,9 +86,9 @@ class MTCamera extends Component {
 
   componentDidUpdate() {
     // d3.select('#rect-overlay').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
-    d3.select('#mtcamera').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
-    d3.select('#raftDetail').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
-    d3.select('#ccdDetail').call(d3.zoom().scaleExtent([1, Infinity]).on('zoom', this.zoomed));
+    d3.select('#mtcamera').call(d3.zoom().scaleExtent([0, Infinity]).on('zoom', this.zoomed));
+    d3.select('#raftdetail').call(d3.zoom().scaleExtent([0, Infinity]).on('zoom', this.zoomed));
+    d3.select('#ccddetail').call(d3.zoom().scaleExtent([0, Infinity]).on('zoom', this.zoomed));
   }
 
   zoomed = () => {
@@ -97,61 +97,67 @@ class MTCamera extends Component {
     const targetId = this.state.activeViewId;
     if (targetId == null) return;
     if (targetId === 'mtcamera') baseK = 0;
-    else if (targetId === 'raftDetail') baseK = 2;
+    else if (targetId === 'raftdetail') baseK = 2;
+    else if (targetId === 'ccddetail') baseK = 4;
 
     const k = d3.event.transform.k + baseK;
-    if (k >= 1 && k < 3) {
+    // console.log("K", k);
+    let newActiveViewId, newSelectedRaft;
+    if (k >= 0 && k < 3) {
       d3.select('#mtcamera').attr('visibility', 'visible');
-      d3.select('#raftDetail').attr('visibility', 'hidden');
+      d3.select('#raftdetail').attr('visibility', 'hidden');
+      d3.select('#ccddetail').attr('visibility', 'hidden');
+      newActiveViewId = 'mtcamera';
     }
     if (k >= 3 && k < 5) {
       d3.select('#mtcamera').attr('visibility', 'hidden');
-      d3.select('#raftDetail').attr('visibility', 'visible');
-      this.setState((prevState) => ({ selectedRaft: prevState.hoveredRaft }));
+      d3.select('#raftdetail').attr('visibility', 'visible');
+      d3.select('#ccddetail').attr('visibility', 'hidden');
+      newActiveViewId = 'raftdetail';
+      newSelectedRaft = this.state.hoveredRaft;
+    }
+    if (k >= 5 && k < 7) {
+      d3.select('#mtcamera').attr('visibility', 'hidden');
+      d3.select('#raftdetail').attr('visibility', 'hidden');
+      d3.select('#ccddetail').attr('visibility', 'visible');
+      newActiveViewId = 'ccddetail';
     }
 
     if (targetId === 'mtcamera') d3.select('#mtcamera').attr('transform', d3.event.transform);
-    else if (targetId === 'raftDetail') d3.select('#raftDetail').attr('transform', d3.event.transform);
-    else if (targetId === 'ccdDetail') d3.select('#ccdDetail').attr('transform', d3.event.transform);
+    else if (targetId === 'raftdetail') d3.select('#raftdetail').attr('transform', d3.event.transform);
+    else if (targetId === 'ccddetail') d3.select('#ccddetail').attr('transform', d3.event.transform);
 
-    this.setState({
-      zoomLevel: d3.event.transform.k,
-    });
+    this.setState((prevState) => ({
+      activeViewId: newActiveViewId,
+      selectedRaft: newSelectedRaft,
+      zoomLevel: k,
+    }));
   };
 
   render() {
     const { selectedCCD, hoveredRaft, selectedRaft } = this.state;
-    console.log('Selected', selectedRaft);
-    console.log('Hovered', hoveredRaft);
+    // console.log('Selected', selectedRaft);
+    // console.log('Hovered', hoveredRaft);
+    // console.log(this.state.activeViewId);
     return <div className={styles.container}>{this.getSvg()}</div>;
-    // return <div style={{height: 480, width: 480}}><CCDDetail ccd={selectedCCD} selectNeighboorCCD={this.selectNeighboorCCD} /></div>
   }
 
   getSvg() {
     const { zoomLevel } = this.state;
-    console.log(zoomLevel);
 
     const scale = (Math.max(this.state.xRadius, this.state.yRadius) * this.state.width) / 65000;
     const margin = 60;
 
     return (
-      <svg
-        className={styles.svgContainer}
-        viewBox={`0 0 ${this.state.width} ${this.state.width}`}
-        // onMouseEnter={this.disableScroll}
-        // onMouseLeave={this.enableScroll}
-      >
-        {/* {zoomLevel >= 3 && zoomLevel < 5 && this.getRaftDetail()} */}
-        {/* {zoomLevel >= 1 && zoomLevel < 3 && this.getMTCamera()} */}
-        {/* {this.getRaftDetail()} */}
-        {this.getCCDDetail()}
-        {/* {this.getBackground()} */}
-
-        {/* {zoomLevel > 2 && zoomLevel < 3 && (
-          <foreignObject x="50" y="50" width="160" height="160">
-            <div style={{ backgroundColor: 'red', height: '100%', width: '100%' }}>Hola 2</div>
-          </foreignObject>
-        )} */}
+      <svg className={styles.svgContainer} viewBox={`0 0 ${this.state.width} ${this.state.width}`}>
+        {/* {zoomLevel >= 5 && zoomLevel < 7 && this.getCCDdetail()}
+        {zoomLevel >= 3 && zoomLevel < 5 && this.getRaftdetail()}
+        {zoomLevel >= 0 && zoomLevel < 3 && this.getMTCamera()} */}
+        {this.getCCDdetail()}
+        {this.getRaftdetail()}
+        {this.getMTCamera()}
+        {/* {this.getCCDdetail()}
+        {this.getRaftdetail()} */}
       </svg>
     );
   }
@@ -168,8 +174,6 @@ class MTCamera extends Component {
           key={'overlay'}
           fill={'none'}
           pointerEvents="all"
-          // onMouseEnter={this.enableScroll}
-          // onMouseLeave={this.disableScroll}
         />
       </>
     );
@@ -177,7 +181,7 @@ class MTCamera extends Component {
 
   getMTCamera() {
     return (
-      <g id="mtcamera" pointerEvents="all">
+      <g id="mtcamera" pointerEvents="all" visibility="visible">
         <foreignObject
           className={styles.foreignObjectSvg}
           x="0"
@@ -195,9 +199,9 @@ class MTCamera extends Component {
     );
   }
 
-  getRaftDetail() {
+  getRaftdetail() {
     return (
-      <g id="raftDetail">
+      <g id="raftdetail" visibility="hidden">
         <foreignObject
           className={styles.foreignObjectSvg}
           x="0"
@@ -211,10 +215,10 @@ class MTCamera extends Component {
     );
   }
 
-  getCCDDetail() {
+  getCCDdetail() {
     const { selectedCCD } = this.state;
     return (
-      <g id="ccdDetail">
+      <g id="ccddetail" visibility="hidden">
         <foreignObject
           className={styles.foreignObjectSvg}
           x="0"
