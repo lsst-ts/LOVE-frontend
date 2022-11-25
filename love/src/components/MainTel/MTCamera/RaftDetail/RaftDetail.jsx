@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
+import Neighboors from 'components/GeneralPurpose/Neighboors/Neighboors';
 import CCDDetail from '../CCDDetail/CCDDetail';
 import styles from './RaftDetail.module.css';
 
@@ -18,9 +19,7 @@ const ccds = [
 class RaftDetail extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      raftId: '',
-    };
+    this.state = {};
   }
 
   renderCCDsPlots() {
@@ -76,14 +75,13 @@ class RaftDetail extends Component {
       <div className={styles.rebsContainer}>
         {plots.map((p, i) => (
           <div ref={refs[i]} className={styles.plot}>
-            {/* <PlotContainer
+            <PlotContainer
               inputs={p}
               containerNode={refs[i]}
               xAxisTitle="Time"
               yAxisTitle="Value"
               legendPosition="bottom"
-            /> */}
-            <div style={{ backgroundColor: 'green', width: '70px', height: '20px' }}></div>
+            />
           </div>
         ))}
       </div>
@@ -91,13 +89,38 @@ class RaftDetail extends Component {
   }
 
   render() {
-    return (
-      <div className={styles.container}>
+    const { ccd, showNeighboors, selectNeighboorCCD } = this.props;
+    const barHeight = 20;
+    return showNeighboors ? (
+      <Neighboors selectNeighboor={selectNeighboorCCD}>{this.renderPlots()}</Neighboors>
+    ) : (
+      <div style={{ height: '100%' }}>{this.renderPlots()}</div>
+    );
+  }
+
+  render() {
+    const { raft, showNeighboors, selectNeighboorRaft } = this.props;
+    const barHeight = 20;
+    return showNeighboors ? (
+      <Neighboors selectNeighboor={selectNeighboorRaft}>
+        {this.renderCCDsPlots()}
+        {this.renderRebsPlots()}
+      </Neighboors>
+    ) : (
+      <div style={{ height: '100%' }}>
         <span>RaftDetail component</span>
         {this.renderCCDsPlots()}
         {this.renderRebsPlots()}
       </div>
     );
+
+    // return (
+    //   <div className={styles.container}>
+    //     <span>RaftDetail component</span>
+    //     {this.renderCCDsPlots()}
+    //     {this.renderRebsPlots()}
+    //   </div>
+    // );
   }
 }
 

@@ -18,7 +18,7 @@ class MTCamera extends Component {
       width: 480,
       zoomLevel: 1,
       activeViewId: 'mtcamera',
-      selectedRaft: null,
+      selectedRaft: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
       selectedCCD: { id: 100, top: 1, right: 2, bottom: 3, left: 4 },
       hoveredRaft: null,
       hoveredCCD: null,
@@ -52,9 +52,21 @@ class MTCamera extends Component {
     document.removeEventListener('wheel', this.preventDefault, false);
   };
 
+  findRaftById(id) {
+    return { id, top: 100, right: 101, bottom: 102, left: 103 };
+  }
+
   findCCDById(id) {
     return { id, top: 100, right: 101, bottom: 102, left: 103 };
   }
+
+  selectNeighboorRaft = (direction) => {
+    const { selectedRaft } = this.state;
+    const nextRaftId = selectedRaft[direction];
+    const nextRaft = this.findRaftById(nextRaftId);
+    console.log(selectedRaft, direction, nextRaftId, nextraft);
+    this.setState({ selectedRaft: nextRaft });
+  };
 
   selectNeighboorCCD = (direction) => {
     const { selectedCCD } = this.state;
@@ -187,7 +199,7 @@ class MTCamera extends Component {
           x="0"
           y="0"
           width={this.state.width}
-          height={this.state.width}
+          height={this.state.width + 10}
         >
           <FocalPlane
             selectedRaft={this.state.selectedRaft}
@@ -200,6 +212,7 @@ class MTCamera extends Component {
   }
 
   getRaftdetail() {
+    const { selectedRaft } = this.state;
     return (
       <g id="raftdetail" visibility="hidden">
         <foreignObject
@@ -209,7 +222,7 @@ class MTCamera extends Component {
           width={this.state.width}
           height={this.state.width}
         >
-          <RaftDetail />
+          <RaftDetail raft={selectedRaft} showNeighboors={true} selectNeighboorRaft={this.selectNeighboorRaft} />
         </foreignObject>
       </g>
     );
