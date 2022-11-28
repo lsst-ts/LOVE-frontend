@@ -8,8 +8,8 @@
   display: grid;
   height: calc(100%);
   width: calc(100%);
-  grid-template-columns: 2fr 2fr;
-  grid-template-rows: auto;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  grid-template-rows: repeat(3, 200px);
   gap: 1em;
   overflow: hidden;
   border: 1px solid gray;

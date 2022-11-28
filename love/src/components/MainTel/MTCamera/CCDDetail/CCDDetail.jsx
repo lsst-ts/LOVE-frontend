@@ -98,6 +98,7 @@ class CCDDetail extends Component {
               yAxisTitle="Value"
               legendPosition="bottom"
             />
+            <div>Plot</div>
           </div>
         ))}
       </div>
