@@ -129,12 +129,6 @@
   opacity: 1 !important;
 }
 
-.divExportBtn {
-  margin-left: auto;
-  align-self: center;
-  display: flex;
-}
-
 .infoIcon {
   width: 1em;
   margin-left: 0.5em;
@@ -167,6 +161,7 @@
   padding: 0.5em 0;
   margin-bottom: 0.5em;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .filters > * {
