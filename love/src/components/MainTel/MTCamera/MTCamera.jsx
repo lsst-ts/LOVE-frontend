@@ -6,6 +6,7 @@ import FocalPlane from './FocalPlane/FocalPlane';
 import CCDDetail from './CCDDetail/CCDDetail';
 import PropTypes from 'prop-types';
 import styles from './MTCamera.module.css';
+import MTCameraSummaryDetail from './MTCameraSummaryDetail/MTCameraSummaryDetail';
 
 class MTCamera extends Component {
   constructor(props) {
@@ -153,7 +154,9 @@ class MTCamera extends Component {
   };
 
   render() {
-    const { selectedCCD, hoveredRaft, selectedRaft } = this.state;
+    const { selectedCCD, hoveredRaft, selectedRaft, hoveredCCD } = this.state;
+    // console.log('Selected', selectedCCD);
+    // console.log('Hovered', hoveredCCD);
     // console.log('Selected', selectedRaft);
     // console.log('Hovered', hoveredRaft);
     // console.log(this.state.activeViewId);
@@ -161,12 +164,15 @@ class MTCamera extends Component {
   }
 
   getComponent() {
-    const { zoomLevel } = this.state;
+    const { zoomLevel, selectedCCD } = this.state;
     return (
       <div>
-        {zoomLevel >= 3 && zoomLevel < 4 && this.getCCDdetail()}
-        {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftdetail()}
-        {zoomLevel >= 0 && zoomLevel < 2 && this.getMTCamera()}
+        <div>
+          {zoomLevel >= 3 && zoomLevel < 4 && this.getCCDdetail()}
+          {zoomLevel >= 2 && zoomLevel < 3 && this.getRaftdetail()}
+          {zoomLevel >= 0 && zoomLevel < 2 && this.getMTCamera()}
+        </div>
+        <div>{selectedCCD ? MTCameraSummaryDetail : ''}</div>
       </div>
     );
   }
