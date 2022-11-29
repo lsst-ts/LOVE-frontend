@@ -5,6 +5,8 @@ import { DATE_TIME_FORMAT } from 'Config';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import styles from './WeatherForecast.module.css';
 import WindPlotContainer from './PlotsContainer/WindPlot.container';
+import TemperaturePlotContainer from './PlotsContainer/TemperaturePlot.container';
+import RainPlotContainer from './PlotsContainer/RainPlot.container';
 
 
 export default class WeatherForecast extends Component {
@@ -32,6 +34,8 @@ export default class WeatherForecast extends Component {
     };
 
     this.windPlotRef = React.createRef();
+    this.temperaturePlotRef = React.createRef();
+    this.rainPlotRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -130,6 +134,32 @@ export default class WeatherForecast extends Component {
               containerNode={this.windPlotRef.current}
               xAxisTitle="Time"
               yAxisTitle="Wind"
+              legendPosition="right"
+            />
+          </div>
+        </div>
+
+        <div className={styles.fullSection}>
+          <div className={styles.sectionTitle}>Temperature</div>
+          <div ref={this.temperaturePlotRef} className={styles.plot}>
+            <TemperaturePlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
+              containerNode={this.temperaturePlotRef.current}
+              xAxisTitle="Time"
+              yAxisTitle="Temperature"
+              legendPosition="right"
+            />
+          </div>
+        </div>
+
+        <div className={styles.fullSection}>
+          <div className={styles.sectionTitle}>Rain</div>
+          <div ref={this.rainPlotRef} className={styles.plot}>
+            <RainPlotContainer
+              timeSeriesControlsProps={timeSeriesControlsProps}
+              containerNode={this.rainPlotRef.current}
+              xAxisTitle="Time"
+              yAxisTitle="Precipitation"
               legendPosition="right"
             />
           </div>
