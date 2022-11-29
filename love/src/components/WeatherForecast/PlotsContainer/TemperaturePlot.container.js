@@ -21,9 +21,9 @@ export const schema = {
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        'Wind speed': {
-          type: 'area',
-          color: '#4682b4',
+        'Temperature': {
+          type: 'line',
+          color: '#ff7bb5',
           shape: 'circle',
           filled: false,
           dash: [4, 0],
@@ -33,7 +33,7 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
+              topic: 'WeatherForecast_hourlyTrend',
               item: 'timestamp',
               accessor: '(x) => x[0]',
             },
@@ -42,24 +42,15 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMin',
+              topic: 'WeatherForecast_hourlyTrend',
+              item: 'temperature',
               accessor: '(x) => x[0]',
             },
-            {
-              variable: 'y2',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMax',
-              accessor: '(x) => x[0]',
-            }
           ],
         },
-        'Windspeed spread': {
+        'Temperature Spread': {
           type: 'spread',
-          color: '#4682b4',
+          color: '#ff7bb5',
           shape: 'circle',
           filled: false,
           dash: [4, 0],
@@ -69,7 +60,7 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
+              topic: 'WeatherForecast_hourlyTrend',
               item: 'timestamp',
               accessor: '(x) => x[0]',
             },
@@ -78,8 +69,8 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMean',
+              topic: 'WeatherForecast_hourlyTrend',
+              item: 'temperature',
               accessor: '(x) => x[0]',
             },
             {
@@ -88,17 +79,17 @@ export const schema = {
               csc: 'WeatherForecast',
               salindex: 0,
               topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedSpread',
+              item: 'temperatureSpread',
               accessor: '(x) => x[0]',
             }
           ],
         },
-        'Wind direction': {
-          type: 'arrow',
-          color: '#4682b4',
+        'Temperature Min/Max': {
+          type: 'area',
+          color: '#ff7bb5',
           shape: 'circle',
           filled: false,
-          dash: [4, 0],
+          dash: [8, 4],
           values: [
             {
               variable: 'x',
@@ -114,24 +105,24 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMean',
+              topic: 'WeatherForecast_hourlyTrend',
+              item: 'temperatureMin',
               accessor: '(x) => x[0]',
             },
             {
-              variable: 'angle',
+              variable: 'y2',
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
               topic: 'WeatherForecast_dailyTrend',
-              item: 'windDirection',
+              item: 'temperatureMax',
               accessor: '(x) => x[0]',
             }
           ],
         },
-        'Gust Wind': {
+        'Dew Point Temp': {
           type: 'line',
-          color: '#97e54f',
+          color: '#e77bff',
           shape: 'circle',
           filled: false,
           dash: [4, 0],
@@ -141,7 +132,7 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
+              topic: 'WeatherForecast_hourlyTrend',
               item: 'timestamp',
               accessor: '(x) => x[0]',
             },
@@ -150,18 +141,18 @@ export const schema = {
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'gust',
+              topic: 'WeatherForecast_hourlyTrend',
+              item: 'dewPointtemperature',
               accessor: '(x) => x[0]',
             },
           ],
         },
-        'Ex Gust': {
-          type: 'line',
-          color: '#97e54f',
+        'Dew Point Temp Min/Max': {
+          type: 'area',
+          color: '#e77bff',
           shape: 'circle',
           filled: false,
-          dash: [4, 0],
+          dash: [4, 2],
           values: [
             {
               variable: 'x',
@@ -175,53 +166,89 @@ export const schema = {
             {
               variable: 'y',
               category: 'telemetry',
-              csc: 'ATMCS',
+              csc: 'WeatherForecast',
               salindex: 0,
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => 15',
+              topic: 'WeatherForecast_hourlyTrend',
+              item: 'dewPointTemperatureMin',
+              accessor: '(x) => x[0]',
             },
-          ],
-        },
-        'Ex direction': {
-          type: 'arrow',
-          color: '#4682b4',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
             {
-              variable: 'x',
+              variable: 'y2',
               category: 'telemetry',
               csc: 'WeatherForecast',
               salindex: 0,
               topic: 'WeatherForecast_dailyTrend',
-              item: 'timestamp',
+              item: 'dewPointTemperatureMax',
               accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'y',
-              category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: 0,
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => x[0] - 40',
-            },
-            {
-              variable: 'angle',
-              category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: 0,
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => 40',
             }
           ],
         },
-        'Ex windspread': {
+        'Ex temp': {
+          type: 'line',
+          color: '#ff7bb5',
+          shape: 'circle',
+          filled: false,
+          dash: [4, 0],
+          values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'WeatherForecast_hourlyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x[0]',
+            },
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: 0,
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0]',
+            },
+          ],
+        },
+        'Ex temp min/max': {
+          type: 'area',
+          color: '#ff7bb5',
+          shape: 'circle',
+          filled: false,
+          dash: [8, 4],
+          values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'WeatherForecast_dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x[0]',
+            },
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: 0,
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0] - 50',
+            },
+            {
+              variable: 'y2',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: 0,
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0] + 15',
+            }
+          ],
+        },
+        'Ex temp spread': {
           type: 'spread',
-          color: '#4682b4',
+          color: '#ff7bb5',
           shape: 'circle',
           filled: false,
           dash: [4, 0],
@@ -255,6 +282,42 @@ export const schema = {
             }
           ],
         },
+        'Ex dash': {
+          type: 'area',
+          color: '#e77bff',
+          shape: 'circle',
+          filled: false,
+          dash: [4, 2],
+          values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'WeatherForecast_dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x[0]',
+            },
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: 0,
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0] - 75',
+            },
+            {
+              variable: 'y2',
+              category: 'telemetry',
+              csc: 'ATMCS',
+              salindex: 0,
+              topic: 'mount_AzEl_Encoders',
+              item: 'elevationCalculatedAngle',
+              accessor: '(x) => x[0] - 45',
+            }
+          ],
+        },
       }
     }
   },
@@ -262,7 +325,7 @@ export const schema = {
 
 const containerRef =  React.createRef();
 
-const WindPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const TemperaturePlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   const { containerNode } = props;
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
@@ -333,4 +396,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(WindPlotContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(TemperaturePlotContainer);
