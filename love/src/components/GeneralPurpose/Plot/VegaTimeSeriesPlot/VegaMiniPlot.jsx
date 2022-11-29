@@ -17,7 +17,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
   };
 
   static propTypes = {
-    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow']),
+    markType: PropTypes.oneOf(['line', 'pointLine', 'bar', 'area', 'arrow', 'spread']),
     /** (All layers) hex color */
     color: PropTypes.string,
     /** (Only `lines` layer). Dash pattern for segmented lines passed to the strokeDash channel. E.g, [2, 1] draws
@@ -159,6 +159,77 @@ class VegaLegendMiniPlot extends React.PureComponent {
     };
   };
 
+  spreadSpec = (markType) => {
+    if (markType !== 'spread' ) {
+      return {};
+    }
+    return {
+      data: {
+        values: [{ a: -2, b: 2, c: 4, mean: 3}, { a: 0, b: 1, c: 5, mean: 3}, { a: 2, b: 2, c: 4, mean: 3}, { a: 4, b: 3, c: 6, mean: 4}],
+      },
+      layer: [
+        {
+          mark: {
+            type: 'area',
+            color: this.props.color,
+          },
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'quantitative',
+              scale: {
+                domain: [-1, 4],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'b',
+              aggregate: 'max',
+              axis: { title: null },
+            },
+            y2: {
+              field: 'c',
+              aggregate: 'min',
+              axis: { title: null },
+            },
+            opacity: {
+              value: 0.6
+            }
+          }
+        },
+        {
+          mark: {
+            type: 'line',
+            color: this.props.color,
+          },
+          encoding: {
+            x: {
+              field: 'a',
+              type: 'quantitative',
+              scale: {
+                domain: [-1, 4],
+              },
+              axis: {
+                title: null,
+              },
+            },
+            y: {
+              field: 'mean',
+              axis: { title: null },
+            }
+          }
+      }
+      
+    ],
+      config: {
+        background: null,
+        axis: false,
+      },
+    };
+  };
+
   arrowSpec = (markType) => {
     if (markType !== 'arrow' ) {
       return {};
@@ -166,7 +237,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
     return {
       data: {
         values: [
-          {x: -2, y: 0.5, angle: 0}, {x: 0, y: 2, angle: -45}, {x: 2, y: 1, angle: -260}
+          {x: -2, y: 0.5, angle: 165}, {x: 0, y: 2, angle: 105}, {x: 2, y: 1, angle: 25}
         ]
       },
       layer: [
@@ -230,7 +301,8 @@ class VegaLegendMiniPlot extends React.PureComponent {
             },
             angle: {
               field: 'angle',
-              type: 'nominal',
+              type: 'quantitative',
+              scale: {domain: [360, 0]}
             }
           }
         },
@@ -247,6 +319,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
     const barSpec = this.barSpec(this.props.markType);
     const areaSpec = this.areaSpec(this.props.markType);
     const arrowSpec = this.arrowSpec(this.props.markType);
+    const spreadSpec = this.spreadSpec(this.props.markType);
     const spec = {
       schema: 'https://vega.github.io/schema/vega-lite/v5.json',
       width: 24,
@@ -259,7 +332,7 @@ class VegaLegendMiniPlot extends React.PureComponent {
       ...barSpec,
       ...arrowSpec,
       ...areaSpec,
-      
+      ...spreadSpec,
     };
 
     return <VegaLite renderer="svg" spec={spec} actions={false} />;
