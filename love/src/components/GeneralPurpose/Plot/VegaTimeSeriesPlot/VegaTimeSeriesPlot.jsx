@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { VegaLite } from 'react-vega';
 import styles from './VegaTimeSeriesPlot.module.css';
 import PropTypes from 'prop-types';
-import { style } from 'd3';
+
 
 export const SHAPES = [
   'circle',
@@ -85,6 +85,12 @@ class VegaTimeseriesPlot extends Component {
        *  - x,y,y2 are the plot-axis coordinates of a point in that area
        */
        areas: PropTypes.arrayOf(PropTypes.object),
+       /**
+       * List of `{name, x, y, y2}` of area plot to be plotted.
+       *  - name distinguishes a mark from another
+       *  - x,y,y2 are the plot-axis coordinates of a point in that area
+       */
+        spreads: PropTypes.arrayOf(PropTypes.object),
     }).isRequired,
 
     /**
@@ -516,6 +522,96 @@ class VegaTimeseriesPlot extends Component {
     };
   };
 
+  makeSpreadLayer = (dataName) => {
+    const styleEncoding = this.makeStyleEncoding();
+    return {
+      data: { name: dataName },
+      transform: [
+        {
+          calculate: '(datum.mean + datum.delta)',
+          as: 'y2'
+        },
+        {
+          calculate: '(datum.mean - datum.delta)',
+          as: 'y'
+        },
+        {
+          calculate: '(datum.mean)',
+          as: 'mean'
+        },
+      ],
+      layer: [
+        {
+          mark: {
+            type: 'line',
+            clip: true,
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'mean',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            color: styleEncoding.color,
+            strokeDash: styleEncoding.strokeDash,
+          },
+        },
+        {
+          mark: {
+            type: 'area',
+            clip: true
+          },
+          encoding: {
+            x: {
+              field: 'x',
+              type: this.props.temporalXAxis ? 'temporal' : 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.xAxisTitle, this.props.units?.x),
+                format: '%H:%M:%S',
+              },
+              scale: this.props.xDomain ? { domain: this.props.xDomain } : { type: 'utc' },
+            },
+            y: {
+              field: 'y',
+              aggregate: 'min',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+              scale: {
+                domainMax: 100,
+                domainMin: 0
+              }
+            },
+            y2: {
+              field: 'y2',
+              aggregate: 'max',
+              type: 'quantitative',
+              axis: {
+                title: this.makeAxisTitle(this.props.yAxisTitle, this.props.units?.y),
+              },
+            },
+            color: styleEncoding.color,
+            opacity: {
+              value: 0.6
+            }
+          }
+        }
+      ]
+    };
+  };
+
   updateSpec = () => {
     this.setState({
       spec: {
@@ -556,12 +652,13 @@ class VegaTimeseriesPlot extends Component {
           },
         },
         layer: [
+          this.makeAreaLayer('areas'),
+          this.makeSpreadLayer('spreads'),
           this.makeBarLayer('bars'),
           this.makeLineLayer('lines'),
           this.makeLineLayer('pointLines'),
           this.makePointsLayer('pointLines'),
-          this.makeArrowLayer('arrows'),
-          this.makeAreaLayer('areas')
+          this.makeArrowLayer('arrows')
         ],
       },
     });
