@@ -1454,36 +1454,72 @@ export const takeScreenshot = (callback) => {
 export const parsePlotInputs = (inputs) => {
   const cscs = {};
   Object.values(inputs).forEach((input) => {
-    const cscDict = cscs?.[input.csc];
-    const indexDict = cscs?.[input.csc]?.[input.salindex];
-    const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
-    let newTopicDict = topicDict ?? [];
-    let newIndexDict = indexDict ?? {};
-    const newCSCDict = cscDict ?? {};
-    if (topicDict) {
-      newIndexDict[input.topic].push(input.item);
-      return;
-    }
-    // Next line was added to support EFD Querying for Array type items (influx)
-    newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
-    // newIndexDict[input.topic] = [input.item]; // Original line
+    if (!input.values) {
+      const cscDict = cscs?.[input.csc];
+      const indexDict = cscs?.[input.csc]?.[input.salindex];
+      const topicDict = cscs?.[input.csc]?.[input.salindex]?.[input.topic];
+      let newTopicDict = topicDict ?? [];
+      let newIndexDict = indexDict ?? {};
+      const newCSCDict = cscDict ?? {};
+      if (topicDict) {
+        newIndexDict[input.topic].push(input.item);
+        return;
+      }
+      // Next line was added to support EFD Querying for Array type items (influx)
+      newIndexDict[input.topic] = [`${input.item}${input.arrayIndex ?? ''}`];
+      // newIndexDict[input.topic] = [input.item]; // Original line
 
-    newTopicDict = newIndexDict[input.topic];
-    if (indexDict) {
-      newCSCDict[input.salindex][input.topic] = newTopicDict;
-      newIndexDict = newCSCDict[input.salindex];
+      newTopicDict = newIndexDict[input.topic];
+      if (indexDict) {
+        newCSCDict[input.salindex][input.topic] = newTopicDict;
+        newIndexDict = newCSCDict[input.salindex];
+      } else {
+        newIndexDict = {
+          [input.topic]: newTopicDict,
+        };
+        newCSCDict[input.salindex] = newIndexDict;
+      }
+      if (cscDict) {
+        cscs[input.csc][input.salindex] = newIndexDict;
+      } else {
+        cscs[input.csc] = {
+          [input.salindex]: newIndexDict,
+        };
+      }
     } else {
-      newIndexDict = {
-        [input.topic]: newTopicDict,
-      };
-      newCSCDict[input.salindex] = newIndexDict;
-    }
-    if (cscDict) {
-      cscs[input.csc][input.salindex] = newIndexDict;
-    } else {
-      cscs[input.csc] = {
-        [input.salindex]: newIndexDict,
-      };
+      Object.values(input.values).forEach((value) => {
+        const cscDict = cscs?.[value.csc];
+        const indexDict = cscs?.[value.csc]?.[value.salindex];
+        const topicDict = cscs?.[value.csc]?.[value.salindex]?.[value.topic];
+        let newTopicDict = topicDict ?? [];
+        let newIndexDict = indexDict ?? {};
+        const newCSCDict = cscDict ?? {};
+        if (topicDict) {
+          newIndexDict[value.topic].push(value.item);
+          return;
+        }
+        // Next line was added to support EFD Querying for Array type items (influx)
+        newIndexDict[value.topic] = [`${value.item}${value.arrayIndex ?? ''}`];
+        // newIndexDict[value.topic] = [value.item]; // Original line
+
+        newTopicDict = newIndexDict[value.topic];
+        if (indexDict) {
+          newCSCDict[value.salindex][value.topic] = newTopicDict;
+          newIndexDict = newCSCDict[value.salindex];
+        } else {
+          newIndexDict = {
+            [value.topic]: newTopicDict,
+          };
+          newCSCDict[value.salindex] = newIndexDict;
+        }
+        if (cscDict) {
+          cscs[value.csc][value.salindex] = newIndexDict;
+        } else {
+          cscs[value.csc] = {
+            [value.salindex]: newIndexDict,
+          };
+        }
+      });
     }
   });
   return cscs;

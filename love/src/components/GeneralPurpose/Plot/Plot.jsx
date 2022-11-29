@@ -6,11 +6,8 @@ import VegaLegend from './VegaTimeSeriesPlot/VegaLegend';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import ManagerInterface, { parseTimestamp, parsePlotInputs, parseCommanderData } from 'Utils';
-import { defaultStyles } from './Plot.container';
 import isEqual from 'lodash/isEqual';
 import styles from './Plot.module.css';
-
-
 const moment = extendMoment(Moment);
 
 
@@ -36,7 +33,7 @@ export default class Plot extends Component {
     /** Node to be used to track width and height.
      *  Use this instead of props.width and props.height for responsive plots.
      *  Will be ignored if both props.width and props.height are provided */
-    containerNode: PropTypes.node,
+    containerNode: PropTypes.instanceOf(Element), 
     timeSeriesControlsProps: PropTypes.object,
     efdConfigFile: PropTypes.object,
     maxHeight: PropTypes.number,
@@ -44,8 +41,29 @@ export default class Plot extends Component {
 
   static defaultProps = {
     maxHeight: undefined,
+    inputs: {},
   };
 
+  static defaultStyles = [
+    {
+      color: '#ff7bb5',
+      shape: 'circle',
+      filled: false,
+      dash: [4, 0],
+    },
+    {
+      color: '#00b7ff',
+      shape: 'square',
+      filled: true,
+      dash: [4, 0],
+    },
+    {
+      color: '#97e54f',
+      shape: 'diamond',
+      filled: true,
+      dash: [4, 0],
+    },
+  ];
 
   constructor(props) {
     super(props);
@@ -69,6 +87,7 @@ export default class Plot extends Component {
     const { inputs } = this.props;
     const { selectedEfdClient } = this.state;
     const cscs = parsePlotInputs(inputs);
+    // const cscs = this.getParsePlot(inputs);
     const parsedDate = startDate.format('YYYY-MM-DDTHH:mm:ss');
     ManagerInterface.getEFDTimeseries(parsedDate, timeWindow, cscs, '1min', selectedEfdClient).then((data) => {
       if (!data) return;
@@ -83,7 +102,13 @@ export default class Plot extends Component {
     const topics = {};
     Object.keys(inputs).forEach((inputKey) => {
       const input = inputs[inputKey];
-      topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+      if (!input.values) {
+        topics[inputKey] = [`${input.csc}-${input.salindex}-${input.topic}`, input.item];
+      } else {
+        Object.values(input.values).forEach((value) => {
+          topics[inputKey] = [`${value.csc}-${value.salindex}-${value.topic}`, value.item];
+        });
+      }
     });
     return topics;
   };
@@ -291,7 +316,7 @@ export default class Plot extends Component {
 
     const units = {y: streamsItems.find((item) => item?.units !== undefined && item?.units !== '')?.units};
 
-    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas'];
+    const layerTypes = ['lines', 'bars', 'pointLines', 'arrows', 'areas', 'spreads'];
     const layers = {};
     for (const [inputName, inputConfig] of Object.entries(inputs)) {
       const { type } = inputConfig;
@@ -318,7 +343,7 @@ export default class Plot extends Component {
     const marksStyles = Object.keys(inputs).map((input, index) => {
       return {
         name: input,
-        ...defaultStyles[index % defaultStyles.length],
+        ...Plot.defaultStyles[index % Plot.defaultStyles.length],
         ...(inputs[input].color !== undefined ? { color: inputs[input].color } : {}),
         ...(inputs[input].dash !== undefined ? { dash: inputs[input].dash } : {}),
         ...(inputs[input].shape !== undefined ? { shape: inputs[input].shape } : {}),
@@ -331,7 +356,7 @@ export default class Plot extends Component {
         const style = marksStyles?.find((style) => style.name === name);
         if (!style) {
           return {
-            ...defaultStyles[index % defaultStyles.length],
+            ...Plot.defaultStyles[index % Plot.defaultStyles.length],
             ...(markType !== undefined ? { markType } : {}),
             name,
           };
@@ -340,7 +365,8 @@ export default class Plot extends Component {
           ...style,
           ...(markType !== undefined ? { markType } : {}),
         };
-      });
+      });  
+    
 
     return (
       <>
@@ -397,5 +423,4 @@ export default class Plot extends Component {
       </>
     );
   }
-
 }
