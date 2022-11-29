@@ -2,193 +2,36 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ManagerInterface, { parseCommanderData } from 'Utils';
 import { DATE_TIME_FORMAT } from 'Config';
-import PlotContainer from 'components/GeneralPurpose/Plot/Plot.container';
-import Plot from 'components/GeneralPurpose/Plot/Plot';
-import PolarPlotContainer from 'components/GeneralPurpose/Plot/PolarPlot/PolarPlot.container';
-import { COLORS } from 'components/GeneralPurpose/Plot/VegaTimeSeriesPlot/VegaTimeSeriesPlot';
 import TimeSeriesControls from 'components/GeneralPurpose/Plot/TimeSeriesControls/TimeSeriesControls';
 import styles from './WeatherForecast.module.css';
+import WindPlotContainer from './PlotsContainer/WindPlot.container';
+
 
 export default class WeatherForecast extends Component {
   static propTypes = {
+    subscribeToStreams: PropTypes.func,
+    unsubscribeToStreams: PropTypes.func,
     /* Weather stream data */
     weather: PropTypes.object,
-    /* Wind speed stream data */
-    windSpeed: PropTypes.object,
+    /* Wind stream data */
+    wind: PropTypes.object,
   };
 
-  temperaturePlot = {
-    'Air temperature': {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'airTemperature',
-      item: 'avg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-    'Soil temperature': {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'soilTemperature',
-      item: 'avg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[1],
-    },
-    'Dew point': {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'dewPoint',
-      item: 'avg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[2],
-    },
-  };
-
-  humidityPlot = {
-    Humidity: {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'relativeHumidity',
-      item: 'avg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-  };
-
-  pressurePlot = {
-    'Air pressure': {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'airPressure',
-      item: 'paAvg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-  };
-
-  solarPlot = {
-    'Solar radiation': {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'solarNetRadiation',
-      item: 'avg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-  };
-
-  precipitationPlot = {
-    Precipitation: {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'precipitation',
-      item: 'prSum1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-  };
-
-  snowDepthPlot = {
-    'Snow depth': {
-      category: 'telemetry',
-      csc: 'WeatherForecast',
-      salindex: this.props.salindex,
-      topic: 'snowDepth',
-      item: 'avg1M',
-      type: 'line',
-      accessor: (x) => x,
-      color: COLORS[0],
-    },
-  };
-
-  windPlot = {
-    title: 'Time series plot',
-    inputs: {
-      GustSpeed: {
-        csc: 'WeatherForecast',
-        item: 'avg2M',
-        group: 1,
-        topic: 'windSpeed',
-        accessor: '(x) => x',
-        category: 'telemetry',
-        encoding: 'radial',
-        salindex: 1,
-      },
-      WindSpeed: {
-        csc: 'WeatherForecast',
-        item: 'avg2M',
-        group: 0,
-        topic: 'windSpeed',
-        accessor: '(x) => x',
-        category: 'telemetry',
-        encoding: 'radial',
-        salindex: 1,
-      },
-      GustDirection: {
-        csc: 'WeatherForecast',
-        item: 'value10M',
-        group: 1,
-        topic: 'windGustDirection',
-        accessor: '(x) => x',
-        category: 'telemetry',
-        encoding: 'angular',
-        salindex: 1,
-      },
-      WindDirection: {
-        csc: 'WeatherForecast',
-        item: 'avg2M',
-        group: 0,
-        topic: 'windDirection',
-        accessor: '(x) => x',
-        category: 'telemetry',
-        encoding: 'angular',
-        salindex: 1,
-      },
-    },
-    titleBar: false,
-    hasRawMode: false,
-    xAxisTitle: 'Time',
-    yAxisTitle: '',
-    displayDome: true,
-    groupTitles: ['Wind', 'Gust'],
-    radialUnits: 'km/s',
-    colorInterpolation:
-      '(value, minValue, maxValue, group) => { \n    if(group == 1){\n        const proportion = (value - minValue) / (maxValue - minValue); \n        return [255 * (1 - proportion), 255, 255 * (1 - proportion)]; \n    }\n  const proportion = (value - minValue) / (maxValue - minValue); \n  return [255 * (1 - proportion), 255 * (1 - proportion), 255]; \n}',
-    opacityInterpolation:
-      '(value, minValue, maxValue, group) => {\n  if (maxValue === minValue) return 1;\n  return 0.01 + ((value - minValue) / (maxValue - minValue)) * 0.9;\n}',
-  };
+  static defaultProps = {
+    subscribeToStreams: () => undefined,
+    unsubscribeToStreams: () => undefined,
+  }
 
   constructor(props) {
     super(props);
-    // this.temperaturePlotRef = React.createRef();
-    // this.humidityPlotRef = React.createRef();
-    // this.windDirectionPlotRef = React.createRef();
-    // this.windSpeedPlotRef = React.createRef();
-    // this.solarPlotRef = React.createRef();
-    // this.pressurePlotRef = React.createRef();
-    // this.precipitationPlotRef = React.createRef();
-    // this.snowDepthPlotRef = React.createRef();
-    this.cloudsPlotRef = React.createRef();
 
     this.state = {
       isLive: true,
       timeWindow: 60,
       historicalData: [],
     };
+
+    this.windPlotRef = React.createRef();
   }
 
   componentDidMount = () => {
@@ -203,18 +46,15 @@ export default class WeatherForecast extends Component {
     const cscs = {
       WeatherForecast: {
         1: {
-          airTemperature: ['avg1M'],
-          soilTemperature: ['avg1M'],
-          dewPoint: ['avg1M'],
-          relativeHumidity: ['avg1M'],
-          airPressure: ['paAvg1M'],
-          solarNetRadiation: ['avg1M'],
-          precipitation: ['prSum1M'],
-          snowDepth: ['avg1M'],
-          windSpeed: ['avg2M'],
-          windSpeed: ['avg2M'],
-          windGustDirection: ['value10M'],
-          windDirection: ['avg2M'],
+          temperatureMax: dailyTrend['temperatureMax'],
+          temperatureMin: dailyTrend['temperatureMin'],
+          temperatureMean: dailyTrend['temperatureMean'],
+          temperatureSpread: dailyTrend['temperatureSpread'],
+          windspeedMax: dailyTrend['windspeedMax'],
+          windspeedMin: dailyTrend['windspeedMin'],
+          windspeedMean: dailyTrend['windspeedMean'],
+          windspeedSpread: dailyTrend['windspeedSpread'],
+          windDirection: dailyTrend['windDirection'],
         },
       },
     };
@@ -283,14 +123,13 @@ export default class WeatherForecast extends Component {
 
 
         <div className={styles.fullSection}>
-          <div className={styles.sectionTitle}>Clouds</div>
-          <div ref={this.cloudsPlotRef} className={styles.plot}>
-            <PlotContainer
+          <div className={styles.sectionTitle}>Wind</div>
+          <div ref={this.windPlotRef} className={styles.plot}>
+            <WindPlotContainer
               timeSeriesControlsProps={timeSeriesControlsProps}
-              inputs={this.temperaturePlot}
-              containerNode={this.cloudsPlotRef.current?.parentNode}
+              containerNode={this.windPlotRef.current}
               xAxisTitle="Time"
-              yAxisTitle="Temperature"
+              yAxisTitle="Wind"
               legendPosition="right"
             />
           </div>
