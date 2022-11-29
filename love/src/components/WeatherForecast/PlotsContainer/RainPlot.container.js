@@ -21,117 +21,9 @@ export const schema = {
       description: 'list of inputs',
       isPrivate: false,
       default: {
-        'Wind speed': {
-          type: 'area',
-          color: '#4682b4',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
-            {
-              variable: 'x',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'y',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMin',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'y2',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMax',
-              accessor: '(x) => x[0]',
-            }
-          ],
-        },
-        'Windspeed spread': {
-          type: 'spread',
-          color: '#4682b4',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
-            {
-              variable: 'x',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'mean',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMean',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'delta',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedSpread',
-              accessor: '(x) => x[0]',
-            }
-          ],
-        },
-        'Wind direction': {
-          type: 'arrow',
-          color: '#4682b4',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
-            {
-              variable: 'x',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'y',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windspeedMean',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'angle',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'windDirection',
-              accessor: '(x) => x[0]',
-            }
-          ],
-        },
-        'Gust Wind': {
+        'Precipitation %': {
           type: 'line',
-          color: '#97e54f',
+          color: '#2ca02c',
           shape: 'circle',
           filled: false,
           dash: [4, 0],
@@ -151,14 +43,41 @@ export const schema = {
               csc: 'WeatherForecast',
               salindex: 0,
               topic: 'WeatherForecast_dailyTrend',
-              item: 'gust',
+              item: 'precipitationProbability',
               accessor: '(x) => x[0]',
             },
           ],
         },
-        'Ex Gust': {
+        'Precipitation [mm]': {
+          type: 'bar',
+          color: '#4682b4',
+          shape: 'circle',
+          filled: false,
+          dash: [4, 0],
+          values: [
+            {
+              variable: 'x',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'WeatherForecast_dailyTrend',
+              item: 'timestamp',
+              accessor: '(x) => x[0]',
+            },
+            {
+              variable: 'y',
+              category: 'telemetry',
+              csc: 'WeatherForecast',
+              salindex: 0,
+              topic: 'WeatherForecast_dailyTrend',
+              item: 'precipitation',
+              accessor: '(x) => x[0]',
+            },
+          ],
+        },
+        'Ex Precipitation %': {
           type: 'line',
-          color: '#97e54f',
+          color: '#2ca02c',
           shape: 'circle',
           filled: false,
           dash: [4, 0],
@@ -183,8 +102,8 @@ export const schema = {
             },
           ],
         },
-        'Ex direction': {
-          type: 'arrow',
+        'Ex Bar': {
+          type: 'bar',
           color: '#4682b4',
           shape: 'circle',
           filled: false,
@@ -206,53 +125,8 @@ export const schema = {
               salindex: 0,
               topic: 'mount_AzEl_Encoders',
               item: 'elevationCalculatedAngle',
-              accessor: '(x) => x[0] - 40',
+              accessor: '(x) => 35',
             },
-            {
-              variable: 'angle',
-              category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: 0,
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => 40',
-            }
-          ],
-        },
-        'Ex windspread': {
-          type: 'spread',
-          color: '#4682b4',
-          shape: 'circle',
-          filled: false,
-          dash: [4, 0],
-          values: [
-            {
-              variable: 'x',
-              category: 'telemetry',
-              csc: 'WeatherForecast',
-              salindex: 0,
-              topic: 'WeatherForecast_dailyTrend',
-              item: 'timestamp',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'mean',
-              category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: 0,
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => x[0]',
-            },
-            {
-              variable: 'delta',
-              category: 'telemetry',
-              csc: 'ATMCS',
-              salindex: 0,
-              topic: 'mount_AzEl_Encoders',
-              item: 'elevationCalculatedAngle',
-              accessor: '(x) => 10',
-            }
           ],
         },
       }
@@ -262,7 +136,7 @@ export const schema = {
 
 const containerRef =  React.createRef();
 
-const WindPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
+const RainPlotContainer = ({ subscribeToStreams, unsubscribeToStreams, ...props }) => {
   const { containerNode } = props;
   if (props.isRaw) {
     return <SubscriptionTableContainer subscriptions={props.subscriptions}></SubscriptionTableContainer>;
@@ -333,4 +207,4 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(WindPlotContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(RainPlotContainer);

@@ -655,9 +655,9 @@ class VegaTimeseriesPlot extends Component {
           this.makeAreaLayer('areas'),
           this.makeSpreadLayer('spreads'),
           this.makeBarLayer('bars'),
-          this.makeLineLayer('lines'),
           this.makeLineLayer('pointLines'),
           this.makePointsLayer('pointLines'),
+          this.makeLineLayer('lines'),
           this.makeArrowLayer('arrows')
         ],
       },
